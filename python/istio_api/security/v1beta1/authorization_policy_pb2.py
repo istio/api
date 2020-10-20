@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.security.v1beta1',
   syntax='proto3',
   serialized_options=_b('Z\035istio.io/api/security/v1beta1'),
-  serialized_pb=_b('\n+security/v1beta1/authorization_policy.proto\x12\x16istio.security.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1btype/v1beta1/selector.proto\"\xee\x02\n\x13\x41uthorizationPolicy\x12\x36\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelector\x12+\n\x05rules\x18\x02 \x03(\x0b\x32\x1c.istio.security.v1beta1.Rule\x12\x42\n\x06\x61\x63tion\x18\x03 \x01(\x0e\x32\x32.istio.security.v1beta1.AuthorizationPolicy.Action\x12H\n\x08\x65xternal\x18\x04 \x01(\x0b\x32\x34.istio.security.v1beta1.AuthorizationPolicy.ExternalH\x00\x1a\x1b\n\x08\x45xternal\x12\x0f\n\x07service\x18\x01 \x01(\t\"6\n\x06\x41\x63tion\x12\t\n\x05\x41LLOW\x10\x00\x12\x08\n\x04\x44\x45NY\x10\x01\x12\t\n\x05\x41UDIT\x10\x02\x12\x0c\n\x08\x45XTERNAL\x10\x03\x42\x0f\n\raction_detail\"\x89\x02\n\x04Rule\x12/\n\x04\x66rom\x18\x01 \x03(\x0b\x32!.istio.security.v1beta1.Rule.From\x12+\n\x02to\x18\x02 \x03(\x0b\x32\x1f.istio.security.v1beta1.Rule.To\x12/\n\x04when\x18\x03 \x03(\x0b\x32!.istio.security.v1beta1.Condition\x1a\x36\n\x04\x46rom\x12.\n\x06source\x18\x01 \x01(\x0b\x32\x1e.istio.security.v1beta1.Source\x1a:\n\x02To\x12\x34\n\toperation\x18\x01 \x01(\x0b\x32!.istio.security.v1beta1.Operation\"\xfe\x01\n\x06Source\x12\x12\n\nprincipals\x18\x01 \x03(\t\x12\x16\n\x0enot_principals\x18\x05 \x03(\t\x12\x1a\n\x12request_principals\x18\x02 \x03(\t\x12\x1e\n\x16not_request_principals\x18\x06 \x03(\t\x12\x12\n\nnamespaces\x18\x03 \x03(\t\x12\x16\n\x0enot_namespaces\x18\x07 \x03(\t\x12\x11\n\tip_blocks\x18\x04 \x03(\t\x12\x15\n\rnot_ip_blocks\x18\x08 \x03(\t\x12\x18\n\x10remote_ip_blocks\x18\t \x03(\t\x12\x1c\n\x14not_remote_ip_blocks\x18\n \x03(\t\"\x97\x01\n\tOperation\x12\r\n\x05hosts\x18\x01 \x03(\t\x12\x11\n\tnot_hosts\x18\x05 \x03(\t\x12\r\n\x05ports\x18\x02 \x03(\t\x12\x11\n\tnot_ports\x18\x06 \x03(\t\x12\x0f\n\x07methods\x18\x03 \x03(\t\x12\x13\n\x0bnot_methods\x18\x07 \x03(\t\x12\r\n\x05paths\x18\x04 \x03(\t\x12\x11\n\tnot_paths\x18\x08 \x03(\t\"A\n\tCondition\x12\x10\n\x03key\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x0e\n\x06values\x18\x02 \x03(\t\x12\x12\n\nnot_values\x18\x03 \x03(\tB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
+  serialized_pb=_b('\n+security/v1beta1/authorization_policy.proto\x12\x16istio.security.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1btype/v1beta1/selector.proto\"\xef\x02\n\x13\x41uthorizationPolicy\x12\x36\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelector\x12+\n\x05rules\x18\x02 \x03(\x0b\x32\x1c.istio.security.v1beta1.Rule\x12\x42\n\x06\x61\x63tion\x18\x03 \x01(\x0e\x32\x32.istio.security.v1beta1.AuthorizationPolicy.Action\x12H\n\x08\x65xternal\x18\x04 \x01(\x0b\x32\x34.istio.security.v1beta1.AuthorizationPolicy.ExternalH\x00\x1a\x1c\n\x08\x45xternal\x12\x10\n\x08provider\x18\x01 \x01(\t\"6\n\x06\x41\x63tion\x12\t\n\x05\x41LLOW\x10\x00\x12\x08\n\x04\x44\x45NY\x10\x01\x12\t\n\x05\x41UDIT\x10\x02\x12\x0c\n\x08\x45XTERNAL\x10\x03\x42\x0f\n\raction_detail\"\x89\x02\n\x04Rule\x12/\n\x04\x66rom\x18\x01 \x03(\x0b\x32!.istio.security.v1beta1.Rule.From\x12+\n\x02to\x18\x02 \x03(\x0b\x32\x1f.istio.security.v1beta1.Rule.To\x12/\n\x04when\x18\x03 \x03(\x0b\x32!.istio.security.v1beta1.Condition\x1a\x36\n\x04\x46rom\x12.\n\x06source\x18\x01 \x01(\x0b\x32\x1e.istio.security.v1beta1.Source\x1a:\n\x02To\x12\x34\n\toperation\x18\x01 \x01(\x0b\x32!.istio.security.v1beta1.Operation\"\xfe\x01\n\x06Source\x12\x12\n\nprincipals\x18\x01 \x03(\t\x12\x16\n\x0enot_principals\x18\x05 \x03(\t\x12\x1a\n\x12request_principals\x18\x02 \x03(\t\x12\x1e\n\x16not_request_principals\x18\x06 \x03(\t\x12\x12\n\nnamespaces\x18\x03 \x03(\t\x12\x16\n\x0enot_namespaces\x18\x07 \x03(\t\x12\x11\n\tip_blocks\x18\x04 \x03(\t\x12\x15\n\rnot_ip_blocks\x18\x08 \x03(\t\x12\x18\n\x10remote_ip_blocks\x18\t \x03(\t\x12\x1c\n\x14not_remote_ip_blocks\x18\n \x03(\t\"\x97\x01\n\tOperation\x12\r\n\x05hosts\x18\x01 \x03(\t\x12\x11\n\tnot_hosts\x18\x05 \x03(\t\x12\r\n\x05ports\x18\x02 \x03(\t\x12\x11\n\tnot_ports\x18\x06 \x03(\t\x12\x0f\n\x07methods\x18\x03 \x03(\t\x12\x13\n\x0bnot_methods\x18\x07 \x03(\t\x12\r\n\x05paths\x18\x04 \x03(\t\x12\x11\n\tnot_paths\x18\x08 \x03(\t\"A\n\tCondition\x12\x10\n\x03key\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x0e\n\x06values\x18\x02 \x03(\t\x12\x12\n\nnot_values\x18\x03 \x03(\tB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,])
 
@@ -53,8 +53,8 @@ _AUTHORIZATIONPOLICY_ACTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=429,
-  serialized_end=483,
+  serialized_start=430,
+  serialized_end=484,
 )
 _sym_db.RegisterEnumDescriptor(_AUTHORIZATIONPOLICY_ACTION)
 
@@ -67,7 +67,7 @@ _AUTHORIZATIONPOLICY_EXTERNAL = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='service', full_name='istio.security.v1beta1.AuthorizationPolicy.External.service', index=0,
+      name='provider', full_name='istio.security.v1beta1.AuthorizationPolicy.External.provider', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -86,7 +86,7 @@ _AUTHORIZATIONPOLICY_EXTERNAL = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=400,
-  serialized_end=427,
+  serialized_end=428,
 )
 
 _AUTHORIZATIONPOLICY = _descriptor.Descriptor(
@@ -141,7 +141,7 @@ _AUTHORIZATIONPOLICY = _descriptor.Descriptor(
       index=0, containing_type=None, fields=[]),
   ],
   serialized_start=134,
-  serialized_end=500,
+  serialized_end=501,
 )
 
 
@@ -171,8 +171,8 @@ _RULE_FROM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=654,
-  serialized_end=708,
+  serialized_start=655,
+  serialized_end=709,
 )
 
 _RULE_TO = _descriptor.Descriptor(
@@ -201,8 +201,8 @@ _RULE_TO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=710,
-  serialized_end=768,
+  serialized_start=711,
+  serialized_end=769,
 )
 
 _RULE = _descriptor.Descriptor(
@@ -245,8 +245,8 @@ _RULE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=503,
-  serialized_end=768,
+  serialized_start=504,
+  serialized_end=769,
 )
 
 
@@ -339,8 +339,8 @@ _SOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=771,
-  serialized_end=1025,
+  serialized_start=772,
+  serialized_end=1026,
 )
 
 
@@ -419,8 +419,8 @@ _OPERATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1028,
-  serialized_end=1179,
+  serialized_start=1029,
+  serialized_end=1180,
 )
 
 
@@ -464,8 +464,8 @@ _CONDITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1181,
-  serialized_end=1246,
+  serialized_start=1182,
+  serialized_end=1247,
 )
 
 _AUTHORIZATIONPOLICY_EXTERNAL.containing_type = _AUTHORIZATIONPOLICY

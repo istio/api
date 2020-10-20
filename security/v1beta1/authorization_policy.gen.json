@@ -93,8 +93,8 @@
       "istio.security.v1beta1.AuthorizationPolicy.External": {
         "type": "object",
         "properties": {
-          "service": {
-            "description": "Specifies the name of the external service to call. This is currently defined in the MeshConfig.",
+          "provider": {
+            "description": "Specifies the name of the external provider. The list of available providers are defined in the MeshConfig.",
             "type": "string",
             "format": "string"
           }

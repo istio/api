@@ -192,11 +192,11 @@
           "ca": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.CA"
           },
-          "extensionServices": {
-            "description": "Defines a list of extension services that provide extra functionality to the mesh. The extension services are usually deployed and managed by the mesh administrator to extend Istio's functionality, for example, an external authorization service is used with the AuthorizationPolicy to integrate custom authorization system into Istio. Note, at most 1 extension service is allowed for now.",
+          "externalProviders": {
+            "description": "Defines a list of external providers that provide extra functionality to Istio. For example, An external provider can be configured as an external authorizer used with the AuthorizationPolicy to integrate Istio with a custom authorization system. Note, currently at most 1 external provider is allowed.",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionService"
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalProvider"
             }
           }
         }
@@ -473,11 +473,11 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.MeshConfig.ExtensionService": {
+      "istio.mesh.v1alpha1.MeshConfig.ExternalProvider": {
         "type": "object",
         "properties": {
           "name": {
-            "description": "REQUIRED. A unique name identifying the extension service.",
+            "description": "REQUIRED. A unique name identifying the external provider.",
             "type": "string",
             "format": "string"
           }
@@ -488,11 +488,21 @@
               "anyOf": [
                 {
                   "required": [
-                    "authorization"
+                    "envoyExtAuthzHttp"
                   ],
                   "properties": {
-                    "authorization": {
-                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionService.Authorization"
+                    "envoyExtAuthzHttp": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalProvider.EnvoyExternalHttpAuthorizationProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "envoyExtAuthzGrpc"
+                  ],
+                  "properties": {
+                    "envoyExtAuthzGrpc": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalProvider.EnvoyExternalGrpcAuthorizationProvider"
                     }
                   }
                 }
@@ -501,11 +511,21 @@
           },
           {
             "required": [
-              "authorization"
+              "envoyExtAuthzHttp"
             ],
             "properties": {
-              "authorization": {
-                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionService.Authorization"
+              "envoyExtAuthzHttp": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalProvider.EnvoyExternalHttpAuthorizationProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "envoyExtAuthzGrpc"
+            ],
+            "properties": {
+              "envoyExtAuthzGrpc": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalProvider.EnvoyExternalGrpcAuthorizationProvider"
               }
             }
           }
@@ -528,77 +548,23 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.MeshConfig.ExtensionService.Authorization": {
-        "description": "Authorization supplies the detail configuration of the external authorization server.",
+      "istio.mesh.v1alpha1.MeshConfig.ExternalProvider.EnvoyExternalHttpAuthorizationProvider": {
         "type": "object",
         "properties": {
           "service": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.Destination"
           },
           "timeout": {
-            "description": "Sets the maximum duration in milliseconds for connection to the external server (default is 1s).",
+            "description": "Sets the maximum duration in milliseconds for connection to the external authorizer (default is 1s).",
             "type": "string"
-          }
-        },
-        "oneOf": [
-          {
-            "not": {
-              "anyOf": [
-                {
-                  "required": [
-                    "http"
-                  ],
-                  "properties": {
-                    "http": {
-                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionService.Authorization.HTTP"
-                    }
-                  }
-                },
-                {
-                  "required": [
-                    "grpc"
-                  ],
-                  "properties": {
-                    "grpc": {
-                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionService.Authorization.GRPC"
-                    }
-                  }
-                }
-              ]
-            }
           },
-          {
-            "required": [
-              "http"
-            ],
-            "properties": {
-              "http": {
-                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionService.Authorization.HTTP"
-              }
-            }
-          },
-          {
-            "required": [
-              "grpc"
-            ],
-            "properties": {
-              "grpc": {
-                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionService.Authorization.GRPC"
-              }
-            }
-          }
-        ]
-      },
-      "istio.mesh.v1alpha1.MeshConfig.ExtensionService.Authorization.HTTP": {
-        "type": "object",
-        "properties": {
           "pathPrefix": {
             "description": "Sets a prefix to the value of authorization request header *Path*. For example, setting this to \"/check\" for an original user request at path \"/admin\" will cause the authorization check request to be sent to the external server at the path \"/check/admin\" instead of \"/admin\".",
             "type": "string",
             "format": "string"
           },
           "includeHeadersInCheck": {
-            "description": "List of headers that should be included in the authorization check request to the external auth server. Note that in addition to the headers supplied by users: 1. *Host*, *Method*, *Path* and *Content-Length* are automatically included to the list. 2. *Content-Length* will be set to 0 and the request will not have a message body.",
+            "description": "List of headers that should be included in the authorization request sent to the external authorizer. Note that in addition to the headers supplied by users: 1. *Host*, *Method*, *Path* and *Content-Length* are automatically sent. 2. *Content-Length* will be set to 0 and the request will not have a message body.",
             "type": "array",
             "items": {
               "type": "string",
@@ -614,7 +580,7 @@
             }
           },
           "headersToDownstreamOnDeny": {
-            "description": "List of headers from the external server that should be forwarded to downstream when the authorization check result is not allowed (HTTP code other than 200). If not specified, all the authorization response headers, except *Authority (Host)* will be in the response to the downstream. When a header is included in this list, *Path*, *Status*, *Content-Length*, *WWWAuthenticate* and *Location* are automatically added.",
+            "description": "List of headers from the external authorizer that should be forwarded to downstream when the authorization check result is not allowed (HTTP code other than 200). If not specified, all the authorization response headers, except *Authority (Host)* will be in the response to the downstream. When a header is included in this list, *Path*, *Status*, *Content-Length*, *WWWAuthenticate* and *Location* are automatically added. Note, the body from the external authorizer is always included in the response to downstream.",
             "type": "array",
             "items": {
               "type": "string",
@@ -623,8 +589,17 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.MeshConfig.ExtensionService.Authorization.GRPC": {
-        "type": "object"
+      "istio.mesh.v1alpha1.MeshConfig.ExternalProvider.EnvoyExternalGrpcAuthorizationProvider": {
+        "type": "object",
+        "properties": {
+          "service": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.Destination"
+          },
+          "timeout": {
+            "description": "Sets the maximum duration in milliseconds for connection to the external authorizer (default is 1s).",
+            "type": "string"
+          }
+        }
       },
       "istio.mesh.v1alpha1.Resource": {
         "description": "Resource describes the source of configuration",
@@ -1301,7 +1276,7 @@
         }
       },
       "istio.networking.v1alpha3.Destination": {
-        "description": "REQUIRED. Specifies the network addressable service to which the authorization check request should be sent. Note, the `service.port` must always be configured explicitly even if the service exposes only a single port.",
+        "description": "REQUIRED. Specifies the network addressable service of the external authorizer that implements the Envoy ext_authz authorization check service using the gRPC API.",
         "type": "object",
         "properties": {
           "host": {

@@ -261,15 +261,15 @@ message AuthorizationPolicy {
     // defined [here](https://github.com/istio/proxy/blob/master/extensions/common/context.h).
 
     // $hide_from_docs
-    // External delegates the authorization decision to an external server out of Envoy. An extra authorization request
-    // will be sent to the external server and the response will decide whether or not the original request should be
+    // THe EXTERNAL action delegates the authorization decision to an external authorizer. An authorization check request
+    // will be sent to the external authorizer and the response will decide whether or not the original request should be
     // allowed or denied.
     //
-    // The EXTERNAL action is evaluated before the ALLOW and DENY action, implemented by the Envoy ext_authz filter
-    // and is currently an **experimental feature** in Istio.
+    // The EXTERNAL action is evaluated before the ALLOW and DENY action and is currently an **experimental feature** in Istio.
+    // See the `external_providers` in MeshConfig for the supported external authorizers (currently only Envoy ext_authz).
     //
-    // The following authorization policy applies to ingress gateway to call the external authorization service of name
-    // "default" (defined in MeshConfig) if the request path has prefix "/admin/".
+    // The following authorization policy applies to ingress gateway and delegates the authorization decision to the external
+    // provider named "default" (defined in MeshConfig) when the request path has prefix "/admin/".
     //
     // ```yaml
     // apiVersion: security.istio.io/v1beta1
@@ -283,7 +283,7 @@ message AuthorizationPolicy {
     //      app: istio-ingressgateway
     //  action: EXTERNAL
     //  external:
-    //    service: "default"
+    //    provider: "default"
     //  rules:
     //  - to:
     //    - operation:
@@ -297,13 +297,13 @@ message AuthorizationPolicy {
 
   // $hide_from_docs
   message External {
-    // Specifies the name of the external service to call. This is currently defined in the MeshConfig.
-    string service = 1;
+    // Specifies the name of the external provider. The list of available providers are defined in the MeshConfig.
+    string provider = 1;
   }
 
   // $hide_from_docs
   oneof action_detail {
-    // Supplies configuration of the external service. Must be used only with EXTERNAL action.
+    // Specifies detailed configuration of the EXTERNAL action. Must be used only with EXTERNAL action.
     External external = 4;
   }
 }

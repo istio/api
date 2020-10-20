@@ -36204,8 +36204,8 @@
               },
               {
                 "id": 57,
-                "name": "extension_services",
-                "type": "ExtensionService",
+                "name": "external_providers",
+                "type": "ExternalProvider",
                 "is_repeated": true
               }
             ],
@@ -36327,7 +36327,7 @@
                 ]
               },
               {
-                "name": "ExtensionService",
+                "name": "ExternalProvider",
                 "fields": [
                   {
                     "id": 1,
@@ -36336,13 +36336,18 @@
                   },
                   {
                     "id": 2,
-                    "name": "authorization",
-                    "type": "Authorization"
+                    "name": "envoy_ext_authz_http",
+                    "type": "EnvoyExternalHttpAuthorizationProvider"
+                  },
+                  {
+                    "id": 3,
+                    "name": "envoy_ext_authz_grpc",
+                    "type": "EnvoyExternalGrpcAuthorizationProvider"
                   }
                 ],
                 "messages": [
                   {
-                    "name": "Authorization",
+                    "name": "EnvoyExternalHttpAuthorizationProvider",
                     "fields": [
                       {
                         "id": 1,
@@ -36356,46 +36361,41 @@
                       },
                       {
                         "id": 3,
-                        "name": "http",
-                        "type": "HTTP"
+                        "name": "path_prefix",
+                        "type": "string"
                       },
                       {
                         "id": 4,
-                        "name": "grpc",
-                        "type": "GRPC"
-                      }
-                    ],
-                    "messages": [
-                      {
-                        "name": "HTTP",
-                        "fields": [
-                          {
-                            "id": 1,
-                            "name": "path_prefix",
-                            "type": "string"
-                          },
-                          {
-                            "id": 2,
-                            "name": "include_headers_in_check",
-                            "type": "string",
-                            "is_repeated": true
-                          },
-                          {
-                            "id": 3,
-                            "name": "headers_to_upstream_on_allow",
-                            "type": "string",
-                            "is_repeated": true
-                          },
-                          {
-                            "id": 4,
-                            "name": "headers_to_downstream_on_deny",
-                            "type": "string",
-                            "is_repeated": true
-                          }
-                        ]
+                        "name": "include_headers_in_check",
+                        "type": "string",
+                        "is_repeated": true
                       },
                       {
-                        "name": "GRPC"
+                        "id": 5,
+                        "name": "headers_to_upstream_on_allow",
+                        "type": "string",
+                        "is_repeated": true
+                      },
+                      {
+                        "id": 6,
+                        "name": "headers_to_downstream_on_deny",
+                        "type": "string",
+                        "is_repeated": true
+                      }
+                    ]
+                  },
+                  {
+                    "name": "EnvoyExternalGrpcAuthorizationProvider",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "service",
+                        "type": "istio.networking.v1alpha3.Destination"
+                      },
+                      {
+                        "id": 2,
+                        "name": "timeout",
+                        "type": "google.protobuf.Duration"
                       }
                     ]
                   }
@@ -43563,7 +43563,7 @@
                 "fields": [
                   {
                     "id": 1,
-                    "name": "service",
+                    "name": "provider",
                     "type": "string"
                   }
                 ]

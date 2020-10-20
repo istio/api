@@ -506,73 +506,71 @@ message MeshConfig {
   CA ca = 55;
 
   // $hide_from_docs
-  message ExtensionService {
-    // REQUIRED. A unique name identifying the extension service.
+  message ExternalProvider {
+    // REQUIRED. A unique name identifying the external provider.
     string name = 1;
 
-    // REQUIRED. Specifies detail configurations of the extension service.
+    // REQUIRED. Specifies detailed configuration for the external provider.
     oneof config {
-      Authorization authorization = 2;
+      // Configures an external authorizer that implements the Envoy ext_authz filter authorization check service using the HTTP API.
+      EnvoyExternalHttpAuthorizationProvider envoy_ext_authz_http = 2;
+      // Configures an external authorizer that implements the Envoy ext_authz filter authorization check service using the gRPC API.
+      EnvoyExternalGrpcAuthorizationProvider envoy_ext_authz_grpc = 3;
     }
 
     // $hide_from_docs
-    // Authorization supplies the detail configuration of the external authorization server.
-    message Authorization {
-      // REQUIRED. Specifies the network addressable service to which the authorization check request should be sent.
-      // Note, the `service.port` must always be configured explicitly even if the service exposes only a single port.
+    message EnvoyExternalHttpAuthorizationProvider {
+      // REQUIRED. Specifies the network addressable service of the external authorizer that implements the Envoy ext_authz
+      // authorization check service using the HTTP API.
       istio.networking.v1alpha3.Destination service = 1;
 
-      // Sets the maximum duration in milliseconds for connection to the external server (default is 1s).
+      // Sets the maximum duration in milliseconds for connection to the external authorizer (default is 1s).
       google.protobuf.Duration timeout = 2;
 
-      // $hide_from_docs
-      message HTTP {
-        // Sets a prefix to the value of authorization request header *Path*.
-        // For example, setting this to "/check" for an original user request at path "/admin" will cause the
-        // authorization check request to be sent to the external server at the path "/check/admin" instead of "/admin".
-        string path_prefix = 1;
+      // Sets a prefix to the value of authorization request header *Path*.
+      // For example, setting this to "/check" for an original user request at path "/admin" will cause the
+      // authorization check request to be sent to the external server at the path "/check/admin" instead of "/admin".
+      string path_prefix = 3;
 
-        // List of headers that should be included in the authorization check request to the external auth server.
-        // Note that in addition to the headers supplied by users:
-        // 1. *Host*, *Method*, *Path* and *Content-Length* are automatically included to the list.
-        // 2. *Content-Length* will be set to 0 and the request will not have a message body.
-        repeated string include_headers_in_check = 2;
+      // List of headers that should be included in the authorization request sent to the external authorizer.
+      // Note that in addition to the headers supplied by users:
+      // 1. *Host*, *Method*, *Path* and *Content-Length* are automatically sent.
+      // 2. *Content-Length* will be set to 0 and the request will not have a message body.
+      repeated string include_headers_in_check = 4;
 
-        // List of headers from the external server that should be added to the original request and forwarded to the
-        // upstream when the authorization check result is allowed (HTTP code 200).
-        // If not specified, the original request will not be modified and forwarded to backend as-is.
-        // Note, any existing headers will be overridden.
-        repeated string headers_to_upstream_on_allow = 3;
+      // List of headers from the external server that should be added to the original request and forwarded to the
+      // upstream when the authorization check result is allowed (HTTP code 200).
+      // If not specified, the original request will not be modified and forwarded to backend as-is.
+      // Note, any existing headers will be overridden.
+      repeated string headers_to_upstream_on_allow = 5;
 
-        // List of headers from the external server that should be forwarded to downstream when the authorization check result
-        // is not allowed (HTTP code other than 200).
-        // If not specified, all the authorization response headers, except *Authority (Host)* will be in the response to
-        // the downstream. When a header is included in this list, *Path*, *Status*, *Content-Length*, *WWWAuthenticate*
-        // and *Location* are automatically added.
-        repeated string headers_to_downstream_on_deny = 4;
-      }
+      // List of headers from the external authorizer that should be forwarded to downstream when the authorization check result
+      // is not allowed (HTTP code other than 200).
+      // If not specified, all the authorization response headers, except *Authority (Host)* will be in the response to
+      // the downstream.
+      // When a header is included in this list, *Path*, *Status*, *Content-Length*, *WWWAuthenticate* and *Location* are
+      // automatically added.
+      // Note, the body from the external authorizer is always included in the response to downstream.
+      repeated string headers_to_downstream_on_deny = 6;
+    }
 
-      // $hide_from_docs
-      message GRPC {}
+    // $hide_from_docs
+    message EnvoyExternalGrpcAuthorizationProvider {
+      // REQUIRED. Specifies the network addressable service of the external authorizer that implements the Envoy ext_authz
+      // authorization check service using the gRPC API.
+      istio.networking.v1alpha3.Destination service = 1;
 
-      // REQUIRED. Specifies the API used to talk to the external authorization server.
-      oneof external_authz_service_type {
-        // Send the authorization check request to the external server using the HTTP API.
-        HTTP http = 3;
-
-        // Send the authorization check request to the external server using the gRPC API as defined by
-        // [Envoy ext_authz check request API](https://github.com/envoyproxy/envoy/blob/9dce187eca9aa10e98c0ae81368c078384528801/api/envoy/service/auth/v3/external_auth.proto#L29-L34).
-        GRPC grpc = 4;
-      }
+      // Sets the maximum duration in milliseconds for connection to the external authorizer (default is 1s).
+      google.protobuf.Duration timeout = 2;
     }
   }
 
   // $hide_from_docs
-  // Defines a list of extension services that provide extra functionality to the mesh. The extension services are usually
-  // deployed and managed by the mesh administrator to extend Istio's functionality, for example, an external authorization
-  // service is used with the AuthorizationPolicy to integrate custom authorization system into Istio.
-  // Note, at most 1 extension service is allowed for now.
-  repeated ExtensionService extension_services = 57;
+  // Defines a list of external providers that provide extra functionality to Istio. For example, An external provider
+  // can be configured as an external authorizer used with the AuthorizationPolicy to integrate Istio with a custom
+  // authorization system.
+  // Note, currently at most 1 external provider is allowed.
+  repeated ExternalProvider external_providers = 57;
 
   // $hide_from_docs
   // Next available field number: 58

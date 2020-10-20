@@ -3047,10 +3047,10 @@ spec:
               - EXTERNAL
               type: string
             external:
-              description: Supplies configuration of the external service.
+              description: Specifies detailed configuration of the EXTERNAL action.
               properties:
-                service:
-                  description: Specifies the name of the external service to call.
+                provider:
+                  description: Specifies the name of the external provider.
                   format: string
                   type: string
               type: object
