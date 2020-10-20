@@ -24,7 +24,7 @@
             }
           },
           "observedGeneration": {
-            "description": "Resource Generation to which the Reconciled Condition refers. When this value is not equal to the object's metadata generation, reconciled condition calculation for the current generation is still in progress. +optional",
+            "description": "Resource Generation to which the Reconciled Condition refers. When this value is not equal to the object's metadata generation, reconciled condition calculation for the current generation is still in progress. See https://istio.io/latest/docs/reference/config/config-status/ for more info. +optional",
             "type": "integer",
             "format": "int64"
           }

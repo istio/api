@@ -39,7 +39,7 @@ type IstioStatus struct {
 	ValidationMessages []*v1alpha1.AnalysisMessageBase `protobuf:"bytes,2,rep,name=validation_messages,json=validationMessages,proto3" json:"validation_messages,omitempty"`
 	// Resource Generation to which the Reconciled Condition refers.
 	// When this value is not equal to the object's metadata generation, reconciled condition  calculation for the current
-	// generation is still in progress.
+	// generation is still in progress.  See https://istio.io/latest/docs/reference/config/config-status/ for more info.
 	// +optional
 	ObservedGeneration   int64    `protobuf:"varint,3,opt,name=observed_generation,json=observedGeneration,proto3" json:"observed_generation,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
