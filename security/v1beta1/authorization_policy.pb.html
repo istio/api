@@ -363,13 +363,14 @@ No
 list of conditions. A match occurs when at least one source, operation and condition
 matches the request. An empty rule is always matched.</p>
 
-<p>Any string field in the rule supports Exact, Prefix, Suffix and Presence match:</p>
+<p>Any string field in the rule supports Exact, Prefix, Suffix and Presence and Regex match:</p>
 
 <ul>
 <li>Exact match: &ldquo;abc&rdquo; will match on value &ldquo;abc&rdquo;.</li>
 <li>Prefix match: &ldquo;abc*&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;abcd&rdquo;.</li>
 <li>Suffix match: &ldquo;*abc&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;xabc&rdquo;.</li>
 <li>Presence match: &ldquo;*&rdquo; will match when value is not empty.</li>
+<li>Regex match: &ldquo;regex:abc\/[0-9]?&rdquo; will match on value &ldquo;abc/&rdquo; and &ldquo;abc/0&rdquo; etc.</li>
 </ul>
 
 <table class="message-fields">
@@ -586,11 +587,12 @@ No
 ANDed together.</p>
 
 <p>For example, the following operation matches if the host has suffix &ldquo;.example.com&rdquo;
-and the method is &ldquo;GET&rdquo; or &ldquo;HEAD&rdquo; and the path doesn&rsquo;t have prefix &ldquo;/admin&rdquo;.</p>
+and the method is &ldquo;GET&rdquo; or &ldquo;HEAD&rdquo; and the path doesn&rsquo;t have prefix &ldquo;/admin&rdquo; and doesn&rsquo;t match regex
+pattern &ldquo;abc/[0-9]?&rdquo;.</p>
 
 <pre><code class="language-yaml">hosts: [&quot;*.example.com&quot;]
 methods: [&quot;GET&quot;, &quot;HEAD&quot;]
-not_paths: [&quot;/admin*&quot;]
+not_paths: [&quot;/admin*&quot;, 'regex:abc\/[0-9]?']
 </code></pre>
 
 <table class="message-fields">

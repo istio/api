@@ -793,12 +793,13 @@ func (m *External_TCPConfig) GetIncludePeerCertificate() bool {
 // list of conditions. A match occurs when at least one source, operation and condition
 // matches the request. An empty rule is always matched.
 //
-// Any string field in the rule supports Exact, Prefix, Suffix and Presence match:
+// Any string field in the rule supports Exact, Prefix, Suffix and Presence and Regex match:
 //
 // - Exact match: "abc" will match on value "abc".
 // - Prefix match: "abc*" will match on value "abc" and "abcd".
 // - Suffix match: "*abc" will match on value "abc" and "xabc".
 // - Presence match: "*" will match when value is not empty.
+// - Regex match: "regex:abc\/[0-9]?" will match on value "abc/" and "abc/0" etc.
 type Rule struct {
 	// Optional. from specifies the source of a request.
 	//
@@ -1133,12 +1134,13 @@ func (m *Source) GetNotRemoteIpBlocks() []string {
 // ANDed together.
 //
 // For example, the following operation matches if the host has suffix ".example.com"
-// and the method is "GET" or "HEAD" and the path doesn't have prefix "/admin".
+// and the method is "GET" or "HEAD" and the path doesn't have prefix "/admin" and doesn't match regex
+// pattern "abc/[0-9]?".
 //
 // ```yaml
 // hosts: ["*.example.com"]
 // methods: ["GET", "HEAD"]
-// not_paths: ["/admin*"]
+// not_paths: ["/admin*", 'regex:abc\/[0-9]?']
 // ```
 type Operation struct {
 	// Optional. A list of hosts, which matches to the "request.host" attribute.
