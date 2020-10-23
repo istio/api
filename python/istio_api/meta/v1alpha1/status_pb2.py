@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.meta.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\032istio.io/api/meta/v1alpha1'),
-  serialized_pb=_b('\n\x1ameta/v1alpha1/status.proto\x12\x13istio.meta.v1alpha1\x1a\x1f\x61nalysis/v1alpha1/message.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1fgoogle/api/field_behavior.proto\"\x91\x01\n\x0bIstioStatus\x12\x37\n\nconditions\x18\x01 \x03(\x0b\x32#.istio.meta.v1alpha1.IstioCondition\x12I\n\x13validation_messages\x18\x02 \x03(\x0b\x32,.istio.analysis.v1alpha1.AnalysisMessageBase\"\xbe\x01\n\x0eIstioCondition\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0e\n\x06status\x18\x02 \x01(\t\x12\x33\n\x0flast_probe_time\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x38\n\x14last_transition_time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0e\n\x06reason\x18\x05 \x01(\t\x12\x0f\n\x07message\x18\x06 \x01(\tB\x1cZ\x1aistio.io/api/meta/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x1ameta/v1alpha1/status.proto\x12\x13istio.meta.v1alpha1\x1a\x1f\x61nalysis/v1alpha1/message.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1fgoogle/api/field_behavior.proto\"\xae\x01\n\x0bIstioStatus\x12\x37\n\nconditions\x18\x01 \x03(\x0b\x32#.istio.meta.v1alpha1.IstioCondition\x12I\n\x13validation_messages\x18\x02 \x03(\x0b\x32,.istio.analysis.v1alpha1.AnalysisMessageBase\x12\x1b\n\x13observed_generation\x18\x03 \x01(\x03\"\xbe\x01\n\x0eIstioCondition\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0e\n\x06status\x18\x02 \x01(\t\x12\x33\n\x0flast_probe_time\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x38\n\x14last_transition_time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0e\n\x06reason\x18\x05 \x01(\t\x12\x0f\n\x07message\x18\x06 \x01(\tB\x1cZ\x1aistio.io/api/meta/v1alpha1b\x06proto3')
   ,
   dependencies=[analysis_dot_v1alpha1_dot_message__pb2.DESCRIPTOR,google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,])
 
@@ -51,6 +51,13 @@ _ISTIOSTATUS = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='observed_generation', full_name='istio.meta.v1alpha1.IstioStatus.observed_generation', index=2,
+      number=3, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -64,7 +71,7 @@ _ISTIOSTATUS = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=151,
-  serialized_end=296,
+  serialized_end=325,
 )
 
 
@@ -129,8 +136,8 @@ _ISTIOCONDITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=299,
-  serialized_end=489,
+  serialized_start=328,
+  serialized_end=518,
 )
 
 _ISTIOSTATUS.fields_by_name['conditions'].message_type = _ISTIOCONDITION

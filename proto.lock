@@ -37185,6 +37185,11 @@
                 "name": "validation_messages",
                 "type": "analysis.v1alpha1.AnalysisMessageBase",
                 "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "observed_generation",
+                "type": "int64"
               }
             ]
           },
