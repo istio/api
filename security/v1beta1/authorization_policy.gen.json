@@ -30,11 +30,11 @@
               "anyOf": [
                 {
                   "required": [
-                    "external"
+                    "provider"
                   ],
                   "properties": {
-                    "external": {
-                      "$ref": "#/components/schemas/istio.security.v1beta1.AuthorizationPolicy.External"
+                    "provider": {
+                      "$ref": "#/components/schemas/istio.security.v1beta1.AuthorizationPolicy.ExtensionProvider"
                     }
                   }
                 }
@@ -43,11 +43,11 @@
           },
           {
             "required": [
-              "external"
+              "provider"
             ],
             "properties": {
-              "external": {
-                "$ref": "#/components/schemas/istio.security.v1beta1.AuthorizationPolicy.External"
+              "provider": {
+                "$ref": "#/components/schemas/istio.security.v1beta1.AuthorizationPolicy.ExtensionProvider"
               }
             }
           }
@@ -87,14 +87,14 @@
           "ALLOW",
           "DENY",
           "AUDIT",
-          "EXTERNAL"
+          "EXTENDED"
         ]
       },
-      "istio.security.v1beta1.AuthorizationPolicy.External": {
+      "istio.security.v1beta1.AuthorizationPolicy.ExtensionProvider": {
         "type": "object",
         "properties": {
-          "provider": {
-            "description": "Specifies the name of the external provider. The list of available providers are defined in the MeshConfig.",
+          "name": {
+            "description": "Specifies the name of the extension provider. The list of available providers are defined in the MeshConfig.",
             "type": "string",
             "format": "string"
           }

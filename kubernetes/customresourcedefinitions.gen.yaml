@@ -3034,9 +3034,9 @@ spec:
           - not:
               anyOf:
               - required:
-                - external
+                - provider
           - required:
-            - external
+            - provider
           properties:
             action:
               description: Optional.
@@ -3044,13 +3044,13 @@ spec:
               - ALLOW
               - DENY
               - AUDIT
-              - EXTERNAL
+              - EXTENDED
               type: string
-            external:
-              description: Specifies detailed configuration of the EXTERNAL action.
+            provider:
+              description: Specifies detailed configuration of the EXTENDED action.
               properties:
-                provider:
-                  description: Specifies the name of the external provider.
+                name:
+                  description: Specifies the name of the extension provider.
                   format: string
                   type: string
               type: object

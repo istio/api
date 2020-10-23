@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.security.v1beta1',
   syntax='proto3',
   serialized_options=_b('Z\035istio.io/api/security/v1beta1'),
-  serialized_pb=_b('\n+security/v1beta1/authorization_policy.proto\x12\x16istio.security.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1btype/v1beta1/selector.proto\"\xef\x02\n\x13\x41uthorizationPolicy\x12\x36\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelector\x12+\n\x05rules\x18\x02 \x03(\x0b\x32\x1c.istio.security.v1beta1.Rule\x12\x42\n\x06\x61\x63tion\x18\x03 \x01(\x0e\x32\x32.istio.security.v1beta1.AuthorizationPolicy.Action\x12H\n\x08\x65xternal\x18\x04 \x01(\x0b\x32\x34.istio.security.v1beta1.AuthorizationPolicy.ExternalH\x00\x1a\x1c\n\x08\x45xternal\x12\x10\n\x08provider\x18\x01 \x01(\t\"6\n\x06\x41\x63tion\x12\t\n\x05\x41LLOW\x10\x00\x12\x08\n\x04\x44\x45NY\x10\x01\x12\t\n\x05\x41UDIT\x10\x02\x12\x0c\n\x08\x45XTERNAL\x10\x03\x42\x0f\n\raction_detail\"\x89\x02\n\x04Rule\x12/\n\x04\x66rom\x18\x01 \x03(\x0b\x32!.istio.security.v1beta1.Rule.From\x12+\n\x02to\x18\x02 \x03(\x0b\x32\x1f.istio.security.v1beta1.Rule.To\x12/\n\x04when\x18\x03 \x03(\x0b\x32!.istio.security.v1beta1.Condition\x1a\x36\n\x04\x46rom\x12.\n\x06source\x18\x01 \x01(\x0b\x32\x1e.istio.security.v1beta1.Source\x1a:\n\x02To\x12\x34\n\toperation\x18\x01 \x01(\x0b\x32!.istio.security.v1beta1.Operation\"\xfe\x01\n\x06Source\x12\x12\n\nprincipals\x18\x01 \x03(\t\x12\x16\n\x0enot_principals\x18\x05 \x03(\t\x12\x1a\n\x12request_principals\x18\x02 \x03(\t\x12\x1e\n\x16not_request_principals\x18\x06 \x03(\t\x12\x12\n\nnamespaces\x18\x03 \x03(\t\x12\x16\n\x0enot_namespaces\x18\x07 \x03(\t\x12\x11\n\tip_blocks\x18\x04 \x03(\t\x12\x15\n\rnot_ip_blocks\x18\x08 \x03(\t\x12\x18\n\x10remote_ip_blocks\x18\t \x03(\t\x12\x1c\n\x14not_remote_ip_blocks\x18\n \x03(\t\"\x97\x01\n\tOperation\x12\r\n\x05hosts\x18\x01 \x03(\t\x12\x11\n\tnot_hosts\x18\x05 \x03(\t\x12\r\n\x05ports\x18\x02 \x03(\t\x12\x11\n\tnot_ports\x18\x06 \x03(\t\x12\x0f\n\x07methods\x18\x03 \x03(\t\x12\x13\n\x0bnot_methods\x18\x07 \x03(\t\x12\r\n\x05paths\x18\x04 \x03(\t\x12\x11\n\tnot_paths\x18\x08 \x03(\t\"A\n\tCondition\x12\x10\n\x03key\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x0e\n\x06values\x18\x02 \x03(\t\x12\x12\n\nnot_values\x18\x03 \x03(\tB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
+  serialized_pb=_b('\n+security/v1beta1/authorization_policy.proto\x12\x16istio.security.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1btype/v1beta1/selector.proto\"\xfd\x02\n\x13\x41uthorizationPolicy\x12\x36\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelector\x12+\n\x05rules\x18\x02 \x03(\x0b\x32\x1c.istio.security.v1beta1.Rule\x12\x42\n\x06\x61\x63tion\x18\x03 \x01(\x0e\x32\x32.istio.security.v1beta1.AuthorizationPolicy.Action\x12Q\n\x08provider\x18\x04 \x01(\x0b\x32=.istio.security.v1beta1.AuthorizationPolicy.ExtensionProviderH\x00\x1a!\n\x11\x45xtensionProvider\x12\x0c\n\x04name\x18\x01 \x01(\t\"6\n\x06\x41\x63tion\x12\t\n\x05\x41LLOW\x10\x00\x12\x08\n\x04\x44\x45NY\x10\x01\x12\t\n\x05\x41UDIT\x10\x02\x12\x0c\n\x08\x45XTENDED\x10\x03\x42\x0f\n\raction_detail\"\x89\x02\n\x04Rule\x12/\n\x04\x66rom\x18\x01 \x03(\x0b\x32!.istio.security.v1beta1.Rule.From\x12+\n\x02to\x18\x02 \x03(\x0b\x32\x1f.istio.security.v1beta1.Rule.To\x12/\n\x04when\x18\x03 \x03(\x0b\x32!.istio.security.v1beta1.Condition\x1a\x36\n\x04\x46rom\x12.\n\x06source\x18\x01 \x01(\x0b\x32\x1e.istio.security.v1beta1.Source\x1a:\n\x02To\x12\x34\n\toperation\x18\x01 \x01(\x0b\x32!.istio.security.v1beta1.Operation\"\xfe\x01\n\x06Source\x12\x12\n\nprincipals\x18\x01 \x03(\t\x12\x16\n\x0enot_principals\x18\x05 \x03(\t\x12\x1a\n\x12request_principals\x18\x02 \x03(\t\x12\x1e\n\x16not_request_principals\x18\x06 \x03(\t\x12\x12\n\nnamespaces\x18\x03 \x03(\t\x12\x16\n\x0enot_namespaces\x18\x07 \x03(\t\x12\x11\n\tip_blocks\x18\x04 \x03(\t\x12\x15\n\rnot_ip_blocks\x18\x08 \x03(\t\x12\x18\n\x10remote_ip_blocks\x18\t \x03(\t\x12\x1c\n\x14not_remote_ip_blocks\x18\n \x03(\t\"\x97\x01\n\tOperation\x12\r\n\x05hosts\x18\x01 \x03(\t\x12\x11\n\tnot_hosts\x18\x05 \x03(\t\x12\r\n\x05ports\x18\x02 \x03(\t\x12\x11\n\tnot_ports\x18\x06 \x03(\t\x12\x0f\n\x07methods\x18\x03 \x03(\t\x12\x13\n\x0bnot_methods\x18\x07 \x03(\t\x12\r\n\x05paths\x18\x04 \x03(\t\x12\x11\n\tnot_paths\x18\x08 \x03(\t\"A\n\tCondition\x12\x10\n\x03key\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x0e\n\x06values\x18\x02 \x03(\t\x12\x12\n\nnot_values\x18\x03 \x03(\tB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,])
 
@@ -47,27 +47,27 @@ _AUTHORIZATIONPOLICY_ACTION = _descriptor.EnumDescriptor(
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='EXTERNAL', index=3, number=3,
+      name='EXTENDED', index=3, number=3,
       serialized_options=None,
       type=None),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=430,
-  serialized_end=484,
+  serialized_start=444,
+  serialized_end=498,
 )
 _sym_db.RegisterEnumDescriptor(_AUTHORIZATIONPOLICY_ACTION)
 
 
-_AUTHORIZATIONPOLICY_EXTERNAL = _descriptor.Descriptor(
-  name='External',
-  full_name='istio.security.v1beta1.AuthorizationPolicy.External',
+_AUTHORIZATIONPOLICY_EXTENSIONPROVIDER = _descriptor.Descriptor(
+  name='ExtensionProvider',
+  full_name='istio.security.v1beta1.AuthorizationPolicy.ExtensionProvider',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='provider', full_name='istio.security.v1beta1.AuthorizationPolicy.External.provider', index=0,
+      name='name', full_name='istio.security.v1beta1.AuthorizationPolicy.ExtensionProvider.name', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -85,8 +85,8 @@ _AUTHORIZATIONPOLICY_EXTERNAL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=400,
-  serialized_end=428,
+  serialized_start=409,
+  serialized_end=442,
 )
 
 _AUTHORIZATIONPOLICY = _descriptor.Descriptor(
@@ -118,7 +118,7 @@ _AUTHORIZATIONPOLICY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='external', full_name='istio.security.v1beta1.AuthorizationPolicy.external', index=3,
+      name='provider', full_name='istio.security.v1beta1.AuthorizationPolicy.provider', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -127,7 +127,7 @@ _AUTHORIZATIONPOLICY = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_AUTHORIZATIONPOLICY_EXTERNAL, ],
+  nested_types=[_AUTHORIZATIONPOLICY_EXTENSIONPROVIDER, ],
   enum_types=[
     _AUTHORIZATIONPOLICY_ACTION,
   ],
@@ -141,7 +141,7 @@ _AUTHORIZATIONPOLICY = _descriptor.Descriptor(
       index=0, containing_type=None, fields=[]),
   ],
   serialized_start=134,
-  serialized_end=501,
+  serialized_end=515,
 )
 
 
@@ -171,8 +171,8 @@ _RULE_FROM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=655,
-  serialized_end=709,
+  serialized_start=669,
+  serialized_end=723,
 )
 
 _RULE_TO = _descriptor.Descriptor(
@@ -201,8 +201,8 @@ _RULE_TO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=711,
-  serialized_end=769,
+  serialized_start=725,
+  serialized_end=783,
 )
 
 _RULE = _descriptor.Descriptor(
@@ -245,8 +245,8 @@ _RULE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=504,
-  serialized_end=769,
+  serialized_start=518,
+  serialized_end=783,
 )
 
 
@@ -339,8 +339,8 @@ _SOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=772,
-  serialized_end=1026,
+  serialized_start=786,
+  serialized_end=1040,
 )
 
 
@@ -419,8 +419,8 @@ _OPERATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1029,
-  serialized_end=1180,
+  serialized_start=1043,
+  serialized_end=1194,
 )
 
 
@@ -464,19 +464,19 @@ _CONDITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1182,
-  serialized_end=1247,
+  serialized_start=1196,
+  serialized_end=1261,
 )
 
-_AUTHORIZATIONPOLICY_EXTERNAL.containing_type = _AUTHORIZATIONPOLICY
+_AUTHORIZATIONPOLICY_EXTENSIONPROVIDER.containing_type = _AUTHORIZATIONPOLICY
 _AUTHORIZATIONPOLICY.fields_by_name['selector'].message_type = type_dot_v1beta1_dot_selector__pb2._WORKLOADSELECTOR
 _AUTHORIZATIONPOLICY.fields_by_name['rules'].message_type = _RULE
 _AUTHORIZATIONPOLICY.fields_by_name['action'].enum_type = _AUTHORIZATIONPOLICY_ACTION
-_AUTHORIZATIONPOLICY.fields_by_name['external'].message_type = _AUTHORIZATIONPOLICY_EXTERNAL
+_AUTHORIZATIONPOLICY.fields_by_name['provider'].message_type = _AUTHORIZATIONPOLICY_EXTENSIONPROVIDER
 _AUTHORIZATIONPOLICY_ACTION.containing_type = _AUTHORIZATIONPOLICY
 _AUTHORIZATIONPOLICY.oneofs_by_name['action_detail'].fields.append(
-  _AUTHORIZATIONPOLICY.fields_by_name['external'])
-_AUTHORIZATIONPOLICY.fields_by_name['external'].containing_oneof = _AUTHORIZATIONPOLICY.oneofs_by_name['action_detail']
+  _AUTHORIZATIONPOLICY.fields_by_name['provider'])
+_AUTHORIZATIONPOLICY.fields_by_name['provider'].containing_oneof = _AUTHORIZATIONPOLICY.oneofs_by_name['action_detail']
 _RULE_FROM.fields_by_name['source'].message_type = _SOURCE
 _RULE_FROM.containing_type = _RULE
 _RULE_TO.fields_by_name['operation'].message_type = _OPERATION
@@ -493,10 +493,10 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 AuthorizationPolicy = _reflection.GeneratedProtocolMessageType('AuthorizationPolicy', (_message.Message,), {
 
-  'External' : _reflection.GeneratedProtocolMessageType('External', (_message.Message,), {
-    'DESCRIPTOR' : _AUTHORIZATIONPOLICY_EXTERNAL,
+  'ExtensionProvider' : _reflection.GeneratedProtocolMessageType('ExtensionProvider', (_message.Message,), {
+    'DESCRIPTOR' : _AUTHORIZATIONPOLICY_EXTENSIONPROVIDER,
     '__module__' : 'security.v1beta1.authorization_policy_pb2'
-    # @@protoc_insertion_point(class_scope:istio.security.v1beta1.AuthorizationPolicy.External)
+    # @@protoc_insertion_point(class_scope:istio.security.v1beta1.AuthorizationPolicy.ExtensionProvider)
     })
   ,
   'DESCRIPTOR' : _AUTHORIZATIONPOLICY,
@@ -504,7 +504,7 @@ AuthorizationPolicy = _reflection.GeneratedProtocolMessageType('AuthorizationPol
   # @@protoc_insertion_point(class_scope:istio.security.v1beta1.AuthorizationPolicy)
   })
 _sym_db.RegisterMessage(AuthorizationPolicy)
-_sym_db.RegisterMessage(AuthorizationPolicy.External)
+_sym_db.RegisterMessage(AuthorizationPolicy.ExtensionProvider)
 
 Rule = _reflection.GeneratedProtocolMessageType('Rule', (_message.Message,), {
 

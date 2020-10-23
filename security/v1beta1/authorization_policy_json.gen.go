@@ -188,14 +188,14 @@ func (this *AuthorizationPolicy) UnmarshalJSON(b []byte) error {
 	return AuthorizationPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for AuthorizationPolicy_External
-func (this *AuthorizationPolicy_External) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for AuthorizationPolicy_ExtensionProvider
+func (this *AuthorizationPolicy_ExtensionProvider) MarshalJSON() ([]byte, error) {
 	str, err := AuthorizationPolicyMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for AuthorizationPolicy_External
-func (this *AuthorizationPolicy_External) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for AuthorizationPolicy_ExtensionProvider
+func (this *AuthorizationPolicy_ExtensionProvider) UnmarshalJSON(b []byte) error {
 	return AuthorizationPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
