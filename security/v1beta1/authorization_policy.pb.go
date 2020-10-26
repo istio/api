@@ -194,19 +194,19 @@ const (
 	// Audit a request if it matches any of the rules.
 	AuthorizationPolicy_AUDIT AuthorizationPolicy_Action = 2
 	// $hide_from_docs
-	// The EXTENDED action lets an extension to handle the user request if the  matching rules evaluate to true.
+	// The EXTENDED action allows an extension to handle the user request if the  matching rules evaluate to true.
 	// The extension is evaluated independently and before the native ALLOW and DENY actions. When used together, A request
 	// is allowed if and only if all the actions return allow, in other words, the extension cannot bypass the
 	// authorization decision made by ALLOW and DENY action.
-	// The detail extension is referred to by its provider name defined in the MeshConfig.
+	// Extension behavior is defined by the named providers declared in MeshConfig. The authorization policy refers to
+	// the extension by specifying the name of the provider.
 	// One example use case of the extension is to integrate with a custom external authorization system to delegate
 	// the authorization decision to it.
 	//
 	// Note: The EXTENDED action is currently an **experimental feature** and is subject to breaking changes in later versions.
-	// We're actively working to improve it based on user feedbacks.
 	//
-	// The following authorization policy applies to ingress gateway and delegates the authorization check to the extension
-	// provider called "my-custom-authz" (defined in MeshConfig) if the request path has prefix "/admin/".
+	// The following authorization policy applies to an ingress gateway and delegates the authorization check to a named extension
+	// "my-custom-authz" if the request path has prefix "/admin/".
 	//
 	// ```yaml
 	// apiVersion: security.istio.io/v1beta1
@@ -410,7 +410,7 @@ func (*AuthorizationPolicy) XXX_OneofWrappers() []interface{} {
 
 // $hide_from_docs
 type AuthorizationPolicy_ExtensionProvider struct {
-	// Specifies the name of the extension provider. The list of available providers are defined in the MeshConfig.
+	// Specifies the name of the extension provider. The list of available providers is defined in the MeshConfig.
 	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`

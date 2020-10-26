@@ -552,11 +552,11 @@
         "type": "object",
         "properties": {
           "port": {
-            "description": "Specifies the port of the service. Can be omitted if it can be decided unambiguously for the service (e.g. the service has defined only 1 port).",
+            "description": "Specifies the port of the service. Can be omitted if it can be derived unambiguously from the service (e.g. the service has defined only 1 port).",
             "type": "integer"
           },
           "service": {
-            "description": "REQUIRED. Specifies the service that implements the Envoy ext_authz HTTP authorization service. The format is \"[\u003cNamespace\u003e/]\u003cService\u003e\". The \u003cNamespace\u003e will have the default value \"istio-system\" if it is omitted. The \u003cService\u003e is the name of the service object (k8s service or ServiceEntry). Example: \"foo/my-ext-authz\" or \"my-ext-authz\".",
+            "description": "REQUIRED. Specifies the service that implements the Envoy ext_authz HTTP authorization service. The format is \"[\u003cNamespace\u003e/]\u003cService\u003e\". If the \u003cNamespace\u003e is omitted then it is resolved within the same namespace as this configuration resource. The \u003cService\u003e is the name of the service object (k8s service or ServiceEntry). Example: \"foo/my-ext-authz\" or \"my-ext-authz\".",
             "type": "string",
             "format": "string"
           },
@@ -604,11 +604,11 @@
         "type": "object",
         "properties": {
           "port": {
-            "description": "Specifies the port of the service. Can be omitted if it can be decided unambiguously for the service (e.g. the service has defined only 1 port).",
+            "description": "Specifies the port of the service. Can be omitted if it can be derived unambiguously from the service (e.g. the service has defined only 1 port).",
             "type": "integer"
           },
           "service": {
-            "description": "REQUIRED. Specifies the service that implements the Envoy ext_authz gRPC authorization service. The format is \"[\u003cNamespace\u003e/]\u003cService\u003e\", the \u003cNamespace\u003e will have the default value \"istio-system\" if it is omitted. The \u003cService\u003e is the name of the service object (k8s service or ServiceEntry). Example: \"foo/my-ext-authz\" or \"my-ext-authz\".",
+            "description": "REQUIRED. Specifies the service that implements the Envoy ext_authz gRPC authorization service. The format is \"[\u003cNamespace\u003e/]\u003cService\u003e\". If the \u003cNamespace\u003e is omitted then it is resolved within the same namespace as this configuration resource. The \u003cService\u003e is the name of the service object (k8s service or ServiceEntry). Example: \"foo/my-ext-authz\" or \"my-ext-authz\".",
             "type": "string",
             "format": "string"
           },

@@ -520,12 +520,12 @@ message MeshConfig {
     // $hide_from_docs
     message EnvoyExternalAuthorizationHttpProvider {
       // REQUIRED. Specifies the service that implements the Envoy ext_authz HTTP authorization service.
-      // The format is "[<Namespace>/]<Service>". The <Namespace> will have the default value "istio-system" if it is
-      // omitted. The <Service> is the name of the service object (k8s service or ServiceEntry).
+      // The format is "[<Namespace>/]<Service>". If the <Namespace> is omitted then it is resolved within the same
+      // namespace as this configuration resource. The <Service> is the name of the service object (k8s service or ServiceEntry).
       // Example: "foo/my-ext-authz" or "my-ext-authz".
       string service = 1;
 
-      // Specifies the port of the service. Can be omitted if it can be decided unambiguously for the service (e.g. the
+      // Specifies the port of the service. Can be omitted if it can be derived unambiguously from the service (e.g. the
       // service has defined only 1 port).
       uint32 port = 2;
 
@@ -568,12 +568,12 @@ message MeshConfig {
     // $hide_from_docs
     message EnvoyExternalAuthorizationGrpcProvider {
       // REQUIRED. Specifies the service that implements the Envoy ext_authz gRPC authorization service.
-      // The format is "[<Namespace>/]<Service>", the <Namespace> will have the default value "istio-system" if it is
-      // omitted. The <Service> is the name of the service object (k8s service or ServiceEntry).
+      // The format is "[<Namespace>/]<Service>". If the <Namespace> is omitted then it is resolved within the same
+      // namespace as this configuration resource. The <Service> is the name of the service object (k8s service or ServiceEntry).
       // Example: "foo/my-ext-authz" or "my-ext-authz".
       string service = 1;
 
-      // Specifies the port of the service. Can be omitted if it can be decided unambiguously for the service (e.g. the
+      // Specifies the port of the service. Can be omitted if it can be derived unambiguously from the service (e.g. the
       // service has defined only 1 port).
       uint32 port = 2;
 

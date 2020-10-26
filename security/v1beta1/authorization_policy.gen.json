@@ -94,7 +94,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "Specifies the name of the extension provider. The list of available providers are defined in the MeshConfig.",
+            "description": "Specifies the name of the extension provider. The list of available providers is defined in the MeshConfig.",
             "type": "string",
             "format": "string"
           }
