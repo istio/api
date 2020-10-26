@@ -52,4 +52,9 @@ const (
 	// workload. The label is added internally within the control plane to enable workload selection
 	// based on cluster.
 	IstioCluster = "topology.istio.io/cluster"
+
+	// IstioUnprivilegedPod marks a Kubernetes Pod as unprivileged, so that istiod will not generate any
+	// listeners with ports < 1024, as these require CAP_NET_BIND_SERVICE privileges. This is currently
+	// used to mark gateway deployments with gateway.runAsRoot = false
+	IstioUnprivilegedPod = "istio.io/unprivileged-pod"
 )
