@@ -1213,8 +1213,7 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider struct 
 	// namespace as this configuration resource. The <Service> is the name of the service object (k8s service or ServiceEntry).
 	// Example: "foo/my-ext-authz" or "my-ext-authz".
 	Service string `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
-	// Specifies the port of the service. Can be omitted if it can be derived unambiguously from the service (e.g. the
-	// service has defined only 1 port).
+	// REQUIRED. Specifies the port of the service.
 	Port uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
 	// Sets a prefix to the value of authorization request header *Path*.
 	// For example, setting this to "/check" for an original user request at path "/admin" will cause the
@@ -1350,8 +1349,7 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider struct 
 	// namespace as this configuration resource. The <Service> is the name of the service object (k8s service or ServiceEntry).
 	// Example: "foo/my-ext-authz" or "my-ext-authz".
 	Service string `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
-	// Specifies the port of the service. Can be omitted if it can be derived unambiguously from the service (e.g. the
-	// service has defined only 1 port).
+	// REQUIRED. Specifies the port of the service.
 	Port uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
 	// If true, the user request will be allowed even if the communication with the authorization service has failed,
 	// or if the authorization service has returned a HTTP 5xx error.

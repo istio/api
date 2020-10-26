@@ -525,8 +525,7 @@ message MeshConfig {
       // Example: "foo/my-ext-authz" or "my-ext-authz".
       string service = 1;
 
-      // Specifies the port of the service. Can be omitted if it can be derived unambiguously from the service (e.g. the
-      // service has defined only 1 port).
+      // REQUIRED. Specifies the port of the service.
       uint32 port = 2;
 
       // Sets a prefix to the value of authorization request header *Path*.
@@ -573,8 +572,7 @@ message MeshConfig {
       // Example: "foo/my-ext-authz" or "my-ext-authz".
       string service = 1;
 
-      // Specifies the port of the service. Can be omitted if it can be derived unambiguously from the service (e.g. the
-      // service has defined only 1 port).
+      // REQUIRED. Specifies the port of the service.
       uint32 port = 2;
 
       // If true, the user request will be allowed even if the communication with the authorization service has failed,
