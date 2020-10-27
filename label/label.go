@@ -38,8 +38,16 @@ const (
 	// IstioOperatorVersion is the Istio operator version that installed the resource, e.g. "1.6.0"
 	IstioOperatorVersion = "operator.istio.io/version"
 
-	// IstioSubZone identifies the locality subzone of a workload.
+	// IstioSubZone is a node label that allows a cluster admin to set the locality
+	// sub-zone of workload instances assigned to that node.
 	IstioSubZone = "topology.istio.io/subzone"
+
+	// IstioLocality is a pod label that allows the service owner to override the locality
+	// node labels (set by Kubernetes or a cluster admin) for a pod. The string is a
+	// dot-separated string (since k8s labels do not support `/`) of the form
+	// `region.zone.subzone`. Each level in the string is optional. This means that
+	// `region` is valid, as is `region.zone`.
+	IstioLocality = "topology.istio.io/locality"
 
 	// IstioNetwork enables Istio to group endpoints resident in the same L3 domain/network.
 	// All endpoints in the same network are assumed to be directly reachable from one another.
