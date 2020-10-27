@@ -36086,6 +36086,11 @@
                 "type": "bool"
               },
               {
+                "id": 56,
+                "name": "disable_envoy_listener_log",
+                "type": "bool"
+              },
+              {
                 "id": 14,
                 "name": "default_config",
                 "type": "ProxyConfig"
@@ -36196,6 +36201,12 @@
                 "id": 55,
                 "name": "ca",
                 "type": "CA"
+              },
+              {
+                "id": 57,
+                "name": "extension_providers",
+                "type": "ExtensionProvider",
+                "is_repeated": true
               }
             ],
             "reserved_ids": [
@@ -36312,6 +36323,101 @@
                     "id": 4,
                     "name": "istiod_side",
                     "type": "bool"
+                  }
+                ]
+              },
+              {
+                "name": "ExtensionProvider",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "envoy_ext_authz_http",
+                    "type": "EnvoyExternalAuthorizationHttpProvider"
+                  },
+                  {
+                    "id": 3,
+                    "name": "envoy_ext_authz_grpc",
+                    "type": "EnvoyExternalAuthorizationGrpcProvider"
+                  }
+                ],
+                "messages": [
+                  {
+                    "name": "EnvoyExternalAuthorizationHttpProvider",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "service",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "port",
+                        "type": "uint32"
+                      },
+                      {
+                        "id": 3,
+                        "name": "path_prefix",
+                        "type": "string"
+                      },
+                      {
+                        "id": 4,
+                        "name": "fail_open",
+                        "type": "bool"
+                      },
+                      {
+                        "id": 5,
+                        "name": "status_on_error",
+                        "type": "string"
+                      },
+                      {
+                        "id": 6,
+                        "name": "include_headers_in_check",
+                        "type": "string",
+                        "is_repeated": true
+                      },
+                      {
+                        "id": 7,
+                        "name": "headers_to_upstream_on_allow",
+                        "type": "string",
+                        "is_repeated": true
+                      },
+                      {
+                        "id": 8,
+                        "name": "headers_to_downstream_on_deny",
+                        "type": "string",
+                        "is_repeated": true
+                      }
+                    ]
+                  },
+                  {
+                    "name": "EnvoyExternalAuthorizationGrpcProvider",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "service",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "port",
+                        "type": "uint32"
+                      },
+                      {
+                        "id": 3,
+                        "name": "fail_open",
+                        "type": "bool"
+                      },
+                      {
+                        "id": 4,
+                        "name": "status_on_error",
+                        "type": "string"
+                      }
+                    ]
                   }
                 ]
               }
@@ -43441,7 +43547,7 @@
                 "integer": 2
               },
               {
-                "name": "EXTERNAL",
+                "name": "CUSTOM",
                 "integer": 3
               }
             ]
@@ -43469,103 +43575,18 @@
               },
               {
                 "id": 4,
-                "name": "external",
-                "type": "External"
-              }
-            ]
-          },
-          {
-            "name": "External",
-            "fields": [
-              {
-                "id": 1,
-                "name": "http",
-                "type": "HTTPConfig"
-              },
-              {
-                "id": 2,
-                "name": "tcp",
-                "type": "TCPConfig"
+                "name": "provider",
+                "type": "ExtensionProvider"
               }
             ],
             "messages": [
               {
-                "name": "HTTPConfig",
+                "name": "ExtensionProvider",
                 "fields": [
                   {
                     "id": 1,
-                    "name": "server",
+                    "name": "name",
                     "type": "string"
-                  },
-                  {
-                    "id": 2,
-                    "name": "timeout",
-                    "type": "google.protobuf.Duration"
-                  },
-                  {
-                    "id": 3,
-                    "name": "authorization_request",
-                    "type": "AuthorizationRequest"
-                  },
-                  {
-                    "id": 4,
-                    "name": "authorization_response",
-                    "type": "AuthorizationResponse"
-                  },
-                  {
-                    "id": 5,
-                    "name": "include_peer_certificate",
-                    "type": "bool"
-                  }
-                ],
-                "messages": [
-                  {
-                    "name": "AuthorizationRequest",
-                    "fields": [
-                      {
-                        "id": 1,
-                        "name": "allowed_headers",
-                        "type": "string",
-                        "is_repeated": true
-                      }
-                    ]
-                  },
-                  {
-                    "name": "AuthorizationResponse",
-                    "fields": [
-                      {
-                        "id": 1,
-                        "name": "forward_to_upstream",
-                        "type": "string",
-                        "is_repeated": true
-                      },
-                      {
-                        "id": 2,
-                        "name": "forward_to_downstream",
-                        "type": "string",
-                        "is_repeated": true
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "name": "TCPConfig",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "server",
-                    "type": "string"
-                  },
-                  {
-                    "id": 2,
-                    "name": "timeout",
-                    "type": "google.protobuf.Duration"
-                  },
-                  {
-                    "id": 3,
-                    "name": "include_peer_certificate",
-                    "type": "bool"
                   }
                 ]
               }
@@ -43764,9 +43785,6 @@
           }
         ],
         "imports": [
-          {
-            "path": "google/protobuf/duration.proto"
-          },
           {
             "path": "google/api/field_behavior.proto"
           },
