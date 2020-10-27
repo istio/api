@@ -63,7 +63,7 @@ const (
 	// contain any annotation or whose annotations match the value
 	// specified in the ingress_class parameter described earlier. Use this
 	// mode if Istio ingress controller will be the default ingress
-	// controller for the entireKubernetes cluster.
+	// controller for the entire Kubernetes cluster.
 	MeshConfig_DEFAULT MeshConfig_IngressControllerMode = 2
 	// Istio ingress controller will only act on ingress resources whose
 	// annotations match the value specified in the ingress_class parameter
