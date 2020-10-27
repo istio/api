@@ -505,7 +505,95 @@ message MeshConfig {
   CA ca = 55;
 
   // $hide_from_docs
-  // Next available field number: 57
+  message ExtensionProvider {
+    // REQUIRED. A unique name identifying the extension provider.
+    string name = 1;
+
+    // REQUIRED. Specifies detailed configuration for the extension provider.
+    oneof provider {
+      // Configures an external authorizer that implements the Envoy ext_authz filter authorization check service using the HTTP API.
+      EnvoyExternalAuthorizationHttpProvider envoy_ext_authz_http = 2;
+      // Configures an external authorizer that implements the Envoy ext_authz filter authorization check service using the gRPC API.
+      EnvoyExternalAuthorizationGrpcProvider envoy_ext_authz_grpc = 3;
+    }
+
+    // $hide_from_docs
+    message EnvoyExternalAuthorizationHttpProvider {
+      // REQUIRED. Specifies the service that implements the Envoy ext_authz HTTP authorization service.
+      // The format is "[<Namespace>/]<Service>". If the <Namespace> is omitted then it is resolved within the same
+      // namespace as this configuration resource. The <Service> is the name of the service object (k8s service or ServiceEntry).
+      // Example: "foo/my-ext-authz" or "my-ext-authz".
+      string service = 1;
+
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 2;
+
+      // Sets a prefix to the value of authorization request header *Path*.
+      // For example, setting this to "/check" for an original user request at path "/admin" will cause the
+      // authorization check request to be sent to the authorization service at the path "/check/admin" instead of "/admin".
+      string path_prefix = 3;
+
+      // If true, the user request will be allowed even if the communication with the authorization service has failed,
+      // or if the authorization service has returned a HTTP 5xx error.
+      // Default is false and the request will be rejected with "Forbidden" response.
+      bool fail_open = 4;
+
+      // Sets the HTTP status that is returned to the client when there is a network error to the authorization service.
+      // The default status is "403" (HTTP Forbidden).
+      string status_on_error = 5;
+
+      // List of headers that should be included in the authorization request sent to the authorization service.
+      // Note that in addition to the headers supplied by users:
+      // 1. *Host*, *Method*, *Path* and *Content-Length* are automatically sent.
+      // 2. *Content-Length* will be set to 0 and the request will not have a message body.
+      repeated string include_headers_in_check = 6;
+
+      // List of headers from the authorization service that should be added or overridden in the original request and
+      // forwarded to the upstream when the authorization check result is allowed (HTTP code 200).
+      // If not specified, the original request will not be modified and forwarded to backend as-is.
+      // Note, any existing headers will be overridden.
+      repeated string headers_to_upstream_on_allow = 7;
+
+      // List of headers from the authorization service that should be forwarded to downstream when the authorization
+      // check result is not allowed (HTTP code other than 200).
+      // If not specified, all the authorization response headers, except *Authority (Host)* will be in the response to
+      // the downstream.
+      // When a header is included in this list, *Path*, *Status*, *Content-Length*, *WWWAuthenticate* and *Location* are
+      // automatically added.
+      // Note, the body from the authorization service is always included in the response to downstream.
+      repeated string headers_to_downstream_on_deny = 8;
+    }
+
+    // $hide_from_docs
+    message EnvoyExternalAuthorizationGrpcProvider {
+      // REQUIRED. Specifies the service that implements the Envoy ext_authz gRPC authorization service.
+      // The format is "[<Namespace>/]<Service>". If the <Namespace> is omitted then it is resolved within the same
+      // namespace as this configuration resource. The <Service> is the name of the service object (k8s service or ServiceEntry).
+      // Example: "foo/my-ext-authz" or "my-ext-authz".
+      string service = 1;
+
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 2;
+
+      // If true, the user request will be allowed even if the communication with the authorization service has failed,
+      // or if the authorization service has returned a HTTP 5xx error.
+      // Default is false and the request will be rejected with "Forbidden" response.
+      bool fail_open = 3;
+
+      // Sets the HTTP status that is returned to the client when there is a network error to the authorization service.
+      // The default status is "403" (HTTP Forbidden).
+      string status_on_error = 4;
+    }
+  }
+
+  // $hide_from_docs
+  // Defines a list of extension providers that extend Istio's functionality. For example, the AuthorizationPolicy
+  // can be used with an extension provider to delegate the authorization decision to a custom authorization system.
+  // Note, currently at most 1 extension provider is allowed.
+  repeated ExtensionProvider extension_providers = 57;
+
+  // $hide_from_docs
+  // Next available field number: 58
 }
 
 // Resource describes the source of configuration
