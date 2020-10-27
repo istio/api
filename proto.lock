@@ -43547,7 +43547,7 @@
                 "integer": 2
               },
               {
-                "name": "EXTENDED",
+                "name": "CUSTOM",
                 "integer": 3
               }
             ]

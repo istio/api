@@ -87,7 +87,7 @@
           "ALLOW",
           "DENY",
           "AUDIT",
-          "EXTENDED"
+          "CUSTOM"
         ]
       },
       "istio.security.v1beta1.AuthorizationPolicy.ExtensionProvider": {

@@ -3044,10 +3044,10 @@ spec:
               - ALLOW
               - DENY
               - AUDIT
-              - EXTENDED
+              - CUSTOM
               type: string
             provider:
-              description: Specifies detailed configuration of the EXTENDED action.
+              description: Specifies detailed configuration of the CUSTOM action.
               properties:
                 name:
                   description: Specifies the name of the extension provider.
