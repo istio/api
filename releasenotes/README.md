@@ -2,3 +2,5 @@ This directory contains the release notes, upgrade notes, and security notes for
 
 For more information about the release notes tooling, please reference the
 documentation in [Istio](https://github.com/istio/istio/tree/master/releasenotes)
+
+Release notes should be created according to the [release notes template](https://github.com/istio/istio/blob/master/releasenotes/template.yaml)
