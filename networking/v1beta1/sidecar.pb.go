@@ -594,11 +594,12 @@ type IstioIngressListener struct {
 	// The captureMode option dictates how traffic to the listener is
 	// expected to be captured (or not).
 	CaptureMode CaptureMode `protobuf:"varint,3,opt,name=capture_mode,json=captureMode,proto3,enum=istio.networking.v1beta1.CaptureMode" json:"capture_mode,omitempty"`
-	// The loopback IP endpoint or Unix domain socket to which
+	// The IP endpoint or Unix domain socket to which
 	// traffic should be forwarded to. This configuration can be used to
 	// redirect traffic arriving at the bind `IP:Port` on the sidecar to a `localhost:port`
 	// or Unix domain socket where the application workload instance is listening for
-	// connections. Format should be `127.0.0.1:PORT` or `unix:///path/to/socket`
+	// connections. Arbitrary IPs are not supported. Format should be one of `127.0.0.1:PORT`, `0.0.0.0:PORT`
+	// (which will forward to the instance IP), or `unix:///path/to/socket`
 	DefaultEndpoint      string   `protobuf:"bytes,4,opt,name=default_endpoint,json=defaultEndpoint,proto3" json:"default_endpoint,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
