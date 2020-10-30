@@ -187,7 +187,9 @@ const (
 	EnvoyFilter_Patch_REMOVE EnvoyFilter_Patch_Operation = 3
 	// Insert operation on an array of named objects. This operation
 	// is typically useful only in the context of filters or routes,
-	// where the order of elements matter. For clusters and virtual hosts,
+	// where the order of elements matter. Routes should be ordered
+	// based on most to least specific matching criteria since the
+	// first matching element is selected. For clusters and virtual hosts,
 	// order of the element in the array does not matter. Insert
 	// before the selected filter or sub filter. If no filter is
 	// selected, the specified filter will be inserted at the front
@@ -195,7 +197,9 @@ const (
 	EnvoyFilter_Patch_INSERT_BEFORE EnvoyFilter_Patch_Operation = 4
 	// Insert operation on an array of named objects. This operation
 	// is typically useful only in the context of filters or routes,
-	// where the order of elements matter. For clusters and virtual hosts,
+	// where the order of elements matter. Routes should be ordered
+	// based on most to least specific matching criteria since the
+	// first matching element is selected. For clusters and virtual hosts,
 	// order of the element in the array does not matter. Insert
 	// after the selected filter or sub filter. If no filter is
 	// selected, the specified filter will be inserted at the end
@@ -203,7 +207,9 @@ const (
 	EnvoyFilter_Patch_INSERT_AFTER EnvoyFilter_Patch_Operation = 5
 	// Insert operation on an array of named objects. This operation
 	// is typically useful only in the context of filters or routes,
-	// where the order of elements matter. For clusters and virtual hosts,
+	// where the order of elements matter. Routes should be ordered
+	// based on most to least specific matching criteria since the
+	// first matching element is selected. For clusters and virtual hosts,
 	// order of the element in the array does not matter. Insert
 	// first in the list based on the presence of selected filter or not.
 	// This is specifically useful when you want your filter first in the
