@@ -98,7 +98,9 @@ message IstioOperatorSpec {
     // component.
     IstioComponentSetSpec components = 50;
 
-    // Extra addon components which are not explicitly specified above.
+    // Deprecated.
+    // Users should manage the installation of addon components on their own.
+    // Refer to samples/addons for demo installation of addon components.
     map<string, ExternalComponentSpec> addon_components = 51 [deprecated = true];
 
     // Overrides for default `values.yaml`. This is a validated pass-through to Helm templates.

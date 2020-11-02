@@ -125,7 +125,9 @@ type IstioOperatorSpec struct {
 	// Kubernetes resource settings, enablement and component-specific settings that are not internal to the
 	// component.
 	Components *IstioComponentSetSpec `protobuf:"bytes,50,opt,name=components,proto3" json:"components,omitempty"`
-	// Extra addon components which are not explicitly specified above.
+	// Deprecated.
+	// Users should manage the installation of addon components on their own.
+	// Refer to samples/addons for demo installation of addon components.
 	AddonComponents map[string]*ExternalComponentSpec `protobuf:"bytes,51,rep,name=addon_components,json=addonComponents,proto3" json:"addonComponents,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"` // Deprecated: Do not use.
 	// Overrides for default `values.yaml`. This is a validated pass-through to Helm templates.
 	// See the [Helm installation options](https://istio.io/v1.5/docs/reference/config/installation-options/) for schema details.
