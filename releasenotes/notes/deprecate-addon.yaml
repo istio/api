@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: removal
+area: installation
+issue:
+  - 25701
+
+releaseNotes:
+  - |
+    **Deprecated** IstioOperator API `addons` in favor of user managed addons installation or the samples/addons/ for demo deployment
