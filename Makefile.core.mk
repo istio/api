@@ -140,7 +140,7 @@ type_v1beta1_path := type/v1beta1
 type_v1beta1_protos := $(wildcard $(type_v1beta1_path)/*.proto)
 type_v1beta1_pb_gos := $(type_v1beta1_protos:.proto=.pb.go)
 type_v1beta1_pb_pythons := $(patsubst $(type_v1beta1_path)/%.proto,$(python_output_path)/$(type_v1beta1_path)/%_pb2.py,$(type_v1beta1_protos))
-type_v1beta1_pb_doc := $(type_v1beta1_path)/istio.type.v1beta1.pb.html
+type_v1beta1_pb_doc := $(type_v1beta1_path:.proto=.pb.html)
 type_v1beta1_openapi := $(type_v1beta1_protos:.proto=.gen.json)
 type_v1beta1_k8s_gos := \
 	$(patsubst $(type_v1beta1_path)/%.proto,$(type_v1beta1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(type_v1beta1_protos))) \
@@ -148,7 +148,7 @@ type_v1beta1_k8s_gos := \
 
 $(type_v1beta1_pb_gos) $(type_v1beta1_pb_doc) $(type_v1beta1_pb_pythons) $(type_v1beta1_k8s_gos): $(type_v1beta1_protos)
 	@$(protolock) status
-	@$(protoc) $(gogofast_plugin) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin)$(type_v1beta1_path) $(protoc_gen_python_plugin) $^
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin_per_file)$(type_v1beta1_path) $(protoc_gen_python_plugin) $^
 	@cp -r /tmp/istio.io/api/type/* type
 
 generate-type: $(type_v1beta1_pb_gos) $(type_v1beta1_pb_doc) $(type_v1beta1_pb_pythons) $(type_v1beta1_k8s_gos)
