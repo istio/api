@@ -183,6 +183,8 @@ message ComponentSpec {
     TypeBoolValueForPB enabled = 1;
     // Namespace for the component.
     string namespace = 2;
+    // Check whether autoScale is enabled.
+    TypeBoolValueForPB autoScaleEnabled = 3;
     // Hub for the component (overrides top level hub setting).
     string hub = 10;
     // Tag for the component (overrides top level tag setting).
@@ -224,12 +226,13 @@ message GatewaySpec {
     string name = 3;
     // Labels for the gateway.
     map <string, string> label = 4;
+    // Check whether autoScale is enabled.
+    TypeBoolValueForPB autoScaleEnabled = 5;
 
     // Hub for the component (overrides top level hub setting).
     string hub = 10;
     // Tag for the component (overrides top level tag setting).
     TypeInterface tag = 11;
-
     // Kubernetes resource spec.
     KubernetesResourcesSpec k8s = 50;
 }
@@ -484,6 +487,8 @@ message PodDisruptionBudgetSpec {
     uint32 minAvailable = 1;
     k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 2;
     uint32 maxUnavailable = 3;
+    // Check whether PodDisruptionBudget is enabled
+    TypeBoolValueForPB enabled = 4;
 }
 
 // See k8s.io.api.core.v1.PodsMetricSource.
