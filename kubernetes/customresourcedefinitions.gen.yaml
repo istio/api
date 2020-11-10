@@ -5828,3 +5828,206 @@ spec:
       status: {}
 
 ---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    app: istio-pilot
+    chart: istio
+    heritage: Tiller
+    istio: telemetry
+    release: istio
+  name: telemetrys.telemetry.istio.io
+spec:
+  group: telemetry.istio.io
+  names:
+    categories:
+    - istio-io
+    - telemetry-istio-io
+    kind: Telemetry
+    listKind: TelemetryList
+    plural: telemetrys
+    shortNames:
+    - telemetry
+    singular: telemetry
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: 'CreationTimestamp is a timestamp representing the server time
+        when this object was created. It is not guaranteed to be set in happens-before
+        order across separate operations. Clients may not set this value. It is represented
+        in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for
+        lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata'
+      jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            description: Telemetry defines the telemetry generation policies for workloads
+              within a mesh.
+            properties:
+              tracing:
+                description: Optional.
+                items:
+                  properties:
+                    config:
+                      description: Customization of the default behavior for tracing.
+                      oneOf:
+                      - not:
+                          anyOf:
+                          - required:
+                            - constantSampler
+                          - required:
+                            - percentageSampler
+                      - required:
+                        - constantSampler
+                      - required:
+                        - percentageSampler
+                      properties:
+                        constantSampler:
+                          description: A sampler that makes uniform decisions for
+                            all Sidecar traffic.
+                          properties:
+                            decision:
+                              description: Controls the behavior of the sampler.
+                              enum:
+                              - DECISION_UNSPECIFIED
+                              - NEVER_SAMPLE
+                              - ALWAYS_SAMPLE
+                              type: string
+                          type: object
+                        customTags:
+                          additionalProperties:
+                            oneOf:
+                            - not:
+                                anyOf:
+                                - required:
+                                  - literal
+                                - required:
+                                  - environment
+                                - required:
+                                  - header
+                            - required:
+                              - literal
+                            - required:
+                              - environment
+                            - required:
+                              - header
+                            properties:
+                              environment:
+                                description: Environment adds the value of an environment
+                                  variable to each span.
+                                properties:
+                                  defaultValue:
+                                    description: Optional.
+                                    format: string
+                                    type: string
+                                  name:
+                                    description: Name of the environment variable
+                                      from which to extract the tag value.
+                                    format: string
+                                    type: string
+                                type: object
+                              header:
+                                description: RequestHeader adds the value of an header
+                                  from the request to each span.
+                                properties:
+                                  defaultValue:
+                                    description: Optional.
+                                    format: string
+                                    type: string
+                                  name:
+                                    description: Name of the header from which to
+                                      extract the tag value.
+                                    format: string
+                                    type: string
+                                type: object
+                              literal:
+                                description: Literal adds the same, hard-coded value
+                                  to each span.
+                                properties:
+                                  value:
+                                    description: The tag value to use.
+                                    format: string
+                                    type: string
+                                type: object
+                            type: object
+                          description: Optional.
+                          type: object
+                        maxPathTagLength:
+                          description: Optional.
+                          type: integer
+                        percentageSampler:
+                          description: A sampler that selects a configurable percentage
+                            of traffic for telemetry generation.
+                          properties:
+                            randomSamplingPercentageTarget:
+                              format: double
+                              type: number
+                          type: object
+                        providers:
+                          description: Optional.
+                          items:
+                            properties:
+                              name:
+                                description: Required.
+                                format: string
+                                type: string
+                            type: object
+                          type: array
+                        reportSpans:
+                          description: Enables the tracing functionality.
+                          type: boolean
+                      type: object
+                    match:
+                      description: Defines the conditions under which the associated
+                        configuration applies.
+                      properties:
+                        port:
+                          description: Optional.
+                          properties:
+                            number:
+                              type: integer
+                          type: object
+                        protocol:
+                          description: Optional.
+                          enum:
+                          - ALL_PROTOCOLS
+                          - HTTP
+                          - TCP
+                          type: string
+                        trafficDirection:
+                          description: Optional.
+                          enum:
+                          - ALL_TRAFFIC
+                          - OUTBOUND
+                          - INBOUND
+                          type: string
+                      type: object
+                  type: object
+                type: array
+              workloadSelector:
+                description: Optional.
+                properties:
+                  matchLabels:
+                    additionalProperties:
+                      format: string
+                      type: string
+                    type: object
+                type: object
+            type: object
+          status:
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+
+---

@@ -1,0 +1,272 @@
+// Copyright Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "type/v1beta1/selector.proto";
+
+option go_package = "istio.io/api/telemetry/v1alpha1";
+
+package istio.telemetry.v1alpha1;
+
+// $schema: istio.telemetry.v1alpha1.Telemetry
+// $title: Telemetry
+// $description: Telemetry configuration for workloads.
+// $location: https://istio.io/docs/reference/config/telemetry/telemetry.html
+// $aliases: [/docs/reference/config/telemetry/v1alpha1/telemetry]
+
+// Telemetry defines the telemetry generation policies for workloads within a mesh.
+// Telemetry policies control runtime configuration of telemetry generation for Istio.
+//
+// For mesh level configuration, put the policy in root configuration namespace for 
+// your Istio installation *without* a workload selector.
+//
+// For any namespace, including the root configuration namespace, it is only valid 
+// to have a single workload-selector-less Telemetry resource. In the case of multiples,
+// the oldest known resource will be used to the exclusion of any other resources.
+//
+// For resources with a workload-selector, it is only valid to have one resource selecting
+// any given workload. If multiple resources select a single resource, the oldest known
+// resource will be used to the exclusion of all other resources.
+//
+// WARNING: Support for Telemetry policies is under active development and is *not* 
+// stable or supported by Istio at this time.
+//
+// Examples:
+//
+// Policy to enable sending trace data to a Zipkin backend for 10% of all traffic:
+// ```yaml
+// apiVersion: telemetry.istio.io/v1beta1
+// kind: Telemetry
+// metadata:
+//   name: mesh-default
+//   namespace: istio-system
+// spec:
+//   tracing:
+//   - match: # apply to all traffic
+//     config:
+//       providers:
+//       - name: "zipkin"
+//       reportSpans: true
+//       percentageSampler:
+//         randomSamplingPercentageTarget: 10.00
+// ```
+//
+//
+// <!-- crd generation tags
+// +cue-gen:Telemetry:groupName:telemetry.istio.io
+// +cue-gen:Telemetry:version:v1alpha1
+// +cue-gen:Telemetry:storageVersion
+// +cue-gen:Telemetry:annotations:helm.sh/resource-policy=keep
+// +cue-gen:Telemetry:labels:app=istio-pilot,chart=istio,istio=telemetry,heritage=Tiller,release=istio
+// +cue-gen:Telemetry:subresource:status
+// +cue-gen:Telemetry:scope:Namespaced
+// +cue-gen:Telemetry:resource:categories=istio-io,telemetry-istio-io,shortNames=telemetry
+// +cue-gen:Telemetry:preserveUnknownFields:false
+// +cue-gen:Telemetry:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
+// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
+// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// -->
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=telemetry.istio.io/v1alpha1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
+message Telemetry {
+  // Optional. Workload selector decides where to apply the Telemetry policy.
+  // If not set, the Telemetry policy will be applied to all workloads in the
+  // same namespace as the Telemetry policy.
+  istio.type.v1beta1.WorkloadSelector workload_selector = 1;
+
+  // Optional. Tracing defines the per-workload overrides for trace span
+  // reporting.
+  repeated TracingRule tracing = 2;
+
+  // AccessLoggingRule access_logging = 3;
+  // MetricsRule metrics = 4;
+}
+
+// TracingRule defines how trace spans should be reported (sampling rate, custom tags)
+// and under what conditions the reporting should be conducted.
+message TracingRule {
+  // Defines the conditions under which the associated configuration applies.
+  TelemetryRuleMatch match = 1;
+  // Customization of the default behavior for tracing.
+  TracingConfig config = 2;
+}
+
+// TelemetryRuleMatch defines conditions for selecting subsets of mesh traffic
+// for a workload. TelemetryRuleMatch is concerned with simplified selection 
+// based on listener, protocol, and traffic direction.
+message TelemetryRuleMatch {
+
+  // TrafficDirection selects for traffic relative to the local
+  // proxy. 
+  enum TrafficDirection {
+    // (Default) Match all traffic, regardless of direction.
+    ALL_TRAFFIC = 0;
+    // Match outbound traffic leaving the proxy. Use this to select "client-side"
+    // traffic in telemetry reporting.
+    // Note: Use OUTBOUND for gateways (even including ingress)
+    OUTBOUND = 1; 
+    // Match incoming traffic for the proxy. Use this to select "server-side"
+    // traffic in telemetry reporting.
+    INBOUND = 2;
+ }
+
+  // Protocol selects for traffic based on the identified protocol of that traffic. 
+  enum Protocol {
+    // (Default) Matches all traffic, regardless of protocol
+    ALL_PROTOCOLS = 0;
+    // Selects for HTTP traffic, including HTTP/1.1, gRPC, HTTP/2.
+    HTTP = 1; 
+    // Selects for all non-HTTP traffic.
+    // NOTE: Tracing is currently only supported for HTTP. 
+    TCP = 2; 
+  }
+
+  // Optional. Specifies the intended direction of the traffic relative to the local proxy.
+  // Defaults to ALL if unset.
+  TrafficDirection traffic_direction = 1; 
+
+  // Optional. Specifies the protocol of the traffic.
+  // Defaults to ALL if unset.
+  Protocol protocol = 2; 
+
+  // Optional. The port on which the traffic is received.
+  // Defaults to ALL if unset.
+  PortSelector port = 3; 
+}
+
+// PortSelector specifies the number of a port to be used for
+// matching or selection for final routing.
+message PortSelector {
+  // Valid port number
+  uint32 number = 1;
+}
+
+// Used to bind Telemetry configuration to specific providers for
+// targeted customization.
+message ProviderRef {
+  // Required. Name of Telemetry provider in MeshConfig.
+  string name = 1;
+}
+
+// TracingConfig defines the workload-level overrides for tracing behavior within
+// a mesh. It can be used to enable/disable tracing, as well as to set sampling
+// rates and custom tag extraction.
+message TracingConfig {
+  // Optional. Name of providers to which this configuration should apply.
+  // If not specified, this will apply to the full list of known tracing
+  // providers.
+  repeated ProviderRef providers = 1;
+  
+  // Enables the tracing functionality. When this is set to `true`, the
+  // sidecar will report spans to a configured backend for all traffic with a trace
+  // context that specifies the trace is sampled. Additionally, spans will be
+  // generated for traffic without trace contexts based on the
+  // `sampler` configuration provided. If `report_spans` is `false` (or unset),
+  // the sidecar will ignore the incoming trace context, generating no spans for
+  // the traffic (the context will be silently forwarded). This is equivalent to 
+  // disabling tracing for the sidecar.
+  bool report_spans = 2; 
+
+  // CustomTag defines a tag to be added to a trace span that is based on
+  // an operator-supplied value. This value can either be a hard-coded value,
+  // a value taken from an environment variable known to the sidecar proxy, or
+  // from a request header.
+  message CustomTag {
+    oneof type {
+      // Literal adds the same, hard-coded value to each span.
+      Literal literal = 1;
+      // Environment adds the value of an environment variable to each span.
+      Environment environment = 2;
+      // RequestHeader adds the value of an header from the request to each span.
+      RequestHeader header = 3;
+    }
+  }
+  message Literal {
+    // The tag value to use.
+    string value = 1;
+  }
+  message Environment {
+    // Name of the environment variable from which to extract the tag value.
+    string name = 1;
+    // Optional. If the environment variable is not found, this value will be
+    // used instead.
+    string default_value = 2;
+  }
+  message RequestHeader {
+    // Name of the header from which to extract the tag value.
+    string name = 1;
+    // Optional. If the header is not found, this value will be
+    // used instead.
+    string default_value = 2;
+  }
+
+  // Optional. Configures additional custom tags to the generated trace spans.
+  map<string, CustomTag> custom_tags = 3;
+
+  // Optional. Controls the overall path length allowed in a reported span.
+  uint32 max_path_tag_length = 4;
+
+  // Required. 
+  oneof sampler {
+    // A sampler that makes uniform decisions for all Sidecar traffic.
+    ConstantSampler constant_sampler = 5;
+    // A sampler that selects a configurable percentage of traffic for telemetry generation.
+    PercentageSampler percentage_sampler = 6;
+  }
+}
+
+// A sampler that makes uniform decisions for all Sidecar traffic.
+message ConstantSampler {
+  // ConstantDecision controls the behavior of the ConstantSampler.
+  enum ConstantDecision {
+    // Equivalent to NEVER_SAMPLE.
+    DECISION_UNSPECIFIED = 0;
+    // Ignore all sidecar traffic for the purposes of telemetry generation.
+    // For tracing, this means that the sidecar will never generate trace spans
+    // for traffic without an existing trace context.
+    NEVER_SAMPLE = 1;
+    // Consider all sidecar traffic for the purposes of telemetry generation.
+    // For tracing, this will generate trace spans for traffic without an
+    // existing trace context.
+    ALWAYS_SAMPLE = 2;
+  }
+
+  // Controls the behavior of the sampler.
+  ConstantDecision decision = 1;
+}
+
+// A sampler that selects a configurable percentage of traffic for telemetry generation.
+message PercentageSampler {
+  // Controls the amount of traffic selected for which no previous
+  // sampling decision has been made. If a prior sampling decision has been
+  // made, that decision will be respected. However, if no sampling decision
+  // has been made (example: no `x-b3-sampled` tracing header was present in the
+  // requests), the traffic will be selected for telemetry generation at the
+  // percentage specified.
+  // Setting `random_sampling_percentage_target` to 0 is equivalent to
+  // ConstantDecision.NEVER_SAMPLE. Setting `random_sampling_percentage_target` to
+  // 100 is equivalent of ConstantDecision.ALWAYS SAMPLE.
+  //
+  // Defaults to 0%. Valid values [0.00-100.00]. Can be specified in 0.01%
+  // increments.
+  double random_sampling_percentage_target = 1;
+}
+
