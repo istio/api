@@ -287,7 +287,8 @@ message KubernetesResourcesSpec {
     PodSecurityContext securityContext = 16;
     // Check whether autoScale is enabled.
     TypeBoolValueForPB autoScaleEnabled = 17;
-
+    // Check whether PodDisruptionBudget is enabled
+    TypeBoolValueForPB podDisruptionBudgetEnabled = 18;
     // Overlays for k8s resources in rendered manifests.
     repeated K8sObjectOverlay overlays = 100;
 }
@@ -486,8 +487,6 @@ message PodDisruptionBudgetSpec {
     uint32 minAvailable = 1;
     k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 2;
     uint32 maxUnavailable = 3;
-    // Check whether PodDisruptionBudget is enabled
-    TypeBoolValueForPB enabled = 4;
 }
 
 // See k8s.io.api.core.v1.PodsMetricSource.
