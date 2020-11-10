@@ -183,8 +183,6 @@ message ComponentSpec {
     TypeBoolValueForPB enabled = 1;
     // Namespace for the component.
     string namespace = 2;
-    // Check whether autoScale is enabled.
-    TypeBoolValueForPB autoScaleEnabled = 3;
     // Hub for the component (overrides top level hub setting).
     string hub = 10;
     // Tag for the component (overrides top level tag setting).
@@ -226,13 +224,12 @@ message GatewaySpec {
     string name = 3;
     // Labels for the gateway.
     map <string, string> label = 4;
-    // Check whether autoScale is enabled.
-    TypeBoolValueForPB autoScaleEnabled = 5;
 
     // Hub for the component (overrides top level hub setting).
     string hub = 10;
     // Tag for the component (overrides top level tag setting).
     TypeInterface tag = 11;
+
     // Kubernetes resource spec.
     KubernetesResourcesSpec k8s = 50;
 }
@@ -288,6 +285,8 @@ message KubernetesResourcesSpec {
     // k8s pod security context
     // [https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)
     PodSecurityContext securityContext = 16;
+    // Check whether autoScale is enabled.
+    TypeBoolValueForPB autoScaleEnabled = 17;
 
     // Overlays for k8s resources in rendered manifests.
     repeated K8sObjectOverlay overlays = 100;
