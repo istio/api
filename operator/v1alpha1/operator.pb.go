@@ -744,9 +744,9 @@ type KubernetesResourcesSpec struct {
 	// k8s pod security context
 	// [https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)
 	SecurityContext *PodSecurityContext `protobuf:"bytes,16,opt,name=securityContext,proto3" json:"securityContext,omitempty"`
-	// Check whether autoScale is enabled.
+	// Enable autoScale. If this is enabled, HPAs will be installed.
 	AutoScaleEnabled *BoolValueForPB `protobuf:"bytes,17,opt,name=autoScaleEnabled,proto3" json:"autoScaleEnabled,omitempty"`
-	// Check whether PodDisruptionBudget is enabled
+	// Enable PodDisruptionBudget. If this is enabled, PDBs will be installed.
 	PodDisruptionBudgetEnabled *BoolValueForPB `protobuf:"bytes,18,opt,name=podDisruptionBudgetEnabled,proto3" json:"podDisruptionBudgetEnabled,omitempty"`
 	// Overlays for k8s resources in rendered manifests.
 	Overlays             []*K8SObjectOverlay `protobuf:"bytes,100,rep,name=overlays,proto3" json:"overlays,omitempty"`
