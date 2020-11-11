@@ -235,16 +235,16 @@ type ReadinessProbe struct {
 	// Number of seconds after the container has started before readiness probes are initiated.
 	InitialDelaySeconds int32 `protobuf:"varint,2,opt,name=initial_delay_seconds,json=initialDelaySeconds,proto3" json:"initial_delay_seconds,omitempty"`
 	// Number of seconds after which the probe times out.
-	// Defaults to 1 second. Minimum value is 1.
+	// Defaults to 1 second. Minimum value is 1 second.
 	TimeoutSeconds int32 `protobuf:"varint,3,opt,name=timeout_seconds,json=timeoutSeconds,proto3" json:"timeout_seconds,omitempty"`
 	// How often (in seconds) to perform the probe.
-	// Default to 10 seconds. Minimum value is 1.
+	// Default to 10 seconds. Minimum value is 1 second.
 	PeriodSeconds int32 `protobuf:"varint,4,opt,name=period_seconds,json=periodSeconds,proto3" json:"period_seconds,omitempty"`
 	// Minimum consecutive successes for the probe to be considered successful after having failed.
-	// Defaults to 1.
+	// Defaults to 1 second.
 	SuccessThreshold int32 `protobuf:"varint,5,opt,name=success_threshold,json=successThreshold,proto3" json:"success_threshold,omitempty"`
 	// Minimum consecutive failures for the probe to be considered failed after having succeeded.
-	// Defaults to 3.
+	// Defaults to 3 seconds.
 	FailureThreshold int32 `protobuf:"varint,6,opt,name=failure_threshold,json=failureThreshold,proto3" json:"failure_threshold,omitempty"`
 	// Users can only provide one configuration for healthchecks (tcp, http, exec),
 	// and this is expressed as a oneof. All of the other configuration values
@@ -388,15 +388,15 @@ func (*ReadinessProbe) XXX_OneofWrappers() []interface{} {
 type HTTPHealthCheckConfig struct {
 	// Path to access on the HTTP server.
 	Path string `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
-	// port on which the endpoint lives.
+	// Port on which the endpoint lives.
 	Port uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
 	// Host name to connect to, defaults to the pod IP. You probably want to set
 	// "Host" in httpHeaders instead.
 	Host string `protobuf:"bytes,3,opt,name=host,proto3" json:"host,omitempty"`
-	// http or https, defaults to http
+	// HTTP or HTTPS, defaults to HTTP
 	Scheme string `protobuf:"bytes,4,opt,name=scheme,proto3" json:"scheme,omitempty"`
-	// headers the proxy will pass on to make the request.
-	// allows repeated headers.
+	// Headers the proxy will pass on to make the request.
+	// Allows repeated headers.
 	HttpHeaders          []*HTTPHeader `protobuf:"bytes,5,rep,name=http_headers,json=httpHeaders,proto3" json:"http_headers,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`
@@ -529,9 +529,9 @@ func (m *HTTPHeader) GetValue() string {
 }
 
 type TCPHealthCheckConfig struct {
-	// host to connect to, defaults to localhost
+	// Host to connect to, defaults to localhost
 	Host string `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
-	// port of host
+	// Port of host
 	Port                 uint32   `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -586,7 +586,7 @@ func (m *TCPHealthCheckConfig) GetPort() uint32 {
 }
 
 type ExecHealthCheckConfig struct {
-	// command to run. Exit status of 0 is treated as live/healthy and non-zero is unhealthy.
+	// Command to run. Exit status of 0 is treated as live/healthy and non-zero is unhealthy.
 	Command              []string `protobuf:"bytes,1,rep,name=command,proto3" json:"command,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
