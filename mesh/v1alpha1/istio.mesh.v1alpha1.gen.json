@@ -362,6 +362,11 @@
           },
           "proxyStatsMatcher": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig.ProxyStatsMatcher"
+          },
+          "holdApplicationUntilProxyStarts": {
+            "description": "Boolean flag for enabling/disabling the holdApplicationUntilProxyStarts behavior. This feature adds hooks to delay application startup until the pod proxy is ready to accept traffic, mitigating some startup race conditions. Default value is 'false'.",
+            "type": "boolean",
+            "nullable": true
           }
         }
       },
