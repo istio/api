@@ -488,6 +488,14 @@ message ProxyConfig {
   // collected by prometheus significantly. Care needs to be taken on Prometheus
   // resource provision and configuration to reduce cardinality.
   ProxyStatsMatcher proxy_stats_matcher = 32;
+
+
+  // Boolean flag for enabling/disabling the holdApplicationUntilProxyStarts behavior.
+  // This feature adds hooks to delay application startup until the pod proxy
+  // is ready to accept traffic, mitigating some startup race conditions.
+  // Default value is 'false'.
+  google.protobuf.BoolValue hold_application_until_proxy_starts = 33;
+
 }
 
 message RemoteService {
