@@ -48,8 +48,7 @@ const (
 	// Applies the patch to a virtual host inside a route configuration.
 	EnvoyFilter_VIRTUAL_HOST EnvoyFilter_ApplyTo = 6
 	// Applies the patch to a route object inside the matched virtual
-	// host in a route configuration. Currently, only `MERGE` operation
-	// is allowed on the route objects.
+	// host in a route configuration.
 	EnvoyFilter_HTTP_ROUTE EnvoyFilter_ApplyTo = 7
 	// Applies the patch to a cluster in a CDS output. Also used to add new clusters.
 	EnvoyFilter_CLUSTER EnvoyFilter_ApplyTo = 8
@@ -181,30 +180,36 @@ const (
 	// to `ROUTE_CONFIGURATION`, or `HTTP_ROUTE`.
 	EnvoyFilter_Patch_ADD EnvoyFilter_Patch_Operation = 2
 	// Remove the selected object from the list (of listeners,
-	// clusters, virtual hosts, network filters, or http
+	// clusters, virtual hosts, network filters, routes, or http
 	// filters). Does not require a value to be specified. This
 	// operation will be ignored when `applyTo` is set to
 	// `ROUTE_CONFIGURATION`, or `HTTP_ROUTE`.
 	EnvoyFilter_Patch_REMOVE EnvoyFilter_Patch_Operation = 3
 	// Insert operation on an array of named objects. This operation
-	// is typically useful only in the context of filters, where the
-	// order of filters matter. For clusters and virtual hosts,
+	// is typically useful only in the context of filters or routes,
+	// where the order of elements matter. Routes should be ordered
+	// based on most to least specific matching criteria since the
+	// first matching element is selected. For clusters and virtual hosts,
 	// order of the element in the array does not matter. Insert
 	// before the selected filter or sub filter. If no filter is
 	// selected, the specified filter will be inserted at the front
 	// of the list.
 	EnvoyFilter_Patch_INSERT_BEFORE EnvoyFilter_Patch_Operation = 4
 	// Insert operation on an array of named objects. This operation
-	// is typically useful only in the context of filters, where the
-	// order of filters matter. For clusters and virtual hosts,
+	// is typically useful only in the context of filters or routes,
+	// where the order of elements matter. Routes should be ordered
+	// based on most to least specific matching criteria since the
+	// first matching element is selected. For clusters and virtual hosts,
 	// order of the element in the array does not matter. Insert
 	// after the selected filter or sub filter. If no filter is
 	// selected, the specified filter will be inserted at the end
 	// of the list.
 	EnvoyFilter_Patch_INSERT_AFTER EnvoyFilter_Patch_Operation = 5
 	// Insert operation on an array of named objects. This operation
-	// is typically useful only in the context of filters, where the
-	// order of filters matter. For clusters and virtual hosts,
+	// is typically useful only in the context of filters or routes,
+	// where the order of elements matter. Routes should be ordered
+	// based on most to least specific matching criteria since the
+	// first matching element is selected. For clusters and virtual hosts,
 	// order of the element in the array does not matter. Insert
 	// first in the list based on the presence of selected filter or not.
 	// This is specifically useful when you want your filter first in the
