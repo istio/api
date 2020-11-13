@@ -91,6 +91,10 @@
             "description": "This flag disables Envoy Listener logs. See [Listener Access Log](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/listener/v3/listener.proto#envoy-v3-api-field-config-listener-v3-listener-access-log) Istio Enables Envoy's listener access logs on \"NoRoute\" response flag. Default value is `false`.",
             "type": "boolean"
           },
+          "enableStackdriverFormattedAppLogs": {
+            "description": "This flag enables outputting application logs om a format compatible with stackdriver. See [Stacdriver Application Log](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/application_logging#stackdriver-logging-with-gke)",
+            "type": "boolean"
+          },
           "defaultConfig": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig"
           },

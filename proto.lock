@@ -36091,6 +36091,11 @@
                 "type": "bool"
               },
               {
+                "id": 58,
+                "name": "enable_stackdriver_formatted_app_logs",
+                "type": "bool"
+              },
+              {
                 "id": 14,
                 "name": "default_config",
                 "type": "ProxyConfig"
@@ -37084,6 +37089,11 @@
                 "id": 32,
                 "name": "proxy_stats_matcher",
                 "type": "ProxyStatsMatcher"
+              },
+              {
+                "id": 33,
+                "name": "hold_application_until_proxy_starts",
+                "type": "google.protobuf.BoolValue"
               }
             ],
             "maps": [
@@ -42069,7 +42079,13 @@
                 "field": {
                   "id": 51,
                   "name": "addon_components",
-                  "type": "ExternalComponentSpec"
+                  "type": "ExternalComponentSpec",
+                  "options": [
+                    {
+                      "name": "deprecated",
+                      "value": "true"
+                    }
+                  ]
                 }
               }
             ]

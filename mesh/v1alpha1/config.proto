@@ -168,6 +168,10 @@ message MeshConfig {
   // Default value is `false`.
   bool disable_envoy_listener_log = 56;
 
+  // This flag enables outputting application logs om a format compatible with
+  // stackdriver. See [Stacdriver Application Log](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/application_logging#stackdriver-logging-with-gke)
+  bool enable_stackdriver_formatted_app_logs = 58;
+
   // Default proxy config used by the proxy injection mechanism operating in the mesh
   // (e.g. Kubernetes admission controller)
   // In case of Kubernetes, the proxy config is applied once during the injection process,
@@ -593,7 +597,7 @@ message MeshConfig {
   repeated ExtensionProvider extension_providers = 57;
 
   // $hide_from_docs
-  // Next available field number: 58
+  // Next available field number: 59
 }
 
 // Resource describes the source of configuration
