@@ -6,6 +6,18 @@
   },
   "components": {
     "schemas": {
+      "istio.networking.v1alpha3.ConnectionPoolSettings": {
+        "description": "Connection pool settings for an upstream host. The settings apply to each individual host in the upstream service. See Envoy's [circuit breaker](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/circuit_breaking) for more details. Connection pool settings can be applied at the TCP level as well as at HTTP level.",
+        "type": "object",
+        "properties": {
+          "tcp": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings"
+          },
+          "http": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings"
+          }
+        }
+      },
       "istio.networking.v1alpha3.PortSelector": {
         "description": "PortSelector specifies the number of a port to be used for matching or selection for final routing.",
         "type": "object",
@@ -15,6 +27,88 @@
             "type": "integer"
           }
         }
+      },
+      "istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings": {
+        "description": "Settings common to both HTTP and TCP upstream connections.",
+        "type": "object",
+        "properties": {
+          "maxConnections": {
+            "description": "Maximum number of HTTP1 /TCP connections to a destination host. Default 2^32-1.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "connectTimeout": {
+            "description": "TCP connection timeout. format: 1h/1m/1s/1ms. MUST BE \u003e=1ms. Default is 10s.",
+            "type": "string"
+          },
+          "tcpKeepalive": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings": {
+        "description": "Settings applicable to HTTP1.1/HTTP2/GRPC connections.",
+        "type": "object",
+        "properties": {
+          "http1MaxPendingRequests": {
+            "description": "Maximum number of pending HTTP requests to a destination. Default 2^32-1.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "http2MaxRequests": {
+            "description": "Maximum number of requests to a backend. Default 2^32-1.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxRequestsPerConnection": {
+            "description": "Maximum number of requests per connection to a backend. Setting this parameter to 1 disables keep alive. Default 0, meaning \"unlimited\", up to 2^29.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxRetries": {
+            "description": "Maximum number of retries that can be outstanding to all hosts in a cluster at a given time. Defaults to 2^32-1.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "idleTimeout": {
+            "description": "The idle timeout for upstream connection pool connections. The idle timeout is defined as the period in which there are no active requests. If not set, the default is 1 hour. When the idle timeout is reached, the connection will be closed. If the connection is an HTTP/2 connection a drain sequence will occur prior to closing the connection. Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive. Applies to both HTTP1.1 and HTTP2 connections.",
+            "type": "string"
+          },
+          "h2UpgradePolicy": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicy"
+          },
+          "useClientProtocol": {
+            "description": "If set to true, client protocol will be preserved while initiating connection to backend. Note that when this is set to true, h2_upgrade_policy will be ineffective i.e. the client connections will not be upgraded to http2.",
+            "type": "boolean"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive": {
+        "description": "TCP keepalive.",
+        "type": "object",
+        "properties": {
+          "time": {
+            "description": "The time duration a connection needs to be idle before keep-alive probes start being sent. Default is to use the OS level configuration (unless overridden, Linux defaults to 7200s (ie 2 hours.)",
+            "type": "string"
+          },
+          "probes": {
+            "description": "Maximum number of keepalive probes to send without response before deciding the connection is dead. Default is to use the OS level configuration (unless overridden, Linux defaults to 9.)",
+            "type": "integer"
+          },
+          "interval": {
+            "description": "The time duration between keep-alive probes. Default is to use the OS level configuration (unless overridden, Linux defaults to 75s.)",
+            "type": "string"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicy": {
+        "description": "Policy for upgrading http1.1 connections to http2.",
+        "type": "string",
+        "enum": [
+          "DEFAULT",
+          "DO_NOT_UPGRADE",
+          "UPGRADE"
+        ]
       },
       "istio.networking.v1alpha3.WorkloadSelector": {
         "description": "`WorkloadSelector` specifies the criteria used to determine if the `Gateway`, `Sidecar`, or `EnvoyFilter` or `ServiceEntry` configuration can be applied to a proxy. The matching criteria includes the metadata associated with a proxy, workload instance info such as labels attached to the pod/VM, or any other info that the proxy provides to Istio during the initial handshake. If multiple conditions are specified, all conditions need to match in order for the workload instance to be selected. Currently, only label based selection mechanism is supported.",
@@ -58,6 +152,9 @@
         "description": "`Sidecar` describes the configuration of the sidecar proxy that mediates inbound and outbound communication of the workload instance to which it is attached.",
         "type": "object",
         "properties": {
+          "connectionPool": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ConnectionPoolSettings"
+          },
           "workloadSelector": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.WorkloadSelector"
           },

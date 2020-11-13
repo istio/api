@@ -448,6 +448,9 @@ message Sidecar {
   // detected defaults from the namespace-wide or the global default Sidecar.
   repeated IstioEgressListener egress = 3;
 
+  // Settings controlling the volume of connections to an upstream service
+  istio.networking.v1alpha3.ConnectionPoolSettings connection_pool = 7;
+
   // Configuration for the outbound traffic policy.  If your
   // application uses one or more external services that are not known
   // apriori, setting the policy to `ALLOW_ANY` will cause the

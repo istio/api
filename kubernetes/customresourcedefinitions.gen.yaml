@@ -1788,6 +1788,68 @@ spec:
           description: 'Configuration affecting network reachability of a sidecar.
             See more details at: https://istio.io/docs/reference/config/networking/sidecar.html'
           properties:
+            connectionPool:
+              properties:
+                http:
+                  description: HTTP connection pool settings.
+                  properties:
+                    h2UpgradePolicy:
+                      description: Specify if http1.1 connection should be upgraded
+                        to http2 for the associated destination.
+                      enum:
+                      - DEFAULT
+                      - DO_NOT_UPGRADE
+                      - UPGRADE
+                      type: string
+                    http1MaxPendingRequests:
+                      description: Maximum number of pending HTTP requests to a destination.
+                      format: int32
+                      type: integer
+                    http2MaxRequests:
+                      description: Maximum number of requests to a backend.
+                      format: int32
+                      type: integer
+                    idleTimeout:
+                      description: The idle timeout for upstream connection pool connections.
+                      type: string
+                    maxRequestsPerConnection:
+                      description: Maximum number of requests per connection to a
+                        backend.
+                      format: int32
+                      type: integer
+                    maxRetries:
+                      format: int32
+                      type: integer
+                    useClientProtocol:
+                      description: If set to true, client protocol will be preserved
+                        while initiating connection to backend.
+                      type: boolean
+                  type: object
+                tcp:
+                  description: Settings common to both HTTP and TCP upstream connections.
+                  properties:
+                    connectTimeout:
+                      description: TCP connection timeout.
+                      type: string
+                    maxConnections:
+                      description: Maximum number of HTTP1 /TCP connections to a destination
+                        host.
+                      format: int32
+                      type: integer
+                    tcpKeepalive:
+                      description: If set then set SO_KEEPALIVE on the socket to enable
+                        TCP Keepalives.
+                      properties:
+                        interval:
+                          description: The time duration between keep-alive probes.
+                          type: string
+                        probes:
+                          type: integer
+                        time:
+                          type: string
+                      type: object
+                  type: object
+              type: object
             egress:
               items:
                 properties:
