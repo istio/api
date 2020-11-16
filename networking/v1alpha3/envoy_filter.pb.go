@@ -308,7 +308,7 @@ func (EnvoyFilter_Patch_FilterClass) EnumDescriptor() ([]byte, []int) {
 // +cue-gen:EnvoyFilter:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:EnvoyFilter:subresource:status
 // +cue-gen:EnvoyFilter:scope:Namespaced
-// +cue-gen:EnvoyFilter:resource:categories=istio-io,networking-istio-io
+// +cue-gen:EnvoyFilter:resource:categories=istio-io,networking-istio-io,shortNames=ef
 // +cue-gen:EnvoyFilter:preserveUnknownFields:true
 // -->
 //

@@ -1200,6 +1200,8 @@ spec:
     kind: EnvoyFilter
     listKind: EnvoyFilterList
     plural: envoyfilters
+    shortNames:
+    - ef
     singular: envoyfilter
   preserveUnknownFields: true
   scope: Namespaced
