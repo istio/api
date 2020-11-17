@@ -1210,9 +1210,9 @@ func (*MeshConfig_ExtensionProvider) XXX_OneofWrappers() []interface{} {
 type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider struct {
 	// REQUIRED. Specifies the service that implements the Envoy ext_authz HTTP authorization service.
 	// The format is "[<Namespace>/]<Hostname>". The <Hostname> is the full qualified host name in the Istio service
-	// registry defined by the k8s service or ServiceEntry. The <Namespace> is the namespace of the k8s service or
-	// ServiceEntry object, and can be omitted if the <Hostname> alone can decide the service unambiguously (normally
-	// this means there is only 1 such host name in the service registry).
+	// registry defined by the Kubernetes service or ServiceEntry. The <Namespace> is the namespace of the Kubernetes
+	// service or ServiceEntry object, and can be omitted if the <Hostname> alone can decide the service unambiguously
+	// (normally this means there is only 1 such host name in the service registry).
 	//
 	// Example: "my-ext-authz.foo.svc.cluster.local" or "bar/my-ext-authz.example.com".
 	Service string `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
@@ -1349,9 +1349,9 @@ func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) Ge
 type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider struct {
 	// REQUIRED. Specifies the service that implements the Envoy ext_authz gRPC authorization service.
 	// The format is "[<Namespace>/]<Hostname>". The <Hostname> is the full qualified host name in the Istio service
-	// registry defined by the k8s service or ServiceEntry. The <Namespace> is the namespace of the k8s service or
-	// ServiceEntry object, and can be omitted if the <Hostname> alone can decide the service unambiguously (normally
-	// this means there is only 1 such host name in the service registry).
+	// registry defined by the Kubernetes service or ServiceEntry. The <Namespace> is the namespace of the Kubernetes
+	// service or ServiceEntry object, and can be omitted if the <Hostname> alone can decide the service unambiguously
+	// (normally this means there is only 1 such host name in the service registry).
 	//
 	// Example: "my-ext-authz.foo.svc.cluster.local" or "bar/my-ext-authz.example.com".
 	Service string `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
