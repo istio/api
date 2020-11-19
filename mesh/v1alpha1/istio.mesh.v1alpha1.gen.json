@@ -553,7 +553,7 @@
             "type": "integer"
           },
           "service": {
-            "description": "REQUIRED. Specifies the service that implements the Envoy ext_authz HTTP authorization service. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The \u003cHostname\u003e is the full qualified host name in the Istio service registry defined by the Kubernetes service or ServiceEntry. The \u003cNamespace\u003e is the namespace of the Kubernetes service or ServiceEntry object, and can be omitted if the \u003cHostname\u003e alone can decide the service unambiguously (normally this means there is only 1 such host name in the service registry).",
+            "description": "REQUIRED. Specifies the service that implements the Envoy ext_authz HTTP authorization service. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
             "type": "string",
             "format": "string"
           },
@@ -605,7 +605,7 @@
             "type": "integer"
           },
           "service": {
-            "description": "REQUIRED. Specifies the service that implements the Envoy ext_authz gRPC authorization service. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The \u003cHostname\u003e is the full qualified host name in the Istio service registry defined by the Kubernetes service or ServiceEntry. The \u003cNamespace\u003e is the namespace of the Kubernetes service or ServiceEntry object, and can be omitted if the \u003cHostname\u003e alone can decide the service unambiguously (normally this means there is only 1 such host name in the service registry).",
+            "description": "REQUIRED. Specifies the service that implements the Envoy ext_authz gRPC authorization service. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
             "type": "string",
             "format": "string"
           },
