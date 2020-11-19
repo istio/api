@@ -561,7 +561,7 @@
             "type": "integer"
           },
           "service": {
-            "description": "REQUIRED. Specifies the service that implements the Envoy ext_authz HTTP authorization service. The format is \"[\u003cNamespace\u003e/]\u003cService\u003e\". If the \u003cNamespace\u003e is omitted then it is resolved within the same namespace as this configuration resource. The \u003cService\u003e is the name of the service object (k8s service or ServiceEntry). Example: \"foo/my-ext-authz\" or \"my-ext-authz\".",
+            "description": "REQUIRED. Specifies the service that implements the Envoy ext_authz HTTP authorization service. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The \u003cHostname\u003e is the full qualified host name in the Istio service registry defined by the Kubernetes service or ServiceEntry. The \u003cNamespace\u003e is the namespace of the Kubernetes service or ServiceEntry object, and can be omitted if the \u003cHostname\u003e alone can decide the service unambiguously (normally this means there is only 1 such host name in the service registry).",
             "type": "string",
             "format": "string"
           },
@@ -613,7 +613,7 @@
             "type": "integer"
           },
           "service": {
-            "description": "REQUIRED. Specifies the service that implements the Envoy ext_authz gRPC authorization service. The format is \"[\u003cNamespace\u003e/]\u003cService\u003e\". If the \u003cNamespace\u003e is omitted then it is resolved within the same namespace as this configuration resource. The \u003cService\u003e is the name of the service object (k8s service or ServiceEntry). Example: \"foo/my-ext-authz\" or \"my-ext-authz\".",
+            "description": "REQUIRED. Specifies the service that implements the Envoy ext_authz gRPC authorization service. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The \u003cHostname\u003e is the full qualified host name in the Istio service registry defined by the Kubernetes service or ServiceEntry. The \u003cNamespace\u003e is the namespace of the Kubernetes service or ServiceEntry object, and can be omitted if the \u003cHostname\u003e alone can decide the service unambiguously (normally this means there is only 1 such host name in the service registry).",
             "type": "string",
             "format": "string"
           },
