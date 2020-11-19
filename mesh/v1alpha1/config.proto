@@ -14,6 +14,7 @@
 
 syntax = "proto3";
 
+import "google/api/field_behavior.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 import "mesh/v1alpha1/proxy.proto";
@@ -536,8 +537,11 @@ message MeshConfig {
   // Note, currently at most 1 extension provider is allowed.
   repeated ExtensionProvider extension_providers = 57;
 
+  // Configuration for an external rate limit service.
+  RateLimitService service = 58;
+
   // $hide_from_docs
-  // Next available field number: 58
+  // Next available field number: 59
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
@@ -630,4 +634,28 @@ message Certificate {
   // The DNS names for the certificate. A certificate may contain
   // multiple DNS names.
   repeated string dns_names = 2;
+}
+
+// RateLimitService describes the configuration for an external rate limit service provider.
+message RateLimitService {
+  // REQUIRED. Specifies the service that implements rate limit service.
+  // The format is "[<Namespace>/]<Hostname>". The <Hostname> is the full qualified host name in the Istio service
+  // registry defined by the Kubernetes service or ServiceEntry. The <Namespace> is the namespace of the Kubernetes
+  // service or ServiceEntry object, and can be omitted if the <Hostname> alone can decide the service unambiguously
+  // (normally this means there is only 1 such host name in the service registry).
+  //
+  // Example: "rls.foo.svc.cluster.local" or "bar/rls.example.com".
+  string host = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // REQUIRED. Specifies the port of the service.
+  uint32 port = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // The filter’s behaviour in case the rate limiting service does not respond back.
+  // When it is set to true, Envoy will allow traffic in case of communication failure
+  // between rate limiting service and the proxy.
+  bool fail_open = 3;
+
+  // The timeout for the rate limit service RPC.
+  // If not set, this defaults to 20ms.
+  google.protobuf.Duration timeout = 4;
 }

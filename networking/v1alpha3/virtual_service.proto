@@ -1261,6 +1261,130 @@ message HTTPRouteDestination {
 
   // Header manipulation rules
   Headers headers = 7;
+
+  // Local rate limiting.
+  HTTPLocalRateLimit local_rate_limit = 8;
+
+  // Global rate limiting.
+  HTTPGlobalRateLimit global_rate_limit = 9;
+}
+
+// HTTPGlobalRateLimit used to rate limit the HTTP requests calling the rate limit service.
+message HTTPGlobalRateLimit {
+  // The rate limit domain to use when calling the rate limit service.
+  string domain = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The timeout in milliseconds for the rate limit service RPC.
+  // If set, it will override the global value from mesh config.
+  google.protobuf.Duration timeout = 2;
+
+  // The filter’s behaviour in case the rate limiting service does not respond back.
+  // When it is set to true, Envoy will allow traffic in case of communication failure
+  // between rate limiting service and the proxy.
+  // If set, it will override the global value from mesh config.
+  bool fail_open = 3;
+
+  // A list of actions that are to be applied for this rate limit configuration.
+  // Order matters as the actions are processed sequentially
+  // and the descriptor is composed by appending descriptor entries in that sequence.
+  repeated RateLimitAction actions = 4 [(google.api.field_behavior) = REQUIRED];
+}
+
+// RateLimitAction describes how to generate descriptor entries.
+message RateLimitAction{
+  oneof action {
+    // Rate limit on request headers.
+    RequestHeader request_header = 1;
+
+    // Rate limit on remote address.
+    // The following descriptor entry is appended to the descriptor and is populated using the trusted address from x-forwarded-for:
+    // `("remote_address", "<trusted address from x-forwarded-for>")`
+    bool remote_address = 2;
+
+    // Rate limit on the existence of request headers.
+    HeaderMatch header_match = 3;
+
+    // Rate limit on a generic key.
+    GenericKey generic_key = 4;
+  }
+
+  // The following descriptor entry is appended when a header contains a key that matches the header_name:
+  // `("<descriptor_key>", "<header_value_queried_from_header>")`
+  message RequestHeader{
+    // The header name to be queried from the request headers.
+    // The header’s value is used to populate the value of the descriptor entry for the descriptor_key
+    string header_name = 1 [(google.api.field_behavior) = REQUIRED];
+
+    // The key to use in the descriptor entry.
+    string descriptor_key = 2 [(google.api.field_behavior) = REQUIRED];
+
+    // If set to true, Envoy skips the descriptor while calling rate limiting service when header is not present in the request.
+    // By default it is true and skips calling rate limiting service if this header does not exist.
+    string skip_if_absent = 3;
+  }
+
+  // The following descriptor entry is appended to the descriptor:
+  // `("header_match", "<descriptor_value>")`
+  message HeaderMatch{
+    // The value to use in the descriptor entry.
+    string descriptor_value = 1 [(google.api.field_behavior) = REQUIRED];
+
+    // If set to true, the action will append a descriptor entry when the request matches the headers.
+    // If set to false, the action will append a descriptor entry when the request does not match the headers.
+    // The default value is true.
+    string expect_match = 2;
+
+    // The header name to be queried from the request headers.
+    string header_name = 3 [(google.api.field_behavior) = REQUIRED];
+
+    // Specifies how the header value match will be performed to route the request.
+    oneof match_type {
+      // exact string match on the header value
+      string exact = 4;
+
+      // prefix-based match
+      string prefix = 5;
+
+      // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+      string regex = 6;
+    }
+  }
+
+  // The following descriptor entry is appended to the descriptor:
+  // `("generic_key", "<descriptor_value>")`
+  message GenericKey{
+    // An optional key to use in the descriptor entry.
+    // If not set it defaults to ‘generic_key’ as the descriptor key.
+    string descriptor_key = 1;
+
+    // The value to use in the descriptor entry.
+    string descriptor_value = 2 [(google.api.field_behavior) = REQUIRED];
+  }
+}
+
+// HTTPLocalRateLimit used to rate limit the HTTP requests locally
+message HTTPLocalRateLimit {
+  // StatusCode allows for a custom HTTP response status code to the downstream client
+  // when the request has been rate limited. Defaults to 429 (TooManyRequests).
+  int32 status_code = 1;
+
+  // The token bucket configuration to use for rate limiting requests.
+  TokenBucket token_bucket = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// TokenBucket used for local rate limiting
+message TokenBucket {
+  // The maximum tokens that the bucket can hold.
+  uint32 max_tokens = 1;
+
+  // The number of tokens added to the bucket during each fill interval. If not specified, defaults to 1.
+  uint32 tokens_per_fill = 2;
+
+  // The fill interval that tokens are added to the bucket.
+  // During each fill interval tokens_per_fill are added to the bucket.
+  // The bucket will never contain more than max_tokens tokens.
+  // *Note*: It must be >= 50ms to avoid aggressive fills.
+  google.protobuf.Duration interval = 3;
 }
 
 // L4 routing rule weighted destination.
@@ -1273,6 +1397,53 @@ message RouteDestination {
   // version. If there is only one destination in a rule, all traffic will be
   // routed to it irrespective of the weight.
   int32 weight = 2;
+
+  // L4 local rate limiting policy.
+  LocalRateLimit local_rate_limit = 3;
+
+  // L4 global rate limiting policy.
+  GlobalRateLimit global_rate_limit = 4;
+}
+
+// LocalRateLimit used to rate limit the L4 connections locally
+message LocalRateLimit {
+  // The token bucket configuration to use for rate limiting requests.
+  TokenBucket token_bucket = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// GlobalRateLimit used to rate limit the L4 connections calling the global rate limit service.
+message GlobalRateLimit {
+  // The rate limit domain to use when calling the rate limit service.
+  string domain = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The timeout for the rate limit service RPC.
+  // If set, it will override the global value from mesh config.
+  google.protobuf.Duration timeout = 2;
+
+  // The filter’s behaviour in case the rate limiting service does not respond back.
+  // When it is set to true, Envoy will allow traffic in case of communication failure
+  // between rate limiting service and the proxy.
+  // If set, it will override the global value from mesh config.
+  bool fail_open = 3;
+
+  // The rate limit descriptor list to use in the rate limit service request.
+  RateLimitDescriptor descriptors = 4 [(google.api.field_behavior) = REQUIRED];
+
+  // A RateLimitDescriptor is a list of hierarchical entries that are used by the service to
+  // determine the final rate limit key and overall allowed limit. Here are some examples of how
+  // they might be used for the domain "envoy".
+  message RateLimitDescriptor{
+    message Entry {
+      // Descriptor key.
+      string key = 1;
+
+      // Descriptor value.
+      string value = 2;
+    }
+
+    // Descriptor entries.
+    repeated Entry entries = 1 [(google.api.field_behavior) = REQUIRED];
+  }
 }
 
 // L4 connection match attributes. Note that L4 connection matching support
