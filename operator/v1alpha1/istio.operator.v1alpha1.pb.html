@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.operator.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 61
+number_of_entries: 62
 ---
 <p>Configuration affecting Istio control plane installation version and shape.</p>
 
@@ -343,9 +343,37 @@ No
 </tr>
 <tr id="BaseComponentSpec-k8s">
 <td><code>k8s</code></td>
-<td><code><a href="#KubernetesResourcesSpec">KubernetesResourcesSpec</a></code></td>
+<td><code><a href="#K8sOverlay">K8sOverlay</a></code></td>
 <td>
-<p>Kubernetes resource spec.</p>
+<p>Overlays for k8s resources.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="K8sOverlay">K8sOverlay</h2>
+<section>
+<p>Overlays for k8s resources.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="K8sOverlay-overlays">
+<td><code>overlays</code></td>
+<td><code><a href="#K8sObjectOverlay">K8sObjectOverlay[]</a></code></td>
+<td>
+<p>Overlays for k8s resources in rendered manifests.</p>
 
 </td>
 <td>

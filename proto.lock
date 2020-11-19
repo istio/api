@@ -13049,7 +13049,13 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings"
+                        "name": "additional_bindings",
+                        "aggregated": [
+                          {
+                            "name": "get",
+                            "value": "/v1/services/{service_name}/config"
+                          }
+                        ]
                       }
                     ]
                   }
@@ -37084,6 +37090,11 @@
                 "id": 32,
                 "name": "proxy_stats_matcher",
                 "type": "ProxyStatsMatcher"
+              },
+              {
+                "id": 33,
+                "name": "hold_application_until_proxy_starts",
+                "type": "google.protobuf.BoolValue"
               }
             ],
             "maps": [
@@ -42069,7 +42080,13 @@
                 "field": {
                   "id": 51,
                   "name": "addon_components",
-                  "type": "ExternalComponentSpec"
+                  "type": "ExternalComponentSpec",
+                  "options": [
+                    {
+                      "name": "deprecated",
+                      "value": "true"
+                    }
+                  ]
                 }
               }
             ]
@@ -42187,7 +42204,18 @@
               {
                 "id": 50,
                 "name": "k8s",
-                "type": "KubernetesResourcesSpec"
+                "type": "K8sOverlay"
+              }
+            ]
+          },
+          {
+            "name": "K8sOverlay",
+            "fields": [
+              {
+                "id": 1,
+                "name": "overlays",
+                "type": "K8sObjectOverlay",
+                "is_repeated": true
               }
             ]
           },

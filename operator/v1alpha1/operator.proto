@@ -173,8 +173,14 @@ message BaseComponentSpec {
     // Selects whether this component is installed.
     TypeBoolValueForPB enabled = 1;
 
-    // Kubernetes resource spec.
-    KubernetesResourcesSpec k8s = 50;
+    // Overlays for k8s resources.
+    K8sOverlay k8s = 50;
+}
+
+// Overlays for k8s resources.
+message K8sOverlay {
+    // Overlays for k8s resources in rendered manifests.
+    repeated K8sObjectOverlay overlays = 1;
 }
 
 // Configuration for internal components.
