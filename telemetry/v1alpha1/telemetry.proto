@@ -33,12 +33,12 @@ package istio.telemetry.v1alpha1;
 // your Istio installation *without* a workload selector.
 //
 // For any namespace, including the root configuration namespace, it is only valid 
-// to have a single workload-selector-less Telemetry resource. In the case of multiples,
+// to have a single workload selector-less Telemetry resource. In the case of multiples,
 // the oldest known resource will be used to the exclusion of any other resources.
 //
-// For resources with a workload-selector, it is only valid to have one resource selecting
-// any given workload. If multiple resources select a single resource, the oldest known
-// resource will be used to the exclusion of all other resources.
+// For resources with a workload selector, it is only valid to have one resource selecting
+// any given workload. If multiple resources with a workload selector select a single resource,
+// the oldest known resource will be used to the exclusion of all other resources.
 //
 // WARNING: Support for Telemetry policies is under active development and is *not* 
 // stable or supported by Istio at this time.
@@ -54,15 +54,37 @@ package istio.telemetry.v1alpha1;
 //   namespace: istio-system
 // spec:
 //   tracing:
-//   - match: # apply to all traffic
+//   - match: {} # apply to all traffic
 //     config:
 //       providers:
 //       - name: "zipkin"
 //       reportSpans: true
 //       percentageSampler:
-//         randomSamplingPercentageTarget: 10.00
+//         target: 10.00
 // ```
 //
+// Policy to disable trace reporting for all inbound traffic to the "foo"
+// workloads that arrives on port 8090:
+// ```yaml
+// apiVersion: telemetry.istio.io/v1beta1
+// kind: Telemetry
+// metadata:
+//   name: mesh-default
+//   namespace: istio-system
+// spec:
+//   workloadSelector:
+//     labels:
+//       service.istio.io/canonical-name: foo
+//   tracing:
+//   - match:
+//       trafficDirection: INBOUND
+//       port:
+//         number: 8090
+//     config:
+//       providers:
+//       - name: "zipkin"
+//       reportSpans: false
+// ```
 //
 // <!-- crd generation tags
 // +cue-gen:Telemetry:groupName:telemetry.istio.io
@@ -118,7 +140,7 @@ message TelemetryRuleMatch {
   // proxy. 
   enum TrafficDirection {
     // (Default) Match all traffic, regardless of direction.
-    ALL_TRAFFIC = 0;
+    ALL_DIRECTIONS = 0;
     // Match outbound traffic leaving the proxy. Use this to select "client-side"
     // traffic in telemetry reporting.
     // Note: Use OUTBOUND for gateways (even including ingress)
@@ -149,12 +171,12 @@ message TelemetryRuleMatch {
 
   // Optional. The port on which the traffic is received.
   // Defaults to ALL if unset.
-  PortSelector port = 3; 
+  Port port = 3;
 }
 
-// PortSelector specifies the number of a port to be used for
+// Port specifies the number of a port to be used for
 // matching or selection for final routing.
-message PortSelector {
+message Port {
   // Valid port number
   uint32 number = 1;
 }
@@ -170,9 +192,8 @@ message ProviderRef {
 // a mesh. It can be used to enable/disable tracing, as well as to set sampling
 // rates and custom tag extraction.
 message TracingConfig {
-  // Optional. Name of providers to which this configuration should apply.
-  // If not specified, this will apply to the full list of known tracing
-  // providers.
+  // Required. Name of providers to which this configuration should apply. At
+  // least one provider needs to be specified.
   repeated ProviderRef providers = 1;
   
   // Enables the tracing functionality. When this is set to `true`, the
@@ -183,7 +204,13 @@ message TracingConfig {
   // the sidecar will ignore the incoming trace context, generating no spans for
   // the traffic (the context will be silently forwarded). This is equivalent to 
   // disabling tracing for the sidecar.
-  bool report_spans = 2; 
+  bool report_spans = 2;
+
+  // Controls whether or not Istio-specific tags will be generated for each
+  // span created by the sidecar proxies. These tags include information on
+  // the canonical service, meh, and namespace involved in the request.
+  // Default: true
+  bool include_istio_tags = 3;
 
   // CustomTag defines a tag to be added to a trace span that is based on
   // an operator-supplied value. This value can either be a hard-coded value,
@@ -219,17 +246,17 @@ message TracingConfig {
   }
 
   // Optional. Configures additional custom tags to the generated trace spans.
-  map<string, CustomTag> custom_tags = 3;
+  map<string, CustomTag> custom_tags = 4;
 
   // Optional. Controls the overall path length allowed in a reported span.
-  uint32 max_path_tag_length = 4;
+  uint32 max_path_tag_length = 5;
 
   // Required. 
   oneof sampler {
     // A sampler that makes uniform decisions for all Sidecar traffic.
-    ConstantSampler constant_sampler = 5;
+    ConstantSampler constant_sampler = 6;
     // A sampler that selects a configurable percentage of traffic for telemetry generation.
-    PercentageSampler percentage_sampler = 6;
+    PercentageSampler percentage_sampler = 7;
   }
 }
 
@@ -261,12 +288,12 @@ message PercentageSampler {
   // has been made (example: no `x-b3-sampled` tracing header was present in the
   // requests), the traffic will be selected for telemetry generation at the
   // percentage specified.
-  // Setting `random_sampling_percentage_target` to 0 is equivalent to
-  // ConstantDecision.NEVER_SAMPLE. Setting `random_sampling_percentage_target` to
+  // Setting `target` to 0 is equivalent to
+  // ConstantDecision.NEVER_SAMPLE. Setting `target` to
   // 100 is equivalent of ConstantDecision.ALWAYS SAMPLE.
   //
   // Defaults to 0%. Valid values [0.00-100.00]. Can be specified in 0.01%
   // increments.
-  double random_sampling_percentage_target = 1;
+  double target = 1;
 }
 

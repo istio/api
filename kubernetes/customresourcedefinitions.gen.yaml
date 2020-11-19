@@ -5959,6 +5959,8 @@ spec:
                             type: object
                           description: Optional.
                           type: object
+                        includeIstioTags:
+                          type: boolean
                         maxPathTagLength:
                           description: Optional.
                           type: integer
@@ -5966,12 +5968,12 @@ spec:
                           description: A sampler that selects a configurable percentage
                             of traffic for telemetry generation.
                           properties:
-                            randomSamplingPercentageTarget:
+                            target:
                               format: double
                               type: number
                           type: object
                         providers:
-                          description: Optional.
+                          description: Required.
                           items:
                             properties:
                               name:
@@ -6004,7 +6006,7 @@ spec:
                         trafficDirection:
                           description: Optional.
                           enum:
-                          - ALL_TRAFFIC
+                          - ALL_DIRECTIONS
                           - OUTBOUND
                           - INBOUND
                           type: string
