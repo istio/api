@@ -128,7 +128,7 @@ message TracingRule {
   // Defines the conditions under which the associated configuration applies.
   TelemetryRuleMatch match = 1;
   // Customization of the default behavior for tracing.
-  TracingConfig config = 2;
+  Tracing config = 2;
 }
 
 // TelemetryRuleMatch defines conditions for selecting subsets of mesh traffic
@@ -188,10 +188,10 @@ message ProviderRef {
   string name = 1;
 }
 
-// TracingConfig defines the workload-level overrides for tracing behavior within
+// Tracing defines the workload-level overrides for tracing behavior within
 // a mesh. It can be used to enable/disable tracing, as well as to set sampling
 // rates and custom tag extraction.
-message TracingConfig {
+message Tracing {
   // Required. Name of providers to which this configuration should apply. At
   // least one provider needs to be specified.
   repeated ProviderRef providers = 1;
