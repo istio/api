@@ -412,8 +412,7 @@ message ProxyConfig {
   // for details about Envoy's Metrics Service API.
   RemoteService envoy_metrics_service = 23;
 
-  // $hide_from_docs
-  // Additional env variables for the proxy.
+  // Additional environment variables for the proxy.
   // Names starting with ISTIO_META_ will be included in the generated bootstrap and sent to the XDS server.
   map<string,string> proxy_metadata = 24;
 

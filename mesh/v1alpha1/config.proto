@@ -29,29 +29,8 @@ package istio.mesh.v1alpha1;
 
 option go_package="istio.io/api/mesh/v1alpha1";
 
-// MeshConfig defines mesh-wide variables shared by all Envoy instances in the
-// Istio service mesh.
-//
-// NOTE: This configuration type should be used for the low-level global
-// configuration, such as component addresses and port numbers. It should not
-// be used for the features of the mesh that can be scoped by service or by
-// namespace. Some of the fields in the mesh config are going to be deprecated
-// and replaced with several individual configuration types (for example,
-// tracing configuration).
+// MeshConfig defines mesh-wide settings for the Istio service mesh.
 message MeshConfig {
-  reserved 1;
-  reserved "mixer_check_server";
-  reserved 2;
-  reserved "mixer_report_server";
-  reserved 3;
-  reserved "disable_policy_checks";
-  reserved 48;
-  reserved "disable_mixer_http_reports";
-  reserved 25;
-  reserved "policy_check_fail_open";
-  reserved 30;
-  reserved "sidecar_to_telemetry_session_affinity";
-
   // Port on which Envoy should listen for incoming connections from
   // other services. Default port is 15001.
   int32 proxy_listen_port = 4;
@@ -126,12 +105,6 @@ message MeshConfig {
     MUTUAL_TLS = 1;
   }
 
-  // $hide_from_docs
-  AuthPolicy auth_policy = 10 [deprecated=true];
-
-  // $hide_from_docs
-  google.protobuf.Duration rds_refresh_delay = 11 [deprecated=true];
-
   // Flag to control generation of trace spans and request IDs.
   // Requires a trace span collector defined in the proxy configuration.
   bool enable_tracing = 12;
@@ -168,17 +141,12 @@ message MeshConfig {
   // Default value is `false`.
   bool disable_envoy_listener_log = 56;
 
-  // Default proxy config used by the proxy injection mechanism operating in the mesh
-  // (e.g. Kubernetes admission controller)
+  // Default proxy config used by gateway and sidecars.
   // In case of Kubernetes, the proxy config is applied once during the injection process,
   // and remain constant for the duration of the pod. The rest of the mesh config can be changed
   // at runtime and config gets distributed dynamically.
+  // On Kubernetes, this can be overridden on individual pods with the `proxy.istio.io/config` annotation.
   ProxyConfig default_config = 14;
-
-  reserved 15;
-
-  reserved 16;
-  reserved "mixer_address";
 
   message OutboundTrafficPolicy {
     enum Mode {
@@ -209,17 +177,6 @@ message MeshConfig {
   // Default mode is `ALLOW_ANY` which means outbound traffic to unknown destinations will be allowed.
   OutboundTrafficPolicy outbound_traffic_policy = 17;
 
-  reserved 18;
-
-  reserved 19;
-  reserved "enable_client_side_policy_check";
-
-  reserved 20;
-  reserved "sds_uds_path";
-
-  reserved 21;
-  reserved "sds_refresh_delay";
-
   // ConfigSource describes a source of configuration data for networking
   // rules, and other Istio configuration artifacts. Multiple data sources
   // can be configured for a single control plane.
@@ -237,13 +194,6 @@ message MeshConfig {
   // mutual `TLS` when server sides are capable of accepting mutual `TLS` traffic.
   // If service `DestinationRule` exists and has `ClientTLSSettings` specified, that is always used instead.
   google.protobuf.BoolValue enable_auto_mtls = 43;
-
-
-  reserved 23;
-  reserved "enable_sds_token_mount";
-
-  reserved 29;
-  reserved "sds_use_k8s_sa_jwt";
 
   // The trust domain corresponds to the trust root of a system.
   // Refer to [SPIFFE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)
@@ -315,15 +265,6 @@ message MeshConfig {
   // Configures DNS refresh rate for Envoy clusters of type `STRICT_DNS`
   // Default refresh rate is `5s`.
   google.protobuf.Duration dns_refresh_rate = 36;
-
-  reserved 37;
-  reserved "disable_report_batch";
-
-  reserved 38;
-  reserved "report_batch_max_entries";
-
-  reserved 39;
-  reserved "report_batch_max_time";
 
   // Default Policy for upgrading http1.1 connections to http2.
   enum H2UpgradePolicy {
@@ -453,9 +394,6 @@ message MeshConfig {
   // `prometheus.istio.io/merge-metrics: "false"` annotation.
   // If not specified, this will be enabled by default.
   google.protobuf.BoolValue enable_prometheus_merge = 51;
-
-  reserved 53;
-  reserved "termination_drain_duration";
 
   // `VerifyCertificateAtClient` sets the mesh global default for peer certificate validation
   // at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination
@@ -600,6 +538,44 @@ message MeshConfig {
 
   // $hide_from_docs
   // Next available field number: 58
+  reserved 1;
+  reserved "mixer_check_server";
+  reserved 2;
+  reserved "mixer_report_server";
+  reserved 3;
+  reserved "disable_policy_checks";
+  reserved 48;
+  reserved "disable_mixer_http_reports";
+  reserved 25;
+  reserved "policy_check_fail_open";
+  reserved 30;
+  reserved "sidecar_to_telemetry_session_affinity";
+  reserved 10;
+  reserved "auth_policy";
+  reserved 11;
+  reserved "rds_refresh_delay";
+  reserved 15;
+  reserved 16;
+  reserved "mixer_address";
+  reserved 18;
+  reserved 19;
+  reserved "enable_client_side_policy_check";
+  reserved 20;
+  reserved "sds_uds_path";
+  reserved 21;
+  reserved "sds_refresh_delay";
+  reserved 23;
+  reserved "enable_sds_token_mount";
+  reserved 29;
+  reserved "sds_use_k8s_sa_jwt";
+  reserved 53;
+  reserved "termination_drain_duration";
+  reserved 37;
+  reserved "disable_report_batch";
+  reserved 38;
+  reserved "report_batch_max_entries";
+  reserved 39;
+  reserved "report_batch_max_time";
 }
 
 // Resource describes the source of configuration

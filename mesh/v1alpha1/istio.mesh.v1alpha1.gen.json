@@ -7,7 +7,7 @@
   "components": {
     "schemas": {
       "istio.mesh.v1alpha1.MeshConfig": {
-        "description": "MeshConfig defines mesh-wide variables shared by all Envoy instances in the Istio service mesh.",
+        "description": "MeshConfig defines mesh-wide settings for the Istio service mesh.",
         "type": "object",
         "properties": {
           "localityLbSetting": {
@@ -57,14 +57,6 @@
             "description": "Defines which gateway deployment to use as the Ingress controller. This field corresponds to the Gateway.selector field, and will be set as `istio: INGRESS_SELECTOR`. By default, `ingressgateway` is used, which will select the default IngressGateway as it has the `istio: ingressgateway` labels. It is recommended that this is the same value as ingress_service.",
             "type": "string",
             "format": "string"
-          },
-          "authPolicy": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.AuthPolicy",
-            "deprecated": true
-          },
-          "rdsRefreshDelay": {
-            "type": "string",
-            "deprecated": true
           },
           "enableTracing": {
             "description": "Flag to control generation of trace spans and request IDs. Requires a trace span collector defined in the proxy configuration.",
@@ -210,13 +202,6 @@
           "STRICT"
         ]
       },
-      "istio.mesh.v1alpha1.MeshConfig.AuthPolicy": {
-        "type": "string",
-        "enum": [
-          "NONE",
-          "MUTUAL_TLS"
-        ]
-      },
       "istio.mesh.v1alpha1.MeshConfig.AccessLogEncoding": {
         "type": "string",
         "enum": [
@@ -325,7 +310,7 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.RemoteService"
           },
           "proxyMetadata": {
-            "description": "Additional env variables for the proxy. Names starting with ISTIO_META_ will be included in the generated bootstrap and sent to the XDS server.",
+            "description": "Additional environment variables for the proxy. Names starting with ISTIO_META_ will be included in the generated bootstrap and sent to the XDS server.",
             "type": "object",
             "additionalProperties": {
               "type": "string",
@@ -534,6 +519,13 @@
               }
             }
           }
+        ]
+      },
+      "istio.mesh.v1alpha1.MeshConfig.AuthPolicy": {
+        "type": "string",
+        "enum": [
+          "NONE",
+          "MUTUAL_TLS"
         ]
       },
       "istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.Mode": {
