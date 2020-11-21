@@ -499,7 +499,7 @@ message ProxyConfig {
   // See [xDS Protocol](https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol)
   // for further information about Envoy configuration model.
   // $hide_from_docs
-  string discovery_service = 34;
+  RemoteService discovery_service = 34;
 }
 
 message RemoteService {

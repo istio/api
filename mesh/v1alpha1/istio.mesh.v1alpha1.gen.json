@@ -354,9 +354,7 @@
             "nullable": true
           },
           "discoveryService": {
-            "description": "Address of the discovery service exposing xDS with mTLS connection. See [xDS Protocol](https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol) for further information about Envoy configuration model. $hide_from_docs",
-            "type": "string",
-            "format": "string"
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.RemoteService"
           }
         }
       },
