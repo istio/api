@@ -352,6 +352,11 @@
             "description": "Boolean flag for enabling/disabling the holdApplicationUntilProxyStarts behavior. This feature adds hooks to delay application startup until the pod proxy is ready to accept traffic, mitigating some startup race conditions. Default value is 'false'.",
             "type": "boolean",
             "nullable": true
+          },
+          "discoveryService": {
+            "description": "Address of the discovery service exposing xDS with mTLS connection. See [xDS Protocol](https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol) for further information about Envoy configuration model. $hide_from_docs",
+            "type": "string",
+            "format": "string"
           }
         }
       },
