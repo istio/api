@@ -495,6 +495,11 @@ message ProxyConfig {
   // Default value is 'false'.
   google.protobuf.BoolValue hold_application_until_proxy_starts = 33;
 
+  // Address of the discovery service exposing xDS with mTLS connection.
+  // See [xDS Protocol](https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol)
+  // for further information about Envoy configuration model.
+  // $hide_from_docs
+  string discovery_service = 34;
 }
 
 message RemoteService {
