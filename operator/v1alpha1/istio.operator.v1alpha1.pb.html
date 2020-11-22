@@ -826,7 +826,17 @@ No
 <td><code>autoScaleEnabled</code></td>
 <td><code><a href="#TypeBoolValueForPB">TypeBoolValueForPB</a></code></td>
 <td>
-<p>Enable autoScale. If this is enabled, HPAs will be installed.</p>
+<p>Setting this field to true will create a HorizonalPodAutoscaler (HPA) for the Deployment in this component,
+with default settings defined by spec.components.<component-name>.k8s.hpaSpec in the selected profile. These
+defaults can be overridden e.g.:
+spec:
+  profile: demo
+  components:
+    pilot:
+      k8s:
+        autoScaleEnabled: true
+        hpaSpec:
+          minReplicas: 5 # changes from the default defined in the <code>demo</code> profile.</p>
 
 </td>
 <td>
@@ -837,7 +847,17 @@ No
 <td><code>podDisruptionBudgetEnabled</code></td>
 <td><code><a href="#TypeBoolValueForPB">TypeBoolValueForPB</a></code></td>
 <td>
-<p>Enable PodDisruptionBudget. If this is enabled, PDBs will be installed.</p>
+<p>Setting this field to true will create a PodDisruptionBudget (PDB) for the Deployment in this component,
+with default settings defined by spec.components<component-name>.k8s. podDisruptionBudget in the selected
+profile. These defaults can be overridden e.g.:
+spec:
+  profile: demo
+  components:
+    pilot:
+      k8s:
+        podDisruptionBudgetEnabled: true
+        podDisruptionBudget:
+          minAvailable: 2 # changes from the default defined in the <code>demo</code> profile.</p>
 
 </td>
 <td>

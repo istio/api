@@ -744,9 +744,29 @@ type KubernetesResourcesSpec struct {
 	// k8s pod security context
 	// [https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)
 	SecurityContext *PodSecurityContext `protobuf:"bytes,16,opt,name=securityContext,proto3" json:"securityContext,omitempty"`
-	// Enable autoScale. If this is enabled, HPAs will be installed.
+	// Setting this field to true will create a HorizonalPodAutoscaler (HPA) for the Deployment in this component,
+	// with default settings defined by spec.components.<component-name>.k8s.hpaSpec in the selected profile. These
+	// defaults can be overridden e.g.:
+	// spec:
+	//   profile: demo
+	//   components:
+	//     pilot:
+	//       k8s:
+	//         autoScaleEnabled: true
+	//         hpaSpec:
+	//           minReplicas: 5 # changes from the default defined in the `demo` profile.
 	AutoScaleEnabled *BoolValueForPB `protobuf:"bytes,17,opt,name=autoScaleEnabled,proto3" json:"autoScaleEnabled,omitempty"`
-	// Enable PodDisruptionBudget. If this is enabled, PDBs will be installed.
+	// Setting this field to true will create a PodDisruptionBudget (PDB) for the Deployment in this component,
+	// with default settings defined by spec.components<component-name>.k8s. podDisruptionBudget in the selected
+	// profile. These defaults can be overridden e.g.:
+	// spec:
+	//   profile: demo
+	//   components:
+	//     pilot:
+	//       k8s:
+	//         podDisruptionBudgetEnabled: true
+	//         podDisruptionBudget:
+	//           minAvailable: 2 # changes from the default defined in the `demo` profile.
 	PodDisruptionBudgetEnabled *BoolValueForPB `protobuf:"bytes,18,opt,name=podDisruptionBudgetEnabled,proto3" json:"podDisruptionBudgetEnabled,omitempty"`
 	// Overlays for k8s resources in rendered manifests.
 	Overlays             []*K8SObjectOverlay `protobuf:"bytes,100,rep,name=overlays,proto3" json:"overlays,omitempty"`
