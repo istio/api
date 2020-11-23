@@ -2,7 +2,7 @@
 title: istio.telemetry.v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 15
+number_of_entries: 14
 ---
 <h2 id="Telemetry">Telemetry</h2>
 <section>
@@ -172,18 +172,6 @@ Defaults to ALL if unset.</p>
 No
 </td>
 </tr>
-<tr id="TelemetryRuleMatch-protocol">
-<td><code>protocol</code></td>
-<td><code><a href="#TelemetryRuleMatch-Protocol">Protocol</a></code></td>
-<td>
-<p>Optional. Specifies the protocol of the traffic.
-Defaults to ALL if unset.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="TelemetryRuleMatch-port">
 <td><code>port</code></td>
 <td><code><a href="#Port">Port</a></code></td>
@@ -278,7 +266,8 @@ rates and custom tag extraction.</p>
 <td><code><a href="#ProviderRef">ProviderRef[]</a></code></td>
 <td>
 <p>Required. Name of providers to which this configuration should apply. At
-least one provider needs to be specified.</p>
+least one provider needs to be specified.
+NOTE: Only a single provider is currently supported.</p>
 
 </td>
 <td>
@@ -620,43 +609,6 @@ Note: Use OUTBOUND for gateways (even including ingress)</p>
 <td>
 <p>Match incoming traffic for the proxy. Use this to select &ldquo;server-side&rdquo;
 traffic in telemetry reporting.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="TelemetryRuleMatch-Protocol">TelemetryRuleMatch.Protocol</h2>
-<section>
-<p>Protocol selects for traffic based on the identified protocol of that traffic.</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="TelemetryRuleMatch-Protocol-ALL_PROTOCOLS">
-<td><code>ALL_PROTOCOLS</code></td>
-<td>
-<p>(Default) Matches all traffic, regardless of protocol</p>
-
-</td>
-</tr>
-<tr id="TelemetryRuleMatch-Protocol-HTTP">
-<td><code>HTTP</code></td>
-<td>
-<p>Selects for HTTP traffic, including HTTP/1.1, gRPC, HTTP/2.</p>
-
-</td>
-</tr>
-<tr id="TelemetryRuleMatch-Protocol-TCP">
-<td><code>TCP</code></td>
-<td>
-<p>Selects for all non-HTTP traffic.
-NOTE: Tracing is currently only supported for HTTP.</p>
 
 </td>
 </tr>

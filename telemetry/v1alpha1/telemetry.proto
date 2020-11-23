@@ -150,24 +150,9 @@ message TelemetryRuleMatch {
     INBOUND = 2;
  }
 
-  // Protocol selects for traffic based on the identified protocol of that traffic. 
-  enum Protocol {
-    // (Default) Matches all traffic, regardless of protocol
-    ALL_PROTOCOLS = 0;
-    // Selects for HTTP traffic, including HTTP/1.1, gRPC, HTTP/2.
-    HTTP = 1; 
-    // Selects for all non-HTTP traffic.
-    // NOTE: Tracing is currently only supported for HTTP. 
-    TCP = 2; 
-  }
-
   // Optional. Specifies the intended direction of the traffic relative to the local proxy.
   // Defaults to ALL if unset.
   TrafficDirection traffic_direction = 1; 
-
-  // Optional. Specifies the protocol of the traffic.
-  // Defaults to ALL if unset.
-  Protocol protocol = 2; 
 
   // Optional. The port on which the traffic is received.
   // Defaults to ALL if unset.
@@ -194,6 +179,7 @@ message ProviderRef {
 message Tracing {
   // Required. Name of providers to which this configuration should apply. At
   // least one provider needs to be specified.
+  // NOTE: Only a single provider is currently supported.
   repeated ProviderRef providers = 1;
   
   // Enables the tracing functionality. When this is set to `true`, the

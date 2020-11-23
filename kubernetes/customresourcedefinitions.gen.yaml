@@ -5996,13 +5996,6 @@ spec:
                             number:
                               type: integer
                           type: object
-                        protocol:
-                          description: Optional.
-                          enum:
-                          - ALL_PROTOCOLS
-                          - HTTP
-                          - TCP
-                          type: string
                         trafficDirection:
                           description: Optional.
                           enum:

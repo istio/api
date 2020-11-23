@@ -544,6 +544,149 @@ message MeshConfig {
       // The default status is "403" (HTTP Forbidden).
       string status_on_error = 4;
     }
+
+    // EnvoyTracingOpenCensusProvider defines configuration for an OpenCensus tracer writing to
+    // an OpenCensus agent backend. See
+    // [Envoy's OpenCensus trace configuration](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/trace/v3/opencensus.proto)
+    // and
+    // [OpenCensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto)
+    // for details.
+    // $hide_from_docs
+    message EnvoyTracingOpenCensusProvider {
+      // REQUIRED. gRPC address for the OpenCensus agent (e.g. dns://authority/host:port or
+      // unix:path). See [gRPC naming docs](https://github.com/grpc/grpc/blob/master/doc/naming.md) for
+      // details.
+      string address = 1;
+
+      // TraceContext selects the context propagation headers used for
+      // distributed tracing.
+      // $hide_from_docs
+      enum TraceContext {
+        // Unspecified context. Should not be used for now, but added to reserve
+        // the 0 enum value if TraceContext is used outside of a repeated field.
+        UNSPECIFIED = 0;
+        // Use W3C Trace Context propagation using the `traceparent` HTTP header.
+        // See the
+        // [Trace Context documentation](https://www.w3.org/TR/trace-context/) for details.
+        W3C_TRACE_CONTEXT = 1;
+        // Use gRPC binary context propagation using the `grpc-trace-bin` http header.
+        GRPC_BIN = 2;
+        // Use Cloud Trace context propagation using the
+        // `X-Cloud-Trace-Context` http header.
+        CLOUD_TRACE_CONTEXT = 3;
+        // Use multi-header B3 context propagation using the `X-B3-TraceId`,
+        // `X-B3-SpanId`, and `X-B3-Sampled` HTTP headers. See
+        // [B3 header propagation README](https://github.com/openzipkin/b3-propagation)
+        // for details.
+        B3 = 4;
+      }
+
+      // Specifies the set of context propagation headers used for
+      // distributed tracing.
+      // $hide_from_docs
+      repeated TraceContext context = 2;
+    }
+
+    // $hide_from_docs
+    message EnvoyTracingDatadogProvider {
+       // REQUIRED. Address of the Datadog Agent.
+       string address = 1;
+    }
+
+    // $hide_from_docs
+    message EnvoyTracingLightStepProvider {
+      // REQUIRED. Address of the Lightstep Satellite pool.
+      string address = 1;
+
+      // REQUIRED. The Lightstep access token.
+      string access_token = 2;
+
+      // Available propagation modes for trace context
+      // $hide_from_docs
+      enum PropagationMode {
+         // Propagate trace context in the single header x-ot-span-context.
+         ENVOY = 0;
+         // Propagate trace context using LightStep's native format.
+         LIGHTSTEP = 1;
+         // Propagate trace context using the b3 format.
+         B3 = 2;
+         // Propagation trace context using the w3 trace-context standard.
+         TRACE_CONTEXT = 3;
+      }
+ 
+      // Optional. Propagation modes to use by LightStep's tracer.
+      repeated PropagationMode propagation_modes = 3;
+    }
+
+    // $hide_from_docs
+    message EnvoyTracingZipkinAPIProvider {
+      // REQUIRED. Specifies the service that implements the Zipkin API.
+      // The format is "[<Namespace>/]<Service>". If the <Namespace> is omitted then it is resolved within the same
+      // namespace as this configuration resource. The <Service> is the name of the service object (k8s service or ServiceEntry).
+      // Example: "foo/zipkin" or "zipkin".
+      string service = 1;
+
+      // REQUIRED. Specifies the port of the Zipkin API service.
+      // Typically, this is 9411.
+      uint32 port = 2;
+    }
+
+    // $hide_from_docs
+    message StackdriverProvider{
+      // debug enables trace output to stdout.
+      // $hide_from_docs
+      bool debug = 1;
+      // The global default max number of attributes per trace span.
+      // default is 200.
+      // $hide_from_docs
+      google.protobuf.Int64Value max_trace_attributes = 2;
+      // The global default max number of annotation events per trace span.
+      // default is 200.
+      // $hide_from_docs
+      google.protobuf.Int64Value max_trace_annotations = 3;
+      // The global default max number of message events per trace span.
+      // default is 200.
+      // $hide_from_docs
+      google.protobuf.Int64Value max_trace_message_events = 4;
+
+      // Optional. Allows configuration of the size of the LogWrite request. The
+      // size is in bytes, so that it allows for better performance. Default is 4MB.
+      // The size of one log entry within LogWrite request is approx 1Kb.
+      // $hide_from_docs
+      google.protobuf.Int32Value max_log_batch_size_in_bytes = 5;
+
+      // Optional. Allows configuration of the time between calls out to the
+      // Stackdriver logging service to report buffered LogWrite request.
+      // Customers can choose to report more aggressively by keeping shorter report
+      // interval if needed. Default is 10s.
+      // $hide_from_docs
+      google.protobuf.Duration log_report_duration = 6;
+
+      // Optional. Allows enabling log compression for stackdriver access logs.
+      // $hide_from_docs
+      google.protobuf.BoolValue enable_log_compression = 7;
+
+      // Optional. Controls whether to export audit log.
+      // $hide_from_docs
+      bool enable_audit_log = 8;
+
+      // Optional. Controls reporting via meshtelemetry.googleapis.com.
+      // $hide_from_docs
+      bool enable_mesh_edges_reporting = 9;
+
+      // Optional. Allows configuration of time between flush of accumulated
+      // edge data.
+      // $hide_from_docs
+      google.protobuf.Duration mesh_edges_reporting_duration = 10;
+
+      // Optional. Configures max number of peer info in edge data caches.
+      // $hide_from_docs
+      google.protobuf.Int32Value max_peer_cache_size = 11;
+
+      // Optional. Configures max number of edges per batch in requests.
+      // $hide_from_docs
+      google.protobuf.Int32Value max_edges_batch_size = 12;
+    }
   }
 
   // Defines a list of extension providers that extend Istio's functionality. For example, the AuthorizationPolicy
