@@ -473,6 +473,16 @@ message MeshConfig {
       EnvoyExternalAuthorizationHttpProvider envoy_ext_authz_http = 2;
       // Configures an external authorizer that implements the Envoy ext_authz filter authorization check service using the gRPC API.
       EnvoyExternalAuthorizationGrpcProvider envoy_ext_authz_grpc = 3;
+      // Configures an OpenCensus tracing provider.
+      EnvoyTracingOpenCensusProvider opencensus = 4;
+      // Configures a tracing provider that implements the Zipkin API.
+      EnvoyTracingZipkinAPIProvider zipkin = 5;
+      // Configures an LightStep tracing provider.
+      EnvoyTracingLightStepProvider lightstep = 6;
+      // Configures an Datadog tracing provider.
+      EnvoyTracingDatadogProvider datadog = 7;
+      // Configures a Stackdriver provider.
+      StackdriverProvider stackdriver = 8;
     }
 
     message EnvoyExternalAuthorizationHttpProvider {
@@ -632,7 +642,7 @@ message MeshConfig {
     }
 
     // $hide_from_docs
-    message StackdriverProvider{
+    message StackdriverProvider {
       // debug enables trace output to stdout.
       // $hide_from_docs
       bool debug = 1;

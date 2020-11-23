@@ -577,6 +577,56 @@
                       "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationGrpcProvider"
                     }
                   }
+                },
+                {
+                  "required": [
+                    "opencensus"
+                  ],
+                  "properties": {
+                    "opencensus": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTracingOpenCensusProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "zipkin"
+                  ],
+                  "properties": {
+                    "zipkin": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTracingZipkinAPIProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "lightstep"
+                  ],
+                  "properties": {
+                    "lightstep": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTracingLightStepProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "datadog"
+                  ],
+                  "properties": {
+                    "datadog": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTracingDatadogProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "stackdriver"
+                  ],
+                  "properties": {
+                    "stackdriver": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider"
+                    }
+                  }
                 }
               ]
             }
@@ -598,6 +648,56 @@
             "properties": {
               "envoyExtAuthzGrpc": {
                 "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationGrpcProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "opencensus"
+            ],
+            "properties": {
+              "opencensus": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTracingOpenCensusProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "zipkin"
+            ],
+            "properties": {
+              "zipkin": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTracingZipkinAPIProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "lightstep"
+            ],
+            "properties": {
+              "lightstep": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTracingLightStepProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "datadog"
+            ],
+            "properties": {
+              "datadog": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTracingDatadogProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "stackdriver"
+            ],
+            "properties": {
+              "stackdriver": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider"
               }
             }
           }
@@ -720,22 +820,15 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTracingOpenCensusProvider.TraceContext": {
-        "description": "TraceContext selects the context propagation headers used for distributed tracing. $hide_from_docs",
-        "type": "string",
-        "enum": [
-          "UNSPECIFIED",
-          "W3C_TRACE_CONTEXT",
-          "GRPC_BIN",
-          "CLOUD_TRACE_CONTEXT",
-          "B3"
-        ]
-      },
-      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTracingDatadogProvider": {
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTracingZipkinAPIProvider": {
         "type": "object",
         "properties": {
-          "address": {
-            "description": "REQUIRED. Address of the Datadog Agent.",
+          "port": {
+            "description": "REQUIRED. Specifies the port of the Zipkin API service. Typically, this is 9411.",
+            "type": "integer"
+          },
+          "service": {
+            "description": "REQUIRED. Specifies the service that implements the Zipkin API. The format is \"[\u003cNamespace\u003e/]\u003cService\u003e\". If the \u003cNamespace\u003e is omitted then it is resolved within the same namespace as this configuration resource. The \u003cService\u003e is the name of the service object (k8s service or ServiceEntry). Example: \"foo/zipkin\" or \"zipkin\".",
             "type": "string",
             "format": "string"
           }
@@ -763,25 +856,11 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTracingLightStepProvider.PropagationMode": {
-        "description": "Available propagation modes for trace context $hide_from_docs",
-        "type": "string",
-        "enum": [
-          "ENVOY",
-          "LIGHTSTEP",
-          "B3",
-          "TRACE_CONTEXT"
-        ]
-      },
-      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTracingZipkinAPIProvider": {
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTracingDatadogProvider": {
         "type": "object",
         "properties": {
-          "port": {
-            "description": "REQUIRED. Specifies the port of the Zipkin API service. Typically, this is 9411.",
-            "type": "integer"
-          },
-          "service": {
-            "description": "REQUIRED. Specifies the service that implements the Zipkin API. The format is \"[\u003cNamespace\u003e/]\u003cService\u003e\". If the \u003cNamespace\u003e is omitted then it is resolved within the same namespace as this configuration resource. The \u003cService\u003e is the name of the service object (k8s service or ServiceEntry). Example: \"foo/zipkin\" or \"zipkin\".",
+          "address": {
+            "description": "REQUIRED. Address of the Datadog Agent.",
             "type": "string",
             "format": "string"
           }
@@ -846,6 +925,27 @@
             "nullable": true
           }
         }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTracingOpenCensusProvider.TraceContext": {
+        "description": "TraceContext selects the context propagation headers used for distributed tracing. $hide_from_docs",
+        "type": "string",
+        "enum": [
+          "UNSPECIFIED",
+          "W3C_TRACE_CONTEXT",
+          "GRPC_BIN",
+          "CLOUD_TRACE_CONTEXT",
+          "B3"
+        ]
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTracingLightStepProvider.PropagationMode": {
+        "description": "Available propagation modes for trace context $hide_from_docs",
+        "type": "string",
+        "enum": [
+          "ENVOY",
+          "LIGHTSTEP",
+          "B3",
+          "TRACE_CONTEXT"
+        ]
       },
       "istio.mesh.v1alpha1.Resource": {
         "description": "Resource describes the source of configuration",
