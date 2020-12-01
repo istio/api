@@ -495,6 +495,26 @@
                       "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationGrpcProvider"
                     }
                   }
+                },
+                {
+                  "required": [
+                    "stackdriverTelemetryProvider"
+                  ],
+                  "properties": {
+                    "stackdriverTelemetryProvider": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverTelemetryProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "prometheusMetricsProvider"
+                  ],
+                  "properties": {
+                    "prometheusMetricsProvider": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.PrometheusMetricsProvider"
+                    }
+                  }
                 }
               ]
             }
@@ -516,6 +536,26 @@
             "properties": {
               "envoyExtAuthzGrpc": {
                 "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationGrpcProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "stackdriverTelemetryProvider"
+            ],
+            "properties": {
+              "stackdriverTelemetryProvider": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverTelemetryProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "prometheusMetricsProvider"
+            ],
+            "properties": {
+              "prometheusMetricsProvider": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.PrometheusMetricsProvider"
               }
             }
           }
@@ -619,6 +659,24 @@
             "format": "string"
           }
         }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverTelemetryProvider": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "description": "OPTIONAL. An alternate address to use for Stackdriver reporting. This should ONLY be used to override the default endpoints for the Stackdriver APIs (monitoring.googleapis.com, logging.googleapis.com, cloudtrace.googleapis.com).",
+            "type": "string",
+            "format": "string"
+          },
+          "project": {
+            "description": "OPTIONAL. Explicit configuration of the GCP project ID to use for reporting. This should only be used for cases in which the GCP project ID cannot be detected from the environment.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.PrometheusMetricsProvider": {
+        "type": "object"
       },
       "istio.mesh.v1alpha1.Resource": {
         "description": "Resource describes the source of configuration",

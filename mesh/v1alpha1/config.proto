@@ -453,6 +453,10 @@ message MeshConfig {
       EnvoyExternalAuthorizationHttpProvider envoy_ext_authz_http = 2;
       // Configures an external authorizer that implements the Envoy ext_authz filter authorization check service using the gRPC API.
       EnvoyExternalAuthorizationGrpcProvider envoy_ext_authz_grpc = 3;
+      // Configures a Stackdriver telemetry provider. 
+      StackdriverTelemetryProvider stackdriver_telemetry_provider = 4;
+      // Configures a Prometheus metrics provider.
+      PrometheusMetricsProvider prometheus_metrics_provider = 5;
     }
 
     // $hide_from_docs
@@ -527,6 +531,22 @@ message MeshConfig {
       // Sets the HTTP status that is returned to the client when there is a network error to the authorization service.
       // The default status is "403" (HTTP Forbidden).
       string status_on_error = 4;
+    }
+
+    // $hide_from_docs
+    message StackdriverTelemetryProvider {
+      // OPTIONAL. An alternate address to use for Stackdriver reporting. This should ONLY be used to override
+      // the default endpoints for the Stackdriver APIs (monitoring.googleapis.com, logging.googleapis.com, 
+      // cloudtrace.googleapis.com).
+      string address = 1;
+
+      // OPTIONAL. Explicit configuration of the GCP project ID to use for reporting. This should only be used
+      // for cases in which the GCP project ID cannot be detected from the environment.
+      string project = 2;
+    }
+
+    // $hide_from_docs
+    message PrometheusMetricsProvider {
     }
   }
 
