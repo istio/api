@@ -2,7 +2,7 @@
 title: istio.telemetry.v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 7
+number_of_entries: 15
 ---
 <h2 id="Telemetry">Telemetry</h2>
 <section>
@@ -130,6 +130,18 @@ selected workloads.</p>
 No
 </td>
 </tr>
+<tr id="Telemetry-metrics">
+<td><code>metrics</code></td>
+<td><code><a href="#Metrics">Metrics[]</a></code></td>
+<td>
+<p>Optional. Metrics configures the metrics behavior for all
+selected workloads.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -210,6 +222,129 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="MetricsRule">MetricsRule</h2>
+<section>
+<p>MetricsRule defines how metrics should be reported and under what conditions
+the reporting should be conducted.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MetricsRule-match">
+<td><code>match</code></td>
+<td><code><a href="#TelemetryRuleMatch">TelemetryRuleMatch</a></code></td>
+<td>
+<p>Defines the conditions under which the associated configuration applies.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MetricsRule-config">
+<td><code>config</code></td>
+<td><code><a href="#Metrics">Metrics</a></code></td>
+<td>
+<p>Customization of the default behavior for metrics.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="TelemetryRuleMatch">TelemetryRuleMatch</h2>
+<section>
+<p>TelemetryRuleMatch defines conditions for selecting subsets of mesh traffic
+for a workload. TelemetryRuleMatch is concerned with simplified selection
+based on listener, protocol, and traffic direction.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="TelemetryRuleMatch-traffic_direction">
+<td><code>trafficDirection</code></td>
+<td><code><a href="#TelemetryRuleMatch-TrafficDirection">TrafficDirection</a></code></td>
+<td>
+<p>Optional. Specifies the intended direction of the traffic relative to the local proxy.
+Defaults to ALL if unset.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="TelemetryRuleMatch-protocol">
+<td><code>protocol</code></td>
+<td><code><a href="#TelemetryRuleMatch-Protocol">Protocol</a></code></td>
+<td>
+<p>Optional. Specifies the protocol of the traffic being monitored.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="TelemetryRuleMatch-port">
+<td><code>port</code></td>
+<td><code><a href="#Port">Port</a></code></td>
+<td>
+<p>Optional. The port on which the traffic is received.
+Defaults to ALL if unset.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Port">Port</h2>
+<section>
+<p>Port specifies the number of a port to be used for
+matching or selection for final routing.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Port-number">
+<td><code>number</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Valid port number</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="ProviderRef">ProviderRef</h2>
 <section>
 <p>Used to bind Telemetry configuration to specific providers for
@@ -230,6 +365,143 @@ targeted customization.</p>
 <td><code>string</code></td>
 <td>
 <p>Required. Name of Telemetry provider in MeshConfig.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Metrics">Metrics</h2>
+<section>
+<p>Metrics defines the workload-level overrides for monitoring behavior within
+a mesh. It can be used to enable/disable metrics generation, as well as to
+customize the shape of the generated metrics.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Metrics-providers">
+<td><code>providers</code></td>
+<td><code><a href="#ProviderRef">ProviderRef[]</a></code></td>
+<td>
+<p>(Optional) Name of providers to which this configuration should apply.
+If not specified, this will apply to the full list of known metrics
+providers.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Metrics-overrides">
+<td><code>overrides</code></td>
+<td><code><a href="#MetricsOverrides">MetricsOverrides[]</a></code></td>
+<td>
+<p>Set of overrides to apply. These include customization of dimensions
+as well as enablement control.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Metrics-enable_host_header_fallback">
+<td><code>enableHostHeaderFallback</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Optional. Enable to configure the use of HTTP headers to provide values for
+destination services in telemetry if the metadata has not been supplied by
+the control plane. This should be enabled with caution, especially at
+ingress, as it can lead to incorrect/surprising results.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Metrics-tcp_reporting_duration">
+<td><code>tcpReportingDuration</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>Optional. Controls how frequently metrics for TCP connections are updated. This allows
+reporting of bytes transferred at intervals for long-lived TCP connections.
+Defaults to <code>15s</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MetricsOverrides">MetricsOverrides</h2>
+<section>
+<p>MetricsOverrides defines custom monitoring behavior for an individual metric
+or the set of all standard metrics.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MetricsOverrides-metric">
+<td><code>metric</code></td>
+<td><code><a href="#MetricsOverrides-StandardMetric">StandardMetric</a></code></td>
+<td>
+<p>(Optional) if not specified, config applied to all metrics.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MetricsOverrides-skip_reporting">
+<td><code>skipReporting</code></td>
+<td><code>bool</code></td>
+<td>
+<p>(Optional) Must explicitly set this to &ldquo;true&rdquo; to turn off collection.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MetricsOverrides-dimensions">
+<td><code>dimensions</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>(Optional) Collection of tag names and tag expressions to include in the
+metric. Conflicts are resolved by the tag name by overriding previously
+supplied values.
+WARNING: some providers may not support adding custom dimensions.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MetricsOverrides-tags_to_remove">
+<td><code>tagsToRemove</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>(Optional) A list of tags to remove.
+WARNING: may not be supported by some providers.</p>
 
 </td>
 <td>
@@ -389,6 +661,147 @@ used instead.</p>
 </td>
 <td>
 No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="TelemetryRuleMatch-TrafficDirection">TelemetryRuleMatch.TrafficDirection</h2>
+<section>
+<p>TrafficDirection selects for traffic relative to the local
+proxy.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="TelemetryRuleMatch-TrafficDirection-ALL_DIRECTIONS">
+<td><code>ALL_DIRECTIONS</code></td>
+<td>
+<p>(Default) Match all traffic, regardless of direction.</p>
+
+</td>
+</tr>
+<tr id="TelemetryRuleMatch-TrafficDirection-OUTBOUND">
+<td><code>OUTBOUND</code></td>
+<td>
+<p>Match outbound traffic leaving the proxy. Use this to select &ldquo;client-side&rdquo;
+traffic in telemetry reporting.
+Note: Use OUTBOUND for gateways (even including ingress)</p>
+
+</td>
+</tr>
+<tr id="TelemetryRuleMatch-TrafficDirection-INBOUND">
+<td><code>INBOUND</code></td>
+<td>
+<p>Match incoming traffic for the proxy. Use this to select &ldquo;server-side&rdquo;
+traffic in telemetry reporting.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="TelemetryRuleMatch-Protocol">TelemetryRuleMatch.Protocol</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="TelemetryRuleMatch-Protocol-ALL_PROTOCOLS">
+<td><code>ALL_PROTOCOLS</code></td>
+<td>
+</td>
+</tr>
+<tr id="TelemetryRuleMatch-Protocol-HTTP">
+<td><code>HTTP</code></td>
+<td>
+<p>includes HTTP/1.1, gRPC, HTTP/2</p>
+
+</td>
+</tr>
+<tr id="TelemetryRuleMatch-Protocol-TCP">
+<td><code>TCP</code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MetricsOverrides-StandardMetric">MetricsOverrides.StandardMetric</h2>
+<section>
+<p>Curated list of known metric types that Istio expects every Metrics
+extension to be able to generate.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MetricsOverrides-StandardMetric-ALL">
+<td><code>ALL</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-REQUEST_COUNT">
+<td><code>REQUEST_COUNT</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-REQUEST_DURATION">
+<td><code>REQUEST_DURATION</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-REQUEST_SIZE">
+<td><code>REQUEST_SIZE</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-RESPONSE_SIZE">
+<td><code>RESPONSE_SIZE</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-TCP_OPEN_CONNECTIONS">
+<td><code>TCP_OPEN_CONNECTIONS</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-TCP_CLOSED_CONNECTIONS">
+<td><code>TCP_CLOSED_CONNECTIONS</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-TCP_SENT_BYTES">
+<td><code>TCP_SENT_BYTES</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-TCP_RECEIVED_BYTES">
+<td><code>TCP_RECEIVED_BYTES</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-GRPC_REQUEST_MESSAGES">
+<td><code>GRPC_REQUEST_MESSAGES</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-GRPC_RESPONSE_MESSAGES">
+<td><code>GRPC_RESPONSE_MESSAGES</code></td>
+<td>
 </td>
 </tr>
 </tbody>

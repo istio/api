@@ -485,6 +485,8 @@ message MeshConfig {
       OpenCensusAgentTracingProvider opencensus = 8;
       // Configures a Apache SkyWalking provider.
       SkyWalkingTracingProvider skywalking = 9;
+      // Configures a Prometheus metrics provider.
+      PrometheusMetricsProvider prometheus = 10;
     }
 
     message EnvoyExternalAuthorizationRequestBody {
@@ -770,6 +772,22 @@ message MeshConfig {
       // Optional. Controls the overall path length allowed in a reported span.
       // NOTE: currently only controls max length of the path tag.
       uint32 max_tag_length = 4;
+    }
+
+    // $hide_from_docs
+    message StackdriverTelemetryProvider {
+      // OPTIONAL. An alternate address to use for Stackdriver reporting. This should ONLY be used to override
+      // the default endpoints for the Stackdriver APIs (monitoring.googleapis.com, logging.googleapis.com, 
+      // cloudtrace.googleapis.com).
+      string address = 1;
+
+      // OPTIONAL. Explicit configuration of the GCP project ID to use for reporting. This should only be used
+      // for cases in which the GCP project ID cannot be detected from the environment.
+      string project = 2;
+    }
+
+    // $hide_from_docs
+    message PrometheusMetricsProvider {
     }
   }
 

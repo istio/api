@@ -5518,6 +5518,63 @@ spec:
             description: Telemetry defines how the telemetry is generated for workloads
               within a mesh.
             properties:
+              metrics:
+                description: Optional.
+                items:
+                  properties:
+                    enableHostHeaderFallback:
+                      description: Optional.
+                      type: boolean
+                    overrides:
+                      description: Set of overrides to apply.
+                      items:
+                        properties:
+                          dimensions:
+                            additionalProperties:
+                              type: string
+                            type: object
+                          metric:
+                            description: (Optional) if not specified, config applied
+                              to all metrics.
+                            enum:
+                            - ALL
+                            - REQUEST_COUNT
+                            - REQUEST_DURATION
+                            - REQUEST_SIZE
+                            - RESPONSE_SIZE
+                            - TCP_OPEN_CONNECTIONS
+                            - TCP_CLOSED_CONNECTIONS
+                            - TCP_SENT_BYTES
+                            - TCP_RECEIVED_BYTES
+                            - GRPC_REQUEST_MESSAGES
+                            - GRPC_RESPONSE_MESSAGES
+                            type: string
+                          skipReporting:
+                            description: (Optional) Must explicitly set this to "true"
+                              to turn off collection.
+                            type: boolean
+                          tagsToRemove:
+                            description: (Optional) A list of tags to remove.
+                            items:
+                              type: string
+                            type: array
+                        type: object
+                      type: array
+                    providers:
+                      description: (Optional) Name of providers to which this configuration
+                        should apply.
+                      items:
+                        properties:
+                          name:
+                            description: Required.
+                            type: string
+                        type: object
+                      type: array
+                    tcpReportingDuration:
+                      description: Optional.
+                      type: string
+                  type: object
+                type: array
               selector:
                 description: Optional.
                 properties:

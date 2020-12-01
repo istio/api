@@ -436,6 +436,16 @@
                       "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SkyWalkingTracingProvider"
                     }
                   }
+                },
+                {
+                  "required": [
+                    "prometheus"
+                  ],
+                  "properties": {
+                    "prometheus": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.PrometheusMetricsProvider"
+                    }
+                  }
                 }
               ]
             }
@@ -517,6 +527,16 @@
             "properties": {
               "skywalking": {
                 "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SkyWalkingTracingProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "prometheus"
+            ],
+            "properties": {
+              "prometheus": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.PrometheusMetricsProvider"
               }
             }
           }
@@ -710,6 +730,9 @@
           "B3"
         ]
       },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.PrometheusMetricsProvider": {
+        "type": "object"
+      },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SkyWalkingTracingProvider": {
         "description": "Defines configuration for a SkyWalking tracer.",
         "type": "object",
@@ -754,6 +777,19 @@
           "maxTagLength": {
             "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
             "type": "integer"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverTelemetryProvider": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "description": "OPTIONAL. An alternate address to use for Stackdriver reporting. This should ONLY be used to override the default endpoints for the Stackdriver APIs (monitoring.googleapis.com, logging.googleapis.com, cloudtrace.googleapis.com).",
+            "type": "string"
+          },
+          "project": {
+            "description": "OPTIONAL. Explicit configuration of the GCP project ID to use for reporting. This should only be used for cases in which the GCP project ID cannot be detected from the environment.",
+            "type": "string"
           }
         }
       },
