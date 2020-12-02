@@ -276,6 +276,83 @@ func (this *HTTPRouteDestination) UnmarshalJSON(b []byte) error {
 	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for HTTPGlobalRateLimit
+func (this *HTTPGlobalRateLimit) MarshalJSON() ([]byte, error) {
+	str, err := VirtualServiceMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for HTTPGlobalRateLimit
+func (this *HTTPGlobalRateLimit) UnmarshalJSON(b []byte) error {
+	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for RateLimitAction
+func (this *RateLimitAction) MarshalJSON() ([]byte, error) {
+	str, err := VirtualServiceMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for RateLimitAction
+func (this *RateLimitAction) UnmarshalJSON(b []byte) error {
+	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for RateLimitAction_RequestHeader
+func (this *RateLimitAction_RequestHeader) MarshalJSON() ([]byte, error) {
+	str, err := VirtualServiceMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for RateLimitAction_RequestHeader
+func (this *RateLimitAction_RequestHeader) UnmarshalJSON(b []byte) error {
+	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for RateLimitAction_HeaderMatch
+func (this *RateLimitAction_HeaderMatch) MarshalJSON() ([]byte, error) {
+	str, err := VirtualServiceMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for RateLimitAction_HeaderMatch
+func (this *RateLimitAction_HeaderMatch) UnmarshalJSON(b []byte) error {
+	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for RateLimitAction_GenericKey
+func (this *RateLimitAction_GenericKey) MarshalJSON() ([]byte, error) {
+	str, err := VirtualServiceMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for RateLimitAction_GenericKey
+func (this *RateLimitAction_GenericKey) UnmarshalJSON(b []byte) error {
+	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for HTTPLocalRateLimit
+func (this *HTTPLocalRateLimit) MarshalJSON() ([]byte, error) {
+	str, err := VirtualServiceMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for HTTPLocalRateLimit
+func (this *HTTPLocalRateLimit) UnmarshalJSON(b []byte) error {
+	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for TokenBucket
+func (this *TokenBucket) MarshalJSON() ([]byte, error) {
+	str, err := VirtualServiceMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for TokenBucket
+func (this *TokenBucket) UnmarshalJSON(b []byte) error {
+	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 // MarshalJSON is a custom marshaler for RouteDestination
 func (this *RouteDestination) MarshalJSON() ([]byte, error) {
 	str, err := VirtualServiceMarshaler.MarshalToString(this)
@@ -284,6 +361,50 @@ func (this *RouteDestination) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for RouteDestination
 func (this *RouteDestination) UnmarshalJSON(b []byte) error {
+	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for LocalRateLimit
+func (this *LocalRateLimit) MarshalJSON() ([]byte, error) {
+	str, err := VirtualServiceMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for LocalRateLimit
+func (this *LocalRateLimit) UnmarshalJSON(b []byte) error {
+	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for GlobalRateLimit
+func (this *GlobalRateLimit) MarshalJSON() ([]byte, error) {
+	str, err := VirtualServiceMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for GlobalRateLimit
+func (this *GlobalRateLimit) UnmarshalJSON(b []byte) error {
+	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for GlobalRateLimit_RateLimitDescriptor
+func (this *GlobalRateLimit_RateLimitDescriptor) MarshalJSON() ([]byte, error) {
+	str, err := VirtualServiceMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for GlobalRateLimit_RateLimitDescriptor
+func (this *GlobalRateLimit_RateLimitDescriptor) UnmarshalJSON(b []byte) error {
+	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for GlobalRateLimit_RateLimitDescriptor_Entry
+func (this *GlobalRateLimit_RateLimitDescriptor_Entry) MarshalJSON() ([]byte, error) {
+	str, err := VirtualServiceMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for GlobalRateLimit_RateLimitDescriptor_Entry
+func (this *GlobalRateLimit_RateLimitDescriptor_Entry) UnmarshalJSON(b []byte) error {
 	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

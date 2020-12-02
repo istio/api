@@ -23,6 +23,9 @@
           "h2UpgradePolicy": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.H2UpgradePolicy"
           },
+          "service": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.RateLimitService"
+          },
           "outboundTrafficPolicy": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy"
           },
@@ -521,6 +524,29 @@
           }
         ]
       },
+      "istio.mesh.v1alpha1.RateLimitService": {
+        "description": "RateLimitService describes the configuration for an external rate limit service provider.",
+        "type": "object",
+        "properties": {
+          "host": {
+            "description": "REQUIRED. Specifies the service that implements rate limit service. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The \u003cHostname\u003e is the full qualified host name in the Istio service registry defined by the Kubernetes service or ServiceEntry. The \u003cNamespace\u003e is the namespace of the Kubernetes service or ServiceEntry object, and can be omitted if the \u003cHostname\u003e alone can decide the service unambiguously (normally this means there is only 1 such host name in the service registry).",
+            "type": "string",
+            "format": "string"
+          },
+          "port": {
+            "description": "REQUIRED. Specifies the port of the service.",
+            "type": "integer"
+          },
+          "timeout": {
+            "description": "The timeout for the rate limit service RPC. If not set, this defaults to 20ms.",
+            "type": "string"
+          },
+          "failOpen": {
+            "description": "The filter’s behaviour in case the rate limiting service does not respond back. When it is set to true, Envoy will allow traffic in case of communication failure between rate limiting service and the proxy.",
+            "type": "boolean"
+          }
+        }
+      },
       "istio.mesh.v1alpha1.MeshConfig.AuthPolicy": {
         "type": "string",
         "enum": [
@@ -557,14 +583,14 @@
             "type": "string",
             "format": "string"
           },
+          "failOpen": {
+            "description": "If true, the user request will be allowed even if the communication with the authorization service has failed, or if the authorization service has returned a HTTP 5xx error. Default is false and the request will be rejected with \"Forbidden\" response.",
+            "type": "boolean"
+          },
           "pathPrefix": {
             "description": "Sets a prefix to the value of authorization request header *Path*. For example, setting this to \"/check\" for an original user request at path \"/admin\" will cause the authorization check request to be sent to the authorization service at the path \"/check/admin\" instead of \"/admin\".",
             "type": "string",
             "format": "string"
-          },
-          "failOpen": {
-            "description": "If true, the user request will be allowed even if the communication with the authorization service has failed, or if the authorization service has returned a HTTP 5xx error. Default is false and the request will be rejected with \"Forbidden\" response.",
-            "type": "boolean"
           },
           "statusOnError": {
             "description": "Sets the HTTP status that is returned to the client when there is a network error to the authorization service. The default status is \"403\" (HTTP Forbidden).",

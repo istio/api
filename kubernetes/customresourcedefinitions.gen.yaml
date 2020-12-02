@@ -2517,6 +2517,151 @@ spec:
                               format: string
                               type: string
                           type: object
+                        globalRateLimit:
+                          description: Global rate limiting.
+                          properties:
+                            actions:
+                              description: A list of actions that are to be applied
+                                for this rate limit configuration.
+                              items:
+                                oneOf:
+                                - not:
+                                    anyOf:
+                                    - required:
+                                      - requestHeader
+                                    - required:
+                                      - remoteAddress
+                                    - properties:
+                                        headerMatch:
+                                          oneOf:
+                                          - not:
+                                              anyOf:
+                                              - required:
+                                                - exact
+                                              - required:
+                                                - prefix
+                                              - required:
+                                                - regex
+                                          - required:
+                                            - exact
+                                          - required:
+                                            - prefix
+                                          - required:
+                                            - regex
+                                      required:
+                                      - headerMatch
+                                    - required:
+                                      - genericKey
+                                - required:
+                                  - requestHeader
+                                - required:
+                                  - remoteAddress
+                                - properties:
+                                    headerMatch:
+                                      oneOf:
+                                      - not:
+                                          anyOf:
+                                          - required:
+                                            - exact
+                                          - required:
+                                            - prefix
+                                          - required:
+                                            - regex
+                                      - required:
+                                        - exact
+                                      - required:
+                                        - prefix
+                                      - required:
+                                        - regex
+                                  required:
+                                  - headerMatch
+                                - required:
+                                  - genericKey
+                                properties:
+                                  genericKey:
+                                    description: Rate limit on a generic key.
+                                    properties:
+                                      descriptorKey:
+                                        description: An optional key to use in the
+                                          descriptor entry.
+                                        format: string
+                                        type: string
+                                      descriptorValue:
+                                        description: The value to use in the descriptor
+                                          entry.
+                                        format: string
+                                        type: string
+                                    type: object
+                                  headerMatch:
+                                    description: Rate limit on the existence of request
+                                      headers.
+                                    properties:
+                                      descriptorValue:
+                                        description: The value to use in the descriptor
+                                          entry.
+                                        format: string
+                                        type: string
+                                      exact:
+                                        format: string
+                                        type: string
+                                      expectMatch:
+                                        description: If set to true, the action will
+                                          append a descriptor entry when the request
+                                          matches the headers.
+                                        format: string
+                                        type: string
+                                      headerName:
+                                        description: The header name to be queried
+                                          from the request headers.
+                                        format: string
+                                        type: string
+                                      prefix:
+                                        format: string
+                                        type: string
+                                      regex:
+                                        description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                        format: string
+                                        type: string
+                                    type: object
+                                  remoteAddress:
+                                    description: Rate limit on remote address.
+                                    type: boolean
+                                  requestHeader:
+                                    description: Rate limit on request headers.
+                                    properties:
+                                      descriptorKey:
+                                        description: The key to use in the descriptor
+                                          entry.
+                                        format: string
+                                        type: string
+                                      headerName:
+                                        description: The header name to be queried
+                                          from the request headers.
+                                        format: string
+                                        type: string
+                                      skipIfAbsent:
+                                        description: If set to true, Envoy skips the
+                                          descriptor while calling rate limiting service
+                                          when header is not present in the request.
+                                        format: string
+                                        type: string
+                                    type: object
+                                type: object
+                              type: array
+                            domain:
+                              description: The rate limit domain to use when calling
+                                the rate limit service.
+                              format: string
+                              type: string
+                            failOpen:
+                              description: The filter’s behaviour in case the rate
+                                limiting service does not respond back.
+                              type: boolean
+                            timeout:
+                              description: The timeout in milliseconds for the rate
+                                limit service RPC.
+                              type: string
+                          type: object
                         headers:
                           properties:
                             request:
@@ -2554,6 +2699,30 @@ spec:
                                     format: string
                                     type: string
                                   type: object
+                              type: object
+                          type: object
+                        localRateLimit:
+                          description: Local rate limiting.
+                          properties:
+                            statusCode:
+                              format: int32
+                              type: integer
+                            tokenBucket:
+                              description: The token bucket configuration to use for
+                                rate limiting requests.
+                              properties:
+                                interval:
+                                  description: The fill interval that tokens are added
+                                    to the bucket.
+                                  type: string
+                                maxTokens:
+                                  description: The maximum tokens that the bucket
+                                    can hold.
+                                  type: integer
+                                tokensPerFill:
+                                  description: The number of tokens added to the bucket
+                                    during each fill interval.
+                                  type: integer
                               type: object
                           type: object
                         weight:
@@ -2632,6 +2801,63 @@ spec:
                               format: string
                               type: string
                           type: object
+                        globalRateLimit:
+                          description: L4 global rate limiting policy.
+                          properties:
+                            descriptors:
+                              description: The rate limit descriptor list to use in
+                                the rate limit service request.
+                              properties:
+                                entries:
+                                  description: Descriptor entries.
+                                  items:
+                                    properties:
+                                      key:
+                                        description: Descriptor key.
+                                        format: string
+                                        type: string
+                                      value:
+                                        description: Descriptor value.
+                                        format: string
+                                        type: string
+                                    type: object
+                                  type: array
+                              type: object
+                            domain:
+                              description: The rate limit domain to use when calling
+                                the rate limit service.
+                              format: string
+                              type: string
+                            failOpen:
+                              description: The filter’s behaviour in case the rate
+                                limiting service does not respond back.
+                              type: boolean
+                            timeout:
+                              description: The timeout for the rate limit service
+                                RPC.
+                              type: string
+                          type: object
+                        localRateLimit:
+                          description: L4 local rate limiting policy.
+                          properties:
+                            tokenBucket:
+                              description: The token bucket configuration to use for
+                                rate limiting requests.
+                              properties:
+                                interval:
+                                  description: The fill interval that tokens are added
+                                    to the bucket.
+                                  type: string
+                                maxTokens:
+                                  description: The maximum tokens that the bucket
+                                    can hold.
+                                  type: integer
+                                tokensPerFill:
+                                  description: The number of tokens added to the bucket
+                                    during each fill interval.
+                                  type: integer
+                              type: object
+                          type: object
                         weight:
                           format: int32
                           type: integer
@@ -2704,6 +2930,63 @@ spec:
                               description: The name of a subset within the service.
                               format: string
                               type: string
+                          type: object
+                        globalRateLimit:
+                          description: L4 global rate limiting policy.
+                          properties:
+                            descriptors:
+                              description: The rate limit descriptor list to use in
+                                the rate limit service request.
+                              properties:
+                                entries:
+                                  description: Descriptor entries.
+                                  items:
+                                    properties:
+                                      key:
+                                        description: Descriptor key.
+                                        format: string
+                                        type: string
+                                      value:
+                                        description: Descriptor value.
+                                        format: string
+                                        type: string
+                                    type: object
+                                  type: array
+                              type: object
+                            domain:
+                              description: The rate limit domain to use when calling
+                                the rate limit service.
+                              format: string
+                              type: string
+                            failOpen:
+                              description: The filter’s behaviour in case the rate
+                                limiting service does not respond back.
+                              type: boolean
+                            timeout:
+                              description: The timeout for the rate limit service
+                                RPC.
+                              type: string
+                          type: object
+                        localRateLimit:
+                          description: L4 local rate limiting policy.
+                          properties:
+                            tokenBucket:
+                              description: The token bucket configuration to use for
+                                rate limiting requests.
+                              properties:
+                                interval:
+                                  description: The fill interval that tokens are added
+                                    to the bucket.
+                                  type: string
+                                maxTokens:
+                                  description: The maximum tokens that the bucket
+                                    can hold.
+                                  type: integer
+                                tokensPerFill:
+                                  description: The number of tokens added to the bucket
+                                    during each fill interval.
+                                  type: integer
+                              type: object
                           type: object
                         weight:
                           format: int32

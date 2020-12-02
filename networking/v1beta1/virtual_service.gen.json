@@ -275,6 +275,12 @@
             "description": "The proportion of traffic to be forwarded to the service version. (0-100). Sum of weights across destinations SHOULD BE == 100. If there is only one destination in a rule, the weight value is assumed to be 100.",
             "type": "integer",
             "format": "int32"
+          },
+          "localRateLimit": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.HTTPLocalRateLimit"
+          },
+          "globalRateLimit": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.HTTPGlobalRateLimit"
           }
         }
       },
@@ -532,6 +538,12 @@
             "description": "The proportion of traffic to be forwarded to the service version. If there is only one destination in a rule, all traffic will be routed to it irrespective of the weight.",
             "type": "integer",
             "format": "int32"
+          },
+          "localRateLimit": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.LocalRateLimit"
+          },
+          "globalRateLimit": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.GlobalRateLimit"
           }
         }
       },
@@ -662,6 +674,355 @@
             }
           }
         ]
+      },
+      "istio.networking.v1beta1.HTTPLocalRateLimit": {
+        "description": "HTTPLocalRateLimit used to rate limit the HTTP requests locally",
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "description": "StatusCode allows for a custom HTTP response status code to the downstream client when the request has been rate limited. Defaults to 429 (TooManyRequests).",
+            "type": "integer",
+            "format": "int32"
+          },
+          "tokenBucket": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.TokenBucket"
+          }
+        }
+      },
+      "istio.networking.v1beta1.HTTPGlobalRateLimit": {
+        "description": "HTTPGlobalRateLimit used to rate limit the HTTP requests calling the rate limit service.",
+        "type": "object",
+        "properties": {
+          "timeout": {
+            "description": "The timeout in milliseconds for the rate limit service RPC. If set, it will override the global value from mesh config.",
+            "type": "string"
+          },
+          "domain": {
+            "description": "The rate limit domain to use when calling the rate limit service.",
+            "type": "string",
+            "format": "string"
+          },
+          "failOpen": {
+            "description": "The filter’s behaviour in case the rate limiting service does not respond back. When it is set to true, Envoy will allow traffic in case of communication failure between rate limiting service and the proxy. If set, it will override the global value from mesh config.",
+            "type": "boolean"
+          },
+          "actions": {
+            "description": "A list of actions that are to be applied for this rate limit configuration. Order matters as the actions are processed sequentially and the descriptor is composed by appending descriptor entries in that sequence.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1beta1.RateLimitAction"
+            }
+          }
+        }
+      },
+      "istio.networking.v1beta1.RateLimitAction": {
+        "description": "RateLimitAction describes how to generate descriptor entries.",
+        "type": "object",
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "requestHeader"
+                  ],
+                  "properties": {
+                    "requestHeader": {
+                      "$ref": "#/components/schemas/istio.networking.v1beta1.RateLimitAction.RequestHeader"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "remoteAddress"
+                  ],
+                  "properties": {
+                    "remoteAddress": {
+                      "description": "Rate limit on remote address. The following descriptor entry is appended to the descriptor and is populated using the trusted address from x-forwarded-for: `(\"remote_address\", \"\u003ctrusted address from x-forwarded-for\u003e\")`",
+                      "type": "boolean"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "headerMatch"
+                  ],
+                  "properties": {
+                    "headerMatch": {
+                      "$ref": "#/components/schemas/istio.networking.v1beta1.RateLimitAction.HeaderMatch"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "genericKey"
+                  ],
+                  "properties": {
+                    "genericKey": {
+                      "$ref": "#/components/schemas/istio.networking.v1beta1.RateLimitAction.GenericKey"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "requestHeader"
+            ],
+            "properties": {
+              "requestHeader": {
+                "$ref": "#/components/schemas/istio.networking.v1beta1.RateLimitAction.RequestHeader"
+              }
+            }
+          },
+          {
+            "required": [
+              "remoteAddress"
+            ],
+            "properties": {
+              "remoteAddress": {
+                "description": "Rate limit on remote address. The following descriptor entry is appended to the descriptor and is populated using the trusted address from x-forwarded-for: `(\"remote_address\", \"\u003ctrusted address from x-forwarded-for\u003e\")`",
+                "type": "boolean"
+              }
+            }
+          },
+          {
+            "required": [
+              "headerMatch"
+            ],
+            "properties": {
+              "headerMatch": {
+                "$ref": "#/components/schemas/istio.networking.v1beta1.RateLimitAction.HeaderMatch"
+              }
+            }
+          },
+          {
+            "required": [
+              "genericKey"
+            ],
+            "properties": {
+              "genericKey": {
+                "$ref": "#/components/schemas/istio.networking.v1beta1.RateLimitAction.GenericKey"
+              }
+            }
+          }
+        ]
+      },
+      "istio.networking.v1beta1.RateLimitAction.RequestHeader": {
+        "description": "The following descriptor entry is appended when a header contains a key that matches the header_name: `(\"\u003cdescriptor_key\u003e\", \"\u003cheader_value_queried_from_header\u003e\")`",
+        "type": "object",
+        "properties": {
+          "headerName": {
+            "description": "The header name to be queried from the request headers. The header’s value is used to populate the value of the descriptor entry for the descriptor_key",
+            "type": "string",
+            "format": "string"
+          },
+          "descriptorKey": {
+            "description": "The key to use in the descriptor entry.",
+            "type": "string",
+            "format": "string"
+          },
+          "skipIfAbsent": {
+            "description": "If set to true, Envoy skips the descriptor while calling rate limiting service when header is not present in the request. By default it is true and skips calling rate limiting service if this header does not exist.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.networking.v1beta1.RateLimitAction.HeaderMatch": {
+        "description": "The following descriptor entry is appended to the descriptor: `(\"header_match\", \"\u003cdescriptor_value\u003e\")`",
+        "type": "object",
+        "properties": {
+          "headerName": {
+            "description": "The header name to be queried from the request headers.",
+            "type": "string",
+            "format": "string"
+          },
+          "descriptorValue": {
+            "description": "The value to use in the descriptor entry.",
+            "type": "string",
+            "format": "string"
+          },
+          "expectMatch": {
+            "description": "If set to true, the action will append a descriptor entry when the request matches the headers. If set to false, the action will append a descriptor entry when the request does not match the headers. The default value is true.",
+            "type": "string",
+            "format": "string"
+          }
+        },
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "exact"
+                  ],
+                  "properties": {
+                    "exact": {
+                      "description": "exact string match on the header value",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "prefix"
+                  ],
+                  "properties": {
+                    "prefix": {
+                      "description": "prefix-based match",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "regex"
+                  ],
+                  "properties": {
+                    "regex": {
+                      "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "exact"
+            ],
+            "properties": {
+              "exact": {
+                "description": "exact string match on the header value",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "prefix"
+            ],
+            "properties": {
+              "prefix": {
+                "description": "prefix-based match",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "regex"
+            ],
+            "properties": {
+              "regex": {
+                "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          }
+        ]
+      },
+      "istio.networking.v1beta1.RateLimitAction.GenericKey": {
+        "description": "The following descriptor entry is appended to the descriptor: `(\"generic_key\", \"\u003cdescriptor_value\u003e\")`",
+        "type": "object",
+        "properties": {
+          "descriptorKey": {
+            "description": "An optional key to use in the descriptor entry. If not set it defaults to ‘generic_key’ as the descriptor key.",
+            "type": "string",
+            "format": "string"
+          },
+          "descriptorValue": {
+            "description": "The value to use in the descriptor entry.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.networking.v1beta1.TokenBucket": {
+        "description": "TokenBucket used for local rate limiting",
+        "type": "object",
+        "properties": {
+          "interval": {
+            "description": "The fill interval that tokens are added to the bucket. During each fill interval tokens_per_fill are added to the bucket. The bucket will never contain more than max_tokens tokens. *Note*: It must be \u003e= 50ms to avoid aggressive fills.",
+            "type": "string"
+          },
+          "maxTokens": {
+            "description": "The maximum tokens that the bucket can hold.",
+            "type": "integer"
+          },
+          "tokensPerFill": {
+            "description": "The number of tokens added to the bucket during each fill interval. If not specified, defaults to 1.",
+            "type": "integer"
+          }
+        }
+      },
+      "istio.networking.v1beta1.LocalRateLimit": {
+        "description": "LocalRateLimit used to rate limit the L4 connections locally",
+        "type": "object",
+        "properties": {
+          "tokenBucket": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.TokenBucket"
+          }
+        }
+      },
+      "istio.networking.v1beta1.GlobalRateLimit": {
+        "description": "GlobalRateLimit used to rate limit the L4 connections calling the global rate limit service.",
+        "type": "object",
+        "properties": {
+          "timeout": {
+            "description": "The timeout for the rate limit service RPC. If set, it will override the global value from mesh config.",
+            "type": "string"
+          },
+          "domain": {
+            "description": "The rate limit domain to use when calling the rate limit service.",
+            "type": "string",
+            "format": "string"
+          },
+          "failOpen": {
+            "description": "The filter’s behaviour in case the rate limiting service does not respond back. When it is set to true, Envoy will allow traffic in case of communication failure between rate limiting service and the proxy. If set, it will override the global value from mesh config.",
+            "type": "boolean"
+          },
+          "descriptors": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.GlobalRateLimit.RateLimitDescriptor"
+          }
+        }
+      },
+      "istio.networking.v1beta1.GlobalRateLimit.RateLimitDescriptor": {
+        "description": "A RateLimitDescriptor is a list of hierarchical entries that are used by the service to determine the final rate limit key and overall allowed limit. Here are some examples of how they might be used for the domain \"envoy\".",
+        "type": "object",
+        "properties": {
+          "entries": {
+            "description": "Descriptor entries.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1beta1.GlobalRateLimit.RateLimitDescriptor.Entry"
+            }
+          }
+        }
+      },
+      "istio.networking.v1beta1.GlobalRateLimit.RateLimitDescriptor.Entry": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "description": "Descriptor key.",
+            "type": "string",
+            "format": "string"
+          },
+          "value": {
+            "description": "Descriptor value.",
+            "type": "string",
+            "format": "string"
+          }
+        }
       },
       "istio.networking.v1beta1.HTTPFaultInjection.Delay": {
         "description": "Delay specification is used to inject latency into the request forwarding path. The following example will introduce a 5 second delay in 1 out of every 1000 requests to the \"v1\" version of the \"reviews\" service from all pods with label env: prod",
