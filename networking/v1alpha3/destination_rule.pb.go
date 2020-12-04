@@ -1837,6 +1837,8 @@ type ClientTLSSettings struct {
 	Sni string `protobuf:"bytes,6,opt,name=sni,proto3" json:"sni,omitempty"`
 	// auto_sni and auto_san could automatically set the outbound SNI
 	// based on host/authority
+	// **NOTE:** auto_sni and auto_san fields are only applicable for HTTPs traffic
+	// when auto_sni field set as true, it will override the sni set above.
 	// Additional context:
 	// https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-upstreamhttpprotocoloptions-auto-sni
 	// https://github.com/istio/istio/issues/27847
