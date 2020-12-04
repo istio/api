@@ -952,6 +952,13 @@ message ClientTLSSettings {
 
   // SNI string to present to the server during TLS handshake.
   string sni = 6;
+  // auto_sni and auto_san could automatically set the outbound SNI
+  // based on host/authority
+  // Additional context:
+  // https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-upstreamhttpprotocoloptions-auto-sni
+  // https://github.com/istio/istio/issues/27847 
+  bool auto_sni = 8;
+  bool auto_san = 9;
 }
 
 // Locality-weighted load balancing allows administrators to control the

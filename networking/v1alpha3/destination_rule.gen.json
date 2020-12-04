@@ -230,6 +230,13 @@
             "description": "SNI string to present to the server during TLS handshake.",
             "type": "string",
             "format": "string"
+          },
+          "autoSni": {
+            "description": "auto_sni and auto_san could automatically set the outbound SNI based on host/authority Additional context: https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-upstreamhttpprotocoloptions-auto-sni https://github.com/istio/istio/issues/27847",
+            "type": "boolean"
+          },
+          "autoSan": {
+            "type": "boolean"
           }
         }
       },
