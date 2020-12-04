@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.networking.v1alpha3',
   syntax='proto3',
   serialized_options=_b('Z istio.io/api/networking/v1alpha3'),
-  serialized_pb=_b('\n(networking/v1alpha3/workload_group.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a(networking/v1alpha3/workload_entry.proto\"\xef\x03\n\rWorkloadGroup\x12\x45\n\x08metadata\x18\x01 \x01(\x0b\x32\x33.istio.networking.v1alpha3.WorkloadGroup.ObjectMeta\x12?\n\x08template\x18\x02 \x01(\x0b\x32(.istio.networking.v1alpha3.WorkloadEntryB\x03\xe0\x41\x02\x12\x38\n\x05probe\x18\x03 \x01(\x0b\x32).istio.networking.v1alpha3.ReadinessProbe\x1a\x9b\x02\n\nObjectMeta\x12O\n\x06labels\x18\x01 \x03(\x0b\x32?.istio.networking.v1alpha3.WorkloadGroup.ObjectMeta.LabelsEntry\x12Y\n\x0b\x61nnotations\x18\x02 \x03(\x0b\x32\x44.istio.networking.v1alpha3.WorkloadGroup.ObjectMeta.AnnotationsEntry\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x32\n\x10\x41nnotationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xfc\x02\n\x0eReadinessProbe\x12\x1d\n\x15initial_delay_seconds\x18\x02 \x01(\x05\x12\x17\n\x0ftimeout_seconds\x18\x03 \x01(\x05\x12\x16\n\x0eperiod_seconds\x18\x04 \x01(\x05\x12\x19\n\x11success_threshold\x18\x05 \x01(\x05\x12\x19\n\x11\x66\x61ilure_threshold\x18\x06 \x01(\x05\x12\x44\n\x08http_get\x18\x07 \x01(\x0b\x32\x30.istio.networking.v1alpha3.HTTPHealthCheckConfigH\x00\x12\x45\n\ntcp_socket\x18\x08 \x01(\x0b\x32/.istio.networking.v1alpha3.TCPHealthCheckConfigH\x00\x12@\n\x04\x65xec\x18\t \x01(\x0b\x32\x30.istio.networking.v1alpha3.ExecHealthCheckConfigH\x00\x42\x15\n\x13health_check_method\"\x8e\x01\n\x15HTTPHealthCheckConfig\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\r\x12\x0c\n\x04host\x18\x03 \x01(\t\x12\x0e\n\x06scheme\x18\x04 \x01(\t\x12;\n\x0chttp_headers\x18\x05 \x03(\x0b\x32%.istio.networking.v1alpha3.HTTPHeader\")\n\nHTTPHeader\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"2\n\x14TCPHealthCheckConfig\x12\x0c\n\x04host\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\r\"(\n\x15\x45xecHealthCheckConfig\x12\x0f\n\x07\x63ommand\x18\x01 \x03(\tB\"Z istio.io/api/networking/v1alpha3b\x06proto3')
+  serialized_pb=_b('\n(networking/v1alpha3/workload_group.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a(networking/v1alpha3/workload_entry.proto\"\xef\x03\n\rWorkloadGroup\x12\x45\n\x08metadata\x18\x01 \x01(\x0b\x32\x33.istio.networking.v1alpha3.WorkloadGroup.ObjectMeta\x12?\n\x08template\x18\x02 \x01(\x0b\x32(.istio.networking.v1alpha3.WorkloadEntryB\x03\xe0\x41\x02\x12\x38\n\x05probe\x18\x03 \x01(\x0b\x32).istio.networking.v1alpha3.ReadinessProbe\x1a\x9b\x02\n\nObjectMeta\x12O\n\x06labels\x18\x01 \x03(\x0b\x32?.istio.networking.v1alpha3.WorkloadGroup.ObjectMeta.LabelsEntry\x12Y\n\x0b\x61nnotations\x18\x02 \x03(\x0b\x32\x44.istio.networking.v1alpha3.WorkloadGroup.ObjectMeta.AnnotationsEntry\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x32\n\x10\x41nnotationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xfc\x02\n\x0eReadinessProbe\x12\x1d\n\x15initial_delay_seconds\x18\x02 \x01(\x05\x12\x17\n\x0ftimeout_seconds\x18\x03 \x01(\x05\x12\x16\n\x0eperiod_seconds\x18\x04 \x01(\x05\x12\x19\n\x11success_threshold\x18\x05 \x01(\x05\x12\x19\n\x11\x66\x61ilure_threshold\x18\x06 \x01(\x05\x12\x44\n\x08http_get\x18\x07 \x01(\x0b\x32\x30.istio.networking.v1alpha3.HTTPHealthCheckConfigH\x00\x12\x45\n\ntcp_socket\x18\x08 \x01(\x0b\x32/.istio.networking.v1alpha3.TCPHealthCheckConfigH\x00\x12@\n\x04\x65xec\x18\t \x01(\x0b\x32\x30.istio.networking.v1alpha3.ExecHealthCheckConfigH\x00\x42\x15\n\x13health_check_method\"\x93\x01\n\x15HTTPHealthCheckConfig\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x11\n\x04port\x18\x02 \x01(\rB\x03\xe0\x41\x02\x12\x0c\n\x04host\x18\x03 \x01(\t\x12\x0e\n\x06scheme\x18\x04 \x01(\t\x12;\n\x0chttp_headers\x18\x05 \x03(\x0b\x32%.istio.networking.v1alpha3.HTTPHeader\")\n\nHTTPHeader\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"7\n\x14TCPHealthCheckConfig\x12\x0c\n\x04host\x18\x01 \x01(\t\x12\x11\n\x04port\x18\x02 \x01(\rB\x03\xe0\x41\x02\"(\n\x15\x45xecHealthCheckConfig\x12\x0f\n\x07\x63ommand\x18\x01 \x03(\tB\"Z istio.io/api/networking/v1alpha3b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_workload__entry__pb2.DESCRIPTOR,])
 
@@ -288,7 +288,7 @@ _HTTPHEALTHCHECKCONFIG = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='host', full_name='istio.networking.v1alpha3.HTTPHealthCheckConfig.host', index=2,
       number=3, type=9, cpp_type=9, label=1,
@@ -323,7 +323,7 @@ _HTTPHEALTHCHECKCONFIG = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=1028,
-  serialized_end=1170,
+  serialized_end=1175,
 )
 
 
@@ -360,8 +360,8 @@ _HTTPHEADER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1172,
-  serialized_end=1213,
+  serialized_start=1177,
+  serialized_end=1218,
 )
 
 
@@ -385,7 +385,7 @@ _TCPHEALTHCHECKCONFIG = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -398,8 +398,8 @@ _TCPHEALTHCHECKCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1215,
-  serialized_end=1265,
+  serialized_start=1220,
+  serialized_end=1275,
 )
 
 
@@ -429,8 +429,8 @@ _EXECHEALTHCHECKCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1267,
-  serialized_end=1307,
+  serialized_start=1277,
+  serialized_end=1317,
 )
 
 _WORKLOADGROUP_OBJECTMETA_LABELSENTRY.containing_type = _WORKLOADGROUP_OBJECTMETA
@@ -533,4 +533,6 @@ DESCRIPTOR._options = None
 _WORKLOADGROUP_OBJECTMETA_LABELSENTRY._options = None
 _WORKLOADGROUP_OBJECTMETA_ANNOTATIONSENTRY._options = None
 _WORKLOADGROUP.fields_by_name['template']._options = None
+_HTTPHEALTHCHECKCONFIG.fields_by_name['port']._options = None
+_TCPHEALTHCHECKCONFIG.fields_by_name['port']._options = None
 # @@protoc_insertion_point(module_scope)
