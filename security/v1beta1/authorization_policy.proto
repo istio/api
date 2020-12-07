@@ -307,6 +307,7 @@ message AuthorizationPolicy {
 
   // $hide_from_docs
   oneof action_detail {
+    // $hide_from_docs
     // Specifies detailed configuration of the CUSTOM action. Must be used only with CUSTOM action.
     ExtensionProvider provider = 4;
   }
