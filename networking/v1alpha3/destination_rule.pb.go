@@ -860,10 +860,10 @@ type isLoadBalancerSettings_LbPolicy interface {
 }
 
 type LoadBalancerSettings_Simple struct {
-	Simple LoadBalancerSettings_SimpleLB `protobuf:"varint,1,opt,name=simple,proto3,enum=istio.networking.v1alpha3.LoadBalancerSettings_SimpleLB,oneof"`
+	Simple LoadBalancerSettings_SimpleLB `protobuf:"varint,1,opt,name=simple,proto3,enum=istio.networking.v1alpha3.LoadBalancerSettings_SimpleLB,oneof" json:"simple,omitempty"`
 }
 type LoadBalancerSettings_ConsistentHash struct {
-	ConsistentHash *LoadBalancerSettings_ConsistentHashLB `protobuf:"bytes,2,opt,name=consistent_hash,json=consistentHash,proto3,oneof"`
+	ConsistentHash *LoadBalancerSettings_ConsistentHashLB `protobuf:"bytes,2,opt,name=consistent_hash,json=consistentHash,proto3,oneof" json:"consistent_hash,omitempty"`
 }
 
 func (*LoadBalancerSettings_Simple) isLoadBalancerSettings_LbPolicy()         {}
@@ -971,16 +971,16 @@ type isLoadBalancerSettings_ConsistentHashLB_HashKey interface {
 }
 
 type LoadBalancerSettings_ConsistentHashLB_HttpHeaderName struct {
-	HttpHeaderName string `protobuf:"bytes,1,opt,name=http_header_name,json=httpHeaderName,proto3,oneof"`
+	HttpHeaderName string `protobuf:"bytes,1,opt,name=http_header_name,json=httpHeaderName,proto3,oneof" json:"http_header_name,omitempty"`
 }
 type LoadBalancerSettings_ConsistentHashLB_HttpCookie struct {
-	HttpCookie *LoadBalancerSettings_ConsistentHashLB_HTTPCookie `protobuf:"bytes,2,opt,name=http_cookie,json=httpCookie,proto3,oneof"`
+	HttpCookie *LoadBalancerSettings_ConsistentHashLB_HTTPCookie `protobuf:"bytes,2,opt,name=http_cookie,json=httpCookie,proto3,oneof" json:"http_cookie,omitempty"`
 }
 type LoadBalancerSettings_ConsistentHashLB_UseSourceIp struct {
-	UseSourceIp bool `protobuf:"varint,3,opt,name=use_source_ip,json=useSourceIp,proto3,oneof"`
+	UseSourceIp bool `protobuf:"varint,3,opt,name=use_source_ip,json=useSourceIp,proto3,oneof" json:"use_source_ip,omitempty"`
 }
 type LoadBalancerSettings_ConsistentHashLB_HttpQueryParameterName struct {
-	HttpQueryParameterName string `protobuf:"bytes,5,opt,name=http_query_parameter_name,json=httpQueryParameterName,proto3,oneof"`
+	HttpQueryParameterName string `protobuf:"bytes,5,opt,name=http_query_parameter_name,json=httpQueryParameterName,proto3,oneof" json:"http_query_parameter_name,omitempty"`
 }
 
 func (*LoadBalancerSettings_ConsistentHashLB_HttpHeaderName) isLoadBalancerSettings_ConsistentHashLB_HashKey() {
@@ -2683,7 +2683,8 @@ func (m *LoadBalancerSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 }
 
 func (m *LoadBalancerSettings_Simple) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *LoadBalancerSettings_Simple) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -2694,7 +2695,8 @@ func (m *LoadBalancerSettings_Simple) MarshalToSizedBuffer(dAtA []byte) (int, er
 	return len(dAtA) - i, nil
 }
 func (m *LoadBalancerSettings_ConsistentHash) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *LoadBalancerSettings_ConsistentHash) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -2755,7 +2757,8 @@ func (m *LoadBalancerSettings_ConsistentHashLB) MarshalToSizedBuffer(dAtA []byte
 }
 
 func (m *LoadBalancerSettings_ConsistentHashLB_HttpHeaderName) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *LoadBalancerSettings_ConsistentHashLB_HttpHeaderName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -2768,7 +2771,8 @@ func (m *LoadBalancerSettings_ConsistentHashLB_HttpHeaderName) MarshalToSizedBuf
 	return len(dAtA) - i, nil
 }
 func (m *LoadBalancerSettings_ConsistentHashLB_HttpCookie) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *LoadBalancerSettings_ConsistentHashLB_HttpCookie) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -2788,7 +2792,8 @@ func (m *LoadBalancerSettings_ConsistentHashLB_HttpCookie) MarshalToSizedBuffer(
 	return len(dAtA) - i, nil
 }
 func (m *LoadBalancerSettings_ConsistentHashLB_UseSourceIp) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *LoadBalancerSettings_ConsistentHashLB_UseSourceIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -2804,7 +2809,8 @@ func (m *LoadBalancerSettings_ConsistentHashLB_UseSourceIp) MarshalToSizedBuffer
 	return len(dAtA) - i, nil
 }
 func (m *LoadBalancerSettings_ConsistentHashLB_HttpQueryParameterName) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *LoadBalancerSettings_ConsistentHashLB_HttpQueryParameterName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -6961,6 +6967,7 @@ func (m *LocalityLoadBalancerSetting_Failover) Unmarshal(dAtA []byte) error {
 func skipDestinationRule(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -6992,10 +6999,8 @@ func skipDestinationRule(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -7016,55 +7021,30 @@ func skipDestinationRule(dAtA []byte) (n int, err error) {
 				return 0, ErrInvalidLengthDestinationRule
 			}
 			iNdEx += length
-			if iNdEx < 0 {
-				return 0, ErrInvalidLengthDestinationRule
-			}
-			return iNdEx, nil
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowDestinationRule
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipDestinationRule(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-				if iNdEx < 0 {
-					return 0, ErrInvalidLengthDestinationRule
-				}
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupDestinationRule
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthDestinationRule
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthDestinationRule = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowDestinationRule   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthDestinationRule        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowDestinationRule          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupDestinationRule = fmt.Errorf("proto: unexpected end of group")
 )

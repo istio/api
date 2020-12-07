@@ -596,6 +596,11 @@ message EnvoyFilter {
       // to `envoy.filters.network.http_connection_manager` to add a filter or apply a
       // patch to the HTTP connection manager.
       FilterMatch filter = 5;
+
+       // Applies only to `SIDECAR_INBOUND` context. The destination_port
+       // value used by a filter chain's match condition. This condition
+       // will evaluate to false if the filter chain has no destination_port:wq match.
+       uint32 destination_port = 6;
     };
 
     // Conditions to match a specific filter within a filter chain.
