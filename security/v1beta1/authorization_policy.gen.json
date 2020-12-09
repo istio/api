@@ -94,7 +94,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "Specifies the name of the extension provider. The list of available providers is defined in the MeshConfig.",
+            "description": "Specifies the name of the extension provider. The list of available providers is defined in the MeshConfig. Note, currently at most 1 extension provider is allowed per workload. Different workloads can use different extension provider.",
             "type": "string",
             "format": "string"
           }
