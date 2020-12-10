@@ -819,7 +819,7 @@
             "type": "integer"
           },
           "sampling": {
-            "description": "The percentage of requests (0.0 - 100.0) that will be randomly selected for trace generation, if not requested by the client or not forced. Default is 100. $hide_from_docs",
+            "description": "The percentage of requests (0.0 - 100.0) that will be randomly selected for trace generation, if not requested by the client or not forced. Default is 1.0.",
             "type": "number",
             "format": "double"
           }
