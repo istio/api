@@ -888,9 +888,8 @@ type EnvoyFilter_ListenerMatch_FilterChainMatch struct {
 	// to `envoy.filters.network.http_connection_manager` to add a filter or apply a
 	// patch to the HTTP connection manager.
 	Filter *EnvoyFilter_ListenerMatch_FilterMatch `protobuf:"bytes,5,opt,name=filter,proto3" json:"filter,omitempty"`
-	// Applies only to `SIDECAR_INBOUND` context. The destination_port
-	// value used by a filter chain's match condition. This condition
-	// will evaluate to false if the filter chain has no destination_port:wq match.
+	// The destination_port value used by a filter chain's match condition.
+	// This condition will evaluate to false if the filter chain has no destination_port match.
 	DestinationPort      uint32   `protobuf:"varint,6,opt,name=destination_port,json=destinationPort,proto3" json:"destination_port,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -1219,13 +1218,13 @@ type isEnvoyFilter_EnvoyConfigObjectMatch_ObjectTypes interface {
 }
 
 type EnvoyFilter_EnvoyConfigObjectMatch_Listener struct {
-	Listener *EnvoyFilter_ListenerMatch `protobuf:"bytes,3,opt,name=listener,proto3,oneof" json:"listener,omitempty"`
+	Listener *EnvoyFilter_ListenerMatch `protobuf:"bytes,3,opt,name=listener,proto3,oneof"`
 }
 type EnvoyFilter_EnvoyConfigObjectMatch_RouteConfiguration struct {
-	RouteConfiguration *EnvoyFilter_RouteConfigurationMatch `protobuf:"bytes,4,opt,name=route_configuration,json=routeConfiguration,proto3,oneof" json:"route_configuration,omitempty"`
+	RouteConfiguration *EnvoyFilter_RouteConfigurationMatch `protobuf:"bytes,4,opt,name=route_configuration,json=routeConfiguration,proto3,oneof"`
 }
 type EnvoyFilter_EnvoyConfigObjectMatch_Cluster struct {
-	Cluster *EnvoyFilter_ClusterMatch `protobuf:"bytes,5,opt,name=cluster,proto3,oneof" json:"cluster,omitempty"`
+	Cluster *EnvoyFilter_ClusterMatch `protobuf:"bytes,5,opt,name=cluster,proto3,oneof"`
 }
 
 func (*EnvoyFilter_EnvoyConfigObjectMatch_Listener) isEnvoyFilter_EnvoyConfigObjectMatch_ObjectTypes() {
@@ -2099,8 +2098,7 @@ func (m *EnvoyFilter_EnvoyConfigObjectMatch) MarshalToSizedBuffer(dAtA []byte) (
 }
 
 func (m *EnvoyFilter_EnvoyConfigObjectMatch_Listener) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
 }
 
 func (m *EnvoyFilter_EnvoyConfigObjectMatch_Listener) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -2120,8 +2118,7 @@ func (m *EnvoyFilter_EnvoyConfigObjectMatch_Listener) MarshalToSizedBuffer(dAtA 
 	return len(dAtA) - i, nil
 }
 func (m *EnvoyFilter_EnvoyConfigObjectMatch_RouteConfiguration) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
 }
 
 func (m *EnvoyFilter_EnvoyConfigObjectMatch_RouteConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -2141,8 +2138,7 @@ func (m *EnvoyFilter_EnvoyConfigObjectMatch_RouteConfiguration) MarshalToSizedBu
 	return len(dAtA) - i, nil
 }
 func (m *EnvoyFilter_EnvoyConfigObjectMatch_Cluster) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
 }
 
 func (m *EnvoyFilter_EnvoyConfigObjectMatch_Cluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -4624,7 +4620,6 @@ func (m *EnvoyFilter_EnvoyConfigObjectPatch) Unmarshal(dAtA []byte) error {
 func skipEnvoyFilter(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
-	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -4656,8 +4651,10 @@ func skipEnvoyFilter(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
+			return iNdEx, nil
 		case 1:
 			iNdEx += 8
+			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -4678,30 +4675,55 @@ func skipEnvoyFilter(dAtA []byte) (n int, err error) {
 				return 0, ErrInvalidLengthEnvoyFilter
 			}
 			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupEnvoyFilter
+			if iNdEx < 0 {
+				return 0, ErrInvalidLengthEnvoyFilter
 			}
-			depth--
+			return iNdEx, nil
+		case 3:
+			for {
+				var innerWire uint64
+				var start int = iNdEx
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return 0, ErrIntOverflowEnvoyFilter
+					}
+					if iNdEx >= l {
+						return 0, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					innerWire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				innerWireType := int(innerWire & 0x7)
+				if innerWireType == 4 {
+					break
+				}
+				next, err := skipEnvoyFilter(dAtA[start:])
+				if err != nil {
+					return 0, err
+				}
+				iNdEx = start + next
+				if iNdEx < 0 {
+					return 0, ErrInvalidLengthEnvoyFilter
+				}
+			}
+			return iNdEx, nil
+		case 4:
+			return iNdEx, nil
 		case 5:
 			iNdEx += 4
+			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthEnvoyFilter
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
 	}
-	return 0, io.ErrUnexpectedEOF
+	panic("unreachable")
 }
 
 var (
-	ErrInvalidLengthEnvoyFilter        = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowEnvoyFilter          = fmt.Errorf("proto: integer overflow")
-	ErrUnexpectedEndOfGroupEnvoyFilter = fmt.Errorf("proto: unexpected end of group")
+	ErrInvalidLengthEnvoyFilter = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowEnvoyFilter   = fmt.Errorf("proto: integer overflow")
 )

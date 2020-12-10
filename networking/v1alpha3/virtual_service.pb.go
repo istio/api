@@ -2480,13 +2480,13 @@ type isStringMatch_MatchType interface {
 }
 
 type StringMatch_Exact struct {
-	Exact string `protobuf:"bytes,1,opt,name=exact,proto3,oneof" json:"exact,omitempty"`
+	Exact string `protobuf:"bytes,1,opt,name=exact,proto3,oneof"`
 }
 type StringMatch_Prefix struct {
-	Prefix string `protobuf:"bytes,2,opt,name=prefix,proto3,oneof" json:"prefix,omitempty"`
+	Prefix string `protobuf:"bytes,2,opt,name=prefix,proto3,oneof"`
 }
 type StringMatch_Regex struct {
-	Regex string `protobuf:"bytes,3,opt,name=regex,proto3,oneof" json:"regex,omitempty"`
+	Regex string `protobuf:"bytes,3,opt,name=regex,proto3,oneof"`
 }
 
 func (*StringMatch_Exact) isStringMatch_MatchType()  {}
@@ -3025,10 +3025,10 @@ type isHTTPFaultInjection_Delay_HttpDelayType interface {
 }
 
 type HTTPFaultInjection_Delay_FixedDelay struct {
-	FixedDelay *types.Duration `protobuf:"bytes,2,opt,name=fixed_delay,json=fixedDelay,proto3,oneof" json:"fixed_delay,omitempty"`
+	FixedDelay *types.Duration `protobuf:"bytes,2,opt,name=fixed_delay,json=fixedDelay,proto3,oneof"`
 }
 type HTTPFaultInjection_Delay_ExponentialDelay struct {
-	ExponentialDelay *types.Duration `protobuf:"bytes,3,opt,name=exponential_delay,json=exponentialDelay,proto3,oneof" json:"exponential_delay,omitempty"`
+	ExponentialDelay *types.Duration `protobuf:"bytes,3,opt,name=exponential_delay,json=exponentialDelay,proto3,oneof"`
 }
 
 func (*HTTPFaultInjection_Delay_FixedDelay) isHTTPFaultInjection_Delay_HttpDelayType()       {}
@@ -3185,13 +3185,13 @@ type isHTTPFaultInjection_Abort_ErrorType interface {
 }
 
 type HTTPFaultInjection_Abort_HttpStatus struct {
-	HttpStatus int32 `protobuf:"varint,2,opt,name=http_status,json=httpStatus,proto3,oneof" json:"http_status,omitempty"`
+	HttpStatus int32 `protobuf:"varint,2,opt,name=http_status,json=httpStatus,proto3,oneof"`
 }
 type HTTPFaultInjection_Abort_GrpcStatus struct {
-	GrpcStatus string `protobuf:"bytes,3,opt,name=grpc_status,json=grpcStatus,proto3,oneof" json:"grpc_status,omitempty"`
+	GrpcStatus string `protobuf:"bytes,3,opt,name=grpc_status,json=grpcStatus,proto3,oneof"`
 }
 type HTTPFaultInjection_Abort_Http2Error struct {
-	Http2Error string `protobuf:"bytes,4,opt,name=http2_error,json=http2Error,proto3,oneof" json:"http2_error,omitempty"`
+	Http2Error string `protobuf:"bytes,4,opt,name=http2_error,json=http2Error,proto3,oneof"`
 }
 
 func (*HTTPFaultInjection_Abort_HttpStatus) isHTTPFaultInjection_Abort_ErrorType() {}
@@ -4738,8 +4738,7 @@ func (m *StringMatch) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 }
 
 func (m *StringMatch_Exact) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
 }
 
 func (m *StringMatch_Exact) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -4752,8 +4751,7 @@ func (m *StringMatch_Exact) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 func (m *StringMatch_Prefix) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
 }
 
 func (m *StringMatch_Prefix) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -4766,8 +4764,7 @@ func (m *StringMatch_Prefix) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 func (m *StringMatch_Regex) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
 }
 
 func (m *StringMatch_Regex) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -5048,8 +5045,7 @@ func (m *HTTPFaultInjection_Delay) MarshalToSizedBuffer(dAtA []byte) (int, error
 }
 
 func (m *HTTPFaultInjection_Delay_FixedDelay) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
 }
 
 func (m *HTTPFaultInjection_Delay_FixedDelay) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -5069,8 +5065,7 @@ func (m *HTTPFaultInjection_Delay_FixedDelay) MarshalToSizedBuffer(dAtA []byte) 
 	return len(dAtA) - i, nil
 }
 func (m *HTTPFaultInjection_Delay_ExponentialDelay) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
 }
 
 func (m *HTTPFaultInjection_Delay_ExponentialDelay) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -5138,8 +5133,7 @@ func (m *HTTPFaultInjection_Abort) MarshalToSizedBuffer(dAtA []byte) (int, error
 }
 
 func (m *HTTPFaultInjection_Abort_HttpStatus) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
 }
 
 func (m *HTTPFaultInjection_Abort_HttpStatus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -5150,8 +5144,7 @@ func (m *HTTPFaultInjection_Abort_HttpStatus) MarshalToSizedBuffer(dAtA []byte) 
 	return len(dAtA) - i, nil
 }
 func (m *HTTPFaultInjection_Abort_GrpcStatus) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
 }
 
 func (m *HTTPFaultInjection_Abort_GrpcStatus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -5164,8 +5157,7 @@ func (m *HTTPFaultInjection_Abort_GrpcStatus) MarshalToSizedBuffer(dAtA []byte) 
 	return len(dAtA) - i, nil
 }
 func (m *HTTPFaultInjection_Abort_Http2Error) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
 }
 
 func (m *HTTPFaultInjection_Abort_Http2Error) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -11090,7 +11082,6 @@ func (m *Percent) Unmarshal(dAtA []byte) error {
 func skipVirtualService(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
-	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -11122,8 +11113,10 @@ func skipVirtualService(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
+			return iNdEx, nil
 		case 1:
 			iNdEx += 8
+			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -11144,30 +11137,55 @@ func skipVirtualService(dAtA []byte) (n int, err error) {
 				return 0, ErrInvalidLengthVirtualService
 			}
 			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupVirtualService
+			if iNdEx < 0 {
+				return 0, ErrInvalidLengthVirtualService
 			}
-			depth--
+			return iNdEx, nil
+		case 3:
+			for {
+				var innerWire uint64
+				var start int = iNdEx
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return 0, ErrIntOverflowVirtualService
+					}
+					if iNdEx >= l {
+						return 0, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					innerWire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				innerWireType := int(innerWire & 0x7)
+				if innerWireType == 4 {
+					break
+				}
+				next, err := skipVirtualService(dAtA[start:])
+				if err != nil {
+					return 0, err
+				}
+				iNdEx = start + next
+				if iNdEx < 0 {
+					return 0, ErrInvalidLengthVirtualService
+				}
+			}
+			return iNdEx, nil
+		case 4:
+			return iNdEx, nil
 		case 5:
 			iNdEx += 4
+			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthVirtualService
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
 	}
-	return 0, io.ErrUnexpectedEOF
+	panic("unreachable")
 }
 
 var (
-	ErrInvalidLengthVirtualService        = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowVirtualService          = fmt.Errorf("proto: integer overflow")
-	ErrUnexpectedEndOfGroupVirtualService = fmt.Errorf("proto: unexpected end of group")
+	ErrInvalidLengthVirtualService = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowVirtualService   = fmt.Errorf("proto: integer overflow")
 )

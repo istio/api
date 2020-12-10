@@ -300,13 +300,13 @@ type isReadinessProbe_HealthCheckMethod interface {
 }
 
 type ReadinessProbe_HttpGet struct {
-	HttpGet *HTTPHealthCheckConfig `protobuf:"bytes,7,opt,name=http_get,json=httpGet,proto3,oneof" json:"http_get,omitempty"`
+	HttpGet *HTTPHealthCheckConfig `protobuf:"bytes,7,opt,name=http_get,json=httpGet,proto3,oneof"`
 }
 type ReadinessProbe_TcpSocket struct {
-	TcpSocket *TCPHealthCheckConfig `protobuf:"bytes,8,opt,name=tcp_socket,json=tcpSocket,proto3,oneof" json:"tcp_socket,omitempty"`
+	TcpSocket *TCPHealthCheckConfig `protobuf:"bytes,8,opt,name=tcp_socket,json=tcpSocket,proto3,oneof"`
 }
 type ReadinessProbe_Exec struct {
-	Exec *ExecHealthCheckConfig `protobuf:"bytes,9,opt,name=exec,proto3,oneof" json:"exec,omitempty"`
+	Exec *ExecHealthCheckConfig `protobuf:"bytes,9,opt,name=exec,proto3,oneof"`
 }
 
 func (*ReadinessProbe_HttpGet) isReadinessProbe_HealthCheckMethod()   {}
@@ -887,8 +887,7 @@ func (m *ReadinessProbe) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 }
 
 func (m *ReadinessProbe_HttpGet) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
 }
 
 func (m *ReadinessProbe_HttpGet) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -908,8 +907,7 @@ func (m *ReadinessProbe_HttpGet) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	return len(dAtA) - i, nil
 }
 func (m *ReadinessProbe_TcpSocket) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
 }
 
 func (m *ReadinessProbe_TcpSocket) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -929,8 +927,7 @@ func (m *ReadinessProbe_TcpSocket) MarshalToSizedBuffer(dAtA []byte) (int, error
 	return len(dAtA) - i, nil
 }
 func (m *ReadinessProbe_Exec) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
 }
 
 func (m *ReadinessProbe_Exec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -2596,7 +2593,6 @@ func (m *ExecHealthCheckConfig) Unmarshal(dAtA []byte) error {
 func skipWorkloadGroup(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
-	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -2628,8 +2624,10 @@ func skipWorkloadGroup(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
+			return iNdEx, nil
 		case 1:
 			iNdEx += 8
+			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -2650,30 +2648,55 @@ func skipWorkloadGroup(dAtA []byte) (n int, err error) {
 				return 0, ErrInvalidLengthWorkloadGroup
 			}
 			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupWorkloadGroup
+			if iNdEx < 0 {
+				return 0, ErrInvalidLengthWorkloadGroup
 			}
-			depth--
+			return iNdEx, nil
+		case 3:
+			for {
+				var innerWire uint64
+				var start int = iNdEx
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return 0, ErrIntOverflowWorkloadGroup
+					}
+					if iNdEx >= l {
+						return 0, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					innerWire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				innerWireType := int(innerWire & 0x7)
+				if innerWireType == 4 {
+					break
+				}
+				next, err := skipWorkloadGroup(dAtA[start:])
+				if err != nil {
+					return 0, err
+				}
+				iNdEx = start + next
+				if iNdEx < 0 {
+					return 0, ErrInvalidLengthWorkloadGroup
+				}
+			}
+			return iNdEx, nil
+		case 4:
+			return iNdEx, nil
 		case 5:
 			iNdEx += 4
+			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthWorkloadGroup
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
 	}
-	return 0, io.ErrUnexpectedEOF
+	panic("unreachable")
 }
 
 var (
-	ErrInvalidLengthWorkloadGroup        = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowWorkloadGroup          = fmt.Errorf("proto: integer overflow")
-	ErrUnexpectedEndOfGroupWorkloadGroup = fmt.Errorf("proto: unexpected end of group")
+	ErrInvalidLengthWorkloadGroup = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowWorkloadGroup   = fmt.Errorf("proto: integer overflow")
 )
