@@ -5897,8 +5897,8 @@ spec:
                               description: Controls the behavior of the sampler.
                               enum:
                               - DECISION_UNSPECIFIED
-                              - NEVER_SAMPLE
-                              - ALWAYS_SAMPLE
+                              - NEVER
+                              - ALWAYS
                               type: string
                           type: object
                         customTags:
@@ -5912,12 +5912,16 @@ spec:
                                   - environment
                                 - required:
                                   - header
+                                - required:
+                                  - metadata
                             - required:
                               - literal
                             - required:
                               - environment
                             - required:
                               - header
+                            - required:
+                              - metadata
                             properties:
                               environment:
                                 description: Environment adds the value of an environment
@@ -5956,6 +5960,44 @@ spec:
                                     format: string
                                     type: string
                                 type: object
+                              metadata:
+                                description: Metadata adds the value of a metadata
+                                  field to each span.
+                                properties:
+                                  defaultValue:
+                                    description: Optional.
+                                    format: string
+                                    type: string
+                                  key:
+                                    description: Defines the path used to retrieve
+                                      the tag value.
+                                    properties:
+                                      key:
+                                        description: Required.
+                                        format: string
+                                        type: string
+                                      segment:
+                                        description: Required.
+                                        items:
+                                          properties:
+                                            key:
+                                              description: Key to retrieve the value
+                                                in a Struct.
+                                              format: string
+                                              type: string
+                                          type: object
+                                        type: array
+                                    type: object
+                                  kind:
+                                    description: Kind of metadata from which to obtain
+                                      tag value.
+                                    enum:
+                                    - REQUEST
+                                    - ROUTE
+                                    - CLUSTER
+                                    - HOST
+                                    type: string
+                                type: object
                             type: object
                           description: Optional.
                           type: object
@@ -5972,16 +6014,6 @@ spec:
                               format: double
                               type: number
                           type: object
-                        providers:
-                          description: Required.
-                          items:
-                            properties:
-                              name:
-                                description: Required.
-                                format: string
-                                type: string
-                            type: object
-                          type: array
                         reportSpans:
                           description: Enables the tracing functionality.
                           type: boolean

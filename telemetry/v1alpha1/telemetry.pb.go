@@ -60,6 +60,41 @@ func (TelemetryRuleMatch_TrafficDirection) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_991c84745e2b7651, []int{2, 0}
 }
 
+type Tracing_Metadata_Kind int32
+
+const (
+	// Represents dynamic metadata associated with the request
+	Tracing_Metadata_REQUEST Tracing_Metadata_Kind = 0
+	// Represents metadata from the route.
+	Tracing_Metadata_ROUTE Tracing_Metadata_Kind = 1
+	// Represents metadata from the upstream cluster.
+	Tracing_Metadata_CLUSTER Tracing_Metadata_Kind = 2
+	// Represents metadata from the upstream host.
+	Tracing_Metadata_HOST Tracing_Metadata_Kind = 3
+)
+
+var Tracing_Metadata_Kind_name = map[int32]string{
+	0: "REQUEST",
+	1: "ROUTE",
+	2: "CLUSTER",
+	3: "HOST",
+}
+
+var Tracing_Metadata_Kind_value = map[string]int32{
+	"REQUEST": 0,
+	"ROUTE":   1,
+	"CLUSTER": 2,
+	"HOST":    3,
+}
+
+func (x Tracing_Metadata_Kind) String() string {
+	return proto.EnumName(Tracing_Metadata_Kind_name, int32(x))
+}
+
+func (Tracing_Metadata_Kind) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_991c84745e2b7651, []int{4, 4, 0}
+}
+
 // ConstantDecision controls the behavior of the ConstantSampler.
 type ConstantSampler_ConstantDecision int32
 
@@ -69,23 +104,23 @@ const (
 	// Ignore all sidecar traffic for the purposes of telemetry generation.
 	// For tracing, this means that the sidecar will never generate trace spans
 	// for traffic without an existing trace context.
-	ConstantSampler_NEVER_SAMPLE ConstantSampler_ConstantDecision = 1
+	ConstantSampler_NEVER ConstantSampler_ConstantDecision = 1
 	// Consider all sidecar traffic for the purposes of telemetry generation.
 	// For tracing, this will generate trace spans for traffic without an
 	// existing trace context.
-	ConstantSampler_ALWAYS_SAMPLE ConstantSampler_ConstantDecision = 2
+	ConstantSampler_ALWAYS ConstantSampler_ConstantDecision = 2
 )
 
 var ConstantSampler_ConstantDecision_name = map[int32]string{
 	0: "DECISION_UNSPECIFIED",
-	1: "NEVER_SAMPLE",
-	2: "ALWAYS_SAMPLE",
+	1: "NEVER",
+	2: "ALWAYS",
 }
 
 var ConstantSampler_ConstantDecision_value = map[string]int32{
 	"DECISION_UNSPECIFIED": 0,
-	"NEVER_SAMPLE":         1,
-	"ALWAYS_SAMPLE":        2,
+	"NEVER":                1,
+	"ALWAYS":               2,
 }
 
 func (x ConstantSampler_ConstantDecision) String() string {
@@ -93,7 +128,7 @@ func (x ConstantSampler_ConstantDecision) String() string {
 }
 
 func (ConstantSampler_ConstantDecision) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_991c84745e2b7651, []int{6, 0}
+	return fileDescriptor_991c84745e2b7651, []int{5, 0}
 }
 
 // Telemetry defines the telemetry generation policies for workloads within a mesh.
@@ -115,7 +150,7 @@ func (ConstantSampler_ConstantDecision) EnumDescriptor() ([]byte, []int) {
 //
 // Examples:
 //
-// Policy to enable sending trace data to a Zipkin backend for 10% of all traffic:
+// Policy to enable random sampling for 10% of all traffic:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1beta1
 // kind: Telemetry
@@ -126,8 +161,6 @@ func (ConstantSampler_ConstantDecision) EnumDescriptor() ([]byte, []int) {
 //   tracing:
 //   - match: {} # apply to all traffic
 //     config:
-//       providers:
-//       - name: "zipkin"
 //       reportSpans: true
 //       percentageSampler:
 //         target: 10.00
@@ -151,8 +184,6 @@ func (ConstantSampler_ConstantDecision) EnumDescriptor() ([]byte, []int) {
 //       port:
 //         number: 8090
 //     config:
-//       providers:
-//       - name: "zipkin"
 //       reportSpans: false
 // ```
 //
@@ -409,64 +440,10 @@ func (m *Port) GetNumber() uint32 {
 	return 0
 }
 
-// Used to bind Telemetry configuration to specific providers for
-// targeted customization.
-type ProviderRef struct {
-	// Required. Name of Telemetry provider in MeshConfig.
-	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *ProviderRef) Reset()         { *m = ProviderRef{} }
-func (m *ProviderRef) String() string { return proto.CompactTextString(m) }
-func (*ProviderRef) ProtoMessage()    {}
-func (*ProviderRef) Descriptor() ([]byte, []int) {
-	return fileDescriptor_991c84745e2b7651, []int{4}
-}
-func (m *ProviderRef) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ProviderRef) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ProviderRef.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *ProviderRef) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ProviderRef.Merge(m, src)
-}
-func (m *ProviderRef) XXX_Size() int {
-	return m.Size()
-}
-func (m *ProviderRef) XXX_DiscardUnknown() {
-	xxx_messageInfo_ProviderRef.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ProviderRef proto.InternalMessageInfo
-
-func (m *ProviderRef) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
-
 // Tracing defines the workload-level overrides for tracing behavior within
 // a mesh. It can be used to enable/disable tracing, as well as to set sampling
 // rates and custom tag extraction.
 type Tracing struct {
-	// Required. Name of providers to which this configuration should apply. At
-	// least one provider needs to be specified.
-	// NOTE: Only a single provider is currently supported.
-	Providers []*ProviderRef `protobuf:"bytes,1,rep,name=providers,proto3" json:"providers,omitempty"`
 	// Enables the tracing functionality. When this is set to `true`, the
 	// sidecar will report spans to a configured backend for all traffic with a trace
 	// context that specifies the trace is sampled. Additionally, spans will be
@@ -500,7 +477,7 @@ func (m *Tracing) Reset()         { *m = Tracing{} }
 func (m *Tracing) String() string { return proto.CompactTextString(m) }
 func (*Tracing) ProtoMessage()    {}
 func (*Tracing) Descriptor() ([]byte, []int) {
-	return fileDescriptor_991c84745e2b7651, []int{5}
+	return fileDescriptor_991c84745e2b7651, []int{4}
 }
 func (m *Tracing) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -548,13 +525,6 @@ func (*Tracing_PercentageSampler) isTracing_Sampler() {}
 func (m *Tracing) GetSampler() isTracing_Sampler {
 	if m != nil {
 		return m.Sampler
-	}
-	return nil
-}
-
-func (m *Tracing) GetProviders() []*ProviderRef {
-	if m != nil {
-		return m.Providers
 	}
 	return nil
 }
@@ -618,6 +588,7 @@ type Tracing_CustomTag struct {
 	//	*Tracing_CustomTag_Literal
 	//	*Tracing_CustomTag_Environment
 	//	*Tracing_CustomTag_Header
+	//	*Tracing_CustomTag_Metadata
 	Type                 isTracing_CustomTag_Type `protobuf_oneof:"type"`
 	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
 	XXX_unrecognized     []byte                   `json:"-"`
@@ -628,7 +599,7 @@ func (m *Tracing_CustomTag) Reset()         { *m = Tracing_CustomTag{} }
 func (m *Tracing_CustomTag) String() string { return proto.CompactTextString(m) }
 func (*Tracing_CustomTag) ProtoMessage()    {}
 func (*Tracing_CustomTag) Descriptor() ([]byte, []int) {
-	return fileDescriptor_991c84745e2b7651, []int{5, 0}
+	return fileDescriptor_991c84745e2b7651, []int{4, 0}
 }
 func (m *Tracing_CustomTag) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -672,10 +643,14 @@ type Tracing_CustomTag_Environment struct {
 type Tracing_CustomTag_Header struct {
 	Header *Tracing_RequestHeader `protobuf:"bytes,3,opt,name=header,proto3,oneof" json:"header,omitempty"`
 }
+type Tracing_CustomTag_Metadata struct {
+	Metadata *Tracing_Metadata `protobuf:"bytes,4,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
+}
 
 func (*Tracing_CustomTag_Literal) isTracing_CustomTag_Type()     {}
 func (*Tracing_CustomTag_Environment) isTracing_CustomTag_Type() {}
 func (*Tracing_CustomTag_Header) isTracing_CustomTag_Type()      {}
+func (*Tracing_CustomTag_Metadata) isTracing_CustomTag_Type()    {}
 
 func (m *Tracing_CustomTag) GetType() isTracing_CustomTag_Type {
 	if m != nil {
@@ -705,12 +680,20 @@ func (m *Tracing_CustomTag) GetHeader() *Tracing_RequestHeader {
 	return nil
 }
 
+func (m *Tracing_CustomTag) GetMetadata() *Tracing_Metadata {
+	if x, ok := m.GetType().(*Tracing_CustomTag_Metadata); ok {
+		return x.Metadata
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*Tracing_CustomTag) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*Tracing_CustomTag_Literal)(nil),
 		(*Tracing_CustomTag_Environment)(nil),
 		(*Tracing_CustomTag_Header)(nil),
+		(*Tracing_CustomTag_Metadata)(nil),
 	}
 }
 
@@ -726,7 +709,7 @@ func (m *Tracing_Literal) Reset()         { *m = Tracing_Literal{} }
 func (m *Tracing_Literal) String() string { return proto.CompactTextString(m) }
 func (*Tracing_Literal) ProtoMessage()    {}
 func (*Tracing_Literal) Descriptor() ([]byte, []int) {
-	return fileDescriptor_991c84745e2b7651, []int{5, 1}
+	return fileDescriptor_991c84745e2b7651, []int{4, 1}
 }
 func (m *Tracing_Literal) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -777,7 +760,7 @@ func (m *Tracing_Environment) Reset()         { *m = Tracing_Environment{} }
 func (m *Tracing_Environment) String() string { return proto.CompactTextString(m) }
 func (*Tracing_Environment) ProtoMessage()    {}
 func (*Tracing_Environment) Descriptor() ([]byte, []int) {
-	return fileDescriptor_991c84745e2b7651, []int{5, 2}
+	return fileDescriptor_991c84745e2b7651, []int{4, 2}
 }
 func (m *Tracing_Environment) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -835,7 +818,7 @@ func (m *Tracing_RequestHeader) Reset()         { *m = Tracing_RequestHeader{} }
 func (m *Tracing_RequestHeader) String() string { return proto.CompactTextString(m) }
 func (*Tracing_RequestHeader) ProtoMessage()    {}
 func (*Tracing_RequestHeader) Descriptor() ([]byte, []int) {
-	return fileDescriptor_991c84745e2b7651, []int{5, 3}
+	return fileDescriptor_991c84745e2b7651, []int{4, 3}
 }
 func (m *Tracing_RequestHeader) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -878,6 +861,183 @@ func (m *Tracing_RequestHeader) GetDefaultValue() string {
 	return ""
 }
 
+// Retrieve the protobuf value from Metadata, and populate the tag
+// value with the canonical JSON representation of it.
+type Tracing_Metadata struct {
+	// Kind of metadata from which to obtain tag value.
+	Kind Tracing_Metadata_Kind `protobuf:"varint,1,opt,name=kind,proto3,enum=istio.telemetry.v1alpha1.Tracing_Metadata_Kind" json:"kind,omitempty"`
+	// Defines the path used to retrieve the tag value.
+	Key *Tracing_Metadata_Key `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
+	// Optional. If the key is not found, this value will be
+	// used instead.
+	DefaultValue         string   `protobuf:"bytes,3,opt,name=default_value,json=defaultValue,proto3" json:"default_value,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Tracing_Metadata) Reset()         { *m = Tracing_Metadata{} }
+func (m *Tracing_Metadata) String() string { return proto.CompactTextString(m) }
+func (*Tracing_Metadata) ProtoMessage()    {}
+func (*Tracing_Metadata) Descriptor() ([]byte, []int) {
+	return fileDescriptor_991c84745e2b7651, []int{4, 4}
+}
+func (m *Tracing_Metadata) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Tracing_Metadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Tracing_Metadata.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Tracing_Metadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Tracing_Metadata.Merge(m, src)
+}
+func (m *Tracing_Metadata) XXX_Size() int {
+	return m.Size()
+}
+func (m *Tracing_Metadata) XXX_DiscardUnknown() {
+	xxx_messageInfo_Tracing_Metadata.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Tracing_Metadata proto.InternalMessageInfo
+
+func (m *Tracing_Metadata) GetKind() Tracing_Metadata_Kind {
+	if m != nil {
+		return m.Kind
+	}
+	return Tracing_Metadata_REQUEST
+}
+
+func (m *Tracing_Metadata) GetKey() *Tracing_Metadata_Key {
+	if m != nil {
+		return m.Key
+	}
+	return nil
+}
+
+func (m *Tracing_Metadata) GetDefaultValue() string {
+	if m != nil {
+		return m.DefaultValue
+	}
+	return ""
+}
+
+type Tracing_Metadata_Key struct {
+	// Required. The key name of Metadata to retrieve the Struct from the
+	// metadata. Typically, it represents a builtin subsystem or custom
+	// extension.
+	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	// Required. Specifies the segment in a path to retrieve the value.
+	Segment              []*Tracing_Metadata_Key_PathSegment `protobuf:"bytes,2,rep,name=segment,proto3" json:"segment,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                            `json:"-"`
+	XXX_unrecognized     []byte                              `json:"-"`
+	XXX_sizecache        int32                               `json:"-"`
+}
+
+func (m *Tracing_Metadata_Key) Reset()         { *m = Tracing_Metadata_Key{} }
+func (m *Tracing_Metadata_Key) String() string { return proto.CompactTextString(m) }
+func (*Tracing_Metadata_Key) ProtoMessage()    {}
+func (*Tracing_Metadata_Key) Descriptor() ([]byte, []int) {
+	return fileDescriptor_991c84745e2b7651, []int{4, 4, 0}
+}
+func (m *Tracing_Metadata_Key) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Tracing_Metadata_Key) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Tracing_Metadata_Key.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Tracing_Metadata_Key) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Tracing_Metadata_Key.Merge(m, src)
+}
+func (m *Tracing_Metadata_Key) XXX_Size() int {
+	return m.Size()
+}
+func (m *Tracing_Metadata_Key) XXX_DiscardUnknown() {
+	xxx_messageInfo_Tracing_Metadata_Key.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Tracing_Metadata_Key proto.InternalMessageInfo
+
+func (m *Tracing_Metadata_Key) GetKey() string {
+	if m != nil {
+		return m.Key
+	}
+	return ""
+}
+
+func (m *Tracing_Metadata_Key) GetSegment() []*Tracing_Metadata_Key_PathSegment {
+	if m != nil {
+		return m.Segment
+	}
+	return nil
+}
+
+// One segment of a path to a Metadata value.
+type Tracing_Metadata_Key_PathSegment struct {
+	// Key to retrieve the value in a Struct.
+	Key                  string   `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Tracing_Metadata_Key_PathSegment) Reset()         { *m = Tracing_Metadata_Key_PathSegment{} }
+func (m *Tracing_Metadata_Key_PathSegment) String() string { return proto.CompactTextString(m) }
+func (*Tracing_Metadata_Key_PathSegment) ProtoMessage()    {}
+func (*Tracing_Metadata_Key_PathSegment) Descriptor() ([]byte, []int) {
+	return fileDescriptor_991c84745e2b7651, []int{4, 4, 0, 0}
+}
+func (m *Tracing_Metadata_Key_PathSegment) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Tracing_Metadata_Key_PathSegment) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Tracing_Metadata_Key_PathSegment.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Tracing_Metadata_Key_PathSegment) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Tracing_Metadata_Key_PathSegment.Merge(m, src)
+}
+func (m *Tracing_Metadata_Key_PathSegment) XXX_Size() int {
+	return m.Size()
+}
+func (m *Tracing_Metadata_Key_PathSegment) XXX_DiscardUnknown() {
+	xxx_messageInfo_Tracing_Metadata_Key_PathSegment.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Tracing_Metadata_Key_PathSegment proto.InternalMessageInfo
+
+func (m *Tracing_Metadata_Key_PathSegment) GetKey() string {
+	if m != nil {
+		return m.Key
+	}
+	return ""
+}
+
 // A sampler that makes uniform decisions for all Sidecar traffic.
 type ConstantSampler struct {
 	// Controls the behavior of the sampler.
@@ -891,7 +1051,7 @@ func (m *ConstantSampler) Reset()         { *m = ConstantSampler{} }
 func (m *ConstantSampler) String() string { return proto.CompactTextString(m) }
 func (*ConstantSampler) ProtoMessage()    {}
 func (*ConstantSampler) Descriptor() ([]byte, []int) {
-	return fileDescriptor_991c84745e2b7651, []int{6}
+	return fileDescriptor_991c84745e2b7651, []int{5}
 }
 func (m *ConstantSampler) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -951,7 +1111,7 @@ func (m *PercentageSampler) Reset()         { *m = PercentageSampler{} }
 func (m *PercentageSampler) String() string { return proto.CompactTextString(m) }
 func (*PercentageSampler) ProtoMessage()    {}
 func (*PercentageSampler) Descriptor() ([]byte, []int) {
-	return fileDescriptor_991c84745e2b7651, []int{7}
+	return fileDescriptor_991c84745e2b7651, []int{6}
 }
 func (m *PercentageSampler) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -989,18 +1149,21 @@ func (m *PercentageSampler) GetTarget() float64 {
 
 func init() {
 	proto.RegisterEnum("istio.telemetry.v1alpha1.TelemetryRuleMatch_TrafficDirection", TelemetryRuleMatch_TrafficDirection_name, TelemetryRuleMatch_TrafficDirection_value)
+	proto.RegisterEnum("istio.telemetry.v1alpha1.Tracing_Metadata_Kind", Tracing_Metadata_Kind_name, Tracing_Metadata_Kind_value)
 	proto.RegisterEnum("istio.telemetry.v1alpha1.ConstantSampler_ConstantDecision", ConstantSampler_ConstantDecision_name, ConstantSampler_ConstantDecision_value)
 	proto.RegisterType((*Telemetry)(nil), "istio.telemetry.v1alpha1.Telemetry")
 	proto.RegisterType((*TracingRule)(nil), "istio.telemetry.v1alpha1.TracingRule")
 	proto.RegisterType((*TelemetryRuleMatch)(nil), "istio.telemetry.v1alpha1.TelemetryRuleMatch")
 	proto.RegisterType((*Port)(nil), "istio.telemetry.v1alpha1.Port")
-	proto.RegisterType((*ProviderRef)(nil), "istio.telemetry.v1alpha1.ProviderRef")
 	proto.RegisterType((*Tracing)(nil), "istio.telemetry.v1alpha1.Tracing")
 	proto.RegisterMapType((map[string]*Tracing_CustomTag)(nil), "istio.telemetry.v1alpha1.Tracing.CustomTagsEntry")
 	proto.RegisterType((*Tracing_CustomTag)(nil), "istio.telemetry.v1alpha1.Tracing.CustomTag")
 	proto.RegisterType((*Tracing_Literal)(nil), "istio.telemetry.v1alpha1.Tracing.Literal")
 	proto.RegisterType((*Tracing_Environment)(nil), "istio.telemetry.v1alpha1.Tracing.Environment")
 	proto.RegisterType((*Tracing_RequestHeader)(nil), "istio.telemetry.v1alpha1.Tracing.RequestHeader")
+	proto.RegisterType((*Tracing_Metadata)(nil), "istio.telemetry.v1alpha1.Tracing.Metadata")
+	proto.RegisterType((*Tracing_Metadata_Key)(nil), "istio.telemetry.v1alpha1.Tracing.Metadata.Key")
+	proto.RegisterType((*Tracing_Metadata_Key_PathSegment)(nil), "istio.telemetry.v1alpha1.Tracing.Metadata.Key.PathSegment")
 	proto.RegisterType((*ConstantSampler)(nil), "istio.telemetry.v1alpha1.ConstantSampler")
 	proto.RegisterType((*PercentageSampler)(nil), "istio.telemetry.v1alpha1.PercentageSampler")
 }
@@ -1010,63 +1173,70 @@ func init() {
 }
 
 var fileDescriptor_991c84745e2b7651 = []byte{
-	// 883 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x95, 0xdd, 0x6e, 0x1a, 0xc7,
-	0x1b, 0xc6, 0x59, 0x8c, 0xc1, 0xbc, 0xd8, 0xf1, 0xf2, 0xfe, 0xa3, 0xbf, 0x90, 0x2b, 0x91, 0x78,
-	0xdb, 0x4a, 0x89, 0x12, 0x83, 0x70, 0x4f, 0xda, 0x48, 0x55, 0xc5, 0xc7, 0x46, 0x20, 0x11, 0x8c,
-	0x07, 0xec, 0xa8, 0x55, 0xa5, 0xd5, 0x78, 0x19, 0x60, 0x93, 0xfd, 0xea, 0xec, 0x40, 0xe2, 0x7b,
-	0xe8, 0x3d, 0xf4, 0x46, 0x7a, 0x01, 0x3d, 0xec, 0x25, 0x54, 0xbe, 0x89, 0xf6, 0xa4, 0x52, 0xb5,
-	0xb3, 0xb3, 0xe0, 0xe0, 0x3a, 0xb4, 0x3d, 0xdb, 0x79, 0xe6, 0x7d, 0x7e, 0xfb, 0xcc, 0xec, 0x3b,
-	0xb3, 0x60, 0x08, 0xe6, 0x32, 0x8f, 0x09, 0x7e, 0x5d, 0x5f, 0x36, 0xa8, 0x1b, 0xce, 0x69, 0xa3,
-	0xbe, 0x92, 0x6a, 0x21, 0x0f, 0x44, 0x80, 0x15, 0x27, 0x12, 0x4e, 0x50, 0x5b, 0xcb, 0x69, 0xe5,
-	0xd1, 0x27, 0xe2, 0x3a, 0x64, 0xf5, 0x65, 0xe3, 0x8a, 0x09, 0xda, 0xa8, 0x47, 0xcc, 0x65, 0xb6,
-	0x08, 0x78, 0x62, 0x33, 0x7e, 0xd2, 0xa0, 0x38, 0x4e, 0x3d, 0x78, 0x0e, 0xe5, 0x77, 0x01, 0x7f,
-	0xeb, 0x06, 0x74, 0x62, 0xa5, 0x85, 0x15, 0xed, 0xb1, 0xf6, 0xa4, 0x74, 0xfa, 0x59, 0x4d, 0xbd,
-	0xe0, 0x3a, 0x64, 0x35, 0x05, 0xab, 0xbd, 0x56, 0xc5, 0x23, 0x55, 0x4b, 0xf4, 0x77, 0x1b, 0x0a,
-	0x7e, 0x03, 0x05, 0xc1, 0xa9, 0xed, 0xf8, 0xb3, 0x4a, 0xf6, 0xf1, 0xce, 0x93, 0xd2, 0xe9, 0xe7,
-	0xb5, 0xfb, 0x92, 0xd6, 0xc6, 0x49, 0x21, 0x59, 0xb8, 0x8c, 0xa4, 0x2e, 0xe3, 0x47, 0x0d, 0x4a,
-	0xb7, 0x26, 0xb0, 0x05, 0xbb, 0x1e, 0x15, 0xf6, 0x5c, 0xe5, 0x7a, 0xfe, 0x11, 0x5c, 0x2a, 0xc5,
-	0xbe, 0x57, 0xb1, 0x87, 0x24, 0x56, 0xfc, 0x0a, 0xf2, 0x76, 0xe0, 0x4f, 0x9d, 0x38, 0x53, 0x0c,
-	0x39, 0xde, 0x9e, 0x49, 0x19, 0x8c, 0xdf, 0x35, 0xc0, 0xbb, 0x60, 0x7c, 0x03, 0x65, 0xc1, 0xe9,
-	0x74, 0xea, 0xd8, 0xd6, 0xc4, 0xe1, 0xcc, 0x16, 0x4e, 0xe0, 0xcb, 0x84, 0x0f, 0x4e, 0xbf, 0xfe,
-	0x37, 0x09, 0xe3, 0xf7, 0xc5, 0x94, 0x4e, 0x0a, 0x21, 0xba, 0xd8, 0x50, 0xf0, 0x14, 0x72, 0x61,
-	0xc0, 0x45, 0x65, 0x47, 0x66, 0xaf, 0xde, 0x8f, 0x1f, 0x06, 0x5c, 0x10, 0x59, 0x6b, 0x34, 0x41,
-	0xdf, 0x24, 0x23, 0xc2, 0x83, 0x66, 0xbf, 0x6f, 0x75, 0x7a, 0xc4, 0x6c, 0x8f, 0x7b, 0x67, 0x83,
-	0x91, 0x9e, 0xc1, 0x7d, 0xd8, 0x3b, 0xbb, 0x18, 0xb7, 0xce, 0x2e, 0x06, 0x1d, 0x5d, 0xc3, 0x12,
-	0x14, 0x7a, 0x83, 0x64, 0x90, 0x35, 0xaa, 0x90, 0x8b, 0x81, 0xf8, 0x7f, 0xc8, 0xfb, 0x0b, 0xef,
-	0x8a, 0x25, 0x9d, 0x71, 0x40, 0xd4, 0xc8, 0x38, 0x86, 0xd2, 0x90, 0x07, 0x4b, 0x67, 0xc2, 0x38,
-	0x61, 0x53, 0x44, 0xc8, 0xf9, 0xd4, 0x63, 0xb2, 0xa8, 0x48, 0xe4, 0xb3, 0xf1, 0x67, 0x01, 0x0a,
-	0x6a, 0x43, 0xb1, 0x0d, 0xc5, 0x50, 0x95, 0x47, 0x15, 0x6d, 0x5b, 0x6b, 0xdc, 0x22, 0x93, 0xb5,
-	0x0f, 0x8f, 0x61, 0x9f, 0xb3, 0x78, 0x81, 0x56, 0x14, 0x52, 0x3f, 0x92, 0x9f, 0x73, 0x8f, 0x94,
-	0x12, 0x6d, 0x14, 0x4b, 0xf8, 0x1c, 0xd0, 0xf1, 0x6d, 0x77, 0x31, 0x61, 0x96, 0xa4, 0x5b, 0x82,
-	0xce, 0x22, 0xb9, 0x77, 0x7b, 0x44, 0x57, 0x33, 0xbd, 0x78, 0x62, 0x4c, 0x67, 0x11, 0x12, 0x28,
-	0xd9, 0x8b, 0x48, 0x04, 0x5e, 0x52, 0x96, 0x93, 0xb9, 0x1a, 0x5b, 0xdb, 0xa3, 0xd6, 0x96, 0xa6,
-	0x18, 0x61, 0xfa, 0xf1, 0xf7, 0x04, 0x7b, 0x25, 0xe0, 0x09, 0xfc, 0xcf, 0xa3, 0xef, 0xad, 0x90,
-	0x8a, 0x79, 0x4c, 0xb5, 0x5c, 0xe6, 0xcf, 0xc4, 0xbc, 0xb2, 0x2b, 0x77, 0x4f, 0xf7, 0xe8, 0xfb,
-	0x21, 0x15, 0xf3, 0x31, 0x9d, 0xf5, 0xa5, 0x8e, 0x97, 0xa0, 0xdb, 0x81, 0x1f, 0x09, 0xea, 0x0b,
-	0x2b, 0xa2, 0x5e, 0xe8, 0x32, 0x5e, 0xc9, 0xcb, 0x4f, 0xfd, 0xf4, 0xfe, 0x1c, 0x6d, 0xe5, 0x18,
-	0x25, 0x86, 0x6e, 0x86, 0x1c, 0xda, 0x1f, 0x4a, 0xf8, 0x3d, 0x60, 0xc8, 0xb8, 0xcd, 0x7c, 0x41,
-	0x67, 0x6c, 0x45, 0x2e, 0x48, 0xf2, 0xb3, 0x8f, 0xec, 0xfc, 0xca, 0xb3, 0x66, 0x97, 0xc3, 0x4d,
-	0xf1, 0xe8, 0x0f, 0x0d, 0x8a, 0xab, 0x4d, 0x40, 0x13, 0x0a, 0xae, 0x23, 0x18, 0xa7, 0xae, 0x3a,
-	0xa6, 0x4f, 0xb7, 0x6f, 0x61, 0x3f, 0x31, 0x74, 0x33, 0x24, 0xf5, 0xe2, 0x39, 0x94, 0x98, 0xbf,
-	0x74, 0x78, 0xe0, 0x7b, 0xcc, 0x17, 0xea, 0xb0, 0x9e, 0x6c, 0x47, 0x99, 0x6b, 0x53, 0x37, 0x43,
-	0x6e, 0x33, 0xb0, 0x07, 0xf9, 0x39, 0xa3, 0x13, 0xc6, 0xd5, 0xf1, 0xa9, 0x6f, 0xa7, 0x11, 0xf6,
-	0xc3, 0x82, 0x45, 0xa2, 0x2b, 0x6d, 0xdd, 0x0c, 0x51, 0x80, 0x56, 0x1e, 0x72, 0xf1, 0x6d, 0x78,
-	0xf4, 0x08, 0x0a, 0x2a, 0x3b, 0x3e, 0x84, 0xdd, 0x25, 0x75, 0x17, 0x69, 0xd7, 0x27, 0x83, 0xa3,
-	0x97, 0x50, 0xba, 0x95, 0xe8, 0xef, 0x4e, 0x06, 0x7e, 0x0a, 0x07, 0x13, 0x36, 0xa5, 0x0b, 0x57,
-	0x58, 0x09, 0x20, 0x2b, 0x27, 0xf7, 0x95, 0x78, 0x29, 0x39, 0x5d, 0x38, 0xf8, 0x20, 0xcb, 0x7f,
-	0x27, 0xbd, 0x81, 0xc3, 0x8d, 0x8e, 0x45, 0x1d, 0x76, 0xde, 0xb2, 0x6b, 0x85, 0x8a, 0x1f, 0xb1,
-	0x99, 0x2e, 0x26, 0xbb, 0xad, 0x47, 0xee, 0x9c, 0x02, 0xb5, 0xf2, 0x17, 0xd9, 0x2f, 0xb5, 0x56,
-	0x11, 0x0a, 0xaa, 0xd9, 0x8c, 0x9f, 0x35, 0x38, 0xdc, 0xe8, 0x54, 0xbc, 0x84, 0xbd, 0x09, 0xb3,
-	0x9d, 0x68, 0x7d, 0x61, 0xbe, 0xf8, 0xc7, 0x6d, 0xbe, 0x1a, 0x77, 0x14, 0x81, 0xac, 0x58, 0xc6,
-	0x39, 0xe8, 0x9b, 0xb3, 0x58, 0x81, 0x87, 0x1d, 0xb3, 0xdd, 0x1b, 0xf5, 0xce, 0x06, 0xd6, 0xc5,
-	0x60, 0x34, 0x34, 0xdb, 0xbd, 0x97, 0x3d, 0xb3, 0xa3, 0x67, 0x50, 0x87, 0xfd, 0x81, 0x79, 0x69,
-	0x12, 0x6b, 0xd4, 0x7c, 0x35, 0xec, 0x9b, 0xba, 0x86, 0x65, 0x38, 0x68, 0xf6, 0x5f, 0x37, 0xbf,
-	0x1d, 0xa5, 0x52, 0xd6, 0x78, 0x06, 0xe5, 0x3b, 0xa7, 0x21, 0xbe, 0x0e, 0x05, 0xe5, 0x33, 0x26,
-	0x64, 0x7a, 0x8d, 0xa8, 0x51, 0xeb, 0xe4, 0x97, 0x9b, 0xaa, 0xf6, 0xeb, 0x4d, 0x55, 0xfb, 0xed,
-	0xa6, 0xaa, 0x7d, 0xf7, 0x28, 0x59, 0x92, 0x13, 0xd4, 0x69, 0xe8, 0xd4, 0xef, 0xfe, 0xcf, 0xaf,
-	0xf2, 0xf2, 0x7f, 0xfc, 0xc5, 0x5f, 0x01, 0x00, 0x00, 0xff, 0xff, 0xbc, 0x00, 0x06, 0x80, 0xec,
-	0x07, 0x00, 0x00,
+	// 993 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x96, 0xdf, 0x6e, 0x1a, 0xc7,
+	0x17, 0xc7, 0x59, 0xc0, 0x80, 0x0f, 0x76, 0xbc, 0x9e, 0x5f, 0xf4, 0x13, 0xa2, 0x92, 0x9d, 0x6c,
+	0x5b, 0x29, 0x69, 0xe2, 0x45, 0x76, 0x55, 0xa9, 0xb5, 0x54, 0xb5, 0x06, 0x36, 0x02, 0x85, 0x80,
+	0x3d, 0xbb, 0x38, 0x6a, 0x55, 0x69, 0x35, 0x5e, 0xc6, 0xb0, 0xf1, 0xfe, 0xeb, 0xee, 0xe0, 0x84,
+	0xeb, 0xde, 0x56, 0x7d, 0x85, 0xbe, 0x41, 0x1f, 0xa2, 0x57, 0xbd, 0xec, 0x23, 0x54, 0x7e, 0x89,
+	0xde, 0x55, 0xd5, 0xcc, 0xce, 0x62, 0x07, 0xe2, 0x10, 0xf7, 0x8e, 0x39, 0x73, 0xbe, 0x9f, 0x39,
+	0xe7, 0xcc, 0x99, 0xc3, 0x82, 0xc6, 0xa8, 0x47, 0x7d, 0xca, 0xe2, 0x59, 0xe3, 0x72, 0x9f, 0x78,
+	0xd1, 0x84, 0xec, 0x37, 0xe6, 0x26, 0x3d, 0x8a, 0x43, 0x16, 0xa2, 0x9a, 0x9b, 0x30, 0x37, 0xd4,
+	0xaf, 0xcd, 0x99, 0x67, 0xfd, 0x23, 0x36, 0x8b, 0x68, 0xe3, 0x72, 0xff, 0x8c, 0x32, 0xb2, 0xdf,
+	0x48, 0xa8, 0x47, 0x1d, 0x16, 0xc6, 0xa9, 0x4c, 0xfb, 0x55, 0x81, 0x75, 0x2b, 0xd3, 0xa0, 0x13,
+	0xd8, 0x7e, 0x1d, 0xc6, 0x17, 0x5e, 0x48, 0x46, 0x76, 0xe6, 0x58, 0x53, 0x1e, 0x28, 0x8f, 0xaa,
+	0x07, 0x9f, 0xe8, 0xf2, 0x80, 0x59, 0x44, 0x75, 0x09, 0xd3, 0x5f, 0x4a, 0x67, 0x53, 0xfa, 0x62,
+	0xf5, 0xf5, 0x82, 0x05, 0x7d, 0x03, 0x65, 0x16, 0x13, 0xc7, 0x0d, 0xc6, 0xb5, 0xfc, 0x83, 0xc2,
+	0xa3, 0xea, 0xc1, 0xa7, 0xfa, 0x6d, 0x91, 0xea, 0x56, 0xea, 0x88, 0xa7, 0x1e, 0xc5, 0x99, 0x4a,
+	0xfb, 0x59, 0x81, 0xea, 0x8d, 0x0d, 0xd4, 0x84, 0x35, 0x9f, 0x30, 0x67, 0x22, 0xe3, 0x7a, 0xfa,
+	0x1e, 0x5c, 0x66, 0xe2, 0xba, 0x17, 0x5c, 0x83, 0x53, 0x29, 0xfa, 0x0a, 0x4a, 0x4e, 0x18, 0x9c,
+	0xbb, 0x3c, 0x26, 0x0e, 0x79, 0xb8, 0x3a, 0x26, 0x29, 0xd0, 0xfe, 0x56, 0x00, 0x2d, 0x83, 0xd1,
+	0x2b, 0xd8, 0x66, 0x31, 0x39, 0x3f, 0x77, 0x1d, 0x7b, 0xe4, 0xc6, 0xd4, 0x61, 0x6e, 0x18, 0x88,
+	0x08, 0xef, 0x1d, 0x7c, 0x7d, 0x97, 0x08, 0xf9, 0x79, 0x9c, 0xd2, 0xce, 0x20, 0x58, 0x65, 0x0b,
+	0x16, 0x74, 0x00, 0xc5, 0x28, 0x8c, 0x59, 0xad, 0x20, 0x62, 0xdf, 0xb9, 0x1d, 0x7f, 0x1c, 0xc6,
+	0x0c, 0x0b, 0x5f, 0xed, 0x08, 0xd4, 0x45, 0x32, 0x42, 0x70, 0xef, 0xa8, 0xd7, 0xb3, 0xdb, 0x5d,
+	0x6c, 0xb4, 0xac, 0xee, 0xa0, 0x6f, 0xaa, 0x39, 0xb4, 0x01, 0x95, 0xc1, 0xd0, 0x6a, 0x0e, 0x86,
+	0xfd, 0xb6, 0xaa, 0xa0, 0x2a, 0x94, 0xbb, 0xfd, 0x74, 0x91, 0xd7, 0x76, 0xa0, 0xc8, 0x81, 0xe8,
+	0xff, 0x50, 0x0a, 0xa6, 0xfe, 0x19, 0x4d, 0x3b, 0x63, 0x13, 0xcb, 0x95, 0xf6, 0x53, 0x15, 0xca,
+	0xb2, 0x5a, 0xe8, 0x21, 0x6c, 0xc4, 0x94, 0x1f, 0x6c, 0x27, 0x11, 0x09, 0x12, 0x51, 0xe6, 0x0a,
+	0xae, 0xa6, 0x36, 0x93, 0x9b, 0xd0, 0x53, 0x40, 0x6e, 0xe0, 0x78, 0xd3, 0x11, 0xb5, 0x45, 0x02,
+	0x36, 0x23, 0xe3, 0x44, 0xe4, 0x54, 0xc1, 0xaa, 0xdc, 0xe9, 0xf2, 0x0d, 0x8b, 0x8c, 0x13, 0x84,
+	0xa1, 0xea, 0x4c, 0x13, 0x16, 0xfa, 0xa9, 0x5b, 0x51, 0xb4, 0xd2, 0xfe, 0xca, 0x6b, 0xd3, 0x5b,
+	0x42, 0xc4, 0x11, 0x46, 0xc0, 0xeb, 0x0c, 0xce, 0xdc, 0x80, 0xf6, 0xe0, 0x7f, 0x3e, 0x79, 0x63,
+	0x47, 0x84, 0x4d, 0x38, 0xd5, 0xf6, 0x68, 0x30, 0x66, 0x93, 0xda, 0x9a, 0xc8, 0x4a, 0xf5, 0xc9,
+	0x9b, 0x63, 0xc2, 0x26, 0x16, 0x19, 0xf7, 0x84, 0x1d, 0x9d, 0x82, 0xea, 0x84, 0x41, 0xc2, 0x48,
+	0xc0, 0xec, 0x84, 0xf8, 0x91, 0x47, 0xe3, 0x5a, 0x49, 0x5c, 0xc1, 0xe3, 0xdb, 0xe3, 0x68, 0x49,
+	0x85, 0x99, 0x0a, 0x3a, 0x39, 0xbc, 0xe5, 0xbc, 0x6d, 0x42, 0x3f, 0x00, 0x8a, 0x68, 0xec, 0xd0,
+	0x80, 0x91, 0x31, 0x9d, 0x93, 0xcb, 0x82, 0xfc, 0xe4, 0x3d, 0x97, 0x3b, 0xd7, 0x5c, 0xb3, 0xb7,
+	0xa3, 0x45, 0x63, 0xfd, 0xf7, 0x3c, 0xac, 0xcf, 0x8b, 0x80, 0x0c, 0x28, 0x7b, 0x2e, 0xa3, 0x31,
+	0xf1, 0xe4, 0xf3, 0x79, 0xbc, 0xba, 0x84, 0xbd, 0x54, 0xd0, 0xc9, 0xe1, 0x4c, 0x8b, 0x4e, 0xa0,
+	0x4a, 0x83, 0x4b, 0x37, 0x0e, 0x03, 0x9f, 0x06, 0x4c, 0x3e, 0xa2, 0xbd, 0xd5, 0x28, 0xe3, 0x5a,
+	0xd4, 0xc9, 0xe1, 0x9b, 0x0c, 0xd4, 0x85, 0xd2, 0x84, 0x92, 0x11, 0x8d, 0x65, 0x5b, 0x37, 0x56,
+	0xd3, 0x30, 0xfd, 0x71, 0x4a, 0x13, 0xd6, 0x11, 0xb2, 0x4e, 0x0e, 0x4b, 0x00, 0xea, 0x40, 0xc5,
+	0xa7, 0x8c, 0x8c, 0x08, 0x23, 0xb5, 0xa2, 0x80, 0x7d, 0xb6, 0x1a, 0xf6, 0x42, 0x2a, 0x3a, 0x39,
+	0x3c, 0x57, 0x37, 0x4b, 0x50, 0xe4, 0xf3, 0xae, 0xbe, 0x0b, 0x65, 0x59, 0x05, 0x74, 0x1f, 0xd6,
+	0x2e, 0x89, 0x37, 0xa5, 0xa2, 0x7e, 0xeb, 0x38, 0x5d, 0xd4, 0x9f, 0x41, 0xf5, 0x46, 0x6e, 0x08,
+	0x41, 0x31, 0x20, 0x7e, 0xe6, 0x23, 0x7e, 0xa3, 0x8f, 0x61, 0x73, 0x44, 0xcf, 0xc9, 0xd4, 0x63,
+	0x76, 0x0a, 0xc8, 0x8b, 0xcd, 0x0d, 0x69, 0x3c, 0x15, 0x9c, 0x0e, 0x6c, 0xbe, 0x95, 0xd5, 0x7f,
+	0x27, 0xfd, 0x93, 0x87, 0x4a, 0x96, 0x13, 0x6a, 0x41, 0xf1, 0xc2, 0x0d, 0x46, 0x72, 0x20, 0x35,
+	0x3e, 0xbc, 0x1a, 0xfa, 0x73, 0x37, 0x18, 0x61, 0x21, 0x46, 0xdf, 0x42, 0xe1, 0x82, 0xce, 0xe4,
+	0x65, 0xeb, 0x77, 0x61, 0xd0, 0x19, 0xe6, 0xd2, 0xe5, 0xc0, 0x0b, 0xef, 0x08, 0xfc, 0x17, 0x05,
+	0x0a, 0xcf, 0xe9, 0x0c, 0xa9, 0xe9, 0x71, 0x69, 0xe2, 0x42, 0x6e, 0x41, 0x39, 0xa1, 0x63, 0xd9,
+	0x71, 0xfc, 0xfd, 0x1f, 0xde, 0x2d, 0x08, 0x9d, 0xbf, 0x67, 0x33, 0x25, 0xe0, 0x0c, 0x55, 0xdf,
+	0x85, 0xea, 0x0d, 0xfb, 0xf2, 0xb1, 0xda, 0x17, 0x50, 0xe4, 0x55, 0xe0, 0xc3, 0x10, 0x1b, 0x27,
+	0x43, 0xc3, 0xb4, 0xd4, 0x1c, 0x5a, 0x87, 0x35, 0x3c, 0x18, 0x5a, 0x46, 0x3a, 0x24, 0x5b, 0xbd,
+	0xa1, 0x69, 0x19, 0x58, 0xcd, 0xa3, 0x0a, 0x14, 0x3b, 0x03, 0xd3, 0x52, 0x0b, 0xf5, 0x57, 0xb0,
+	0xb5, 0x30, 0x7c, 0xde, 0x91, 0xd2, 0x51, 0xd6, 0x4d, 0xf9, 0x55, 0xcf, 0x7d, 0x69, 0xa0, 0xc9,
+	0xd6, 0x3b, 0xcc, 0x7f, 0xa9, 0x34, 0xd7, 0xa1, 0x2c, 0xe7, 0x86, 0xf6, 0x9b, 0x02, 0x5b, 0x0b,
+	0x43, 0x07, 0x9d, 0x42, 0x65, 0x44, 0x1d, 0x37, 0xb9, 0xfe, 0x4f, 0x3a, 0xfc, 0xe0, 0x89, 0x35,
+	0x5f, 0xb7, 0x25, 0x01, 0xcf, 0x59, 0x5a, 0x0b, 0xd4, 0xc5, 0x5d, 0x54, 0x83, 0xfb, 0x6d, 0xa3,
+	0xd5, 0x35, 0xbb, 0x83, 0xbe, 0x3d, 0xec, 0x9b, 0xc7, 0x46, 0xab, 0xfb, 0xac, 0x6b, 0xb4, 0xd3,
+	0x92, 0xf5, 0x8d, 0x53, 0x03, 0xab, 0x0a, 0x02, 0x28, 0x1d, 0xf5, 0x5e, 0x1e, 0x7d, 0x67, 0xaa,
+	0x79, 0xed, 0x09, 0x6c, 0x2f, 0x8d, 0x32, 0xfe, 0x1f, 0xc3, 0x48, 0x3c, 0xa6, 0x4c, 0xc4, 0xab,
+	0x60, 0xb9, 0x6a, 0xee, 0xfd, 0x71, 0xb5, 0xa3, 0xfc, 0x79, 0xb5, 0xa3, 0xfc, 0x75, 0xb5, 0xa3,
+	0x7c, 0xbf, 0x9b, 0x26, 0xe1, 0x86, 0x0d, 0x12, 0xb9, 0x8d, 0xe5, 0x8f, 0xa4, 0xb3, 0x92, 0xf8,
+	0xc8, 0xf9, 0xfc, 0xdf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x10, 0x48, 0xdf, 0x64, 0x41, 0x09, 0x00,
+	0x00,
 }
 
 func (m *Telemetry) Marshal() (dAtA []byte, err error) {
@@ -1249,40 +1419,6 @@ func (m *Port) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *ProviderRef) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ProviderRef) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ProviderRef) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintTelemetry(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
 func (m *Tracing) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1366,20 +1502,6 @@ func (m *Tracing) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x10
-	}
-	if len(m.Providers) > 0 {
-		for iNdEx := len(m.Providers) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Providers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTelemetry(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
 	}
 	return len(dAtA) - i, nil
 }
@@ -1525,6 +1647,27 @@ func (m *Tracing_CustomTag_Header) MarshalToSizedBuffer(dAtA []byte) (int, error
 	}
 	return len(dAtA) - i, nil
 }
+func (m *Tracing_CustomTag_Metadata) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Tracing_CustomTag_Metadata) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Metadata != nil {
+		{
+			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTelemetry(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
 func (m *Tracing_Literal) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1635,6 +1778,139 @@ func (m *Tracing_RequestHeader) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.Name)
 		copy(dAtA[i:], m.Name)
 		i = encodeVarintTelemetry(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Tracing_Metadata) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Tracing_Metadata) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Tracing_Metadata) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.DefaultValue) > 0 {
+		i -= len(m.DefaultValue)
+		copy(dAtA[i:], m.DefaultValue)
+		i = encodeVarintTelemetry(dAtA, i, uint64(len(m.DefaultValue)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Key != nil {
+		{
+			size, err := m.Key.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTelemetry(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Kind != 0 {
+		i = encodeVarintTelemetry(dAtA, i, uint64(m.Kind))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Tracing_Metadata_Key) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Tracing_Metadata_Key) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Tracing_Metadata_Key) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.Segment) > 0 {
+		for iNdEx := len(m.Segment) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Segment[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTelemetry(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Key) > 0 {
+		i -= len(m.Key)
+		copy(dAtA[i:], m.Key)
+		i = encodeVarintTelemetry(dAtA, i, uint64(len(m.Key)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Tracing_Metadata_Key_PathSegment) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Tracing_Metadata_Key_PathSegment) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Tracing_Metadata_Key_PathSegment) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.Key) > 0 {
+		i -= len(m.Key)
+		copy(dAtA[i:], m.Key)
+		i = encodeVarintTelemetry(dAtA, i, uint64(len(m.Key)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -1793,34 +2069,12 @@ func (m *Port) Size() (n int) {
 	return n
 }
 
-func (m *ProviderRef) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Name)
-	if l > 0 {
-		n += 1 + l + sovTelemetry(uint64(l))
-	}
-	if m.XXX_unrecognized != nil {
-		n += len(m.XXX_unrecognized)
-	}
-	return n
-}
-
 func (m *Tracing) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if len(m.Providers) > 0 {
-		for _, e := range m.Providers {
-			l = e.Size()
-			n += 1 + l + sovTelemetry(uint64(l))
-		}
-	}
 	if m.ReportSpans {
 		n += 2
 	}
@@ -1927,6 +2181,18 @@ func (m *Tracing_CustomTag_Header) Size() (n int) {
 	}
 	return n
 }
+func (m *Tracing_CustomTag_Metadata) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovTelemetry(uint64(l))
+	}
+	return n
+}
 func (m *Tracing_Literal) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1974,6 +2240,67 @@ func (m *Tracing_RequestHeader) Size() (n int) {
 		n += 1 + l + sovTelemetry(uint64(l))
 	}
 	l = len(m.DefaultValue)
+	if l > 0 {
+		n += 1 + l + sovTelemetry(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Tracing_Metadata) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Kind != 0 {
+		n += 1 + sovTelemetry(uint64(m.Kind))
+	}
+	if m.Key != nil {
+		l = m.Key.Size()
+		n += 1 + l + sovTelemetry(uint64(l))
+	}
+	l = len(m.DefaultValue)
+	if l > 0 {
+		n += 1 + l + sovTelemetry(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Tracing_Metadata_Key) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Key)
+	if l > 0 {
+		n += 1 + l + sovTelemetry(uint64(l))
+	}
+	if len(m.Segment) > 0 {
+		for _, e := range m.Segment {
+			l = e.Size()
+			n += 1 + l + sovTelemetry(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Tracing_Metadata_Key_PathSegment) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Key)
 	if l > 0 {
 		n += 1 + l + sovTelemetry(uint64(l))
 	}
@@ -2439,89 +2766,6 @@ func (m *Port) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *ProviderRef) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTelemetry
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ProviderRef: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ProviderRef: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTelemetry
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTelemetry
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTelemetry
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTelemetry(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTelemetry
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
 func (m *Tracing) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -2551,40 +2795,6 @@ func (m *Tracing) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: Tracing: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Providers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTelemetry
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTelemetry
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTelemetry
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Providers = append(m.Providers, &ProviderRef{})
-			if err := m.Providers[len(m.Providers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 2:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ReportSpans", wireType)
@@ -2999,6 +3209,41 @@ func (m *Tracing_CustomTag) Unmarshal(dAtA []byte) error {
 			}
 			m.Type = &Tracing_CustomTag_Header{v}
 			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTelemetry
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &Tracing_Metadata{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Type = &Tracing_CustomTag_Metadata{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTelemetry(dAtA[iNdEx:])
@@ -3311,6 +3556,344 @@ func (m *Tracing_RequestHeader) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.DefaultValue = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTelemetry(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Tracing_Metadata) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTelemetry
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Metadata: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Metadata: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Kind", wireType)
+			}
+			m.Kind = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTelemetry
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Kind |= Tracing_Metadata_Kind(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTelemetry
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Key == nil {
+				m.Key = &Tracing_Metadata_Key{}
+			}
+			if err := m.Key.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultValue", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTelemetry
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DefaultValue = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTelemetry(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Tracing_Metadata_Key) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTelemetry
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Key: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Key: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTelemetry
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Key = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Segment", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTelemetry
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Segment = append(m.Segment, &Tracing_Metadata_Key_PathSegment{})
+			if err := m.Segment[len(m.Segment)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTelemetry(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Tracing_Metadata_Key_PathSegment) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTelemetry
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PathSegment: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PathSegment: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTelemetry
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Key = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

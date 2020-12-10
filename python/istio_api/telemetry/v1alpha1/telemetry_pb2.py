@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.telemetry.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\037istio.io/api/telemetry/v1alpha1'),
-  serialized_pb=_b('\n\"telemetry/v1alpha1/telemetry.proto\x12\x18istio.telemetry.v1alpha1\x1a\x1btype/v1beta1/selector.proto\"\x9f\x01\n\tTelemetry\x12Q\n\x11workload_selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x10workloadSelector\x12?\n\x07tracing\x18\x02 \x03(\x0b\x32%.istio.telemetry.v1alpha1.TracingRuleR\x07tracing\"\x8c\x01\n\x0bTracingRule\x12\x42\n\x05match\x18\x01 \x01(\x0b\x32,.istio.telemetry.v1alpha1.TelemetryRuleMatchR\x05match\x12\x39\n\x06\x63onfig\x18\x02 \x01(\x0b\x32!.istio.telemetry.v1alpha1.TracingR\x06\x63onfig\"\xf7\x01\n\x12TelemetryRuleMatch\x12j\n\x11traffic_direction\x18\x01 \x01(\x0e\x32=.istio.telemetry.v1alpha1.TelemetryRuleMatch.TrafficDirectionR\x10trafficDirection\x12\x32\n\x04port\x18\x03 \x01(\x0b\x32\x1e.istio.telemetry.v1alpha1.PortR\x04port\"A\n\x10TrafficDirection\x12\x12\n\x0e\x41LL_DIRECTIONS\x10\x00\x12\x0c\n\x08OUTBOUND\x10\x01\x12\x0b\n\x07INBOUND\x10\x02\"\x1e\n\x04Port\x12\x16\n\x06number\x18\x01 \x01(\rR\x06number\"!\n\x0bProviderRef\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"\xfd\x07\n\x07Tracing\x12\x43\n\tproviders\x18\x01 \x03(\x0b\x32%.istio.telemetry.v1alpha1.ProviderRefR\tproviders\x12!\n\x0creport_spans\x18\x02 \x01(\x08R\x0breportSpans\x12,\n\x12include_istio_tags\x18\x03 \x01(\x08R\x10includeIstioTags\x12R\n\x0b\x63ustom_tags\x18\x04 \x03(\x0b\x32\x31.istio.telemetry.v1alpha1.Tracing.CustomTagsEntryR\ncustomTags\x12-\n\x13max_path_tag_length\x18\x05 \x01(\rR\x10maxPathTagLength\x12V\n\x10\x63onstant_sampler\x18\x06 \x01(\x0b\x32).istio.telemetry.v1alpha1.ConstantSamplerH\x00R\x0f\x63onstantSampler\x12\\\n\x12percentage_sampler\x18\x07 \x01(\x0b\x32+.istio.telemetry.v1alpha1.PercentageSamplerH\x00R\x11percentageSampler\x1a\xf8\x01\n\tCustomTag\x12\x45\n\x07literal\x18\x01 \x01(\x0b\x32).istio.telemetry.v1alpha1.Tracing.LiteralH\x00R\x07literal\x12Q\n\x0b\x65nvironment\x18\x02 \x01(\x0b\x32-.istio.telemetry.v1alpha1.Tracing.EnvironmentH\x00R\x0b\x65nvironment\x12I\n\x06header\x18\x03 \x01(\x0b\x32/.istio.telemetry.v1alpha1.Tracing.RequestHeaderH\x00R\x06headerB\x06\n\x04type\x1a\x1f\n\x07Literal\x12\x14\n\x05value\x18\x01 \x01(\tR\x05value\x1a\x46\n\x0b\x45nvironment\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1aH\n\rRequestHeader\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1aj\n\x0f\x43ustomTagsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x41\n\x05value\x18\x02 \x01(\x0b\x32+.istio.telemetry.v1alpha1.Tracing.CustomTagR\x05value:\x02\x38\x01\x42\t\n\x07sampler\"\xbc\x01\n\x0f\x43onstantSampler\x12V\n\x08\x64\x65\x63ision\x18\x01 \x01(\x0e\x32:.istio.telemetry.v1alpha1.ConstantSampler.ConstantDecisionR\x08\x64\x65\x63ision\"Q\n\x10\x43onstantDecision\x12\x18\n\x14\x44\x45\x43ISION_UNSPECIFIED\x10\x00\x12\x10\n\x0cNEVER_SAMPLE\x10\x01\x12\x11\n\rALWAYS_SAMPLE\x10\x02\"+\n\x11PercentageSampler\x12\x16\n\x06target\x18\x01 \x01(\x01R\x06targetB!Z\x1fistio.io/api/telemetry/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\"telemetry/v1alpha1/telemetry.proto\x12\x18istio.telemetry.v1alpha1\x1a\x1btype/v1beta1/selector.proto\"\x9f\x01\n\tTelemetry\x12Q\n\x11workload_selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x10workloadSelector\x12?\n\x07tracing\x18\x02 \x03(\x0b\x32%.istio.telemetry.v1alpha1.TracingRuleR\x07tracing\"\x8c\x01\n\x0bTracingRule\x12\x42\n\x05match\x18\x01 \x01(\x0b\x32,.istio.telemetry.v1alpha1.TelemetryRuleMatchR\x05match\x12\x39\n\x06\x63onfig\x18\x02 \x01(\x0b\x32!.istio.telemetry.v1alpha1.TracingR\x06\x63onfig\"\xf7\x01\n\x12TelemetryRuleMatch\x12j\n\x11traffic_direction\x18\x01 \x01(\x0e\x32=.istio.telemetry.v1alpha1.TelemetryRuleMatch.TrafficDirectionR\x10trafficDirection\x12\x32\n\x04port\x18\x03 \x01(\x0b\x32\x1e.istio.telemetry.v1alpha1.PortR\x04port\"A\n\x10TrafficDirection\x12\x12\n\x0e\x41LL_DIRECTIONS\x10\x00\x12\x0c\n\x08OUTBOUND\x10\x01\x12\x0b\n\x07INBOUND\x10\x02\"\x1e\n\x04Port\x12\x16\n\x06number\x18\x01 \x01(\rR\x06number\"\x83\x0b\n\x07Tracing\x12!\n\x0creport_spans\x18\x02 \x01(\x08R\x0breportSpans\x12,\n\x12include_istio_tags\x18\x03 \x01(\x08R\x10includeIstioTags\x12R\n\x0b\x63ustom_tags\x18\x04 \x03(\x0b\x32\x31.istio.telemetry.v1alpha1.Tracing.CustomTagsEntryR\ncustomTags\x12-\n\x13max_path_tag_length\x18\x05 \x01(\rR\x10maxPathTagLength\x12V\n\x10\x63onstant_sampler\x18\x06 \x01(\x0b\x32).istio.telemetry.v1alpha1.ConstantSamplerH\x00R\x0f\x63onstantSampler\x12\\\n\x12percentage_sampler\x18\x07 \x01(\x0b\x32+.istio.telemetry.v1alpha1.PercentageSamplerH\x00R\x11percentageSampler\x1a\xc2\x02\n\tCustomTag\x12\x45\n\x07literal\x18\x01 \x01(\x0b\x32).istio.telemetry.v1alpha1.Tracing.LiteralH\x00R\x07literal\x12Q\n\x0b\x65nvironment\x18\x02 \x01(\x0b\x32-.istio.telemetry.v1alpha1.Tracing.EnvironmentH\x00R\x0b\x65nvironment\x12I\n\x06header\x18\x03 \x01(\x0b\x32/.istio.telemetry.v1alpha1.Tracing.RequestHeaderH\x00R\x06header\x12H\n\x08metadata\x18\x04 \x01(\x0b\x32*.istio.telemetry.v1alpha1.Tracing.MetadataH\x00R\x08metadataB\x06\n\x04type\x1a\x1f\n\x07Literal\x12\x14\n\x05value\x18\x01 \x01(\tR\x05value\x1a\x46\n\x0b\x45nvironment\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1aH\n\rRequestHeader\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1a\xfe\x02\n\x08Metadata\x12\x43\n\x04kind\x18\x01 \x01(\x0e\x32/.istio.telemetry.v1alpha1.Tracing.Metadata.KindR\x04kind\x12@\n\x03key\x18\x02 \x01(\x0b\x32..istio.telemetry.v1alpha1.Tracing.Metadata.KeyR\x03key\x12#\n\rdefault_value\x18\x03 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1a\x8e\x01\n\x03Key\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12T\n\x07segment\x18\x02 \x03(\x0b\x32:.istio.telemetry.v1alpha1.Tracing.Metadata.Key.PathSegmentR\x07segment\x1a\x1f\n\x0bPathSegment\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\"5\n\x04Kind\x12\x0b\n\x07REQUEST\x10\x00\x12\t\n\x05ROUTE\x10\x01\x12\x0b\n\x07\x43LUSTER\x10\x02\x12\x08\n\x04HOST\x10\x03\x1aj\n\x0f\x43ustomTagsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x41\n\x05value\x18\x02 \x01(\x0b\x32+.istio.telemetry.v1alpha1.Tracing.CustomTagR\x05value:\x02\x38\x01\x42\t\n\x07sampler\"\xae\x01\n\x0f\x43onstantSampler\x12V\n\x08\x64\x65\x63ision\x18\x01 \x01(\x0e\x32:.istio.telemetry.v1alpha1.ConstantSampler.ConstantDecisionR\x08\x64\x65\x63ision\"C\n\x10\x43onstantDecision\x12\x18\n\x14\x44\x45\x43ISION_UNSPECIFIED\x10\x00\x12\t\n\x05NEVER\x10\x01\x12\n\n\x06\x41LWAYS\x10\x02\"+\n\x11PercentageSampler\x12\x16\n\x06target\x18\x01 \x01(\x01R\x06targetB!Z\x1fistio.io/api/telemetry/v1alpha1b\x06proto3')
   ,
   dependencies=[type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,])
 
@@ -53,6 +53,36 @@ _TELEMETRYRULEMATCH_TRAFFICDIRECTION = _descriptor.EnumDescriptor(
 )
 _sym_db.RegisterEnumDescriptor(_TELEMETRYRULEMATCH_TRAFFICDIRECTION)
 
+_TRACING_METADATA_KIND = _descriptor.EnumDescriptor(
+  name='Kind',
+  full_name='istio.telemetry.v1alpha1.Tracing.Metadata.Kind',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='REQUEST', index=0, number=0,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='ROUTE', index=1, number=1,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='CLUSTER', index=2, number=2,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='HOST', index=3, number=3,
+      serialized_options=None,
+      type=None),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=1920,
+  serialized_end=1973,
+)
+_sym_db.RegisterEnumDescriptor(_TRACING_METADATA_KIND)
+
 _CONSTANTSAMPLER_CONSTANTDECISION = _descriptor.EnumDescriptor(
   name='ConstantDecision',
   full_name='istio.telemetry.v1alpha1.ConstantSampler.ConstantDecision',
@@ -64,18 +94,18 @@ _CONSTANTSAMPLER_CONSTANTDECISION = _descriptor.EnumDescriptor(
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='NEVER_SAMPLE', index=1, number=1,
+      name='NEVER', index=1, number=1,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='ALWAYS_SAMPLE', index=2, number=2,
+      name='ALWAYS', index=2, number=2,
       serialized_options=None,
       type=None),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1847,
-  serialized_end=1928,
+  serialized_start=2202,
+  serialized_end=2269,
 )
 _sym_db.RegisterEnumDescriptor(_CONSTANTSAMPLER_CONSTANTDECISION)
 
@@ -226,37 +256,6 @@ _PORT = _descriptor.Descriptor(
 )
 
 
-_PROVIDERREF = _descriptor.Descriptor(
-  name='ProviderRef',
-  full_name='istio.telemetry.v1alpha1.ProviderRef',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='name', full_name='istio.telemetry.v1alpha1.ProviderRef.name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='name', file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=680,
-  serialized_end=713,
-)
-
-
 _TRACING_CUSTOMTAG = _descriptor.Descriptor(
   name='CustomTag',
   full_name='istio.telemetry.v1alpha1.Tracing.CustomTag',
@@ -285,6 +284,13 @@ _TRACING_CUSTOMTAG = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='header', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='metadata', full_name='istio.telemetry.v1alpha1.Tracing.CustomTag.metadata', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='metadata', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -300,8 +306,8 @@ _TRACING_CUSTOMTAG = _descriptor.Descriptor(
       name='type', full_name='istio.telemetry.v1alpha1.Tracing.CustomTag.type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=1191,
-  serialized_end=1439,
+  serialized_start=1087,
+  serialized_end=1409,
 )
 
 _TRACING_LITERAL = _descriptor.Descriptor(
@@ -330,8 +336,8 @@ _TRACING_LITERAL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1441,
-  serialized_end=1472,
+  serialized_start=1411,
+  serialized_end=1442,
 )
 
 _TRACING_ENVIRONMENT = _descriptor.Descriptor(
@@ -367,8 +373,8 @@ _TRACING_ENVIRONMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1474,
-  serialized_end=1544,
+  serialized_start=1444,
+  serialized_end=1514,
 )
 
 _TRACING_REQUESTHEADER = _descriptor.Descriptor(
@@ -404,8 +410,120 @@ _TRACING_REQUESTHEADER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1546,
-  serialized_end=1618,
+  serialized_start=1516,
+  serialized_end=1588,
+)
+
+_TRACING_METADATA_KEY_PATHSEGMENT = _descriptor.Descriptor(
+  name='PathSegment',
+  full_name='istio.telemetry.v1alpha1.Tracing.Metadata.Key.PathSegment',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.telemetry.v1alpha1.Tracing.Metadata.Key.PathSegment.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='key', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1887,
+  serialized_end=1918,
+)
+
+_TRACING_METADATA_KEY = _descriptor.Descriptor(
+  name='Key',
+  full_name='istio.telemetry.v1alpha1.Tracing.Metadata.Key',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.telemetry.v1alpha1.Tracing.Metadata.Key.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='key', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='segment', full_name='istio.telemetry.v1alpha1.Tracing.Metadata.Key.segment', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='segment', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_TRACING_METADATA_KEY_PATHSEGMENT, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1776,
+  serialized_end=1918,
+)
+
+_TRACING_METADATA = _descriptor.Descriptor(
+  name='Metadata',
+  full_name='istio.telemetry.v1alpha1.Tracing.Metadata',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='kind', full_name='istio.telemetry.v1alpha1.Tracing.Metadata.kind', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='kind', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.telemetry.v1alpha1.Tracing.Metadata.key', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='key', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='default_value', full_name='istio.telemetry.v1alpha1.Tracing.Metadata.default_value', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='defaultValue', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_TRACING_METADATA_KEY, ],
+  enum_types=[
+    _TRACING_METADATA_KIND,
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1591,
+  serialized_end=1973,
 )
 
 _TRACING_CUSTOMTAGSENTRY = _descriptor.Descriptor(
@@ -441,8 +559,8 @@ _TRACING_CUSTOMTAGSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1620,
-  serialized_end=1726,
+  serialized_start=1975,
+  serialized_end=2081,
 )
 
 _TRACING = _descriptor.Descriptor(
@@ -453,49 +571,42 @@ _TRACING = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='providers', full_name='istio.telemetry.v1alpha1.Tracing.providers', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='providers', file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='report_spans', full_name='istio.telemetry.v1alpha1.Tracing.report_spans', index=1,
+      name='report_spans', full_name='istio.telemetry.v1alpha1.Tracing.report_spans', index=0,
       number=2, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='reportSpans', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='include_istio_tags', full_name='istio.telemetry.v1alpha1.Tracing.include_istio_tags', index=2,
+      name='include_istio_tags', full_name='istio.telemetry.v1alpha1.Tracing.include_istio_tags', index=1,
       number=3, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='includeIstioTags', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='custom_tags', full_name='istio.telemetry.v1alpha1.Tracing.custom_tags', index=3,
+      name='custom_tags', full_name='istio.telemetry.v1alpha1.Tracing.custom_tags', index=2,
       number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='customTags', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='max_path_tag_length', full_name='istio.telemetry.v1alpha1.Tracing.max_path_tag_length', index=4,
+      name='max_path_tag_length', full_name='istio.telemetry.v1alpha1.Tracing.max_path_tag_length', index=3,
       number=5, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='maxPathTagLength', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='constant_sampler', full_name='istio.telemetry.v1alpha1.Tracing.constant_sampler', index=5,
+      name='constant_sampler', full_name='istio.telemetry.v1alpha1.Tracing.constant_sampler', index=4,
       number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='constantSampler', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='percentage_sampler', full_name='istio.telemetry.v1alpha1.Tracing.percentage_sampler', index=6,
+      name='percentage_sampler', full_name='istio.telemetry.v1alpha1.Tracing.percentage_sampler', index=5,
       number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -504,7 +615,7 @@ _TRACING = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_TRACING_CUSTOMTAG, _TRACING_LITERAL, _TRACING_ENVIRONMENT, _TRACING_REQUESTHEADER, _TRACING_CUSTOMTAGSENTRY, ],
+  nested_types=[_TRACING_CUSTOMTAG, _TRACING_LITERAL, _TRACING_ENVIRONMENT, _TRACING_REQUESTHEADER, _TRACING_METADATA, _TRACING_CUSTOMTAGSENTRY, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -516,8 +627,8 @@ _TRACING = _descriptor.Descriptor(
       name='sampler', full_name='istio.telemetry.v1alpha1.Tracing.sampler',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=716,
-  serialized_end=1737,
+  serialized_start=681,
+  serialized_end=2092,
 )
 
 
@@ -548,8 +659,8 @@ _CONSTANTSAMPLER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1740,
-  serialized_end=1928,
+  serialized_start=2095,
+  serialized_end=2269,
 )
 
 
@@ -579,8 +690,8 @@ _PERCENTAGESAMPLER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1930,
-  serialized_end=1973,
+  serialized_start=2271,
+  serialized_end=2314,
 )
 
 _TELEMETRY.fields_by_name['workload_selector'].message_type = type_dot_v1beta1_dot_selector__pb2._WORKLOADSELECTOR
@@ -593,6 +704,7 @@ _TELEMETRYRULEMATCH_TRAFFICDIRECTION.containing_type = _TELEMETRYRULEMATCH
 _TRACING_CUSTOMTAG.fields_by_name['literal'].message_type = _TRACING_LITERAL
 _TRACING_CUSTOMTAG.fields_by_name['environment'].message_type = _TRACING_ENVIRONMENT
 _TRACING_CUSTOMTAG.fields_by_name['header'].message_type = _TRACING_REQUESTHEADER
+_TRACING_CUSTOMTAG.fields_by_name['metadata'].message_type = _TRACING_METADATA
 _TRACING_CUSTOMTAG.containing_type = _TRACING
 _TRACING_CUSTOMTAG.oneofs_by_name['type'].fields.append(
   _TRACING_CUSTOMTAG.fields_by_name['literal'])
@@ -603,12 +715,21 @@ _TRACING_CUSTOMTAG.fields_by_name['environment'].containing_oneof = _TRACING_CUS
 _TRACING_CUSTOMTAG.oneofs_by_name['type'].fields.append(
   _TRACING_CUSTOMTAG.fields_by_name['header'])
 _TRACING_CUSTOMTAG.fields_by_name['header'].containing_oneof = _TRACING_CUSTOMTAG.oneofs_by_name['type']
+_TRACING_CUSTOMTAG.oneofs_by_name['type'].fields.append(
+  _TRACING_CUSTOMTAG.fields_by_name['metadata'])
+_TRACING_CUSTOMTAG.fields_by_name['metadata'].containing_oneof = _TRACING_CUSTOMTAG.oneofs_by_name['type']
 _TRACING_LITERAL.containing_type = _TRACING
 _TRACING_ENVIRONMENT.containing_type = _TRACING
 _TRACING_REQUESTHEADER.containing_type = _TRACING
+_TRACING_METADATA_KEY_PATHSEGMENT.containing_type = _TRACING_METADATA_KEY
+_TRACING_METADATA_KEY.fields_by_name['segment'].message_type = _TRACING_METADATA_KEY_PATHSEGMENT
+_TRACING_METADATA_KEY.containing_type = _TRACING_METADATA
+_TRACING_METADATA.fields_by_name['kind'].enum_type = _TRACING_METADATA_KIND
+_TRACING_METADATA.fields_by_name['key'].message_type = _TRACING_METADATA_KEY
+_TRACING_METADATA.containing_type = _TRACING
+_TRACING_METADATA_KIND.containing_type = _TRACING_METADATA
 _TRACING_CUSTOMTAGSENTRY.fields_by_name['value'].message_type = _TRACING_CUSTOMTAG
 _TRACING_CUSTOMTAGSENTRY.containing_type = _TRACING
-_TRACING.fields_by_name['providers'].message_type = _PROVIDERREF
 _TRACING.fields_by_name['custom_tags'].message_type = _TRACING_CUSTOMTAGSENTRY
 _TRACING.fields_by_name['constant_sampler'].message_type = _CONSTANTSAMPLER
 _TRACING.fields_by_name['percentage_sampler'].message_type = _PERCENTAGESAMPLER
@@ -624,7 +745,6 @@ DESCRIPTOR.message_types_by_name['Telemetry'] = _TELEMETRY
 DESCRIPTOR.message_types_by_name['TracingRule'] = _TRACINGRULE
 DESCRIPTOR.message_types_by_name['TelemetryRuleMatch'] = _TELEMETRYRULEMATCH
 DESCRIPTOR.message_types_by_name['Port'] = _PORT
-DESCRIPTOR.message_types_by_name['ProviderRef'] = _PROVIDERREF
 DESCRIPTOR.message_types_by_name['Tracing'] = _TRACING
 DESCRIPTOR.message_types_by_name['ConstantSampler'] = _CONSTANTSAMPLER
 DESCRIPTOR.message_types_by_name['PercentageSampler'] = _PERCENTAGESAMPLER
@@ -658,13 +778,6 @@ Port = _reflection.GeneratedProtocolMessageType('Port', (_message.Message,), {
   })
 _sym_db.RegisterMessage(Port)
 
-ProviderRef = _reflection.GeneratedProtocolMessageType('ProviderRef', (_message.Message,), {
-  'DESCRIPTOR' : _PROVIDERREF,
-  '__module__' : 'telemetry.v1alpha1.telemetry_pb2'
-  # @@protoc_insertion_point(class_scope:istio.telemetry.v1alpha1.ProviderRef)
-  })
-_sym_db.RegisterMessage(ProviderRef)
-
 Tracing = _reflection.GeneratedProtocolMessageType('Tracing', (_message.Message,), {
 
   'CustomTag' : _reflection.GeneratedProtocolMessageType('CustomTag', (_message.Message,), {
@@ -695,6 +808,27 @@ Tracing = _reflection.GeneratedProtocolMessageType('Tracing', (_message.Message,
     })
   ,
 
+  'Metadata' : _reflection.GeneratedProtocolMessageType('Metadata', (_message.Message,), {
+
+    'Key' : _reflection.GeneratedProtocolMessageType('Key', (_message.Message,), {
+
+      'PathSegment' : _reflection.GeneratedProtocolMessageType('PathSegment', (_message.Message,), {
+        'DESCRIPTOR' : _TRACING_METADATA_KEY_PATHSEGMENT,
+        '__module__' : 'telemetry.v1alpha1.telemetry_pb2'
+        # @@protoc_insertion_point(class_scope:istio.telemetry.v1alpha1.Tracing.Metadata.Key.PathSegment)
+        })
+      ,
+      'DESCRIPTOR' : _TRACING_METADATA_KEY,
+      '__module__' : 'telemetry.v1alpha1.telemetry_pb2'
+      # @@protoc_insertion_point(class_scope:istio.telemetry.v1alpha1.Tracing.Metadata.Key)
+      })
+    ,
+    'DESCRIPTOR' : _TRACING_METADATA,
+    '__module__' : 'telemetry.v1alpha1.telemetry_pb2'
+    # @@protoc_insertion_point(class_scope:istio.telemetry.v1alpha1.Tracing.Metadata)
+    })
+  ,
+
   'CustomTagsEntry' : _reflection.GeneratedProtocolMessageType('CustomTagsEntry', (_message.Message,), {
     'DESCRIPTOR' : _TRACING_CUSTOMTAGSENTRY,
     '__module__' : 'telemetry.v1alpha1.telemetry_pb2'
@@ -710,6 +844,9 @@ _sym_db.RegisterMessage(Tracing.CustomTag)
 _sym_db.RegisterMessage(Tracing.Literal)
 _sym_db.RegisterMessage(Tracing.Environment)
 _sym_db.RegisterMessage(Tracing.RequestHeader)
+_sym_db.RegisterMessage(Tracing.Metadata)
+_sym_db.RegisterMessage(Tracing.Metadata.Key)
+_sym_db.RegisterMessage(Tracing.Metadata.Key.PathSegment)
 _sym_db.RegisterMessage(Tracing.CustomTagsEntry)
 
 ConstantSampler = _reflection.GeneratedProtocolMessageType('ConstantSampler', (_message.Message,), {

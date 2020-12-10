@@ -45,7 +45,7 @@ package istio.telemetry.v1alpha1;
 //
 // Examples:
 //
-// Policy to enable sending trace data to a Zipkin backend for 10% of all traffic:
+// Policy to enable random sampling for 10% of all traffic:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1beta1
 // kind: Telemetry
@@ -56,8 +56,6 @@ package istio.telemetry.v1alpha1;
 //   tracing:
 //   - match: {} # apply to all traffic
 //     config:
-//       providers:
-//       - name: "zipkin"
 //       reportSpans: true
 //       percentageSampler:
 //         target: 10.00
@@ -81,8 +79,6 @@ package istio.telemetry.v1alpha1;
 //       port:
 //         number: 8090
 //     config:
-//       providers:
-//       - name: "zipkin"
 //       reportSpans: false
 // ```
 //
@@ -117,9 +113,6 @@ message Telemetry {
   // Optional. Tracing defines the per-workload overrides for trace span
   // reporting.
   repeated TracingRule tracing = 2;
-
-  // AccessLoggingRule access_logging = 3;
-  // MetricsRule metrics = 4;
 }
 
 // TracingRule defines how trace spans should be reported (sampling rate, custom tags)
@@ -166,22 +159,11 @@ message Port {
   uint32 number = 1;
 }
 
-// Used to bind Telemetry configuration to specific providers for
-// targeted customization.
-message ProviderRef {
-  // Required. Name of Telemetry provider in MeshConfig.
-  string name = 1;
-}
-
 // Tracing defines the workload-level overrides for tracing behavior within
 // a mesh. It can be used to enable/disable tracing, as well as to set sampling
 // rates and custom tag extraction.
 message Tracing {
-  // Required. Name of providers to which this configuration should apply. At
-  // least one provider needs to be specified.
-  // NOTE: Only a single provider is currently supported.
-  repeated ProviderRef providers = 1;
-  
+
   // Enables the tracing functionality. When this is set to `true`, the
   // sidecar will report spans to a configured backend for all traffic with a trace
   // context that specifies the trace is sampled. Additionally, spans will be
@@ -210,12 +192,16 @@ message Tracing {
       Environment environment = 2;
       // RequestHeader adds the value of an header from the request to each span.
       RequestHeader header = 3;
+      // Metadata adds the value of a metadata field to each span.
+      Metadata metadata = 4;
     }
   }
+
   message Literal {
     // The tag value to use.
     string value = 1;
   }
+
   message Environment {
     // Name of the environment variable from which to extract the tag value.
     string name = 1;
@@ -223,12 +209,54 @@ message Tracing {
     // used instead.
     string default_value = 2;
   }
+
   message RequestHeader {
     // Name of the header from which to extract the tag value.
     string name = 1;
     // Optional. If the header is not found, this value will be
     // used instead.
     string default_value = 2;
+  }
+
+  // Retrieve the protobuf value from Metadata, and populate the tag
+  // value with the canonical JSON representation of it.
+  message Metadata {
+    enum Kind {
+      // Represents dynamic metadata associated with the request
+      REQUEST = 0;
+      // Represents metadata from the route.
+      ROUTE = 1;
+      // Represents metadata from the upstream cluster.
+      CLUSTER = 2;
+      // Represents metadata from the upstream host.
+      HOST = 3;
+    }
+
+    message Key {
+      // Required. The key name of Metadata to retrieve the Struct from the
+      // metadata. Typically, it represents a builtin subsystem or custom
+      // extension.
+      string key = 1;
+
+      // One segment of a path to a Metadata value.
+      message PathSegment {
+        // Key to retrieve the value in a Struct.
+        string key = 1;
+      }
+
+      // Required. Specifies the segment in a path to retrieve the value.
+      repeated PathSegment segment = 2;
+    }
+
+    // Kind of metadata from which to obtain tag value.
+    Kind kind = 1;
+
+    // Defines the path used to retrieve the tag value.
+    Key key = 2;
+
+    // Optional. If the key is not found, this value will be
+    // used instead.
+    string default_value = 3;
   }
 
   // Optional. Configures additional custom tags to the generated trace spans.
@@ -255,11 +283,11 @@ message ConstantSampler {
     // Ignore all sidecar traffic for the purposes of telemetry generation.
     // For tracing, this means that the sidecar will never generate trace spans
     // for traffic without an existing trace context.
-    NEVER_SAMPLE = 1;
+    NEVER = 1;
     // Consider all sidecar traffic for the purposes of telemetry generation.
     // For tracing, this will generate trace spans for traffic without an
     // existing trace context.
-    ALWAYS_SAMPLE = 2;
+    ALWAYS = 2;
   }
 
   // Controls the behavior of the sampler.

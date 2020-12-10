@@ -61,17 +61,6 @@ func (this *Port) UnmarshalJSON(b []byte) error {
 	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for ProviderRef
-func (this *ProviderRef) MarshalJSON() ([]byte, error) {
-	str, err := TelemetryMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for ProviderRef
-func (this *ProviderRef) UnmarshalJSON(b []byte) error {
-	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
 // MarshalJSON is a custom marshaler for Tracing
 func (this *Tracing) MarshalJSON() ([]byte, error) {
 	str, err := TelemetryMarshaler.MarshalToString(this)
@@ -124,6 +113,39 @@ func (this *Tracing_RequestHeader) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for Tracing_RequestHeader
 func (this *Tracing_RequestHeader) UnmarshalJSON(b []byte) error {
+	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for Tracing_Metadata
+func (this *Tracing_Metadata) MarshalJSON() ([]byte, error) {
+	str, err := TelemetryMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for Tracing_Metadata
+func (this *Tracing_Metadata) UnmarshalJSON(b []byte) error {
+	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for Tracing_Metadata_Key
+func (this *Tracing_Metadata_Key) MarshalJSON() ([]byte, error) {
+	str, err := TelemetryMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for Tracing_Metadata_Key
+func (this *Tracing_Metadata_Key) UnmarshalJSON(b []byte) error {
+	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for Tracing_Metadata_Key_PathSegment
+func (this *Tracing_Metadata_Key_PathSegment) MarshalJSON() ([]byte, error) {
+	str, err := TelemetryMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for Tracing_Metadata_Key_PathSegment
+func (this *Tracing_Metadata_Key_PathSegment) UnmarshalJSON(b []byte) error {
 	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
