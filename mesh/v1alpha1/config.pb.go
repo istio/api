@@ -449,7 +449,6 @@ type MeshConfig struct {
 	// $hide_from_docs
 	// Defines a list of extension providers that extend Istio's functionality. For example, the AuthorizationPolicy
 	// can be used with an extension provider to delegate the authorization decision to a custom authorization system.
-	// Note, currently at most 1 extension provider is allowed.
 	ExtensionProviders   []*MeshConfig_ExtensionProvider `protobuf:"bytes,57,rep,name=extension_providers,json=extensionProviders,proto3" json:"extensionProviders,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                        `json:"-"`
 	XXX_unrecognized     []byte                          `json:"-"`
@@ -1181,10 +1180,9 @@ func (*MeshConfig_ExtensionProvider) XXX_OneofWrappers() []interface{} {
 // $hide_from_docs
 type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider struct {
 	// REQUIRED. Specifies the service that implements the Envoy ext_authz HTTP authorization service.
-	// The format is "[<Namespace>/]<Hostname>". The <Hostname> is the full qualified host name in the Istio service
-	// registry defined by the Kubernetes service or ServiceEntry. The <Namespace> is the namespace of the Kubernetes
-	// service or ServiceEntry object, and can be omitted if the <Hostname> alone can decide the service unambiguously
-	// (normally this means there is only 1 such host name in the service registry).
+	// The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
+	// to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+	// service defined by the Kubernetes service or ServiceEntry.
 	//
 	// Example: "my-ext-authz.foo.svc.cluster.local" or "bar/my-ext-authz.example.com".
 	Service string `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
@@ -1320,10 +1318,9 @@ func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) Ge
 // $hide_from_docs
 type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider struct {
 	// REQUIRED. Specifies the service that implements the Envoy ext_authz gRPC authorization service.
-	// The format is "[<Namespace>/]<Hostname>". The <Hostname> is the full qualified host name in the Istio service
-	// registry defined by the Kubernetes service or ServiceEntry. The <Namespace> is the namespace of the Kubernetes
-	// service or ServiceEntry object, and can be omitted if the <Hostname> alone can decide the service unambiguously
-	// (normally this means there is only 1 such host name in the service registry).
+	// The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
+	// to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+	// service defined by the Kubernetes service or ServiceEntry.
 	//
 	// Example: "my-ext-authz.foo.svc.cluster.local" or "bar/my-ext-authz.example.com".
 	Service string `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
