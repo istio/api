@@ -1,0 +1,8 @@
+apiVersion: release-notes/v2
+kind: feature
+area: istioctl
+issue:
+  - https://github.com/istio/istio/issues/29445
+releaseNotes:
+  - |
+    **Added** the description of the analyzer message into each message of the `validationMessages` field (when the status and analysis are enabled).
