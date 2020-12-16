@@ -79,6 +79,10 @@ message AnalysisMessageBase {
   // Required.
   string documentation_url = 3;
 
+  // A human-readable message that describes the specific analysis message.
+  // Required.
+  string description = 4;
+
 }
 
 // AnalysisMessageWeakSchema is the set of information that's needed to define a

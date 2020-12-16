@@ -20,6 +20,11 @@
             "description": "A url pointing to the Istio documentation for this specific error type. Should be of the form `^http(s)?://(preliminary\\.)?istio.io/docs/reference/config/analysis/` Required.",
             "type": "string",
             "format": "string"
+          },
+          "description": {
+            "description": "A human-readable message that describes the specific analysis message. Required.",
+            "type": "string",
+            "format": "string"
           }
         }
       },
@@ -53,13 +58,13 @@
         "description": "AnalysisMessageWeakSchema is the set of information that's needed to define a weakly-typed schema. The purpose of this proto is to provide a mechanism for validating istio/istio/galley/pkg/config/analysis/msg/messages.yaml to make sure that we don't allow committing underspecified types.",
         "type": "object",
         "properties": {
-          "messageBase": {
-            "$ref": "#/components/schemas/istio.analysis.v1alpha1.AnalysisMessageBase"
-          },
           "description": {
             "description": "A human readable description of what the error means. Required.",
             "type": "string",
             "format": "string"
+          },
+          "messageBase": {
+            "$ref": "#/components/schemas/istio.analysis.v1alpha1.AnalysisMessageBase"
           },
           "template": {
             "description": "A go-style template string (https://golang.org/pkg/fmt/#hdr-Printing) defining how to combine the args for a particular message into a log line. Required.",
