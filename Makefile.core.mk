@@ -102,12 +102,7 @@ gen: \
 	generate-security \
 	generate-analysis \
 	generate-meta \
-	generate-envoy \
 	generate-annotations \
-	generate-openapi-schema \
-	generate-openapi-crd \
-	tidy-go \
-	mirror-licenses \
 
 gen-check: clean gen check-clean-repo
 
