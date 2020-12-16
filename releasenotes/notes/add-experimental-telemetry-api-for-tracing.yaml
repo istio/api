@@ -1,0 +1,13 @@
+apiVersion: release-notes/v2
+
+kind: feature
+area: telemetry
+issue:
+
+releaseNotes:
+- |
+    **Added** experimental Telemetry API with support for workload-level specification of tracing behavior.
+
+# docs is a list of related docs to the change.
+docs:
+- https://docs.google.com/document/d/1pTFVzGii7sB4uALMsrUN4ALFc0J7vI2UyBnJpP_bsgU/edit
