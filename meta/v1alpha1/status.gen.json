@@ -78,6 +78,11 @@
             "description": "A url pointing to the Istio documentation for this specific error type. Should be of the form `^http(s)?://(preliminary\\.)?istio.io/docs/reference/config/analysis/` Required.",
             "type": "string",
             "format": "string"
+          },
+          "description": {
+            "description": "A human-readable message that describes the specific analysis message. Required.",
+            "type": "string",
+            "format": "string"
           }
         }
       },
