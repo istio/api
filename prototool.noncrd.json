@@ -1,0 +1,46 @@
+{
+    "protoc": {
+        "version": "3.9.2",
+        "includes": [
+            "common-protos"
+        ]
+    },
+    "generate": {
+        "go_options": {
+            "import_path": "istio.io/api",
+            "extra_modifiers": {
+                "networking/v1alpha3/destination_rule.proto": "istio.io/api/networking/v1alpha3",
+                "google/protobuf/duration.proto": "github.com/gogo/protobuf/types",
+                "google/rpc/code.proto": "istio.io/gogo-genproto/googleapis/google/rpc",
+                "google/protobuf/timestamp.proto": "github.com/gogo/protobuf/types",
+                "google/protobuf/any.proto": "github.com/gogo/protobuf/types",
+                "google/protobuf/descriptor.proto": "github.com/gogo/protobuf/protoc-gen-gogo/descriptor",
+                "google/protobuf/wrappers.proto": "github.com/gogo/protobuf/types",
+                "google/protobuf/struct.proto": "github.com/gogo/protobuf/types",
+                "gogoproto/gogo.proto": "github.com/gogo/protobuf/gogoproto",
+                "google/api/field_behavior.proto": "istio.io/gogo-genproto/googleapis/google/api",
+                "networking/v1alpha3/workload_group.proto": "istio.io/api/networking/v1alpha3",
+                "google/rpc/error_details.proto": "istio.io/gogo-genproto/googleapis/google/rpc",
+                "type/v1beta1/selector.proto": "istio.io/api/type/v1beta1",
+                "google/rpc/status.proto": "istio.io/gogo-genproto/googleapis/google/rpc"
+            }
+        },
+        "plugins": [
+            {
+                "type": "gogo",
+                "flags": "plugins=grpc",
+                "name": "gogofast",
+                "output": "../.."
+            },
+            {
+                "flags": "warnings=false,dictionary=./dictionaries/en-US,custom_word_list=./dictionaries/custom.txt,per_file=true,mode=html_fragment_with_front_matter",
+                "name": "docs",
+                "output": "../.."
+            },
+            {
+                "output": "python/istio_api",
+                "name": "python"
+            }
+        ]
+    }
+}

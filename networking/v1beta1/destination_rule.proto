@@ -24,6 +24,7 @@ import "gogoproto/gogo.proto";
 // $description: Configuration affecting load balancing, outlier detection, etc.
 // $location: https://istio.io/docs/reference/config/networking/destination-rule.html
 // $aliases: [/docs/reference/config/networking/v1beta1/destination-rule]
+// $mode: none
 
 // `DestinationRule` defines policies that apply to traffic intended for a
 // service after routing has occurred. These rules specify configuration

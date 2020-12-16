@@ -15,6 +15,7 @@
 syntax = "proto3";
 
 // $schema: istio.authentication.v1alpha1.Policy
+// $mode: package
 
 // This package defines user-facing authentication policy.
 package istio.authentication.v1alpha1;

@@ -2,7 +2,10 @@ protoc:
   # This is ignored because we always run with
   # --protoc-bin-path=/usr/bin/protoc to use the protoc from our
   # container
-  version: 3.6.1
+  version: 3.9.2
+
+  includes:
+  - common-protos
 
 lint:
   # Linter files to ignore.
@@ -32,3 +35,39 @@ lint:
       - ENUM_FIELD_PREFIXES
       - ENUM_ZERO_VALUES_INVALID
       - COMMENTS_NO_C_STYLE
+generate:
+  go_options:
+    import_path: istio.io/api
+    extra_modifiers:
+      gogoproto/gogo.proto: github.com/gogo/protobuf/gogoproto
+      google/protobuf/any.proto: github.com/gogo/protobuf/types
+      google/protobuf/descriptor.proto: github.com/gogo/protobuf/protoc-gen-gogo/descriptor
+      google/protobuf/duration.proto: github.com/gogo/protobuf/types
+      google/protobuf/struct.proto: github.com/gogo/protobuf/types
+      google/protobuf/timestamp.proto: github.com/gogo/protobuf/types
+      google/protobuf/wrappers.proto: github.com/gogo/protobuf/types
+      google/rpc/status.proto: istio.io/gogo-genproto/googleapis/google/rpc
+      google/rpc/code.proto: istio.io/gogo-genproto/googleapis/google/rpc
+      google/rpc/error_details.proto: istio.io/gogo-genproto/googleapis/google/rpc
+      google/api/field_behavior.proto: istio.io/gogo-genproto/googleapis/google/api
+      type/v1beta1/selector.proto: istio.io/api/type/v1beta1
+      networking/v1alpha3/destination_rule.proto: istio.io/api/networking/v1alpha3
+      networking/v1alpha3/workload_group.proto: istio.io/api/networking/v1alpha3
+      analysis/v1alpha1/message.proto: istio.io/api/analysis/v1alpha1
+
+  plugins:
+  - name: gogofast
+    type: gogo
+    flags: plugins=grpc
+    output: ../..
+  - name: deepcopy
+    type: gogo
+    output: ../..
+  - name: jsonshim
+    type: gogo
+    output: ../..
+  - name: docs
+    output: ../..
+    flags: warnings=false,dictionary=./dictionaries/en-US,custom_word_list=./dictionaries/custom.txt,per_file=true,mode=html_fragment_with_front_matter
+  - name: python
+    output: python/istio_api
