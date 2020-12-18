@@ -190,6 +190,10 @@
             "items": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider"
             }
+          },
+          "enableMcsServiceExport": {
+            "description": "If true, Istio will create serviceexport objects as per the Kubernetes MCS Spec (unless overridden by the ServiceSettings) If false, Istio will never create serviceexport objects regardless of ServiceSettings Defaults to false",
+            "type": "boolean"
           }
         }
       },

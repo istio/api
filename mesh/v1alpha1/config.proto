@@ -533,8 +533,13 @@ message MeshConfig {
   // can be used with an extension provider to delegate the authorization decision to a custom authorization system.
   repeated ExtensionProvider extension_providers = 57;
 
+  // If true, Istio will create serviceexport objects as per the Kubernetes MCS Spec (unless overridden by the ServiceSettings)
+  // If false, Istio will never create serviceexport objects regardless of ServiceSettings
+  // Defaults to false
+  bool enable_mcs_service_export = 58;
+
   // $hide_from_docs
-  // Next available field number: 58
+  // Next available field number: 59
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;

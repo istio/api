@@ -571,6 +571,19 @@ if host is <code>*.x.y.com</code>, client-side proxy will verify the presented s
 No
 </td>
 </tr>
+<tr id="MeshConfig-enable_mcs_service_export">
+<td><code>enableMcsServiceExport</code></td>
+<td><code>bool</code></td>
+<td>
+<p>If true, Istio will create serviceexport objects as per the Kubernetes MCS Spec (unless overridden by the ServiceSettings)
+If false, Istio will never create serviceexport objects regardless of ServiceSettings
+Defaults to false</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
