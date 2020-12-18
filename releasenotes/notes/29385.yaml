@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - 29385
+
+releaseNotes:
+  - |
+    **Added** Adds an optional field to the MeshConfig to control whether or not Istio creates Kubernetes MCS ServiceExports.
