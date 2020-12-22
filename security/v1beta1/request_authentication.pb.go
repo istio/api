@@ -93,12 +93,14 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //    - source:
 //        requestPrincipals: ["issuer-foo/*"]
 //    to:
-//      hosts: ["example.com"]
+//    - operation:
+//        hosts: ["example.com"]
 //  - from:
 //    - source:
 //        requestPrincipals: ["issuer-bar/*"]
 //    to:
-//      hosts: ["another-host.com"]
+//    - operation:
+//        hosts: ["another-host.com"]
 // ```
 //
 // - You can fine tune the authorization policy to set different requirement per path. For example,
