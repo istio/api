@@ -411,6 +411,7 @@ func (*AuthorizationPolicy) XXX_OneofWrappers() []interface{} {
 // $hide_from_docs
 type AuthorizationPolicy_ExtensionProvider struct {
 	// Specifies the name of the extension provider. The list of available providers is defined in the MeshConfig.
+	// Note, currently at most 1 extension provider is allowed per workload. Different workloads can use different extension provider.
 	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`

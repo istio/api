@@ -302,11 +302,13 @@ message AuthorizationPolicy {
   // $hide_from_docs
   message ExtensionProvider {
     // Specifies the name of the extension provider. The list of available providers is defined in the MeshConfig.
+    // Note, currently at most 1 extension provider is allowed per workload. Different workloads can use different extension provider.
     string name = 1;
   }
 
   // $hide_from_docs
   oneof action_detail {
+    // $hide_from_docs
     // Specifies detailed configuration of the CUSTOM action. Must be used only with CUSTOM action.
     ExtensionProvider provider = 4;
   }
