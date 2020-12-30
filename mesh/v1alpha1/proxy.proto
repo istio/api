@@ -506,6 +506,6 @@ message RemoteService {
   // mode as `ISTIO_MUTUAL`.
   istio.networking.v1alpha3.ClientTLSSettings tls_settings = 2;
 
-  // If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalives.
+  // If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalive.
   istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive tcp_keepalive = 3;
 }

@@ -54,7 +54,7 @@ message MeshConfig {
   // 0s to disable). Default detection timeout is 5s.
   google.protobuf.Duration protocol_detection_timeout = 42;
 
-  // If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalives.
+  // If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalive.
   istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive tcp_keepalive = 28;
 
   // Class of ingress resources to be processed by Istio ingress
@@ -409,7 +409,7 @@ message MeshConfig {
   // If unset, and `VerifyCertificateAtClient` is false, proxy does not verify SANs.
   //
   // For SAN, client-side proxy will exact match host in `DestinationRule` as well as one level
-  // wildcard if the specified host in DestinationRule doesn't contain a wildcard.
+  // wildcard if the specified host in DestinationRule does not contain a wildcard.
   // For example, if the host in `DestinationRule` is `x.y.com`, client-side proxy will
   // match either `x.y.com` or `*.y.com` for the SAN in the presented server certificate.
   // For wildcard host name in DestinationRule, client-side proxy will do a suffix match. For example,
@@ -420,7 +420,7 @@ message MeshConfig {
   message CA {
     // REQUIRED. Address of the CA server implementing the Istio CA gRPC API. 
     // Can be IP address or a fully qualified DNS name with port
-    // Eg: custom-ca.default.svc.cluster.local:8932, 192.168.23.2:9000
+    // For example: custom-ca.default.svc.cluster.local:8932, 192.168.23.2:9000
     string address = 1;
     // Use the tls_settings to specify the tls mode to use. 
     // Regarding tls_settings:

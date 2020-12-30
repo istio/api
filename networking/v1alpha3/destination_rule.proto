@@ -207,7 +207,7 @@ message DestinationRule {
   // rule in the "default" namespace containing a host "reviews" will be
   // interpreted as "reviews.default.svc.cluster.local", irrespective of
   // the actual namespace associated with the reviews service. _To avoid
-  // potential misconfigurations, it is recommended to always use fully
+  // potential misconfiguration, it is recommended to always use fully
   // qualified domain names over short names._
   //
   // Note that the host field applies to both HTTP and TCP services.
@@ -780,7 +780,7 @@ message OutlierDetection {
 
 // SSL/TLS related settings for upstream connections. See Envoy's [TLS
 // context](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/auth/cert.proto.html)
-// for more details. These settings are common to both HTTP and TCP upstreams.
+// for more details. These settings are common to both HTTP and TCP upstream connections.
 //
 // For example, the following rule configures a client to use mutual TLS
 // for connections to upstream database cluster.

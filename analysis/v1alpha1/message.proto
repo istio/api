@@ -34,7 +34,7 @@ option go_package="istio.io/api/analysis/v1alpha1";
 // One is the GenericAnalysisMessage, which is the struct that we guarantee that
 // you can deserialize any analysis message to. Istio internally uses generated
 // golang types from messages.yaml, so in order to reduce friction in creating
-// new analyzers we offer a path that doesn't require committing to two
+// new analyzers we offer a path that does not require committing to two
 // different repos and solidifying the interface.
 // Finally, we can create a new proto message of a specific message type and
 // commit it to istio/api when we need a strong guarantee for cross platform
@@ -126,7 +126,7 @@ message GenericAnalysisMessage {
 
   // A list of strings specifying the resource identifiers that were the cause
   // of message generation. A "path" here is a (NAMESPACE\/)?RESOURCETYPE/NAME
-  // tuple that uniquely identifies a particular resource. There doesn't seem to
+  // tuple that uniquely identifies a particular resource. There does not seem to
   // be a single concept for this, but this is intuitively taken from
   // https://kubernetes.io/docs/reference/using-api/api-concepts/#standard-api-terminology
   // At least one is required.
