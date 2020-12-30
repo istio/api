@@ -20,7 +20,7 @@ authentication flow.</p>
 <p>Spec for a JWT that is issued by <code>https://example.com</code>, with the audience claims must be either
 <code>bookstore_android.apps.example.com</code> or <code>bookstore_web.apps.example.com</code>.
 The token should be presented at the <code>Authorization</code> header (default). The Json web key set (JWKS)
-will be discovered followwing OpenID Connect protocol.</p>
+will be discovered following OpenID Connect protocol.</p>
 
 <pre><code class="language-yaml">issuer: https://example.com
 audiences:
@@ -172,7 +172,7 @@ No
 <td><code>forwardOriginalToken</code></td>
 <td><code>bool</code></td>
 <td>
-<p>If set to true, the orginal token will be kept for the ustream request. Default is false.</p>
+<p>If set to true, the original token will be kept for the upstream request. Default is false.</p>
 
 </td>
 <td>
@@ -213,7 +213,7 @@ Yes
 <td>
 <p>The prefix that should be stripped before decoding the token.
 For example, for &ldquo;Authorization: Bearer <token>&rdquo;, prefix=&ldquo;Bearer &rdquo; with a space at the end.
-If the header doesn&rsquo;t have this exact prefix, it is considerred invalid.</p>
+If the header does not have this exact prefix, it is considered invalid.</p>
 
 </td>
 <td>

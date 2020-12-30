@@ -144,6 +144,6 @@ message JWTHeader {
 
   // The prefix that should be stripped before decoding the token.
   // For example, for "Authorization: Bearer <token>", prefix="Bearer " with a space at the end.
-  // If the header does not have this exact prefix, it is considerred invalid.
+  // If the header does not have this exact prefix, it is considered invalid.
   string prefix = 2;
 }

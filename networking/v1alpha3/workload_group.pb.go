@@ -78,7 +78,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // provides a template for `WorkloadEntry`, similar to how `Deployment` specifies properties
 // of workloads via `Pod` templates. A `WorkloadGroup` can have more than one `WorkloadEntry`.
 // `WorkloadGroup` has no relationship to resources which control service registry like `ServiceEntry`
-// and as such doesn't configure host name for these workloads.
+// and as such does not configure host name for these workloads.
 //
 // <!-- crd generation tags
 // +cue-gen:WorkloadGroup:groupName:networking.istio.io

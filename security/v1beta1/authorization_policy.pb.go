@@ -802,7 +802,7 @@ func (m *Source) GetNotRemoteIpBlocks() []string {
 // ANDed together.
 //
 // For example, the following operation matches if the host has suffix ".example.com"
-// and the method is "GET" or "HEAD" and the path doesn't have prefix "/admin".
+// and the method is "GET" or "HEAD" and the path does not have prefix "/admin".
 //
 // ```yaml
 // hosts: ["*.example.com"]

@@ -254,7 +254,7 @@ func (EnvoyFilter_Patch_Operation) EnumDescriptor() ([]byte, []int) {
 
 // FilterClass determines the filter insertion point in the filter chain
 // relative to the filters implicitly inserted by the control plane.
-// It is used in conjuction with the `ADD` operation.
+// It is used in conjunction with the `ADD` operation.
 // This is the preferred insertion mechanism for adding filters over
 // the `INSERT_*` operations since those operations rely on potentially unstable
 // filter names.

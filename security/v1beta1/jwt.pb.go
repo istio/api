@@ -33,7 +33,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // Spec for a JWT that is issued by `https://example.com`, with the audience claims must be either
 // `bookstore_android.apps.example.com` or `bookstore_web.apps.example.com`.
 // The token should be presented at the `Authorization` header (default). The Json web key set (JWKS)
-// will be discovered followwing OpenID Connect protocol.
+// will be discovered following OpenID Connect protocol.
 //
 // ```yaml
 // issuer: https://example.com
@@ -111,7 +111,7 @@ type JWTRule struct {
 	// backend. The forwarded data is `base64_encoded(jwt_payload_in_JSON)`. If it is not specified,
 	// the payload will not be emitted.
 	OutputPayloadToHeader string `protobuf:"bytes,8,opt,name=output_payload_to_header,json=outputPayloadToHeader,proto3" json:"output_payload_to_header,omitempty"`
-	// If set to true, the orginal token will be kept for the ustream request. Default is false.
+	// If set to true, the original token will be kept for the upstream request. Default is false.
 	ForwardOriginalToken bool     `protobuf:"varint,9,opt,name=forward_original_token,json=forwardOriginalToken,proto3" json:"forward_original_token,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -213,7 +213,7 @@ type JWTHeader struct {
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// The prefix that should be stripped before decoding the token.
 	// For example, for "Authorization: Bearer <token>", prefix="Bearer " with a space at the end.
-	// If the header doesn't have this exact prefix, it is considerred invalid.
+	// If the header does not have this exact prefix, it is considered invalid.
 	Prefix               string   `protobuf:"bytes,2,opt,name=prefix,proto3" json:"prefix,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`

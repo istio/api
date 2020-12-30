@@ -82,7 +82,7 @@ No
 <td><code>tcpKeepalive</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ConnectionPoolSettings-TCPSettings-TcpKeepalive">TcpKeepalive</a></code></td>
 <td>
-<p>If set then set <code>SO_KEEPALIVE</code> on the socket to enable TCP Keepalives.</p>
+<p>If set then set <code>SO_KEEPALIVE</code> on the socket to enable TCP Keepalive.</p>
 
 </td>
 <td>
@@ -559,7 +559,7 @@ and <code>VerifyCertificateAtClient</code> is true, proxy uses host in destinati
 If unset, and <code>VerifyCertificateAtClient</code> is false, proxy does not verify SANs.</p>
 
 <p>For SAN, client-side proxy will exact match host in <code>DestinationRule</code> as well as one level
-wildcard if the specified host in DestinationRule doesn&rsquo;t contain a wildcard.
+wildcard if the specified host in DestinationRule does not contain a wildcard.
 For example, if the host in <code>DestinationRule</code> is <code>x.y.com</code>, client-side proxy will
 match either <code>x.y.com</code> or <code>*.y.com</code> for the SAN in the presented server certificate.
 For wildcard host name in DestinationRule, client-side proxy will do a suffix match. For example,
@@ -771,7 +771,7 @@ No
 <td>
 <p>REQUIRED. Address of the CA server implementing the Istio CA gRPC API.
 Can be IP address or a fully qualified DNS name with port
-Eg: custom-ca.default.svc.cluster.local:8932, 192.168.23.2:9000</p>
+For example: custom-ca.default.svc.cluster.local:8932, 192.168.23.2:9000</p>
 
 </td>
 <td>
@@ -1435,7 +1435,7 @@ No
 <td><code>tcpKeepalive</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ConnectionPoolSettings-TCPSettings-TcpKeepalive">TcpKeepalive</a></code></td>
 <td>
-<p>If set then set <code>SO_KEEPALIVE</code> on the socket to enable TCP Keepalives.</p>
+<p>If set then set <code>SO_KEEPALIVE</code> on the socket to enable TCP Keepalive.</p>
 
 </td>
 <td>

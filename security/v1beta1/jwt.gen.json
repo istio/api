@@ -54,7 +54,7 @@
             "format": "string"
           },
           "forwardOriginalToken": {
-            "description": "If set to true, the orginal token will be kept for the ustream request. Default is false.",
+            "description": "If set to true, the original token will be kept for the upstream request. Default is false.",
             "type": "boolean"
           }
         }
@@ -69,7 +69,7 @@
             "format": "string"
           },
           "prefix": {
-            "description": "The prefix that should be stripped before decoding the token. For example, for \"Authorization: Bearer \u003ctoken\u003e\", prefix=\"Bearer \" with a space at the end. If the header doesn't have this exact prefix, it is considerred invalid.",
+            "description": "The prefix that should be stripped before decoding the token. For example, for \"Authorization: Bearer \u003ctoken\u003e\", prefix=\"Bearer \" with a space at the end. If the header does not have this exact prefix, it is considered invalid.",
             "type": "string",
             "format": "string"
           }

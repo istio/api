@@ -54,7 +54,7 @@
             "format": "string"
           },
           "forwardOriginalToken": {
-            "description": "If set to true, the orginal token will be kept for the ustream request. Default is false.",
+            "description": "If set to true, the original token will be kept for the upstream request. Default is false.",
             "type": "boolean"
           }
         }
@@ -69,7 +69,7 @@
             "format": "string"
           },
           "prefix": {
-            "description": "The prefix that should be stripped before decoding the token. For example, for \"Authorization: Bearer \u003ctoken\u003e\", prefix=\"Bearer \" with a space at the end. If the header doesn't have this exact prefix, it is considerred invalid.",
+            "description": "The prefix that should be stripped before decoding the token. For example, for \"Authorization: Bearer \u003ctoken\u003e\", prefix=\"Bearer \" with a space at the end. If the header does not have this exact prefix, it is considered invalid.",
             "type": "string",
             "format": "string"
           }
@@ -83,7 +83,7 @@
             "$ref": "#/components/schemas/istio.type.v1beta1.WorkloadSelector"
           },
           "jwtRules": {
-            "description": "Define the list of JWTs that can be validated at the selected workloads' proxy. A valid token will be used to extract the authenticated identity. Each rule will be activated only when a token is presented at the location recorgnized by the rule. The token will be validated based on the JWT rule config. If validation fails, the request will be rejected. Note: if more than one token is presented (at different locations), the output principal is nondeterministic.",
+            "description": "Define the list of JWTs that can be validated at the selected workloads' proxy. A valid token will be used to extract the authenticated identity. Each rule will be activated only when a token is presented at the location recognized by the rule. The token will be validated based on the JWT rule config. If validation fails, the request will be rejected. Note: if more than one token is presented (at different locations), the output principal is nondeterministic.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.security.v1beta1.JWTRule"

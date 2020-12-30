@@ -220,7 +220,7 @@ type VirtualService struct {
 	// rule in the "default" namespace containing a host "reviews" will be
 	// interpreted as "reviews.default.svc.cluster.local", irrespective of
 	// the actual namespace associated with the reviews service. _To avoid
-	// potential misconfigurations, it is recommended to always use fully
+	// potential misconfiguration, it is recommended to always use fully
 	// qualified domain names over short names._
 	//
 	// The hosts field applies to both HTTP and TCP services. Service inside
@@ -371,7 +371,7 @@ func (m *VirtualService) GetExportTo() []string {
 // rule in the "default" namespace containing a host "reviews will be
 // interpreted as "reviews.default.svc.cluster.local", irrespective of the
 // actual namespace associated with the reviews service. _To avoid potential
-// misconfigurations, it is recommended to always use fully qualified
+// misconfiguration, it is recommended to always use fully qualified
 // domain names over short names._
 //
 // The following Kubernetes example routes all traffic by default to pods

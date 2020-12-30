@@ -196,7 +196,7 @@ the short name based on the namespace of the rule, not the service. A
 rule in the &ldquo;default&rdquo; namespace containing a host &ldquo;reviews&rdquo; will be
 interpreted as &ldquo;reviews.default.svc.cluster.local&rdquo;, irrespective of
 the actual namespace associated with the reviews service. <em>To avoid
-potential misconfigurations, it is recommended to always use fully
+potential misconfiguration, it is recommended to always use fully
 qualified domain names over short names.</em></p>
 
 <p>The hosts field applies to both HTTP and TCP services. Service inside
@@ -325,7 +325,7 @@ the short name based on the namespace of the rule, not the service. A
 rule in the &ldquo;default&rdquo; namespace containing a host &ldquo;reviews will be
 interpreted as &ldquo;reviews.default.svc.cluster.local&rdquo;, irrespective of the
 actual namespace associated with the reviews service. <em>To avoid potential
-misconfigurations, it is recommended to always use fully qualified
+misconfiguration, it is recommended to always use fully qualified
 domain names over short names.</em></p>
 
 <p>The following Kubernetes example routes all traffic by default to pods
@@ -1869,7 +1869,7 @@ No
 <p>SNI (server name indicator) to match on. Wildcard prefixes
 can be used in the SNI value, e.g., *.com will match foo.example.com
 as well as example.com. An SNI value must be a subset (i.e., fall
-within the domain) of the corresponding virtual serivce&rsquo;s hosts.</p>
+within the domain) of the corresponding virtual service&rsquo;s hosts.</p>
 
 </td>
 <td>

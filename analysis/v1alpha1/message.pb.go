@@ -347,7 +347,7 @@ type GenericAnalysisMessage struct {
 	Args *types.Struct `protobuf:"bytes,2,opt,name=args,proto3" json:"args,omitempty"`
 	// A list of strings specifying the resource identifiers that were the cause
 	// of message generation. A "path" here is a (NAMESPACE\/)?RESOURCETYPE/NAME
-	// tuple that uniquely identifies a particular resource. There doesn't seem to
+	// tuple that uniquely identifies a particular resource. There does not seem to
 	// be a single concept for this, but this is intuitively taken from
 	// https://kubernetes.io/docs/reference/using-api/api-concepts/#standard-api-terminology
 	// At least one is required.

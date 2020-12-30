@@ -221,7 +221,7 @@ type VirtualService struct {
 	// rule in the "default" namespace containing a host "reviews" will be
 	// interpreted as "reviews.default.svc.cluster.local", irrespective of
 	// the actual namespace associated with the reviews service. _To avoid
-	// potential misconfigurations, it is recommended to always use fully
+	// potential misconfiguration, it is recommended to always use fully
 	// qualified domain names over short names._
 	//
 	// The hosts field applies to both HTTP and TCP services. Service inside
@@ -375,7 +375,7 @@ func (m *VirtualService) GetExportTo() []string {
 // rule in the "default" namespace containing a host "reviews will be
 // interpreted as "reviews.default.svc.cluster.local", irrespective of the
 // actual namespace associated with the reviews service. _To avoid potential
-// misconfigurations, it is recommended to always use fully qualified
+// misconfiguration, it is recommended to always use fully qualified
 // domain names over short names._
 //
 // The following Kubernetes example routes all traffic by default to pods
@@ -2095,7 +2095,7 @@ type TLSMatchAttributes struct {
 	// SNI (server name indicator) to match on. Wildcard prefixes
 	// can be used in the SNI value, e.g., *.com will match foo.example.com
 	// as well as example.com. An SNI value must be a subset (i.e., fall
-	// within the domain) of the corresponding virtual serivce's hosts.
+	// within the domain) of the corresponding virtual service's hosts.
 	SniHosts []string `protobuf:"bytes,1,rep,name=sni_hosts,json=sniHosts,proto3" json:"sni_hosts,omitempty"`
 	// IPv4 or IPv6 ip addresses of destination with optional subnet.  E.g.,
 	// a.b.c.d/xx form or just a.b.c.d.

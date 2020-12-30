@@ -226,7 +226,7 @@ type MeshConfig struct {
 	// for the client to send the first bits of data. (MUST BE >=1ms or
 	// 0s to disable). Default detection timeout is 5s.
 	ProtocolDetectionTimeout *types.Duration `protobuf:"bytes,42,opt,name=protocol_detection_timeout,json=protocolDetectionTimeout,proto3" json:"protocolDetectionTimeout,omitempty"`
-	// If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalives.
+	// If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalive.
 	TcpKeepalive *v1alpha3.ConnectionPoolSettings_TCPSettings_TcpKeepalive `protobuf:"bytes,28,opt,name=tcp_keepalive,json=tcpKeepalive,proto3" json:"tcpKeepalive,omitempty"`
 	// Class of ingress resources to be processed by Istio ingress
 	// controller. This corresponds to the value of
@@ -435,7 +435,7 @@ type MeshConfig struct {
 	// If unset, and `VerifyCertificateAtClient` is false, proxy does not verify SANs.
 	//
 	// For SAN, client-side proxy will exact match host in `DestinationRule` as well as one level
-	// wildcard if the specified host in DestinationRule doesn't contain a wildcard.
+	// wildcard if the specified host in DestinationRule does not contain a wildcard.
 	// For example, if the host in `DestinationRule` is `x.y.com`, client-side proxy will
 	// match either `x.y.com` or `*.y.com` for the SAN in the presented server certificate.
 	// For wildcard host name in DestinationRule, client-side proxy will do a suffix match. For example,
@@ -995,7 +995,7 @@ func (m *MeshConfig_ServiceSettings_Settings) GetClusterLocal() bool {
 type MeshConfig_CA struct {
 	// REQUIRED. Address of the CA server implementing the Istio CA gRPC API.
 	// Can be IP address or a fully qualified DNS name with port
-	// Eg: custom-ca.default.svc.cluster.local:8932, 192.168.23.2:9000
+	// For example: custom-ca.default.svc.cluster.local:8932, 192.168.23.2:9000
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	// Use the tls_settings to specify the tls mode to use.
 	// Regarding tls_settings:
