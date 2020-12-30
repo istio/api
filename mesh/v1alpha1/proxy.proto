@@ -493,7 +493,43 @@ message ProxyConfig {
   // Default value is 'false'.
   google.protobuf.BoolValue hold_application_until_proxy_starts = 33;
 
+  // Configuration used to generate and maintain workload certificates.
+  WorkloadCertificate workload_certificate = 34;
+
+  // $hide_from_docs
+  // Next available field number: 35
 }
+
+message WorkloadCertificate {
+  // The cert lifetime requested by istio agent.
+  // Default TTL duration is `24h0m0s`.
+  google.protobuf.Duration ttl = 1;
+
+  // The signature algorithm used.
+  // Default is `RSA`. ECDSA is also supported.
+  oneof encryption_algorithm {
+    RSA rsa = 2;
+    ECDSA ecdsa = 3;
+  }
+
+}
+
+message RSA {
+  // Default is `2048`. Valid range is `[2048, 4096]`.
+  uint32 key_size = 2;
+}
+
+message ECDSA {
+  // The curve to use when generating the public and private key pair
+  // Default is `P256`. Only P256 is supported for now.
+  Curve curve = 1;
+
+  enum Curve {
+    // NIST Curve P-256
+    P256 = 0;
+  }
+}
+
 
 message RemoteService {
   // Address of a remove service used for various purposes (access log
