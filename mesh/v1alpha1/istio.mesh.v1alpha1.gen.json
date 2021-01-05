@@ -310,7 +310,7 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.RemoteService"
           },
           "proxyMetadata": {
-            "description": "Additional environment variables for the proxy. Names starting with ISTIO_META_ will be included in the generated bootstrap and sent to the XDS server.",
+            "description": "Additional environment variables for the proxy. Names starting with `ISTIO_META_` will be included in the generated bootstrap and sent to the XDS server.",
             "type": "object",
             "additionalProperties": {
               "type": "string",

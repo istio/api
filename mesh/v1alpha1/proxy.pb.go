@@ -1187,7 +1187,7 @@ type ProxyConfig struct {
 	// for details about Envoy's Metrics Service API.
 	EnvoyMetricsService *RemoteService `protobuf:"bytes,23,opt,name=envoy_metrics_service,json=envoyMetricsService,proto3" json:"envoyMetricsService,omitempty"`
 	// Additional environment variables for the proxy.
-	// Names starting with ISTIO_META_ will be included in the generated bootstrap and sent to the XDS server.
+	// Names starting with `ISTIO_META_` will be included in the generated bootstrap and sent to the XDS server.
 	ProxyMetadata map[string]string `protobuf:"bytes,24,rep,name=proxy_metadata,json=proxyMetadata,proto3" json:"proxyMetadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Port on which the agent should listen for administrative commands such as readiness probe.
 	// Default is set to port `15020`.
