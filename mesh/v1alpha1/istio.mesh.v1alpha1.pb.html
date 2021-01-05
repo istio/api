@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 29
+number_of_entries: 33
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -1378,12 +1378,121 @@ Default value is &lsquo;false&rsquo;.</p>
 No
 </td>
 </tr>
+<tr id="ProxyConfig-workload_certificate">
+<td><code>workloadCertificate</code></td>
+<td><code><a href="#WorkloadCertificate">WorkloadCertificate</a></code></td>
+<td>
+<p>Configuration used to generate and maintain workload certificates.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="ProxyConfig-zipkin_address" class="deprecated ">
 <td><code>zipkinAddress</code></td>
 <td><code>string</code></td>
 <td>
 <p>Address of the Zipkin service (e.g. <em>zipkin:9411</em>).
 DEPRECATED: Use <a href="#ProxyConfig-tracing">tracing</a> instead.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="WorkloadCertificate">WorkloadCertificate</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="WorkloadCertificate-ttl">
+<td><code>ttl</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>The cert lifetime requested by istio agent.
+Default TTL duration is <code>24h0m0s</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WorkloadCertificate-rsa" class="oneof oneof-start">
+<td><code>rsa</code></td>
+<td><code><a href="#RSA">RSA (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WorkloadCertificate-ecdsa" class="oneof">
+<td><code>ecdsa</code></td>
+<td><code><a href="#ECDSA">ECDSA (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RSA">RSA</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RSA-key_size">
+<td><code>keySize</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Default is <code>2048</code>. Valid range is <code>[2048, 4096]</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ECDSA">ECDSA</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ECDSA-curve">
+<td><code>curve</code></td>
+<td><code><a href="#ECDSA-Curve">Curve</a></code></td>
+<td>
+<p>The curve to use when generating the public and private key pair
+Default is <code>P256</code>. Only P256 is supported for now.</p>
 
 </td>
 <td>
@@ -2123,6 +2232,26 @@ source IP addresses during redirection.</p>
 source and destination IP addresses and ports, so that they can be used for advanced
 filtering and manipulation. This mode also configures the sidecar to run with the
 <code>CAP_NET_ADMIN</code> capability, which is required to use <code>TPROXY</code>.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ECDSA-Curve">ECDSA.Curve</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ECDSA-Curve-P256">
+<td><code>P256</code></td>
+<td>
+<p>NIST Curve P-256</p>
 
 </td>
 </tr>

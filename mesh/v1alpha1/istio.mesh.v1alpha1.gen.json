@@ -352,6 +352,9 @@
             "description": "Boolean flag for enabling/disabling the holdApplicationUntilProxyStarts behavior. This feature adds hooks to delay application startup until the pod proxy is ready to accept traffic, mitigating some startup race conditions. Default value is 'false'.",
             "type": "boolean",
             "nullable": true
+          },
+          "workloadCertificate": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.WorkloadCertificate"
           }
         }
       },
@@ -1233,6 +1236,87 @@
             }
           }
         }
+      },
+      "istio.mesh.v1alpha1.WorkloadCertificate": {
+        "description": "The signature algorithm used. Default is `RSA`. ECDSA is also supported.",
+        "type": "object",
+        "properties": {
+          "ttl": {
+            "description": "The cert lifetime requested by istio agent. Default TTL duration is `24h0m0s`.",
+            "type": "string"
+          }
+        },
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "rsa"
+                  ],
+                  "properties": {
+                    "rsa": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.RSA"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "ecdsa"
+                  ],
+                  "properties": {
+                    "ecdsa": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.ECDSA"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "rsa"
+            ],
+            "properties": {
+              "rsa": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.RSA"
+              }
+            }
+          },
+          {
+            "required": [
+              "ecdsa"
+            ],
+            "properties": {
+              "ecdsa": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.ECDSA"
+              }
+            }
+          }
+        ]
+      },
+      "istio.mesh.v1alpha1.RSA": {
+        "type": "object",
+        "properties": {
+          "keySize": {
+            "description": "Default is `2048`. Valid range is `[2048, 4096]`.",
+            "type": "integer"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.ECDSA": {
+        "type": "object",
+        "properties": {
+          "curve": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ECDSA.Curve"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.ECDSA.Curve": {
+        "type": "string",
+        "enum": [
+          "P256"
+        ]
       },
       "istio.networking.v1alpha3.ClientTLSSettings": {
         "description": "Use the `tls_settings` to specify the tls mode to use. If the remote service uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS mode as `ISTIO_MUTUAL`.",
