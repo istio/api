@@ -36039,28 +36039,6 @@
                 "type": "string"
               },
               {
-                "id": 10,
-                "name": "auth_policy",
-                "type": "AuthPolicy",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
-                "id": 11,
-                "name": "rds_refresh_delay",
-                "type": "google.protobuf.Duration",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
                 "id": 12,
                 "name": "enable_tracing",
                 "type": "bool"
@@ -36216,6 +36194,8 @@
               48,
               25,
               30,
+              10,
+              11,
               15,
               16,
               18,
@@ -36224,10 +36204,10 @@
               21,
               23,
               29,
+              53,
               37,
               38,
-              39,
-              53
+              39
             ],
             "reserved_names": [
               "mixer_check_server",
@@ -36236,16 +36216,18 @@
               "disable_mixer_http_reports",
               "policy_check_fail_open",
               "sidecar_to_telemetry_session_affinity",
+              "auth_policy",
+              "rds_refresh_delay",
               "mixer_address",
               "enable_client_side_policy_check",
               "sds_uds_path",
               "sds_refresh_delay",
               "enable_sds_token_mount",
               "sds_use_k8s_sa_jwt",
+              "termination_drain_duration",
               "disable_report_batch",
               "report_batch_max_entries",
-              "report_batch_max_time",
-              "termination_drain_duration"
+              "report_batch_max_time"
             ],
             "messages": [
               {
@@ -36686,6 +36668,14 @@
                 "integer": 1
               }
             ]
+          },
+          {
+            "name": "ECDSA.Curve",
+            "enum_fields": [
+              {
+                "name": "P256"
+              }
+            ]
           }
         ],
         "messages": [
@@ -37084,6 +37074,16 @@
                 "id": 32,
                 "name": "proxy_stats_matcher",
                 "type": "ProxyStatsMatcher"
+              },
+              {
+                "id": 33,
+                "name": "hold_application_until_proxy_starts",
+                "type": "google.protobuf.BoolValue"
+              },
+              {
+                "id": 34,
+                "name": "workload_certificate",
+                "type": "WorkloadCertificate"
               }
             ],
             "maps": [
@@ -37125,6 +37125,46 @@
                     "is_repeated": true
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "name": "WorkloadCertificate",
+            "fields": [
+              {
+                "id": 1,
+                "name": "ttl",
+                "type": "google.protobuf.Duration"
+              },
+              {
+                "id": 2,
+                "name": "rsa",
+                "type": "RSA"
+              },
+              {
+                "id": 3,
+                "name": "ecdsa",
+                "type": "ECDSA"
+              }
+            ]
+          },
+          {
+            "name": "RSA",
+            "fields": [
+              {
+                "id": 1,
+                "name": "key_size",
+                "type": "uint32"
+              }
+            ]
+          },
+          {
+            "name": "ECDSA",
+            "fields": [
+              {
+                "id": 1,
+                "name": "curve",
+                "type": "Curve"
               }
             ]
           },
@@ -38148,6 +38188,11 @@
                         "id": 5,
                         "name": "filter",
                         "type": "FilterMatch"
+                      },
+                      {
+                        "id": 6,
+                        "name": "destination_port",
+                        "type": "uint32"
                       }
                     ]
                   },
@@ -42069,7 +42114,13 @@
                 "field": {
                   "id": 51,
                   "name": "addon_components",
-                  "type": "ExternalComponentSpec"
+                  "type": "ExternalComponentSpec",
+                  "options": [
+                    {
+                      "name": "deprecated",
+                      "value": "true"
+                    }
+                  ]
                 }
               }
             ]
