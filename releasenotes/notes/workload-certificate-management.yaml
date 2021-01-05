@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: addition
+area: security
+issue:
+  - 29870
+
+releaseNotes:
+  - |
+    **Added** the ability for users to manage workload certificates PKI and TTL for Istio created certificates.
