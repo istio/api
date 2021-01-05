@@ -411,7 +411,7 @@ message ProxyConfig {
   RemoteService envoy_metrics_service = 23;
 
   // Additional environment variables for the proxy.
-  // Names starting with ISTIO_META_ will be included in the generated bootstrap and sent to the XDS server.
+  // Names starting with `ISTIO_META_` will be included in the generated bootstrap and sent to the XDS server.
   map<string,string> proxy_metadata = 24;
 
   // Port on which the agent should listen for administrative commands such as readiness probe.
