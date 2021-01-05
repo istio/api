@@ -516,7 +516,7 @@ message WorkloadCertificate {
 
 message RSA {
   // Default is `2048`. Valid range is `[2048, 4096]`.
-  uint32 key_size = 2;
+  uint32 key_size = 1;
 }
 
 message ECDSA {
