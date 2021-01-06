@@ -73,11 +73,10 @@ var (
 	AlphaCanonicalServiceAccounts = Instance {
 		Name: "alpha.istio.io/canonical-serviceaccounts",
 		Description: "Specifies the non-Kubernetes service accounts that are "+
-                        "allowed to run this service. NOTE This API is Alpha and "+
-                        "has no stability guarantees.",
+                        "allowed to run this service.",
 		FeatureStatus: Alpha,
 		Hidden: true,
-		Deprecated: false,
+		Deprecated: true,
 		Resources: []ResourceTypes{
 			Service,
 		},
@@ -85,11 +84,10 @@ var (
 
 	AlphaIdentity = Instance {
 		Name: "alpha.istio.io/identity",
-		Description: "Identity for the workload. NOTE This API is Alpha and has "+
-                        "no stability guarantees.",
+		Description: "Identity for the workload.",
 		FeatureStatus: Alpha,
 		Hidden: true,
-		Deprecated: false,
+		Deprecated: true,
 		Resources: []ResourceTypes{
 			Pod,
 		},
@@ -98,11 +96,10 @@ var (
 	AlphaKubernetesServiceAccounts = Instance {
 		Name: "alpha.istio.io/kubernetes-serviceaccounts",
 		Description: "Specifies the Kubernetes service accounts that are "+
-                        "allowed to run this service on the VMs. NOTE This API is "+
-                        "Alpha and has no stability guarantees.",
+                        "allowed to run this service on the VMs.",
 		FeatureStatus: Alpha,
 		Hidden: true,
-		Deprecated: false,
+		Deprecated: true,
 		Resources: []ResourceTypes{
 			Service,
 		},
@@ -165,7 +162,7 @@ var (
 		Name: "kubernetes.io/ingress.class",
 		Description: "Annotation on an Ingress resources denoting the class of "+
                         "controllers responsible for it.",
-		FeatureStatus: Alpha,
+		FeatureStatus: Stable,
 		Hidden: false,
 		Deprecated: false,
 		Resources: []ResourceTypes{
@@ -204,7 +201,7 @@ var (
 		Description: "Overrides for the proxy configuration for this specific "+
                         "proxy. Available options can be found at "+
                         "https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#ProxyConfig.",
-		FeatureStatus: Alpha,
+		FeatureStatus: Beta,
 		Hidden: false,
 		Deprecated: false,
 		Resources: []ResourceTypes{
@@ -274,7 +271,7 @@ var (
                         "mutual TLS.",
 		FeatureStatus: Alpha,
 		Hidden: true,
-		Deprecated: false,
+		Deprecated: true,
 		Resources: []ResourceTypes{
 			Pod,
 		},
@@ -311,7 +308,7 @@ var (
                         "into mutual TLS connections.",
 		FeatureStatus: Alpha,
 		Hidden: false,
-		Deprecated: false,
+		Deprecated: true,
 		Resources: []ResourceTypes{
 			Pod,
 		},
@@ -323,7 +320,7 @@ var (
                         "Envoy sidecar.",
 		FeatureStatus: Alpha,
 		Hidden: false,
-		Deprecated: false,
+		Deprecated: true,
 		Resources: []ResourceTypes{
 			Pod,
 		},
@@ -345,7 +342,7 @@ var (
 		Name: "sidecar.istio.io/inject",
 		Description: "Specifies whether or not an Envoy sidecar should be "+
                         "automatically injected into the workload.",
-		FeatureStatus: Alpha,
+		FeatureStatus: Beta,
 		Hidden: false,
 		Deprecated: false,
 		Resources: []ResourceTypes{
@@ -452,7 +449,7 @@ var (
                         "stats to be emitted by Envoy.",
 		FeatureStatus: Alpha,
 		Hidden: false,
-		Deprecated: false,
+		Deprecated: true,
 		Resources: []ResourceTypes{
 			Pod,
 		},
@@ -464,7 +461,7 @@ var (
                         "should match to be emitted by Envoy.",
 		FeatureStatus: Alpha,
 		Hidden: false,
-		Deprecated: false,
+		Deprecated: true,
 		Resources: []ResourceTypes{
 			Pod,
 		},
@@ -476,7 +473,7 @@ var (
                         "stats to be emitted by Envoy.",
 		FeatureStatus: Alpha,
 		Hidden: false,
-		Deprecated: false,
+		Deprecated: true,
 		Resources: []ResourceTypes{
 			Pod,
 		},
