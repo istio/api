@@ -104,6 +104,7 @@ gen: \
 	generate-meta \
 	generate-envoy \
 	generate-annotations \
+	generate-labels \
 	generate-openapi-schema \
 	generate-openapi-crd \
 	tidy-go \
@@ -402,14 +403,32 @@ clean-envoy:
 annotations_path := annotation
 annotations_pb_go := $(annotations_path)/annotations.gen.go
 annotations_pb_doc := $(annotations_path)/annotations.pb.html
+annotations_yaml := $(annotations_path)/annotations.yaml
 
-$(annotations_pb_go) $(annotations_pb_doc): $(annotations_path)/annotations.yaml
-	@$(annotations_prep) --input $(annotations_path)/annotations.yaml --output $(annotations_pb_go) --html_output $(annotations_pb_doc)
+$(annotations_pb_go) $(annotations_pb_doc): $(annotations_yaml)
+	@$(annotations_prep) --input $(annotations_yaml) --output $(annotations_pb_go) --html_output $(annotations_pb_doc) --collection_type annotation
 
 generate-annotations: $(annotations_pb_go) $(annotations_pb_doc)
 
 clean-annotations:
 	@rm -fr $(annotations_pb_go) $(annotations_pb_doc)
+
+#####################
+# label/...
+#####################
+
+labels_path := label
+labels_pb_go := $(labels_path)/labels.gen.go
+labels_pb_doc := $(labels_path)/labels.pb.html
+labels_yaml := $(labels_path)/labels.yaml
+
+$(labels_pb_go) $(labels_pb_doc): $(labels_yaml)
+	@$(annotations_prep) --input $(labels_yaml) --output $(labels_pb_go) --html_output $(labels_pb_doc) --collection_type label
+
+generate-labels: $(labels_pb_go) $(labels_pb_doc)
+
+clean-labels:
+	@rm -fr $(labels_pb_go) $(labels_pb_doc)
 
 #####################
 # Protolock
@@ -502,6 +521,7 @@ clean: \
 	clean-authn \
 	clean-envoy \
 	clean-annotations \
+	clean-labels \
 	clean-openapi-schema \
 	clean-security \
 	clean-analysis \
