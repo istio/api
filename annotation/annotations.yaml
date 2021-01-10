@@ -202,6 +202,14 @@ annotations:
     hidden: false
     resources:
       - Pod
+  - name: sidecar.istio.io/holdApplicationUntilProxyStarts
+    description: If set to true, the sidecar injector injects the sidecar in front of all other containers.
+      It also adds a post-start lifecycle hook to the sidecar container that blocks the start of the other
+      containers until the proxy is fully running.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
   - name: status.sidecar.istio.io/port
     featureStatus: Alpha
     description: Specifies the HTTP status Port for the Envoy sidecar. If zero, the

@@ -338,6 +338,20 @@ var (
 		},
 	}
 
+	SidecarHoldApplicationUntilProxyStarts = Instance {
+		Name: "sidecar.istio.io/holdApplicationUntilProxyStarts",
+		Description: "If set to true, the sidecar injector injects the sidecar "+
+                        "in front of all other containers. It also adds a "+
+                        "post-start lifecycle hook to the sidecar container that "+
+                        "blocks the start of the other containers until the proxy "+
+                        "is fully running.",
+		Hidden: false,
+		Deprecated: false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	SidecarInject = Instance {
 		Name: "sidecar.istio.io/inject",
 		Description: "Specifies whether or not an Envoy sidecar should be "+
@@ -645,6 +659,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarControlPlaneAuthPolicy,
 		&SidecarDiscoveryAddress,
 		&SidecarEnableCoreDump,
+		&SidecarHoldApplicationUntilProxyStarts,
 		&SidecarInject,
 		&SidecarInterceptionMode,
 		&SidecarLogLevel,
