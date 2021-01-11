@@ -141,7 +141,7 @@ var (
 
 	ServiceCanonicalName = Instance {
 		Name:          "service.istio.io/canonical-name",
-		Description:   "Istio Canonical Service for a workload instance.",
+		Description:   "The name of the canonical service a workload belongs to",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -152,7 +152,8 @@ var (
 
 	ServiceCanonicalRevision = Instance {
 		Name:          "service.istio.io/canonical-revision",
-		Description:   "Istio Canonical Service revision for a workload instance.",
+		Description:   "The name of a revision within a canonical service that "+
+                        "the workload belongs to",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,

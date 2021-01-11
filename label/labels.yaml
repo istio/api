@@ -27,7 +27,7 @@ labels:
 
   - name: service.istio.io/canonical-name
     featureStatus: Alpha
-    description: Istio Canonical Service for a workload instance.
+    description: The name of the canonical service a workload belongs to
     hidden: false
     deprecated: false
     resources:
@@ -35,7 +35,7 @@ labels:
 
   - name: service.istio.io/canonical-revision
     featureStatus: Alpha
-    description: Istio Canonical Service revision for a workload instance.
+    description: The name of a revision within a canonical service that the workload belongs to
     hidden: false
     deprecated: false
     resources:
