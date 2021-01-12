@@ -2889,16 +2889,23 @@ No
 <tr id="MeshConfig-OutboundTrafficPolicy-Mode-REGISTRY_ONLY">
 <td><code>REGISTRY_ONLY</code></td>
 <td>
-<p>outbound traffic will be restricted to services defined in the
-service registry as well as those defined through ServiceEntries</p>
+<p>Outbound traffic will be restricted to services defined in the
+service registry as well as those defined through <code>ServiceEntry</code> configurations.</p>
+
+<p>Note: This configuration is not a security policy, but instead an explicit declaration of dependencies,
+which configures how the sidecar proxy responds to unknown destinations.
+This is helpful in scenarios where failing fast is preferred for misconfigurations or for preventing
+unintended dependencies.
+Applications can still bypass these restrictions, so if strict enforcement is
+required alternative mechanisms like Kubernetes <code>NetworkPolicy</code> should be configured.</p>
 
 </td>
 </tr>
 <tr id="MeshConfig-OutboundTrafficPolicy-Mode-ALLOW_ANY">
 <td><code>ALLOW_ANY</code></td>
 <td>
-<p>outbound traffic to unknown destinations will be allowed, in case
-there are no services or ServiceEntries for the destination port</p>
+<p>Outbound traffic to any endpoint or service will be allowed, in case
+there are no services or <code>ServiceEntry</code> resources for the destination port.</p>
 
 </td>
 </tr>

@@ -180,11 +180,18 @@ func (MeshConfig_H2UpgradePolicy) EnumDescriptor() ([]byte, []int) {
 type MeshConfig_OutboundTrafficPolicy_Mode int32
 
 const (
-	// outbound traffic will be restricted to services defined in the
-	// service registry as well as those defined through ServiceEntries
+	// Outbound traffic will be restricted to services defined in the
+	// service registry as well as those defined through `ServiceEntry` configurations.
+	//
+	// Note: This configuration is not a security policy, but instead an explicit declaration of dependencies,
+	// which configures how the sidecar proxy responds to unknown destinations.
+	// This is helpful in scenarios where failing fast is preferred for misconfigurations or for preventing
+	// unintended dependencies.
+	// Applications can still bypass these restrictions, so if strict enforcement is
+	// required alternative mechanisms like Kubernetes `NetworkPolicy` should be configured.
 	MeshConfig_OutboundTrafficPolicy_REGISTRY_ONLY MeshConfig_OutboundTrafficPolicy_Mode = 0
-	// outbound traffic to unknown destinations will be allowed, in case
-	// there are no services or ServiceEntries for the destination port
+	// Outbound traffic to any endpoint or service will be allowed, in case
+	// there are no services or `ServiceEntry` resources for the destination port.
 	MeshConfig_OutboundTrafficPolicy_ALLOW_ANY MeshConfig_OutboundTrafficPolicy_Mode = 1
 )
 

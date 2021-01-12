@@ -443,6 +443,11 @@ type OutboundTrafficPolicy_Mode int32
 const (
 	// Outbound traffic will be restricted to services defined in the
 	// service registry as well as those defined through `ServiceEntry` configurations.
+	//
+	// Note: These restrictions are not a security boundary, and instead just refer to the response
+	// to unknown resources. This is helpful to fail-fast to misconfigurations or avoid accidental calls
+	// to unknown destinations. Applications may still bypass these restrictions, so if enforcement is
+	// required alternative mechanisms are required.
 	OutboundTrafficPolicy_REGISTRY_ONLY OutboundTrafficPolicy_Mode = 0
 	// Outbound traffic to unknown destinations will be allowed, in case
 	// there are no services or `ServiceEntry` configurations for the destination port.
