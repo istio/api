@@ -170,7 +170,7 @@ message HTTPHealthCheckConfig {
     string path = 1;
 
     // Port on which the endpoint lives.
-    uint32 port = 2;
+    uint32 port = 2 [(google.api.field_behavior) = REQUIRED];
 
     // Host name to connect to, defaults to the pod IP. You probably want to set
     // "Host" in httpHeaders instead.
@@ -196,7 +196,7 @@ message TCPHealthCheckConfig {
     // Host to connect to, defaults to localhost
     string host = 1;
     // Port of host
-    uint32 port = 2;
+    uint32 port = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 message ExecHealthCheckConfig {
