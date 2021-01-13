@@ -32088,9 +32088,6 @@
           }
         ],
         "imports": [
-          {
-            "path": "authentication/v1alpha1/policy.proto"
-          }
         ],
         "package": {
           "name": "istio.envoy.config.filter.http.authn.v2alpha1"
