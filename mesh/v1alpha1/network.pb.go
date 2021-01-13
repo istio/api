@@ -157,10 +157,10 @@ type isNetwork_NetworkEndpoints_Ne interface {
 }
 
 type Network_NetworkEndpoints_FromCidr struct {
-	FromCidr string `protobuf:"bytes,1,opt,name=from_cidr,json=fromCidr,proto3,oneof"`
+	FromCidr string `protobuf:"bytes,1,opt,name=from_cidr,json=fromCidr,proto3,oneof" json:"fromCidr,omitempty"`
 }
 type Network_NetworkEndpoints_FromRegistry struct {
-	FromRegistry string `protobuf:"bytes,2,opt,name=from_registry,json=fromRegistry,proto3,oneof"`
+	FromRegistry string `protobuf:"bytes,2,opt,name=from_registry,json=fromRegistry,proto3,oneof" json:"fromRegistry,omitempty"`
 }
 
 func (*Network_NetworkEndpoints_FromCidr) isNetwork_NetworkEndpoints_Ne()     {}
@@ -252,10 +252,10 @@ type isNetwork_IstioNetworkGateway_Gw interface {
 }
 
 type Network_IstioNetworkGateway_RegistryServiceName struct {
-	RegistryServiceName string `protobuf:"bytes,1,opt,name=registry_service_name,json=registryServiceName,proto3,oneof"`
+	RegistryServiceName string `protobuf:"bytes,1,opt,name=registry_service_name,json=registryServiceName,proto3,oneof" json:"registryServiceName,omitempty"`
 }
 type Network_IstioNetworkGateway_Address struct {
-	Address string `protobuf:"bytes,2,opt,name=address,proto3,oneof"`
+	Address string `protobuf:"bytes,2,opt,name=address,proto3,oneof" json:"address,omitempty"`
 }
 
 func (*Network_IstioNetworkGateway_RegistryServiceName) isNetwork_IstioNetworkGateway_Gw() {}
@@ -507,7 +507,8 @@ func (m *Network_NetworkEndpoints) MarshalToSizedBuffer(dAtA []byte) (int, error
 }
 
 func (m *Network_NetworkEndpoints_FromCidr) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *Network_NetworkEndpoints_FromCidr) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -520,7 +521,8 @@ func (m *Network_NetworkEndpoints_FromCidr) MarshalToSizedBuffer(dAtA []byte) (i
 	return len(dAtA) - i, nil
 }
 func (m *Network_NetworkEndpoints_FromRegistry) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *Network_NetworkEndpoints_FromRegistry) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -581,7 +583,8 @@ func (m *Network_IstioNetworkGateway) MarshalToSizedBuffer(dAtA []byte) (int, er
 }
 
 func (m *Network_IstioNetworkGateway_RegistryServiceName) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *Network_IstioNetworkGateway_RegistryServiceName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -594,7 +597,8 @@ func (m *Network_IstioNetworkGateway_RegistryServiceName) MarshalToSizedBuffer(d
 	return len(dAtA) - i, nil
 }
 func (m *Network_IstioNetworkGateway_Address) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *Network_IstioNetworkGateway_Address) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -905,10 +909,7 @@ func (m *Network) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthNetwork
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthNetwork
 			}
 			if (iNdEx + skippy) > l {
@@ -1023,10 +1024,7 @@ func (m *Network_NetworkEndpoints) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthNetwork
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthNetwork
 			}
 			if (iNdEx + skippy) > l {
@@ -1192,10 +1190,7 @@ func (m *Network_IstioNetworkGateway) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthNetwork
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthNetwork
 			}
 			if (iNdEx + skippy) > l {
@@ -1358,7 +1353,7 @@ func (m *MeshNetworks) Unmarshal(dAtA []byte) error {
 					if err != nil {
 						return err
 					}
-					if skippy < 0 {
+					if (skippy < 0) || (iNdEx+skippy) < 0 {
 						return ErrInvalidLengthNetwork
 					}
 					if (iNdEx + skippy) > postIndex {
@@ -1375,10 +1370,7 @@ func (m *MeshNetworks) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthNetwork
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthNetwork
 			}
 			if (iNdEx + skippy) > l {
@@ -1397,6 +1389,7 @@ func (m *MeshNetworks) Unmarshal(dAtA []byte) error {
 func skipNetwork(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -1428,10 +1421,8 @@ func skipNetwork(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -1452,55 +1443,30 @@ func skipNetwork(dAtA []byte) (n int, err error) {
 				return 0, ErrInvalidLengthNetwork
 			}
 			iNdEx += length
-			if iNdEx < 0 {
-				return 0, ErrInvalidLengthNetwork
-			}
-			return iNdEx, nil
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowNetwork
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipNetwork(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-				if iNdEx < 0 {
-					return 0, ErrInvalidLengthNetwork
-				}
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupNetwork
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthNetwork
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthNetwork = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowNetwork   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthNetwork        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowNetwork          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupNetwork = fmt.Errorf("proto: unexpected end of group")
 )

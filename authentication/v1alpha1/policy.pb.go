@@ -139,16 +139,16 @@ type isStringMatch_MatchType interface {
 }
 
 type StringMatch_Exact struct {
-	Exact string `protobuf:"bytes,1,opt,name=exact,proto3,oneof"`
+	Exact string `protobuf:"bytes,1,opt,name=exact,proto3,oneof" json:"exact,omitempty"`
 }
 type StringMatch_Prefix struct {
-	Prefix string `protobuf:"bytes,2,opt,name=prefix,proto3,oneof"`
+	Prefix string `protobuf:"bytes,2,opt,name=prefix,proto3,oneof" json:"prefix,omitempty"`
 }
 type StringMatch_Suffix struct {
-	Suffix string `protobuf:"bytes,3,opt,name=suffix,proto3,oneof"`
+	Suffix string `protobuf:"bytes,3,opt,name=suffix,proto3,oneof" json:"suffix,omitempty"`
 }
 type StringMatch_Regex struct {
-	Regex string `protobuf:"bytes,4,opt,name=regex,proto3,oneof"`
+	Regex string `protobuf:"bytes,4,opt,name=regex,proto3,oneof" json:"regex,omitempty"`
 }
 
 func (*StringMatch_Exact) isStringMatch_MatchType()  {}
@@ -590,10 +590,10 @@ type isPeerAuthenticationMethod_Params interface {
 }
 
 type PeerAuthenticationMethod_Mtls struct {
-	Mtls *MutualTls `protobuf:"bytes,1,opt,name=mtls,proto3,oneof"`
+	Mtls *MutualTls `protobuf:"bytes,1,opt,name=mtls,proto3,oneof" json:"mtls,omitempty"`
 }
 type PeerAuthenticationMethod_Jwt struct {
-	Jwt *Jwt `protobuf:"bytes,2,opt,name=jwt,proto3,oneof"`
+	Jwt *Jwt `protobuf:"bytes,2,opt,name=jwt,proto3,oneof" json:"jwt,omitempty"`
 }
 
 func (*PeerAuthenticationMethod_Mtls) isPeerAuthenticationMethod_Params() {}
@@ -1016,10 +1016,10 @@ type isPortSelector_Port interface {
 }
 
 type PortSelector_Number struct {
-	Number uint32 `protobuf:"varint,1,opt,name=number,proto3,oneof"`
+	Number uint32 `protobuf:"varint,1,opt,name=number,proto3,oneof" json:"number,omitempty"`
 }
 type PortSelector_Name struct {
-	Name string `protobuf:"bytes,2,opt,name=name,proto3,oneof"`
+	Name string `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
 }
 
 func (*PortSelector_Number) isPortSelector_Port() {}
@@ -1166,7 +1166,8 @@ func (m *StringMatch) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 }
 
 func (m *StringMatch_Exact) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *StringMatch_Exact) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -1179,7 +1180,8 @@ func (m *StringMatch_Exact) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 func (m *StringMatch_Prefix) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *StringMatch_Prefix) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -1192,7 +1194,8 @@ func (m *StringMatch_Prefix) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 func (m *StringMatch_Suffix) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *StringMatch_Suffix) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -1205,7 +1208,8 @@ func (m *StringMatch_Suffix) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 func (m *StringMatch_Regex) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *StringMatch_Regex) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -1440,7 +1444,8 @@ func (m *PeerAuthenticationMethod) MarshalToSizedBuffer(dAtA []byte) (int, error
 }
 
 func (m *PeerAuthenticationMethod_Mtls) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *PeerAuthenticationMethod_Mtls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -1460,7 +1465,8 @@ func (m *PeerAuthenticationMethod_Mtls) MarshalToSizedBuffer(dAtA []byte) (int, 
 	return len(dAtA) - i, nil
 }
 func (m *PeerAuthenticationMethod_Jwt) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *PeerAuthenticationMethod_Jwt) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -1697,7 +1703,8 @@ func (m *PortSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 }
 
 func (m *PortSelector_Number) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *PortSelector_Number) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -1708,7 +1715,8 @@ func (m *PortSelector_Number) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 func (m *PortSelector_Name) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *PortSelector_Name) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -2196,10 +2204,7 @@ func (m *StringMatch) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPolicy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPolicy
 			}
 			if (iNdEx + skippy) > l {
@@ -2289,10 +2294,7 @@ func (m *MutualTls) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPolicy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPolicy
 			}
 			if (iNdEx + skippy) > l {
@@ -2569,10 +2571,7 @@ func (m *Jwt) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPolicy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPolicy
 			}
 			if (iNdEx + skippy) > l {
@@ -2691,10 +2690,7 @@ func (m *Jwt_TriggerRule) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPolicy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPolicy
 			}
 			if (iNdEx + skippy) > l {
@@ -2815,10 +2811,7 @@ func (m *PeerAuthenticationMethod) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPolicy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPolicy
 			}
 			if (iNdEx + skippy) > l {
@@ -2905,10 +2898,7 @@ func (m *OriginAuthenticationMethod) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPolicy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPolicy
 			}
 			if (iNdEx + skippy) > l {
@@ -3120,10 +3110,7 @@ func (m *Policy) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPolicy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPolicy
 			}
 			if (iNdEx + skippy) > l {
@@ -3240,10 +3227,7 @@ func (m *TargetSelector) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPolicy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPolicy
 			}
 			if (iNdEx + skippy) > l {
@@ -3346,10 +3330,7 @@ func (m *PortSelector) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPolicy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPolicy
 			}
 			if (iNdEx + skippy) > l {
@@ -3368,6 +3349,7 @@ func (m *PortSelector) Unmarshal(dAtA []byte) error {
 func skipPolicy(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -3399,10 +3381,8 @@ func skipPolicy(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -3423,55 +3403,30 @@ func skipPolicy(dAtA []byte) (n int, err error) {
 				return 0, ErrInvalidLengthPolicy
 			}
 			iNdEx += length
-			if iNdEx < 0 {
-				return 0, ErrInvalidLengthPolicy
-			}
-			return iNdEx, nil
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowPolicy
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipPolicy(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-				if iNdEx < 0 {
-					return 0, ErrInvalidLengthPolicy
-				}
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupPolicy
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthPolicy
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthPolicy = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowPolicy   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthPolicy        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowPolicy          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupPolicy = fmt.Errorf("proto: unexpected end of group")
 )

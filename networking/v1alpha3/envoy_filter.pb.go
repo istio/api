@@ -1218,13 +1218,13 @@ type isEnvoyFilter_EnvoyConfigObjectMatch_ObjectTypes interface {
 }
 
 type EnvoyFilter_EnvoyConfigObjectMatch_Listener struct {
-	Listener *EnvoyFilter_ListenerMatch `protobuf:"bytes,3,opt,name=listener,proto3,oneof"`
+	Listener *EnvoyFilter_ListenerMatch `protobuf:"bytes,3,opt,name=listener,proto3,oneof" json:"listener,omitempty"`
 }
 type EnvoyFilter_EnvoyConfigObjectMatch_RouteConfiguration struct {
-	RouteConfiguration *EnvoyFilter_RouteConfigurationMatch `protobuf:"bytes,4,opt,name=route_configuration,json=routeConfiguration,proto3,oneof"`
+	RouteConfiguration *EnvoyFilter_RouteConfigurationMatch `protobuf:"bytes,4,opt,name=route_configuration,json=routeConfiguration,proto3,oneof" json:"route_configuration,omitempty"`
 }
 type EnvoyFilter_EnvoyConfigObjectMatch_Cluster struct {
-	Cluster *EnvoyFilter_ClusterMatch `protobuf:"bytes,5,opt,name=cluster,proto3,oneof"`
+	Cluster *EnvoyFilter_ClusterMatch `protobuf:"bytes,5,opt,name=cluster,proto3,oneof" json:"cluster,omitempty"`
 }
 
 func (*EnvoyFilter_EnvoyConfigObjectMatch_Listener) isEnvoyFilter_EnvoyConfigObjectMatch_ObjectTypes() {
@@ -2098,7 +2098,8 @@ func (m *EnvoyFilter_EnvoyConfigObjectMatch) MarshalToSizedBuffer(dAtA []byte) (
 }
 
 func (m *EnvoyFilter_EnvoyConfigObjectMatch_Listener) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *EnvoyFilter_EnvoyConfigObjectMatch_Listener) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -2118,7 +2119,8 @@ func (m *EnvoyFilter_EnvoyConfigObjectMatch_Listener) MarshalToSizedBuffer(dAtA 
 	return len(dAtA) - i, nil
 }
 func (m *EnvoyFilter_EnvoyConfigObjectMatch_RouteConfiguration) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *EnvoyFilter_EnvoyConfigObjectMatch_RouteConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -2138,7 +2140,8 @@ func (m *EnvoyFilter_EnvoyConfigObjectMatch_RouteConfiguration) MarshalToSizedBu
 	return len(dAtA) - i, nil
 }
 func (m *EnvoyFilter_EnvoyConfigObjectMatch_Cluster) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *EnvoyFilter_EnvoyConfigObjectMatch_Cluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -2679,10 +2682,7 @@ func (m *EnvoyFilter) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthEnvoyFilter
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthEnvoyFilter
 			}
 			if (iNdEx + skippy) > l {
@@ -2875,7 +2875,7 @@ func (m *EnvoyFilter_ProxyMatch) Unmarshal(dAtA []byte) error {
 					if err != nil {
 						return err
 					}
-					if skippy < 0 {
+					if (skippy < 0) || (iNdEx+skippy) < 0 {
 						return ErrInvalidLengthEnvoyFilter
 					}
 					if (iNdEx + skippy) > postIndex {
@@ -2892,10 +2892,7 @@ func (m *EnvoyFilter_ProxyMatch) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthEnvoyFilter
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthEnvoyFilter
 			}
 			if (iNdEx + skippy) > l {
@@ -3061,10 +3058,7 @@ func (m *EnvoyFilter_ClusterMatch) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthEnvoyFilter
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthEnvoyFilter
 			}
 			if (iNdEx + skippy) > l {
@@ -3266,10 +3260,7 @@ func (m *EnvoyFilter_RouteConfigurationMatch) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthEnvoyFilter
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthEnvoyFilter
 			}
 			if (iNdEx + skippy) > l {
@@ -3371,10 +3362,7 @@ func (m *EnvoyFilter_RouteConfigurationMatch_RouteMatch) Unmarshal(dAtA []byte) 
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthEnvoyFilter
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthEnvoyFilter
 			}
 			if (iNdEx + skippy) > l {
@@ -3493,10 +3481,7 @@ func (m *EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch) Unmarshal(dAtA []
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthEnvoyFilter
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthEnvoyFilter
 			}
 			if (iNdEx + skippy) > l {
@@ -3666,10 +3651,7 @@ func (m *EnvoyFilter_ListenerMatch) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthEnvoyFilter
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthEnvoyFilter
 			}
 			if (iNdEx + skippy) > l {
@@ -3903,10 +3885,7 @@ func (m *EnvoyFilter_ListenerMatch_FilterChainMatch) Unmarshal(dAtA []byte) erro
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthEnvoyFilter
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthEnvoyFilter
 			}
 			if (iNdEx + skippy) > l {
@@ -4025,10 +4004,7 @@ func (m *EnvoyFilter_ListenerMatch_FilterMatch) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthEnvoyFilter
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthEnvoyFilter
 			}
 			if (iNdEx + skippy) > l {
@@ -4111,10 +4087,7 @@ func (m *EnvoyFilter_ListenerMatch_SubFilterMatch) Unmarshal(dAtA []byte) error 
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthEnvoyFilter
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthEnvoyFilter
 			}
 			if (iNdEx + skippy) > l {
@@ -4239,10 +4212,7 @@ func (m *EnvoyFilter_Patch) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthEnvoyFilter
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthEnvoyFilter
 			}
 			if (iNdEx + skippy) > l {
@@ -4453,10 +4423,7 @@ func (m *EnvoyFilter_EnvoyConfigObjectMatch) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthEnvoyFilter
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthEnvoyFilter
 			}
 			if (iNdEx + skippy) > l {
@@ -4598,10 +4565,7 @@ func (m *EnvoyFilter_EnvoyConfigObjectPatch) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthEnvoyFilter
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthEnvoyFilter
 			}
 			if (iNdEx + skippy) > l {
@@ -4620,6 +4584,7 @@ func (m *EnvoyFilter_EnvoyConfigObjectPatch) Unmarshal(dAtA []byte) error {
 func skipEnvoyFilter(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -4651,10 +4616,8 @@ func skipEnvoyFilter(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -4675,55 +4638,30 @@ func skipEnvoyFilter(dAtA []byte) (n int, err error) {
 				return 0, ErrInvalidLengthEnvoyFilter
 			}
 			iNdEx += length
-			if iNdEx < 0 {
-				return 0, ErrInvalidLengthEnvoyFilter
-			}
-			return iNdEx, nil
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowEnvoyFilter
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipEnvoyFilter(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-				if iNdEx < 0 {
-					return 0, ErrInvalidLengthEnvoyFilter
-				}
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupEnvoyFilter
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthEnvoyFilter
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthEnvoyFilter = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowEnvoyFilter   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthEnvoyFilter        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowEnvoyFilter          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupEnvoyFilter = fmt.Errorf("proto: unexpected end of group")
 )
