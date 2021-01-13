@@ -9,8 +9,6 @@ openapi:
 directories:
   type/v1beta1:
     - mode: perFile
-  authentication/v1alpha1:
-    - mode: all
   mcp/v1alpha1:
     - mode: all
       title: This package defines the common, core types used by the Mesh Configuration Protocol.
