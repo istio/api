@@ -32059,11 +32059,6 @@
             "name": "FilterConfig",
             "fields": [
               {
-                "id": 1,
-                "name": "policy",
-                "type": "istio.authentication.v1alpha1.Policy"
-              },
-              {
                 "id": 3,
                 "name": "skip_validate_trust_domain",
                 "type": "bool"
@@ -32084,10 +32079,14 @@
                   "type": "string"
                 }
               }
+            ],
+            "reserved_ids": [
+              1
+            ],
+            "reserved_names": [
+              "policy"
             ]
           }
-        ],
-        "imports": [
         ],
         "package": {
           "name": "istio.envoy.config.filter.http.authn.v2alpha1"
