@@ -18,6 +18,7 @@ import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 import "mesh/v1alpha1/proxy.proto";
 import "networking/v1alpha3/destination_rule.proto";
+import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
 
 // $title: Global Mesh Options
 // $description: Configuration affecting the service mesh as a whole.
@@ -533,8 +534,13 @@ message MeshConfig {
   // can be used with an extension provider to delegate the authorization decision to a custom authorization system.
   repeated ExtensionProvider extension_providers = 57;
 
+  // A list of kubernetes selectors that specify the set of namespaces that istio processes.
+  // Elements in the list are disjunctive, i.e. a namespace will be included if it matches any selector.
+  // If omitted, istio will use the default behavior of processing all namespaces.
+  repeated k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector discovery_selectors = 58;
+
   // $hide_from_docs
-  // Next available field number: 58
+  // Next available field number: 59
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;

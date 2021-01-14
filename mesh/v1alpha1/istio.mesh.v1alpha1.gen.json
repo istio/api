@@ -190,6 +190,13 @@
             "items": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider"
             }
+          },
+          "discoverySelectors": {
+            "description": "A list of kubernetes selectors that specify the set of namespaces that istio processes. Elements in the list are disjunctive, i.e. a namespace will be included if it matches any selector. If omitted, istio will use the default behavior of processing all namespaces.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
+            }
           }
         }
       },
@@ -1327,13 +1334,13 @@
             "allOf": [
               {
                 "properties": {
-                  "initialDelaySeconds": {
-                    "description": "Number of seconds after the container has started before readiness probes are initiated.",
+                  "timeoutSeconds": {
+                    "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1 second.",
                     "type": "integer",
                     "format": "int32"
                   },
-                  "timeoutSeconds": {
-                    "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1 second.",
+                  "initialDelaySeconds": {
+                    "description": "Number of seconds after the container has started before readiness probes are initiated.",
                     "type": "integer",
                     "format": "int32"
                   },
@@ -1362,13 +1369,13 @@
                         "httpGet"
                       ],
                       "properties": {
-                        "initialDelaySeconds": {
-                          "description": "Number of seconds after the container has started before readiness probes are initiated.",
+                        "timeoutSeconds": {
+                          "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1 second.",
                           "type": "integer",
                           "format": "int32"
                         },
-                        "timeoutSeconds": {
-                          "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1 second.",
+                        "initialDelaySeconds": {
+                          "description": "Number of seconds after the container has started before readiness probes are initiated.",
                           "type": "integer",
                           "format": "int32"
                         },
@@ -1397,13 +1404,13 @@
                         "tcpSocket"
                       ],
                       "properties": {
-                        "initialDelaySeconds": {
-                          "description": "Number of seconds after the container has started before readiness probes are initiated.",
+                        "timeoutSeconds": {
+                          "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1 second.",
                           "type": "integer",
                           "format": "int32"
                         },
-                        "timeoutSeconds": {
-                          "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1 second.",
+                        "initialDelaySeconds": {
+                          "description": "Number of seconds after the container has started before readiness probes are initiated.",
                           "type": "integer",
                           "format": "int32"
                         },
@@ -1432,13 +1439,13 @@
                         "exec"
                       ],
                       "properties": {
-                        "initialDelaySeconds": {
-                          "description": "Number of seconds after the container has started before readiness probes are initiated.",
+                        "timeoutSeconds": {
+                          "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1 second.",
                           "type": "integer",
                           "format": "int32"
                         },
-                        "timeoutSeconds": {
-                          "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1 second.",
+                        "initialDelaySeconds": {
+                          "description": "Number of seconds after the container has started before readiness probes are initiated.",
                           "type": "integer",
                           "format": "int32"
                         },
@@ -1472,13 +1479,13 @@
               "httpGet"
             ],
             "properties": {
-              "initialDelaySeconds": {
-                "description": "Number of seconds after the container has started before readiness probes are initiated.",
+              "timeoutSeconds": {
+                "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1 second.",
                 "type": "integer",
                 "format": "int32"
               },
-              "timeoutSeconds": {
-                "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1 second.",
+              "initialDelaySeconds": {
+                "description": "Number of seconds after the container has started before readiness probes are initiated.",
                 "type": "integer",
                 "format": "int32"
               },
@@ -1507,13 +1514,13 @@
               "tcpSocket"
             ],
             "properties": {
-              "initialDelaySeconds": {
-                "description": "Number of seconds after the container has started before readiness probes are initiated.",
+              "timeoutSeconds": {
+                "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1 second.",
                 "type": "integer",
                 "format": "int32"
               },
-              "timeoutSeconds": {
-                "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1 second.",
+              "initialDelaySeconds": {
+                "description": "Number of seconds after the container has started before readiness probes are initiated.",
                 "type": "integer",
                 "format": "int32"
               },
@@ -1542,13 +1549,13 @@
               "exec"
             ],
             "properties": {
-              "initialDelaySeconds": {
-                "description": "Number of seconds after the container has started before readiness probes are initiated.",
+              "timeoutSeconds": {
+                "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1 second.",
                 "type": "integer",
                 "format": "int32"
               },
-              "timeoutSeconds": {
-                "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1 second.",
+              "initialDelaySeconds": {
+                "description": "Number of seconds after the container has started before readiness probes are initiated.",
                 "type": "integer",
                 "format": "int32"
               },
@@ -1573,6 +1580,26 @@
             }
           }
         ]
+      },
+      "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector": {
+        "type": "object",
+        "properties": {
+          "matchLabels": {
+            "description": "matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is \"key\", the operator is \"In\", and the values array contains only \"value\". The requirements are ANDed. +optional",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "matchExpressions": {
+            "description": "matchExpressions is a list of label selector requirements. The requirements are ANDed. +optional",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorRequirement"
+            }
+          }
+        }
       },
       "istio.networking.v1alpha3.ClientTLSSettings.TLSmode": {
         "description": "Indicates whether connections to this port should be secured using TLS. The value of this field determines how TLS is enforced.",
@@ -1674,6 +1701,29 @@
           "port": {
             "description": "Port of host",
             "type": "integer"
+          }
+        }
+      },
+      "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorRequirement": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "description": "key is the label key that the selector applies to. +patchMergeKey=key +patchStrategy=merge",
+            "type": "string",
+            "format": "string"
+          },
+          "operator": {
+            "description": "operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.",
+            "type": "string",
+            "format": "string"
+          },
+          "values": {
+            "description": "values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch. +optional",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
           }
         }
       },
