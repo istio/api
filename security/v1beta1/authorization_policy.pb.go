@@ -361,7 +361,7 @@ type isAuthorizationPolicy_ActionDetail interface {
 }
 
 type AuthorizationPolicy_Provider struct {
-	Provider *AuthorizationPolicy_ExtensionProvider `protobuf:"bytes,4,opt,name=provider,proto3,oneof"`
+	Provider *AuthorizationPolicy_ExtensionProvider `protobuf:"bytes,4,opt,name=provider,proto3,oneof" json:"provider,omitempty"`
 }
 
 func (*AuthorizationPolicy_Provider) isAuthorizationPolicy_ActionDetail() {}
@@ -1137,7 +1137,8 @@ func (m *AuthorizationPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 }
 
 func (m *AuthorizationPolicy_Provider) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *AuthorizationPolicy_Provider) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -2059,10 +2060,7 @@ func (m *AuthorizationPolicy) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthAuthorizationPolicy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthAuthorizationPolicy
 			}
 			if (iNdEx + skippy) > l {
@@ -2145,10 +2143,7 @@ func (m *AuthorizationPolicy_ExtensionProvider) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthAuthorizationPolicy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthAuthorizationPolicy
 			}
 			if (iNdEx + skippy) > l {
@@ -2301,10 +2296,7 @@ func (m *Rule) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthAuthorizationPolicy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthAuthorizationPolicy
 			}
 			if (iNdEx + skippy) > l {
@@ -2391,10 +2383,7 @@ func (m *Rule_From) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthAuthorizationPolicy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthAuthorizationPolicy
 			}
 			if (iNdEx + skippy) > l {
@@ -2481,10 +2470,7 @@ func (m *Rule_To) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthAuthorizationPolicy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthAuthorizationPolicy
 			}
 			if (iNdEx + skippy) > l {
@@ -2855,10 +2841,7 @@ func (m *Source) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthAuthorizationPolicy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthAuthorizationPolicy
 			}
 			if (iNdEx + skippy) > l {
@@ -3165,10 +3148,7 @@ func (m *Operation) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthAuthorizationPolicy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthAuthorizationPolicy
 			}
 			if (iNdEx + skippy) > l {
@@ -3315,10 +3295,7 @@ func (m *Condition) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthAuthorizationPolicy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthAuthorizationPolicy
 			}
 			if (iNdEx + skippy) > l {
@@ -3337,6 +3314,7 @@ func (m *Condition) Unmarshal(dAtA []byte) error {
 func skipAuthorizationPolicy(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -3368,10 +3346,8 @@ func skipAuthorizationPolicy(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -3392,55 +3368,30 @@ func skipAuthorizationPolicy(dAtA []byte) (n int, err error) {
 				return 0, ErrInvalidLengthAuthorizationPolicy
 			}
 			iNdEx += length
-			if iNdEx < 0 {
-				return 0, ErrInvalidLengthAuthorizationPolicy
-			}
-			return iNdEx, nil
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowAuthorizationPolicy
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipAuthorizationPolicy(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-				if iNdEx < 0 {
-					return 0, ErrInvalidLengthAuthorizationPolicy
-				}
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupAuthorizationPolicy
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthAuthorizationPolicy
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthAuthorizationPolicy = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowAuthorizationPolicy   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthAuthorizationPolicy        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowAuthorizationPolicy          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupAuthorizationPolicy = fmt.Errorf("proto: unexpected end of group")
 )

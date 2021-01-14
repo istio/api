@@ -276,19 +276,19 @@ type isTracing_Tracer interface {
 }
 
 type Tracing_Zipkin_ struct {
-	Zipkin *Tracing_Zipkin `protobuf:"bytes,1,opt,name=zipkin,proto3,oneof"`
+	Zipkin *Tracing_Zipkin `protobuf:"bytes,1,opt,name=zipkin,proto3,oneof" json:"zipkin,omitempty"`
 }
 type Tracing_Lightstep_ struct {
-	Lightstep *Tracing_Lightstep `protobuf:"bytes,2,opt,name=lightstep,proto3,oneof"`
+	Lightstep *Tracing_Lightstep `protobuf:"bytes,2,opt,name=lightstep,proto3,oneof" json:"lightstep,omitempty"`
 }
 type Tracing_Datadog_ struct {
-	Datadog *Tracing_Datadog `protobuf:"bytes,3,opt,name=datadog,proto3,oneof"`
+	Datadog *Tracing_Datadog `protobuf:"bytes,3,opt,name=datadog,proto3,oneof" json:"datadog,omitempty"`
 }
 type Tracing_Stackdriver_ struct {
-	Stackdriver *Tracing_Stackdriver `protobuf:"bytes,4,opt,name=stackdriver,proto3,oneof"`
+	Stackdriver *Tracing_Stackdriver `protobuf:"bytes,4,opt,name=stackdriver,proto3,oneof" json:"stackdriver,omitempty"`
 }
 type Tracing_OpenCensusAgent_ struct {
-	OpenCensusAgent *Tracing_OpenCensusAgent `protobuf:"bytes,9,opt,name=open_census_agent,json=openCensusAgent,proto3,oneof"`
+	OpenCensusAgent *Tracing_OpenCensusAgent `protobuf:"bytes,9,opt,name=open_census_agent,json=openCensusAgent,proto3,oneof" json:"openCensusAgent,omitempty"`
 }
 
 func (*Tracing_Zipkin_) isTracing_Tracer()          {}
@@ -745,13 +745,13 @@ type isTracing_CustomTag_Type interface {
 }
 
 type Tracing_CustomTag_Literal struct {
-	Literal *Tracing_Literal `protobuf:"bytes,1,opt,name=literal,proto3,oneof"`
+	Literal *Tracing_Literal `protobuf:"bytes,1,opt,name=literal,proto3,oneof" json:"literal,omitempty"`
 }
 type Tracing_CustomTag_Environment struct {
-	Environment *Tracing_Environment `protobuf:"bytes,2,opt,name=environment,proto3,oneof"`
+	Environment *Tracing_Environment `protobuf:"bytes,2,opt,name=environment,proto3,oneof" json:"environment,omitempty"`
 }
 type Tracing_CustomTag_Header struct {
-	Header *Tracing_RequestHeader `protobuf:"bytes,3,opt,name=header,proto3,oneof"`
+	Header *Tracing_RequestHeader `protobuf:"bytes,3,opt,name=header,proto3,oneof" json:"header,omitempty"`
 }
 
 func (*Tracing_CustomTag_Literal) isTracing_CustomTag_Type()     {}
@@ -1894,7 +1894,8 @@ func (m *Tracing) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 }
 
 func (m *Tracing_Zipkin_) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *Tracing_Zipkin_) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -1914,7 +1915,8 @@ func (m *Tracing_Zipkin_) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 func (m *Tracing_Lightstep_) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *Tracing_Lightstep_) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -1934,7 +1936,8 @@ func (m *Tracing_Lightstep_) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 func (m *Tracing_Datadog_) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *Tracing_Datadog_) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -1954,7 +1957,8 @@ func (m *Tracing_Datadog_) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 func (m *Tracing_Stackdriver_) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *Tracing_Stackdriver_) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -1974,7 +1978,8 @@ func (m *Tracing_Stackdriver_) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 func (m *Tracing_OpenCensusAgent_) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *Tracing_OpenCensusAgent_) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -2264,7 +2269,8 @@ func (m *Tracing_CustomTag) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 }
 
 func (m *Tracing_CustomTag_Literal) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *Tracing_CustomTag_Literal) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -2284,7 +2290,8 @@ func (m *Tracing_CustomTag_Literal) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	return len(dAtA) - i, nil
 }
 func (m *Tracing_CustomTag_Environment) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *Tracing_CustomTag_Environment) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -2304,7 +2311,8 @@ func (m *Tracing_CustomTag_Environment) MarshalToSizedBuffer(dAtA []byte) (int, 
 	return len(dAtA) - i, nil
 }
 func (m *Tracing_CustomTag_Header) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
 func (m *Tracing_CustomTag_Header) MarshalToSizedBuffer(dAtA []byte) (int, error) {
@@ -3818,7 +3826,7 @@ func (m *Tracing) Unmarshal(dAtA []byte) error {
 					if err != nil {
 						return err
 					}
-					if skippy < 0 {
+					if (skippy < 0) || (iNdEx+skippy) < 0 {
 						return ErrInvalidLengthProxy
 					}
 					if (iNdEx + skippy) > postIndex {
@@ -3936,10 +3944,7 @@ func (m *Tracing) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthProxy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthProxy
 			}
 			if (iNdEx + skippy) > l {
@@ -4022,10 +4027,7 @@ func (m *Tracing_Zipkin) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthProxy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthProxy
 			}
 			if (iNdEx + skippy) > l {
@@ -4140,10 +4142,7 @@ func (m *Tracing_Lightstep) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthProxy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthProxy
 			}
 			if (iNdEx + skippy) > l {
@@ -4226,10 +4225,7 @@ func (m *Tracing_Datadog) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthProxy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthProxy
 			}
 			if (iNdEx + skippy) > l {
@@ -4408,10 +4404,7 @@ func (m *Tracing_Stackdriver) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthProxy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthProxy
 			}
 			if (iNdEx + skippy) > l {
@@ -4563,10 +4556,7 @@ func (m *Tracing_OpenCensusAgent) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthProxy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthProxy
 			}
 			if (iNdEx + skippy) > l {
@@ -4722,10 +4712,7 @@ func (m *Tracing_CustomTag) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthProxy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthProxy
 			}
 			if (iNdEx + skippy) > l {
@@ -4808,10 +4795,7 @@ func (m *Tracing_Literal) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthProxy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthProxy
 			}
 			if (iNdEx + skippy) > l {
@@ -4926,10 +4910,7 @@ func (m *Tracing_Environment) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthProxy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthProxy
 			}
 			if (iNdEx + skippy) > l {
@@ -5044,10 +5025,7 @@ func (m *Tracing_RequestHeader) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthProxy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthProxy
 			}
 			if (iNdEx + skippy) > l {
@@ -5150,10 +5128,7 @@ func (m *SDS) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthProxy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthProxy
 			}
 			if (iNdEx + skippy) > l {
@@ -5242,10 +5217,7 @@ func (m *Topology) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthProxy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthProxy
 			}
 			if (iNdEx + skippy) > l {
@@ -6090,7 +6062,7 @@ func (m *ProxyConfig) Unmarshal(dAtA []byte) error {
 					if err != nil {
 						return err
 					}
-					if skippy < 0 {
+					if (skippy < 0) || (iNdEx+skippy) < 0 {
 						return ErrInvalidLengthProxy
 					}
 					if (iNdEx + skippy) > postIndex {
@@ -6370,10 +6342,7 @@ func (m *ProxyConfig) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthProxy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthProxy
 			}
 			if (iNdEx + skippy) > l {
@@ -6520,10 +6489,7 @@ func (m *ProxyConfig_ProxyStatsMatcher) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthProxy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthProxy
 			}
 			if (iNdEx + skippy) > l {
@@ -6678,10 +6644,7 @@ func (m *RemoteService) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthProxy
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthProxy
 			}
 			if (iNdEx + skippy) > l {
@@ -6700,6 +6663,7 @@ func (m *RemoteService) Unmarshal(dAtA []byte) error {
 func skipProxy(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -6731,10 +6695,8 @@ func skipProxy(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -6755,55 +6717,30 @@ func skipProxy(dAtA []byte) (n int, err error) {
 				return 0, ErrInvalidLengthProxy
 			}
 			iNdEx += length
-			if iNdEx < 0 {
-				return 0, ErrInvalidLengthProxy
-			}
-			return iNdEx, nil
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowProxy
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipProxy(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-				if iNdEx < 0 {
-					return 0, ErrInvalidLengthProxy
-				}
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupProxy
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthProxy
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthProxy = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowProxy   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthProxy        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowProxy          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupProxy = fmt.Errorf("proto: unexpected end of group")
 )
