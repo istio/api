@@ -454,6 +454,22 @@ type MeshConfig struct {
 	// A list of kubernetes selectors that specify the set of namespaces that istio processes.
 	// Elements in the list are disjunctive, i.e. a namespace will be included if it matches any selector.
 	// If omitted, istio will use the default behavior of processing all namespaces.
+	// The following example selects any namespace with either labels `env: prod` and `region: us-east1`,
+	// or with label `app` equal to `cassandra` or `spark`.
+	// ```yaml
+	// discoverySelectors:
+	//  - matchLabels:
+	//      env: prod
+	//      region: us-east1
+	//  - matchExpressions:
+	//    - key: app
+	//      operator: In
+	//      values:
+	//        - cassandra
+	//        - spark
+	// ```
+	// Refer to the [kubernetes selector docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors)
+	// for additional detail on selector semantics.
 	DiscoverySelectors   []*v1.LabelSelector `protobuf:"bytes,58,rep,name=discovery_selectors,json=discoverySelectors,proto3" json:"discoverySelectors,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
 	XXX_unrecognized     []byte              `json:"-"`
