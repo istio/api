@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - https://github.com/istio/istio/issues/26679
+
+releaseNotes:
+  - |
+    Add discovery selectors to mesh config, a disjunctive list of k8s selectors used to restrict the namespaces of services/pods/endpoints that istiod processes.
