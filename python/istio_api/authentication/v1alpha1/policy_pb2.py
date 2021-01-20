@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.authentication.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z$istio.io/api/authentication/v1alpha1'),
-  serialized_pb=_b('\n$authentication/v1alpha1/policy.proto\x12\x1distio.authentication.v1alpha1\x1a\x1fgoogle/api/field_behavior.proto\"a\n\x0bStringMatch\x12\x0f\n\x05\x65xact\x18\x01 \x01(\tH\x00\x12\x10\n\x06prefix\x18\x02 \x01(\tH\x00\x12\x10\n\x06suffix\x18\x03 \x01(\tH\x00\x12\x0f\n\x05regex\x18\x04 \x01(\tH\x00\x42\x0c\n\nmatch_type\"\x83\x01\n\tMutualTls\x12\x15\n\tallow_tls\x18\x01 \x01(\x08\x42\x02\x18\x01\x12;\n\x04mode\x18\x02 \x01(\x0e\x32-.istio.authentication.v1alpha1.MutualTls.Mode\"\"\n\x04Mode\x12\n\n\x06STRICT\x10\x00\x12\x0e\n\nPERMISSIVE\x10\x01\"\xd0\x02\n\x03Jwt\x12\x0e\n\x06issuer\x18\x01 \x01(\t\x12\x11\n\taudiences\x18\x02 \x03(\t\x12\x10\n\x08jwks_uri\x18\x03 \x01(\t\x12\x0c\n\x04jwks\x18\n \x01(\t\x12\x13\n\x0bjwt_headers\x18\x06 \x03(\t\x12\x12\n\njwt_params\x18\x07 \x03(\t\x12\x45\n\rtrigger_rules\x18\t \x03(\x0b\x32..istio.authentication.v1alpha1.Jwt.TriggerRule\x1a\x95\x01\n\x0bTriggerRule\x12\x42\n\x0e\x65xcluded_paths\x18\x01 \x03(\x0b\x32*.istio.authentication.v1alpha1.StringMatch\x12\x42\n\x0eincluded_paths\x18\x02 \x03(\x0b\x32*.istio.authentication.v1alpha1.StringMatch\"\x95\x01\n\x18PeerAuthenticationMethod\x12\x38\n\x04mtls\x18\x01 \x01(\x0b\x32(.istio.authentication.v1alpha1.MutualTlsH\x00\x12\x35\n\x03jwt\x18\x02 \x01(\x0b\x32\".istio.authentication.v1alpha1.JwtB\x02\x18\x01H\x00\x42\x08\n\x06params\"M\n\x1aOriginAuthenticationMethod\x12/\n\x03jwt\x18\x01 \x01(\x0b\x32\".istio.authentication.v1alpha1.Jwt\"\xf2\x02\n\x06Policy\x12\x42\n\x07targets\x18\x01 \x03(\x0b\x32-.istio.authentication.v1alpha1.TargetSelectorB\x02\x18\x01\x12\x46\n\x05peers\x18\x02 \x03(\x0b\x32\x37.istio.authentication.v1alpha1.PeerAuthenticationMethod\x12\x1c\n\x10peer_is_optional\x18\x03 \x01(\x08\x42\x02\x18\x01\x12N\n\x07origins\x18\x04 \x03(\x0b\x32\x39.istio.authentication.v1alpha1.OriginAuthenticationMethodB\x02\x18\x01\x12\x1e\n\x12origin_is_optional\x18\x05 \x01(\x08\x42\x02\x18\x01\x12N\n\x11principal_binding\x18\x06 \x01(\x0e\x32/.istio.authentication.v1alpha1.PrincipalBindingB\x02\x18\x01\"m\n\x0eTargetSelector\x12\x11\n\x04name\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12:\n\x05ports\x18\x02 \x03(\x0b\x32+.istio.authentication.v1alpha1.PortSelectorJ\x04\x08\x03\x10\x04R\x06labels\"8\n\x0cPortSelector\x12\x10\n\x06number\x18\x01 \x01(\rH\x00\x12\x0e\n\x04name\x18\x02 \x01(\tH\x00\x42\x06\n\x04port*0\n\x10PrincipalBinding\x12\x0c\n\x08USE_PEER\x10\x00\x12\x0e\n\nUSE_ORIGIN\x10\x01\x42&Z$istio.io/api/authentication/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n$authentication/v1alpha1/policy.proto\x12\x1distio.authentication.v1alpha1\x1a\x1fgoogle/api/field_behavior.proto\"\x7f\n\x0bStringMatch\x12\x16\n\x05\x65xact\x18\x01 \x01(\tH\x00R\x05\x65xact\x12\x18\n\x06prefix\x18\x02 \x01(\tH\x00R\x06prefix\x12\x18\n\x06suffix\x18\x03 \x01(\tH\x00R\x06suffix\x12\x16\n\x05regex\x18\x04 \x01(\tH\x00R\x05regexB\x0c\n\nmatch_type\"\x93\x01\n\tMutualTls\x12\x1f\n\tallow_tls\x18\x01 \x01(\x08\x42\x02\x18\x01R\x08\x61llowTls\x12\x41\n\x04mode\x18\x02 \x01(\x0e\x32-.istio.authentication.v1alpha1.MutualTls.ModeR\x04mode\"\"\n\x04Mode\x12\n\n\x06STRICT\x10\x00\x12\x0e\n\nPERMISSIVE\x10\x01\"\xb5\x03\n\x03Jwt\x12\x16\n\x06issuer\x18\x01 \x01(\tR\x06issuer\x12\x1c\n\taudiences\x18\x02 \x03(\tR\taudiences\x12\x19\n\x08jwks_uri\x18\x03 \x01(\tR\x07jwksUri\x12\x12\n\x04jwks\x18\n \x01(\tR\x04jwks\x12\x1f\n\x0bjwt_headers\x18\x06 \x03(\tR\njwtHeaders\x12\x1d\n\njwt_params\x18\x07 \x03(\tR\tjwtParams\x12S\n\rtrigger_rules\x18\t \x03(\x0b\x32..istio.authentication.v1alpha1.Jwt.TriggerRuleR\x0ctriggerRules\x1a\xb3\x01\n\x0bTriggerRule\x12Q\n\x0e\x65xcluded_paths\x18\x01 \x03(\x0b\x32*.istio.authentication.v1alpha1.StringMatchR\rexcludedPaths\x12Q\n\x0eincluded_paths\x18\x02 \x03(\x0b\x32*.istio.authentication.v1alpha1.StringMatchR\rincludedPaths\"\xa0\x01\n\x18PeerAuthenticationMethod\x12>\n\x04mtls\x18\x01 \x01(\x0b\x32(.istio.authentication.v1alpha1.MutualTlsH\x00R\x04mtls\x12:\n\x03jwt\x18\x02 \x01(\x0b\x32\".istio.authentication.v1alpha1.JwtB\x02\x18\x01H\x00R\x03jwtB\x08\n\x06params\"R\n\x1aOriginAuthenticationMethod\x12\x34\n\x03jwt\x18\x01 \x01(\x0b\x32\".istio.authentication.v1alpha1.JwtR\x03jwt\"\xbf\x03\n\x06Policy\x12K\n\x07targets\x18\x01 \x03(\x0b\x32-.istio.authentication.v1alpha1.TargetSelectorB\x02\x18\x01R\x07targets\x12M\n\x05peers\x18\x02 \x03(\x0b\x32\x37.istio.authentication.v1alpha1.PeerAuthenticationMethodR\x05peers\x12,\n\x10peer_is_optional\x18\x03 \x01(\x08\x42\x02\x18\x01R\x0epeerIsOptional\x12W\n\x07origins\x18\x04 \x03(\x0b\x32\x39.istio.authentication.v1alpha1.OriginAuthenticationMethodB\x02\x18\x01R\x07origins\x12\x30\n\x12origin_is_optional\x18\x05 \x01(\x08\x42\x02\x18\x01R\x10originIsOptional\x12`\n\x11principal_binding\x18\x06 \x01(\x0e\x32/.istio.authentication.v1alpha1.PrincipalBindingB\x02\x18\x01R\x10principalBinding\"{\n\x0eTargetSelector\x12\x18\n\x04name\x18\x01 \x01(\tB\x04\xe2\x41\x01\x02R\x04name\x12\x41\n\x05ports\x18\x02 \x03(\x0b\x32+.istio.authentication.v1alpha1.PortSelectorR\x05portsJ\x04\x08\x03\x10\x04R\x06labels\"F\n\x0cPortSelector\x12\x18\n\x06number\x18\x01 \x01(\rH\x00R\x06number\x12\x14\n\x04name\x18\x02 \x01(\tH\x00R\x04nameB\x06\n\x04port*0\n\x10PrincipalBinding\x12\x0c\n\x08USE_PEER\x10\x00\x12\x0e\n\nUSE_ORIGIN\x10\x01\x42&Z$istio.io/api/authentication/v1alpha1b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,])
 
@@ -43,8 +43,8 @@ _PRINCIPALBINDING = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1449,
-  serialized_end=1497,
+  serialized_start=1717,
+  serialized_end=1765,
 )
 _sym_db.RegisterEnumDescriptor(_PRINCIPALBINDING)
 
@@ -70,8 +70,8 @@ _MUTUALTLS_MODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=301,
-  serialized_end=335,
+  serialized_start=347,
+  serialized_end=381,
 )
 _sym_db.RegisterEnumDescriptor(_MUTUALTLS_MODE)
 
@@ -89,28 +89,28 @@ _STRINGMATCH = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='exact', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='prefix', full_name='istio.authentication.v1alpha1.StringMatch.prefix', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='prefix', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='suffix', full_name='istio.authentication.v1alpha1.StringMatch.suffix', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='suffix', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='regex', full_name='istio.authentication.v1alpha1.StringMatch.regex', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='regex', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -127,7 +127,7 @@ _STRINGMATCH = _descriptor.Descriptor(
       index=0, containing_type=None, fields=[]),
   ],
   serialized_start=104,
-  serialized_end=201,
+  serialized_end=231,
 )
 
 
@@ -144,14 +144,14 @@ _MUTUALTLS = _descriptor.Descriptor(
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\030\001'), file=DESCRIPTOR),
+      serialized_options=_b('\030\001'), json_name='allowTls', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='mode', full_name='istio.authentication.v1alpha1.MutualTls.mode', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='mode', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -165,8 +165,8 @@ _MUTUALTLS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=204,
-  serialized_end=335,
+  serialized_start=234,
+  serialized_end=381,
 )
 
 
@@ -183,14 +183,14 @@ _JWT_TRIGGERRULE = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='excludedPaths', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='included_paths', full_name='istio.authentication.v1alpha1.Jwt.TriggerRule.included_paths', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='includedPaths', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -203,8 +203,8 @@ _JWT_TRIGGERRULE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=525,
-  serialized_end=674,
+  serialized_start=642,
+  serialized_end=821,
 )
 
 _JWT = _descriptor.Descriptor(
@@ -220,49 +220,49 @@ _JWT = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='issuer', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='audiences', full_name='istio.authentication.v1alpha1.Jwt.audiences', index=1,
       number=2, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='audiences', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='jwks_uri', full_name='istio.authentication.v1alpha1.Jwt.jwks_uri', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='jwksUri', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='jwks', full_name='istio.authentication.v1alpha1.Jwt.jwks', index=3,
       number=10, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='jwks', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='jwt_headers', full_name='istio.authentication.v1alpha1.Jwt.jwt_headers', index=4,
       number=6, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='jwtHeaders', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='jwt_params', full_name='istio.authentication.v1alpha1.Jwt.jwt_params', index=5,
       number=7, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='jwtParams', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='trigger_rules', full_name='istio.authentication.v1alpha1.Jwt.trigger_rules', index=6,
       number=9, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='triggerRules', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -275,8 +275,8 @@ _JWT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=338,
-  serialized_end=674,
+  serialized_start=384,
+  serialized_end=821,
 )
 
 
@@ -293,14 +293,14 @@ _PEERAUTHENTICATIONMETHOD = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='mtls', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='jwt', full_name='istio.authentication.v1alpha1.PeerAuthenticationMethod.jwt', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\030\001'), file=DESCRIPTOR),
+      serialized_options=_b('\030\001'), json_name='jwt', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -316,8 +316,8 @@ _PEERAUTHENTICATIONMETHOD = _descriptor.Descriptor(
       name='params', full_name='istio.authentication.v1alpha1.PeerAuthenticationMethod.params',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=677,
-  serialized_end=826,
+  serialized_start=824,
+  serialized_end=984,
 )
 
 
@@ -334,7 +334,7 @@ _ORIGINAUTHENTICATIONMETHOD = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='jwt', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -347,8 +347,8 @@ _ORIGINAUTHENTICATIONMETHOD = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=828,
-  serialized_end=905,
+  serialized_start=986,
+  serialized_end=1068,
 )
 
 
@@ -365,42 +365,42 @@ _POLICY = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\030\001'), file=DESCRIPTOR),
+      serialized_options=_b('\030\001'), json_name='targets', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='peers', full_name='istio.authentication.v1alpha1.Policy.peers', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='peers', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='peer_is_optional', full_name='istio.authentication.v1alpha1.Policy.peer_is_optional', index=2,
       number=3, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\030\001'), file=DESCRIPTOR),
+      serialized_options=_b('\030\001'), json_name='peerIsOptional', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='origins', full_name='istio.authentication.v1alpha1.Policy.origins', index=3,
       number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\030\001'), file=DESCRIPTOR),
+      serialized_options=_b('\030\001'), json_name='origins', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='origin_is_optional', full_name='istio.authentication.v1alpha1.Policy.origin_is_optional', index=4,
       number=5, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\030\001'), file=DESCRIPTOR),
+      serialized_options=_b('\030\001'), json_name='originIsOptional', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='principal_binding', full_name='istio.authentication.v1alpha1.Policy.principal_binding', index=5,
       number=6, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\030\001'), file=DESCRIPTOR),
+      serialized_options=_b('\030\001'), json_name='principalBinding', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -413,8 +413,8 @@ _POLICY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=908,
-  serialized_end=1278,
+  serialized_start=1071,
+  serialized_end=1518,
 )
 
 
@@ -431,14 +431,14 @@ _TARGETSELECTOR = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
+      serialized_options=_b('\342A\001\002'), json_name='name', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='ports', full_name='istio.authentication.v1alpha1.TargetSelector.ports', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='ports', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -451,8 +451,8 @@ _TARGETSELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1280,
-  serialized_end=1389,
+  serialized_start=1520,
+  serialized_end=1643,
 )
 
 
@@ -469,14 +469,14 @@ _PORTSELECTOR = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='number', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='name', full_name='istio.authentication.v1alpha1.PortSelector.name', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='name', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -492,8 +492,8 @@ _PORTSELECTOR = _descriptor.Descriptor(
       name='port', full_name='istio.authentication.v1alpha1.PortSelector.port',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=1391,
-  serialized_end=1447,
+  serialized_start=1645,
+  serialized_end=1715,
 )
 
 _STRINGMATCH.oneofs_by_name['match_type'].fields.append(
