@@ -23,6 +23,7 @@ import "google/protobuf/wrappers.proto";
 // $description: Configuration affecting label/content routing, sni routing, etc.
 // $location: https://istio.io/docs/reference/config/networking/virtual-service.html
 // $aliases: [/docs/reference/config/networking/v1beta1/virtual-service]
+// $mode: none
 
 // Configuration affecting traffic routing. Here are a few terms useful to define
 // in the context of traffic routing.

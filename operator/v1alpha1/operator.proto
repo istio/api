@@ -18,6 +18,7 @@ syntax = "proto3";
 // $description: Configuration affecting Istio control plane installation version and shape.
 // $location: https://istio.io/docs/reference/config/istio.operator.v1alpha1.html
 // $weight: 20
+// $mode: package
 
 // Configuration affecting Istio control plane installation version and shape.
 package istio.operator.v1alpha1;
