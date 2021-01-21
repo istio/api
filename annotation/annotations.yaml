@@ -61,17 +61,6 @@ annotations:
     resources:
       - Service
 
-  - name: security.istio.io/tlsMode
-    featureStatus: Alpha
-    description: Specifies the TLS mode supported by a sidecar proxy. Valid values are 'istio', 'disabled'.
-      When injecting sidecars into Pods, the sidecar injector will set the value of this label to 'istio' indicating
-      that the sidecar is capable of supporting mTLS. Clients will opportunistically use this label to determine whether
-      or not to secure the traffic to this workload using Istio mutual TLS.
-    hidden: true
-    deprecated: true
-    resources:
-      - Pod
-
   - name: sidecar.istio.io/inject
     featureStatus: Beta
     description: Specifies whether or not an Envoy sidecar should be automatically
