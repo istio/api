@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 33
+number_of_entries: 32
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -1015,7 +1015,7 @@ No
 Note that in addition to the headers supplied by users:
 1. <em>Host</em>, <em>Method</em>, <em>Path</em> and <em>Content-Length</em> are automatically sent.
 2. <em>Content-Length</em> will be set to 0 and the request will not have a message body.
-Prefix, suffix and substring matching is supported by using &ldquo;<em>&rdquo; in the format of &ldquo;prefix</em>&rdquo;, &ldquo;<em>suffix&rdquo; and &ldquo;</em>substring*&rdquo;.</p>
+Prefix and suffix matching is supported by using &ldquo;<em>&rdquo; in the format of &ldquo;prefix</em>&rdquo; and &ldquo;*suffix&rdquo;.</p>
 
 </td>
 <td>
@@ -1024,7 +1024,7 @@ No
 </tr>
 <tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationHttpProvider-add_headers_in_check">
 <td><code>addHeadersInCheck</code></td>
-<td><code><a href="#MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationHttpProvider-HeaderValue">HeaderValue[]</a></code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
 <p>List of fixed header values that should be added in the authorization request sent to the authorization service.
 Note that client request of the same key will be overridden.</p>
@@ -1042,7 +1042,7 @@ No
 forwarded to the upstream when the authorization check result is allowed (HTTP code 200).
 If not specified, the original request will not be modified and forwarded to backend as-is.
 Note, any existing headers will be overridden.
-Prefix, suffix and substring matching is supported by using &ldquo;<em>&rdquo; in the format of &ldquo;prefix</em>&rdquo;, &ldquo;<em>suffix&rdquo; and &ldquo;</em>substring*&rdquo;.</p>
+Prefix and suffix matching is supported by using &ldquo;<em>&rdquo; in the format of &ldquo;prefix</em>&rdquo; and &ldquo;*suffix&rdquo;.</p>
 
 </td>
 <td>
@@ -1057,7 +1057,7 @@ No
 forwarded to the upstream when the authorization check result is allowed (HTTP code 200).
 If not specified, the original request will not be modified and forwarded to backend as-is.
 Note, any existing headers will be appended.
-Prefix, suffix and substring matching is supported by using &ldquo;<em>&rdquo; in the format of &ldquo;prefix</em>&rdquo;, &ldquo;<em>suffix&rdquo; and &ldquo;</em>substring*&rdquo;.</p>
+Prefix and suffix matching is supported by using &ldquo;<em>&rdquo; in the format of &ldquo;prefix</em>&rdquo; and &ldquo;*suffix&rdquo;.</p>
 
 </td>
 <td>
@@ -1075,7 +1075,7 @@ the downstream.
 When a header is included in this list, <em>Path</em>, <em>Status</em>, <em>Content-Length</em>, <em>WWWAuthenticate</em> and <em>Location</em> are
 automatically added.
 Note, the body from the authorization service is always included in the response to downstream.
-Prefix, suffix and substring matching is supported by using &ldquo;<em>&rdquo; in the format of &ldquo;prefix</em>&rdquo;, &ldquo;<em>suffix&rdquo; and &ldquo;</em>substring*&rdquo;.</p>
+Prefix and suffix matching is supported by using &ldquo;<em>&rdquo; in the format of &ldquo;prefix</em>&rdquo; and &ldquo;*suffix&rdquo;.</p>
 
 </td>
 <td>
@@ -1144,41 +1144,6 @@ No
 <p>Sets the HTTP status that is returned to the client when there is a network error to the authorization service.
 The default status is &ldquo;403&rdquo; (HTTP Forbidden).</p>
 
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationHttpProvider-HeaderValue">MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationHttpProvider.HeaderValue</h2>
-<section>
-<p>HeaderValue defines the header name and value pair.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationHttpProvider-HeaderValue-key">
-<td><code>key</code></td>
-<td><code>string</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationHttpProvider-HeaderValue-value">
-<td><code>value</code></td>
-<td><code>string</code></td>
-<td>
 </td>
 <td>
 No

@@ -485,31 +485,25 @@ message MeshConfig {
       // Note that in addition to the headers supplied by users:
       // 1. *Host*, *Method*, *Path* and *Content-Length* are automatically sent.
       // 2. *Content-Length* will be set to 0 and the request will not have a message body.
-      // Prefix, suffix and substring matching is supported by using "*" in the format of "prefix*", "*suffix" and "*substring*".
+      // Prefix and suffix matching is supported by using "*" in the format of "prefix*" and "*suffix".
       repeated string include_headers_in_check = 6;
-
-      // HeaderValue defines the header name and value pair.
-      message HeaderValue {
-        string key = 1;
-        string value = 2;
-      }
 
       // List of fixed header values that should be added in the authorization request sent to the authorization service.
       // Note that client request of the same key will be overridden.
-      repeated HeaderValue add_headers_in_check = 9;
+      map<string, string> add_headers_in_check = 9;
 
       // List of headers from the authorization service that should be added or overridden in the original request and
       // forwarded to the upstream when the authorization check result is allowed (HTTP code 200).
       // If not specified, the original request will not be modified and forwarded to backend as-is.
       // Note, any existing headers will be overridden.
-      // Prefix, suffix and substring matching is supported by using "*" in the format of "prefix*", "*suffix" and "*substring*".
+      // Prefix and suffix matching is supported by using "*" in the format of "prefix*" and "*suffix".
       repeated string headers_to_upstream_on_allow = 7;
 
       // List of headers from the authorization service that should be added or appended in the original request and
       // forwarded to the upstream when the authorization check result is allowed (HTTP code 200).
       // If not specified, the original request will not be modified and forwarded to backend as-is.
       // Note, any existing headers will be appended.
-      // Prefix, suffix and substring matching is supported by using "*" in the format of "prefix*", "*suffix" and "*substring*".
+      // Prefix and suffix matching is supported by using "*" in the format of "prefix*" and "*suffix".
       repeated string append_headers_to_upstream_on_allow = 10;
 
       // List of headers from the authorization service that should be forwarded to downstream when the authorization
@@ -519,7 +513,7 @@ message MeshConfig {
       // When a header is included in this list, *Path*, *Status*, *Content-Length*, *WWWAuthenticate* and *Location* are
       // automatically added.
       // Note, the body from the authorization service is always included in the response to downstream.
-      // Prefix, suffix and substring matching is supported by using "*" in the format of "prefix*", "*suffix" and "*substring*".
+      // Prefix and suffix matching is supported by using "*" in the format of "prefix*" and "*suffix".
       repeated string headers_to_downstream_on_deny = 8;
     }
 
