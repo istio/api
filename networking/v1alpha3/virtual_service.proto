@@ -643,10 +643,90 @@ message HTTPRoute {
   // Header manipulation rules
   Headers headers = 16;
 
+  // Rate limits
+  RateLimit rate_limit = 21;
+
   // $hide_from_docs
-  // Next available field number: 21
+  // Next available field number: 22
 }
 
+// RateLimit configuration.
+message RateLimit {
+  // Specifies the rate limit descriptors to produce for the route.
+  repeated RateLimitDescriptor descriptors = 1;
+
+  // Token bucket algorithm configuration. Each request consumes a single token.
+  message TokenBucket {
+    // Maximum amount of tokens in a bucket.
+    uint32 max_tokens = 1;
+    // The amount of tokens added per fill.
+    uint32 tokens_per_fill = 2;
+    // The interval that tokens are added to the bucket.
+    google.protobuf.Duration fill_interval = 3;
+  }
+
+  // Local rate limit descriptor configuration.
+  message LocalDescriptor {
+    // Descriptor entry match.
+    message Entry {
+      string key = 1;
+      string value = 2;
+    }
+    // Descriptor entry match.
+    repeated Entry entries = 1;
+
+    // Specifies the token bucket for matching descriptors.
+    TokenBucket token_bucket = 2;
+  }
+
+  // Local rate limit enforcement.
+  message Local {
+    // The token bucket configuration to use for rate limiting requests that
+    // are processed by this filter. Each request processed by the filter
+    // consumes a single token. If the token is available, the request will be
+    // allowed. If no tokens are available, the request will receive 429.
+    TokenBucket token_bucket = 1;
+
+    // The rate limit descriptor list to use in the local rate limit to
+    // override on. The rate limit descriptor is selected by the first full
+    // match from the request descriptors. The descriptors token bucket fill
+    // interval must be a multiple of the global fill interval.
+    repeated LocalDescriptor descriptors = 2;
+  }
+
+  oneof rate_limit_specifier {
+    // Local rate limit configuration.
+    Local local = 2;
+  }
+}
+
+// Rate limit descriptor specifies the descriptors consisting of multiple actions.
+message RateLimitDescriptor {
+  // Descriptor entry.
+  message Entry {
+    // The key to use in the descriptor entry.
+    string key = 1;
+
+    // If set to true, skip the entry when the evaluation fails or when the header is missing.
+    // By default, the entire descriptor is not produced.
+    bool skip_if_error = 2;
+
+    oneof entry_specifier {
+      // The header name to be queried from the request headers. The header’s
+      // value is used to populate the value of the descriptor entry for the
+      // descriptor_key.
+      string request_header = 3;
+
+      // CEL expression to populate the entry value.
+      string expression = 4;
+    }
+  }
+
+  // Rate limit entries specify an ordered list of string values composing the descriptor.
+  // The order of the entries matters, as they are processed sequentially. If an entry fails
+  // to be computed, no descriptor is generated.
+  repeated Entry entries = 1;
+}
 
 // Describes the delegate VirtualService.
 // The following routing rules forward the traffic to `/productpage` by a delegate VirtualService named `productpage`,

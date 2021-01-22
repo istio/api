@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.VirtualService
 aliases: [/docs/reference/config/networking/v1alpha3/virtual-service]
-number_of_entries: 24
+number_of_entries: 31
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -812,6 +812,17 @@ No
 No
 </td>
 </tr>
+<tr id="HTTPRoute-rate_limit">
+<td><code>rateLimit</code></td>
+<td><code><a href="#RateLimit">RateLimit</a></code></td>
+<td>
+<p>Rate limits</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="HTTPRoute-mirror_percent" class="deprecated ">
 <td><code>mirrorPercent</code></td>
 <td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
@@ -819,6 +830,75 @@ No
 <p>Percentage of the traffic to be mirrored by the <code>mirror</code> field.
 Use of integer <code>mirror_percent</code> value is deprecated. Use the
 double <code>mirror_percentage</code> field instead</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RateLimit">RateLimit</h2>
+<section>
+<p>RateLimit configuration.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RateLimit-descriptors">
+<td><code>descriptors</code></td>
+<td><code><a href="#RateLimitDescriptor">RateLimitDescriptor[]</a></code></td>
+<td>
+<p>Specifies the rate limit descriptors to produce for the route.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimit-local" class="oneof oneof-start">
+<td><code>local</code></td>
+<td><code><a href="#RateLimit-Local">Local (oneof)</a></code></td>
+<td>
+<p>Local rate limit configuration.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RateLimitDescriptor">RateLimitDescriptor</h2>
+<section>
+<p>Rate limit descriptor specifies the descriptors consisting of multiple actions.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RateLimitDescriptor-entries">
+<td><code>entries</code></td>
+<td><code><a href="#RateLimitDescriptor-Entry">Entry[]</a></code></td>
+<td>
+<p>Rate limit entries specify an ordered list of string values composing the descriptor.
+The order of the entries matters, as they are processed sequentially. If an entry fails
+to be computed, no descriptor is generated.</p>
 
 </td>
 <td>
@@ -2561,6 +2641,239 @@ No
 <td><code>value</code></td>
 <td><code>double</code></td>
 <td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RateLimit-TokenBucket">RateLimit.TokenBucket</h2>
+<section>
+<p>Token bucket algorithm configuration. Each request consumes a single token.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RateLimit-TokenBucket-max_tokens">
+<td><code>maxTokens</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Maximum amount of tokens in a bucket.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimit-TokenBucket-tokens_per_fill">
+<td><code>tokensPerFill</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>The amount of tokens added per fill.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimit-TokenBucket-fill_interval">
+<td><code>fillInterval</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>The interval that tokens are added to the bucket.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RateLimit-LocalDescriptor">RateLimit.LocalDescriptor</h2>
+<section>
+<p>Local rate limit descriptor configuration.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RateLimit-LocalDescriptor-entries">
+<td><code>entries</code></td>
+<td><code><a href="#RateLimit-LocalDescriptor-Entry">Entry[]</a></code></td>
+<td>
+<p>Descriptor entry match.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimit-LocalDescriptor-token_bucket">
+<td><code>tokenBucket</code></td>
+<td><code><a href="#RateLimit-TokenBucket">TokenBucket</a></code></td>
+<td>
+<p>Specifies the token bucket for matching descriptors.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RateLimit-Local">RateLimit.Local</h2>
+<section>
+<p>Local rate limit enforcement.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RateLimit-Local-token_bucket">
+<td><code>tokenBucket</code></td>
+<td><code><a href="#RateLimit-TokenBucket">TokenBucket</a></code></td>
+<td>
+<p>The token bucket configuration to use for rate limiting requests that
+are processed by this filter. Each request processed by the filter
+consumes a single token. If the token is available, the request will be
+allowed. If no tokens are available, the request will receive 429.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimit-Local-descriptors">
+<td><code>descriptors</code></td>
+<td><code><a href="#RateLimit-LocalDescriptor">LocalDescriptor[]</a></code></td>
+<td>
+<p>The rate limit descriptor list to use in the local rate limit to
+override on. The rate limit descriptor is selected by the first full
+match from the request descriptors. The descriptors token bucket fill
+interval must be a multiple of the global fill interval.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RateLimit-LocalDescriptor-Entry">RateLimit.LocalDescriptor.Entry</h2>
+<section>
+<p>Descriptor entry match.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RateLimit-LocalDescriptor-Entry-key">
+<td><code>key</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimit-LocalDescriptor-Entry-value">
+<td><code>value</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RateLimitDescriptor-Entry">RateLimitDescriptor.Entry</h2>
+<section>
+<p>Descriptor entry.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RateLimitDescriptor-Entry-key">
+<td><code>key</code></td>
+<td><code>string</code></td>
+<td>
+<p>The key to use in the descriptor entry.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimitDescriptor-Entry-skip_if_error">
+<td><code>skipIfError</code></td>
+<td><code>bool</code></td>
+<td>
+<p>If set to true, skip the entry when the evaluation fails or when the header is missing.
+By default, the entire descriptor is not produced.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimitDescriptor-Entry-request_header" class="oneof oneof-start">
+<td><code>requestHeader</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>The header name to be queried from the request headers. The header’s
+value is used to populate the value of the descriptor entry for the
+descriptor_key.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimitDescriptor-Entry-expression" class="oneof">
+<td><code>expression</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>CEL expression to populate the entry value.</p>
+
 </td>
 <td>
 No
