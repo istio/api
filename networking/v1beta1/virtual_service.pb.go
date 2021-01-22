@@ -892,6 +892,101 @@ func (m *HTTPRoute) GetRateLimit() *RateLimit {
 }
 
 // RateLimit configuration.
+//
+// Example 1: Limit the number of requests to product page by 1000 qps:
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: VirtualService
+// metadata:
+//   name: bookinfo
+// spec:
+//   hosts:
+//   - "bookinfo.com"
+//   gateways:
+//   - mygateway
+//   http:
+//   - match:
+//     - uri:
+//         prefix: "/productpage"
+//     rate_limit:
+//       local:
+//         token_bucket:
+//           max_tokens: 1000
+//           tokens_per_fill: 1000
+//           fill_interval: 1s
+// ```
+//
+// Example 2: Limit the number of requests to product page by 1000 qps
+// and the requests with x-test header value foo by 100 qps:
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: VirtualService
+// metadata:
+//   name: bookinfo
+// spec:
+//   hosts:
+//   - "bookinfo.com"
+//   gateways:
+//   - mygateway
+//   http:
+//   - match:
+//     - uri:
+//         prefix: "/productpage"
+//     rate_limit:
+//       descriptors:
+//       - entries:
+//         - key: test
+//           request_header: x-test
+//       local:
+//         token_bucket:
+//           max_tokens: 1000
+//           tokens_per_fill: 1000
+//           fill_interval: 1s
+//         descriptors:
+//         - entries:
+//           - key: test
+//             value: foo
+//           token_bucket:
+//             max_tokens: 100
+//             tokens_per_fill: 100
+//             fill_interval: 1s
+// ```
+//
+// Example 3: Limit the number of requests to product page by 1000 qps
+// and POST requests by 100 qps:
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: VirtualService
+// metadata:
+//   name: bookinfo
+// spec:
+//   hosts:
+//   - "bookinfo.com"
+//   gateways:
+//   - mygateway
+//   http:
+//   - match:
+//     - uri:
+//         prefix: "/productpage"
+//     rate_limit:
+//       descriptors:
+//       - entries:
+//         - key: method
+//           expression: request.method
+//       local:
+//         token_bucket:
+//           max_tokens: 1000
+//           tokens_per_fill: 1000
+//           fill_interval: 1s
+//         descriptors:
+//         - entries:
+//           - key: method
+//             value: POST
+//           token_bucket:
+//             max_tokens: 100
+//             tokens_per_fill: 100
+//             fill_interval: 1s
+// ```
 type RateLimit struct {
 	// Specifies the rate limit descriptors to produce for the route.
 	Descriptors []*RateLimitDescriptor `protobuf:"bytes,1,rep,name=descriptors,proto3" json:"descriptors,omitempty"`
