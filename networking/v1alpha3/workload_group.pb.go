@@ -84,6 +84,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // +cue-gen:WorkloadGroup:groupName:networking.istio.io
 // +cue-gen:WorkloadGroup:version:v1alpha3
 // +cue-gen:WorkloadGroup:storageVersion
+// +cue-gen:WorkloadGroup:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:WorkloadGroup:subresource:status
 // +cue-gen:WorkloadGroup:scope:Namespaced
 // +cue-gen:WorkloadGroup:resource:categories=istio-io,networking-istio-io,shortNames=wg,plural=workloadgroups
