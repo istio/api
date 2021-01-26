@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 29
+number_of_entries: 31
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -313,6 +313,17 @@ trustDomainAliases: [&quot;td2&quot;, &quot;td3&quot;]
 
 <p>Any service with the identity <code>td1/ns/foo/sa/a-service-account</code>, <code>td2/ns/foo/sa/a-service-account</code>,
 or <code>td3/ns/foo/sa/a-service-account</code> will be treated the same in the Istio mesh.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-root_config">
+<td><code>rootConfig</code></td>
+<td><code><a href="#MeshConfig-RootConfig">RootConfig[]</a></code></td>
+<td>
+<p>RootConfig defines the root of trust or the root of trust fetching method for the workloads.</p>
 
 </td>
 <td>
@@ -706,6 +717,43 @@ No
 <td><code>mode</code></td>
 <td><code><a href="#MeshConfig-OutboundTrafficPolicy-Mode">Mode</a></code></td>
 <td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-RootConfig">MeshConfig.RootConfig</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-RootConfig-mode">
+<td><code>mode</code></td>
+<td><code><a href="#MeshConfig-RootConfig-Mode">Mode</a></code></td>
+<td>
+<p>Mode specifies how the root certificate is loaded.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-RootConfig-config">
+<td><code>config</code></td>
+<td><code>string</code></td>
+<td>
+<p>Config specifies the details of the root certificate or its fetching method, depending on the mode.</p>
+
 </td>
 <td>
 No
@@ -1378,6 +1426,17 @@ Default value is &lsquo;false&rsquo;.</p>
 No
 </td>
 </tr>
+<tr id="ProxyConfig-root_cert_pem">
+<td><code>rootCertPem</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>The PEM content of the root certificates used in workload-to-workload communication.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="ProxyConfig-zipkin_address" class="deprecated ">
 <td><code>zipkinAddress</code></td>
 <td><code>string</code></td>
@@ -1909,6 +1968,43 @@ service registry as well as those defined through ServiceEntries</p>
 <td>
 <p>outbound traffic to unknown destinations will be allowed, in case
 there are no services or ServiceEntries for the destination port</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-RootConfig-Mode">MeshConfig.RootConfig.Mode</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-RootConfig-Mode-CITADEL">
+<td><code>CITADEL</code></td>
+<td>
+<p>The Citadel root that is available as the secret istio-ca-secret or cacerts in the control plane namespace.
+The config field is ignored in this mode.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-RootConfig-Mode-SPIFFE_BUNDLE_ENDPOINT">
+<td><code>SPIFFE_BUNDLE_ENDPOINT</code></td>
+<td>
+<p>The SPIFFE Bundle Endpoint that complies to:
+https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE<em>Trust</em>Domain<em>and</em>Bundle.md#the-spiffe-trust-domain-and-bundle
+The config field specifies the SPIFFE Bundle Endpoint URL.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-RootConfig-Mode-PEM_CONTENT">
+<td><code>PEM_CONTENT</code></td>
+<td>
+<p>The config specifies the PEM content of the root certificates.</p>
 
 </td>
 </tr>

@@ -111,6 +111,13 @@
               "format": "string"
             }
           },
+          "rootConfig": {
+            "description": "RootConfig defines the root of trust or the root of trust fetching method for the workloads.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.RootConfig"
+            }
+          },
           "defaultServiceExportTo": {
             "description": "The default value for the ServiceEntry.export_to field and services imported through container registry integrations, e.g. this applies to Kubernetes Service resources. The value is a list of namespace names and reserved namespace aliases. The allowed namespace aliases are: ``` * - All Namespaces . - Current Namespace ~ - No Namespace ``` If not set the system will use \"*\" as the default value which implies that services are exported to all namespaces.",
             "type": "array",
@@ -352,6 +359,14 @@
             "description": "Boolean flag for enabling/disabling the holdApplicationUntilProxyStarts behavior. This feature adds hooks to delay application startup until the pod proxy is ready to accept traffic, mitigating some startup race conditions. Default value is 'false'.",
             "type": "boolean",
             "nullable": true
+          },
+          "rootCertPem": {
+            "description": "The PEM content of the root certificates used in workload-to-workload communication.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
           }
         }
       },
@@ -381,6 +396,19 @@
             "items": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.Resource"
             }
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.RootConfig": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.RootConfig.Mode"
+          },
+          "config": {
+            "description": "Config specifies the details of the root certificate or its fetching method, depending on the mode.",
+            "type": "string",
+            "format": "string"
           }
         }
       },
@@ -533,6 +561,14 @@
         "enum": [
           "REGISTRY_ONLY",
           "ALLOW_ANY"
+        ]
+      },
+      "istio.mesh.v1alpha1.MeshConfig.RootConfig.Mode": {
+        "type": "string",
+        "enum": [
+          "CITADEL",
+          "SPIFFE_BUNDLE_ENDPOINT",
+          "PEM_CONTENT"
         ]
       },
       "istio.mesh.v1alpha1.MeshConfig.ServiceSettings.Settings": {
