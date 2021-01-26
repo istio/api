@@ -145,6 +145,13 @@
           },
           "headers": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.Headers"
+          },
+          "filters": {
+            "description": "Optional list of filters to apply on the requests that match this rule.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1beta1.HTTPRouteFilter"
+            }
           }
         }
       },
@@ -350,8 +357,7 @@
           },
           "retryRemoteLocalities": {
             "description": "Flag to specify whether the retries should retry to other localities. See the [retry plugin configuration](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_connection_management#retry-plugin-configuration) for more details.",
-            "type": "boolean",
-            "nullable": true
+            "type": "boolean"
           }
         }
       },
@@ -427,8 +433,7 @@
           },
           "allowCredentials": {
             "description": "Indicates whether the caller is allowed to send the actual request (not the preflight) using credentials. Translates to `Access-Control-Allow-Credentials` header.",
-            "type": "boolean",
-            "nullable": true
+            "type": "boolean"
           }
         }
       },
@@ -443,6 +448,71 @@
             "$ref": "#/components/schemas/istio.networking.v1beta1.Headers.HeaderOperations"
           }
         }
+      },
+      "istio.networking.v1beta1.HTTPRouteFilter": {
+        "description": "HTTP route filter for custom extensions.",
+        "type": "object",
+        "properties": {
+          "category": {
+            "description": "Extension category determining the type of a filter extension.",
+            "type": "string",
+            "format": "string"
+          }
+        },
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "name"
+                  ],
+                  "properties": {
+                    "name": {
+                      "description": "External reference to the extension configuration by name.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "description": "Explicit extension configuration.",
+                      "type": "object"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
+                "description": "External reference to the extension configuration by name.",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "value": {
+                "description": "Explicit extension configuration.",
+                "type": "object"
+              }
+            }
+          }
+        ]
       },
       "istio.networking.v1beta1.Headers.HeaderOperations": {
         "description": "HeaderOperations Describes the header manipulations to apply",

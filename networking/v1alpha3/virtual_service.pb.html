@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.VirtualService
 aliases: [/docs/reference/config/networking/v1alpha3/virtual-service]
-number_of_entries: 24
+number_of_entries: 25
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -812,6 +812,17 @@ No
 No
 </td>
 </tr>
+<tr id="HTTPRoute-filters">
+<td><code>filters</code></td>
+<td><code><a href="#HTTPRouteFilter">HTTPRouteFilter[]</a></code></td>
+<td>
+<p>Optional list of filters to apply on the requests that match this rule.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="HTTPRoute-mirror_percent" class="deprecated ">
 <td><code>mirrorPercent</code></td>
 <td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
@@ -819,6 +830,56 @@ No
 <p>Percentage of the traffic to be mirrored by the <code>mirror</code> field.
 Use of integer <code>mirror_percent</code> value is deprecated. Use the
 double <code>mirror_percentage</code> field instead</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HTTPRouteFilter">HTTPRouteFilter</h2>
+<section>
+<p>HTTP route filter for custom extensions.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HTTPRouteFilter-category">
+<td><code>category</code></td>
+<td><code>string</code></td>
+<td>
+<p>Extension category determining the type of a filter extension.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPRouteFilter-name" class="oneof oneof-start">
+<td><code>name</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>External reference to the extension configuration by name.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPRouteFilter-value" class="oneof">
+<td><code>value</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">Struct (oneof)</a></code></td>
+<td>
+<p>Explicit extension configuration.</p>
 
 </td>
 <td>

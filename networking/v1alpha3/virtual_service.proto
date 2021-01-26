@@ -17,6 +17,7 @@ syntax = "proto3";
 import "google/api/field_behavior.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
+import "google/protobuf/struct.proto";
 
 // $schema: istio.networking.v1alpha3.VirtualService
 // $title: Virtual Service
@@ -643,10 +644,26 @@ message HTTPRoute {
   // Header manipulation rules
   Headers headers = 16;
 
+  // Optional list of filters to apply on the requests that match this rule.
+  repeated HTTPRouteFilter filters = 21;
+
   // $hide_from_docs
-  // Next available field number: 21
+  // Next available field number: 22
 }
 
+// HTTP route filter for custom extensions.
+message HTTPRouteFilter {
+  // Extension category determining the type of a filter extension.
+  string category = 1;
+
+  oneof ref_type {
+    // External reference to the extension configuration by name.
+    string name = 2;
+
+    // Explicit extension configuration.
+    google.protobuf.Struct value = 3;
+  }
+}
 
 // Describes the delegate VirtualService.
 // The following routing rules forward the traffic to `/productpage` by a delegate VirtualService named `productpage`,

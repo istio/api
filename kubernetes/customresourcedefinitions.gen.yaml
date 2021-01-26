@@ -1989,7 +1989,6 @@ spec:
                     description: Cross-Origin Resource Sharing policy (CORS).
                     properties:
                       allowCredentials:
-                        nullable: true
                         type: boolean
                       allowHeaders:
                         items:
@@ -2134,6 +2133,37 @@ spec:
                             type: object
                         type: object
                     type: object
+                  filters:
+                    description: Optional list of filters to apply on the requests
+                      that match this rule.
+                    items:
+                      oneOf:
+                      - not:
+                          anyOf:
+                          - required:
+                            - name
+                          - required:
+                            - value
+                      - required:
+                        - name
+                      - required:
+                        - value
+                      properties:
+                        category:
+                          description: Extension category determining the type of
+                            a filter extension.
+                          format: string
+                          type: string
+                        name:
+                          description: External reference to the extension configuration
+                            by name.
+                          format: string
+                          type: string
+                        value:
+                          description: Explicit extension configuration.
+                          type: object
+                      type: object
+                    type: array
                   headers:
                     properties:
                       request:
@@ -2483,7 +2513,6 @@ spec:
                       retryRemoteLocalities:
                         description: Flag to specify whether the retries should retry
                           to other localities.
-                        nullable: true
                         type: boolean
                     type: object
                   rewrite:
