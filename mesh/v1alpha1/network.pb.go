@@ -312,7 +312,7 @@ func (*Network_IstioNetworkGateway) XXX_OneofWrappers() []interface{} {
 // ```yaml
 // networks:
 //   network1:
-//   - endpoints:
+//     endpoints:
 //     - fromRegistry: registry1 #must match kubeconfig name in Kubernetes secret
 //     - fromCidr: 192.168.100.0/22 #a VM network for example
 //     gateways:
