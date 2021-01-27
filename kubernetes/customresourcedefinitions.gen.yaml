@@ -2500,6 +2500,7 @@ spec:
                       uriRegex:
                         properties:
                           pattern:
+                            description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
                             format: string
                             type: string
                           substitution:

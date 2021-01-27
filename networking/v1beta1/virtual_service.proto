@@ -1469,11 +1469,20 @@ message HTTPRewrite {
   // uri_regex can be used for rewriting portions of path that match the
   // pattern during forwarding the request
   // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
-  UriRegexRewrite uri_regex = 3;
+  // uri_regex can be used for rewriting portions of path that match the
+  // pattern during forwarding the request
+  // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+  RegexMatchAndSubstitute uri_regex = 3;
 }
 
-message UriRegexRewrite {
+// Describes how to match a string and then produce a new string using a regular
+// expression and a substitution string.
+message RegexMatchAndSubstitute {
+  // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
   string pattern = 1;
+
+  // The string that should be substituted into matching portions of the
+  // subject string during a substitution operation to produce a new string.
   string substitution = 2;
 }
 

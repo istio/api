@@ -2139,7 +2139,7 @@ No
 </tr>
 <tr id="HTTPRewrite-uri_regex">
 <td><code>uriRegex</code></td>
-<td><code><a href="#UriRegexRewrite">UriRegexRewrite</a></code></td>
+<td><code><a href="#RegexMatchAndSubstitute">RegexMatchAndSubstitute</a></code></td>
 <td>
 <p>uri_regex can be used for rewriting portions of path that match the
 pattern during forwarding the request
@@ -2153,8 +2153,11 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="UriRegexRewrite">UriRegexRewrite</h2>
+<h2 id="RegexMatchAndSubstitute">RegexMatchAndSubstitute</h2>
 <section>
+<p>Describes how to match a string and then produce a new string using a regular
+expression and a substitution string.</p>
+
 <table class="message-fields">
 <thead>
 <tr>
@@ -2165,19 +2168,24 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="UriRegexRewrite-pattern">
+<tr id="RegexMatchAndSubstitute-pattern">
 <td><code>pattern</code></td>
 <td><code>string</code></td>
 <td>
+<p>RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).</p>
+
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="UriRegexRewrite-substitution">
+<tr id="RegexMatchAndSubstitute-substitution">
 <td><code>substitution</code></td>
 <td><code>string</code></td>
 <td>
+<p>The string that should be substituted into matching portions of the
+subject string during a substitution operation to produce a new string.</p>
+
 </td>
 <td>
 No

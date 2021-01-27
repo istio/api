@@ -329,7 +329,7 @@
             "format": "string"
           },
           "uriRegex": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.UriRegexRewrite"
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.RegexMatchAndSubstitute"
           }
         }
       },
@@ -666,14 +666,17 @@
           }
         ]
       },
-      "istio.networking.v1alpha3.UriRegexRewrite": {
+      "istio.networking.v1alpha3.RegexMatchAndSubstitute": {
+        "description": "Describes how to match a string and then produce a new string using a regular expression and a substitution string.",
         "type": "object",
         "properties": {
           "pattern": {
+            "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
             "type": "string",
             "format": "string"
           },
           "substitution": {
+            "description": "The string that should be substituted into matching portions of the subject string during a substitution operation to produce a new string.",
             "type": "string",
             "format": "string"
           }
