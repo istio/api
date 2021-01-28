@@ -2452,6 +2452,110 @@ spec:
                     description: The name assigned to the route for debugging purposes.
                     format: string
                     type: string
+                  rateLimit:
+                    oneOf:
+                    - not:
+                        anyOf:
+                        - required:
+                          - local
+                    - required:
+                      - local
+                    properties:
+                      descriptors:
+                        description: Specifies the rate limit descriptors to produce
+                          for the route.
+                        items:
+                          properties:
+                            entries:
+                              description: Rate limit entries specify an ordered list
+                                of string values composing the descriptor.
+                              items:
+                                oneOf:
+                                - not:
+                                    anyOf:
+                                    - required:
+                                      - requestHeader
+                                    - required:
+                                      - expression
+                                - required:
+                                  - requestHeader
+                                - required:
+                                  - expression
+                                properties:
+                                  expression:
+                                    description: CEL expression to populate the entry
+                                      value.
+                                    format: string
+                                    type: string
+                                  key:
+                                    description: The key to use in the descriptor
+                                      entry.
+                                    format: string
+                                    type: string
+                                  requestHeader:
+                                    description: The header name to be queried from
+                                      the request headers.
+                                    format: string
+                                    type: string
+                                  skipIfError:
+                                    description: If set to true, skip the entry when
+                                      the evaluation fails or when the header is missing.
+                                    type: boolean
+                                type: object
+                              type: array
+                          type: object
+                        type: array
+                      local:
+                        description: Local rate limit configuration.
+                        properties:
+                          descriptors:
+                            items:
+                              properties:
+                                entries:
+                                  description: Descriptor entry match.
+                                  items:
+                                    properties:
+                                      key:
+                                        format: string
+                                        type: string
+                                      value:
+                                        format: string
+                                        type: string
+                                    type: object
+                                  type: array
+                                tokenBucket:
+                                  description: Specifies the token bucket for matching
+                                    descriptors.
+                                  properties:
+                                    fillInterval:
+                                      description: The interval that tokens are added
+                                        to the bucket.
+                                      type: string
+                                    maxTokens:
+                                      description: Maximum amount of tokens in a bucket.
+                                      type: integer
+                                    tokensPerFill:
+                                      description: The amount of tokens added per
+                                        fill.
+                                      type: integer
+                                  type: object
+                              type: object
+                            type: array
+                          tokenBucket:
+                            properties:
+                              fillInterval:
+                                description: The interval that tokens are added to
+                                  the bucket.
+                                type: string
+                              maxTokens:
+                                description: Maximum amount of tokens in a bucket.
+                                type: integer
+                              tokensPerFill:
+                                description: The amount of tokens added per fill.
+                                type: integer
+                            type: object
+                        type: object
+                    type: object
                   redirect:
                     description: A HTTP rule can either redirect or forward (default)
                       traffic.

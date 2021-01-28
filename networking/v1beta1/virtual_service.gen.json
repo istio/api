@@ -145,6 +145,9 @@
           },
           "headers": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.Headers"
+          },
+          "rateLimit": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.RateLimit"
           }
         }
       },
@@ -443,6 +446,195 @@
             "$ref": "#/components/schemas/istio.networking.v1beta1.Headers.HeaderOperations"
           }
         }
+      },
+      "istio.networking.v1beta1.RateLimit": {
+        "description": "RateLimit configuration.",
+        "type": "object",
+        "properties": {
+          "descriptors": {
+            "description": "Specifies the rate limit descriptors to produce for the route.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1beta1.RateLimitDescriptor"
+            }
+          }
+        },
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "local"
+                  ],
+                  "properties": {
+                    "local": {
+                      "$ref": "#/components/schemas/istio.networking.v1beta1.RateLimit.Local"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "local"
+            ],
+            "properties": {
+              "local": {
+                "$ref": "#/components/schemas/istio.networking.v1beta1.RateLimit.Local"
+              }
+            }
+          }
+        ]
+      },
+      "istio.networking.v1beta1.RateLimitDescriptor": {
+        "description": "Rate limit descriptor specifies the descriptors consisting of multiple actions.",
+        "type": "object",
+        "properties": {
+          "entries": {
+            "description": "Rate limit entries specify an ordered list of string values composing the descriptor. The order of the entries matters, as they are processed sequentially. If an entry fails to be computed, no descriptor is generated.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1beta1.RateLimitDescriptor.Entry"
+            }
+          }
+        }
+      },
+      "istio.networking.v1beta1.RateLimit.TokenBucket": {
+        "description": "Token bucket algorithm configuration. Each request consumes a single token.",
+        "type": "object",
+        "properties": {
+          "maxTokens": {
+            "description": "Maximum amount of tokens in a bucket.",
+            "type": "integer"
+          },
+          "tokensPerFill": {
+            "description": "The amount of tokens added per fill.",
+            "type": "integer"
+          },
+          "fillInterval": {
+            "description": "The interval that tokens are added to the bucket.",
+            "type": "string"
+          }
+        }
+      },
+      "istio.networking.v1beta1.RateLimit.LocalDescriptor": {
+        "description": "Local rate limit descriptor configuration.",
+        "type": "object",
+        "properties": {
+          "entries": {
+            "description": "Descriptor entry match.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1beta1.RateLimit.LocalDescriptor.Entry"
+            }
+          },
+          "tokenBucket": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.RateLimit.TokenBucket"
+          }
+        }
+      },
+      "istio.networking.v1beta1.RateLimit.LocalDescriptor.Entry": {
+        "description": "Descriptor entry match.",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "format": "string"
+          },
+          "value": {
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.networking.v1beta1.RateLimit.Local": {
+        "description": "Local rate limit enforcement.",
+        "type": "object",
+        "properties": {
+          "descriptors": {
+            "description": "The rate limit descriptor list to use in the local rate limit to override on. The rate limit descriptor is selected by the first full match from the request descriptors. The descriptors token bucket fill interval must be a multiple of the global fill interval.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1beta1.RateLimit.LocalDescriptor"
+            }
+          },
+          "tokenBucket": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.RateLimit.TokenBucket"
+          }
+        }
+      },
+      "istio.networking.v1beta1.RateLimitDescriptor.Entry": {
+        "description": "Descriptor entry.",
+        "type": "object",
+        "properties": {
+          "key": {
+            "description": "The key to use in the descriptor entry.",
+            "type": "string",
+            "format": "string"
+          },
+          "skipIfError": {
+            "description": "If set to true, skip the entry when the evaluation fails or when the header is missing. By default, the entire descriptor is not produced.",
+            "type": "boolean"
+          }
+        },
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "requestHeader"
+                  ],
+                  "properties": {
+                    "requestHeader": {
+                      "description": "The header name to be queried from the request headers. The header’s value is used to populate the value of the descriptor entry for the descriptor_key.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "expression"
+                  ],
+                  "properties": {
+                    "expression": {
+                      "description": "CEL expression to populate the entry value.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "requestHeader"
+            ],
+            "properties": {
+              "requestHeader": {
+                "description": "The header name to be queried from the request headers. The header’s value is used to populate the value of the descriptor entry for the descriptor_key.",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "expression"
+            ],
+            "properties": {
+              "expression": {
+                "description": "CEL expression to populate the entry value.",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          }
+        ]
       },
       "istio.networking.v1beta1.Headers.HeaderOperations": {
         "description": "HeaderOperations Describes the header manipulations to apply",

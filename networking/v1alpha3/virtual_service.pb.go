@@ -748,10 +748,12 @@ type HTTPRoute struct {
 	// for further details about cross origin resource sharing.
 	CorsPolicy *CorsPolicy `protobuf:"bytes,10,opt,name=cors_policy,json=corsPolicy,proto3" json:"cors_policy,omitempty"`
 	// Header manipulation rules
-	Headers              *Headers `protobuf:"bytes,16,opt,name=headers,proto3" json:"headers,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Headers *Headers `protobuf:"bytes,16,opt,name=headers,proto3" json:"headers,omitempty"`
+	// Rate limits
+	RateLimit            *RateLimit `protobuf:"bytes,21,opt,name=rate_limit,json=rateLimit,proto3" json:"rate_limit,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
 }
 
 func (m *HTTPRoute) Reset()         { *m = HTTPRoute{} }
@@ -886,6 +888,597 @@ func (m *HTTPRoute) GetHeaders() *Headers {
 	return nil
 }
 
+func (m *HTTPRoute) GetRateLimit() *RateLimit {
+	if m != nil {
+		return m.RateLimit
+	}
+	return nil
+}
+
+// RateLimit configuration.
+//
+// Example 1: Limit the number of requests to product page by 1000 qps:
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: VirtualService
+// metadata:
+//   name: bookinfo
+// spec:
+//   hosts:
+//   - "bookinfo.com"
+//   gateways:
+//   - mygateway
+//   http:
+//   - match:
+//     - uri:
+//         prefix: "/productpage"
+//     rate_limit:
+//       local:
+//         token_bucket:
+//           max_tokens: 1000
+//           tokens_per_fill: 1000
+//           fill_interval: 1s
+// ```
+//
+// Example 2: Limit the number of requests to product page by 1000 qps
+// and the requests with x-test header value foo by 100 qps:
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: VirtualService
+// metadata:
+//   name: bookinfo
+// spec:
+//   hosts:
+//   - "bookinfo.com"
+//   gateways:
+//   - mygateway
+//   http:
+//   - match:
+//     - uri:
+//         prefix: "/productpage"
+//     rate_limit:
+//       descriptors:
+//       - entries:
+//         - key: test
+//           request_header: x-test
+//       local:
+//         token_bucket:
+//           max_tokens: 1000
+//           tokens_per_fill: 1000
+//           fill_interval: 1s
+//         descriptors:
+//         - entries:
+//           - key: test
+//             value: foo
+//           token_bucket:
+//             max_tokens: 100
+//             tokens_per_fill: 100
+//             fill_interval: 1s
+// ```
+//
+// Example 3: Limit the number of requests to product page by 1000 qps
+// and POST requests by 100 qps:
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: VirtualService
+// metadata:
+//   name: bookinfo
+// spec:
+//   hosts:
+//   - "bookinfo.com"
+//   gateways:
+//   - mygateway
+//   http:
+//   - match:
+//     - uri:
+//         prefix: "/productpage"
+//     rate_limit:
+//       descriptors:
+//       - entries:
+//         - key: method
+//           expression: request.method
+//       local:
+//         token_bucket:
+//           max_tokens: 1000
+//           tokens_per_fill: 1000
+//           fill_interval: 1s
+//         descriptors:
+//         - entries:
+//           - key: method
+//             value: POST
+//           token_bucket:
+//             max_tokens: 100
+//             tokens_per_fill: 100
+//             fill_interval: 1s
+// ```
+type RateLimit struct {
+	// Specifies the rate limit descriptors to produce for the route.
+	Descriptors []*RateLimitDescriptor `protobuf:"bytes,1,rep,name=descriptors,proto3" json:"descriptors,omitempty"`
+	// Types that are valid to be assigned to RateLimitSpecifier:
+	//	*RateLimit_Local_
+	RateLimitSpecifier   isRateLimit_RateLimitSpecifier `protobuf_oneof:"rate_limit_specifier"`
+	XXX_NoUnkeyedLiteral struct{}                       `json:"-"`
+	XXX_unrecognized     []byte                         `json:"-"`
+	XXX_sizecache        int32                          `json:"-"`
+}
+
+func (m *RateLimit) Reset()         { *m = RateLimit{} }
+func (m *RateLimit) String() string { return proto.CompactTextString(m) }
+func (*RateLimit) ProtoMessage()    {}
+func (*RateLimit) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e85a9a4fa9c17a22, []int{3}
+}
+func (m *RateLimit) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RateLimit) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RateLimit.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RateLimit) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RateLimit.Merge(m, src)
+}
+func (m *RateLimit) XXX_Size() int {
+	return m.Size()
+}
+func (m *RateLimit) XXX_DiscardUnknown() {
+	xxx_messageInfo_RateLimit.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RateLimit proto.InternalMessageInfo
+
+type isRateLimit_RateLimitSpecifier interface {
+	isRateLimit_RateLimitSpecifier()
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type RateLimit_Local_ struct {
+	Local *RateLimit_Local `protobuf:"bytes,2,opt,name=local,proto3,oneof" json:"local,omitempty"`
+}
+
+func (*RateLimit_Local_) isRateLimit_RateLimitSpecifier() {}
+
+func (m *RateLimit) GetRateLimitSpecifier() isRateLimit_RateLimitSpecifier {
+	if m != nil {
+		return m.RateLimitSpecifier
+	}
+	return nil
+}
+
+func (m *RateLimit) GetDescriptors() []*RateLimitDescriptor {
+	if m != nil {
+		return m.Descriptors
+	}
+	return nil
+}
+
+func (m *RateLimit) GetLocal() *RateLimit_Local {
+	if x, ok := m.GetRateLimitSpecifier().(*RateLimit_Local_); ok {
+		return x.Local
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*RateLimit) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*RateLimit_Local_)(nil),
+	}
+}
+
+// Token bucket algorithm configuration. Each request consumes a single token.
+type RateLimit_TokenBucket struct {
+	// Maximum amount of tokens in a bucket.
+	MaxTokens uint32 `protobuf:"varint,1,opt,name=max_tokens,json=maxTokens,proto3" json:"max_tokens,omitempty"`
+	// The amount of tokens added per fill.
+	TokensPerFill uint32 `protobuf:"varint,2,opt,name=tokens_per_fill,json=tokensPerFill,proto3" json:"tokens_per_fill,omitempty"`
+	// The interval that tokens are added to the bucket.
+	FillInterval         *types.Duration `protobuf:"bytes,3,opt,name=fill_interval,json=fillInterval,proto3" json:"fill_interval,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
+}
+
+func (m *RateLimit_TokenBucket) Reset()         { *m = RateLimit_TokenBucket{} }
+func (m *RateLimit_TokenBucket) String() string { return proto.CompactTextString(m) }
+func (*RateLimit_TokenBucket) ProtoMessage()    {}
+func (*RateLimit_TokenBucket) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e85a9a4fa9c17a22, []int{3, 0}
+}
+func (m *RateLimit_TokenBucket) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RateLimit_TokenBucket) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RateLimit_TokenBucket.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RateLimit_TokenBucket) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RateLimit_TokenBucket.Merge(m, src)
+}
+func (m *RateLimit_TokenBucket) XXX_Size() int {
+	return m.Size()
+}
+func (m *RateLimit_TokenBucket) XXX_DiscardUnknown() {
+	xxx_messageInfo_RateLimit_TokenBucket.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RateLimit_TokenBucket proto.InternalMessageInfo
+
+func (m *RateLimit_TokenBucket) GetMaxTokens() uint32 {
+	if m != nil {
+		return m.MaxTokens
+	}
+	return 0
+}
+
+func (m *RateLimit_TokenBucket) GetTokensPerFill() uint32 {
+	if m != nil {
+		return m.TokensPerFill
+	}
+	return 0
+}
+
+func (m *RateLimit_TokenBucket) GetFillInterval() *types.Duration {
+	if m != nil {
+		return m.FillInterval
+	}
+	return nil
+}
+
+// Local rate limit descriptor configuration.
+type RateLimit_LocalDescriptor struct {
+	// Descriptor entry match.
+	Entries []*RateLimit_LocalDescriptor_Entry `protobuf:"bytes,1,rep,name=entries,proto3" json:"entries,omitempty"`
+	// Specifies the token bucket for matching descriptors.
+	TokenBucket          *RateLimit_TokenBucket `protobuf:"bytes,2,opt,name=token_bucket,json=tokenBucket,proto3" json:"token_bucket,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}               `json:"-"`
+	XXX_unrecognized     []byte                 `json:"-"`
+	XXX_sizecache        int32                  `json:"-"`
+}
+
+func (m *RateLimit_LocalDescriptor) Reset()         { *m = RateLimit_LocalDescriptor{} }
+func (m *RateLimit_LocalDescriptor) String() string { return proto.CompactTextString(m) }
+func (*RateLimit_LocalDescriptor) ProtoMessage()    {}
+func (*RateLimit_LocalDescriptor) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e85a9a4fa9c17a22, []int{3, 1}
+}
+func (m *RateLimit_LocalDescriptor) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RateLimit_LocalDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RateLimit_LocalDescriptor.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RateLimit_LocalDescriptor) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RateLimit_LocalDescriptor.Merge(m, src)
+}
+func (m *RateLimit_LocalDescriptor) XXX_Size() int {
+	return m.Size()
+}
+func (m *RateLimit_LocalDescriptor) XXX_DiscardUnknown() {
+	xxx_messageInfo_RateLimit_LocalDescriptor.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RateLimit_LocalDescriptor proto.InternalMessageInfo
+
+func (m *RateLimit_LocalDescriptor) GetEntries() []*RateLimit_LocalDescriptor_Entry {
+	if m != nil {
+		return m.Entries
+	}
+	return nil
+}
+
+func (m *RateLimit_LocalDescriptor) GetTokenBucket() *RateLimit_TokenBucket {
+	if m != nil {
+		return m.TokenBucket
+	}
+	return nil
+}
+
+// Descriptor entry match.
+type RateLimit_LocalDescriptor_Entry struct {
+	Key                  string   `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	Value                string   `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *RateLimit_LocalDescriptor_Entry) Reset()         { *m = RateLimit_LocalDescriptor_Entry{} }
+func (m *RateLimit_LocalDescriptor_Entry) String() string { return proto.CompactTextString(m) }
+func (*RateLimit_LocalDescriptor_Entry) ProtoMessage()    {}
+func (*RateLimit_LocalDescriptor_Entry) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e85a9a4fa9c17a22, []int{3, 1, 0}
+}
+func (m *RateLimit_LocalDescriptor_Entry) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RateLimit_LocalDescriptor_Entry) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RateLimit_LocalDescriptor_Entry.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RateLimit_LocalDescriptor_Entry) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RateLimit_LocalDescriptor_Entry.Merge(m, src)
+}
+func (m *RateLimit_LocalDescriptor_Entry) XXX_Size() int {
+	return m.Size()
+}
+func (m *RateLimit_LocalDescriptor_Entry) XXX_DiscardUnknown() {
+	xxx_messageInfo_RateLimit_LocalDescriptor_Entry.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RateLimit_LocalDescriptor_Entry proto.InternalMessageInfo
+
+func (m *RateLimit_LocalDescriptor_Entry) GetKey() string {
+	if m != nil {
+		return m.Key
+	}
+	return ""
+}
+
+func (m *RateLimit_LocalDescriptor_Entry) GetValue() string {
+	if m != nil {
+		return m.Value
+	}
+	return ""
+}
+
+// Local rate limit enforcement.
+type RateLimit_Local struct {
+	// The token bucket configuration to use for rate limiting requests that
+	// are processed by this filter. Each request processed by the filter
+	// consumes a single token. If the token is available, the request will be
+	// allowed. If no tokens are available, the request will receive 429.
+	TokenBucket *RateLimit_TokenBucket `protobuf:"bytes,1,opt,name=token_bucket,json=tokenBucket,proto3" json:"token_bucket,omitempty"`
+	// The rate limit descriptor list to use in the local rate limit to
+	// override on. The rate limit descriptor is selected by the first full
+	// match from the request descriptors. The descriptors token bucket fill
+	// interval must be a multiple of the global fill interval.
+	Descriptors          []*RateLimit_LocalDescriptor `protobuf:"bytes,2,rep,name=descriptors,proto3" json:"descriptors,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                     `json:"-"`
+	XXX_unrecognized     []byte                       `json:"-"`
+	XXX_sizecache        int32                        `json:"-"`
+}
+
+func (m *RateLimit_Local) Reset()         { *m = RateLimit_Local{} }
+func (m *RateLimit_Local) String() string { return proto.CompactTextString(m) }
+func (*RateLimit_Local) ProtoMessage()    {}
+func (*RateLimit_Local) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e85a9a4fa9c17a22, []int{3, 2}
+}
+func (m *RateLimit_Local) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RateLimit_Local) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RateLimit_Local.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RateLimit_Local) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RateLimit_Local.Merge(m, src)
+}
+func (m *RateLimit_Local) XXX_Size() int {
+	return m.Size()
+}
+func (m *RateLimit_Local) XXX_DiscardUnknown() {
+	xxx_messageInfo_RateLimit_Local.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RateLimit_Local proto.InternalMessageInfo
+
+func (m *RateLimit_Local) GetTokenBucket() *RateLimit_TokenBucket {
+	if m != nil {
+		return m.TokenBucket
+	}
+	return nil
+}
+
+func (m *RateLimit_Local) GetDescriptors() []*RateLimit_LocalDescriptor {
+	if m != nil {
+		return m.Descriptors
+	}
+	return nil
+}
+
+// Rate limit descriptor specifies the descriptors consisting of multiple actions.
+type RateLimitDescriptor struct {
+	// Rate limit entries specify an ordered list of string values composing the descriptor.
+	// The order of the entries matters, as they are processed sequentially. If an entry fails
+	// to be computed, no descriptor is generated.
+	Entries              []*RateLimitDescriptor_Entry `protobuf:"bytes,1,rep,name=entries,proto3" json:"entries,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                     `json:"-"`
+	XXX_unrecognized     []byte                       `json:"-"`
+	XXX_sizecache        int32                        `json:"-"`
+}
+
+func (m *RateLimitDescriptor) Reset()         { *m = RateLimitDescriptor{} }
+func (m *RateLimitDescriptor) String() string { return proto.CompactTextString(m) }
+func (*RateLimitDescriptor) ProtoMessage()    {}
+func (*RateLimitDescriptor) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e85a9a4fa9c17a22, []int{4}
+}
+func (m *RateLimitDescriptor) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RateLimitDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RateLimitDescriptor.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RateLimitDescriptor) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RateLimitDescriptor.Merge(m, src)
+}
+func (m *RateLimitDescriptor) XXX_Size() int {
+	return m.Size()
+}
+func (m *RateLimitDescriptor) XXX_DiscardUnknown() {
+	xxx_messageInfo_RateLimitDescriptor.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RateLimitDescriptor proto.InternalMessageInfo
+
+func (m *RateLimitDescriptor) GetEntries() []*RateLimitDescriptor_Entry {
+	if m != nil {
+		return m.Entries
+	}
+	return nil
+}
+
+// Descriptor entry.
+type RateLimitDescriptor_Entry struct {
+	// The key to use in the descriptor entry.
+	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	// If set to true, skip the entry when the evaluation fails or when the header is missing.
+	// By default, the entire descriptor is not produced.
+	SkipIfError bool `protobuf:"varint,2,opt,name=skip_if_error,json=skipIfError,proto3" json:"skip_if_error,omitempty"`
+	// Types that are valid to be assigned to EntrySpecifier:
+	//	*RateLimitDescriptor_Entry_RequestHeader
+	//	*RateLimitDescriptor_Entry_Expression
+	EntrySpecifier       isRateLimitDescriptor_Entry_EntrySpecifier `protobuf_oneof:"entry_specifier"`
+	XXX_NoUnkeyedLiteral struct{}                                   `json:"-"`
+	XXX_unrecognized     []byte                                     `json:"-"`
+	XXX_sizecache        int32                                      `json:"-"`
+}
+
+func (m *RateLimitDescriptor_Entry) Reset()         { *m = RateLimitDescriptor_Entry{} }
+func (m *RateLimitDescriptor_Entry) String() string { return proto.CompactTextString(m) }
+func (*RateLimitDescriptor_Entry) ProtoMessage()    {}
+func (*RateLimitDescriptor_Entry) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e85a9a4fa9c17a22, []int{4, 0}
+}
+func (m *RateLimitDescriptor_Entry) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RateLimitDescriptor_Entry) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RateLimitDescriptor_Entry.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RateLimitDescriptor_Entry) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RateLimitDescriptor_Entry.Merge(m, src)
+}
+func (m *RateLimitDescriptor_Entry) XXX_Size() int {
+	return m.Size()
+}
+func (m *RateLimitDescriptor_Entry) XXX_DiscardUnknown() {
+	xxx_messageInfo_RateLimitDescriptor_Entry.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RateLimitDescriptor_Entry proto.InternalMessageInfo
+
+type isRateLimitDescriptor_Entry_EntrySpecifier interface {
+	isRateLimitDescriptor_Entry_EntrySpecifier()
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type RateLimitDescriptor_Entry_RequestHeader struct {
+	RequestHeader string `protobuf:"bytes,3,opt,name=request_header,json=requestHeader,proto3,oneof" json:"request_header,omitempty"`
+}
+type RateLimitDescriptor_Entry_Expression struct {
+	Expression string `protobuf:"bytes,4,opt,name=expression,proto3,oneof" json:"expression,omitempty"`
+}
+
+func (*RateLimitDescriptor_Entry_RequestHeader) isRateLimitDescriptor_Entry_EntrySpecifier() {}
+func (*RateLimitDescriptor_Entry_Expression) isRateLimitDescriptor_Entry_EntrySpecifier()    {}
+
+func (m *RateLimitDescriptor_Entry) GetEntrySpecifier() isRateLimitDescriptor_Entry_EntrySpecifier {
+	if m != nil {
+		return m.EntrySpecifier
+	}
+	return nil
+}
+
+func (m *RateLimitDescriptor_Entry) GetKey() string {
+	if m != nil {
+		return m.Key
+	}
+	return ""
+}
+
+func (m *RateLimitDescriptor_Entry) GetSkipIfError() bool {
+	if m != nil {
+		return m.SkipIfError
+	}
+	return false
+}
+
+func (m *RateLimitDescriptor_Entry) GetRequestHeader() string {
+	if x, ok := m.GetEntrySpecifier().(*RateLimitDescriptor_Entry_RequestHeader); ok {
+		return x.RequestHeader
+	}
+	return ""
+}
+
+func (m *RateLimitDescriptor_Entry) GetExpression() string {
+	if x, ok := m.GetEntrySpecifier().(*RateLimitDescriptor_Entry_Expression); ok {
+		return x.Expression
+	}
+	return ""
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*RateLimitDescriptor_Entry) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*RateLimitDescriptor_Entry_RequestHeader)(nil),
+		(*RateLimitDescriptor_Entry_Expression)(nil),
+	}
+}
+
 // Describes the delegate VirtualService.
 // The following routing rules forward the traffic to `/productpage` by a delegate VirtualService named `productpage`,
 // forward the traffic to `/reviews` by a delegate VirtualService named `reviews`.
@@ -961,7 +1554,7 @@ func (m *Delegate) Reset()         { *m = Delegate{} }
 func (m *Delegate) String() string { return proto.CompactTextString(m) }
 func (*Delegate) ProtoMessage()    {}
 func (*Delegate) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{3}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{5}
 }
 func (m *Delegate) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1089,7 +1682,7 @@ func (m *Headers) Reset()         { *m = Headers{} }
 func (m *Headers) String() string { return proto.CompactTextString(m) }
 func (*Headers) ProtoMessage()    {}
 func (*Headers) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{4}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{6}
 }
 func (m *Headers) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1150,7 +1743,7 @@ func (m *Headers_HeaderOperations) Reset()         { *m = Headers_HeaderOperatio
 func (m *Headers_HeaderOperations) String() string { return proto.CompactTextString(m) }
 func (*Headers_HeaderOperations) ProtoMessage()    {}
 func (*Headers_HeaderOperations) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{4, 0}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{6, 0}
 }
 func (m *Headers_HeaderOperations) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1281,7 +1874,7 @@ func (m *TLSRoute) Reset()         { *m = TLSRoute{} }
 func (m *TLSRoute) String() string { return proto.CompactTextString(m) }
 func (*TLSRoute) ProtoMessage()    {}
 func (*TLSRoute) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{5}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{7}
 }
 func (m *TLSRoute) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1386,7 +1979,7 @@ func (m *TCPRoute) Reset()         { *m = TCPRoute{} }
 func (m *TCPRoute) String() string { return proto.CompactTextString(m) }
 func (*TCPRoute) ProtoMessage()    {}
 func (*TCPRoute) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{6}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{8}
 }
 func (m *TCPRoute) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1593,7 +2186,7 @@ func (m *HTTPMatchRequest) Reset()         { *m = HTTPMatchRequest{} }
 func (m *HTTPMatchRequest) String() string { return proto.CompactTextString(m) }
 func (*HTTPMatchRequest) ProtoMessage()    {}
 func (*HTTPMatchRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{7}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{9}
 }
 func (m *HTTPMatchRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1872,7 +2465,7 @@ func (m *HTTPRouteDestination) Reset()         { *m = HTTPRouteDestination{} }
 func (m *HTTPRouteDestination) String() string { return proto.CompactTextString(m) }
 func (*HTTPRouteDestination) ProtoMessage()    {}
 func (*HTTPRouteDestination) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{8}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{10}
 }
 func (m *HTTPRouteDestination) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1940,7 +2533,7 @@ func (m *RouteDestination) Reset()         { *m = RouteDestination{} }
 func (m *RouteDestination) String() string { return proto.CompactTextString(m) }
 func (*RouteDestination) ProtoMessage()    {}
 func (*RouteDestination) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{9}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{11}
 }
 func (m *RouteDestination) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2019,7 +2612,7 @@ func (m *L4MatchAttributes) Reset()         { *m = L4MatchAttributes{} }
 func (m *L4MatchAttributes) String() string { return proto.CompactTextString(m) }
 func (*L4MatchAttributes) ProtoMessage()    {}
 func (*L4MatchAttributes) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{10}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{12}
 }
 func (m *L4MatchAttributes) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2127,7 +2720,7 @@ func (m *TLSMatchAttributes) Reset()         { *m = TLSMatchAttributes{} }
 func (m *TLSMatchAttributes) String() string { return proto.CompactTextString(m) }
 func (*TLSMatchAttributes) ProtoMessage()    {}
 func (*TLSMatchAttributes) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{11}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{13}
 }
 func (m *TLSMatchAttributes) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2266,7 +2859,7 @@ func (m *HTTPRedirect) Reset()         { *m = HTTPRedirect{} }
 func (m *HTTPRedirect) String() string { return proto.CompactTextString(m) }
 func (*HTTPRedirect) ProtoMessage()    {}
 func (*HTTPRedirect) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{12}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{14}
 }
 func (m *HTTPRedirect) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2384,7 +2977,7 @@ func (m *HTTPRewrite) Reset()         { *m = HTTPRewrite{} }
 func (m *HTTPRewrite) String() string { return proto.CompactTextString(m) }
 func (*HTTPRewrite) ProtoMessage()    {}
 func (*HTTPRewrite) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{13}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{15}
 }
 func (m *HTTPRewrite) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2444,7 +3037,7 @@ func (m *StringMatch) Reset()         { *m = StringMatch{} }
 func (m *StringMatch) String() string { return proto.CompactTextString(m) }
 func (*StringMatch) ProtoMessage()    {}
 func (*StringMatch) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{14}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{16}
 }
 func (m *StringMatch) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2607,7 +3200,7 @@ func (m *HTTPRetry) Reset()         { *m = HTTPRetry{} }
 func (m *HTTPRetry) String() string { return proto.CompactTextString(m) }
 func (*HTTPRetry) ProtoMessage()    {}
 func (*HTTPRetry) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{15}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{17}
 }
 func (m *HTTPRetry) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2763,7 +3356,7 @@ func (m *CorsPolicy) Reset()         { *m = CorsPolicy{} }
 func (m *CorsPolicy) String() string { return proto.CompactTextString(m) }
 func (*CorsPolicy) ProtoMessage()    {}
 func (*CorsPolicy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{16}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{18}
 }
 func (m *CorsPolicy) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2866,7 +3459,7 @@ func (m *HTTPFaultInjection) Reset()         { *m = HTTPFaultInjection{} }
 func (m *HTTPFaultInjection) String() string { return proto.CompactTextString(m) }
 func (*HTTPFaultInjection) ProtoMessage()    {}
 func (*HTTPFaultInjection) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{17}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{19}
 }
 func (m *HTTPFaultInjection) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2989,7 +3582,7 @@ func (m *HTTPFaultInjection_Delay) Reset()         { *m = HTTPFaultInjection_Del
 func (m *HTTPFaultInjection_Delay) String() string { return proto.CompactTextString(m) }
 func (*HTTPFaultInjection_Delay) ProtoMessage()    {}
 func (*HTTPFaultInjection_Delay) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{17, 0}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{19, 0}
 }
 func (m *HTTPFaultInjection_Delay) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3149,7 +3742,7 @@ func (m *HTTPFaultInjection_Abort) Reset()         { *m = HTTPFaultInjection_Abo
 func (m *HTTPFaultInjection_Abort) String() string { return proto.CompactTextString(m) }
 func (*HTTPFaultInjection_Abort) ProtoMessage()    {}
 func (*HTTPFaultInjection_Abort) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{17, 1}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{19, 1}
 }
 func (m *HTTPFaultInjection_Abort) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3256,7 +3849,7 @@ func (m *PortSelector) Reset()         { *m = PortSelector{} }
 func (m *PortSelector) String() string { return proto.CompactTextString(m) }
 func (*PortSelector) ProtoMessage()    {}
 func (*PortSelector) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{18}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{20}
 }
 func (m *PortSelector) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3304,7 +3897,7 @@ func (m *Percent) Reset()         { *m = Percent{} }
 func (m *Percent) String() string { return proto.CompactTextString(m) }
 func (*Percent) ProtoMessage()    {}
 func (*Percent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85a9a4fa9c17a22, []int{19}
+	return fileDescriptor_e85a9a4fa9c17a22, []int{21}
 }
 func (m *Percent) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3344,6 +3937,13 @@ func init() {
 	proto.RegisterType((*VirtualService)(nil), "istio.networking.v1alpha3.VirtualService")
 	proto.RegisterType((*Destination)(nil), "istio.networking.v1alpha3.Destination")
 	proto.RegisterType((*HTTPRoute)(nil), "istio.networking.v1alpha3.HTTPRoute")
+	proto.RegisterType((*RateLimit)(nil), "istio.networking.v1alpha3.RateLimit")
+	proto.RegisterType((*RateLimit_TokenBucket)(nil), "istio.networking.v1alpha3.RateLimit.TokenBucket")
+	proto.RegisterType((*RateLimit_LocalDescriptor)(nil), "istio.networking.v1alpha3.RateLimit.LocalDescriptor")
+	proto.RegisterType((*RateLimit_LocalDescriptor_Entry)(nil), "istio.networking.v1alpha3.RateLimit.LocalDescriptor.Entry")
+	proto.RegisterType((*RateLimit_Local)(nil), "istio.networking.v1alpha3.RateLimit.Local")
+	proto.RegisterType((*RateLimitDescriptor)(nil), "istio.networking.v1alpha3.RateLimitDescriptor")
+	proto.RegisterType((*RateLimitDescriptor_Entry)(nil), "istio.networking.v1alpha3.RateLimitDescriptor.Entry")
 	proto.RegisterType((*Delegate)(nil), "istio.networking.v1alpha3.Delegate")
 	proto.RegisterType((*Headers)(nil), "istio.networking.v1alpha3.Headers")
 	proto.RegisterType((*Headers_HeaderOperations)(nil), "istio.networking.v1alpha3.Headers.HeaderOperations")
@@ -3379,132 +3979,153 @@ func init() {
 }
 
 var fileDescriptor_e85a9a4fa9c17a22 = []byte{
-	// 1989 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x59, 0x4f, 0x73, 0x1b, 0x49,
-	0x15, 0x8f, 0xfe, 0x4b, 0x4f, 0x92, 0x2d, 0x77, 0x42, 0x32, 0x31, 0xa9, 0xc4, 0x4c, 0x48, 0xf0,
-	0x16, 0xac, 0x5c, 0xd8, 0x40, 0xa5, 0x20, 0x9b, 0xe0, 0x3f, 0xd9, 0x75, 0x4c, 0xb2, 0x36, 0x6d,
-	0xef, 0x52, 0xc5, 0x65, 0x6a, 0x34, 0xf3, 0x2c, 0x0d, 0x19, 0x4d, 0x4f, 0x7a, 0x7a, 0x6c, 0xab,
-	0xf8, 0x00, 0x14, 0x27, 0x8a, 0x13, 0x17, 0x6e, 0xf0, 0x29, 0xf8, 0x04, 0x1c, 0x39, 0x71, 0xa4,
-	0xb6, 0x72, 0xe0, 0xc0, 0x81, 0x8f, 0x40, 0x51, 0xdd, 0x3d, 0x23, 0x8d, 0x2c, 0x47, 0x7f, 0x42,
-	0xc2, 0x9e, 0xac, 0x7e, 0xfd, 0x7e, 0xbf, 0xee, 0x79, 0xaf, 0xdf, 0x9f, 0x6e, 0xc3, 0x47, 0x01,
-	0x8a, 0x73, 0xc6, 0x5f, 0x79, 0x41, 0x77, 0xe3, 0xec, 0xfb, 0xb6, 0x1f, 0xf6, 0xec, 0xad, 0x8d,
-	0x33, 0x8f, 0x8b, 0xd8, 0xf6, 0xad, 0x08, 0xf9, 0x99, 0xe7, 0x60, 0x3b, 0xe4, 0x4c, 0x30, 0x72,
-	0xdb, 0x8b, 0x84, 0xc7, 0xda, 0x23, 0x40, 0x3b, 0x05, 0xac, 0xde, 0xeb, 0x32, 0xd6, 0xf5, 0x71,
-	0xc3, 0x0e, 0xbd, 0x8d, 0x53, 0x0f, 0x7d, 0xd7, 0xea, 0x60, 0xcf, 0x3e, 0xf3, 0x18, 0xd7, 0xd8,
-	0xd5, 0xbb, 0x89, 0x82, 0x1a, 0x75, 0xe2, 0xd3, 0x0d, 0x37, 0xe6, 0xb6, 0xf0, 0x58, 0xf0, 0xb6,
-	0xf9, 0x73, 0x6e, 0x87, 0x21, 0xf2, 0x48, 0xcf, 0x9b, 0xbf, 0xc9, 0xc3, 0xd2, 0x97, 0x7a, 0x57,
-	0xc7, 0x7a, 0x53, 0xe4, 0x06, 0x94, 0x7a, 0x2c, 0x12, 0x91, 0x91, 0x5b, 0x2b, 0xac, 0xd7, 0xa8,
-	0x1e, 0x90, 0x55, 0xa8, 0x76, 0x6d, 0x81, 0xe7, 0xf6, 0x20, 0x32, 0xf2, 0x6a, 0x62, 0x38, 0x26,
-	0x8f, 0xa0, 0xd8, 0x13, 0x22, 0x34, 0x0a, 0x6b, 0x85, 0xf5, 0xfa, 0xe6, 0xb7, 0xdb, 0x6f, 0xfd,
-	0x9e, 0xf6, 0xfe, 0xc9, 0xc9, 0x11, 0x65, 0xb1, 0x40, 0xaa, 0x10, 0xe4, 0x87, 0x50, 0x10, 0x7e,
-	0x64, 0x94, 0x14, 0xf0, 0xfe, 0x14, 0xe0, 0xc9, 0x8b, 0x63, 0x8d, 0x93, 0xfa, 0x0a, 0xe6, 0x84,
-	0x46, 0x71, 0x36, 0x6c, 0xf7, 0x28, 0x85, 0x39, 0x21, 0xf9, 0x26, 0xd4, 0xf0, 0x22, 0x64, 0x5c,
-	0x58, 0x82, 0x19, 0x65, 0xfd, 0x11, 0x5a, 0x70, 0xc2, 0xcc, 0x5f, 0x43, 0x7d, 0x0f, 0x23, 0xe1,
-	0x05, 0xca, 0x7c, 0xe4, 0x16, 0x14, 0xe5, 0x87, 0x1b, 0xb9, 0xb5, 0xdc, 0x7a, 0x6d, 0xa7, 0xf0,
-	0xd5, 0x76, 0x9e, 0x2a, 0x01, 0xb9, 0x09, 0xe5, 0x28, 0xee, 0x44, 0x28, 0x8c, 0xbc, 0x9c, 0xa2,
-	0xc9, 0x88, 0xfc, 0x04, 0x8a, 0x92, 0xc9, 0x28, 0xac, 0xe5, 0xd6, 0xeb, 0x9b, 0xdf, 0x99, 0xb2,
-	0xa9, 0x23, 0xc6, 0xc5, 0x31, 0xfa, 0xe8, 0x08, 0xc6, 0xa9, 0x02, 0x99, 0x7f, 0xac, 0x42, 0x6d,
-	0x68, 0x1b, 0x42, 0xa0, 0x18, 0xd8, 0x7d, 0x34, 0x56, 0xd4, 0x02, 0xea, 0x37, 0xd9, 0x86, 0x52,
-	0xdf, 0x16, 0x4e, 0x4f, 0x79, 0xa5, 0xbe, 0xf9, 0xdd, 0x19, 0x46, 0x7e, 0x29, 0x75, 0x29, 0xbe,
-	0x8e, 0x31, 0x12, 0x54, 0x23, 0xc9, 0x33, 0x28, 0x71, 0xc9, 0xaf, 0xfc, 0x57, 0xdf, 0xdc, 0x98,
-	0xc7, 0x4f, 0x19, 0x93, 0x50, 0x8d, 0x26, 0xbb, 0x50, 0xe5, 0xe8, 0x7a, 0x1c, 0x9d, 0x79, 0x3e,
-	0x56, 0x31, 0x25, 0xea, 0x74, 0x08, 0x24, 0x4f, 0xa1, 0xea, 0xa2, 0x8f, 0xf2, 0x08, 0x19, 0x37,
-	0x14, 0xc9, 0x34, 0x37, 0xee, 0x25, 0xaa, 0x74, 0x08, 0x22, 0x3f, 0x85, 0x0a, 0xc7, 0x73, 0xee,
-	0x09, 0x34, 0x8a, 0x0a, 0xff, 0x70, 0xe6, 0x26, 0x94, 0x36, 0x4d, 0x61, 0x64, 0x0b, 0x2a, 0xc2,
-	0xeb, 0x23, 0x8b, 0x85, 0x51, 0x56, 0x0c, 0xb7, 0xdb, 0x3a, 0x58, 0xda, 0x69, 0xb0, 0xb4, 0xf7,
-	0x92, 0x60, 0xa2, 0xa9, 0x26, 0x79, 0x22, 0x97, 0x15, 0xdc, 0xc3, 0xc8, 0xa8, 0x28, 0xd0, 0xcc,
-	0xd3, 0x8e, 0x82, 0x0f, 0x68, 0x0a, 0x22, 0xbb, 0x50, 0x3a, 0xb5, 0x63, 0x5f, 0x18, 0x55, 0x85,
-	0xfe, 0x78, 0x06, 0xfa, 0x53, 0xa9, 0xfb, 0x3c, 0xf8, 0x15, 0x3a, 0xda, 0x03, 0x0a, 0x4b, 0x9e,
-	0x40, 0xb9, 0xef, 0x71, 0xce, 0xb8, 0x51, 0x9b, 0xf9, 0xe9, 0x59, 0x07, 0x26, 0x28, 0xf2, 0x19,
-	0x2c, 0xe9, 0x5f, 0x56, 0x88, 0xdc, 0xc1, 0x40, 0x18, 0x44, 0xf1, 0xdc, 0x99, 0x30, 0xc0, 0x17,
-	0xcf, 0x03, 0xb1, 0xb5, 0xf9, 0xa5, 0xed, 0xc7, 0xb8, 0x93, 0x37, 0x72, 0xb4, 0xa9, 0x71, 0x47,
-	0x1a, 0x46, 0x0e, 0x61, 0x65, 0x9c, 0xc8, 0xee, 0xa2, 0x71, 0x5d, 0x71, 0x99, 0xd3, 0x02, 0x40,
-	0x2b, 0xd3, 0xd6, 0x18, 0x9b, 0xdd, 0x45, 0xf2, 0x29, 0xd4, 0x1d, 0xc6, 0x23, 0x2b, 0x64, 0xbe,
-	0xe7, 0x0c, 0x0c, 0x50, 0x54, 0x0f, 0xa6, 0x50, 0xed, 0x32, 0x1e, 0x1d, 0x29, 0x65, 0x0a, 0xce,
-	0xf0, 0x37, 0x79, 0x0c, 0x95, 0x1e, 0xda, 0x2e, 0xf2, 0xc8, 0x68, 0xcd, 0xdc, 0xce, 0xbe, 0xd6,
-	0xa4, 0x29, 0xe4, 0xa0, 0x58, 0x2d, 0xb5, 0xca, 0x07, 0xc5, 0x6a, 0xbd, 0xd5, 0xa2, 0x2b, 0xe7,
-	0xd8, 0x89, 0x98, 0xf3, 0x0a, 0x85, 0x15, 0x87, 0x5d, 0x6e, 0xbb, 0x48, 0x97, 0x64, 0x06, 0x0d,
-	0x5c, 0x2b, 0x51, 0xa7, 0xb7, 0x38, 0xf6, 0xd9, 0x19, 0x5a, 0x1c, 0xa3, 0x90, 0x05, 0x11, 0x8e,
-	0x26, 0x12, 0xc5, 0x89, 0x89, 0x9b, 0x43, 0x84, 0x0a, 0xd0, 0x91, 0x7c, 0x08, 0x18, 0x93, 0x9b,
-	0x8f, 0xa1, 0x9a, 0x86, 0xc0, 0x30, 0x39, 0xe4, 0x32, 0xc9, 0xe1, 0x0e, 0xd4, 0xe4, 0xdf, 0x28,
-	0xb4, 0x1d, 0x4c, 0xd2, 0xd2, 0x48, 0x60, 0xfe, 0xb3, 0x00, 0x95, 0xe4, 0x1b, 0xc9, 0x4b, 0x79,
-	0x7e, 0x15, 0xb9, 0x22, 0xa8, 0x6f, 0x6e, 0xcd, 0x36, 0x4c, 0xf2, 0xf7, 0x30, 0x44, 0x1d, 0x0d,
-	0x11, 0x4d, 0x39, 0xc8, 0xa1, 0xcc, 0x05, 0xfa, 0xe3, 0xd4, 0xba, 0xef, 0xc8, 0x37, 0x24, 0x59,
-	0xfd, 0x4b, 0x1e, 0x5a, 0x97, 0xa7, 0xc9, 0xe7, 0x50, 0x90, 0xf9, 0x56, 0x67, 0xbe, 0xc7, 0xef,
-	0xb0, 0x40, 0xfb, 0x18, 0xc5, 0xb3, 0x40, 0x06, 0xa2, 0x24, 0x92, 0x7c, 0xb6, 0xeb, 0x26, 0x69,
-	0xf0, 0x9d, 0xf8, 0xb6, 0x5d, 0x37, 0xe1, 0xb3, 0x5d, 0x57, 0x96, 0x04, 0xed, 0x50, 0x55, 0x01,
-	0x6b, 0x34, 0x19, 0xad, 0xfe, 0x08, 0xaa, 0xe9, 0xc2, 0xa4, 0x05, 0x85, 0x57, 0x38, 0x48, 0xbc,
-	0x26, 0x7f, 0xca, 0x3a, 0x7b, 0x26, 0x03, 0x2b, 0x71, 0x98, 0x1e, 0xfc, 0x38, 0xff, 0x28, 0x27,
-	0x71, 0xe9, 0x02, 0x8b, 0xe0, 0xcc, 0x3f, 0xe4, 0xa0, 0x9a, 0x16, 0x4a, 0xb2, 0x3f, 0x5e, 0x30,
-	0x3e, 0x9e, 0x5e, 0x5c, 0x55, 0xbd, 0xd8, 0x16, 0x82, 0x7b, 0x9d, 0x58, 0x60, 0xa4, 0x0b, 0x5e,
-	0x52, 0x37, 0xb6, 0xc7, 0xeb, 0xc6, 0xb4, 0xd2, 0xf3, 0x96, 0x9a, 0x61, 0xfe, 0x5e, 0xee, 0x2c,
-	0xa9, 0xc5, 0x64, 0x67, 0x7c, 0x67, 0xdf, 0x9b, 0xc2, 0xf7, 0xe2, 0x07, 0x97, 0x36, 0xf6, 0x1e,
-	0xf7, 0xf4, 0xe7, 0x1a, 0xb4, 0x2e, 0x97, 0xca, 0x61, 0x74, 0xd5, 0x33, 0xd1, 0xf5, 0x08, 0x0a,
-	0x31, 0xf7, 0x92, 0x78, 0x99, 0x96, 0x6b, 0x8f, 0x05, 0xf7, 0x82, 0xae, 0xe6, 0x93, 0x10, 0x99,
-	0xa8, 0x23, 0xa7, 0x87, 0xfd, 0x34, 0x38, 0xe6, 0x05, 0x27, 0x28, 0x95, 0xe8, 0x51, 0xf4, 0x98,
-	0x9b, 0x14, 0xda, 0xb9, 0xf1, 0x1a, 0x45, 0xf6, 0xa0, 0x66, 0xc7, 0xa2, 0xc7, 0xb8, 0x27, 0x06,
-	0x73, 0x94, 0xc9, 0x2c, 0xc5, 0x08, 0x48, 0xe8, 0x28, 0x99, 0xea, 0x46, 0xed, 0xd1, 0x02, 0xcd,
-	0x47, 0x1a, 0x43, 0x3a, 0x5c, 0x52, 0x22, 0x69, 0x67, 0xd5, 0x2d, 0xc9, 0xca, 0xdb, 0xd4, 0x4d,
-	0x10, 0xe9, 0x40, 0x33, 0x62, 0x31, 0x77, 0xd0, 0xf2, 0xed, 0x0e, 0xfa, 0xb2, 0xc2, 0xca, 0xd5,
-	0x3e, 0x59, 0x64, 0xb5, 0x63, 0x45, 0xf0, 0x42, 0xe1, 0xf5, 0x92, 0x8d, 0x28, 0x23, 0x1a, 0x6b,
-	0x63, 0xab, 0x97, 0xda, 0x58, 0x0b, 0x1a, 0xaf, 0x63, 0xe4, 0x03, 0x2b, 0xb4, 0xb9, 0xdd, 0x8f,
-	0x8c, 0xda, 0xec, 0xfc, 0x70, 0x79, 0xf9, 0x9f, 0x4b, 0xfc, 0x91, 0x82, 0xeb, 0xd5, 0xeb, 0xaf,
-	0x47, 0x12, 0xf2, 0x10, 0x96, 0xbd, 0x6e, 0xc0, 0x38, 0x5a, 0x31, 0xf7, 0x2c, 0xc7, 0x8e, 0x50,
-	0x55, 0xb8, 0x2a, 0x6d, 0x6a, 0xf1, 0x17, 0xdc, 0xdb, 0xb5, 0x23, 0x24, 0x3d, 0x58, 0x3e, 0xf7,
-	0x44, 0x8f, 0xc5, 0xc3, 0x0a, 0x60, 0x34, 0xd4, 0x5e, 0x9e, 0x2e, 0xb2, 0x97, 0x5f, 0x68, 0x8a,
-	0x31, 0xfb, 0x2f, 0x9d, 0x8f, 0x09, 0xc9, 0x47, 0xd0, 0x4a, 0x4c, 0x3e, 0xaa, 0x1f, 0x4d, 0x75,
-	0xf4, 0x97, 0xb5, 0xfc, 0xf3, 0x54, 0xbc, 0xda, 0x81, 0x46, 0x96, 0xea, 0x8a, 0xc4, 0xf4, 0x38,
-	0x9b, 0x98, 0xe6, 0x3f, 0x69, 0x99, 0xc4, 0xf7, 0x14, 0x56, 0x26, 0x1c, 0xb8, 0x50, 0xe6, 0x3c,
-	0x85, 0xd6, 0x65, 0x17, 0x7c, 0x90, 0x8d, 0x7a, 0x70, 0xfd, 0x0a, 0xf3, 0x7e, 0x88, 0xa5, 0xcc,
-	0x3f, 0xe5, 0xe1, 0xc6, 0x55, 0xed, 0x38, 0x79, 0x09, 0x75, 0x77, 0x34, 0x9c, 0x23, 0x3d, 0x65,
-	0xc0, 0x3a, 0xbf, 0x67, 0xf1, 0xb2, 0x88, 0x9d, 0xa3, 0xd7, 0xed, 0xe9, 0x7b, 0x4d, 0x89, 0x26,
-	0xa3, 0x6c, 0x2b, 0x55, 0x79, 0x97, 0x56, 0xaa, 0xd0, 0xaa, 0xfc, 0x1f, 0x3a, 0xa4, 0x01, 0xb4,
-	0xbe, 0x26, 0x03, 0x99, 0xff, 0xca, 0xc3, 0xca, 0x44, 0x9d, 0x22, 0x1b, 0x70, 0x3d, 0x03, 0xb6,
-	0xa2, 0xb8, 0x13, 0xe0, 0xf0, 0x4e, 0x4d, 0x32, 0x53, 0xc7, 0x7a, 0x66, 0x98, 0x11, 0xf3, 0x99,
-	0x8c, 0x78, 0x7f, 0x98, 0x11, 0x35, 0x5e, 0x95, 0x81, 0x5a, 0x9a, 0xd2, 0x34, 0x92, 0x38, 0x97,
-	0xd3, 0xa6, 0xbe, 0x16, 0x3f, 0x59, 0xa4, 0xac, 0x2e, 0x94, 0x37, 0x4b, 0x97, 0xf2, 0xe6, 0x55,
-	0x49, 0xa4, 0x7c, 0x75, 0x12, 0xf9, 0x5f, 0x03, 0xdc, 0xfc, 0x4f, 0x1e, 0xc8, 0x64, 0xbb, 0x42,
-	0xd6, 0xa0, 0x16, 0x05, 0x9e, 0x95, 0x79, 0xb7, 0xd0, 0x0e, 0xac, 0x46, 0x81, 0xb7, 0xaf, 0xde,
-	0x2f, 0xde, 0xe2, 0x8f, 0xfc, 0x4c, 0x7f, 0x14, 0x32, 0xfe, 0x70, 0x2f, 0x9b, 0xba, 0x34, 0x33,
-	0x2d, 0x4f, 0x6e, 0x76, 0x21, 0x5b, 0x97, 0xe7, 0xb0, 0x75, 0xe5, 0xc3, 0xd8, 0xfa, 0xa0, 0x58,
-	0x2d, 0xb6, 0x4a, 0x74, 0xfc, 0x04, 0x9a, 0x0e, 0x34, 0xb2, 0x57, 0x7a, 0x49, 0x98, 0x36, 0x47,
-	0x35, 0xdd, 0xf4, 0xdc, 0xc9, 0x36, 0x1d, 0xc9, 0x65, 0x64, 0xd4, 0x4c, 0xdc, 0x87, 0x66, 0xfa,
-	0x08, 0x60, 0x39, 0xcc, 0xc5, 0xc4, 0xbe, 0x8d, 0x54, 0xb8, 0xcb, 0x5c, 0x34, 0x3f, 0x81, 0x7a,
-	0xe6, 0xca, 0xbe, 0xe8, 0x1a, 0x26, 0x42, 0x3d, 0x93, 0x4c, 0xc9, 0x4d, 0x28, 0xe1, 0x85, 0xed,
-	0x24, 0x6f, 0x39, 0xfb, 0xd7, 0xa8, 0x1e, 0x12, 0x03, 0xca, 0x21, 0xc7, 0x53, 0xef, 0x42, 0x33,
-	0xec, 0x5f, 0xa3, 0xc9, 0x58, 0x22, 0x38, 0x76, 0xf1, 0x42, 0xc7, 0x9b, 0x44, 0xa8, 0xe1, 0x4e,
-	0x03, 0x40, 0xb5, 0x9f, 0x96, 0x18, 0x84, 0x68, 0xfe, 0x23, 0x97, 0x3c, 0xda, 0xc8, 0x2b, 0x3e,
-	0xb9, 0x07, 0x55, 0x5b, 0x08, 0xec, 0x87, 0xea, 0x04, 0xe6, 0xd6, 0x4b, 0xc9, 0x09, 0x4c, 0x85,
-	0x64, 0x1b, 0x96, 0x43, 0xe4, 0x96, 0xe0, 0x03, 0x2b, 0x7d, 0x77, 0xc8, 0xcf, 0x7a, 0x77, 0x68,
-	0x86, 0xc8, 0x4f, 0xf8, 0xe0, 0x24, 0x79, 0x7d, 0xb8, 0x2d, 0xaf, 0x5b, 0x92, 0x80, 0x05, 0x49,
-	0x2a, 0x50, 0x0f, 0x0b, 0x83, 0xc3, 0x80, 0x50, 0xb8, 0xa5, 0xa7, 0x64, 0xe2, 0x14, 0x68, 0xf9,
-	0xcc, 0xb1, 0x7d, 0x4f, 0x78, 0x18, 0x25, 0x8d, 0xdf, 0xea, 0xc4, 0x2a, 0x3b, 0x8c, 0xf9, 0xea,
-	0x6a, 0x4f, 0xbf, 0xa1, 0xa0, 0x54, 0x21, 0x5f, 0x0c, 0x81, 0xe6, 0xbf, 0xf3, 0x00, 0xa3, 0x0b,
-	0x36, 0x79, 0x00, 0x0d, 0xdb, 0xf7, 0xd9, 0xb9, 0xc5, 0xb8, 0xd7, 0xf5, 0x82, 0x24, 0xce, 0xf2,
-	0x46, 0x8e, 0xd6, 0x95, 0xfc, 0x50, 0x89, 0xc9, 0xcf, 0xa0, 0x99, 0x55, 0x4b, 0xdb, 0xb8, 0x79,
-	0x4b, 0x5f, 0x23, 0xc3, 0x15, 0xc9, 0xe3, 0xa2, 0xc9, 0x74, 0x47, 0x9b, 0x06, 0xac, 0x56, 0x7a,
-	0xa9, 0x65, 0x23, 0xa5, 0xb4, 0x50, 0x15, 0x32, 0x4a, 0x69, 0xab, 0xf3, 0x00, 0x96, 0xf0, 0x22,
-	0x64, 0xa3, 0x1a, 0xa3, 0xf2, 0x64, 0x8d, 0x36, 0xb5, 0x34, 0x55, 0xdb, 0x84, 0x4a, 0xdf, 0xbe,
-	0xb0, 0xec, 0x2e, 0x1a, 0xa5, 0x59, 0xde, 0x29, 0xf7, 0xed, 0x8b, 0xed, 0x2e, 0x92, 0xcf, 0x60,
-	0x45, 0xaf, 0xef, 0x70, 0x74, 0x31, 0x10, 0x9e, 0xed, 0x47, 0xc9, 0x9b, 0xd2, 0x34, 0xab, 0xb7,
-	0x14, 0x68, 0x77, 0x84, 0x31, 0x7f, 0x57, 0x02, 0x32, 0xf9, 0xec, 0x43, 0x9e, 0x43, 0xc9, 0x45,
-	0xdf, 0x1e, 0xcc, 0x73, 0x65, 0x9f, 0x40, 0xb7, 0xf7, 0x24, 0x94, 0x6a, 0x06, 0x49, 0x65, 0x77,
-	0xd2, 0x32, 0xb3, 0x30, 0xd5, 0xb6, 0x84, 0x52, 0xcd, 0xb0, 0xfa, 0xdb, 0x3c, 0x94, 0x14, 0x37,
-	0xb9, 0x03, 0x95, 0xf4, 0x21, 0x49, 0x9f, 0x7c, 0x79, 0x26, 0x52, 0x11, 0xd9, 0x86, 0xfa, 0xa9,
-	0x77, 0x81, 0xae, 0xa5, 0xbf, 0x61, 0xd6, 0x99, 0x57, 0x61, 0xb3, 0x7f, 0x8d, 0x82, 0x02, 0xe9,
-	0x05, 0xf6, 0x61, 0x45, 0x7a, 0x29, 0xd0, 0x76, 0x4a, 0x88, 0x0a, 0x33, 0x88, 0xf6, 0xaf, 0xd1,
-	0x56, 0x06, 0xa5, 0x99, 0x76, 0x00, 0x32, 0x4f, 0x55, 0xa5, 0xb9, 0x9f, 0xaa, 0x32, 0xa8, 0x9d,
-	0x15, 0x58, 0xee, 0x09, 0x11, 0xea, 0x6d, 0xa8, 0x54, 0xb0, 0xfa, 0xf7, 0x1c, 0x94, 0x94, 0x71,
-	0xc8, 0x43, 0xa8, 0xab, 0xc9, 0x48, 0xd8, 0x22, 0x8e, 0x74, 0xab, 0x30, 0xfc, 0x24, 0x39, 0x73,
-	0xac, 0x26, 0xc8, 0xb7, 0xa0, 0xde, 0xe5, 0xa1, 0x93, 0xea, 0xa5, 0x89, 0x06, 0xa4, 0x70, 0xa4,
-	0x22, 0x01, 0x9b, 0x16, 0xaa, 0xb7, 0xbe, 0x62, 0xaa, 0xa2, 0x84, 0xcf, 0xd4, 0x4b, 0xde, 0xfb,
-	0xf8, 0x9c, 0x06, 0x80, 0x5a, 0x40, 0x7d, 0xc9, 0x41, 0xb1, 0x9a, 0x6b, 0xe5, 0x87, 0xce, 0x33,
-	0x37, 0xa1, 0x91, 0x7d, 0xae, 0x96, 0x4d, 0x50, 0x10, 0xf7, 0x3b, 0xc8, 0x95, 0xa7, 0x9b, 0x34,
-	0x19, 0x1d, 0x14, 0xab, 0xf9, 0x56, 0x41, 0xdf, 0x97, 0xcd, 0x7b, 0x50, 0x49, 0x1f, 0x08, 0x87,
-	0xc5, 0x45, 0x6a, 0xe7, 0x92, 0xe2, 0xb2, 0xd3, 0xfe, 0xeb, 0x9b, 0xbb, 0xb9, 0xbf, 0xbd, 0xb9,
-	0x9b, 0xfb, 0xea, 0xcd, 0xdd, 0xdc, 0x2f, 0xd7, 0xf4, 0x76, 0x3d, 0xa6, 0xfe, 0xcb, 0x71, 0xc5,
-	0xbf, 0x4d, 0x3a, 0x65, 0xe5, 0xdb, 0xad, 0xff, 0x06, 0x00, 0x00, 0xff, 0xff, 0xc4, 0xf5, 0xff,
-	0x26, 0x54, 0x19, 0x00, 0x00,
+	// 2324 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x59, 0xcd, 0x73, 0x1b, 0x4b,
+	0x11, 0xb7, 0x3e, 0x56, 0x1f, 0x2d, 0xc9, 0x96, 0x27, 0x79, 0xc9, 0x46, 0x84, 0xc4, 0x28, 0x24,
+	0x2f, 0x0f, 0x78, 0x32, 0x38, 0x81, 0x4a, 0x3d, 0xf2, 0x12, 0x2c, 0x3b, 0x79, 0x8a, 0x71, 0x12,
+	0x33, 0xf6, 0x0b, 0x55, 0x5c, 0xb6, 0x56, 0xab, 0xb1, 0x34, 0x64, 0xb5, 0xbb, 0x99, 0x1d, 0xd9,
+	0x52, 0x71, 0xe4, 0x40, 0x71, 0xa2, 0xa8, 0xa2, 0x8a, 0x03, 0x47, 0xf8, 0x13, 0x38, 0xf1, 0x17,
+	0x70, 0xe4, 0xc4, 0x91, 0x7a, 0xe4, 0xc0, 0x81, 0x2a, 0xb8, 0x72, 0xa3, 0xa8, 0xf9, 0xd8, 0xd5,
+	0x4a, 0x76, 0xf4, 0x11, 0x12, 0x38, 0x69, 0xa7, 0xa7, 0x7f, 0x3d, 0x3d, 0xdd, 0x3d, 0x3d, 0x3d,
+	0x2d, 0xf8, 0xc8, 0x23, 0xfc, 0xd4, 0x67, 0x2f, 0xa9, 0xd7, 0xdd, 0x3c, 0xf9, 0x96, 0xed, 0x06,
+	0x3d, 0xfb, 0xce, 0xe6, 0x09, 0x65, 0x7c, 0x60, 0xbb, 0x56, 0x48, 0xd8, 0x09, 0x75, 0x48, 0x23,
+	0x60, 0x3e, 0xf7, 0xd1, 0x15, 0x1a, 0x72, 0xea, 0x37, 0xc6, 0x80, 0x46, 0x04, 0xa8, 0x5d, 0xef,
+	0xfa, 0x7e, 0xd7, 0x25, 0x9b, 0x76, 0x40, 0x37, 0x8f, 0x29, 0x71, 0x3b, 0x56, 0x9b, 0xf4, 0xec,
+	0x13, 0xea, 0x33, 0x85, 0xad, 0x5d, 0xd3, 0x0c, 0x72, 0xd4, 0x1e, 0x1c, 0x6f, 0x76, 0x06, 0xcc,
+	0xe6, 0xd4, 0xf7, 0xde, 0x34, 0x7f, 0xca, 0xec, 0x20, 0x20, 0x2c, 0x54, 0xf3, 0xf5, 0x9f, 0xa5,
+	0x61, 0xf5, 0x85, 0xd2, 0xea, 0x50, 0x29, 0x85, 0x2e, 0x82, 0xd1, 0xf3, 0x43, 0x1e, 0x9a, 0xa9,
+	0x8d, 0xcc, 0xed, 0x22, 0x56, 0x03, 0x54, 0x83, 0x42, 0xd7, 0xe6, 0xe4, 0xd4, 0x1e, 0x85, 0x66,
+	0x5a, 0x4e, 0xc4, 0x63, 0x74, 0x0f, 0xb2, 0x3d, 0xce, 0x03, 0x33, 0xb3, 0x91, 0xb9, 0x5d, 0xda,
+	0xfa, 0x6a, 0xe3, 0x8d, 0xfb, 0x69, 0xb4, 0x8e, 0x8e, 0x0e, 0xb0, 0x3f, 0xe0, 0x04, 0x4b, 0x04,
+	0xfa, 0x36, 0x64, 0xb8, 0x1b, 0x9a, 0x86, 0x04, 0xde, 0x98, 0x01, 0x3c, 0xda, 0x3f, 0x54, 0x38,
+	0xc1, 0x2f, 0x61, 0x4e, 0x60, 0x66, 0xe7, 0xc3, 0x76, 0x0e, 0x22, 0x98, 0x13, 0xa0, 0x2f, 0x41,
+	0x91, 0x0c, 0x03, 0x9f, 0x71, 0x8b, 0xfb, 0x66, 0x4e, 0x6d, 0x42, 0x11, 0x8e, 0xfc, 0xfa, 0x4f,
+	0xa0, 0xb4, 0x4b, 0x42, 0x4e, 0x3d, 0x69, 0x3e, 0x74, 0x19, 0xb2, 0x62, 0xe3, 0x66, 0x6a, 0x23,
+	0x75, 0xbb, 0xd8, 0xcc, 0x7c, 0xb1, 0x9d, 0xc6, 0x92, 0x80, 0x2e, 0x41, 0x2e, 0x1c, 0xb4, 0x43,
+	0xc2, 0xcd, 0xb4, 0x98, 0xc2, 0x7a, 0x84, 0xbe, 0x0b, 0x59, 0x21, 0xc9, 0xcc, 0x6c, 0xa4, 0x6e,
+	0x97, 0xb6, 0x3e, 0x9c, 0xa1, 0xd4, 0x81, 0xcf, 0xf8, 0x21, 0x71, 0x89, 0xc3, 0x7d, 0x86, 0x25,
+	0xa8, 0xfe, 0xd7, 0x02, 0x14, 0x63, 0xdb, 0x20, 0x04, 0x59, 0xcf, 0xee, 0x13, 0x73, 0x5d, 0x2e,
+	0x20, 0xbf, 0xd1, 0x36, 0x18, 0x7d, 0x9b, 0x3b, 0x3d, 0xe9, 0x95, 0xd2, 0xd6, 0xd7, 0xe7, 0x18,
+	0xf9, 0xa9, 0xe0, 0xc5, 0xe4, 0xd5, 0x80, 0x84, 0x1c, 0x2b, 0x24, 0x7a, 0x04, 0x06, 0x13, 0xf2,
+	0xa5, 0xff, 0x4a, 0x5b, 0x9b, 0x8b, 0xf8, 0x29, 0x61, 0x12, 0xac, 0xd0, 0x68, 0x07, 0x0a, 0x8c,
+	0x74, 0x28, 0x23, 0xce, 0x22, 0x9b, 0x95, 0x92, 0x34, 0x3b, 0x8e, 0x81, 0xe8, 0x21, 0x14, 0x3a,
+	0xc4, 0x25, 0x22, 0x84, 0xcc, 0x8b, 0x52, 0xc8, 0x2c, 0x37, 0xee, 0x6a, 0x56, 0x1c, 0x83, 0xd0,
+	0xf7, 0x20, 0xcf, 0xc8, 0x29, 0xa3, 0x9c, 0x98, 0x59, 0x89, 0xbf, 0x35, 0x57, 0x09, 0xc9, 0x8d,
+	0x23, 0x18, 0xba, 0x03, 0x79, 0x4e, 0xfb, 0xc4, 0x1f, 0x70, 0x33, 0x27, 0x25, 0x5c, 0x69, 0xa8,
+	0xc3, 0xd2, 0x88, 0x0e, 0x4b, 0x63, 0x57, 0x1f, 0x26, 0x1c, 0x71, 0xa2, 0x07, 0x62, 0x59, 0xce,
+	0x28, 0x09, 0xcd, 0xbc, 0x04, 0xcd, 0x8d, 0x76, 0xc2, 0xd9, 0x08, 0x47, 0x20, 0xb4, 0x03, 0xc6,
+	0xb1, 0x3d, 0x70, 0xb9, 0x59, 0x90, 0xe8, 0x8f, 0xe7, 0xa0, 0x1f, 0x0b, 0xde, 0x27, 0xde, 0x8f,
+	0x89, 0xa3, 0x3c, 0x20, 0xb1, 0xe8, 0x01, 0xe4, 0xfa, 0x94, 0x31, 0x9f, 0x99, 0xc5, 0xb9, 0x5b,
+	0x4f, 0x3a, 0x50, 0xa3, 0xd0, 0x67, 0xb0, 0xaa, 0xbe, 0xac, 0x80, 0x30, 0x87, 0x78, 0xdc, 0x44,
+	0x52, 0xce, 0xd5, 0x33, 0x06, 0xf8, 0xfc, 0x89, 0xc7, 0xef, 0x6c, 0xbd, 0xb0, 0xdd, 0x01, 0x69,
+	0xa6, 0xcd, 0x14, 0xae, 0x28, 0xdc, 0x81, 0x82, 0xa1, 0xe7, 0xb0, 0x3e, 0x29, 0xc8, 0xee, 0x12,
+	0xf3, 0x82, 0x94, 0x55, 0x9f, 0x75, 0x00, 0x14, 0x33, 0xae, 0x4e, 0x48, 0xb3, 0xbb, 0x04, 0x3d,
+	0x86, 0x92, 0xe3, 0xb3, 0xd0, 0x0a, 0x7c, 0x97, 0x3a, 0x23, 0x13, 0xa4, 0xa8, 0x9b, 0x33, 0x44,
+	0xed, 0xf8, 0x2c, 0x3c, 0x90, 0xcc, 0x18, 0x9c, 0xf8, 0x1b, 0xdd, 0x87, 0x7c, 0x8f, 0xd8, 0x1d,
+	0xc2, 0x42, 0xb3, 0x3a, 0x57, 0x9d, 0x96, 0xe2, 0xc4, 0x11, 0x04, 0xed, 0x00, 0x30, 0x9b, 0x13,
+	0xcb, 0xa5, 0x7d, 0xca, 0xcd, 0x0f, 0xe6, 0xfa, 0x19, 0xdb, 0x9c, 0xec, 0x0b, 0x5e, 0x5c, 0x64,
+	0xd1, 0xe7, 0x5e, 0xb6, 0x60, 0x54, 0x73, 0x7b, 0xd9, 0x42, 0xa9, 0x5a, 0xc5, 0xeb, 0xa7, 0xa4,
+	0x1d, 0xfa, 0xce, 0x4b, 0xc2, 0xad, 0x41, 0xd0, 0x65, 0x76, 0x87, 0xe0, 0x55, 0x91, 0x86, 0xbd,
+	0x8e, 0xa5, 0xd7, 0xc4, 0x97, 0x19, 0xe9, 0xfb, 0x27, 0xc4, 0x62, 0x24, 0x0c, 0x7c, 0x2f, 0x24,
+	0xe3, 0x09, 0xcd, 0x78, 0x66, 0xe2, 0x52, 0x8c, 0x90, 0xa7, 0x7c, 0x4c, 0x8f, 0x01, 0x13, 0xf4,
+	0xfa, 0xbf, 0x0c, 0x28, 0xc6, 0x9a, 0xa2, 0x03, 0x28, 0x75, 0x48, 0xe8, 0x30, 0x1a, 0x70, 0x9f,
+	0x85, 0x3a, 0xab, 0x34, 0x16, 0xd9, 0xe4, 0x6e, 0x0c, 0xc3, 0x49, 0x11, 0xa8, 0x09, 0x86, 0xeb,
+	0x3b, 0xb6, 0x2b, 0xf3, 0x62, 0x69, 0xeb, 0x6b, 0x8b, 0xc8, 0x6a, 0xec, 0x0b, 0x44, 0x6b, 0x05,
+	0x2b, 0x68, 0xed, 0x57, 0x29, 0x28, 0x1d, 0xf9, 0x2f, 0x89, 0xd7, 0x1c, 0x08, 0x6b, 0xa1, 0x2f,
+	0x03, 0xf4, 0xed, 0xa1, 0xc5, 0x05, 0x29, 0x94, 0xb9, 0xb8, 0x82, 0x8b, 0x7d, 0x7b, 0x28, 0x79,
+	0x42, 0x74, 0x0b, 0xd6, 0xd4, 0x94, 0x88, 0x3f, 0xeb, 0x98, 0xba, 0x6a, 0xf1, 0x0a, 0xae, 0x28,
+	0xf2, 0x01, 0x61, 0x8f, 0xa9, 0xeb, 0xa2, 0x07, 0x50, 0x11, 0x93, 0x16, 0xf5, 0x38, 0x61, 0x27,
+	0xb6, 0xab, 0xf3, 0xd6, 0x8c, 0x03, 0x5f, 0x16, 0xfc, 0x4f, 0x34, 0x7b, 0xed, 0x1f, 0x29, 0x58,
+	0x93, 0x9a, 0x8e, 0xf7, 0x8e, 0x8e, 0x20, 0x4f, 0x3c, 0x95, 0x09, 0x94, 0xf1, 0x3e, 0x59, 0x7c,
+	0xc3, 0x63, 0x31, 0x8d, 0x47, 0x9e, 0xcc, 0x0f, 0x5a, 0x14, 0x3a, 0x84, 0xb2, 0x54, 0xdd, 0x6a,
+	0x4b, 0x03, 0x68, 0x5b, 0x7e, 0x73, 0x21, 0xd1, 0x09, 0xc3, 0xe1, 0x12, 0x1f, 0x0f, 0x6a, 0x9b,
+	0x60, 0xc8, 0x65, 0x50, 0x15, 0x32, 0x2f, 0xc9, 0x48, 0xdd, 0x69, 0x58, 0x7c, 0x8a, 0xcb, 0xfe,
+	0x44, 0x9c, 0x6e, 0x7d, 0x99, 0xa9, 0x41, 0xed, 0xf7, 0x29, 0x30, 0xa4, 0xa2, 0x67, 0xf4, 0x49,
+	0xbd, 0x03, 0x7d, 0xd0, 0x8b, 0xc9, 0xd8, 0x53, 0xd7, 0xd1, 0xdd, 0xb7, 0x31, 0xdf, 0x44, 0x04,
+	0x36, 0x2f, 0xc1, 0xc5, 0xf1, 0xb9, 0xb5, 0xc2, 0x80, 0x38, 0xf4, 0x98, 0x12, 0x56, 0xff, 0x69,
+	0x1a, 0x2e, 0x9c, 0x13, 0xbe, 0xe8, 0xd9, 0xb4, 0x0b, 0xef, 0x2e, 0x17, 0xff, 0x53, 0xce, 0xab,
+	0xfd, 0x26, 0xf5, 0x66, 0x43, 0xd7, 0xa1, 0x12, 0xbe, 0xa4, 0x81, 0x45, 0x8f, 0x2d, 0x22, 0x53,
+	0xb7, 0x30, 0x78, 0x01, 0x97, 0x04, 0xf1, 0xc9, 0xf1, 0x23, 0x99, 0x97, 0x3f, 0x84, 0xd5, 0xc9,
+	0x43, 0x2b, 0xe3, 0xb4, 0xd8, 0x5a, 0xc1, 0x15, 0x4d, 0x57, 0xa9, 0x0a, 0x6d, 0x00, 0x90, 0x61,
+	0xc0, 0x48, 0x18, 0x52, 0xdf, 0x93, 0xf7, 0x9f, 0x60, 0x4a, 0xd0, 0x9a, 0xeb, 0xb0, 0x26, 0xb4,
+	0x1a, 0x25, 0xac, 0x70, 0x1f, 0x0a, 0xd1, 0x3d, 0x1a, 0x57, 0x18, 0xa9, 0x44, 0x85, 0x71, 0x15,
+	0x8a, 0xe2, 0x37, 0x0c, 0x6c, 0x27, 0x0a, 0x87, 0x31, 0xa1, 0xfe, 0xb7, 0x0c, 0xe4, 0x75, 0xa2,
+	0x44, 0x4f, 0xc5, 0x25, 0x28, 0xf5, 0xd1, 0xf1, 0x70, 0x67, 0x7e, 0x76, 0xd5, 0xbf, 0xcf, 0x03,
+	0xa2, 0x4e, 0x58, 0x88, 0x23, 0x19, 0xe8, 0xb9, 0x28, 0x28, 0x54, 0x72, 0xd3, 0xf1, 0xfe, 0x56,
+	0xf2, 0x62, 0x21, 0xb5, 0x3f, 0xa4, 0xa1, 0x3a, 0x3d, 0x8d, 0x9e, 0x41, 0x26, 0x94, 0x01, 0x2c,
+	0x1c, 0x7d, 0xff, 0x2d, 0x16, 0x68, 0x1c, 0x12, 0xae, 0x1c, 0x2e, 0x04, 0x09, 0x79, 0x76, 0xa7,
+	0xa3, 0x83, 0xf7, 0xad, 0xe4, 0x6d, 0x77, 0x3a, 0x5a, 0x9e, 0xdd, 0xe9, 0x88, 0xba, 0x52, 0x25,
+	0x74, 0x59, 0x46, 0x17, 0xb1, 0x1e, 0xd5, 0xbe, 0x03, 0x85, 0x68, 0xe1, 0x45, 0xcf, 0xef, 0x27,
+	0xe9, 0x7b, 0x29, 0x81, 0x8b, 0x16, 0x58, 0x06, 0x57, 0xff, 0x75, 0x0a, 0x0a, 0x51, 0xb5, 0x8d,
+	0x5a, 0x93, 0x55, 0xe7, 0xc7, 0xb3, 0x2b, 0x74, 0x59, 0x74, 0x6e, 0x73, 0xce, 0x68, 0x7b, 0xc0,
+	0x49, 0xa8, 0xaa, 0x66, 0x5d, 0x7c, 0x6e, 0x4f, 0x16, 0x9f, 0xb3, 0xea, 0xd7, 0x37, 0x14, 0x9e,
+	0xf5, 0x5f, 0x0a, 0xcd, 0x74, 0x41, 0x2f, 0x6e, 0x9b, 0xa4, 0x66, 0xdf, 0x98, 0x21, 0x6f, 0xff,
+	0xee, 0x94, 0x62, 0xef, 0x50, 0xa7, 0xdf, 0x15, 0xa1, 0x3a, 0x5d, 0x6f, 0xc7, 0xa7, 0xab, 0x94,
+	0x38, 0x5d, 0xf7, 0x20, 0x33, 0x60, 0x54, 0x9f, 0x97, 0x59, 0x05, 0xdb, 0x21, 0x67, 0xd4, 0xeb,
+	0x2a, 0x79, 0x02, 0x22, 0xaa, 0xbd, 0xd0, 0xe9, 0x91, 0x7e, 0x74, 0x38, 0x16, 0x05, 0x6b, 0x94,
+	0xac, 0x16, 0x09, 0xef, 0xf9, 0x1d, 0x7d, 0xeb, 0x2d, 0x8c, 0x57, 0x28, 0xb4, 0x0b, 0x45, 0x7b,
+	0xc0, 0x7b, 0x3e, 0xa3, 0x7c, 0xb4, 0x40, 0xad, 0x9d, 0x14, 0x31, 0x06, 0x22, 0x3c, 0xae, 0xc8,
+	0xd4, 0x6b, 0xef, 0xde, 0x12, 0x2f, 0x98, 0xe8, 0x0c, 0xe9, 0x7c, 0x1b, 0xd5, 0x69, 0x48, 0x3f,
+	0xb9, 0x72, 0xf2, 0xce, 0x97, 0xdf, 0xa8, 0x0d, 0x95, 0xd0, 0x1f, 0x30, 0x87, 0x58, 0xae, 0xdd,
+	0x26, 0xae, 0x28, 0xd3, 0xc5, 0x6a, 0x9f, 0x2e, 0xb3, 0xda, 0xa1, 0x14, 0xb0, 0x2f, 0xf1, 0x6a,
+	0xc9, 0x72, 0x98, 0x20, 0x4d, 0xbc, 0x85, 0x0b, 0x53, 0x6f, 0x61, 0x0b, 0xca, 0xaf, 0x06, 0x84,
+	0x8d, 0xac, 0xc0, 0x66, 0x76, 0x3f, 0x34, 0x8b, 0xf3, 0xf3, 0xc3, 0xf4, 0xf2, 0x3f, 0x10, 0xf8,
+	0x03, 0x09, 0x57, 0xab, 0x97, 0x5e, 0x8d, 0x29, 0xa2, 0xe6, 0xa1, 0x5d, 0xcf, 0x67, 0xc4, 0x1a,
+	0x30, 0x6a, 0x39, 0x76, 0x48, 0x64, 0x99, 0x5c, 0xc0, 0x15, 0x45, 0xfe, 0x9c, 0xd1, 0x1d, 0x3b,
+	0x24, 0xa8, 0x07, 0x6b, 0xa7, 0x94, 0xf7, 0xfc, 0x41, 0x5c, 0x01, 0x9a, 0x65, 0xa9, 0xcb, 0xc3,
+	0x65, 0x74, 0xf9, 0xa1, 0x12, 0x31, 0x61, 0xff, 0xd5, 0xd3, 0x09, 0x22, 0xfa, 0x08, 0xaa, 0xda,
+	0xe4, 0xe3, 0xfb, 0xa3, 0x22, 0x43, 0x7f, 0x4d, 0xd1, 0x9f, 0x45, 0xe4, 0x5a, 0x1b, 0xca, 0x49,
+	0x51, 0xe7, 0x24, 0xa6, 0xfb, 0xc9, 0xc4, 0xb4, 0x78, 0xa4, 0x25, 0x12, 0xdf, 0x43, 0x58, 0x3f,
+	0xe3, 0xc0, 0xa5, 0x32, 0xe7, 0x31, 0x54, 0xa7, 0x5d, 0xf0, 0x5e, 0x14, 0xa5, 0x70, 0xe1, 0x1c,
+	0xf3, 0xbe, 0x8f, 0xa5, 0xea, 0xbf, 0x4d, 0xc3, 0xc5, 0xf3, 0xde, 0xf4, 0xe8, 0xa9, 0x2c, 0xc5,
+	0xa2, 0xe1, 0x02, 0xe9, 0x29, 0x01, 0x56, 0xf9, 0x3d, 0x89, 0x17, 0x97, 0xd8, 0x29, 0xa1, 0xdd,
+	0x9e, 0x2a, 0x5c, 0x0d, 0xac, 0x47, 0xc9, 0xf7, 0x58, 0x7e, 0xe9, 0xf7, 0xd8, 0x5e, 0xb6, 0x90,
+	0xa9, 0xe6, 0xff, 0x07, 0x2f, 0xa4, 0x11, 0x54, 0xff, 0x4f, 0x06, 0xaa, 0xff, 0x3d, 0x0d, 0xeb,
+	0x67, 0xee, 0x29, 0xb4, 0x09, 0x17, 0x12, 0x60, 0x2b, 0x1c, 0xb4, 0x3d, 0x12, 0x37, 0xe6, 0x50,
+	0x62, 0xea, 0x50, 0xcd, 0xc4, 0x19, 0x31, 0x9d, 0xc8, 0x88, 0x37, 0xe2, 0x8c, 0xa8, 0xf0, 0xaa,
+	0xa8, 0x8c, 0x52, 0x9a, 0x42, 0x22, 0x67, 0x3a, 0x6d, 0xaa, 0xde, 0xda, 0x83, 0x65, 0xae, 0xd5,
+	0xa5, 0xf2, 0xa6, 0x31, 0x95, 0x37, 0xcf, 0x4b, 0x22, 0xb9, 0xf3, 0x93, 0xc8, 0x7f, 0x7b, 0xc0,
+	0xeb, 0xff, 0x4e, 0x03, 0x3a, 0x5b, 0xae, 0xa0, 0x0d, 0x28, 0x86, 0x1e, 0xb5, 0x12, 0xcd, 0x4f,
+	0xe5, 0xc0, 0x42, 0xe8, 0xd1, 0x96, 0x6c, 0x82, 0xbe, 0xc1, 0x1f, 0xe9, 0xb9, 0xfe, 0xc8, 0x24,
+	0xfc, 0xd1, 0x99, 0x36, 0xb5, 0x31, 0x37, 0x2d, 0x9f, 0x55, 0x76, 0x29, 0x5b, 0xe7, 0x16, 0xb0,
+	0x75, 0xfe, 0xfd, 0xd8, 0x7a, 0x2f, 0x5b, 0xc8, 0x56, 0x0d, 0x3c, 0x19, 0x81, 0x75, 0x07, 0xca,
+	0xc9, 0xbe, 0xa0, 0x10, 0x18, 0x15, 0x47, 0x45, 0x55, 0xf4, 0x5c, 0x4d, 0x16, 0x1d, 0xfa, 0x31,
+	0x32, 0x2e, 0x26, 0x6e, 0x40, 0x25, 0xea, 0x24, 0x5a, 0x8e, 0xdf, 0x21, 0xda, 0xbe, 0xe5, 0x88,
+	0xb8, 0xe3, 0x77, 0x48, 0xfd, 0x53, 0x28, 0x25, 0xfa, 0x7e, 0xcb, 0xae, 0x51, 0x27, 0x50, 0x4a,
+	0x24, 0x53, 0x74, 0x09, 0x0c, 0x32, 0xb4, 0x1d, 0xdd, 0x10, 0x6e, 0xad, 0x60, 0x35, 0x44, 0x26,
+	0xe4, 0x02, 0x46, 0x8e, 0xe9, 0x50, 0x49, 0x68, 0xad, 0x60, 0x3d, 0x16, 0x08, 0x46, 0xba, 0x64,
+	0x18, 0x3f, 0xe2, 0xd4, 0xb0, 0x59, 0x06, 0x90, 0xe5, 0xa7, 0xc5, 0x47, 0x01, 0xa9, 0xff, 0x25,
+	0xa5, 0x3b, 0xbf, 0x44, 0x58, 0xf6, 0x3a, 0x14, 0x6c, 0xce, 0x49, 0x3f, 0xe0, 0xaa, 0xdb, 0x61,
+	0xe8, 0x08, 0x8c, 0x88, 0x68, 0x1b, 0xd6, 0x02, 0xc2, 0x2c, 0xf1, 0xb2, 0x8b, 0x9a, 0x97, 0xe9,
+	0x79, 0xbd, 0x8c, 0x4a, 0x40, 0xd8, 0x11, 0x1b, 0x1d, 0xe9, 0x16, 0xe6, 0x15, 0xf1, 0xdc, 0x12,
+	0x02, 0x7c, 0x4f, 0xa7, 0x02, 0xd9, 0x9d, 0x1c, 0x3d, 0xf7, 0x10, 0x86, 0xcb, 0x6a, 0x4a, 0x24,
+	0x4e, 0xf1, 0x90, 0x16, 0xaf, 0x6d, 0xca, 0xc5, 0x03, 0x59, 0x15, 0x7e, 0xb5, 0x33, 0xab, 0x34,
+	0x7d, 0xdf, 0x95, 0xfd, 0x41, 0xfc, 0x81, 0x84, 0x62, 0x89, 0xdc, 0x8f, 0x81, 0xf5, 0x7f, 0xa6,
+	0x01, 0xc6, 0x5d, 0x3a, 0x74, 0x13, 0xca, 0xb6, 0xeb, 0xfa, 0xa7, 0x96, 0xcf, 0x68, 0x97, 0x7a,
+	0xfa, 0x9c, 0xa5, 0xcd, 0x14, 0x2e, 0x49, 0xfa, 0x73, 0x49, 0x46, 0xdf, 0x87, 0x4a, 0x92, 0x2d,
+	0x2a, 0xe3, 0x16, 0xbd, 0xfa, 0xca, 0x09, 0x59, 0xa1, 0x08, 0x17, 0x25, 0x4c, 0x55, 0xb4, 0xd1,
+	0x81, 0x55, 0x4c, 0x4f, 0x15, 0x6d, 0xcc, 0x14, 0x5d, 0x54, 0x99, 0x04, 0x53, 0x54, 0xea, 0xdc,
+	0x84, 0x55, 0x32, 0x0c, 0xfc, 0xf1, 0x1d, 0x23, 0xf3, 0x64, 0x11, 0x57, 0x14, 0x35, 0x62, 0xdb,
+	0x82, 0x7c, 0xdf, 0x1e, 0x5a, 0x76, 0x97, 0x98, 0xc6, 0x3c, 0xef, 0xe4, 0xfa, 0xf6, 0x70, 0xbb,
+	0x4b, 0xd0, 0x67, 0xb0, 0xae, 0xd6, 0x77, 0x18, 0xe9, 0x10, 0x8f, 0x53, 0xdb, 0x0d, 0x75, 0x63,
+	0x7a, 0x96, 0xd5, 0xab, 0x12, 0xb4, 0x33, 0xc6, 0xd4, 0x7f, 0x61, 0x00, 0x3a, 0xdb, 0x3b, 0x46,
+	0x4f, 0xc0, 0xe8, 0x10, 0xd7, 0x1e, 0x2d, 0xf2, 0x64, 0x3f, 0x83, 0x6e, 0xec, 0x0a, 0x28, 0x56,
+	0x12, 0x84, 0x28, 0xbb, 0x1d, 0x5d, 0x33, 0x4b, 0x8b, 0xda, 0x16, 0x50, 0xac, 0x24, 0xd4, 0x7e,
+	0x9e, 0x06, 0x43, 0xca, 0x46, 0x57, 0x21, 0x1f, 0x75, 0xa3, 0x55, 0xe4, 0x8b, 0x98, 0x88, 0x48,
+	0x68, 0x1b, 0x4a, 0xc7, 0x74, 0x48, 0x3a, 0x96, 0xda, 0xc3, 0xbc, 0x98, 0x97, 0xc7, 0xa6, 0xb5,
+	0x82, 0x41, 0x82, 0xd4, 0x02, 0x2d, 0x58, 0x17, 0x5e, 0xf2, 0x94, 0x9d, 0xb4, 0xa0, 0x79, 0x8d,
+	0xc0, 0xd6, 0x0a, 0xae, 0x26, 0x50, 0x4a, 0x52, 0x13, 0x20, 0xd1, 0xef, 0x36, 0x16, 0xee, 0x77,
+	0x27, 0x50, 0xcd, 0x75, 0x58, 0xeb, 0x71, 0x1e, 0x28, 0x35, 0x64, 0x2a, 0xa8, 0xfd, 0x39, 0x05,
+	0x86, 0x34, 0x0e, 0xba, 0x05, 0x25, 0x39, 0x19, 0x72, 0x9b, 0x0f, 0x42, 0x55, 0x2a, 0xc4, 0x5b,
+	0x12, 0x33, 0x87, 0x72, 0x02, 0x7d, 0x05, 0x4a, 0x5d, 0x16, 0x38, 0x11, 0x5f, 0x94, 0x68, 0x40,
+	0x10, 0xc7, 0x2c, 0x02, 0xb0, 0xa5, 0xbb, 0x4e, 0x71, 0xaf, 0x48, 0x12, 0x55, 0xdb, 0xe9, 0x5d,
+	0x6c, 0xa7, 0x0c, 0x20, 0x17, 0x90, 0x3b, 0xd9, 0xcb, 0x16, 0x52, 0xd5, 0x74, 0xec, 0xbc, 0xfa,
+	0x16, 0x94, 0x93, 0xff, 0x79, 0x89, 0x22, 0xc8, 0x1b, 0xf4, 0xdb, 0x84, 0xe9, 0x8e, 0xae, 0x1e,
+	0xed, 0x65, 0x0b, 0xe9, 0x6a, 0x46, 0xbd, 0x97, 0xeb, 0xd7, 0x21, 0x1f, 0xfd, 0xcb, 0x10, 0x5f,
+	0x2e, 0x82, 0x3b, 0xa5, 0x2f, 0x97, 0x66, 0xe3, 0x8f, 0xaf, 0xaf, 0xa5, 0xfe, 0xf4, 0xfa, 0x5a,
+	0xea, 0x8b, 0xd7, 0xd7, 0x52, 0x3f, 0xda, 0x50, 0xea, 0x52, 0x5f, 0xfe, 0x55, 0x7a, 0xce, 0x7f,
+	0xaf, 0xed, 0x9c, 0xf4, 0xed, 0x9d, 0xff, 0x04, 0x00, 0x00, 0xff, 0xff, 0xb9, 0x03, 0xc1, 0x4a,
+	0x99, 0x1d, 0x00, 0x00,
 }
 
 func (m *VirtualService) Marshal() (dAtA []byte, err error) {
@@ -3679,6 +4300,20 @@ func (m *HTTPRoute) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.XXX_unrecognized != nil {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.RateLimit != nil {
+		{
+			size, err := m.RateLimit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintVirtualService(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
 	}
 	if m.Delegate != nil {
 		{
@@ -3860,6 +4495,395 @@ func (m *HTTPRoute) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *RateLimit) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RateLimit) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RateLimit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.RateLimitSpecifier != nil {
+		{
+			size := m.RateLimitSpecifier.Size()
+			i -= size
+			if _, err := m.RateLimitSpecifier.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.Descriptors) > 0 {
+		for iNdEx := len(m.Descriptors) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Descriptors[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintVirtualService(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RateLimit_Local_) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RateLimit_Local_) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Local != nil {
+		{
+			size, err := m.Local.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintVirtualService(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *RateLimit_TokenBucket) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RateLimit_TokenBucket) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RateLimit_TokenBucket) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.FillInterval != nil {
+		{
+			size, err := m.FillInterval.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintVirtualService(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.TokensPerFill != 0 {
+		i = encodeVarintVirtualService(dAtA, i, uint64(m.TokensPerFill))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.MaxTokens != 0 {
+		i = encodeVarintVirtualService(dAtA, i, uint64(m.MaxTokens))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RateLimit_LocalDescriptor) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RateLimit_LocalDescriptor) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RateLimit_LocalDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.TokenBucket != nil {
+		{
+			size, err := m.TokenBucket.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintVirtualService(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Entries) > 0 {
+		for iNdEx := len(m.Entries) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Entries[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintVirtualService(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RateLimit_LocalDescriptor_Entry) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RateLimit_LocalDescriptor_Entry) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RateLimit_LocalDescriptor_Entry) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.Value) > 0 {
+		i -= len(m.Value)
+		copy(dAtA[i:], m.Value)
+		i = encodeVarintVirtualService(dAtA, i, uint64(len(m.Value)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Key) > 0 {
+		i -= len(m.Key)
+		copy(dAtA[i:], m.Key)
+		i = encodeVarintVirtualService(dAtA, i, uint64(len(m.Key)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RateLimit_Local) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RateLimit_Local) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RateLimit_Local) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.Descriptors) > 0 {
+		for iNdEx := len(m.Descriptors) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Descriptors[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintVirtualService(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.TokenBucket != nil {
+		{
+			size, err := m.TokenBucket.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintVirtualService(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RateLimitDescriptor) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RateLimitDescriptor) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RateLimitDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.Entries) > 0 {
+		for iNdEx := len(m.Entries) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Entries[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintVirtualService(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RateLimitDescriptor_Entry) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RateLimitDescriptor_Entry) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RateLimitDescriptor_Entry) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.EntrySpecifier != nil {
+		{
+			size := m.EntrySpecifier.Size()
+			i -= size
+			if _, err := m.EntrySpecifier.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.SkipIfError {
+		i--
+		if m.SkipIfError {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Key) > 0 {
+		i -= len(m.Key)
+		copy(dAtA[i:], m.Key)
+		i = encodeVarintVirtualService(dAtA, i, uint64(len(m.Key)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RateLimitDescriptor_Entry_RequestHeader) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RateLimitDescriptor_Entry_RequestHeader) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.RequestHeader)
+	copy(dAtA[i:], m.RequestHeader)
+	i = encodeVarintVirtualService(dAtA, i, uint64(len(m.RequestHeader)))
+	i--
+	dAtA[i] = 0x1a
+	return len(dAtA) - i, nil
+}
+func (m *RateLimitDescriptor_Entry_Expression) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RateLimitDescriptor_Entry_Expression) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Expression)
+	copy(dAtA[i:], m.Expression)
+	i = encodeVarintVirtualService(dAtA, i, uint64(len(m.Expression)))
+	i--
+	dAtA[i] = 0x22
+	return len(dAtA) - i, nil
+}
 func (m *Delegate) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -5391,12 +6415,195 @@ func (m *HTTPRoute) Size() (n int) {
 		l = m.Delegate.Size()
 		n += 2 + l + sovVirtualService(uint64(l))
 	}
+	if m.RateLimit != nil {
+		l = m.RateLimit.Size()
+		n += 2 + l + sovVirtualService(uint64(l))
+	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
 	}
 	return n
 }
 
+func (m *RateLimit) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Descriptors) > 0 {
+		for _, e := range m.Descriptors {
+			l = e.Size()
+			n += 1 + l + sovVirtualService(uint64(l))
+		}
+	}
+	if m.RateLimitSpecifier != nil {
+		n += m.RateLimitSpecifier.Size()
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *RateLimit_Local_) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Local != nil {
+		l = m.Local.Size()
+		n += 1 + l + sovVirtualService(uint64(l))
+	}
+	return n
+}
+func (m *RateLimit_TokenBucket) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MaxTokens != 0 {
+		n += 1 + sovVirtualService(uint64(m.MaxTokens))
+	}
+	if m.TokensPerFill != 0 {
+		n += 1 + sovVirtualService(uint64(m.TokensPerFill))
+	}
+	if m.FillInterval != nil {
+		l = m.FillInterval.Size()
+		n += 1 + l + sovVirtualService(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *RateLimit_LocalDescriptor) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Entries) > 0 {
+		for _, e := range m.Entries {
+			l = e.Size()
+			n += 1 + l + sovVirtualService(uint64(l))
+		}
+	}
+	if m.TokenBucket != nil {
+		l = m.TokenBucket.Size()
+		n += 1 + l + sovVirtualService(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *RateLimit_LocalDescriptor_Entry) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Key)
+	if l > 0 {
+		n += 1 + l + sovVirtualService(uint64(l))
+	}
+	l = len(m.Value)
+	if l > 0 {
+		n += 1 + l + sovVirtualService(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *RateLimit_Local) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TokenBucket != nil {
+		l = m.TokenBucket.Size()
+		n += 1 + l + sovVirtualService(uint64(l))
+	}
+	if len(m.Descriptors) > 0 {
+		for _, e := range m.Descriptors {
+			l = e.Size()
+			n += 1 + l + sovVirtualService(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *RateLimitDescriptor) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Entries) > 0 {
+		for _, e := range m.Entries {
+			l = e.Size()
+			n += 1 + l + sovVirtualService(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *RateLimitDescriptor_Entry) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Key)
+	if l > 0 {
+		n += 1 + l + sovVirtualService(uint64(l))
+	}
+	if m.SkipIfError {
+		n += 2
+	}
+	if m.EntrySpecifier != nil {
+		n += m.EntrySpecifier.Size()
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *RateLimitDescriptor_Entry_RequestHeader) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.RequestHeader)
+	n += 1 + l + sovVirtualService(uint64(l))
+	return n
+}
+func (m *RateLimitDescriptor_Entry_Expression) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Expression)
+	n += 1 + l + sovVirtualService(uint64(l))
+	return n
+}
 func (m *Delegate) Size() (n int) {
 	if m == nil {
 		return 0
@@ -6983,6 +8190,896 @@ func (m *HTTPRoute) Unmarshal(dAtA []byte) error {
 			if err := m.Delegate.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 21:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RateLimit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVirtualService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.RateLimit == nil {
+				m.RateLimit = &RateLimit{}
+			}
+			if err := m.RateLimit.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVirtualService(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RateLimit) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVirtualService
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RateLimit: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RateLimit: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Descriptors", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVirtualService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Descriptors = append(m.Descriptors, &RateLimitDescriptor{})
+			if err := m.Descriptors[len(m.Descriptors)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Local", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVirtualService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &RateLimit_Local{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.RateLimitSpecifier = &RateLimit_Local_{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVirtualService(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RateLimit_TokenBucket) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVirtualService
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TokenBucket: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TokenBucket: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxTokens", wireType)
+			}
+			m.MaxTokens = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVirtualService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MaxTokens |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TokensPerFill", wireType)
+			}
+			m.TokensPerFill = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVirtualService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TokensPerFill |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FillInterval", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVirtualService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.FillInterval == nil {
+				m.FillInterval = &types.Duration{}
+			}
+			if err := m.FillInterval.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVirtualService(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RateLimit_LocalDescriptor) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVirtualService
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: LocalDescriptor: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: LocalDescriptor: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Entries", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVirtualService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Entries = append(m.Entries, &RateLimit_LocalDescriptor_Entry{})
+			if err := m.Entries[len(m.Entries)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TokenBucket", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVirtualService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TokenBucket == nil {
+				m.TokenBucket = &RateLimit_TokenBucket{}
+			}
+			if err := m.TokenBucket.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVirtualService(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RateLimit_LocalDescriptor_Entry) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVirtualService
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Entry: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Entry: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVirtualService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Key = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVirtualService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Value = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVirtualService(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RateLimit_Local) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVirtualService
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Local: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Local: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TokenBucket", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVirtualService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TokenBucket == nil {
+				m.TokenBucket = &RateLimit_TokenBucket{}
+			}
+			if err := m.TokenBucket.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Descriptors", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVirtualService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Descriptors = append(m.Descriptors, &RateLimit_LocalDescriptor{})
+			if err := m.Descriptors[len(m.Descriptors)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVirtualService(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RateLimitDescriptor) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVirtualService
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RateLimitDescriptor: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RateLimitDescriptor: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Entries", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVirtualService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Entries = append(m.Entries, &RateLimitDescriptor_Entry{})
+			if err := m.Entries[len(m.Entries)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVirtualService(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RateLimitDescriptor_Entry) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVirtualService
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Entry: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Entry: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVirtualService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Key = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SkipIfError", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVirtualService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.SkipIfError = bool(v != 0)
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestHeader", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVirtualService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EntrySpecifier = &RateLimitDescriptor_Entry_RequestHeader{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Expression", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVirtualService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthVirtualService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EntrySpecifier = &RateLimitDescriptor_Entry_Expression{string(dAtA[iNdEx:postIndex])}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
