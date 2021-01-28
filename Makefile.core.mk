@@ -99,6 +99,7 @@ gen: \
 	generate-networking \
 	generate-authn \
 	generate-security \
+	generate-telemetry \
 	generate-analysis \
 	generate-meta \
 	generate-envoy \
@@ -331,6 +332,30 @@ clean-security:
 	@rm -fr $(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons) $(security_v1beta1_k8s_gos)
 
 #####################
+# telemetry/...
+#####################
+
+telemetry_v1alpha1_path := telemetry/v1alpha1
+telemetry_v1alpha1_protos := $(wildcard $(telemetry_v1alpha1_path)/*.proto)
+telemetry_v1alpha1_pb_gos := $(telemetry_v1alpha1_protos:.proto=.pb.go)
+telemetry_v1alpha1_pb_pythons := $(patsubst $(telemetry_v1alpha1_path)/%.proto,$(python_output_path)/$(telemetry_v1alpha1_path)/%_pb2.py,$(telemetry_v1alpha1_protos))
+telemetry_v1alpha1_pb_docs := $(telemetry_v1alpha1_protos:.proto=.pb.html)
+telemetry_v1alpha1_openapi := $(telemetry_v1alpha1_protos:.proto=.gen.json)
+telemetry_v1alpha1_k8s_gos := \
+	$(patsubst $(telemetry_v1alpha1_path)/%.proto,$(telemetry_v1alpha1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(telemetry_v1alpha1_protos))) \
+	$(patsubst $(telemetry_v1alpha1_path)/%.proto,$(telemetry_v1alpha1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(telemetry_v1alpha1_protos)))
+
+$(telemetry_v1alpha1_pb_gos) $(telemetry_v1alpha1_pb_docs) $(telemetry_v1alpha1_pb_pythons) $(telemetry_v1alpha1_k8s_gos): $(telemetry_v1alpha1_protos)
+	@$(protolock) status
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin_per_file)$(telemetry_v1alpha1_path) $(protoc_gen_python_plugin) $^
+	@cp -r /tmp/istio.io/api/telemetry/* telemetry
+
+generate-telemetry: $(telemetry_v1alpha1_pb_gos) $(telemetry_v1alpha1_pb_docs) $(telemetry_v1alpha1_pb_pythons) $(telemetry_v1alpha1_k8s_gos) 
+
+clean-telemetry:
+	@rm -fr $(telemetry_v1alpha1_pb_gos) $(telemetry_v1alpha1_pb_docs) $(telemetry_v1alpha1_pb_pythons) $(telemetry_v1alpha1_k8s_gos)
+
+#####################
 # analysis/...
 #####################
 
@@ -469,7 +494,8 @@ all_protos := \
 	$(security_v1beta1_protos) \
 	$(analysis_v1alpha1_protos) \
 	$(meta_v1alpha1_protos) \
-	$(type_v1beta1_protos)
+	$(type_v1beta1_protos) \
+	$(telemetry_v1alpha1_protos)
 
 all_openapi := \
 	$(core_v1alpha1_openapi) \
@@ -482,7 +508,8 @@ all_openapi := \
 	$(security_v1beta1_openapi) \
 	$(analysis_v1alpha1_openapi) \
 	$(meta_v1alpha1_openapi) \
-	$(type_v1beta1_openapi)
+	$(type_v1beta1_openapi) \
+	$(telemetry_v1alpha1_openapi)
 
 all_openapi_crd := kubernetes/customresourcedefinitions.gen.yaml
 
@@ -526,7 +553,8 @@ clean: \
 	clean-analysis \
 	clean-meta \
 	clean-type \
-	clean-openapi-crd
+	clean-openapi-crd \
+	clean-telemetry
 
 #####################
 # CI System
