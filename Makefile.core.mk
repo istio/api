@@ -47,8 +47,8 @@ gen: \
 	gen-proto \
 	generate-annotations \
 	generate-labels \
-	tidy-go \
-	mirror-licenses
+	mirror-licenses \
+	tidy-go
 
 gen-check: gen check-clean-repo
 
