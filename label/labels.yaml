@@ -74,7 +74,7 @@ labels:
       - Any
 
   - name: topology.istio.io/subzone
-    featureStatus: Alpha
+    featureStatus: Beta
     description: User-provided node label for identifying the locality subzone of a workload.
       This allows admins to specify a more granular level of locality than what is offered by
       default with Kubernetes regions and zones.
@@ -84,7 +84,7 @@ labels:
       - Node
 
   - name: topology.istio.io/network
-    featureStatus: Alpha
+    featureStatus: Beta
     description: |-
       A label used to identify the network for one or more pods. This is used
       internally by Istio to group pods resident in the same L3 domain/network.
