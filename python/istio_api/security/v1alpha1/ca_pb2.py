@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.v1.auth',
   syntax='proto3',
   serialized_options=_b('Z\036istio.io/api/security/v1alpha1'),
-  serialized_pb=_b('\n\x1asecurity/v1alpha1/ca.proto\x12\ristio.v1.auth\x1a\x1cgoogle/protobuf/struct.proto\"l\n\x17IstioCertificateRequest\x12\x0b\n\x03\x63sr\x18\x01 \x01(\t\x12\x19\n\x11validity_duration\x18\x03 \x01(\x03\x12)\n\x08metadata\x18\x04 \x01(\x0b\x32\x17.google.protobuf.Struct\".\n\x18IstioCertificateResponse\x12\x12\n\ncert_chain\x18\x01 \x03(\t2\x81\x01\n\x17IstioCertificateService\x12\x66\n\x11\x43reateCertificate\x12&.istio.v1.auth.IstioCertificateRequest\x1a\'.istio.v1.auth.IstioCertificateResponse\"\x00\x42 Z\x1eistio.io/api/security/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x1asecurity/v1alpha1/ca.proto\x12\ristio.v1.auth\x1a\x1cgoogle/protobuf/struct.proto\"\x8d\x01\n\x17IstioCertificateRequest\x12\x10\n\x03\x63sr\x18\x01 \x01(\tR\x03\x63sr\x12+\n\x11validity_duration\x18\x03 \x01(\x03R\x10validityDuration\x12\x33\n\x08metadata\x18\x04 \x01(\x0b\x32\x17.google.protobuf.StructR\x08metadata\"9\n\x18IstioCertificateResponse\x12\x1d\n\ncert_chain\x18\x01 \x03(\tR\tcertChain2\x81\x01\n\x17IstioCertificateService\x12\x66\n\x11\x43reateCertificate\x12&.istio.v1.auth.IstioCertificateRequest\x1a\'.istio.v1.auth.IstioCertificateResponse\"\x00\x42 Z\x1eistio.io/api/security/v1alpha1b\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,])
 
@@ -41,21 +41,21 @@ _ISTIOCERTIFICATEREQUEST = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='csr', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='validity_duration', full_name='istio.v1.auth.IstioCertificateRequest.validity_duration', index=1,
       number=3, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='validityDuration', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='metadata', full_name='istio.v1.auth.IstioCertificateRequest.metadata', index=2,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='metadata', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -68,8 +68,8 @@ _ISTIOCERTIFICATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=75,
-  serialized_end=183,
+  serialized_start=76,
+  serialized_end=217,
 )
 
 
@@ -86,7 +86,7 @@ _ISTIOCERTIFICATERESPONSE = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='certChain', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -99,8 +99,8 @@ _ISTIOCERTIFICATERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=185,
-  serialized_end=231,
+  serialized_start=219,
+  serialized_end=276,
 )
 
 _ISTIOCERTIFICATEREQUEST.fields_by_name['metadata'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
@@ -131,8 +131,8 @@ _ISTIOCERTIFICATESERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=234,
-  serialized_end=363,
+  serialized_start=279,
+  serialized_end=408,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateCertificate',

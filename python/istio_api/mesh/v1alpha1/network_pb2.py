@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.mesh.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\032istio.io/api/mesh/v1alpha1'),
-  serialized_pb=_b('\n\x1bmesh/v1alpha1/network.proto\x12\x13istio.mesh.v1alpha1\x1a\x1fgoogle/api/field_behavior.proto\"\xd7\x02\n\x07Network\x12\x45\n\tendpoints\x18\x02 \x03(\x0b\x32-.istio.mesh.v1alpha1.Network.NetworkEndpointsB\x03\xe0\x41\x02\x12G\n\x08gateways\x18\x03 \x03(\x0b\x32\x30.istio.mesh.v1alpha1.Network.IstioNetworkGatewayB\x03\xe0\x41\x02\x1a\x46\n\x10NetworkEndpoints\x12\x13\n\tfrom_cidr\x18\x01 \x01(\tH\x00\x12\x17\n\rfrom_registry\x18\x02 \x01(\tH\x00\x42\x04\n\x02ne\x1at\n\x13IstioNetworkGateway\x12\x1f\n\x15registry_service_name\x18\x01 \x01(\tH\x00\x12\x11\n\x07\x61\x64\x64ress\x18\x02 \x01(\tH\x00\x12\x11\n\x04port\x18\x03 \x01(\rB\x03\xe0\x41\x02\x12\x10\n\x08locality\x18\x04 \x01(\tB\x04\n\x02gw\"\xa5\x01\n\x0cMeshNetworks\x12\x46\n\x08networks\x18\x01 \x03(\x0b\x32/.istio.mesh.v1alpha1.MeshNetworks.NetworksEntryB\x03\xe0\x41\x02\x1aM\n\rNetworksEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12+\n\x05value\x18\x02 \x01(\x0b\x32\x1c.istio.mesh.v1alpha1.Network:\x02\x38\x01\x42\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x1bmesh/v1alpha1/network.proto\x12\x13istio.mesh.v1alpha1\x1a\x1fgoogle/api/field_behavior.proto\"\xb6\x03\n\x07Network\x12Q\n\tendpoints\x18\x02 \x03(\x0b\x32-.istio.mesh.v1alpha1.Network.NetworkEndpointsB\x04\xe2\x41\x01\x02R\tendpoints\x12R\n\x08gateways\x18\x03 \x03(\x0b\x32\x30.istio.mesh.v1alpha1.Network.IstioNetworkGatewayB\x04\xe2\x41\x01\x02R\x08gateways\x1a^\n\x10NetworkEndpoints\x12\x1d\n\tfrom_cidr\x18\x01 \x01(\tH\x00R\x08\x66romCidr\x12%\n\rfrom_registry\x18\x02 \x01(\tH\x00R\x0c\x66romRegistryB\x04\n\x02ne\x1a\xa3\x01\n\x13IstioNetworkGateway\x12\x34\n\x15registry_service_name\x18\x01 \x01(\tH\x00R\x13registryServiceName\x12\x1a\n\x07\x61\x64\x64ress\x18\x02 \x01(\tH\x00R\x07\x61\x64\x64ress\x12\x18\n\x04port\x18\x03 \x01(\rB\x04\xe2\x41\x01\x02R\x04port\x12\x1a\n\x08locality\x18\x04 \x01(\tR\x08localityB\x04\n\x02gw\"\xbc\x01\n\x0cMeshNetworks\x12Q\n\x08networks\x18\x01 \x03(\x0b\x32/.istio.mesh.v1alpha1.MeshNetworks.NetworksEntryB\x04\xe2\x41\x01\x02R\x08networks\x1aY\n\rNetworksEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x32\n\x05value\x18\x02 \x01(\x0b\x32\x1c.istio.mesh.v1alpha1.NetworkR\x05value:\x02\x38\x01\x42\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,])
 
@@ -41,14 +41,14 @@ _NETWORK_NETWORKENDPOINTS = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='fromCidr', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='from_registry', full_name='istio.mesh.v1alpha1.Network.NetworkEndpoints.from_registry', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='fromRegistry', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -64,8 +64,8 @@ _NETWORK_NETWORKENDPOINTS = _descriptor.Descriptor(
       name='ne', full_name='istio.mesh.v1alpha1.Network.NetworkEndpoints.ne',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=241,
-  serialized_end=311,
+  serialized_start=264,
+  serialized_end=358,
 )
 
 _NETWORK_ISTIONETWORKGATEWAY = _descriptor.Descriptor(
@@ -81,28 +81,28 @@ _NETWORK_ISTIONETWORKGATEWAY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='registryServiceName', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='address', full_name='istio.mesh.v1alpha1.Network.IstioNetworkGateway.address', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='address', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='port', full_name='istio.mesh.v1alpha1.Network.IstioNetworkGateway.port', index=2,
       number=3, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
+      serialized_options=_b('\342A\001\002'), json_name='port', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='locality', full_name='istio.mesh.v1alpha1.Network.IstioNetworkGateway.locality', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='locality', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -118,8 +118,8 @@ _NETWORK_ISTIONETWORKGATEWAY = _descriptor.Descriptor(
       name='gw', full_name='istio.mesh.v1alpha1.Network.IstioNetworkGateway.gw',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=313,
-  serialized_end=429,
+  serialized_start=361,
+  serialized_end=524,
 )
 
 _NETWORK = _descriptor.Descriptor(
@@ -135,14 +135,14 @@ _NETWORK = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
+      serialized_options=_b('\342A\001\002'), json_name='endpoints', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='gateways', full_name='istio.mesh.v1alpha1.Network.gateways', index=1,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
+      serialized_options=_b('\342A\001\002'), json_name='gateways', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -156,7 +156,7 @@ _NETWORK = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=86,
-  serialized_end=429,
+  serialized_end=524,
 )
 
 
@@ -173,14 +173,14 @@ _MESHNETWORKS_NETWORKSENTRY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='key', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='value', full_name='istio.mesh.v1alpha1.MeshNetworks.NetworksEntry.value', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='value', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -193,8 +193,8 @@ _MESHNETWORKS_NETWORKSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=520,
-  serialized_end=597,
+  serialized_start=626,
+  serialized_end=715,
 )
 
 _MESHNETWORKS = _descriptor.Descriptor(
@@ -210,7 +210,7 @@ _MESHNETWORKS = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
+      serialized_options=_b('\342A\001\002'), json_name='networks', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -223,8 +223,8 @@ _MESHNETWORKS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=432,
-  serialized_end=597,
+  serialized_start=527,
+  serialized_end=715,
 )
 
 _NETWORK_NETWORKENDPOINTS.containing_type = _NETWORK
