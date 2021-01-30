@@ -260,7 +260,6 @@ message AuthorizationPolicy {
     // Audit policy decisions can be read by telemetry plugins using the function getAuditPolicy
     // defined [here](https://github.com/istio/proxy/blob/master/extensions/common/context.h).
 
-    // $hide_from_docs
     // The CUSTOM action allows an extension to handle the user request if the matching rules evaluate to true.
     // The extension is evaluated independently and before the native ALLOW and DENY actions. When used together, A request
     // is allowed if and only if all the actions return allow, in other words, the extension cannot bypass the
@@ -299,16 +298,13 @@ message AuthorizationPolicy {
   // Optional. The action to take if the request is matched with the rules.
   Action action = 3;
 
-  // $hide_from_docs
   message ExtensionProvider {
     // Specifies the name of the extension provider. The list of available providers is defined in the MeshConfig.
     // Note, currently at most 1 extension provider is allowed per workload. Different workloads can use different extension provider.
     string name = 1;
   }
 
-  // $hide_from_docs
   oneof action_detail {
-    // $hide_from_docs
     // Specifies detailed configuration of the CUSTOM action. Must be used only with CUSTOM action.
     ExtensionProvider provider = 4;
   }
