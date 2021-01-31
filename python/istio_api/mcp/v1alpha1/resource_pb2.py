@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.mcp.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\031istio.io/api/mcp/v1alpha1\250\342\036\001'),
-  serialized_pb=_b('\n\x1bmcp/v1alpha1/resource.proto\x12\x12istio.mcp.v1alpha1\x1a\x19google/protobuf/any.proto\x1a\x14gogoproto/gogo.proto\x1a\x1bmcp/v1alpha1/metadata.proto\"^\n\x08Resource\x12.\n\x08metadata\x18\x01 \x01(\x0b\x32\x1c.istio.mcp.v1alpha1.Metadata\x12\"\n\x04\x62ody\x18\x02 \x01(\x0b\x32\x14.google.protobuf.AnyB\x1fZ\x19istio.io/api/mcp/v1alpha1\xa8\xe2\x1e\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x1bmcp/v1alpha1/resource.proto\x12\x12istio.mcp.v1alpha1\x1a\x19google/protobuf/any.proto\x1a\x14gogoproto/gogo.proto\x1a\x1bmcp/v1alpha1/metadata.proto\"n\n\x08Resource\x12\x38\n\x08metadata\x18\x01 \x01(\x0b\x32\x1c.istio.mcp.v1alpha1.MetadataR\x08metadata\x12(\n\x04\x62ody\x18\x02 \x01(\x0b\x32\x14.google.protobuf.AnyR\x04\x62odyB\x1fZ\x19istio.io/api/mcp/v1alpha1\xa8\xe2\x1e\x01\x62\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR,gogoproto_dot_gogo__pb2.DESCRIPTOR,mcp_dot_v1alpha1_dot_metadata__pb2.DESCRIPTOR,])
 
@@ -43,14 +43,14 @@ _RESOURCE = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='metadata', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='body', full_name='istio.mcp.v1alpha1.Resource.body', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='body', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -64,7 +64,7 @@ _RESOURCE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=129,
-  serialized_end=223,
+  serialized_end=239,
 )
 
 _RESOURCE.fields_by_name['metadata'].message_type = mcp_dot_v1alpha1_dot_metadata__pb2._METADATA

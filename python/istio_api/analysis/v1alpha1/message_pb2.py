@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.analysis.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\036istio.io/api/analysis/v1alpha1'),
-  serialized_pb=_b('\n\x1f\x61nalysis/v1alpha1/message.proto\x12\x17istio.analysis.v1alpha1\x1a\x1cgoogle/protobuf/struct.proto\"\x90\x02\n\x13\x41nalysisMessageBase\x12?\n\x04type\x18\x01 \x01(\x0b\x32\x31.istio.analysis.v1alpha1.AnalysisMessageBase.Type\x12\x41\n\x05level\x18\x02 \x01(\x0e\x32\x32.istio.analysis.v1alpha1.AnalysisMessageBase.Level\x12\x19\n\x11\x64ocumentation_url\x18\x03 \x01(\t\x1a\"\n\x04Type\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0c\n\x04\x63ode\x18\x02 \x01(\t\"6\n\x05Level\x12\x0b\n\x07UNKNOWN\x10\x00\x12\t\n\x05\x45RROR\x10\x03\x12\x0b\n\x07WARNING\x10\x08\x12\x08\n\x04INFO\x10\x0c\"\xfa\x01\n\x19\x41nalysisMessageWeakSchema\x12\x42\n\x0cmessage_base\x18\x01 \x01(\x0b\x32,.istio.analysis.v1alpha1.AnalysisMessageBase\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x10\n\x08template\x18\x03 \x01(\t\x12H\n\x04\x61rgs\x18\x04 \x03(\x0b\x32:.istio.analysis.v1alpha1.AnalysisMessageWeakSchema.ArgType\x1a(\n\x07\x41rgType\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07go_type\x18\x02 \x01(\t\"\x9b\x01\n\x16GenericAnalysisMessage\x12\x42\n\x0cmessage_base\x18\x01 \x01(\x0b\x32,.istio.analysis.v1alpha1.AnalysisMessageBase\x12%\n\x04\x61rgs\x18\x02 \x01(\x0b\x32\x17.google.protobuf.Struct\x12\x16\n\x0eresource_paths\x18\x03 \x03(\t\"r\n\x1cInternalErrorAnalysisMessage\x12\x42\n\x0cmessage_base\x18\x01 \x01(\x0b\x32,.istio.analysis.v1alpha1.AnalysisMessageBase\x12\x0e\n\x06\x64\x65tail\x18\x02 \x01(\tB Z\x1eistio.io/api/analysis/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x1f\x61nalysis/v1alpha1/message.proto\x12\x17istio.analysis.v1alpha1\x1a\x1cgoogle/protobuf/struct.proto\"\xbb\x02\n\x13\x41nalysisMessageBase\x12\x45\n\x04type\x18\x01 \x01(\x0b\x32\x31.istio.analysis.v1alpha1.AnalysisMessageBase.TypeR\x04type\x12H\n\x05level\x18\x02 \x01(\x0e\x32\x32.istio.analysis.v1alpha1.AnalysisMessageBase.LevelR\x05level\x12+\n\x11\x64ocumentation_url\x18\x03 \x01(\tR\x10\x64ocumentationUrl\x1a.\n\x04Type\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x12\n\x04\x63ode\x18\x02 \x01(\tR\x04\x63ode\"6\n\x05Level\x12\x0b\n\x07UNKNOWN\x10\x00\x12\t\n\x05\x45RROR\x10\x03\x12\x0b\n\x07WARNING\x10\x08\x12\x08\n\x04INFO\x10\x0c\"\xb2\x02\n\x19\x41nalysisMessageWeakSchema\x12O\n\x0cmessage_base\x18\x01 \x01(\x0b\x32,.istio.analysis.v1alpha1.AnalysisMessageBaseR\x0bmessageBase\x12 \n\x0b\x64\x65scription\x18\x02 \x01(\tR\x0b\x64\x65scription\x12\x1a\n\x08template\x18\x03 \x01(\tR\x08template\x12N\n\x04\x61rgs\x18\x04 \x03(\x0b\x32:.istio.analysis.v1alpha1.AnalysisMessageWeakSchema.ArgTypeR\x04\x61rgs\x1a\x36\n\x07\x41rgType\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x17\n\x07go_type\x18\x02 \x01(\tR\x06goType\"\xbd\x01\n\x16GenericAnalysisMessage\x12O\n\x0cmessage_base\x18\x01 \x01(\x0b\x32,.istio.analysis.v1alpha1.AnalysisMessageBaseR\x0bmessageBase\x12+\n\x04\x61rgs\x18\x02 \x01(\x0b\x32\x17.google.protobuf.StructR\x04\x61rgs\x12%\n\x0eresource_paths\x18\x03 \x03(\tR\rresourcePaths\"\x87\x01\n\x1cInternalErrorAnalysisMessage\x12O\n\x0cmessage_base\x18\x01 \x01(\x0b\x32,.istio.analysis.v1alpha1.AnalysisMessageBaseR\x0bmessageBase\x12\x16\n\x06\x64\x65tail\x18\x02 \x01(\tR\x06\x64\x65tailB Z\x1eistio.io/api/analysis/v1alpha1b\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,])
 
@@ -52,8 +52,8 @@ _ANALYSISMESSAGEBASE_LEVEL = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=309,
-  serialized_end=363,
+  serialized_start=352,
+  serialized_end=406,
 )
 _sym_db.RegisterEnumDescriptor(_ANALYSISMESSAGEBASE_LEVEL)
 
@@ -71,14 +71,14 @@ _ANALYSISMESSAGEBASE_TYPE = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='name', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='code', full_name='istio.analysis.v1alpha1.AnalysisMessageBase.Type.code', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='code', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -91,8 +91,8 @@ _ANALYSISMESSAGEBASE_TYPE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=273,
-  serialized_end=307,
+  serialized_start=304,
+  serialized_end=350,
 )
 
 _ANALYSISMESSAGEBASE = _descriptor.Descriptor(
@@ -108,21 +108,21 @@ _ANALYSISMESSAGEBASE = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='type', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='level', full_name='istio.analysis.v1alpha1.AnalysisMessageBase.level', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='level', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='documentation_url', full_name='istio.analysis.v1alpha1.AnalysisMessageBase.documentation_url', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='documentationUrl', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -137,7 +137,7 @@ _ANALYSISMESSAGEBASE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=91,
-  serialized_end=363,
+  serialized_end=406,
 )
 
 
@@ -154,14 +154,14 @@ _ANALYSISMESSAGEWEAKSCHEMA_ARGTYPE = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='name', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='go_type', full_name='istio.analysis.v1alpha1.AnalysisMessageWeakSchema.ArgType.go_type', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='goType', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -174,8 +174,8 @@ _ANALYSISMESSAGEWEAKSCHEMA_ARGTYPE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=576,
-  serialized_end=616,
+  serialized_start=661,
+  serialized_end=715,
 )
 
 _ANALYSISMESSAGEWEAKSCHEMA = _descriptor.Descriptor(
@@ -191,28 +191,28 @@ _ANALYSISMESSAGEWEAKSCHEMA = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='messageBase', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='description', full_name='istio.analysis.v1alpha1.AnalysisMessageWeakSchema.description', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='description', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='template', full_name='istio.analysis.v1alpha1.AnalysisMessageWeakSchema.template', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='template', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='args', full_name='istio.analysis.v1alpha1.AnalysisMessageWeakSchema.args', index=3,
       number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='args', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -225,8 +225,8 @@ _ANALYSISMESSAGEWEAKSCHEMA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=366,
-  serialized_end=616,
+  serialized_start=409,
+  serialized_end=715,
 )
 
 
@@ -243,21 +243,21 @@ _GENERICANALYSISMESSAGE = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='messageBase', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='args', full_name='istio.analysis.v1alpha1.GenericAnalysisMessage.args', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='args', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='resource_paths', full_name='istio.analysis.v1alpha1.GenericAnalysisMessage.resource_paths', index=2,
       number=3, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='resourcePaths', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -270,8 +270,8 @@ _GENERICANALYSISMESSAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=619,
-  serialized_end=774,
+  serialized_start=718,
+  serialized_end=907,
 )
 
 
@@ -288,14 +288,14 @@ _INTERNALERRORANALYSISMESSAGE = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='messageBase', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='detail', full_name='istio.analysis.v1alpha1.InternalErrorAnalysisMessage.detail', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='detail', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -308,8 +308,8 @@ _INTERNALERRORANALYSISMESSAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=776,
-  serialized_end=890,
+  serialized_start=910,
+  serialized_end=1045,
 )
 
 _ANALYSISMESSAGEBASE_TYPE.containing_type = _ANALYSISMESSAGEBASE

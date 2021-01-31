@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.networking.v1alpha3',
   syntax='proto3',
   serialized_options=_b('Z istio.io/api/networking/v1alpha3'),
-  serialized_pb=_b('\n(networking/v1alpha3/workload_group.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a(networking/v1alpha3/workload_entry.proto\"\xef\x03\n\rWorkloadGroup\x12\x45\n\x08metadata\x18\x01 \x01(\x0b\x32\x33.istio.networking.v1alpha3.WorkloadGroup.ObjectMeta\x12?\n\x08template\x18\x02 \x01(\x0b\x32(.istio.networking.v1alpha3.WorkloadEntryB\x03\xe0\x41\x02\x12\x38\n\x05probe\x18\x03 \x01(\x0b\x32).istio.networking.v1alpha3.ReadinessProbe\x1a\x9b\x02\n\nObjectMeta\x12O\n\x06labels\x18\x01 \x03(\x0b\x32?.istio.networking.v1alpha3.WorkloadGroup.ObjectMeta.LabelsEntry\x12Y\n\x0b\x61nnotations\x18\x02 \x03(\x0b\x32\x44.istio.networking.v1alpha3.WorkloadGroup.ObjectMeta.AnnotationsEntry\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x32\n\x10\x41nnotationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xfc\x02\n\x0eReadinessProbe\x12\x1d\n\x15initial_delay_seconds\x18\x02 \x01(\x05\x12\x17\n\x0ftimeout_seconds\x18\x03 \x01(\x05\x12\x16\n\x0eperiod_seconds\x18\x04 \x01(\x05\x12\x19\n\x11success_threshold\x18\x05 \x01(\x05\x12\x19\n\x11\x66\x61ilure_threshold\x18\x06 \x01(\x05\x12\x44\n\x08http_get\x18\x07 \x01(\x0b\x32\x30.istio.networking.v1alpha3.HTTPHealthCheckConfigH\x00\x12\x45\n\ntcp_socket\x18\x08 \x01(\x0b\x32/.istio.networking.v1alpha3.TCPHealthCheckConfigH\x00\x12@\n\x04\x65xec\x18\t \x01(\x0b\x32\x30.istio.networking.v1alpha3.ExecHealthCheckConfigH\x00\x42\x15\n\x13health_check_method\"\x93\x01\n\x15HTTPHealthCheckConfig\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x11\n\x04port\x18\x02 \x01(\rB\x03\xe0\x41\x02\x12\x0c\n\x04host\x18\x03 \x01(\t\x12\x0e\n\x06scheme\x18\x04 \x01(\t\x12;\n\x0chttp_headers\x18\x05 \x03(\x0b\x32%.istio.networking.v1alpha3.HTTPHeader\")\n\nHTTPHeader\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"7\n\x14TCPHealthCheckConfig\x12\x0c\n\x04host\x18\x01 \x01(\t\x12\x11\n\x04port\x18\x02 \x01(\rB\x03\xe0\x41\x02\"(\n\x15\x45xecHealthCheckConfig\x12\x0f\n\x07\x63ommand\x18\x01 \x03(\tB\"Z istio.io/api/networking/v1alpha3b\x06proto3')
+  serialized_pb=_b('\n(networking/v1alpha3/workload_group.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a(networking/v1alpha3/workload_entry.proto\"\xb8\x04\n\rWorkloadGroup\x12O\n\x08metadata\x18\x01 \x01(\x0b\x32\x33.istio.networking.v1alpha3.WorkloadGroup.ObjectMetaR\x08metadata\x12J\n\x08template\x18\x02 \x01(\x0b\x32(.istio.networking.v1alpha3.WorkloadEntryB\x04\xe2\x41\x01\x02R\x08template\x12?\n\x05probe\x18\x03 \x01(\x0b\x32).istio.networking.v1alpha3.ReadinessProbeR\x05probe\x1a\xc8\x02\n\nObjectMeta\x12W\n\x06labels\x18\x01 \x03(\x0b\x32?.istio.networking.v1alpha3.WorkloadGroup.ObjectMeta.LabelsEntryR\x06labels\x12\x66\n\x0b\x61nnotations\x18\x02 \x03(\x0b\x32\x44.istio.networking.v1alpha3.WorkloadGroup.ObjectMeta.AnnotationsEntryR\x0b\x61nnotations\x1a\x39\n\x0bLabelsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\x1a>\n\x10\x41nnotationsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xee\x03\n\x0eReadinessProbe\x12\x32\n\x15initial_delay_seconds\x18\x02 \x01(\x05R\x13initialDelaySeconds\x12\'\n\x0ftimeout_seconds\x18\x03 \x01(\x05R\x0etimeoutSeconds\x12%\n\x0eperiod_seconds\x18\x04 \x01(\x05R\rperiodSeconds\x12+\n\x11success_threshold\x18\x05 \x01(\x05R\x10successThreshold\x12+\n\x11\x66\x61ilure_threshold\x18\x06 \x01(\x05R\x10\x66\x61ilureThreshold\x12M\n\x08http_get\x18\x07 \x01(\x0b\x32\x30.istio.networking.v1alpha3.HTTPHealthCheckConfigH\x00R\x07httpGet\x12P\n\ntcp_socket\x18\x08 \x01(\x0b\x32/.istio.networking.v1alpha3.TCPHealthCheckConfigH\x00R\ttcpSocket\x12\x46\n\x04\x65xec\x18\t \x01(\x0b\x32\x30.istio.networking.v1alpha3.ExecHealthCheckConfigH\x00R\x04\x65xecB\x15\n\x13health_check_method\"\xbb\x01\n\x15HTTPHealthCheckConfig\x12\x12\n\x04path\x18\x01 \x01(\tR\x04path\x12\x18\n\x04port\x18\x02 \x01(\rB\x04\xe2\x41\x01\x02R\x04port\x12\x12\n\x04host\x18\x03 \x01(\tR\x04host\x12\x16\n\x06scheme\x18\x04 \x01(\tR\x06scheme\x12H\n\x0chttp_headers\x18\x05 \x03(\x0b\x32%.istio.networking.v1alpha3.HTTPHeaderR\x0bhttpHeaders\"6\n\nHTTPHeader\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value\"D\n\x14TCPHealthCheckConfig\x12\x12\n\x04host\x18\x01 \x01(\tR\x04host\x12\x18\n\x04port\x18\x02 \x01(\rB\x04\xe2\x41\x01\x02R\x04port\"1\n\x15\x45xecHealthCheckConfig\x12\x18\n\x07\x63ommand\x18\x01 \x03(\tR\x07\x63ommandB\"Z istio.io/api/networking/v1alpha3b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_workload__entry__pb2.DESCRIPTOR,])
 
@@ -42,14 +42,14 @@ _WORKLOADGROUP_OBJECTMETA_LABELSENTRY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='key', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='value', full_name='istio.networking.v1alpha3.WorkloadGroup.ObjectMeta.LabelsEntry.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='value', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -62,8 +62,8 @@ _WORKLOADGROUP_OBJECTMETA_LABELSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=545,
-  serialized_end=590,
+  serialized_start=594,
+  serialized_end=651,
 )
 
 _WORKLOADGROUP_OBJECTMETA_ANNOTATIONSENTRY = _descriptor.Descriptor(
@@ -79,14 +79,14 @@ _WORKLOADGROUP_OBJECTMETA_ANNOTATIONSENTRY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='key', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='value', full_name='istio.networking.v1alpha3.WorkloadGroup.ObjectMeta.AnnotationsEntry.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='value', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -99,8 +99,8 @@ _WORKLOADGROUP_OBJECTMETA_ANNOTATIONSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=592,
-  serialized_end=642,
+  serialized_start=653,
+  serialized_end=715,
 )
 
 _WORKLOADGROUP_OBJECTMETA = _descriptor.Descriptor(
@@ -116,14 +116,14 @@ _WORKLOADGROUP_OBJECTMETA = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='labels', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='annotations', full_name='istio.networking.v1alpha3.WorkloadGroup.ObjectMeta.annotations', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='annotations', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -136,8 +136,8 @@ _WORKLOADGROUP_OBJECTMETA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=359,
-  serialized_end=642,
+  serialized_start=387,
+  serialized_end=715,
 )
 
 _WORKLOADGROUP = _descriptor.Descriptor(
@@ -153,21 +153,21 @@ _WORKLOADGROUP = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='metadata', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='template', full_name='istio.networking.v1alpha3.WorkloadGroup.template', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
+      serialized_options=_b('\342A\001\002'), json_name='template', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='probe', full_name='istio.networking.v1alpha3.WorkloadGroup.probe', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='probe', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -181,7 +181,7 @@ _WORKLOADGROUP = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=147,
-  serialized_end=642,
+  serialized_end=715,
 )
 
 
@@ -198,56 +198,56 @@ _READINESSPROBE = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='initialDelaySeconds', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='timeout_seconds', full_name='istio.networking.v1alpha3.ReadinessProbe.timeout_seconds', index=1,
       number=3, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='timeoutSeconds', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='period_seconds', full_name='istio.networking.v1alpha3.ReadinessProbe.period_seconds', index=2,
       number=4, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='periodSeconds', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='success_threshold', full_name='istio.networking.v1alpha3.ReadinessProbe.success_threshold', index=3,
       number=5, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='successThreshold', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='failure_threshold', full_name='istio.networking.v1alpha3.ReadinessProbe.failure_threshold', index=4,
       number=6, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='failureThreshold', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='http_get', full_name='istio.networking.v1alpha3.ReadinessProbe.http_get', index=5,
       number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='httpGet', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='tcp_socket', full_name='istio.networking.v1alpha3.ReadinessProbe.tcp_socket', index=6,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='tcpSocket', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='exec', full_name='istio.networking.v1alpha3.ReadinessProbe.exec', index=7,
       number=9, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='exec', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -263,8 +263,8 @@ _READINESSPROBE = _descriptor.Descriptor(
       name='health_check_method', full_name='istio.networking.v1alpha3.ReadinessProbe.health_check_method',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=645,
-  serialized_end=1025,
+  serialized_start=718,
+  serialized_end=1212,
 )
 
 
@@ -281,35 +281,35 @@ _HTTPHEALTHCHECKCONFIG = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='path', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='port', full_name='istio.networking.v1alpha3.HTTPHealthCheckConfig.port', index=1,
       number=2, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
+      serialized_options=_b('\342A\001\002'), json_name='port', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='host', full_name='istio.networking.v1alpha3.HTTPHealthCheckConfig.host', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='host', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='scheme', full_name='istio.networking.v1alpha3.HTTPHealthCheckConfig.scheme', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='scheme', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='http_headers', full_name='istio.networking.v1alpha3.HTTPHealthCheckConfig.http_headers', index=4,
       number=5, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='httpHeaders', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -322,8 +322,8 @@ _HTTPHEALTHCHECKCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1028,
-  serialized_end=1175,
+  serialized_start=1215,
+  serialized_end=1402,
 )
 
 
@@ -340,14 +340,14 @@ _HTTPHEADER = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='name', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='value', full_name='istio.networking.v1alpha3.HTTPHeader.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='value', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -360,8 +360,8 @@ _HTTPHEADER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1177,
-  serialized_end=1218,
+  serialized_start=1404,
+  serialized_end=1458,
 )
 
 
@@ -378,14 +378,14 @@ _TCPHEALTHCHECKCONFIG = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='host', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='port', full_name='istio.networking.v1alpha3.TCPHealthCheckConfig.port', index=1,
       number=2, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
+      serialized_options=_b('\342A\001\002'), json_name='port', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -398,8 +398,8 @@ _TCPHEALTHCHECKCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1220,
-  serialized_end=1275,
+  serialized_start=1460,
+  serialized_end=1528,
 )
 
 
@@ -416,7 +416,7 @@ _EXECHEALTHCHECKCONFIG = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='command', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -429,8 +429,8 @@ _EXECHEALTHCHECKCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1277,
-  serialized_end=1317,
+  serialized_start=1530,
+  serialized_end=1579,
 )
 
 _WORKLOADGROUP_OBJECTMETA_LABELSENTRY.containing_type = _WORKLOADGROUP_OBJECTMETA
