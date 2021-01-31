@@ -493,8 +493,8 @@ message ProxyConfig {
   // Default value is 'false'.
   google.protobuf.BoolValue hold_application_until_proxy_starts = 33;
 
-  // The PEM content of the root certificates used in workload-to-workload communication.
-  repeated string root_cert_pem = 34;
+  // The PEM data of the root certificates for workload-to-workload communication.
+  repeated string ca_certificates = 34;
 }
 
 message RemoteService {
