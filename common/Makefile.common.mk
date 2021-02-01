@@ -61,7 +61,7 @@ lint-typescript:
 	@${FINDFILES} -name '*.ts' -print0 | ${XARGS} tslint -c common/config/tslint.json
 
 lint-protos:
-	@if test -d common-protos; then $(FINDFILES) -name '*.proto' -print0 | $(XARGS) -L 1 prototool lint --protoc-bin-path=/usr/bin/protoc --protoc-wkt-path=common-protos; fi
+	@buf lint
 
 lint-licenses:
 	@if test -d licenses; then license-lint --config common/config/license-lint.yml; fi
