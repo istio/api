@@ -319,8 +319,8 @@ or <code>td3/ns/foo/sa/a-service-account</code> will be treated the same in the 
 No
 </td>
 </tr>
-<tr id="MeshConfig-ca_certificates">
-<td><code>caCertificates</code></td>
+<tr id="MeshConfig-ca_certificate_pems">
+<td><code>caCertificatePems</code></td>
 <td><code>string[]</code></td>
 <td>
 <p>The PEM data of the root certificates for workload-to-workload communication.</p>
@@ -336,7 +336,8 @@ No
 <td>
 <p>The SPIFFE Bundle Endpoint that complies to:
 https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE<em>Trust</em>Domain<em>and</em>Bundle.md#the-spiffe-trust-domain-and-bundle
-This field specifies the SPIFFE Bundle Endpoint URL.
+This field specifies the SPIFFE Bundle Endpoint URL. The endpoint should support authentication based on Web PKI:
+https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE<em>Trust</em>Domain<em>and</em>Bundle.md#521-web-pki
 The fetched root certificates are added to the root of trust for workload-to-workload communication.</p>
 
 </td>
@@ -1403,11 +1404,14 @@ Default value is &lsquo;false&rsquo;.</p>
 No
 </td>
 </tr>
-<tr id="ProxyConfig-ca_certificates">
-<td><code>caCertificates</code></td>
+<tr id="ProxyConfig-ca_certificate_pems">
+<td><code>caCertificatePems</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>The PEM data of the root certificates for workload-to-workload communication.</p>
+<p>The PEM data of the root certificates for workload-to-workload communication.
+This includes the certificates defined in MeshConfig and any other certificates that Istiod uses as CA.
+The plugin certificates (the &lsquo;cacerts&rsquo; secret), self-signed certificates (the &lsquo;istio-ca-secret&rsquo; secret)
+are added automatically by Istiod.</p>
 
 </td>
 <td>

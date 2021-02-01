@@ -211,10 +211,11 @@ message MeshConfig {
   repeated string trust_domain_aliases = 46;
 
   // The PEM data of the root certificates for workload-to-workload communication.
-  repeated string ca_certificates = 58;
+  repeated string ca_certificate_pems = 58;
   // The SPIFFE Bundle Endpoint that complies to:
   // https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#the-spiffe-trust-domain-and-bundle
-  // This field specifies the SPIFFE Bundle Endpoint URL.
+  // This field specifies the SPIFFE Bundle Endpoint URL. The endpoint should support authentication based on Web PKI:
+  // https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#521-web-pki
   // The fetched root certificates are added to the root of trust for workload-to-workload communication.
   repeated string ca_certificate_urls = 59;
 
