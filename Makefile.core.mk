@@ -24,7 +24,6 @@ repo_dir := .
 
 protolock = protolock
 protolock_release = /bin/bash scripts/check-release-locks.sh
-prototool = prototool
 annotations_prep = annotations_prep
 htmlproofer = htmlproofer
 cue = cue-gen -paths=common-protos

@@ -61,7 +61,7 @@ lint-typescript:
 	@${FINDFILES} -name '*.ts' -print0 | ${XARGS} tslint -c common/config/tslint.json
 
 lint-protos:
-	@if test -d common-protos; then $(FINDFILES) -name '*.proto' -print0 | $(XARGS) -L 1 prototool lint --protoc-bin-path=/usr/bin/protoc --protoc-wkt-path=common-protos; fi
+	@buf lint
 
 lint-licenses:
 	@if test -d licenses; then license-lint --config common/config/license-lint.yml; fi
@@ -76,9 +76,6 @@ mod-download-go:
 # go mod tidy is needed with Golang 1.16+ as go mod download affects go.sum
 # https://github.com/golang/go/issues/43994
 	@go mod tidy
-
-list-all-go:
-	@-GOFLAGS="-mod=readonly" go list -deps -test
 
 format-go: tidy-go
 	@${FINDFILES} -name '*.go' \( ! \( -name '*.gen.go' -o -name '*.pb.go' \) \) -print0 | ${XARGS} common/scripts/format_go.sh

@@ -27,6 +27,7 @@ option go_package="istio.io/api/operator/v1alpha1";
 
 import "google/protobuf/any.proto";
 import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
+import "k8s.io/api/core/v1/generated.proto";
 import "gogoproto/gogo.proto";
 
 option (gogoproto.marshaler_all) = false;
@@ -286,6 +287,13 @@ message KubernetesResourcesSpec {
     // k8s pod security context
     // [https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)
     PodSecurityContext securityContext = 16;
+    // k8s volume
+    // [https://kubernetes.io/docs/concepts/storage/volumes/](https://kubernetes.io/docs/concepts/storage/volumes/)
+    // Volumes defines the collection of Volume to inject into the pod.
+    repeated k8s.io.api.core.v1.Volume volumes = 17;
+    // k8s volumeMounts
+    // VolumeMounts defines the collection of VolumeMount to inject into containers.
+    repeated k8s.io.api.core.v1.VolumeMount volumeMounts = 18;
 
     // Overlays for k8s resources in rendered manifests.
     repeated K8sObjectOverlay overlays = 100;
