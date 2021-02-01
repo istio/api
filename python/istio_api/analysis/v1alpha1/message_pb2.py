@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.analysis.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\036istio.io/api/analysis/v1alpha1'),
-  serialized_pb=_b('\n\x1f\x61nalysis/v1alpha1/message.proto\x12\x17istio.analysis.v1alpha1\x1a\x1cgoogle/protobuf/struct.proto\"\xbb\x02\n\x13\x41nalysisMessageBase\x12\x45\n\x04type\x18\x01 \x01(\x0b\x32\x31.istio.analysis.v1alpha1.AnalysisMessageBase.TypeR\x04type\x12H\n\x05level\x18\x02 \x01(\x0e\x32\x32.istio.analysis.v1alpha1.AnalysisMessageBase.LevelR\x05level\x12+\n\x11\x64ocumentation_url\x18\x03 \x01(\tR\x10\x64ocumentationUrl\x1a.\n\x04Type\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x12\n\x04\x63ode\x18\x02 \x01(\tR\x04\x63ode\"6\n\x05Level\x12\x0b\n\x07UNKNOWN\x10\x00\x12\t\n\x05\x45RROR\x10\x03\x12\x0b\n\x07WARNING\x10\x08\x12\x08\n\x04INFO\x10\x0c\"\xb2\x02\n\x19\x41nalysisMessageWeakSchema\x12O\n\x0cmessage_base\x18\x01 \x01(\x0b\x32,.istio.analysis.v1alpha1.AnalysisMessageBaseR\x0bmessageBase\x12 \n\x0b\x64\x65scription\x18\x02 \x01(\tR\x0b\x64\x65scription\x12\x1a\n\x08template\x18\x03 \x01(\tR\x08template\x12N\n\x04\x61rgs\x18\x04 \x03(\x0b\x32:.istio.analysis.v1alpha1.AnalysisMessageWeakSchema.ArgTypeR\x04\x61rgs\x1a\x36\n\x07\x41rgType\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x17\n\x07go_type\x18\x02 \x01(\tR\x06goType\"\xbd\x01\n\x16GenericAnalysisMessage\x12O\n\x0cmessage_base\x18\x01 \x01(\x0b\x32,.istio.analysis.v1alpha1.AnalysisMessageBaseR\x0bmessageBase\x12+\n\x04\x61rgs\x18\x02 \x01(\x0b\x32\x17.google.protobuf.StructR\x04\x61rgs\x12%\n\x0eresource_paths\x18\x03 \x03(\tR\rresourcePaths\"\x87\x01\n\x1cInternalErrorAnalysisMessage\x12O\n\x0cmessage_base\x18\x01 \x01(\x0b\x32,.istio.analysis.v1alpha1.AnalysisMessageBaseR\x0bmessageBase\x12\x16\n\x06\x64\x65tail\x18\x02 \x01(\tR\x06\x64\x65tailB Z\x1eistio.io/api/analysis/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x1f\x61nalysis/v1alpha1/message.proto\x12\x17istio.analysis.v1alpha1\x1a\x1cgoogle/protobuf/struct.proto\"\xba\x02\n\x13\x41nalysisMessageBase\x12\x45\n\x04type\x18\x01 \x01(\x0b\x32\x31.istio.analysis.v1alpha1.AnalysisMessageBase.TypeR\x04type\x12H\n\x05level\x18\x02 \x01(\x0e\x32\x32.istio.analysis.v1alpha1.AnalysisMessageBase.LevelR\x05level\x12*\n\x10\x64ocumentationUrl\x18\x03 \x01(\tR\x10\x64ocumentationUrl\x1a.\n\x04Type\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x12\n\x04\x63ode\x18\x02 \x01(\tR\x04\x63ode\"6\n\x05Level\x12\x0b\n\x07UNKNOWN\x10\x00\x12\t\n\x05\x45RROR\x10\x03\x12\x0b\n\x07WARNING\x10\x08\x12\x08\n\x04INFO\x10\x0c\"\xb2\x02\n\x19\x41nalysisMessageWeakSchema\x12O\n\x0cmessage_base\x18\x01 \x01(\x0b\x32,.istio.analysis.v1alpha1.AnalysisMessageBaseR\x0bmessageBase\x12 \n\x0b\x64\x65scription\x18\x02 \x01(\tR\x0b\x64\x65scription\x12\x1a\n\x08template\x18\x03 \x01(\tR\x08template\x12N\n\x04\x61rgs\x18\x04 \x03(\x0b\x32:.istio.analysis.v1alpha1.AnalysisMessageWeakSchema.ArgTypeR\x04\x61rgs\x1a\x36\n\x07\x41rgType\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x17\n\x07go_type\x18\x02 \x01(\tR\x06goType\"\xbd\x01\n\x16GenericAnalysisMessage\x12O\n\x0cmessage_base\x18\x01 \x01(\x0b\x32,.istio.analysis.v1alpha1.AnalysisMessageBaseR\x0bmessageBase\x12+\n\x04\x61rgs\x18\x02 \x01(\x0b\x32\x17.google.protobuf.StructR\x04\x61rgs\x12%\n\x0eresource_paths\x18\x03 \x03(\tR\rresourcePaths\"\x87\x01\n\x1cInternalErrorAnalysisMessage\x12O\n\x0cmessage_base\x18\x01 \x01(\x0b\x32,.istio.analysis.v1alpha1.AnalysisMessageBaseR\x0bmessageBase\x12\x16\n\x06\x64\x65tail\x18\x02 \x01(\tR\x06\x64\x65tailB Z\x1eistio.io/api/analysis/v1alpha1b\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,])
 
@@ -52,8 +52,8 @@ _ANALYSISMESSAGEBASE_LEVEL = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=352,
-  serialized_end=406,
+  serialized_start=351,
+  serialized_end=405,
 )
 _sym_db.RegisterEnumDescriptor(_ANALYSISMESSAGEBASE_LEVEL)
 
@@ -91,8 +91,8 @@ _ANALYSISMESSAGEBASE_TYPE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=304,
-  serialized_end=350,
+  serialized_start=303,
+  serialized_end=349,
 )
 
 _ANALYSISMESSAGEBASE = _descriptor.Descriptor(
@@ -117,7 +117,7 @@ _ANALYSISMESSAGEBASE = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='level', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='documentation_url', full_name='istio.analysis.v1alpha1.AnalysisMessageBase.documentation_url', index=2,
+      name='documentationUrl', full_name='istio.analysis.v1alpha1.AnalysisMessageBase.documentationUrl', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -137,7 +137,7 @@ _ANALYSISMESSAGEBASE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=91,
-  serialized_end=406,
+  serialized_end=405,
 )
 
 
@@ -174,8 +174,8 @@ _ANALYSISMESSAGEWEAKSCHEMA_ARGTYPE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=661,
-  serialized_end=715,
+  serialized_start=660,
+  serialized_end=714,
 )
 
 _ANALYSISMESSAGEWEAKSCHEMA = _descriptor.Descriptor(
@@ -225,8 +225,8 @@ _ANALYSISMESSAGEWEAKSCHEMA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=409,
-  serialized_end=715,
+  serialized_start=408,
+  serialized_end=714,
 )
 
 
@@ -270,8 +270,8 @@ _GENERICANALYSISMESSAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=718,
-  serialized_end=907,
+  serialized_start=717,
+  serialized_end=906,
 )
 
 
@@ -308,8 +308,8 @@ _INTERNALERRORANALYSISMESSAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=910,
-  serialized_end=1045,
+  serialized_start=909,
+  serialized_end=1044,
 )
 
 _ANALYSISMESSAGEBASE_TYPE.containing_type = _ANALYSISMESSAGEBASE

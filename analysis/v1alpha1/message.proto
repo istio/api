@@ -77,7 +77,7 @@ message AnalysisMessageBase {
   // Should be of the form
   // `^http(s)?://(preliminary\.)?istio.io/docs/reference/config/analysis/`
   // Required.
-  string documentation_url = 3;
+  string documentationUrl = 3;
 
 }
 
