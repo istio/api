@@ -446,7 +446,6 @@ type MeshConfig struct {
 	// If specified, Istiod will authorize and forward the CSRs from the workloads to the specified external CA
 	// using the Istio CA gRPC API.
 	Ca *MeshConfig_CA `protobuf:"bytes,55,opt,name=ca,proto3" json:"ca,omitempty"`
-	// $hide_from_docs
 	// Defines a list of extension providers that extend Istio's functionality. For example, the AuthorizationPolicy
 	// can be used with an extension provider to delegate the authorization decision to a custom authorization system.
 	ExtensionProviders   []*MeshConfig_ExtensionProvider `protobuf:"bytes,57,rep,name=extension_providers,json=extensionProviders,proto3" json:"extensionProviders,omitempty"`
@@ -1077,7 +1076,6 @@ func (m *MeshConfig_CA) GetIstiodSide() bool {
 	return false
 }
 
-// $hide_from_docs
 type MeshConfig_ExtensionProvider struct {
 	// REQUIRED. A unique name identifying the extension provider.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
@@ -1177,7 +1175,6 @@ func (*MeshConfig_ExtensionProvider) XXX_OneofWrappers() []interface{} {
 	}
 }
 
-// $hide_from_docs
 type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider struct {
 	// REQUIRED. Specifies the service that implements the Envoy ext_authz HTTP authorization service.
 	// The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
@@ -1315,7 +1312,6 @@ func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) Ge
 	return nil
 }
 
-// $hide_from_docs
 type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider struct {
 	// REQUIRED. Specifies the service that implements the Envoy ext_authz gRPC authorization service.
 	// The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
