@@ -210,7 +210,7 @@ resources to help automate Istio's multi-network configuration.
   installing the gateway (e.g. east-west gateway) and should match either
   the default network for the control plane (as specified by the Istio System
   Namespace label) or the network of the targeted pods.`,
-		FeatureStatus: Alpha,
+		FeatureStatus: Beta,
 		Hidden:        false,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
@@ -226,7 +226,7 @@ resources to help automate Istio's multi-network configuration.
                         "subzone of a workload. This allows admins to specify a "+
                         "more granular level of locality than what is offered by "+
                         "default with Kubernetes regions and zones.",
-		FeatureStatus: Alpha,
+		FeatureStatus: Beta,
 		Hidden:        false,
 		Deprecated:    false,
 		Resources: []ResourceTypes{

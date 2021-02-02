@@ -25,7 +25,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.networking.v1alpha3',
   syntax='proto3',
   serialized_options=_b('Z istio.io/api/networking/v1alpha3'),
-  serialized_pb=_b('\n*networking/v1alpha3/destination_rule.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a)networking/v1alpha3/virtual_service.proto\x1a\x14gogoproto/gogo.proto\"\xad\x01\n\x0f\x44\x65stinationRule\x12\x11\n\x04host\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12@\n\x0etraffic_policy\x18\x02 \x01(\x0b\x32(.istio.networking.v1alpha3.TrafficPolicy\x12\x32\n\x07subsets\x18\x03 \x03(\x0b\x32!.istio.networking.v1alpha3.Subset\x12\x11\n\texport_to\x18\x04 \x03(\t\"\xe3\x05\n\rTrafficPolicy\x12\x46\n\rload_balancer\x18\x01 \x01(\x0b\x32/.istio.networking.v1alpha3.LoadBalancerSettings\x12J\n\x0f\x63onnection_pool\x18\x02 \x01(\x0b\x32\x31.istio.networking.v1alpha3.ConnectionPoolSettings\x12\x46\n\x11outlier_detection\x18\x03 \x01(\x0b\x32+.istio.networking.v1alpha3.OutlierDetection\x12\x39\n\x03tls\x18\x04 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettings\x12W\n\x13port_level_settings\x18\x05 \x03(\x0b\x32:.istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy\x1a\xe1\x02\n\x11PortTrafficPolicy\x12\x35\n\x04port\x18\x01 \x01(\x0b\x32\'.istio.networking.v1alpha3.PortSelector\x12\x46\n\rload_balancer\x18\x02 \x01(\x0b\x32/.istio.networking.v1alpha3.LoadBalancerSettings\x12J\n\x0f\x63onnection_pool\x18\x03 \x01(\x0b\x32\x31.istio.networking.v1alpha3.ConnectionPoolSettings\x12\x46\n\x11outlier_detection\x18\x04 \x01(\x0b\x32+.istio.networking.v1alpha3.OutlierDetection\x12\x39\n\x03tls\x18\x05 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettings\"\xcb\x01\n\x06Subset\x12\x11\n\x04name\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12=\n\x06labels\x18\x02 \x03(\x0b\x32-.istio.networking.v1alpha3.Subset.LabelsEntry\x12@\n\x0etraffic_policy\x18\x03 \x01(\x0b\x32(.istio.networking.v1alpha3.TrafficPolicy\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xc1\x05\n\x14LoadBalancerSettings\x12J\n\x06simple\x18\x01 \x01(\x0e\x32\x38.istio.networking.v1alpha3.LoadBalancerSettings.SimpleLBH\x00\x12[\n\x0f\x63onsistent_hash\x18\x02 \x01(\x0b\x32@.istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLBH\x00\x12S\n\x13locality_lb_setting\x18\x03 \x01(\x0b\x32\x36.istio.networking.v1alpha3.LocalityLoadBalancerSetting\x1a\xd3\x02\n\x10\x43onsistentHashLB\x12\x1a\n\x10http_header_name\x18\x01 \x01(\tH\x00\x12\x62\n\x0bhttp_cookie\x18\x02 \x01(\x0b\x32K.istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookieH\x00\x12\x17\n\ruse_source_ip\x18\x03 \x01(\x08H\x00\x12#\n\x19http_query_parameter_name\x18\x05 \x01(\tH\x00\x12\x19\n\x11minimum_ring_size\x18\x04 \x01(\x04\x1aZ\n\nHTTPCookie\x12\x11\n\x04name\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x0c\n\x04path\x18\x02 \x01(\t\x12+\n\x03ttl\x18\x03 \x01(\x0b\x32\x19.google.protobuf.DurationB\x03\xe0\x41\x02\x42\n\n\x08hash_key\"H\n\x08SimpleLB\x12\x0f\n\x0bROUND_ROBIN\x10\x00\x12\x0e\n\nLEAST_CONN\x10\x01\x12\n\n\x06RANDOM\x10\x02\x12\x0f\n\x0bPASSTHROUGH\x10\x03\x42\x0b\n\tlb_policy\"\xed\x06\n\x16\x43onnectionPoolSettings\x12J\n\x03tcp\x18\x01 \x01(\x0b\x32=.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings\x12L\n\x04http\x18\x02 \x01(\x0b\x32>.istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings\x1a\xb3\x02\n\x0bTCPSettings\x12\x17\n\x0fmax_connections\x18\x01 \x01(\x05\x12\x32\n\x0f\x63onnect_timeout\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x61\n\rtcp_keepalive\x18\x03 \x01(\x0b\x32J.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive\x1at\n\x0cTcpKeepalive\x12\x0e\n\x06probes\x18\x01 \x01(\r\x12\'\n\x04time\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\x12+\n\x08interval\x18\x03 \x01(\x0b\x32\x19.google.protobuf.Duration\x1a\x82\x03\n\x0cHTTPSettings\x12\"\n\x1ahttp1_max_pending_requests\x18\x01 \x01(\x05\x12\x1a\n\x12http2_max_requests\x18\x02 \x01(\x05\x12#\n\x1bmax_requests_per_connection\x18\x03 \x01(\x05\x12\x13\n\x0bmax_retries\x18\x04 \x01(\x05\x12/\n\x0cidle_timeout\x18\x05 \x01(\x0b\x32\x19.google.protobuf.Duration\x12i\n\x11h2_upgrade_policy\x18\x06 \x01(\x0e\x32N.istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicy\x12\x1b\n\x13use_client_protocol\x18\x07 \x01(\x08\"?\n\x0fH2UpgradePolicy\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x00\x12\x12\n\x0e\x44O_NOT_UPGRADE\x10\x01\x12\x0b\n\x07UPGRADE\x10\x02\"\xd0\x02\n\x10OutlierDetection\x12\x1e\n\x12\x63onsecutive_errors\x18\x01 \x01(\x05\x42\x02\x18\x01\x12@\n\x1a\x63onsecutive_gateway_errors\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12<\n\x16\x63onsecutive_5xx_errors\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12+\n\x08interval\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x35\n\x12\x62\x61se_ejection_time\x18\x03 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x1c\n\x14max_ejection_percent\x18\x04 \x01(\x05\x12\x1a\n\x12min_health_percent\x18\x05 \x01(\x05\"\xa9\x02\n\x11\x43lientTLSSettings\x12G\n\x04mode\x18\x01 \x01(\x0e\x32\x34.istio.networking.v1alpha3.ClientTLSSettings.TLSmodeB\x03\xe0\x41\x02\x12\x1a\n\x12\x63lient_certificate\x18\x02 \x01(\t\x12\x13\n\x0bprivate_key\x18\x03 \x01(\t\x12\x17\n\x0f\x63\x61_certificates\x18\x04 \x01(\t\x12\x17\n\x0f\x63redential_name\x18\x07 \x01(\t\x12\x19\n\x11subject_alt_names\x18\x05 \x03(\t\x12\x0b\n\x03sni\x18\x06 \x01(\t\"@\n\x07TLSmode\x12\x0b\n\x07\x44ISABLE\x10\x00\x12\n\n\x06SIMPLE\x10\x01\x12\n\n\x06MUTUAL\x10\x02\x12\x10\n\x0cISTIO_MUTUAL\x10\x03\"\xb9\x03\n\x1bLocalityLoadBalancerSetting\x12U\n\ndistribute\x18\x01 \x03(\x0b\x32\x41.istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute\x12Q\n\x08\x66\x61ilover\x18\x02 \x03(\x0b\x32?.istio.networking.v1alpha3.LocalityLoadBalancerSetting.Failover\x12+\n\x07\x65nabled\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x1a\x9c\x01\n\nDistribute\x12\x0c\n\x04\x66rom\x18\x01 \x01(\t\x12U\n\x02to\x18\x02 \x03(\x0b\x32I.istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.ToEntry\x1a)\n\x07ToEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\r:\x02\x38\x01\x1a$\n\x08\x46\x61ilover\x12\x0c\n\x04\x66rom\x18\x01 \x01(\t\x12\n\n\x02to\x18\x02 \x01(\tB\"Z istio.io/api/networking/v1alpha3b\x06proto3')
+  serialized_pb=_b('\n*networking/v1alpha3/destination_rule.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a)networking/v1alpha3/virtual_service.proto\x1a\x14gogoproto/gogo.proto\"\xd6\x01\n\x0f\x44\x65stinationRule\x12\x18\n\x04host\x18\x01 \x01(\tB\x04\xe2\x41\x01\x02R\x04host\x12O\n\x0etraffic_policy\x18\x02 \x01(\x0b\x32(.istio.networking.v1alpha3.TrafficPolicyR\rtrafficPolicy\x12;\n\x07subsets\x18\x03 \x03(\x0b\x32!.istio.networking.v1alpha3.SubsetR\x07subsets\x12\x1b\n\texport_to\x18\x04 \x03(\tR\x08\x65xportTo\"\xe6\x06\n\rTrafficPolicy\x12T\n\rload_balancer\x18\x01 \x01(\x0b\x32/.istio.networking.v1alpha3.LoadBalancerSettingsR\x0cloadBalancer\x12Z\n\x0f\x63onnection_pool\x18\x02 \x01(\x0b\x32\x31.istio.networking.v1alpha3.ConnectionPoolSettingsR\x0e\x63onnectionPool\x12X\n\x11outlier_detection\x18\x03 \x01(\x0b\x32+.istio.networking.v1alpha3.OutlierDetectionR\x10outlierDetection\x12>\n\x03tls\x18\x04 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettingsR\x03tls\x12j\n\x13port_level_settings\x18\x05 \x03(\x0b\x32:.istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicyR\x11portLevelSettings\x1a\x9c\x03\n\x11PortTrafficPolicy\x12;\n\x04port\x18\x01 \x01(\x0b\x32\'.istio.networking.v1alpha3.PortSelectorR\x04port\x12T\n\rload_balancer\x18\x02 \x01(\x0b\x32/.istio.networking.v1alpha3.LoadBalancerSettingsR\x0cloadBalancer\x12Z\n\x0f\x63onnection_pool\x18\x03 \x01(\x0b\x32\x31.istio.networking.v1alpha3.ConnectionPoolSettingsR\x0e\x63onnectionPool\x12X\n\x11outlier_detection\x18\x04 \x01(\x0b\x32+.istio.networking.v1alpha3.OutlierDetectionR\x10outlierDetection\x12>\n\x03tls\x18\x05 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettingsR\x03tls\"\xf5\x01\n\x06Subset\x12\x18\n\x04name\x18\x01 \x01(\tB\x04\xe2\x41\x01\x02R\x04name\x12\x45\n\x06labels\x18\x02 \x03(\x0b\x32-.istio.networking.v1alpha3.Subset.LabelsEntryR\x06labels\x12O\n\x0etraffic_policy\x18\x03 \x01(\x0b\x32(.istio.networking.v1alpha3.TrafficPolicyR\rtrafficPolicy\x1a\x39\n\x0bLabelsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xd1\x06\n\x14LoadBalancerSettings\x12R\n\x06simple\x18\x01 \x01(\x0e\x32\x38.istio.networking.v1alpha3.LoadBalancerSettings.SimpleLBH\x00R\x06simple\x12k\n\x0f\x63onsistent_hash\x18\x02 \x01(\x0b\x32@.istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLBH\x00R\x0e\x63onsistentHash\x12\x66\n\x13locality_lb_setting\x18\x03 \x01(\x0b\x32\x36.istio.networking.v1alpha3.LocalityLoadBalancerSettingR\x11localityLbSetting\x1a\xb8\x03\n\x10\x43onsistentHashLB\x12*\n\x10http_header_name\x18\x01 \x01(\tH\x00R\x0ehttpHeaderName\x12n\n\x0bhttp_cookie\x18\x02 \x01(\x0b\x32K.istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookieH\x00R\nhttpCookie\x12$\n\ruse_source_ip\x18\x03 \x01(\x08H\x00R\x0buseSourceIp\x12;\n\x19http_query_parameter_name\x18\x05 \x01(\tH\x00R\x16httpQueryParameterName\x12*\n\x11minimum_ring_size\x18\x04 \x01(\x04R\x0fminimumRingSize\x1am\n\nHTTPCookie\x12\x18\n\x04name\x18\x01 \x01(\tB\x04\xe2\x41\x01\x02R\x04name\x12\x12\n\x04path\x18\x02 \x01(\tR\x04path\x12\x31\n\x03ttl\x18\x03 \x01(\x0b\x32\x19.google.protobuf.DurationB\x04\xe2\x41\x01\x02R\x03ttlB\n\n\x08hash_key\"H\n\x08SimpleLB\x12\x0f\n\x0bROUND_ROBIN\x10\x00\x12\x0e\n\nLEAST_CONN\x10\x01\x12\n\n\x06RANDOM\x10\x02\x12\x0f\n\x0bPASSTHROUGH\x10\x03\x42\x0b\n\tlb_policy\"\xc1\x08\n\x16\x43onnectionPoolSettings\x12O\n\x03tcp\x18\x01 \x01(\x0b\x32=.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettingsR\x03tcp\x12R\n\x04http\x18\x02 \x01(\x0b\x32>.istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettingsR\x04http\x1a\xfa\x02\n\x0bTCPSettings\x12\'\n\x0fmax_connections\x18\x01 \x01(\x05R\x0emaxConnections\x12\x42\n\x0f\x63onnect_timeout\x18\x02 \x01(\x0b\x32\x19.google.protobuf.DurationR\x0e\x63onnectTimeout\x12o\n\rtcp_keepalive\x18\x03 \x01(\x0b\x32J.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepaliveR\x0ctcpKeepalive\x1a\x8c\x01\n\x0cTcpKeepalive\x12\x16\n\x06probes\x18\x01 \x01(\rR\x06probes\x12-\n\x04time\x18\x02 \x01(\x0b\x32\x19.google.protobuf.DurationR\x04time\x12\x35\n\x08interval\x18\x03 \x01(\x0b\x32\x19.google.protobuf.DurationR\x08interval\x1a\x84\x04\n\x0cHTTPSettings\x12;\n\x1ahttp1_max_pending_requests\x18\x01 \x01(\x05R\x17http1MaxPendingRequests\x12,\n\x12http2_max_requests\x18\x02 \x01(\x05R\x10http2MaxRequests\x12=\n\x1bmax_requests_per_connection\x18\x03 \x01(\x05R\x18maxRequestsPerConnection\x12\x1f\n\x0bmax_retries\x18\x04 \x01(\x05R\nmaxRetries\x12<\n\x0cidle_timeout\x18\x05 \x01(\x0b\x32\x19.google.protobuf.DurationR\x0bidleTimeout\x12z\n\x11h2_upgrade_policy\x18\x06 \x01(\x0e\x32N.istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicyR\x0fh2UpgradePolicy\x12.\n\x13use_client_protocol\x18\x07 \x01(\x08R\x11useClientProtocol\"?\n\x0fH2UpgradePolicy\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x00\x12\x12\n\x0e\x44O_NOT_UPGRADE\x10\x01\x12\x0b\n\x07UPGRADE\x10\x02\"\xd5\x03\n\x10OutlierDetection\x12\x31\n\x12\x63onsecutive_errors\x18\x01 \x01(\x05\x42\x02\x18\x01R\x11\x63onsecutiveErrors\x12Z\n\x1a\x63onsecutive_gateway_errors\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt32ValueR\x18\x63onsecutiveGatewayErrors\x12R\n\x16\x63onsecutive_5xx_errors\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.UInt32ValueR\x14\x63onsecutive5xxErrors\x12\x35\n\x08interval\x18\x02 \x01(\x0b\x32\x19.google.protobuf.DurationR\x08interval\x12G\n\x12\x62\x61se_ejection_time\x18\x03 \x01(\x0b\x32\x19.google.protobuf.DurationR\x10\x62\x61seEjectionTime\x12\x30\n\x14max_ejection_percent\x18\x04 \x01(\x05R\x12maxEjectionPercent\x12,\n\x12min_health_percent\x18\x05 \x01(\x05R\x10minHealthPercent\"\x85\x03\n\x11\x43lientTLSSettings\x12N\n\x04mode\x18\x01 \x01(\x0e\x32\x34.istio.networking.v1alpha3.ClientTLSSettings.TLSmodeB\x04\xe2\x41\x01\x02R\x04mode\x12-\n\x12\x63lient_certificate\x18\x02 \x01(\tR\x11\x63lientCertificate\x12\x1f\n\x0bprivate_key\x18\x03 \x01(\tR\nprivateKey\x12\'\n\x0f\x63\x61_certificates\x18\x04 \x01(\tR\x0e\x63\x61\x43\x65rtificates\x12\'\n\x0f\x63redential_name\x18\x07 \x01(\tR\x0e\x63redentialName\x12*\n\x11subject_alt_names\x18\x05 \x03(\tR\x0fsubjectAltNames\x12\x10\n\x03sni\x18\x06 \x01(\tR\x03sni\"@\n\x07TLSmode\x12\x0b\n\x07\x44ISABLE\x10\x00\x12\n\n\x06SIMPLE\x10\x01\x12\n\n\x06MUTUAL\x10\x02\x12\x10\n\x0cISTIO_MUTUAL\x10\x03\"\xf8\x03\n\x1bLocalityLoadBalancerSetting\x12\x61\n\ndistribute\x18\x01 \x03(\x0b\x32\x41.istio.networking.v1alpha3.LocalityLoadBalancerSetting.DistributeR\ndistribute\x12[\n\x08\x66\x61ilover\x18\x02 \x03(\x0b\x32?.istio.networking.v1alpha3.LocalityLoadBalancerSetting.FailoverR\x08\x66\x61ilover\x12\x34\n\x07\x65nabled\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x07\x65nabled\x1a\xb2\x01\n\nDistribute\x12\x12\n\x04\x66rom\x18\x01 \x01(\tR\x04\x66rom\x12Y\n\x02to\x18\x02 \x03(\x0b\x32I.istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.ToEntryR\x02to\x1a\x35\n\x07ToEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\rR\x05value:\x02\x38\x01\x1a.\n\x08\x46\x61ilover\x12\x12\n\x04\x66rom\x18\x01 \x01(\tR\x04\x66rom\x12\x0e\n\x02to\x18\x02 \x01(\tR\x02toB\"Z istio.io/api/networking/v1alpha3b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_virtual__service__pb2.DESCRIPTOR,gogoproto_dot_gogo__pb2.DESCRIPTOR,])
 
@@ -56,8 +56,8 @@ _LOADBALANCERSETTINGS_SIMPLELB = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1980,
-  serialized_end=2052,
+  serialized_start=2338,
+  serialized_end=2410,
 )
 _sym_db.RegisterEnumDescriptor(_LOADBALANCERSETTINGS_SIMPLELB)
 
@@ -82,8 +82,8 @@ _CONNECTIONPOOLSETTINGS_HTTPSETTINGS_H2UPGRADEPOLICY = _descriptor.EnumDescripto
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2882,
-  serialized_end=2945,
+  serialized_start=3452,
+  serialized_end=3515,
 )
 _sym_db.RegisterEnumDescriptor(_CONNECTIONPOOLSETTINGS_HTTPSETTINGS_H2UPGRADEPOLICY)
 
@@ -112,8 +112,8 @@ _CLIENTTLSSETTINGS_TLSMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=3520,
-  serialized_end=3584,
+  serialized_start=4315,
+  serialized_end=4379,
 )
 _sym_db.RegisterEnumDescriptor(_CLIENTTLSSETTINGS_TLSMODE)
 
@@ -131,28 +131,28 @@ _DESTINATIONRULE = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
+      serialized_options=_b('\342A\001\002'), json_name='host', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='traffic_policy', full_name='istio.networking.v1alpha3.DestinationRule.traffic_policy', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='trafficPolicy', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='subsets', full_name='istio.networking.v1alpha3.DestinationRule.subsets', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='subsets', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='export_to', full_name='istio.networking.v1alpha3.DestinationRule.export_to', index=3,
       number=4, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='exportTo', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -166,7 +166,7 @@ _DESTINATIONRULE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=236,
-  serialized_end=409,
+  serialized_end=450,
 )
 
 
@@ -183,35 +183,35 @@ _TRAFFICPOLICY_PORTTRAFFICPOLICY = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='port', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='load_balancer', full_name='istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.load_balancer', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='loadBalancer', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='connection_pool', full_name='istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.connection_pool', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='connectionPool', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='outlier_detection', full_name='istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.outlier_detection', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='outlierDetection', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='tls', full_name='istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.tls', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='tls', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -224,8 +224,8 @@ _TRAFFICPOLICY_PORTTRAFFICPOLICY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=798,
-  serialized_end=1151,
+  serialized_start=911,
+  serialized_end=1323,
 )
 
 _TRAFFICPOLICY = _descriptor.Descriptor(
@@ -241,35 +241,35 @@ _TRAFFICPOLICY = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='loadBalancer', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='connection_pool', full_name='istio.networking.v1alpha3.TrafficPolicy.connection_pool', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='connectionPool', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='outlier_detection', full_name='istio.networking.v1alpha3.TrafficPolicy.outlier_detection', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='outlierDetection', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='tls', full_name='istio.networking.v1alpha3.TrafficPolicy.tls', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='tls', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='port_level_settings', full_name='istio.networking.v1alpha3.TrafficPolicy.port_level_settings', index=4,
       number=5, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='portLevelSettings', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -282,8 +282,8 @@ _TRAFFICPOLICY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=412,
-  serialized_end=1151,
+  serialized_start=453,
+  serialized_end=1323,
 )
 
 
@@ -300,14 +300,14 @@ _SUBSET_LABELSENTRY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='key', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='value', full_name='istio.networking.v1alpha3.Subset.LabelsEntry.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='value', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -320,8 +320,8 @@ _SUBSET_LABELSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1312,
-  serialized_end=1357,
+  serialized_start=1514,
+  serialized_end=1571,
 )
 
 _SUBSET = _descriptor.Descriptor(
@@ -337,21 +337,21 @@ _SUBSET = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
+      serialized_options=_b('\342A\001\002'), json_name='name', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='labels', full_name='istio.networking.v1alpha3.Subset.labels', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='labels', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='traffic_policy', full_name='istio.networking.v1alpha3.Subset.traffic_policy', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='trafficPolicy', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -364,8 +364,8 @@ _SUBSET = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1154,
-  serialized_end=1357,
+  serialized_start=1326,
+  serialized_end=1571,
 )
 
 
@@ -382,21 +382,21 @@ _LOADBALANCERSETTINGS_CONSISTENTHASHLB_HTTPCOOKIE = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
+      serialized_options=_b('\342A\001\002'), json_name='name', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='path', full_name='istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.path', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='path', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='ttl', full_name='istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.ttl', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
+      serialized_options=_b('\342A\001\002'), json_name='ttl', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -409,8 +409,8 @@ _LOADBALANCERSETTINGS_CONSISTENTHASHLB_HTTPCOOKIE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1876,
-  serialized_end=1966,
+  serialized_start=2215,
+  serialized_end=2324,
 )
 
 _LOADBALANCERSETTINGS_CONSISTENTHASHLB = _descriptor.Descriptor(
@@ -426,35 +426,35 @@ _LOADBALANCERSETTINGS_CONSISTENTHASHLB = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='httpHeaderName', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='http_cookie', full_name='istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.http_cookie', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='httpCookie', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='use_source_ip', full_name='istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.use_source_ip', index=2,
       number=3, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='useSourceIp', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='http_query_parameter_name', full_name='istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.http_query_parameter_name', index=3,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='httpQueryParameterName', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='minimum_ring_size', full_name='istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.minimum_ring_size', index=4,
       number=4, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='minimumRingSize', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -470,8 +470,8 @@ _LOADBALANCERSETTINGS_CONSISTENTHASHLB = _descriptor.Descriptor(
       name='hash_key', full_name='istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.hash_key',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=1639,
-  serialized_end=1978,
+  serialized_start=1896,
+  serialized_end=2336,
 )
 
 _LOADBALANCERSETTINGS = _descriptor.Descriptor(
@@ -487,21 +487,21 @@ _LOADBALANCERSETTINGS = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='simple', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='consistent_hash', full_name='istio.networking.v1alpha3.LoadBalancerSettings.consistent_hash', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='consistentHash', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='locality_lb_setting', full_name='istio.networking.v1alpha3.LoadBalancerSettings.locality_lb_setting', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='localityLbSetting', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -518,8 +518,8 @@ _LOADBALANCERSETTINGS = _descriptor.Descriptor(
       name='lb_policy', full_name='istio.networking.v1alpha3.LoadBalancerSettings.lb_policy',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=1360,
-  serialized_end=2065,
+  serialized_start=1574,
+  serialized_end=2423,
 )
 
 
@@ -536,21 +536,21 @@ _CONNECTIONPOOLSETTINGS_TCPSETTINGS_TCPKEEPALIVE = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='probes', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='time', full_name='istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.time', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='time', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='interval', full_name='istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.interval', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='interval', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -563,8 +563,8 @@ _CONNECTIONPOOLSETTINGS_TCPSETTINGS_TCPKEEPALIVE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2440,
-  serialized_end=2556,
+  serialized_start=2856,
+  serialized_end=2996,
 )
 
 _CONNECTIONPOOLSETTINGS_TCPSETTINGS = _descriptor.Descriptor(
@@ -580,21 +580,21 @@ _CONNECTIONPOOLSETTINGS_TCPSETTINGS = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='maxConnections', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='connect_timeout', full_name='istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.connect_timeout', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='connectTimeout', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='tcp_keepalive', full_name='istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.tcp_keepalive', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='tcpKeepalive', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -607,8 +607,8 @@ _CONNECTIONPOOLSETTINGS_TCPSETTINGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2249,
-  serialized_end=2556,
+  serialized_start=2618,
+  serialized_end=2996,
 )
 
 _CONNECTIONPOOLSETTINGS_HTTPSETTINGS = _descriptor.Descriptor(
@@ -624,49 +624,49 @@ _CONNECTIONPOOLSETTINGS_HTTPSETTINGS = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='http1MaxPendingRequests', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='http2_max_requests', full_name='istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.http2_max_requests', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='http2MaxRequests', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='max_requests_per_connection', full_name='istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.max_requests_per_connection', index=2,
       number=3, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='maxRequestsPerConnection', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='max_retries', full_name='istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.max_retries', index=3,
       number=4, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='maxRetries', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='idle_timeout', full_name='istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.idle_timeout', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='idleTimeout', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='h2_upgrade_policy', full_name='istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.h2_upgrade_policy', index=5,
       number=6, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='h2UpgradePolicy', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='use_client_protocol', full_name='istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.use_client_protocol', index=6,
       number=7, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='useClientProtocol', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -680,8 +680,8 @@ _CONNECTIONPOOLSETTINGS_HTTPSETTINGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2559,
-  serialized_end=2945,
+  serialized_start=2999,
+  serialized_end=3515,
 )
 
 _CONNECTIONPOOLSETTINGS = _descriptor.Descriptor(
@@ -697,14 +697,14 @@ _CONNECTIONPOOLSETTINGS = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='tcp', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='http', full_name='istio.networking.v1alpha3.ConnectionPoolSettings.http', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='http', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -717,8 +717,8 @@ _CONNECTIONPOOLSETTINGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2068,
-  serialized_end=2945,
+  serialized_start=2426,
+  serialized_end=3515,
 )
 
 
@@ -735,49 +735,49 @@ _OUTLIERDETECTION = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\030\001'), file=DESCRIPTOR),
+      serialized_options=_b('\030\001'), json_name='consecutiveErrors', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='consecutive_gateway_errors', full_name='istio.networking.v1alpha3.OutlierDetection.consecutive_gateway_errors', index=1,
       number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='consecutiveGatewayErrors', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='consecutive_5xx_errors', full_name='istio.networking.v1alpha3.OutlierDetection.consecutive_5xx_errors', index=2,
       number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='consecutive5xxErrors', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='interval', full_name='istio.networking.v1alpha3.OutlierDetection.interval', index=3,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='interval', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='base_ejection_time', full_name='istio.networking.v1alpha3.OutlierDetection.base_ejection_time', index=4,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='baseEjectionTime', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='max_ejection_percent', full_name='istio.networking.v1alpha3.OutlierDetection.max_ejection_percent', index=5,
       number=4, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='maxEjectionPercent', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='min_health_percent', full_name='istio.networking.v1alpha3.OutlierDetection.min_health_percent', index=6,
       number=5, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='minHealthPercent', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -790,8 +790,8 @@ _OUTLIERDETECTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2948,
-  serialized_end=3284,
+  serialized_start=3518,
+  serialized_end=3987,
 )
 
 
@@ -808,49 +808,49 @@ _CLIENTTLSSETTINGS = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
+      serialized_options=_b('\342A\001\002'), json_name='mode', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='client_certificate', full_name='istio.networking.v1alpha3.ClientTLSSettings.client_certificate', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='clientCertificate', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='private_key', full_name='istio.networking.v1alpha3.ClientTLSSettings.private_key', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='privateKey', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='ca_certificates', full_name='istio.networking.v1alpha3.ClientTLSSettings.ca_certificates', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='caCertificates', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='credential_name', full_name='istio.networking.v1alpha3.ClientTLSSettings.credential_name', index=4,
       number=7, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='credentialName', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='subject_alt_names', full_name='istio.networking.v1alpha3.ClientTLSSettings.subject_alt_names', index=5,
       number=5, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='subjectAltNames', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sni', full_name='istio.networking.v1alpha3.ClientTLSSettings.sni', index=6,
       number=6, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='sni', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -864,8 +864,8 @@ _CLIENTTLSSETTINGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3287,
-  serialized_end=3584,
+  serialized_start=3990,
+  serialized_end=4379,
 )
 
 
@@ -882,14 +882,14 @@ _LOCALITYLOADBALANCERSETTING_DISTRIBUTE_TOENTRY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='key', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='value', full_name='istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.ToEntry.value', index=1,
       number=2, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='value', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -902,8 +902,8 @@ _LOCALITYLOADBALANCERSETTING_DISTRIBUTE_TOENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3949,
-  serialized_end=3990,
+  serialized_start=4785,
+  serialized_end=4838,
 )
 
 _LOCALITYLOADBALANCERSETTING_DISTRIBUTE = _descriptor.Descriptor(
@@ -919,14 +919,14 @@ _LOCALITYLOADBALANCERSETTING_DISTRIBUTE = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='from', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='to', full_name='istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.to', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='to', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -939,8 +939,8 @@ _LOCALITYLOADBALANCERSETTING_DISTRIBUTE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3834,
-  serialized_end=3990,
+  serialized_start=4660,
+  serialized_end=4838,
 )
 
 _LOCALITYLOADBALANCERSETTING_FAILOVER = _descriptor.Descriptor(
@@ -956,14 +956,14 @@ _LOCALITYLOADBALANCERSETTING_FAILOVER = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='from', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='to', full_name='istio.networking.v1alpha3.LocalityLoadBalancerSetting.Failover.to', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='to', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -976,8 +976,8 @@ _LOCALITYLOADBALANCERSETTING_FAILOVER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3992,
-  serialized_end=4028,
+  serialized_start=4840,
+  serialized_end=4886,
 )
 
 _LOCALITYLOADBALANCERSETTING = _descriptor.Descriptor(
@@ -993,21 +993,21 @@ _LOCALITYLOADBALANCERSETTING = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='distribute', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='failover', full_name='istio.networking.v1alpha3.LocalityLoadBalancerSetting.failover', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='failover', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='enabled', full_name='istio.networking.v1alpha3.LocalityLoadBalancerSetting.enabled', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, json_name='enabled', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -1020,8 +1020,8 @@ _LOCALITYLOADBALANCERSETTING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3587,
-  serialized_end=4028,
+  serialized_start=4382,
+  serialized_end=4886,
 )
 
 _DESTINATIONRULE.fields_by_name['traffic_policy'].message_type = _TRAFFICPOLICY

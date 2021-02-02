@@ -259,24 +259,6 @@ var (
 		},
 	}
 
-	SecurityTlsMode = Instance {
-		Name:          "security.istio.io/tlsMode",
-		Description:   "Specifies the TLS mode supported by a sidecar proxy. "+
-                        "Valid values are 'istio', 'disabled'. When injecting "+
-                        "sidecars into Pods, the sidecar injector will set the "+
-                        "value of this label to 'istio' indicating that the "+
-                        "sidecar is capable of supporting mTLS. Clients will "+
-                        "opportunistically use this label to determine whether or "+
-                        "not to secure the traffic to this workload using Istio "+
-                        "mutual TLS.",
-		FeatureStatus: Alpha,
-		Hidden:        true,
-		Deprecated:    true,
-		Resources: []ResourceTypes{
-			Pod,
-		},
-	}
-
 	SidecarBootstrapOverride = Instance {
 		Name:          "sidecar.istio.io/bootstrapOverride",
 		Description:   "Specifies an alternative Envoy bootstrap configuration "+
@@ -639,7 +621,6 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarStatusReadinessFailureThreshold,
 		&SidecarStatusReadinessInitialDelaySeconds,
 		&SidecarStatusReadinessPeriodSeconds,
-		&SecurityTlsMode,
 		&SidecarBootstrapOverride,
 		&SidecarComponentLogLevel,
 		&SidecarControlPlaneAuthPolicy,
