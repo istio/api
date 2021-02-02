@@ -1,0 +1,170 @@
+// Copyright Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "google/api/field_behavior.proto";
+import "networking/v1alpha3/sidecar.proto";
+
+package istio.networking.v1alpha3;
+
+option go_package = "istio.io/api/networking/v1alpha3";
+
+// ServiceExportPolicy configures the exporting of services across the mesh.
+//
+// We use the term "exporting" to refer to the process where a service's endpoints are
+// made accessible to one or more workloads. If no endpoint for a service is exported
+// to a workload, the service will be effectively unreachable from the workload.
+//
+// ServiceExportPolicy supports a variety of use cases that require partitioning the mesh
+// and providing customized views of service endpoints to each workload. For example,
+// it may be desirable that workloads in a given cluster use only the service endpoints
+// residing within the same cluster.
+//
+// By default (if no ServiceExportPolicy is specified), all services are exported to all
+// workloads in the mesh. This means that any workload can call any service endpoint.
+//
+// The mesh-wide default can be overridden by applying a ServiceExportPolicy to the
+// Istio system namespace, using the service wildcard. For example, the following will
+// disable export of all services across the mesh by default, requiring that services
+// be explicitly exported:
+//
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceExportPolicy
+// metadata:
+//   name: auto-export-off
+//   namespace: istio-system # Using the Istio system namespace applies mesh-wide
+// spec:
+//   from:
+//     service: * # Using wildcard applies to all services.
+//   # No "to" is specified, so services will not export by default.
+// ```
+// {{</tab>}}
+// {{</tabset>}}
+//
+// Similarly, a namespace-wide default can be specified by applying a ServiceExportPolicy
+// to the namespace the service being exported.
+//
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceExportPolicy
+// metadata:
+//   name: auto-export-off
+//   namespace: example-ns
+// spec:
+//   from:
+//     service: * # Using wildcard applies to all services in the namespace.
+//   to:
+//     hosts:
+//     - *.example.svc.cluster.local # Export to all workloads in the same namespace.
+// ```
+// {{</tab>}}
+// {{</tabset>}}
+//
+// The selection of service endpoints to be exported can be further refined by selecting
+// specific workloads by label. For example, the following policy configures the service
+// endpoints in cluster1 to be exported only to workloads running in the same cluster.
+//
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceExportPolicy
+// metadata:
+//   name: myservice-cluster1-to-cluster1-cluster2
+//   namespace: example-ns
+// spec:
+//   from:
+//     service: MyService
+//     selector:
+//       "topology.istio.io/cluster": cluster1
+//   to:
+//     hosts:
+//     - *
+//     selector:
+//       "topology.istio.io/cluster": cluster1
+// ```
+// {{</tab>}}
+// {{</tabset>}}
+//
+// The workload selectors can also be used to match against a number of
+// label values. The following expands the previous example to export
+// the service to both cluster1 and cluster2.
+//
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceExportPolicy
+// metadata:
+//   name: myservice-cluster1-to-cluster1-cluster2
+//   namespace: example-ns
+// spec:
+//   from:
+//     service: MyService
+//     selector:
+//       "topology.istio.io/cluster": cluster1
+//   to:
+//     hosts:
+//     - *
+//     selector:
+//       "topology.istio.io/cluster": cluster1,cluster2
+// ```
+// {{</tab>}}
+// {{</tabset>}}
+//
+message ServiceExportPolicy {
+
+  message From {
+    // Required. Selects a specific service within the namespace to be included in the
+    // operation. If a wildcard ('*'), all services within the scope
+    // (namespace or mesh-wide) are selected
+    string service = 1 [(google.api.field_behavior) = REQUIRED];
+
+    // Optional. Further refines the selection of service endpoints that should be
+    // included in the operation.
+    //
+    // Allows multiple values to be specified for a given label, separated by commas. In
+    // which case, a workload will be selected if its value matches any of the values
+    // specified.
+    WorkloadSelector selector = 2;
+  }
+
+  message To {
+    // Required. The hosts to which the selected services should be exported.
+    // Could be a DNS name with wildcard prefix.
+    repeated string hosts = 1 [(google.api.field_behavior) = REQUIRED];
+
+    // Optional. Selects workloads to have access to the exported services. If not
+    // set, all workloads in the selected namespaces will be selected.
+    //
+    // Allows multiple values to be specified for a given label, separated by commas. In
+    // which case, a workload will be selected if its value matches any of the values
+    // specified.
+    WorkloadSelector selector = 2;
+  }
+
+  // Required. Selects the services to be exported.
+  repeated From from = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. Selects the workloads to which the services are to be exported.
+  // Only selected workloads will be able to reach the services. If not set,
+  // no workloads will be able to reach the selected services.
+  repeated To to = 2;
+}

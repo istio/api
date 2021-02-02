@@ -1,0 +1,74 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "",
+    "version": "v1alpha3"
+  },
+  "components": {
+    "schemas": {
+      "istio.networking.v1alpha3.WorkloadSelector": {
+        "description": "`WorkloadSelector` specifies the criteria used to determine if the `Gateway`, `Sidecar`, or `EnvoyFilter` or `ServiceEntry` configuration can be applied to a proxy. The matching criteria includes the metadata associated with a proxy, workload instance info such as labels attached to the pod/VM, or any other info that the proxy provides to Istio during the initial handshake. If multiple conditions are specified, all conditions need to match in order for the workload instance to be selected. Currently, only label based selection mechanism is supported.",
+        "type": "object",
+        "properties": {
+          "labels": {
+            "description": "One or more labels that indicate a specific set of pods/VMs on which the configuration should be applied. The scope of label search is restricted to the configuration namespace in which the the resource is present.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        }
+      },
+      "istio.networking.v1alpha3.ServiceExportPolicy": {
+        "description": "ServiceExportPolicy configures the exporting of services across the mesh.",
+        "type": "object",
+        "properties": {
+          "from": {
+            "description": "Required. Selects the services to be exported.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.ServiceExportPolicy.From"
+            }
+          },
+          "to": {
+            "description": "Optional. Selects the workloads to which the services are to be exported. Only selected workloads will be able to reach the services. If not set, no workloads will be able to reach the selected services.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.ServiceExportPolicy.To"
+            }
+          }
+        }
+      },
+      "istio.networking.v1alpha3.ServiceExportPolicy.From": {
+        "type": "object",
+        "properties": {
+          "service": {
+            "description": "Required. Selects a specific service within the namespace to be included in the operation. If a wildcard ('*'), all services within the scope (namespace or mesh-wide) are selected",
+            "type": "string",
+            "format": "string"
+          },
+          "selector": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.WorkloadSelector"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.ServiceExportPolicy.To": {
+        "type": "object",
+        "properties": {
+          "selector": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.WorkloadSelector"
+          },
+          "hosts": {
+            "description": "Required. The hosts to which the selected services should be exported. Could be a DNS name with wildcard prefix.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}
