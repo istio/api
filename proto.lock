@@ -34395,7 +34395,7 @@
                   },
                   {
                     "id": 2,
-                    "name": "http2_max_requests",
+                    "name": "max_requests",
                     "type": "int32"
                   },
                   {
@@ -37090,7 +37090,7 @@
                   },
                   {
                     "id": 2,
-                    "name": "http2_max_requests",
+                    "name": "max_requests",
                     "type": "int32"
                   },
                   {

@@ -1,0 +1,10 @@
+apiVersion: release-notes/v2
+kind: API Change
+area: networking
+issue:
+  - 27473
+
+releaseNotes:
+  - |
+    **Changed** ConnectionPoolSettings.HTTPSettings `http2MaxRequests` of DestinationRule API to `maxRequests` in accordance with the combination of H1 and H2 conn_pool implementations: https://github.com/envoyproxy/envoy/issues/9215. This resolves the outdated H1 only implications for `max_requests` field.
+

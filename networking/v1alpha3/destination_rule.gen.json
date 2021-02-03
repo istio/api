@@ -454,7 +454,7 @@
             "type": "integer",
             "format": "int32"
           },
-          "http2MaxRequests": {
+          "maxRequests": {
             "description": "Maximum number of requests to a backend. Default 2^32-1.",
             "type": "integer",
             "format": "int32"

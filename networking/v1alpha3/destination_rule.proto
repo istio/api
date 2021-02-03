@@ -607,7 +607,7 @@ message ConnectionPoolSettings {
     int32 http1_max_pending_requests = 1;
 
     // Maximum number of requests to a backend. Default 2^32-1.
-    int32 http2_max_requests = 2;
+    int32 max_requests = 2;
 
     // Maximum number of requests per connection to a backend. Setting this
     // parameter to 1 disables keep alive. Default 0, meaning "unlimited",
@@ -683,7 +683,7 @@ message ConnectionPoolSettings {
 //       tcp:
 //         maxConnections: 100
 //       http:
-//         http2MaxRequests: 1000
+//         maxRequests: 1000
 //         maxRequestsPerConnection: 10
 //     outlierDetection:
 //       consecutiveErrors: 7
@@ -705,7 +705,7 @@ message ConnectionPoolSettings {
 //       tcp:
 //         maxConnections: 100
 //       http:
-//         http2MaxRequests: 1000
+//         maxRequests: 1000
 //         maxRequestsPerConnection: 10
 //     outlierDetection:
 //       consecutiveErrors: 7
