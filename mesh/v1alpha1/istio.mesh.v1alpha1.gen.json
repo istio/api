@@ -23,6 +23,13 @@
           "h2UpgradePolicy": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.H2UpgradePolicy"
           },
+          "caCertificates": {
+            "description": "The root certificates for workload-to-workload communication.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.CertificateReference"
+            }
+          },
           "outboundTrafficPolicy": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy"
           },
@@ -105,22 +112,6 @@
           },
           "trustDomainAliases": {
             "description": "The trust domain aliases represent the aliases of `trust_domain`. For example, if we have ```yaml trustDomain: td1 trustDomainAliases: [\"td2\", \"td3\"] ``` Any service with the identity `td1/ns/foo/sa/a-service-account`, `td2/ns/foo/sa/a-service-account`, or `td3/ns/foo/sa/a-service-account` will be treated the same in the Istio mesh.",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "caCertificatePems": {
-            "description": "The PEM data of the root certificates for workload-to-workload communication.",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "caCertificateUrls": {
-            "description": "The SPIFFE Bundle Endpoint that complies to: https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#the-spiffe-trust-domain-and-bundle This field specifies the SPIFFE Bundle Endpoint URL. The endpoint should support authentication based on Web PKI: https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#521-web-pki The fetched root certificates are added to the root of trust for workload-to-workload communication.",
             "type": "array",
             "items": {
               "type": "string",
@@ -229,14 +220,6 @@
         "description": "ProxyConfig defines variables for individual Envoy instances.",
         "type": "object",
         "properties": {
-          "caCertificatePems": {
-            "description": "The PEM data of the root certificates for workload-to-workload communication. This includes the certificates defined in MeshConfig and any other certificates that Istiod uses as CA. The plugin certificates (the 'cacerts' secret), self-signed certificates (the 'istio-ca-secret' secret) are added automatically by Istiod.",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "string"
-            }
-          },
           "configPath": {
             "description": "Path to the generated configuration file directory. Proxy agent generates the actual configuration and stores it in this directory.",
             "type": "string",
@@ -376,6 +359,14 @@
             "description": "Boolean flag for enabling/disabling the holdApplicationUntilProxyStarts behavior. This feature adds hooks to delay application startup until the pod proxy is ready to accept traffic, mitigating some startup race conditions. Default value is 'false'.",
             "type": "boolean",
             "nullable": true
+          },
+          "caCertificatesPem": {
+            "description": "The PEM data of the root certificates for workload-to-workload communication. This includes the certificates defined in MeshConfig and any other certificates that Istiod uses as CA. The plugin certificates (the 'cacerts' secret), self-signed certificates (the 'istio-ca-secret' secret) are added automatically by Istiod.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
           }
         }
       },
@@ -407,6 +398,65 @@
             }
           }
         }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.CertificateReference": {
+        "type": "object",
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "pem"
+                  ],
+                  "properties": {
+                    "pem": {
+                      "description": "The PEM data of the certificate.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "spiffeBundleUrl"
+                  ],
+                  "properties": {
+                    "spiffeBundleUrl": {
+                      "description": "The SPIFFE bundle endpoint URL that complies to: https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#the-spiffe-trust-domain-and-bundle The endpoint should support authentication based on Web PKI: https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#521-web-pki The certificate is retrieved from the endpoint.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "pem"
+            ],
+            "properties": {
+              "pem": {
+                "description": "The PEM data of the certificate.",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "spiffeBundleUrl"
+            ],
+            "properties": {
+              "spiffeBundleUrl": {
+                "description": "The SPIFFE bundle endpoint URL that complies to: https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#the-spiffe-trust-domain-and-bundle The endpoint should support authentication based on Web PKI: https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#521-web-pki The certificate is retrieved from the endpoint.",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          }
+        ]
       },
       "istio.mesh.v1alpha1.MeshConfig.H2UpgradePolicy": {
         "description": "Default Policy for upgrading http1.1 connections to http2.",

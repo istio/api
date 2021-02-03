@@ -497,7 +497,7 @@ message ProxyConfig {
   // This includes the certificates defined in MeshConfig and any other certificates that Istiod uses as CA.
   // The plugin certificates (the 'cacerts' secret), self-signed certificates (the 'istio-ca-secret' secret)
   // are added automatically by Istiod.
-  repeated string ca_certificate_pems = 34;
+  repeated string ca_certificates_pem = 34;
 }
 
 message RemoteService {

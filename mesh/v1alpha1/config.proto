@@ -210,14 +210,21 @@ message MeshConfig {
   // or `td3/ns/foo/sa/a-service-account` will be treated the same in the Istio mesh.
   repeated string trust_domain_aliases = 46;
 
-  // The PEM data of the root certificates for workload-to-workload communication.
-  repeated string ca_certificate_pems = 58;
-  // The SPIFFE Bundle Endpoint that complies to:
-  // https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#the-spiffe-trust-domain-and-bundle
-  // This field specifies the SPIFFE Bundle Endpoint URL. The endpoint should support authentication based on Web PKI:
-  // https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#521-web-pki
-  // The fetched root certificates are added to the root of trust for workload-to-workload communication.
-  repeated string ca_certificate_urls = 59;
+  message CertificateReference {
+    oneof certificate_reference {
+      // The PEM data of the certificate.
+      string pem = 1;
+      // The SPIFFE bundle endpoint URL that complies to:
+      // https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#the-spiffe-trust-domain-and-bundle
+      // The endpoint should support authentication based on Web PKI:
+      // https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#521-web-pki
+      // The certificate is retrieved from the endpoint.
+      string spiffe_bundle_url = 2;
+    }
+  }
+
+  // The root certificates for workload-to-workload communication.
+  repeated CertificateReference ca_certificates = 58;
 
   // The default value for the ServiceEntry.export_to field and services
   // imported through container registry integrations, e.g. this applies to
@@ -544,7 +551,7 @@ message MeshConfig {
   repeated ExtensionProvider extension_providers = 57;
 
   // $hide_from_docs
-  // Next available field number: 60
+  // Next available field number: 59
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
