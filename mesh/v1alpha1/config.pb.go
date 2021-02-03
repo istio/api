@@ -450,9 +450,11 @@ type MeshConfig struct {
 	// Defines a list of extension providers that extend Istio's functionality. For example, the AuthorizationPolicy
 	// can be used with an extension provider to delegate the authorization decision to a custom authorization system.
 	ExtensionProviders []*MeshConfig_ExtensionProvider `protobuf:"bytes,57,rep,name=extension_providers,json=extensionProviders,proto3" json:"extensionProviders,omitempty"`
-	// A list of kubernetes selectors that specify the set of namespaces that istio processes.
-	// Elements in the list are disjunctive, i.e. a namespace will be included if it matches any selector.
-	// If omitted, istio will use the default behavior of processing all namespaces.
+	// A list of Kubernetes selectors that specify the set of namespaces that Istio considers when
+	// computing configuration updates for sidecars. This can be used to reduce Istio's computational load
+	// by limiting the number of entities (including services, pods, and endpoints) that are watched and processed.
+	// If omitted, Istio will use the default behavior of processing all namespaces.
+	// Elements in the list are disjunctive (OR semantics), i.e. a namespace will be included if it matches any selector.
 	// The following example selects any namespace with either labels `env: prod` and `region: us-east1`,
 	// or with label `app` equal to `cassandra` or `spark`.
 	// ```yaml

@@ -587,9 +587,11 @@ No
 <td><code>discoverySelectors</code></td>
 <td><code><a href="#k8s-io-apimachinery-pkg-apis-meta-v1-LabelSelector">LabelSelector[]</a></code></td>
 <td>
-<p>A list of kubernetes selectors that specify the set of namespaces that istio processes.
-Elements in the list are disjunctive, i.e. a namespace will be included if it matches any selector.
-If omitted, istio will use the default behavior of processing all namespaces.
+<p>A list of Kubernetes selectors that specify the set of namespaces that Istio considers when
+computing configuration updates for sidecars. This can be used to reduce Istio&rsquo;s computational load
+by limiting the number of entities (including services, pods, and endpoints) that are watched and processed.
+If omitted, Istio will use the default behavior of processing all namespaces.
+Elements in the list are disjunctive (OR semantics), i.e. a namespace will be included if it matches any selector.
 The following example selects any namespace with either labels <code>env: prod</code> and <code>region: us-east1</code>,
 or with label <code>app</code> equal to <code>cassandra</code> or <code>spark</code>.</p>
 

@@ -6,4 +6,4 @@ issue:
 
 releaseNotes:
   - |
-    **Added** Add discovery selectors to mesh config, a disjunctive list of k8s selectors used to restrict the namespaces that istiod processes.
+    **Added** Add discovery selectors to mesh config, a list of Kubernetes selectors used to limit the namespaces that istiod processes for reducing computational load.
