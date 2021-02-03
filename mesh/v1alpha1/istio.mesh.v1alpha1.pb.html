@@ -323,7 +323,10 @@ No
 <td><code>caCertificates</code></td>
 <td><code><a href="#MeshConfig-CertificateData">CertificateData[]</a></code></td>
 <td>
-<p>The root certificates for workload-to-workload communication.</p>
+<p>The extra root certificates for workload-to-workload communication.
+The plugin certificates (the &lsquo;cacerts&rsquo; secret) or self-signed certificates (the &lsquo;istio-ca-secret&rsquo; secret)
+are added automatically by Istiod.
+The CA certificate that signs the workload certificates is automatically added by Istio Agent.</p>
 
 </td>
 <td>
@@ -1686,7 +1689,7 @@ No
 <td><code>caCertificatesPem</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>The PEM data of the root certificates for workload-to-workload communication.
+<p>The PEM data of the extra root certificates for workload-to-workload communication.
 This includes the certificates defined in MeshConfig and any other certificates that Istiod uses as CA.
 The plugin certificates (the &lsquo;cacerts&rsquo; secret), self-signed certificates (the &lsquo;istio-ca-secret&rsquo; secret)
 are added automatically by Istiod.</p>

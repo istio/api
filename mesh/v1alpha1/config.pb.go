@@ -313,7 +313,10 @@ type MeshConfig struct {
 	// Any service with the identity `td1/ns/foo/sa/a-service-account`, `td2/ns/foo/sa/a-service-account`,
 	// or `td3/ns/foo/sa/a-service-account` will be treated the same in the Istio mesh.
 	TrustDomainAliases []string `protobuf:"bytes,46,rep,name=trust_domain_aliases,json=trustDomainAliases,proto3" json:"trustDomainAliases,omitempty"`
-	// The root certificates for workload-to-workload communication.
+	// The extra root certificates for workload-to-workload communication.
+	// The plugin certificates (the 'cacerts' secret) or self-signed certificates (the 'istio-ca-secret' secret)
+	// are added automatically by Istiod.
+	// The CA certificate that signs the workload certificates is automatically added by Istio Agent.
 	CaCertificates []*MeshConfig_CertificateData `protobuf:"bytes,58,rep,name=ca_certificates,json=caCertificates,proto3" json:"caCertificates,omitempty"`
 	// The default value for the ServiceEntry.export_to field and services
 	// imported through container registry integrations, e.g. this applies to

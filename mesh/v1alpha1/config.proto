@@ -223,7 +223,10 @@ message MeshConfig {
     }
   }
 
-  // The root certificates for workload-to-workload communication.
+  // The extra root certificates for workload-to-workload communication.
+  // The plugin certificates (the 'cacerts' secret) or self-signed certificates (the 'istio-ca-secret' secret)
+  // are added automatically by Istiod.
+  // The CA certificate that signs the workload certificates is automatically added by Istio Agent.
   repeated CertificateData ca_certificates = 58;
 
   // The default value for the ServiceEntry.export_to field and services

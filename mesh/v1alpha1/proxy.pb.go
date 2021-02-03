@@ -1246,7 +1246,7 @@ type ProxyConfig struct {
 	// is ready to accept traffic, mitigating some startup race conditions.
 	// Default value is 'false'.
 	HoldApplicationUntilProxyStarts *types.BoolValue `protobuf:"bytes,33,opt,name=hold_application_until_proxy_starts,json=holdApplicationUntilProxyStarts,proto3" json:"holdApplicationUntilProxyStarts,omitempty"`
-	// The PEM data of the root certificates for workload-to-workload communication.
+	// The PEM data of the extra root certificates for workload-to-workload communication.
 	// This includes the certificates defined in MeshConfig and any other certificates that Istiod uses as CA.
 	// The plugin certificates (the 'cacerts' secret), self-signed certificates (the 'istio-ca-secret' secret)
 	// are added automatically by Istiod.
