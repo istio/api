@@ -193,7 +193,6 @@ const (
 	AuthorizationPolicy_DENY AuthorizationPolicy_Action = 1
 	// Audit a request if it matches any of the rules.
 	AuthorizationPolicy_AUDIT AuthorizationPolicy_Action = 2
-	// $hide_from_docs
 	// The CUSTOM action allows an extension to handle the user request if the matching rules evaluate to true.
 	// The extension is evaluated independently and before the native ALLOW and DENY actions. When used together, A request
 	// is allowed if and only if all the actions return allow, in other words, the extension cannot bypass the
@@ -311,8 +310,6 @@ type AuthorizationPolicy struct {
 	Rules []*Rule `protobuf:"bytes,2,rep,name=rules,proto3" json:"rules,omitempty"`
 	// Optional. The action to take if the request is matched with the rules.
 	Action AuthorizationPolicy_Action `protobuf:"varint,3,opt,name=action,proto3,enum=istio.security.v1beta1.AuthorizationPolicy_Action" json:"action,omitempty"`
-	// $hide_from_docs
-	//
 	// Types that are valid to be assigned to ActionDetail:
 	//	*AuthorizationPolicy_Provider
 	ActionDetail         isAuthorizationPolicy_ActionDetail `protobuf_oneof:"action_detail"`
@@ -408,7 +405,6 @@ func (*AuthorizationPolicy) XXX_OneofWrappers() []interface{} {
 	}
 }
 
-// $hide_from_docs
 type AuthorizationPolicy_ExtensionProvider struct {
 	// Specifies the name of the extension provider. The list of available providers is defined in the MeshConfig.
 	// Note, currently at most 1 extension provider is allowed per workload. Different workloads can use different extension provider.
