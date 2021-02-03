@@ -464,6 +464,7 @@
         }
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider": {
+        "description": "REQUIRED. Specifies detailed configuration for the extension provider.",
         "type": "object",
         "properties": {
           "name": {

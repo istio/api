@@ -442,7 +442,6 @@ message MeshConfig {
   // using the Istio CA gRPC API.
   CA ca = 55;
 
-  // $hide_from_docs
   message ExtensionProvider {
     // REQUIRED. A unique name identifying the extension provider.
     string name = 1;
@@ -455,7 +454,6 @@ message MeshConfig {
       EnvoyExternalAuthorizationGrpcProvider envoy_ext_authz_grpc = 3;
     }
 
-    // $hide_from_docs
     message EnvoyExternalAuthorizationHttpProvider {
       // REQUIRED. Specifies the service that implements the Envoy ext_authz HTTP authorization service.
       // The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
@@ -504,7 +502,6 @@ message MeshConfig {
       repeated string headers_to_downstream_on_deny = 8;
     }
 
-    // $hide_from_docs
     message EnvoyExternalAuthorizationGrpcProvider {
       // REQUIRED. Specifies the service that implements the Envoy ext_authz gRPC authorization service.
       // The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
@@ -528,7 +525,6 @@ message MeshConfig {
     }
   }
 
-  // $hide_from_docs
   // Defines a list of extension providers that extend Istio's functionality. For example, the AuthorizationPolicy
   // can be used with an extension provider to delegate the authorization decision to a custom authorization system.
   repeated ExtensionProvider extension_providers = 57;
