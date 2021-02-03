@@ -321,7 +321,7 @@ No
 </tr>
 <tr id="MeshConfig-ca_certificates">
 <td><code>caCertificates</code></td>
-<td><code><a href="#MeshConfig-CertificateReference">CertificateReference[]</a></code></td>
+<td><code><a href="#MeshConfig-CertificateData">CertificateData[]</a></code></td>
 <td>
 <p>The root certificates for workload-to-workload communication.</p>
 
@@ -737,7 +737,7 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="MeshConfig-CertificateReference">MeshConfig.CertificateReference</h2>
+<h2 id="MeshConfig-CertificateData">MeshConfig.CertificateData</h2>
 <section>
 <table class="message-fields">
 <thead>
@@ -749,7 +749,7 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-CertificateReference-pem" class="oneof oneof-start">
+<tr id="MeshConfig-CertificateData-pem" class="oneof oneof-start">
 <td><code>pem</code></td>
 <td><code>string (oneof)</code></td>
 <td>
@@ -760,7 +760,7 @@ No
 No
 </td>
 </tr>
-<tr id="MeshConfig-CertificateReference-spiffe_bundle_url" class="oneof">
+<tr id="MeshConfig-CertificateData-spiffe_bundle_url" class="oneof">
 <td><code>spiffeBundleUrl</code></td>
 <td><code>string (oneof)</code></td>
 <td>

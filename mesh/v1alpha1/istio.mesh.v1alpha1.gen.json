@@ -27,7 +27,7 @@
             "description": "The root certificates for workload-to-workload communication.",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.CertificateReference"
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.CertificateData"
             }
           },
           "outboundTrafficPolicy": {
@@ -399,7 +399,7 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.MeshConfig.CertificateReference": {
+      "istio.mesh.v1alpha1.MeshConfig.CertificateData": {
         "type": "object",
         "oneOf": [
           {

@@ -210,8 +210,8 @@ message MeshConfig {
   // or `td3/ns/foo/sa/a-service-account` will be treated the same in the Istio mesh.
   repeated string trust_domain_aliases = 46;
 
-  message CertificateReference {
-    oneof certificate_reference {
+  message CertificateData {
+    oneof certificate_data {
       // The PEM data of the certificate.
       string pem = 1;
       // The SPIFFE bundle endpoint URL that complies to:
@@ -224,7 +224,7 @@ message MeshConfig {
   }
 
   // The root certificates for workload-to-workload communication.
-  repeated CertificateReference ca_certificates = 58;
+  repeated CertificateData ca_certificates = 58;
 
   // The default value for the ServiceEntry.export_to field and services
   // imported through container registry integrations, e.g. this applies to
