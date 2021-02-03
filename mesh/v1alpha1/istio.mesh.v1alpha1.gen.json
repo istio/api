@@ -24,7 +24,7 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.H2UpgradePolicy"
           },
           "caCertificates": {
-            "description": "The extra root certificates for workload-to-workload communication. The plugin certificates (the 'cacerts' secret) or self-signed certificates (the 'istio-ca-secret' secret) are added automatically by Istiod. The CA certificate that signs the workload certificates is automatically added by Istio Agent.",
+            "description": "The extra root certificates for workload-to-workload communication. The plugin certificates (the 'cacerts' secret) or self-signed certificates (the 'istio-ca-secret' secret) are automatically added by Istiod. The CA certificate that signs the workload certificates is automatically added by Istio Agent.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.CertificateData"
