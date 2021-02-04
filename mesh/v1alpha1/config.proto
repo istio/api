@@ -211,6 +211,25 @@ message MeshConfig {
   // or `td3/ns/foo/sa/a-service-account` will be treated the same in the Istio mesh.
   repeated string trust_domain_aliases = 46;
 
+  message CertificateData {
+    oneof certificate_data {
+      // The PEM data of the certificate.
+      string pem = 1;
+      // The SPIFFE bundle endpoint URL that complies to:
+      // https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#the-spiffe-trust-domain-and-bundle
+      // The endpoint should support authentication based on Web PKI:
+      // https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#521-web-pki
+      // The certificate is retrieved from the endpoint.
+      string spiffe_bundle_url = 2;
+    }
+  }
+
+  // The extra root certificates for workload-to-workload communication.
+  // The plugin certificates (the 'cacerts' secret) or self-signed certificates (the 'istio-ca-secret' secret)
+  // are automatically added by Istiod.
+  // The CA certificate that signs the workload certificates is automatically added by Istio Agent.
+  repeated CertificateData ca_certificates = 58;
+
   // The default value for the ServiceEntry.export_to field and services
   // imported through container registry integrations, e.g. this applies to
   // Kubernetes Service resources. The value is a list of namespace names and
@@ -534,7 +553,7 @@ message MeshConfig {
   // A list of Kubernetes selectors that specify the set of namespaces that Istio considers when
   // computing configuration updates for sidecars. This can be used to reduce Istio's computational load
   // by limiting the number of entities (including services, pods, and endpoints) that are watched and processed.
-  // If omitted, Istio will use the default behavior of processing all namespaces.
+  // If omitted, Istio will use the default behavior of processing all namespaces in the cluster.
   // Elements in the list are disjunctive (OR semantics), i.e. a namespace will be included if it matches any selector.
   // The following example selects any namespace with either labels `env: prod` and `region: us-east1`,
   // or with label `app` equal to `cassandra` or `spark`.
@@ -552,10 +571,10 @@ message MeshConfig {
   // ```
   // Refer to the [kubernetes selector docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors)
   // for additional detail on selector semantics.
-  repeated k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector discovery_selectors = 58;
+  repeated k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector discovery_selectors = 59;
 
   // $hide_from_docs
-  // Next available field number: 59
+  // Next available field number: 60
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
