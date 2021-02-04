@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - https://github.com/istio/istio/issues/26679
+
+releaseNotes:
+  - |
+    **Added** Add discovery selectors to mesh config, a list of Kubernetes selectors used to limit the namespaces that istiod processes for reducing computational load.
