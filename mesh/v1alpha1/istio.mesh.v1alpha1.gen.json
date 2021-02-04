@@ -23,6 +23,13 @@
           "h2UpgradePolicy": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.H2UpgradePolicy"
           },
+          "caCertificates": {
+            "description": "The extra root certificates for workload-to-workload communication. The plugin certificates (the 'cacerts' secret) or self-signed certificates (the 'istio-ca-secret' secret) are automatically added by Istiod. The CA certificate that signs the workload certificates is automatically added by Istio Agent.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.CertificateData"
+            }
+          },
           "outboundTrafficPolicy": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy"
           },
@@ -352,6 +359,14 @@
             "description": "Boolean flag for enabling/disabling the holdApplicationUntilProxyStarts behavior. This feature adds hooks to delay application startup until the pod proxy is ready to accept traffic, mitigating some startup race conditions. Default value is 'false'.",
             "type": "boolean",
             "nullable": true
+          },
+          "caCertificatesPem": {
+            "description": "The PEM data of the extra root certificates for workload-to-workload communication. This includes the certificates defined in MeshConfig and any other certificates that Istiod uses as CA. The plugin certificates (the 'cacerts' secret), self-signed certificates (the 'istio-ca-secret' secret) are added automatically by Istiod.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
           }
         }
       },
@@ -383,6 +398,65 @@
             }
           }
         }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.CertificateData": {
+        "type": "object",
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "pem"
+                  ],
+                  "properties": {
+                    "pem": {
+                      "description": "The PEM data of the certificate.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "spiffeBundleUrl"
+                  ],
+                  "properties": {
+                    "spiffeBundleUrl": {
+                      "description": "The SPIFFE bundle endpoint URL that complies to: https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#the-spiffe-trust-domain-and-bundle The endpoint should support authentication based on Web PKI: https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#521-web-pki The certificate is retrieved from the endpoint.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "pem"
+            ],
+            "properties": {
+              "pem": {
+                "description": "The PEM data of the certificate.",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "spiffeBundleUrl"
+            ],
+            "properties": {
+              "spiffeBundleUrl": {
+                "description": "The SPIFFE bundle endpoint URL that complies to: https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#the-spiffe-trust-domain-and-bundle The endpoint should support authentication based on Web PKI: https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#521-web-pki The certificate is retrieved from the endpoint.",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          }
+        ]
       },
       "istio.mesh.v1alpha1.MeshConfig.H2UpgradePolicy": {
         "description": "Default Policy for upgrading http1.1 connections to http2.",

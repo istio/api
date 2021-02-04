@@ -210,6 +210,25 @@ message MeshConfig {
   // or `td3/ns/foo/sa/a-service-account` will be treated the same in the Istio mesh.
   repeated string trust_domain_aliases = 46;
 
+  message CertificateData {
+    oneof certificate_data {
+      // The PEM data of the certificate.
+      string pem = 1;
+      // The SPIFFE bundle endpoint URL that complies to:
+      // https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#the-spiffe-trust-domain-and-bundle
+      // The endpoint should support authentication based on Web PKI:
+      // https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#521-web-pki
+      // The certificate is retrieved from the endpoint.
+      string spiffe_bundle_url = 2;
+    }
+  }
+
+  // The extra root certificates for workload-to-workload communication.
+  // The plugin certificates (the 'cacerts' secret) or self-signed certificates (the 'istio-ca-secret' secret)
+  // are automatically added by Istiod.
+  // The CA certificate that signs the workload certificates is automatically added by Istio Agent.
+  repeated CertificateData ca_certificates = 58;
+
   // The default value for the ServiceEntry.export_to field and services
   // imported through container registry integrations, e.g. this applies to
   // Kubernetes Service resources. The value is a list of namespace names and
@@ -531,7 +550,7 @@ message MeshConfig {
   repeated ExtensionProvider extension_providers = 57;
 
   // $hide_from_docs
-  // Next available field number: 58
+  // Next available field number: 59
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
