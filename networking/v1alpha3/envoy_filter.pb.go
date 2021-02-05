@@ -172,7 +172,7 @@ const (
 	EnvoyFilter_Patch_INVALID EnvoyFilter_Patch_Operation = 0
 	// Merge the provided config with the generated config using
 	// proto merge semantics. If you are specifying config in its
-	// entirity, use `REPLACE` instead.
+	// entirety, use `REPLACE` instead.
 	EnvoyFilter_Patch_MERGE EnvoyFilter_Patch_Operation = 1
 	// Add the provided config to an existing list (of listeners,
 	// clusters, virtual hosts, network filters, or http

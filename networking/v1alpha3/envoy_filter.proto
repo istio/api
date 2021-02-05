@@ -657,7 +657,7 @@ message EnvoyFilter {
 
       // Merge the provided config with the generated config using
       // proto merge semantics. If you are specifying config in its
-      // entirity, use `REPLACE` instead.
+      // entirety, use `REPLACE` instead.
       MERGE = 1;
 
       // Add the provided config to an existing list (of listeners,
