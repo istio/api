@@ -262,9 +262,7 @@ import "google/api/field_behavior.proto";
 //   hosts:
 //   - mongosvr.prod.svc.cluster.local # name of internal Mongo service
 //   gateways:
-//   - some-config-namespace/my-gateway # can omit the namespace if gateway is
-//   in same
-//                                        namespace as virtual service.
+//   - some-config-namespace/my-gateway # can omit the namespace if gateway is in same namespace as virtual service.
 //   tcp:
 //   - match:
 //     - port: 27017
@@ -287,9 +285,7 @@ import "google/api/field_behavior.proto";
 //   hosts:
 //   - mongosvr.prod.svc.cluster.local # name of internal Mongo service
 //   gateways:
-//   - some-config-namespace/my-gateway # can omit the namespace if gateway is
-//   in same
-//                                        namespace as virtual service.
+//   - some-config-namespace/my-gateway # can omit the namespace if gateway is in same namespace as virtual service.
 //   tcp:
 //   - match:
 //     - port: 27017
@@ -679,8 +675,8 @@ message ServerTLSSettings {
   // feature is enabled in the proxy by setting
   // `ISTIO_META_USER_SDS` metadata variable.  The secret (of type
   // `generic`) should contain the following keys and values: `key:
-  // <privateKey>` and `cert: <serverCert>`. For mutual TLS, 
-  // `cacert: <CACertificate>` can be provided in the same secret or 
+  // <privateKey>` and `cert: <serverCert>`. For mutual TLS,
+  // `cacert: <CACertificate>` can be provided in the same secret or
   // a separate secret named `<secret>-cacert`.
   // Secret of type tls for server certificates along with
   // ca.crt key for CA certificates is also supported.
