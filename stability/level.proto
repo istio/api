@@ -1,4 +1,4 @@
-// Copyright 2021 Istio Authors
+// Copyright Istio Authors
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -14,11 +14,11 @@
 
 syntax = "proto3";
 
-package istio.feature;
+package istio.stability;
 
-option go_package="istio.io/api/feature";
+option go_package="istio.io/api/stability";
 
-// Level defines the stability level naming Istio uses.
+// Level defines the stability levels Istio uses.
 enum Level {
     EXPERIMENTAL = 0;
     ALPHA = 1;
