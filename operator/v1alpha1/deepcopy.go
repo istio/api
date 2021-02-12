@@ -24,9 +24,11 @@ import (
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
-var _ = proto.Marshal
-var _ = fmt.Errorf
-var _ = math.Inf
+var (
+	_ = proto.Marshal
+	_ = fmt.Errorf
+	_ = math.Inf
+)
 
 // DeepCopyInto supports using IstioOperatorSpec within kubernetes types, where deepcopy-gen is used.
 func (in *IstioOperatorSpec) DeepCopyInto(out *IstioOperatorSpec) {
