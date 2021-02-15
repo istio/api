@@ -1515,7 +1515,7 @@ func (m *ConnectionPoolSettings_HTTPSettings) GetUseClientProtocol() bool {
 //         http2MaxRequests: 1000
 //         maxRequestsPerConnection: 10
 //     outlierDetection:
-//       consecutiveErrors: 7
+//       consecutive5xxErrors: 7
 //       interval: 5m
 //       baseEjectionTime: 15m
 // ```
@@ -1537,7 +1537,7 @@ func (m *ConnectionPoolSettings_HTTPSettings) GetUseClientProtocol() bool {
 //         http2MaxRequests: 1000
 //         maxRequestsPerConnection: 10
 //     outlierDetection:
-//       consecutiveErrors: 7
+//       consecutive5xxErrors: 7
 //       interval: 5m
 //       baseEjectionTime: 15m
 // ```
