@@ -103,7 +103,7 @@
             "format": "string"
           },
           "credentialName": {
-            "description": "For gateways running on Kubernetes, the name of the secret that holds the TLS certs including the CA certificates. Applicable only on Kubernetes, and only if the dynamic credential fetching feature is enabled in the proxy by setting `ISTIO_META_USER_SDS` metadata variable. The secret (of type `generic`) should contain the following keys and values: `key: \u003cprivateKey\u003e` and `cert: \u003cserverCert\u003e`. For mutual TLS, `cacert: \u003cCACertificate\u003e` can be provided in the same secret or a separate secret named `\u003csecret\u003e-cacert`. Secret of type tls for server certificates along with ca.crt key for CA certificates is also supported. Only one of server certificates and CA certificate or credentialName can be specified.",
+            "description": "For gateways running on Kubernetes, the name of the secret that holds the TLS certs including the CA certificates. Applicable only on Kubernetes. The secret (of type `generic`) should contain the following keys and values: `key: \u003cprivateKey\u003e` and `cert: \u003cserverCert\u003e`. For mutual TLS, `cacert: \u003cCACertificate\u003e` can be provided in the same secret or a separate secret named `\u003csecret\u003e-cacert`. Secret of type tls for server certificates along with ca.crt key for CA certificates is also supported. Only one of server certificates and CA certificate or credentialName can be specified.",
             "type": "string",
             "format": "string"
           },

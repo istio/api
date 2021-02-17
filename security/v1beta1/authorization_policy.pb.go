@@ -44,26 +44,26 @@
 // apiVersion: security.istio.io/v1beta1
 // kind: AuthorizationPolicy
 // metadata:
-//  name: httpbin
-//  namespace: foo
+//   name: httpbin
+//   namespace: foo
 // spec:
-//  action: ALLOW
-//  rules:
-//  - from:
-//    - source:
-//        principals: ["cluster.local/ns/default/sa/sleep"]
-//    - source:
-//        namespaces: ["test"]
-//    to:
-//    - operation:
-//        methods: ["GET"]
-//        paths: ["/info*"]
-//    - operation:
-//        methods: ["POST"]
-//        paths: ["/data"]
-//    when:
-//    - key: request.auth.claims[iss]
-//      values: ["https://accounts.google.com"]
+//   action: ALLOW
+//   rules:
+//   - from:
+//     - source:
+//         principals: ["cluster.local/ns/default/sa/sleep"]
+//     - source:
+//         namespaces: ["test"]
+//     to:
+//     - operation:
+//         methods: ["GET"]
+//         paths: ["/info*"]
+//     - operation:
+//         methods: ["POST"]
+//         paths: ["/data"]
+//     when:
+//     - key: request.auth.claims[iss]
+//       values: ["https://accounts.google.com"]
 // ```
 //
 // The following is another example that sets `action` to "DENY" to create a deny policy.
@@ -74,17 +74,17 @@
 // apiVersion: security.istio.io/v1beta1
 // kind: AuthorizationPolicy
 // metadata:
-//  name: httpbin
-//  namespace: foo
+//   name: httpbin
+//   namespace: foo
 // spec:
-//  action: DENY
-//  rules:
-//  - from:
-//    - source:
-//        namespaces: ["dev"]
-//    to:
-//    - operation:
-//        methods: ["POST"]
+//   action: DENY
+//   rules:
+//   - from:
+//     - source:
+//         namespaces: ["dev"]
+//     to:
+//     - operation:
+//         methods: ["POST"]
 // ```
 //
 // The following authorization policy sets the `action` to "AUDIT". It will audit any GET requests to the path with the
@@ -100,7 +100,7 @@
 //   selector:
 //     matchLabels:
 //       app: myapi
-//   action: audit
+//   action: AUDIT
 //   rules:
 //   - to:
 //     - operation:
@@ -124,12 +124,12 @@
 // apiVersion: security.istio.io/v1beta1
 // kind: AuthorizationPolicy
 // metadata:
-//  name: policy
-//  namespace: bar
+//   name: policy
+//   namespace: bar
 // spec:
-//  selector:
-//    matchLabels:
-//      app: httpbin
+//   selector:
+//     matchLabels:
+//       app: httpbin
 // ```
 //
 // The following authorization policy applies to all workloads in namespace foo.

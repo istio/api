@@ -550,7 +550,7 @@ func (m *VirtualService) GetExportTo() []string {
 //     name: example-http
 //     protocol: HTTP
 //   resolution: DNS
-//
+// ---
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
 // metadata:
@@ -581,7 +581,7 @@ func (m *VirtualService) GetExportTo() []string {
 //     name: example-http
 //     protocol: HTTP
 //   resolution: DNS
-//
+// ---
 // apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
@@ -1022,7 +1022,7 @@ func (m *Delegate) GetNamespace() string {
 //   - headers:
 //       request:
 //         set:
-//           test: true
+//           test: "true"
 //     route:
 //     - destination:
 //         host: reviews.prod.svc.cluster.local
@@ -1052,7 +1052,7 @@ func (m *Delegate) GetNamespace() string {
 //   - headers:
 //       request:
 //         set:
-//           test: true
+//           test: "true"
 //     route:
 //     - destination:
 //         host: reviews.prod.svc.cluster.local

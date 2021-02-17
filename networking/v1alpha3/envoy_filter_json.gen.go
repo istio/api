@@ -59,9 +59,9 @@
 //     patch:
 //       operation: INSERT_BEFORE
 //       value:
-//         # This is the full filter config including the name and config or typed_config section.
+//         # This is the full filter config including the name and typed_config section.
 //         name: "envoy.config.filter.network.custom_protocol"
-//         config:
+//         typed_config:
 //          ...
 //   - applyTo: NETWORK_FILTER # http connection manager is a filter in Envoy
 //     match:
@@ -78,7 +78,7 @@
 //           "@type": "type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager"
 //           common_http_protocol_options:
 //             idle_timeout: 30s
-//```
+// ```
 //
 // The following example enables Envoy's Lua filter for all inbound
 // HTTP calls arriving at service port 8080 of the reviews service pod
@@ -104,26 +104,30 @@
 //       context: SIDECAR_INBOUND
 //       listener:
 //         portNumber: 8080
+//         filterChain:
+//           filter:
+//             name: "envoy.filters.network.http_connection_manager"
+//             subFilter:
+//               name: "envoy.filters.http.router"
 //     patch:
-//       operation: ADD
-//       filterClass: AUTHZ # This filter will run *after* the Istio authz filter.
+//       operation: INSERT_BEFORE
 //       value: # lua filter specification
-//         name: envoy.filters.http.lua
-//         typed_config:
+//        name: envoy.lua
+//        typed_config:
 //           "@type": "type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua"
 //           inlineCode: |
-//            function envoy_on_request(request_handle)
-//              -- Make an HTTP call to an upstream host with the following headers, body, and timeout.
-//              local headers, body = request_handle:httpCall(
-//               "lua_cluster",
-//               {
-//                [":method"] = "POST",
-//                [":path"] = "/acl",
-//                [":authority"] = "internal.org.net"
-//               },
-//              "authorize call",
-//              5000)
-//            end
+//             function envoy_on_request(request_handle)
+//               -- Make an HTTP call to an upstream host with the following headers, body, and timeout.
+//               local headers, body = request_handle:httpCall(
+//                "lua_cluster",
+//                {
+//                 [":method"] = "POST",
+//                 [":path"] = "/acl",
+//                 [":authority"] = "internal.org.net"
+//                },
+//               "authorize call",
+//               5000)
+//             end
 //   # The second patch adds the cluster that is referenced by the lua code
 //   # cds match is omitted as a new cluster is being added
 //   - applyTo: CLUSTER
@@ -136,12 +140,16 @@
 //         type: STRICT_DNS
 //         connect_timeout: 0.5s
 //         lb_policy: ROUND_ROBIN
-//         hosts:
-//         - socket_address:
-//             protocol: TCP
-//             address: "internal.org.net"
-//             port_value: 8888
-//
+//         load_assignment:
+//           cluster_name: lua_cluster
+//           endpoints:
+//           - lb_endpoints:
+//             - endpoint:
+//                 address:
+//                   socket_address:
+//                     protocol: TCP
+//                     address: "internal.org.net"
+//                     port_value: 8888
 // ```
 //
 // The following example overwrites certain fields (HTTP idle timeout
@@ -171,9 +179,11 @@
 //     patch:
 //       operation: MERGE
 //       value:
-//         common_http_protocol_options:
-//           idle_timeout: 30s
-//         xff_num_trusted_hops: 5
+//         typed_config:
+//           "@type": "type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager"
+//           xff_num_trusted_hops: 5
+//           common_http_protocol_options:
+//             idle_timeout: 30s
 //```
 //
 // The following example inserts an attributegen filter
@@ -246,9 +256,9 @@
 //           grpc_service:
 //             envoy_grpc:
 //               cluster_name: acme-ext-authz
-//               initial_metadata:
-//               - key: foo
-//                 value: myauth.acme # required by local ext auth server.
+//             initial_metadata:
+//             - key: foo
+//               value: myauth.acme # required by local ext auth server.
 // ```
 //
 // A workload in the `myns` namespace needs to access a different ext_auth server
@@ -314,8 +324,10 @@
 //                 remote:
 //                   http_uri:
 //                     uri: http://my-wasm-binary-uri
-//             configuration: |
-//               {}
+//             configuration:
+//               "@type": "type.googleapis.com/google.protobuf.StringValue"
+//               value: |
+//                 {}
 //   # The second patch instructs to apply the above Wasm filter to the listener/http connection manager.
 //   - applyTo: HTTP_FILTER
 //     match:
