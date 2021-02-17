@@ -93,6 +93,10 @@ message IstioOperatorSpec {
     // This option is currently experimental.
     string revision = 16;
 
+    // Identify whether this revision is the default revision for the cluster
+    // This option is currently experimental.
+    bool default_revision = 17;
+
     // Config used by control plane components internally.
     TypeMapStringInterface mesh_config = 40;
 
