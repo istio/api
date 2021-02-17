@@ -480,7 +480,7 @@ message VirtualService {
 //     name: example-http
 //     protocol: HTTP
 //   resolution: DNS
-//
+// ---
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
 // metadata:
@@ -511,7 +511,7 @@ message VirtualService {
 //     name: example-http
 //     protocol: HTTP
 //   resolution: DNS
-//
+// ---
 // apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
@@ -734,7 +734,7 @@ message Delegate {
 //   - headers:
 //       request:
 //         set:
-//           test: true
+//           test: "true"
 //     route:
 //     - destination:
 //         host: reviews.prod.svc.cluster.local
@@ -764,7 +764,7 @@ message Delegate {
 //   - headers:
 //       request:
 //         set:
-//           test: true
+//           test: "true"
 //     route:
 //     - destination:
 //         host: reviews.prod.svc.cluster.local
