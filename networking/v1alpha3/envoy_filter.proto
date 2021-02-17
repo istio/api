@@ -207,7 +207,7 @@ import "networking/v1alpha3/sidecar.proto";
 //           xff_num_trusted_hops: 5
 //           common_http_protocol_options:
 //             idle_timeout: 30s
-//```
+// ```
 //
 // The following example inserts an attributegen filter
 // that produces `istio_operationId` attribute which is consumed
