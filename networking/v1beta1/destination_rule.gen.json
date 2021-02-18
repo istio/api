@@ -276,7 +276,7 @@
             }
           },
           "failover": {
-            "description": "Optional: only failover or distribute can be set. Explicitly specify the region traffic will land on when endpoints in local region becomes unhealthy. Should be used together with OutlierDetection to detect unhealthy endpoints. Note: if no OutlierDetection specified, this will not take effect.",
+            "description": "Optional: only failover or distribute can be set. Explicitly specify the locality traffic will land on when endpoints in local locality becomes unhealthy. Should be used together with OutlierDetection to detect unhealthy endpoints. Note: if no OutlierDetection specified, this will not take effect.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.networking.v1beta1.LocalityLoadBalancerSetting.Failover"
@@ -538,16 +538,16 @@
         }
       },
       "istio.networking.v1beta1.LocalityLoadBalancerSetting.Failover": {
-        "description": "Specify the traffic failover policy across regions. Since zone and sub-zone failover is supported by default this only needs to be specified for regions when the operator needs to constrain traffic failover so that the default behavior of failing over to any endpoint globally does not apply. This is useful when failing over traffic across regions would not improve service health or may need to be restricted for other reasons like regulatory controls.",
+        "description": "Specify the traffic failover policy. Examples: `us-west` or `us-west/*` - all zones and sub-zones within the us-west region",
         "type": "object",
         "properties": {
           "from": {
-            "description": "Originating region.",
+            "description": "Originating locality.",
             "type": "string",
             "format": "string"
           },
           "to": {
-            "description": "Destination region the traffic will fail over to when endpoints in the 'from' region becomes unhealthy.",
+            "description": "Destination locality the traffic will fail over to when endpoints in the 'from' locality becomes unhealthy.",
             "type": "string",
             "format": "string"
           }

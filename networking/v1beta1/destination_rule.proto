@@ -984,18 +984,18 @@ message ClientTLSSettings {
 // operational requirements an operator can set a 'failover' policy instead of
 // a 'distribute' policy.
 //
-// The following example sets up a locality failover policy for regions.
-// Assume a service resides in zones within us-east, us-west & eu-west
-// this example specifies that when endpoints within us-east become unhealthy
-// traffic should failover to endpoints in any zone or sub-zone within eu-west
-// and similarly us-west should failover to us-east.
+// The following example sets up a locality failover policy.
+// Assume a service resides in "us-east/zone1/subzone1" and "eu-west/zone2/subzone2",
+// this example specifies that when endpoints within "us-east/zone1/subzone1" become unhealthy
+// traffic should failover to endpoints in "eu-west/zone2/subzone2"
+// and similarly "eu-west/zone2/subzone2" should failover to "us-east/zone1/subzone1".
 //
 // ```yaml
 //  failover:
-//    - from: us-east
-//      to: eu-west
-//    - from: us-west
-//      to: us-east
+//    - from: us-east/zone1/subzone1
+//      to: eu-west/zone2/subzone2
+//    - from: us-west/zone2/subzone2
+//      to: us-east/zone1/subzone1
 // ```
 // Locality load balancing settings.
 message LocalityLoadBalancerSetting{
@@ -1019,19 +1019,19 @@ message LocalityLoadBalancerSetting{
         map<string, uint32> to = 2;
     };
 
-    // Specify the traffic failover policy across regions. Since zone and sub-zone
-    // failover is supported by default this only needs to be specified for
-    // regions when the operator needs to constrain traffic failover so that
-    // the default behavior of failing over to any endpoint globally does not
-    // apply. This is useful when failing over traffic across regions would not
-    // improve service health or may need to be restricted for other reasons
-    // like regulatory controls.
+    // Specify the traffic failover policy. Examples:
+    //
+    // `us-west` or `us-west/*` - all zones and sub-zones within the us-west region
+    //
+    // `us-west/zone-1/*` - all sub-zones within us-west/zone-1
+    //
+    // `us-west/zone-1/subzone-1` - subzone-1 within us-west/zone-1
     message Failover{
-        // Originating region.
+        // Originating locality.
         string from = 1;
 
-        // Destination region the traffic will fail over to when endpoints in
-        // the 'from' region becomes unhealthy.
+        // Destination locality the traffic will fail over to when endpoints in
+        // the 'from' locality becomes unhealthy.
         string to = 2;
     };
 
@@ -1042,7 +1042,7 @@ message LocalityLoadBalancerSetting{
     repeated Distribute distribute = 1;
 
     // Optional: only failover or distribute can be set.
-    // Explicitly specify the region traffic will land on when endpoints in local region becomes unhealthy.
+    // Explicitly specify the locality traffic will land on when endpoints in local locality becomes unhealthy.
     // Should be used together with OutlierDetection to detect unhealthy endpoints.
     // Note: if no OutlierDetection specified, this will not take effect.
     repeated Failover failover = 2;

@@ -1951,18 +1951,18 @@ func (m *ClientTLSSettings) GetSni() string {
 // operational requirements an operator can set a 'failover' policy instead of
 // a 'distribute' policy.
 //
-// The following example sets up a locality failover policy for regions.
-// Assume a service resides in zones within us-east, us-west & eu-west
-// this example specifies that when endpoints within us-east become unhealthy
-// traffic should failover to endpoints in any zone or sub-zone within eu-west
-// and similarly us-west should failover to us-east.
+// The following example sets up a locality failover policy.
+// Assume a service resides in "us-east/zone1/subzone1" and "eu-west/zone2/subzone2",
+// this example specifies that when endpoints within "us-east/zone1/subzone1" become unhealthy
+// traffic should failover to endpoints in "eu-west/zone2/subzone2"
+// and similarly "eu-west/zone2/subzone2" should failover to "us-east/zone1/subzone1".
 //
 // ```yaml
 //  failover:
-//    - from: us-east
-//      to: eu-west
-//    - from: us-west
-//      to: us-east
+//    - from: us-east/zone1/subzone1
+//      to: eu-west/zone2/subzone2
+//    - from: us-west/zone2/subzone2
+//      to: us-east/zone1/subzone1
 // ```
 // Locality load balancing settings.
 type LocalityLoadBalancerSetting struct {
@@ -1972,7 +1972,7 @@ type LocalityLoadBalancerSetting struct {
 	// If empty, the locality weight is set according to the endpoints number within it.
 	Distribute []*LocalityLoadBalancerSetting_Distribute `protobuf:"bytes,1,rep,name=distribute,proto3" json:"distribute,omitempty"`
 	// Optional: only failover or distribute can be set.
-	// Explicitly specify the region traffic will land on when endpoints in local region becomes unhealthy.
+	// Explicitly specify the locality traffic will land on when endpoints in local locality becomes unhealthy.
 	// Should be used together with OutlierDetection to detect unhealthy endpoints.
 	// Note: if no OutlierDetection specified, this will not take effect.
 	Failover []*LocalityLoadBalancerSetting_Failover `protobuf:"bytes,2,rep,name=failover,proto3" json:"failover,omitempty"`
