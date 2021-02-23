@@ -115,7 +115,8 @@ type IstioOperatorSpec struct {
 	// Never implemented; replaced by revision.
 	ResourceSuffix string `protobuf:"bytes,14,opt,name=resource_suffix,json=resourceSuffix,proto3" json:"resourceSuffix,omitempty"` // Deprecated: Do not use.
 	// Namespace to install control plane resources into. If unset, Istio will be installed into the same namespace
-	// as the `IstioOperator` CR.
+	// as the `IstioOperator` CR. You must also set `values.global.istioNamespace` if you wish to install Istio in
+	// a custom namespace. If you enabled CNI, you also need to set `values.cni.excludeNamespaces[0]`.
 	Namespace string `protobuf:"bytes,15,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	// Identify the revision this installation is associated with.
 	// This option is currently experimental.
