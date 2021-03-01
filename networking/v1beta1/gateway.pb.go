@@ -240,9 +240,7 @@
 //   hosts:
 //   - mongosvr.prod.svc.cluster.local # name of internal Mongo service
 //   gateways:
-//   - some-config-namespace/my-gateway # can omit the namespace if gateway is
-//   in same
-//                                        namespace as virtual service.
+//   - some-config-namespace/my-gateway # can omit the namespace if gateway is in same namespace as virtual service.
 //   tcp:
 //   - match:
 //     - port: 27017
@@ -265,9 +263,7 @@
 //   hosts:
 //   - mongosvr.prod.svc.cluster.local # name of internal Mongo service
 //   gateways:
-//   - some-config-namespace/my-gateway # can omit the namespace if gateway is
-//   in same
-//                                        namespace as virtual service.
+//   - some-config-namespace/my-gateway # can omit the namespace if gateway is in same namespace as virtual service.
 //   tcp:
 //   - match:
 //     - port: 27017
@@ -377,6 +373,9 @@ const (
 	// not have direct connectivity between their respective
 	// endpoints. Use of this mode assumes that both the source and
 	// the destination are using Istio mTLS to secure traffic.
+	// In order for this mode to be enabled, the gateway deployment
+	// must be configured with the `ISTIO_META_ROUTER_MODE=sni-dnat`
+	// environment variable.
 	ServerTLSSettings_AUTO_PASSTHROUGH ServerTLSSettings_TLSmode = 3
 	// Secure connections from the downstream using mutual TLS by
 	// presenting server certificates for authentication.  Compared
