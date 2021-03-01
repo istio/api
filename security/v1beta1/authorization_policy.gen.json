@@ -54,7 +54,7 @@
         ]
       },
       "istio.security.v1beta1.Rule": {
-        "description": "Rule matches requests from a list of sources that perform a list of operations subject to a list of conditions. A match occurs when at least one source, operation and condition matches the request. An empty rule is always matched.",
+        "description": "Rule matches requests from a list of sources that perform a list of operations subject to a list of conditions. A match occurs when at least one source, operation and all conditions matches the request. An empty rule is always matched.",
         "type": "object",
         "properties": {
           "from": {
