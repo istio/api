@@ -88,17 +88,19 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //   selector:
 //     matchLabels:
 //       app: httpbin
-//  rules:
-//  - from:
-//    - source:
-//        requestPrincipals: ["issuer-foo/*"]
-//    to:
-//      hosts: ["example.com"]
-//  - from:
-//    - source:
-//        requestPrincipals: ["issuer-bar/*"]
-//    to:
-//      hosts: ["another-host.com"]
+//   rules:
+//   - from:
+//     - source:
+//         requestPrincipals: ["issuer-foo/*"]
+//     to:
+//     - operation:
+//         hosts: ["example.com"]
+//   - from:
+//     - source:
+//         requestPrincipals: ["issuer-bar/*"]
+//     to:
+//     - operation:
+//         hosts: ["another-host.com"]
 // ```
 //
 // - You can fine tune the authorization policy to set different requirement per path. For example,
@@ -115,13 +117,13 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //   selector:
 //     matchLabels:
 //       app: httpbin
-//  rules:
-//  - from:
-//    - source:
-//        requestPrincipals: ["*"]
-//  - to:
-//    - operation:
-//        paths: ["/healthz"]
+//   rules:
+//   - from:
+//     - source:
+//         requestPrincipals: ["*"]
+//   - to:
+//     - operation:
+//         paths: ["/healthz"]
 // ```
 //
 // <!-- crd generation tags

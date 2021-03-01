@@ -1223,7 +1223,8 @@ func (m *ConnectionPoolSettings) GetHttp() *ConnectionPoolSettings_HTTPSettings 
 type ConnectionPoolSettings_TCPSettings struct {
 	// Maximum number of HTTP1 /TCP connections to a destination host. Default 2^32-1.
 	MaxConnections int32 `protobuf:"varint,1,opt,name=max_connections,json=maxConnections,proto3" json:"max_connections,omitempty"`
-	// TCP connection timeout.
+	// TCP connection timeout. format:
+	// 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
 	ConnectTimeout *types.Duration `protobuf:"bytes,2,opt,name=connect_timeout,json=connectTimeout,proto3" json:"connect_timeout,omitempty"`
 	// If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
 	TcpKeepalive         *ConnectionPoolSettings_TCPSettings_TcpKeepalive `protobuf:"bytes,3,opt,name=tcp_keepalive,json=tcpKeepalive,proto3" json:"tcp_keepalive,omitempty"`
@@ -1510,7 +1511,7 @@ func (m *ConnectionPoolSettings_HTTPSettings) GetUseClientProtocol() bool {
 //         http2MaxRequests: 1000
 //         maxRequestsPerConnection: 10
 //     outlierDetection:
-//       consecutiveErrors: 7
+//       consecutive5xxErrors: 7
 //       interval: 5m
 //       baseEjectionTime: 15m
 // ```
@@ -1532,7 +1533,7 @@ func (m *ConnectionPoolSettings_HTTPSettings) GetUseClientProtocol() bool {
 //         http2MaxRequests: 1000
 //         maxRequestsPerConnection: 10
 //     outlierDetection:
-//       consecutiveErrors: 7
+//       consecutive5xxErrors: 7
 //       interval: 5m
 //       baseEjectionTime: 15m
 // ```
@@ -2041,14 +2042,17 @@ func (m *LocalityLoadBalancerSetting) GetEnabled() *types.BoolValue {
 // distributed over a set of 'to' zones. Syntax for specifying a zone is
 // {region}/{zone}/{sub-zone} and terminal wildcards are allowed on any
 // segment of the specification. Examples:
-// * - matches all localities
-// us-west/* - all zones and sub-zones within the us-west region
-// us-west/zone-1/* - all sub-zones within us-west/zone-1
+//
+// `*` - matches all localities
+//
+// `us-west/*` - all zones and sub-zones within the us-west region
+//
+// `us-west/zone-1/*` - all sub-zones within us-west/zone-1
 type LocalityLoadBalancerSetting_Distribute struct {
 	// Originating locality, '/' separated, e.g. 'region/zone/sub_zone'.
 	From string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
 	// Map of upstream localities to traffic distribution weights. The sum of
-	// all weights should be == 100. Any locality not assigned a weight will
+	// all weights should be 100. Any locality not present will
 	// receive no traffic.
 	To                   map[string]uint32 `protobuf:"bytes,2,rep,name=to,proto3" json:"to,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"varint,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`

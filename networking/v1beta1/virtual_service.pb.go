@@ -550,7 +550,7 @@ func (m *VirtualService) GetExportTo() []string {
 //     name: example-http
 //     protocol: HTTP
 //   resolution: DNS
-//
+// ---
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
 // metadata:
@@ -581,7 +581,7 @@ func (m *VirtualService) GetExportTo() []string {
 //     name: example-http
 //     protocol: HTTP
 //   resolution: DNS
-//
+// ---
 // apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
@@ -1022,7 +1022,7 @@ func (m *Delegate) GetNamespace() string {
 //   - headers:
 //       request:
 //         set:
-//           test: true
+//           test: "true"
 //     route:
 //     - destination:
 //         host: reviews.prod.svc.cluster.local
@@ -1052,7 +1052,7 @@ func (m *Delegate) GetNamespace() string {
 //   - headers:
 //       request:
 //         set:
-//           test: true
+//           test: "true"
 //     route:
 //     - destination:
 //         host: reviews.prod.svc.cluster.local
@@ -2581,7 +2581,7 @@ type HTTPRetry struct {
 	// or `per_try_timeout` is configured, the actual number of retries attempted also depends on
 	// the specified request `timeout` and `per_try_timeout` values.
 	Attempts int32 `protobuf:"varint,1,opt,name=attempts,proto3" json:"attempts,omitempty"`
-	// Timeout per retry attempt for a given request. format: 1h/1m/1s/1ms. MUST BE >=1ms.
+	// Timeout per attempt for a given request, including the initial call and any retries. Format: 1h/1m/1s/1ms. MUST BE >=1ms.
 	// Default is same value as request
 	// `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute),
 	// which means no timeout.
