@@ -1561,6 +1561,7 @@ message HTTPRetry {
   // One or more policies can be specified using a ‘,’ delimited list.
   // See the [retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on)
   // and [gRPC retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on) for more details.
+  // Defaults to `connect-failure,refused-stream,unavailable,cancelled,retriable-status-codes`.
   string retry_on = 3;
 
   // Flag to specify whether the retries should retry to other localities.
