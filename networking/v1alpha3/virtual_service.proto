@@ -1569,6 +1569,7 @@ message HTTPRetry {
 
   // Flag to specify whether the retries should retry to other localities.
   // See the [retry plugin configuration](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_connection_management#retry-plugin-configuration) for more details.
+  // Defaults to `false`.
   google.protobuf.BoolValue retry_remote_localities = 4;
 }
 
