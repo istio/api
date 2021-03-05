@@ -1551,6 +1551,7 @@ message HTTPRetry {
   // `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute) 
   // or `per_try_timeout` is configured, the actual number of retries attempted also depends on
   // the specified request `timeout` and `per_try_timeout` values.
+  // Defaults to `2`.
   int32 attempts = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Timeout per attempt for a given request, including the initial call and any retries. Format: 1h/1m/1s/1ms. MUST BE >=1ms.
