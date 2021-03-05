@@ -240,7 +240,7 @@ var (
 		Description:   "Specifies the initial delay (in seconds) for the Envoy "+
                         "sidecar readiness probe.",
 		FeatureStatus: Alpha,
-		Hidden:        true,
+		Hidden:        false,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Pod,
@@ -261,7 +261,7 @@ var (
 
 	SidecarAgentLogLevel = Instance {
 		Name:          "sidecar.istio.io/agentLogLevel",
-		Description:   "Specifies the log output level.",
+		Description:   "Specifies the log output level for pilot-agent.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,

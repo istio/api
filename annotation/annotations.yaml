@@ -242,7 +242,7 @@ annotations:
 
   - name: sidecar.istio.io/agentLogLevel
     featureStatus: Alpha
-    description: Specifies the log output level.
+    description: Specifies the log output level for pilot-agent.
     deprecated: false
     hidden: false
     resources:
@@ -253,7 +253,7 @@ annotations:
     description: Specifies the initial delay (in seconds) for the Envoy sidecar readiness
       probe.
     deprecated: false
-    hidden: true
+    hidden: false
     resources:
       - Pod
 
