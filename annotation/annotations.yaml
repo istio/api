@@ -240,12 +240,20 @@ annotations:
     resources:
       - Pod
 
+  - name: sidecar.istio.io/agentLogLevel
+    featureStatus: Alpha
+    description: Specifies the log output level.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+
   - name: readiness.status.sidecar.istio.io/initialDelaySeconds
     featureStatus: Alpha
     description: Specifies the initial delay (in seconds) for the Envoy sidecar readiness
       probe.
     deprecated: false
-    hidden: false
+    hidden: true
     resources:
       - Pod
 

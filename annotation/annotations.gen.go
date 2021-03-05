@@ -240,7 +240,7 @@ var (
 		Description:   "Specifies the initial delay (in seconds) for the Envoy "+
                         "sidecar readiness probe.",
 		FeatureStatus: Alpha,
-		Hidden:        false,
+		Hidden:        true,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Pod,
@@ -251,6 +251,17 @@ var (
 		Name:          "readiness.status.sidecar.istio.io/periodSeconds",
 		Description:   "Specifies the period (in seconds) for the Envoy sidecar "+
                         "readiness probe.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
+	SidecarAgentLogLevel = Instance {
+		Name:          "sidecar.istio.io/agentLogLevel",
+		Description:   "Specifies the log output level.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -621,6 +632,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarStatusReadinessFailureThreshold,
 		&SidecarStatusReadinessInitialDelaySeconds,
 		&SidecarStatusReadinessPeriodSeconds,
+		&SidecarAgentLogLevel,
 		&SidecarBootstrapOverride,
 		&SidecarComponentLogLevel,
 		&SidecarControlPlaneAuthPolicy,
