@@ -611,6 +611,8 @@ message HTTPRoute {
   google.protobuf.Duration timeout = 6;
 
   // Retry policy for HTTP requests.
+  // Retries are enabled by default, with a default policy based on the
+  // default for each field.
   HTTPRetry retries = 7;
 
   // Fault injection policy to apply on HTTP traffic at the client side.
