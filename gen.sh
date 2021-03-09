@@ -22,7 +22,6 @@ buf generate \
   --path security \
   --path type \
   --path analysis \
-  --path authentication \
   --path meta
 
 # These folders do not have the full plugins used, as they are not full CRDs.
