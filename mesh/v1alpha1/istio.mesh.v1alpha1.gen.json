@@ -227,6 +227,10 @@
         "description": "ProxyConfig defines variables for individual Envoy instances.",
         "type": "object",
         "properties": {
+          "enableTracing": {
+            "description": "Use this flag to enable/disable tracing at the proxy level. By default tracing is enabled. The sidecar proxies do not mount the global mesh configmap, so a specific flag at the proxy level is needed in order to allow completely disabling tracing. When setting this flag to false, no tracing configuration will be generated in the bootstrap configuration of the proxy.",
+            "type": "boolean"
+          },
           "configPath": {
             "description": "Path to the generated configuration file directory. Proxy agent generates the actual configuration and stores it in this directory.",
             "type": "string",

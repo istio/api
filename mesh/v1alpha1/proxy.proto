@@ -498,6 +498,13 @@ message ProxyConfig {
   // The plugin certificates (the 'cacerts' secret), self-signed certificates (the 'istio-ca-secret' secret)
   // are added automatically by Istiod.
   repeated string ca_certificates_pem = 34;
+
+  // Use this flag to enable/disable tracing at the proxy level. By default tracing is enabled.
+  // The sidecar proxies do not mount the global mesh configmap, so a specific flag at the proxy
+  // level is needed in order to allow completely disabling tracing.
+  // When setting this flag to false, no tracing configuration will be generated in
+  // the bootstrap configuration of the proxy.
+  bool enable_tracing = 35;
 }
 
 message RemoteService {
