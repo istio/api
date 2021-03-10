@@ -17,7 +17,6 @@ syntax = "proto3";
 import "google/api/field_behavior.proto";
 import "networking/v1alpha3/gateway.proto";
 import "networking/v1alpha3/virtual_service.proto";
-import "networking/v1alpha3/destination_rule.proto";
 
 // $schema: istio.networking.v1alpha3.Sidecar
 // $title: Sidecar
@@ -562,7 +561,7 @@ message IstioEgressListener {
 }
 
 // `WorkloadSelector` specifies the criteria used to determine if the
-// `Gateway`, `Sidecar`, or `EnvoyFilter` or `ServiceEntry`
+// `Gateway`, `Sidecar`, `EnvoyFilter`, or `ServiceEntry`
 // configuration can be applied to a proxy. The matching criteria
 // includes the metadata associated with a proxy, workload instance
 // info such as labels attached to the pod/VM, or any other info that
