@@ -629,6 +629,36 @@ for additional detail on selector semantics.</p>
 No
 </td>
 </tr>
+<tr id="MeshConfig-tls_inbound_workload_cipher_suites">
+<td><code>tlsInboundWorkloadCipherSuites</code></td>
+<td><code>string</code></td>
+<td>
+<p>The cipher suites for inbound TLS connections to workloads, delimited by comma.
+For the ciphers, please refer to the Envoy BoringSSL FIPS cipher list on
+https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto.html.
+The order matters: first one on the server list that&rsquo;s also supported
+by the client is used for the connection.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-default_profile_for_tls_inbound_workload_cipher_suites">
+<td><code>defaultProfileForTlsInboundWorkloadCipherSuites</code></td>
+<td><code>string</code></td>
+<td>
+<p>The default profile for the cipher suites of inbound TLS connections to workloads,
+which is used when tls<em>inbound</em>workload<em>cipher</em>suites is empty.
+When configuring the value of the default profile:
+&ldquo;default&rdquo;: means that the default profile will be used.
+&ldquo;restricted&rdquo;: means that the restricted profile will be used for higher security.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>

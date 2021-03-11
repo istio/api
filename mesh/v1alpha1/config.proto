@@ -573,8 +573,23 @@ message MeshConfig {
   // for additional detail on selector semantics.
   repeated k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector discovery_selectors = 59;
 
+
+  // The cipher suites for inbound TLS connections to workloads, delimited by comma.
+  // For the ciphers, please refer to the Envoy BoringSSL FIPS cipher list on
+	// https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto.html.
+	// The order matters: first one on the server list that's also supported
+	// by the client is used for the connection.
+  string tls_inbound_workload_cipher_suites = 60;
+
+  // The default profile for the cipher suites of inbound TLS connections to workloads,
+  // which is used when tls_inbound_workload_cipher_suites is empty.
+  // When configuring the value of the default profile:
+  // "default": means that the default profile will be used.
+  // "restricted": means that the restricted profile will be used for higher security.
+  string default_profile_for_tls_inbound_workload_cipher_suites = 61;
+
   // $hide_from_docs
-  // Next available field number: 60
+  // Next available field number: 62
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;

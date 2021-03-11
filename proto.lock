@@ -32909,6 +32909,12 @@
                 "is_repeated": true
               },
               {
+                "id": 58,
+                "name": "ca_certificates",
+                "type": "CertificateData",
+                "is_repeated": true
+              },
+              {
                 "id": 31,
                 "name": "default_service_export_to",
                 "type": "string",
@@ -32993,6 +32999,22 @@
                 "name": "extension_providers",
                 "type": "ExtensionProvider",
                 "is_repeated": true
+              },
+              {
+                "id": 59,
+                "name": "discovery_selectors",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector",
+                "is_repeated": true
+              },
+              {
+                "id": 60,
+                "name": "tls_inbound_workload_cipher_suites",
+                "type": "string"
+              },
+              {
+                "id": 61,
+                "name": "default_profile_for_tls_inbound_workload_cipher_suites",
+                "type": "string"
               }
             ],
             "reserved_ids": [
@@ -33045,6 +33067,21 @@
                     "id": 1,
                     "name": "mode",
                     "type": "Mode"
+                  }
+                ]
+              },
+              {
+                "name": "CertificateData",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "pem",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "spiffe_bundle_url",
+                    "type": "string"
                   }
                 ]
               },
@@ -33263,6 +33300,9 @@
           },
           {
             "path": "networking/v1alpha3/destination_rule.proto"
+          },
+          {
+            "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
           }
         ],
         "package": {
@@ -33879,6 +33919,12 @@
                 "id": 33,
                 "name": "hold_application_until_proxy_starts",
                 "type": "google.protobuf.BoolValue"
+              },
+              {
+                "id": 34,
+                "name": "ca_certificates_pem",
+                "type": "string",
+                "is_repeated": true
               }
             ],
             "maps": [
@@ -35666,9 +35712,6 @@
           },
           {
             "path": "networking/v1alpha3/virtual_service.proto"
-          },
-          {
-            "path": "networking/v1alpha3/destination_rule.proto"
           }
         ],
         "package": {
@@ -37896,9 +37939,6 @@
           },
           {
             "path": "networking/v1beta1/virtual_service.proto"
-          },
-          {
-            "path": "networking/v1beta1/destination_rule.proto"
           }
         ],
         "package": {
@@ -38853,6 +38893,11 @@
                 "id": 16,
                 "name": "revision",
                 "type": "string"
+              },
+              {
+                "id": 17,
+                "name": "default_revision",
+                "type": "bool"
               },
               {
                 "id": 40,
@@ -40848,6 +40893,42 @@
           {
             "name": "go_package",
             "value": "istio.io/api/security/v1beta1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "stability:/:level.proto",
+      "def": {
+        "enums": [
+          {
+            "name": "Level",
+            "enum_fields": [
+              {
+                "name": "EXPERIMENTAL"
+              },
+              {
+                "name": "ALPHA",
+                "integer": 1
+              },
+              {
+                "name": "BETA",
+                "integer": 2
+              },
+              {
+                "name": "STABLE",
+                "integer": 3
+              }
+            ]
+          }
+        ],
+        "package": {
+          "name": "istio.stability"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/stability"
           }
         ]
       }
