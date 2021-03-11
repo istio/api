@@ -1073,8 +1073,8 @@ type MeshConfig_ServiceSettings_Settings struct {
 	//     this service-by-service (e.g. mysvc.myns.svc.cluster.local) or as a group
 	//     (e.g. *.myns.svc.cluster.local).
 	//
-	// By default, Istio will consider all services in the kube-system namespace to be cluster-local,
-	// unless explicitly overridden here.
+	// By default Istio will consider kubernetes.default.svc (i.e. the API Server) as well as all
+	// services in the kube-system namespace to be cluster-local, unless explicitly overridden here.
 	ClusterLocal         bool     `protobuf:"varint,1,opt,name=cluster_local,json=clusterLocal,proto3" json:"clusterLocal,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
