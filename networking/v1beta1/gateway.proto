@@ -533,7 +533,6 @@ message Server {
   // connections.
   Port port = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // $hide_from_docs
   // The ip or the Unix domain socket to which the listener should be bound
   // to. Format: `x.x.x.x` or `unix:///path/to/uds` or `unix://@foobar`
   // (Linux abstract namespace). When using Unix domain sockets, the port

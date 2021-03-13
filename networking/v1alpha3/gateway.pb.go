@@ -676,7 +676,6 @@ type Server struct {
 	// The Port on which the proxy should listen for incoming
 	// connections.
 	Port *Port `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
-	// $hide_from_docs
 	// The ip or the Unix domain socket to which the listener should be bound
 	// to. Format: `x.x.x.x` or `unix:///path/to/uds` or `unix://@foobar`
 	// (Linux abstract namespace). When using Unix domain sockets, the port
