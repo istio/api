@@ -13,12 +13,20 @@ Telemetry policies control runtime configuration of telemetry generation for Ist
 your Istio installation <em>without</em> a workload selector.</p>
 
 <p>For any namespace, including the root configuration namespace, it is only valid
-to have a single workload selector-less Telemetry resource. In the case of multiples,
-the oldest known resource will be used to the exclusion of any other resources.</p>
+to have a single workload selector-less Telemetry resource.</p>
 
 <p>For resources with a workload selector, it is only valid to have one resource selecting
-any given workload. If multiple resources with a workload selector select a single resource,
-the oldest known resource will be used to the exclusion of all other resources.</p>
+any given workload.</p>
+
+<p>Workload policies will be evaluated in order, from most specific matches per telemetry
+subdomain (tracing, access logging, and metrics) to least specific matches. The first
+matching policy for the subdomain will be applied. The order of evaluation will be:</p>
+
+<ol>
+<li>Workload-specific policy</li>
+<li>Namespace-specific policy</li>
+<li>Root namespace policy</li>
+</ol>
 
 <p>WARNING: Support for Telemetry policies is under active development and is <em>not</em>
 stable or supported by Istio at this time.</p>
@@ -27,7 +35,7 @@ stable or supported by Istio at this time.</p>
 
 <p>Policy to enable random sampling for 10% of all traffic:</p>
 
-<pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1beta1
+<pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
 metadata:
   name: mesh-default
@@ -36,7 +44,6 @@ spec:
   tracing:
   - match: {} # apply to all traffic
     config:
-      reportSpans: true
       percentageSampler:
         target: 10.00
 </code></pre>
@@ -44,13 +51,13 @@ spec:
 <p>Policy to disable trace reporting for all inbound traffic to the &ldquo;foo&rdquo;
 workloads that arrives on port 8090:</p>
 
-<pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1beta1
+<pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
 metadata:
   name: mesh-default
   namespace: istio-system
 spec:
-  workloadSelector:
+  selector:
     labels:
       service.istio.io/canonical-name: foo
   tracing:
@@ -59,7 +66,7 @@ spec:
       port:
         number: 8090
     config:
-      reportSpans: false
+      disableSpanReporting: true
 </code></pre>
 
 <table class="message-fields">
@@ -72,11 +79,11 @@ spec:
 </tr>
 </thead>
 <tbody>
-<tr id="Telemetry-workload_selector">
-<td><code>workloadSelector</code></td>
+<tr id="Telemetry-selector">
+<td><code>selector</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#WorkloadSelector">WorkloadSelector</a></code></td>
 <td>
-<p>Optional. Workload selector decides where to apply the Telemetry policy.
+<p>Optional. The selector decides where to apply the Telemetry policy.
 If not set, the Telemetry policy will be applied to all workloads in the
 same namespace as the Telemetry policy.</p>
 
@@ -228,15 +235,15 @@ rates and custom tag extraction.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="Tracing-report_spans">
-<td><code>reportSpans</code></td>
+<tr id="Tracing-disable_span_reporting">
+<td><code>disableSpanReporting</code></td>
 <td><code>bool</code></td>
 <td>
-<p>Enables the tracing functionality. When this is set to <code>true</code>, the
-sidecar will report spans to a configured backend for all traffic with a trace
+<p>Disables the tracing functionality. When this is set to <code>false</code> (or unset), the
+proxy will report spans to a configured backend for all traffic with a trace
 context that specifies the trace is sampled. Additionally, spans will be
 generated for traffic without trace contexts based on the
-<code>sampler</code> configuration provided. If <code>report_spans</code> is <code>false</code> (or unset),
+<code>sampler</code> configuration provided. If <code>disable_span_reporting</code> is <code>true</code>,
 the sidecar will ignore the incoming trace context, generating no spans for
 the traffic (the context will be silently forwarded). This is equivalent to
 disabling tracing for the sidecar.</p>
@@ -246,14 +253,13 @@ disabling tracing for the sidecar.</p>
 No
 </td>
 </tr>
-<tr id="Tracing-include_istio_tags">
-<td><code>includeIstioTags</code></td>
+<tr id="Tracing-exclude_mesh_tags">
+<td><code>excludeMeshTags</code></td>
 <td><code>bool</code></td>
 <td>
 <p>Controls whether or not Istio-specific tags will be generated for each
 span created by the sidecar proxies. These tags include information on
-the canonical service, meh, and namespace involved in the request.
-Default: true</p>
+the canonical service, meh, and namespace involved in the request.</p>
 
 </td>
 <td>
@@ -271,11 +277,12 @@ No
 No
 </td>
 </tr>
-<tr id="Tracing-max_path_tag_length">
-<td><code>maxPathTagLength</code></td>
+<tr id="Tracing-max_tag_length">
+<td><code>maxTagLength</code></td>
 <td><code>uint32</code></td>
 <td>
-<p>Optional. Controls the overall path length allowed in a reported span.</p>
+<p>Optional. Controls the overall path length allowed in a reported span.
+NOTE: currently only controls max length of the path tag.</p>
 
 </td>
 <td>

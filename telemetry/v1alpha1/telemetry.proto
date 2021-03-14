@@ -33,12 +33,18 @@ package istio.telemetry.v1alpha1;
 // your Istio installation *without* a workload selector.
 //
 // For any namespace, including the root configuration namespace, it is only valid 
-// to have a single workload selector-less Telemetry resource. In the case of multiples,
-// the oldest known resource will be used to the exclusion of any other resources.
+// to have a single workload selector-less Telemetry resource.
 //
 // For resources with a workload selector, it is only valid to have one resource selecting
-// any given workload. If multiple resources with a workload selector select a single resource,
-// the oldest known resource will be used to the exclusion of all other resources.
+// any given workload.
+//
+// Workload policies will be evaluated in order, from most specific matches per telemetry
+// subdomain (tracing, access logging, and metrics) to least specific matches. The first
+// matching policy for the subdomain will be applied. The order of evaluation will be:
+//
+// 1. Workload-specific policy
+// 1. Namespace-specific policy
+// 1. Root namespace policy 
 //
 // WARNING: Support for Telemetry policies is under active development and is *not* 
 // stable or supported by Istio at this time.
@@ -47,7 +53,7 @@ package istio.telemetry.v1alpha1;
 //
 // Policy to enable random sampling for 10% of all traffic:
 // ```yaml
-// apiVersion: telemetry.istio.io/v1beta1
+// apiVersion: telemetry.istio.io/v1alpha1
 // kind: Telemetry
 // metadata:
 //   name: mesh-default
@@ -56,7 +62,6 @@ package istio.telemetry.v1alpha1;
 //   tracing:
 //   - match: {} # apply to all traffic
 //     config:
-//       reportSpans: true
 //       percentageSampler:
 //         target: 10.00
 // ```
@@ -64,13 +69,13 @@ package istio.telemetry.v1alpha1;
 // Policy to disable trace reporting for all inbound traffic to the "foo"
 // workloads that arrives on port 8090:
 // ```yaml
-// apiVersion: telemetry.istio.io/v1beta1
+// apiVersion: telemetry.istio.io/v1alpha1
 // kind: Telemetry
 // metadata:
 //   name: mesh-default
 //   namespace: istio-system
 // spec:
-//   workloadSelector:
+//   selector:
 //     labels:
 //       service.istio.io/canonical-name: foo
 //   tracing:
@@ -79,7 +84,7 @@ package istio.telemetry.v1alpha1;
 //       port:
 //         number: 8090
 //     config:
-//       reportSpans: false
+//       disableSpanReporting: true
 // ```
 //
 // <!-- crd generation tags
@@ -90,7 +95,7 @@ package istio.telemetry.v1alpha1;
 // +cue-gen:Telemetry:labels:app=istio-pilot,chart=istio,istio=telemetry,heritage=Tiller,release=istio
 // +cue-gen:Telemetry:subresource:status
 // +cue-gen:Telemetry:scope:Namespaced
-// +cue-gen:Telemetry:resource:categories=istio-io,telemetry-istio-io,shortNames=telemetry
+// +cue-gen:Telemetry:resource:categories=istio-io,telemetry-istio-io,shortNames=telemetry,plural=telemetries
 // +cue-gen:Telemetry:preserveUnknownFields:false
 // +cue-gen:Telemetry:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
 // representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
@@ -105,10 +110,10 @@ package istio.telemetry.v1alpha1;
 // +k8s:deepcopy-gen=true
 // -->
 message Telemetry {
-  // Optional. Workload selector decides where to apply the Telemetry policy.
+  // Optional. The selector decides where to apply the Telemetry policy.
   // If not set, the Telemetry policy will be applied to all workloads in the
   // same namespace as the Telemetry policy.
-  istio.type.v1beta1.WorkloadSelector workload_selector = 1;
+  istio.type.v1beta1.WorkloadSelector selector = 1;
 
   // Optional. Tracing defines the per-workload overrides for trace span
   // reporting.
@@ -164,21 +169,20 @@ message Port {
 // rates and custom tag extraction.
 message Tracing {
 
-  // Enables the tracing functionality. When this is set to `true`, the
-  // sidecar will report spans to a configured backend for all traffic with a trace
+  // Disables the tracing functionality. When this is set to `false` (or unset), the
+  // proxy will report spans to a configured backend for all traffic with a trace
   // context that specifies the trace is sampled. Additionally, spans will be
   // generated for traffic without trace contexts based on the
-  // `sampler` configuration provided. If `report_spans` is `false` (or unset),
+  // `sampler` configuration provided. If `disable_span_reporting` is `true`,
   // the sidecar will ignore the incoming trace context, generating no spans for
   // the traffic (the context will be silently forwarded). This is equivalent to 
   // disabling tracing for the sidecar.
-  bool report_spans = 2;
+  bool disable_span_reporting = 2;
 
   // Controls whether or not Istio-specific tags will be generated for each
   // span created by the sidecar proxies. These tags include information on
   // the canonical service, meh, and namespace involved in the request.
-  // Default: true
-  bool include_istio_tags = 3;
+  bool exclude_mesh_tags = 3;
 
   // CustomTag defines a tag to be added to a trace span that is based on
   // an operator-supplied value. This value can either be a hard-coded value,
@@ -263,7 +267,8 @@ message Tracing {
   map<string, CustomTag> custom_tags = 4;
 
   // Optional. Controls the overall path length allowed in a reported span.
-  uint32 max_path_tag_length = 5;
+  // NOTE: currently only controls max length of the path tag.
+  uint32 max_tag_length = 5;
 
   // Required. 
   oneof sampler {
