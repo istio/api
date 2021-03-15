@@ -1546,13 +1546,13 @@ message HTTPRetry {
   // `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute) 
   // or `per_try_timeout` is configured, the actual number of retries attempted also depends on
   // the specified request `timeout` and `per_try_timeout` values.
+  // Defaults to `2`.
   int32 attempts = 1;
 
   // Timeout per attempt for a given request, including the initial call and any retries. Format: 1h/1m/1s/1ms. MUST BE >=1ms.
   // Default is same value as request 
   // `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute), 
   // which means no timeout.
-  // Defaults to `2`.
   google.protobuf.Duration per_try_timeout = 2;
 
   // Specifies the conditions under which retry takes place.
