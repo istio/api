@@ -6,4 +6,4 @@ area: traffic-management
 # release notes.
 releaseNotes:
   - |
-    **Fixes** VirtualService `HTTPRetry.attempts` field is no longer a required field.
+    **Fixed** VirtualService `HTTPRetry.attempts` field is no longer a required field.
