@@ -6,4 +6,4 @@ issue:
 
 releaseNotes:
   - |
-    **Added** Support for specifying bind in gateway server definition.
+    **Added** Support for specifying bind to IP or Unix domain socket in gateway server definition.
