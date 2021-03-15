@@ -237,9 +237,6 @@ namespaces by default.</p>
 the destination rule is declared in. Similarly, the value &ldquo;*&rdquo; is reserved and
 defines an export to all namespaces.</p>
 
-<p>NOTE: in the current release, the <code>exportTo</code> value is restricted to
-&ldquo;.&rdquo; or &ldquo;*&rdquo; (i.e., the current namespace or all namespaces).</p>
-
 </td>
 <td>
 No
@@ -692,7 +689,7 @@ spec:
         http2MaxRequests: 1000
         maxRequestsPerConnection: 10
     outlierDetection:
-      consecutiveErrors: 7
+      consecutive5xxErrors: 7
       interval: 5m
       baseEjectionTime: 15m
 </code></pre>
@@ -715,7 +712,7 @@ spec:
         http2MaxRequests: 1000
         maxRequestsPerConnection: 10
     outlierDetection:
-      consecutiveErrors: 7
+      consecutive5xxErrors: 7
       interval: 5m
       baseEjectionTime: 15m
 </code></pre>
@@ -1492,9 +1489,13 @@ No
 <td><code>idleTimeout</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
-<p>The idle timeout for upstream connection pool connections. The idle timeout is defined as the period in which there are no active requests.
-If not set, the default is 1 hour. When the idle timeout is reached the connection will be closed.
-Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive. Applies to both HTTP1.1 and HTTP2 connections.</p>
+<p>The idle timeout for upstream connection pool connections. The idle timeout
+is defined as the period in which there are no active requests.
+If not set, the default is 1 hour. When the idle timeout is reached,
+the connection will be closed. If the connection is an HTTP/2
+connection a drain sequence will occur prior to closing the connection.
+Note that request based timeouts mean that HTTP/2 PINGs will not
+keep the connection alive. Applies to both HTTP1.1 and HTTP2 connections.</p>
 
 </td>
 <td>
@@ -1506,6 +1507,19 @@ No
 <td><code><a href="#ConnectionPoolSettings-HTTPSettings-H2UpgradePolicy">H2UpgradePolicy</a></code></td>
 <td>
 <p>Specify if http1.1 connection should be upgraded to http2 for the associated destination.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ConnectionPoolSettings-HTTPSettings-use_client_protocol">
+<td><code>useClientProtocol</code></td>
+<td><code>bool</code></td>
+<td>
+<p>If set to true, client protocol will be preserved while initiating connection to backend.
+Note that when this is set to true, h2<em>upgrade</em>policy will be ineffective i.e. the client
+connections will not be upgraded to http2.</p>
 
 </td>
 <td>

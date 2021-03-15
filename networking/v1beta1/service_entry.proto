@@ -24,6 +24,7 @@ import "networking/v1beta1/workload_entry.proto";
 // $description: Configuration affecting service registry.
 // $location: https://istio.io/docs/reference/config/networking/service-entry.html
 // $aliases: [/docs/reference/config/networking/v1beta1/service-entry]
+// $mode: none
 
 // `ServiceEntry` enables adding additional entries into Istio's
 // internal service registry, so that auto-discovered services in the
@@ -795,6 +796,7 @@ option go_package = "istio.io/api/networking/v1beta1";
 // representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
 // Clients may not set this value. It is represented in RFC3339 form and is in UTC.
 // Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// +cue-gen:ServiceEntry:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -939,9 +941,6 @@ message ServiceEntry {
   // For a Kubernetes Service, the equivalent effect can be achieved by setting
   // the annotation "networking.istio.io/exportTo" to a comma-separated list
   // of namespace names.
-  //
-  // NOTE: in the current release, the `exportTo` value is restricted to
-  // "." or "*" (i.e., the current namespace or all namespaces).
   repeated string export_to = 7;
 
   // If specified, the proxy will verify that the server certificate's

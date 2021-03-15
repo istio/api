@@ -11,6 +11,7 @@ import (
 	types "github.com/gogo/protobuf/types"
 	io "io"
 	v1alpha3 "istio.io/api/networking/v1alpha3"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	math "math"
 	math_bits "math/bits"
 )
@@ -63,7 +64,7 @@ const (
 	// contain any annotation or whose annotations match the value
 	// specified in the ingress_class parameter described earlier. Use this
 	// mode if Istio ingress controller will be the default ingress
-	// controller for the entireKubernetes cluster.
+	// controller for the entire Kubernetes cluster.
 	MeshConfig_DEFAULT MeshConfig_IngressControllerMode = 2
 	// Istio ingress controller will only act on ingress resources whose
 	// annotations match the value specified in the ingress_class parameter
@@ -124,7 +125,9 @@ func (MeshConfig_AuthPolicy) EnumDescriptor() ([]byte, []int) {
 type MeshConfig_AccessLogEncoding int32
 
 const (
+	// text encoding for the proxy access log
 	MeshConfig_TEXT MeshConfig_AccessLogEncoding = 0
+	// json encoding for the proxy access log
 	MeshConfig_JSON MeshConfig_AccessLogEncoding = 1
 )
 
@@ -203,15 +206,7 @@ func (MeshConfig_OutboundTrafficPolicy_Mode) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_b5c7ece76d5d5022, []int{0, 0, 0}
 }
 
-// MeshConfig defines mesh-wide variables shared by all Envoy instances in the
-// Istio service mesh.
-//
-// NOTE: This configuration type should be used for the low-level global
-// configuration, such as component addresses and port numbers. It should not
-// be used for the features of the mesh that can be scoped by service or by
-// namespace. Some of the fields in the mesh config are going to be deprecated
-// and replaced with several individual configuration types (for example,
-// tracing configuration).
+// MeshConfig defines mesh-wide settings for the Istio service mesh.
 type MeshConfig struct {
 	// Port on which Envoy should listen for incoming connections from
 	// other services. Default port is 15001.
@@ -232,17 +227,17 @@ type MeshConfig struct {
 	// for the client to send the first bits of data. (MUST BE >=1ms or
 	// 0s to disable). Default detection timeout is 5s.
 	ProtocolDetectionTimeout *types.Duration `protobuf:"bytes,42,opt,name=protocol_detection_timeout,json=protocolDetectionTimeout,proto3" json:"protocolDetectionTimeout,omitempty"`
-	// If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
+	// If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalives.
 	TcpKeepalive *v1alpha3.ConnectionPoolSettings_TCPSettings_TcpKeepalive `protobuf:"bytes,28,opt,name=tcp_keepalive,json=tcpKeepalive,proto3" json:"tcpKeepalive,omitempty"`
 	// Class of ingress resources to be processed by Istio ingress
 	// controller. This corresponds to the value of
-	// "kubernetes.io/ingress.class" annotation.
+	// `kubernetes.io/ingress.class` annotation.
 	IngressClass string `protobuf:"bytes,7,opt,name=ingress_class,json=ingressClass,proto3" json:"ingressClass,omitempty"`
 	// Name of the Kubernetes service used for the istio ingress controller.
 	// If no ingress controller is specified, the default value `istio-ingressgateway` is used.
 	IngressService string `protobuf:"bytes,8,opt,name=ingress_service,json=ingressService,proto3" json:"ingressService,omitempty"`
 	// Defines whether to use Istio ingress controller for annotated or all ingress resources.
-	// Default mode is STRICT.
+	// Default mode is `STRICT`.
 	IngressControllerMode MeshConfig_IngressControllerMode `protobuf:"varint,9,opt,name=ingress_controller_mode,json=ingressControllerMode,proto3,enum=istio.mesh.v1alpha1.MeshConfig_IngressControllerMode" json:"ingressControllerMode,omitempty"`
 	// Defines which gateway deployment to use as the Ingress controller. This field corresponds to
 	// the Gateway.selector field, and will be set as `istio: INGRESS_SELECTOR`.
@@ -250,10 +245,6 @@ type MeshConfig struct {
 	// `istio: ingressgateway` labels.
 	// It is recommended that this is the same value as ingress_service.
 	IngressSelector string `protobuf:"bytes,52,opt,name=ingress_selector,json=ingressSelector,proto3" json:"ingressSelector,omitempty"`
-	// $hide_from_docs
-	AuthPolicy MeshConfig_AuthPolicy `protobuf:"varint,10,opt,name=auth_policy,json=authPolicy,proto3,enum=istio.mesh.v1alpha1.MeshConfig_AuthPolicy" json:"authPolicy,omitempty"` // Deprecated: Do not use.
-	// $hide_from_docs
-	RdsRefreshDelay *types.Duration `protobuf:"bytes,11,opt,name=rds_refresh_delay,json=rdsRefreshDelay,proto3" json:"rdsRefreshDelay,omitempty"` // Deprecated: Do not use.
 	// Flag to control generation of trace spans and request IDs.
 	// Requires a trace span collector defined in the proxy configuration.
 	EnableTracing bool `protobuf:"varint,12,opt,name=enable_tracing,json=enableTracing,proto3" json:"enableTracing,omitempty"`
@@ -263,48 +254,53 @@ type MeshConfig struct {
 	// Format for the proxy access log
 	// Empty value results in proxy's default access log format
 	AccessLogFormat string `protobuf:"bytes,24,opt,name=access_log_format,json=accessLogFormat,proto3" json:"accessLogFormat,omitempty"`
-	// Encoding for the proxy access log (text or json).
-	// Default value is text.
+	// Encoding for the proxy access log (`TEXT` or `JSON`).
+	// Default value is `TEXT`.
 	AccessLogEncoding MeshConfig_AccessLogEncoding `protobuf:"varint,27,opt,name=access_log_encoding,json=accessLogEncoding,proto3,enum=istio.mesh.v1alpha1.MeshConfig_AccessLogEncoding" json:"accessLogEncoding,omitempty"`
 	// This flag enables Envoy's gRPC Access Log Service.
 	// See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto)
 	// for details about Envoy's gRPC Access Log Service API.
-	// Default value is false.
+	// Default value is `false`.
 	EnableEnvoyAccessLogService bool `protobuf:"varint,40,opt,name=enable_envoy_access_log_service,json=enableEnvoyAccessLogService,proto3" json:"enableEnvoyAccessLogService,omitempty"`
-	// Default proxy config used by the proxy injection mechanism operating in the mesh
-	// (e.g. Kubernetes admission controller)
+	// This flag disables Envoy Listener logs.
+	// See [Listener Access Log](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/listener/v3/listener.proto#envoy-v3-api-field-config-listener-v3-listener-access-log)
+	// Istio Enables Envoy's listener access logs on "NoRoute" response flag.
+	// Default value is `false`.
+	DisableEnvoyListenerLog bool `protobuf:"varint,56,opt,name=disable_envoy_listener_log,json=disableEnvoyListenerLog,proto3" json:"disableEnvoyListenerLog,omitempty"`
+	// Default proxy config used by gateway and sidecars.
 	// In case of Kubernetes, the proxy config is applied once during the injection process,
 	// and remain constant for the duration of the pod. The rest of the mesh config can be changed
 	// at runtime and config gets distributed dynamically.
+	// On Kubernetes, this can be overridden on individual pods with the `proxy.istio.io/config` annotation.
 	DefaultConfig *ProxyConfig `protobuf:"bytes,14,opt,name=default_config,json=defaultConfig,proto3" json:"defaultConfig,omitempty"`
 	// Set the default behavior of the sidecar for handling outbound
 	// traffic from the application.  If your application uses one or
 	// more external services that are not known apriori, setting the
-	// policy to ALLOW_ANY will cause the sidecars to route any unknown
+	// policy to `ALLOW_ANY` will cause the sidecars to route any unknown
 	// traffic originating from the application to its requested
 	// destination. Users are strongly encouraged to use ServiceEntries
 	// to explicitly declare any external dependencies, instead of using
-	// allow_any, so that traffic to these services can be
+	// `ALLOW_ANY`, so that traffic to these services can be
 	// monitored. Can be overridden at a Sidecar level by setting the
-	// OutboundTrafficPolicy in the [Sidecar
+	// `OutboundTrafficPolicy` in the [Sidecar
 	// API](https://istio.io/docs/reference/config/networking/sidecar/#OutboundTrafficPolicy).
-	// Default mode is ALLOW_ANY which means outbound traffic to unknown destinations will be allowed.
+	// Default mode is `ALLOW_ANY` which means outbound traffic to unknown destinations will be allowed.
 	OutboundTrafficPolicy *MeshConfig_OutboundTrafficPolicy `protobuf:"bytes,17,opt,name=outbound_traffic_policy,json=outboundTrafficPolicy,proto3" json:"outboundTrafficPolicy,omitempty"`
 	// ConfigSource describes a source of configuration data for networking
 	// rules, and other Istio configuration artifacts. Multiple data sources
 	// can be configured for a single control plane.
 	ConfigSources []*ConfigSource `protobuf:"bytes,22,rep,name=config_sources,json=configSources,proto3" json:"configSources,omitempty"`
-	// This flag is used to enable mutual TLS automatically for service to service communication
+	// This flag is used to enable mutual `TLS` automatically for service to service communication
 	// within the mesh, default true.
-	// If set to true, and a given service does not have a corresponding DestinationRule configured,
-	// or its DestinationRule does not have ClientTLSSettings specified, Istio configures client side
+	// If set to true, and a given service does not have a corresponding `DestinationRule` configured,
+	// or its `DestinationRule` does not have ClientTLSSettings specified, Istio configures client side
 	// TLS configuration appropriately. More specifically,
-	// If the upstream authentication policy is in STRICT mode, use Istio provisioned certificate
-	// for mutual TLS to connect to upstream.
+	// If the upstream authentication policy is in `STRICT` mode, use Istio provisioned certificate
+	// for mutual `TLS` to connect to upstream.
 	// If upstream service is in plain text mode, use plain text.
 	// If the upstream authentication policy is in PERMISSIVE mode, Istio configures clients to use
-	// mutual TLS when server sides are capable of accepting mutual TLS traffic.
-	// If service DestinationRule exists and has ClientTLSSettings specified, that is always used instead.
+	// mutual `TLS` when server sides are capable of accepting mutual `TLS` traffic.
+	// If service `DestinationRule` exists and has `ClientTLSSettings` specified, that is always used instead.
 	EnableAutoMtls *types.BoolValue `protobuf:"bytes,43,opt,name=enable_auto_mtls,json=enableAutoMtls,proto3" json:"enableAutoMtls,omitempty"`
 	// The trust domain corresponds to the trust root of a system.
 	// Refer to [SPIFFE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)
@@ -318,39 +314,44 @@ type MeshConfig struct {
 	// Any service with the identity `td1/ns/foo/sa/a-service-account`, `td2/ns/foo/sa/a-service-account`,
 	// or `td3/ns/foo/sa/a-service-account` will be treated the same in the Istio mesh.
 	TrustDomainAliases []string `protobuf:"bytes,46,rep,name=trust_domain_aliases,json=trustDomainAliases,proto3" json:"trustDomainAliases,omitempty"`
+	// The extra root certificates for workload-to-workload communication.
+	// The plugin certificates (the 'cacerts' secret) or self-signed certificates (the 'istio-ca-secret' secret)
+	// are automatically added by Istiod.
+	// The CA certificate that signs the workload certificates is automatically added by Istio Agent.
+	CaCertificates []*MeshConfig_CertificateData `protobuf:"bytes,58,rep,name=ca_certificates,json=caCertificates,proto3" json:"caCertificates,omitempty"`
 	// The default value for the ServiceEntry.export_to field and services
 	// imported through container registry integrations, e.g. this applies to
 	// Kubernetes Service resources. The value is a list of namespace names and
 	// reserved namespace aliases. The allowed namespace aliases are:
-	//
+	// ```
 	// * - All Namespaces
 	// . - Current Namespace
 	// ~ - No Namespace
-	//
+	// ```
 	// If not set the system will use "*" as the default value which implies that
 	// services are exported to all namespaces.
 	//
-	// 'All namespaces' is a reasonable default for implementations that don't
+	// `All namespaces` is a reasonable default for implementations that don't
 	// need to restrict access or visibility of services across namespace
 	// boundaries. If that requirement is present it is generally good practice to
-	// make the default 'Current namespace' so that services are only visible
+	// make the default `Current namespace` so that services are only visible
 	// within their own namespaces by default. Operators can then expand the
-	// visibility of services to other namespaces as needed. Use of 'No Namespace'
+	// visibility of services to other namespaces as needed. Use of `No Namespace`
 	// is expected to be rare but can have utility for deployments where
 	// dependency management needs to be precise even within the scope of a single
 	// namespace.
 	//
-	// For further discussion see the reference documentation for ServiceEntry,
-	// Sidecar, and Gateway.
+	// For further discussion see the reference documentation for `ServiceEntry`,
+	// `Sidecar`, and `Gateway`.
 	DefaultServiceExportTo []string `protobuf:"bytes,31,rep,name=default_service_export_to,json=defaultServiceExportTo,proto3" json:"defaultServiceExportTo,omitempty"`
 	// The default value for the VirtualService.export_to field. Has the same
-	// syntax as 'default_service_export_to'.
+	// syntax as `default_service_export_to`.
 	//
 	// If not set the system will use "*" as the default value which implies that
 	// virtual services are exported to all namespaces
 	DefaultVirtualServiceExportTo []string `protobuf:"bytes,32,rep,name=default_virtual_service_export_to,json=defaultVirtualServiceExportTo,proto3" json:"defaultVirtualServiceExportTo,omitempty"`
-	// The default value for the DestinationRule.export_to field. Has the same
-	// syntax as 'default_service_export_to'.
+	// The default value for the `DestinationRule.export_to` field. Has the same
+	// syntax as `default_service_export_to`.
 	//
 	// If not set the system will use "*" as the default value which implies that
 	// destination rules are exported to all namespaces
@@ -366,13 +367,13 @@ type MeshConfig struct {
 	RootNamespace string `protobuf:"bytes,34,opt,name=root_namespace,json=rootNamespace,proto3" json:"rootNamespace,omitempty"`
 	// Locality based load balancing distribution or failover settings.
 	LocalityLbSetting *v1alpha3.LocalityLoadBalancerSetting `protobuf:"bytes,35,opt,name=locality_lb_setting,json=localityLbSetting,proto3" json:"localityLbSetting,omitempty"`
-	// Configures DNS refresh rate for Envoy clusters of type STRICT_DNS
-	// Default refresh rate is 5s.
+	// Configures DNS refresh rate for Envoy clusters of type `STRICT_DNS`
+	// Default refresh rate is `5s`.
 	DnsRefreshRate *types.Duration `protobuf:"bytes,36,opt,name=dns_refresh_rate,json=dnsRefreshRate,proto3" json:"dnsRefreshRate,omitempty"`
 	// Specify if http1.1 connections should be upgraded to http2 by default.
-	// if sidecar is installed on all pods in the mesh, then this should be set to UPGRADE.
-	// If one or more services or namespaces do not have sidecar(s), then this should be set to DO_NOT_UPGRADE.
-	// It can be enabled by destination using the destinationRule.trafficPolicy.connectionPool.http.h2UpgradePolicy override.
+	// if sidecar is installed on all pods in the mesh, then this should be set to `UPGRADE`.
+	// If one or more services or namespaces do not have sidecar(s), then this should be set to `DO_NOT_UPGRADE`.
+	// It can be enabled by destination using the `destinationRule.trafficPolicy.connectionPool.http.h2UpgradePolicy` override.
 	H2UpgradePolicy MeshConfig_H2UpgradePolicy `protobuf:"varint,41,opt,name=h2_upgrade_policy,json=h2UpgradePolicy,proto3,enum=istio.mesh.v1alpha1.MeshConfig_H2UpgradePolicy" json:"h2UpgradePolicy,omitempty"`
 	// Name to be used while emitting statistics for inbound clusters. The same pattern is used while computing stat prefix for
 	// network filters like TCP and Redis.
@@ -406,7 +407,7 @@ type MeshConfig struct {
 	//
 	// Following are some examples of supported patterns for reviews:
 	//
-	// - `%SERVICE_FQDN%_%SERVICE_PORT%` will use reviews.prod.svc.cluster.local_7443 as the stats name.
+	// - `%SERVICE_FQDN%_%SERVICE_PORT%` will use `reviews.prod.svc.cluster.local_7443` as the stats name.
 	// - `%SERVICE%` will use reviews.prod as the stats name.
 	OutboundClusterStatName string `protobuf:"bytes,45,opt,name=outbound_cluster_stat_name,json=outboundClusterStatName,proto3" json:"outboundClusterStatName,omitempty"`
 	// Configure the provision of certificates.
@@ -426,34 +427,59 @@ type MeshConfig struct {
 	// `prometheus.istio.io/merge-metrics: "false"` annotation.
 	// If not specified, this will be enabled by default.
 	EnablePrometheusMerge *types.BoolValue `protobuf:"bytes,51,opt,name=enable_prometheus_merge,json=enablePrometheusMerge,proto3" json:"enablePrometheusMerge,omitempty"`
-	// VerifyCertificateAtClient sets the mesh global default for peer certificate validation
-	// at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non ISTIO_MUTUAL) origination
+	// `VerifyCertificateAtClient` sets the mesh global default for peer certificate validation
+	// at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination
 	// modes are used. This setting can be overridden at the host level via DestinationRule API.
-	// By default, VerifyCertificateAtClient is true.
+	// By default, `VerifyCertificateAtClient` is `true`.
 	//
-	// CaCertificates: If set, proxy verifies CA signature based on given CaCertificates. If unset,
+	// `CaCertificates`: If set, proxy verifies CA signature based on given CaCertificates. If unset,
 	// and VerifyCertificateAtClient is true, proxy uses default System CA bundle. If unset and
-	// VerifyCertificateAtClient is false, proxy will not verify the CA.
+	// `VerifyCertificateAtClient` is false, proxy will not verify the CA.
 	//
-	// SubjectAltNames: If set, proxy verifies subject alt names are present in the SAN. If unset,
-	// and VerifyCertificateAtClient is true, proxy uses host in destination rule to verify the SANs.
-	// If unset, and VerifyCertificateAtClient is false, proxy does not verify SANs.
+	// `SubjectAltNames`: If set, proxy verifies subject alt names are present in the SAN. If unset,
+	// and `VerifyCertificateAtClient` is true, proxy uses host in destination rule to verify the SANs.
+	// If unset, and `VerifyCertificateAtClient` is false, proxy does not verify SANs.
 	//
-	// For SAN, client-side proxy will exact match host in DestinationRule as well as one level
+	// For SAN, client-side proxy will exact match host in `DestinationRule` as well as one level
 	// wildcard if the specified host in DestinationRule doesn't contain a wildcard.
-	// For example, if the host in DestinationRule is x.y.com, client-side proxy will
-	// match either x.y.com or *.y.com for the SAN in the presented server certificate.
+	// For example, if the host in `DestinationRule` is `x.y.com`, client-side proxy will
+	// match either `x.y.com` or `*.y.com` for the SAN in the presented server certificate.
 	// For wildcard host name in DestinationRule, client-side proxy will do a suffix match. For example,
-	// if host is *.x.y.com, client-side proxy will verify the presented server certificate SAN matches
-	// .x.y.com suffix.
+	// if host is `*.x.y.com`, client-side proxy will verify the presented server certificate SAN matches
+	// ``.x.y.com` suffix.
 	VerifyCertificateAtClient *types.BoolValue `protobuf:"bytes,54,opt,name=verify_certificate_at_client,json=verifyCertificateAtClient,proto3" json:"verifyCertificateAtClient,omitempty"`
 	// $hide_from_docs
 	// If specified, Istiod will authorize and forward the CSRs from the workloads to the specified external CA
 	// using the Istio CA gRPC API.
-	Ca                   *MeshConfig_CA `protobuf:"bytes,55,opt,name=ca,proto3" json:"ca,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_unrecognized     []byte         `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Ca *MeshConfig_CA `protobuf:"bytes,55,opt,name=ca,proto3" json:"ca,omitempty"`
+	// Defines a list of extension providers that extend Istio's functionality. For example, the AuthorizationPolicy
+	// can be used with an extension provider to delegate the authorization decision to a custom authorization system.
+	ExtensionProviders []*MeshConfig_ExtensionProvider `protobuf:"bytes,57,rep,name=extension_providers,json=extensionProviders,proto3" json:"extensionProviders,omitempty"`
+	// A list of Kubernetes selectors that specify the set of namespaces that Istio considers when
+	// computing configuration updates for sidecars. This can be used to reduce Istio's computational load
+	// by limiting the number of entities (including services, pods, and endpoints) that are watched and processed.
+	// If omitted, Istio will use the default behavior of processing all namespaces in the cluster.
+	// Elements in the list are disjunctive (OR semantics), i.e. a namespace will be included if it matches any selector.
+	// The following example selects any namespace with either labels `env: prod` and `region: us-east1`,
+	// or with label `app` equal to `cassandra` or `spark`.
+	// ```yaml
+	// discoverySelectors:
+	//  - matchLabels:
+	//      env: prod
+	//      region: us-east1
+	//  - matchExpressions:
+	//    - key: app
+	//      operator: In
+	//      values:
+	//        - cassandra
+	//        - spark
+	// ```
+	// Refer to the [kubernetes selector docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors)
+	// for additional detail on selector semantics.
+	DiscoverySelectors   []*v1.LabelSelector `protobuf:"bytes,59,rep,name=discovery_selectors,json=discoverySelectors,proto3" json:"discoverySelectors,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
 }
 
 func (m *MeshConfig) Reset()         { *m = MeshConfig{} }
@@ -552,22 +578,6 @@ func (m *MeshConfig) GetIngressSelector() string {
 	return ""
 }
 
-// Deprecated: Do not use.
-func (m *MeshConfig) GetAuthPolicy() MeshConfig_AuthPolicy {
-	if m != nil {
-		return m.AuthPolicy
-	}
-	return MeshConfig_NONE
-}
-
-// Deprecated: Do not use.
-func (m *MeshConfig) GetRdsRefreshDelay() *types.Duration {
-	if m != nil {
-		return m.RdsRefreshDelay
-	}
-	return nil
-}
-
 func (m *MeshConfig) GetEnableTracing() bool {
 	if m != nil {
 		return m.EnableTracing
@@ -599,6 +609,13 @@ func (m *MeshConfig) GetAccessLogEncoding() MeshConfig_AccessLogEncoding {
 func (m *MeshConfig) GetEnableEnvoyAccessLogService() bool {
 	if m != nil {
 		return m.EnableEnvoyAccessLogService
+	}
+	return false
+}
+
+func (m *MeshConfig) GetDisableEnvoyListenerLog() bool {
+	if m != nil {
+		return m.DisableEnvoyListenerLog
 	}
 	return false
 }
@@ -641,6 +658,13 @@ func (m *MeshConfig) GetTrustDomain() string {
 func (m *MeshConfig) GetTrustDomainAliases() []string {
 	if m != nil {
 		return m.TrustDomainAliases
+	}
+	return nil
+}
+
+func (m *MeshConfig) GetCaCertificates() []*MeshConfig_CertificateData {
+	if m != nil {
+		return m.CaCertificates
 	}
 	return nil
 }
@@ -750,6 +774,20 @@ func (m *MeshConfig) GetCa() *MeshConfig_CA {
 	return nil
 }
 
+func (m *MeshConfig) GetExtensionProviders() []*MeshConfig_ExtensionProvider {
+	if m != nil {
+		return m.ExtensionProviders
+	}
+	return nil
+}
+
+func (m *MeshConfig) GetDiscoverySelectors() []*v1.LabelSelector {
+	if m != nil {
+		return m.DiscoverySelectors
+	}
+	return nil
+}
+
 type MeshConfig_OutboundTrafficPolicy struct {
 	Mode                 MeshConfig_OutboundTrafficPolicy_Mode `protobuf:"varint,1,opt,name=mode,proto3,enum=istio.mesh.v1alpha1.MeshConfig_OutboundTrafficPolicy_Mode" json:"mode,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                              `json:"-"`
@@ -797,12 +835,100 @@ func (m *MeshConfig_OutboundTrafficPolicy) GetMode() MeshConfig_OutboundTrafficP
 	return MeshConfig_OutboundTrafficPolicy_REGISTRY_ONLY
 }
 
+type MeshConfig_CertificateData struct {
+	// Types that are valid to be assigned to CertificateData:
+	//	*MeshConfig_CertificateData_Pem
+	//	*MeshConfig_CertificateData_SpiffeBundleUrl
+	CertificateData      isMeshConfig_CertificateData_CertificateData `protobuf_oneof:"certificate_data"`
+	XXX_NoUnkeyedLiteral struct{}                                     `json:"-"`
+	XXX_unrecognized     []byte                                       `json:"-"`
+	XXX_sizecache        int32                                        `json:"-"`
+}
+
+func (m *MeshConfig_CertificateData) Reset()         { *m = MeshConfig_CertificateData{} }
+func (m *MeshConfig_CertificateData) String() string { return proto.CompactTextString(m) }
+func (*MeshConfig_CertificateData) ProtoMessage()    {}
+func (*MeshConfig_CertificateData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b5c7ece76d5d5022, []int{0, 1}
+}
+func (m *MeshConfig_CertificateData) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MeshConfig_CertificateData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MeshConfig_CertificateData.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MeshConfig_CertificateData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MeshConfig_CertificateData.Merge(m, src)
+}
+func (m *MeshConfig_CertificateData) XXX_Size() int {
+	return m.Size()
+}
+func (m *MeshConfig_CertificateData) XXX_DiscardUnknown() {
+	xxx_messageInfo_MeshConfig_CertificateData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MeshConfig_CertificateData proto.InternalMessageInfo
+
+type isMeshConfig_CertificateData_CertificateData interface {
+	isMeshConfig_CertificateData_CertificateData()
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type MeshConfig_CertificateData_Pem struct {
+	Pem string `protobuf:"bytes,1,opt,name=pem,proto3,oneof" json:"pem,omitempty"`
+}
+type MeshConfig_CertificateData_SpiffeBundleUrl struct {
+	SpiffeBundleUrl string `protobuf:"bytes,2,opt,name=spiffe_bundle_url,json=spiffeBundleUrl,proto3,oneof" json:"spiffeBundleUrl,omitempty"`
+}
+
+func (*MeshConfig_CertificateData_Pem) isMeshConfig_CertificateData_CertificateData()             {}
+func (*MeshConfig_CertificateData_SpiffeBundleUrl) isMeshConfig_CertificateData_CertificateData() {}
+
+func (m *MeshConfig_CertificateData) GetCertificateData() isMeshConfig_CertificateData_CertificateData {
+	if m != nil {
+		return m.CertificateData
+	}
+	return nil
+}
+
+func (m *MeshConfig_CertificateData) GetPem() string {
+	if x, ok := m.GetCertificateData().(*MeshConfig_CertificateData_Pem); ok {
+		return x.Pem
+	}
+	return ""
+}
+
+func (m *MeshConfig_CertificateData) GetSpiffeBundleUrl() string {
+	if x, ok := m.GetCertificateData().(*MeshConfig_CertificateData_SpiffeBundleUrl); ok {
+		return x.SpiffeBundleUrl
+	}
+	return ""
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*MeshConfig_CertificateData) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*MeshConfig_CertificateData_Pem)(nil),
+		(*MeshConfig_CertificateData_SpiffeBundleUrl)(nil),
+	}
+}
+
 type MeshConfig_ThriftConfig struct {
 	// Specify thrift rate limit service URL. If pilot has thrift protocol support enabled,
 	// this will enable the rate limit service for destinations that have matching rate
 	// limit configurations.
 	RateLimitUrl string `protobuf:"bytes,1,opt,name=rate_limit_url,json=rateLimitUrl,proto3" json:"rateLimitUrl,omitempty"`
-	// Specify thrift rate limit service timeout, in milliseconds. Default is 50ms
+	// Specify thrift rate limit service timeout, in milliseconds. Default is `50ms`
 	RateLimitTimeout     *types.Duration `protobuf:"bytes,2,opt,name=rate_limit_timeout,json=rateLimitTimeout,proto3" json:"rateLimitTimeout,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_unrecognized     []byte          `json:"-"`
@@ -813,7 +939,7 @@ func (m *MeshConfig_ThriftConfig) Reset()         { *m = MeshConfig_ThriftConfig
 func (m *MeshConfig_ThriftConfig) String() string { return proto.CompactTextString(m) }
 func (*MeshConfig_ThriftConfig) ProtoMessage()    {}
 func (*MeshConfig_ThriftConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b5c7ece76d5d5022, []int{0, 1}
+	return fileDescriptor_b5c7ece76d5d5022, []int{0, 2}
 }
 func (m *MeshConfig_ThriftConfig) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -887,7 +1013,7 @@ func (m *MeshConfig_ServiceSettings) Reset()         { *m = MeshConfig_ServiceSe
 func (m *MeshConfig_ServiceSettings) String() string { return proto.CompactTextString(m) }
 func (*MeshConfig_ServiceSettings) ProtoMessage()    {}
 func (*MeshConfig_ServiceSettings) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b5c7ece76d5d5022, []int{0, 2}
+	return fileDescriptor_b5c7ece76d5d5022, []int{0, 3}
 }
 func (m *MeshConfig_ServiceSettings) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -947,8 +1073,8 @@ type MeshConfig_ServiceSettings_Settings struct {
 	//     this service-by-service (e.g. mysvc.myns.svc.cluster.local) or as a group
 	//     (e.g. *.myns.svc.cluster.local).
 	//
-	// By default, Istio will consider all services in the kube-system namespace to be cluster-local,
-	// unless explicitly overridden here.
+	// By default Istio will consider kubernetes.default.svc (i.e. the API Server) as well as all
+	// services in the kube-system namespace to be cluster-local, unless explicitly overridden here.
 	ClusterLocal         bool     `protobuf:"varint,1,opt,name=cluster_local,json=clusterLocal,proto3" json:"clusterLocal,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -959,7 +1085,7 @@ func (m *MeshConfig_ServiceSettings_Settings) Reset()         { *m = MeshConfig_
 func (m *MeshConfig_ServiceSettings_Settings) String() string { return proto.CompactTextString(m) }
 func (*MeshConfig_ServiceSettings_Settings) ProtoMessage()    {}
 func (*MeshConfig_ServiceSettings_Settings) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b5c7ece76d5d5022, []int{0, 2, 0}
+	return fileDescriptor_b5c7ece76d5d5022, []int{0, 3, 0}
 }
 func (m *MeshConfig_ServiceSettings_Settings) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1023,7 +1149,7 @@ func (m *MeshConfig_CA) Reset()         { *m = MeshConfig_CA{} }
 func (m *MeshConfig_CA) String() string { return proto.CompactTextString(m) }
 func (*MeshConfig_CA) ProtoMessage()    {}
 func (*MeshConfig_CA) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b5c7ece76d5d5022, []int{0, 3}
+	return fileDescriptor_b5c7ece76d5d5022, []int{0, 4}
 }
 func (m *MeshConfig_CA) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1080,6 +1206,329 @@ func (m *MeshConfig_CA) GetIstiodSide() bool {
 	return false
 }
 
+type MeshConfig_ExtensionProvider struct {
+	// REQUIRED. A unique name identifying the extension provider.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// REQUIRED. Specifies detailed configuration for the extension provider.
+	//
+	// Types that are valid to be assigned to Provider:
+	//	*MeshConfig_ExtensionProvider_EnvoyExtAuthzHttp
+	//	*MeshConfig_ExtensionProvider_EnvoyExtAuthzGrpc
+	Provider             isMeshConfig_ExtensionProvider_Provider `protobuf_oneof:"provider"`
+	XXX_NoUnkeyedLiteral struct{}                                `json:"-"`
+	XXX_unrecognized     []byte                                  `json:"-"`
+	XXX_sizecache        int32                                   `json:"-"`
+}
+
+func (m *MeshConfig_ExtensionProvider) Reset()         { *m = MeshConfig_ExtensionProvider{} }
+func (m *MeshConfig_ExtensionProvider) String() string { return proto.CompactTextString(m) }
+func (*MeshConfig_ExtensionProvider) ProtoMessage()    {}
+func (*MeshConfig_ExtensionProvider) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b5c7ece76d5d5022, []int{0, 5}
+}
+func (m *MeshConfig_ExtensionProvider) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MeshConfig_ExtensionProvider) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MeshConfig_ExtensionProvider.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MeshConfig_ExtensionProvider) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MeshConfig_ExtensionProvider.Merge(m, src)
+}
+func (m *MeshConfig_ExtensionProvider) XXX_Size() int {
+	return m.Size()
+}
+func (m *MeshConfig_ExtensionProvider) XXX_DiscardUnknown() {
+	xxx_messageInfo_MeshConfig_ExtensionProvider.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MeshConfig_ExtensionProvider proto.InternalMessageInfo
+
+type isMeshConfig_ExtensionProvider_Provider interface {
+	isMeshConfig_ExtensionProvider_Provider()
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type MeshConfig_ExtensionProvider_EnvoyExtAuthzHttp struct {
+	EnvoyExtAuthzHttp *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider `protobuf:"bytes,2,opt,name=envoy_ext_authz_http,json=envoyExtAuthzHttp,proto3,oneof" json:"envoyExtAuthzHttp,omitempty"`
+}
+type MeshConfig_ExtensionProvider_EnvoyExtAuthzGrpc struct {
+	EnvoyExtAuthzGrpc *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider `protobuf:"bytes,3,opt,name=envoy_ext_authz_grpc,json=envoyExtAuthzGrpc,proto3,oneof" json:"envoyExtAuthzGrpc,omitempty"`
+}
+
+func (*MeshConfig_ExtensionProvider_EnvoyExtAuthzHttp) isMeshConfig_ExtensionProvider_Provider() {}
+func (*MeshConfig_ExtensionProvider_EnvoyExtAuthzGrpc) isMeshConfig_ExtensionProvider_Provider() {}
+
+func (m *MeshConfig_ExtensionProvider) GetProvider() isMeshConfig_ExtensionProvider_Provider {
+	if m != nil {
+		return m.Provider
+	}
+	return nil
+}
+
+func (m *MeshConfig_ExtensionProvider) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *MeshConfig_ExtensionProvider) GetEnvoyExtAuthzHttp() *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider {
+	if x, ok := m.GetProvider().(*MeshConfig_ExtensionProvider_EnvoyExtAuthzHttp); ok {
+		return x.EnvoyExtAuthzHttp
+	}
+	return nil
+}
+
+func (m *MeshConfig_ExtensionProvider) GetEnvoyExtAuthzGrpc() *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider {
+	if x, ok := m.GetProvider().(*MeshConfig_ExtensionProvider_EnvoyExtAuthzGrpc); ok {
+		return x.EnvoyExtAuthzGrpc
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*MeshConfig_ExtensionProvider) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*MeshConfig_ExtensionProvider_EnvoyExtAuthzHttp)(nil),
+		(*MeshConfig_ExtensionProvider_EnvoyExtAuthzGrpc)(nil),
+	}
+}
+
+type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider struct {
+	// REQUIRED. Specifies the service that implements the Envoy ext_authz HTTP authorization service.
+	// The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
+	// to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+	// service defined by the Kubernetes service or ServiceEntry.
+	//
+	// Example: "my-ext-authz.foo.svc.cluster.local" or "bar/my-ext-authz.example.com".
+	Service string `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
+	// REQUIRED. Specifies the port of the service.
+	Port uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
+	// Sets a prefix to the value of authorization request header *Path*.
+	// For example, setting this to "/check" for an original user request at path "/admin" will cause the
+	// authorization check request to be sent to the authorization service at the path "/check/admin" instead of "/admin".
+	PathPrefix string `protobuf:"bytes,3,opt,name=path_prefix,json=pathPrefix,proto3" json:"pathPrefix,omitempty"`
+	// If true, the user request will be allowed even if the communication with the authorization service has failed,
+	// or if the authorization service has returned a HTTP 5xx error.
+	// Default is false and the request will be rejected with "Forbidden" response.
+	FailOpen bool `protobuf:"varint,4,opt,name=fail_open,json=failOpen,proto3" json:"failOpen,omitempty"`
+	// Sets the HTTP status that is returned to the client when there is a network error to the authorization service.
+	// The default status is "403" (HTTP Forbidden).
+	StatusOnError string `protobuf:"bytes,5,opt,name=status_on_error,json=statusOnError,proto3" json:"statusOnError,omitempty"`
+	// List of headers that should be included in the authorization request sent to the authorization service.
+	// Note that in addition to the headers supplied by users:
+	// 1. *Host*, *Method*, *Path* and *Content-Length* are automatically sent.
+	// 2. *Content-Length* will be set to 0 and the request will not have a message body.
+	IncludeHeadersInCheck []string `protobuf:"bytes,6,rep,name=include_headers_in_check,json=includeHeadersInCheck,proto3" json:"includeHeadersInCheck,omitempty"`
+	// List of headers from the authorization service that should be added or overridden in the original request and
+	// forwarded to the upstream when the authorization check result is allowed (HTTP code 200).
+	// If not specified, the original request will not be modified and forwarded to backend as-is.
+	// Note, any existing headers will be overridden.
+	HeadersToUpstreamOnAllow []string `protobuf:"bytes,7,rep,name=headers_to_upstream_on_allow,json=headersToUpstreamOnAllow,proto3" json:"headersToUpstreamOnAllow,omitempty"`
+	// List of headers from the authorization service that should be forwarded to downstream when the authorization
+	// check result is not allowed (HTTP code other than 200).
+	// If not specified, all the authorization response headers, except *Authority (Host)* will be in the response to
+	// the downstream.
+	// When a header is included in this list, *Path*, *Status*, *Content-Length*, *WWWAuthenticate* and *Location* are
+	// automatically added.
+	// Note, the body from the authorization service is always included in the response to downstream.
+	HeadersToDownstreamOnDeny []string `protobuf:"bytes,8,rep,name=headers_to_downstream_on_deny,json=headersToDownstreamOnDeny,proto3" json:"headersToDownstreamOnDeny,omitempty"`
+	XXX_NoUnkeyedLiteral      struct{} `json:"-"`
+	XXX_unrecognized          []byte   `json:"-"`
+	XXX_sizecache             int32    `json:"-"`
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) Reset() {
+	*m = MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider{}
+}
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) String() string {
+	return proto.CompactTextString(m)
+}
+func (*MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) ProtoMessage() {}
+func (*MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b5c7ece76d5d5022, []int{0, 5, 0}
+}
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider.Merge(m, src)
+}
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) XXX_Size() int {
+	return m.Size()
+}
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) XXX_DiscardUnknown() {
+	xxx_messageInfo_MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider proto.InternalMessageInfo
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) GetService() string {
+	if m != nil {
+		return m.Service
+	}
+	return ""
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) GetPort() uint32 {
+	if m != nil {
+		return m.Port
+	}
+	return 0
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) GetPathPrefix() string {
+	if m != nil {
+		return m.PathPrefix
+	}
+	return ""
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) GetFailOpen() bool {
+	if m != nil {
+		return m.FailOpen
+	}
+	return false
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) GetStatusOnError() string {
+	if m != nil {
+		return m.StatusOnError
+	}
+	return ""
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) GetIncludeHeadersInCheck() []string {
+	if m != nil {
+		return m.IncludeHeadersInCheck
+	}
+	return nil
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) GetHeadersToUpstreamOnAllow() []string {
+	if m != nil {
+		return m.HeadersToUpstreamOnAllow
+	}
+	return nil
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) GetHeadersToDownstreamOnDeny() []string {
+	if m != nil {
+		return m.HeadersToDownstreamOnDeny
+	}
+	return nil
+}
+
+type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider struct {
+	// REQUIRED. Specifies the service that implements the Envoy ext_authz gRPC authorization service.
+	// The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
+	// to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+	// service defined by the Kubernetes service or ServiceEntry.
+	//
+	// Example: "my-ext-authz.foo.svc.cluster.local" or "bar/my-ext-authz.example.com".
+	Service string `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
+	// REQUIRED. Specifies the port of the service.
+	Port uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
+	// If true, the user request will be allowed even if the communication with the authorization service has failed,
+	// or if the authorization service has returned a HTTP 5xx error.
+	// Default is false and the request will be rejected with "Forbidden" response.
+	FailOpen bool `protobuf:"varint,3,opt,name=fail_open,json=failOpen,proto3" json:"failOpen,omitempty"`
+	// Sets the HTTP status that is returned to the client when there is a network error to the authorization service.
+	// The default status is "403" (HTTP Forbidden).
+	StatusOnError        string   `protobuf:"bytes,4,opt,name=status_on_error,json=statusOnError,proto3" json:"statusOnError,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider) Reset() {
+	*m = MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider{}
+}
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider) String() string {
+	return proto.CompactTextString(m)
+}
+func (*MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider) ProtoMessage() {}
+func (*MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b5c7ece76d5d5022, []int{0, 5, 1}
+}
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider.Merge(m, src)
+}
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider) XXX_Size() int {
+	return m.Size()
+}
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider) XXX_DiscardUnknown() {
+	xxx_messageInfo_MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider proto.InternalMessageInfo
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider) GetService() string {
+	if m != nil {
+		return m.Service
+	}
+	return ""
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider) GetPort() uint32 {
+	if m != nil {
+		return m.Port
+	}
+	return 0
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider) GetFailOpen() bool {
+	if m != nil {
+		return m.FailOpen
+	}
+	return false
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider) GetStatusOnError() string {
+	if m != nil {
+		return m.StatusOnError
+	}
+	return ""
+}
+
 // ConfigSource describes information about a configuration store inside a
 // mesh. A single control plane instance can interact with one or more data
 // sources.
@@ -1090,7 +1539,7 @@ type ConfigSource struct {
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	// Use the tls_settings to specify the tls mode to use. If the MCP server
 	// uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
-	// mode as ISTIO_MUTUAL.
+	// mode as `ISTIO_MUTUAL`.
 	TlsSettings *v1alpha3.ClientTLSSettings `protobuf:"bytes,2,opt,name=tls_settings,json=tlsSettings,proto3" json:"tlsSettings,omitempty"`
 	// Describes the source of configuration, if nothing is specified default is MCP
 	SubscribedResources  []Resource `protobuf:"varint,3,rep,packed,name=subscribed_resources,json=subscribedResources,proto3,enum=istio.mesh.v1alpha1.Resource" json:"subscribedResources,omitempty"`
@@ -1155,18 +1604,22 @@ func (m *ConfigSource) GetSubscribedResources() []Resource {
 
 // Certificate configures the provision of a certificate and its key.
 // Example 1: key and cert stored in a secret
+// ```
 // { secretName: galley-cert
 //   secretNamespace: istio-system
 //   dnsNames:
 //     - galley.istio-system.svc
 //     - galley.mydomain.com
 // }
+// ```
 // Example 2: key and cert stored in a directory
+// ```
 // { dnsNames:
 //     - pilot.istio-system
 //     - pilot.istio-system.svc
 //     - pilot.mydomain.com
 // }
+// ```
 type Certificate struct {
 	// Name of the secret the certificate and its key will be stored into.
 	// If it is empty, it will not be stored into a secret.
@@ -1236,10 +1689,14 @@ func init() {
 	proto.RegisterEnum("istio.mesh.v1alpha1.MeshConfig_OutboundTrafficPolicy_Mode", MeshConfig_OutboundTrafficPolicy_Mode_name, MeshConfig_OutboundTrafficPolicy_Mode_value)
 	proto.RegisterType((*MeshConfig)(nil), "istio.mesh.v1alpha1.MeshConfig")
 	proto.RegisterType((*MeshConfig_OutboundTrafficPolicy)(nil), "istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy")
+	proto.RegisterType((*MeshConfig_CertificateData)(nil), "istio.mesh.v1alpha1.MeshConfig.CertificateData")
 	proto.RegisterType((*MeshConfig_ThriftConfig)(nil), "istio.mesh.v1alpha1.MeshConfig.ThriftConfig")
 	proto.RegisterType((*MeshConfig_ServiceSettings)(nil), "istio.mesh.v1alpha1.MeshConfig.ServiceSettings")
 	proto.RegisterType((*MeshConfig_ServiceSettings_Settings)(nil), "istio.mesh.v1alpha1.MeshConfig.ServiceSettings.Settings")
 	proto.RegisterType((*MeshConfig_CA)(nil), "istio.mesh.v1alpha1.MeshConfig.CA")
+	proto.RegisterType((*MeshConfig_ExtensionProvider)(nil), "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider")
+	proto.RegisterType((*MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider)(nil), "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationHttpProvider")
+	proto.RegisterType((*MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider)(nil), "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationGrpcProvider")
 	proto.RegisterType((*ConfigSource)(nil), "istio.mesh.v1alpha1.ConfigSource")
 	proto.RegisterType((*Certificate)(nil), "istio.mesh.v1alpha1.Certificate")
 }
@@ -1247,131 +1704,162 @@ func init() {
 func init() { proto.RegisterFile("mesh/v1alpha1/config.proto", fileDescriptor_b5c7ece76d5d5022) }
 
 var fileDescriptor_b5c7ece76d5d5022 = []byte{
-	// 1971 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x58, 0xcd, 0x76, 0xdb, 0xb8,
-	0x15, 0x8e, 0x64, 0x26, 0xa1, 0xa1, 0x3f, 0x1a, 0xfe, 0x09, 0xa3, 0x4c, 0x1c, 0x45, 0x99, 0x24,
-	0x1a, 0x77, 0x2a, 0x4f, 0x9c, 0x4e, 0x3a, 0x6d, 0x57, 0xb2, 0xa4, 0x24, 0xe6, 0x28, 0xb6, 0x0b,
-	0xc9, 0x99, 0x66, 0x66, 0x81, 0x03, 0x93, 0x90, 0x84, 0x86, 0x22, 0x54, 0x00, 0x74, 0xe2, 0x45,
-	0x1f, 0xa9, 0x7d, 0x8e, 0x9e, 0xd3, 0x4d, 0x17, 0x7d, 0x80, 0x9e, 0x3c, 0x44, 0xd7, 0x3d, 0x04,
-	0x48, 0x49, 0x76, 0x74, 0xaa, 0xd3, 0x2e, 0x66, 0x67, 0x7c, 0xf8, 0xbe, 0x8b, 0x8b, 0x8b, 0x7b,
-	0x2f, 0xaf, 0x0c, 0xaa, 0x13, 0x2a, 0xc7, 0xfb, 0x17, 0xcf, 0x48, 0x38, 0x1d, 0x93, 0x67, 0xfb,
-	0x3e, 0x8f, 0x86, 0x6c, 0xd4, 0x9c, 0x0a, 0xae, 0x38, 0xdc, 0x64, 0x52, 0x31, 0xde, 0x4c, 0x18,
-	0xcd, 0x8c, 0x51, 0xdd, 0x1d, 0x71, 0x3e, 0x0a, 0xe9, 0xbe, 0xa6, 0x9c, 0xc7, 0xc3, 0xfd, 0x20,
-	0x16, 0x44, 0x31, 0x1e, 0x19, 0xd1, 0xe7, 0xfb, 0x1f, 0x04, 0x99, 0x4e, 0xa9, 0x90, 0xe9, 0xfe,
-	0xdd, 0xab, 0x07, 0x4e, 0x05, 0xff, 0x78, 0x99, 0x6e, 0xed, 0x45, 0x54, 0x7d, 0xe0, 0xe2, 0x3d,
-	0x8b, 0x46, 0x19, 0xe1, 0xf9, 0x7e, 0x40, 0xa5, 0x62, 0x91, 0x3e, 0x01, 0x8b, 0x38, 0xa4, 0x86,
-	0x5b, 0xff, 0xf7, 0x2e, 0x00, 0x6f, 0xa8, 0x1c, 0xb7, 0xb5, 0xc3, 0x70, 0x0f, 0x6c, 0x68, 0x4b,
-	0x38, 0x64, 0x52, 0xd1, 0x08, 0x4f, 0xb9, 0x50, 0xae, 0x55, 0xcb, 0x35, 0x6e, 0xa2, 0x8a, 0xde,
-	0xe8, 0x69, 0xfc, 0x94, 0x0b, 0x05, 0x9f, 0x00, 0x03, 0xe1, 0xb1, 0x52, 0x53, 0xc3, 0xbc, 0xa9,
-	0x99, 0x25, 0x0d, 0xbf, 0x56, 0x6a, 0xaa, 0x79, 0x87, 0xa0, 0xe2, 0xf3, 0x28, 0xa2, 0xbe, 0xc2,
-	0x8a, 0x4d, 0x28, 0x8f, 0x95, 0x7b, 0xab, 0x96, 0x6b, 0x14, 0x0e, 0xee, 0x36, 0xcd, 0x1d, 0x9b,
-	0xd9, 0x1d, 0x9b, 0x9d, 0x34, 0x06, 0xa8, 0x9c, 0x2a, 0x06, 0x46, 0x00, 0x7f, 0x00, 0x55, 0x4d,
-	0xf2, 0x79, 0x88, 0x03, 0xaa, 0xa8, 0xaf, 0xef, 0x91, 0x99, 0xdb, 0x5b, 0x65, 0xce, 0xcd, 0xc4,
-	0x9d, 0x4c, 0x9b, 0x19, 0xe6, 0xa0, 0xa4, 0xfc, 0x29, 0x7e, 0x4f, 0xe9, 0x94, 0x84, 0xec, 0x82,
-	0xba, 0x5f, 0x68, 0x5b, 0x5e, 0xd3, 0xbc, 0xd9, 0x3c, 0x92, 0xd9, 0xcb, 0x3d, 0x6f, 0xb6, 0x8d,
-	0x6b, 0x8c, 0x47, 0xa7, 0x9c, 0x87, 0x7d, 0xaa, 0x14, 0x8b, 0x46, 0xb2, 0x39, 0x68, 0x9f, 0xce,
-	0xff, 0xf6, 0xa7, 0xdf, 0x67, 0x16, 0x51, 0x51, 0x2d, 0xac, 0xe0, 0x23, 0x50, 0x62, 0xd1, 0x48,
-	0x50, 0x29, 0xb1, 0x1f, 0x12, 0x29, 0xdd, 0xdb, 0xb5, 0x5c, 0x63, 0x1d, 0x15, 0x53, 0xb0, 0x9d,
-	0x60, 0xf0, 0x29, 0xa8, 0x64, 0x24, 0x49, 0xc5, 0x05, 0xf3, 0xa9, 0x6b, 0x6b, 0x5a, 0x39, 0x85,
-	0xfb, 0x06, 0x85, 0x13, 0x70, 0x67, 0x66, 0x8d, 0x47, 0x4a, 0xf0, 0x30, 0xa4, 0x02, 0x4f, 0x78,
-	0x40, 0xdd, 0xf5, 0x5a, 0xae, 0x51, 0x3e, 0xf8, 0xb6, 0xb9, 0x24, 0xf9, 0x9a, 0xf3, 0x17, 0x6f,
-	0x1e, 0xa5, 0xe7, 0xce, 0xd4, 0x6f, 0x78, 0x40, 0xd1, 0x36, 0x5b, 0x06, 0xc3, 0xaf, 0x80, 0x33,
-	0xf7, 0x2b, 0xa4, 0xbe, 0xe2, 0xc2, 0xfd, 0x95, 0x76, 0xac, 0x32, 0x73, 0xcc, 0xc0, 0xf0, 0x04,
-	0x14, 0x48, 0xac, 0xc6, 0x78, 0xca, 0x43, 0xe6, 0x5f, 0xba, 0x40, 0x7b, 0xb3, 0xb7, 0xca, 0x9b,
-	0x56, 0xac, 0xc6, 0xa7, 0x5a, 0x71, 0x98, 0x77, 0x73, 0x08, 0x90, 0xd9, 0x1a, 0x1e, 0x81, 0x0d,
-	0x11, 0x48, 0x2c, 0xe8, 0x50, 0x50, 0x39, 0xc6, 0x01, 0x0d, 0xc9, 0xa5, 0x5b, 0x58, 0xf1, 0xf2,
-	0xda, 0x4a, 0x45, 0x04, 0x12, 0x19, 0x59, 0x27, 0x51, 0xc1, 0xc7, 0xa0, 0x4c, 0x23, 0x72, 0x1e,
-	0x52, 0xac, 0x04, 0xf1, 0x59, 0x34, 0x72, 0x8b, 0xb5, 0x5c, 0xc3, 0x46, 0x25, 0x83, 0x0e, 0x0c,
-	0x98, 0x24, 0x38, 0xf1, 0xfd, 0xe4, 0xb2, 0x21, 0x1f, 0xe1, 0x21, 0x0b, 0xa9, 0x5b, 0xd2, 0x97,
-	0x2d, 0x19, 0xb8, 0xc7, 0x47, 0x2f, 0x59, 0x48, 0x93, 0xa2, 0x59, 0xe4, 0x71, 0x31, 0x21, 0xca,
-	0x75, 0x4d, 0x58, 0xe6, 0x4c, 0x0d, 0x43, 0x02, 0x36, 0x17, 0xb8, 0x34, 0xf2, 0x79, 0x90, 0x9c,
-	0x7f, 0x4f, 0x87, 0xe7, 0xd9, 0xca, 0xf0, 0x64, 0xd6, 0xba, 0xa9, 0x10, 0x6d, 0x90, 0xeb, 0x10,
-	0xec, 0x80, 0x07, 0xe9, 0xed, 0x68, 0x74, 0xc1, 0x2f, 0xf1, 0xc2, 0x79, 0x59, 0x32, 0x35, 0xf4,
-	0x75, 0xef, 0x19, 0x5a, 0x37, 0x61, 0xcd, 0x2c, 0x67, 0x99, 0xf5, 0x0a, 0x94, 0x03, 0x3a, 0x24,
-	0x71, 0xa8, 0xb0, 0x69, 0x66, 0x6e, 0x59, 0xc7, 0xba, 0xb6, 0xd4, 0xc7, 0xd3, 0xa4, 0xe2, 0x8d,
-	0x93, 0xa8, 0x94, 0xea, 0xd2, 0x96, 0x32, 0x01, 0x77, 0x78, 0xac, 0xce, 0x79, 0x1c, 0x05, 0x49,
-	0xb8, 0x87, 0x43, 0xe6, 0x67, 0x49, 0xb1, 0xa1, 0x2d, 0xae, 0x4c, 0xd1, 0x93, 0x54, 0x3e, 0x30,
-	0x6a, 0x93, 0x0f, 0x68, 0x9b, 0x2f, 0x83, 0xe1, 0x6b, 0x50, 0x36, 0xfe, 0x62, 0xc9, 0x63, 0xe1,
-	0x53, 0xe9, 0xee, 0xd4, 0xd6, 0x1a, 0x85, 0x83, 0x87, 0x4b, 0x4f, 0x31, 0x27, 0xf4, 0x35, 0x13,
-	0x95, 0xfc, 0x85, 0x95, 0x84, 0x1d, 0xe0, 0xa4, 0x71, 0x24, 0xb1, 0xe2, 0x78, 0xa2, 0x42, 0xe9,
-	0xfe, 0x42, 0x7b, 0x5c, 0xfd, 0x2c, 0xdf, 0x0e, 0x39, 0x0f, 0xdf, 0x92, 0x30, 0xa6, 0x28, 0xcd,
-	0xac, 0x56, 0xac, 0xf8, 0x1b, 0x15, 0x4a, 0xf8, 0x10, 0x14, 0x95, 0x88, 0xa5, 0xc2, 0x01, 0x9f,
-	0x10, 0x16, 0xb9, 0x55, 0x9d, 0x17, 0x05, 0x8d, 0x75, 0x34, 0x04, 0xbf, 0x01, 0x5b, 0x8b, 0x14,
-	0x4c, 0x42, 0x46, 0x24, 0x95, 0x6e, 0xb3, 0xb6, 0xd6, 0x58, 0x47, 0x70, 0x81, 0xda, 0x32, 0x3b,
-	0xf0, 0x37, 0xe0, 0x6e, 0xf6, 0x38, 0xe9, 0x93, 0x62, 0xfa, 0x31, 0xe9, 0xc0, 0x58, 0x71, 0xf7,
-	0x81, 0x96, 0xed, 0xa4, 0x84, 0xf4, 0x3d, 0xbb, 0x7a, 0x7b, 0xc0, 0xe1, 0x6b, 0xf0, 0x30, 0x93,
-	0x5e, 0x30, 0xa1, 0x62, 0x12, 0x2e, 0x31, 0x51, 0xd3, 0x26, 0xee, 0xa7, 0xc4, 0xb7, 0x86, 0x77,
-	0xdd, 0x92, 0x07, 0xea, 0x99, 0xa5, 0xeb, 0x1f, 0x97, 0x05, 0x53, 0x0f, 0xb5, 0xa9, 0xdd, 0x94,
-	0xd9, 0x99, 0x13, 0x51, 0x1c, 0xce, 0x6d, 0x3d, 0x06, 0x65, 0xc1, 0xb9, 0xc2, 0x11, 0x99, 0x50,
-	0x39, 0x25, 0x3e, 0x75, 0xeb, 0xa6, 0xd2, 0x12, 0xf4, 0x38, 0x03, 0xe1, 0x10, 0x6c, 0x86, 0xdc,
-	0x27, 0x21, 0x53, 0x97, 0x38, 0x3c, 0xc7, 0xd2, 0xf4, 0x5b, 0xf7, 0x91, 0x7e, 0x95, 0x17, 0xff,
-	0xa5, 0x67, 0xf7, 0x52, 0x55, 0x8f, 0x93, 0xe0, 0x90, 0x84, 0x24, 0xf2, 0xa9, 0x48, 0xbb, 0x35,
-	0xda, 0xc8, 0x4c, 0xf6, 0xce, 0x53, 0x08, 0xb6, 0x81, 0x13, 0x44, 0xf3, 0x5e, 0x23, 0x88, 0xa2,
-	0xee, 0x97, 0x2b, 0xbf, 0x59, 0x41, 0x94, 0xb5, 0x19, 0x44, 0x14, 0x85, 0x3f, 0x81, 0x8d, 0xf1,
-	0x01, 0x8e, 0xa7, 0x23, 0x41, 0x02, 0x9a, 0xa5, 0xfc, 0x57, 0xba, 0xd0, 0xf7, 0x57, 0xa5, 0xfc,
-	0xeb, 0x83, 0x33, 0xa3, 0x4b, 0x93, 0xbd, 0x32, 0xbe, 0x0a, 0x24, 0x19, 0xc0, 0x22, 0x53, 0x54,
-	0x7e, 0x18, 0x4b, 0x45, 0x05, 0x96, 0x8a, 0x98, 0x00, 0xba, 0x5f, 0xeb, 0xd8, 0xed, 0xa4, 0x84,
-	0xb6, 0xd9, 0xef, 0x2b, 0xa2, 0x23, 0x09, 0x7f, 0x07, 0xaa, 0xb3, 0x82, 0xfc, 0x5c, 0xfb, 0x4b,
-	0xad, 0x9d, 0x95, 0xec, 0x75, 0x71, 0x07, 0x14, 0x7d, 0x2a, 0x14, 0x1b, 0x32, 0x9f, 0x28, 0x2a,
-	0xdd, 0x7d, 0x5d, 0x5c, 0xcb, 0x9b, 0x42, 0x7b, 0x4e, 0x44, 0x57, 0x54, 0xf0, 0xf7, 0xa0, 0xa4,
-	0xc6, 0x82, 0x0d, 0x67, 0xbd, 0xe5, 0x99, 0x0e, 0xee, 0xd7, 0xab, 0xc2, 0x32, 0xd0, 0xa2, 0xb4,
-	0xcf, 0x14, 0xd5, 0xc2, 0x0a, 0xfe, 0x08, 0x9c, 0x2c, 0x8f, 0xd3, 0xb4, 0x90, 0xee, 0x81, 0x76,
-	0x6e, 0x65, 0xb0, 0xd3, 0xc4, 0xce, 0xbe, 0xde, 0xa8, 0x22, 0xaf, 0x02, 0x10, 0x81, 0x3b, 0x69,
-	0x27, 0x98, 0x0a, 0x3e, 0xa1, 0x6a, 0x4c, 0x63, 0x89, 0x27, 0x54, 0x8c, 0xa8, 0xfb, 0x7c, 0x65,
-	0x43, 0xd8, 0x36, 0xd2, 0xd3, 0x99, 0xf2, 0x4d, 0x22, 0x84, 0x3f, 0x81, 0x2f, 0x2e, 0xa8, 0x60,
-	0xc3, 0x4b, 0xbc, 0x10, 0x19, 0x4c, 0x14, 0xf6, 0x43, 0x46, 0x23, 0xe5, 0xbe, 0x58, 0x69, 0xf8,
-	0xae, 0xd1, 0x2f, 0x44, 0xb9, 0xa5, 0xda, 0x5a, 0x0c, 0x0f, 0x40, 0xde, 0x27, 0xee, 0xaf, 0xb5,
-	0x89, 0xfa, 0xaa, 0xeb, 0xb7, 0x5b, 0x28, 0xef, 0x93, 0xea, 0x5f, 0x72, 0x60, 0x7b, 0x69, 0xa7,
-	0x85, 0xc7, 0xc0, 0xd2, 0x13, 0x45, 0x4e, 0xe7, 0xee, 0x6f, 0xff, 0xaf, 0x76, 0xdd, 0xd4, 0x63,
-	0x85, 0xb6, 0x53, 0xef, 0x00, 0x4b, 0x4f, 0x13, 0x1b, 0xa0, 0x84, 0xba, 0xaf, 0x8e, 0xfa, 0x03,
-	0xf4, 0x0e, 0x9f, 0x1c, 0xf7, 0xde, 0x39, 0x37, 0x60, 0x09, 0xac, 0xb7, 0x7a, 0xbd, 0x93, 0x1f,
-	0x70, 0xeb, 0xf8, 0x9d, 0x93, 0xab, 0x5b, 0x76, 0xde, 0xc9, 0xef, 0x6d, 0xbd, 0x3d, 0x42, 0x83,
-	0xb3, 0x56, 0x0f, 0xf7, 0xbb, 0xe8, 0xed, 0x51, 0xbb, 0xab, 0xc9, 0xd5, 0x3f, 0x83, 0xe2, 0x62,
-	0x3a, 0xc0, 0x2f, 0x41, 0x39, 0xa9, 0x53, 0x1c, 0xb2, 0x09, 0x53, 0x38, 0x16, 0xa1, 0xf6, 0x77,
-	0x1d, 0x15, 0x13, 0xb4, 0x97, 0x80, 0x67, 0x22, 0x84, 0xaf, 0x00, 0x5c, 0x60, 0x65, 0x03, 0x64,
-	0x7e, 0x55, 0x6d, 0x3b, 0x33, 0x23, 0xe9, 0xe0, 0x58, 0xfd, 0x6b, 0x0e, 0x54, 0xae, 0x25, 0x0e,
-	0x1c, 0x00, 0x7b, 0x96, 0x7b, 0x39, 0x6d, 0xf2, 0xbb, 0xff, 0x31, 0xf7, 0x9a, 0xb3, 0x24, 0x9c,
-	0x59, 0x82, 0x5b, 0xe0, 0xe6, 0x98, 0x4b, 0x25, 0xdd, 0xbc, 0x6e, 0xa5, 0x66, 0x51, 0xdd, 0x07,
-	0xf6, 0xec, 0xdc, 0x47, 0xa0, 0x94, 0x15, 0xb2, 0xee, 0x65, 0xfa, 0x70, 0x1b, 0x15, 0x53, 0x50,
-	0x37, 0xbf, 0xea, 0x3f, 0x73, 0x20, 0xdf, 0x6e, 0x41, 0x17, 0xdc, 0x26, 0x41, 0x90, 0x8c, 0x6a,
-	0x69, 0x7c, 0xb2, 0x25, 0x3c, 0x01, 0x45, 0x15, 0xca, 0x79, 0xf5, 0xe4, 0xaf, 0xd4, 0xe4, 0xd2,
-	0x49, 0x58, 0x67, 0xdb, 0xa0, 0xd7, 0x9f, 0x79, 0x5d, 0x50, 0xa1, 0x9c, 0xb9, 0x75, 0x08, 0x2a,
-	0x82, 0xfe, 0x29, 0xa6, 0x72, 0x1e, 0xe8, 0xb5, 0x95, 0x4d, 0x34, 0x55, 0x64, 0xf3, 0xf9, 0x03,
-	0x50, 0xd0, 0xe7, 0x07, 0x58, 0xb2, 0x80, 0xea, 0x9f, 0x22, 0x36, 0x02, 0x06, 0xea, 0xb3, 0x80,
-	0xd6, 0x3d, 0xb0, 0xbd, 0x74, 0x84, 0x85, 0x15, 0x50, 0x38, 0x3b, 0xee, 0x9f, 0x76, 0xdb, 0x47,
-	0x2f, 0x8f, 0xba, 0x1d, 0xe7, 0x06, 0xbc, 0x0d, 0xd6, 0x4e, 0x5e, 0xbe, 0x74, 0x72, 0xb0, 0x00,
-	0x6e, 0x77, 0xba, 0x2f, 0x5b, 0x67, 0xbd, 0x81, 0x93, 0x87, 0x00, 0xdc, 0xea, 0x0f, 0xd0, 0x51,
-	0x7b, 0xe0, 0xac, 0xd5, 0x9f, 0x00, 0x30, 0x1f, 0x40, 0xa1, 0x0d, 0xac, 0xe3, 0x93, 0xe3, 0xae,
-	0x73, 0x03, 0x96, 0x01, 0x78, 0x73, 0xa6, 0x33, 0x70, 0xd0, 0xeb, 0x3b, 0xb9, 0xfa, 0x53, 0xb0,
-	0xf1, 0xd9, 0x24, 0x96, 0xd0, 0x07, 0xdd, 0x3f, 0x0c, 0x9c, 0x1b, 0xc9, 0x5f, 0x5e, 0xff, 0xe4,
-	0xd8, 0xc9, 0xd5, 0x0f, 0x40, 0xe5, 0x5a, 0x27, 0x87, 0x10, 0x94, 0x3b, 0x27, 0xf8, 0xf8, 0x64,
-	0x80, 0xcf, 0x4e, 0x5f, 0xa1, 0x56, 0x27, 0xb1, 0x5f, 0x00, 0xb7, 0xb3, 0x45, 0xce, 0xb3, 0xec,
-	0x9c, 0x93, 0xf7, 0x92, 0xcc, 0x5f, 0xf3, 0x2c, 0x7b, 0xcd, 0xb1, 0x3c, 0xcb, 0xfe, 0xc6, 0x79,
-	0xe6, 0x59, 0xf6, 0x5d, 0xa7, 0xea, 0x59, 0xf6, 0xae, 0xf3, 0xc0, 0xb3, 0xec, 0x8a, 0xe3, 0x78,
-	0x96, 0xed, 0x38, 0x1b, 0x9e, 0x65, 0x43, 0x67, 0xd3, 0xb3, 0xec, 0x4d, 0x67, 0xcb, 0xb3, 0xec,
-	0x2d, 0x67, 0xdb, 0xb3, 0xec, 0x6d, 0x67, 0xc7, 0xb3, 0xec, 0x3b, 0x8e, 0xeb, 0x59, 0xf6, 0x7d,
-	0x67, 0xd7, 0xb3, 0xec, 0xc7, 0xce, 0x13, 0xcf, 0xb2, 0x9f, 0x38, 0x4f, 0x3d, 0xcb, 0x7e, 0xea,
-	0x34, 0x3c, 0xcb, 0xfe, 0xd6, 0x79, 0x81, 0xe0, 0x84, 0x7d, 0xa4, 0x02, 0xfb, 0x63, 0xea, 0xbf,
-	0xd7, 0x63, 0x00, 0x15, 0x68, 0xd3, 0x60, 0x82, 0xea, 0x2f, 0x78, 0x0a, 0x6e, 0x07, 0x4c, 0x9a,
-	0x06, 0xa8, 0x6f, 0x61, 0x14, 0x12, 0x55, 0x33, 0xd8, 0x68, 0xf4, 0x0f, 0x41, 0x23, 0x94, 0x68,
-	0x67, 0x91, 0x8a, 0x87, 0x84, 0x85, 0x98, 0x4f, 0x69, 0x84, 0x1e, 0x27, 0x0f, 0xe9, 0x13, 0x81,
-	0x15, 0xc7, 0x8a, 0x86, 0x74, 0x42, 0x95, 0xb8, 0xc4, 0x92, 0x4a, 0x99, 0x4c, 0x0f, 0x49, 0xcb,
-	0x88, 0x98, 0xba, 0x44, 0x25, 0x63, 0x32, 0x4d, 0x4e, 0x94, 0x8d, 0xb4, 0xa6, 0x3b, 0xea, 0x64,
-	0xb8, 0xe2, 0x0b, 0x2a, 0xca, 0x40, 0xe2, 0x38, 0x90, 0x78, 0x4a, 0xd4, 0x18, 0x6d, 0xc8, 0xeb,
-	0x3f, 0x15, 0xd0, 0x4e, 0x6a, 0x21, 0xd9, 0x51, 0xfc, 0x3d, 0x8d, 0xf0, 0x84, 0xc7, 0x91, 0x42,
-	0x50, 0x0b, 0x25, 0xc5, 0xef, 0xbf, 0x93, 0x58, 0x12, 0xfc, 0xc7, 0x0f, 0x0a, 0x6d, 0x65, 0xf7,
-	0x4a, 0xa3, 0x70, 0x4e, 0x94, 0x3f, 0x46, 0xee, 0xe2, 0x0a, 0x4f, 0xc8, 0x47, 0x4c, 0x23, 0x25,
-	0x18, 0x95, 0x68, 0xfb, 0xb3, 0x9d, 0x24, 0xe1, 0x51, 0x55, 0x51, 0x31, 0xc9, 0xe6, 0xa2, 0x40,
-	0x24, 0xb3, 0x5d, 0xf6, 0x2b, 0xbf, 0xfe, 0xf7, 0x1c, 0x28, 0x2e, 0x4e, 0x9f, 0x3f, 0x67, 0x61,
-	0x9e, 0x82, 0x2d, 0x19, 0x9f, 0x4b, 0x5f, 0xb0, 0x73, 0x1a, 0x60, 0x41, 0xb3, 0x49, 0x79, 0xad,
-	0xb6, 0xd6, 0x28, 0x1f, 0xdc, 0x5f, 0xda, 0xb3, 0x50, 0xca, 0x42, 0x9b, 0x73, 0x69, 0x86, 0xc9,
-	0xfa, 0xf7, 0xa0, 0xb0, 0xf0, 0x1d, 0x4a, 0xaa, 0x56, 0x52, 0x5f, 0xd0, 0x74, 0xa6, 0x30, 0xf7,
-	0x01, 0x06, 0xd2, 0x63, 0xc4, 0x3d, 0xb0, 0x9e, 0x0c, 0x58, 0x7a, 0xdc, 0x4b, 0xfb, 0x9a, 0x1d,
-	0x44, 0x52, 0x4f, 0x7a, 0x7b, 0x35, 0x60, 0x67, 0x96, 0xe1, 0x16, 0x70, 0xb2, 0xae, 0x9f, 0x7d,
-	0x2b, 0x9c, 0x1b, 0x87, 0x8d, 0xbf, 0x7d, 0xda, 0xcd, 0xfd, 0xe3, 0xd3, 0x6e, 0xee, 0x5f, 0x9f,
-	0x76, 0x73, 0x3f, 0x56, 0x8d, 0xbf, 0x8c, 0xef, 0x93, 0x29, 0xdb, 0xbf, 0xf2, 0x7f, 0x91, 0xf3,
-	0x5b, 0xba, 0xc5, 0x3c, 0xff, 0x4f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x15, 0xa9, 0xc8, 0xdd, 0xa0,
-	0x11, 0x00, 0x00,
+	// 2465 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x58, 0x5b, 0x72, 0x1b, 0xc7,
+	0xb9, 0x26, 0xc8, 0xb1, 0x34, 0x6c, 0x12, 0xc4, 0xb0, 0x49, 0x4a, 0x23, 0xc8, 0xa2, 0x28, 0xda,
+	0x92, 0x68, 0x1d, 0x1f, 0xc0, 0xa4, 0x7c, 0x91, 0xed, 0xaa, 0x53, 0x87, 0x04, 0x20, 0x91, 0x30,
+	0x44, 0xf0, 0x34, 0x41, 0xf9, 0xf6, 0xd0, 0xd5, 0x9c, 0x69, 0x00, 0x73, 0x38, 0x98, 0x9e, 0x74,
+	0xf7, 0x50, 0xa4, 0xab, 0xb2, 0x82, 0x2c, 0x21, 0x6b, 0x48, 0x16, 0x90, 0x15, 0xa4, 0x2a, 0x2f,
+	0x79, 0xc8, 0x02, 0x52, 0x7e, 0xc9, 0x12, 0xf2, 0x9a, 0xea, 0xcb, 0x00, 0x20, 0x89, 0x18, 0x76,
+	0x2a, 0x95, 0x37, 0xcc, 0xd7, 0xff, 0xff, 0x75, 0xf7, 0xdf, 0xff, 0x15, 0xa0, 0x3c, 0xa0, 0xa2,
+	0x5f, 0x3d, 0xdf, 0x26, 0x71, 0xda, 0x27, 0xdb, 0xd5, 0x80, 0x25, 0xdd, 0xa8, 0x57, 0x49, 0x39,
+	0x93, 0x0c, 0xae, 0x44, 0x42, 0x46, 0xac, 0xa2, 0x24, 0x2a, 0xb9, 0x44, 0x79, 0xbd, 0xc7, 0x58,
+	0x2f, 0xa6, 0x55, 0x2d, 0x72, 0x9a, 0x75, 0xab, 0x61, 0xc6, 0x89, 0x8c, 0x58, 0x62, 0x94, 0x6e,
+	0xae, 0xbf, 0xe5, 0x24, 0x4d, 0x29, 0x17, 0x76, 0xfd, 0xde, 0xd5, 0x0d, 0x53, 0xce, 0x2e, 0x2e,
+	0xed, 0xd2, 0xb3, 0x84, 0xca, 0xb7, 0x8c, 0x9f, 0x45, 0x49, 0x2f, 0x17, 0x78, 0x5e, 0x0d, 0xa9,
+	0x90, 0x51, 0xa2, 0x77, 0xc0, 0x3c, 0x8b, 0xa9, 0x95, 0xfd, 0xf8, 0xec, 0x85, 0xa8, 0x44, 0xac,
+	0x4a, 0xd2, 0x68, 0x40, 0x82, 0x7e, 0x94, 0x50, 0x7e, 0x59, 0x4d, 0xcf, 0x7a, 0x0a, 0x10, 0xd5,
+	0x01, 0x95, 0xa4, 0x7a, 0xbe, 0x5d, 0xed, 0xd1, 0x84, 0x72, 0x22, 0x69, 0x68, 0xb4, 0x36, 0xff,
+	0xb0, 0x05, 0xc0, 0x6b, 0x2a, 0xfa, 0x35, 0x7d, 0x4d, 0xf8, 0x0c, 0x2c, 0xeb, 0xfd, 0x71, 0x1c,
+	0x09, 0x49, 0x13, 0x9c, 0x32, 0x2e, 0x7d, 0x67, 0xa3, 0xb0, 0xf5, 0x0e, 0x2a, 0xe9, 0x85, 0x96,
+	0xc6, 0x8f, 0x18, 0x97, 0xf0, 0x09, 0x30, 0x10, 0xee, 0x4b, 0x99, 0x1a, 0xc9, 0x77, 0xb4, 0x64,
+	0x51, 0xc3, 0xfb, 0x52, 0xa6, 0x5a, 0x6e, 0x0f, 0x94, 0x02, 0x96, 0x24, 0x34, 0x90, 0x58, 0x46,
+	0x03, 0xca, 0x32, 0xe9, 0xdf, 0xda, 0x28, 0x6c, 0x2d, 0xec, 0xdc, 0xab, 0x18, 0xcb, 0x54, 0x72,
+	0xcb, 0x54, 0xea, 0xd6, 0x72, 0x68, 0xc9, 0x6a, 0x74, 0x8c, 0x02, 0xfc, 0x1a, 0x94, 0xb5, 0x50,
+	0xc0, 0x62, 0x1c, 0x52, 0x49, 0x03, 0x7d, 0xfb, 0x9c, 0xee, 0xd9, 0x34, 0x3a, 0x3f, 0x57, 0xae,
+	0xe7, 0xba, 0x39, 0x31, 0x03, 0x45, 0x19, 0xa4, 0xf8, 0x8c, 0xd2, 0x94, 0xc4, 0xd1, 0x39, 0xf5,
+	0xdf, 0xd5, 0x5c, 0xcd, 0x8a, 0x79, 0xe9, 0x91, 0xfd, 0xf3, 0xf7, 0x7e, 0x5e, 0xa9, 0x99, 0xa3,
+	0x45, 0x2c, 0x39, 0x62, 0x2c, 0x3e, 0xa6, 0x52, 0x46, 0x49, 0x4f, 0x54, 0x3a, 0xb5, 0xa3, 0xd1,
+	0xef, 0x20, 0xfd, 0x2a, 0x67, 0x44, 0x8b, 0x72, 0xec, 0x0b, 0xbe, 0x07, 0x8a, 0x51, 0xd2, 0xe3,
+	0x54, 0x08, 0x1c, 0xc4, 0x44, 0x08, 0xff, 0xf6, 0x46, 0x61, 0x6b, 0x1e, 0x2d, 0x5a, 0xb0, 0xa6,
+	0x30, 0xf8, 0x14, 0x94, 0x72, 0x21, 0x41, 0xf9, 0x79, 0x14, 0x50, 0xdf, 0xd5, 0x62, 0x4b, 0x16,
+	0x3e, 0x36, 0x28, 0x1c, 0x80, 0xbb, 0x43, 0x36, 0x96, 0x48, 0xce, 0xe2, 0x98, 0x72, 0x3c, 0x60,
+	0x21, 0xf5, 0xe7, 0x37, 0x0a, 0x5b, 0x4b, 0x3b, 0x9f, 0x54, 0x26, 0xb8, 0x6c, 0x65, 0xf4, 0xe2,
+	0x95, 0x03, 0xbb, 0xef, 0x50, 0xfb, 0x35, 0x0b, 0x29, 0x5a, 0x8b, 0x26, 0xc1, 0xf0, 0x03, 0xe0,
+	0x8d, 0xce, 0x15, 0xd3, 0x40, 0x32, 0xee, 0x7f, 0xac, 0x0f, 0x56, 0x1a, 0x1e, 0xcc, 0xc0, 0xf0,
+	0x31, 0x58, 0xa2, 0x09, 0x39, 0x8d, 0x29, 0x96, 0x9c, 0x04, 0x51, 0xd2, 0xf3, 0x17, 0x37, 0x0a,
+	0x5b, 0x2e, 0x2a, 0x1a, 0xb4, 0x63, 0x40, 0xe5, 0x44, 0x24, 0x08, 0x14, 0x61, 0xcc, 0x7a, 0xb8,
+	0x1b, 0xc5, 0xd4, 0x2f, 0x6a, 0xc2, 0xa2, 0x81, 0x5b, 0xac, 0xf7, 0x32, 0x8a, 0xa9, 0x72, 0xcc,
+	0x71, 0x39, 0xc6, 0x07, 0x44, 0xfa, 0xbe, 0xd9, 0x7a, 0x24, 0xa9, 0x61, 0x48, 0xc0, 0xca, 0x98,
+	0x2c, 0x4d, 0x02, 0x16, 0xaa, 0xfd, 0xef, 0x6b, 0x83, 0x6c, 0x4f, 0x33, 0xc8, 0x6e, 0xce, 0xd6,
+	0xb0, 0x8a, 0x68, 0x99, 0x5c, 0x87, 0x60, 0x1d, 0x3c, 0xb4, 0xb7, 0xa3, 0xc9, 0x39, 0xbb, 0xc4,
+	0x63, 0xfb, 0xe5, 0x0f, 0xb6, 0xa5, 0xaf, 0x7b, 0xdf, 0x88, 0x35, 0x94, 0xd4, 0x90, 0x39, 0x7f,
+	0xbd, 0x2f, 0x41, 0x39, 0x8c, 0xc4, 0x18, 0x8d, 0x89, 0x3a, 0xca, 0x15, 0x91, 0xff, 0x42, 0x13,
+	0xdc, 0xb5, 0x12, 0x9a, 0xa1, 0x65, 0xd7, 0x5b, 0xac, 0x07, 0x5f, 0x81, 0xa5, 0x90, 0x76, 0x49,
+	0x16, 0x4b, 0x6c, 0x72, 0x94, 0xbf, 0xa4, 0x5d, 0x77, 0x63, 0xe2, 0x05, 0x8f, 0x54, 0x48, 0x9a,
+	0x1b, 0xa2, 0xa2, 0xd5, 0xb3, 0x31, 0x3f, 0x00, 0x77, 0x59, 0x26, 0x4f, 0x59, 0x96, 0x84, 0xea,
+	0xad, 0xba, 0xdd, 0x28, 0xc0, 0x29, 0x8b, 0xa3, 0xe0, 0xd2, 0x5f, 0xd6, 0x8c, 0x53, 0x7d, 0xa8,
+	0x6d, 0xd5, 0x3b, 0x46, 0xfb, 0x48, 0x2b, 0xa3, 0x35, 0x36, 0x09, 0x86, 0xfb, 0x60, 0xc9, 0x9c,
+	0x17, 0x0b, 0x96, 0xf1, 0x80, 0x0a, 0xff, 0xce, 0xc6, 0xdc, 0xd6, 0xc2, 0xce, 0xa3, 0x89, 0xbb,
+	0x98, 0x1d, 0x8e, 0xb5, 0x24, 0x2a, 0x06, 0x63, 0x5f, 0x02, 0xd6, 0x81, 0x67, 0x1f, 0x81, 0x64,
+	0x92, 0xe1, 0x81, 0x8c, 0x85, 0xff, 0x5f, 0xfa, 0xc4, 0xe5, 0x1b, 0xa9, 0x60, 0x8f, 0xb1, 0xf8,
+	0x0d, 0x89, 0x33, 0x8a, 0xac, 0x5b, 0xee, 0x66, 0x92, 0xbd, 0x96, 0xb1, 0x80, 0x8f, 0xc0, 0xa2,
+	0xe4, 0x99, 0x90, 0x38, 0x64, 0x03, 0x12, 0x25, 0x7e, 0x59, 0x3b, 0xd5, 0x82, 0xc6, 0xea, 0x1a,
+	0x82, 0x1f, 0x81, 0xd5, 0x71, 0x11, 0x4c, 0xe2, 0x88, 0x08, 0x2a, 0xfc, 0xca, 0xc6, 0xdc, 0xd6,
+	0x3c, 0x82, 0x63, 0xa2, 0xbb, 0x66, 0x05, 0x7e, 0x03, 0x4a, 0x01, 0xc1, 0x01, 0xe5, 0x32, 0xea,
+	0x46, 0x01, 0x91, 0x54, 0xf8, 0x5f, 0xe8, 0x5b, 0x56, 0xa7, 0xd9, 0xb2, 0x36, 0xd2, 0xa9, 0x13,
+	0x49, 0xd0, 0x52, 0x40, 0xc6, 0x20, 0x01, 0x3f, 0x07, 0xf7, 0xf2, 0x67, 0xb7, 0x9e, 0x86, 0xe9,
+	0x85, 0x4a, 0xbe, 0x58, 0x32, 0xff, 0xa1, 0x3e, 0xd0, 0x1d, 0x2b, 0x60, 0xdd, 0xac, 0xa1, 0x97,
+	0x3b, 0x0c, 0xee, 0x83, 0x47, 0xb9, 0xea, 0x79, 0xc4, 0x65, 0x46, 0xe2, 0x09, 0x14, 0x1b, 0x9a,
+	0xe2, 0x81, 0x15, 0x7c, 0x63, 0xe4, 0xae, 0x33, 0x35, 0xc1, 0x66, 0xce, 0x74, 0xbd, 0x1a, 0x8d,
+	0x51, 0x3d, 0xd2, 0x54, 0xeb, 0x56, 0xb2, 0x3e, 0x12, 0x44, 0x59, 0x3c, 0xe2, 0x7a, 0x0c, 0x96,
+	0x38, 0x63, 0x12, 0x27, 0x64, 0x40, 0x45, 0x4a, 0x02, 0xea, 0x6f, 0x9a, 0x04, 0xa0, 0xd0, 0xc3,
+	0x1c, 0x84, 0x5d, 0xb0, 0x12, 0xb3, 0x80, 0xc4, 0x91, 0xbc, 0xc4, 0xf1, 0x29, 0x16, 0x26, 0xd5,
+	0xfa, 0xef, 0xe9, 0xf7, 0xfe, 0xf4, 0x27, 0xd2, 0x75, 0xcb, 0x6a, 0xb5, 0x18, 0x09, 0xf7, 0x48,
+	0x4c, 0x92, 0x80, 0x72, 0x9b, 0xa8, 0xd1, 0x72, 0x4e, 0xd9, 0x3a, 0xb5, 0x10, 0xac, 0x01, 0x2f,
+	0x4c, 0x04, 0xe6, 0xb4, 0xcb, 0xa9, 0xe8, 0x63, 0x55, 0x2b, 0xfd, 0xf7, 0xa7, 0x96, 0xab, 0x30,
+	0x11, 0xc8, 0x68, 0x20, 0x22, 0x29, 0xfc, 0x1e, 0x2c, 0xf7, 0x77, 0x70, 0x96, 0xf6, 0x38, 0x09,
+	0x69, 0x1e, 0x4c, 0x1f, 0xe8, 0xfc, 0x33, 0xd5, 0x01, 0xf6, 0x77, 0x4e, 0x8c, 0x9e, 0x0d, 0xa3,
+	0x52, 0xff, 0x2a, 0xa0, 0x3c, 0x20, 0x4a, 0x4c, 0xb8, 0x06, 0x71, 0x26, 0x24, 0xe5, 0x58, 0x48,
+	0x62, 0x0c, 0xe8, 0x7f, 0xa8, 0x6d, 0x77, 0xc7, 0x0a, 0xd4, 0xcc, 0xfa, 0xb1, 0x24, 0xda, 0x92,
+	0x2a, 0xe1, 0x0c, 0x43, 0xfd, 0xa6, 0xee, 0x7f, 0x6b, 0xdd, 0x61, 0x32, 0xb8, 0xae, 0x5c, 0x07,
+	0x8b, 0x57, 0x1c, 0xba, 0xaa, 0x1d, 0x7a, 0x72, 0xba, 0x19, 0x73, 0x59, 0x74, 0x45, 0x0b, 0xfe,
+	0x1f, 0x28, 0xca, 0x3e, 0x8f, 0xba, 0xc3, 0xac, 0xb5, 0xad, 0x8d, 0xfb, 0xe1, 0x34, 0xb3, 0x74,
+	0xb4, 0x92, 0xcd, 0x60, 0x8b, 0x72, 0xec, 0x0b, 0x7e, 0x07, 0xbc, 0xdc, 0x8f, 0xad, 0x5b, 0x08,
+	0x7f, 0xe7, 0xe7, 0x45, 0x9b, 0x75, 0xec, 0xbc, 0x70, 0xa3, 0x92, 0xb8, 0x0a, 0x40, 0x04, 0xee,
+	0xda, 0x1c, 0x93, 0x72, 0x36, 0xa0, 0xb2, 0x4f, 0x33, 0x81, 0x07, 0x94, 0xf7, 0xa8, 0xff, 0x7c,
+	0x6a, 0xaa, 0x59, 0x33, 0xaa, 0x47, 0x43, 0xcd, 0xd7, 0x4a, 0x11, 0x7e, 0x0f, 0xde, 0x3d, 0xa7,
+	0x3c, 0xea, 0x5e, 0x8e, 0x27, 0x08, 0x4c, 0x24, 0x0e, 0xe2, 0x88, 0x26, 0xd2, 0xff, 0x74, 0x2a,
+	0xf1, 0x3d, 0xa3, 0x3f, 0x66, 0xe5, 0x5d, 0x59, 0xd3, 0xca, 0x70, 0x07, 0xcc, 0x06, 0xc4, 0xff,
+	0x4c, 0x53, 0x6c, 0x4e, 0x4d, 0x36, 0xbb, 0x68, 0x36, 0x20, 0xf0, 0x14, 0xac, 0xd0, 0x0b, 0x49,
+	0x13, 0xa1, 0x82, 0x38, 0xe5, 0xec, 0x3c, 0x0a, 0x29, 0x17, 0xfe, 0xe7, 0xda, 0x86, 0x53, 0x0b,
+	0x66, 0x23, 0x57, 0x3d, 0xb2, 0x9a, 0x08, 0xd2, 0xeb, 0x90, 0x80, 0x21, 0x58, 0x09, 0x23, 0x11,
+	0xb0, 0x73, 0xca, 0x2f, 0x87, 0xcd, 0x83, 0xf0, 0xbf, 0xd4, 0x7b, 0x3c, 0xaf, 0x98, 0xe6, 0xb5,
+	0x32, 0xde, 0xbc, 0x56, 0xd2, 0xb3, 0x9e, 0x02, 0x44, 0x45, 0x35, 0xaf, 0x95, 0xf3, 0xed, 0x4a,
+	0x8b, 0x9c, 0xd2, 0x38, 0xef, 0x30, 0x10, 0x1c, 0xf2, 0xe5, 0x90, 0x28, 0xff, 0xae, 0x00, 0xd6,
+	0x26, 0x56, 0x23, 0x78, 0x08, 0x1c, 0xdd, 0x16, 0x15, 0x74, 0x14, 0x7e, 0xf1, 0x2f, 0x95, 0xb4,
+	0x8a, 0xee, 0x8d, 0x34, 0xcf, 0x66, 0x1d, 0x38, 0xba, 0x25, 0x5a, 0x06, 0x45, 0xd4, 0x78, 0x75,
+	0x70, 0xdc, 0x41, 0xdf, 0xe2, 0xf6, 0x61, 0xeb, 0x5b, 0x6f, 0x06, 0x16, 0xc1, 0xfc, 0x6e, 0xab,
+	0xd5, 0xfe, 0x1a, 0xef, 0x1e, 0x7e, 0xeb, 0x15, 0x36, 0x1d, 0x77, 0xd6, 0x9b, 0x7d, 0xb6, 0xfa,
+	0xe6, 0x00, 0x75, 0x4e, 0x76, 0x5b, 0xf8, 0xb8, 0x81, 0xde, 0x1c, 0xd4, 0x1a, 0x5a, 0xb8, 0xdc,
+	0x03, 0xa5, 0x6b, 0x09, 0x1f, 0x42, 0x30, 0x97, 0xd2, 0x81, 0x3e, 0xe7, 0xfc, 0xfe, 0x0c, 0x52,
+	0x1f, 0xf0, 0x43, 0xb0, 0x2c, 0xd2, 0xa8, 0xdb, 0xa5, 0xf8, 0x34, 0x4b, 0xc2, 0x98, 0xe2, 0x8c,
+	0xc7, 0xfe, 0xac, 0x95, 0x28, 0x99, 0xa5, 0x3d, 0xbd, 0x72, 0xc2, 0xe3, 0x3d, 0x08, 0xbc, 0x71,
+	0xc7, 0x0a, 0x89, 0x24, 0xe5, 0x5f, 0x83, 0xc5, 0xf1, 0x08, 0x82, 0xef, 0x83, 0x25, 0x95, 0xda,
+	0x70, 0x1c, 0x0d, 0x22, 0xa9, 0xe9, 0x0a, 0xa6, 0x0f, 0x55, 0x68, 0x4b, 0x81, 0x27, 0x3c, 0x86,
+	0xaf, 0x00, 0x1c, 0x93, 0xca, 0xdb, 0xed, 0xd9, 0x69, 0xe9, 0xd0, 0x1b, 0x92, 0xd8, 0x36, 0xbb,
+	0xfc, 0xfb, 0x02, 0x28, 0x5d, 0x8b, 0x35, 0xd8, 0x01, 0xee, 0x30, 0x5c, 0x0b, 0x9a, 0xf2, 0xc5,
+	0x2f, 0x0c, 0xd7, 0xca, 0x30, 0x6e, 0x87, 0x4c, 0x70, 0x15, 0xbc, 0xd3, 0x67, 0x42, 0x0a, 0x7f,
+	0x56, 0x57, 0x1f, 0xf3, 0x51, 0xae, 0x02, 0x77, 0xb8, 0xef, 0x7b, 0xa0, 0x98, 0xe7, 0x3e, 0x9d,
+	0xfe, 0xf5, 0xe6, 0x2e, 0x5a, 0xb4, 0xa0, 0xae, 0x17, 0xe5, 0xbf, 0x14, 0xc0, 0x6c, 0x6d, 0x17,
+	0xfa, 0xe0, 0x36, 0x09, 0x43, 0xd5, 0xd8, 0x5a, 0xfb, 0xe4, 0x9f, 0xb0, 0x0d, 0x16, 0x65, 0x2c,
+	0x46, 0x09, 0x67, 0xf6, 0x4a, 0x1a, 0x9b, 0x38, 0x37, 0xe8, 0x00, 0xed, 0xb4, 0x8e, 0x87, 0xa7,
+	0x5e, 0x90, 0xb1, 0x18, 0x1e, 0x6b, 0x0f, 0x94, 0x38, 0xfd, 0x55, 0x46, 0xc5, 0xc8, 0xd0, 0x73,
+	0x53, 0xeb, 0x8e, 0xd5, 0xc8, 0xa7, 0x99, 0x87, 0x60, 0x41, 0xef, 0x1f, 0x62, 0x11, 0x85, 0x54,
+	0x0f, 0x6e, 0x2e, 0x02, 0x06, 0x3a, 0x8e, 0x42, 0x5a, 0xfe, 0xdb, 0x2d, 0xb0, 0x7c, 0x23, 0x5e,
+	0x21, 0x04, 0x8e, 0x2e, 0x00, 0xe6, 0x8a, 0xfa, 0x37, 0xfc, 0x4d, 0x01, 0xac, 0x9a, 0xa6, 0x94,
+	0x5e, 0x48, 0xd5, 0x60, 0xf5, 0x7f, 0xd0, 0x83, 0x9e, 0xbd, 0xe8, 0x37, 0xbf, 0x38, 0x2b, 0x54,
+	0x74, 0x07, 0xab, 0x60, 0x9e, 0x90, 0x78, 0x37, 0x93, 0x7d, 0xc6, 0xa3, 0x1f, 0xf4, 0x3d, 0xf4,
+	0xa8, 0x68, 0xc5, 0xf6, 0x67, 0xd0, 0x32, 0xb5, 0x92, 0x4a, 0xe8, 0x07, 0xb5, 0x38, 0xf1, 0x34,
+	0x3d, 0x9e, 0x06, 0xd6, 0x44, 0xff, 0xd6, 0xd3, 0xbc, 0xe2, 0x69, 0xf0, 0x4f, 0x4f, 0xa3, 0x16,
+	0xcb, 0x7f, 0x9f, 0x05, 0x4f, 0x7e, 0xde, 0x6d, 0x94, 0x03, 0xe5, 0x03, 0x81, 0x75, 0x20, 0xfb,
+	0xa9, 0x8c, 0xae, 0x67, 0x66, 0x65, 0xcf, 0x22, 0xd2, 0xbf, 0xd5, 0xfb, 0xa5, 0x44, 0xf6, 0x71,
+	0xca, 0x69, 0x37, 0xba, 0xd0, 0x97, 0x9b, 0x47, 0x40, 0x41, 0x47, 0x1a, 0x81, 0xf7, 0xc1, 0x7c,
+	0x97, 0x44, 0x31, 0x66, 0x29, 0x4d, 0xec, 0xf3, 0xba, 0x0a, 0x68, 0xa7, 0x34, 0x51, 0xb3, 0x94,
+	0x2a, 0xe6, 0x99, 0xc0, 0x2c, 0xc1, 0x94, 0x73, 0xc6, 0xf5, 0x40, 0x3e, 0x8f, 0x8a, 0x06, 0x6e,
+	0x27, 0x0d, 0x05, 0xc2, 0xcf, 0x80, 0x1f, 0x25, 0x41, 0x9c, 0x85, 0x14, 0xf7, 0x29, 0x51, 0xd9,
+	0x19, 0x47, 0x09, 0x0e, 0xfa, 0x34, 0x38, 0xf3, 0x6f, 0xe9, 0xa8, 0x59, 0xb3, 0xeb, 0xfb, 0x66,
+	0xf9, 0x20, 0xa9, 0xa9, 0x45, 0xf8, 0x3f, 0xe0, 0xdd, 0x5c, 0x41, 0x32, 0x9c, 0xa5, 0x42, 0x72,
+	0x4a, 0x06, 0x6a, 0x37, 0x12, 0xc7, 0xec, 0xad, 0x7f, 0x5b, 0x2b, 0xfb, 0x56, 0xa6, 0xc3, 0x4e,
+	0xac, 0x44, 0x3b, 0xd9, 0x55, 0xeb, 0xf0, 0x7f, 0xc1, 0x83, 0x31, 0xfd, 0x90, 0xbd, 0x4d, 0x46,
+	0x0c, 0x21, 0x4d, 0x2e, 0x7d, 0x57, 0x13, 0xdc, 0x1b, 0x12, 0xd4, 0x87, 0x22, 0xed, 0xa4, 0x4e,
+	0x93, 0xcb, 0xf2, 0x6f, 0x0b, 0x3f, 0x65, 0xf9, 0xf1, 0x97, 0xfb, 0x85, 0x96, 0xbf, 0x62, 0xd8,
+	0xb9, 0xe9, 0x86, 0x75, 0x26, 0x18, 0x76, 0x0f, 0x00, 0x37, 0xaf, 0x9e, 0x9b, 0x4d, 0xb0, 0x36,
+	0x71, 0xb4, 0x86, 0x25, 0xb0, 0x70, 0x72, 0x78, 0x7c, 0xd4, 0xa8, 0x1d, 0xbc, 0x3c, 0x68, 0xd4,
+	0xbd, 0x19, 0x78, 0x1b, 0xcc, 0xb5, 0x5f, 0xbe, 0xf4, 0x0a, 0x70, 0x01, 0xdc, 0xae, 0x37, 0x5e,
+	0xee, 0x9e, 0xb4, 0x3a, 0xde, 0x2c, 0x04, 0xe0, 0xd6, 0x71, 0x07, 0x1d, 0xd4, 0x3a, 0xde, 0xdc,
+	0xe6, 0x13, 0x00, 0xd4, 0x3d, 0x6d, 0x25, 0x73, 0x81, 0x73, 0xd8, 0x3e, 0x6c, 0x78, 0x33, 0x70,
+	0x09, 0x80, 0xd7, 0x27, 0xba, 0xa8, 0x74, 0x5a, 0xc7, 0x5e, 0x61, 0xf3, 0x29, 0x58, 0xbe, 0x31,
+	0xbd, 0x2a, 0xf1, 0x4e, 0xe3, 0x9b, 0x8e, 0x37, 0xa3, 0x7e, 0x35, 0x8f, 0xdb, 0x87, 0x5e, 0x61,
+	0x73, 0x07, 0x94, 0xae, 0xb5, 0x99, 0x10, 0x82, 0xa5, 0x7a, 0x1b, 0x1f, 0xb6, 0x3b, 0xf8, 0xe4,
+	0xe8, 0x15, 0xda, 0xad, 0x2b, 0xfe, 0x05, 0x70, 0x3b, 0xff, 0x28, 0x34, 0x1d, 0xb7, 0xe0, 0xcd,
+	0x36, 0x55, 0x31, 0x9b, 0x6b, 0x3a, 0xee, 0x9c, 0xe7, 0x34, 0x1d, 0xf7, 0x23, 0x6f, 0xbb, 0xe9,
+	0xb8, 0xf7, 0xbc, 0x72, 0xd3, 0x71, 0xd7, 0xbd, 0x87, 0x4d, 0xc7, 0x05, 0xde, 0x42, 0xd3, 0x71,
+	0x17, 0xbc, 0xc5, 0xa6, 0xe3, 0x96, 0x3c, 0xaf, 0xe9, 0xb8, 0x9e, 0xb7, 0xdc, 0x74, 0x5c, 0xe8,
+	0xad, 0x34, 0x1d, 0x77, 0xc5, 0x5b, 0x6d, 0x3a, 0xee, 0xaa, 0xb7, 0xd6, 0x74, 0xdc, 0x35, 0xef,
+	0x4e, 0xd3, 0x71, 0xef, 0x7a, 0x7e, 0xd3, 0x71, 0x1f, 0x78, 0xeb, 0x4d, 0xc7, 0xfd, 0xc4, 0xfb,
+	0xb4, 0xe9, 0xb8, 0x8f, 0xbd, 0x27, 0x4d, 0xc7, 0x7d, 0xe2, 0x3d, 0x6d, 0x3a, 0xee, 0x53, 0x6f,
+	0x0b, 0xc1, 0x41, 0x74, 0x41, 0xb9, 0x71, 0x4f, 0x3d, 0xaf, 0x50, 0x8e, 0x56, 0x0c, 0xc6, 0xa9,
+	0x1e, 0x35, 0x2c, 0xb8, 0x96, 0xcf, 0xd2, 0xa6, 0xdf, 0x36, 0x1a, 0x02, 0x0d, 0x47, 0x6c, 0xa3,
+	0xa3, 0xff, 0xac, 0x32, 0x8a, 0x02, 0xdd, 0x19, 0x17, 0xc5, 0x43, 0x07, 0x40, 0x8f, 0x55, 0xfa,
+	0x0c, 0x08, 0x57, 0x6e, 0x2a, 0x69, 0x4c, 0x07, 0x54, 0xea, 0xae, 0x45, 0xe8, 0x0e, 0x49, 0x75,
+	0x04, 0x49, 0x24, 0x2f, 0xd1, 0x82, 0x4a, 0x44, 0x76, 0x3b, 0xb4, 0xcc, 0xc3, 0xd1, 0xd8, 0x10,
+	0xd2, 0x98, 0x5c, 0xa2, 0xa2, 0xd9, 0xd2, 0x96, 0x0c, 0x94, 0xff, 0x65, 0x60, 0xda, 0x3c, 0x9d,
+	0xa2, 0xaf, 0x9c, 0x15, 0x2d, 0x8a, 0x50, 0xe0, 0x2c, 0x14, 0x58, 0x45, 0x3c, 0x5a, 0x16, 0x37,
+	0x08, 0xef, 0x58, 0x06, 0xb5, 0x22, 0xd9, 0x19, 0x4d, 0xf0, 0x80, 0x65, 0x89, 0x44, 0x50, 0x2b,
+	0x0a, 0x8a, 0xcf, 0x5e, 0x08, 0x2c, 0x08, 0xfe, 0xff, 0xb7, 0x12, 0x95, 0x25, 0xe5, 0x83, 0x7c,
+	0x32, 0x0b, 0xb9, 0x9a, 0x5b, 0xf3, 0x3f, 0x26, 0xd1, 0x6a, 0x6e, 0x13, 0x6b, 0xc1, 0x53, 0x22,
+	0x83, 0x3e, 0xf2, 0xc7, 0xbf, 0xf0, 0x80, 0x5c, 0x60, 0x9a, 0x48, 0x1e, 0x51, 0x81, 0xd6, 0x6e,
+	0xac, 0xa8, 0x12, 0xb5, 0xf9, 0xa7, 0x02, 0x58, 0x1c, 0x1f, 0xd0, 0xff, 0x93, 0xe5, 0xf2, 0x08,
+	0xac, 0x8a, 0xec, 0x54, 0x04, 0x3c, 0x3a, 0xa5, 0x21, 0xe6, 0x34, 0xff, 0x33, 0x61, 0x6e, 0x63,
+	0x6e, 0x6b, 0x69, 0xe7, 0xc1, 0xc4, 0x82, 0x80, 0xac, 0x14, 0x5a, 0x19, 0xa9, 0xe6, 0x98, 0xd8,
+	0xfc, 0x0a, 0x2c, 0x8c, 0xf5, 0x62, 0x2a, 0x17, 0x0b, 0x1a, 0x70, 0x6a, 0x87, 0x23, 0x73, 0x1f,
+	0x60, 0x20, 0x3d, 0x0f, 0xdd, 0x07, 0xf3, 0x6a, 0x52, 0xd4, 0x73, 0xab, 0xed, 0x36, 0xdc, 0x30,
+	0x11, 0x7a, 0x64, 0x7d, 0xb6, 0x01, 0xdc, 0x9c, 0x19, 0xae, 0x02, 0x2f, 0x6f, 0xfa, 0xf2, 0x56,
+	0xd1, 0x9b, 0xd9, 0xdb, 0xfa, 0xe3, 0x8f, 0xeb, 0x85, 0x3f, 0xff, 0xb8, 0x5e, 0xf8, 0xeb, 0x8f,
+	0xeb, 0x85, 0xef, 0xca, 0xe6, 0xbc, 0xe6, 0xff, 0xdb, 0xea, 0x95, 0x7f, 0x84, 0x4f, 0x6f, 0xe9,
+	0xc2, 0xff, 0xfc, 0x1f, 0x01, 0x00, 0x00, 0xff, 0xff, 0xd3, 0x2a, 0x5a, 0x58, 0x9a, 0x16, 0x00,
+	0x00,
 }
 
 func (m *MeshConfig) Marshal() (dAtA []byte, err error) {
@@ -1397,6 +1885,66 @@ func (m *MeshConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.XXX_unrecognized != nil {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.DiscoverySelectors) > 0 {
+		for iNdEx := len(m.DiscoverySelectors) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.DiscoverySelectors[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintConfig(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3
+			i--
+			dAtA[i] = 0xda
+		}
+	}
+	if len(m.CaCertificates) > 0 {
+		for iNdEx := len(m.CaCertificates) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.CaCertificates[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintConfig(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3
+			i--
+			dAtA[i] = 0xd2
+		}
+	}
+	if len(m.ExtensionProviders) > 0 {
+		for iNdEx := len(m.ExtensionProviders) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ExtensionProviders[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintConfig(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3
+			i--
+			dAtA[i] = 0xca
+		}
+	}
+	if m.DisableEnvoyListenerLog {
+		i--
+		if m.DisableEnvoyListenerLog {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xc0
 	}
 	if m.Ca != nil {
 		{
@@ -1739,23 +2287,6 @@ func (m *MeshConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x60
 	}
-	if m.RdsRefreshDelay != nil {
-		{
-			size, err := m.RdsRefreshDelay.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintConfig(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x5a
-	}
-	if m.AuthPolicy != 0 {
-		i = encodeVarintConfig(dAtA, i, uint64(m.AuthPolicy))
-		i--
-		dAtA[i] = 0x50
-	}
 	if m.IngressControllerMode != 0 {
 		i = encodeVarintConfig(dAtA, i, uint64(m.IngressControllerMode))
 		i--
@@ -1832,6 +2363,70 @@ func (m *MeshConfig_OutboundTrafficPolicy) MarshalToSizedBuffer(dAtA []byte) (in
 	return len(dAtA) - i, nil
 }
 
+func (m *MeshConfig_CertificateData) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MeshConfig_CertificateData) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MeshConfig_CertificateData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.CertificateData != nil {
+		{
+			size := m.CertificateData.Size()
+			i -= size
+			if _, err := m.CertificateData.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MeshConfig_CertificateData_Pem) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MeshConfig_CertificateData_Pem) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Pem)
+	copy(dAtA[i:], m.Pem)
+	i = encodeVarintConfig(dAtA, i, uint64(len(m.Pem)))
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+func (m *MeshConfig_CertificateData_SpiffeBundleUrl) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MeshConfig_CertificateData_SpiffeBundleUrl) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.SpiffeBundleUrl)
+	copy(dAtA[i:], m.SpiffeBundleUrl)
+	i = encodeVarintConfig(dAtA, i, uint64(len(m.SpiffeBundleUrl)))
+	i--
+	dAtA[i] = 0x12
+	return len(dAtA) - i, nil
+}
 func (m *MeshConfig_ThriftConfig) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2031,6 +2626,237 @@ func (m *MeshConfig_CA) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *MeshConfig_ExtensionProvider) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MeshConfig_ExtensionProvider) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MeshConfig_ExtensionProvider) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.Provider != nil {
+		{
+			size := m.Provider.Size()
+			i -= size
+			if _, err := m.Provider.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintConfig(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExtAuthzHttp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExtAuthzHttp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnvoyExtAuthzHttp != nil {
+		{
+			size, err := m.EnvoyExtAuthzHttp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintConfig(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *MeshConfig_ExtensionProvider_EnvoyExtAuthzGrpc) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExtAuthzGrpc) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnvoyExtAuthzGrpc != nil {
+		{
+			size, err := m.EnvoyExtAuthzGrpc.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintConfig(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.HeadersToDownstreamOnDeny) > 0 {
+		for iNdEx := len(m.HeadersToDownstreamOnDeny) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.HeadersToDownstreamOnDeny[iNdEx])
+			copy(dAtA[i:], m.HeadersToDownstreamOnDeny[iNdEx])
+			i = encodeVarintConfig(dAtA, i, uint64(len(m.HeadersToDownstreamOnDeny[iNdEx])))
+			i--
+			dAtA[i] = 0x42
+		}
+	}
+	if len(m.HeadersToUpstreamOnAllow) > 0 {
+		for iNdEx := len(m.HeadersToUpstreamOnAllow) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.HeadersToUpstreamOnAllow[iNdEx])
+			copy(dAtA[i:], m.HeadersToUpstreamOnAllow[iNdEx])
+			i = encodeVarintConfig(dAtA, i, uint64(len(m.HeadersToUpstreamOnAllow[iNdEx])))
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if len(m.IncludeHeadersInCheck) > 0 {
+		for iNdEx := len(m.IncludeHeadersInCheck) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.IncludeHeadersInCheck[iNdEx])
+			copy(dAtA[i:], m.IncludeHeadersInCheck[iNdEx])
+			i = encodeVarintConfig(dAtA, i, uint64(len(m.IncludeHeadersInCheck[iNdEx])))
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if len(m.StatusOnError) > 0 {
+		i -= len(m.StatusOnError)
+		copy(dAtA[i:], m.StatusOnError)
+		i = encodeVarintConfig(dAtA, i, uint64(len(m.StatusOnError)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.FailOpen {
+		i--
+		if m.FailOpen {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x20
+	}
+	if len(m.PathPrefix) > 0 {
+		i -= len(m.PathPrefix)
+		copy(dAtA[i:], m.PathPrefix)
+		i = encodeVarintConfig(dAtA, i, uint64(len(m.PathPrefix)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Port != 0 {
+		i = encodeVarintConfig(dAtA, i, uint64(m.Port))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Service) > 0 {
+		i -= len(m.Service)
+		copy(dAtA[i:], m.Service)
+		i = encodeVarintConfig(dAtA, i, uint64(len(m.Service)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.StatusOnError) > 0 {
+		i -= len(m.StatusOnError)
+		copy(dAtA[i:], m.StatusOnError)
+		i = encodeVarintConfig(dAtA, i, uint64(len(m.StatusOnError)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.FailOpen {
+		i--
+		if m.FailOpen {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.Port != 0 {
+		i = encodeVarintConfig(dAtA, i, uint64(m.Port))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Service) > 0 {
+		i -= len(m.Service)
+		copy(dAtA[i:], m.Service)
+		i = encodeVarintConfig(dAtA, i, uint64(len(m.Service)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *ConfigSource) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2056,20 +2882,20 @@ func (m *ConfigSource) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	if len(m.SubscribedResources) > 0 {
-		dAtA19 := make([]byte, len(m.SubscribedResources)*10)
-		var j18 int
+		dAtA20 := make([]byte, len(m.SubscribedResources)*10)
+		var j19 int
 		for _, num := range m.SubscribedResources {
 			for num >= 1<<7 {
-				dAtA19[j18] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA20[j19] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
-				j18++
+				j19++
 			}
-			dAtA19[j18] = uint8(num)
-			j18++
+			dAtA20[j19] = uint8(num)
+			j19++
 		}
-		i -= j18
-		copy(dAtA[i:], dAtA19[:j18])
-		i = encodeVarintConfig(dAtA, i, uint64(j18))
+		i -= j19
+		copy(dAtA[i:], dAtA20[:j19])
+		i = encodeVarintConfig(dAtA, i, uint64(j19))
 		i--
 		dAtA[i] = 0x1a
 	}
@@ -2175,13 +3001,6 @@ func (m *MeshConfig) Size() (n int) {
 	}
 	if m.IngressControllerMode != 0 {
 		n += 1 + sovConfig(uint64(m.IngressControllerMode))
-	}
-	if m.AuthPolicy != 0 {
-		n += 1 + sovConfig(uint64(m.AuthPolicy))
-	}
-	if m.RdsRefreshDelay != nil {
-		l = m.RdsRefreshDelay.Size()
-		n += 1 + l + sovConfig(uint64(l))
 	}
 	if m.EnableTracing {
 		n += 2
@@ -2309,6 +3128,27 @@ func (m *MeshConfig) Size() (n int) {
 		l = m.Ca.Size()
 		n += 2 + l + sovConfig(uint64(l))
 	}
+	if m.DisableEnvoyListenerLog {
+		n += 3
+	}
+	if len(m.ExtensionProviders) > 0 {
+		for _, e := range m.ExtensionProviders {
+			l = e.Size()
+			n += 2 + l + sovConfig(uint64(l))
+		}
+	}
+	if len(m.CaCertificates) > 0 {
+		for _, e := range m.CaCertificates {
+			l = e.Size()
+			n += 2 + l + sovConfig(uint64(l))
+		}
+	}
+	if len(m.DiscoverySelectors) > 0 {
+		for _, e := range m.DiscoverySelectors {
+			l = e.Size()
+			n += 2 + l + sovConfig(uint64(l))
+		}
+	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
 	}
@@ -2330,6 +3170,41 @@ func (m *MeshConfig_OutboundTrafficPolicy) Size() (n int) {
 	return n
 }
 
+func (m *MeshConfig_CertificateData) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CertificateData != nil {
+		n += m.CertificateData.Size()
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *MeshConfig_CertificateData_Pem) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Pem)
+	n += 1 + l + sovConfig(uint64(l))
+	return n
+}
+func (m *MeshConfig_CertificateData_SpiffeBundleUrl) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.SpiffeBundleUrl)
+	n += 1 + l + sovConfig(uint64(l))
+	return n
+}
 func (m *MeshConfig_ThriftConfig) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2407,6 +3282,123 @@ func (m *MeshConfig_CA) Size() (n int) {
 	}
 	if m.IstiodSide {
 		n += 2
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *MeshConfig_ExtensionProvider) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovConfig(uint64(l))
+	}
+	if m.Provider != nil {
+		n += m.Provider.Size()
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExtAuthzHttp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnvoyExtAuthzHttp != nil {
+		l = m.EnvoyExtAuthzHttp.Size()
+		n += 1 + l + sovConfig(uint64(l))
+	}
+	return n
+}
+func (m *MeshConfig_ExtensionProvider_EnvoyExtAuthzGrpc) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnvoyExtAuthzGrpc != nil {
+		l = m.EnvoyExtAuthzGrpc.Size()
+		n += 1 + l + sovConfig(uint64(l))
+	}
+	return n
+}
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Service)
+	if l > 0 {
+		n += 1 + l + sovConfig(uint64(l))
+	}
+	if m.Port != 0 {
+		n += 1 + sovConfig(uint64(m.Port))
+	}
+	l = len(m.PathPrefix)
+	if l > 0 {
+		n += 1 + l + sovConfig(uint64(l))
+	}
+	if m.FailOpen {
+		n += 2
+	}
+	l = len(m.StatusOnError)
+	if l > 0 {
+		n += 1 + l + sovConfig(uint64(l))
+	}
+	if len(m.IncludeHeadersInCheck) > 0 {
+		for _, s := range m.IncludeHeadersInCheck {
+			l = len(s)
+			n += 1 + l + sovConfig(uint64(l))
+		}
+	}
+	if len(m.HeadersToUpstreamOnAllow) > 0 {
+		for _, s := range m.HeadersToUpstreamOnAllow {
+			l = len(s)
+			n += 1 + l + sovConfig(uint64(l))
+		}
+	}
+	if len(m.HeadersToDownstreamOnDeny) > 0 {
+		for _, s := range m.HeadersToDownstreamOnDeny {
+			l = len(s)
+			n += 1 + l + sovConfig(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Service)
+	if l > 0 {
+		n += 1 + l + sovConfig(uint64(l))
+	}
+	if m.Port != 0 {
+		n += 1 + sovConfig(uint64(m.Port))
+	}
+	if m.FailOpen {
+		n += 2
+	}
+	l = len(m.StatusOnError)
+	if l > 0 {
+		n += 1 + l + sovConfig(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -2655,61 +3647,6 @@ func (m *MeshConfig) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 10:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AuthPolicy", wireType)
-			}
-			m.AuthPolicy = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowConfig
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.AuthPolicy |= MeshConfig_AuthPolicy(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 11:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RdsRefreshDelay", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowConfig
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthConfig
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthConfig
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.RdsRefreshDelay == nil {
-				m.RdsRefreshDelay = &types.Duration{}
-			}
-			if err := m.RdsRefreshDelay.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 12:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field EnableTracing", wireType)
@@ -3638,16 +4575,135 @@ func (m *MeshConfig) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 56:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableEnvoyListenerLog", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.DisableEnvoyListenerLog = bool(v != 0)
+		case 57:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExtensionProviders", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthConfig
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ExtensionProviders = append(m.ExtensionProviders, &MeshConfig_ExtensionProvider{})
+			if err := m.ExtensionProviders[len(m.ExtensionProviders)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 58:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CaCertificates", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthConfig
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CaCertificates = append(m.CaCertificates, &MeshConfig_CertificateData{})
+			if err := m.CaCertificates[len(m.CaCertificates)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 59:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DiscoverySelectors", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthConfig
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DiscoverySelectors = append(m.DiscoverySelectors, &v1.LabelSelector{})
+			if err := m.DiscoverySelectors[len(m.DiscoverySelectors)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipConfig(dAtA[iNdEx:])
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthConfig
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthConfig
 			}
 			if (iNdEx + skippy) > l {
@@ -3717,10 +4773,122 @@ func (m *MeshConfig_OutboundTrafficPolicy) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthConfig
 			}
-			if (iNdEx + skippy) < 0 {
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MeshConfig_CertificateData) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowConfig
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CertificateData: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CertificateData: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pem", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthConfig
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CertificateData = &MeshConfig_CertificateData_Pem{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SpiffeBundleUrl", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthConfig
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CertificateData = &MeshConfig_CertificateData_SpiffeBundleUrl{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipConfig(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthConfig
 			}
 			if (iNdEx + skippy) > l {
@@ -3839,10 +5007,7 @@ func (m *MeshConfig_ThriftConfig) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthConfig
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthConfig
 			}
 			if (iNdEx + skippy) > l {
@@ -3961,10 +5126,7 @@ func (m *MeshConfig_ServiceSettings) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthConfig
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthConfig
 			}
 			if (iNdEx + skippy) > l {
@@ -4035,10 +5197,7 @@ func (m *MeshConfig_ServiceSettings_Settings) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthConfig
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthConfig
 			}
 			if (iNdEx + skippy) > l {
@@ -4213,10 +5372,596 @@ func (m *MeshConfig_CA) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthConfig
 			}
-			if (iNdEx + skippy) < 0 {
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MeshConfig_ExtensionProvider) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowConfig
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ExtensionProvider: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ExtensionProvider: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthConfig
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnvoyExtAuthzHttp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthConfig
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Provider = &MeshConfig_ExtensionProvider_EnvoyExtAuthzHttp{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnvoyExtAuthzGrpc", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthConfig
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Provider = &MeshConfig_ExtensionProvider_EnvoyExtAuthzGrpc{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipConfig(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowConfig
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EnvoyExternalAuthorizationHttpProvider: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EnvoyExternalAuthorizationHttpProvider: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Service", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthConfig
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Service = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
+			}
+			m.Port = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Port |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PathPrefix", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthConfig
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PathPrefix = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FailOpen", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.FailOpen = bool(v != 0)
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StatusOnError", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthConfig
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StatusOnError = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IncludeHeadersInCheck", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthConfig
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.IncludeHeadersInCheck = append(m.IncludeHeadersInCheck, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HeadersToUpstreamOnAllow", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthConfig
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.HeadersToUpstreamOnAllow = append(m.HeadersToUpstreamOnAllow, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HeadersToDownstreamOnDeny", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthConfig
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.HeadersToDownstreamOnDeny = append(m.HeadersToDownstreamOnDeny, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipConfig(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowConfig
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EnvoyExternalAuthorizationGrpcProvider: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EnvoyExternalAuthorizationGrpcProvider: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Service", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthConfig
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Service = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
+			}
+			m.Port = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Port |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FailOpen", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.FailOpen = bool(v != 0)
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StatusOnError", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthConfig
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StatusOnError = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipConfig(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthConfig
 			}
 			if (iNdEx + skippy) > l {
@@ -4404,10 +6149,7 @@ func (m *ConfigSource) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthConfig
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthConfig
 			}
 			if (iNdEx + skippy) > l {
@@ -4522,10 +6264,7 @@ func (m *Certificate) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthConfig
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthConfig
 			}
 			if (iNdEx + skippy) > l {
@@ -4544,6 +6283,7 @@ func (m *Certificate) Unmarshal(dAtA []byte) error {
 func skipConfig(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -4575,10 +6315,8 @@ func skipConfig(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -4599,55 +6337,30 @@ func skipConfig(dAtA []byte) (n int, err error) {
 				return 0, ErrInvalidLengthConfig
 			}
 			iNdEx += length
-			if iNdEx < 0 {
-				return 0, ErrInvalidLengthConfig
-			}
-			return iNdEx, nil
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowConfig
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipConfig(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-				if iNdEx < 0 {
-					return 0, ErrInvalidLengthConfig
-				}
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupConfig
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthConfig
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthConfig = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowConfig   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthConfig        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowConfig          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupConfig = fmt.Errorf("proto: unexpected end of group")
 )

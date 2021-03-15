@@ -185,6 +185,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. 
 // Clients may not set this value. It is represented in RFC3339 form and is in UTC.
 // Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// +cue-gen:DestinationRule:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -234,9 +235,6 @@ message DestinationRule {
   // The value "." is reserved and defines an export to the same namespace that
   // the destination rule is declared in. Similarly, the value "*" is reserved and
   // defines an export to all namespaces.
-  //
-  // NOTE: in the current release, the `exportTo` value is restricted to
-  // "." or "*" (i.e., the current namespace or all namespaces).
   repeated string export_to = 4;
 }
 
@@ -617,9 +615,13 @@ message ConnectionPoolSettings {
     // cluster at a given time. Defaults to 2^32-1.
     int32 max_retries = 4;
 
-    // The idle timeout for upstream connection pool connections. The idle timeout is defined as the period in which there are no active requests.
-    // If not set, the default is 1 hour. When the idle timeout is reached the connection will be closed.
-    // Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive. Applies to both HTTP1.1 and HTTP2 connections.
+    // The idle timeout for upstream connection pool connections. The idle timeout 
+    // is defined as the period in which there are no active requests.
+    // If not set, the default is 1 hour. When the idle timeout is reached, 
+    // the connection will be closed. If the connection is an HTTP/2 
+    // connection a drain sequence will occur prior to closing the connection. 
+    // Note that request based timeouts mean that HTTP/2 PINGs will not 
+    // keep the connection alive. Applies to both HTTP1.1 and HTTP2 connections. 
     google.protobuf.Duration idle_timeout = 5;
 
     // Policy for upgrading http1.1 connections to http2.
@@ -635,6 +637,11 @@ message ConnectionPoolSettings {
     };
     // Specify if http1.1 connection should be upgraded to http2 for the associated destination.
     H2UpgradePolicy h2_upgrade_policy = 6;
+
+    // If set to true, client protocol will be preserved while initiating connection to backend.
+    // Note that when this is set to true, h2_upgrade_policy will be ineffective i.e. the client
+    // connections will not be upgraded to http2.
+    bool use_client_protocol = 7;
   };
 
   // Settings common to both HTTP and TCP upstream connections.
@@ -676,7 +683,7 @@ message ConnectionPoolSettings {
 //         http2MaxRequests: 1000
 //         maxRequestsPerConnection: 10
 //     outlierDetection:
-//       consecutiveErrors: 7
+//       consecutive5xxErrors: 7
 //       interval: 5m
 //       baseEjectionTime: 15m
 // ```
@@ -698,7 +705,7 @@ message ConnectionPoolSettings {
 //         http2MaxRequests: 1000
 //         maxRequestsPerConnection: 10
 //     outlierDetection:
-//       consecutiveErrors: 7
+//       consecutive5xxErrors: 7
 //       interval: 5m
 //       baseEjectionTime: 15m
 // ```

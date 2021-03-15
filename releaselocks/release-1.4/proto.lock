@@ -42425,7 +42425,7 @@
       }
     },
     {
-      "protopath": "security:/:v1beta1:/:authorization.proto",
+      "protopath": "security:/:v1beta1:/:authorization_policy.proto",
       "def": {
         "messages": [
           {

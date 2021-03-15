@@ -18,40 +18,21 @@ import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 import "mesh/v1alpha1/proxy.proto";
 import "networking/v1alpha3/destination_rule.proto";
+import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
 
 // $title: Global Mesh Options
 // $description: Configuration affecting the service mesh as a whole.
 // $location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 // $weight: 20
+// $mode: package
 
 // Configuration affecting the service mesh as a whole.
 package istio.mesh.v1alpha1;
 
 option go_package="istio.io/api/mesh/v1alpha1";
 
-// MeshConfig defines mesh-wide variables shared by all Envoy instances in the
-// Istio service mesh.
-//
-// NOTE: This configuration type should be used for the low-level global
-// configuration, such as component addresses and port numbers. It should not
-// be used for the features of the mesh that can be scoped by service or by
-// namespace. Some of the fields in the mesh config are going to be deprecated
-// and replaced with several individual configuration types (for example,
-// tracing configuration).
+// MeshConfig defines mesh-wide settings for the Istio service mesh.
 message MeshConfig {
-  reserved 1;
-  reserved "mixer_check_server";
-  reserved 2;
-  reserved "mixer_report_server";
-  reserved 3;
-  reserved "disable_policy_checks";
-  reserved 48;
-  reserved "disable_mixer_http_reports";
-  reserved 25;
-  reserved "policy_check_fail_open";
-  reserved 30;
-  reserved "sidecar_to_telemetry_session_affinity";
-
   // Port on which Envoy should listen for incoming connections from
   // other services. Default port is 15001.
   int32 proxy_listen_port = 4;
@@ -75,12 +56,12 @@ message MeshConfig {
   // 0s to disable). Default detection timeout is 5s.
   google.protobuf.Duration protocol_detection_timeout = 42;
 
-  // If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
+  // If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalives.
   istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive tcp_keepalive = 28;
 
   // Class of ingress resources to be processed by Istio ingress
   // controller. This corresponds to the value of
-  // "kubernetes.io/ingress.class" annotation.
+  // `kubernetes.io/ingress.class` annotation.
   string ingress_class = 7;
 
   // Name of the Kubernetes service used for the istio ingress controller.
@@ -98,7 +79,7 @@ message MeshConfig {
     // contain any annotation or whose annotations match the value
     // specified in the ingress_class parameter described earlier. Use this
     // mode if Istio ingress controller will be the default ingress
-    // controller for the entireKubernetes cluster.
+    // controller for the entire Kubernetes cluster.
     DEFAULT = 2;
 
     // Istio ingress controller will only act on ingress resources whose
@@ -110,7 +91,7 @@ message MeshConfig {
   }
 
   // Defines whether to use Istio ingress controller for annotated or all ingress resources.
-  // Default mode is STRICT.
+  // Default mode is `STRICT`.
   IngressControllerMode ingress_controller_mode = 9;
 
   // Defines which gateway deployment to use as the Ingress controller. This field corresponds to
@@ -126,12 +107,6 @@ message MeshConfig {
     MUTUAL_TLS = 1;
   }
 
-  // $hide_from_docs
-  AuthPolicy auth_policy = 10 [deprecated=true];
-
-  // $hide_from_docs
-  google.protobuf.Duration rds_refresh_delay = 11 [deprecated=true];
-
   // Flag to control generation of trace spans and request IDs.
   // Requires a trace span collector defined in the proxy configuration.
   bool enable_tracing = 12;
@@ -145,31 +120,35 @@ message MeshConfig {
   string access_log_format = 24;
 
   enum AccessLogEncoding {
+    // text encoding for the proxy access log
     TEXT = 0;
+
+    // json encoding for the proxy access log
     JSON = 1;
   }
 
-  // Encoding for the proxy access log (text or json).
-  // Default value is text.
+  // Encoding for the proxy access log (`TEXT` or `JSON`).
+  // Default value is `TEXT`.
   AccessLogEncoding access_log_encoding = 27;
 
   // This flag enables Envoy's gRPC Access Log Service.
   // See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto)
   // for details about Envoy's gRPC Access Log Service API.
-  // Default value is false.
+  // Default value is `false`.
   bool enable_envoy_access_log_service = 40;
 
-  // Default proxy config used by the proxy injection mechanism operating in the mesh
-  // (e.g. Kubernetes admission controller)
+  // This flag disables Envoy Listener logs.
+  // See [Listener Access Log](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/listener/v3/listener.proto#envoy-v3-api-field-config-listener-v3-listener-access-log)
+  // Istio Enables Envoy's listener access logs on "NoRoute" response flag.
+  // Default value is `false`.
+  bool disable_envoy_listener_log = 56;
+
+  // Default proxy config used by gateway and sidecars.
   // In case of Kubernetes, the proxy config is applied once during the injection process,
   // and remain constant for the duration of the pod. The rest of the mesh config can be changed
   // at runtime and config gets distributed dynamically.
+  // On Kubernetes, this can be overridden on individual pods with the `proxy.istio.io/config` annotation.
   ProxyConfig default_config = 14;
-
-  reserved 15;
-
-  reserved 16;
-  reserved "mixer_address";
 
   message OutboundTrafficPolicy {
     enum Mode {
@@ -189,52 +168,34 @@ message MeshConfig {
   // Set the default behavior of the sidecar for handling outbound
   // traffic from the application.  If your application uses one or
   // more external services that are not known apriori, setting the
-  // policy to ALLOW_ANY will cause the sidecars to route any unknown
+  // policy to `ALLOW_ANY` will cause the sidecars to route any unknown
   // traffic originating from the application to its requested
   // destination. Users are strongly encouraged to use ServiceEntries
   // to explicitly declare any external dependencies, instead of using
-  // allow_any, so that traffic to these services can be
+  // `ALLOW_ANY`, so that traffic to these services can be
   // monitored. Can be overridden at a Sidecar level by setting the
-  // OutboundTrafficPolicy in the [Sidecar
+  // `OutboundTrafficPolicy` in the [Sidecar
   // API](https://istio.io/docs/reference/config/networking/sidecar/#OutboundTrafficPolicy).
-  // Default mode is ALLOW_ANY which means outbound traffic to unknown destinations will be allowed.
+  // Default mode is `ALLOW_ANY` which means outbound traffic to unknown destinations will be allowed.
   OutboundTrafficPolicy outbound_traffic_policy = 17;
-
-  reserved 18;
-
-  reserved 19;
-  reserved "enable_client_side_policy_check";
-
-  reserved 20;
-  reserved "sds_uds_path";
-
-  reserved 21;
-  reserved "sds_refresh_delay";
 
   // ConfigSource describes a source of configuration data for networking
   // rules, and other Istio configuration artifacts. Multiple data sources
   // can be configured for a single control plane.
   repeated ConfigSource config_sources = 22;
 
-  // This flag is used to enable mutual TLS automatically for service to service communication
+  // This flag is used to enable mutual `TLS` automatically for service to service communication
   // within the mesh, default true.
-  // If set to true, and a given service does not have a corresponding DestinationRule configured,
-  // or its DestinationRule does not have ClientTLSSettings specified, Istio configures client side
+  // If set to true, and a given service does not have a corresponding `DestinationRule` configured,
+  // or its `DestinationRule` does not have ClientTLSSettings specified, Istio configures client side
   // TLS configuration appropriately. More specifically,
-  // If the upstream authentication policy is in STRICT mode, use Istio provisioned certificate
-  // for mutual TLS to connect to upstream.
+  // If the upstream authentication policy is in `STRICT` mode, use Istio provisioned certificate
+  // for mutual `TLS` to connect to upstream.
   // If upstream service is in plain text mode, use plain text.
   // If the upstream authentication policy is in PERMISSIVE mode, Istio configures clients to use
-  // mutual TLS when server sides are capable of accepting mutual TLS traffic.
-  // If service DestinationRule exists and has ClientTLSSettings specified, that is always used instead.
+  // mutual `TLS` when server sides are capable of accepting mutual `TLS` traffic.
+  // If service `DestinationRule` exists and has `ClientTLSSettings` specified, that is always used instead.
   google.protobuf.BoolValue enable_auto_mtls = 43;
-
-
-  reserved 23;
-  reserved "enable_sds_token_mount";
-
-  reserved 29;
-  reserved "sds_use_k8s_sa_jwt";
 
   // The trust domain corresponds to the trust root of a system.
   // Refer to [SPIFFE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)
@@ -250,41 +211,60 @@ message MeshConfig {
   // or `td3/ns/foo/sa/a-service-account` will be treated the same in the Istio mesh.
   repeated string trust_domain_aliases = 46;
 
+  message CertificateData {
+    oneof certificate_data {
+      // The PEM data of the certificate.
+      string pem = 1;
+      // The SPIFFE bundle endpoint URL that complies to:
+      // https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#the-spiffe-trust-domain-and-bundle
+      // The endpoint should support authentication based on Web PKI:
+      // https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#521-web-pki
+      // The certificate is retrieved from the endpoint.
+      string spiffe_bundle_url = 2;
+    }
+  }
+
+  // The extra root certificates for workload-to-workload communication.
+  // The plugin certificates (the 'cacerts' secret) or self-signed certificates (the 'istio-ca-secret' secret)
+  // are automatically added by Istiod.
+  // The CA certificate that signs the workload certificates is automatically added by Istio Agent.
+  repeated CertificateData ca_certificates = 58;
+
   // The default value for the ServiceEntry.export_to field and services
   // imported through container registry integrations, e.g. this applies to
   // Kubernetes Service resources. The value is a list of namespace names and
   // reserved namespace aliases. The allowed namespace aliases are:
-  //
+  // ```
   // * - All Namespaces
   // . - Current Namespace
   // ~ - No Namespace
-  //
+  // ```
   // If not set the system will use "*" as the default value which implies that
   // services are exported to all namespaces.
   //
-  // 'All namespaces' is a reasonable default for implementations that don't
+  // `All namespaces` is a reasonable default for implementations that don't
   // need to restrict access or visibility of services across namespace
   // boundaries. If that requirement is present it is generally good practice to
-  // make the default 'Current namespace' so that services are only visible
+  // make the default `Current namespace` so that services are only visible
   // within their own namespaces by default. Operators can then expand the
-  // visibility of services to other namespaces as needed. Use of 'No Namespace'
+  // visibility of services to other namespaces as needed. Use of `No Namespace`
   // is expected to be rare but can have utility for deployments where
   // dependency management needs to be precise even within the scope of a single
   // namespace.
   //
-  // For further discussion see the reference documentation for ServiceEntry,
-  // Sidecar, and Gateway.
+  // For further discussion see the reference documentation for `ServiceEntry`,
+  // `Sidecar`, and `Gateway`.
   repeated string default_service_export_to = 31;
 
   // The default value for the VirtualService.export_to field. Has the same
-  // syntax as 'default_service_export_to'.
+  // syntax as `default_service_export_to`.
   //
   // If not set the system will use "*" as the default value which implies that
   // virtual services are exported to all namespaces
   repeated string default_virtual_service_export_to = 32;
 
-  // The default value for the DestinationRule.export_to field. Has the same
-  // syntax as 'default_service_export_to'.
+  // The default value for the `DestinationRule.export_to` field. Has the same
+  // syntax as `default_service_export_to`.
   //
   // If not set the system will use "*" as the default value which implies that
   // destination rules are exported to all namespaces
@@ -303,18 +283,9 @@ message MeshConfig {
   // Locality based load balancing distribution or failover settings.
   istio.networking.v1alpha3.LocalityLoadBalancerSetting locality_lb_setting = 35;
 
-  // Configures DNS refresh rate for Envoy clusters of type STRICT_DNS
-  // Default refresh rate is 5s.
+  // Configures DNS refresh rate for Envoy clusters of type `STRICT_DNS`
+  // Default refresh rate is `5s`.
   google.protobuf.Duration dns_refresh_rate = 36;
-
-  reserved 37;
-  reserved "disable_report_batch";
-
-  reserved 38;
-  reserved "report_batch_max_entries";
-
-  reserved 39;
-  reserved "report_batch_max_time";
 
   // Default Policy for upgrading http1.1 connections to http2.
   enum H2UpgradePolicy {
@@ -325,9 +296,9 @@ message MeshConfig {
   }
 
   // Specify if http1.1 connections should be upgraded to http2 by default.
-  // if sidecar is installed on all pods in the mesh, then this should be set to UPGRADE.
-  // If one or more services or namespaces do not have sidecar(s), then this should be set to DO_NOT_UPGRADE.
-  // It can be enabled by destination using the destinationRule.trafficPolicy.connectionPool.http.h2UpgradePolicy override.
+  // if sidecar is installed on all pods in the mesh, then this should be set to `UPGRADE`.
+  // If one or more services or namespaces do not have sidecar(s), then this should be set to `DO_NOT_UPGRADE`.
+  // It can be enabled by destination using the `destinationRule.trafficPolicy.connectionPool.http.h2UpgradePolicy` override.
   H2UpgradePolicy h2_upgrade_policy = 41;
 
   // Name to be used while emitting statistics for inbound clusters. The same pattern is used while computing stat prefix for
@@ -363,7 +334,7 @@ message MeshConfig {
   //
   // Following are some examples of supported patterns for reviews:
   //
-  // - `%SERVICE_FQDN%_%SERVICE_PORT%` will use reviews.prod.svc.cluster.local_7443 as the stats name.
+  // - `%SERVICE_FQDN%_%SERVICE_PORT%` will use `reviews.prod.svc.cluster.local_7443` as the stats name.
   // - `%SERVICE%` will use reviews.prod as the stats name.
   string outbound_cluster_stat_name = 45;
 
@@ -376,7 +347,7 @@ message MeshConfig {
     // limit configurations.
     string rate_limit_url = 1;
 
-    // Specify thrift rate limit service timeout, in milliseconds. Default is 50ms
+    // Specify thrift rate limit service timeout, in milliseconds. Default is `50ms`
     google.protobuf.Duration rate_limit_timeout = 2;
   }
 
@@ -415,8 +386,8 @@ message MeshConfig {
       //     this service-by-service (e.g. mysvc.myns.svc.cluster.local) or as a group
       //     (e.g. *.myns.svc.cluster.local).
       //
-      // By default, Istio will consider all services in the kube-system namespace to be cluster-local,
-      // unless explicitly overridden here.
+      // By default Istio will consider kubernetes.default.svc (i.e. the API Server) as well as all
+      // services in the kube-system namespace to be cluster-local, unless explicitly overridden here.
       bool cluster_local = 1;
     }
 
@@ -445,29 +416,26 @@ message MeshConfig {
   // If not specified, this will be enabled by default.
   google.protobuf.BoolValue enable_prometheus_merge = 51;
 
-  reserved 53;
-  reserved "termination_drain_duration";
-
-  // VerifyCertificateAtClient sets the mesh global default for peer certificate validation
-  // at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non ISTIO_MUTUAL) origination
+  // `VerifyCertificateAtClient` sets the mesh global default for peer certificate validation
+  // at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination
   // modes are used. This setting can be overridden at the host level via DestinationRule API.
-  // By default, VerifyCertificateAtClient is true.
+  // By default, `VerifyCertificateAtClient` is `true`.
   //
-  // CaCertificates: If set, proxy verifies CA signature based on given CaCertificates. If unset,
+  // `CaCertificates`: If set, proxy verifies CA signature based on given CaCertificates. If unset,
   // and VerifyCertificateAtClient is true, proxy uses default System CA bundle. If unset and
-  // VerifyCertificateAtClient is false, proxy will not verify the CA.
+  // `VerifyCertificateAtClient` is false, proxy will not verify the CA.
   //
-  // SubjectAltNames: If set, proxy verifies subject alt names are present in the SAN. If unset,
-  // and VerifyCertificateAtClient is true, proxy uses host in destination rule to verify the SANs.
-  // If unset, and VerifyCertificateAtClient is false, proxy does not verify SANs.
+  // `SubjectAltNames`: If set, proxy verifies subject alt names are present in the SAN. If unset,
+  // and `VerifyCertificateAtClient` is true, proxy uses host in destination rule to verify the SANs.
+  // If unset, and `VerifyCertificateAtClient` is false, proxy does not verify SANs.
   //
-  // For SAN, client-side proxy will exact match host in DestinationRule as well as one level
+  // For SAN, client-side proxy will exact match host in `DestinationRule` as well as one level
   // wildcard if the specified host in DestinationRule doesn't contain a wildcard.
-  // For example, if the host in DestinationRule is x.y.com, client-side proxy will
-  // match either x.y.com or *.y.com for the SAN in the presented server certificate.
+  // For example, if the host in `DestinationRule` is `x.y.com`, client-side proxy will
+  // match either `x.y.com` or `*.y.com` for the SAN in the presented server certificate.
   // For wildcard host name in DestinationRule, client-side proxy will do a suffix match. For example,
-  // if host is *.x.y.com, client-side proxy will verify the presented server certificate SAN matches
-  // .x.y.com suffix.
+  // if host is `*.x.y.com`, client-side proxy will verify the presented server certificate SAN matches
+  // ``.x.y.com` suffix.
   google.protobuf.BoolValue verify_certificate_at_client = 54;
 
   message CA {
@@ -495,8 +463,156 @@ message MeshConfig {
   // using the Istio CA gRPC API.
   CA ca = 55;
 
+  message ExtensionProvider {
+    // REQUIRED. A unique name identifying the extension provider.
+    string name = 1;
+
+    // REQUIRED. Specifies detailed configuration for the extension provider.
+    oneof provider {
+      // Configures an external authorizer that implements the Envoy ext_authz filter authorization check service using the HTTP API.
+      EnvoyExternalAuthorizationHttpProvider envoy_ext_authz_http = 2;
+      // Configures an external authorizer that implements the Envoy ext_authz filter authorization check service using the gRPC API.
+      EnvoyExternalAuthorizationGrpcProvider envoy_ext_authz_grpc = 3;
+    }
+
+    message EnvoyExternalAuthorizationHttpProvider {
+      // REQUIRED. Specifies the service that implements the Envoy ext_authz HTTP authorization service.
+      // The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
+      // to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+      // service defined by the Kubernetes service or ServiceEntry.
+      //
+      // Example: "my-ext-authz.foo.svc.cluster.local" or "bar/my-ext-authz.example.com".
+      string service = 1;
+
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 2;
+
+      // Sets a prefix to the value of authorization request header *Path*.
+      // For example, setting this to "/check" for an original user request at path "/admin" will cause the
+      // authorization check request to be sent to the authorization service at the path "/check/admin" instead of "/admin".
+      string path_prefix = 3;
+
+      // If true, the user request will be allowed even if the communication with the authorization service has failed,
+      // or if the authorization service has returned a HTTP 5xx error.
+      // Default is false and the request will be rejected with "Forbidden" response.
+      bool fail_open = 4;
+
+      // Sets the HTTP status that is returned to the client when there is a network error to the authorization service.
+      // The default status is "403" (HTTP Forbidden).
+      string status_on_error = 5;
+
+      // List of headers that should be included in the authorization request sent to the authorization service.
+      // Note that in addition to the headers supplied by users:
+      // 1. *Host*, *Method*, *Path* and *Content-Length* are automatically sent.
+      // 2. *Content-Length* will be set to 0 and the request will not have a message body.
+      repeated string include_headers_in_check = 6;
+
+      // List of headers from the authorization service that should be added or overridden in the original request and
+      // forwarded to the upstream when the authorization check result is allowed (HTTP code 200).
+      // If not specified, the original request will not be modified and forwarded to backend as-is.
+      // Note, any existing headers will be overridden.
+      repeated string headers_to_upstream_on_allow = 7;
+
+      // List of headers from the authorization service that should be forwarded to downstream when the authorization
+      // check result is not allowed (HTTP code other than 200).
+      // If not specified, all the authorization response headers, except *Authority (Host)* will be in the response to
+      // the downstream.
+      // When a header is included in this list, *Path*, *Status*, *Content-Length*, *WWWAuthenticate* and *Location* are
+      // automatically added.
+      // Note, the body from the authorization service is always included in the response to downstream.
+      repeated string headers_to_downstream_on_deny = 8;
+    }
+
+    message EnvoyExternalAuthorizationGrpcProvider {
+      // REQUIRED. Specifies the service that implements the Envoy ext_authz gRPC authorization service.
+      // The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
+      // to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+      // service defined by the Kubernetes service or ServiceEntry.
+      //
+      // Example: "my-ext-authz.foo.svc.cluster.local" or "bar/my-ext-authz.example.com".
+      string service = 1;
+
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 2;
+
+      // If true, the user request will be allowed even if the communication with the authorization service has failed,
+      // or if the authorization service has returned a HTTP 5xx error.
+      // Default is false and the request will be rejected with "Forbidden" response.
+      bool fail_open = 3;
+
+      // Sets the HTTP status that is returned to the client when there is a network error to the authorization service.
+      // The default status is "403" (HTTP Forbidden).
+      string status_on_error = 4;
+    }
+  }
+
+  // Defines a list of extension providers that extend Istio's functionality. For example, the AuthorizationPolicy
+  // can be used with an extension provider to delegate the authorization decision to a custom authorization system.
+  repeated ExtensionProvider extension_providers = 57;
+
+  // A list of Kubernetes selectors that specify the set of namespaces that Istio considers when
+  // computing configuration updates for sidecars. This can be used to reduce Istio's computational load
+  // by limiting the number of entities (including services, pods, and endpoints) that are watched and processed.
+  // If omitted, Istio will use the default behavior of processing all namespaces in the cluster.
+  // Elements in the list are disjunctive (OR semantics), i.e. a namespace will be included if it matches any selector.
+  // The following example selects any namespace with either labels `env: prod` and `region: us-east1`,
+  // or with label `app` equal to `cassandra` or `spark`.
+  // ```yaml
+  // discoverySelectors:
+  //  - matchLabels:
+  //      env: prod
+  //      region: us-east1
+  //  - matchExpressions:
+  //    - key: app
+  //      operator: In
+  //      values:
+  //        - cassandra
+  //        - spark
+  // ```
+  // Refer to the [kubernetes selector docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors)
+  // for additional detail on selector semantics.
+  repeated k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector discovery_selectors = 59;
+
   // $hide_from_docs
-  // Next available field number: 56
+  // Next available field number: 60
+  reserved 1;
+  reserved "mixer_check_server";
+  reserved 2;
+  reserved "mixer_report_server";
+  reserved 3;
+  reserved "disable_policy_checks";
+  reserved 48;
+  reserved "disable_mixer_http_reports";
+  reserved 25;
+  reserved "policy_check_fail_open";
+  reserved 30;
+  reserved "sidecar_to_telemetry_session_affinity";
+  reserved 10;
+  reserved "auth_policy";
+  reserved 11;
+  reserved "rds_refresh_delay";
+  reserved 15;
+  reserved 16;
+  reserved "mixer_address";
+  reserved 18;
+  reserved 19;
+  reserved "enable_client_side_policy_check";
+  reserved 20;
+  reserved "sds_uds_path";
+  reserved 21;
+  reserved "sds_refresh_delay";
+  reserved 23;
+  reserved "enable_sds_token_mount";
+  reserved 29;
+  reserved "sds_use_k8s_sa_jwt";
+  reserved 53;
+  reserved "termination_drain_duration";
+  reserved 37;
+  reserved "disable_report_batch";
+  reserved 38;
+  reserved "report_batch_max_entries";
+  reserved 39;
+  reserved "report_batch_max_time";
 }
 
 // Resource describes the source of configuration
@@ -517,7 +633,7 @@ message ConfigSource {
  string address = 1;
  // Use the tls_settings to specify the tls mode to use. If the MCP server
  // uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
- // mode as ISTIO_MUTUAL.
+ // mode as `ISTIO_MUTUAL`.
  istio.networking.v1alpha3.ClientTLSSettings tls_settings = 2;
  // Describes the source of configuration, if nothing is specified default is MCP
  repeated Resource subscribed_resources = 3;
@@ -527,18 +643,22 @@ message ConfigSource {
 
 // Certificate configures the provision of a certificate and its key.
 // Example 1: key and cert stored in a secret
+// ```
 // { secretName: galley-cert
 //   secretNamespace: istio-system
 //   dnsNames:
 //     - galley.istio-system.svc
 //     - galley.mydomain.com
 // }
+// ```
 // Example 2: key and cert stored in a directory
+// ```
 // { dnsNames:
 //     - pilot.istio-system
 //     - pilot.istio-system.svc
 //     - pilot.mydomain.com
 // }
+// ```
 message Certificate {
   // Name of the secret the certificate and its key will be stored into.
   // If it is empty, it will not be stored into a secret.

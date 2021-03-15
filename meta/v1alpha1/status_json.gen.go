@@ -43,5 +43,5 @@ func (this *IstioCondition) UnmarshalJSON(b []byte) error {
 
 var (
 	StatusMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	StatusUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	StatusUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )

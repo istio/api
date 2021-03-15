@@ -41,5 +41,5 @@ func (this *JWTHeader) UnmarshalJSON(b []byte) error {
 
 var (
 	JwtMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	JwtUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	JwtUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )

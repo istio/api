@@ -337,5 +337,5 @@ func (this *LocalityLoadBalancerSetting_Failover) UnmarshalJSON(b []byte) error 
 
 var (
 	DestinationRuleMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	DestinationRuleUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	DestinationRuleUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )

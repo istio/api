@@ -237,5 +237,5 @@ func (this *WorkloadEntry) UnmarshalJSON(b []byte) error {
 
 var (
 	WorkloadEntryMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	WorkloadEntryUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	WorkloadEntryUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )

@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: security
+issue:
+  - 30629
+
+releaseNotes:
+  - |
+    **Added** API to configure extra roots of trust for workload-to-workload communication.

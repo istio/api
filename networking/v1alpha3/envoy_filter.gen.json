@@ -23,7 +23,7 @@
         }
       },
       "istio.networking.v1alpha3.WorkloadSelector": {
-        "description": "`WorkloadSelector` specifies the criteria used to determine if the `Gateway`, `Sidecar`, or `EnvoyFilter` or `ServiceEntry` configuration can be applied to a proxy. The matching criteria includes the metadata associated with a proxy, workload instance info such as labels attached to the pod/VM, or any other info that the proxy provides to Istio during the initial handshake. If multiple conditions are specified, all conditions need to match in order for the workload instance to be selected. Currently, only label based selection mechanism is supported.",
+        "description": "`WorkloadSelector` specifies the criteria used to determine if the `Gateway`, `Sidecar`, `EnvoyFilter`, or `ServiceEntry` configuration can be applied to a proxy. The matching criteria includes the metadata associated with a proxy, workload instance info such as labels attached to the pod/VM, or any other info that the proxy provides to Istio during the initial handshake. If multiple conditions are specified, all conditions need to match in order for the workload instance to be selected. Currently, only label based selection mechanism is supported.",
         "type": "object",
         "properties": {
           "labels": {
@@ -52,7 +52,7 @@
         }
       },
       "istio.networking.v1alpha3.EnvoyFilter.ApplyTo": {
-        "description": "ApplyTo specifies where in the Envoy configuration, the given patch should be applied.",
+        "description": "`ApplyTo` specifies where in the Envoy configuration, the given patch should be applied.",
         "type": "string",
         "enum": [
           "INVALID",
@@ -63,7 +63,8 @@
           "ROUTE_CONFIGURATION",
           "VIRTUAL_HOST",
           "HTTP_ROUTE",
-          "CLUSTER"
+          "CLUSTER",
+          "EXTENSION_CONFIG"
         ]
       },
       "istio.networking.v1alpha3.EnvoyFilter.PatchContext": {
@@ -81,7 +82,7 @@
         "type": "object",
         "properties": {
           "proxyVersion": {
-            "description": "A regular expression in golang regex format (RE2) that can be used to select proxies using a specific version of istio proxy. The Istio version for a given proxy is obtained from the node metadata field ISTIO_VERSION supplied by the proxy when connecting to Pilot. This value is embedded as an environment variable (ISTIO_META_ISTIO_VERSION) in the Istio proxy docker image. Custom proxy implementations should provide this metadata variable to take advantage of the Istio version check option.",
+            "description": "A regular expression in golang regex format (RE2) that can be used to select proxies using a specific version of istio proxy. The Istio version for a given proxy is obtained from the node metadata field `ISTIO_VERSION` supplied by the proxy when connecting to Pilot. This value is embedded as an environment variable (`ISTIO_META_ISTIO_VERSION`) in the Istio proxy docker image. Custom proxy implementations should provide this metadata variable to take advantage of the Istio version check option.",
             "type": "string",
             "format": "string"
           },
@@ -96,11 +97,11 @@
         }
       },
       "istio.networking.v1alpha3.EnvoyFilter.ClusterMatch": {
-        "description": "Conditions specified in ClusterMatch must be met for the patch to be applied to a cluster.",
+        "description": "Conditions specified in `ClusterMatch` must be met for the patch to be applied to a cluster.",
         "type": "object",
         "properties": {
           "name": {
-            "description": "The exact name of the cluster to match. To match a specific cluster by name, such as the internally generated \"Passthrough\" cluster, leave all fields in clusterMatch empty, except the name.",
+            "description": "The exact name of the cluster to match. To match a specific cluster by name, such as the internally generated `Passthrough` cluster, leave all fields in clusterMatch empty, except the name.",
             "type": "string",
             "format": "string"
           },
@@ -125,7 +126,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "Route configuration name to match on. Can be used to match a specific route configuration by name, such as the internally generated \"http_proxy\" route configuration for all sidecars.",
+            "description": "Route configuration name to match on. Can be used to match a specific route configuration by name, such as the internally generated `http_proxy` route configuration for all sidecars.",
             "type": "string",
             "format": "string"
           },
@@ -139,7 +140,7 @@
             "format": "string"
           },
           "gateway": {
-            "description": "The Istio gateway config's namespace/name for which this route configuration was generated. Applies only if the context is GATEWAY. Should be in the namespace/name format. Use this field in conjunction with the portNumber and portName to accurately select the Envoy route configuration for a specific HTTPS server within a gateway config object.",
+            "description": "The Istio gateway config's namespace/name for which this route configuration was generated. Applies only if the context is GATEWAY. Should be in the namespace/name format. Use this field in conjunction with the `portNumber` and `portName` to accurately select the Envoy route configuration for a specific HTTPS server within a gateway config object.",
             "type": "string",
             "format": "string"
           },
@@ -167,7 +168,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "The Route objects generated by default are named as \"default\". Route objects generated using a virtual service will carry the name used in the virtual service's HTTP routes.",
+            "description": "The Route objects generated by default are named as default. Route objects generated using a virtual service will carry the name used in the virtual service's HTTP routes.",
             "type": "string",
             "format": "string"
           },
@@ -224,17 +225,21 @@
             "format": "string"
           },
           "transportProtocol": {
-            "description": "Applies only to SIDECAR_INBOUND context. If non-empty, a transport protocol to consider when determining a filter chain match. This value will be compared against the transport protocol of a new connection, when it's detected by the tls_inspector listener filter.",
+            "description": "Applies only to `SIDECAR_INBOUND` context. If non-empty, a transport protocol to consider when determining a filter chain match. This value will be compared against the transport protocol of a new connection, when it's detected by the `tls_inspector` listener filter.",
             "type": "string",
             "format": "string"
           },
           "applicationProtocols": {
-            "description": "Applies only to sidecars. If non-empty, a comma separated set of application protocols to consider when determining a filter chain match. This value will be compared against the application protocols of a new connection, when it's detected by one of the listener filters such as the http_inspector.",
+            "description": "Applies only to sidecars. If non-empty, a comma separated set of application protocols to consider when determining a filter chain match. This value will be compared against the application protocols of a new connection, when it's detected by one of the listener filters such as the `http_inspector`.",
             "type": "string",
             "format": "string"
           },
           "filter": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterMatch"
+          },
+          "destinationPort": {
+            "description": "The destination_port value used by a filter chain's match condition. This condition will evaluate to false if the filter chain has no destination_port match.",
+            "type": "integer"
           }
         }
       },
@@ -243,7 +248,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "The filter name to match on. For standard Envoy filters, canonical filter names should be used. Refer to https://www.envoyproxy.io/docs/envoy/latest/version_history/v1.14.0#deprecated for canonical names.",
+            "description": "The filter name to match on. For standard Envoy filters, [canonical filter](https://www.envoyproxy.io/docs/envoy/latest/version_history/v1.14.0#deprecated) names should be used.",
             "type": "string",
             "format": "string"
           },
@@ -253,7 +258,7 @@
         }
       },
       "istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.SubFilterMatch": {
-        "description": "Conditions to match a specific filter within another filter. This field is typically useful to match a HTTP filter inside the envoy.filters.network.http_connection_manager network filter. This could also be applicable for thrift filters.",
+        "description": "Conditions to match a specific filter within another filter. This field is typically useful to match a HTTP filter inside the `envoy.filters.network.http_connection_manager` network filter. This could also be applicable for thrift filters.",
         "type": "object",
         "properties": {
           "name": {
@@ -294,7 +299,7 @@
         ]
       },
       "istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass": {
-        "description": "FilterClass determines the filter insertion point in the filter chain relative to the filters implicitly inserted by the control plane. It is used in conjuction with the ADD operation. This is the preferred insertion mechanism for adding filters over the INSERT_* operations since those operations rely on potentially unstable filter names. Filter ordering is important if your filter depends on or affects the functioning of a another filter in the filter chain. Within a filter class, filters are inserted in the order of processing.",
+        "description": "FilterClass determines the filter insertion point in the filter chain relative to the filters implicitly inserted by the control plane. It is used in conjuction with the `ADD` operation. This is the preferred insertion mechanism for adding filters over the `INSERT_*` operations since those operations rely on potentially unstable filter names. Filter ordering is important if your filter depends on or affects the functioning of a another filter in the filter chain. Within a filter class, filters are inserted in the order of processing.",
         "type": "string",
         "enum": [
           "UNSPECIFIED",

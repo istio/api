@@ -117,7 +117,7 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 //     8080:
 //       mode: DISABLE
 // ```
-// Policy to inherite mTLS mode from namespace (or mesh) settings, and overwrite
+// Policy to inherit mTLS mode from namespace (or mesh) settings, and overwrite
 // settings for port 8080
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -145,6 +145,12 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 // +cue-gen:PeerAuthentication:subresource:status
 // +cue-gen:PeerAuthentication:scope:Namespaced
 // +cue-gen:PeerAuthentication:resource:categories=istio-io,security-istio-io,shortNames=pa
+// +cue-gen:PeerAuthentication:preserveUnknownFields:false
+// +cue-gen:PeerAuthentication:printerColumn:name=Mode,type=string,JSONPath=.spec.mtls.mode,description="Defines the mTLS mode used for peer authentication."
+// +cue-gen:PeerAuthentication:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
+// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
+// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
 // -->
 //
 // <!-- go code generation tags
@@ -685,7 +691,7 @@ func (m *PeerAuthentication) Unmarshal(dAtA []byte) error {
 					if err != nil {
 						return err
 					}
-					if skippy < 0 {
+					if (skippy < 0) || (iNdEx+skippy) < 0 {
 						return ErrInvalidLengthPeerAuthentication
 					}
 					if (iNdEx + skippy) > postIndex {
@@ -702,10 +708,7 @@ func (m *PeerAuthentication) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPeerAuthentication
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPeerAuthentication
 			}
 			if (iNdEx + skippy) > l {
@@ -775,10 +778,7 @@ func (m *PeerAuthentication_MutualTLS) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPeerAuthentication
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPeerAuthentication
 			}
 			if (iNdEx + skippy) > l {
@@ -797,6 +797,7 @@ func (m *PeerAuthentication_MutualTLS) Unmarshal(dAtA []byte) error {
 func skipPeerAuthentication(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -828,10 +829,8 @@ func skipPeerAuthentication(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -852,55 +851,30 @@ func skipPeerAuthentication(dAtA []byte) (n int, err error) {
 				return 0, ErrInvalidLengthPeerAuthentication
 			}
 			iNdEx += length
-			if iNdEx < 0 {
-				return 0, ErrInvalidLengthPeerAuthentication
-			}
-			return iNdEx, nil
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowPeerAuthentication
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipPeerAuthentication(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-				if iNdEx < 0 {
-					return 0, ErrInvalidLengthPeerAuthentication
-				}
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupPeerAuthentication
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthPeerAuthentication
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthPeerAuthentication = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowPeerAuthentication   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthPeerAuthentication        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowPeerAuthentication          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupPeerAuthentication = fmt.Errorf("proto: unexpected end of group")
 )

@@ -18,6 +18,7 @@ syntax = "proto3";
 // $description: Configuration affecting Istio control plane installation version and shape.
 // $location: https://istio.io/docs/reference/config/istio.operator.v1alpha1.html
 // $weight: 20
+// $mode: package
 
 // Configuration affecting Istio control plane installation version and shape.
 package istio.operator.v1alpha1;
@@ -26,107 +27,12 @@ option go_package="istio.io/api/operator/v1alpha1";
 
 import "google/protobuf/any.proto";
 import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
+import "k8s.io/api/core/v1/generated.proto";
 import "gogoproto/gogo.proto";
 
 option (gogoproto.marshaler_all) = false;
 option (gogoproto.unmarshaler_all) = false;
 option (gogoproto.sizer_all) = false;
-
-/*
-IstioOperatorSpec is an API for managing an Istio control plane. It is used to define profiles that are included
-with Istio releases, and user overlays, which are used to override profile values.
-
-The simplest overlay is to set the profile to a different value, for example "minimal", which will use the values
-associated with the minimal control plane profile for Istio.
-
-Deeper customization is possible at three levels:
-
-1. IstioComponentSpec
-
-Components can be enabled/disabled and Kubernetes resources can be modified.
-
-2. values.yaml
-
-The entirety of values.yaml settings is accessible through IstioOperatorSpec.values.
-This API will gradually be deprecated and is here to support migration. Values will be migrated either here (for
-installation settings) or MeshConfig (for runtime config).
-
-3. Kubernetes resource overlays
-
-Once a manifest is rendered, a further customization can be applied by specifying Kubernetes resource overlays.
-
-EXAMPLES
-
-1. Default Istio install
-
-    ```yaml
-    spec:
-    ```
-
-1. Default minimal profile install
-
-    ```yaml
-    spec:
-      profile: minimal
-    ```
-
-1. Default install with telemetry disabled
-
-    ```yaml
-    spec:
-      components:
-        telemetry:
-          enabled: false
-    ```
-
-1. Default install with specialized Kubernetes settings for pilot
-
-    ```yaml
-    spec:
-      components:
-        pilot:
-          k8s:
-            resources:
-              limits:
-                cpu: 444m
-                memory: 333Mi
-              requests:
-                cpu: 222m
-                memory: 111Mi
-            readinessProbe:
-              failureThreshold: 44
-              initialDelaySeconds: 11
-              periodSeconds: 22
-              successThreshold: 33
-    ```
-
-1. Default install with values.yaml customizations for proxy
-
-    ```yaml
-    spec:
-      values:
-        global:
-          proxy:
-            enableCoreDump: true
-            dnsRefreshRate: 10s
-    ```
-
-1. Default install with modification to container flag in galley
-
-    ```yaml
-    spec:
-      components:
-        galley:
-          k8s:
-            overlays:
-            - apiVersion: extensions/v1beta1
-              kind: Deployment
-              name: istio-galley
-              patches:
-              - path: spec.template.spec.containers.[name:galley].command.[--livenessProbeInterval]
-                value: --livenessProbeInterval=123s
-    ```
-*/
 
 // <!-- go code generation tags
 // +kubetype-gen
@@ -139,18 +45,40 @@ EXAMPLES
 // The spec is a used to define a customization of the default profile values that are supplied with each Istio release.
 // Because the spec is a customization API, specifying an empty IstioOperatorSpec results in a default Istio
 // component values.
+//
+// ```yaml
+// apiVersion: install.istio.io/v1alpha1
+// kind: IstioOperator
+// spec:
+//   profile: default
+//   hub: gcr.io/istio-testing
+//   tag: latest
+//   revision: 1-8-0
+//   meshConfig:
+//     accessLogFile: /dev/stdout
+//     enableTracing: true
+//   components:
+//     egressGateways:
+//     - name: istio-egressgateway
+//       enabled: true
+// ```
+//
 message IstioOperatorSpec {
     // Path or name for the profile e.g.
-    //     - minimal (looks in profiles dir for a file called minimal.yaml)
-    //     - /tmp/istio/install/values/custom/custom-install.yaml (local file path)
+    //
+    // * minimal (looks in profiles dir for a file called minimal.yaml)
+    // * /tmp/istio/install/values/custom/custom-install.yaml (local file path)
+    //
     // default profile is used if this field is unset.
     string profile = 10;
     // Path for the install package. e.g.
-    //     - /tmp/istio-installer/nightly (local file path)
+    //
+    // * /tmp/istio-installer/nightly (local file path)
+    //
     string install_package_path = 11;
-    // Root for docker image paths e.g. docker.io/istio
+    // Root for docker image paths e.g. `docker.io/istio`
     string hub = 12;
-    // Version tag for docker images e.g. 1.0.6
+    // Version tag for docker images e.g. `1.7.2`
     TypeInterface tag = 13;
 
     // $hide_from_docs
@@ -158,12 +86,16 @@ message IstioOperatorSpec {
     // Never implemented; replaced by revision.
     string resource_suffix = 14 [deprecated = true];
     // Namespace to install control plane resources into. If unset, Istio will be installed into the same namespace
-    // as the IstioOperator CR.
+    // as the `IstioOperator` CR.
     string namespace = 15;
 
     // Identify the revision this installation is associated with.
     // This option is currently experimental.
     string revision = 16;
+
+    // Identify whether this revision is the default revision for the cluster
+    // This option is currently experimental.
+    bool default_revision = 17;
 
     // Config used by control plane components internally.
     TypeMapStringInterface mesh_config = 40;
@@ -172,15 +104,17 @@ message IstioOperatorSpec {
     // component.
     IstioComponentSetSpec components = 50;
 
-    // Extra addon components which are not explicitly specified above.
-    map<string, ExternalComponentSpec> addon_components = 51;
+    // Deprecated.
+    // Users should manage the installation of addon components on their own.
+    // Refer to samples/addons for demo installation of addon components.
+    map<string, ExternalComponentSpec> addon_components = 51 [deprecated = true];
 
-    // Overrides for default values.yaml. This is a validated pass-through to Helm templates.
-    // See the Helm installation options for schema details: https://istio.io/docs/reference/config/installation-options/.
-    // Anything that is available in IstioOperatorSpec should be set above rather than using the passthrough. This
-    // includes Kubernetes resource settings for components in KubernetesResourcesSpec.
+    // Overrides for default `values.yaml`. This is a validated pass-through to Helm templates.
+    // See the [Helm installation options](https://istio.io/v1.5/docs/reference/config/installation-options/) for schema details.
+    // Anything that is available in `IstioOperatorSpec` should be set above rather than using the passthrough. This
+    // includes Kubernetes resource settings for components in `KubernetesResourcesSpec`.
     TypeMapStringInterface values = 100;
-    // Unvalidated overrides for default values.yaml. Used for custom templates where new parameters are added.
+    // Unvalidated overrides for default `values.yaml`. Used for custom templates where new parameters are added.
     TypeMapStringInterface unvalidated_values = 101;
 }
 
@@ -200,7 +134,7 @@ message InstallStatus {
         ERROR = 4;
         // Overall status only and would not be set as a component status.
         // Action is needed from the user for reconciliation to proceed
-        // e.g. There are proxies still pointing to the control plane revision when try to remove an IstioOperator CR.
+        // e.g. There are proxies still pointing to the control plane revision when try to remove an `IstioOperator` CR.
         ACTION_REQUIRED = 5;
     }
     // VersionStatus is the status and version of a component.
@@ -210,13 +144,15 @@ message InstallStatus {
         string error = 4;
     }
     // Overall status of all components controlled by the operator.
-    // - If all components have status NONE, overall status is NONE.
-    // - If all components are HEALTHY, overall status is HEALTHY.
-    // - If one or more components are RECONCILING and others are HEALTHY, overall status is RECONCILING.
-    // - If one or more components are UPDATING and others are HEALTHY, overall status is UPDATING.
-    // - If components are a mix of RECONCILING, UPDATING and HEALTHY, overall status is UPDATING.
-    // - If any component is in ERROR state, overall status is ERROR.
-    // - If further action is needed for reconciliation to proceed, overall status is ACTION_REQUIRED.
+    //
+    // * If all components have status `NONE`, overall status is `NONE`.
+    // * If all components are `HEALTHY`, overall status is `HEALTHY`.
+    // * If one or more components are `RECONCILING` and others are `HEALTHY`, overall status is `RECONCILING`.
+    // * If one or more components are `UPDATING` and others are `HEALTHY`, overall status is `UPDATING`.
+    // * If components are a mix of `RECONCILING`, `UPDATING` and `HEALTHY`, overall status is `UPDATING`.
+    // * If any component is in `ERROR` state, overall status is `ERROR`.
+    // * If further action is needed for reconciliation to proceed, overall status is `ACTION_REQUIRED`.
+    //
     Status status = 1;
     // Optional message providing additional information about the existing overall status.
     string message = 3;
@@ -355,6 +291,13 @@ message KubernetesResourcesSpec {
     // k8s pod security context
     // [https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)
     PodSecurityContext securityContext = 16;
+    // k8s volume
+    // [https://kubernetes.io/docs/concepts/storage/volumes/](https://kubernetes.io/docs/concepts/storage/volumes/)
+    // Volumes defines the collection of Volume to inject into the pod.
+    repeated k8s.io.api.core.v1.Volume volumes = 17;
+    // k8s volumeMounts
+    // VolumeMounts defines the collection of VolumeMount to inject into containers.
+    repeated k8s.io.api.core.v1.VolumeMount volumeMounts = 18;
 
     // Overlays for k8s resources in rendered manifests.
     repeated K8sObjectOverlay overlays = 100;

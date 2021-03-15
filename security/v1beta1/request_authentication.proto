@@ -27,7 +27,7 @@ package istio.security.v1beta1;
 option go_package="istio.io/api/security/v1beta1";
 
 // RequestAuthentication defines what request authentication methods are supported by a workload.
-// If will reject a request if the request contains invalid authentication information, based on the
+// It will reject a request if the request contains invalid authentication information, based on the
 // configured authentication rules. A request that does not contain any authentication credentials
 // will be accepted but will not have any authenticated identity. To restrict access to authenticated
 // requests only, this should be accompanied by an authorization rule.
@@ -91,17 +91,19 @@ option go_package="istio.io/api/security/v1beta1";
 //   selector:
 //     matchLabels:
 //       app: httpbin
-//  rules:
-//  - from:
-//    - source:
-//        requestPrincipals: ["issuer-foo/*"]
-//    to:
-//      hosts: ["example.com"]
-//  - from:
-//    - source:
-//        requestPrincipals: ["issuer-bar/*"]
-//    to:
-//      hosts: ["another-host.com"]
+//   rules:
+//   - from:
+//     - source:
+//         requestPrincipals: ["issuer-foo/*"]
+//     to:
+//     - operation:
+//         hosts: ["example.com"]
+//   - from:
+//     - source:
+//         requestPrincipals: ["issuer-bar/*"]
+//     to:
+//     - operation:
+//         hosts: ["another-host.com"]
 // ```
 //
 // - You can fine tune the authorization policy to set different requirement per path. For example,
@@ -118,13 +120,13 @@ option go_package="istio.io/api/security/v1beta1";
 //   selector:
 //     matchLabels:
 //       app: httpbin
-//  rules:
-//  - from:
-//    - source:
-//        requestPrincipals: ["*"]
-//  - to:
-//    - operation:
-//        paths: ["/healthz]
+//   rules:
+//   - from:
+//     - source:
+//         requestPrincipals: ["*"]
+//   - to:
+//     - operation:
+//         paths: ["/healthz"]
 // ```
 //
 // <!-- crd generation tags
@@ -136,6 +138,7 @@ option go_package="istio.io/api/security/v1beta1";
 // +cue-gen:RequestAuthentication:subresource:status
 // +cue-gen:RequestAuthentication:scope:Namespaced
 // +cue-gen:RequestAuthentication:resource:categories=istio-io,security-istio-io,shortNames=ra
+// +cue-gen:RequestAuthentication:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags

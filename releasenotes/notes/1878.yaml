@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: bug-fix
+area: documentation
+issue:
+  - 1878
+
+releaseNotes:
+  - |
+    **Fixed** fix istio gateway reference documents error

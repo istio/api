@@ -30,5 +30,5 @@ func (this *RequestAuthentication) UnmarshalJSON(b []byte) error {
 
 var (
 	RequestAuthenticationMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	RequestAuthenticationUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	RequestAuthenticationUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )

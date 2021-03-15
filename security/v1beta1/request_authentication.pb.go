@@ -24,7 +24,7 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // RequestAuthentication defines what request authentication methods are supported by a workload.
-// If will reject a request if the request contains invalid authentication information, based on the
+// It will reject a request if the request contains invalid authentication information, based on the
 // configured authentication rules. A request that does not contain any authentication credentials
 // will be accepted but will not have any authenticated identity. To restrict access to authenticated
 // requests only, this should be accompanied by an authorization rule.
@@ -88,17 +88,19 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //   selector:
 //     matchLabels:
 //       app: httpbin
-//  rules:
-//  - from:
-//    - source:
-//        requestPrincipals: ["issuer-foo/*"]
-//    to:
-//      hosts: ["example.com"]
-//  - from:
-//    - source:
-//        requestPrincipals: ["issuer-bar/*"]
-//    to:
-//      hosts: ["another-host.com"]
+//   rules:
+//   - from:
+//     - source:
+//         requestPrincipals: ["issuer-foo/*"]
+//     to:
+//     - operation:
+//         hosts: ["example.com"]
+//   - from:
+//     - source:
+//         requestPrincipals: ["issuer-bar/*"]
+//     to:
+//     - operation:
+//         hosts: ["another-host.com"]
 // ```
 //
 // - You can fine tune the authorization policy to set different requirement per path. For example,
@@ -115,13 +117,13 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //   selector:
 //     matchLabels:
 //       app: httpbin
-//  rules:
-//  - from:
-//    - source:
-//        requestPrincipals: ["*"]
-//  - to:
-//    - operation:
-//        paths: ["/healthz]
+//   rules:
+//   - from:
+//     - source:
+//         requestPrincipals: ["*"]
+//   - to:
+//     - operation:
+//         paths: ["/healthz"]
 // ```
 //
 // <!-- crd generation tags
@@ -133,6 +135,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // +cue-gen:RequestAuthentication:subresource:status
 // +cue-gen:RequestAuthentication:scope:Namespaced
 // +cue-gen:RequestAuthentication:resource:categories=istio-io,security-istio-io,shortNames=ra
+// +cue-gen:RequestAuthentication:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -428,10 +431,7 @@ func (m *RequestAuthentication) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthRequestAuthentication
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthRequestAuthentication
 			}
 			if (iNdEx + skippy) > l {
@@ -450,6 +450,7 @@ func (m *RequestAuthentication) Unmarshal(dAtA []byte) error {
 func skipRequestAuthentication(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -481,10 +482,8 @@ func skipRequestAuthentication(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -505,55 +504,30 @@ func skipRequestAuthentication(dAtA []byte) (n int, err error) {
 				return 0, ErrInvalidLengthRequestAuthentication
 			}
 			iNdEx += length
-			if iNdEx < 0 {
-				return 0, ErrInvalidLengthRequestAuthentication
-			}
-			return iNdEx, nil
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowRequestAuthentication
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipRequestAuthentication(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-				if iNdEx < 0 {
-					return 0, ErrInvalidLengthRequestAuthentication
-				}
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupRequestAuthentication
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthRequestAuthentication
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthRequestAuthentication = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowRequestAuthentication   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthRequestAuthentication        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowRequestAuthentication          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupRequestAuthentication = fmt.Errorf("proto: unexpected end of group")
 )

@@ -84,7 +84,7 @@ option go_package="istio.io/api/security/v1beta1";
 //     8080:
 //       mode: DISABLE
 // ```
-// Policy to inherite mTLS mode from namespace (or mesh) settings, and overwrite
+// Policy to inherit mTLS mode from namespace (or mesh) settings, and overwrite
 // settings for port 8080
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -112,6 +112,12 @@ option go_package="istio.io/api/security/v1beta1";
 // +cue-gen:PeerAuthentication:subresource:status
 // +cue-gen:PeerAuthentication:scope:Namespaced
 // +cue-gen:PeerAuthentication:resource:categories=istio-io,security-istio-io,shortNames=pa
+// +cue-gen:PeerAuthentication:preserveUnknownFields:false
+// +cue-gen:PeerAuthentication:printerColumn:name=Mode,type=string,JSONPath=.spec.mtls.mode,description="Defines the mTLS mode used for peer authentication."
+// +cue-gen:PeerAuthentication:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
+// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
+// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
 // -->
 //
 // <!-- go code generation tags

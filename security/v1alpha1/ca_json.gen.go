@@ -43,5 +43,5 @@ func (this *IstioCertificateResponse) UnmarshalJSON(b []byte) error {
 
 var (
 	CaMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	CaUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	CaUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )

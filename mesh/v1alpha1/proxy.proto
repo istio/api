@@ -17,6 +17,7 @@ syntax = "proto3";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 import "networking/v1alpha3/destination_rule.proto";
+import "networking/v1alpha3/workload_group.proto";
 
 package istio.mesh.v1alpha1;
 
@@ -208,10 +209,8 @@ message Tracing {
   uint32 max_path_tag_length = 6;
 
   // The percentage of requests (0.0 - 100.0) that will be randomly selected for trace generation,
-  // if not requested by the client or not forced. Default is 100.
-  // $hide_from_docs
+  // if not requested by the client or not forced. Default is 1.0.
   double sampling = 7;
-
 
   // Use the tls_settings to specify the tls mode to use. If the remote tracing service
   // uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
@@ -301,30 +300,30 @@ message ProxyConfig {
   // Path to the proxy binary
   string binary_path = 2;
 
-  // Service cluster defines the name for the service_cluster that is
+  // Service cluster defines the name for the `service_cluster` that is
   // shared by all Envoy instances. This setting corresponds to
-  // _--service-cluster_ flag in Envoy.  In a typical Envoy deployment, the
-  // _service-cluster_ flag is used to identify the caller, for
+  // `--service-cluster` flag in Envoy.  In a typical Envoy deployment, the
+  // `service-cluster` flag is used to identify the caller, for
   // source-based routing scenarios.
   //
-  // Since Istio does not assign a local service/service version to each
+  // Since Istio does not assign a local `service/service` version to each
   // Envoy instance, the name is same for all of them.  However, the
   // source/caller's identity (e.g., IP address) is encoded in the
-  // _--service-node_ flag when launching Envoy.  When the RDS service
-  // receives API calls from Envoy, it uses the value of the _service-node_
+  // `--service-node` flag when launching Envoy.  When the RDS service
+  // receives API calls from Envoy, it uses the value of the `service-node`
   // flag to compute routes that are relative to the service instances
   // located at that IP address.
   string service_cluster = 3;
 
   // The time in seconds that Envoy will drain connections during a hot
   // restart. MUST be >=1s (e.g., _1s/1m/1h_)
-  // Default drain duration is 45s.
+  // Default drain duration is `45s`.
   google.protobuf.Duration drain_duration = 4;
 
   // The time in seconds that Envoy will wait before shutting down the
-  // parent process during a hot restart. MUST be >=1s (e.g., _1s/1m/1h_).
-  // MUST BE greater than _drain_duration_ parameter.
-  // Default shutdown duration is 60s.
+  // parent process during a hot restart. MUST be >=1s (e.g., `1s/1m/1h`).
+  // MUST BE greater than `drain_duration` parameter.
+  // Default shutdown duration is `60s`.
   google.protobuf.Duration parent_shutdown_duration = 5;
 
   // Address of the discovery service exposing xDS with mTLS connection.
@@ -341,21 +340,21 @@ message ProxyConfig {
   reserved "connect_timeout";
   reserved 9;
 
-  // IP Address and Port of a statsd UDP listener (e.g. _10.75.241.127:9125_).
+  // IP Address and Port of a statsd UDP listener (e.g. `10.75.241.127:9125`).
   string statsd_udp_address = 10;
 
   // $hide_from_docs
   string envoy_metrics_service_address = 20 [deprecated=true];
 
   // Port on which Envoy should listen for administrative commands.
-  // Default port is 15000.
+  // Default port is `15000`.
   int32 proxy_admin_port = 11;
 
   // $hide_from_docs
   string availability_zone = 12 [deprecated=true];
 
   // AuthenticationPolicy defines how the proxy is authenticated when it connects to the control plane.
-  // Default is set to MUTUAL_TLS.
+  // Default is set to `MUTUAL_TLS`.
   AuthenticationPolicy control_plane_auth_policy = 13;
   // File path of custom proxy configuration, currently used by proxies
   // in front of Mixer and Pilot.
@@ -378,16 +377,16 @@ message ProxyConfig {
   string proxy_bootstrap_template_path = 17;
 
   // The mode used to redirect inbound traffic to Envoy.
-  // This setting has no effect on outbound traffic: iptables REDIRECT is always used for
+  // This setting has no effect on outbound traffic: iptables `REDIRECT` is always used for
   // outbound connections.
   enum InboundInterceptionMode {
-    // The REDIRECT mode uses iptables REDIRECT to NAT and redirect to Envoy. This mode loses
+    // The `REDIRECT` mode uses iptables `REDIRECT` to `NAT` and redirect to Envoy. This mode loses
     // source IP addresses during redirection.
     REDIRECT = 0;
-    // The TPROXY mode uses iptables TPROXY to redirect to Envoy. This mode preserves both the
+    // The `TPROXY` mode uses iptables `TPROXY` to redirect to Envoy. This mode preserves both the
     // source and destination IP addresses and ports, so that they can be used for advanced
     // filtering and manipulation. This mode also configures the sidecar to run with the
-    // CAP_NET_ADMIN capability, which is required to use TPROXY.
+    // `CAP_NET_ADMIN` capability, which is required to use `TPROXY`.
     TPROXY = 1;
   }
 
@@ -397,27 +396,26 @@ message ProxyConfig {
   // Tracing configuration to be used by the proxy.
   Tracing tracing = 19;
 
-  // secret discovery service(SDS) configuration to be used by the proxy.
+  // Secret Discovery Service(SDS) configuration to be used by the proxy.
   SDS sds = 21;
 
   // Address of the service to which access logs from Envoys should be
-  // sent. (e.g. accesslog-service:15000). See [Access Log
+  // sent. (e.g. `accesslog-service:15000`). See [Access Log
   // Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto)
   // for details about Envoy's gRPC Access Log Service API.
   RemoteService envoy_access_log_service = 22;
 
-  // Address of the Envoy Metrics Service implementation (e.g. metrics-service:15000).
+  // Address of the Envoy Metrics Service implementation (e.g. `metrics-service:15000`).
   // See [Metric Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/metrics/v2/metrics_service.proto)
   // for details about Envoy's Metrics Service API.
   RemoteService envoy_metrics_service = 23;
 
-  // $hide_from_docs
-  // Additional env variables for the proxy.
-  // Names starting with ISTIO_META_ will be included in the generated bootstrap and sent to the XDS server.
+  // Additional environment variables for the proxy.
+  // Names starting with `ISTIO_META_` will be included in the generated bootstrap and sent to the XDS server.
   map<string,string> proxy_metadata = 24;
 
   // Port on which the agent should listen for administrative commands such as readiness probe.
-  // Default is set to port 15020.
+  // Default is set to port `15020`.
   int32 status_port = 26;
 
   // An additional list of tags to extract from the in-proxy Istio telemetry. These extra tags can be
@@ -435,16 +433,71 @@ message ProxyConfig {
   Topology gateway_topology = 28;
 
   // The amount of time allowed for connections to complete on proxy shutdown.
-	// On receiving SIGTERM or SIGINT, istio-agent tells the active Envoy to start draining,
+	// On receiving `SIGTERM` or `SIGINT`, `istio-agent` tells the active Envoy to start draining,
 	// preventing any new connections and allowing existing connections to complete. It then
-  // sleeps for the termination_drain_duration and then kills any remaining active Envoy processes.
-  // If not set, a default of 5s will be applied.
+  // sleeps for the `termination_drain_duration` and then kills any remaining active Envoy processes.
+  // If not set, a default of `5s` will be applied.
   google.protobuf.Duration  termination_drain_duration = 29;
 
   // The unique identifier for the [service mesh](https://istio.io/docs/reference/glossary/#service-mesh)
   // All control planes running in the same service mesh should specify the same mesh ID.
   // Mesh ID is used to label telemetry reports for cases where telemetry from multiple meshes is mixed together.
   string mesh_id = 30;
+
+  // VM Health Checking readiness probe. This health check config exactly mirrors the
+  // kubernetes readiness probe configuration both in schema and logic.
+  // Only one health check method of 3 can be set at a time.
+  istio.networking.v1alpha3.ReadinessProbe readiness_probe = 31;
+
+  // Proxy stats name matchers for stats creation. Note this is in addition to
+  // the minimum Envoy stats that Istio generates by default.
+  message ProxyStatsMatcher {
+    // Proxy stats name prefix matcher for inclusion.
+    repeated string inclusion_prefixes = 1;
+
+    // Proxy stats name suffix matcher for inclusion.
+    repeated string inclusion_suffixes = 2;
+
+    // Proxy stats name regexps matcher for inclusion.
+    repeated string inclusion_regexps = 3;
+  }
+
+  // Proxy stats matcher defines configuration for reporting custom Envoy stats.
+  // To reduce memory and CPU overhead from Envoy stats system, Istio proxies by
+  // default create and expose only a subset of Envoy stats. This option is to
+  // control creation of additional Envoy stats with prefix, suffix, and regex
+  // expressions match on the name of the stats. This replaces the stats
+  // inclusion annotations
+  // (`sidecar.istio.io/statsInclusionPrefixes`,
+  // `sidecar.istio.io/statsInclusionRegexps`, and
+  // `sidecar.istio.io/statsInclusionSuffixes`). For example, to enable stats
+  // for circuit breaker, retry, and upstream connections, you can specify stats
+  // matcher as follow:
+  // ```yaml
+  // proxyStatsMatcher:
+  //   inclusionRegexps:
+  //     - .*circuit_breakers.*
+  //   inclusionPrefixes:
+  //     - upstream_rq_retry
+  //     - upstream_cx
+  // ```
+  // Note including more Envoy stats might increase number of time series
+  // collected by prometheus significantly. Care needs to be taken on Prometheus
+  // resource provision and configuration to reduce cardinality.
+  ProxyStatsMatcher proxy_stats_matcher = 32;
+
+
+  // Boolean flag for enabling/disabling the holdApplicationUntilProxyStarts behavior.
+  // This feature adds hooks to delay application startup until the pod proxy
+  // is ready to accept traffic, mitigating some startup race conditions.
+  // Default value is 'false'.
+  google.protobuf.BoolValue hold_application_until_proxy_starts = 33;
+
+  // The PEM data of the extra root certificates for workload-to-workload communication.
+  // This includes the certificates defined in MeshConfig and any other certificates that Istiod uses as CA.
+  // The plugin certificates (the 'cacerts' secret), self-signed certificates (the 'istio-ca-secret' secret)
+  // are added automatically by Istiod.
+  repeated string ca_certificates_pem = 34;
 }
 
 message RemoteService {
@@ -453,11 +506,11 @@ message RemoteService {
   // qualified DNS name.
   string address = 1;
 
-  // Use the tls_settings to specify the tls mode to use. If the remote service
+  // Use the `tls_settings` to specify the tls mode to use. If the remote service
   // uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
   // mode as `ISTIO_MUTUAL`.
   istio.networking.v1alpha3.ClientTLSSettings tls_settings = 2;
 
-  // If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
+  // If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalives.
   istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive tcp_keepalive = 3;
 }
