@@ -5429,8 +5429,12 @@ spec:
                 anyOf:
                 - required:
                   - provider
+                - required:
+                  - customizeDeny
             - required:
               - provider
+            - required:
+              - customizeDeny
             properties:
               action:
                 description: Optional.
@@ -5440,6 +5444,16 @@ spec:
                 - AUDIT
                 - CUSTOM
                 type: string
+              customizeDeny:
+                description: Specifies detailed configuration of the ALLOW/DENY action.
+                properties:
+                  body:
+                    format: string
+                    type: string
+                  statusCode:
+                    format: string
+                    type: string
+                type: object
               provider:
                 description: Specifies detailed configuration of the CUSTOM action.
                 properties:

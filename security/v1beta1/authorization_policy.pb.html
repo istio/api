@@ -7,7 +7,7 @@ generator: protoc-gen-docs
 schema: istio.security.v1beta1.AuthorizationPolicy
 weight: 20
 aliases: [/docs/reference/config/authorization/authorization-policy]
-number_of_entries: 9
+number_of_entries: 10
 ---
 <p>Istio Authorization Policy enables access control on workloads in the mesh.</p>
 
@@ -253,6 +253,17 @@ No
 <td><code><a href="#AuthorizationPolicy-ExtensionProvider">ExtensionProvider (oneof)</a></code></td>
 <td>
 <p>Specifies detailed configuration of the CUSTOM action. Must be used only with CUSTOM action.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AuthorizationPolicy-customize_deny" class="oneof">
+<td><code>customizeDeny</code></td>
+<td><code><a href="#AuthorizationPolicy-CustomizeDeny">CustomizeDeny (oneof)</a></code></td>
+<td>
+<p>Specifies detailed configuration of the ALLOW/DENY action.</p>
 
 </td>
 <td>
@@ -681,6 +692,43 @@ No
 <td>
 <p>Specifies the name of the extension provider. The list of available providers is defined in the MeshConfig.
 Note, currently at most 1 extension provider is allowed per workload. Different workloads can use different extension provider.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="AuthorizationPolicy-CustomizeDeny">AuthorizationPolicy.CustomizeDeny</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AuthorizationPolicy-CustomizeDeny-status_code">
+<td><code>statusCode</code></td>
+<td><code>string</code></td>
+<td>
+<p>Custom response deny status code</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AuthorizationPolicy-CustomizeDeny-body">
+<td><code>body</code></td>
+<td><code>string</code></td>
+<td>
+<p>Custom response deny body</p>
 
 </td>
 <td>
