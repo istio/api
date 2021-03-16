@@ -682,6 +682,10 @@ type Server struct {
 	// to. Format: `x.x.x.x` or `unix:///path/to/uds` or `unix://@foobar`
 	// (Linux abstract namespace). When using Unix domain sockets, the port
 	// number should be 0.
+	// This is used to restrict the avaialability of this server to the gateway only.
+	// This is typically used when a gateway needs to communicate to another mesh cluster
+	// to publish metrics for example. In such case, the server created with the
+	// specified bind will not be available for gateway clients.
 	Bind string `protobuf:"bytes,4,opt,name=bind,proto3" json:"bind,omitempty"`
 	// One or more hosts exposed by this gateway.
 	// While typically applicable to
