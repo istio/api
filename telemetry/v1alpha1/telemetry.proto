@@ -44,14 +44,14 @@ package istio.telemetry.v1alpha1;
 //
 // 1. Workload-specific policy
 // 1. Namespace-specific policy
-// 1. Root namespace policy 
+// 1. Root namespace policy
 //
 // WARNING: Support for Telemetry policies is under active development and is *not* 
 // stable or supported by Istio at this time.
 //
 // Examples:
 //
-// Policy to enable random sampling for 10% of all traffic:
+// Policy to enable random sampling for 10% of traffic:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1alpha1
 // kind: Telemetry
@@ -60,14 +60,27 @@ package istio.telemetry.v1alpha1;
 //   namespace: istio-system
 // spec:
 //   tracing:
-//   - match: {} # apply to all traffic
-//     config:
-//       percentageSampler:
-//         target: 10.00
+//   - config:
+//       randomSamplingPercentage: 10.00
 // ```
 //
-// Policy to disable trace reporting for all inbound traffic to the "foo"
-// workloads that arrives on port 8090:
+// Policy to disable trace reporting for the "foo" workload:
+// ```yaml
+// apiVersion: telemetry.istio.io/v1alpha1
+// kind: Telemetry
+// metadata:
+//   name: foo-tracing
+//   namespace: bar
+// spec:
+//   selector:
+//     labels:
+//       service.istio.io/canonical-name: foo
+//   tracing:
+//   - config:
+//       spanReporting: DO_NOT_REPORT_SPANS
+// ```
+//
+// Policy to select the alternate zipkin provider for trace reporting:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1alpha1
 // kind: Telemetry
@@ -79,12 +92,9 @@ package istio.telemetry.v1alpha1;
 //     labels:
 //       service.istio.io/canonical-name: foo
 //   tracing:
-//   - match:
-//       trafficDirection: INBOUND
-//       port:
-//         number: 8090
-//     config:
-//       disableSpanReporting: true
+//   - config:
+//       providers:
+//       - name: "zipkin-alternate"
 // ```
 //
 // <!-- crd generation tags
@@ -123,45 +133,15 @@ message Telemetry {
 // TracingRule defines how trace spans should be reported (sampling rate, custom tags)
 // and under what conditions the reporting should be conducted.
 message TracingRule {
-  // Defines the conditions under which the associated configuration applies.
-  TelemetryRuleMatch match = 1;
   // Customization of the default behavior for tracing.
   Tracing config = 2;
 }
 
-// TelemetryRuleMatch defines conditions for selecting subsets of mesh traffic
-// for a workload. TelemetryRuleMatch is concerned with simplified selection 
-// based on listener, protocol, and traffic direction.
-message TelemetryRuleMatch {
-
-  // TrafficDirection selects for traffic relative to the local
-  // proxy. 
-  enum TrafficDirection {
-    // (Default) Match all traffic, regardless of direction.
-    ALL_DIRECTIONS = 0;
-    // Match outbound traffic leaving the proxy. Use this to select "client-side"
-    // traffic in telemetry reporting.
-    // Note: Use OUTBOUND for gateways (even including ingress)
-    OUTBOUND = 1; 
-    // Match incoming traffic for the proxy. Use this to select "server-side"
-    // traffic in telemetry reporting.
-    INBOUND = 2;
- }
-
-  // Optional. Specifies the intended direction of the traffic relative to the local proxy.
-  // Defaults to ALL if unset.
-  TrafficDirection traffic_direction = 1; 
-
-  // Optional. The port on which the traffic is received.
-  // Defaults to ALL if unset.
-  Port port = 3;
-}
-
-// Port specifies the number of a port to be used for
-// matching or selection for final routing.
-message Port {
-  // Valid port number
-  uint32 number = 1;
+// Used to bind Telemetry configuration to specific providers for
+// targeted customization.
+message ProviderRef {
+  // Required. Name of Telemetry provider in MeshConfig.
+  string name = 1;
 }
 
 // Tracing defines the workload-level overrides for tracing behavior within
@@ -169,20 +149,39 @@ message Port {
 // rates and custom tag extraction.
 message Tracing {
 
-  // Disables the tracing functionality. When this is set to `false` (or unset), the
-  // proxy will report spans to a configured backend for all traffic with a trace
-  // context that specifies the trace is sampled. Additionally, spans will be
-  // generated for traffic without trace contexts based on the
-  // `sampler` configuration provided. If `disable_span_reporting` is `true`,
-  // the sidecar will ignore the incoming trace context, generating no spans for
-  // the traffic (the context will be silently forwarded). This is equivalent to 
-  // disabling tracing for the sidecar.
-  bool disable_span_reporting = 2;
+  // Optional. Name of provider(s) to use for span reporting. If a provider is
+  // not specified, the [default tracing provider][istio.mesh.v1alpha1.MeshConfig.default_tracing_provider]
+  // will be used.
+  // NOTE: At the moment, only a single provider can be specified in a given
+  // Tracing rule.
+  repeated ProviderRef providers = 1;
 
-  // Controls whether or not Istio-specific tags will be generated for each
-  // span created by the sidecar proxies. These tags include information on
-  // the canonical service, meh, and namespace involved in the request.
-  bool exclude_mesh_tags = 3;
+  // Controls the rate at which traffic will be selected for tracing if no
+  // prior sampling decision has been made. If a prior sampling decision has been
+  // made, that decision will be respected. However, if no sampling decision
+  // has been made (example: no `x-b3-sampled` tracing header was present in the
+  // requests), the traffic will be selected for telemetry generation at the
+  // percentage specified.
+  //
+  // Defaults to 0%. Valid values [0.00-100.00]. Can be specified in 0.01%
+  // increments.
+  double random_sampling_percentage = 2;
+
+  // List options for reporting of trace spans by selecting proxies.
+  enum SpanReporting {
+    // Report all spans to the configured tracing provider.
+    REPORT_SPANS = 0;
+    // Do not report spans. Tracing headers will still be forwarded.
+    DO_NOT_REPORT_SPANS = 1;
+    // Leave room for other options, including termination of tracing header
+    // propagation, etc.
+  }
+
+  // Controls trace reporting. This does not impact sampling rate, but rather
+  // is used to opt in/out of trace reporting. Example uses include enabling
+  // tracing for an entire mesh and opting a single namespace (or individual 
+  // workload) out of reporting.
+  SpanReporting span_reporting = 3;
 
   // CustomTag defines a tag to be added to a trace span that is based on
   // an operator-supplied value. This value can either be a hard-coded value,
@@ -196,8 +195,6 @@ message Tracing {
       Environment environment = 2;
       // RequestHeader adds the value of an header from the request to each span.
       RequestHeader header = 3;
-      // Metadata adds the value of a metadata field to each span.
-      Metadata metadata = 4;
     }
   }
 
@@ -222,97 +219,7 @@ message Tracing {
     string default_value = 2;
   }
 
-  // Retrieve the protobuf value from Metadata, and populate the tag
-  // value with the canonical JSON representation of it.
-  message Metadata {
-    enum Kind {
-      // Represents dynamic metadata associated with the request
-      REQUEST = 0;
-      // Represents metadata from the route.
-      ROUTE = 1;
-      // Represents metadata from the upstream cluster.
-      CLUSTER = 2;
-      // Represents metadata from the upstream host.
-      HOST = 3;
-    }
-
-    message Key {
-      // Required. The key name of Metadata to retrieve the Struct from the
-      // metadata. Typically, it represents a builtin subsystem or custom
-      // extension.
-      string key = 1;
-
-      // One segment of a path to a Metadata value.
-      message PathSegment {
-        // Key to retrieve the value in a Struct.
-        string key = 1;
-      }
-
-      // Required. Specifies the segment in a path to retrieve the value.
-      repeated PathSegment segment = 2;
-    }
-
-    // Kind of metadata from which to obtain tag value.
-    Kind kind = 1;
-
-    // Defines the path used to retrieve the tag value.
-    Key key = 2;
-
-    // Optional. If the key is not found, this value will be
-    // used instead.
-    string default_value = 3;
-  }
-
   // Optional. Configures additional custom tags to the generated trace spans.
   map<string, CustomTag> custom_tags = 4;
-
-  // Optional. Controls the overall path length allowed in a reported span.
-  // NOTE: currently only controls max length of the path tag.
-  uint32 max_tag_length = 5;
-
-  // Required. 
-  oneof sampler {
-    // A sampler that makes uniform decisions for all Sidecar traffic.
-    ConstantSampler constant_sampler = 6;
-    // A sampler that selects a configurable percentage of traffic for telemetry generation.
-    PercentageSampler percentage_sampler = 7;
-  }
-}
-
-// A sampler that makes uniform decisions for all Sidecar traffic.
-message ConstantSampler {
-  // ConstantDecision controls the behavior of the ConstantSampler.
-  enum ConstantDecision {
-    // Equivalent to NEVER_SAMPLE.
-    DECISION_UNSPECIFIED = 0;
-    // Ignore all sidecar traffic for the purposes of telemetry generation.
-    // For tracing, this means that the sidecar will never generate trace spans
-    // for traffic without an existing trace context.
-    NEVER = 1;
-    // Consider all sidecar traffic for the purposes of telemetry generation.
-    // For tracing, this will generate trace spans for traffic without an
-    // existing trace context.
-    ALWAYS = 2;
-  }
-
-  // Controls the behavior of the sampler.
-  ConstantDecision decision = 1;
-}
-
-// A sampler that selects a configurable percentage of traffic for telemetry generation.
-message PercentageSampler {
-  // Controls the amount of traffic selected for which no previous
-  // sampling decision has been made. If a prior sampling decision has been
-  // made, that decision will be respected. However, if no sampling decision
-  // has been made (example: no `x-b3-sampled` tracing header was present in the
-  // requests), the traffic will be selected for telemetry generation at the
-  // percentage specified.
-  // Setting `target` to 0 is equivalent to
-  // ConstantDecision.NEVER_SAMPLE. Setting `target` to
-  // 100 is equivalent of ConstantDecision.ALWAYS SAMPLE.
-  //
-  // Defaults to 0%. Valid values [0.00-100.00]. Can be specified in 0.01%
-  // increments.
-  double target = 1;
 }
 

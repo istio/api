@@ -394,7 +394,8 @@ message ProxyConfig {
   InboundInterceptionMode interception_mode = 18;
 
   // Tracing configuration to be used by the proxy.
-  Tracing tracing = 19;
+  // DEPRECATED: Use [extension_providers][istio.mesh.v1alpha1.MeshConfig.extension_providers] instead.
+  Tracing tracing = 19 [deprecated=true];
 
   // Secret Discovery Service(SDS) configuration to be used by the proxy.
   SDS sds = 21;

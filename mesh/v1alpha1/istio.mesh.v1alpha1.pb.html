@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 34
+number_of_entries: 40
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -597,6 +597,17 @@ can be used with an extension provider to delegate the authorization decision to
 No
 </td>
 </tr>
+<tr id="MeshConfig-default_tracing_provider">
+<td><code>defaultTracingProvider</code></td>
+<td><code>string</code></td>
+<td>
+<p>Name of the default tracing provider. This should match the name of a provider configured in <code>extension_providers</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="MeshConfig-discovery_selectors">
 <td><code>discoverySelectors</code></td>
 <td><code><a href="#k8s-io-apimachinery-pkg-apis-meta-v1-LabelSelector">LabelSelector[]</a></code></td>
@@ -966,6 +977,61 @@ No
 No
 </td>
 </tr>
+<tr id="MeshConfig-ExtensionProvider-zipkin" class="oneof">
+<td><code>zipkin</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-ZipkinTracingProvider">ZipkinTracingProvider (oneof)</a></code></td>
+<td>
+<p>Configures a tracing provider that uses the Zipkin API.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-lightstep" class="oneof">
+<td><code>lightstep</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-LightstepTracingProvider">LightstepTracingProvider (oneof)</a></code></td>
+<td>
+<p>Configures a Lightstep tracing provider.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-datadog" class="oneof">
+<td><code>datadog</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-DatadogTracingProvider">DatadogTracingProvider (oneof)</a></code></td>
+<td>
+<p>Configures a Datadog tracing provider.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-stackdriver" class="oneof">
+<td><code>stackdriver</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-StackdriverProvider">StackdriverProvider (oneof)</a></code></td>
+<td>
+<p>Configures a Stackdriver provider.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-opencensus" class="oneof">
+<td><code>opencensus</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-OpenCensusAgentTracingProvider">OpenCensusAgentTracingProvider (oneof)</a></code></td>
+<td>
+<p>Configures an OpenCensusAgent tracing provider.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1198,6 +1264,340 @@ No
 <td>
 <p>Sets the HTTP status that is returned to the client when there is a network error to the authorization service.
 The default status is &ldquo;403&rdquo; (HTTP Forbidden).</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-ZipkinTracingProvider">MeshConfig.ExtensionProvider.ZipkinTracingProvider</h2>
+<section>
+<p>Defines configuration for a Zipkin tracer.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-ZipkinTracingProvider-address">
+<td><code>address</code></td>
+<td><code>string</code></td>
+<td>
+<p>Address of the Zipkin service (e.g. <em>zipkin:9411</em>).</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-ZipkinTracingProvider-tls_settings">
+<td><code>tlsSettings</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ClientTLSSettings">ClientTLSSettings</a></code></td>
+<td>
+<p>Use the tls_settings to specify the tls mode to use. If the remote tracing service
+uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
+mode as <code>ISTIO_MUTUAL</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-ZipkinTracingProvider-exclude_mesh_tags">
+<td><code>excludeMeshTags</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Controls whether or not Istio-specific tags will be generated for each
+span created by the sidecar proxies. These tags include information on
+the canonical service, mesh, and namespace involved in the request.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-ZipkinTracingProvider-max_tag_length">
+<td><code>maxTagLength</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Optional. Controls the overall path length allowed in a reported span.
+NOTE: currently only controls max length of the path tag.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-LightstepTracingProvider">MeshConfig.ExtensionProvider.LightstepTracingProvider</h2>
+<section>
+<p>Defines configuration for a Lightstep tracer.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-LightstepTracingProvider-address">
+<td><code>address</code></td>
+<td><code>string</code></td>
+<td>
+<p>Address of the Lightstep Satellite pool.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-LightstepTracingProvider-access_token">
+<td><code>accessToken</code></td>
+<td><code>string</code></td>
+<td>
+<p>The Lightstep access token.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-LightstepTracingProvider-tls_settings">
+<td><code>tlsSettings</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ClientTLSSettings">ClientTLSSettings</a></code></td>
+<td>
+<p>Use the tls_settings to specify the tls mode to use. If the remote tracing service
+uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
+mode as <code>ISTIO_MUTUAL</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-LightstepTracingProvider-exclude_mesh_tags">
+<td><code>excludeMeshTags</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Controls whether or not Istio-specific tags will be generated for each
+span created by the sidecar proxies. These tags include information on
+the canonical service, mesh, and namespace involved in the request.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-LightstepTracingProvider-max_tag_length">
+<td><code>maxTagLength</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Optional. Controls the overall path length allowed in a reported span.
+NOTE: currently only controls max length of the path tag.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-DatadogTracingProvider">MeshConfig.ExtensionProvider.DatadogTracingProvider</h2>
+<section>
+<p>Defines configuration for a Datadog tracer.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-DatadogTracingProvider-address">
+<td><code>address</code></td>
+<td><code>string</code></td>
+<td>
+<p>Address of the Datadog Agent.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-DatadogTracingProvider-tls_settings">
+<td><code>tlsSettings</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ClientTLSSettings">ClientTLSSettings</a></code></td>
+<td>
+<p>Use the tls_settings to specify the tls mode to use. If the remote tracing service
+uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
+mode as <code>ISTIO_MUTUAL</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-DatadogTracingProvider-exclude_mesh_tags">
+<td><code>excludeMeshTags</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Controls whether or not Istio-specific tags will be generated for each
+span created by the sidecar proxies. These tags include information on
+the canonical service, mesh, and namespace involved in the request.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-DatadogTracingProvider-max_tag_length">
+<td><code>maxTagLength</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Optional. Controls the overall path length allowed in a reported span.
+NOTE: currently only controls max length of the path tag.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-StackdriverProvider">MeshConfig.ExtensionProvider.StackdriverProvider</h2>
+<section>
+<p>Defines configuration for Stackdriver.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-StackdriverProvider-exclude_mesh_tags">
+<td><code>excludeMeshTags</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Controls whether or not Istio-specific tags will be generated for each
+span created by the sidecar proxies. These tags include information on
+the canonical service, mesh, and namespace involved in the request.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-StackdriverProvider-max_tag_length">
+<td><code>maxTagLength</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Optional. Controls the overall path length allowed in a reported span.
+NOTE: currently only controls max length of the path tag.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-OpenCensusAgentTracingProvider">MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider</h2>
+<section>
+<p>Defines configuration for an OpenCensus tracer writing to an OpenCensus backend.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-OpenCensusAgentTracingProvider-address">
+<td><code>address</code></td>
+<td><code>string</code></td>
+<td>
+<p>gRPC address for the OpenCensus agent (e.g. dns://authority/host:port or
+unix:path). See <a href="https://github.com/grpc/grpc/blob/master/doc/naming.md">gRPC naming
+docs</a> for
+details.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-OpenCensusAgentTracingProvider-tls_settings">
+<td><code>tlsSettings</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ClientTLSSettings">ClientTLSSettings</a></code></td>
+<td>
+<p>Use the tls_settings to specify the tls mode to use. If the remote tracing service
+uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
+mode as <code>ISTIO_MUTUAL</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-OpenCensusAgentTracingProvider-context">
+<td><code>context</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-OpenCensusAgentTracingProvider-TraceContext">TraceContext[]</a></code></td>
+<td>
+<p>Specifies the set of context propagation headers used for distributed
+tracing. Default is <code>[&quot;W3C_TRACE_CONTEXT&quot;]</code>. If multiple values are specified,
+the proxy will attempt to read each header for each request and will
+write all headers.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-OpenCensusAgentTracingProvider-exclude_mesh_tags">
+<td><code>excludeMeshTags</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Controls whether or not Istio-specific tags will be generated for each
+span created by the sidecar proxies. These tags include information on
+the canonical service, mesh, and namespace involved in the request.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-OpenCensusAgentTracingProvider-max_tag_length">
+<td><code>maxTagLength</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Optional. Controls the overall path length allowed in a reported span.
+NOTE: currently only controls max length of the path tag.</p>
 
 </td>
 <td>
@@ -1587,17 +1987,6 @@ No
 No
 </td>
 </tr>
-<tr id="ProxyConfig-tracing">
-<td><code>tracing</code></td>
-<td><code><a href="#Tracing">Tracing</a></code></td>
-<td>
-<p>Tracing configuration to be used by the proxy.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="ProxyConfig-sds">
 <td><code>sds</code></td>
 <td><code><a href="#SDS">SDS</a></code></td>
@@ -1782,6 +2171,18 @@ No
 <td>
 <p>Address of the Zipkin service (e.g. <em>zipkin:9411</em>).
 DEPRECATED: Use <a href="#ProxyConfig-tracing">tracing</a> instead.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-tracing" class="deprecated ">
+<td><code>tracing</code></td>
+<td><code><a href="#Tracing">Tracing</a></code></td>
+<td>
+<p>Tracing configuration to be used by the proxy.
+DEPRECATED: Use <a href="#MeshConfig-extension_providers">extension_providers</a> instead.</p>
 
 </td>
 <td>
@@ -2307,6 +2708,56 @@ service registry as well as those defined through ServiceEntries</p>
 <td>
 <p>outbound traffic to unknown destinations will be allowed, in case
 there are no services or ServiceEntries for the destination port</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-OpenCensusAgentTracingProvider-TraceContext">MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider.TraceContext</h2>
+<section>
+<p>TraceContext selects the context propagation headers used for
+distributed tracing.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-OpenCensusAgentTracingProvider-TraceContext-W3C_TRACE_CONTEXT">
+<td><code>W3C_TRACE_CONTEXT</code></td>
+<td>
+<p>Use W3C Trace Context propagation using the <code>traceparent</code> HTTP header.
+See the
+<a href="https://www.w3.org/TR/trace-context/">Trace Context documentation</a> for details.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-OpenCensusAgentTracingProvider-TraceContext-GRPC_BIN">
+<td><code>GRPC_BIN</code></td>
+<td>
+<p>Use gRPC binary context propagation using the <code>grpc-trace-bin</code> http header.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-OpenCensusAgentTracingProvider-TraceContext-CLOUD_TRACE_CONTEXT">
+<td><code>CLOUD_TRACE_CONTEXT</code></td>
+<td>
+<p>Use Cloud Trace context propagation using the
+<code>X-Cloud-Trace-Context</code> http header.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-OpenCensusAgentTracingProvider-TraceContext-B3">
+<td><code>B3</code></td>
+<td>
+<p>Use multi-header B3 context propagation using the <code>X-B3-TraceId</code>,
+<code>X-B3-SpanId</code>, and <code>X-B3-Sampled</code> HTTP headers. See
+<a href="https://github.com/openzipkin/b3-propagation">B3 header propagation README</a>
+for details.</p>
 
 </td>
 </tr>

@@ -39,25 +39,14 @@ func (this *TracingRule) UnmarshalJSON(b []byte) error {
 	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for TelemetryRuleMatch
-func (this *TelemetryRuleMatch) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for ProviderRef
+func (this *ProviderRef) MarshalJSON() ([]byte, error) {
 	str, err := TelemetryMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for TelemetryRuleMatch
-func (this *TelemetryRuleMatch) UnmarshalJSON(b []byte) error {
-	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
-// MarshalJSON is a custom marshaler for Port
-func (this *Port) MarshalJSON() ([]byte, error) {
-	str, err := TelemetryMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for Port
-func (this *Port) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for ProviderRef
+func (this *ProviderRef) UnmarshalJSON(b []byte) error {
 	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
@@ -113,61 +102,6 @@ func (this *Tracing_RequestHeader) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for Tracing_RequestHeader
 func (this *Tracing_RequestHeader) UnmarshalJSON(b []byte) error {
-	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
-// MarshalJSON is a custom marshaler for Tracing_Metadata
-func (this *Tracing_Metadata) MarshalJSON() ([]byte, error) {
-	str, err := TelemetryMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for Tracing_Metadata
-func (this *Tracing_Metadata) UnmarshalJSON(b []byte) error {
-	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
-// MarshalJSON is a custom marshaler for Tracing_Metadata_Key
-func (this *Tracing_Metadata_Key) MarshalJSON() ([]byte, error) {
-	str, err := TelemetryMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for Tracing_Metadata_Key
-func (this *Tracing_Metadata_Key) UnmarshalJSON(b []byte) error {
-	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
-// MarshalJSON is a custom marshaler for Tracing_Metadata_Key_PathSegment
-func (this *Tracing_Metadata_Key_PathSegment) MarshalJSON() ([]byte, error) {
-	str, err := TelemetryMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for Tracing_Metadata_Key_PathSegment
-func (this *Tracing_Metadata_Key_PathSegment) UnmarshalJSON(b []byte) error {
-	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
-// MarshalJSON is a custom marshaler for ConstantSampler
-func (this *ConstantSampler) MarshalJSON() ([]byte, error) {
-	str, err := TelemetryMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for ConstantSampler
-func (this *ConstantSampler) UnmarshalJSON(b []byte) error {
-	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
-// MarshalJSON is a custom marshaler for PercentageSampler
-func (this *PercentageSampler) MarshalJSON() ([]byte, error) {
-	str, err := TelemetryMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for PercentageSampler
-func (this *PercentageSampler) UnmarshalJSON(b []byte) error {
 	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

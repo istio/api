@@ -2,7 +2,7 @@
 title: istio.telemetry.v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 17
+number_of_entries: 9
 ---
 <h2 id="Telemetry">Telemetry</h2>
 <section>
@@ -33,7 +33,7 @@ stable or supported by Istio at this time.</p>
 
 <p>Examples:</p>
 
-<p>Policy to enable random sampling for 10% of all traffic:</p>
+<p>Policy to enable random sampling for 10% of traffic:</p>
 
 <pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
@@ -42,14 +42,27 @@ metadata:
   namespace: istio-system
 spec:
   tracing:
-  - match: {} # apply to all traffic
-    config:
-      percentageSampler:
-        target: 10.00
+  - config:
+      randomSamplingPercentage: 10.00
 </code></pre>
 
-<p>Policy to disable trace reporting for all inbound traffic to the &ldquo;foo&rdquo;
-workloads that arrives on port 8090:</p>
+<p>Policy to disable trace reporting for the &ldquo;foo&rdquo; workload:</p>
+
+<pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: foo-tracing
+  namespace: bar
+spec:
+  selector:
+    labels:
+      service.istio.io/canonical-name: foo
+  tracing:
+  - config:
+      spanReporting: DO_NOT_REPORT_SPANS
+</code></pre>
+
+<p>Policy to select the alternate zipkin provider for trace reporting:</p>
 
 <pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
@@ -61,12 +74,9 @@ spec:
     labels:
       service.istio.io/canonical-name: foo
   tracing:
-  - match:
-      trafficDirection: INBOUND
-      port:
-        number: 8090
-    config:
-      disableSpanReporting: true
+  - config:
+      providers:
+      - name: &quot;zipkin-alternate&quot;
 </code></pre>
 
 <table class="message-fields">
@@ -122,17 +132,6 @@ and under what conditions the reporting should be conducted.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="TracingRule-match">
-<td><code>match</code></td>
-<td><code><a href="#TelemetryRuleMatch">TelemetryRuleMatch</a></code></td>
-<td>
-<p>Defines the conditions under which the associated configuration applies.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="TracingRule-config">
 <td><code>config</code></td>
 <td><code><a href="#Tracing">Tracing</a></code></td>
@@ -147,11 +146,10 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="TelemetryRuleMatch">TelemetryRuleMatch</h2>
+<h2 id="ProviderRef">ProviderRef</h2>
 <section>
-<p>TelemetryRuleMatch defines conditions for selecting subsets of mesh traffic
-for a workload. TelemetryRuleMatch is concerned with simplified selection
-based on listener, protocol, and traffic direction.</p>
+<p>Used to bind Telemetry configuration to specific providers for
+targeted customization.</p>
 
 <table class="message-fields">
 <thead>
@@ -163,53 +161,11 @@ based on listener, protocol, and traffic direction.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="TelemetryRuleMatch-traffic_direction">
-<td><code>trafficDirection</code></td>
-<td><code><a href="#TelemetryRuleMatch-TrafficDirection">TrafficDirection</a></code></td>
+<tr id="ProviderRef-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
 <td>
-<p>Optional. Specifies the intended direction of the traffic relative to the local proxy.
-Defaults to ALL if unset.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="TelemetryRuleMatch-port">
-<td><code>port</code></td>
-<td><code><a href="#Port">Port</a></code></td>
-<td>
-<p>Optional. The port on which the traffic is received.
-Defaults to ALL if unset.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="Port">Port</h2>
-<section>
-<p>Port specifies the number of a port to be used for
-matching or selection for final routing.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Port-number">
-<td><code>number</code></td>
-<td><code>uint32</code></td>
-<td>
-<p>Valid port number</p>
+<p>Required. Name of Telemetry provider in MeshConfig.</p>
 
 </td>
 <td>
@@ -235,31 +191,48 @@ rates and custom tag extraction.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="Tracing-disable_span_reporting">
-<td><code>disableSpanReporting</code></td>
-<td><code>bool</code></td>
+<tr id="Tracing-providers">
+<td><code>providers</code></td>
+<td><code><a href="#ProviderRef">ProviderRef[]</a></code></td>
 <td>
-<p>Disables the tracing functionality. When this is set to <code>false</code> (or unset), the
-proxy will report spans to a configured backend for all traffic with a trace
-context that specifies the trace is sampled. Additionally, spans will be
-generated for traffic without trace contexts based on the
-<code>sampler</code> configuration provided. If <code>disable_span_reporting</code> is <code>true</code>,
-the sidecar will ignore the incoming trace context, generating no spans for
-the traffic (the context will be silently forwarded). This is equivalent to
-disabling tracing for the sidecar.</p>
+<p>Optional. Name of provider(s) to use for span reporting. If a provider is
+not specified, the <em>default tracing provider</em>
+will be used.
+NOTE: At the moment, only a single provider can be specified in a given
+Tracing rule.</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="Tracing-exclude_mesh_tags">
-<td><code>excludeMeshTags</code></td>
-<td><code>bool</code></td>
+<tr id="Tracing-random_sampling_percentage">
+<td><code>randomSamplingPercentage</code></td>
+<td><code>double</code></td>
 <td>
-<p>Controls whether or not Istio-specific tags will be generated for each
-span created by the sidecar proxies. These tags include information on
-the canonical service, meh, and namespace involved in the request.</p>
+<p>Controls the rate at which traffic will be selected for tracing if no
+prior sampling decision has been made. If a prior sampling decision has been
+made, that decision will be respected. However, if no sampling decision
+has been made (example: no <code>x-b3-sampled</code> tracing header was present in the
+requests), the traffic will be selected for telemetry generation at the
+percentage specified.</p>
+
+<p>Defaults to 0%. Valid values [0.00-100.00]. Can be specified in 0.01%
+increments.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Tracing-span_reporting">
+<td><code>spanReporting</code></td>
+<td><code><a href="#Tracing-SpanReporting">SpanReporting</a></code></td>
+<td>
+<p>Controls trace reporting. This does not impact sampling rate, but rather
+is used to opt in/out of trace reporting. Example uses include enabling
+tracing for an entire mesh and opting a single namespace (or individual
+workload) out of reporting.</p>
 
 </td>
 <td>
@@ -271,107 +244,6 @@ No
 <td><code>map&lt;string,&nbsp;<a href="#Tracing-CustomTag">CustomTag</a>&gt;</code></td>
 <td>
 <p>Optional. Configures additional custom tags to the generated trace spans.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="Tracing-max_tag_length">
-<td><code>maxTagLength</code></td>
-<td><code>uint32</code></td>
-<td>
-<p>Optional. Controls the overall path length allowed in a reported span.
-NOTE: currently only controls max length of the path tag.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="Tracing-constant_sampler" class="oneof oneof-start">
-<td><code>constantSampler</code></td>
-<td><code><a href="#ConstantSampler">ConstantSampler (oneof)</a></code></td>
-<td>
-<p>A sampler that makes uniform decisions for all Sidecar traffic.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="Tracing-percentage_sampler" class="oneof">
-<td><code>percentageSampler</code></td>
-<td><code><a href="#PercentageSampler">PercentageSampler (oneof)</a></code></td>
-<td>
-<p>A sampler that selects a configurable percentage of traffic for telemetry generation.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="ConstantSampler">ConstantSampler</h2>
-<section>
-<p>A sampler that makes uniform decisions for all Sidecar traffic.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="ConstantSampler-decision">
-<td><code>decision</code></td>
-<td><code><a href="#ConstantSampler-ConstantDecision">ConstantDecision</a></code></td>
-<td>
-<p>Controls the behavior of the sampler.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="PercentageSampler">PercentageSampler</h2>
-<section>
-<p>A sampler that selects a configurable percentage of traffic for telemetry generation.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="PercentageSampler-target">
-<td><code>target</code></td>
-<td><code>double</code></td>
-<td>
-<p>Controls the amount of traffic selected for which no previous
-sampling decision has been made. If a prior sampling decision has been
-made, that decision will be respected. However, if no sampling decision
-has been made (example: no <code>x-b3-sampled</code> tracing header was present in the
-requests), the traffic will be selected for telemetry generation at the
-percentage specified.
-Setting <code>target</code> to 0 is equivalent to
-ConstantDecision.NEVER_SAMPLE. Setting <code>target</code> to
-100 is equivalent of ConstantDecision.ALWAYS SAMPLE.</p>
-
-<p>Defaults to 0%. Valid values [0.00-100.00]. Can be specified in 0.01%
-increments.</p>
 
 </td>
 <td>
@@ -425,17 +297,6 @@ No
 <td><code><a href="#Tracing-RequestHeader">RequestHeader (oneof)</a></code></td>
 <td>
 <p>RequestHeader adds the value of an header from the request to each span.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="Tracing-CustomTag-metadata" class="oneof">
-<td><code>metadata</code></td>
-<td><code><a href="#Tracing-Metadata">Metadata (oneof)</a></code></td>
-<td>
-<p>Metadata adds the value of a metadata field to each span.</p>
 
 </td>
 <td>
@@ -547,129 +408,9 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="Tracing-Metadata">Tracing.Metadata</h2>
+<h2 id="Tracing-SpanReporting">Tracing.SpanReporting</h2>
 <section>
-<p>Retrieve the protobuf value from Metadata, and populate the tag
-value with the canonical JSON representation of it.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Tracing-Metadata-kind">
-<td><code>kind</code></td>
-<td><code><a href="#Tracing-Metadata-Kind">Kind</a></code></td>
-<td>
-<p>Kind of metadata from which to obtain tag value.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="Tracing-Metadata-key">
-<td><code>key</code></td>
-<td><code><a href="#Tracing-Metadata-Key">Key</a></code></td>
-<td>
-<p>Defines the path used to retrieve the tag value.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="Tracing-Metadata-default_value">
-<td><code>defaultValue</code></td>
-<td><code>string</code></td>
-<td>
-<p>Optional. If the key is not found, this value will be
-used instead.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="Tracing-Metadata-Key">Tracing.Metadata.Key</h2>
-<section>
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Tracing-Metadata-Key-key">
-<td><code>key</code></td>
-<td><code>string</code></td>
-<td>
-<p>Required. The key name of Metadata to retrieve the Struct from the
-metadata. Typically, it represents a builtin subsystem or custom
-extension.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="Tracing-Metadata-Key-segment">
-<td><code>segment</code></td>
-<td><code><a href="#Tracing-Metadata-Key-PathSegment">PathSegment[]</a></code></td>
-<td>
-<p>Required. Specifies the segment in a path to retrieve the value.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="Tracing-Metadata-Key-PathSegment">Tracing.Metadata.Key.PathSegment</h2>
-<section>
-<p>One segment of a path to a Metadata value.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Tracing-Metadata-Key-PathSegment-key">
-<td><code>key</code></td>
-<td><code>string</code></td>
-<td>
-<p>Key to retrieve the value in a Struct.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="TelemetryRuleMatch-TrafficDirection">TelemetryRuleMatch.TrafficDirection</h2>
-<section>
-<p>TrafficDirection selects for traffic relative to the local
-proxy.</p>
+<p>List options for reporting of trace spans by selecting proxies.</p>
 
 <table class="enum-values">
 <thead>
@@ -679,108 +420,17 @@ proxy.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="TelemetryRuleMatch-TrafficDirection-ALL_DIRECTIONS">
-<td><code>ALL_DIRECTIONS</code></td>
+<tr id="Tracing-SpanReporting-REPORT_SPANS">
+<td><code>REPORT_SPANS</code></td>
 <td>
-<p>(Default) Match all traffic, regardless of direction.</p>
+<p>Report all spans to the configured tracing provider.</p>
 
 </td>
 </tr>
-<tr id="TelemetryRuleMatch-TrafficDirection-OUTBOUND">
-<td><code>OUTBOUND</code></td>
+<tr id="Tracing-SpanReporting-DO_NOT_REPORT_SPANS">
+<td><code>DO_NOT_REPORT_SPANS</code></td>
 <td>
-<p>Match outbound traffic leaving the proxy. Use this to select &ldquo;client-side&rdquo;
-traffic in telemetry reporting.
-Note: Use OUTBOUND for gateways (even including ingress)</p>
-
-</td>
-</tr>
-<tr id="TelemetryRuleMatch-TrafficDirection-INBOUND">
-<td><code>INBOUND</code></td>
-<td>
-<p>Match incoming traffic for the proxy. Use this to select &ldquo;server-side&rdquo;
-traffic in telemetry reporting.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="Tracing-Metadata-Kind">Tracing.Metadata.Kind</h2>
-<section>
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Tracing-Metadata-Kind-REQUEST">
-<td><code>REQUEST</code></td>
-<td>
-<p>Represents dynamic metadata associated with the request</p>
-
-</td>
-</tr>
-<tr id="Tracing-Metadata-Kind-ROUTE">
-<td><code>ROUTE</code></td>
-<td>
-<p>Represents metadata from the route.</p>
-
-</td>
-</tr>
-<tr id="Tracing-Metadata-Kind-CLUSTER">
-<td><code>CLUSTER</code></td>
-<td>
-<p>Represents metadata from the upstream cluster.</p>
-
-</td>
-</tr>
-<tr id="Tracing-Metadata-Kind-HOST">
-<td><code>HOST</code></td>
-<td>
-<p>Represents metadata from the upstream host.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="ConstantSampler-ConstantDecision">ConstantSampler.ConstantDecision</h2>
-<section>
-<p>ConstantDecision controls the behavior of the ConstantSampler.</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="ConstantSampler-ConstantDecision-DECISION_UNSPECIFIED">
-<td><code>DECISION_UNSPECIFIED</code></td>
-<td>
-<p>Equivalent to NEVER_SAMPLE.</p>
-
-</td>
-</tr>
-<tr id="ConstantSampler-ConstantDecision-NEVER">
-<td><code>NEVER</code></td>
-<td>
-<p>Ignore all sidecar traffic for the purposes of telemetry generation.
-For tracing, this means that the sidecar will never generate trace spans
-for traffic without an existing trace context.</p>
-
-</td>
-</tr>
-<tr id="ConstantSampler-ConstantDecision-ALWAYS">
-<td><code>ALWAYS</code></td>
-<td>
-<p>Consider all sidecar traffic for the purposes of telemetry generation.
-For tracing, this will generate trace spans for traffic without an
-existing trace context.</p>
+<p>Do not report spans. Tracing headers will still be forwarded.</p>
 
 </td>
 </tr>

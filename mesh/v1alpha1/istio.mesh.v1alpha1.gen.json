@@ -198,6 +198,11 @@
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider"
             }
           },
+          "defaultTracingProvider": {
+            "description": "Name of the default tracing provider. This should match the name of a provider configured in `extension_providers`.",
+            "type": "string",
+            "format": "string"
+          },
           "discoverySelectors": {
             "description": "A list of Kubernetes selectors that specify the set of namespaces that Istio considers when computing configuration updates for sidecars. This can be used to reduce Istio's computational load by limiting the number of entities (including services, pods, and endpoints) that are watched and processed. If omitted, Istio will use the default behavior of processing all namespaces in the cluster. Elements in the list are disjunctive (OR semantics), i.e. a namespace will be included if it matches any selector. The following example selects any namespace with either labels `env: prod` and `region: us-east1`, or with label `app` equal to `cassandra` or `spark`. ```yaml discoverySelectors: - matchLabels: env: prod region: us-east1 - matchExpressions: - key: app operator: In values: - cassandra - spark ``` Refer to the [kubernetes selector docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors) for additional detail on selector semantics.",
             "type": "array",
@@ -312,7 +317,8 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig.InboundInterceptionMode"
           },
           "tracing": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing"
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing",
+            "deprecated": true
           },
           "sds": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.SDS"
@@ -577,6 +583,56 @@
                       "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationGrpcProvider"
                     }
                   }
+                },
+                {
+                  "required": [
+                    "zipkin"
+                  ],
+                  "properties": {
+                    "zipkin": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "lightstep"
+                  ],
+                  "properties": {
+                    "lightstep": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "datadog"
+                  ],
+                  "properties": {
+                    "datadog": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.DatadogTracingProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "stackdriver"
+                  ],
+                  "properties": {
+                    "stackdriver": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "opencensus"
+                  ],
+                  "properties": {
+                    "opencensus": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider"
+                    }
+                  }
                 }
               ]
             }
@@ -598,6 +654,56 @@
             "properties": {
               "envoyExtAuthzGrpc": {
                 "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationGrpcProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "zipkin"
+            ],
+            "properties": {
+              "zipkin": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "lightstep"
+            ],
+            "properties": {
+              "lightstep": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "datadog"
+            ],
+            "properties": {
+              "datadog": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.DatadogTracingProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "stackdriver"
+            ],
+            "properties": {
+              "stackdriver": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "opencensus"
+            ],
+            "properties": {
+              "opencensus": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider"
               }
             }
           }
@@ -701,6 +807,150 @@
             "format": "string"
           }
         }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProvider": {
+        "description": "Defines configuration for a Zipkin tracer.",
+        "type": "object",
+        "properties": {
+          "address": {
+            "description": "Address of the Zipkin service (e.g. _zipkin:9411_).",
+            "type": "string",
+            "format": "string"
+          },
+          "tlsSettings": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
+          },
+          "excludeMeshTags": {
+            "description": "Controls whether or not Istio-specific tags will be generated for each span created by the sidecar proxies. These tags include information on the canonical service, mesh, and namespace involved in the request.",
+            "type": "boolean"
+          },
+          "maxTagLength": {
+            "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
+            "type": "integer"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider": {
+        "description": "Defines configuration for a Lightstep tracer.",
+        "type": "object",
+        "properties": {
+          "address": {
+            "description": "Address of the Lightstep Satellite pool.",
+            "type": "string",
+            "format": "string"
+          },
+          "tlsSettings": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
+          },
+          "excludeMeshTags": {
+            "description": "Controls whether or not Istio-specific tags will be generated for each span created by the sidecar proxies. These tags include information on the canonical service, mesh, and namespace involved in the request.",
+            "type": "boolean"
+          },
+          "maxTagLength": {
+            "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
+            "type": "integer"
+          },
+          "accessToken": {
+            "description": "The Lightstep access token.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.DatadogTracingProvider": {
+        "description": "Defines configuration for a Datadog tracer.",
+        "type": "object",
+        "properties": {
+          "address": {
+            "description": "Address of the Datadog Agent.",
+            "type": "string",
+            "format": "string"
+          },
+          "tlsSettings": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
+          },
+          "excludeMeshTags": {
+            "description": "Controls whether or not Istio-specific tags will be generated for each span created by the sidecar proxies. These tags include information on the canonical service, mesh, and namespace involved in the request.",
+            "type": "boolean"
+          },
+          "maxTagLength": {
+            "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
+            "type": "integer"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider": {
+        "description": "Defines configuration for Stackdriver.",
+        "type": "object",
+        "properties": {
+          "excludeMeshTags": {
+            "description": "Controls whether or not Istio-specific tags will be generated for each span created by the sidecar proxies. These tags include information on the canonical service, mesh, and namespace involved in the request.",
+            "type": "boolean"
+          },
+          "maxTagLength": {
+            "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
+            "type": "integer"
+          },
+          "debug": {
+            "description": "debug enables trace output to stdout. $hide_from_docs",
+            "type": "boolean"
+          },
+          "maxNumberOfAttributes": {
+            "description": "The global default max number of attributes per span. default is 200. $hide_from_docs",
+            "type": "integer",
+            "nullable": true
+          },
+          "maxNumberOfAnnotations": {
+            "description": "The global default max number of annotation events per span. default is 200. $hide_from_docs",
+            "type": "integer",
+            "nullable": true
+          },
+          "maxNumberOfMessageEvents": {
+            "description": "The global default max number of message events per span. default is 200. $hide_from_docs",
+            "type": "integer",
+            "nullable": true
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider": {
+        "description": "Defines configuration for an OpenCensus tracer writing to an OpenCensus backend.",
+        "type": "object",
+        "properties": {
+          "context": {
+            "description": "Specifies the set of context propagation headers used for distributed tracing. Default is `[\"W3C_TRACE_CONTEXT\"]`. If multiple values are specified, the proxy will attempt to read each header for each request and will write all headers.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider.TraceContext"
+            }
+          },
+          "address": {
+            "description": "gRPC address for the OpenCensus agent (e.g. dns://authority/host:port or unix:path). See [gRPC naming docs](https://github.com/grpc/grpc/blob/master/doc/naming.md) for details.",
+            "type": "string",
+            "format": "string"
+          },
+          "tlsSettings": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
+          },
+          "excludeMeshTags": {
+            "description": "Controls whether or not Istio-specific tags will be generated for each span created by the sidecar proxies. These tags include information on the canonical service, mesh, and namespace involved in the request.",
+            "type": "boolean"
+          },
+          "maxTagLength": {
+            "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
+            "type": "integer"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider.TraceContext": {
+        "description": "TraceContext selects the context propagation headers used for distributed tracing.",
+        "type": "string",
+        "enum": [
+          "UNSPECIFIED",
+          "W3C_TRACE_CONTEXT",
+          "GRPC_BIN",
+          "CLOUD_TRACE_CONTEXT",
+          "B3"
+        ]
       },
       "istio.mesh.v1alpha1.Resource": {
         "description": "Resource describes the source of configuration",
