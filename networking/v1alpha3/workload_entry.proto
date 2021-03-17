@@ -19,7 +19,7 @@ import "google/api/field_behavior.proto";
 // $schema: istio.networking.v1alpha3.WorkloadEntry
 // $title: Workload Entry
 // $description: Configuration affecting VMs onboarded into the mesh.
-// $location: https://istio.io/docs/reference/config/networking/workload-entry.html
+// $location: https://istio.io/latest/docs/reference/config/networking/workload-entry.html
 // $aliases: [/docs/reference/config/networking/v1alpha3/workload-entry]
 
 // `WorkloadEntry` enables operators to describe the properties of a

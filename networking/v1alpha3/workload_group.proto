@@ -20,7 +20,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // $schema: istio.networking.v1alpha3.WorkloadGroup
 // $title: Workload Group
 // $description: Describes a collection of workload instances.
-// $location: https://istio.io/docs/reference/config/networking/workload-group.html
+// $location: https://istio.io/latest/docs/reference/config/networking/workload-group.html
 // $aliases: [/docs/reference/config/networking/v1alpha3/workload-group]
 
 // `WorkloadGroup` describes a collection of workload instances.

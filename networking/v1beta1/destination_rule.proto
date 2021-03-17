@@ -22,7 +22,7 @@ import "gogoproto/gogo.proto";
 // $schema: istio.networking.v1beta1.DestinationRule
 // $title: Destination Rule
 // $description: Configuration affecting load balancing, outlier detection, etc.
-// $location: https://istio.io/docs/reference/config/networking/destination-rule.html
+// $location: https://istio.io/latest/docs/reference/config/networking/destination-rule.html
 // $aliases: [/docs/reference/config/networking/v1beta1/destination-rule]
 // $mode: none
 

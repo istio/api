@@ -21,7 +21,7 @@ import "google/api/field_behavior.proto";
 
 // $title: Istio Status
 // $description: Common status field for all istio collections.
-// $location: https://istio.io/docs/reference/config/meta/v1beta1/istio-status.html
+// $location: https://istio.io/latest/docs/reference/config/meta/v1beta1/istio-status.html
 
 package istio.meta.v1alpha1;
 

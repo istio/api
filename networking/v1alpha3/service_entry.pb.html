@@ -1,7 +1,7 @@
 ---
 title: Service Entry
 description: Configuration affecting service registry.
-location: https://istio.io/docs/reference/config/networking/service-entry.html
+location: https://istio.io/latest/docs/reference/config/networking/service-entry.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.ServiceEntry
@@ -861,7 +861,7 @@ No
 </tr>
 <tr id="ServiceEntry-ports">
 <td><code>ports</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/networking/gateway.html#Port">Port[]</a></code></td>
+<td><code><a href="https://istio.io/latest/docs/reference/config/networking/gateway.html#Port">Port[]</a></code></td>
 <td>
 <p>The ports associated with the external service. If the
 Endpoints are Unix domain socket addresses, there must be exactly one
@@ -900,7 +900,7 @@ Yes
 </tr>
 <tr id="ServiceEntry-endpoints">
 <td><code>endpoints</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/networking/workload-entry.html#WorkloadEntry">WorkloadEntry[]</a></code></td>
+<td><code><a href="https://istio.io/latest/docs/reference/config/networking/workload-entry.html#WorkloadEntry">WorkloadEntry[]</a></code></td>
 <td>
 <p>One or more endpoints associated with the service. Only one of
 <code>endpoints</code> or <code>workloadSelector</code> can be specified.</p>
@@ -912,7 +912,7 @@ No
 </tr>
 <tr id="ServiceEntry-workload_selector">
 <td><code>workloadSelector</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/networking/sidecar.html#WorkloadSelector">WorkloadSelector</a></code></td>
+<td><code><a href="https://istio.io/latest/docs/reference/config/networking/sidecar.html#WorkloadSelector">WorkloadSelector</a></code></td>
 <td>
 <p>Applicable only for MESH_INTERNAL services. Only one of
 <code>endpoints</code> or <code>workloadSelector</code> can be specified. Selects one

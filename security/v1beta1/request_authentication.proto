@@ -19,7 +19,7 @@ import "security/v1beta1/jwt.proto";
 // $schema: istio.security.v1beta1.RequestAuthentication
 // $title: RequestAuthentication
 // $description: Request authentication configuration for workloads.
-// $location: https://istio.io/docs/reference/config/security/request_authentication.html
+// $location: https://istio.io/latest/docs/reference/config/security/request_authentication.html
 // $aliases: [/docs/reference/config/security/v1beta1/request_authentication]
 
 package istio.security.v1beta1;

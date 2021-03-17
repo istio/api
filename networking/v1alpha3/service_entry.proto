@@ -22,7 +22,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // $schema: istio.networking.v1alpha3.ServiceEntry
 // $title: Service Entry
 // $description: Configuration affecting service registry.
-// $location: https://istio.io/docs/reference/config/networking/service-entry.html
+// $location: https://istio.io/latest/docs/reference/config/networking/service-entry.html
 // $aliases: [/docs/reference/config/networking/v1alpha3/service-entry]
 
 // `ServiceEntry` enables adding additional entries into Istio's
