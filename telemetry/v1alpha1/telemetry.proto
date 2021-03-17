@@ -60,8 +60,7 @@ package istio.telemetry.v1alpha1;
 //   namespace: istio-system
 // spec:
 //   tracing:
-//   - config:
-//       randomSamplingPercentage: 10.00
+//   - randomSamplingPercentage: 10.00
 // ```
 //
 // Policy to disable trace reporting for the "foo" workload:
@@ -76,8 +75,7 @@ package istio.telemetry.v1alpha1;
 //     labels:
 //       service.istio.io/canonical-name: foo
 //   tracing:
-//   - config:
-//       spanReporting: DO_NOT_REPORT_SPANS
+//   - spanReporting: DO_NOT_REPORT_SPANS
 // ```
 //
 // Policy to select the alternate zipkin provider for trace reporting:
@@ -85,16 +83,32 @@ package istio.telemetry.v1alpha1;
 // apiVersion: telemetry.istio.io/v1alpha1
 // kind: Telemetry
 // metadata:
-//   name: mesh-default
-//   namespace: istio-system
+//   name: foo-tracing-alternate
+//   namespace: bar
 // spec:
 //   selector:
 //     labels:
 //       service.istio.io/canonical-name: foo
 //   tracing:
-//   - config:
-//       providers:
-//       - name: "zipkin-alternate"
+//   - providers:
+//     - name: "zipkin-alternate"
+//     randomSamplingPercentage: 10.00
+// ```
+//
+// Policy to add a custom tag tag from a literal value:
+// ```yaml
+// apiVersion: telemetry.istio.io/v1alpha1
+// kind: Telemetry
+// metadata:
+//   name: mesh-default
+//   namespace: istio-system
+// spec:
+//   tracing:
+//   - randomSamplingPercentage: 10.00
+//     customTags:
+//       my_new_foo_tag:
+//         literal:
+//           value: "foo"
 // ```
 //
 // <!-- crd generation tags
@@ -127,34 +141,20 @@ message Telemetry {
 
   // Optional. Tracing defines the per-workload overrides for trace span
   // reporting.
-  repeated TracingRule tracing = 2;
-}
-
-// TracingRule defines how trace spans should be reported (sampling rate, custom tags)
-// and under what conditions the reporting should be conducted.
-message TracingRule {
-  // Customization of the default behavior for tracing.
-  Tracing config = 2;
-}
-
-// Used to bind Telemetry configuration to specific providers for
-// targeted customization.
-message ProviderRef {
-  // Required. Name of Telemetry provider in MeshConfig.
-  string name = 1;
+  repeated Tracing tracing = 2;
 }
 
 // Tracing defines the workload-level overrides for tracing behavior within
 // a mesh. It can be used to enable/disable tracing, as well as to set sampling
 // rates and custom tag extraction.
 message Tracing {
-
-  // Optional. Name of provider(s) to use for span reporting. If a provider is
+  
+ // Optional. Name of provider(s) to use for span reporting. If a provider is
   // not specified, the [default tracing provider][istio.mesh.v1alpha1.MeshConfig.default_tracing_provider]
   // will be used.
   // NOTE: At the moment, only a single provider can be specified in a given
   // Tracing rule.
-  repeated ProviderRef providers = 1;
+  repeated ProviderRef providers = 2;
 
   // Controls the rate at which traffic will be selected for tracing if no
   // prior sampling decision has been made. If a prior sampling decision has been
@@ -165,7 +165,7 @@ message Tracing {
   //
   // Defaults to 0%. Valid values [0.00-100.00]. Can be specified in 0.01%
   // increments.
-  double random_sampling_percentage = 2;
+  double random_sampling_percentage = 3;
 
   // List options for reporting of trace spans by selecting proxies.
   enum SpanReporting {
@@ -181,7 +181,7 @@ message Tracing {
   // is used to opt in/out of trace reporting. Example uses include enabling
   // tracing for an entire mesh and opting a single namespace (or individual 
   // workload) out of reporting.
-  SpanReporting span_reporting = 3;
+  SpanReporting span_reporting = 4;
 
   // CustomTag defines a tag to be added to a trace span that is based on
   // an operator-supplied value. This value can either be a hard-coded value,
@@ -195,6 +195,7 @@ message Tracing {
       Environment environment = 2;
       // RequestHeader adds the value of an header from the request to each span.
       RequestHeader header = 3;
+      // TODO: add support for Metadata tags
     }
   }
 
@@ -220,6 +221,12 @@ message Tracing {
   }
 
   // Optional. Configures additional custom tags to the generated trace spans.
-  map<string, CustomTag> custom_tags = 4;
+  map<string, CustomTag> custom_tags = 5;
 }
 
+// Used to bind Telemetry configuration to specific providers for
+// targeted customization.
+message ProviderRef {
+  // Required. Name of Telemetry provider in MeshConfig.
+  string name = 1;
+} 

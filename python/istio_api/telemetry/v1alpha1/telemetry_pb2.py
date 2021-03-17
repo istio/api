@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.telemetry.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\037istio.io/api/telemetry/v1alpha1'),
-  serialized_pb=_b('\n\"telemetry/v1alpha1/telemetry.proto\x12\x18istio.telemetry.v1alpha1\x1a\x1btype/v1beta1/selector.proto\"\x8e\x01\n\tTelemetry\x12@\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x08selector\x12?\n\x07tracing\x18\x02 \x03(\x0b\x32%.istio.telemetry.v1alpha1.TracingRuleR\x07tracing\"H\n\x0bTracingRule\x12\x39\n\x06\x63onfig\x18\x02 \x01(\x0b\x32!.istio.telemetry.v1alpha1.TracingR\x06\x63onfig\"!\n\x0bProviderRef\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"\x8e\x07\n\x07Tracing\x12\x43\n\tproviders\x18\x01 \x03(\x0b\x32%.istio.telemetry.v1alpha1.ProviderRefR\tproviders\x12<\n\x1arandom_sampling_percentage\x18\x02 \x01(\x01R\x18randomSamplingPercentage\x12V\n\x0espan_reporting\x18\x03 \x01(\x0e\x32/.istio.telemetry.v1alpha1.Tracing.SpanReportingR\rspanReporting\x12R\n\x0b\x63ustom_tags\x18\x04 \x03(\x0b\x32\x31.istio.telemetry.v1alpha1.Tracing.CustomTagsEntryR\ncustomTags\x1a\xf8\x01\n\tCustomTag\x12\x45\n\x07literal\x18\x01 \x01(\x0b\x32).istio.telemetry.v1alpha1.Tracing.LiteralH\x00R\x07literal\x12Q\n\x0b\x65nvironment\x18\x02 \x01(\x0b\x32-.istio.telemetry.v1alpha1.Tracing.EnvironmentH\x00R\x0b\x65nvironment\x12I\n\x06header\x18\x03 \x01(\x0b\x32/.istio.telemetry.v1alpha1.Tracing.RequestHeaderH\x00R\x06headerB\x06\n\x04type\x1a\x1f\n\x07Literal\x12\x14\n\x05value\x18\x01 \x01(\tR\x05value\x1a\x46\n\x0b\x45nvironment\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1aH\n\rRequestHeader\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1aj\n\x0f\x43ustomTagsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x41\n\x05value\x18\x02 \x01(\x0b\x32+.istio.telemetry.v1alpha1.Tracing.CustomTagR\x05value:\x02\x38\x01\":\n\rSpanReporting\x12\x10\n\x0cREPORT_SPANS\x10\x00\x12\x17\n\x13\x44O_NOT_REPORT_SPANS\x10\x01\x42!Z\x1fistio.io/api/telemetry/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\"telemetry/v1alpha1/telemetry.proto\x12\x18istio.telemetry.v1alpha1\x1a\x1btype/v1beta1/selector.proto\"\x8a\x01\n\tTelemetry\x12@\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x08selector\x12;\n\x07tracing\x18\x02 \x03(\x0b\x32!.istio.telemetry.v1alpha1.TracingR\x07tracing\"\x8e\x07\n\x07Tracing\x12\x43\n\tproviders\x18\x02 \x03(\x0b\x32%.istio.telemetry.v1alpha1.ProviderRefR\tproviders\x12<\n\x1arandom_sampling_percentage\x18\x03 \x01(\x01R\x18randomSamplingPercentage\x12V\n\x0espan_reporting\x18\x04 \x01(\x0e\x32/.istio.telemetry.v1alpha1.Tracing.SpanReportingR\rspanReporting\x12R\n\x0b\x63ustom_tags\x18\x05 \x03(\x0b\x32\x31.istio.telemetry.v1alpha1.Tracing.CustomTagsEntryR\ncustomTags\x1a\xf8\x01\n\tCustomTag\x12\x45\n\x07literal\x18\x01 \x01(\x0b\x32).istio.telemetry.v1alpha1.Tracing.LiteralH\x00R\x07literal\x12Q\n\x0b\x65nvironment\x18\x02 \x01(\x0b\x32-.istio.telemetry.v1alpha1.Tracing.EnvironmentH\x00R\x0b\x65nvironment\x12I\n\x06header\x18\x03 \x01(\x0b\x32/.istio.telemetry.v1alpha1.Tracing.RequestHeaderH\x00R\x06headerB\x06\n\x04type\x1a\x1f\n\x07Literal\x12\x14\n\x05value\x18\x01 \x01(\tR\x05value\x1a\x46\n\x0b\x45nvironment\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1aH\n\rRequestHeader\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1aj\n\x0f\x43ustomTagsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x41\n\x05value\x18\x02 \x01(\x0b\x32+.istio.telemetry.v1alpha1.Tracing.CustomTagR\x05value:\x02\x38\x01\":\n\rSpanReporting\x12\x10\n\x0cREPORT_SPANS\x10\x00\x12\x17\n\x13\x44O_NOT_REPORT_SPANS\x10\x01\"!\n\x0bProviderRef\x12\x12\n\x04name\x18\x01 \x01(\tR\x04nameB!Z\x1fistio.io/api/telemetry/v1alpha1b\x06proto3')
   ,
   dependencies=[type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,])
 
@@ -44,8 +44,8 @@ _TRACING_SPANREPORTING = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1200,
-  serialized_end=1258,
+  serialized_start=1087,
+  serialized_end=1145,
 )
 _sym_db.RegisterEnumDescriptor(_TRACING_SPANREPORTING)
 
@@ -84,69 +84,7 @@ _TELEMETRY = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=94,
-  serialized_end=236,
-)
-
-
-_TRACINGRULE = _descriptor.Descriptor(
-  name='TracingRule',
-  full_name='istio.telemetry.v1alpha1.TracingRule',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='config', full_name='istio.telemetry.v1alpha1.TracingRule.config', index=0,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='config', file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=238,
-  serialized_end=310,
-)
-
-
-_PROVIDERREF = _descriptor.Descriptor(
-  name='ProviderRef',
-  full_name='istio.telemetry.v1alpha1.ProviderRef',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='name', full_name='istio.telemetry.v1alpha1.ProviderRef.name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='name', file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=312,
-  serialized_end=345,
+  serialized_end=232,
 )
 
 
@@ -193,8 +131,8 @@ _TRACING_CUSTOMTAG = _descriptor.Descriptor(
       name='type', full_name='istio.telemetry.v1alpha1.Tracing.CustomTag.type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=663,
-  serialized_end=911,
+  serialized_start=550,
+  serialized_end=798,
 )
 
 _TRACING_LITERAL = _descriptor.Descriptor(
@@ -223,8 +161,8 @@ _TRACING_LITERAL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=913,
-  serialized_end=944,
+  serialized_start=800,
+  serialized_end=831,
 )
 
 _TRACING_ENVIRONMENT = _descriptor.Descriptor(
@@ -260,8 +198,8 @@ _TRACING_ENVIRONMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=946,
-  serialized_end=1016,
+  serialized_start=833,
+  serialized_end=903,
 )
 
 _TRACING_REQUESTHEADER = _descriptor.Descriptor(
@@ -297,8 +235,8 @@ _TRACING_REQUESTHEADER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1018,
-  serialized_end=1090,
+  serialized_start=905,
+  serialized_end=977,
 )
 
 _TRACING_CUSTOMTAGSENTRY = _descriptor.Descriptor(
@@ -334,8 +272,8 @@ _TRACING_CUSTOMTAGSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1092,
-  serialized_end=1198,
+  serialized_start=979,
+  serialized_end=1085,
 )
 
 _TRACING = _descriptor.Descriptor(
@@ -347,28 +285,28 @@ _TRACING = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='providers', full_name='istio.telemetry.v1alpha1.Tracing.providers', index=0,
-      number=1, type=11, cpp_type=10, label=3,
+      number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='providers', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='random_sampling_percentage', full_name='istio.telemetry.v1alpha1.Tracing.random_sampling_percentage', index=1,
-      number=2, type=1, cpp_type=5, label=1,
+      number=3, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='randomSamplingPercentage', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='span_reporting', full_name='istio.telemetry.v1alpha1.Tracing.span_reporting', index=2,
-      number=3, type=14, cpp_type=8, label=1,
+      number=4, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='spanReporting', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='custom_tags', full_name='istio.telemetry.v1alpha1.Tracing.custom_tags', index=3,
-      number=4, type=11, cpp_type=10, label=3,
+      number=5, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -386,13 +324,43 @@ _TRACING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=348,
-  serialized_end=1258,
+  serialized_start=235,
+  serialized_end=1145,
+)
+
+
+_PROVIDERREF = _descriptor.Descriptor(
+  name='ProviderRef',
+  full_name='istio.telemetry.v1alpha1.ProviderRef',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='istio.telemetry.v1alpha1.ProviderRef.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='name', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1147,
+  serialized_end=1180,
 )
 
 _TELEMETRY.fields_by_name['selector'].message_type = type_dot_v1beta1_dot_selector__pb2._WORKLOADSELECTOR
-_TELEMETRY.fields_by_name['tracing'].message_type = _TRACINGRULE
-_TRACINGRULE.fields_by_name['config'].message_type = _TRACING
+_TELEMETRY.fields_by_name['tracing'].message_type = _TRACING
 _TRACING_CUSTOMTAG.fields_by_name['literal'].message_type = _TRACING_LITERAL
 _TRACING_CUSTOMTAG.fields_by_name['environment'].message_type = _TRACING_ENVIRONMENT
 _TRACING_CUSTOMTAG.fields_by_name['header'].message_type = _TRACING_REQUESTHEADER
@@ -416,9 +384,8 @@ _TRACING.fields_by_name['span_reporting'].enum_type = _TRACING_SPANREPORTING
 _TRACING.fields_by_name['custom_tags'].message_type = _TRACING_CUSTOMTAGSENTRY
 _TRACING_SPANREPORTING.containing_type = _TRACING
 DESCRIPTOR.message_types_by_name['Telemetry'] = _TELEMETRY
-DESCRIPTOR.message_types_by_name['TracingRule'] = _TRACINGRULE
-DESCRIPTOR.message_types_by_name['ProviderRef'] = _PROVIDERREF
 DESCRIPTOR.message_types_by_name['Tracing'] = _TRACING
+DESCRIPTOR.message_types_by_name['ProviderRef'] = _PROVIDERREF
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 Telemetry = _reflection.GeneratedProtocolMessageType('Telemetry', (_message.Message,), {
@@ -427,20 +394,6 @@ Telemetry = _reflection.GeneratedProtocolMessageType('Telemetry', (_message.Mess
   # @@protoc_insertion_point(class_scope:istio.telemetry.v1alpha1.Telemetry)
   })
 _sym_db.RegisterMessage(Telemetry)
-
-TracingRule = _reflection.GeneratedProtocolMessageType('TracingRule', (_message.Message,), {
-  'DESCRIPTOR' : _TRACINGRULE,
-  '__module__' : 'telemetry.v1alpha1.telemetry_pb2'
-  # @@protoc_insertion_point(class_scope:istio.telemetry.v1alpha1.TracingRule)
-  })
-_sym_db.RegisterMessage(TracingRule)
-
-ProviderRef = _reflection.GeneratedProtocolMessageType('ProviderRef', (_message.Message,), {
-  'DESCRIPTOR' : _PROVIDERREF,
-  '__module__' : 'telemetry.v1alpha1.telemetry_pb2'
-  # @@protoc_insertion_point(class_scope:istio.telemetry.v1alpha1.ProviderRef)
-  })
-_sym_db.RegisterMessage(ProviderRef)
 
 Tracing = _reflection.GeneratedProtocolMessageType('Tracing', (_message.Message,), {
 
@@ -488,6 +441,13 @@ _sym_db.RegisterMessage(Tracing.Literal)
 _sym_db.RegisterMessage(Tracing.Environment)
 _sym_db.RegisterMessage(Tracing.RequestHeader)
 _sym_db.RegisterMessage(Tracing.CustomTagsEntry)
+
+ProviderRef = _reflection.GeneratedProtocolMessageType('ProviderRef', (_message.Message,), {
+  'DESCRIPTOR' : _PROVIDERREF,
+  '__module__' : 'telemetry.v1alpha1.telemetry_pb2'
+  # @@protoc_insertion_point(class_scope:istio.telemetry.v1alpha1.ProviderRef)
+  })
+_sym_db.RegisterMessage(ProviderRef)
 
 
 DESCRIPTOR._options = None

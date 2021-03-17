@@ -5884,87 +5884,83 @@ spec:
                 description: Optional.
                 items:
                   properties:
-                    config:
-                      description: Customization of the default behavior for tracing.
-                      properties:
-                        customTags:
-                          additionalProperties:
-                            oneOf:
-                            - not:
-                                anyOf:
-                                - required:
-                                  - literal
-                                - required:
-                                  - environment
-                                - required:
-                                  - header
+                    customTags:
+                      additionalProperties:
+                        oneOf:
+                        - not:
+                            anyOf:
                             - required:
                               - literal
                             - required:
                               - environment
                             - required:
                               - header
+                        - required:
+                          - literal
+                        - required:
+                          - environment
+                        - required:
+                          - header
+                        properties:
+                          environment:
+                            description: Environment adds the value of an environment
+                              variable to each span.
                             properties:
-                              environment:
-                                description: Environment adds the value of an environment
-                                  variable to each span.
-                                properties:
-                                  defaultValue:
-                                    description: Optional.
-                                    format: string
-                                    type: string
-                                  name:
-                                    description: Name of the environment variable
-                                      from which to extract the tag value.
-                                    format: string
-                                    type: string
-                                type: object
-                              header:
-                                description: RequestHeader adds the value of an header
-                                  from the request to each span.
-                                properties:
-                                  defaultValue:
-                                    description: Optional.
-                                    format: string
-                                    type: string
-                                  name:
-                                    description: Name of the header from which to
-                                      extract the tag value.
-                                    format: string
-                                    type: string
-                                type: object
-                              literal:
-                                description: Literal adds the same, hard-coded value
-                                  to each span.
-                                properties:
-                                  value:
-                                    description: The tag value to use.
-                                    format: string
-                                    type: string
-                                type: object
-                            type: object
-                          description: Optional.
-                          type: object
-                        providers:
-                          description: Optional.
-                          items:
-                            properties:
+                              defaultValue:
+                                description: Optional.
+                                format: string
+                                type: string
                               name:
-                                description: Required.
+                                description: Name of the environment variable from
+                                  which to extract the tag value.
                                 format: string
                                 type: string
                             type: object
-                          type: array
-                        randomSamplingPercentage:
-                          format: double
-                          type: number
-                        spanReporting:
-                          description: Controls trace reporting.
-                          enum:
-                          - REPORT_SPANS
-                          - DO_NOT_REPORT_SPANS
-                          type: string
+                          header:
+                            description: RequestHeader adds the value of an header
+                              from the request to each span.
+                            properties:
+                              defaultValue:
+                                description: Optional.
+                                format: string
+                                type: string
+                              name:
+                                description: Name of the header from which to extract
+                                  the tag value.
+                                format: string
+                                type: string
+                            type: object
+                          literal:
+                            description: Literal adds the same, hard-coded value to
+                              each span.
+                            properties:
+                              value:
+                                description: The tag value to use.
+                                format: string
+                                type: string
+                            type: object
+                        type: object
+                      description: Optional.
                       type: object
+                    providers:
+                      description: Optional.
+                      items:
+                        properties:
+                          name:
+                            description: Required.
+                            format: string
+                            type: string
+                        type: object
+                      type: array
+                    randomSamplingPercentage:
+                      format: double
+                      type: number
+                    spanReporting:
+                      description: Controls trace reporting.
+                      enum:
+                      - REPORT_SPANS
+                      - DO_NOT_REPORT_SPANS
+                      type: string
                   type: object
                 type: array
             type: object

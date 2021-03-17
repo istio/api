@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 40
+number_of_entries: 41
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -597,11 +597,11 @@ can be used with an extension provider to delegate the authorization decision to
 No
 </td>
 </tr>
-<tr id="MeshConfig-default_tracing_provider">
-<td><code>defaultTracingProvider</code></td>
-<td><code>string</code></td>
+<tr id="MeshConfig-default_providers">
+<td><code>defaultProviders</code></td>
+<td><code><a href="#MeshConfig-DefaultProviders">DefaultProviders</a></code></td>
 <td>
-<p>Name of the default tracing provider. This should match the name of a provider configured in <code>extension_providers</code>.</p>
+<p>Specifies extension providers to use by default in Istio configuration resources.</p>
 
 </td>
 <td>
@@ -1026,6 +1026,37 @@ No
 <td><code><a href="#MeshConfig-ExtensionProvider-OpenCensusAgentTracingProvider">OpenCensusAgentTracingProvider (oneof)</a></code></td>
 <td>
 <p>Configures an OpenCensusAgent tracing provider.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-DefaultProviders">MeshConfig.DefaultProviders</h2>
+<section>
+<p>Holds the name references to the providers that will be used by default
+in other Istio configuration resources if the provider is not specified.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-DefaultProviders-tracing">
+<td><code>tracing</code></td>
+<td><code>string</code></td>
+<td>
+<p>Name of the default provider for tracing. This must match a provider
+defined in <code>extension_providers</code> that is one of the support tracing
+providers.</p>
 
 </td>
 <td>
@@ -1987,6 +2018,17 @@ No
 No
 </td>
 </tr>
+<tr id="ProxyConfig-tracing">
+<td><code>tracing</code></td>
+<td><code><a href="#Tracing">Tracing</a></code></td>
+<td>
+<p>Tracing configuration to be used by the proxy.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="ProxyConfig-sds">
 <td><code>sds</code></td>
 <td><code><a href="#SDS">SDS</a></code></td>
@@ -2171,18 +2213,6 @@ No
 <td>
 <p>Address of the Zipkin service (e.g. <em>zipkin:9411</em>).
 DEPRECATED: Use <a href="#ProxyConfig-tracing">tracing</a> instead.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="ProxyConfig-tracing" class="deprecated ">
-<td><code>tracing</code></td>
-<td><code><a href="#Tracing">Tracing</a></code></td>
-<td>
-<p>Tracing configuration to be used by the proxy.
-DEPRECATED: Use <a href="#MeshConfig-extension_providers">extension_providers</a> instead.</p>
 
 </td>
 <td>

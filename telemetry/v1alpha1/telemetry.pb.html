@@ -2,7 +2,7 @@
 title: istio.telemetry.v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 9
+number_of_entries: 8
 ---
 <h2 id="Telemetry">Telemetry</h2>
 <section>
@@ -42,8 +42,7 @@ metadata:
   namespace: istio-system
 spec:
   tracing:
-  - config:
-      randomSamplingPercentage: 10.00
+  - randomSamplingPercentage: 10.00
 </code></pre>
 
 <p>Policy to disable trace reporting for the &ldquo;foo&rdquo; workload:</p>
@@ -58,8 +57,7 @@ spec:
     labels:
       service.istio.io/canonical-name: foo
   tracing:
-  - config:
-      spanReporting: DO_NOT_REPORT_SPANS
+  - spanReporting: DO_NOT_REPORT_SPANS
 </code></pre>
 
 <p>Policy to select the alternate zipkin provider for trace reporting:</p>
@@ -67,16 +65,32 @@ spec:
 <pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
 metadata:
-  name: mesh-default
-  namespace: istio-system
+  name: foo-tracing-alternate
+  namespace: bar
 spec:
   selector:
     labels:
       service.istio.io/canonical-name: foo
   tracing:
-  - config:
-      providers:
-      - name: &quot;zipkin-alternate&quot;
+  - providers:
+    - name: &quot;zipkin-alternate&quot;
+    randomSamplingPercentage: 10.00
+</code></pre>
+
+<p>Policy to add a custom tag tag from a literal value:</p>
+
+<pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: mesh-default
+  namespace: istio-system
+spec:
+  tracing:
+  - randomSamplingPercentage: 10.00
+    customTags:
+      my_new_foo_tag:
+        literal:
+          value: &quot;foo&quot;
 </code></pre>
 
 <table class="message-fields">
@@ -104,68 +118,10 @@ No
 </tr>
 <tr id="Telemetry-tracing">
 <td><code>tracing</code></td>
-<td><code><a href="#TracingRule">TracingRule[]</a></code></td>
+<td><code><a href="#Tracing">Tracing[]</a></code></td>
 <td>
 <p>Optional. Tracing defines the per-workload overrides for trace span
 reporting.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="TracingRule">TracingRule</h2>
-<section>
-<p>TracingRule defines how trace spans should be reported (sampling rate, custom tags)
-and under what conditions the reporting should be conducted.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="TracingRule-config">
-<td><code>config</code></td>
-<td><code><a href="#Tracing">Tracing</a></code></td>
-<td>
-<p>Customization of the default behavior for tracing.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="ProviderRef">ProviderRef</h2>
-<section>
-<p>Used to bind Telemetry configuration to specific providers for
-targeted customization.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="ProviderRef-name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>Required. Name of Telemetry provider in MeshConfig.</p>
 
 </td>
 <td>
@@ -244,6 +200,35 @@ No
 <td><code>map&lt;string,&nbsp;<a href="#Tracing-CustomTag">CustomTag</a>&gt;</code></td>
 <td>
 <p>Optional. Configures additional custom tags to the generated trace spans.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ProviderRef">ProviderRef</h2>
+<section>
+<p>Used to bind Telemetry configuration to specific providers for
+targeted customization.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProviderRef-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>Required. Name of Telemetry provider in MeshConfig.</p>
 
 </td>
 <td>

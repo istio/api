@@ -703,8 +703,17 @@ message MeshConfig {
   // can be used with an extension provider to delegate the authorization decision to a custom authorization system.
   repeated ExtensionProvider extension_providers = 57;
 
-  // Name of the default tracing provider. This should match the name of a provider configured in `extension_providers`.
-  string default_tracing_provider = 60;
+  // Holds the name references to the providers that will be used by default
+  // in other Istio configuration resources if the provider is not specified.
+  message DefaultProviders {
+    // Name of the default provider for tracing. This must match a provider
+    // defined in `extension_providers` that is one of the support tracing
+    // providers.
+    string tracing = 1;
+  }
+
+  // Specifies extension providers to use by default in Istio configuration resources.
+  DefaultProviders default_providers = 60;
 
   // A list of Kubernetes selectors that specify the set of namespaces that Istio considers when
   // computing configuration updates for sidecars. This can be used to reduce Istio's computational load
