@@ -81,16 +81,11 @@ message IstioOperatorSpec {
     // Version tag for docker images e.g. `1.7.2`
     TypeInterface tag = 13;
 
-    // $hide_from_docs
-    // Resource suffix is appended to all resources installed by each component.
-    // Never implemented; replaced by revision.
-    string resource_suffix = 14 [deprecated = true];
     // Namespace to install control plane resources into. If unset, Istio will be installed into the same namespace
     // as the `IstioOperator` CR.
     string namespace = 15;
 
     // Identify the revision this installation is associated with.
-    // This option is currently experimental.
     string revision = 16;
 
     // Identify whether this revision is the default revision for the cluster
