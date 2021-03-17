@@ -111,6 +111,9 @@ message IstioOperatorSpec {
     TypeMapStringInterface values = 100;
     // Unvalidated overrides for default `values.yaml`. Used for custom templates where new parameters are added.
     TypeMapStringInterface unvalidated_values = 101;
+
+    reserved 14;
+    reserved "resource_suffix";
 }
 
 // Observed state of IstioOperator
