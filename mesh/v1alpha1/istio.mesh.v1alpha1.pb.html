@@ -1345,19 +1345,6 @@ No
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-ZipkinTracingProvider-exclude_mesh_tags">
-<td><code>excludeMeshTags</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Controls whether or not Istio-specific tags will be generated for each
-span created by the sidecar proxies. These tags include information on
-the canonical service, mesh, and namespace involved in the request.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="MeshConfig-ExtensionProvider-ZipkinTracingProvider-max_tag_length">
 <td><code>maxTagLength</code></td>
 <td><code>uint32</code></td>
@@ -1425,19 +1412,6 @@ No
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-LightstepTracingProvider-exclude_mesh_tags">
-<td><code>excludeMeshTags</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Controls whether or not Istio-specific tags will be generated for each
-span created by the sidecar proxies. These tags include information on
-the canonical service, mesh, and namespace involved in the request.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="MeshConfig-ExtensionProvider-LightstepTracingProvider-max_tag_length">
 <td><code>maxTagLength</code></td>
 <td><code>uint32</code></td>
@@ -1494,19 +1468,6 @@ No
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-DatadogTracingProvider-exclude_mesh_tags">
-<td><code>excludeMeshTags</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Controls whether or not Istio-specific tags will be generated for each
-span created by the sidecar proxies. These tags include information on
-the canonical service, mesh, and namespace involved in the request.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="MeshConfig-ExtensionProvider-DatadogTracingProvider-max_tag_length">
 <td><code>maxTagLength</code></td>
 <td><code>uint32</code></td>
@@ -1536,19 +1497,6 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-ExtensionProvider-StackdriverProvider-exclude_mesh_tags">
-<td><code>excludeMeshTags</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Controls whether or not Istio-specific tags will be generated for each
-span created by the sidecar proxies. These tags include information on
-the canonical service, mesh, and namespace involved in the request.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="MeshConfig-ExtensionProvider-StackdriverProvider-max_tag_length">
 <td><code>maxTagLength</code></td>
 <td><code>uint32</code></td>
@@ -1613,19 +1561,6 @@ No
 tracing. Default is <code>[&quot;W3C_TRACE_CONTEXT&quot;]</code>. If multiple values are specified,
 the proxy will attempt to read each header for each request and will
 write all headers.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-ExtensionProvider-OpenCensusAgentTracingProvider-exclude_mesh_tags">
-<td><code>excludeMeshTags</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Controls whether or not Istio-specific tags will be generated for each
-span created by the sidecar proxies. These tags include information on
-the canonical service, mesh, and namespace involved in the request.</p>
 
 </td>
 <td>

@@ -829,10 +829,6 @@
             "type": "string",
             "format": "string"
           },
-          "excludeMeshTags": {
-            "description": "Controls whether or not Istio-specific tags will be generated for each span created by the sidecar proxies. These tags include information on the canonical service, mesh, and namespace involved in the request.",
-            "type": "boolean"
-          },
           "maxTagLength": {
             "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
             "type": "integer"
@@ -851,10 +847,6 @@
             "description": "REQUIRED. Specifies the service for the Lightstep collector. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
             "type": "string",
             "format": "string"
-          },
-          "excludeMeshTags": {
-            "description": "Controls whether or not Istio-specific tags will be generated for each span created by the sidecar proxies. These tags include information on the canonical service, mesh, and namespace involved in the request.",
-            "type": "boolean"
           },
           "maxTagLength": {
             "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
@@ -880,10 +872,6 @@
             "type": "string",
             "format": "string"
           },
-          "excludeMeshTags": {
-            "description": "Controls whether or not Istio-specific tags will be generated for each span created by the sidecar proxies. These tags include information on the canonical service, mesh, and namespace involved in the request.",
-            "type": "boolean"
-          },
           "maxTagLength": {
             "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
             "type": "integer"
@@ -894,10 +882,6 @@
         "description": "Defines configuration for Stackdriver.",
         "type": "object",
         "properties": {
-          "excludeMeshTags": {
-            "description": "Controls whether or not Istio-specific tags will be generated for each span created by the sidecar proxies. These tags include information on the canonical service, mesh, and namespace involved in the request.",
-            "type": "boolean"
-          },
           "maxTagLength": {
             "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
             "type": "integer"
@@ -942,10 +926,6 @@
             "items": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider.TraceContext"
             }
-          },
-          "excludeMeshTags": {
-            "description": "Controls whether or not Istio-specific tags will be generated for each span created by the sidecar proxies. These tags include information on the canonical service, mesh, and namespace involved in the request.",
-            "type": "boolean"
           },
           "maxTagLength": {
             "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",

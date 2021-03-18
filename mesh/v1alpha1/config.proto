@@ -568,14 +568,9 @@ message MeshConfig {
       // REQUIRED. Specifies the port of the service.
       uint32 port = 2;
 
-      // Controls whether or not Istio-specific tags will be generated for each
-      // span created by the sidecar proxies. These tags include information on
-      // the canonical service, mesh, and namespace involved in the request.
-      bool exclude_mesh_tags = 3;
-
       // Optional. Controls the overall path length allowed in a reported span.
       // NOTE: currently only controls max length of the path tag.
-      uint32 max_tag_length = 4;
+      uint32 max_tag_length = 3;
     }
 
     // Defines configuration for a Lightstep tracer.
@@ -594,14 +589,9 @@ message MeshConfig {
       // The Lightstep access token.
       string access_token = 3;
 
-      // Controls whether or not Istio-specific tags will be generated for each
-      // span created by the sidecar proxies. These tags include information on
-      // the canonical service, mesh, and namespace involved in the request.
-      bool exclude_mesh_tags = 4;
-
       // Optional. Controls the overall path length allowed in a reported span.
       // NOTE: currently only controls max length of the path tag.
-      uint32 max_tag_length = 5;
+      uint32 max_tag_length = 4;
     }
 
     // Defines configuration for a Datadog tracer.
@@ -617,14 +607,9 @@ message MeshConfig {
       // REQUIRED. Specifies the port of the service.
       uint32 port = 2;
 
-      // Controls whether or not Istio-specific tags will be generated for each
-      // span created by the sidecar proxies. These tags include information on
-      // the canonical service, mesh, and namespace involved in the request.
-      bool exclude_mesh_tags = 3;
-
       // Optional. Controls the overall path length allowed in a reported span.
       // NOTE: currently only controls max length of the path tag.
-      uint32 max_tag_length = 4;
+      uint32 max_tag_length = 3;
     }
 
     // Defines configuration for Stackdriver.
@@ -645,14 +630,9 @@ message MeshConfig {
       // $hide_from_docs
       google.protobuf.Int64Value max_number_of_message_events = 4;
 
-      // Controls whether or not Istio-specific tags will be generated for each
-      // span created by the sidecar proxies. These tags include information on
-      // the canonical service, mesh, and namespace involved in the request.
-      bool exclude_mesh_tags = 5;
-
       // Optional. Controls the overall path length allowed in a reported span.
       // NOTE: currently only controls max length of the path tag.
-      uint32 max_tag_length = 6;
+      uint32 max_tag_length = 5;
     }
 
     // Defines configuration for an OpenCensus tracer writing to an OpenCensus backend.
@@ -697,14 +677,9 @@ message MeshConfig {
       // write all headers.
       repeated TraceContext context = 3;
 
-      // Controls whether or not Istio-specific tags will be generated for each
-      // span created by the sidecar proxies. These tags include information on
-      // the canonical service, mesh, and namespace involved in the request.
-      bool exclude_mesh_tags = 4;
-
       // Optional. Controls the overall path length allowed in a reported span.
       // NOTE: currently only controls max length of the path tag.
-      uint32 max_tag_length = 5;
+      uint32 max_tag_length = 4;
     }
   }
 
