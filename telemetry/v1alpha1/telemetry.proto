@@ -78,7 +78,7 @@ package istio.telemetry.v1alpha1;
 //     labels:
 //       service.istio.io/canonical-name: foo
 //   tracing:
-//   - spanReporting: DO_NOT_REPORT_SPANS
+//   - disableSpanReporting: true
 // ```
 //
 // Policy to select the alternate zipkin provider for trace reporting:
@@ -170,22 +170,11 @@ message Tracing {
   // increments.
   double random_sampling_percentage = 3;
 
-  // List options for reporting of trace spans by selecting proxies.
-  enum SpanReporting {
-    // Report all spans to the configured tracing provider.
-    REPORT_SPANS = 0;
-    // Do not report spans. Tracing headers will still be forwarded.
-    DO_NOT_REPORT_SPANS = 1;
-    // Leave room for other options, including termination of tracing header
-    // propagation, etc.
-  }
-
-  // Controls trace reporting. This does not impact sampling rate, but rather
-  // is used to opt in/out of trace reporting. Example uses include enabling
-  // tracing for an entire mesh and opting a single namespace (or individual 
-  // workload) out of reporting.
-  SpanReporting span_reporting = 4;
-
+  // Controls span reporting. If set to true, no spans will be reported for
+  // impacted workloads. This does NOT impact context propagation or trace 
+  // sampling behavior.
+  bool disable_span_reporting = 4;
+ 
   // CustomTag defines a tag to be added to a trace span that is based on
   // an operator-supplied value. This value can either be a hard-coded value,
   // a value taken from an environment variable known to the sidecar proxy, or

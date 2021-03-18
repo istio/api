@@ -21,33 +21,11 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.telemetry.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\037istio.io/api/telemetry/v1alpha1'),
-  serialized_pb=_b('\n\"telemetry/v1alpha1/telemetry.proto\x12\x18istio.telemetry.v1alpha1\x1a\x1btype/v1beta1/selector.proto\"\x8a\x01\n\tTelemetry\x12@\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x08selector\x12;\n\x07tracing\x18\x02 \x03(\x0b\x32!.istio.telemetry.v1alpha1.TracingR\x07tracing\"\x8e\x07\n\x07Tracing\x12\x43\n\tproviders\x18\x02 \x03(\x0b\x32%.istio.telemetry.v1alpha1.ProviderRefR\tproviders\x12<\n\x1arandom_sampling_percentage\x18\x03 \x01(\x01R\x18randomSamplingPercentage\x12V\n\x0espan_reporting\x18\x04 \x01(\x0e\x32/.istio.telemetry.v1alpha1.Tracing.SpanReportingR\rspanReporting\x12R\n\x0b\x63ustom_tags\x18\x05 \x03(\x0b\x32\x31.istio.telemetry.v1alpha1.Tracing.CustomTagsEntryR\ncustomTags\x1a\xf8\x01\n\tCustomTag\x12\x45\n\x07literal\x18\x01 \x01(\x0b\x32).istio.telemetry.v1alpha1.Tracing.LiteralH\x00R\x07literal\x12Q\n\x0b\x65nvironment\x18\x02 \x01(\x0b\x32-.istio.telemetry.v1alpha1.Tracing.EnvironmentH\x00R\x0b\x65nvironment\x12I\n\x06header\x18\x03 \x01(\x0b\x32/.istio.telemetry.v1alpha1.Tracing.RequestHeaderH\x00R\x06headerB\x06\n\x04type\x1a\x1f\n\x07Literal\x12\x14\n\x05value\x18\x01 \x01(\tR\x05value\x1a\x46\n\x0b\x45nvironment\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1aH\n\rRequestHeader\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1aj\n\x0f\x43ustomTagsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x41\n\x05value\x18\x02 \x01(\x0b\x32+.istio.telemetry.v1alpha1.Tracing.CustomTagR\x05value:\x02\x38\x01\":\n\rSpanReporting\x12\x10\n\x0cREPORT_SPANS\x10\x00\x12\x17\n\x13\x44O_NOT_REPORT_SPANS\x10\x01\"!\n\x0bProviderRef\x12\x12\n\x04name\x18\x01 \x01(\tR\x04nameB!Z\x1fistio.io/api/telemetry/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\"telemetry/v1alpha1/telemetry.proto\x12\x18istio.telemetry.v1alpha1\x1a\x1btype/v1beta1/selector.proto\"\x8a\x01\n\tTelemetry\x12@\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x08selector\x12;\n\x07tracing\x18\x02 \x03(\x0b\x32!.istio.telemetry.v1alpha1.TracingR\x07tracing\"\xb0\x06\n\x07Tracing\x12\x43\n\tproviders\x18\x02 \x03(\x0b\x32%.istio.telemetry.v1alpha1.ProviderRefR\tproviders\x12<\n\x1arandom_sampling_percentage\x18\x03 \x01(\x01R\x18randomSamplingPercentage\x12\x34\n\x16\x64isable_span_reporting\x18\x04 \x01(\x08R\x14\x64isableSpanReporting\x12R\n\x0b\x63ustom_tags\x18\x05 \x03(\x0b\x32\x31.istio.telemetry.v1alpha1.Tracing.CustomTagsEntryR\ncustomTags\x1a\xf8\x01\n\tCustomTag\x12\x45\n\x07literal\x18\x01 \x01(\x0b\x32).istio.telemetry.v1alpha1.Tracing.LiteralH\x00R\x07literal\x12Q\n\x0b\x65nvironment\x18\x02 \x01(\x0b\x32-.istio.telemetry.v1alpha1.Tracing.EnvironmentH\x00R\x0b\x65nvironment\x12I\n\x06header\x18\x03 \x01(\x0b\x32/.istio.telemetry.v1alpha1.Tracing.RequestHeaderH\x00R\x06headerB\x06\n\x04type\x1a\x1f\n\x07Literal\x12\x14\n\x05value\x18\x01 \x01(\tR\x05value\x1a\x46\n\x0b\x45nvironment\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1aH\n\rRequestHeader\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1aj\n\x0f\x43ustomTagsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x41\n\x05value\x18\x02 \x01(\x0b\x32+.istio.telemetry.v1alpha1.Tracing.CustomTagR\x05value:\x02\x38\x01\"!\n\x0bProviderRef\x12\x12\n\x04name\x18\x01 \x01(\tR\x04nameB!Z\x1fistio.io/api/telemetry/v1alpha1b\x06proto3')
   ,
   dependencies=[type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,])
 
 
-
-_TRACING_SPANREPORTING = _descriptor.EnumDescriptor(
-  name='SpanReporting',
-  full_name='istio.telemetry.v1alpha1.Tracing.SpanReporting',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='REPORT_SPANS', index=0, number=0,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='DO_NOT_REPORT_SPANS', index=1, number=1,
-      serialized_options=None,
-      type=None),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=1087,
-  serialized_end=1145,
-)
-_sym_db.RegisterEnumDescriptor(_TRACING_SPANREPORTING)
 
 
 _TELEMETRY = _descriptor.Descriptor(
@@ -131,8 +109,8 @@ _TRACING_CUSTOMTAG = _descriptor.Descriptor(
       name='type', full_name='istio.telemetry.v1alpha1.Tracing.CustomTag.type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=550,
-  serialized_end=798,
+  serialized_start=516,
+  serialized_end=764,
 )
 
 _TRACING_LITERAL = _descriptor.Descriptor(
@@ -161,8 +139,8 @@ _TRACING_LITERAL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=800,
-  serialized_end=831,
+  serialized_start=766,
+  serialized_end=797,
 )
 
 _TRACING_ENVIRONMENT = _descriptor.Descriptor(
@@ -198,8 +176,8 @@ _TRACING_ENVIRONMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=833,
-  serialized_end=903,
+  serialized_start=799,
+  serialized_end=869,
 )
 
 _TRACING_REQUESTHEADER = _descriptor.Descriptor(
@@ -235,8 +213,8 @@ _TRACING_REQUESTHEADER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=905,
-  serialized_end=977,
+  serialized_start=871,
+  serialized_end=943,
 )
 
 _TRACING_CUSTOMTAGSENTRY = _descriptor.Descriptor(
@@ -272,8 +250,8 @@ _TRACING_CUSTOMTAGSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=979,
-  serialized_end=1085,
+  serialized_start=945,
+  serialized_end=1051,
 )
 
 _TRACING = _descriptor.Descriptor(
@@ -298,12 +276,12 @@ _TRACING = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='randomSamplingPercentage', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='span_reporting', full_name='istio.telemetry.v1alpha1.Tracing.span_reporting', index=2,
-      number=4, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
+      name='disable_span_reporting', full_name='istio.telemetry.v1alpha1.Tracing.disable_span_reporting', index=2,
+      number=4, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='spanReporting', file=DESCRIPTOR),
+      serialized_options=None, json_name='disableSpanReporting', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='custom_tags', full_name='istio.telemetry.v1alpha1.Tracing.custom_tags', index=3,
       number=5, type=11, cpp_type=10, label=3,
@@ -316,7 +294,6 @@ _TRACING = _descriptor.Descriptor(
   ],
   nested_types=[_TRACING_CUSTOMTAG, _TRACING_LITERAL, _TRACING_ENVIRONMENT, _TRACING_REQUESTHEADER, _TRACING_CUSTOMTAGSENTRY, ],
   enum_types=[
-    _TRACING_SPANREPORTING,
   ],
   serialized_options=None,
   is_extendable=False,
@@ -325,7 +302,7 @@ _TRACING = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=235,
-  serialized_end=1145,
+  serialized_end=1051,
 )
 
 
@@ -355,8 +332,8 @@ _PROVIDERREF = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1147,
-  serialized_end=1180,
+  serialized_start=1053,
+  serialized_end=1086,
 )
 
 _TELEMETRY.fields_by_name['selector'].message_type = type_dot_v1beta1_dot_selector__pb2._WORKLOADSELECTOR
@@ -380,9 +357,7 @@ _TRACING_REQUESTHEADER.containing_type = _TRACING
 _TRACING_CUSTOMTAGSENTRY.fields_by_name['value'].message_type = _TRACING_CUSTOMTAG
 _TRACING_CUSTOMTAGSENTRY.containing_type = _TRACING
 _TRACING.fields_by_name['providers'].message_type = _PROVIDERREF
-_TRACING.fields_by_name['span_reporting'].enum_type = _TRACING_SPANREPORTING
 _TRACING.fields_by_name['custom_tags'].message_type = _TRACING_CUSTOMTAGSENTRY
-_TRACING_SPANREPORTING.containing_type = _TRACING
 DESCRIPTOR.message_types_by_name['Telemetry'] = _TELEMETRY
 DESCRIPTOR.message_types_by_name['Tracing'] = _TRACING
 DESCRIPTOR.message_types_by_name['ProviderRef'] = _PROVIDERREF

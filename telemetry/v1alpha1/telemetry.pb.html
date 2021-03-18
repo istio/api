@@ -2,7 +2,7 @@
 title: istio.telemetry.v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 8
+number_of_entries: 7
 ---
 <h2 id="Telemetry">Telemetry</h2>
 <section>
@@ -60,7 +60,7 @@ spec:
     labels:
       service.istio.io/canonical-name: foo
   tracing:
-  - spanReporting: DO_NOT_REPORT_SPANS
+  - disableSpanReporting: true
 </code></pre>
 
 <p>Policy to select the alternate zipkin provider for trace reporting:</p>
@@ -184,14 +184,13 @@ increments.</p>
 No
 </td>
 </tr>
-<tr id="Tracing-span_reporting">
-<td><code>spanReporting</code></td>
-<td><code><a href="#Tracing-SpanReporting">SpanReporting</a></code></td>
+<tr id="Tracing-disable_span_reporting">
+<td><code>disableSpanReporting</code></td>
+<td><code>bool</code></td>
 <td>
-<p>Controls trace reporting. This does not impact sampling rate, but rather
-is used to opt in/out of trace reporting. Example uses include enabling
-tracing for an entire mesh and opting a single namespace (or individual
-workload) out of reporting.</p>
+<p>Controls span reporting. If set to true, no spans will be reported for
+impacted workloads. This does NOT impact context propagation or trace
+sampling behavior.</p>
 
 </td>
 <td>
@@ -391,35 +390,6 @@ used instead.</p>
 </td>
 <td>
 No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="Tracing-SpanReporting">Tracing.SpanReporting</h2>
-<section>
-<p>List options for reporting of trace spans by selecting proxies.</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Tracing-SpanReporting-REPORT_SPANS">
-<td><code>REPORT_SPANS</code></td>
-<td>
-<p>Report all spans to the configured tracing provider.</p>
-
-</td>
-</tr>
-<tr id="Tracing-SpanReporting-DO_NOT_REPORT_SPANS">
-<td><code>DO_NOT_REPORT_SPANS</code></td>
-<td>
-<p>Do not report spans. Tracing headers will still be forwarded.</p>
-
 </td>
 </tr>
 </tbody>

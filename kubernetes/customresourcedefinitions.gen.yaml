@@ -5942,6 +5942,9 @@ spec:
                         type: object
                       description: Optional.
                       type: object
+                    disableSpanReporting:
+                      description: Controls span reporting.
+                      type: boolean
                     providers:
                       description: Optional.
                       items:
@@ -5955,12 +5958,6 @@ spec:
                     randomSamplingPercentage:
                       format: double
                       type: number
-                    spanReporting:
-                      description: Controls trace reporting.
-                      enum:
-                      - REPORT_SPANS
-                      - DO_NOT_REPORT_SPANS
-                      type: string
                   type: object
                 type: array
             type: object
