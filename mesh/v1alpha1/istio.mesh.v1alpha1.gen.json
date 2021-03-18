@@ -820,13 +820,14 @@
         "description": "Defines configuration for a Zipkin tracer.",
         "type": "object",
         "properties": {
-          "address": {
-            "description": "Address of the Zipkin service (e.g. _zipkin:9411_).",
+          "port": {
+            "description": "REQUIRED. Specifies the port of the service.",
+            "type": "integer"
+          },
+          "service": {
+            "description": "REQUIRED. Specifies the service that the Zipkin API. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
             "type": "string",
             "format": "string"
-          },
-          "tlsSettings": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
           },
           "excludeMeshTags": {
             "description": "Controls whether or not Istio-specific tags will be generated for each span created by the sidecar proxies. These tags include information on the canonical service, mesh, and namespace involved in the request.",
@@ -842,13 +843,14 @@
         "description": "Defines configuration for a Lightstep tracer.",
         "type": "object",
         "properties": {
-          "address": {
-            "description": "Address of the Lightstep Satellite pool.",
+          "port": {
+            "description": "REQUIRED. Specifies the port of the service.",
+            "type": "integer"
+          },
+          "service": {
+            "description": "REQUIRED. Specifies the service for the Lightstep collector. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
             "type": "string",
             "format": "string"
-          },
-          "tlsSettings": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
           },
           "excludeMeshTags": {
             "description": "Controls whether or not Istio-specific tags will be generated for each span created by the sidecar proxies. These tags include information on the canonical service, mesh, and namespace involved in the request.",
@@ -869,13 +871,14 @@
         "description": "Defines configuration for a Datadog tracer.",
         "type": "object",
         "properties": {
-          "address": {
-            "description": "Address of the Datadog Agent.",
+          "port": {
+            "description": "REQUIRED. Specifies the port of the service.",
+            "type": "integer"
+          },
+          "service": {
+            "description": "REQUIRED. Specifies the service for the Datadog agent. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
             "type": "string",
             "format": "string"
-          },
-          "tlsSettings": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
           },
           "excludeMeshTags": {
             "description": "Controls whether or not Istio-specific tags will be generated for each span created by the sidecar proxies. These tags include information on the canonical service, mesh, and namespace involved in the request.",
@@ -924,20 +927,21 @@
         "description": "Defines configuration for an OpenCensus tracer writing to an OpenCensus backend.",
         "type": "object",
         "properties": {
+          "port": {
+            "description": "REQUIRED. Specifies the port of the service.",
+            "type": "integer"
+          },
+          "service": {
+            "description": "REQUIRED. Specifies the service for the OpenCensusAgent. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
+            "type": "string",
+            "format": "string"
+          },
           "context": {
             "description": "Specifies the set of context propagation headers used for distributed tracing. Default is `[\"W3C_TRACE_CONTEXT\"]`. If multiple values are specified, the proxy will attempt to read each header for each request and will write all headers.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider.TraceContext"
             }
-          },
-          "address": {
-            "description": "gRPC address for the OpenCensus agent (e.g. dns://authority/host:port or unix:path). See [gRPC naming docs](https://github.com/grpc/grpc/blob/master/doc/naming.md) for details.",
-            "type": "string",
-            "format": "string"
-          },
-          "tlsSettings": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
           },
           "excludeMeshTags": {
             "description": "Controls whether or not Istio-specific tags will be generated for each span created by the sidecar proxies. These tags include information on the canonical service, mesh, and namespace involved in the request.",

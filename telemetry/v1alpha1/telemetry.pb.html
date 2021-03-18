@@ -6,10 +6,9 @@ number_of_entries: 8
 ---
 <h2 id="Telemetry">Telemetry</h2>
 <section>
-<p>Telemetry defines the telemetry generation policies for workloads within a mesh.
-Telemetry policies control runtime configuration of telemetry generation for Istio.</p>
+<p>Telemetry defines how the telemetry is generated for workloads within a mesh.</p>
 
-<p>For mesh level configuration, put the policy in root configuration namespace for
+<p>For mesh level configuration, put the resource in root configuration namespace for
 your Istio installation <em>without</em> a workload selector.</p>
 
 <p>For any namespace, including the root configuration namespace, it is only valid
@@ -18,15 +17,19 @@ to have a single workload selector-less Telemetry resource.</p>
 <p>For resources with a workload selector, it is only valid to have one resource selecting
 any given workload.</p>
 
-<p>Workload policies will be evaluated in order, from most specific matches per telemetry
+<p>Telemetry configuration will be evaluated in order, from most specific matches per telemetry
 subdomain (tracing, access logging, and metrics) to least specific matches. The first
-matching policy for the subdomain will be applied. The order of evaluation will be:</p>
+matching configuration for the subdomain will be applied. The order of evaluation will be:</p>
 
 <ol>
-<li>Workload-specific policy</li>
-<li>Namespace-specific policy</li>
-<li>Root namespace policy</li>
+<li>Workload-specific configuration</li>
+<li>Namespace-specific configuration</li>
+<li>Root namespace configuration</li>
 </ol>
+
+<p>Telemetry configuration does not inherit. Rather, matched configurations must fully-specify
+the desired behavior. Workload-specific configuration fully replaces any configuration
+defined at the local and root namespace levels.</p>
 
 <p>WARNING: Support for Telemetry policies is under active development and is <em>not</em>
 stable or supported by Istio at this time.</p>

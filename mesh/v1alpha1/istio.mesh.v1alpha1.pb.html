@@ -1318,24 +1318,27 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-ExtensionProvider-ZipkinTracingProvider-address">
-<td><code>address</code></td>
+<tr id="MeshConfig-ExtensionProvider-ZipkinTracingProvider-service">
+<td><code>service</code></td>
 <td><code>string</code></td>
 <td>
-<p>Address of the Zipkin service (e.g. <em>zipkin:9411</em>).</p>
+<p>REQUIRED. Specifies the service that the Zipkin API.
+The format is &ldquo;[<Namespace>/]<Hostname>&rdquo;. The specification of <Namespace> is required only when it is insufficient
+to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+service defined by the Kubernetes service or ServiceEntry.</p>
+
+<p>Example: &ldquo;zipkin.default.svc.cluster.local&rdquo; or &ldquo;bar/zipkin.example.com&rdquo;.</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-ZipkinTracingProvider-tls_settings">
-<td><code>tlsSettings</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ClientTLSSettings">ClientTLSSettings</a></code></td>
+<tr id="MeshConfig-ExtensionProvider-ZipkinTracingProvider-port">
+<td><code>port</code></td>
+<td><code>uint32</code></td>
 <td>
-<p>Use the tls_settings to specify the tls mode to use. If the remote tracing service
-uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
-mode as <code>ISTIO_MUTUAL</code>.</p>
+<p>REQUIRED. Specifies the port of the service.</p>
 
 </td>
 <td>
@@ -1384,11 +1387,27 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-ExtensionProvider-LightstepTracingProvider-address">
-<td><code>address</code></td>
+<tr id="MeshConfig-ExtensionProvider-LightstepTracingProvider-service">
+<td><code>service</code></td>
 <td><code>string</code></td>
 <td>
-<p>Address of the Lightstep Satellite pool.</p>
+<p>REQUIRED. Specifies the service for the Lightstep collector.
+The format is &ldquo;[<Namespace>/]<Hostname>&rdquo;. The specification of <Namespace> is required only when it is insufficient
+to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+service defined by the Kubernetes service or ServiceEntry.</p>
+
+<p>Example: &ldquo;lightstep.default.svc.cluster.local&rdquo; or &ldquo;bar/lightstep.example.com&rdquo;.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-LightstepTracingProvider-port">
+<td><code>port</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>REQUIRED. Specifies the port of the service.</p>
 
 </td>
 <td>
@@ -1400,19 +1419,6 @@ No
 <td><code>string</code></td>
 <td>
 <p>The Lightstep access token.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-ExtensionProvider-LightstepTracingProvider-tls_settings">
-<td><code>tlsSettings</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ClientTLSSettings">ClientTLSSettings</a></code></td>
-<td>
-<p>Use the tls_settings to specify the tls mode to use. If the remote tracing service
-uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
-mode as <code>ISTIO_MUTUAL</code>.</p>
 
 </td>
 <td>
@@ -1461,24 +1467,27 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-ExtensionProvider-DatadogTracingProvider-address">
-<td><code>address</code></td>
+<tr id="MeshConfig-ExtensionProvider-DatadogTracingProvider-service">
+<td><code>service</code></td>
 <td><code>string</code></td>
 <td>
-<p>Address of the Datadog Agent.</p>
+<p>REQUIRED. Specifies the service for the Datadog agent.
+The format is &ldquo;[<Namespace>/]<Hostname>&rdquo;. The specification of <Namespace> is required only when it is insufficient
+to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+service defined by the Kubernetes service or ServiceEntry.</p>
+
+<p>Example: &ldquo;datadog.default.svc.cluster.local&rdquo; or &ldquo;bar/datadog.example.com&rdquo;.</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-DatadogTracingProvider-tls_settings">
-<td><code>tlsSettings</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ClientTLSSettings">ClientTLSSettings</a></code></td>
+<tr id="MeshConfig-ExtensionProvider-DatadogTracingProvider-port">
+<td><code>port</code></td>
+<td><code>uint32</code></td>
 <td>
-<p>Use the tls_settings to specify the tls mode to use. If the remote tracing service
-uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
-mode as <code>ISTIO_MUTUAL</code>.</p>
+<p>REQUIRED. Specifies the port of the service.</p>
 
 </td>
 <td>
@@ -1569,27 +1578,27 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-ExtensionProvider-OpenCensusAgentTracingProvider-address">
-<td><code>address</code></td>
+<tr id="MeshConfig-ExtensionProvider-OpenCensusAgentTracingProvider-service">
+<td><code>service</code></td>
 <td><code>string</code></td>
 <td>
-<p>gRPC address for the OpenCensus agent (e.g. dns://authority/host:port or
-unix:path). See <a href="https://github.com/grpc/grpc/blob/master/doc/naming.md">gRPC naming
-docs</a> for
-details.</p>
+<p>REQUIRED. Specifies the service for the OpenCensusAgent.
+The format is &ldquo;[<Namespace>/]<Hostname>&rdquo;. The specification of <Namespace> is required only when it is insufficient
+to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+service defined by the Kubernetes service or ServiceEntry.</p>
+
+<p>Example: &ldquo;ocagent.default.svc.cluster.local&rdquo; or &ldquo;bar/ocagent.example.com&rdquo;.</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-OpenCensusAgentTracingProvider-tls_settings">
-<td><code>tlsSettings</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ClientTLSSettings">ClientTLSSettings</a></code></td>
+<tr id="MeshConfig-ExtensionProvider-OpenCensusAgentTracingProvider-port">
+<td><code>port</code></td>
+<td><code>uint32</code></td>
 <td>
-<p>Use the tls_settings to specify the tls mode to use. If the remote tracing service
-uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
-mode as <code>ISTIO_MUTUAL</code>.</p>
+<p>REQUIRED. Specifies the port of the service.</p>
 
 </td>
 <td>

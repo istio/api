@@ -52,10 +52,9 @@ func (Tracing_SpanReporting) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_991c84745e2b7651, []int{1, 0}
 }
 
-// Telemetry defines the telemetry generation policies for workloads within a mesh.
-// Telemetry policies control runtime configuration of telemetry generation for Istio.
+// Telemetry defines how the telemetry is generated for workloads within a mesh.
 //
-// For mesh level configuration, put the policy in root configuration namespace for
+// For mesh level configuration, put the resource in root configuration namespace for
 // your Istio installation *without* a workload selector.
 //
 // For any namespace, including the root configuration namespace, it is only valid
@@ -64,13 +63,17 @@ func (Tracing_SpanReporting) EnumDescriptor() ([]byte, []int) {
 // For resources with a workload selector, it is only valid to have one resource selecting
 // any given workload.
 //
-// Workload policies will be evaluated in order, from most specific matches per telemetry
+// Telemetry configuration will be evaluated in order, from most specific matches per telemetry
 // subdomain (tracing, access logging, and metrics) to least specific matches. The first
-// matching policy for the subdomain will be applied. The order of evaluation will be:
+// matching configuration for the subdomain will be applied. The order of evaluation will be:
 //
-// 1. Workload-specific policy
-// 1. Namespace-specific policy
-// 1. Root namespace policy
+// 1. Workload-specific configuration
+// 1. Namespace-specific configuration
+// 1. Root namespace configuration
+//
+// Telemetry configuration does not inherit. Rather, matched configurations must fully-specify
+// the desired behavior. Workload-specific configuration fully replaces any configuration
+// defined at the local and root namespace levels.
 //
 // WARNING: Support for Telemetry policies is under active development and is *not*
 // stable or supported by Istio at this time.

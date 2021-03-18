@@ -557,13 +557,16 @@ message MeshConfig {
 
     // Defines configuration for a Zipkin tracer.
     message ZipkinTracingProvider {
-      // Address of the Zipkin service (e.g. _zipkin:9411_).
-      string address = 1;
+      // REQUIRED. Specifies the service that the Zipkin API.
+      // The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
+      // to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+      // service defined by the Kubernetes service or ServiceEntry.
+      //
+      // Example: "zipkin.default.svc.cluster.local" or "bar/zipkin.example.com".
+      string service = 1;
 
-      // Use the tls_settings to specify the tls mode to use. If the remote tracing service
-      // uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
-      // mode as `ISTIO_MUTUAL`.
-      istio.networking.v1alpha3.ClientTLSSettings tls_settings = 2;
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 2;
 
       // Controls whether or not Istio-specific tags will be generated for each
       // span created by the sidecar proxies. These tags include information on
@@ -577,16 +580,19 @@ message MeshConfig {
 
     // Defines configuration for a Lightstep tracer.
     message LightstepTracingProvider {
-      // Address of the Lightstep Satellite pool.
-      string address = 1;
+      // REQUIRED. Specifies the service for the Lightstep collector.
+      // The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
+      // to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+      // service defined by the Kubernetes service or ServiceEntry.
+      //
+      // Example: "lightstep.default.svc.cluster.local" or "bar/lightstep.example.com".
+      string service = 1;
+
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 2;
 
       // The Lightstep access token.
-      string access_token = 2;
-
-      // Use the tls_settings to specify the tls mode to use. If the remote tracing service
-      // uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
-      // mode as `ISTIO_MUTUAL`.
-      istio.networking.v1alpha3.ClientTLSSettings tls_settings = 3;
+      string access_token = 3;
 
       // Controls whether or not Istio-specific tags will be generated for each
       // span created by the sidecar proxies. These tags include information on
@@ -600,13 +606,16 @@ message MeshConfig {
 
     // Defines configuration for a Datadog tracer.
     message DatadogTracingProvider {
-      // Address of the Datadog Agent.
-      string address = 1;
+      // REQUIRED. Specifies the service for the Datadog agent.
+      // The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
+      // to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+      // service defined by the Kubernetes service or ServiceEntry.
+      //
+      // Example: "datadog.default.svc.cluster.local" or "bar/datadog.example.com".
+      string service = 1;
 
-      // Use the tls_settings to specify the tls mode to use. If the remote tracing service
-      // uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
-      // mode as `ISTIO_MUTUAL`.
-      istio.networking.v1alpha3.ClientTLSSettings tls_settings = 2;
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 2;
 
       // Controls whether or not Istio-specific tags will be generated for each
       // span created by the sidecar proxies. These tags include information on
@@ -648,16 +657,16 @@ message MeshConfig {
 
     // Defines configuration for an OpenCensus tracer writing to an OpenCensus backend.
     message OpenCensusAgentTracingProvider {
-      // gRPC address for the OpenCensus agent (e.g. dns://authority/host:port or
-      // unix:path). See [gRPC naming
-      // docs](https://github.com/grpc/grpc/blob/master/doc/naming.md) for
-      // details.
-      string address = 1;
+      // REQUIRED. Specifies the service for the OpenCensusAgent.
+      // The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
+      // to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+      // service defined by the Kubernetes service or ServiceEntry.
+      //
+      // Example: "ocagent.default.svc.cluster.local" or "bar/ocagent.example.com".
+      string service = 1;
 
-      // Use the tls_settings to specify the tls mode to use. If the remote tracing service
-      // uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
-      // mode as `ISTIO_MUTUAL`.
-      istio.networking.v1alpha3.ClientTLSSettings tls_settings = 2;
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 2;
 
       // TraceContext selects the context propagation headers used for
       // distributed tracing.

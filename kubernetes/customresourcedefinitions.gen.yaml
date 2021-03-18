@@ -5868,7 +5868,7 @@ spec:
       openAPIV3Schema:
         properties:
           spec:
-            description: Telemetry defines the telemetry generation policies for workloads
+            description: Telemetry defines how the telemetry is generated for workloads
               within a mesh.
             properties:
               selector:
