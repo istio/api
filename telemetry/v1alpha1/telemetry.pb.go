@@ -36,8 +36,8 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // any given workload.
 //
 // Telemetry configuration will be evaluated in order, from most specific matches per telemetry
-// subdomain (tracing, access logging, and metrics) to least specific matches. The first
-// matching configuration for the subdomain will be applied. The order of evaluation will be:
+// type (tracing, access logging, and metrics) to least specific matches. The first
+// matching configuration for the telemetry type will be applied. The order of evaluation will be:
 //
 // 1. Workload-specific configuration
 // 1. Namespace-specific configuration
