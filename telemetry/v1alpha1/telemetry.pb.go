@@ -64,7 +64,8 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //   - randomSamplingPercentage: 10.00
 // ```
 //
-// Policy to disable trace reporting for the "foo" workload:
+// Policy to disable trace reporting for the "foo" workload (note: tracing
+// context will still be propagated):
 // ```yaml
 // apiVersion: telemetry.istio.io/v1alpha1
 // kind: Telemetry
@@ -85,7 +86,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // kind: Telemetry
 // metadata:
 //   name: foo-tracing-alternate
-//   namespace: bar
+//   namespace: baz
 // spec:
 //   selector:
 //     labels:
@@ -96,7 +97,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //     randomSamplingPercentage: 10.00
 // ```
 //
-// Policy to add a custom tag tag from a literal value:
+// Policy to add a custom tag from a literal value:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1alpha1
 // kind: Telemetry
@@ -139,8 +140,8 @@ type Telemetry struct {
 	// If not set, the Telemetry policy will be applied to all workloads in the
 	// same namespace as the Telemetry policy.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
-	// Optional. Tracing defines the per-workload overrides for trace span
-	// reporting.
+	// Optional. Tracing configures the tracing behavior for all
+	// selected workloads.
 	Tracing              []*Tracing `protobuf:"bytes,2,rep,name=tracing,proto3" json:"tracing,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
 	XXX_unrecognized     []byte     `json:"-"`
@@ -194,8 +195,8 @@ func (m *Telemetry) GetTracing() []*Tracing {
 	return nil
 }
 
-// Tracing defines the workload-level overrides for tracing behavior within
-// a mesh. It can be used to enable/disable tracing, as well as to set sampling
+// Tracing configures tracing behavior for workloads within a mesh.
+// It can be used to enable/disable tracing, as well as to set sampling
 // rates and custom tag extraction.
 type Tracing struct {
 	// Optional. Name of provider(s) to use for span reporting. If a provider is

@@ -48,7 +48,8 @@ spec:
   - randomSamplingPercentage: 10.00
 </code></pre>
 
-<p>Policy to disable trace reporting for the &ldquo;foo&rdquo; workload:</p>
+<p>Policy to disable trace reporting for the &ldquo;foo&rdquo; workload (note: tracing
+context will still be propagated):</p>
 
 <pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
@@ -69,7 +70,7 @@ spec:
 kind: Telemetry
 metadata:
   name: foo-tracing-alternate
-  namespace: bar
+  namespace: baz
 spec:
   selector:
     labels:
@@ -80,7 +81,7 @@ spec:
     randomSamplingPercentage: 10.00
 </code></pre>
 
-<p>Policy to add a custom tag tag from a literal value:</p>
+<p>Policy to add a custom tag from a literal value:</p>
 
 <pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
@@ -123,8 +124,8 @@ No
 <td><code>tracing</code></td>
 <td><code><a href="#Tracing">Tracing[]</a></code></td>
 <td>
-<p>Optional. Tracing defines the per-workload overrides for trace span
-reporting.</p>
+<p>Optional. Tracing configures the tracing behavior for all
+selected workloads.</p>
 
 </td>
 <td>
@@ -136,8 +137,8 @@ No
 </section>
 <h2 id="Tracing">Tracing</h2>
 <section>
-<p>Tracing defines the workload-level overrides for tracing behavior within
-a mesh. It can be used to enable/disable tracing, as well as to set sampling
+<p>Tracing configures tracing behavior for workloads within a mesh.
+It can be used to enable/disable tracing, as well as to set sampling
 rates and custom tag extraction.</p>
 
 <table class="message-fields">
