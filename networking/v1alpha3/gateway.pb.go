@@ -678,11 +678,14 @@ type Server struct {
 	// The Port on which the proxy should listen for incoming
 	// connections.
 	Port *Port `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
-	// $hide_from_docs
 	// The ip or the Unix domain socket to which the listener should be bound
 	// to. Format: `x.x.x.x` or `unix:///path/to/uds` or `unix://@foobar`
 	// (Linux abstract namespace). When using Unix domain sockets, the port
 	// number should be 0.
+	// This can be used to restrict the reachability of this server to be gateway internal only.
+	// This is typically used when a gateway needs to communicate to another mesh service
+	// e.g. publishing metrics. In such case, the server created with the
+	// specified bind will not be available to external gateway clients.
 	Bind string `protobuf:"bytes,4,opt,name=bind,proto3" json:"bind,omitempty"`
 	// One or more hosts exposed by this gateway.
 	// While typically applicable to
