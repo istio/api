@@ -410,6 +410,10 @@ message Source {
 
   // Optional. A list of negative match of remote IP blocks.
   repeated string not_remote_ip_blocks = 10;
+
+  // Optional. A list of trust domains of client certificates.
+  // This field requires mTLS enabled.
+  repeated string trust_domains = 11;
 }
 
 // Operation specifies the operations of a request. Fields in the operation are

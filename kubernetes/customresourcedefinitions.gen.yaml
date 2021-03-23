@@ -5519,6 +5519,12 @@ spec:
                                   format: string
                                   type: string
                                 type: array
+                              trustDomains:
+                                description: Optional.
+                                items:
+                                  format: string
+                                  type: string
+                                type: array
                             type: object
                         type: object
                       type: array

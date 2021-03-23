@@ -228,6 +228,14 @@
               "type": "string",
               "format": "string"
             }
+          },
+          "trustDomains": {
+            "description": "Optional. A list of trust domains of client certificates. This field requires mTLS enabled.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
           }
         }
       },

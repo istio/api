@@ -222,6 +222,13 @@ message MeshConfig {
       // The certificate is retrieved from the endpoint.
       string spiffe_bundle_url = 2;
     }
+
+    // Optional. Specify the trust domain to which this certificate data belongs.
+    // If `enabled_spiffe_multiple_independent_trust_domain_authentication` enabled, this must be set for
+    // distinguishing different trust domains from each other. Certificates in a same trust domain will be merged
+    // and used together to validate the trust domain.
+    // If `enabled_spiffe_multiple_independent_trust_domain_authentication` disabled, it is not necessary to set.
+    string trust_domain = 3;
   }
 
   // The extra root certificates for workload-to-workload communication.
@@ -229,6 +236,25 @@ message MeshConfig {
   // are automatically added by Istiod.
   // The CA certificate that signs the workload certificates is automatically added by Istio Agent.
   repeated CertificateData ca_certificates = 58;
+
+  // If enabled, SPIFFE multiple independent trust domain authentication scheme is used for mTSL client certificate validation.
+  // That means, all the root certificates specified in `ca_certificates` and the self-signed 'istio-ca-secret' secret are used to
+  // validate client certificates while keeping them isolated from each other.
+  // More precisely, the proxy validates client certificates with the following procedure:
+  // 1. Extract the SVID(URI SAN) in an incoming client certificate.
+  // 2. Select a root certificate for the trust domain in the SVID (E.g. "example.com" for "spiffe://example.com/foo" SVID).
+  // 3. Verify the certificate using the selected root certificate.
+  // This is a particular importance for cross cluster mTLS communication where each cluster manages their own root certificates.
+  // For example, consider the case where a cluster A manages the trust domain "aaa.com", cluster B manages "bbb.com".
+  // When services in cluster A talk to services in cluster B, services in cluster B have to validate client certificates
+  // based on the root certificates of cluster A. However, if we merge root certificates from both cluster A and cluster B,
+  // then we cannot trust that presented client certificates are actually signed by the corresponding cluster. That is because
+  // cluster A might sign client certificates with "spiffe://bbb.com/**" URI SAN in order to bypass
+  // cluster B's authorization based on workload identity. In that case, we say these trust domains are NOT isolated from each other.
+  // This is why we need to select root certificates based on the trust domain before verify client certificates.
+  //
+  // Please note that this setting requires `STRICT` mTLS mode to take into effect.
+  bool enabled_spiffe_multiple_independent_trust_domain_authentication = 60;
 
   // The default value for the ServiceEntry.export_to field and services
   // imported through container registry integrations, e.g. this applies to
