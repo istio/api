@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.operator.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 63
+number_of_entries: 98
 ---
 <p>Configuration affecting Istio control plane installation version and shape.</p>
 
@@ -836,11 +836,12 @@ No
 </tr>
 <tr id="KubernetesResourcesSpec-volumes">
 <td><code>volumes</code></td>
-<td><code><a href="#k8s-io-api-core-v1-Volume">Volume[]</a></code></td>
+<td><code><a href="#Volume">Volume[]</a></code></td>
 <td>
 <p>k8s volume
 <a href="https://kubernetes.io/docs/concepts/storage/volumes/">https://kubernetes.io/docs/concepts/storage/volumes/</a>
-Volumes defines the collection of Volume to inject into the pod.</p>
+Volumes defines the collection of Volume to inject into the pod.
+Duplicate the volume definition here to resolve the marshal/unmarshal issue caused by the inline field in the k8s api.</p>
 
 </td>
 <td>
@@ -2696,6 +2697,2148 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="Volume">Volume</h2>
+<section>
+<p>k8s.io.api.core.v1.Volume</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Volume-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-hostPath">
+<td><code>hostPath</code></td>
+<td><code><a href="#HostPathVolumeSource">HostPathVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-emptyDir">
+<td><code>emptyDir</code></td>
+<td><code><a href="#EmptyDirVolumeSource">EmptyDirVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-gcePersistentDisk">
+<td><code>gcePersistentDisk</code></td>
+<td><code><a href="#GCEPersistentDiskVolumeSource">GCEPersistentDiskVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-awsElasticBlockStore">
+<td><code>awsElasticBlockStore</code></td>
+<td><code><a href="#AWSElasticBlockStoreVolumeSource">AWSElasticBlockStoreVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-gitRepo">
+<td><code>gitRepo</code></td>
+<td><code><a href="#GitRepoVolumeSource">GitRepoVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-secret">
+<td><code>secret</code></td>
+<td><code><a href="#SecretVolumeSource">SecretVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-nfs">
+<td><code>nfs</code></td>
+<td><code><a href="#NFSVolumeSource">NFSVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-iscsi">
+<td><code>iscsi</code></td>
+<td><code><a href="#ISCSIVolumeSource">ISCSIVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-glusterfs">
+<td><code>glusterfs</code></td>
+<td><code><a href="#GlusterfsVolumeSource">GlusterfsVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-persistentVolumeClaim">
+<td><code>persistentVolumeClaim</code></td>
+<td><code><a href="#PersistentVolumeClaimVolumeSource">PersistentVolumeClaimVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-rbd">
+<td><code>rbd</code></td>
+<td><code><a href="#RBDVolumeSource">RBDVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-flexVolume">
+<td><code>flexVolume</code></td>
+<td><code><a href="#FlexVolumeSource">FlexVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-cinder">
+<td><code>cinder</code></td>
+<td><code><a href="#CinderVolumeSource">CinderVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-cephfs">
+<td><code>cephfs</code></td>
+<td><code><a href="#CephFSVolumeSource">CephFSVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-flocker">
+<td><code>flocker</code></td>
+<td><code><a href="#FlockerVolumeSource">FlockerVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-downwardAPI">
+<td><code>downwardAPI</code></td>
+<td><code><a href="#DownwardAPIVolumeSource">DownwardAPIVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-fc">
+<td><code>fc</code></td>
+<td><code><a href="#FCVolumeSource">FCVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-azureFile">
+<td><code>azureFile</code></td>
+<td><code><a href="#AzureFileVolumeSource">AzureFileVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-configMap">
+<td><code>configMap</code></td>
+<td><code><a href="#ConfigMapVolumeSource">ConfigMapVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-vsphereVolume">
+<td><code>vsphereVolume</code></td>
+<td><code><a href="#VsphereVirtualDiskVolumeSource">VsphereVirtualDiskVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-quobyte">
+<td><code>quobyte</code></td>
+<td><code><a href="#QuobyteVolumeSource">QuobyteVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-azureDisk">
+<td><code>azureDisk</code></td>
+<td><code><a href="#AzureDiskVolumeSource">AzureDiskVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-photonPersistentDisk">
+<td><code>photonPersistentDisk</code></td>
+<td><code><a href="#PhotonPersistentDiskVolumeSource">PhotonPersistentDiskVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-projected">
+<td><code>projected</code></td>
+<td><code><a href="#ProjectedVolumeSource">ProjectedVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-portworxVolume">
+<td><code>portworxVolume</code></td>
+<td><code><a href="#PortworxVolumeSource">PortworxVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-scaleIO">
+<td><code>scaleIO</code></td>
+<td><code><a href="#ScaleIOVolumeSource">ScaleIOVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-storageos">
+<td><code>storageos</code></td>
+<td><code><a href="#StorageOSVolumeSource">StorageOSVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Volume-csi">
+<td><code>csi</code></td>
+<td><code><a href="#CSIVolumeSource">CSIVolumeSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HostPathVolumeSource">HostPathVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.HostPathVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HostPathVolumeSource-path">
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HostPathVolumeSource-type">
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="EmptyDirVolumeSource">EmptyDirVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.EmptyDirVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="EmptyDirVolumeSource-medium">
+<td><code>medium</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="EmptyDirVolumeSource-sizeLimit">
+<td><code>sizeLimit</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="GCEPersistentDiskVolumeSource">GCEPersistentDiskVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.GCEPersistentDiskVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="GCEPersistentDiskVolumeSource-pdName">
+<td><code>pdName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="GCEPersistentDiskVolumeSource-fsType">
+<td><code>fsType</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="GCEPersistentDiskVolumeSource-partition">
+<td><code>partition</code></td>
+<td><code>int32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="GCEPersistentDiskVolumeSource-readOnly">
+<td><code>readOnly</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="AWSElasticBlockStoreVolumeSource">AWSElasticBlockStoreVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.AWSElasticBlockStoreVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AWSElasticBlockStoreVolumeSource-volumeID">
+<td><code>volumeID</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AWSElasticBlockStoreVolumeSource-fsType">
+<td><code>fsType</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AWSElasticBlockStoreVolumeSource-partition">
+<td><code>partition</code></td>
+<td><code>int32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AWSElasticBlockStoreVolumeSource-readOnly">
+<td><code>readOnly</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="GitRepoVolumeSource">GitRepoVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.GitRepoVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="GitRepoVolumeSource-repository">
+<td><code>repository</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="GitRepoVolumeSource-revision">
+<td><code>revision</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="GitRepoVolumeSource-directory">
+<td><code>directory</code></td>
+<td><code>int32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="SecretVolumeSource">SecretVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.SecretVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="SecretVolumeSource-secretName">
+<td><code>secretName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="SecretVolumeSource-items">
+<td><code>items</code></td>
+<td><code><a href="#KeyToPath">KeyToPath[]</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="SecretVolumeSource-defaultMode">
+<td><code>defaultMode</code></td>
+<td><code>int32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="SecretVolumeSource-optional">
+<td><code>optional</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="KeyToPath">KeyToPath</h2>
+<section>
+<p>k8s.io.api.core.v1.KeyToPath</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="KeyToPath-key">
+<td><code>key</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="KeyToPath-path">
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="KeyToPath-mode">
+<td><code>mode</code></td>
+<td><code>int32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="NFSVolumeSource">NFSVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.NFSVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="NFSVolumeSource-server">
+<td><code>server</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="NFSVolumeSource-path">
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="NFSVolumeSource-readOnly">
+<td><code>readOnly</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ISCSIVolumeSource">ISCSIVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.ISCSIVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ISCSIVolumeSource-targetPortal">
+<td><code>targetPortal</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ISCSIVolumeSource-iqn">
+<td><code>iqn</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ISCSIVolumeSource-lun">
+<td><code>lun</code></td>
+<td><code>int32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ISCSIVolumeSource-iscsiInterface">
+<td><code>iscsiInterface</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ISCSIVolumeSource-fsType">
+<td><code>fsType</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ISCSIVolumeSource-readOnly">
+<td><code>readOnly</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ISCSIVolumeSource-portals">
+<td><code>portals</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ISCSIVolumeSource-chapAuthDiscovery">
+<td><code>chapAuthDiscovery</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ISCSIVolumeSource-chapAuthSession">
+<td><code>chapAuthSession</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ISCSIVolumeSource-secretRef">
+<td><code>secretRef</code></td>
+<td><code><a href="#LocalObjectReference">LocalObjectReference</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ISCSIVolumeSource-initiatorName">
+<td><code>initiatorName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="GlusterfsVolumeSource">GlusterfsVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.GlusterfsVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="GlusterfsVolumeSource-endpoints">
+<td><code>endpoints</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="GlusterfsVolumeSource-path">
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="GlusterfsVolumeSource-readOnly">
+<td><code>readOnly</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="PersistentVolumeClaimVolumeSource">PersistentVolumeClaimVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.PersistentVolumeClaimVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="PersistentVolumeClaimVolumeSource-claimName">
+<td><code>claimName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="PersistentVolumeClaimVolumeSource-readOnly">
+<td><code>readOnly</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RBDVolumeSource">RBDVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.RBDVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RBDVolumeSource-monitors">
+<td><code>monitors</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RBDVolumeSource-image">
+<td><code>image</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RBDVolumeSource-fsType">
+<td><code>fsType</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RBDVolumeSource-pool">
+<td><code>pool</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RBDVolumeSource-user">
+<td><code>user</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RBDVolumeSource-keyring">
+<td><code>keyring</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RBDVolumeSource-secretRef">
+<td><code>secretRef</code></td>
+<td><code><a href="#LocalObjectReference">LocalObjectReference</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RBDVolumeSource-readOnly">
+<td><code>readOnly</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="FlexVolumeSource">FlexVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.FlexVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="FlexVolumeSource-driver">
+<td><code>driver</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="FlexVolumeSource-fsType">
+<td><code>fsType</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="FlexVolumeSource-secretRef">
+<td><code>secretRef</code></td>
+<td><code><a href="#LocalObjectReference">LocalObjectReference</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="FlexVolumeSource-readOnly">
+<td><code>readOnly</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="FlexVolumeSource-options">
+<td><code>options</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="CinderVolumeSource">CinderVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.CinderVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="CinderVolumeSource-volumeID">
+<td><code>volumeID</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CinderVolumeSource-fsType">
+<td><code>fsType</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CinderVolumeSource-readOnly">
+<td><code>readOnly</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CinderVolumeSource-secretRef">
+<td><code>secretRef</code></td>
+<td><code><a href="#LocalObjectReference">LocalObjectReference</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="CephFSVolumeSource">CephFSVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.CephFSVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="CephFSVolumeSource-monitors">
+<td><code>monitors</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CephFSVolumeSource-path">
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CephFSVolumeSource-user">
+<td><code>user</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CephFSVolumeSource-secretFile">
+<td><code>secretFile</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CephFSVolumeSource-secretRef">
+<td><code>secretRef</code></td>
+<td><code><a href="#LocalObjectReference">LocalObjectReference</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CephFSVolumeSource-readOnly">
+<td><code>readOnly</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="FlockerVolumeSource">FlockerVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.FlockerVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="FlockerVolumeSource-datasetName">
+<td><code>datasetName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="FlockerVolumeSource-datasetUUID">
+<td><code>datasetUUID</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="DownwardAPIVolumeSource">DownwardAPIVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.DownwardAPIVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="DownwardAPIVolumeSource-items">
+<td><code>items</code></td>
+<td><code><a href="#DownwardAPIVolumeFile">DownwardAPIVolumeFile[]</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="DownwardAPIVolumeSource-defaultMode">
+<td><code>defaultMode</code></td>
+<td><code>int32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="DownwardAPIVolumeFile">DownwardAPIVolumeFile</h2>
+<section>
+<p>k8s.io.api.core.v1.DownwardAPIVolumeFile</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="DownwardAPIVolumeFile-path">
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="DownwardAPIVolumeFile-fieldRef">
+<td><code>fieldRef</code></td>
+<td><code><a href="#ObjectFieldSelector">ObjectFieldSelector</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="DownwardAPIVolumeFile-resourceFieldRef">
+<td><code>resourceFieldRef</code></td>
+<td><code><a href="#ResourceFieldSelector">ResourceFieldSelector</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="DownwardAPIVolumeFile-mode">
+<td><code>mode</code></td>
+<td><code>int32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="FCVolumeSource">FCVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.FCVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="FCVolumeSource-targetWWNs">
+<td><code>targetWWNs</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="FCVolumeSource-lun">
+<td><code>lun</code></td>
+<td><code>int32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="FCVolumeSource-fsType">
+<td><code>fsType</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="FCVolumeSource-readOnly">
+<td><code>readOnly</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="FCVolumeSource-wwids">
+<td><code>wwids</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="AzureFileVolumeSource">AzureFileVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.AzureFileVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AzureFileVolumeSource-secretName">
+<td><code>secretName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AzureFileVolumeSource-shareName">
+<td><code>shareName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AzureFileVolumeSource-readOnly">
+<td><code>readOnly</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ConfigMapVolumeSource">ConfigMapVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.ConfigMapVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ConfigMapVolumeSource-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ConfigMapVolumeSource-items">
+<td><code>items</code></td>
+<td><code><a href="#KeyToPath">KeyToPath[]</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ConfigMapVolumeSource-defaultMode">
+<td><code>defaultMode</code></td>
+<td><code>int32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ConfigMapVolumeSource-optional">
+<td><code>optional</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="VsphereVirtualDiskVolumeSource">VsphereVirtualDiskVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.VsphereVirtualDiskVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="VsphereVirtualDiskVolumeSource-volumePath">
+<td><code>volumePath</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="VsphereVirtualDiskVolumeSource-fsType">
+<td><code>fsType</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="VsphereVirtualDiskVolumeSource-storagePolicyName">
+<td><code>storagePolicyName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="VsphereVirtualDiskVolumeSource-storagePolicyID">
+<td><code>storagePolicyID</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="QuobyteVolumeSource">QuobyteVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.QuobyteVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="QuobyteVolumeSource-registry">
+<td><code>registry</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="QuobyteVolumeSource-volume">
+<td><code>volume</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="QuobyteVolumeSource-readOnly">
+<td><code>readOnly</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="QuobyteVolumeSource-user">
+<td><code>user</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="QuobyteVolumeSource-group">
+<td><code>group</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="QuobyteVolumeSource-tenant">
+<td><code>tenant</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="AzureDiskVolumeSource">AzureDiskVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.AzureDiskVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AzureDiskVolumeSource-diskName">
+<td><code>diskName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AzureDiskVolumeSource-diskURI">
+<td><code>diskURI</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AzureDiskVolumeSource-cachingMode">
+<td><code>cachingMode</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AzureDiskVolumeSource-fsType">
+<td><code>fsType</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AzureDiskVolumeSource-readOnly">
+<td><code>readOnly</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AzureDiskVolumeSource-kind">
+<td><code>kind</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="PhotonPersistentDiskVolumeSource">PhotonPersistentDiskVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.PhotonPersistentDiskVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="PhotonPersistentDiskVolumeSource-pdID">
+<td><code>pdID</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="PhotonPersistentDiskVolumeSource-fsType">
+<td><code>fsType</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ProjectedVolumeSource">ProjectedVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.ProjectedVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProjectedVolumeSource-sources">
+<td><code>sources</code></td>
+<td><code><a href="#VolumeProjection">VolumeProjection[]</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProjectedVolumeSource-defaultMode">
+<td><code>defaultMode</code></td>
+<td><code>int32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="VolumeProjection">VolumeProjection</h2>
+<section>
+<p>k8s.io.api.core.v1.VolumeProjection</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="VolumeProjection-secret">
+<td><code>secret</code></td>
+<td><code><a href="#SecretProjection">SecretProjection</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="VolumeProjection-downwardAPI">
+<td><code>downwardAPI</code></td>
+<td><code><a href="#DownwardAPIProjection">DownwardAPIProjection</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="VolumeProjection-configMap">
+<td><code>configMap</code></td>
+<td><code><a href="#ConfigMapProjection">ConfigMapProjection</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="VolumeProjection-serviceAccountToken">
+<td><code>serviceAccountToken</code></td>
+<td><code><a href="#ServiceAccountTokenProjection">ServiceAccountTokenProjection</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="SecretProjection">SecretProjection</h2>
+<section>
+<p>k8s.io.api.core.v1.SecretProjection</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="SecretProjection-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="SecretProjection-items">
+<td><code>items</code></td>
+<td><code><a href="#KeyToPath">KeyToPath[]</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="SecretProjection-optional">
+<td><code>optional</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="DownwardAPIProjection">DownwardAPIProjection</h2>
+<section>
+<p>k8s.io.api.core.v1.DownwardAPIProjection</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="DownwardAPIProjection-items">
+<td><code>items</code></td>
+<td><code><a href="#DownwardAPIVolumeFile">DownwardAPIVolumeFile[]</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ConfigMapProjection">ConfigMapProjection</h2>
+<section>
+<p>k8s.io.api.core.v1.ConfigMapProjection</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ConfigMapProjection-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ConfigMapProjection-items">
+<td><code>items</code></td>
+<td><code><a href="#KeyToPath">KeyToPath[]</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ConfigMapProjection-optional">
+<td><code>optional</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ServiceAccountTokenProjection">ServiceAccountTokenProjection</h2>
+<section>
+<p>k8s.io.api.core.v1.ServiceAccountTokenProjection</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ServiceAccountTokenProjection-audience">
+<td><code>audience</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ServiceAccountTokenProjection-expirationSeconds">
+<td><code>expirationSeconds</code></td>
+<td><code>int64</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ServiceAccountTokenProjection-path">
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="PortworxVolumeSource">PortworxVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.PortworxVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="PortworxVolumeSource-volumeID">
+<td><code>volumeID</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="PortworxVolumeSource-fsType">
+<td><code>fsType</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="PortworxVolumeSource-readOnly">
+<td><code>readOnly</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ScaleIOVolumeSource">ScaleIOVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.ScaleIOVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ScaleIOVolumeSource-gateway">
+<td><code>gateway</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ScaleIOVolumeSource-system">
+<td><code>system</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ScaleIOVolumeSource-secretRef">
+<td><code>secretRef</code></td>
+<td><code><a href="#LocalObjectReference">LocalObjectReference</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ScaleIOVolumeSource-sslEnabled">
+<td><code>sslEnabled</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ScaleIOVolumeSource-protectionDomain">
+<td><code>protectionDomain</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ScaleIOVolumeSource-storagePool">
+<td><code>storagePool</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ScaleIOVolumeSource-storageMode">
+<td><code>storageMode</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ScaleIOVolumeSource-volumeName">
+<td><code>volumeName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ScaleIOVolumeSource-fsType">
+<td><code>fsType</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ScaleIOVolumeSource-readOnly">
+<td><code>readOnly</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="StorageOSVolumeSource">StorageOSVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.StorageOSVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="StorageOSVolumeSource-volumeName">
+<td><code>volumeName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="StorageOSVolumeSource-volumeNamespace">
+<td><code>volumeNamespace</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="StorageOSVolumeSource-fsType">
+<td><code>fsType</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="StorageOSVolumeSource-readOnly">
+<td><code>readOnly</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="StorageOSVolumeSource-secretRef">
+<td><code>secretRef</code></td>
+<td><code><a href="#LocalObjectReference">LocalObjectReference</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="CSIVolumeSource">CSIVolumeSource</h2>
+<section>
+<p>k8s.io.api.core.v1.CSIVolumeSource</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="CSIVolumeSource-driver">
+<td><code>driver</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CSIVolumeSource-readOnly">
+<td><code>readOnly</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CSIVolumeSource-fsType">
+<td><code>fsType</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CSIVolumeSource-volumeAttributes">
+<td><code>volumeAttributes</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CSIVolumeSource-nodePublishSecretRef">
+<td><code>nodePublishSecretRef</code></td>
+<td><code><a href="#LocalObjectReference">LocalObjectReference</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="PodSecurityContext">PodSecurityContext</h2>
 <section>
 <p>See k8s.io.api.core.v1.PodSecurityContext.</p>
@@ -3073,49 +5216,6 @@ For add, the path should be a new leaf.
 For delete, value should be unset.
 For replace, path should reference an existing node.
 All values are strings but are converted into appropriate type based on schema.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="k8s-io-api-core-v1-Volume">k8s.io.api.core.v1.Volume</h2>
-<section>
-<p>Volume represents a named volume in a pod that may be accessed by any container in the pod.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="k8s-io-api-core-v1-Volume-name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>Volume&rsquo;s name.
-Must be a DNS_LABEL and unique within the pod.
-More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="k8s-io-api-core-v1-Volume-volumeSource">
-<td><code>volumeSource</code></td>
-<td><code><a href="#k8s-io-api-core-v1-VolumeSource">VolumeSource</a></code></td>
-<td>
-<p>VolumeSource represents the location and type of the mounted volume.
-If not specified, the Volume is implied to be an EmptyDir.
-This implied behavior is deprecated and will be removed in a future version.</p>
 
 </td>
 <td>

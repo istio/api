@@ -294,7 +294,8 @@ message KubernetesResourcesSpec {
     // k8s volume
     // [https://kubernetes.io/docs/concepts/storage/volumes/](https://kubernetes.io/docs/concepts/storage/volumes/)
     // Volumes defines the collection of Volume to inject into the pod.
-    repeated k8s.io.api.core.v1.Volume volumes = 17;
+    // Duplicate the volume definition here to resolve the marshal/unmarshal issue caused by the inline field in the k8s api.
+    repeated Volume volumes = 17;
     // k8s volumeMounts
     // VolumeMounts defines the collection of VolumeMount to inject into containers.
     repeated k8s.io.api.core.v1.VolumeMount volumeMounts = 18;
@@ -607,6 +608,320 @@ message Toleration {
 message WeightedPodAffinityTerm {
     int32 weight = 1;
     PodAffinityTerm podAffinityTerm = 2;
+}
+
+// k8s.io.api.core.v1.Volume
+message Volume {
+    string name = 1;
+    HostPathVolumeSource hostPath = 2;
+    EmptyDirVolumeSource emptyDir = 3;
+    GCEPersistentDiskVolumeSource gcePersistentDisk = 4;
+    AWSElasticBlockStoreVolumeSource awsElasticBlockStore = 5;
+    GitRepoVolumeSource gitRepo = 6;
+    SecretVolumeSource secret = 7;
+    NFSVolumeSource nfs =8;
+    ISCSIVolumeSource iscsi = 9;
+    GlusterfsVolumeSource glusterfs = 10;
+    PersistentVolumeClaimVolumeSource persistentVolumeClaim = 11;
+    RBDVolumeSource rbd = 12;
+    FlexVolumeSource flexVolume = 13;
+    CinderVolumeSource cinder = 14;
+    CephFSVolumeSource cephfs = 15;
+    FlockerVolumeSource flocker = 16;
+    DownwardAPIVolumeSource downwardAPI = 17;
+    FCVolumeSource fc = 18;
+    AzureFileVolumeSource azureFile = 19;
+    ConfigMapVolumeSource configMap = 20;
+    VsphereVirtualDiskVolumeSource vsphereVolume = 21;
+    QuobyteVolumeSource quobyte = 22;
+    AzureDiskVolumeSource azureDisk = 23;
+    PhotonPersistentDiskVolumeSource photonPersistentDisk = 24;
+    ProjectedVolumeSource projected = 25;
+    PortworxVolumeSource portworxVolume = 26;
+    ScaleIOVolumeSource scaleIO = 27;
+    StorageOSVolumeSource storageos = 28;
+    CSIVolumeSource csi = 29;
+}
+
+// k8s.io.api.core.v1.HostPathVolumeSource
+message HostPathVolumeSource {
+    string path = 1;
+    string type = 2;
+}
+
+// k8s.io.api.core.v1.EmptyDirVolumeSource
+message EmptyDirVolumeSource {
+    string medium = 1;
+    string sizeLimit = 2;
+}
+
+// k8s.io.api.core.v1.GCEPersistentDiskVolumeSource
+message GCEPersistentDiskVolumeSource {
+    string pdName = 1;
+    string fsType = 2;
+    int32 partition = 3;
+    bool readOnly = 4;
+}
+
+// k8s.io.api.core.v1.AWSElasticBlockStoreVolumeSource
+message AWSElasticBlockStoreVolumeSource {
+    string volumeID = 1;
+    string fsType = 2;
+    int32 partition = 3;
+    bool readOnly = 4;
+}
+
+// k8s.io.api.core.v1.GitRepoVolumeSource
+message GitRepoVolumeSource {
+    string repository = 1;
+    string revision = 2;
+    int32 directory = 3;
+}
+
+// k8s.io.api.core.v1.SecretVolumeSource
+message SecretVolumeSource {
+    string secretName = 1;
+    repeated KeyToPath items = 2;
+    int32 defaultMode = 3;
+    bool optional = 4;
+}
+
+// k8s.io.api.core.v1.KeyToPath
+message KeyToPath {
+    string key = 1;
+    string path = 2;
+    int32 mode = 3;
+}
+
+// k8s.io.api.core.v1.NFSVolumeSource
+message NFSVolumeSource {
+    string server = 1;
+    string path = 2;
+    bool readOnly = 3;
+}
+
+// k8s.io.api.core.v1.ISCSIVolumeSource
+message ISCSIVolumeSource {
+    string targetPortal = 1;
+    string iqn = 2;
+    int32 lun = 3;
+    string iscsiInterface = 4;
+    string fsType = 5;
+    bool readOnly = 6;
+    repeated string portals = 7;
+    bool chapAuthDiscovery = 8;
+    bool chapAuthSession = 9;
+    LocalObjectReference secretRef = 10;
+    string initiatorName = 11;
+}
+
+// k8s.io.api.core.v1.GlusterfsVolumeSource
+message GlusterfsVolumeSource {
+    string endpoints = 1;
+    string path = 2;
+    bool readOnly = 3;
+}
+
+// k8s.io.api.core.v1.PersistentVolumeClaimVolumeSource
+message PersistentVolumeClaimVolumeSource {
+    string claimName = 1;
+    bool readOnly = 2;
+}
+
+// k8s.io.api.core.v1.RBDVolumeSource
+message RBDVolumeSource {
+    repeated string monitors = 1;
+    string image = 2;
+    string fsType = 3;
+    string pool = 4;
+    string user = 5;
+    string keyring = 6;
+    LocalObjectReference secretRef = 7;
+    bool readOnly = 8;
+}
+
+// k8s.io.api.core.v1.FlexVolumeSource
+message FlexVolumeSource {
+    string driver = 1;
+    string fsType = 2;
+    LocalObjectReference secretRef = 3;
+    bool readOnly = 4;
+    map<string, string> options = 5;
+}
+
+// k8s.io.api.core.v1.CinderVolumeSource
+message CinderVolumeSource {
+    string volumeID = 1;
+    string fsType = 2;
+    bool readOnly = 3;
+    LocalObjectReference secretRef = 4;
+}
+
+// k8s.io.api.core.v1.CephFSVolumeSource
+message CephFSVolumeSource {
+    repeated string monitors = 1;
+    string path = 2;
+    string user = 3;
+    string secretFile = 4;
+    LocalObjectReference secretRef = 5;
+    bool readOnly = 6;
+}
+
+// k8s.io.api.core.v1.FlockerVolumeSource
+message FlockerVolumeSource {
+    string datasetName = 1;
+    string datasetUUID = 2;
+}
+
+// k8s.io.api.core.v1.DownwardAPIVolumeSource
+message DownwardAPIVolumeSource {
+    repeated DownwardAPIVolumeFile items = 1;
+    int32 defaultMode = 2;
+}
+
+// k8s.io.api.core.v1.DownwardAPIVolumeFile
+message DownwardAPIVolumeFile {
+    string path = 1;
+    ObjectFieldSelector fieldRef = 2;
+    ResourceFieldSelector resourceFieldRef = 3;
+    int32 mode = 4;
+}
+
+// k8s.io.api.core.v1.FCVolumeSource
+message FCVolumeSource {
+    repeated string targetWWNs = 1;
+    int32 lun = 2;
+    string fsType = 3;
+    bool readOnly = 4;
+    repeated string wwids = 5;
+}
+
+// k8s.io.api.core.v1.AzureFileVolumeSource
+message AzureFileVolumeSource {
+    string secretName = 1;
+    string shareName = 2;
+    bool readOnly = 3;
+}
+
+// k8s.io.api.core.v1.ConfigMapVolumeSource
+message ConfigMapVolumeSource {
+    string name = 1;
+    repeated KeyToPath items = 2;
+    int32 defaultMode = 3;
+    bool optional = 4;
+}
+
+// k8s.io.api.core.v1.VsphereVirtualDiskVolumeSource
+message VsphereVirtualDiskVolumeSource {
+    string volumePath = 1;
+    string fsType = 2;
+    string storagePolicyName = 3;
+    string storagePolicyID = 4;
+}
+
+// k8s.io.api.core.v1.QuobyteVolumeSource
+message QuobyteVolumeSource {
+    string registry = 1;
+    string volume = 2;
+    bool readOnly = 3;
+    string user = 4;
+    string group = 5;
+    string tenant = 6;
+}
+
+// k8s.io.api.core.v1.AzureDiskVolumeSource
+message AzureDiskVolumeSource {
+    string diskName = 1;
+    string diskURI = 2;
+    string cachingMode = 3;
+    string fsType = 4;
+    bool readOnly = 5;
+    string kind = 6;
+}
+
+// k8s.io.api.core.v1.PhotonPersistentDiskVolumeSource
+message PhotonPersistentDiskVolumeSource {
+    string pdID = 1;
+    string fsType = 2;
+}
+
+// k8s.io.api.core.v1.ProjectedVolumeSource
+message ProjectedVolumeSource {
+    repeated VolumeProjection sources = 1;
+    int32 defaultMode = 2;
+}
+
+// k8s.io.api.core.v1.VolumeProjection
+message VolumeProjection {
+    SecretProjection secret = 1;
+    DownwardAPIProjection downwardAPI = 2;
+    ConfigMapProjection configMap = 3;
+    ServiceAccountTokenProjection serviceAccountToken = 4;
+}
+
+// k8s.io.api.core.v1.SecretProjection
+message SecretProjection {
+    string name = 1;
+    repeated KeyToPath items = 2;
+    bool optional = 3;
+}
+
+// k8s.io.api.core.v1.DownwardAPIProjection
+message DownwardAPIProjection {
+    repeated DownwardAPIVolumeFile items = 1;
+}
+
+// k8s.io.api.core.v1.ConfigMapProjection
+message ConfigMapProjection {
+    string name = 1;
+    repeated KeyToPath items = 2;
+    bool optional = 3;
+}
+
+// k8s.io.api.core.v1.ServiceAccountTokenProjection
+message ServiceAccountTokenProjection {
+    string audience = 1;
+    int64 expirationSeconds = 2;
+    string path = 3;
+}
+
+// k8s.io.api.core.v1.PortworxVolumeSource
+message PortworxVolumeSource {
+    string volumeID = 1;
+    string fsType = 2;
+    bool readOnly = 3;
+}
+
+// k8s.io.api.core.v1.ScaleIOVolumeSource
+message ScaleIOVolumeSource {
+    string gateway = 1;
+    string system = 2;
+    LocalObjectReference secretRef = 3;
+    bool sslEnabled = 4;
+    string protectionDomain = 5;
+    string storagePool = 6;
+    string storageMode= 7;
+    string volumeName = 8;
+    string fsType = 9;
+    bool readOnly = 10;
+}
+
+// k8s.io.api.core.v1.StorageOSVolumeSource
+message StorageOSVolumeSource {
+    string volumeName = 1;
+    string volumeNamespace = 2;
+    string fsType = 3;
+    bool readOnly = 4;
+    LocalObjectReference secretRef = 5;
+}
+
+// k8s.io.api.core.v1.CSIVolumeSource
+message CSIVolumeSource {
+    string driver = 1;
+    bool readOnly = 2;
+    string fsType = 3;
+    map<string, string> volumeAttributes = 4;
+    LocalObjectReference nodePublishSecretRef = 5;
 }
 
 // See k8s.io.api.core.v1.PodSecurityContext.

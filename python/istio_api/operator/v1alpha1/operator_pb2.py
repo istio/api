@@ -24,7 +24,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.operator.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\036istio.io/api/operator/v1alpha1\310\342\036\000\320\342\036\000\340\342\036\000'),
-  serialized_pb=_b('\n operator/v1alpha1/operator.proto\x12\x17istio.operator.v1alpha1\x1a\x19google/protobuf/any.proto\x1a\x34k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto\x1a\"k8s.io/api/core/v1/generated.proto\x1a\x14gogoproto/gogo.proto\"\xec\x06\n\x11IstioOperatorSpec\x12\x18\n\x07profile\x18\n \x01(\tR\x07profile\x12\x30\n\x14install_package_path\x18\x0b \x01(\tR\x12installPackagePath\x12\x10\n\x03hub\x18\x0c \x01(\tR\x03hub\x12\x38\n\x03tag\x18\r \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x03tag\x12+\n\x0fresource_suffix\x18\x0e \x01(\tB\x02\x18\x01R\x0eresourceSuffix\x12\x1c\n\tnamespace\x18\x0f \x01(\tR\tnamespace\x12\x1a\n\x08revision\x18\x10 \x01(\tR\x08revision\x12)\n\x10\x64\x65\x66\x61ult_revision\x18\x11 \x01(\x08R\x0f\x64\x65\x66\x61ultRevision\x12P\n\x0bmesh_config\x18( \x01(\x0b\x32/.istio.operator.v1alpha1.TypeMapStringInterfaceR\nmeshConfig\x12N\n\ncomponents\x18\x32 \x01(\x0b\x32..istio.operator.v1alpha1.IstioComponentSetSpecR\ncomponents\x12n\n\x10\x61\x64\x64on_components\x18\x33 \x03(\x0b\x32?.istio.operator.v1alpha1.IstioOperatorSpec.AddonComponentsEntryB\x02\x18\x01R\x0f\x61\x64\x64onComponents\x12G\n\x06values\x18\x64 \x01(\x0b\x32/.istio.operator.v1alpha1.TypeMapStringInterfaceR\x06values\x12^\n\x12unvalidated_values\x18\x65 \x01(\x0b\x32/.istio.operator.v1alpha1.TypeMapStringInterfaceR\x11unvalidatedValues\x1ar\n\x14\x41\x64\x64onComponentsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x44\n\x05value\x18\x02 \x01(\x0b\x32..istio.operator.v1alpha1.ExternalComponentSpecR\x05value:\x02\x38\x01\"\xbb\x04\n\rInstallStatus\x12\x45\n\x06status\x18\x01 \x01(\x0e\x32-.istio.operator.v1alpha1.InstallStatus.StatusR\x06status\x12\x18\n\x07message\x18\x03 \x01(\tR\x07message\x12\x66\n\x10\x63omponent_status\x18\x02 \x03(\x0b\x32;.istio.operator.v1alpha1.InstallStatus.ComponentStatusEntryR\x0f\x63omponentStatus\x1a\x86\x01\n\rVersionStatus\x12\x18\n\x07version\x18\x01 \x01(\tR\x07version\x12\x45\n\x06status\x18\x02 \x01(\x0e\x32-.istio.operator.v1alpha1.InstallStatus.StatusR\x06status\x12\x14\n\x05\x65rror\x18\x04 \x01(\tR\x05\x65rror\x1ax\n\x14\x43omponentStatusEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12J\n\x05value\x18\x02 \x01(\x0b\x32\x34.istio.operator.v1alpha1.InstallStatus.VersionStatusR\x05value:\x02\x38\x01\"^\n\x06Status\x12\x08\n\x04NONE\x10\x00\x12\x0c\n\x08UPDATING\x10\x01\x12\x0f\n\x0bRECONCILING\x10\x02\x12\x0b\n\x07HEALTHY\x10\x03\x12\t\n\x05\x45RROR\x10\x04\x12\x13\n\x0f\x41\x43TION_REQUIRED\x10\x05\"\xaf\x04\n\x15IstioComponentSetSpec\x12>\n\x04\x62\x61se\x18\x1d \x01(\x0b\x32*.istio.operator.v1alpha1.BaseComponentSpecR\x04\x62\x61se\x12<\n\x05pilot\x18\x1e \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpecR\x05pilot\x12\x38\n\x03\x63ni\x18& \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpecR\x03\x63ni\x12K\n\ristiod_remote\x18\' \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpecR\x0cistiodRemote\x12O\n\x10ingress_gateways\x18( \x03(\x0b\x32$.istio.operator.v1alpha1.GatewaySpecR\x0fingressGateways\x12M\n\x0f\x65gress_gateways\x18) \x03(\x0b\x32$.istio.operator.v1alpha1.GatewaySpecR\x0e\x65gressGatewaysJ\x04\x08\x1f\x10 J\x04\x08 \x10!J\x04\x08!\x10\"J\x04\x08\"\x10#J\x04\x08#\x10$J\x04\x08$\x10%J\x04\x08%\x10&R\x07\x63itadelR\x06policyR\ttelemetryR\x06galleyR\nnode_agentR\x05proxyR\x10sidecar_injector\"\x9e\x01\n\x11\x42\x61seComponentSpec\x12\x45\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPBR\x07\x65nabled\x12\x42\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpecR\x03k8s\"\xc0\x02\n\rComponentSpec\x12\x45\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPBR\x07\x65nabled\x12\x1c\n\tnamespace\x18\x02 \x01(\tR\tnamespace\x12\x10\n\x03hub\x18\n \x01(\tR\x03hub\x12\x38\n\x03tag\x18\x0b \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x03tag\x12:\n\x04spec\x18\x1e \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x04spec\x12\x42\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpecR\x03k8s\"\xc9\x02\n\x15\x45xternalComponentSpec\x12\x45\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPBR\x07\x65nabled\x12\x1c\n\tnamespace\x18\x02 \x01(\tR\tnamespace\x12:\n\x04spec\x18\n \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x04spec\x12\x1d\n\nchart_path\x18\x1e \x01(\tR\tchartPath\x12,\n\x06schema\x18# \x01(\x0b\x32\x14.google.protobuf.AnyR\x06schema\x12\x42\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpecR\x03k8s\"\x97\x03\n\x0bGatewaySpec\x12\x45\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPBR\x07\x65nabled\x12\x1c\n\tnamespace\x18\x02 \x01(\tR\tnamespace\x12\x12\n\x04name\x18\x03 \x01(\tR\x04name\x12\x45\n\x05label\x18\x04 \x03(\x0b\x32/.istio.operator.v1alpha1.GatewaySpec.LabelEntryR\x05label\x12\x10\n\x03hub\x18\n \x01(\tR\x03hub\x12\x38\n\x03tag\x18\x0b \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x03tag\x12\x42\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpecR\x03k8s\x1a\x38\n\nLabelEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xde\x0c\n\x17KubernetesResourcesSpec\x12=\n\x08\x61\x66\x66inity\x18\x01 \x01(\x0b\x32!.istio.operator.v1alpha1.AffinityR\x08\x61\x66\x66inity\x12\x31\n\x03\x65nv\x18\x02 \x03(\x0b\x32\x1f.istio.operator.v1alpha1.EnvVarR\x03\x65nv\x12O\n\x08hpa_spec\x18\x03 \x01(\x0b\x32\x34.istio.operator.v1alpha1.HorizontalPodAutoscalerSpecR\x07hpaSpec\x12*\n\x11image_pull_policy\x18\x04 \x01(\tR\x0fimagePullPolicy\x12g\n\rnode_selector\x18\x05 \x03(\x0b\x32\x42.istio.operator.v1alpha1.KubernetesResourcesSpec.NodeSelectorEntryR\x0cnodeSelector\x12\x64\n\x15pod_disruption_budget\x18\x06 \x01(\x0b\x32\x30.istio.operator.v1alpha1.PodDisruptionBudgetSpecR\x13podDisruptionBudget\x12m\n\x0fpod_annotations\x18\x07 \x03(\x0b\x32\x44.istio.operator.v1alpha1.KubernetesResourcesSpec.PodAnnotationsEntryR\x0epodAnnotations\x12.\n\x13priority_class_name\x18\x08 \x01(\tR\x11priorityClassName\x12P\n\x0freadiness_probe\x18\t \x01(\x0b\x32\'.istio.operator.v1alpha1.ReadinessProbeR\x0ereadinessProbe\x12#\n\rreplica_count\x18\n \x01(\rR\x0creplicaCount\x12@\n\tresources\x18\x0b \x01(\x0b\x32\".istio.operator.v1alpha1.ResourcesR\tresources\x12>\n\x07service\x18\x0c \x01(\x0b\x32$.istio.operator.v1alpha1.ServiceSpecR\x07service\x12G\n\x08strategy\x18\r \x01(\x0b\x32+.istio.operator.v1alpha1.DeploymentStrategyR\x08strategy\x12\x45\n\x0btolerations\x18\x0e \x03(\x0b\x32#.istio.operator.v1alpha1.TolerationR\x0btolerations\x12y\n\x13service_annotations\x18\x0f \x03(\x0b\x32H.istio.operator.v1alpha1.KubernetesResourcesSpec.ServiceAnnotationsEntryR\x12serviceAnnotations\x12U\n\x0fsecurityContext\x18\x10 \x01(\x0b\x32+.istio.operator.v1alpha1.PodSecurityContextR\x0fsecurityContext\x12\x34\n\x07volumes\x18\x11 \x03(\x0b\x32\x1a.k8s.io.api.core.v1.VolumeR\x07volumes\x12\x43\n\x0cvolumeMounts\x18\x12 \x03(\x0b\x32\x1f.k8s.io.api.core.v1.VolumeMountR\x0cvolumeMounts\x12\x45\n\x08overlays\x18\x64 \x03(\x0b\x32).istio.operator.v1alpha1.K8sObjectOverlayR\x08overlays\x1a?\n\x11NodeSelectorEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\x1a\x41\n\x13PodAnnotationsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\x1a\x45\n\x17ServiceAnnotationsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\x89\x02\n\x10K8sObjectOverlay\x12\x1f\n\x0b\x61pi_version\x18\x01 \x01(\tR\napiVersion\x12\x12\n\x04kind\x18\x02 \x01(\tR\x04kind\x12\x12\n\x04name\x18\x03 \x01(\tR\x04name\x12M\n\x07patches\x18\x04 \x03(\x0b\x32\x33.istio.operator.v1alpha1.K8sObjectOverlay.PathValueR\x07patches\x1a]\n\tPathValue\x12\x12\n\x04path\x18\x01 \x01(\tR\x04path\x12<\n\x05value\x18\x02 \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x05value\"\xf1\x01\n\x08\x41\x66\x66inity\x12I\n\x0cnodeAffinity\x18\x01 \x01(\x0b\x32%.istio.operator.v1alpha1.NodeAffinityR\x0cnodeAffinity\x12\x46\n\x0bpodAffinity\x18\x02 \x01(\x0b\x32$.istio.operator.v1alpha1.PodAffinityR\x0bpodAffinity\x12R\n\x0fpodAntiAffinity\x18\x03 \x01(\x0b\x32(.istio.operator.v1alpha1.PodAntiAffinityR\x0fpodAntiAffinity\"\xa7\x01\n\x14\x43onfigMapKeySelector\x12\x61\n\x14localObjectReference\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.LocalObjectReferenceR\x14localObjectReference\x12\x10\n\x03key\x18\x02 \x01(\tR\x03key\x12\x1a\n\x08optional\x18\x03 \x01(\x08R\x08optional\"8\n\x0e\x43lientIPConfig\x12&\n\x0etimeoutSeconds\x18\x01 \x01(\x05R\x0etimeoutSeconds\"e\n\x1b\x43rossVersionObjectReference\x12\x12\n\x04kind\x18\x01 \x01(\tR\x04kind\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12\x1e\n\napiVersion\x18\x03 \x01(\tR\napiVersion\"\x80\x01\n\x12\x44\x65ploymentStrategy\x12\x12\n\x04type\x18\x01 \x01(\tR\x04type\x12V\n\rrollingUpdate\x18\x02 \x01(\x0b\x32\x30.istio.operator.v1alpha1.RollingUpdateDeploymentR\rrollingUpdate\"w\n\x06\x45nvVar\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value\x12\x43\n\tvalueFrom\x18\x03 \x01(\x0b\x32%.istio.operator.v1alpha1.EnvVarSourceR\tvalueFrom\"\xdd\x02\n\x0c\x45nvVarSource\x12H\n\x08\x66ieldRef\x18\x01 \x01(\x0b\x32,.istio.operator.v1alpha1.ObjectFieldSelectorR\x08\x66ieldRef\x12Z\n\x10resourceFieldRef\x18\x02 \x01(\x0b\x32..istio.operator.v1alpha1.ResourceFieldSelectorR\x10resourceFieldRef\x12W\n\x0f\x63onfigMapKeyRef\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.ConfigMapKeySelectorR\x0f\x63onfigMapKeyRef\x12N\n\x0csecretKeyRef\x18\x04 \x01(\x0b\x32*.istio.operator.v1alpha1.SecretKeySelectorR\x0csecretKeyRef\"&\n\nExecAction\x12\x18\n\x07\x63ommand\x18\x01 \x03(\tR\x07\x63ommand\"\xc3\x02\n\x14\x45xternalMetricSource\x12\x1e\n\nmetricName\x18\x01 \x01(\tR\nmetricName\x12[\n\x0emetricSelector\x18\x02 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\x0emetricSelector\x12O\n\x0btargetValue\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0btargetValue\x12]\n\x12targetAverageValue\x18\x04 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x12targetAverageValue\"\xd9\x01\n\rHTTPGetAction\x12\x12\n\x04path\x18\x01 \x01(\tR\x04path\x12\x41\n\x04port\x18\x02 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x04port\x12\x12\n\x04host\x18\x03 \x01(\tR\x04host\x12\x16\n\x06scheme\x18\x04 \x01(\tR\x06scheme\x12\x45\n\x0bhttpHeaders\x18\x05 \x03(\x0b\x32#.istio.operator.v1alpha1.HTTPHeaderR\x0bhttpHeaders\"6\n\nHTTPHeader\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value\"\xfe\x01\n\x1bHorizontalPodAutoscalerSpec\x12\\\n\x0escaleTargetRef\x18\x01 \x01(\x0b\x32\x34.istio.operator.v1alpha1.CrossVersionObjectReferenceR\x0escaleTargetRef\x12 \n\x0bminReplicas\x18\x02 \x01(\x05R\x0bminReplicas\x12 \n\x0bmaxReplicas\x18\x03 \x01(\x05R\x0bmaxReplicas\x12=\n\x07metrics\x18\x04 \x03(\x0b\x32#.istio.operator.v1alpha1.MetricSpecR\x07metrics\"*\n\x14LocalObjectReference\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"\xba\x02\n\nMetricSpec\x12\x12\n\x04type\x18\x01 \x01(\tR\x04type\x12\x43\n\x06object\x18\x02 \x01(\x0b\x32+.istio.operator.v1alpha1.ObjectMetricSourceR\x06object\x12=\n\x04pods\x18\x03 \x01(\x0b\x32).istio.operator.v1alpha1.PodsMetricSourceR\x04pods\x12I\n\x08resource\x18\x04 \x01(\x0b\x32-.istio.operator.v1alpha1.ResourceMetricSourceR\x08resource\x12I\n\x08\x65xternal\x18\x05 \x01(\x0b\x32-.istio.operator.v1alpha1.ExternalMetricSourceR\x08\x65xternal\"\xbb\x02\n\x0cNodeAffinity\x12\x8d\x01\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x01(\x0b\x32%.istio.operator.v1alpha1.NodeSelectorR.requiredDuringSchedulingIgnoredDuringExecution\x12\x9a\x01\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.PreferredSchedulingTermR/preferredDuringSchedulingIgnoredDuringExecution\"g\n\x0cNodeSelector\x12W\n\x11nodeSelectorTerms\x18\x01 \x03(\x0b\x32).istio.operator.v1alpha1.NodeSelectorTermR\x11nodeSelectorTerms\"\xc4\x01\n\x10NodeSelectorTerm\x12\\\n\x10matchExpressions\x18\x01 \x03(\x0b\x32\x30.istio.operator.v1alpha1.NodeSelectorRequirementR\x10matchExpressions\x12R\n\x0bmatchFields\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.NodeSelectorRequirementR\x0bmatchFields\"_\n\x17NodeSelectorRequirement\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x1a\n\x08operator\x18\x02 \x01(\tR\x08operator\x12\x16\n\x06values\x18\x03 \x03(\tR\x06values\"S\n\x13ObjectFieldSelector\x12\x1e\n\napiVersion\x18\x01 \x01(\tR\napiVersion\x12\x1c\n\tfieldPath\x18\x02 \x01(\tR\tfieldPath\">\n\nObjectMeta\x12\x12\n\x04name\x18\x05 \x01(\tR\x04name\x12\x1c\n\tnamespace\x18\x06 \x01(\tR\tnamespace\"\xf7\x02\n\x12ObjectMetricSource\x12L\n\x06target\x18\x01 \x01(\x0b\x32\x34.istio.operator.v1alpha1.CrossVersionObjectReferenceR\x06target\x12\x1e\n\nmetricName\x18\x02 \x01(\tR\nmetricName\x12O\n\x0btargetValue\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0btargetValue\x12O\n\x08selector\x18\x04 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\x08selector\x12Q\n\x0c\x61verageValue\x18\x05 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0c\x61verageValue\"\xbd\x02\n\x0bPodAffinity\x12\x90\x01\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x03(\x0b\x32(.istio.operator.v1alpha1.PodAffinityTermR.requiredDuringSchedulingIgnoredDuringExecution\x12\x9a\x01\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.WeightedPodAffinityTermR/preferredDuringSchedulingIgnoredDuringExecution\"\xc1\x02\n\x0fPodAntiAffinity\x12\x90\x01\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x03(\x0b\x32(.istio.operator.v1alpha1.PodAffinityTermR.requiredDuringSchedulingIgnoredDuringExecution\x12\x9a\x01\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.WeightedPodAffinityTermR/preferredDuringSchedulingIgnoredDuringExecution\"\xae\x01\n\x0fPodAffinityTerm\x12Y\n\rlabelSelector\x18\x01 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\rlabelSelector\x12\x1e\n\nnamespaces\x18\x02 \x03(\tR\nnamespaces\x12 \n\x0btopologyKey\x18\x03 \x01(\tR\x0btopologyKey\"\xb6\x01\n\x17PodDisruptionBudgetSpec\x12\"\n\x0cminAvailable\x18\x01 \x01(\rR\x0cminAvailable\x12O\n\x08selector\x18\x02 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\x08selector\x12&\n\x0emaxUnavailable\x18\x03 \x01(\rR\x0emaxUnavailable\"\xe2\x01\n\x10PodsMetricSource\x12\x1e\n\nmetricName\x18\x01 \x01(\tR\nmetricName\x12]\n\x12targetAverageValue\x18\x02 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x12targetAverageValue\x12O\n\x08selector\x18\x03 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\x08selector\"|\n\x17PreferredSchedulingTerm\x12\x16\n\x06weight\x18\x01 \x01(\x05R\x06weight\x12I\n\npreference\x18\x02 \x01(\x0b\x32).istio.operator.v1alpha1.NodeSelectorTermR\npreference\"\xab\x03\n\x0eReadinessProbe\x12\x37\n\x04\x65xec\x18\x01 \x01(\x0b\x32#.istio.operator.v1alpha1.ExecActionR\x04\x65xec\x12@\n\x07httpGet\x18\x02 \x01(\x0b\x32&.istio.operator.v1alpha1.HTTPGetActionR\x07httpGet\x12\x46\n\ttcpSocket\x18\x03 \x01(\x0b\x32(.istio.operator.v1alpha1.TCPSocketActionR\ttcpSocket\x12\x30\n\x13initialDelaySeconds\x18\x04 \x01(\x05R\x13initialDelaySeconds\x12&\n\x0etimeoutSeconds\x18\x05 \x01(\x05R\x0etimeoutSeconds\x12$\n\rperiodSeconds\x18\x06 \x01(\x05R\rperiodSeconds\x12*\n\x10successThreshold\x18\x07 \x01(\x05R\x10successThreshold\x12*\n\x10\x66\x61ilureThreshold\x18\x08 \x01(\x05R\x10\x66\x61ilureThreshold\"\xa2\x01\n\x15ResourceFieldSelector\x12$\n\rcontainerName\x18\x01 \x01(\tR\rcontainerName\x12\x1a\n\x08resource\x18\x02 \x01(\tR\x08resource\x12G\n\x07\x64ivisor\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x07\x64ivisor\"\xc5\x01\n\x14ResourceMetricSource\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12:\n\x18targetAverageUtilization\x18\x02 \x01(\x05R\x18targetAverageUtilization\x12]\n\x12targetAverageValue\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x12targetAverageValue\"\x99\x02\n\tResources\x12\x46\n\x06limits\x18\x01 \x03(\x0b\x32..istio.operator.v1alpha1.Resources.LimitsEntryR\x06limits\x12L\n\x08requests\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.Resources.RequestsEntryR\x08requests\x1a\x39\n\x0bLimitsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\x1a;\n\rRequestsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xbb\x01\n\x17RollingUpdateDeployment\x12U\n\x0emaxUnavailable\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0emaxUnavailable\x12I\n\x08maxSurge\x18\x02 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x08maxSurge\"\xa4\x01\n\x11SecretKeySelector\x12\x61\n\x14localObjectReference\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.LocalObjectReferenceR\x14localObjectReference\x12\x10\n\x03key\x18\x02 \x01(\tR\x03key\x12\x1a\n\x08optional\x18\x03 \x01(\x08R\x08optional\"\xe6\x05\n\x0bServiceSpec\x12:\n\x05ports\x18\x01 \x03(\x0b\x32$.istio.operator.v1alpha1.ServicePortR\x05ports\x12N\n\x08selector\x18\x02 \x03(\x0b\x32\x32.istio.operator.v1alpha1.ServiceSpec.SelectorEntryR\x08selector\x12\x1c\n\tclusterIP\x18\x03 \x01(\tR\tclusterIP\x12\x12\n\x04type\x18\x04 \x01(\tR\x04type\x12 \n\x0b\x65xternalIPs\x18\x05 \x03(\tR\x0b\x65xternalIPs\x12(\n\x0fsessionAffinity\x18\x07 \x01(\tR\x0fsessionAffinity\x12&\n\x0eloadBalancerIP\x18\x08 \x01(\tR\x0eloadBalancerIP\x12:\n\x18loadBalancerSourceRanges\x18\t \x03(\tR\x18loadBalancerSourceRanges\x12\"\n\x0c\x65xternalName\x18\n \x01(\tR\x0c\x65xternalName\x12\x34\n\x15\x65xternalTrafficPolicy\x18\x0b \x01(\tR\x15\x65xternalTrafficPolicy\x12\x30\n\x13healthCheckNodePort\x18\x0c \x01(\x05R\x13healthCheckNodePort\x12:\n\x18publishNotReadyAddresses\x18\r \x01(\x08R\x18publishNotReadyAddresses\x12\x64\n\x15sessionAffinityConfig\x18\x0e \x01(\x0b\x32..istio.operator.v1alpha1.SessionAffinityConfigR\x15sessionAffinityConfig\x1a;\n\rSelectorEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xbc\x01\n\x0bServicePort\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x1a\n\x08protocol\x18\x02 \x01(\tR\x08protocol\x12\x12\n\x04port\x18\x03 \x01(\x05R\x04port\x12M\n\ntargetPort\x18\x04 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\ntargetPort\x12\x1a\n\x08nodePort\x18\x05 \x01(\x05R\x08nodePort\"\\\n\x15SessionAffinityConfig\x12\x43\n\x08\x63lientIP\x18\x01 \x01(\x0b\x32\'.istio.operator.v1alpha1.ClientIPConfigR\x08\x63lientIP\"h\n\x0fTCPSocketAction\x12\x41\n\x04port\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x04port\x12\x12\n\x04host\x18\x02 \x01(\tR\x04host\"\x96\x01\n\nToleration\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x1a\n\x08operator\x18\x02 \x01(\tR\x08operator\x12\x14\n\x05value\x18\x03 \x01(\tR\x05value\x12\x16\n\x06\x65\x66\x66\x65\x63t\x18\x04 \x01(\tR\x06\x65\x66\x66\x65\x63t\x12,\n\x11tolerationSeconds\x18\x05 \x01(\x03R\x11tolerationSeconds\"\x85\x01\n\x17WeightedPodAffinityTerm\x12\x16\n\x06weight\x18\x01 \x01(\x05R\x06weight\x12R\n\x0fpodAffinityTerm\x18\x02 \x01(\x0b\x32(.istio.operator.v1alpha1.PodAffinityTermR\x0fpodAffinityTerm\"\xaf\x04\n\x12PodSecurityContext\x12O\n\x0eseLinuxOptions\x18\x01 \x01(\x0b\x32\'.istio.operator.v1alpha1.SELinuxOptionsR\x0eseLinuxOptions\x12\x1c\n\trunAsUser\x18\x02 \x01(\x03R\trunAsUser\x12\"\n\x0crunAsNonRoot\x18\x03 \x01(\x08R\x0crunAsNonRoot\x12.\n\x12supplementalGroups\x18\x04 \x03(\x03R\x12supplementalGroups\x12\x18\n\x07\x66sGroup\x18\x05 \x01(\x03R\x07\x66sGroup\x12\x1e\n\nrunAsGroup\x18\x06 \x01(\x03R\nrunAsGroup\x12\x39\n\x07sysctls\x18\x07 \x03(\x0b\x32\x1f.istio.operator.v1alpha1.SysctlR\x07sysctls\x12^\n\x0ewindowsOptions\x18\x08 \x01(\x0b\x32\x36.istio.operator.v1alpha1.WindowsSecurityContextOptionsR\x0ewindowsOptions\x12\x30\n\x13\x66sGroupChangePolicy\x18\t \x01(\tR\x13\x66sGroupChangePolicy\x12O\n\x0eseccompProfile\x18\n \x01(\x0b\x32\'.istio.operator.v1alpha1.SeccompProfileR\x0eseccompProfile\"b\n\x0eSELinuxOptions\x12\x12\n\x04user\x18\x01 \x01(\tR\x04user\x12\x12\n\x04role\x18\x02 \x01(\tR\x04role\x12\x12\n\x04type\x18\x03 \x01(\tR\x04type\x12\x14\n\x05level\x18\x04 \x01(\tR\x05level\"2\n\x06Sysctl\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value\"\xad\x01\n\x1dWindowsSecurityContextOptions\x12\x36\n\x16gmsaCredentialSpecName\x18\x01 \x01(\tR\x16gmsaCredentialSpecName\x12.\n\x12gmsaCredentialSpec\x18\x02 \x01(\tR\x12gmsaCredentialSpec\x12$\n\rrunAsUserName\x18\x03 \x01(\tR\rrunAsUserName\"P\n\x0eSeccompProfile\x12\x12\n\x04type\x18\x01 \x01(\tR\x04type\x12*\n\x10localhostProfile\x18\x02 \x01(\tR\x10localhostProfile\"\x0f\n\rTypeInterface\"\x18\n\x16TypeMapStringInterface\"\x16\n\x14TypeIntOrStringForPB\"\x14\n\x12TypeBoolValueForPBB,Z\x1eistio.io/api/operator/v1alpha1\xc8\xe2\x1e\x00\xd0\xe2\x1e\x00\xe0\xe2\x1e\x00\x62\x06proto3')
+  serialized_pb=_b('\n operator/v1alpha1/operator.proto\x12\x17istio.operator.v1alpha1\x1a\x19google/protobuf/any.proto\x1a\x34k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto\x1a\"k8s.io/api/core/v1/generated.proto\x1a\x14gogoproto/gogo.proto\"\xec\x06\n\x11IstioOperatorSpec\x12\x18\n\x07profile\x18\n \x01(\tR\x07profile\x12\x30\n\x14install_package_path\x18\x0b \x01(\tR\x12installPackagePath\x12\x10\n\x03hub\x18\x0c \x01(\tR\x03hub\x12\x38\n\x03tag\x18\r \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x03tag\x12+\n\x0fresource_suffix\x18\x0e \x01(\tB\x02\x18\x01R\x0eresourceSuffix\x12\x1c\n\tnamespace\x18\x0f \x01(\tR\tnamespace\x12\x1a\n\x08revision\x18\x10 \x01(\tR\x08revision\x12)\n\x10\x64\x65\x66\x61ult_revision\x18\x11 \x01(\x08R\x0f\x64\x65\x66\x61ultRevision\x12P\n\x0bmesh_config\x18( \x01(\x0b\x32/.istio.operator.v1alpha1.TypeMapStringInterfaceR\nmeshConfig\x12N\n\ncomponents\x18\x32 \x01(\x0b\x32..istio.operator.v1alpha1.IstioComponentSetSpecR\ncomponents\x12n\n\x10\x61\x64\x64on_components\x18\x33 \x03(\x0b\x32?.istio.operator.v1alpha1.IstioOperatorSpec.AddonComponentsEntryB\x02\x18\x01R\x0f\x61\x64\x64onComponents\x12G\n\x06values\x18\x64 \x01(\x0b\x32/.istio.operator.v1alpha1.TypeMapStringInterfaceR\x06values\x12^\n\x12unvalidated_values\x18\x65 \x01(\x0b\x32/.istio.operator.v1alpha1.TypeMapStringInterfaceR\x11unvalidatedValues\x1ar\n\x14\x41\x64\x64onComponentsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x44\n\x05value\x18\x02 \x01(\x0b\x32..istio.operator.v1alpha1.ExternalComponentSpecR\x05value:\x02\x38\x01\"\xbb\x04\n\rInstallStatus\x12\x45\n\x06status\x18\x01 \x01(\x0e\x32-.istio.operator.v1alpha1.InstallStatus.StatusR\x06status\x12\x18\n\x07message\x18\x03 \x01(\tR\x07message\x12\x66\n\x10\x63omponent_status\x18\x02 \x03(\x0b\x32;.istio.operator.v1alpha1.InstallStatus.ComponentStatusEntryR\x0f\x63omponentStatus\x1a\x86\x01\n\rVersionStatus\x12\x18\n\x07version\x18\x01 \x01(\tR\x07version\x12\x45\n\x06status\x18\x02 \x01(\x0e\x32-.istio.operator.v1alpha1.InstallStatus.StatusR\x06status\x12\x14\n\x05\x65rror\x18\x04 \x01(\tR\x05\x65rror\x1ax\n\x14\x43omponentStatusEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12J\n\x05value\x18\x02 \x01(\x0b\x32\x34.istio.operator.v1alpha1.InstallStatus.VersionStatusR\x05value:\x02\x38\x01\"^\n\x06Status\x12\x08\n\x04NONE\x10\x00\x12\x0c\n\x08UPDATING\x10\x01\x12\x0f\n\x0bRECONCILING\x10\x02\x12\x0b\n\x07HEALTHY\x10\x03\x12\t\n\x05\x45RROR\x10\x04\x12\x13\n\x0f\x41\x43TION_REQUIRED\x10\x05\"\xaf\x04\n\x15IstioComponentSetSpec\x12>\n\x04\x62\x61se\x18\x1d \x01(\x0b\x32*.istio.operator.v1alpha1.BaseComponentSpecR\x04\x62\x61se\x12<\n\x05pilot\x18\x1e \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpecR\x05pilot\x12\x38\n\x03\x63ni\x18& \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpecR\x03\x63ni\x12K\n\ristiod_remote\x18\' \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpecR\x0cistiodRemote\x12O\n\x10ingress_gateways\x18( \x03(\x0b\x32$.istio.operator.v1alpha1.GatewaySpecR\x0fingressGateways\x12M\n\x0f\x65gress_gateways\x18) \x03(\x0b\x32$.istio.operator.v1alpha1.GatewaySpecR\x0e\x65gressGatewaysJ\x04\x08\x1f\x10 J\x04\x08 \x10!J\x04\x08!\x10\"J\x04\x08\"\x10#J\x04\x08#\x10$J\x04\x08$\x10%J\x04\x08%\x10&R\x07\x63itadelR\x06policyR\ttelemetryR\x06galleyR\nnode_agentR\x05proxyR\x10sidecar_injector\"\x9e\x01\n\x11\x42\x61seComponentSpec\x12\x45\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPBR\x07\x65nabled\x12\x42\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpecR\x03k8s\"\xc0\x02\n\rComponentSpec\x12\x45\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPBR\x07\x65nabled\x12\x1c\n\tnamespace\x18\x02 \x01(\tR\tnamespace\x12\x10\n\x03hub\x18\n \x01(\tR\x03hub\x12\x38\n\x03tag\x18\x0b \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x03tag\x12:\n\x04spec\x18\x1e \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x04spec\x12\x42\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpecR\x03k8s\"\xc9\x02\n\x15\x45xternalComponentSpec\x12\x45\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPBR\x07\x65nabled\x12\x1c\n\tnamespace\x18\x02 \x01(\tR\tnamespace\x12:\n\x04spec\x18\n \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x04spec\x12\x1d\n\nchart_path\x18\x1e \x01(\tR\tchartPath\x12,\n\x06schema\x18# \x01(\x0b\x32\x14.google.protobuf.AnyR\x06schema\x12\x42\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpecR\x03k8s\"\x97\x03\n\x0bGatewaySpec\x12\x45\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPBR\x07\x65nabled\x12\x1c\n\tnamespace\x18\x02 \x01(\tR\tnamespace\x12\x12\n\x04name\x18\x03 \x01(\tR\x04name\x12\x45\n\x05label\x18\x04 \x03(\x0b\x32/.istio.operator.v1alpha1.GatewaySpec.LabelEntryR\x05label\x12\x10\n\x03hub\x18\n \x01(\tR\x03hub\x12\x38\n\x03tag\x18\x0b \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x03tag\x12\x42\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpecR\x03k8s\x1a\x38\n\nLabelEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xe3\x0c\n\x17KubernetesResourcesSpec\x12=\n\x08\x61\x66\x66inity\x18\x01 \x01(\x0b\x32!.istio.operator.v1alpha1.AffinityR\x08\x61\x66\x66inity\x12\x31\n\x03\x65nv\x18\x02 \x03(\x0b\x32\x1f.istio.operator.v1alpha1.EnvVarR\x03\x65nv\x12O\n\x08hpa_spec\x18\x03 \x01(\x0b\x32\x34.istio.operator.v1alpha1.HorizontalPodAutoscalerSpecR\x07hpaSpec\x12*\n\x11image_pull_policy\x18\x04 \x01(\tR\x0fimagePullPolicy\x12g\n\rnode_selector\x18\x05 \x03(\x0b\x32\x42.istio.operator.v1alpha1.KubernetesResourcesSpec.NodeSelectorEntryR\x0cnodeSelector\x12\x64\n\x15pod_disruption_budget\x18\x06 \x01(\x0b\x32\x30.istio.operator.v1alpha1.PodDisruptionBudgetSpecR\x13podDisruptionBudget\x12m\n\x0fpod_annotations\x18\x07 \x03(\x0b\x32\x44.istio.operator.v1alpha1.KubernetesResourcesSpec.PodAnnotationsEntryR\x0epodAnnotations\x12.\n\x13priority_class_name\x18\x08 \x01(\tR\x11priorityClassName\x12P\n\x0freadiness_probe\x18\t \x01(\x0b\x32\'.istio.operator.v1alpha1.ReadinessProbeR\x0ereadinessProbe\x12#\n\rreplica_count\x18\n \x01(\rR\x0creplicaCount\x12@\n\tresources\x18\x0b \x01(\x0b\x32\".istio.operator.v1alpha1.ResourcesR\tresources\x12>\n\x07service\x18\x0c \x01(\x0b\x32$.istio.operator.v1alpha1.ServiceSpecR\x07service\x12G\n\x08strategy\x18\r \x01(\x0b\x32+.istio.operator.v1alpha1.DeploymentStrategyR\x08strategy\x12\x45\n\x0btolerations\x18\x0e \x03(\x0b\x32#.istio.operator.v1alpha1.TolerationR\x0btolerations\x12y\n\x13service_annotations\x18\x0f \x03(\x0b\x32H.istio.operator.v1alpha1.KubernetesResourcesSpec.ServiceAnnotationsEntryR\x12serviceAnnotations\x12U\n\x0fsecurityContext\x18\x10 \x01(\x0b\x32+.istio.operator.v1alpha1.PodSecurityContextR\x0fsecurityContext\x12\x39\n\x07volumes\x18\x11 \x03(\x0b\x32\x1f.istio.operator.v1alpha1.VolumeR\x07volumes\x12\x43\n\x0cvolumeMounts\x18\x12 \x03(\x0b\x32\x1f.k8s.io.api.core.v1.VolumeMountR\x0cvolumeMounts\x12\x45\n\x08overlays\x18\x64 \x03(\x0b\x32).istio.operator.v1alpha1.K8sObjectOverlayR\x08overlays\x1a?\n\x11NodeSelectorEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\x1a\x41\n\x13PodAnnotationsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\x1a\x45\n\x17ServiceAnnotationsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\x89\x02\n\x10K8sObjectOverlay\x12\x1f\n\x0b\x61pi_version\x18\x01 \x01(\tR\napiVersion\x12\x12\n\x04kind\x18\x02 \x01(\tR\x04kind\x12\x12\n\x04name\x18\x03 \x01(\tR\x04name\x12M\n\x07patches\x18\x04 \x03(\x0b\x32\x33.istio.operator.v1alpha1.K8sObjectOverlay.PathValueR\x07patches\x1a]\n\tPathValue\x12\x12\n\x04path\x18\x01 \x01(\tR\x04path\x12<\n\x05value\x18\x02 \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x05value\"\xf1\x01\n\x08\x41\x66\x66inity\x12I\n\x0cnodeAffinity\x18\x01 \x01(\x0b\x32%.istio.operator.v1alpha1.NodeAffinityR\x0cnodeAffinity\x12\x46\n\x0bpodAffinity\x18\x02 \x01(\x0b\x32$.istio.operator.v1alpha1.PodAffinityR\x0bpodAffinity\x12R\n\x0fpodAntiAffinity\x18\x03 \x01(\x0b\x32(.istio.operator.v1alpha1.PodAntiAffinityR\x0fpodAntiAffinity\"\xa7\x01\n\x14\x43onfigMapKeySelector\x12\x61\n\x14localObjectReference\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.LocalObjectReferenceR\x14localObjectReference\x12\x10\n\x03key\x18\x02 \x01(\tR\x03key\x12\x1a\n\x08optional\x18\x03 \x01(\x08R\x08optional\"8\n\x0e\x43lientIPConfig\x12&\n\x0etimeoutSeconds\x18\x01 \x01(\x05R\x0etimeoutSeconds\"e\n\x1b\x43rossVersionObjectReference\x12\x12\n\x04kind\x18\x01 \x01(\tR\x04kind\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12\x1e\n\napiVersion\x18\x03 \x01(\tR\napiVersion\"\x80\x01\n\x12\x44\x65ploymentStrategy\x12\x12\n\x04type\x18\x01 \x01(\tR\x04type\x12V\n\rrollingUpdate\x18\x02 \x01(\x0b\x32\x30.istio.operator.v1alpha1.RollingUpdateDeploymentR\rrollingUpdate\"w\n\x06\x45nvVar\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value\x12\x43\n\tvalueFrom\x18\x03 \x01(\x0b\x32%.istio.operator.v1alpha1.EnvVarSourceR\tvalueFrom\"\xdd\x02\n\x0c\x45nvVarSource\x12H\n\x08\x66ieldRef\x18\x01 \x01(\x0b\x32,.istio.operator.v1alpha1.ObjectFieldSelectorR\x08\x66ieldRef\x12Z\n\x10resourceFieldRef\x18\x02 \x01(\x0b\x32..istio.operator.v1alpha1.ResourceFieldSelectorR\x10resourceFieldRef\x12W\n\x0f\x63onfigMapKeyRef\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.ConfigMapKeySelectorR\x0f\x63onfigMapKeyRef\x12N\n\x0csecretKeyRef\x18\x04 \x01(\x0b\x32*.istio.operator.v1alpha1.SecretKeySelectorR\x0csecretKeyRef\"&\n\nExecAction\x12\x18\n\x07\x63ommand\x18\x01 \x03(\tR\x07\x63ommand\"\xc3\x02\n\x14\x45xternalMetricSource\x12\x1e\n\nmetricName\x18\x01 \x01(\tR\nmetricName\x12[\n\x0emetricSelector\x18\x02 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\x0emetricSelector\x12O\n\x0btargetValue\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0btargetValue\x12]\n\x12targetAverageValue\x18\x04 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x12targetAverageValue\"\xd9\x01\n\rHTTPGetAction\x12\x12\n\x04path\x18\x01 \x01(\tR\x04path\x12\x41\n\x04port\x18\x02 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x04port\x12\x12\n\x04host\x18\x03 \x01(\tR\x04host\x12\x16\n\x06scheme\x18\x04 \x01(\tR\x06scheme\x12\x45\n\x0bhttpHeaders\x18\x05 \x03(\x0b\x32#.istio.operator.v1alpha1.HTTPHeaderR\x0bhttpHeaders\"6\n\nHTTPHeader\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value\"\xfe\x01\n\x1bHorizontalPodAutoscalerSpec\x12\\\n\x0escaleTargetRef\x18\x01 \x01(\x0b\x32\x34.istio.operator.v1alpha1.CrossVersionObjectReferenceR\x0escaleTargetRef\x12 \n\x0bminReplicas\x18\x02 \x01(\x05R\x0bminReplicas\x12 \n\x0bmaxReplicas\x18\x03 \x01(\x05R\x0bmaxReplicas\x12=\n\x07metrics\x18\x04 \x03(\x0b\x32#.istio.operator.v1alpha1.MetricSpecR\x07metrics\"*\n\x14LocalObjectReference\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"\xba\x02\n\nMetricSpec\x12\x12\n\x04type\x18\x01 \x01(\tR\x04type\x12\x43\n\x06object\x18\x02 \x01(\x0b\x32+.istio.operator.v1alpha1.ObjectMetricSourceR\x06object\x12=\n\x04pods\x18\x03 \x01(\x0b\x32).istio.operator.v1alpha1.PodsMetricSourceR\x04pods\x12I\n\x08resource\x18\x04 \x01(\x0b\x32-.istio.operator.v1alpha1.ResourceMetricSourceR\x08resource\x12I\n\x08\x65xternal\x18\x05 \x01(\x0b\x32-.istio.operator.v1alpha1.ExternalMetricSourceR\x08\x65xternal\"\xbb\x02\n\x0cNodeAffinity\x12\x8d\x01\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x01(\x0b\x32%.istio.operator.v1alpha1.NodeSelectorR.requiredDuringSchedulingIgnoredDuringExecution\x12\x9a\x01\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.PreferredSchedulingTermR/preferredDuringSchedulingIgnoredDuringExecution\"g\n\x0cNodeSelector\x12W\n\x11nodeSelectorTerms\x18\x01 \x03(\x0b\x32).istio.operator.v1alpha1.NodeSelectorTermR\x11nodeSelectorTerms\"\xc4\x01\n\x10NodeSelectorTerm\x12\\\n\x10matchExpressions\x18\x01 \x03(\x0b\x32\x30.istio.operator.v1alpha1.NodeSelectorRequirementR\x10matchExpressions\x12R\n\x0bmatchFields\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.NodeSelectorRequirementR\x0bmatchFields\"_\n\x17NodeSelectorRequirement\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x1a\n\x08operator\x18\x02 \x01(\tR\x08operator\x12\x16\n\x06values\x18\x03 \x03(\tR\x06values\"S\n\x13ObjectFieldSelector\x12\x1e\n\napiVersion\x18\x01 \x01(\tR\napiVersion\x12\x1c\n\tfieldPath\x18\x02 \x01(\tR\tfieldPath\">\n\nObjectMeta\x12\x12\n\x04name\x18\x05 \x01(\tR\x04name\x12\x1c\n\tnamespace\x18\x06 \x01(\tR\tnamespace\"\xf7\x02\n\x12ObjectMetricSource\x12L\n\x06target\x18\x01 \x01(\x0b\x32\x34.istio.operator.v1alpha1.CrossVersionObjectReferenceR\x06target\x12\x1e\n\nmetricName\x18\x02 \x01(\tR\nmetricName\x12O\n\x0btargetValue\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0btargetValue\x12O\n\x08selector\x18\x04 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\x08selector\x12Q\n\x0c\x61verageValue\x18\x05 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0c\x61verageValue\"\xbd\x02\n\x0bPodAffinity\x12\x90\x01\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x03(\x0b\x32(.istio.operator.v1alpha1.PodAffinityTermR.requiredDuringSchedulingIgnoredDuringExecution\x12\x9a\x01\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.WeightedPodAffinityTermR/preferredDuringSchedulingIgnoredDuringExecution\"\xc1\x02\n\x0fPodAntiAffinity\x12\x90\x01\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x03(\x0b\x32(.istio.operator.v1alpha1.PodAffinityTermR.requiredDuringSchedulingIgnoredDuringExecution\x12\x9a\x01\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.WeightedPodAffinityTermR/preferredDuringSchedulingIgnoredDuringExecution\"\xae\x01\n\x0fPodAffinityTerm\x12Y\n\rlabelSelector\x18\x01 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\rlabelSelector\x12\x1e\n\nnamespaces\x18\x02 \x03(\tR\nnamespaces\x12 \n\x0btopologyKey\x18\x03 \x01(\tR\x0btopologyKey\"\xb6\x01\n\x17PodDisruptionBudgetSpec\x12\"\n\x0cminAvailable\x18\x01 \x01(\rR\x0cminAvailable\x12O\n\x08selector\x18\x02 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\x08selector\x12&\n\x0emaxUnavailable\x18\x03 \x01(\rR\x0emaxUnavailable\"\xe2\x01\n\x10PodsMetricSource\x12\x1e\n\nmetricName\x18\x01 \x01(\tR\nmetricName\x12]\n\x12targetAverageValue\x18\x02 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x12targetAverageValue\x12O\n\x08selector\x18\x03 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\x08selector\"|\n\x17PreferredSchedulingTerm\x12\x16\n\x06weight\x18\x01 \x01(\x05R\x06weight\x12I\n\npreference\x18\x02 \x01(\x0b\x32).istio.operator.v1alpha1.NodeSelectorTermR\npreference\"\xab\x03\n\x0eReadinessProbe\x12\x37\n\x04\x65xec\x18\x01 \x01(\x0b\x32#.istio.operator.v1alpha1.ExecActionR\x04\x65xec\x12@\n\x07httpGet\x18\x02 \x01(\x0b\x32&.istio.operator.v1alpha1.HTTPGetActionR\x07httpGet\x12\x46\n\ttcpSocket\x18\x03 \x01(\x0b\x32(.istio.operator.v1alpha1.TCPSocketActionR\ttcpSocket\x12\x30\n\x13initialDelaySeconds\x18\x04 \x01(\x05R\x13initialDelaySeconds\x12&\n\x0etimeoutSeconds\x18\x05 \x01(\x05R\x0etimeoutSeconds\x12$\n\rperiodSeconds\x18\x06 \x01(\x05R\rperiodSeconds\x12*\n\x10successThreshold\x18\x07 \x01(\x05R\x10successThreshold\x12*\n\x10\x66\x61ilureThreshold\x18\x08 \x01(\x05R\x10\x66\x61ilureThreshold\"\xa2\x01\n\x15ResourceFieldSelector\x12$\n\rcontainerName\x18\x01 \x01(\tR\rcontainerName\x12\x1a\n\x08resource\x18\x02 \x01(\tR\x08resource\x12G\n\x07\x64ivisor\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x07\x64ivisor\"\xc5\x01\n\x14ResourceMetricSource\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12:\n\x18targetAverageUtilization\x18\x02 \x01(\x05R\x18targetAverageUtilization\x12]\n\x12targetAverageValue\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x12targetAverageValue\"\x99\x02\n\tResources\x12\x46\n\x06limits\x18\x01 \x03(\x0b\x32..istio.operator.v1alpha1.Resources.LimitsEntryR\x06limits\x12L\n\x08requests\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.Resources.RequestsEntryR\x08requests\x1a\x39\n\x0bLimitsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\x1a;\n\rRequestsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xbb\x01\n\x17RollingUpdateDeployment\x12U\n\x0emaxUnavailable\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0emaxUnavailable\x12I\n\x08maxSurge\x18\x02 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x08maxSurge\"\xa4\x01\n\x11SecretKeySelector\x12\x61\n\x14localObjectReference\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.LocalObjectReferenceR\x14localObjectReference\x12\x10\n\x03key\x18\x02 \x01(\tR\x03key\x12\x1a\n\x08optional\x18\x03 \x01(\x08R\x08optional\"\xe6\x05\n\x0bServiceSpec\x12:\n\x05ports\x18\x01 \x03(\x0b\x32$.istio.operator.v1alpha1.ServicePortR\x05ports\x12N\n\x08selector\x18\x02 \x03(\x0b\x32\x32.istio.operator.v1alpha1.ServiceSpec.SelectorEntryR\x08selector\x12\x1c\n\tclusterIP\x18\x03 \x01(\tR\tclusterIP\x12\x12\n\x04type\x18\x04 \x01(\tR\x04type\x12 \n\x0b\x65xternalIPs\x18\x05 \x03(\tR\x0b\x65xternalIPs\x12(\n\x0fsessionAffinity\x18\x07 \x01(\tR\x0fsessionAffinity\x12&\n\x0eloadBalancerIP\x18\x08 \x01(\tR\x0eloadBalancerIP\x12:\n\x18loadBalancerSourceRanges\x18\t \x03(\tR\x18loadBalancerSourceRanges\x12\"\n\x0c\x65xternalName\x18\n \x01(\tR\x0c\x65xternalName\x12\x34\n\x15\x65xternalTrafficPolicy\x18\x0b \x01(\tR\x15\x65xternalTrafficPolicy\x12\x30\n\x13healthCheckNodePort\x18\x0c \x01(\x05R\x13healthCheckNodePort\x12:\n\x18publishNotReadyAddresses\x18\r \x01(\x08R\x18publishNotReadyAddresses\x12\x64\n\x15sessionAffinityConfig\x18\x0e \x01(\x0b\x32..istio.operator.v1alpha1.SessionAffinityConfigR\x15sessionAffinityConfig\x1a;\n\rSelectorEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xbc\x01\n\x0bServicePort\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x1a\n\x08protocol\x18\x02 \x01(\tR\x08protocol\x12\x12\n\x04port\x18\x03 \x01(\x05R\x04port\x12M\n\ntargetPort\x18\x04 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\ntargetPort\x12\x1a\n\x08nodePort\x18\x05 \x01(\x05R\x08nodePort\"\\\n\x15SessionAffinityConfig\x12\x43\n\x08\x63lientIP\x18\x01 \x01(\x0b\x32\'.istio.operator.v1alpha1.ClientIPConfigR\x08\x63lientIP\"h\n\x0fTCPSocketAction\x12\x41\n\x04port\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x04port\x12\x12\n\x04host\x18\x02 \x01(\tR\x04host\"\x96\x01\n\nToleration\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x1a\n\x08operator\x18\x02 \x01(\tR\x08operator\x12\x14\n\x05value\x18\x03 \x01(\tR\x05value\x12\x16\n\x06\x65\x66\x66\x65\x63t\x18\x04 \x01(\tR\x06\x65\x66\x66\x65\x63t\x12,\n\x11tolerationSeconds\x18\x05 \x01(\x03R\x11tolerationSeconds\"\x85\x01\n\x17WeightedPodAffinityTerm\x12\x16\n\x06weight\x18\x01 \x01(\x05R\x06weight\x12R\n\x0fpodAffinityTerm\x18\x02 \x01(\x0b\x32(.istio.operator.v1alpha1.PodAffinityTermR\x0fpodAffinityTerm\"\xaf\x11\n\x06Volume\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12I\n\x08hostPath\x18\x02 \x01(\x0b\x32-.istio.operator.v1alpha1.HostPathVolumeSourceR\x08hostPath\x12I\n\x08\x65mptyDir\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.EmptyDirVolumeSourceR\x08\x65mptyDir\x12\x64\n\x11gcePersistentDisk\x18\x04 \x01(\x0b\x32\x36.istio.operator.v1alpha1.GCEPersistentDiskVolumeSourceR\x11gcePersistentDisk\x12m\n\x14\x61wsElasticBlockStore\x18\x05 \x01(\x0b\x32\x39.istio.operator.v1alpha1.AWSElasticBlockStoreVolumeSourceR\x14\x61wsElasticBlockStore\x12\x46\n\x07gitRepo\x18\x06 \x01(\x0b\x32,.istio.operator.v1alpha1.GitRepoVolumeSourceR\x07gitRepo\x12\x43\n\x06secret\x18\x07 \x01(\x0b\x32+.istio.operator.v1alpha1.SecretVolumeSourceR\x06secret\x12:\n\x03nfs\x18\x08 \x01(\x0b\x32(.istio.operator.v1alpha1.NFSVolumeSourceR\x03nfs\x12@\n\x05iscsi\x18\t \x01(\x0b\x32*.istio.operator.v1alpha1.ISCSIVolumeSourceR\x05iscsi\x12L\n\tglusterfs\x18\n \x01(\x0b\x32..istio.operator.v1alpha1.GlusterfsVolumeSourceR\tglusterfs\x12p\n\x15persistentVolumeClaim\x18\x0b \x01(\x0b\x32:.istio.operator.v1alpha1.PersistentVolumeClaimVolumeSourceR\x15persistentVolumeClaim\x12:\n\x03rbd\x18\x0c \x01(\x0b\x32(.istio.operator.v1alpha1.RBDVolumeSourceR\x03rbd\x12I\n\nflexVolume\x18\r \x01(\x0b\x32).istio.operator.v1alpha1.FlexVolumeSourceR\nflexVolume\x12\x43\n\x06\x63inder\x18\x0e \x01(\x0b\x32+.istio.operator.v1alpha1.CinderVolumeSourceR\x06\x63inder\x12\x43\n\x06\x63\x65phfs\x18\x0f \x01(\x0b\x32+.istio.operator.v1alpha1.CephFSVolumeSourceR\x06\x63\x65phfs\x12\x46\n\x07\x66locker\x18\x10 \x01(\x0b\x32,.istio.operator.v1alpha1.FlockerVolumeSourceR\x07\x66locker\x12R\n\x0b\x64ownwardAPI\x18\x11 \x01(\x0b\x32\x30.istio.operator.v1alpha1.DownwardAPIVolumeSourceR\x0b\x64ownwardAPI\x12\x37\n\x02\x66\x63\x18\x12 \x01(\x0b\x32\'.istio.operator.v1alpha1.FCVolumeSourceR\x02\x66\x63\x12L\n\tazureFile\x18\x13 \x01(\x0b\x32..istio.operator.v1alpha1.AzureFileVolumeSourceR\tazureFile\x12L\n\tconfigMap\x18\x14 \x01(\x0b\x32..istio.operator.v1alpha1.ConfigMapVolumeSourceR\tconfigMap\x12]\n\rvsphereVolume\x18\x15 \x01(\x0b\x32\x37.istio.operator.v1alpha1.VsphereVirtualDiskVolumeSourceR\rvsphereVolume\x12\x46\n\x07quobyte\x18\x16 \x01(\x0b\x32,.istio.operator.v1alpha1.QuobyteVolumeSourceR\x07quobyte\x12L\n\tazureDisk\x18\x17 \x01(\x0b\x32..istio.operator.v1alpha1.AzureDiskVolumeSourceR\tazureDisk\x12m\n\x14photonPersistentDisk\x18\x18 \x01(\x0b\x32\x39.istio.operator.v1alpha1.PhotonPersistentDiskVolumeSourceR\x14photonPersistentDisk\x12L\n\tprojected\x18\x19 \x01(\x0b\x32..istio.operator.v1alpha1.ProjectedVolumeSourceR\tprojected\x12U\n\x0eportworxVolume\x18\x1a \x01(\x0b\x32-.istio.operator.v1alpha1.PortworxVolumeSourceR\x0eportworxVolume\x12\x46\n\x07scaleIO\x18\x1b \x01(\x0b\x32,.istio.operator.v1alpha1.ScaleIOVolumeSourceR\x07scaleIO\x12L\n\tstorageos\x18\x1c \x01(\x0b\x32..istio.operator.v1alpha1.StorageOSVolumeSourceR\tstorageos\x12:\n\x03\x63si\x18\x1d \x01(\x0b\x32(.istio.operator.v1alpha1.CSIVolumeSourceR\x03\x63si\">\n\x14HostPathVolumeSource\x12\x12\n\x04path\x18\x01 \x01(\tR\x04path\x12\x12\n\x04type\x18\x02 \x01(\tR\x04type\"L\n\x14\x45mptyDirVolumeSource\x12\x16\n\x06medium\x18\x01 \x01(\tR\x06medium\x12\x1c\n\tsizeLimit\x18\x02 \x01(\tR\tsizeLimit\"\x89\x01\n\x1dGCEPersistentDiskVolumeSource\x12\x16\n\x06pdName\x18\x01 \x01(\tR\x06pdName\x12\x16\n\x06\x66sType\x18\x02 \x01(\tR\x06\x66sType\x12\x1c\n\tpartition\x18\x03 \x01(\x05R\tpartition\x12\x1a\n\x08readOnly\x18\x04 \x01(\x08R\x08readOnly\"\x90\x01\n AWSElasticBlockStoreVolumeSource\x12\x1a\n\x08volumeID\x18\x01 \x01(\tR\x08volumeID\x12\x16\n\x06\x66sType\x18\x02 \x01(\tR\x06\x66sType\x12\x1c\n\tpartition\x18\x03 \x01(\x05R\tpartition\x12\x1a\n\x08readOnly\x18\x04 \x01(\x08R\x08readOnly\"o\n\x13GitRepoVolumeSource\x12\x1e\n\nrepository\x18\x01 \x01(\tR\nrepository\x12\x1a\n\x08revision\x18\x02 \x01(\tR\x08revision\x12\x1c\n\tdirectory\x18\x03 \x01(\x05R\tdirectory\"\xac\x01\n\x12SecretVolumeSource\x12\x1e\n\nsecretName\x18\x01 \x01(\tR\nsecretName\x12\x38\n\x05items\x18\x02 \x03(\x0b\x32\".istio.operator.v1alpha1.KeyToPathR\x05items\x12 \n\x0b\x64\x65\x66\x61ultMode\x18\x03 \x01(\x05R\x0b\x64\x65\x66\x61ultMode\x12\x1a\n\x08optional\x18\x04 \x01(\x08R\x08optional\"E\n\tKeyToPath\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x12\n\x04path\x18\x02 \x01(\tR\x04path\x12\x12\n\x04mode\x18\x03 \x01(\x05R\x04mode\"Y\n\x0fNFSVolumeSource\x12\x16\n\x06server\x18\x01 \x01(\tR\x06server\x12\x12\n\x04path\x18\x02 \x01(\tR\x04path\x12\x1a\n\x08readOnly\x18\x03 \x01(\x08R\x08readOnly\"\x9c\x03\n\x11ISCSIVolumeSource\x12\"\n\x0ctargetPortal\x18\x01 \x01(\tR\x0ctargetPortal\x12\x10\n\x03iqn\x18\x02 \x01(\tR\x03iqn\x12\x10\n\x03lun\x18\x03 \x01(\x05R\x03lun\x12&\n\x0eiscsiInterface\x18\x04 \x01(\tR\x0eiscsiInterface\x12\x16\n\x06\x66sType\x18\x05 \x01(\tR\x06\x66sType\x12\x1a\n\x08readOnly\x18\x06 \x01(\x08R\x08readOnly\x12\x18\n\x07portals\x18\x07 \x03(\tR\x07portals\x12,\n\x11\x63hapAuthDiscovery\x18\x08 \x01(\x08R\x11\x63hapAuthDiscovery\x12(\n\x0f\x63hapAuthSession\x18\t \x01(\x08R\x0f\x63hapAuthSession\x12K\n\tsecretRef\x18\n \x01(\x0b\x32-.istio.operator.v1alpha1.LocalObjectReferenceR\tsecretRef\x12$\n\rinitiatorName\x18\x0b \x01(\tR\rinitiatorName\"e\n\x15GlusterfsVolumeSource\x12\x1c\n\tendpoints\x18\x01 \x01(\tR\tendpoints\x12\x12\n\x04path\x18\x02 \x01(\tR\x04path\x12\x1a\n\x08readOnly\x18\x03 \x01(\x08R\x08readOnly\"]\n!PersistentVolumeClaimVolumeSource\x12\x1c\n\tclaimName\x18\x01 \x01(\tR\tclaimName\x12\x1a\n\x08readOnly\x18\x02 \x01(\x08R\x08readOnly\"\x86\x02\n\x0fRBDVolumeSource\x12\x1a\n\x08monitors\x18\x01 \x03(\tR\x08monitors\x12\x14\n\x05image\x18\x02 \x01(\tR\x05image\x12\x16\n\x06\x66sType\x18\x03 \x01(\tR\x06\x66sType\x12\x12\n\x04pool\x18\x04 \x01(\tR\x04pool\x12\x12\n\x04user\x18\x05 \x01(\tR\x04user\x12\x18\n\x07keyring\x18\x06 \x01(\tR\x07keyring\x12K\n\tsecretRef\x18\x07 \x01(\x0b\x32-.istio.operator.v1alpha1.LocalObjectReferenceR\tsecretRef\x12\x1a\n\x08readOnly\x18\x08 \x01(\x08R\x08readOnly\"\xb9\x02\n\x10\x46lexVolumeSource\x12\x16\n\x06\x64river\x18\x01 \x01(\tR\x06\x64river\x12\x16\n\x06\x66sType\x18\x02 \x01(\tR\x06\x66sType\x12K\n\tsecretRef\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.LocalObjectReferenceR\tsecretRef\x12\x1a\n\x08readOnly\x18\x04 \x01(\x08R\x08readOnly\x12P\n\x07options\x18\x05 \x03(\x0b\x32\x36.istio.operator.v1alpha1.FlexVolumeSource.OptionsEntryR\x07options\x1a:\n\x0cOptionsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xb1\x01\n\x12\x43inderVolumeSource\x12\x1a\n\x08volumeID\x18\x01 \x01(\tR\x08volumeID\x12\x16\n\x06\x66sType\x18\x02 \x01(\tR\x06\x66sType\x12\x1a\n\x08readOnly\x18\x03 \x01(\x08R\x08readOnly\x12K\n\tsecretRef\x18\x04 \x01(\x0b\x32-.istio.operator.v1alpha1.LocalObjectReferenceR\tsecretRef\"\xe1\x01\n\x12\x43\x65phFSVolumeSource\x12\x1a\n\x08monitors\x18\x01 \x03(\tR\x08monitors\x12\x12\n\x04path\x18\x02 \x01(\tR\x04path\x12\x12\n\x04user\x18\x03 \x01(\tR\x04user\x12\x1e\n\nsecretFile\x18\x04 \x01(\tR\nsecretFile\x12K\n\tsecretRef\x18\x05 \x01(\x0b\x32-.istio.operator.v1alpha1.LocalObjectReferenceR\tsecretRef\x12\x1a\n\x08readOnly\x18\x06 \x01(\x08R\x08readOnly\"Y\n\x13\x46lockerVolumeSource\x12 \n\x0b\x64\x61tasetName\x18\x01 \x01(\tR\x0b\x64\x61tasetName\x12 \n\x0b\x64\x61tasetUUID\x18\x02 \x01(\tR\x0b\x64\x61tasetUUID\"\x81\x01\n\x17\x44ownwardAPIVolumeSource\x12\x44\n\x05items\x18\x01 \x03(\x0b\x32..istio.operator.v1alpha1.DownwardAPIVolumeFileR\x05items\x12 \n\x0b\x64\x65\x66\x61ultMode\x18\x02 \x01(\x05R\x0b\x64\x65\x66\x61ultMode\"\xe5\x01\n\x15\x44ownwardAPIVolumeFile\x12\x12\n\x04path\x18\x01 \x01(\tR\x04path\x12H\n\x08\x66ieldRef\x18\x02 \x01(\x0b\x32,.istio.operator.v1alpha1.ObjectFieldSelectorR\x08\x66ieldRef\x12Z\n\x10resourceFieldRef\x18\x03 \x01(\x0b\x32..istio.operator.v1alpha1.ResourceFieldSelectorR\x10resourceFieldRef\x12\x12\n\x04mode\x18\x04 \x01(\x05R\x04mode\"\x8c\x01\n\x0e\x46\x43VolumeSource\x12\x1e\n\ntargetWWNs\x18\x01 \x03(\tR\ntargetWWNs\x12\x10\n\x03lun\x18\x02 \x01(\x05R\x03lun\x12\x16\n\x06\x66sType\x18\x03 \x01(\tR\x06\x66sType\x12\x1a\n\x08readOnly\x18\x04 \x01(\x08R\x08readOnly\x12\x14\n\x05wwids\x18\x05 \x03(\tR\x05wwids\"q\n\x15\x41zureFileVolumeSource\x12\x1e\n\nsecretName\x18\x01 \x01(\tR\nsecretName\x12\x1c\n\tshareName\x18\x02 \x01(\tR\tshareName\x12\x1a\n\x08readOnly\x18\x03 \x01(\x08R\x08readOnly\"\xa3\x01\n\x15\x43onfigMapVolumeSource\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x38\n\x05items\x18\x02 \x03(\x0b\x32\".istio.operator.v1alpha1.KeyToPathR\x05items\x12 \n\x0b\x64\x65\x66\x61ultMode\x18\x03 \x01(\x05R\x0b\x64\x65\x66\x61ultMode\x12\x1a\n\x08optional\x18\x04 \x01(\x08R\x08optional\"\xb0\x01\n\x1eVsphereVirtualDiskVolumeSource\x12\x1e\n\nvolumePath\x18\x01 \x01(\tR\nvolumePath\x12\x16\n\x06\x66sType\x18\x02 \x01(\tR\x06\x66sType\x12,\n\x11storagePolicyName\x18\x03 \x01(\tR\x11storagePolicyName\x12(\n\x0fstoragePolicyID\x18\x04 \x01(\tR\x0fstoragePolicyID\"\xa7\x01\n\x13QuobyteVolumeSource\x12\x1a\n\x08registry\x18\x01 \x01(\tR\x08registry\x12\x16\n\x06volume\x18\x02 \x01(\tR\x06volume\x12\x1a\n\x08readOnly\x18\x03 \x01(\x08R\x08readOnly\x12\x12\n\x04user\x18\x04 \x01(\tR\x04user\x12\x14\n\x05group\x18\x05 \x01(\tR\x05group\x12\x16\n\x06tenant\x18\x06 \x01(\tR\x06tenant\"\xb7\x01\n\x15\x41zureDiskVolumeSource\x12\x1a\n\x08\x64iskName\x18\x01 \x01(\tR\x08\x64iskName\x12\x18\n\x07\x64iskURI\x18\x02 \x01(\tR\x07\x64iskURI\x12 \n\x0b\x63\x61\x63hingMode\x18\x03 \x01(\tR\x0b\x63\x61\x63hingMode\x12\x16\n\x06\x66sType\x18\x04 \x01(\tR\x06\x66sType\x12\x1a\n\x08readOnly\x18\x05 \x01(\x08R\x08readOnly\x12\x12\n\x04kind\x18\x06 \x01(\tR\x04kind\"N\n PhotonPersistentDiskVolumeSource\x12\x12\n\x04pdID\x18\x01 \x01(\tR\x04pdID\x12\x16\n\x06\x66sType\x18\x02 \x01(\tR\x06\x66sType\"~\n\x15ProjectedVolumeSource\x12\x43\n\x07sources\x18\x01 \x03(\x0b\x32).istio.operator.v1alpha1.VolumeProjectionR\x07sources\x12 \n\x0b\x64\x65\x66\x61ultMode\x18\x02 \x01(\x05R\x0b\x64\x65\x66\x61ultMode\"\xdd\x02\n\x10VolumeProjection\x12\x41\n\x06secret\x18\x01 \x01(\x0b\x32).istio.operator.v1alpha1.SecretProjectionR\x06secret\x12P\n\x0b\x64ownwardAPI\x18\x02 \x01(\x0b\x32..istio.operator.v1alpha1.DownwardAPIProjectionR\x0b\x64ownwardAPI\x12J\n\tconfigMap\x18\x03 \x01(\x0b\x32,.istio.operator.v1alpha1.ConfigMapProjectionR\tconfigMap\x12h\n\x13serviceAccountToken\x18\x04 \x01(\x0b\x32\x36.istio.operator.v1alpha1.ServiceAccountTokenProjectionR\x13serviceAccountToken\"|\n\x10SecretProjection\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x38\n\x05items\x18\x02 \x03(\x0b\x32\".istio.operator.v1alpha1.KeyToPathR\x05items\x12\x1a\n\x08optional\x18\x03 \x01(\x08R\x08optional\"]\n\x15\x44ownwardAPIProjection\x12\x44\n\x05items\x18\x01 \x03(\x0b\x32..istio.operator.v1alpha1.DownwardAPIVolumeFileR\x05items\"\x7f\n\x13\x43onfigMapProjection\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x38\n\x05items\x18\x02 \x03(\x0b\x32\".istio.operator.v1alpha1.KeyToPathR\x05items\x12\x1a\n\x08optional\x18\x03 \x01(\x08R\x08optional\"}\n\x1dServiceAccountTokenProjection\x12\x1a\n\x08\x61udience\x18\x01 \x01(\tR\x08\x61udience\x12,\n\x11\x65xpirationSeconds\x18\x02 \x01(\x03R\x11\x65xpirationSeconds\x12\x12\n\x04path\x18\x03 \x01(\tR\x04path\"f\n\x14PortworxVolumeSource\x12\x1a\n\x08volumeID\x18\x01 \x01(\tR\x08volumeID\x12\x16\n\x06\x66sType\x18\x02 \x01(\tR\x06\x66sType\x12\x1a\n\x08readOnly\x18\x03 \x01(\x08R\x08readOnly\"\xf8\x02\n\x13ScaleIOVolumeSource\x12\x18\n\x07gateway\x18\x01 \x01(\tR\x07gateway\x12\x16\n\x06system\x18\x02 \x01(\tR\x06system\x12K\n\tsecretRef\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.LocalObjectReferenceR\tsecretRef\x12\x1e\n\nsslEnabled\x18\x04 \x01(\x08R\nsslEnabled\x12*\n\x10protectionDomain\x18\x05 \x01(\tR\x10protectionDomain\x12 \n\x0bstoragePool\x18\x06 \x01(\tR\x0bstoragePool\x12 \n\x0bstorageMode\x18\x07 \x01(\tR\x0bstorageMode\x12\x1e\n\nvolumeName\x18\x08 \x01(\tR\nvolumeName\x12\x16\n\x06\x66sType\x18\t \x01(\tR\x06\x66sType\x12\x1a\n\x08readOnly\x18\n \x01(\x08R\x08readOnly\"\xe2\x01\n\x15StorageOSVolumeSource\x12\x1e\n\nvolumeName\x18\x01 \x01(\tR\nvolumeName\x12(\n\x0fvolumeNamespace\x18\x02 \x01(\tR\x0fvolumeNamespace\x12\x16\n\x06\x66sType\x18\x03 \x01(\tR\x06\x66sType\x12\x1a\n\x08readOnly\x18\x04 \x01(\x08R\x08readOnly\x12K\n\tsecretRef\x18\x05 \x01(\x0b\x32-.istio.operator.v1alpha1.LocalObjectReferenceR\tsecretRef\"\xf1\x02\n\x0f\x43SIVolumeSource\x12\x16\n\x06\x64river\x18\x01 \x01(\tR\x06\x64river\x12\x1a\n\x08readOnly\x18\x02 \x01(\x08R\x08readOnly\x12\x16\n\x06\x66sType\x18\x03 \x01(\tR\x06\x66sType\x12j\n\x10volumeAttributes\x18\x04 \x03(\x0b\x32>.istio.operator.v1alpha1.CSIVolumeSource.VolumeAttributesEntryR\x10volumeAttributes\x12\x61\n\x14nodePublishSecretRef\x18\x05 \x01(\x0b\x32-.istio.operator.v1alpha1.LocalObjectReferenceR\x14nodePublishSecretRef\x1a\x43\n\x15VolumeAttributesEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xaf\x04\n\x12PodSecurityContext\x12O\n\x0eseLinuxOptions\x18\x01 \x01(\x0b\x32\'.istio.operator.v1alpha1.SELinuxOptionsR\x0eseLinuxOptions\x12\x1c\n\trunAsUser\x18\x02 \x01(\x03R\trunAsUser\x12\"\n\x0crunAsNonRoot\x18\x03 \x01(\x08R\x0crunAsNonRoot\x12.\n\x12supplementalGroups\x18\x04 \x03(\x03R\x12supplementalGroups\x12\x18\n\x07\x66sGroup\x18\x05 \x01(\x03R\x07\x66sGroup\x12\x1e\n\nrunAsGroup\x18\x06 \x01(\x03R\nrunAsGroup\x12\x39\n\x07sysctls\x18\x07 \x03(\x0b\x32\x1f.istio.operator.v1alpha1.SysctlR\x07sysctls\x12^\n\x0ewindowsOptions\x18\x08 \x01(\x0b\x32\x36.istio.operator.v1alpha1.WindowsSecurityContextOptionsR\x0ewindowsOptions\x12\x30\n\x13\x66sGroupChangePolicy\x18\t \x01(\tR\x13\x66sGroupChangePolicy\x12O\n\x0eseccompProfile\x18\n \x01(\x0b\x32\'.istio.operator.v1alpha1.SeccompProfileR\x0eseccompProfile\"b\n\x0eSELinuxOptions\x12\x12\n\x04user\x18\x01 \x01(\tR\x04user\x12\x12\n\x04role\x18\x02 \x01(\tR\x04role\x12\x12\n\x04type\x18\x03 \x01(\tR\x04type\x12\x14\n\x05level\x18\x04 \x01(\tR\x05level\"2\n\x06Sysctl\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value\"\xad\x01\n\x1dWindowsSecurityContextOptions\x12\x36\n\x16gmsaCredentialSpecName\x18\x01 \x01(\tR\x16gmsaCredentialSpecName\x12.\n\x12gmsaCredentialSpec\x18\x02 \x01(\tR\x12gmsaCredentialSpec\x12$\n\rrunAsUserName\x18\x03 \x01(\tR\rrunAsUserName\"P\n\x0eSeccompProfile\x12\x12\n\x04type\x18\x01 \x01(\tR\x04type\x12*\n\x10localhostProfile\x18\x02 \x01(\tR\x10localhostProfile\"\x0f\n\rTypeInterface\"\x18\n\x16TypeMapStringInterface\"\x16\n\x14TypeIntOrStringForPB\"\x14\n\x12TypeBoolValueForPBB,Z\x1eistio.io/api/operator/v1alpha1\xc8\xe2\x1e\x00\xd0\xe2\x1e\x00\xe0\xe2\x1e\x00\x62\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR,k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2.DESCRIPTOR,gogoproto_dot_gogo__pb2.DESCRIPTOR,])
 
@@ -727,8 +727,8 @@ _KUBERNETESRESOURCESSPEC_NODESELECTORENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4871,
-  serialized_end=4934,
+  serialized_start=4876,
+  serialized_end=4939,
 )
 
 _KUBERNETESRESOURCESSPEC_PODANNOTATIONSENTRY = _descriptor.Descriptor(
@@ -764,8 +764,8 @@ _KUBERNETESRESOURCESSPEC_PODANNOTATIONSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4936,
-  serialized_end=5001,
+  serialized_start=4941,
+  serialized_end=5006,
 )
 
 _KUBERNETESRESOURCESSPEC_SERVICEANNOTATIONSENTRY = _descriptor.Descriptor(
@@ -801,8 +801,8 @@ _KUBERNETESRESOURCESSPEC_SERVICEANNOTATIONSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5003,
-  serialized_end=5072,
+  serialized_start=5008,
+  serialized_end=5077,
 )
 
 _KUBERNETESRESOURCESSPEC = _descriptor.Descriptor(
@@ -958,7 +958,7 @@ _KUBERNETESRESOURCESSPEC = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=3442,
-  serialized_end=5072,
+  serialized_end=5077,
 )
 
 
@@ -995,8 +995,8 @@ _K8SOBJECTOVERLAY_PATHVALUE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5247,
-  serialized_end=5340,
+  serialized_start=5252,
+  serialized_end=5345,
 )
 
 _K8SOBJECTOVERLAY = _descriptor.Descriptor(
@@ -1046,8 +1046,8 @@ _K8SOBJECTOVERLAY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5075,
-  serialized_end=5340,
+  serialized_start=5080,
+  serialized_end=5345,
 )
 
 
@@ -1091,8 +1091,8 @@ _AFFINITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5343,
-  serialized_end=5584,
+  serialized_start=5348,
+  serialized_end=5589,
 )
 
 
@@ -1136,8 +1136,8 @@ _CONFIGMAPKEYSELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5587,
-  serialized_end=5754,
+  serialized_start=5592,
+  serialized_end=5759,
 )
 
 
@@ -1167,8 +1167,8 @@ _CLIENTIPCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5756,
-  serialized_end=5812,
+  serialized_start=5761,
+  serialized_end=5817,
 )
 
 
@@ -1212,8 +1212,8 @@ _CROSSVERSIONOBJECTREFERENCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5814,
-  serialized_end=5915,
+  serialized_start=5819,
+  serialized_end=5920,
 )
 
 
@@ -1250,8 +1250,8 @@ _DEPLOYMENTSTRATEGY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5918,
-  serialized_end=6046,
+  serialized_start=5923,
+  serialized_end=6051,
 )
 
 
@@ -1295,8 +1295,8 @@ _ENVVAR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6048,
-  serialized_end=6167,
+  serialized_start=6053,
+  serialized_end=6172,
 )
 
 
@@ -1347,8 +1347,8 @@ _ENVVARSOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6170,
-  serialized_end=6519,
+  serialized_start=6175,
+  serialized_end=6524,
 )
 
 
@@ -1378,8 +1378,8 @@ _EXECACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6521,
-  serialized_end=6559,
+  serialized_start=6526,
+  serialized_end=6564,
 )
 
 
@@ -1430,8 +1430,8 @@ _EXTERNALMETRICSOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6562,
-  serialized_end=6885,
+  serialized_start=6567,
+  serialized_end=6890,
 )
 
 
@@ -1489,8 +1489,8 @@ _HTTPGETACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6888,
-  serialized_end=7105,
+  serialized_start=6893,
+  serialized_end=7110,
 )
 
 
@@ -1527,8 +1527,8 @@ _HTTPHEADER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7107,
-  serialized_end=7161,
+  serialized_start=7112,
+  serialized_end=7166,
 )
 
 
@@ -1579,8 +1579,8 @@ _HORIZONTALPODAUTOSCALERSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7164,
-  serialized_end=7418,
+  serialized_start=7169,
+  serialized_end=7423,
 )
 
 
@@ -1610,8 +1610,8 @@ _LOCALOBJECTREFERENCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7420,
-  serialized_end=7462,
+  serialized_start=7425,
+  serialized_end=7467,
 )
 
 
@@ -1669,8 +1669,8 @@ _METRICSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7465,
-  serialized_end=7779,
+  serialized_start=7470,
+  serialized_end=7784,
 )
 
 
@@ -1707,8 +1707,8 @@ _NODEAFFINITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7782,
-  serialized_end=8097,
+  serialized_start=7787,
+  serialized_end=8102,
 )
 
 
@@ -1738,8 +1738,8 @@ _NODESELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8099,
-  serialized_end=8202,
+  serialized_start=8104,
+  serialized_end=8207,
 )
 
 
@@ -1776,8 +1776,8 @@ _NODESELECTORTERM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8205,
-  serialized_end=8401,
+  serialized_start=8210,
+  serialized_end=8406,
 )
 
 
@@ -1821,8 +1821,8 @@ _NODESELECTORREQUIREMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8403,
-  serialized_end=8498,
+  serialized_start=8408,
+  serialized_end=8503,
 )
 
 
@@ -1859,8 +1859,8 @@ _OBJECTFIELDSELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8500,
-  serialized_end=8583,
+  serialized_start=8505,
+  serialized_end=8588,
 )
 
 
@@ -1897,8 +1897,8 @@ _OBJECTMETA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8585,
-  serialized_end=8647,
+  serialized_start=8590,
+  serialized_end=8652,
 )
 
 
@@ -1956,8 +1956,8 @@ _OBJECTMETRICSOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8650,
-  serialized_end=9025,
+  serialized_start=8655,
+  serialized_end=9030,
 )
 
 
@@ -1994,8 +1994,8 @@ _PODAFFINITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9028,
-  serialized_end=9345,
+  serialized_start=9033,
+  serialized_end=9350,
 )
 
 
@@ -2032,8 +2032,8 @@ _PODANTIAFFINITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9348,
-  serialized_end=9669,
+  serialized_start=9353,
+  serialized_end=9674,
 )
 
 
@@ -2077,8 +2077,8 @@ _PODAFFINITYTERM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9672,
-  serialized_end=9846,
+  serialized_start=9677,
+  serialized_end=9851,
 )
 
 
@@ -2122,8 +2122,8 @@ _PODDISRUPTIONBUDGETSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9849,
-  serialized_end=10031,
+  serialized_start=9854,
+  serialized_end=10036,
 )
 
 
@@ -2167,8 +2167,8 @@ _PODSMETRICSOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10034,
-  serialized_end=10260,
+  serialized_start=10039,
+  serialized_end=10265,
 )
 
 
@@ -2205,8 +2205,8 @@ _PREFERREDSCHEDULINGTERM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10262,
-  serialized_end=10386,
+  serialized_start=10267,
+  serialized_end=10391,
 )
 
 
@@ -2285,8 +2285,8 @@ _READINESSPROBE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10389,
-  serialized_end=10816,
+  serialized_start=10394,
+  serialized_end=10821,
 )
 
 
@@ -2330,8 +2330,8 @@ _RESOURCEFIELDSELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10819,
-  serialized_end=10981,
+  serialized_start=10824,
+  serialized_end=10986,
 )
 
 
@@ -2375,8 +2375,8 @@ _RESOURCEMETRICSOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10984,
-  serialized_end=11181,
+  serialized_start=10989,
+  serialized_end=11186,
 )
 
 
@@ -2413,8 +2413,8 @@ _RESOURCES_LIMITSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11347,
-  serialized_end=11404,
+  serialized_start=11352,
+  serialized_end=11409,
 )
 
 _RESOURCES_REQUESTSENTRY = _descriptor.Descriptor(
@@ -2450,8 +2450,8 @@ _RESOURCES_REQUESTSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11406,
-  serialized_end=11465,
+  serialized_start=11411,
+  serialized_end=11470,
 )
 
 _RESOURCES = _descriptor.Descriptor(
@@ -2487,8 +2487,8 @@ _RESOURCES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11184,
-  serialized_end=11465,
+  serialized_start=11189,
+  serialized_end=11470,
 )
 
 
@@ -2525,8 +2525,8 @@ _ROLLINGUPDATEDEPLOYMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11468,
-  serialized_end=11655,
+  serialized_start=11473,
+  serialized_end=11660,
 )
 
 
@@ -2570,8 +2570,8 @@ _SECRETKEYSELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11658,
-  serialized_end=11822,
+  serialized_start=11663,
+  serialized_end=11827,
 )
 
 
@@ -2608,8 +2608,8 @@ _SERVICESPEC_SELECTORENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12508,
-  serialized_end=12567,
+  serialized_start=12513,
+  serialized_end=12572,
 )
 
 _SERVICESPEC = _descriptor.Descriptor(
@@ -2722,8 +2722,8 @@ _SERVICESPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11825,
-  serialized_end=12567,
+  serialized_start=11830,
+  serialized_end=12572,
 )
 
 
@@ -2781,8 +2781,8 @@ _SERVICEPORT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12570,
-  serialized_end=12758,
+  serialized_start=12575,
+  serialized_end=12763,
 )
 
 
@@ -2812,8 +2812,8 @@ _SESSIONAFFINITYCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12760,
-  serialized_end=12852,
+  serialized_start=12765,
+  serialized_end=12857,
 )
 
 
@@ -2850,8 +2850,8 @@ _TCPSOCKETACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12854,
-  serialized_end=12958,
+  serialized_start=12859,
+  serialized_end=12963,
 )
 
 
@@ -2909,8 +2909,8 @@ _TOLERATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12961,
-  serialized_end=13111,
+  serialized_start=12966,
+  serialized_end=13116,
 )
 
 
@@ -2947,8 +2947,2136 @@ _WEIGHTEDPODAFFINITYTERM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13114,
-  serialized_end=13247,
+  serialized_start=13119,
+  serialized_end=13252,
+)
+
+
+_VOLUME = _descriptor.Descriptor(
+  name='Volume',
+  full_name='istio.operator.v1alpha1.Volume',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='istio.operator.v1alpha1.Volume.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='name', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='hostPath', full_name='istio.operator.v1alpha1.Volume.hostPath', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='hostPath', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='emptyDir', full_name='istio.operator.v1alpha1.Volume.emptyDir', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='emptyDir', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='gcePersistentDisk', full_name='istio.operator.v1alpha1.Volume.gcePersistentDisk', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='gcePersistentDisk', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='awsElasticBlockStore', full_name='istio.operator.v1alpha1.Volume.awsElasticBlockStore', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='awsElasticBlockStore', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='gitRepo', full_name='istio.operator.v1alpha1.Volume.gitRepo', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='gitRepo', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='secret', full_name='istio.operator.v1alpha1.Volume.secret', index=6,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='secret', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='nfs', full_name='istio.operator.v1alpha1.Volume.nfs', index=7,
+      number=8, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='nfs', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='iscsi', full_name='istio.operator.v1alpha1.Volume.iscsi', index=8,
+      number=9, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='iscsi', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='glusterfs', full_name='istio.operator.v1alpha1.Volume.glusterfs', index=9,
+      number=10, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='glusterfs', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='persistentVolumeClaim', full_name='istio.operator.v1alpha1.Volume.persistentVolumeClaim', index=10,
+      number=11, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='persistentVolumeClaim', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='rbd', full_name='istio.operator.v1alpha1.Volume.rbd', index=11,
+      number=12, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='rbd', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='flexVolume', full_name='istio.operator.v1alpha1.Volume.flexVolume', index=12,
+      number=13, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='flexVolume', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='cinder', full_name='istio.operator.v1alpha1.Volume.cinder', index=13,
+      number=14, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='cinder', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='cephfs', full_name='istio.operator.v1alpha1.Volume.cephfs', index=14,
+      number=15, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='cephfs', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='flocker', full_name='istio.operator.v1alpha1.Volume.flocker', index=15,
+      number=16, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='flocker', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='downwardAPI', full_name='istio.operator.v1alpha1.Volume.downwardAPI', index=16,
+      number=17, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='downwardAPI', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fc', full_name='istio.operator.v1alpha1.Volume.fc', index=17,
+      number=18, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='fc', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='azureFile', full_name='istio.operator.v1alpha1.Volume.azureFile', index=18,
+      number=19, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='azureFile', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='configMap', full_name='istio.operator.v1alpha1.Volume.configMap', index=19,
+      number=20, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='configMap', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='vsphereVolume', full_name='istio.operator.v1alpha1.Volume.vsphereVolume', index=20,
+      number=21, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='vsphereVolume', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='quobyte', full_name='istio.operator.v1alpha1.Volume.quobyte', index=21,
+      number=22, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='quobyte', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='azureDisk', full_name='istio.operator.v1alpha1.Volume.azureDisk', index=22,
+      number=23, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='azureDisk', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='photonPersistentDisk', full_name='istio.operator.v1alpha1.Volume.photonPersistentDisk', index=23,
+      number=24, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='photonPersistentDisk', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='projected', full_name='istio.operator.v1alpha1.Volume.projected', index=24,
+      number=25, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='projected', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='portworxVolume', full_name='istio.operator.v1alpha1.Volume.portworxVolume', index=25,
+      number=26, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='portworxVolume', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='scaleIO', full_name='istio.operator.v1alpha1.Volume.scaleIO', index=26,
+      number=27, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='scaleIO', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='storageos', full_name='istio.operator.v1alpha1.Volume.storageos', index=27,
+      number=28, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='storageos', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='csi', full_name='istio.operator.v1alpha1.Volume.csi', index=28,
+      number=29, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='csi', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=13255,
+  serialized_end=15478,
+)
+
+
+_HOSTPATHVOLUMESOURCE = _descriptor.Descriptor(
+  name='HostPathVolumeSource',
+  full_name='istio.operator.v1alpha1.HostPathVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='path', full_name='istio.operator.v1alpha1.HostPathVolumeSource.path', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='path', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='type', full_name='istio.operator.v1alpha1.HostPathVolumeSource.type', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='type', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=15480,
+  serialized_end=15542,
+)
+
+
+_EMPTYDIRVOLUMESOURCE = _descriptor.Descriptor(
+  name='EmptyDirVolumeSource',
+  full_name='istio.operator.v1alpha1.EmptyDirVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='medium', full_name='istio.operator.v1alpha1.EmptyDirVolumeSource.medium', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='medium', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='sizeLimit', full_name='istio.operator.v1alpha1.EmptyDirVolumeSource.sizeLimit', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='sizeLimit', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=15544,
+  serialized_end=15620,
+)
+
+
+_GCEPERSISTENTDISKVOLUMESOURCE = _descriptor.Descriptor(
+  name='GCEPersistentDiskVolumeSource',
+  full_name='istio.operator.v1alpha1.GCEPersistentDiskVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='pdName', full_name='istio.operator.v1alpha1.GCEPersistentDiskVolumeSource.pdName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='pdName', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fsType', full_name='istio.operator.v1alpha1.GCEPersistentDiskVolumeSource.fsType', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='fsType', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='partition', full_name='istio.operator.v1alpha1.GCEPersistentDiskVolumeSource.partition', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='partition', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='readOnly', full_name='istio.operator.v1alpha1.GCEPersistentDiskVolumeSource.readOnly', index=3,
+      number=4, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='readOnly', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=15623,
+  serialized_end=15760,
+)
+
+
+_AWSELASTICBLOCKSTOREVOLUMESOURCE = _descriptor.Descriptor(
+  name='AWSElasticBlockStoreVolumeSource',
+  full_name='istio.operator.v1alpha1.AWSElasticBlockStoreVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='volumeID', full_name='istio.operator.v1alpha1.AWSElasticBlockStoreVolumeSource.volumeID', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='volumeID', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fsType', full_name='istio.operator.v1alpha1.AWSElasticBlockStoreVolumeSource.fsType', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='fsType', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='partition', full_name='istio.operator.v1alpha1.AWSElasticBlockStoreVolumeSource.partition', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='partition', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='readOnly', full_name='istio.operator.v1alpha1.AWSElasticBlockStoreVolumeSource.readOnly', index=3,
+      number=4, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='readOnly', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=15763,
+  serialized_end=15907,
+)
+
+
+_GITREPOVOLUMESOURCE = _descriptor.Descriptor(
+  name='GitRepoVolumeSource',
+  full_name='istio.operator.v1alpha1.GitRepoVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='repository', full_name='istio.operator.v1alpha1.GitRepoVolumeSource.repository', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='repository', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='revision', full_name='istio.operator.v1alpha1.GitRepoVolumeSource.revision', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='revision', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='directory', full_name='istio.operator.v1alpha1.GitRepoVolumeSource.directory', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='directory', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=15909,
+  serialized_end=16020,
+)
+
+
+_SECRETVOLUMESOURCE = _descriptor.Descriptor(
+  name='SecretVolumeSource',
+  full_name='istio.operator.v1alpha1.SecretVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='secretName', full_name='istio.operator.v1alpha1.SecretVolumeSource.secretName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='secretName', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='items', full_name='istio.operator.v1alpha1.SecretVolumeSource.items', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='items', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='defaultMode', full_name='istio.operator.v1alpha1.SecretVolumeSource.defaultMode', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='defaultMode', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='optional', full_name='istio.operator.v1alpha1.SecretVolumeSource.optional', index=3,
+      number=4, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='optional', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=16023,
+  serialized_end=16195,
+)
+
+
+_KEYTOPATH = _descriptor.Descriptor(
+  name='KeyToPath',
+  full_name='istio.operator.v1alpha1.KeyToPath',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.operator.v1alpha1.KeyToPath.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='key', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='path', full_name='istio.operator.v1alpha1.KeyToPath.path', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='path', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='mode', full_name='istio.operator.v1alpha1.KeyToPath.mode', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='mode', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=16197,
+  serialized_end=16266,
+)
+
+
+_NFSVOLUMESOURCE = _descriptor.Descriptor(
+  name='NFSVolumeSource',
+  full_name='istio.operator.v1alpha1.NFSVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='server', full_name='istio.operator.v1alpha1.NFSVolumeSource.server', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='server', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='path', full_name='istio.operator.v1alpha1.NFSVolumeSource.path', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='path', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='readOnly', full_name='istio.operator.v1alpha1.NFSVolumeSource.readOnly', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='readOnly', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=16268,
+  serialized_end=16357,
+)
+
+
+_ISCSIVOLUMESOURCE = _descriptor.Descriptor(
+  name='ISCSIVolumeSource',
+  full_name='istio.operator.v1alpha1.ISCSIVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='targetPortal', full_name='istio.operator.v1alpha1.ISCSIVolumeSource.targetPortal', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='targetPortal', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='iqn', full_name='istio.operator.v1alpha1.ISCSIVolumeSource.iqn', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='iqn', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='lun', full_name='istio.operator.v1alpha1.ISCSIVolumeSource.lun', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='lun', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='iscsiInterface', full_name='istio.operator.v1alpha1.ISCSIVolumeSource.iscsiInterface', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='iscsiInterface', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fsType', full_name='istio.operator.v1alpha1.ISCSIVolumeSource.fsType', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='fsType', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='readOnly', full_name='istio.operator.v1alpha1.ISCSIVolumeSource.readOnly', index=5,
+      number=6, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='readOnly', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='portals', full_name='istio.operator.v1alpha1.ISCSIVolumeSource.portals', index=6,
+      number=7, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='portals', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='chapAuthDiscovery', full_name='istio.operator.v1alpha1.ISCSIVolumeSource.chapAuthDiscovery', index=7,
+      number=8, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='chapAuthDiscovery', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='chapAuthSession', full_name='istio.operator.v1alpha1.ISCSIVolumeSource.chapAuthSession', index=8,
+      number=9, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='chapAuthSession', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='secretRef', full_name='istio.operator.v1alpha1.ISCSIVolumeSource.secretRef', index=9,
+      number=10, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='secretRef', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='initiatorName', full_name='istio.operator.v1alpha1.ISCSIVolumeSource.initiatorName', index=10,
+      number=11, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='initiatorName', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=16360,
+  serialized_end=16772,
+)
+
+
+_GLUSTERFSVOLUMESOURCE = _descriptor.Descriptor(
+  name='GlusterfsVolumeSource',
+  full_name='istio.operator.v1alpha1.GlusterfsVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='endpoints', full_name='istio.operator.v1alpha1.GlusterfsVolumeSource.endpoints', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='endpoints', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='path', full_name='istio.operator.v1alpha1.GlusterfsVolumeSource.path', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='path', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='readOnly', full_name='istio.operator.v1alpha1.GlusterfsVolumeSource.readOnly', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='readOnly', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=16774,
+  serialized_end=16875,
+)
+
+
+_PERSISTENTVOLUMECLAIMVOLUMESOURCE = _descriptor.Descriptor(
+  name='PersistentVolumeClaimVolumeSource',
+  full_name='istio.operator.v1alpha1.PersistentVolumeClaimVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='claimName', full_name='istio.operator.v1alpha1.PersistentVolumeClaimVolumeSource.claimName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='claimName', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='readOnly', full_name='istio.operator.v1alpha1.PersistentVolumeClaimVolumeSource.readOnly', index=1,
+      number=2, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='readOnly', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=16877,
+  serialized_end=16970,
+)
+
+
+_RBDVOLUMESOURCE = _descriptor.Descriptor(
+  name='RBDVolumeSource',
+  full_name='istio.operator.v1alpha1.RBDVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='monitors', full_name='istio.operator.v1alpha1.RBDVolumeSource.monitors', index=0,
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='monitors', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='image', full_name='istio.operator.v1alpha1.RBDVolumeSource.image', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='image', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fsType', full_name='istio.operator.v1alpha1.RBDVolumeSource.fsType', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='fsType', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='pool', full_name='istio.operator.v1alpha1.RBDVolumeSource.pool', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='pool', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='user', full_name='istio.operator.v1alpha1.RBDVolumeSource.user', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='user', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='keyring', full_name='istio.operator.v1alpha1.RBDVolumeSource.keyring', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='keyring', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='secretRef', full_name='istio.operator.v1alpha1.RBDVolumeSource.secretRef', index=6,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='secretRef', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='readOnly', full_name='istio.operator.v1alpha1.RBDVolumeSource.readOnly', index=7,
+      number=8, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='readOnly', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=16973,
+  serialized_end=17235,
+)
+
+
+_FLEXVOLUMESOURCE_OPTIONSENTRY = _descriptor.Descriptor(
+  name='OptionsEntry',
+  full_name='istio.operator.v1alpha1.FlexVolumeSource.OptionsEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.operator.v1alpha1.FlexVolumeSource.OptionsEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='key', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.operator.v1alpha1.FlexVolumeSource.OptionsEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='value', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=_b('8\001'),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=17493,
+  serialized_end=17551,
+)
+
+_FLEXVOLUMESOURCE = _descriptor.Descriptor(
+  name='FlexVolumeSource',
+  full_name='istio.operator.v1alpha1.FlexVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='driver', full_name='istio.operator.v1alpha1.FlexVolumeSource.driver', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='driver', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fsType', full_name='istio.operator.v1alpha1.FlexVolumeSource.fsType', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='fsType', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='secretRef', full_name='istio.operator.v1alpha1.FlexVolumeSource.secretRef', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='secretRef', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='readOnly', full_name='istio.operator.v1alpha1.FlexVolumeSource.readOnly', index=3,
+      number=4, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='readOnly', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='options', full_name='istio.operator.v1alpha1.FlexVolumeSource.options', index=4,
+      number=5, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='options', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_FLEXVOLUMESOURCE_OPTIONSENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=17238,
+  serialized_end=17551,
+)
+
+
+_CINDERVOLUMESOURCE = _descriptor.Descriptor(
+  name='CinderVolumeSource',
+  full_name='istio.operator.v1alpha1.CinderVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='volumeID', full_name='istio.operator.v1alpha1.CinderVolumeSource.volumeID', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='volumeID', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fsType', full_name='istio.operator.v1alpha1.CinderVolumeSource.fsType', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='fsType', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='readOnly', full_name='istio.operator.v1alpha1.CinderVolumeSource.readOnly', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='readOnly', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='secretRef', full_name='istio.operator.v1alpha1.CinderVolumeSource.secretRef', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='secretRef', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=17554,
+  serialized_end=17731,
+)
+
+
+_CEPHFSVOLUMESOURCE = _descriptor.Descriptor(
+  name='CephFSVolumeSource',
+  full_name='istio.operator.v1alpha1.CephFSVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='monitors', full_name='istio.operator.v1alpha1.CephFSVolumeSource.monitors', index=0,
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='monitors', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='path', full_name='istio.operator.v1alpha1.CephFSVolumeSource.path', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='path', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='user', full_name='istio.operator.v1alpha1.CephFSVolumeSource.user', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='user', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='secretFile', full_name='istio.operator.v1alpha1.CephFSVolumeSource.secretFile', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='secretFile', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='secretRef', full_name='istio.operator.v1alpha1.CephFSVolumeSource.secretRef', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='secretRef', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='readOnly', full_name='istio.operator.v1alpha1.CephFSVolumeSource.readOnly', index=5,
+      number=6, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='readOnly', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=17734,
+  serialized_end=17959,
+)
+
+
+_FLOCKERVOLUMESOURCE = _descriptor.Descriptor(
+  name='FlockerVolumeSource',
+  full_name='istio.operator.v1alpha1.FlockerVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='datasetName', full_name='istio.operator.v1alpha1.FlockerVolumeSource.datasetName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='datasetName', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='datasetUUID', full_name='istio.operator.v1alpha1.FlockerVolumeSource.datasetUUID', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='datasetUUID', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=17961,
+  serialized_end=18050,
+)
+
+
+_DOWNWARDAPIVOLUMESOURCE = _descriptor.Descriptor(
+  name='DownwardAPIVolumeSource',
+  full_name='istio.operator.v1alpha1.DownwardAPIVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='items', full_name='istio.operator.v1alpha1.DownwardAPIVolumeSource.items', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='items', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='defaultMode', full_name='istio.operator.v1alpha1.DownwardAPIVolumeSource.defaultMode', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='defaultMode', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=18053,
+  serialized_end=18182,
+)
+
+
+_DOWNWARDAPIVOLUMEFILE = _descriptor.Descriptor(
+  name='DownwardAPIVolumeFile',
+  full_name='istio.operator.v1alpha1.DownwardAPIVolumeFile',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='path', full_name='istio.operator.v1alpha1.DownwardAPIVolumeFile.path', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='path', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fieldRef', full_name='istio.operator.v1alpha1.DownwardAPIVolumeFile.fieldRef', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='fieldRef', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='resourceFieldRef', full_name='istio.operator.v1alpha1.DownwardAPIVolumeFile.resourceFieldRef', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='resourceFieldRef', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='mode', full_name='istio.operator.v1alpha1.DownwardAPIVolumeFile.mode', index=3,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='mode', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=18185,
+  serialized_end=18414,
+)
+
+
+_FCVOLUMESOURCE = _descriptor.Descriptor(
+  name='FCVolumeSource',
+  full_name='istio.operator.v1alpha1.FCVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='targetWWNs', full_name='istio.operator.v1alpha1.FCVolumeSource.targetWWNs', index=0,
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='targetWWNs', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='lun', full_name='istio.operator.v1alpha1.FCVolumeSource.lun', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='lun', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fsType', full_name='istio.operator.v1alpha1.FCVolumeSource.fsType', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='fsType', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='readOnly', full_name='istio.operator.v1alpha1.FCVolumeSource.readOnly', index=3,
+      number=4, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='readOnly', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='wwids', full_name='istio.operator.v1alpha1.FCVolumeSource.wwids', index=4,
+      number=5, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='wwids', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=18417,
+  serialized_end=18557,
+)
+
+
+_AZUREFILEVOLUMESOURCE = _descriptor.Descriptor(
+  name='AzureFileVolumeSource',
+  full_name='istio.operator.v1alpha1.AzureFileVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='secretName', full_name='istio.operator.v1alpha1.AzureFileVolumeSource.secretName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='secretName', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='shareName', full_name='istio.operator.v1alpha1.AzureFileVolumeSource.shareName', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='shareName', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='readOnly', full_name='istio.operator.v1alpha1.AzureFileVolumeSource.readOnly', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='readOnly', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=18559,
+  serialized_end=18672,
+)
+
+
+_CONFIGMAPVOLUMESOURCE = _descriptor.Descriptor(
+  name='ConfigMapVolumeSource',
+  full_name='istio.operator.v1alpha1.ConfigMapVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='istio.operator.v1alpha1.ConfigMapVolumeSource.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='name', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='items', full_name='istio.operator.v1alpha1.ConfigMapVolumeSource.items', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='items', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='defaultMode', full_name='istio.operator.v1alpha1.ConfigMapVolumeSource.defaultMode', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='defaultMode', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='optional', full_name='istio.operator.v1alpha1.ConfigMapVolumeSource.optional', index=3,
+      number=4, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='optional', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=18675,
+  serialized_end=18838,
+)
+
+
+_VSPHEREVIRTUALDISKVOLUMESOURCE = _descriptor.Descriptor(
+  name='VsphereVirtualDiskVolumeSource',
+  full_name='istio.operator.v1alpha1.VsphereVirtualDiskVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='volumePath', full_name='istio.operator.v1alpha1.VsphereVirtualDiskVolumeSource.volumePath', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='volumePath', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fsType', full_name='istio.operator.v1alpha1.VsphereVirtualDiskVolumeSource.fsType', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='fsType', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='storagePolicyName', full_name='istio.operator.v1alpha1.VsphereVirtualDiskVolumeSource.storagePolicyName', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='storagePolicyName', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='storagePolicyID', full_name='istio.operator.v1alpha1.VsphereVirtualDiskVolumeSource.storagePolicyID', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='storagePolicyID', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=18841,
+  serialized_end=19017,
+)
+
+
+_QUOBYTEVOLUMESOURCE = _descriptor.Descriptor(
+  name='QuobyteVolumeSource',
+  full_name='istio.operator.v1alpha1.QuobyteVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='registry', full_name='istio.operator.v1alpha1.QuobyteVolumeSource.registry', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='registry', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='volume', full_name='istio.operator.v1alpha1.QuobyteVolumeSource.volume', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='volume', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='readOnly', full_name='istio.operator.v1alpha1.QuobyteVolumeSource.readOnly', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='readOnly', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='user', full_name='istio.operator.v1alpha1.QuobyteVolumeSource.user', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='user', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='group', full_name='istio.operator.v1alpha1.QuobyteVolumeSource.group', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='group', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='tenant', full_name='istio.operator.v1alpha1.QuobyteVolumeSource.tenant', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='tenant', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=19020,
+  serialized_end=19187,
+)
+
+
+_AZUREDISKVOLUMESOURCE = _descriptor.Descriptor(
+  name='AzureDiskVolumeSource',
+  full_name='istio.operator.v1alpha1.AzureDiskVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='diskName', full_name='istio.operator.v1alpha1.AzureDiskVolumeSource.diskName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='diskName', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='diskURI', full_name='istio.operator.v1alpha1.AzureDiskVolumeSource.diskURI', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='diskURI', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='cachingMode', full_name='istio.operator.v1alpha1.AzureDiskVolumeSource.cachingMode', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='cachingMode', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fsType', full_name='istio.operator.v1alpha1.AzureDiskVolumeSource.fsType', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='fsType', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='readOnly', full_name='istio.operator.v1alpha1.AzureDiskVolumeSource.readOnly', index=4,
+      number=5, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='readOnly', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='kind', full_name='istio.operator.v1alpha1.AzureDiskVolumeSource.kind', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='kind', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=19190,
+  serialized_end=19373,
+)
+
+
+_PHOTONPERSISTENTDISKVOLUMESOURCE = _descriptor.Descriptor(
+  name='PhotonPersistentDiskVolumeSource',
+  full_name='istio.operator.v1alpha1.PhotonPersistentDiskVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='pdID', full_name='istio.operator.v1alpha1.PhotonPersistentDiskVolumeSource.pdID', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='pdID', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fsType', full_name='istio.operator.v1alpha1.PhotonPersistentDiskVolumeSource.fsType', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='fsType', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=19375,
+  serialized_end=19453,
+)
+
+
+_PROJECTEDVOLUMESOURCE = _descriptor.Descriptor(
+  name='ProjectedVolumeSource',
+  full_name='istio.operator.v1alpha1.ProjectedVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='sources', full_name='istio.operator.v1alpha1.ProjectedVolumeSource.sources', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='sources', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='defaultMode', full_name='istio.operator.v1alpha1.ProjectedVolumeSource.defaultMode', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='defaultMode', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=19455,
+  serialized_end=19581,
+)
+
+
+_VOLUMEPROJECTION = _descriptor.Descriptor(
+  name='VolumeProjection',
+  full_name='istio.operator.v1alpha1.VolumeProjection',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='secret', full_name='istio.operator.v1alpha1.VolumeProjection.secret', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='secret', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='downwardAPI', full_name='istio.operator.v1alpha1.VolumeProjection.downwardAPI', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='downwardAPI', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='configMap', full_name='istio.operator.v1alpha1.VolumeProjection.configMap', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='configMap', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='serviceAccountToken', full_name='istio.operator.v1alpha1.VolumeProjection.serviceAccountToken', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='serviceAccountToken', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=19584,
+  serialized_end=19933,
+)
+
+
+_SECRETPROJECTION = _descriptor.Descriptor(
+  name='SecretProjection',
+  full_name='istio.operator.v1alpha1.SecretProjection',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='istio.operator.v1alpha1.SecretProjection.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='name', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='items', full_name='istio.operator.v1alpha1.SecretProjection.items', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='items', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='optional', full_name='istio.operator.v1alpha1.SecretProjection.optional', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='optional', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=19935,
+  serialized_end=20059,
+)
+
+
+_DOWNWARDAPIPROJECTION = _descriptor.Descriptor(
+  name='DownwardAPIProjection',
+  full_name='istio.operator.v1alpha1.DownwardAPIProjection',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='items', full_name='istio.operator.v1alpha1.DownwardAPIProjection.items', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='items', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=20061,
+  serialized_end=20154,
+)
+
+
+_CONFIGMAPPROJECTION = _descriptor.Descriptor(
+  name='ConfigMapProjection',
+  full_name='istio.operator.v1alpha1.ConfigMapProjection',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='istio.operator.v1alpha1.ConfigMapProjection.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='name', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='items', full_name='istio.operator.v1alpha1.ConfigMapProjection.items', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='items', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='optional', full_name='istio.operator.v1alpha1.ConfigMapProjection.optional', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='optional', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=20156,
+  serialized_end=20283,
+)
+
+
+_SERVICEACCOUNTTOKENPROJECTION = _descriptor.Descriptor(
+  name='ServiceAccountTokenProjection',
+  full_name='istio.operator.v1alpha1.ServiceAccountTokenProjection',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='audience', full_name='istio.operator.v1alpha1.ServiceAccountTokenProjection.audience', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='audience', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='expirationSeconds', full_name='istio.operator.v1alpha1.ServiceAccountTokenProjection.expirationSeconds', index=1,
+      number=2, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='expirationSeconds', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='path', full_name='istio.operator.v1alpha1.ServiceAccountTokenProjection.path', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='path', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=20285,
+  serialized_end=20410,
+)
+
+
+_PORTWORXVOLUMESOURCE = _descriptor.Descriptor(
+  name='PortworxVolumeSource',
+  full_name='istio.operator.v1alpha1.PortworxVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='volumeID', full_name='istio.operator.v1alpha1.PortworxVolumeSource.volumeID', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='volumeID', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fsType', full_name='istio.operator.v1alpha1.PortworxVolumeSource.fsType', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='fsType', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='readOnly', full_name='istio.operator.v1alpha1.PortworxVolumeSource.readOnly', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='readOnly', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=20412,
+  serialized_end=20514,
+)
+
+
+_SCALEIOVOLUMESOURCE = _descriptor.Descriptor(
+  name='ScaleIOVolumeSource',
+  full_name='istio.operator.v1alpha1.ScaleIOVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='gateway', full_name='istio.operator.v1alpha1.ScaleIOVolumeSource.gateway', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='gateway', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='system', full_name='istio.operator.v1alpha1.ScaleIOVolumeSource.system', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='system', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='secretRef', full_name='istio.operator.v1alpha1.ScaleIOVolumeSource.secretRef', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='secretRef', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='sslEnabled', full_name='istio.operator.v1alpha1.ScaleIOVolumeSource.sslEnabled', index=3,
+      number=4, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='sslEnabled', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='protectionDomain', full_name='istio.operator.v1alpha1.ScaleIOVolumeSource.protectionDomain', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='protectionDomain', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='storagePool', full_name='istio.operator.v1alpha1.ScaleIOVolumeSource.storagePool', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='storagePool', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='storageMode', full_name='istio.operator.v1alpha1.ScaleIOVolumeSource.storageMode', index=6,
+      number=7, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='storageMode', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='volumeName', full_name='istio.operator.v1alpha1.ScaleIOVolumeSource.volumeName', index=7,
+      number=8, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='volumeName', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fsType', full_name='istio.operator.v1alpha1.ScaleIOVolumeSource.fsType', index=8,
+      number=9, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='fsType', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='readOnly', full_name='istio.operator.v1alpha1.ScaleIOVolumeSource.readOnly', index=9,
+      number=10, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='readOnly', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=20517,
+  serialized_end=20893,
+)
+
+
+_STORAGEOSVOLUMESOURCE = _descriptor.Descriptor(
+  name='StorageOSVolumeSource',
+  full_name='istio.operator.v1alpha1.StorageOSVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='volumeName', full_name='istio.operator.v1alpha1.StorageOSVolumeSource.volumeName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='volumeName', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='volumeNamespace', full_name='istio.operator.v1alpha1.StorageOSVolumeSource.volumeNamespace', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='volumeNamespace', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fsType', full_name='istio.operator.v1alpha1.StorageOSVolumeSource.fsType', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='fsType', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='readOnly', full_name='istio.operator.v1alpha1.StorageOSVolumeSource.readOnly', index=3,
+      number=4, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='readOnly', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='secretRef', full_name='istio.operator.v1alpha1.StorageOSVolumeSource.secretRef', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='secretRef', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=20896,
+  serialized_end=21122,
+)
+
+
+_CSIVOLUMESOURCE_VOLUMEATTRIBUTESENTRY = _descriptor.Descriptor(
+  name='VolumeAttributesEntry',
+  full_name='istio.operator.v1alpha1.CSIVolumeSource.VolumeAttributesEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.operator.v1alpha1.CSIVolumeSource.VolumeAttributesEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='key', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.operator.v1alpha1.CSIVolumeSource.VolumeAttributesEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='value', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=_b('8\001'),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=21427,
+  serialized_end=21494,
+)
+
+_CSIVOLUMESOURCE = _descriptor.Descriptor(
+  name='CSIVolumeSource',
+  full_name='istio.operator.v1alpha1.CSIVolumeSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='driver', full_name='istio.operator.v1alpha1.CSIVolumeSource.driver', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='driver', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='readOnly', full_name='istio.operator.v1alpha1.CSIVolumeSource.readOnly', index=1,
+      number=2, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='readOnly', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fsType', full_name='istio.operator.v1alpha1.CSIVolumeSource.fsType', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='fsType', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='volumeAttributes', full_name='istio.operator.v1alpha1.CSIVolumeSource.volumeAttributes', index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='volumeAttributes', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='nodePublishSecretRef', full_name='istio.operator.v1alpha1.CSIVolumeSource.nodePublishSecretRef', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='nodePublishSecretRef', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_CSIVOLUMESOURCE_VOLUMEATTRIBUTESENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=21125,
+  serialized_end=21494,
 )
 
 
@@ -3041,8 +5169,8 @@ _PODSECURITYCONTEXT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13250,
-  serialized_end=13809,
+  serialized_start=21497,
+  serialized_end=22056,
 )
 
 
@@ -3093,8 +5221,8 @@ _SELINUXOPTIONS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13811,
-  serialized_end=13909,
+  serialized_start=22058,
+  serialized_end=22156,
 )
 
 
@@ -3131,8 +5259,8 @@ _SYSCTL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13911,
-  serialized_end=13961,
+  serialized_start=22158,
+  serialized_end=22208,
 )
 
 
@@ -3176,8 +5304,8 @@ _WINDOWSSECURITYCONTEXTOPTIONS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13964,
-  serialized_end=14137,
+  serialized_start=22211,
+  serialized_end=22384,
 )
 
 
@@ -3214,8 +5342,8 @@ _SECCOMPPROFILE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14139,
-  serialized_end=14219,
+  serialized_start=22386,
+  serialized_end=22466,
 )
 
 
@@ -3238,8 +5366,8 @@ _TYPEINTERFACE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14221,
-  serialized_end=14236,
+  serialized_start=22468,
+  serialized_end=22483,
 )
 
 
@@ -3262,8 +5390,8 @@ _TYPEMAPSTRINGINTERFACE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14238,
-  serialized_end=14262,
+  serialized_start=22485,
+  serialized_end=22509,
 )
 
 
@@ -3286,8 +5414,8 @@ _TYPEINTORSTRINGFORPB = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14264,
-  serialized_end=14286,
+  serialized_start=22511,
+  serialized_end=22533,
 )
 
 
@@ -3310,8 +5438,8 @@ _TYPEBOOLVALUEFORPB = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14288,
-  serialized_end=14308,
+  serialized_start=22535,
+  serialized_end=22555,
 )
 
 _ISTIOOPERATORSPEC_ADDONCOMPONENTSENTRY.fields_by_name['value'].message_type = _EXTERNALCOMPONENTSPEC
@@ -3366,7 +5494,7 @@ _KUBERNETESRESOURCESSPEC.fields_by_name['strategy'].message_type = _DEPLOYMENTST
 _KUBERNETESRESOURCESSPEC.fields_by_name['tolerations'].message_type = _TOLERATION
 _KUBERNETESRESOURCESSPEC.fields_by_name['service_annotations'].message_type = _KUBERNETESRESOURCESSPEC_SERVICEANNOTATIONSENTRY
 _KUBERNETESRESOURCESSPEC.fields_by_name['securityContext'].message_type = _PODSECURITYCONTEXT
-_KUBERNETESRESOURCESSPEC.fields_by_name['volumes'].message_type = k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2._VOLUME
+_KUBERNETESRESOURCESSPEC.fields_by_name['volumes'].message_type = _VOLUME
 _KUBERNETESRESOURCESSPEC.fields_by_name['volumeMounts'].message_type = k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2._VOLUMEMOUNT
 _KUBERNETESRESOURCESSPEC.fields_by_name['overlays'].message_type = _K8SOBJECTOVERLAY
 _K8SOBJECTOVERLAY_PATHVALUE.fields_by_name['value'].message_type = _TYPEINTERFACE
@@ -3431,6 +5559,59 @@ _SERVICEPORT.fields_by_name['targetPort'].message_type = _TYPEINTORSTRINGFORPB
 _SESSIONAFFINITYCONFIG.fields_by_name['clientIP'].message_type = _CLIENTIPCONFIG
 _TCPSOCKETACTION.fields_by_name['port'].message_type = _TYPEINTORSTRINGFORPB
 _WEIGHTEDPODAFFINITYTERM.fields_by_name['podAffinityTerm'].message_type = _PODAFFINITYTERM
+_VOLUME.fields_by_name['hostPath'].message_type = _HOSTPATHVOLUMESOURCE
+_VOLUME.fields_by_name['emptyDir'].message_type = _EMPTYDIRVOLUMESOURCE
+_VOLUME.fields_by_name['gcePersistentDisk'].message_type = _GCEPERSISTENTDISKVOLUMESOURCE
+_VOLUME.fields_by_name['awsElasticBlockStore'].message_type = _AWSELASTICBLOCKSTOREVOLUMESOURCE
+_VOLUME.fields_by_name['gitRepo'].message_type = _GITREPOVOLUMESOURCE
+_VOLUME.fields_by_name['secret'].message_type = _SECRETVOLUMESOURCE
+_VOLUME.fields_by_name['nfs'].message_type = _NFSVOLUMESOURCE
+_VOLUME.fields_by_name['iscsi'].message_type = _ISCSIVOLUMESOURCE
+_VOLUME.fields_by_name['glusterfs'].message_type = _GLUSTERFSVOLUMESOURCE
+_VOLUME.fields_by_name['persistentVolumeClaim'].message_type = _PERSISTENTVOLUMECLAIMVOLUMESOURCE
+_VOLUME.fields_by_name['rbd'].message_type = _RBDVOLUMESOURCE
+_VOLUME.fields_by_name['flexVolume'].message_type = _FLEXVOLUMESOURCE
+_VOLUME.fields_by_name['cinder'].message_type = _CINDERVOLUMESOURCE
+_VOLUME.fields_by_name['cephfs'].message_type = _CEPHFSVOLUMESOURCE
+_VOLUME.fields_by_name['flocker'].message_type = _FLOCKERVOLUMESOURCE
+_VOLUME.fields_by_name['downwardAPI'].message_type = _DOWNWARDAPIVOLUMESOURCE
+_VOLUME.fields_by_name['fc'].message_type = _FCVOLUMESOURCE
+_VOLUME.fields_by_name['azureFile'].message_type = _AZUREFILEVOLUMESOURCE
+_VOLUME.fields_by_name['configMap'].message_type = _CONFIGMAPVOLUMESOURCE
+_VOLUME.fields_by_name['vsphereVolume'].message_type = _VSPHEREVIRTUALDISKVOLUMESOURCE
+_VOLUME.fields_by_name['quobyte'].message_type = _QUOBYTEVOLUMESOURCE
+_VOLUME.fields_by_name['azureDisk'].message_type = _AZUREDISKVOLUMESOURCE
+_VOLUME.fields_by_name['photonPersistentDisk'].message_type = _PHOTONPERSISTENTDISKVOLUMESOURCE
+_VOLUME.fields_by_name['projected'].message_type = _PROJECTEDVOLUMESOURCE
+_VOLUME.fields_by_name['portworxVolume'].message_type = _PORTWORXVOLUMESOURCE
+_VOLUME.fields_by_name['scaleIO'].message_type = _SCALEIOVOLUMESOURCE
+_VOLUME.fields_by_name['storageos'].message_type = _STORAGEOSVOLUMESOURCE
+_VOLUME.fields_by_name['csi'].message_type = _CSIVOLUMESOURCE
+_SECRETVOLUMESOURCE.fields_by_name['items'].message_type = _KEYTOPATH
+_ISCSIVOLUMESOURCE.fields_by_name['secretRef'].message_type = _LOCALOBJECTREFERENCE
+_RBDVOLUMESOURCE.fields_by_name['secretRef'].message_type = _LOCALOBJECTREFERENCE
+_FLEXVOLUMESOURCE_OPTIONSENTRY.containing_type = _FLEXVOLUMESOURCE
+_FLEXVOLUMESOURCE.fields_by_name['secretRef'].message_type = _LOCALOBJECTREFERENCE
+_FLEXVOLUMESOURCE.fields_by_name['options'].message_type = _FLEXVOLUMESOURCE_OPTIONSENTRY
+_CINDERVOLUMESOURCE.fields_by_name['secretRef'].message_type = _LOCALOBJECTREFERENCE
+_CEPHFSVOLUMESOURCE.fields_by_name['secretRef'].message_type = _LOCALOBJECTREFERENCE
+_DOWNWARDAPIVOLUMESOURCE.fields_by_name['items'].message_type = _DOWNWARDAPIVOLUMEFILE
+_DOWNWARDAPIVOLUMEFILE.fields_by_name['fieldRef'].message_type = _OBJECTFIELDSELECTOR
+_DOWNWARDAPIVOLUMEFILE.fields_by_name['resourceFieldRef'].message_type = _RESOURCEFIELDSELECTOR
+_CONFIGMAPVOLUMESOURCE.fields_by_name['items'].message_type = _KEYTOPATH
+_PROJECTEDVOLUMESOURCE.fields_by_name['sources'].message_type = _VOLUMEPROJECTION
+_VOLUMEPROJECTION.fields_by_name['secret'].message_type = _SECRETPROJECTION
+_VOLUMEPROJECTION.fields_by_name['downwardAPI'].message_type = _DOWNWARDAPIPROJECTION
+_VOLUMEPROJECTION.fields_by_name['configMap'].message_type = _CONFIGMAPPROJECTION
+_VOLUMEPROJECTION.fields_by_name['serviceAccountToken'].message_type = _SERVICEACCOUNTTOKENPROJECTION
+_SECRETPROJECTION.fields_by_name['items'].message_type = _KEYTOPATH
+_DOWNWARDAPIPROJECTION.fields_by_name['items'].message_type = _DOWNWARDAPIVOLUMEFILE
+_CONFIGMAPPROJECTION.fields_by_name['items'].message_type = _KEYTOPATH
+_SCALEIOVOLUMESOURCE.fields_by_name['secretRef'].message_type = _LOCALOBJECTREFERENCE
+_STORAGEOSVOLUMESOURCE.fields_by_name['secretRef'].message_type = _LOCALOBJECTREFERENCE
+_CSIVOLUMESOURCE_VOLUMEATTRIBUTESENTRY.containing_type = _CSIVOLUMESOURCE
+_CSIVOLUMESOURCE.fields_by_name['volumeAttributes'].message_type = _CSIVOLUMESOURCE_VOLUMEATTRIBUTESENTRY
+_CSIVOLUMESOURCE.fields_by_name['nodePublishSecretRef'].message_type = _LOCALOBJECTREFERENCE
 _PODSECURITYCONTEXT.fields_by_name['seLinuxOptions'].message_type = _SELINUXOPTIONS
 _PODSECURITYCONTEXT.fields_by_name['sysctls'].message_type = _SYSCTL
 _PODSECURITYCONTEXT.fields_by_name['windowsOptions'].message_type = _WINDOWSSECURITYCONTEXTOPTIONS
@@ -3483,6 +5664,42 @@ DESCRIPTOR.message_types_by_name['SessionAffinityConfig'] = _SESSIONAFFINITYCONF
 DESCRIPTOR.message_types_by_name['TCPSocketAction'] = _TCPSOCKETACTION
 DESCRIPTOR.message_types_by_name['Toleration'] = _TOLERATION
 DESCRIPTOR.message_types_by_name['WeightedPodAffinityTerm'] = _WEIGHTEDPODAFFINITYTERM
+DESCRIPTOR.message_types_by_name['Volume'] = _VOLUME
+DESCRIPTOR.message_types_by_name['HostPathVolumeSource'] = _HOSTPATHVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['EmptyDirVolumeSource'] = _EMPTYDIRVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['GCEPersistentDiskVolumeSource'] = _GCEPERSISTENTDISKVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['AWSElasticBlockStoreVolumeSource'] = _AWSELASTICBLOCKSTOREVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['GitRepoVolumeSource'] = _GITREPOVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['SecretVolumeSource'] = _SECRETVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['KeyToPath'] = _KEYTOPATH
+DESCRIPTOR.message_types_by_name['NFSVolumeSource'] = _NFSVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['ISCSIVolumeSource'] = _ISCSIVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['GlusterfsVolumeSource'] = _GLUSTERFSVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['PersistentVolumeClaimVolumeSource'] = _PERSISTENTVOLUMECLAIMVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['RBDVolumeSource'] = _RBDVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['FlexVolumeSource'] = _FLEXVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['CinderVolumeSource'] = _CINDERVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['CephFSVolumeSource'] = _CEPHFSVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['FlockerVolumeSource'] = _FLOCKERVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['DownwardAPIVolumeSource'] = _DOWNWARDAPIVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['DownwardAPIVolumeFile'] = _DOWNWARDAPIVOLUMEFILE
+DESCRIPTOR.message_types_by_name['FCVolumeSource'] = _FCVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['AzureFileVolumeSource'] = _AZUREFILEVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['ConfigMapVolumeSource'] = _CONFIGMAPVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['VsphereVirtualDiskVolumeSource'] = _VSPHEREVIRTUALDISKVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['QuobyteVolumeSource'] = _QUOBYTEVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['AzureDiskVolumeSource'] = _AZUREDISKVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['PhotonPersistentDiskVolumeSource'] = _PHOTONPERSISTENTDISKVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['ProjectedVolumeSource'] = _PROJECTEDVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['VolumeProjection'] = _VOLUMEPROJECTION
+DESCRIPTOR.message_types_by_name['SecretProjection'] = _SECRETPROJECTION
+DESCRIPTOR.message_types_by_name['DownwardAPIProjection'] = _DOWNWARDAPIPROJECTION
+DESCRIPTOR.message_types_by_name['ConfigMapProjection'] = _CONFIGMAPPROJECTION
+DESCRIPTOR.message_types_by_name['ServiceAccountTokenProjection'] = _SERVICEACCOUNTTOKENPROJECTION
+DESCRIPTOR.message_types_by_name['PortworxVolumeSource'] = _PORTWORXVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['ScaleIOVolumeSource'] = _SCALEIOVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['StorageOSVolumeSource'] = _STORAGEOSVOLUMESOURCE
+DESCRIPTOR.message_types_by_name['CSIVolumeSource'] = _CSIVOLUMESOURCE
 DESCRIPTOR.message_types_by_name['PodSecurityContext'] = _PODSECURITYCONTEXT
 DESCRIPTOR.message_types_by_name['SELinuxOptions'] = _SELINUXOPTIONS
 DESCRIPTOR.message_types_by_name['Sysctl'] = _SYSCTL
@@ -3918,6 +6135,274 @@ WeightedPodAffinityTerm = _reflection.GeneratedProtocolMessageType('WeightedPodA
   })
 _sym_db.RegisterMessage(WeightedPodAffinityTerm)
 
+Volume = _reflection.GeneratedProtocolMessageType('Volume', (_message.Message,), {
+  'DESCRIPTOR' : _VOLUME,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.Volume)
+  })
+_sym_db.RegisterMessage(Volume)
+
+HostPathVolumeSource = _reflection.GeneratedProtocolMessageType('HostPathVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _HOSTPATHVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.HostPathVolumeSource)
+  })
+_sym_db.RegisterMessage(HostPathVolumeSource)
+
+EmptyDirVolumeSource = _reflection.GeneratedProtocolMessageType('EmptyDirVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _EMPTYDIRVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.EmptyDirVolumeSource)
+  })
+_sym_db.RegisterMessage(EmptyDirVolumeSource)
+
+GCEPersistentDiskVolumeSource = _reflection.GeneratedProtocolMessageType('GCEPersistentDiskVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _GCEPERSISTENTDISKVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.GCEPersistentDiskVolumeSource)
+  })
+_sym_db.RegisterMessage(GCEPersistentDiskVolumeSource)
+
+AWSElasticBlockStoreVolumeSource = _reflection.GeneratedProtocolMessageType('AWSElasticBlockStoreVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _AWSELASTICBLOCKSTOREVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.AWSElasticBlockStoreVolumeSource)
+  })
+_sym_db.RegisterMessage(AWSElasticBlockStoreVolumeSource)
+
+GitRepoVolumeSource = _reflection.GeneratedProtocolMessageType('GitRepoVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _GITREPOVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.GitRepoVolumeSource)
+  })
+_sym_db.RegisterMessage(GitRepoVolumeSource)
+
+SecretVolumeSource = _reflection.GeneratedProtocolMessageType('SecretVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _SECRETVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.SecretVolumeSource)
+  })
+_sym_db.RegisterMessage(SecretVolumeSource)
+
+KeyToPath = _reflection.GeneratedProtocolMessageType('KeyToPath', (_message.Message,), {
+  'DESCRIPTOR' : _KEYTOPATH,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.KeyToPath)
+  })
+_sym_db.RegisterMessage(KeyToPath)
+
+NFSVolumeSource = _reflection.GeneratedProtocolMessageType('NFSVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _NFSVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.NFSVolumeSource)
+  })
+_sym_db.RegisterMessage(NFSVolumeSource)
+
+ISCSIVolumeSource = _reflection.GeneratedProtocolMessageType('ISCSIVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _ISCSIVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ISCSIVolumeSource)
+  })
+_sym_db.RegisterMessage(ISCSIVolumeSource)
+
+GlusterfsVolumeSource = _reflection.GeneratedProtocolMessageType('GlusterfsVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _GLUSTERFSVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.GlusterfsVolumeSource)
+  })
+_sym_db.RegisterMessage(GlusterfsVolumeSource)
+
+PersistentVolumeClaimVolumeSource = _reflection.GeneratedProtocolMessageType('PersistentVolumeClaimVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _PERSISTENTVOLUMECLAIMVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.PersistentVolumeClaimVolumeSource)
+  })
+_sym_db.RegisterMessage(PersistentVolumeClaimVolumeSource)
+
+RBDVolumeSource = _reflection.GeneratedProtocolMessageType('RBDVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _RBDVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.RBDVolumeSource)
+  })
+_sym_db.RegisterMessage(RBDVolumeSource)
+
+FlexVolumeSource = _reflection.GeneratedProtocolMessageType('FlexVolumeSource', (_message.Message,), {
+
+  'OptionsEntry' : _reflection.GeneratedProtocolMessageType('OptionsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _FLEXVOLUMESOURCE_OPTIONSENTRY,
+    '__module__' : 'operator.v1alpha1.operator_pb2'
+    # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.FlexVolumeSource.OptionsEntry)
+    })
+  ,
+  'DESCRIPTOR' : _FLEXVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.FlexVolumeSource)
+  })
+_sym_db.RegisterMessage(FlexVolumeSource)
+_sym_db.RegisterMessage(FlexVolumeSource.OptionsEntry)
+
+CinderVolumeSource = _reflection.GeneratedProtocolMessageType('CinderVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _CINDERVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.CinderVolumeSource)
+  })
+_sym_db.RegisterMessage(CinderVolumeSource)
+
+CephFSVolumeSource = _reflection.GeneratedProtocolMessageType('CephFSVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _CEPHFSVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.CephFSVolumeSource)
+  })
+_sym_db.RegisterMessage(CephFSVolumeSource)
+
+FlockerVolumeSource = _reflection.GeneratedProtocolMessageType('FlockerVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _FLOCKERVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.FlockerVolumeSource)
+  })
+_sym_db.RegisterMessage(FlockerVolumeSource)
+
+DownwardAPIVolumeSource = _reflection.GeneratedProtocolMessageType('DownwardAPIVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _DOWNWARDAPIVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.DownwardAPIVolumeSource)
+  })
+_sym_db.RegisterMessage(DownwardAPIVolumeSource)
+
+DownwardAPIVolumeFile = _reflection.GeneratedProtocolMessageType('DownwardAPIVolumeFile', (_message.Message,), {
+  'DESCRIPTOR' : _DOWNWARDAPIVOLUMEFILE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.DownwardAPIVolumeFile)
+  })
+_sym_db.RegisterMessage(DownwardAPIVolumeFile)
+
+FCVolumeSource = _reflection.GeneratedProtocolMessageType('FCVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _FCVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.FCVolumeSource)
+  })
+_sym_db.RegisterMessage(FCVolumeSource)
+
+AzureFileVolumeSource = _reflection.GeneratedProtocolMessageType('AzureFileVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _AZUREFILEVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.AzureFileVolumeSource)
+  })
+_sym_db.RegisterMessage(AzureFileVolumeSource)
+
+ConfigMapVolumeSource = _reflection.GeneratedProtocolMessageType('ConfigMapVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _CONFIGMAPVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ConfigMapVolumeSource)
+  })
+_sym_db.RegisterMessage(ConfigMapVolumeSource)
+
+VsphereVirtualDiskVolumeSource = _reflection.GeneratedProtocolMessageType('VsphereVirtualDiskVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _VSPHEREVIRTUALDISKVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.VsphereVirtualDiskVolumeSource)
+  })
+_sym_db.RegisterMessage(VsphereVirtualDiskVolumeSource)
+
+QuobyteVolumeSource = _reflection.GeneratedProtocolMessageType('QuobyteVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _QUOBYTEVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.QuobyteVolumeSource)
+  })
+_sym_db.RegisterMessage(QuobyteVolumeSource)
+
+AzureDiskVolumeSource = _reflection.GeneratedProtocolMessageType('AzureDiskVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _AZUREDISKVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.AzureDiskVolumeSource)
+  })
+_sym_db.RegisterMessage(AzureDiskVolumeSource)
+
+PhotonPersistentDiskVolumeSource = _reflection.GeneratedProtocolMessageType('PhotonPersistentDiskVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _PHOTONPERSISTENTDISKVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.PhotonPersistentDiskVolumeSource)
+  })
+_sym_db.RegisterMessage(PhotonPersistentDiskVolumeSource)
+
+ProjectedVolumeSource = _reflection.GeneratedProtocolMessageType('ProjectedVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _PROJECTEDVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ProjectedVolumeSource)
+  })
+_sym_db.RegisterMessage(ProjectedVolumeSource)
+
+VolumeProjection = _reflection.GeneratedProtocolMessageType('VolumeProjection', (_message.Message,), {
+  'DESCRIPTOR' : _VOLUMEPROJECTION,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.VolumeProjection)
+  })
+_sym_db.RegisterMessage(VolumeProjection)
+
+SecretProjection = _reflection.GeneratedProtocolMessageType('SecretProjection', (_message.Message,), {
+  'DESCRIPTOR' : _SECRETPROJECTION,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.SecretProjection)
+  })
+_sym_db.RegisterMessage(SecretProjection)
+
+DownwardAPIProjection = _reflection.GeneratedProtocolMessageType('DownwardAPIProjection', (_message.Message,), {
+  'DESCRIPTOR' : _DOWNWARDAPIPROJECTION,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.DownwardAPIProjection)
+  })
+_sym_db.RegisterMessage(DownwardAPIProjection)
+
+ConfigMapProjection = _reflection.GeneratedProtocolMessageType('ConfigMapProjection', (_message.Message,), {
+  'DESCRIPTOR' : _CONFIGMAPPROJECTION,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ConfigMapProjection)
+  })
+_sym_db.RegisterMessage(ConfigMapProjection)
+
+ServiceAccountTokenProjection = _reflection.GeneratedProtocolMessageType('ServiceAccountTokenProjection', (_message.Message,), {
+  'DESCRIPTOR' : _SERVICEACCOUNTTOKENPROJECTION,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ServiceAccountTokenProjection)
+  })
+_sym_db.RegisterMessage(ServiceAccountTokenProjection)
+
+PortworxVolumeSource = _reflection.GeneratedProtocolMessageType('PortworxVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _PORTWORXVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.PortworxVolumeSource)
+  })
+_sym_db.RegisterMessage(PortworxVolumeSource)
+
+ScaleIOVolumeSource = _reflection.GeneratedProtocolMessageType('ScaleIOVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _SCALEIOVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ScaleIOVolumeSource)
+  })
+_sym_db.RegisterMessage(ScaleIOVolumeSource)
+
+StorageOSVolumeSource = _reflection.GeneratedProtocolMessageType('StorageOSVolumeSource', (_message.Message,), {
+  'DESCRIPTOR' : _STORAGEOSVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.StorageOSVolumeSource)
+  })
+_sym_db.RegisterMessage(StorageOSVolumeSource)
+
+CSIVolumeSource = _reflection.GeneratedProtocolMessageType('CSIVolumeSource', (_message.Message,), {
+
+  'VolumeAttributesEntry' : _reflection.GeneratedProtocolMessageType('VolumeAttributesEntry', (_message.Message,), {
+    'DESCRIPTOR' : _CSIVOLUMESOURCE_VOLUMEATTRIBUTESENTRY,
+    '__module__' : 'operator.v1alpha1.operator_pb2'
+    # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.CSIVolumeSource.VolumeAttributesEntry)
+    })
+  ,
+  'DESCRIPTOR' : _CSIVOLUMESOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.CSIVolumeSource)
+  })
+_sym_db.RegisterMessage(CSIVolumeSource)
+_sym_db.RegisterMessage(CSIVolumeSource.VolumeAttributesEntry)
+
 PodSecurityContext = _reflection.GeneratedProtocolMessageType('PodSecurityContext', (_message.Message,), {
   'DESCRIPTOR' : _PODSECURITYCONTEXT,
   '__module__' : 'operator.v1alpha1.operator_pb2'
@@ -3994,4 +6479,6 @@ _KUBERNETESRESOURCESSPEC_SERVICEANNOTATIONSENTRY._options = None
 _RESOURCES_LIMITSENTRY._options = None
 _RESOURCES_REQUESTSENTRY._options = None
 _SERVICESPEC_SELECTORENTRY._options = None
+_FLEXVOLUMESOURCE_OPTIONSENTRY._options = None
+_CSIVOLUMESOURCE_VOLUMEATTRIBUTESENTRY._options = None
 # @@protoc_insertion_point(module_scope)
