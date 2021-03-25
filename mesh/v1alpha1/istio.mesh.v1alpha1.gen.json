@@ -753,6 +753,10 @@
             "type": "string",
             "format": "string"
           },
+          "timeout": {
+            "description": "Sets the maximum duration in milliseconds that a response can take to arrive upon request (default timeout: 600s).",
+            "type": "string"
+          },
           "pathPrefix": {
             "description": "Sets a prefix to the value of authorization request header *Path*. For example, setting this to \"/check\" for an original user request at path \"/admin\" will cause the authorization check request to be sent to the authorization service at the path \"/check/admin\" instead of \"/admin\".",
             "type": "string",
@@ -775,6 +779,14 @@
               "format": "string"
             }
           },
+          "addHeadersInCheck": {
+            "description": "Set of headers that will be included in the authorization request sent to the authorization service. Note that client request of the same key will be overridden.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "format": "string"
+            }
+          },
           "headersToUpstreamOnAllow": {
             "description": "List of headers from the authorization service that should be added or overridden in the original request and forwarded to the upstream when the authorization check result is allowed (HTTP code 200). If not specified, the original request will not be modified and forwarded to backend as-is. Note, any existing headers will be overridden.",
             "type": "array",
@@ -790,6 +802,9 @@
               "type": "string",
               "format": "string"
             }
+          },
+          "withRequestBody": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationRequestBody"
           }
         }
       },
@@ -805,6 +820,10 @@
             "type": "string",
             "format": "string"
           },
+          "timeout": {
+            "description": "The timeout for the gRPC request. This is the timeout for a specific request (default timeout: 600s).",
+            "type": "string"
+          },
           "failOpen": {
             "description": "If true, the user request will be allowed even if the communication with the authorization service has failed, or if the authorization service has returned a HTTP 5xx error. Default is false and the request will be rejected with \"Forbidden\" response.",
             "type": "boolean"
@@ -813,6 +832,9 @@
             "description": "Sets the HTTP status that is returned to the client when there is a network error to the authorization service. The default status is \"403\" (HTTP Forbidden).",
             "type": "string",
             "format": "string"
+          },
+          "withRequestBody": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationRequestBody"
           }
         }
       },
@@ -930,6 +952,23 @@
           "maxTagLength": {
             "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
             "type": "integer"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationRequestBody": {
+        "type": "object",
+        "properties": {
+          "maxRequestBytes": {
+            "description": "Sets the maximum size of a message body that the filter will hold in memory. Envoy will return HTTP 413 and will not initiate the authorization process when buffer reaches the number set in this field. Note that this setting will have precedence over failure_mode_allow.",
+            "type": "integer"
+          },
+          "allowPartialMessage": {
+            "description": "When this field is true, Envoy will buffer the message until max_request_bytes is reached. The authorization request will be dispatched and no 413 HTTP error will be returned by the filter.",
+            "type": "boolean"
+          },
+          "packAsBytes": {
+            "description": "If true, the body sent to the external authorization service is set with raw bytes, it sets the raw_body field of HTTP request attribute context. Otherwise, it will be filled with UTF-8 string request body.",
+            "type": "boolean"
           }
         }
       },

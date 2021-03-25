@@ -485,6 +485,21 @@ message MeshConfig {
       OpenCensusAgentTracingProvider opencensus = 8;
     }
 
+    message EnvoyExternalAuthorizationRequestBody {
+      // Sets the maximum size of a message body that the filter will hold in memory. Envoy will return HTTP 413 and
+      // will not initiate the authorization process when buffer reaches the number set in this field. Note that this
+      // setting will have precedence over failure_mode_allow.
+      uint32 max_request_bytes = 1;
+
+      // When this field is true, Envoy will buffer the message until max_request_bytes is reached.
+      // The authorization request will be dispatched and no 413 HTTP error will be returned by the filter.
+      bool allow_partial_message = 2;
+
+      // If true, the body sent to the external authorization service is set with raw bytes, it sets the raw_body field
+      // of HTTP request attribute context. Otherwise, it will be filled with UTF-8 string request body.
+      bool pack_as_bytes = 3;
+    }
+
     message EnvoyExternalAuthorizationHttpProvider {
       // REQUIRED. Specifies the service that implements the Envoy ext_authz HTTP authorization service.
       // The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
@@ -496,6 +511,9 @@ message MeshConfig {
 
       // REQUIRED. Specifies the port of the service.
       uint32 port = 2;
+
+      // Sets the maximum duration in milliseconds that a response can take to arrive upon request (default timeout: 600s).
+      google.protobuf.Duration timeout = 9;
 
       // Sets a prefix to the value of authorization request header *Path*.
       // For example, setting this to "/check" for an original user request at path "/admin" will cause the
@@ -515,12 +533,26 @@ message MeshConfig {
       // Note that in addition to the headers supplied by users:
       // 1. *Host*, *Method*, *Path* and *Content-Length* are automatically sent.
       // 2. *Content-Length* will be set to 0 and the request will not have a message body.
+      //
+      // Exact, prefix and suffix presence match is supported:
+      // - Exact match: "abc" will match on value "abc".
+      // - Prefix match: "abc*" will match on value "abc" and "abcd".
+      // - Suffix match: "*abc" will match on value "abc" and "xabc".
       repeated string include_headers_in_check = 6;
+
+      // Set of headers that will be included in the authorization request sent to the authorization service.
+      // Note that client request of the same key will be overridden.
+      map<string, string> add_headers_in_check = 10;
 
       // List of headers from the authorization service that should be added or overridden in the original request and
       // forwarded to the upstream when the authorization check result is allowed (HTTP code 200).
       // If not specified, the original request will not be modified and forwarded to backend as-is.
       // Note, any existing headers will be overridden.
+      //
+      // Exact, prefix and suffix presence match is supported:
+      // - Exact match: "abc" will match on value "abc".
+      // - Prefix match: "abc*" will match on value "abc" and "abcd".
+      // - Suffix match: "*abc" will match on value "abc" and "xabc".
       repeated string headers_to_upstream_on_allow = 7;
 
       // List of headers from the authorization service that should be forwarded to downstream when the authorization
@@ -530,7 +562,17 @@ message MeshConfig {
       // When a header is included in this list, *Path*, *Status*, *Content-Length*, *WWWAuthenticate* and *Location* are
       // automatically added.
       // Note, the body from the authorization service is always included in the response to downstream.
+      //
+      // Exact, prefix and suffix presence match is supported:
+      // - Exact match: "abc" will match on value "abc".
+      // - Prefix match: "abc*" will match on value "abc" and "abcd".
+      // - Suffix match: "*abc" will match on value "abc" and "xabc".
       repeated string headers_to_downstream_on_deny = 8;
+
+      // Enables the ext-authz filter to buffer the client request body and send it within the authorization request.
+      // A "x-envoy-auth-partial-body: false|true" metadata header will be added to the authorization request message
+      // indicating if the body data is partial.
+      EnvoyExternalAuthorizationRequestBody with_request_body = 11;
     }
 
     message EnvoyExternalAuthorizationGrpcProvider {
@@ -545,6 +587,9 @@ message MeshConfig {
       // REQUIRED. Specifies the port of the service.
       uint32 port = 2;
 
+      // The timeout for the gRPC request. This is the timeout for a specific request (default timeout: 600s).
+      google.protobuf.Duration timeout = 6;
+
       // If true, the user request will be allowed even if the communication with the authorization service has failed,
       // or if the authorization service has returned a HTTP 5xx error.
       // Default is false and the request will be rejected with "Forbidden" response.
@@ -553,6 +598,11 @@ message MeshConfig {
       // Sets the HTTP status that is returned to the client when there is a network error to the authorization service.
       // The default status is "403" (HTTP Forbidden).
       string status_on_error = 4;
+
+      // Enables the ext-authz filter to buffer the client request body and send it within the authorization request.
+      // A "x-envoy-auth-partial-body: false|true" metadata header will be added to the authorization request message
+      // indicating if the body data is partial.
+      EnvoyExternalAuthorizationRequestBody with_request_body = 5;
     }
 
     // Defines configuration for a Zipkin tracer.

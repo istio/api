@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 41
+number_of_entries: 42
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -1112,6 +1112,58 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationRequestBody">MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationRequestBody</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationRequestBody-max_request_bytes">
+<td><code>maxRequestBytes</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Sets the maximum size of a message body that the filter will hold in memory. Envoy will return HTTP 413 and
+will not initiate the authorization process when buffer reaches the number set in this field. Note that this
+setting will have precedence over failure<em>mode</em>allow.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationRequestBody-allow_partial_message">
+<td><code>allowPartialMessage</code></td>
+<td><code>bool</code></td>
+<td>
+<p>When this field is true, Envoy will buffer the message until max<em>request</em>bytes is reached.
+The authorization request will be dispatched and no 413 HTTP error will be returned by the filter.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationRequestBody-pack_as_bytes">
+<td><code>packAsBytes</code></td>
+<td><code>bool</code></td>
+<td>
+<p>If true, the body sent to the external authorization service is set with raw bytes, it sets the raw_body field
+of HTTP request attribute context. Otherwise, it will be filled with UTF-8 string request body.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationHttpProvider">MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationHttpProvider</h2>
 <section>
 <table class="message-fields">
@@ -1145,6 +1197,17 @@ No
 <td><code>uint32</code></td>
 <td>
 <p>REQUIRED. Specifies the port of the service.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationHttpProvider-timeout">
+<td><code>timeout</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>Sets the maximum duration in milliseconds that a response can take to arrive upon request (default timeout: 600s).</p>
 
 </td>
 <td>
@@ -1198,6 +1261,23 @@ Note that in addition to the headers supplied by users:
 1. <em>Host</em>, <em>Method</em>, <em>Path</em> and <em>Content-Length</em> are automatically sent.
 2. <em>Content-Length</em> will be set to 0 and the request will not have a message body.</p>
 
+<p>Exact, prefix and suffix presence match is supported:
+- Exact match: &ldquo;abc&rdquo; will match on value &ldquo;abc&rdquo;.
+- Prefix match: &ldquo;abc<em>&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;abcd&rdquo;.
+- Suffix match: &ldquo;</em>abc&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;xabc&rdquo;.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationHttpProvider-add_headers_in_check">
+<td><code>addHeadersInCheck</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>Set of headers that will be included in the authorization request sent to the authorization service.
+Note that client request of the same key will be overridden.</p>
+
 </td>
 <td>
 No
@@ -1211,6 +1291,11 @@ No
 forwarded to the upstream when the authorization check result is allowed (HTTP code 200).
 If not specified, the original request will not be modified and forwarded to backend as-is.
 Note, any existing headers will be overridden.</p>
+
+<p>Exact, prefix and suffix presence match is supported:
+- Exact match: &ldquo;abc&rdquo; will match on value &ldquo;abc&rdquo;.
+- Prefix match: &ldquo;abc<em>&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;abcd&rdquo;.
+- Suffix match: &ldquo;</em>abc&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;xabc&rdquo;.</p>
 
 </td>
 <td>
@@ -1228,6 +1313,24 @@ the downstream.
 When a header is included in this list, <em>Path</em>, <em>Status</em>, <em>Content-Length</em>, <em>WWWAuthenticate</em> and <em>Location</em> are
 automatically added.
 Note, the body from the authorization service is always included in the response to downstream.</p>
+
+<p>Exact, prefix and suffix presence match is supported:
+- Exact match: &ldquo;abc&rdquo; will match on value &ldquo;abc&rdquo;.
+- Prefix match: &ldquo;abc<em>&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;abcd&rdquo;.
+- Suffix match: &ldquo;</em>abc&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;xabc&rdquo;.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationHttpProvider-with_request_body">
+<td><code>withRequestBody</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationRequestBody">EnvoyExternalAuthorizationRequestBody</a></code></td>
+<td>
+<p>Enables the ext-authz filter to buffer the client request body and send it within the authorization request.
+A &ldquo;x-envoy-auth-partial-body: false|true&rdquo; metadata header will be added to the authorization request message
+indicating if the body data is partial.</p>
 
 </td>
 <td>
@@ -1276,6 +1379,17 @@ No
 No
 </td>
 </tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationGrpcProvider-timeout">
+<td><code>timeout</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>The timeout for the gRPC request. This is the timeout for a specific request (default timeout: 600s).</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationGrpcProvider-fail_open">
 <td><code>failOpen</code></td>
 <td><code>bool</code></td>
@@ -1295,6 +1409,19 @@ No
 <td>
 <p>Sets the HTTP status that is returned to the client when there is a network error to the authorization service.
 The default status is &ldquo;403&rdquo; (HTTP Forbidden).</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationGrpcProvider-with_request_body">
+<td><code>withRequestBody</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationRequestBody">EnvoyExternalAuthorizationRequestBody</a></code></td>
+<td>
+<p>Enables the ext-authz filter to buffer the client request body and send it within the authorization request.
+A &ldquo;x-envoy-auth-partial-body: false|true&rdquo; metadata header will be added to the authorization request message
+indicating if the body data is partial.</p>
 
 </td>
 <td>
