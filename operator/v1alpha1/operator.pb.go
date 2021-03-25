@@ -758,7 +758,6 @@ type KubernetesResourcesSpec struct {
 	// k8s volume
 	// [https://kubernetes.io/docs/concepts/storage/volumes/](https://kubernetes.io/docs/concepts/storage/volumes/)
 	// Volumes defines the collection of Volume to inject into the pod.
-	// Duplicate the volume definition here to resolve the marshal/unmarshal issue caused by the inline field in the k8s api.
 	Volumes []*Volume `protobuf:"bytes,17,rep,name=volumes,proto3" json:"volumes,omitempty"`
 	// k8s volumeMounts
 	// VolumeMounts defines the collection of VolumeMount to inject into containers.

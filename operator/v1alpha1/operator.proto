@@ -294,7 +294,6 @@ message KubernetesResourcesSpec {
     // k8s volume
     // [https://kubernetes.io/docs/concepts/storage/volumes/](https://kubernetes.io/docs/concepts/storage/volumes/)
     // Volumes defines the collection of Volume to inject into the pod.
-    // Duplicate the volume definition here to resolve the marshal/unmarshal issue caused by the inline field in the k8s api.
     repeated Volume volumes = 17;
     // k8s volumeMounts
     // VolumeMounts defines the collection of VolumeMount to inject into containers.
