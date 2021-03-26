@@ -198,6 +198,9 @@
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider"
             }
           },
+          "defaultProviders": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.DefaultProviders"
+          },
           "discoverySelectors": {
             "description": "A list of Kubernetes selectors that specify the set of namespaces that Istio considers when computing configuration updates for sidecars. This can be used to reduce Istio's computational load by limiting the number of entities (including services, pods, and endpoints) that are watched and processed. If omitted, Istio will use the default behavior of processing all namespaces in the cluster. Elements in the list are disjunctive (OR semantics), i.e. a namespace will be included if it matches any selector. The following example selects any namespace with either labels `env: prod` and `region: us-east1`, or with label `app` equal to `cassandra` or `spark`. ```yaml discoverySelectors: - matchLabels: env: prod region: us-east1 - matchExpressions: - key: app operator: In values: - cassandra - spark ``` Refer to the [kubernetes selector docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors) for additional detail on selector semantics.",
             "type": "array",
@@ -227,6 +230,9 @@
         "description": "ProxyConfig defines variables for individual Envoy instances.",
         "type": "object",
         "properties": {
+          "tracing": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing"
+          },
           "configPath": {
             "description": "Path to the generated configuration file directory. Proxy agent generates the actual configuration and stores it in this directory.",
             "type": "string",
@@ -310,9 +316,6 @@
           },
           "interceptionMode": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig.InboundInterceptionMode"
-          },
-          "tracing": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing"
           },
           "sds": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.SDS"
@@ -577,6 +580,56 @@
                       "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationGrpcProvider"
                     }
                   }
+                },
+                {
+                  "required": [
+                    "zipkin"
+                  ],
+                  "properties": {
+                    "zipkin": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "lightstep"
+                  ],
+                  "properties": {
+                    "lightstep": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "datadog"
+                  ],
+                  "properties": {
+                    "datadog": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.DatadogTracingProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "stackdriver"
+                  ],
+                  "properties": {
+                    "stackdriver": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "opencensus"
+                  ],
+                  "properties": {
+                    "opencensus": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider"
+                    }
+                  }
                 }
               ]
             }
@@ -600,8 +653,69 @@
                 "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationGrpcProvider"
               }
             }
+          },
+          {
+            "required": [
+              "zipkin"
+            ],
+            "properties": {
+              "zipkin": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "lightstep"
+            ],
+            "properties": {
+              "lightstep": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "datadog"
+            ],
+            "properties": {
+              "datadog": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.DatadogTracingProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "stackdriver"
+            ],
+            "properties": {
+              "stackdriver": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "opencensus"
+            ],
+            "properties": {
+              "opencensus": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider"
+              }
+            }
           }
         ]
+      },
+      "istio.mesh.v1alpha1.MeshConfig.DefaultProviders": {
+        "description": "Holds the name references to the providers that will be used by default in other Istio configuration resources if the provider is not specified.",
+        "type": "object",
+        "properties": {
+          "tracing": {
+            "description": "Name of the default provider for tracing. This must match a provider defined in `extension_providers` that is one of the support tracing providers.",
+            "type": "string",
+            "format": "string"
+          }
+        }
       },
       "istio.mesh.v1alpha1.MeshConfig.AuthPolicy": {
         "type": "string",
@@ -701,6 +815,134 @@
             "format": "string"
           }
         }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProvider": {
+        "description": "Defines configuration for a Zipkin tracer.",
+        "type": "object",
+        "properties": {
+          "port": {
+            "description": "REQUIRED. Specifies the port of the service.",
+            "type": "integer"
+          },
+          "service": {
+            "description": "REQUIRED. Specifies the service that the Zipkin API. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
+            "type": "string",
+            "format": "string"
+          },
+          "maxTagLength": {
+            "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
+            "type": "integer"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider": {
+        "description": "Defines configuration for a Lightstep tracer.",
+        "type": "object",
+        "properties": {
+          "port": {
+            "description": "REQUIRED. Specifies the port of the service.",
+            "type": "integer"
+          },
+          "service": {
+            "description": "REQUIRED. Specifies the service for the Lightstep collector. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
+            "type": "string",
+            "format": "string"
+          },
+          "maxTagLength": {
+            "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
+            "type": "integer"
+          },
+          "accessToken": {
+            "description": "The Lightstep access token.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.DatadogTracingProvider": {
+        "description": "Defines configuration for a Datadog tracer.",
+        "type": "object",
+        "properties": {
+          "port": {
+            "description": "REQUIRED. Specifies the port of the service.",
+            "type": "integer"
+          },
+          "service": {
+            "description": "REQUIRED. Specifies the service for the Datadog agent. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
+            "type": "string",
+            "format": "string"
+          },
+          "maxTagLength": {
+            "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
+            "type": "integer"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider": {
+        "description": "Defines configuration for Stackdriver.",
+        "type": "object",
+        "properties": {
+          "maxTagLength": {
+            "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
+            "type": "integer"
+          },
+          "debug": {
+            "description": "debug enables trace output to stdout. $hide_from_docs",
+            "type": "boolean"
+          },
+          "maxNumberOfAttributes": {
+            "description": "The global default max number of attributes per span. default is 200. $hide_from_docs",
+            "type": "integer",
+            "nullable": true
+          },
+          "maxNumberOfAnnotations": {
+            "description": "The global default max number of annotation events per span. default is 200. $hide_from_docs",
+            "type": "integer",
+            "nullable": true
+          },
+          "maxNumberOfMessageEvents": {
+            "description": "The global default max number of message events per span. default is 200. $hide_from_docs",
+            "type": "integer",
+            "nullable": true
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider": {
+        "description": "Defines configuration for an OpenCensus tracer writing to an OpenCensus backend.",
+        "type": "object",
+        "properties": {
+          "port": {
+            "description": "REQUIRED. Specifies the port of the service.",
+            "type": "integer"
+          },
+          "service": {
+            "description": "REQUIRED. Specifies the service for the OpenCensusAgent. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
+            "type": "string",
+            "format": "string"
+          },
+          "context": {
+            "description": "Specifies the set of context propagation headers used for distributed tracing. Default is `[\"W3C_TRACE_CONTEXT\"]`. If multiple values are specified, the proxy will attempt to read each header for each request and will write all headers.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider.TraceContext"
+            }
+          },
+          "maxTagLength": {
+            "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
+            "type": "integer"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider.TraceContext": {
+        "description": "TraceContext selects the context propagation headers used for distributed tracing.",
+        "type": "string",
+        "enum": [
+          "UNSPECIFIED",
+          "W3C_TRACE_CONTEXT",
+          "GRPC_BIN",
+          "CLOUD_TRACE_CONTEXT",
+          "B3"
+        ]
       },
       "istio.mesh.v1alpha1.Resource": {
         "description": "Resource describes the source of configuration",
