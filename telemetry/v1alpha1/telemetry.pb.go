@@ -47,9 +47,6 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // 1. Namespace-specific configuration
 // 1. Root namespace configuration
 //
-// NOTE: Any specified "top-level" field within a Telemetry type fully replaces any configuration
-// defined at the local and root namespace levels.
-//
 // WARNING: Support for Telemetry policies is under active development and is *not*
 // stable or supported by Istio at this time.
 //
