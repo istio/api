@@ -17,18 +17,19 @@ to have a single workload selector-less Telemetry resource.</p>
 <p>For resources with a workload selector, it is only valid to have one resource selecting
 any given workload.</p>
 
-<p>Telemetry configuration will be evaluated in order, from most specific matches per telemetry
-type (tracing, access logging, and metrics) to least specific matches. The first
-matching configuration for the telemetry type will be applied. The order of evaluation will be:</p>
+<p>Telemetry configuration will use a &ldquo;shallow merge&rdquo; semantic for configuration override
+for each telemetry type (Tracing, Metrics, AccessLogging). For example, Tracing configuration
+will support overrides of the fields <code>providers</code>, <code>random_sampling_percentage</code>, <code>disable_span_reporting</code>,
+and <code>custom_tags</code> at each level in the configuration hierarchy, with absent values filled in
+from parent resources. However, when specified, fields like <code>custom_tags</code> will
+fully replace any values provided by parent configuration.</p>
 
-<ol>
-<li>Workload-specific configuration</li>
-<li>Namespace-specific configuration</li>
-<li>Root namespace configuration</li>
-</ol>
+<p>The hierarchy of Telemetry configuration is as follows:
+1. Workload-specific configuration
+1. Namespace-specific configuration
+1. Root namespace configuration</p>
 
-<p>Telemetry configuration does not inherit. Rather, matched configurations must fully-specify
-the desired behavior. Workload-specific configuration fully replaces any configuration
+<p>NOTE: Any specified &ldquo;top-level&rdquo; field within a Telemetry type fully replaces any configuration
 defined at the local and root namespace levels.</p>
 
 <p>WARNING: Support for Telemetry policies is under active development and is <em>not</em>
