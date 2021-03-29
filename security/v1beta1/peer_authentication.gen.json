@@ -17,7 +17,7 @@
             "$ref": "#/components/schemas/istio.security.v1beta1.PeerAuthentication.MutualTLS"
           },
           "portLevelMtls": {
-            "description": "Port specific mutual TLS settings. This only works when workload selector is specified.",
+            "description": "Port specific mutual TLS settings. These only apply when a workload selector is specified.",
             "type": "object",
             "additionalProperties": {
               "$ref": "#/components/schemas/istio.security.v1beta1.PeerAuthentication.MutualTLS"
