@@ -38,7 +38,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // Telemetry configuration will use a "shallow merge" semantic for configuration override
 // for each telemetry type (Tracing, Metrics, AccessLogging). For example, Tracing configuration
 // will support overrides of the fields `providers`, `random_sampling_percentage`, `disable_span_reporting`,
-// and `custom_tags` at each level in the configuration hierarchy, with absent values filled in
+// and `custom_tags` at each level in the configuration hierarchy, with missing values filled in
 // from parent resources. However, when specified, fields like `custom_tags` will
 // fully replace any values provided by parent configuration.
 //

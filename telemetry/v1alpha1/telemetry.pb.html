@@ -20,7 +20,7 @@ any given workload.</p>
 <p>Telemetry configuration will use a &ldquo;shallow merge&rdquo; semantic for configuration override
 for each telemetry type (Tracing, Metrics, AccessLogging). For example, Tracing configuration
 will support overrides of the fields <code>providers</code>, <code>random_sampling_percentage</code>, <code>disable_span_reporting</code>,
-and <code>custom_tags</code> at each level in the configuration hierarchy, with absent values filled in
+and <code>custom_tags</code> at each level in the configuration hierarchy, with missing values filled in
 from parent resources. However, when specified, fields like <code>custom_tags</code> will
 fully replace any values provided by parent configuration.</p>
 
