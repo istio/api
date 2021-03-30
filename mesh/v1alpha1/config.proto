@@ -518,8 +518,8 @@ message MeshConfig {
       uint32 port = 2;
 
       // The maximum duration that the proxy will wait for a response from the provider (default timeout: 600s).
-      // On timeout, the communication with the authorization service is considered failed, see fail_open for the response
-      // in this case.
+      // When this timeout condition is met, the proxy marks the communication to the authorization service as failure.
+      // In this situation, the response sent back to the client will depend on the configured `fail_open` field.
       google.protobuf.Duration timeout = 9;
 
       // Sets a prefix to the value of authorization request header *Path*.
@@ -536,33 +536,38 @@ message MeshConfig {
       // The default status is "403" (HTTP Forbidden).
       string status_on_error = 5;
 
-      // List of headers that should be included in the authorization request sent to the authorization service.
-      // Note that in addition to the headers supplied by users:
+      // DEPRECATED. Use include_request_headers_in_check instead.
+      repeated string include_headers_in_check = 6;
+
+      // List of client request headers that should be included in the authorization request sent to the authorization service.
+      // Note that in addition to the headers specified here following headers are included by default:
       // 1. *Host*, *Method*, *Path* and *Content-Length* are automatically sent.
       // 2. *Content-Length* will be set to 0 and the request will not have a message body. However, the authorization
       // request can include the buffered client request body (controlled by include_request_body_in_check setting),
       // consequently the value of Content-Length of the authorization request reflects the size of its payload size.
       //
-      // Exact, prefix and suffix matches are supported:
+      // Exact, prefix and suffix matches are supported (similar to the authorization policy rule syntax except the presence match
+      // https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule):
       // - Exact match: "abc" will match on value "abc".
       // - Prefix match: "abc*" will match on value "abc" and "abcd".
       // - Suffix match: "*abc" will match on value "abc" and "xabc".
-      repeated string include_headers_in_check = 6;
+      repeated string include_request_headers_in_check = 10;
+
+      // Set of additional fixed headers that should be included in the authorization request sent to the authorization service.
+      // Key is the header name and value is the header value.
+      // Note that client request of the same key or headers specified in include_request_headers_in_check will be overridden.
+      map<string, string> include_additional_headers_in_check = 11;
 
       // If set, the client request body will be included in the authorization request sent to the authorization service.
-      EnvoyExternalAuthorizationRequestBody include_request_body_in_check = 10;
-
-      // Set of additional headers that will be included in the authorization request sent to the authorization service.
-      // Key is the header name and value is the header value.
-      // Note that client request of the same key or headers specified in include_headers_in_check will be overridden.
-      map<string, string> additional_headers_in_check = 11;
+      EnvoyExternalAuthorizationRequestBody include_request_body_in_check = 12;
 
       // List of headers from the authorization service that should be added or overridden in the original request and
       // forwarded to the upstream when the authorization check result is allowed (HTTP code 200).
       // If not specified, the original request will not be modified and forwarded to backend as-is.
       // Note, any existing headers will be overridden.
       //
-      // Exact, prefix and suffix matches are supported:
+      // Exact, prefix and suffix matches are supported (similar to the authorization policy rule syntax except the presence match
+      // https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule):
       // - Exact match: "abc" will match on value "abc".
       // - Prefix match: "abc*" will match on value "abc" and "abcd".
       // - Suffix match: "*abc" will match on value "abc" and "xabc".
@@ -576,14 +581,15 @@ message MeshConfig {
       // automatically added.
       // Note, the body from the authorization service is always included in the response to downstream.
       //
-      // Exact, prefix and suffix matches are supported:
+      // Exact, prefix and suffix matches are supported (similar to the authorization policy rule syntax except the presence match
+      // https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule):
       // - Exact match: "abc" will match on value "abc".
       // - Prefix match: "abc*" will match on value "abc" and "abcd".
       // - Suffix match: "*abc" will match on value "abc" and "xabc".
       repeated string headers_to_downstream_on_deny = 8;
 
       // $hide_from_docs
-      // Next available field number: 11
+      // Next available field number: 13
     }
 
     message EnvoyExternalAuthorizationGrpcProvider {
@@ -599,7 +605,8 @@ message MeshConfig {
       uint32 port = 2;
 
       // The maximum duration that the proxy will wait for a response from the provider, this is the timeout for a specific request (default timeout: 600s).
-      // On timeout, the communication with the authorization service is considered failed, see the fail_open for the response in this case.
+      // When this timeout condition is met, the proxy marks the communication to the authorization service as failure.
+      // In this situation, the response sent back to the client will depend on the configured `fail_open` field.
       google.protobuf.Duration timeout = 5;
 
       // If true, the HTTP request or TCP connection will be allowed even if the communication with the authorization service has failed,

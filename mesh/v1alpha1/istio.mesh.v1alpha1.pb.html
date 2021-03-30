@@ -1213,8 +1213,8 @@ No
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>The maximum duration that the proxy will wait for a response from the provider (default timeout: 600s).
-On timeout, the communication with the authorization service is considered failed, see fail_open for the response
-in this case.</p>
+When this timeout condition is met, the proxy marks the communication to the authorization service as failure.
+In this situation, the response sent back to the client will depend on the configured <code>fail_open</code> field.</p>
 
 </td>
 <td>
@@ -1263,17 +1263,42 @@ No
 <td><code>includeHeadersInCheck</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>List of headers that should be included in the authorization request sent to the authorization service.
-Note that in addition to the headers supplied by users:
+<p>DEPRECATED. Use include<em>request</em>headers<em>in</em>check instead.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationHttpProvider-include_request_headers_in_check">
+<td><code>includeRequestHeadersInCheck</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>List of client request headers that should be included in the authorization request sent to the authorization service.
+Note that in addition to the headers specified here following headers are included by default:
 1. <em>Host</em>, <em>Method</em>, <em>Path</em> and <em>Content-Length</em> are automatically sent.
 2. <em>Content-Length</em> will be set to 0 and the request will not have a message body. However, the authorization
 request can include the buffered client request body (controlled by include<em>request</em>body<em>in</em>check setting),
 consequently the value of Content-Length of the authorization request reflects the size of its payload size.</p>
 
-<p>Exact, prefix and suffix matches are supported:
+<p>Exact, prefix and suffix matches are supported (similar to the authorization policy rule syntax except the presence match
+https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule):
 - Exact match: &ldquo;abc&rdquo; will match on value &ldquo;abc&rdquo;.
 - Prefix match: &ldquo;abc<em>&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;abcd&rdquo;.
 - Suffix match: &ldquo;</em>abc&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;xabc&rdquo;.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationHttpProvider-include_additional_headers_in_check">
+<td><code>includeAdditionalHeadersInCheck</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>Set of additional fixed headers that should be included in the authorization request sent to the authorization service.
+Key is the header name and value is the header value.
+Note that client request of the same key or headers specified in include<em>request</em>headers<em>in</em>check will be overridden.</p>
 
 </td>
 <td>
@@ -1291,19 +1316,6 @@ No
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationHttpProvider-additional_headers_in_check">
-<td><code>additionalHeadersInCheck</code></td>
-<td><code>map&lt;string,&nbsp;string&gt;</code></td>
-<td>
-<p>Set of additional headers that will be included in the authorization request sent to the authorization service.
-Key is the header name and value is the header value.
-Note that client request of the same key or headers specified in include<em>headers</em>in_check will be overridden.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationHttpProvider-headers_to_upstream_on_allow">
 <td><code>headersToUpstreamOnAllow</code></td>
 <td><code>string[]</code></td>
@@ -1313,7 +1325,8 @@ forwarded to the upstream when the authorization check result is allowed (HTTP c
 If not specified, the original request will not be modified and forwarded to backend as-is.
 Note, any existing headers will be overridden.</p>
 
-<p>Exact, prefix and suffix matches are supported:
+<p>Exact, prefix and suffix matches are supported (similar to the authorization policy rule syntax except the presence match
+https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule):
 - Exact match: &ldquo;abc&rdquo; will match on value &ldquo;abc&rdquo;.
 - Prefix match: &ldquo;abc<em>&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;abcd&rdquo;.
 - Suffix match: &ldquo;</em>abc&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;xabc&rdquo;.</p>
@@ -1335,7 +1348,8 @@ When a header is included in this list, <em>Path</em>, <em>Status</em>, <em>Cont
 automatically added.
 Note, the body from the authorization service is always included in the response to downstream.</p>
 
-<p>Exact, prefix and suffix matches are supported:
+<p>Exact, prefix and suffix matches are supported (similar to the authorization policy rule syntax except the presence match
+https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule):
 - Exact match: &ldquo;abc&rdquo; will match on value &ldquo;abc&rdquo;.
 - Prefix match: &ldquo;abc<em>&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;abcd&rdquo;.
 - Suffix match: &ldquo;</em>abc&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;xabc&rdquo;.</p>
@@ -1392,7 +1406,8 @@ No
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>The maximum duration that the proxy will wait for a response from the provider, this is the timeout for a specific request (default timeout: 600s).
-On timeout, the communication with the authorization service is considered failed, see the fail_open for the response in this case.</p>
+When this timeout condition is met, the proxy marks the communication to the authorization service as failure.
+In this situation, the response sent back to the client will depend on the configured <code>fail_open</code> field.</p>
 
 </td>
 <td>
