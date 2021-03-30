@@ -37,17 +37,17 @@ package istio.telemetry.v1alpha1;
 // For resources with a workload selector, it is only valid to have one resource selecting
 // any given workload.
 //
-// Telemetry configuration will be evaluated in order, from most specific matches per telemetry
-// type (tracing, access logging, and metrics) to least specific matches. The first
-// matching configuration for the telemetry type will be applied. The order of evaluation will be:
+// Telemetry configuration will use a "shallow merge" semantic for configuration override
+// for each telemetry type (Tracing, Metrics, AccessLogging). For example, Tracing configuration
+// will support overrides of the fields `providers`, `random_sampling_percentage`, `disable_span_reporting`,
+// and `custom_tags` at each level in the configuration hierarchy, with missing values filled in
+// from parent resources. However, when specified, fields like `custom_tags` will
+// fully replace any values provided by parent configuration.
 //
+// The hierarchy of Telemetry configuration is as follows:
 // 1. Workload-specific configuration
 // 1. Namespace-specific configuration
 // 1. Root namespace configuration
-//
-// Telemetry configuration does not inherit. Rather, matched configurations must fully-specify
-// the desired behavior. Workload-specific configuration fully replaces any configuration
-// defined at the local and root namespace levels.
 //
 // WARNING: Support for Telemetry policies is under active development and is *not* 
 // stable or supported by Istio at this time.
