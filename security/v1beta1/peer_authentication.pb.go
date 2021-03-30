@@ -165,7 +165,8 @@ type PeerAuthentication struct {
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
 	// Mutual TLS settings for workload. If not defined, inherit from parent.
 	Mtls *PeerAuthentication_MutualTLS `protobuf:"bytes,2,opt,name=mtls,proto3" json:"mtls,omitempty"`
-	// Port specific mutual TLS settings.
+	// Port specific mutual TLS settings. These only apply when a workload selector
+	// is specified.
 	PortLevelMtls        map[uint32]*PeerAuthentication_MutualTLS `protobuf:"bytes,3,rep,name=port_level_mtls,json=portLevelMtls,proto3" json:"port_level_mtls,omitempty" protobuf_key:"varint,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}                                 `json:"-"`
 	XXX_unrecognized     []byte                                   `json:"-"`

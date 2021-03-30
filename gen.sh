@@ -23,7 +23,8 @@ buf generate \
   --path type \
   --path analysis \
   --path authentication \
-  --path meta
+  --path meta \
+  --path telemetry
 
 # These folders do not have the full plugins used, as they are not full CRDs.
 # We pass them a custom configuration to exclude the non-required files

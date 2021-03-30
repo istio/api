@@ -499,6 +499,16 @@ message MeshConfig {
       EnvoyExternalAuthorizationHttpProvider envoy_ext_authz_http = 2;
       // Configures an external authorizer that implements the Envoy ext_authz filter authorization check service using the gRPC API.
       EnvoyExternalAuthorizationGrpcProvider envoy_ext_authz_grpc = 3;
+      // Configures a tracing provider that uses the Zipkin API.
+      ZipkinTracingProvider zipkin = 4;
+      // Configures a Lightstep tracing provider.
+      LightstepTracingProvider lightstep = 5;
+      // Configures a Datadog tracing provider.
+      DatadogTracingProvider datadog = 6;
+      // Configures a Stackdriver provider.
+      StackdriverProvider stackdriver = 7;
+      // Configures an OpenCensusAgent tracing provider.
+      OpenCensusAgentTracingProvider opencensus = 8;
     }
 
     message EnvoyExternalAuthorizationHttpProvider {
@@ -570,11 +580,150 @@ message MeshConfig {
       // The default status is "403" (HTTP Forbidden).
       string status_on_error = 4;
     }
+
+    // Defines configuration for a Zipkin tracer.
+    message ZipkinTracingProvider {
+      // REQUIRED. Specifies the service that the Zipkin API.
+      // The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
+      // to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+      // service defined by the Kubernetes service or ServiceEntry.
+      //
+      // Example: "zipkin.default.svc.cluster.local" or "bar/zipkin.example.com".
+      string service = 1;
+
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 2;
+
+      // Optional. Controls the overall path length allowed in a reported span.
+      // NOTE: currently only controls max length of the path tag.
+      uint32 max_tag_length = 3;
+    }
+
+    // Defines configuration for a Lightstep tracer.
+    message LightstepTracingProvider {
+      // REQUIRED. Specifies the service for the Lightstep collector.
+      // The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
+      // to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+      // service defined by the Kubernetes service or ServiceEntry.
+      //
+      // Example: "lightstep.default.svc.cluster.local" or "bar/lightstep.example.com".
+      string service = 1;
+
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 2;
+
+      // The Lightstep access token.
+      string access_token = 3;
+
+      // Optional. Controls the overall path length allowed in a reported span.
+      // NOTE: currently only controls max length of the path tag.
+      uint32 max_tag_length = 4;
+    }
+
+    // Defines configuration for a Datadog tracer.
+    message DatadogTracingProvider {
+      // REQUIRED. Specifies the service for the Datadog agent.
+      // The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
+      // to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+      // service defined by the Kubernetes service or ServiceEntry.
+      //
+      // Example: "datadog.default.svc.cluster.local" or "bar/datadog.example.com".
+      string service = 1;
+
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 2;
+
+      // Optional. Controls the overall path length allowed in a reported span.
+      // NOTE: currently only controls max length of the path tag.
+      uint32 max_tag_length = 3;
+    }
+
+    // Defines configuration for Stackdriver.
+    message StackdriverProvider {
+      // debug enables trace output to stdout.
+      // $hide_from_docs
+      bool debug = 1;
+      // The global default max number of attributes per span.
+      // default is 200.
+      // $hide_from_docs
+      google.protobuf.Int64Value max_number_of_attributes = 2;
+      // The global default max number of annotation events per span.
+      // default is 200.
+      // $hide_from_docs
+      google.protobuf.Int64Value max_number_of_annotations = 3;
+      // The global default max number of message events per span.
+      // default is 200.
+      // $hide_from_docs
+      google.protobuf.Int64Value max_number_of_message_events = 4;
+
+      // Optional. Controls the overall path length allowed in a reported span.
+      // NOTE: currently only controls max length of the path tag.
+      uint32 max_tag_length = 5;
+    }
+
+    // Defines configuration for an OpenCensus tracer writing to an OpenCensus backend.
+    message OpenCensusAgentTracingProvider {
+      // REQUIRED. Specifies the service for the OpenCensusAgent.
+      // The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
+      // to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+      // service defined by the Kubernetes service or ServiceEntry.
+      //
+      // Example: "ocagent.default.svc.cluster.local" or "bar/ocagent.example.com".
+      string service = 1;
+
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 2;
+
+      // TraceContext selects the context propagation headers used for
+      // distributed tracing.
+      enum TraceContext {
+        // $hide_from_docs
+        // Unspecified context. Should not be used for now, but added to reserve
+        // the 0 enum value if TraceContext is used outside of a repeated field.
+        UNSPECIFIED = 0;
+        // Use W3C Trace Context propagation using the `traceparent` HTTP header.
+        // See the
+        // [Trace Context documentation](https://www.w3.org/TR/trace-context/) for details.
+        W3C_TRACE_CONTEXT = 1;
+        // Use gRPC binary context propagation using the `grpc-trace-bin` http header.
+        GRPC_BIN = 2;
+        // Use Cloud Trace context propagation using the
+        // `X-Cloud-Trace-Context` http header.
+        CLOUD_TRACE_CONTEXT = 3;
+        // Use multi-header B3 context propagation using the `X-B3-TraceId`,
+        // `X-B3-SpanId`, and `X-B3-Sampled` HTTP headers. See
+        // [B3 header propagation README](https://github.com/openzipkin/b3-propagation)
+        // for details.
+        B3 = 4;
+      }
+
+      // Specifies the set of context propagation headers used for distributed
+      // tracing. Default is `["W3C_TRACE_CONTEXT"]`. If multiple values are specified,
+      // the proxy will attempt to read each header for each request and will
+      // write all headers.
+      repeated TraceContext context = 3;
+
+      // Optional. Controls the overall path length allowed in a reported span.
+      // NOTE: currently only controls max length of the path tag.
+      uint32 max_tag_length = 4;
+    }
   }
 
   // Defines a list of extension providers that extend Istio's functionality. For example, the AuthorizationPolicy
   // can be used with an extension provider to delegate the authorization decision to a custom authorization system.
   repeated ExtensionProvider extension_providers = 57;
+
+  // Holds the name references to the providers that will be used by default
+  // in other Istio configuration resources if the provider is not specified.
+  message DefaultProviders {
+    // Name of the default provider for tracing. This must match a provider
+    // defined in `extension_providers` that is one of the support tracing
+    // providers.
+    string tracing = 1;
+  }
+
+  // Specifies extension providers to use by default in Istio configuration resources.
+  DefaultProviders default_providers = 60;
 
   // A list of Kubernetes selectors that specify the set of namespaces that Istio considers when
   // computing configuration updates for sidecars. This can be used to reduce Istio's computational load
@@ -600,7 +749,7 @@ message MeshConfig {
   repeated k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector discovery_selectors = 59;
 
   // $hide_from_docs
-  // Next available field number: 60
+  // Next available field number: 61
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
