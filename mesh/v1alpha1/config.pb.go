@@ -1518,8 +1518,8 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider struct 
 	// REQUIRED. Specifies the port of the service.
 	Port uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
 	// The maximum duration that the proxy will wait for a response from the provider (default timeout: 600s).
-	// On timeout, the communication with the authorization service is considered failed and the request will be rejected
-	// with 403 (HTTP Forbidden).
+	// On timeout, the communication with the authorization service is considered failed, see fail_open for the response
+	// in this case.
 	Timeout *types.Duration `protobuf:"bytes,9,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	// Sets a prefix to the value of authorization request header *Path*.
 	// For example, setting this to "/check" for an original user request at path "/admin" will cause the
@@ -1703,11 +1703,11 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider struct 
 	// REQUIRED. Specifies the port of the service.
 	Port uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
 	// The maximum duration that the proxy will wait for a response from the provider, this is the timeout for a specific request (default timeout: 600s).
-	// On timeout, the communication with the authorization service is considered failed and the client connection will be closed.
+	// On timeout, the communication with the authorization service is considered failed, see the fail_open for the response in this case.
 	Timeout *types.Duration `protobuf:"bytes,5,opt,name=timeout,proto3" json:"timeout,omitempty"`
-	// If true, the client connection will be allowed even if the communication with the authorization service has failed,
+	// If true, the HTTP request or TCP connection will be allowed even if the communication with the authorization service has failed,
 	// or if the authorization service has returned a HTTP 5xx error.
-	// Default is false and the client connection will be closed.
+	// Default is false. For HTTP request, it will be rejected with 403 (HTTP Forbidden). For TCP connection, it will be closed immediately.
 	FailOpen bool `protobuf:"varint,3,opt,name=fail_open,json=failOpen,proto3" json:"failOpen,omitempty"`
 	// Sets the HTTP status that is returned to the client when there is a network error to the authorization service.
 	// The default status is "403" (HTTP Forbidden).

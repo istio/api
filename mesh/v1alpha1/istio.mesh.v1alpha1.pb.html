@@ -1213,8 +1213,8 @@ No
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>The maximum duration that the proxy will wait for a response from the provider (default timeout: 600s).
-On timeout, the communication with the authorization service is considered failed and the request will be rejected
-with 403 (HTTP Forbidden).</p>
+On timeout, the communication with the authorization service is considered failed, see fail_open for the response
+in this case.</p>
 
 </td>
 <td>
@@ -1392,7 +1392,7 @@ No
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>The maximum duration that the proxy will wait for a response from the provider, this is the timeout for a specific request (default timeout: 600s).
-On timeout, the communication with the authorization service is considered failed and the client connection will be closed.</p>
+On timeout, the communication with the authorization service is considered failed, see the fail_open for the response in this case.</p>
 
 </td>
 <td>
@@ -1403,9 +1403,9 @@ No
 <td><code>failOpen</code></td>
 <td><code>bool</code></td>
 <td>
-<p>If true, the client connection will be allowed even if the communication with the authorization service has failed,
+<p>If true, the HTTP request or TCP connection will be allowed even if the communication with the authorization service has failed,
 or if the authorization service has returned a HTTP 5xx error.
-Default is false and the client connection will be closed.</p>
+Default is false. For HTTP request, it will be rejected with 403 (HTTP Forbidden). For TCP connection, it will be closed immediately.</p>
 
 </td>
 <td>

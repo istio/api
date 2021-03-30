@@ -518,8 +518,8 @@ message MeshConfig {
       uint32 port = 2;
 
       // The maximum duration that the proxy will wait for a response from the provider (default timeout: 600s).
-      // On timeout, the communication with the authorization service is considered failed and the request will be rejected
-      // with 403 (HTTP Forbidden).
+      // On timeout, the communication with the authorization service is considered failed, see fail_open for the response
+      // in this case.
       google.protobuf.Duration timeout = 9;
 
       // Sets a prefix to the value of authorization request header *Path*.
@@ -599,12 +599,12 @@ message MeshConfig {
       uint32 port = 2;
 
       // The maximum duration that the proxy will wait for a response from the provider, this is the timeout for a specific request (default timeout: 600s).
-      // On timeout, the communication with the authorization service is considered failed and the client connection will be closed.
+      // On timeout, the communication with the authorization service is considered failed, see the fail_open for the response in this case.
       google.protobuf.Duration timeout = 5;
 
-      // If true, the client connection will be allowed even if the communication with the authorization service has failed,
+      // If true, the HTTP request or TCP connection will be allowed even if the communication with the authorization service has failed,
       // or if the authorization service has returned a HTTP 5xx error.
-      // Default is false and the client connection will be closed.
+      // Default is false. For HTTP request, it will be rejected with 403 (HTTP Forbidden). For TCP connection, it will be closed immediately.
       bool fail_open = 3;
 
       // Sets the HTTP status that is returned to the client when there is a network error to the authorization service.
