@@ -754,7 +754,7 @@
             "format": "string"
           },
           "timeout": {
-            "description": "The maximum duration that the proxy will wait for a response from the provider (default timeout: 600s).",
+            "description": "The maximum duration that the proxy will wait for a response from the provider (default timeout: 600s). On timeout, the communication with the authorization service is considered failed and the request will be rejected with 403 (HTTP Forbidden).",
             "type": "string"
           },
           "pathPrefix": {
@@ -821,11 +821,11 @@
             "format": "string"
           },
           "timeout": {
-            "description": "The timeout for the gRPC request. This is the timeout for a specific request (default timeout: 600s).",
+            "description": "The maximum duration that the proxy will wait for a response from the provider, this is the timeout for a specific request (default timeout: 600s). On timeout, the communication with the authorization service is considered failed and the client connection will be closed.",
             "type": "string"
           },
           "failOpen": {
-            "description": "If true, the user request will be allowed even if the communication with the authorization service has failed, or if the authorization service has returned a HTTP 5xx error. Default is false and the request will be rejected with \"Forbidden\" response.",
+            "description": "If true, the client connection will be allowed even if the communication with the authorization service has failed, or if the authorization service has returned a HTTP 5xx error. Default is false and the client connection will be closed.",
             "type": "boolean"
           },
           "statusOnError": {
