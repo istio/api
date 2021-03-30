@@ -230,7 +230,7 @@
             }
           },
           "trustDomains": {
-            "description": "Optional. A list of trust domains of client certificates. If not specified, the default trust domain and its aliases will be used.",
+            "description": "Optional. A list of trust domains of peer certificates. If not specified, the default trust domain and its aliases will be used.",
             "type": "array",
             "items": {
               "type": "string",

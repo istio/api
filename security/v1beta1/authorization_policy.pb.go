@@ -686,7 +686,7 @@ type Source struct {
 	RemoteIpBlocks []string `protobuf:"bytes,9,rep,name=remote_ip_blocks,json=remoteIpBlocks,proto3" json:"remote_ip_blocks,omitempty"`
 	// Optional. A list of negative match of remote IP blocks.
 	NotRemoteIpBlocks []string `protobuf:"bytes,10,rep,name=not_remote_ip_blocks,json=notRemoteIpBlocks,proto3" json:"not_remote_ip_blocks,omitempty"`
-	// Optional. A list of trust domains of client certificates.
+	// Optional. A list of trust domains of peer certificates.
 	// If not specified, the default trust domain and its aliases will be used.
 	TrustDomains         []string `protobuf:"bytes,11,rep,name=trust_domains,json=trustDomains,proto3" json:"trust_domains,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
