@@ -333,33 +333,6 @@ The CA certificate that signs the workload certificates is automatically added b
 No
 </td>
 </tr>
-<tr id="MeshConfig-enabled_spiffe_multiple_independent_trust_domain_authentication">
-<td><code>enabledSpiffeMultipleIndependentTrustDomainAuthentication</code></td>
-<td><code>bool</code></td>
-<td>
-<p>If enabled, SPIFFE multiple independent trust domain authentication scheme is used for mTSL client certificate validation.
-That means, all the root certificates specified in <code>ca_certificates</code> and the self-signed &lsquo;istio-ca-secret&rsquo; secret are used to
-validate client certificates while keeping them isolated from each other.
-More precisely, the proxy validates client certificates with the following procedure:
-1. Extract the SVID(URI SAN) in an incoming client certificate.
-2. Select a root certificate for the trust domain in the SVID (E.g. &ldquo;example.com&rdquo; for &ldquo;spiffe://example.com/foo&rdquo; SVID).
-3. Verify the certificate using the selected root certificate.
-This is a particular importance for cross cluster mTLS communication where each cluster manages their own root certificates.
-For example, consider the case where a cluster A manages the trust domain &ldquo;aaa.com&rdquo;, cluster B manages &ldquo;bbb.com&rdquo;.
-When services in cluster A talk to services in cluster B, services in cluster B has to validate client certificates
-based on the root certificates of cluster A. However, if we merge root certificates from both cluster A and cluster B,
-then we cannot trust that presented client certificates are actually signed by the corresponding cluster. That is because
-cluster A might sign client certificates with &ldquo;spiffe://bbb.com/**&rdquo; URI SAN in order to bypass
-cluster B&rsquo;s authorization based on workload identity. In that case, we say these trust domains are NOT isolated from each other.
-This is why we need to select root certificates based on the trust domain before verify client certificates.</p>
-
-<p>Please note that this setting requires <code>STRICT</code> mTLS mode to take into effect.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="MeshConfig-default_service_export_to">
 <td><code>defaultServiceExportTo</code></td>
 <td><code>string[]</code></td>
@@ -848,15 +821,13 @@ The certificate is retrieved from the endpoint.</p>
 No
 </td>
 </tr>
-<tr id="MeshConfig-CertificateData-trust_domain">
-<td><code>trustDomain</code></td>
-<td><code>string</code></td>
+<tr id="MeshConfig-CertificateData-trust_domains">
+<td><code>trustDomains</code></td>
+<td><code>string[]</code></td>
 <td>
-<p>Optional. Specify the trust domain to which this certificate data belongs.
-If <code>enabled_spiffe_multiple_independent_trust_domain_authentication</code> enabled, this must be set for
-distinguishing different trust domains from each other. Certificates in a same trust domain will be merged
-and used together to validate the trust domain.
-If <code>enabled_spiffe_multiple_independent_trust_domain_authentication</code> disabled, it is not necessary to set.</p>
+<p>Optional. Specify the list of trust domains to which this certificate data belongs.
+If set, they are used for this root CA, otherwise, this root CA ise used for default trust domain
+and its aliases.</p>
 
 </td>
 <td>
