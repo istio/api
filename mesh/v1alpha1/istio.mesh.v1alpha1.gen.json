@@ -413,7 +413,7 @@
         "type": "object",
         "properties": {
           "trustDomains": {
-            "description": "Optional. Specify the list of trust domains to which this certificate data belongs. If set, they are used for this root CA, otherwise, this root CA ise used for default trust domain and its aliases.",
+            "description": "Optional. Specify the list of trust domains to which this certificate data belongs. If set, they are used for this root CA. Otherwise, this root CA is used for default trust domain and its aliases.",
             "type": "array",
             "items": {
               "type": "string",

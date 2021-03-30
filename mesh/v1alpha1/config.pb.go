@@ -899,7 +899,7 @@ type MeshConfig_CertificateData struct {
 	//	*MeshConfig_CertificateData_SpiffeBundleUrl
 	CertificateData isMeshConfig_CertificateData_CertificateData `protobuf_oneof:"certificate_data"`
 	// Optional. Specify the list of trust domains to which this certificate data belongs.
-	// If set, they are used for this root CA, otherwise, this root CA ise used for default trust domain
+	// If set, they are used for this root CA. Otherwise, this root CA is used for default trust domain
 	// and its aliases.
 	TrustDomains         []string `protobuf:"bytes,3,rep,name=trust_domains,json=trustDomains,proto3" json:"trustDomains,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
