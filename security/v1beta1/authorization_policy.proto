@@ -25,8 +25,8 @@ import "type/v1beta1/selector.proto";
 
 // Istio Authorization Policy enables access control on workloads in the mesh.
 //
-// Authorization policy supports CUSTOM, DENY and ALLOW action for access control. When CUSTOM, DENY and ALLOW actions
-// are used for a workload at the same time, the CUSTOM action is evaluated first, then the DENY action, and the last is ALLOW action.
+// Authorization policy supports CUSTOM, DENY and ALLOW actions for access control. When CUSTOM, DENY and ALLOW actions
+// are used for a workload at the same time, the CUSTOM action is evaluated first, then the DENY action, and finally the ALLOW action.
 // The evaluation is determined by the following rules:
 //
 // 1. If there are any CUSTOM policies that match the request, evaluate and deny the request if the evaluation result is deny.
