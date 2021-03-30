@@ -1143,7 +1143,9 @@ No
 <td><code>bool</code></td>
 <td>
 <p>When this field is true, ext-authz filter will buffer the message until max<em>request</em>bytes is reached.
-The authorization request will be dispatched and no 413 HTTP error will be returned by the filter.</p>
+The authorization request will be dispatched and no 413 HTTP error will be returned by the filter.
+A &ldquo;x-envoy-auth-partial-body: false|true&rdquo; metadata header will be added to the authorization request message
+indicating if the body data is partial.</p>
 
 </td>
 <td>
@@ -1280,9 +1282,7 @@ No
 <td><code>includeRequestBodyInCheck</code></td>
 <td><code><a href="#MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationRequestBody">EnvoyExternalAuthorizationRequestBody</a></code></td>
 <td>
-<p>Enables the ext-authz filter to buffer the client request body and send it within the authorization request.
-A &ldquo;x-envoy-auth-partial-body: false|true&rdquo; metadata header will be added to the authorization request message
-indicating if the body data is partial.</p>
+<p>If set, the client request body will be included in the authorization request sent to the authorization service.</p>
 
 </td>
 <td>
@@ -1425,9 +1425,7 @@ No
 <td><code>includeRequestBodyInCheck</code></td>
 <td><code><a href="#MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationRequestBody">EnvoyExternalAuthorizationRequestBody</a></code></td>
 <td>
-<p>Enables the ext-authz filter to buffer the client request body and send it within the authorization request.
-A &ldquo;x-envoy-auth-partial-body: false|true&rdquo; metadata header will be added to the authorization request message
-indicating if the body data is partial.</p>
+<p>If set, the client request body will be included in the authorization request sent to the authorization service.</p>
 
 </td>
 <td>

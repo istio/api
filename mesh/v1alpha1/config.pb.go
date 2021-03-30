@@ -1436,6 +1436,8 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationRequestBody struct {
 	MaxRequestBytes uint32 `protobuf:"varint,1,opt,name=max_request_bytes,json=maxRequestBytes,proto3" json:"maxRequestBytes,omitempty"`
 	// When this field is true, ext-authz filter will buffer the message until max_request_bytes is reached.
 	// The authorization request will be dispatched and no 413 HTTP error will be returned by the filter.
+	// A "x-envoy-auth-partial-body: false|true" metadata header will be added to the authorization request message
+	// indicating if the body data is partial.
 	AllowPartialMessage bool `protobuf:"varint,2,opt,name=allow_partial_message,json=allowPartialMessage,proto3" json:"allowPartialMessage,omitempty"`
 	// If true, the body sent to the external authorization service in the gRPC authorization request is set with raw bytes
 	// in the raw_body field (https://github.com/envoyproxy/envoy/blame/cffb095d59d7935abda12b9509bcd136808367bb/api/envoy/service/auth/v3/attribute_context.proto#L153).
@@ -1540,9 +1542,7 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider struct 
 	// - Prefix match: "abc*" will match on value "abc" and "abcd".
 	// - Suffix match: "*abc" will match on value "abc" and "xabc".
 	IncludeHeadersInCheck []string `protobuf:"bytes,6,rep,name=include_headers_in_check,json=includeHeadersInCheck,proto3" json:"includeHeadersInCheck,omitempty"`
-	// Enables the ext-authz filter to buffer the client request body and send it within the authorization request.
-	// A "x-envoy-auth-partial-body: false|true" metadata header will be added to the authorization request message
-	// indicating if the body data is partial.
+	// If set, the client request body will be included in the authorization request sent to the authorization service.
 	IncludeRequestBodyInCheck *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationRequestBody `protobuf:"bytes,10,opt,name=include_request_body_in_check,json=includeRequestBodyInCheck,proto3" json:"includeRequestBodyInCheck,omitempty"`
 	// Set of additional headers that will be included in the authorization request sent to the authorization service.
 	// Key is the header name and value is the header value.
@@ -1709,9 +1709,7 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider struct 
 	// Sets the HTTP status that is returned to the client when there is a network error to the authorization service.
 	// The default status is "403" (HTTP Forbidden).
 	StatusOnError string `protobuf:"bytes,4,opt,name=status_on_error,json=statusOnError,proto3" json:"statusOnError,omitempty"`
-	// Enables the ext-authz filter to buffer the client request body and send it within the authorization request.
-	// A "x-envoy-auth-partial-body: false|true" metadata header will be added to the authorization request message
-	// indicating if the body data is partial.
+	// If set, the client request body will be included in the authorization request sent to the authorization service.
 	IncludeRequestBodyInCheck *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationRequestBody `protobuf:"bytes,6,opt,name=include_request_body_in_check,json=includeRequestBodyInCheck,proto3" json:"includeRequestBodyInCheck,omitempty"`
 	XXX_NoUnkeyedLiteral      struct{}                                                            `json:"-"`
 	XXX_unrecognized          []byte                                                              `json:"-"`
