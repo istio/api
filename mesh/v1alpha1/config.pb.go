@@ -901,6 +901,8 @@ type MeshConfig_CertificateData struct {
 	// Optional. Specify the list of trust domains to which this certificate data belongs.
 	// If set, they are used for this root CA. Otherwise, this root CA is used for default trust domain
 	// and its aliases.
+	// Note that we can have multiple certificate data for a same trust_domain.
+	// In that case, certificates with a same trust domain will be merged and used together to verify peer certificates.
 	TrustDomains         []string `protobuf:"bytes,3,rep,name=trust_domains,json=trustDomains,proto3" json:"trustDomains,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
