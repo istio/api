@@ -28,6 +28,7 @@ type ResourceTypes int
 const (
 	Unknown ResourceTypes = iota
     Any
+    AuthorizationPolicy
     Ingress
     Pod
     Service
@@ -38,10 +39,12 @@ func (r ResourceTypes) String() string {
 	case 1:
 		return "Any"
 	case 2:
-		return "Ingress"
+		return "AuthorizationPolicy"
 	case 3:
-		return "Pod"
+		return "Ingress"
 	case 4:
+		return "Pod"
+	case 5:
 		return "Service"
 	}
 	return "Unknown"
@@ -155,6 +158,18 @@ var (
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Any,
+		},
+	}
+
+	IoIstioDryRun = Instance {
+		Name:          "istio.io/dry-run",
+		Description:   "Specifies whether or not the given resource is in dry-run "+
+                        "mode.",
+		FeatureStatus: Alpha,
+		Hidden:        true,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			AuthorizationPolicy,
 		},
 	}
 
@@ -613,6 +628,7 @@ func AllResourceAnnotations() []*Instance {
 		&OperatorInstallChartOwner,
 		&OperatorInstallOwnerGeneration,
 		&OperatorInstallVersion,
+		&IoIstioDryRun,
 		&IoKubernetesIngressClass,
 		&NetworkingExportTo,
 		&PrometheusMergeMetrics,
@@ -655,6 +671,7 @@ func AllResourceAnnotations() []*Instance {
 func AllResourceTypes() []string {
 	return []string {
 		"Any",
+		"AuthorizationPolicy",
 		"Ingress",
 		"Pod",
 		"Service",

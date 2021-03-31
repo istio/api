@@ -392,3 +392,11 @@ annotations:
     hidden: false
     resources:
       - Pod
+
+  - name: istio.io/dry-run
+    featureStatus: Alpha
+    description: Specifies whether or not the given resource is in dry-run mode.
+    deprecated: false
+    hidden: true
+    resources:
+      - AuthorizationPolicy
