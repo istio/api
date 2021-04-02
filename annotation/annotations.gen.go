@@ -274,6 +274,17 @@ var (
 		},
 	}
 
+	SidecarAgentLogLevel = Instance {
+		Name:          "sidecar.istio.io/agentLogLevel",
+		Description:   "Specifies the log output level for pilot-agent.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	SidecarBootstrapOverride = Instance {
 		Name:          "sidecar.istio.io/bootstrapOverride",
 		Description:   "Specifies an alternative Envoy bootstrap configuration "+
@@ -637,6 +648,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarStatusReadinessFailureThreshold,
 		&SidecarStatusReadinessInitialDelaySeconds,
 		&SidecarStatusReadinessPeriodSeconds,
+		&SidecarAgentLogLevel,
 		&SidecarBootstrapOverride,
 		&SidecarComponentLogLevel,
 		&SidecarControlPlaneAuthPolicy,
