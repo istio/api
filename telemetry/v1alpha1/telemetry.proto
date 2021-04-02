@@ -15,6 +15,7 @@
 syntax = "proto3";
 
 import "type/v1beta1/selector.proto";
+import "google/protobuf/wrappers.proto";
 
 option go_package = "istio.io/api/telemetry/v1alpha1";
 
@@ -169,12 +170,12 @@ message Tracing {
   //
   // Defaults to 0%. Valid values [0.00-100.00]. Can be specified in 0.01%
   // increments.
-  double random_sampling_percentage = 3;
+  google.protobuf.DoubleValue random_sampling_percentage = 3;
 
   // Controls span reporting. If set to true, no spans will be reported for
   // impacted workloads. This does NOT impact context propagation or trace 
   // sampling behavior.
-  bool disable_span_reporting = 4;
+  google.protobuf.BoolValue disable_span_reporting = 4;
  
   // CustomTag defines a tag to be added to a trace span that is based on
   // an operator-supplied value. This value can either be a hard-coded value,
