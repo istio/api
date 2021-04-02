@@ -455,7 +455,7 @@ func (m *AuthorizationPolicy_ExtensionProvider) GetName() string {
 }
 
 // Rule matches requests from a list of sources that perform a list of operations subject to a
-// list of conditions. A match occurs when at least one source, operation and condition
+// list of conditions. A match occurs when at least one source, one operation and all conditions
 // matches the request. An empty rule is always matched.
 //
 // Any string field in the rule supports Exact, Prefix, Suffix and Presence match:
