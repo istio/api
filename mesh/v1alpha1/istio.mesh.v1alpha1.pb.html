@@ -1131,7 +1131,8 @@ No
 <p>Sets the maximum size of a message body that the ext-authz filter will hold in memory.
 If max<em>request</em>bytes is reached, and allow<em>partial</em>message is false, Envoy will return a 413 (Payload Too Large).
 Otherwise the request will be sent to the provider with a partial message.
-Note that this setting will have precedence over the fail_open field.</p>
+Note that this setting will have precedence over the fail<em>open field, the 413 will be returned even when the
+fail</em>open is set to true.</p>
 
 </td>
 <td>

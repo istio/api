@@ -489,7 +489,8 @@ message MeshConfig {
       // Sets the maximum size of a message body that the ext-authz filter will hold in memory.
       // If max_request_bytes is reached, and allow_partial_message is false, Envoy will return a 413 (Payload Too Large).
       // Otherwise the request will be sent to the provider with a partial message.
-      // Note that this setting will have precedence over the fail_open field.
+      // Note that this setting will have precedence over the fail_open field, the 413 will be returned even when the
+      // fail_open is set to true.
       uint32 max_request_bytes = 1;
 
       // When this field is true, ext-authz filter will buffer the message until max_request_bytes is reached.

@@ -1432,7 +1432,8 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationRequestBody struct {
 	// Sets the maximum size of a message body that the ext-authz filter will hold in memory.
 	// If max_request_bytes is reached, and allow_partial_message is false, Envoy will return a 413 (Payload Too Large).
 	// Otherwise the request will be sent to the provider with a partial message.
-	// Note that this setting will have precedence over the fail_open field.
+	// Note that this setting will have precedence over the fail_open field, the 413 will be returned even when the
+	// fail_open is set to true.
 	MaxRequestBytes uint32 `protobuf:"varint,1,opt,name=max_request_bytes,json=maxRequestBytes,proto3" json:"maxRequestBytes,omitempty"`
 	// When this field is true, ext-authz filter will buffer the message until max_request_bytes is reached.
 	// The authorization request will be dispatched and no 413 HTTP error will be returned by the filter.
