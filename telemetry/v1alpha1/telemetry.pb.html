@@ -17,19 +17,17 @@ to have a single workload selector-less Telemetry resource.</p>
 <p>For resources with a workload selector, it is only valid to have one resource selecting
 any given workload.</p>
 
-<p>Telemetry configuration will be evaluated in order, from most specific matches per telemetry
-type (tracing, access logging, and metrics) to least specific matches. The first
-matching configuration for the telemetry type will be applied. The order of evaluation will be:</p>
+<p>Telemetry configuration will use a &ldquo;shallow merge&rdquo; semantic for configuration override
+for each telemetry type (Tracing, Metrics, AccessLogging). For example, Tracing configuration
+will support overrides of the fields <code>providers</code>, <code>random_sampling_percentage</code>, <code>disable_span_reporting</code>,
+and <code>custom_tags</code> at each level in the configuration hierarchy, with missing values filled in
+from parent resources. However, when specified, fields like <code>custom_tags</code> will
+fully replace any values provided by parent configuration.</p>
 
-<ol>
-<li>Workload-specific configuration</li>
-<li>Namespace-specific configuration</li>
-<li>Root namespace configuration</li>
-</ol>
-
-<p>Telemetry configuration does not inherit. Rather, matched configurations must fully-specify
-the desired behavior. Workload-specific configuration fully replaces any configuration
-defined at the local and root namespace levels.</p>
+<p>The hierarchy of Telemetry configuration is as follows:
+1. Workload-specific configuration
+1. Namespace-specific configuration
+1. Root namespace configuration</p>
 
 <p>WARNING: Support for Telemetry policies is under active development and is <em>not</em>
 stable or supported by Istio at this time.</p>
@@ -168,7 +166,7 @@ No
 </tr>
 <tr id="Tracing-random_sampling_percentage">
 <td><code>randomSamplingPercentage</code></td>
-<td><code>double</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#doublevalue">DoubleValue</a></code></td>
 <td>
 <p>Controls the rate at which traffic will be selected for tracing if no
 prior sampling decision has been made. If a prior sampling decision has been
@@ -187,7 +185,7 @@ No
 </tr>
 <tr id="Tracing-disable_span_reporting">
 <td><code>disableSpanReporting</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
 <p>Controls span reporting. If set to true, no spans will be reported for
 impacted workloads. This does NOT impact context propagation or trace

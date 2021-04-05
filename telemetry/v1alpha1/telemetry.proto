@@ -15,6 +15,7 @@
 syntax = "proto3";
 
 import "type/v1beta1/selector.proto";
+import "google/protobuf/wrappers.proto";
 
 option go_package = "istio.io/api/telemetry/v1alpha1";
 
@@ -37,17 +38,17 @@ package istio.telemetry.v1alpha1;
 // For resources with a workload selector, it is only valid to have one resource selecting
 // any given workload.
 //
-// Telemetry configuration will be evaluated in order, from most specific matches per telemetry
-// type (tracing, access logging, and metrics) to least specific matches. The first
-// matching configuration for the telemetry type will be applied. The order of evaluation will be:
+// Telemetry configuration will use a "shallow merge" semantic for configuration override
+// for each telemetry type (Tracing, Metrics, AccessLogging). For example, Tracing configuration
+// will support overrides of the fields `providers`, `random_sampling_percentage`, `disable_span_reporting`,
+// and `custom_tags` at each level in the configuration hierarchy, with missing values filled in
+// from parent resources. However, when specified, fields like `custom_tags` will
+// fully replace any values provided by parent configuration.
 //
+// The hierarchy of Telemetry configuration is as follows:
 // 1. Workload-specific configuration
 // 1. Namespace-specific configuration
 // 1. Root namespace configuration
-//
-// Telemetry configuration does not inherit. Rather, matched configurations must fully-specify
-// the desired behavior. Workload-specific configuration fully replaces any configuration
-// defined at the local and root namespace levels.
 //
 // WARNING: Support for Telemetry policies is under active development and is *not* 
 // stable or supported by Istio at this time.
@@ -169,12 +170,12 @@ message Tracing {
   //
   // Defaults to 0%. Valid values [0.00-100.00]. Can be specified in 0.01%
   // increments.
-  double random_sampling_percentage = 3;
+  google.protobuf.DoubleValue random_sampling_percentage = 3;
 
   // Controls span reporting. If set to true, no spans will be reported for
   // impacted workloads. This does NOT impact context propagation or trace 
   // sampling behavior.
-  bool disable_span_reporting = 4;
+  google.protobuf.BoolValue disable_span_reporting = 4;
  
   // CustomTag defines a tag to be added to a trace span that is based on
   // an operator-supplied value. This value can either be a hard-coded value,
