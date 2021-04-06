@@ -753,6 +753,9 @@ message EnvoyFilter {
 
       // Insert filter before Istio stats filters.
       STATS = 3;
+
+      // Insert filter before the Router, ie at the end of the filter chain.
+      ROUTER = 4;
     };
 
     // Determines the filter insertion order.
