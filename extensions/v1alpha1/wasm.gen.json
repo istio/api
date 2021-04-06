@@ -1,0 +1,92 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "",
+    "version": "v1alpha1"
+  },
+  "components": {
+    "schemas": {
+      "istio.extensions.v1alpha1.WasmPlugin": {
+        "description": "WasmPlugins provides a mechanism to extend the functionality provided by the Istio proxy through WebAssembly filters.",
+        "type": "object",
+        "properties": {
+          "url": {
+            "description": "URL of a Wasm module or OCI container. If no scheme is present, defaults to `docker://`, referencing an OCI image. Valid schemes for Wasm modules are `file://` for referencing files present locally within the proxy container, and `http[s]://` for files hosted remotely.",
+            "type": "string"
+          },
+          "sha256": {
+            "description": "SHA256 checksum of Wasm module or OCI container. If the `url` field already references a SHA256 (using the `@sha256:` notation), the `url` field will take precedence.",
+            "type": "string"
+          },
+          "pullPolicy": {
+            "$ref": "#/components/schemas/istio.extensions.v1alpha1.WasmPlugin.PullPolicy"
+          },
+          "pullSecret": {
+            "description": "Credentials to use for OCI image pulling. Name of a K8s Secret in the same namespace as the `WasmPlugin` that contains a docker pull secret which is to be used to authenticate against the registry when pulling the image.",
+            "type": "string"
+          },
+          "verificationKey": {
+            "description": "URL of a public key that will be used to verify signatures of signed OCI images or Wasm modules.",
+            "type": "string"
+          },
+          "pluginConfig": {
+            "description": "The configuration that will be passed on to the plugin.",
+            "type": "object"
+          },
+          "pluginName": {
+            "description": "The plugin name to be used in the Envoy configuration (used to be called `rootID`). This is used to select a Wasm plugin from a module that contains multiple plugins.",
+            "type": "string"
+          },
+          "sandboxConfig": {
+            "$ref": "#/components/schemas/istio.extensions.v1alpha1.WasmPlugin.SandboxConfig"
+          },
+          "selector": {
+            "$ref": "#/components/schemas/istio.type.v1beta1.WorkloadSelector"
+          },
+          "phase": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass"
+          },
+          "priority": {
+            "description": "Determines ordering of `WasmPlugins` in the same `phase`. When multiple `WasmPlugins` are applied to the same workload in the same `phase`, they will be applied by priority, in descending order. If `priority` is not set, or two `WasmPlugins` exist with the same value, the ordering will be deterministically derived from name and namespace of the `WasmPlugins`.",
+            "type": "integer",
+            "nullable": true
+          }
+        }
+      },
+      "istio.extensions.v1alpha1.WasmPlugin.PullPolicy": {
+        "description": "buf:lint:ignore ENUM_VALUE_UPPER_SNAKE_CASE",
+        "type": "string",
+        "enum": [
+          "IfNotPresent",
+          "Always"
+        ]
+      },
+      "istio.extensions.v1alpha1.WasmPlugin.SandboxConfig": {
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass": {
+        "description": "FilterClass determines the filter insertion point in the filter chain relative to the filters implicitly inserted by the control plane. It is used in conjuction with the `ADD` operation. This is the preferred insertion mechanism for adding filters over the `INSERT_*` operations since those operations rely on potentially unstable filter names. Filter ordering is important if your filter depends on or affects the functioning of a another filter in the filter chain. Within a filter class, filters are inserted in the order of processing.",
+        "type": "string",
+        "enum": [
+          "UNSPECIFIED",
+          "AUTHN",
+          "AUTHZ",
+          "STATS"
+        ]
+      },
+      "istio.type.v1beta1.WorkloadSelector": {
+        "description": "WorkloadSelector specifies the criteria used to determine if a policy can be applied to a proxy. The matching criteria includes the metadata associated with a proxy, workload instance info such as labels attached to the pod/VM, or any other info that the proxy provides to Istio during the initial handshake. If multiple conditions are specified, all conditions need to match in order for the workload instance to be selected. Currently, only label based selection mechanism is supported.",
+        "type": "object",
+        "properties": {
+          "matchLabels": {
+            "description": "One or more labels that indicate a specific set of pods/VMs on which a policy should be applied. The scope of label search is restricted to the configuration namespace in which the resource is present.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -7,6 +7,7 @@ build:
     # symlinked into the top level directory.
     - common-protos
 lint:
+  allow_comment_ignores: true
   use:
     - BASIC
   except:
