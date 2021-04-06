@@ -1,0 +1,120 @@
+// Copyright Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/struct.proto";
+import "networking/v1alpha3/envoy_filter.proto";
+import "type/v1beta1/selector.proto";
+
+package istio.extensions.v1alpha1;
+
+option go_package="istio.io/api/extensions/v1alpha1";
+
+// WasmPlugins provides a mechanism to extend the functionality provided by
+// the Istio proxy through WebAssembly filters.
+//
+// <!-- crd generation tags
+// +cue-gen:WasmPlugin:groupName:extensions.istio.io
+// +cue-gen:WasmPlugin:version:v1alpha1
+// +cue-gen:WasmPlugin:storageVersion
+// +cue-gen:WasmPlugin:annotations:helm.sh/resource-policy=keep
+// +cue-gen:WasmPlugin:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
+// +cue-gen:WasmPlugin:subresource:status
+// +cue-gen:WasmPlugin:scope:Namespaced
+// +cue-gen:WasmPlugin:resource:categories=istio-io,extensions-istio-io
+// +cue-gen:WasmPlugin:preserveUnknownFields:config
+// -->
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=extensions.istio.io/v1alpha1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
+message WasmPlugin {
+  // buf:lint:ignore ENUM_VALUE_UPPER_SNAKE_CASE
+  enum PullPolicy {
+    // If an existing version of the image has been pulled before, that
+    // will be used. If no version of the image is present locally, we
+    // will pull the latest version.
+    IfNotPresent = 0;
+
+    // We will always pull the latest version of an image when applying
+    // this `WasmPlugin`.
+    Always = 1;
+  }
+
+  message SandboxConfig {
+    // TBD
+  }
+
+  // URL of a Wasm module or OCI container. If no scheme is present,
+  // defaults to `docker://`, referencing an OCI image. Valid schemes
+  // for Wasm modules are `file://` for referencing files present locally
+  // within the proxy container, and `http[s]://` for files hosted remotely.
+  string url = 1;
+
+  // SHA256 checksum of Wasm module or OCI container. If the `url` field
+  // already references a SHA256 (using the `@sha256:` notation), the
+  // `url` field will take precedence.
+  string sha256 = 2;
+
+  // The pull behaviour to be applied when fetching a OCI image. Only
+  // relevant when images are referenced by tag instead of SHA. Ignored
+  // if referencing a Wasm module directly using `file://` or `https://`
+  PullPolicy pull_policy = 3;
+
+  // Credentials to use for OCI image pulling.
+  // Name of a K8s Secret in the same namespace as the `WasmPlugin` that
+  // contains a docker pull secret which is to be used to authenticate
+  // against the registry when pulling the image.
+  string pull_secret = 4;
+
+  // URL of a public key that will be used to verify signatures of signed
+  // OCI images or Wasm modules.
+  string verification_key = 5;
+
+  // The configuration that will be passed on to the plugin.
+  google.protobuf.Struct plugin_config = 6;
+
+  // The plugin name to be used in the Envoy configuration (used to be called
+  // `rootID`). This is used to select a Wasm plugin from a module that
+  // contains multiple plugins.
+  string plugin_name = 7;
+
+  // Configuration for the Wasm sandbox the plugin will run in.
+  SandboxConfig sandbox_config = 8;
+
+  // Criteria used to select the specific set of pods/VMs on which
+  // this plugin configuration should be applied. If omitted, this
+  // configuration will be applied to all workload instances in the same
+  // namespace.  If omitted, the `WasmPlugin` will be applied to all
+  // workloads in the same namespace. If the `WasmPlugin` is
+  // present in the config root namespace, it will be applied to all
+  // applicable workloads in any namespace.
+  istio.type.v1beta1.WorkloadSelector selector = 9;
+
+  // Determines where in the filter chain this `WasmPlugin` is to be injected.
+  istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass phase = 10;
+
+  // Determines ordering of `WasmPlugins` in the same `phase`.
+  // When multiple `WasmPlugins` are applied to the same workload in the
+  // same `phase`, they will be applied by priority, in descending order.
+  // If `priority` is not set, or two `WasmPlugins` exist with the same
+  // value, the ordering will be deterministically derived from name and
+  // namespace of the `WasmPlugins`.
+  google.protobuf.Int64Value priority = 11;
+}
