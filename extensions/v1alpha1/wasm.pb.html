@@ -1,0 +1,204 @@
+---
+title: istio.extensions.v1alpha1
+layout: protoc-gen-docs
+generator: protoc-gen-docs
+number_of_entries: 3
+---
+<h2 id="WasmPlugin">WasmPlugin</h2>
+<section>
+<p>WasmPlugins provides a mechanism to extend the functionality provided by
+the Istio proxy through WebAssembly filters.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="WasmPlugin-url">
+<td><code>url</code></td>
+<td><code>string</code></td>
+<td>
+<p>URL of a Wasm module or OCI container. If no scheme is present,
+defaults to <code>docker://</code>, referencing an OCI image. Valid schemes
+for Wasm modules are <code>file://</code> for referencing files present locally
+within the proxy container, and <code>http[s]://</code> for files hosted remotely.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WasmPlugin-sha256">
+<td><code>sha256</code></td>
+<td><code>string</code></td>
+<td>
+<p>SHA256 checksum of Wasm module or OCI container. If the <code>url</code> field
+already references a SHA256 (using the <code>@sha256:</code> notation), the
+<code>url</code> field will take precedence.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WasmPlugin-pull_policy">
+<td><code>pullPolicy</code></td>
+<td><code><a href="#WasmPlugin-PullPolicy">PullPolicy</a></code></td>
+<td>
+<p>The pull behaviour to be applied when fetching a OCI image. Only
+relevant when images are referenced by tag instead of SHA. Ignored
+if referencing a Wasm module directly using <code>file://</code> or <code>https://</code></p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WasmPlugin-pull_secret">
+<td><code>pullSecret</code></td>
+<td><code>string</code></td>
+<td>
+<p>Credentials to use for OCI image pulling.
+Name of a K8s Secret in the same namespace as the <code>WasmPlugin</code> that
+contains a docker pull secret which is to be used to authenticate
+against the registry when pulling the image.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WasmPlugin-verification_key">
+<td><code>verificationKey</code></td>
+<td><code>string</code></td>
+<td>
+<p>URL of a public key that will be used to verify signatures of signed
+OCI images or Wasm modules.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WasmPlugin-plugin_config">
+<td><code>pluginConfig</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">Struct</a></code></td>
+<td>
+<p>The configuration that will be passed on to the plugin.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WasmPlugin-plugin_name">
+<td><code>pluginName</code></td>
+<td><code>string</code></td>
+<td>
+<p>The plugin name to be used in the Envoy configuration (used to be called
+<code>rootID</code>). This is used to select a Wasm plugin from a module that
+contains multiple plugins.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WasmPlugin-sandbox_config">
+<td><code>sandboxConfig</code></td>
+<td><code><a href="#WasmPlugin-SandboxConfig">SandboxConfig</a></code></td>
+<td>
+<p>Configuration for the Wasm sandbox the plugin will run in.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WasmPlugin-selector">
+<td><code>selector</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#WorkloadSelector">WorkloadSelector</a></code></td>
+<td>
+<p>Criteria used to select the specific set of pods/VMs on which
+this plugin configuration should be applied. If omitted, this
+configuration will be applied to all workload instances in the same
+namespace.  If omitted, the <code>WasmPlugin</code> will be applied to all
+workloads in the same namespace. If the <code>WasmPlugin</code> is
+present in the config root namespace, it will be applied to all
+applicable workloads in any namespace.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WasmPlugin-phase">
+<td><code>phase</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/envoy-filter.html#EnvoyFilter-Patch-FilterClass">FilterClass</a></code></td>
+<td>
+<p>Determines where in the filter chain this <code>WasmPlugin</code> is to be injected.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WasmPlugin-priority">
+<td><code>priority</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#int64value">Int64Value</a></code></td>
+<td>
+<p>Determines ordering of <code>WasmPlugins</code> in the same <code>phase</code>.
+When multiple <code>WasmPlugins</code> are applied to the same workload in the
+same <code>phase</code>, they will be applied by priority, in descending order.
+If <code>priority</code> is not set, or two <code>WasmPlugins</code> exist with the same
+value, the ordering will be deterministically derived from name and
+namespace of the <code>WasmPlugins</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="WasmPlugin-SandboxConfig">WasmPlugin.SandboxConfig</h2>
+<section>
+</section>
+<h2 id="WasmPlugin-PullPolicy">WasmPlugin.PullPolicy</h2>
+<section>
+<p>buf:lint:ignore ENUM<em>VALUE</em>UPPER<em>SNAKE</em>CASE</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="WasmPlugin-PullPolicy-IfNotPresent">
+<td><code>IfNotPresent</code></td>
+<td>
+<p>If an existing version of the image has been pulled before, that
+will be used. If no version of the image is present locally, we
+will pull the latest version.</p>
+
+</td>
+</tr>
+<tr id="WasmPlugin-PullPolicy-Always">
+<td><code>Always</code></td>
+<td>
+<p>We will always pull the latest version of an image when applying
+this <code>WasmPlugin</code>.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
