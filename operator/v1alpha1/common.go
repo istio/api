@@ -61,6 +61,14 @@ type BoolValueForPB struct {
 	protobuf.BoolValue
 }
 
+// GetValue returns true if self is not nil and Value is true, or false otherwise.
+func (boolvaluepb *BoolValueForPB) GetValue() bool {
+	if boolvaluepb == nil {
+		return false
+	}
+	return boolvaluepb.Value
+}
+
 // MarshalJSON implements the json.JSONMarshaler interface.
 func (boolvaluepb *BoolValueForPB) MarshalJSON() ([]byte, error) {
 	return json.Marshal(boolvaluepb.GetValue())
