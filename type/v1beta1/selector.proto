@@ -15,6 +15,7 @@ syntax = "proto3";
 
 import "google/api/field_behavior.proto";
 
+// $schema: istio.type.v1beta1.WorkloadSelector
 // $title: Workload Selector
 // $description: Definition of a workload selector.
 // $location: https://istio.io/docs/reference/config/type/workload-selector.html

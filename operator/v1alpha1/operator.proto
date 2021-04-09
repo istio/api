@@ -14,6 +14,7 @@
 
 syntax = "proto3";
 
+// $schema: istio.operator.v1alpha1.IstioOperatorSpec
 // $title: IstioOperator Options
 // $description: Configuration affecting Istio control plane installation version and shape.
 // $location: https://istio.io/docs/reference/config/istio.operator.v1alpha1.html
@@ -33,13 +34,6 @@ import "gogoproto/gogo.proto";
 option (gogoproto.marshaler_all) = false;
 option (gogoproto.unmarshaler_all) = false;
 option (gogoproto.sizer_all) = false;
-
-// <!-- go code generation tags
-// +kubetype-gen
-// +kubetype-gen:groupVersion=install.istio.io/v1alpha1
-// +genclient
-// +k8s:deepcopy-gen=true
-// -->
 
 // IstioOperatorSpec defines the desired installed state of Istio components.
 // The spec is a used to define a customization of the default profile values that are supplied with each Istio release.
@@ -63,6 +57,12 @@ option (gogoproto.sizer_all) = false;
 //       enabled: true
 // ```
 //
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=install.istio.io/v1alpha1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message IstioOperatorSpec {
     // Path or name for the profile e.g.
     //
