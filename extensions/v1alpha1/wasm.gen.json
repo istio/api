@@ -23,12 +23,12 @@
             "format": "string"
           },
           "imagePullPolicy": {
-            "description": "Can be one of `IfNotPresent`, `Always`. Only relevant when images are referenced by tag. If set to `Always`, istiod will always pull the latest version of an image when applying this `WasmExtension.` If set to `IfNotPresent`, istiod will use an existing version of an image if it has been pulled before. If not, it will pull the latest version.",
+            "description": "The pull behaviour to be applied when fetching the `image`. Can be one of `IfNotPresent`, `Always`. Only relevant when images are referenced by tag. If set to `Always`, istiod will always pull the latest version of an image when applying this `WasmExtension.` If set to `IfNotPresent`, istiod will use an existing version of an image if it has been pulled before. If not, it will pull the latest version.",
             "type": "string",
             "format": "string"
           },
           "imagePullSecrets": {
-            "description": "List of K8s Secrets that contain docker pull secrets which are to be used to authenticate against the registry when pulling the image. If the name contains a forward-slash, it will be interpreted as \u003cnamespace\u003e/\u003cname\u003e.",
+            "description": "Credentials to use for image pulling. List of K8s Secrets that contain docker pull secrets which are to be used to authenticate against the registry when pulling the image. If the name contains a forward-slash, it will be interpreted as \u003cnamespace\u003e/\u003cname\u003e. Names that do not contain forward-slashes are interpreted as the names of secrets in the same namespace as the `WasmExtension`.",
             "type": "array",
             "items": {
               "type": "string",
@@ -39,14 +39,14 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass"
           },
           "priority": {
-            "description": "When multiple `WasmExtensions` are applied to the same workload in the same `phase`, they will be applied by priority, in descending order.",
+            "description": "Determines ordering of `WasmExtensions` in the same `phase`. When multiple `WasmExtensions` are applied to the same workload in the same `phase`, they will be applied by priority, in descending order. If `priority` is not set, or two `WasmExtensions` exist with the same value, the ordering will be deterministically derived from name and namespace of the `WasmExtensions`.",
             "type": "integer",
             "nullable": true
           }
         }
       },
       "istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass": {
-        "description": "Determines in the filter chain this `WasmExtension` is to be injected.",
+        "description": "Determines where in the filter chain this `WasmExtension` is to be injected.",
         "type": "string",
         "enum": [
           "UNSPECIFIED",

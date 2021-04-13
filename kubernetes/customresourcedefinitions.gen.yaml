@@ -37,17 +37,18 @@ spec:
                 format: string
                 type: string
               imagePullPolicy:
-                description: Can be one of `IfNotPresent`, `Always`.
+                description: The pull behaviour to be applied when fetching the `image`.
                 format: string
                 type: string
               imagePullSecrets:
+                description: Credentials to use for image pulling.
                 items:
                   format: string
                   type: string
                 type: array
               phase:
-                description: Determines in the filter chain this `WasmExtension` is
-                  to be injected.
+                description: Determines where in the filter chain this `WasmExtension`
+                  is to be injected.
                 enum:
                 - UNSPECIFIED
                 - AUTHN
@@ -56,6 +57,7 @@ spec:
                 - ROUTER
                 type: string
               priority:
+                description: Determines ordering of `WasmExtensions` in the same `phase`.
                 nullable: true
                 type: integer
               workloadSelector:

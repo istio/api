@@ -51,6 +51,7 @@ message WasmExtension {
   // URL of a compatible OCI image.
   string image = 2;
 
+  // The pull behaviour to be applied when fetching the `image`.
   // Can be one of `IfNotPresent`, `Always`. Only relevant when images
   // are referenced by tag.
   // If set to `Always`, istiod will always pull the latest version of
@@ -60,10 +61,13 @@ message WasmExtension {
   // latest version.
   string image_pull_policy = 3;
 
+  // Credentials to use for image pulling.
   // List of K8s Secrets that contain docker pull secrets which are to
   // be used to authenticate against the registry when pulling the image.
   // If the name contains a forward-slash, it will be interpreted as
-  // <namespace>/<name>.
+  // <namespace>/<name>. Names that do not contain forward-slashes are
+  // interpreted as the names of secrets in the same namespace as the
+  // `WasmExtension`.
   repeated string image_pull_secrets = 4;
 
   // Criteria used to select the specific set of pods/VMs on which
@@ -75,10 +79,14 @@ message WasmExtension {
   // applicable workloads in any namespace.
   istio.type.v1beta1.WorkloadSelector workload_selector = 5;
 
-  // Determines in the filter chain this `WasmExtension` is to be injected.
+  // Determines where in the filter chain this `WasmExtension` is to be injected.
   istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass phase = 6;
 
+  // Determines ordering of `WasmExtensions` in the same `phase`.
   // When multiple `WasmExtensions` are applied to the same workload in the
   // same `phase`, they will be applied by priority, in descending order.
+  // If `priority` is not set, or two `WasmExtensions` exist with the same
+  // value, the ordering will be deterministically derived from name and
+  // namespace of the `WasmExtensions`.
   google.protobuf.Int64Value priority = 7;
 }

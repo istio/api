@@ -51,6 +51,7 @@ type WasmExtension struct {
 	Config *types.Struct `protobuf:"bytes,1,opt,name=config,proto3" json:"config,omitempty"`
 	// URL of a compatible OCI image.
 	Image string `protobuf:"bytes,2,opt,name=image,proto3" json:"image,omitempty"`
+	// The pull behaviour to be applied when fetching the `image`.
 	// Can be one of `IfNotPresent`, `Always`. Only relevant when images
 	// are referenced by tag.
 	// If set to `Always`, istiod will always pull the latest version of
@@ -59,10 +60,13 @@ type WasmExtension struct {
 	// an image if it has been pulled before. If not, it will pull the
 	// latest version.
 	ImagePullPolicy string `protobuf:"bytes,3,opt,name=image_pull_policy,json=imagePullPolicy,proto3" json:"image_pull_policy,omitempty"`
+	// Credentials to use for image pulling.
 	// List of K8s Secrets that contain docker pull secrets which are to
 	// be used to authenticate against the registry when pulling the image.
 	// If the name contains a forward-slash, it will be interpreted as
-	// <namespace>/<name>.
+	// <namespace>/<name>. Names that do not contain forward-slashes are
+	// interpreted as the names of secrets in the same namespace as the
+	// `WasmExtension`.
 	ImagePullSecrets []string `protobuf:"bytes,4,rep,name=image_pull_secrets,json=imagePullSecrets,proto3" json:"image_pull_secrets,omitempty"`
 	// Criteria used to select the specific set of pods/VMs on which
 	// this Extension configuration should be applied. If omitted, this
@@ -72,10 +76,14 @@ type WasmExtension struct {
 	// present in the config root namespace, it will be applied to all
 	// applicable workloads in any namespace.
 	WorkloadSelector *v1beta1.WorkloadSelector `protobuf:"bytes,5,opt,name=workload_selector,json=workloadSelector,proto3" json:"workload_selector,omitempty"`
-	// Determines in the filter chain this `WasmExtension` is to be injected.
+	// Determines where in the filter chain this `WasmExtension` is to be injected.
 	Phase v1alpha3.EnvoyFilter_Patch_FilterClass `protobuf:"varint,6,opt,name=phase,proto3,enum=istio.networking.v1alpha3.EnvoyFilter_Patch_FilterClass" json:"phase,omitempty"`
+	// Determines ordering of `WasmExtensions` in the same `phase`.
 	// When multiple `WasmExtensions` are applied to the same workload in the
 	// same `phase`, they will be applied by priority, in descending order.
+	// If `priority` is not set, or two `WasmExtensions` exist with the same
+	// value, the ordering will be deterministically derived from name and
+	// namespace of the `WasmExtensions`.
 	Priority             *types.Int64Value `protobuf:"bytes,7,opt,name=priority,proto3" json:"priority,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`

@@ -45,7 +45,8 @@ No
 <td><code>imagePullPolicy</code></td>
 <td><code>string</code></td>
 <td>
-<p>Can be one of <code>IfNotPresent</code>, <code>Always</code>. Only relevant when images
+<p>The pull behaviour to be applied when fetching the <code>image</code>.
+Can be one of <code>IfNotPresent</code>, <code>Always</code>. Only relevant when images
 are referenced by tag.
 If set to <code>Always</code>, istiod will always pull the latest version of
 an image when applying this <code>WasmExtension.</code>
@@ -62,10 +63,13 @@ No
 <td><code>imagePullSecrets</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>List of K8s Secrets that contain docker pull secrets which are to
+<p>Credentials to use for image pulling.
+List of K8s Secrets that contain docker pull secrets which are to
 be used to authenticate against the registry when pulling the image.
 If the name contains a forward-slash, it will be interpreted as
-<namespace>/<name>.</p>
+<namespace>/<name>. Names that do not contain forward-slashes are
+interpreted as the names of secrets in the same namespace as the
+<code>WasmExtension</code>.</p>
 
 </td>
 <td>
@@ -93,7 +97,7 @@ No
 <td><code>phase</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/networking/envoy-filter.html#EnvoyFilter-Patch-FilterClass">FilterClass</a></code></td>
 <td>
-<p>Determines in the filter chain this <code>WasmExtension</code> is to be injected.</p>
+<p>Determines where in the filter chain this <code>WasmExtension</code> is to be injected.</p>
 
 </td>
 <td>
@@ -104,8 +108,12 @@ No
 <td><code>priority</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#int64value">Int64Value</a></code></td>
 <td>
-<p>When multiple <code>WasmExtensions</code> are applied to the same workload in the
-same <code>phase</code>, they will be applied by priority, in descending order.</p>
+<p>Determines ordering of <code>WasmExtensions</code> in the same <code>phase</code>.
+When multiple <code>WasmExtensions</code> are applied to the same workload in the
+same <code>phase</code>, they will be applied by priority, in descending order.
+If <code>priority</code> is not set, or two <code>WasmExtensions</code> exist with the same
+value, the ordering will be deterministically derived from name and
+namespace of the <code>WasmExtensions</code>.</p>
 
 </td>
 <td>
