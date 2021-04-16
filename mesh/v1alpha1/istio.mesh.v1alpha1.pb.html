@@ -1658,26 +1658,16 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-ExtensionProvider-SkyWalkingTracingProvider-service" class="oneof oneof-start">
+<tr id="MeshConfig-ExtensionProvider-SkyWalkingTracingProvider-service">
 <td><code>service</code></td>
-<td><code>string (oneof)</code></td>
+<td><code>string</code></td>
 <td>
-<p>The format is &ldquo;[<Namespace>/]<Hostname>&rdquo;. The specification of <Namespace> is required only when it is insufficient
+<p>REQUIRED. Specifies the service for the SkyWalking receiver.
+The format is &ldquo;[<Namespace>/]<Hostname>&rdquo;. The specification of <Namespace> is required only when it is insufficient
 to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
 service defined by the Kubernetes service or ServiceEntry.</p>
 
 <p>Example: &ldquo;skywalking.default.svc.cluster.local&rdquo; or &ldquo;bar/skywalking.example.com&rdquo;.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-ExtensionProvider-SkyWalkingTracingProvider-address" class="oneof">
-<td><code>address</code></td>
-<td><code>string (oneof)</code></td>
-<td>
-<p>Address of SkyWalking receiver.</p>
 
 </td>
 <td>

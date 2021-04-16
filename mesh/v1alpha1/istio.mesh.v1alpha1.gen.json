@@ -991,68 +991,17 @@
             "description": "REQUIRED. Specifies the port of the service.",
             "type": "integer"
           },
+          "service": {
+            "description": "REQUIRED. Specifies the service for the SkyWalking receiver. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
+            "type": "string",
+            "format": "string"
+          },
           "accessToken": {
             "description": "Optional. The SkyWalking OAP access token.",
             "type": "string",
             "format": "string"
           }
-        },
-        "oneOf": [
-          {
-            "not": {
-              "anyOf": [
-                {
-                  "required": [
-                    "service"
-                  ],
-                  "properties": {
-                    "service": {
-                      "description": "The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
-                      "type": "string",
-                      "format": "string"
-                    }
-                  }
-                },
-                {
-                  "required": [
-                    "address"
-                  ],
-                  "properties": {
-                    "address": {
-                      "description": "Address of SkyWalking receiver.",
-                      "type": "string",
-                      "format": "string"
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "required": [
-              "service"
-            ],
-            "properties": {
-              "service": {
-                "description": "The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
-                "type": "string",
-                "format": "string"
-              }
-            }
-          },
-          {
-            "required": [
-              "address"
-            ],
-            "properties": {
-              "address": {
-                "description": "Address of SkyWalking receiver.",
-                "type": "string",
-                "format": "string"
-              }
-            }
-          }
-        ]
+        }
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationRequestBody": {
         "type": "object",
