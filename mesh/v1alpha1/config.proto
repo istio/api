@@ -483,6 +483,8 @@ message MeshConfig {
       StackdriverProvider stackdriver = 7;
       // Configures an OpenCensusAgent tracing provider.
       OpenCensusAgentTracingProvider opencensus = 8;
+      // Configures a Apache SkyWalking provider.
+      SkyWalkingTracingProvider skywalking = 9;
     }
 
     message EnvoyExternalAuthorizationRequestBody {
@@ -681,6 +683,23 @@ message MeshConfig {
       // Optional. Controls the overall path length allowed in a reported span.
       // NOTE: currently only controls max length of the path tag.
       uint32 max_tag_length = 3;
+    }
+
+    // Defines configuration for a SkyWalking tracer.
+    message SkyWalkingTracingProvider {
+      // REQUIRED. Specifies the service for the SkyWalking receiver.
+      // The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
+      // to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+      // service defined by the Kubernetes service or ServiceEntry.
+      //
+      // Example: "skywalking.default.svc.cluster.local" or "bar/skywalking.example.com".
+      string service = 1;
+
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 2;
+
+      // Optional. The SkyWalking OAP access token.
+      string access_token = 3;
     }
 
     // Defines configuration for Stackdriver.
