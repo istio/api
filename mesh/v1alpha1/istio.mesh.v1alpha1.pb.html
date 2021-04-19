@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 29
+number_of_entries: 31
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -579,6 +579,18 @@ if host is <code>*.x.y.com</code>, client-side proxy will verify the presented s
 No
 </td>
 </tr>
+<tr id="MeshConfig-path_normalization">
+<td><code>pathNormalization</code></td>
+<td><code><a href="#MeshConfig-ProxyPathNormalization">ProxyPathNormalization</a></code></td>
+<td>
+<p>ProxyPathNormalization configures how URL paths in incoming and outgoing HTTP requests are normalized by the proxy.
+The normalized paths, if configured, will be used in all aspects of the lifetime of the request of the proxy, which includes routing decisions in outbound direction (client proxy), authorization policy match and enforcement in inbound direction (server proxy), and the URL path proxied to the upstream service.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -822,6 +834,30 @@ No
 <p>Use istiod_side to specify CA Server integrate to Istiod side or Agent side
 Default: true</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ProxyPathNormalization">MeshConfig.ProxyPathNormalization</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ProxyPathNormalization-normalization">
+<td><code>normalization</code></td>
+<td><code><a href="#MeshConfig-ProxyPathNormalization-NormalizationType">NormalizationType</a></code></td>
+<td>
 </td>
 <td>
 No
@@ -1893,6 +1929,59 @@ service registry as well as those defined through ServiceEntries</p>
 <td>
 <p>outbound traffic to unknown destinations will be allowed, in case
 there are no services or ServiceEntries for the destination port</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ProxyPathNormalization-NormalizationType">MeshConfig.ProxyPathNormalization.NormalizationType</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ProxyPathNormalization-NormalizationType-DEFAULT">
+<td><code>DEFAULT</code></td>
+<td>
+<p>Apply default normalizations. Currently, this is BASE.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ProxyPathNormalization-NormalizationType-NONE">
+<td><code>NONE</code></td>
+<td>
+<p>No normalization, paths are used as is.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ProxyPathNormalization-NormalizationType-BASE">
+<td><code>BASE</code></td>
+<td>
+<p>Normalize according to <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>.
+For Envoy proxies, this is the <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/network/http_connection_manager/v3/http_connection_manager.proto.html"><code>normalize_path</code></a> option.
+For example, <code>/a/../b</code> normalizes to <code>/b</code>.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ProxyPathNormalization-NormalizationType-MERGE_SLASHES">
+<td><code>MERGE_SLASHES</code></td>
+<td>
+<p>In addition to the <code>BASE</code> normalization, consecutive slashes are also merged.
+For example, <code>/a//b</code> normalizes to <code>a/b</code>.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ProxyPathNormalization-NormalizationType-DECODE_AND_MERGE_SLASHES">
+<td><code>DECODE_AND_MERGE_SLASHES</code></td>
+<td>
+<p>In addition to normalization in <code>MERGE_SLASHES</code>, slash characters are UTF-8 decoded (case insensitive) prior to merging.
+This means <code>%2F</code>, <code>%2f</code>, <code>%5C</code>, and <code>%5c</code> sequences in the request path will be rewritten to <code>/</code> or <code>\</code>.
+For example, <code>/a%2f/b</code> normalizes to <code>a/b</code>.</p>
 
 </td>
 </tr>
