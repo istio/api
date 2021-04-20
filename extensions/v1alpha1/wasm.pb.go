@@ -54,11 +54,11 @@ type WasmExtension struct {
 	// The pull behaviour to be applied when fetching the `image`.
 	// Can be one of `IfNotPresent`, `Always`. Only relevant when images
 	// are referenced by tag.
-	// If set to `Always`, istiod will always pull the latest version of
+	// If set to `Always`, we will always pull the latest version of
 	// an image when applying this `WasmExtension.`
-	// If set to `IfNotPresent`, istiod will use an existing version of
-	// an image if it has been pulled before. If not, it will pull the
-	// latest version.
+	// If set to `IfNotPresent`, and an existing version of the image
+	// has been pulled before, that will be used. If no version of the image
+	// is present locally, we will pull the latest version.
 	ImagePullPolicy string `protobuf:"bytes,3,opt,name=image_pull_policy,json=imagePullPolicy,proto3" json:"image_pull_policy,omitempty"`
 	// Credentials to use for image pulling.
 	// List of K8s Secrets that contain docker pull secrets which are to
