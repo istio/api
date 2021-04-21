@@ -126,6 +126,20 @@ var (
 		},
 	}
 
+	InjectTemplates = Instance {
+		Name:          "inject.istio.io/templates",
+		Description:   "The name of the inject template(s) to use, as a comma "+
+                        "separate list. See "+
+                        "https://istio.io/latest/docs/setup/additional-setup/sidecar-injection/#custom-templates-experimental "+
+                        "for more information.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	OperatorInstallChartOwner = Instance {
 		Name:          "install.operator.istio.io/chart-owner",
 		Description:   "Represents the name of the chart used to create this "+
@@ -218,6 +232,18 @@ var (
                         "https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#ProxyConfig.",
 		FeatureStatus: Beta,
 		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
+	ProxyOverrides = Instance {
+		Name:          "proxy.istio.io/overrides",
+		Description:   "Used internally to indicate user-specified overrides in "+
+                        "the proxy container of the pod during injection.",
+		FeatureStatus: Alpha,
+		Hidden:        true,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Pod,
@@ -636,6 +662,7 @@ func AllResourceAnnotations() []*Instance {
 		&AlphaIdentity,
 		&AlphaKubernetesServiceAccounts,
 		&GalleyAnalyzeSuppress,
+		&InjectTemplates,
 		&OperatorInstallChartOwner,
 		&OperatorInstallOwnerGeneration,
 		&OperatorInstallVersion,
@@ -644,6 +671,7 @@ func AllResourceAnnotations() []*Instance {
 		&NetworkingExportTo,
 		&PrometheusMergeMetrics,
 		&ProxyConfig,
+		&ProxyOverrides,
 		&SidecarStatusReadinessApplicationPorts,
 		&SidecarStatusReadinessFailureThreshold,
 		&SidecarStatusReadinessInitialDelaySeconds,
