@@ -1555,7 +1555,7 @@ type HTTPMatchRequest struct {
 	// in these cases it is not required to explicitly select the port.
 	Port uint32 `protobuf:"varint,6,opt,name=port,proto3" json:"port,omitempty"`
 	// One or more labels that constrain the applicability of a rule to
-	// workloads with the given labels. If the VirtualService has a list of
+	// workloads with the given labels for source services. If the VirtualService has a list of
 	// gateways specified in the top-level `gateways` field, it must include the reserved gateway
 	// `mesh` for this field to be applicable.
 	SourceLabels map[string]string `protobuf:"bytes,7,rep,name=source_labels,json=sourceLabels,proto3" json:"source_labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
