@@ -207,6 +207,9 @@
             "items": {
               "$ref": "#/components/schemas/k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
             }
+          },
+          "http11ProtocolOptions": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.Http11ProtocolOptions"
           }
         }
       },
@@ -734,6 +737,15 @@
             "description": "Name of the default provider for tracing. This must match a provider defined in `extension_providers` that is one of the support tracing providers.",
             "type": "string",
             "format": "string"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.Http11ProtocolOptions": {
+        "type": "object",
+        "properties": {
+          "preserveHeaderKeyCasing": {
+            "description": "Currently Envoy normalizes all header keys to lower-case. This could potentially break some applications. In such cases, header case needs to be preserved. Setting this to true would do that.",
+            "type": "boolean"
           }
         }
       },

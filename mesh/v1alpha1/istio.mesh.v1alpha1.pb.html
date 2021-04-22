@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 43
+number_of_entries: 44
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -1068,6 +1068,33 @@ in other Istio configuration resources if the provider is not specified.</p>
 <p>Name of the default provider for tracing. This must match a provider
 defined in <code>extension_providers</code> that is one of the support tracing
 providers.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-Http11ProtocolOptions">MeshConfig.Http11ProtocolOptions</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-Http11ProtocolOptions-preserve_header_key_casing">
+<td><code>preserveHeaderKeyCasing</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Currently Envoy normalizes all header keys to lower-case. This could potentially break some applications.
+In such cases, header case needs to be preserved. Setting this to true would do that.</p>
 
 </td>
 <td>

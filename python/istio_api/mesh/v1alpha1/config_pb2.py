@@ -26,7 +26,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.mesh.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\032istio.io/api/mesh/v1alpha1'),
-  serialized_pb=_b('\n\x1amesh/v1alpha1/config.proto\x12\x13istio.mesh.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x19mesh/v1alpha1/proxy.proto\x1a*networking/v1alpha3/destination_rule.proto\x1a\x34k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto\"\x97?\n\nMeshConfig\x12*\n\x11proxy_listen_port\x18\x04 \x01(\x05R\x0fproxyListenPort\x12&\n\x0fproxy_http_port\x18\x05 \x01(\x05R\rproxyHttpPort\x12\x42\n\x0f\x63onnect_timeout\x18\x06 \x01(\x0b\x32\x19.google.protobuf.DurationR\x0e\x63onnectTimeout\x12W\n\x1aprotocol_detection_timeout\x18* \x01(\x0b\x32\x19.google.protobuf.DurationR\x18protocolDetectionTimeout\x12o\n\rtcp_keepalive\x18\x1c \x01(\x0b\x32J.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepaliveR\x0ctcpKeepalive\x12#\n\ringress_class\x18\x07 \x01(\tR\x0cingressClass\x12\'\n\x0fingress_service\x18\x08 \x01(\tR\x0eingressService\x12m\n\x17ingress_controller_mode\x18\t \x01(\x0e\x32\x35.istio.mesh.v1alpha1.MeshConfig.IngressControllerModeR\x15ingressControllerMode\x12)\n\x10ingress_selector\x18\x34 \x01(\tR\x0fingressSelector\x12%\n\x0e\x65nable_tracing\x18\x0c \x01(\x08R\renableTracing\x12&\n\x0f\x61\x63\x63\x65ss_log_file\x18\r \x01(\tR\raccessLogFile\x12*\n\x11\x61\x63\x63\x65ss_log_format\x18\x18 \x01(\tR\x0f\x61\x63\x63\x65ssLogFormat\x12\x61\n\x13\x61\x63\x63\x65ss_log_encoding\x18\x1b \x01(\x0e\x32\x31.istio.mesh.v1alpha1.MeshConfig.AccessLogEncodingR\x11\x61\x63\x63\x65ssLogEncoding\x12\x44\n\x1f\x65nable_envoy_access_log_service\x18( \x01(\x08R\x1b\x65nableEnvoyAccessLogService\x12;\n\x1a\x64isable_envoy_listener_log\x18\x38 \x01(\x08R\x17\x64isableEnvoyListenerLog\x12G\n\x0e\x64\x65\x66\x61ult_config\x18\x0e \x01(\x0b\x32 .istio.mesh.v1alpha1.ProxyConfigR\rdefaultConfig\x12m\n\x17outbound_traffic_policy\x18\x11 \x01(\x0b\x32\x35.istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicyR\x15outboundTrafficPolicy\x12H\n\x0e\x63onfig_sources\x18\x16 \x03(\x0b\x32!.istio.mesh.v1alpha1.ConfigSourceR\rconfigSources\x12\x44\n\x10\x65nable_auto_mtls\x18+ \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x0e\x65nableAutoMtls\x12!\n\x0ctrust_domain\x18\x1a \x01(\tR\x0btrustDomain\x12\x30\n\x14trust_domain_aliases\x18. \x03(\tR\x12trustDomainAliases\x12X\n\x0f\x63\x61_certificates\x18: \x03(\x0b\x32/.istio.mesh.v1alpha1.MeshConfig.CertificateDataR\x0e\x63\x61\x43\x65rtificates\x12\x39\n\x19\x64\x65\x66\x61ult_service_export_to\x18\x1f \x03(\tR\x16\x64\x65\x66\x61ultServiceExportTo\x12H\n!default_virtual_service_export_to\x18  \x03(\tR\x1d\x64\x65\x66\x61ultVirtualServiceExportTo\x12J\n\"default_destination_rule_export_to\x18! \x03(\tR\x1e\x64\x65\x66\x61ultDestinationRuleExportTo\x12%\n\x0eroot_namespace\x18\" \x01(\tR\rrootNamespace\x12\x66\n\x13locality_lb_setting\x18# \x01(\x0b\x32\x36.istio.networking.v1alpha3.LocalityLoadBalancerSettingR\x11localityLbSetting\x12\x43\n\x10\x64ns_refresh_rate\x18$ \x01(\x0b\x32\x19.google.protobuf.DurationR\x0e\x64nsRefreshRate\x12[\n\x11h2_upgrade_policy\x18) \x01(\x0e\x32/.istio.mesh.v1alpha1.MeshConfig.H2UpgradePolicyR\x0fh2UpgradePolicy\x12\x39\n\x19inbound_cluster_stat_name\x18, \x01(\tR\x16inboundClusterStatName\x12;\n\x1aoutbound_cluster_stat_name\x18- \x01(\tR\x17outboundClusterStatName\x12\x44\n\x0c\x63\x65rtificates\x18/ \x03(\x0b\x32 .istio.mesh.v1alpha1.CertificateR\x0c\x63\x65rtificates\x12Q\n\rthrift_config\x18\x31 \x01(\x0b\x32,.istio.mesh.v1alpha1.MeshConfig.ThriftConfigR\x0cthriftConfig\x12Z\n\x10service_settings\x18\x32 \x03(\x0b\x32/.istio.mesh.v1alpha1.MeshConfig.ServiceSettingsR\x0fserviceSettings\x12R\n\x17\x65nable_prometheus_merge\x18\x33 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x15\x65nablePrometheusMerge\x12[\n\x1cverify_certificate_at_client\x18\x36 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x19verifyCertificateAtClient\x12\x32\n\x02\x63\x61\x18\x37 \x01(\x0b\x32\".istio.mesh.v1alpha1.MeshConfig.CAR\x02\x63\x61\x12\x62\n\x13\x65xtension_providers\x18\x39 \x03(\x0b\x32\x31.istio.mesh.v1alpha1.MeshConfig.ExtensionProviderR\x12\x65xtensionProviders\x12]\n\x11\x64\x65\x66\x61ult_providers\x18< \x01(\x0b\x32\x30.istio.mesh.v1alpha1.MeshConfig.DefaultProvidersR\x10\x64\x65\x66\x61ultProviders\x12\x64\n\x13\x64iscovery_selectors\x18; \x03(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\x12\x64iscoverySelectors\x1a\xad\x01\n\x15OutboundTrafficPolicy\x12N\n\x04mode\x18\x01 \x01(\x0e\x32:.istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.ModeR\x04mode\"D\n\x04Mode\x12\x11\n\rREGISTRY_ONLY\x10\x00\x12\r\n\tALLOW_ANY\x10\x01\"\x04\x08\x02\x10\x02*\x14VIRTUAL_SERVICE_ONLY\x1ag\n\x0f\x43\x65rtificateData\x12\x12\n\x03pem\x18\x01 \x01(\tH\x00R\x03pem\x12,\n\x11spiffe_bundle_url\x18\x02 \x01(\tH\x00R\x0fspiffeBundleUrlB\x12\n\x10\x63\x65rtificate_data\x1a}\n\x0cThriftConfig\x12$\n\x0erate_limit_url\x18\x01 \x01(\tR\x0crateLimitUrl\x12G\n\x12rate_limit_timeout\x18\x02 \x01(\x0b\x32\x19.google.protobuf.DurationR\x10rateLimitTimeout\x1a\xae\x01\n\x0fServiceSettings\x12T\n\x08settings\x18\x01 \x01(\x0b\x32\x38.istio.mesh.v1alpha1.MeshConfig.ServiceSettings.SettingsR\x08settings\x12\x14\n\x05hosts\x18\x02 \x03(\tR\x05hosts\x1a/\n\x08Settings\x12#\n\rcluster_local\x18\x01 \x01(\x08R\x0c\x63lusterLocal\x1a\xd4\x01\n\x02\x43\x41\x12\x18\n\x07\x61\x64\x64ress\x18\x01 \x01(\tR\x07\x61\x64\x64ress\x12O\n\x0ctls_settings\x18\x02 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettingsR\x0btlsSettings\x12\x42\n\x0frequest_timeout\x18\x03 \x01(\x0b\x32\x19.google.protobuf.DurationR\x0erequestTimeout\x12\x1f\n\x0bistiod_side\x18\x04 \x01(\x08R\nistiodSide\x1a\xb7\x1c\n\x11\x45xtensionProvider\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x8b\x01\n\x14\x65nvoy_ext_authz_http\x18\x02 \x01(\x0b\x32X.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationHttpProviderH\x00R\x11\x65nvoyExtAuthzHttp\x12\x8b\x01\n\x14\x65nvoy_ext_authz_grpc\x18\x03 \x01(\x0b\x32X.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationGrpcProviderH\x00R\x11\x65nvoyExtAuthzGrpc\x12\x61\n\x06zipkin\x18\x04 \x01(\x0b\x32G.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProviderH\x00R\x06zipkin\x12j\n\tlightstep\x18\x05 \x01(\x0b\x32J.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProviderH\x00R\tlightstep\x12\x64\n\x07\x64\x61tadog\x18\x06 \x01(\x0b\x32H.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.DatadogTracingProviderH\x00R\x07\x64\x61tadog\x12i\n\x0bstackdriver\x18\x07 \x01(\x0b\x32\x45.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProviderH\x00R\x0bstackdriver\x12r\n\nopencensus\x18\x08 \x01(\x0b\x32P.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProviderH\x00R\nopencensus\x12m\n\nskywalking\x18\t \x01(\x0b\x32K.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SkyWalkingTracingProviderH\x00R\nskywalking\x1a\xab\x01\n%EnvoyExternalAuthorizationRequestBody\x12*\n\x11max_request_bytes\x18\x01 \x01(\rR\x0fmaxRequestBytes\x12\x32\n\x15\x61llow_partial_message\x18\x02 \x01(\x08R\x13\x61llowPartialMessage\x12\"\n\rpack_as_bytes\x18\x03 \x01(\x08R\x0bpackAsBytes\x1a\xb2\x07\n&EnvoyExternalAuthorizationHttpProvider\x12\x18\n\x07service\x18\x01 \x01(\tR\x07service\x12\x12\n\x04port\x18\x02 \x01(\rR\x04port\x12\x33\n\x07timeout\x18\t \x01(\x0b\x32\x19.google.protobuf.DurationR\x07timeout\x12\x1f\n\x0bpath_prefix\x18\x03 \x01(\tR\npathPrefix\x12\x1b\n\tfail_open\x18\x04 \x01(\x08R\x08\x66\x61ilOpen\x12&\n\x0fstatus_on_error\x18\x05 \x01(\tR\rstatusOnError\x12\x37\n\x18include_headers_in_check\x18\x06 \x03(\tR\x15includeHeadersInCheck\x12\x46\n include_request_headers_in_check\x18\n \x03(\tR\x1cincludeRequestHeadersInCheck\x12\xcb\x01\n#include_additional_headers_in_check\x18\x0b \x03(\x0b\x32}.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationHttpProvider.IncludeAdditionalHeadersInCheckEntryR\x1fincludeAdditionalHeadersInCheck\x12\x99\x01\n\x1dinclude_request_body_in_check\x18\x0c \x01(\x0b\x32W.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationRequestBodyR\x19includeRequestBodyInCheck\x12>\n\x1cheaders_to_upstream_on_allow\x18\x07 \x03(\tR\x18headersToUpstreamOnAllow\x12@\n\x1dheaders_to_downstream_on_deny\x18\x08 \x03(\tR\x19headersToDownstreamOnDeny\x1aR\n$IncludeAdditionalHeadersInCheckEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\x1a\xec\x02\n&EnvoyExternalAuthorizationGrpcProvider\x12\x18\n\x07service\x18\x01 \x01(\tR\x07service\x12\x12\n\x04port\x18\x02 \x01(\rR\x04port\x12\x33\n\x07timeout\x18\x05 \x01(\x0b\x32\x19.google.protobuf.DurationR\x07timeout\x12\x1b\n\tfail_open\x18\x03 \x01(\x08R\x08\x66\x61ilOpen\x12&\n\x0fstatus_on_error\x18\x04 \x01(\tR\rstatusOnError\x12\x99\x01\n\x1dinclude_request_body_in_check\x18\x06 \x01(\x0b\x32W.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationRequestBodyR\x19includeRequestBodyInCheck\x1ak\n\x15ZipkinTracingProvider\x12\x18\n\x07service\x18\x01 \x01(\tR\x07service\x12\x12\n\x04port\x18\x02 \x01(\rR\x04port\x12$\n\x0emax_tag_length\x18\x03 \x01(\rR\x0cmaxTagLength\x1a\x91\x01\n\x18LightstepTracingProvider\x12\x18\n\x07service\x18\x01 \x01(\tR\x07service\x12\x12\n\x04port\x18\x02 \x01(\rR\x04port\x12!\n\x0c\x61\x63\x63\x65ss_token\x18\x03 \x01(\tR\x0b\x61\x63\x63\x65ssToken\x12$\n\x0emax_tag_length\x18\x04 \x01(\rR\x0cmaxTagLength\x1al\n\x16\x44\x61tadogTracingProvider\x12\x18\n\x07service\x18\x01 \x01(\tR\x07service\x12\x12\n\x04port\x18\x02 \x01(\rR\x04port\x12$\n\x0emax_tag_length\x18\x03 \x01(\rR\x0cmaxTagLength\x1al\n\x19SkyWalkingTracingProvider\x12\x18\n\x07service\x18\x01 \x01(\tR\x07service\x12\x12\n\x04port\x18\x02 \x01(\rR\x04port\x12!\n\x0c\x61\x63\x63\x65ss_token\x18\x03 \x01(\tR\x0b\x61\x63\x63\x65ssToken\x1a\xdc\x02\n\x13StackdriverProvider\x12\x14\n\x05\x64\x65\x62ug\x18\x01 \x01(\x08R\x05\x64\x65\x62ug\x12T\n\x18max_number_of_attributes\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int64ValueR\x15maxNumberOfAttributes\x12V\n\x19max_number_of_annotations\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int64ValueR\x16maxNumberOfAnnotations\x12[\n\x1cmax_number_of_message_events\x18\x04 \x01(\x0b\x32\x1b.google.protobuf.Int64ValueR\x18maxNumberOfMessageEvents\x12$\n\x0emax_tag_length\x18\x05 \x01(\rR\x0cmaxTagLength\x1a\xd4\x02\n\x1eOpenCensusAgentTracingProvider\x12\x18\n\x07service\x18\x01 \x01(\tR\x07service\x12\x12\n\x04port\x18\x02 \x01(\rR\x04port\x12w\n\x07\x63ontext\x18\x03 \x03(\x0e\x32].istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider.TraceContextR\x07\x63ontext\x12$\n\x0emax_tag_length\x18\x04 \x01(\rR\x0cmaxTagLength\"e\n\x0cTraceContext\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x15\n\x11W3C_TRACE_CONTEXT\x10\x01\x12\x0c\n\x08GRPC_BIN\x10\x02\x12\x17\n\x13\x43LOUD_TRACE_CONTEXT\x10\x03\x12\x06\n\x02\x42\x33\x10\x04\x42\n\n\x08provider\x1a,\n\x10\x44\x65\x66\x61ultProviders\x12\x18\n\x07tracing\x18\x01 \x01(\tR\x07tracing\"J\n\x15IngressControllerMode\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x07\n\x03OFF\x10\x01\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x02\x12\n\n\x06STRICT\x10\x03\"&\n\nAuthPolicy\x12\x08\n\x04NONE\x10\x00\x12\x0e\n\nMUTUAL_TLS\x10\x01\"\'\n\x11\x41\x63\x63\x65ssLogEncoding\x12\x08\n\x04TEXT\x10\x00\x12\x08\n\x04JSON\x10\x01\"2\n\x0fH2UpgradePolicy\x12\x12\n\x0e\x44O_NOT_UPGRADE\x10\x00\x12\x0b\n\x07UPGRADE\x10\x01J\x04\x08\x01\x10\x02J\x04\x08\x02\x10\x03J\x04\x08\x03\x10\x04J\x04\x08\x30\x10\x31J\x04\x08\x19\x10\x1aJ\x04\x08\x1e\x10\x1fJ\x04\x08\n\x10\x0bJ\x04\x08\x0b\x10\x0cJ\x04\x08\x0f\x10\x10J\x04\x08\x10\x10\x11J\x04\x08\x12\x10\x13J\x04\x08\x13\x10\x14J\x04\x08\x14\x10\x15J\x04\x08\x15\x10\x16J\x04\x08\x17\x10\x18J\x04\x08\x1d\x10\x1eJ\x04\x08\x35\x10\x36J\x04\x08%\x10&J\x04\x08&\x10\'J\x04\x08\'\x10(R\x12mixer_check_serverR\x13mixer_report_serverR\x15\x64isable_policy_checksR\x1a\x64isable_mixer_http_reportsR\x16policy_check_fail_openR%sidecar_to_telemetry_session_affinityR\x0b\x61uth_policyR\x11rds_refresh_delayR\rmixer_addressR\x1f\x65nable_client_side_policy_checkR\x0csds_uds_pathR\x11sds_refresh_delayR\x16\x65nable_sds_token_mountR\x12sds_use_k8s_sa_jwtR\x1atermination_drain_durationR\x14\x64isable_report_batchR\x18report_batch_max_entriesR\x15report_batch_max_time\"\xcb\x01\n\x0c\x43onfigSource\x12\x18\n\x07\x61\x64\x64ress\x18\x01 \x01(\tR\x07\x61\x64\x64ress\x12O\n\x0ctls_settings\x18\x02 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettingsR\x0btlsSettings\x12P\n\x14subscribed_resources\x18\x03 \x03(\x0e\x32\x1d.istio.mesh.v1alpha1.ResourceR\x13subscribedResources\"K\n\x0b\x43\x65rtificate\x12\x1f\n\x0bsecret_name\x18\x01 \x01(\tR\nsecretName\x12\x1b\n\tdns_names\x18\x02 \x03(\tR\x08\x64nsNames* \n\x08Resource\x12\x14\n\x10SERVICE_REGISTRY\x10\x00\x42\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x1amesh/v1alpha1/config.proto\x12\x13istio.mesh.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x19mesh/v1alpha1/proxy.proto\x1a*networking/v1alpha3/destination_rule.proto\x1a\x34k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto\"\xdd@\n\nMeshConfig\x12*\n\x11proxy_listen_port\x18\x04 \x01(\x05R\x0fproxyListenPort\x12&\n\x0fproxy_http_port\x18\x05 \x01(\x05R\rproxyHttpPort\x12\x42\n\x0f\x63onnect_timeout\x18\x06 \x01(\x0b\x32\x19.google.protobuf.DurationR\x0e\x63onnectTimeout\x12W\n\x1aprotocol_detection_timeout\x18* \x01(\x0b\x32\x19.google.protobuf.DurationR\x18protocolDetectionTimeout\x12o\n\rtcp_keepalive\x18\x1c \x01(\x0b\x32J.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepaliveR\x0ctcpKeepalive\x12#\n\ringress_class\x18\x07 \x01(\tR\x0cingressClass\x12\'\n\x0fingress_service\x18\x08 \x01(\tR\x0eingressService\x12m\n\x17ingress_controller_mode\x18\t \x01(\x0e\x32\x35.istio.mesh.v1alpha1.MeshConfig.IngressControllerModeR\x15ingressControllerMode\x12)\n\x10ingress_selector\x18\x34 \x01(\tR\x0fingressSelector\x12%\n\x0e\x65nable_tracing\x18\x0c \x01(\x08R\renableTracing\x12&\n\x0f\x61\x63\x63\x65ss_log_file\x18\r \x01(\tR\raccessLogFile\x12*\n\x11\x61\x63\x63\x65ss_log_format\x18\x18 \x01(\tR\x0f\x61\x63\x63\x65ssLogFormat\x12\x61\n\x13\x61\x63\x63\x65ss_log_encoding\x18\x1b \x01(\x0e\x32\x31.istio.mesh.v1alpha1.MeshConfig.AccessLogEncodingR\x11\x61\x63\x63\x65ssLogEncoding\x12\x44\n\x1f\x65nable_envoy_access_log_service\x18( \x01(\x08R\x1b\x65nableEnvoyAccessLogService\x12;\n\x1a\x64isable_envoy_listener_log\x18\x38 \x01(\x08R\x17\x64isableEnvoyListenerLog\x12G\n\x0e\x64\x65\x66\x61ult_config\x18\x0e \x01(\x0b\x32 .istio.mesh.v1alpha1.ProxyConfigR\rdefaultConfig\x12m\n\x17outbound_traffic_policy\x18\x11 \x01(\x0b\x32\x35.istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicyR\x15outboundTrafficPolicy\x12H\n\x0e\x63onfig_sources\x18\x16 \x03(\x0b\x32!.istio.mesh.v1alpha1.ConfigSourceR\rconfigSources\x12\x44\n\x10\x65nable_auto_mtls\x18+ \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x0e\x65nableAutoMtls\x12!\n\x0ctrust_domain\x18\x1a \x01(\tR\x0btrustDomain\x12\x30\n\x14trust_domain_aliases\x18. \x03(\tR\x12trustDomainAliases\x12X\n\x0f\x63\x61_certificates\x18: \x03(\x0b\x32/.istio.mesh.v1alpha1.MeshConfig.CertificateDataR\x0e\x63\x61\x43\x65rtificates\x12\x39\n\x19\x64\x65\x66\x61ult_service_export_to\x18\x1f \x03(\tR\x16\x64\x65\x66\x61ultServiceExportTo\x12H\n!default_virtual_service_export_to\x18  \x03(\tR\x1d\x64\x65\x66\x61ultVirtualServiceExportTo\x12J\n\"default_destination_rule_export_to\x18! \x03(\tR\x1e\x64\x65\x66\x61ultDestinationRuleExportTo\x12%\n\x0eroot_namespace\x18\" \x01(\tR\rrootNamespace\x12\x66\n\x13locality_lb_setting\x18# \x01(\x0b\x32\x36.istio.networking.v1alpha3.LocalityLoadBalancerSettingR\x11localityLbSetting\x12\x43\n\x10\x64ns_refresh_rate\x18$ \x01(\x0b\x32\x19.google.protobuf.DurationR\x0e\x64nsRefreshRate\x12[\n\x11h2_upgrade_policy\x18) \x01(\x0e\x32/.istio.mesh.v1alpha1.MeshConfig.H2UpgradePolicyR\x0fh2UpgradePolicy\x12\x39\n\x19inbound_cluster_stat_name\x18, \x01(\tR\x16inboundClusterStatName\x12;\n\x1aoutbound_cluster_stat_name\x18- \x01(\tR\x17outboundClusterStatName\x12\x44\n\x0c\x63\x65rtificates\x18/ \x03(\x0b\x32 .istio.mesh.v1alpha1.CertificateR\x0c\x63\x65rtificates\x12Q\n\rthrift_config\x18\x31 \x01(\x0b\x32,.istio.mesh.v1alpha1.MeshConfig.ThriftConfigR\x0cthriftConfig\x12Z\n\x10service_settings\x18\x32 \x03(\x0b\x32/.istio.mesh.v1alpha1.MeshConfig.ServiceSettingsR\x0fserviceSettings\x12R\n\x17\x65nable_prometheus_merge\x18\x33 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x15\x65nablePrometheusMerge\x12[\n\x1cverify_certificate_at_client\x18\x36 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x19verifyCertificateAtClient\x12\x32\n\x02\x63\x61\x18\x37 \x01(\x0b\x32\".istio.mesh.v1alpha1.MeshConfig.CAR\x02\x63\x61\x12\x62\n\x13\x65xtension_providers\x18\x39 \x03(\x0b\x32\x31.istio.mesh.v1alpha1.MeshConfig.ExtensionProviderR\x12\x65xtensionProviders\x12]\n\x11\x64\x65\x66\x61ult_providers\x18< \x01(\x0b\x32\x30.istio.mesh.v1alpha1.MeshConfig.DefaultProvidersR\x10\x64\x65\x66\x61ultProviders\x12\x64\n\x13\x64iscovery_selectors\x18; \x03(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\x12\x64iscoverySelectors\x12n\n\x18http_11_protocol_options\x18= \x01(\x0b\x32\x35.istio.mesh.v1alpha1.MeshConfig.Http11ProtocolOptionsR\x15http11ProtocolOptions\x1a\xad\x01\n\x15OutboundTrafficPolicy\x12N\n\x04mode\x18\x01 \x01(\x0e\x32:.istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.ModeR\x04mode\"D\n\x04Mode\x12\x11\n\rREGISTRY_ONLY\x10\x00\x12\r\n\tALLOW_ANY\x10\x01\"\x04\x08\x02\x10\x02*\x14VIRTUAL_SERVICE_ONLY\x1ag\n\x0f\x43\x65rtificateData\x12\x12\n\x03pem\x18\x01 \x01(\tH\x00R\x03pem\x12,\n\x11spiffe_bundle_url\x18\x02 \x01(\tH\x00R\x0fspiffeBundleUrlB\x12\n\x10\x63\x65rtificate_data\x1a}\n\x0cThriftConfig\x12$\n\x0erate_limit_url\x18\x01 \x01(\tR\x0crateLimitUrl\x12G\n\x12rate_limit_timeout\x18\x02 \x01(\x0b\x32\x19.google.protobuf.DurationR\x10rateLimitTimeout\x1a\xae\x01\n\x0fServiceSettings\x12T\n\x08settings\x18\x01 \x01(\x0b\x32\x38.istio.mesh.v1alpha1.MeshConfig.ServiceSettings.SettingsR\x08settings\x12\x14\n\x05hosts\x18\x02 \x03(\tR\x05hosts\x1a/\n\x08Settings\x12#\n\rcluster_local\x18\x01 \x01(\x08R\x0c\x63lusterLocal\x1a\xd4\x01\n\x02\x43\x41\x12\x18\n\x07\x61\x64\x64ress\x18\x01 \x01(\tR\x07\x61\x64\x64ress\x12O\n\x0ctls_settings\x18\x02 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettingsR\x0btlsSettings\x12\x42\n\x0frequest_timeout\x18\x03 \x01(\x0b\x32\x19.google.protobuf.DurationR\x0erequestTimeout\x12\x1f\n\x0bistiod_side\x18\x04 \x01(\x08R\nistiodSide\x1a\xb7\x1c\n\x11\x45xtensionProvider\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x8b\x01\n\x14\x65nvoy_ext_authz_http\x18\x02 \x01(\x0b\x32X.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationHttpProviderH\x00R\x11\x65nvoyExtAuthzHttp\x12\x8b\x01\n\x14\x65nvoy_ext_authz_grpc\x18\x03 \x01(\x0b\x32X.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationGrpcProviderH\x00R\x11\x65nvoyExtAuthzGrpc\x12\x61\n\x06zipkin\x18\x04 \x01(\x0b\x32G.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProviderH\x00R\x06zipkin\x12j\n\tlightstep\x18\x05 \x01(\x0b\x32J.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProviderH\x00R\tlightstep\x12\x64\n\x07\x64\x61tadog\x18\x06 \x01(\x0b\x32H.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.DatadogTracingProviderH\x00R\x07\x64\x61tadog\x12i\n\x0bstackdriver\x18\x07 \x01(\x0b\x32\x45.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProviderH\x00R\x0bstackdriver\x12r\n\nopencensus\x18\x08 \x01(\x0b\x32P.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProviderH\x00R\nopencensus\x12m\n\nskywalking\x18\t \x01(\x0b\x32K.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SkyWalkingTracingProviderH\x00R\nskywalking\x1a\xab\x01\n%EnvoyExternalAuthorizationRequestBody\x12*\n\x11max_request_bytes\x18\x01 \x01(\rR\x0fmaxRequestBytes\x12\x32\n\x15\x61llow_partial_message\x18\x02 \x01(\x08R\x13\x61llowPartialMessage\x12\"\n\rpack_as_bytes\x18\x03 \x01(\x08R\x0bpackAsBytes\x1a\xb2\x07\n&EnvoyExternalAuthorizationHttpProvider\x12\x18\n\x07service\x18\x01 \x01(\tR\x07service\x12\x12\n\x04port\x18\x02 \x01(\rR\x04port\x12\x33\n\x07timeout\x18\t \x01(\x0b\x32\x19.google.protobuf.DurationR\x07timeout\x12\x1f\n\x0bpath_prefix\x18\x03 \x01(\tR\npathPrefix\x12\x1b\n\tfail_open\x18\x04 \x01(\x08R\x08\x66\x61ilOpen\x12&\n\x0fstatus_on_error\x18\x05 \x01(\tR\rstatusOnError\x12\x37\n\x18include_headers_in_check\x18\x06 \x03(\tR\x15includeHeadersInCheck\x12\x46\n include_request_headers_in_check\x18\n \x03(\tR\x1cincludeRequestHeadersInCheck\x12\xcb\x01\n#include_additional_headers_in_check\x18\x0b \x03(\x0b\x32}.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationHttpProvider.IncludeAdditionalHeadersInCheckEntryR\x1fincludeAdditionalHeadersInCheck\x12\x99\x01\n\x1dinclude_request_body_in_check\x18\x0c \x01(\x0b\x32W.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationRequestBodyR\x19includeRequestBodyInCheck\x12>\n\x1cheaders_to_upstream_on_allow\x18\x07 \x03(\tR\x18headersToUpstreamOnAllow\x12@\n\x1dheaders_to_downstream_on_deny\x18\x08 \x03(\tR\x19headersToDownstreamOnDeny\x1aR\n$IncludeAdditionalHeadersInCheckEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\x1a\xec\x02\n&EnvoyExternalAuthorizationGrpcProvider\x12\x18\n\x07service\x18\x01 \x01(\tR\x07service\x12\x12\n\x04port\x18\x02 \x01(\rR\x04port\x12\x33\n\x07timeout\x18\x05 \x01(\x0b\x32\x19.google.protobuf.DurationR\x07timeout\x12\x1b\n\tfail_open\x18\x03 \x01(\x08R\x08\x66\x61ilOpen\x12&\n\x0fstatus_on_error\x18\x04 \x01(\tR\rstatusOnError\x12\x99\x01\n\x1dinclude_request_body_in_check\x18\x06 \x01(\x0b\x32W.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationRequestBodyR\x19includeRequestBodyInCheck\x1ak\n\x15ZipkinTracingProvider\x12\x18\n\x07service\x18\x01 \x01(\tR\x07service\x12\x12\n\x04port\x18\x02 \x01(\rR\x04port\x12$\n\x0emax_tag_length\x18\x03 \x01(\rR\x0cmaxTagLength\x1a\x91\x01\n\x18LightstepTracingProvider\x12\x18\n\x07service\x18\x01 \x01(\tR\x07service\x12\x12\n\x04port\x18\x02 \x01(\rR\x04port\x12!\n\x0c\x61\x63\x63\x65ss_token\x18\x03 \x01(\tR\x0b\x61\x63\x63\x65ssToken\x12$\n\x0emax_tag_length\x18\x04 \x01(\rR\x0cmaxTagLength\x1al\n\x16\x44\x61tadogTracingProvider\x12\x18\n\x07service\x18\x01 \x01(\tR\x07service\x12\x12\n\x04port\x18\x02 \x01(\rR\x04port\x12$\n\x0emax_tag_length\x18\x03 \x01(\rR\x0cmaxTagLength\x1al\n\x19SkyWalkingTracingProvider\x12\x18\n\x07service\x18\x01 \x01(\tR\x07service\x12\x12\n\x04port\x18\x02 \x01(\rR\x04port\x12!\n\x0c\x61\x63\x63\x65ss_token\x18\x03 \x01(\tR\x0b\x61\x63\x63\x65ssToken\x1a\xdc\x02\n\x13StackdriverProvider\x12\x14\n\x05\x64\x65\x62ug\x18\x01 \x01(\x08R\x05\x64\x65\x62ug\x12T\n\x18max_number_of_attributes\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int64ValueR\x15maxNumberOfAttributes\x12V\n\x19max_number_of_annotations\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int64ValueR\x16maxNumberOfAnnotations\x12[\n\x1cmax_number_of_message_events\x18\x04 \x01(\x0b\x32\x1b.google.protobuf.Int64ValueR\x18maxNumberOfMessageEvents\x12$\n\x0emax_tag_length\x18\x05 \x01(\rR\x0cmaxTagLength\x1a\xd4\x02\n\x1eOpenCensusAgentTracingProvider\x12\x18\n\x07service\x18\x01 \x01(\tR\x07service\x12\x12\n\x04port\x18\x02 \x01(\rR\x04port\x12w\n\x07\x63ontext\x18\x03 \x03(\x0e\x32].istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider.TraceContextR\x07\x63ontext\x12$\n\x0emax_tag_length\x18\x04 \x01(\rR\x0cmaxTagLength\"e\n\x0cTraceContext\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x15\n\x11W3C_TRACE_CONTEXT\x10\x01\x12\x0c\n\x08GRPC_BIN\x10\x02\x12\x17\n\x13\x43LOUD_TRACE_CONTEXT\x10\x03\x12\x06\n\x02\x42\x33\x10\x04\x42\n\n\x08provider\x1a,\n\x10\x44\x65\x66\x61ultProviders\x12\x18\n\x07tracing\x18\x01 \x01(\tR\x07tracing\x1aT\n\x15Http11ProtocolOptions\x12;\n\x1apreserve_header_key_casing\x18\x01 \x01(\x08R\x17preserveHeaderKeyCasing\"J\n\x15IngressControllerMode\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x07\n\x03OFF\x10\x01\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x02\x12\n\n\x06STRICT\x10\x03\"&\n\nAuthPolicy\x12\x08\n\x04NONE\x10\x00\x12\x0e\n\nMUTUAL_TLS\x10\x01\"\'\n\x11\x41\x63\x63\x65ssLogEncoding\x12\x08\n\x04TEXT\x10\x00\x12\x08\n\x04JSON\x10\x01\"2\n\x0fH2UpgradePolicy\x12\x12\n\x0e\x44O_NOT_UPGRADE\x10\x00\x12\x0b\n\x07UPGRADE\x10\x01J\x04\x08\x01\x10\x02J\x04\x08\x02\x10\x03J\x04\x08\x03\x10\x04J\x04\x08\x30\x10\x31J\x04\x08\x19\x10\x1aJ\x04\x08\x1e\x10\x1fJ\x04\x08\n\x10\x0bJ\x04\x08\x0b\x10\x0cJ\x04\x08\x0f\x10\x10J\x04\x08\x10\x10\x11J\x04\x08\x12\x10\x13J\x04\x08\x13\x10\x14J\x04\x08\x14\x10\x15J\x04\x08\x15\x10\x16J\x04\x08\x17\x10\x18J\x04\x08\x1d\x10\x1eJ\x04\x08\x35\x10\x36J\x04\x08%\x10&J\x04\x08&\x10\'J\x04\x08\'\x10(R\x12mixer_check_serverR\x13mixer_report_serverR\x15\x64isable_policy_checksR\x1a\x64isable_mixer_http_reportsR\x16policy_check_fail_openR%sidecar_to_telemetry_session_affinityR\x0b\x61uth_policyR\x11rds_refresh_delayR\rmixer_addressR\x1f\x65nable_client_side_policy_checkR\x0csds_uds_pathR\x11sds_refresh_delayR\x16\x65nable_sds_token_mountR\x12sds_use_k8s_sa_jwtR\x1atermination_drain_durationR\x14\x64isable_report_batchR\x18report_batch_max_entriesR\x15report_batch_max_time\"\xcb\x01\n\x0c\x43onfigSource\x12\x18\n\x07\x61\x64\x64ress\x18\x01 \x01(\tR\x07\x61\x64\x64ress\x12O\n\x0ctls_settings\x18\x02 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettingsR\x0btlsSettings\x12P\n\x14subscribed_resources\x18\x03 \x03(\x0e\x32\x1d.istio.mesh.v1alpha1.ResourceR\x13subscribedResources\"K\n\x0b\x43\x65rtificate\x12\x1f\n\x0bsecret_name\x18\x01 \x01(\tR\nsecretName\x12\x1b\n\tdns_names\x18\x02 \x03(\tR\x08\x64nsNames* \n\x08Resource\x12\x14\n\x10SERVICE_REGISTRY\x10\x00\x42\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,mesh_dot_v1alpha1_dot_proxy__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_destination__rule__pb2.DESCRIPTOR,k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2.DESCRIPTOR,])
 
@@ -43,8 +43,8 @@ _RESOURCE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=8613,
-  serialized_end=8645,
+  serialized_start=8811,
+  serialized_end=8843,
 )
 _sym_db.RegisterEnumDescriptor(_RESOURCE)
 
@@ -69,8 +69,8 @@ _MESHCONFIG_OUTBOUNDTRAFFICPOLICY_MODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=3208,
-  serialized_end=3276,
+  serialized_start=3320,
+  serialized_end=3388,
 )
 _sym_db.RegisterEnumDescriptor(_MESHCONFIG_OUTBOUNDTRAFFICPOLICY_MODE)
 
@@ -103,8 +103,8 @@ _MESHCONFIG_EXTENSIONPROVIDER_OPENCENSUSAGENTTRACINGPROVIDER_TRACECONTEXT = _des
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=7429,
-  serialized_end=7530,
+  serialized_start=7541,
+  serialized_end=7642,
 )
 _sym_db.RegisterEnumDescriptor(_MESHCONFIG_EXTENSIONPROVIDER_OPENCENSUSAGENTTRACINGPROVIDER_TRACECONTEXT)
 
@@ -133,8 +133,8 @@ _MESHCONFIG_INGRESSCONTROLLERMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=7590,
-  serialized_end=7664,
+  serialized_start=7788,
+  serialized_end=7862,
 )
 _sym_db.RegisterEnumDescriptor(_MESHCONFIG_INGRESSCONTROLLERMODE)
 
@@ -155,8 +155,8 @@ _MESHCONFIG_AUTHPOLICY = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=7666,
-  serialized_end=7704,
+  serialized_start=7864,
+  serialized_end=7902,
 )
 _sym_db.RegisterEnumDescriptor(_MESHCONFIG_AUTHPOLICY)
 
@@ -177,8 +177,8 @@ _MESHCONFIG_ACCESSLOGENCODING = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=7706,
-  serialized_end=7745,
+  serialized_start=7904,
+  serialized_end=7943,
 )
 _sym_db.RegisterEnumDescriptor(_MESHCONFIG_ACCESSLOGENCODING)
 
@@ -199,8 +199,8 @@ _MESHCONFIG_H2UPGRADEPOLICY = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=7747,
-  serialized_end=7797,
+  serialized_start=7945,
+  serialized_end=7995,
 )
 _sym_db.RegisterEnumDescriptor(_MESHCONFIG_H2UPGRADEPOLICY)
 
@@ -232,8 +232,8 @@ _MESHCONFIG_OUTBOUNDTRAFFICPOLICY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3103,
-  serialized_end=3276,
+  serialized_start=3215,
+  serialized_end=3388,
 )
 
 _MESHCONFIG_CERTIFICATEDATA = _descriptor.Descriptor(
@@ -272,8 +272,8 @@ _MESHCONFIG_CERTIFICATEDATA = _descriptor.Descriptor(
       name='certificate_data', full_name='istio.mesh.v1alpha1.MeshConfig.CertificateData.certificate_data',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=3278,
-  serialized_end=3381,
+  serialized_start=3390,
+  serialized_end=3493,
 )
 
 _MESHCONFIG_THRIFTCONFIG = _descriptor.Descriptor(
@@ -309,8 +309,8 @@ _MESHCONFIG_THRIFTCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3383,
-  serialized_end=3508,
+  serialized_start=3495,
+  serialized_end=3620,
 )
 
 _MESHCONFIG_SERVICESETTINGS_SETTINGS = _descriptor.Descriptor(
@@ -339,8 +339,8 @@ _MESHCONFIG_SERVICESETTINGS_SETTINGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3638,
-  serialized_end=3685,
+  serialized_start=3750,
+  serialized_end=3797,
 )
 
 _MESHCONFIG_SERVICESETTINGS = _descriptor.Descriptor(
@@ -376,8 +376,8 @@ _MESHCONFIG_SERVICESETTINGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3511,
-  serialized_end=3685,
+  serialized_start=3623,
+  serialized_end=3797,
 )
 
 _MESHCONFIG_CA = _descriptor.Descriptor(
@@ -427,8 +427,8 @@ _MESHCONFIG_CA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3688,
-  serialized_end=3900,
+  serialized_start=3800,
+  serialized_end=4012,
 )
 
 _MESHCONFIG_EXTENSIONPROVIDER_ENVOYEXTERNALAUTHORIZATIONREQUESTBODY = _descriptor.Descriptor(
@@ -471,8 +471,8 @@ _MESHCONFIG_EXTENSIONPROVIDER_ENVOYEXTERNALAUTHORIZATIONREQUESTBODY = _descripto
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4872,
-  serialized_end=5043,
+  serialized_start=4984,
+  serialized_end=5155,
 )
 
 _MESHCONFIG_EXTENSIONPROVIDER_ENVOYEXTERNALAUTHORIZATIONHTTPPROVIDER_INCLUDEADDITIONALHEADERSINCHECKENTRY = _descriptor.Descriptor(
@@ -508,8 +508,8 @@ _MESHCONFIG_EXTENSIONPROVIDER_ENVOYEXTERNALAUTHORIZATIONHTTPPROVIDER_INCLUDEADDI
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5910,
-  serialized_end=5992,
+  serialized_start=6022,
+  serialized_end=6104,
 )
 
 _MESHCONFIG_EXTENSIONPROVIDER_ENVOYEXTERNALAUTHORIZATIONHTTPPROVIDER = _descriptor.Descriptor(
@@ -615,8 +615,8 @@ _MESHCONFIG_EXTENSIONPROVIDER_ENVOYEXTERNALAUTHORIZATIONHTTPPROVIDER = _descript
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5046,
-  serialized_end=5992,
+  serialized_start=5158,
+  serialized_end=6104,
 )
 
 _MESHCONFIG_EXTENSIONPROVIDER_ENVOYEXTERNALAUTHORIZATIONGRPCPROVIDER = _descriptor.Descriptor(
@@ -680,8 +680,8 @@ _MESHCONFIG_EXTENSIONPROVIDER_ENVOYEXTERNALAUTHORIZATIONGRPCPROVIDER = _descript
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5995,
-  serialized_end=6359,
+  serialized_start=6107,
+  serialized_end=6471,
 )
 
 _MESHCONFIG_EXTENSIONPROVIDER_ZIPKINTRACINGPROVIDER = _descriptor.Descriptor(
@@ -724,8 +724,8 @@ _MESHCONFIG_EXTENSIONPROVIDER_ZIPKINTRACINGPROVIDER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6361,
-  serialized_end=6468,
+  serialized_start=6473,
+  serialized_end=6580,
 )
 
 _MESHCONFIG_EXTENSIONPROVIDER_LIGHTSTEPTRACINGPROVIDER = _descriptor.Descriptor(
@@ -775,8 +775,8 @@ _MESHCONFIG_EXTENSIONPROVIDER_LIGHTSTEPTRACINGPROVIDER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6471,
-  serialized_end=6616,
+  serialized_start=6583,
+  serialized_end=6728,
 )
 
 _MESHCONFIG_EXTENSIONPROVIDER_DATADOGTRACINGPROVIDER = _descriptor.Descriptor(
@@ -819,8 +819,8 @@ _MESHCONFIG_EXTENSIONPROVIDER_DATADOGTRACINGPROVIDER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6618,
-  serialized_end=6726,
+  serialized_start=6730,
+  serialized_end=6838,
 )
 
 _MESHCONFIG_EXTENSIONPROVIDER_SKYWALKINGTRACINGPROVIDER = _descriptor.Descriptor(
@@ -863,8 +863,8 @@ _MESHCONFIG_EXTENSIONPROVIDER_SKYWALKINGTRACINGPROVIDER = _descriptor.Descriptor
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6728,
-  serialized_end=6836,
+  serialized_start=6840,
+  serialized_end=6948,
 )
 
 _MESHCONFIG_EXTENSIONPROVIDER_STACKDRIVERPROVIDER = _descriptor.Descriptor(
@@ -921,8 +921,8 @@ _MESHCONFIG_EXTENSIONPROVIDER_STACKDRIVERPROVIDER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6839,
-  serialized_end=7187,
+  serialized_start=6951,
+  serialized_end=7299,
 )
 
 _MESHCONFIG_EXTENSIONPROVIDER_OPENCENSUSAGENTTRACINGPROVIDER = _descriptor.Descriptor(
@@ -973,8 +973,8 @@ _MESHCONFIG_EXTENSIONPROVIDER_OPENCENSUSAGENTTRACINGPROVIDER = _descriptor.Descr
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7190,
-  serialized_end=7530,
+  serialized_start=7302,
+  serialized_end=7642,
 )
 
 _MESHCONFIG_EXTENSIONPROVIDER = _descriptor.Descriptor(
@@ -1062,8 +1062,8 @@ _MESHCONFIG_EXTENSIONPROVIDER = _descriptor.Descriptor(
       name='provider', full_name='istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.provider',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=3903,
-  serialized_end=7542,
+  serialized_start=4015,
+  serialized_end=7654,
 )
 
 _MESHCONFIG_DEFAULTPROVIDERS = _descriptor.Descriptor(
@@ -1092,8 +1092,38 @@ _MESHCONFIG_DEFAULTPROVIDERS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7544,
-  serialized_end=7588,
+  serialized_start=7656,
+  serialized_end=7700,
+)
+
+_MESHCONFIG_HTTP11PROTOCOLOPTIONS = _descriptor.Descriptor(
+  name='Http11ProtocolOptions',
+  full_name='istio.mesh.v1alpha1.MeshConfig.Http11ProtocolOptions',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='preserve_header_key_casing', full_name='istio.mesh.v1alpha1.MeshConfig.Http11ProtocolOptions.preserve_header_key_casing', index=0,
+      number=1, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='preserveHeaderKeyCasing', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=7702,
+  serialized_end=7786,
 )
 
 _MESHCONFIG = _descriptor.Descriptor(
@@ -1383,10 +1413,17 @@ _MESHCONFIG = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='discoverySelectors', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='http_11_protocol_options', full_name='istio.mesh.v1alpha1.MeshConfig.http_11_protocol_options', index=40,
+      number=61, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='http11ProtocolOptions', file=DESCRIPTOR),
   ],
   extensions=[
   ],
-  nested_types=[_MESHCONFIG_OUTBOUNDTRAFFICPOLICY, _MESHCONFIG_CERTIFICATEDATA, _MESHCONFIG_THRIFTCONFIG, _MESHCONFIG_SERVICESETTINGS, _MESHCONFIG_CA, _MESHCONFIG_EXTENSIONPROVIDER, _MESHCONFIG_DEFAULTPROVIDERS, ],
+  nested_types=[_MESHCONFIG_OUTBOUNDTRAFFICPOLICY, _MESHCONFIG_CERTIFICATEDATA, _MESHCONFIG_THRIFTCONFIG, _MESHCONFIG_SERVICESETTINGS, _MESHCONFIG_CA, _MESHCONFIG_EXTENSIONPROVIDER, _MESHCONFIG_DEFAULTPROVIDERS, _MESHCONFIG_HTTP11PROTOCOLOPTIONS, ],
   enum_types=[
     _MESHCONFIG_INGRESSCONTROLLERMODE,
     _MESHCONFIG_AUTHPOLICY,
@@ -1400,7 +1437,7 @@ _MESHCONFIG = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=241,
-  serialized_end=8328,
+  serialized_end=8526,
 )
 
 
@@ -1444,8 +1481,8 @@ _CONFIGSOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8331,
-  serialized_end=8534,
+  serialized_start=8529,
+  serialized_end=8732,
 )
 
 
@@ -1482,8 +1519,8 @@ _CERTIFICATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8536,
-  serialized_end=8611,
+  serialized_start=8734,
+  serialized_end=8809,
 )
 
 _MESHCONFIG_OUTBOUNDTRAFFICPOLICY.fields_by_name['mode'].enum_type = _MESHCONFIG_OUTBOUNDTRAFFICPOLICY_MODE
@@ -1558,6 +1595,7 @@ _MESHCONFIG_EXTENSIONPROVIDER.oneofs_by_name['provider'].fields.append(
   _MESHCONFIG_EXTENSIONPROVIDER.fields_by_name['skywalking'])
 _MESHCONFIG_EXTENSIONPROVIDER.fields_by_name['skywalking'].containing_oneof = _MESHCONFIG_EXTENSIONPROVIDER.oneofs_by_name['provider']
 _MESHCONFIG_DEFAULTPROVIDERS.containing_type = _MESHCONFIG
+_MESHCONFIG_HTTP11PROTOCOLOPTIONS.containing_type = _MESHCONFIG
 _MESHCONFIG.fields_by_name['connect_timeout'].message_type = google_dot_protobuf_dot_duration__pb2._DURATION
 _MESHCONFIG.fields_by_name['protocol_detection_timeout'].message_type = google_dot_protobuf_dot_duration__pb2._DURATION
 _MESHCONFIG.fields_by_name['tcp_keepalive'].message_type = networking_dot_v1alpha3_dot_destination__rule__pb2._CONNECTIONPOOLSETTINGS_TCPSETTINGS_TCPKEEPALIVE
@@ -1580,6 +1618,7 @@ _MESHCONFIG.fields_by_name['ca'].message_type = _MESHCONFIG_CA
 _MESHCONFIG.fields_by_name['extension_providers'].message_type = _MESHCONFIG_EXTENSIONPROVIDER
 _MESHCONFIG.fields_by_name['default_providers'].message_type = _MESHCONFIG_DEFAULTPROVIDERS
 _MESHCONFIG.fields_by_name['discovery_selectors'].message_type = k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2._LABELSELECTOR
+_MESHCONFIG.fields_by_name['http_11_protocol_options'].message_type = _MESHCONFIG_HTTP11PROTOCOLOPTIONS
 _MESHCONFIG_INGRESSCONTROLLERMODE.containing_type = _MESHCONFIG
 _MESHCONFIG_AUTHPOLICY.containing_type = _MESHCONFIG
 _MESHCONFIG_ACCESSLOGENCODING.containing_type = _MESHCONFIG
@@ -1719,6 +1758,13 @@ MeshConfig = _reflection.GeneratedProtocolMessageType('MeshConfig', (_message.Me
     # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.MeshConfig.DefaultProviders)
     })
   ,
+
+  'Http11ProtocolOptions' : _reflection.GeneratedProtocolMessageType('Http11ProtocolOptions', (_message.Message,), {
+    'DESCRIPTOR' : _MESHCONFIG_HTTP11PROTOCOLOPTIONS,
+    '__module__' : 'mesh.v1alpha1.config_pb2'
+    # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.MeshConfig.Http11ProtocolOptions)
+    })
+  ,
   'DESCRIPTOR' : _MESHCONFIG,
   '__module__' : 'mesh.v1alpha1.config_pb2'
   # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.MeshConfig)
@@ -1742,6 +1788,7 @@ _sym_db.RegisterMessage(MeshConfig.ExtensionProvider.SkyWalkingTracingProvider)
 _sym_db.RegisterMessage(MeshConfig.ExtensionProvider.StackdriverProvider)
 _sym_db.RegisterMessage(MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider)
 _sym_db.RegisterMessage(MeshConfig.DefaultProviders)
+_sym_db.RegisterMessage(MeshConfig.Http11ProtocolOptions)
 
 ConfigSource = _reflection.GeneratedProtocolMessageType('ConfigSource', (_message.Message,), {
   'DESCRIPTOR' : _CONFIGSOURCE,

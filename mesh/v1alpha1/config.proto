@@ -812,6 +812,16 @@ message MeshConfig {
   // for additional detail on selector semantics.
   repeated k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector discovery_selectors = 59;
 
+  message Http11ProtocolOptions {
+    // Currently Envoy normalizes all header keys to lower-case. This could potentially break some applications.
+    // In such cases, header case needs to be preserved. Setting this to true would do that.
+    bool preserve_header_key_casing = 1;
+  }
+
+  // $hide_from_docs
+  // Defines additional options related to HTTP 1.1 connection like header casing
+  Http11ProtocolOptions http_11_protocol_options = 61;
+
   // $hide_from_docs
   // Next available field number: 61
   reserved 1;
