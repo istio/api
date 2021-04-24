@@ -225,8 +225,7 @@ type Tracing struct {
 	// $hide_from_docs
 	MaxPathTagLength uint32 `protobuf:"varint,6,opt,name=max_path_tag_length,json=maxPathTagLength,proto3" json:"maxPathTagLength,omitempty"`
 	// The percentage of requests (0.0 - 100.0) that will be randomly selected for trace generation,
-	// if not requested by the client or not forced. Default is 100.
-	// $hide_from_docs
+	// if not requested by the client or not forced. Default is 1.0.
 	Sampling float64 `protobuf:"fixed64,7,opt,name=sampling,proto3" json:"sampling,omitempty"`
 	// Use the tls_settings to specify the tls mode to use. If the remote tracing service
 	// uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
