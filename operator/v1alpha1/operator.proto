@@ -496,9 +496,9 @@ message PodAffinityTerm {
 
 // See k8s.io.api.policy.v1beta1.PodDisruptionBudget.
 message PodDisruptionBudgetSpec {
-    uint32 minAvailable = 1;
+    TypeIntOrStringForPB minAvailable = 1;
     k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 2;
-    uint32 maxUnavailable = 3;
+    TypeIntOrStringForPB maxUnavailable = 3;
 }
 
 // See k8s.io.api.core.v1.PodsMetricSource.
