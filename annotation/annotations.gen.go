@@ -28,6 +28,7 @@ type ResourceTypes int
 const (
 	Unknown ResourceTypes = iota
     Any
+    AuthorizationPolicy
     Ingress
     Pod
     Service
@@ -38,10 +39,12 @@ func (r ResourceTypes) String() string {
 	case 1:
 		return "Any"
 	case 2:
-		return "Ingress"
+		return "AuthorizationPolicy"
 	case 3:
-		return "Pod"
+		return "Ingress"
 	case 4:
+		return "Pod"
+	case 5:
 		return "Service"
 	}
 	return "Unknown"
@@ -158,6 +161,18 @@ var (
 		},
 	}
 
+	IoIstioDryRun = Instance {
+		Name:          "istio.io/dry-run",
+		Description:   "Specifies whether or not the given resource is in dry-run "+
+                        "mode.",
+		FeatureStatus: Alpha,
+		Hidden:        true,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			AuthorizationPolicy,
+		},
+	}
+
 	IoKubernetesIngressClass = Instance {
 		Name:          "kubernetes.io/ingress.class",
 		Description:   "Annotation on an Ingress resources denoting the class of "+
@@ -251,6 +266,17 @@ var (
 		Name:          "readiness.status.sidecar.istio.io/periodSeconds",
 		Description:   "Specifies the period (in seconds) for the Envoy sidecar "+
                         "readiness probe.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
+	SidecarAgentLogLevel = Instance {
+		Name:          "sidecar.istio.io/agentLogLevel",
+		Description:   "Specifies the log output level for pilot-agent.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -613,6 +639,7 @@ func AllResourceAnnotations() []*Instance {
 		&OperatorInstallChartOwner,
 		&OperatorInstallOwnerGeneration,
 		&OperatorInstallVersion,
+		&IoIstioDryRun,
 		&IoKubernetesIngressClass,
 		&NetworkingExportTo,
 		&PrometheusMergeMetrics,
@@ -621,6 +648,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarStatusReadinessFailureThreshold,
 		&SidecarStatusReadinessInitialDelaySeconds,
 		&SidecarStatusReadinessPeriodSeconds,
+		&SidecarAgentLogLevel,
 		&SidecarBootstrapOverride,
 		&SidecarComponentLogLevel,
 		&SidecarControlPlaneAuthPolicy,
@@ -655,6 +683,7 @@ func AllResourceAnnotations() []*Instance {
 func AllResourceTypes() []string {
 	return []string {
 		"Any",
+		"AuthorizationPolicy",
 		"Ingress",
 		"Pod",
 		"Service",

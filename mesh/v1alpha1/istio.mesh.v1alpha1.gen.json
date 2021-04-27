@@ -198,6 +198,9 @@
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider"
             }
           },
+          "defaultProviders": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.DefaultProviders"
+          },
           "discoverySelectors": {
             "description": "A list of Kubernetes selectors that specify the set of namespaces that Istio considers when computing configuration updates for sidecars. This can be used to reduce Istio's computational load by limiting the number of entities (including services, pods, and endpoints) that are watched and processed. If omitted, Istio will use the default behavior of processing all namespaces in the cluster. Elements in the list are disjunctive (OR semantics), i.e. a namespace will be included if it matches any selector. The following example selects any namespace with either labels `env: prod` and `region: us-east1`, or with label `app` equal to `cassandra` or `spark`. ```yaml discoverySelectors: - matchLabels: env: prod region: us-east1 - matchExpressions: - key: app operator: In values: - cassandra - spark ``` Refer to the [kubernetes selector docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors) for additional detail on selector semantics.",
             "type": "array",
@@ -227,6 +230,9 @@
         "description": "ProxyConfig defines variables for individual Envoy instances.",
         "type": "object",
         "properties": {
+          "tracing": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing"
+          },
           "configPath": {
             "description": "Path to the generated configuration file directory. Proxy agent generates the actual configuration and stores it in this directory.",
             "type": "string",
@@ -310,9 +316,6 @@
           },
           "interceptionMode": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig.InboundInterceptionMode"
-          },
-          "tracing": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing"
           },
           "sds": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.SDS"
@@ -577,6 +580,66 @@
                       "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationGrpcProvider"
                     }
                   }
+                },
+                {
+                  "required": [
+                    "zipkin"
+                  ],
+                  "properties": {
+                    "zipkin": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "lightstep"
+                  ],
+                  "properties": {
+                    "lightstep": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "datadog"
+                  ],
+                  "properties": {
+                    "datadog": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.DatadogTracingProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "stackdriver"
+                  ],
+                  "properties": {
+                    "stackdriver": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "opencensus"
+                  ],
+                  "properties": {
+                    "opencensus": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "skywalking"
+                  ],
+                  "properties": {
+                    "skywalking": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SkyWalkingTracingProvider"
+                    }
+                  }
                 }
               ]
             }
@@ -600,8 +663,79 @@
                 "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationGrpcProvider"
               }
             }
+          },
+          {
+            "required": [
+              "zipkin"
+            ],
+            "properties": {
+              "zipkin": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "lightstep"
+            ],
+            "properties": {
+              "lightstep": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "datadog"
+            ],
+            "properties": {
+              "datadog": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.DatadogTracingProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "stackdriver"
+            ],
+            "properties": {
+              "stackdriver": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "opencensus"
+            ],
+            "properties": {
+              "opencensus": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "skywalking"
+            ],
+            "properties": {
+              "skywalking": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SkyWalkingTracingProvider"
+              }
+            }
           }
         ]
+      },
+      "istio.mesh.v1alpha1.MeshConfig.DefaultProviders": {
+        "description": "Holds the name references to the providers that will be used by default in other Istio configuration resources if the provider is not specified.",
+        "type": "object",
+        "properties": {
+          "tracing": {
+            "description": "Name of the default provider for tracing. This must match a provider defined in `extension_providers` that is one of the support tracing providers.",
+            "type": "string",
+            "format": "string"
+          }
+        }
       },
       "istio.mesh.v1alpha1.MeshConfig.AuthPolicy": {
         "type": "string",
@@ -639,6 +773,10 @@
             "type": "string",
             "format": "string"
           },
+          "timeout": {
+            "description": "The maximum duration that the proxy will wait for a response from the provider (default timeout: 600s). When this timeout condition is met, the proxy marks the communication to the authorization service as failure. In this situation, the response sent back to the client will depend on the configured `fail_open` field.",
+            "type": "string"
+          },
           "pathPrefix": {
             "description": "Sets a prefix to the value of authorization request header *Path*. For example, setting this to \"/check\" for an original user request at path \"/admin\" will cause the authorization check request to be sent to the authorization service at the path \"/check/admin\" instead of \"/admin\".",
             "type": "string",
@@ -654,12 +792,31 @@
             "format": "string"
           },
           "includeHeadersInCheck": {
-            "description": "List of headers that should be included in the authorization request sent to the authorization service. Note that in addition to the headers supplied by users: 1. *Host*, *Method*, *Path* and *Content-Length* are automatically sent. 2. *Content-Length* will be set to 0 and the request will not have a message body.",
+            "description": "DEPRECATED. Use include_request_headers_in_check instead.",
             "type": "array",
             "items": {
               "type": "string",
               "format": "string"
             }
+          },
+          "includeRequestHeadersInCheck": {
+            "description": "List of client request headers that should be included in the authorization request sent to the authorization service. Note that in addition to the headers specified here following headers are included by default: 1. *Host*, *Method*, *Path* and *Content-Length* are automatically sent. 2. *Content-Length* will be set to 0 and the request will not have a message body. However, the authorization request can include the buffered client request body (controlled by include_request_body_in_check setting), consequently the value of Content-Length of the authorization request reflects the size of its payload size.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "includeAdditionalHeadersInCheck": {
+            "description": "Set of additional fixed headers that should be included in the authorization request sent to the authorization service. Key is the header name and value is the header value. Note that client request of the same key or headers specified in include_request_headers_in_check will be overridden.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "includeRequestBodyInCheck": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationRequestBody"
           },
           "headersToUpstreamOnAllow": {
             "description": "List of headers from the authorization service that should be added or overridden in the original request and forwarded to the upstream when the authorization check result is allowed (HTTP code 200). If not specified, the original request will not be modified and forwarded to backend as-is. Note, any existing headers will be overridden.",
@@ -691,16 +848,188 @@
             "type": "string",
             "format": "string"
           },
+          "timeout": {
+            "description": "The maximum duration that the proxy will wait for a response from the provider, this is the timeout for a specific request (default timeout: 600s). When this timeout condition is met, the proxy marks the communication to the authorization service as failure. In this situation, the response sent back to the client will depend on the configured `fail_open` field.",
+            "type": "string"
+          },
           "failOpen": {
-            "description": "If true, the user request will be allowed even if the communication with the authorization service has failed, or if the authorization service has returned a HTTP 5xx error. Default is false and the request will be rejected with \"Forbidden\" response.",
+            "description": "If true, the HTTP request or TCP connection will be allowed even if the communication with the authorization service has failed, or if the authorization service has returned a HTTP 5xx error. Default is false. For HTTP request, it will be rejected with 403 (HTTP Forbidden). For TCP connection, it will be closed immediately.",
             "type": "boolean"
           },
           "statusOnError": {
             "description": "Sets the HTTP status that is returned to the client when there is a network error to the authorization service. The default status is \"403\" (HTTP Forbidden).",
             "type": "string",
             "format": "string"
+          },
+          "includeRequestBodyInCheck": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationRequestBody"
           }
         }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProvider": {
+        "description": "Defines configuration for a Zipkin tracer.",
+        "type": "object",
+        "properties": {
+          "port": {
+            "description": "REQUIRED. Specifies the port of the service.",
+            "type": "integer"
+          },
+          "service": {
+            "description": "REQUIRED. Specifies the service that the Zipkin API. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
+            "type": "string",
+            "format": "string"
+          },
+          "maxTagLength": {
+            "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
+            "type": "integer"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider": {
+        "description": "Defines configuration for a Lightstep tracer.",
+        "type": "object",
+        "properties": {
+          "port": {
+            "description": "REQUIRED. Specifies the port of the service.",
+            "type": "integer"
+          },
+          "service": {
+            "description": "REQUIRED. Specifies the service for the Lightstep collector. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
+            "type": "string",
+            "format": "string"
+          },
+          "maxTagLength": {
+            "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
+            "type": "integer"
+          },
+          "accessToken": {
+            "description": "The Lightstep access token.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.DatadogTracingProvider": {
+        "description": "Defines configuration for a Datadog tracer.",
+        "type": "object",
+        "properties": {
+          "port": {
+            "description": "REQUIRED. Specifies the port of the service.",
+            "type": "integer"
+          },
+          "service": {
+            "description": "REQUIRED. Specifies the service for the Datadog agent. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
+            "type": "string",
+            "format": "string"
+          },
+          "maxTagLength": {
+            "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
+            "type": "integer"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider": {
+        "description": "Defines configuration for Stackdriver.",
+        "type": "object",
+        "properties": {
+          "maxTagLength": {
+            "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
+            "type": "integer"
+          },
+          "debug": {
+            "description": "debug enables trace output to stdout. $hide_from_docs",
+            "type": "boolean"
+          },
+          "maxNumberOfAttributes": {
+            "description": "The global default max number of attributes per span. default is 200. $hide_from_docs",
+            "type": "integer",
+            "nullable": true
+          },
+          "maxNumberOfAnnotations": {
+            "description": "The global default max number of annotation events per span. default is 200. $hide_from_docs",
+            "type": "integer",
+            "nullable": true
+          },
+          "maxNumberOfMessageEvents": {
+            "description": "The global default max number of message events per span. default is 200. $hide_from_docs",
+            "type": "integer",
+            "nullable": true
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider": {
+        "description": "Defines configuration for an OpenCensus tracer writing to an OpenCensus backend.",
+        "type": "object",
+        "properties": {
+          "port": {
+            "description": "REQUIRED. Specifies the port of the service.",
+            "type": "integer"
+          },
+          "service": {
+            "description": "REQUIRED. Specifies the service for the OpenCensusAgent. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
+            "type": "string",
+            "format": "string"
+          },
+          "context": {
+            "description": "Specifies the set of context propagation headers used for distributed tracing. Default is `[\"W3C_TRACE_CONTEXT\"]`. If multiple values are specified, the proxy will attempt to read each header for each request and will write all headers.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider.TraceContext"
+            }
+          },
+          "maxTagLength": {
+            "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
+            "type": "integer"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SkyWalkingTracingProvider": {
+        "description": "Defines configuration for a SkyWalking tracer.",
+        "type": "object",
+        "properties": {
+          "port": {
+            "description": "REQUIRED. Specifies the port of the service.",
+            "type": "integer"
+          },
+          "service": {
+            "description": "REQUIRED. Specifies the service for the SkyWalking receiver. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
+            "type": "string",
+            "format": "string"
+          },
+          "accessToken": {
+            "description": "Optional. The SkyWalking OAP access token.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationRequestBody": {
+        "type": "object",
+        "properties": {
+          "maxRequestBytes": {
+            "description": "Sets the maximum size of a message body that the ext-authz filter will hold in memory. If max_request_bytes is reached, and allow_partial_message is false, Envoy will return a 413 (Payload Too Large). Otherwise the request will be sent to the provider with a partial message. Note that this setting will have precedence over the fail_open field, the 413 will be returned even when the fail_open is set to true.",
+            "type": "integer"
+          },
+          "allowPartialMessage": {
+            "description": "When this field is true, ext-authz filter will buffer the message until max_request_bytes is reached. The authorization request will be dispatched and no 413 HTTP error will be returned by the filter. A \"x-envoy-auth-partial-body: false|true\" metadata header will be added to the authorization request message indicating if the body data is partial.",
+            "type": "boolean"
+          },
+          "packAsBytes": {
+            "description": "If true, the body sent to the external authorization service in the gRPC authorization request is set with raw bytes in the raw_body field (https://github.com/envoyproxy/envoy/blame/cffb095d59d7935abda12b9509bcd136808367bb/api/envoy/service/auth/v3/attribute_context.proto#L153). Otherwise, it will be filled with UTF-8 string in the body field (https://github.com/envoyproxy/envoy/blame/cffb095d59d7935abda12b9509bcd136808367bb/api/envoy/service/auth/v3/attribute_context.proto#L147). This field only works with the envoy_ext_authz_grpc provider and has no effect for the envoy_ext_authz_http provider.",
+            "type": "boolean"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider.TraceContext": {
+        "description": "TraceContext selects the context propagation headers used for distributed tracing.",
+        "type": "string",
+        "enum": [
+          "UNSPECIFIED",
+          "W3C_TRACE_CONTEXT",
+          "GRPC_BIN",
+          "CLOUD_TRACE_CONTEXT",
+          "B3"
+        ]
       },
       "istio.mesh.v1alpha1.Resource": {
         "description": "Resource describes the source of configuration",

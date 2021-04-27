@@ -154,6 +154,7 @@ message PeerAuthentication {
   // Mutual TLS settings for workload. If not defined, inherit from parent.
   MutualTLS mtls = 2;
 
-  // Port specific mutual TLS settings.
+  // Port specific mutual TLS settings. These only apply when a workload selector
+  // is specified.
   map<uint32, MutualTLS> port_level_mtls = 3;
 }

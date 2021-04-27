@@ -37,7 +37,7 @@ import "networking/v1alpha3/sidecar.proto";
 // namespace](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig),
 // followed by all matching EnvoyFilters in the workload's namespace.
 //
-// **NOTE 1**: Some aspects of this API is deeply tied to the internal
+// **NOTE 1**: Some aspects of this API are deeply tied to the internal
 // implementation in Istio networking subsystem as well as Envoy's XDS
 // API. While the EnvoyFilter API by itself will maintain backward
 // compatibility, any envoy configuration provided through this

@@ -710,12 +710,16 @@ type HTTPRoute struct {
 	Redirect *HTTPRedirect `protobuf:"bytes,3,opt,name=redirect,proto3" json:"redirect,omitempty"`
 	// Delegate is used to specify the particular VirtualService which
 	// can be used to define delegate HTTPRoute.
-	// It can be set only when `Route` and `Redirect` are empty, and the route rules of the
-	// delegate VirtualService will be merged with that in the current one.
+	//
+	// It can be set only when `Route` and `Redirect` are empty, and the route
+	// rules of the delegate VirtualService will be merged with that in the
+	// current one.
+	//
 	// **NOTE**:
-	//    1. Only one level delegation is supported.
-	//    2. The delegate's HTTPMatchRequest must be a strict subset of the root's,
-	//       otherwise there is a conflict and the HTTPRoute will not take effect.
+	//
+	// 1. Only one level delegation is supported.
+	// 2. The delegate's HTTPMatchRequest must be a strict subset of the root's,
+	//    otherwise there is a conflict and the HTTPRoute will not take effect.
 	Delegate *Delegate `protobuf:"bytes,20,opt,name=delegate,proto3" json:"delegate,omitempty"`
 	// Rewrite HTTP URIs and Authority headers. Rewrite cannot be used with
 	// Redirect primitive. Rewrite will be performed before forwarding.
@@ -1562,10 +1566,13 @@ type HTTPMatchRequest struct {
 	// Query parameters for matching.
 	//
 	// Ex:
+	//
 	// - For a query parameter like "?key=true", the map key would be "key" and
 	//   the string match could be defined as `exact: "true"`.
+	//
 	// - For a query parameter like "?key", the map key would be "key" and the
 	//   string match could be defined as `exact: ""`.
+	//
 	// - For a query parameter like "?key=123", the map key would be "key" and the
 	//   string match could be defined as `regex: "\d+$"`. Note that this
 	//   configuration will only match values like "123" but not "a123" or "123a".
