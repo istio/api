@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: installation
+issue:
+  - 30719
+
+releaseNotes:
+  - |
+    **Added** topologySpreadConstraints to the k8s settings of IstioOperator API.
