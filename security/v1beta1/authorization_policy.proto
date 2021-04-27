@@ -358,7 +358,7 @@ message Rule {
 // ```yaml
 // principals: ["admin", "dev"]
 // namespaces: ["prod", "test"]
-// not_ipblocks: ["1.2.3.4"]
+// notIpBlocks: ["1.2.3.4"]
 // ```
 message Source {
   // Optional. A list of source peer identities (i.e. service account), which
@@ -421,7 +421,7 @@ message Source {
 // ```yaml
 // hosts: ["*.example.com"]
 // methods: ["GET", "HEAD"]
-// not_paths: ["/admin*"]
+// notPaths: ["/admin*"]
 // ```
 message Operation {
   // Optional. A list of hosts, which matches to the "request.host" attribute.
