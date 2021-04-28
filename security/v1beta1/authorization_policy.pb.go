@@ -643,7 +643,7 @@ func (m *Rule_To) GetOperation() *Operation {
 // ```yaml
 // principals: ["admin", "dev"]
 // namespaces: ["prod", "test"]
-// not_ipblocks: ["1.2.3.4"]
+// notIpBlocks: ["1.2.3.4"]
 // ```
 type Source struct {
 	// Optional. A list of source peer identities (i.e. service account), which
@@ -803,7 +803,7 @@ func (m *Source) GetNotRemoteIpBlocks() []string {
 // ```yaml
 // hosts: ["*.example.com"]
 // methods: ["GET", "HEAD"]
-// not_paths: ["/admin*"]
+// notPaths: ["/admin*"]
 // ```
 type Operation struct {
 	// Optional. A list of hosts, which matches to the "request.host" attribute.
