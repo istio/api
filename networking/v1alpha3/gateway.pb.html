@@ -810,6 +810,12 @@ No
 <p>A list of alternate names to verify the subject identity in the
 certificate presented by the client.</p>
 
+<p>Note that each subject alt name in SPIFFE URI format may end in &ldquo;/<em>&rdquo;,
+indicating a wildcard. Wildcards are only allowed in specific format
+and at the end and for a whole component of the qualified name, i.e.
+&ldquo;spiffe://foo.cluster.domain/</em>&rdquo; is ok, but not &ldquo;spiffe://foo.c<em>&rdquo; or
+&ldquo;spiffe://foo.</em>.domain&rdquo;. A wildcard will match one or more components.</p>
+
 </td>
 <td>
 No

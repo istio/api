@@ -923,6 +923,12 @@ type ServerTLSSettings struct {
 	CredentialName string `protobuf:"bytes,10,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
 	// A list of alternate names to verify the subject identity in the
 	// certificate presented by the client.
+	//
+	// Note that each subject alt name in SPIFFE URI format may end in "/*",
+	// indicating a wildcard. Wildcards are only allowed in specific format
+	// and at the end and for a whole component of the qualified name, i.e.
+	// "spiffe://foo.cluster.domain/*" is ok, but not "spiffe://foo.c*" or
+	// "spiffe://foo.*.domain". A wildcard will match one or more components.
 	SubjectAltNames []string `protobuf:"bytes,6,rep,name=subject_alt_names,json=subjectAltNames,proto3" json:"subject_alt_names,omitempty"`
 	// An optional list of base64-encoded SHA-256 hashes of the SKPIs of
 	// authorized client certificates.

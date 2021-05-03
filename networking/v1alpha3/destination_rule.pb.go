@@ -1829,6 +1829,12 @@ type ClientTLSSettings struct {
 	// certificate's subject alt name matches one of the specified values.
 	// If specified, this list overrides the value of subject_alt_names
 	// from the ServiceEntry.
+	//
+	// Note that each subject alt name in SPIFFE URI format may end in "/*",
+	// indicating a wildcard. Wildcards are only allowed in specific format
+	// and at the end and for a whole component of the qualified name, i.e.
+	// "spiffe://foo.cluster.domain/*" is ok, but not "spiffe://foo.c*" or
+	// "spiffe://foo.*.domain". A wildcard will match one or more components.
 	SubjectAltNames []string `protobuf:"bytes,5,rep,name=subject_alt_names,json=subjectAltNames,proto3" json:"subject_alt_names,omitempty"`
 	// SNI string to present to the server during TLS handshake.
 	Sni                  string   `protobuf:"bytes,6,opt,name=sni,proto3" json:"sni,omitempty"`
