@@ -971,6 +971,7 @@ type ServiceEntry struct {
 	ExportTo []string `protobuf:"bytes,7,rep,name=export_to,json=exportTo,proto3" json:"export_to,omitempty"`
 	// If specified, the proxy will verify that the server certificate's
 	// subject alternate name matches one of the specified values.
+	// subjectAltNames does not get used when TLS mode is `SIMPLE`.
 	//
 	// NOTE: When using the workloadEntry with workloadSelectors, the
 	// service account specified in the workloadEntry will also be used
