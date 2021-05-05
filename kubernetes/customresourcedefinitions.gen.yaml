@@ -562,6 +562,9 @@ spec:
                                   credentialName:
                                     format: string
                                     type: string
+                                  insecureSkipVerify:
+                                    nullable: true
+                                    type: boolean
                                   mode:
                                     enum:
                                     - DISABLE
@@ -600,6 +603,9 @@ spec:
                             credentialName:
                               format: string
                               type: string
+                            insecureSkipVerify:
+                              nullable: true
+                              type: boolean
                             mode:
                               enum:
                               - DISABLE
@@ -1110,6 +1116,9 @@ spec:
                             credentialName:
                               format: string
                               type: string
+                            insecureSkipVerify:
+                              nullable: true
+                              type: boolean
                             mode:
                               enum:
                               - DISABLE
@@ -1148,6 +1157,9 @@ spec:
                       credentialName:
                         format: string
                         type: string
+                      insecureSkipVerify:
+                        nullable: true
+                        type: boolean
                       mode:
                         enum:
                         - DISABLE

@@ -34181,6 +34181,16 @@
                 "name": "ca_certificates_pem",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 35,
+                "name": "verify_certificate_at_client",
+                "type": "google.protobuf.BoolValue"
+              },
+              {
+                "id": 36,
+                "name": "default_certificate_authority_path",
+                "type": "string"
               }
             ],
             "maps": [
@@ -34819,6 +34829,11 @@
                 "id": 6,
                 "name": "sni",
                 "type": "string"
+              },
+              {
+                "id": 8,
+                "name": "insecure_skip_verify",
+                "type": "google.protobuf.BoolValue"
               }
             ]
           },

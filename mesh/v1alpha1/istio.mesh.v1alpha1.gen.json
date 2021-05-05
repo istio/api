@@ -230,6 +230,11 @@
         "description": "ProxyConfig defines variables for individual Envoy instances.",
         "type": "object",
         "properties": {
+          "verifyCertificateAtClient": {
+            "description": "`VerifyCertificateAtClient` sets the mesh global default for peer certificate validation at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination modes are used. This setting can be overridden at the host level via DestinationRule API. By default, `VerifyCertificateAtClient` is `true`.",
+            "type": "boolean",
+            "nullable": true
+          },
           "tracing": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing"
           },
@@ -377,6 +382,11 @@
               "type": "string",
               "format": "string"
             }
+          },
+          "defaultCertificateAuthorityPath": {
+            "description": "`DefaultCertificateAuthorityPath` sets the mesh global default of the CA certificate path at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination modes are used. This setting can be overridden at the host level via DestinationRule API. If `VerifyCertificateAtClient` is `false`, `DefaultCertificateAuthorityPath` will default to empty. If `VerifyCertificateAtClient` is `true`, `DefaultCertificateAuthorityPath` will default to the OS CA bundle for the proxy.",
+            "type": "string",
+            "format": "string"
           }
         }
       },
@@ -1684,6 +1694,11 @@
             "description": "SNI string to present to the server during TLS handshake.",
             "type": "string",
             "format": "string"
+          },
+          "insecureSkipVerify": {
+            "description": "User does not wish to use the MeshConfig.ProxyConfig settings for CA certification verification. DestinationRule takes priority over ProxyConfig settings, even if annotations are used.",
+            "type": "boolean",
+            "nullable": true
           }
         }
       },

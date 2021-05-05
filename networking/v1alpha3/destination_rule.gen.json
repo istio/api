@@ -230,6 +230,11 @@
             "description": "SNI string to present to the server during TLS handshake.",
             "type": "string",
             "format": "string"
+          },
+          "insecureSkipVerify": {
+            "description": "User does not wish to use the MeshConfig.ProxyConfig settings for CA certification verification. DestinationRule takes priority over ProxyConfig settings, even if annotations are used.",
+            "type": "boolean",
+            "nullable": true
           }
         }
       },

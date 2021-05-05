@@ -949,6 +949,11 @@ message ClientTLSSettings {
 
   // SNI string to present to the server during TLS handshake.
   string sni = 6;
+
+  // User does not wish to use the MeshConfig.ProxyConfig settings for
+  // CA certification verification. DestinationRule takes priority over
+  // ProxyConfig settings, even if annotations are used.
+  google.protobuf.BoolValue insecure_skip_verify = 8;
 }
 
 // Locality-weighted load balancing allows administrators to control the
