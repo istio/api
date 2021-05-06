@@ -1576,6 +1576,9 @@
           },
           "forwardClientCertDetails": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.Topology.ForwardClientCertDetails"
+          },
+          "setCurrentClientCertDetails": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.Topology.SetCurrentClientCertDetails"
           }
         }
       },
@@ -1590,6 +1593,37 @@
           "SANITIZE_SET",
           "ALWAYS_FORWARD_ONLY"
         ]
+      },
+      "istio.mesh.v1alpha1.Topology.SetCurrentClientCertDetails": {
+        "description": "SetCurrentClientCertDetails specifies the fields in the client certificate that should be added to the x-forwarded-client-cert (XFCC) header See [Envoy XFCC Details](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#x-forwarded-client-cert)",
+        "type": "object",
+        "properties": {
+          "uri": {
+            "description": "Adds the URI type Subject Alternative Name of the client cert. Defaults to `true`.",
+            "type": "boolean",
+            "nullable": true
+          },
+          "subject": {
+            "description": "Adds the subject of the client cert. Defaults to `true`.",
+            "type": "boolean",
+            "nullable": true
+          },
+          "cert": {
+            "description": "Adds the entire client cert in URL encoded PEM format. This will appear in the XFCC header comma separated from other values with the value Cert=\"PEM\". Defaults to `true`.",
+            "type": "boolean",
+            "nullable": true
+          },
+          "chain": {
+            "description": "Adds the entire client cert chain (including the leaf cert) in URL encoded PEM format. This will appear in the XFCC header the XFCC header comma separated from other values with the value Chain=”PEM”. Defaults to `true`.",
+            "type": "boolean",
+            "nullable": true
+          },
+          "dns": {
+            "description": "Adds the DNS type Subject Alternative Names of the client cert. Defaults to `true`.",
+            "type": "boolean",
+            "nullable": true
+          }
+        }
       },
       "istio.mesh.v1alpha1.ProxyConfig.InboundInterceptionMode": {
         "description": "The mode used to redirect inbound traffic to Envoy. This setting has no effect on outbound traffic: iptables `REDIRECT` is always used for outbound connections.",
