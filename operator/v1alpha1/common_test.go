@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"testing"
 
+	protobuf "github.com/gogo/protobuf/types"
 	"k8s.io/apimachinery/pkg/util/intstr"
 )
 
@@ -49,4 +50,25 @@ func TestIntOrString_UnmarshalJSONPB(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestBoolValueForPB_GetValue(t *testing.T) {
+	var test *BoolValueForPB
+	t.Run("nil value", func(t *testing.T) {
+		if test.GetValue() != false {
+			t.Fatalf("value of nil BoolValueForPB should be false")
+		}
+	})
+	t.Run("false value", func(t *testing.T) {
+		test = &BoolValueForPB{protobuf.BoolValue{Value: false}}
+		if test.GetValue() != false {
+			t.Fatalf("value of false BoolValueForPB should be false")
+		}
+	})
+	t.Run("true value", func(t *testing.T) {
+		test = &BoolValueForPB{protobuf.BoolValue{Value: false}}
+		if test.GetValue() != false {
+			t.Fatalf("value of true BoolValueForPB should be true")
+		}
+	})
 }
