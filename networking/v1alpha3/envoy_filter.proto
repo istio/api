@@ -370,6 +370,38 @@ import "networking/v1alpha3/sidecar.proto";
 //                   cluster_name: xds-grpc
 //           type_urls: ["envoy.extensions.filters.http.wasm.v3.Wasm"]
 // ```
+//
+// The following example adds a Wasm service extension for all proxies using a locally available Wasm file.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: EnvoyFilter
+// metadata:
+//   name: wasm-service
+//   namespace: myns
+// spec:
+//   configPatches:
+//   - applyTo: BOOTSTRAP
+//     patch:
+//       operation: MERGE
+//       value:
+//         bootstrap_extensions:
+//         - name: envoy.bootstrap.wasm
+//           typed_config:
+//             "@type": type.googleapis.com/envoy.extensions.wasm.v3.WasmService
+//             singleton: true
+//             config:
+//               name: my_plugin
+//               configuration:
+//                 "@type": type.googleapis.com/google.protobuf.StringValue
+//                 value: |
+//                   {}
+//               vm_config:
+//                 runtime: "envoy.wasm.runtime.v8"
+//                 code:
+//                   local:
+//                     filename: "/etc/envoy_filter_http_wasm_example.wasm"
+// ```
 package istio.networking.v1alpha3;
 
 option go_package = "istio.io/api/networking/v1alpha3";
@@ -435,6 +467,9 @@ message EnvoyFilter {
     // Applies the patch to or adds an extension config in ECDS output. Note that ECDS
     // is only supported by HTTP filters.
     EXTENSION_CONFIG = 9;
+
+    // Applies the patch to bootstrap configuration.
+    BOOTSTRAP = 10;
   };
 
   // PatchContext selects a class of configurations based on the

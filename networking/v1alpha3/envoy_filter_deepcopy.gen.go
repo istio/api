@@ -347,6 +347,38 @@
 //                   cluster_name: xds-grpc
 //           type_urls: ["envoy.extensions.filters.http.wasm.v3.Wasm"]
 // ```
+//
+// The following example adds a Wasm service extension for all proxies using a locally available Wasm file.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: EnvoyFilter
+// metadata:
+//   name: wasm-service
+//   namespace: myns
+// spec:
+//   configPatches:
+//   - applyTo: BOOTSTRAP
+//     patch:
+//       operation: MERGE
+//       value:
+//         bootstrap_extensions:
+//         - name: envoy.bootstrap.wasm
+//           typed_config:
+//             "@type": type.googleapis.com/envoy.extensions.wasm.v3.WasmService
+//             singleton: true
+//             config:
+//               name: my_plugin
+//               configuration:
+//                 "@type": type.googleapis.com/google.protobuf.StringValue
+//                 value: |
+//                   {}
+//               vm_config:
+//                 runtime: "envoy.wasm.runtime.v8"
+//                 code:
+//                   local:
+//                     filename: "/etc/envoy_filter_http_wasm_example.wasm"
+// ```
 
 package v1alpha3
 
