@@ -923,6 +923,10 @@ message ClientTLSSettings {
   // certificates to use in verifying a presented server certificate. If
   // omitted, the proxy will not verify the server's certificate.
   // Should be empty if mode is `ISTIO_MUTUAL`.
+  //
+  // If `CaCertificates`is set, proxy verifies CA signature based on given CaCertificates.
+  // This setting take priority over ProxyConfig `DefaultCertificateAuthorityPath` and
+  // `VerifyCertificateAtClient`.
   string ca_certificates = 4;
 
   // The name of the secret that holds the TLS certs for the
@@ -945,14 +949,27 @@ message ClientTLSSettings {
   // certificate's subject alt name matches one of the specified values.
   // If specified, this list overrides the value of subject_alt_names
   // from the ServiceEntry.
+  //
+  // If unset, and `VerifyCertificateAtClient` is true, proxy uses host in
+  // destination rule to verify the SANs. If unset, and
+  // `VerifyCertificateAtClient` is false, proxy does not verify SANs.
+  //
+  // Client-side proxy will exact match host as well as one level wildcard if
+  // the specified host doesn't contain a wildcard. For example, if the host is
+  // `x.y.com`, client-side proxy will match either `x.y.com` or `*.y.com` for
+  // the SAN in the presented server certificate. For wildcard host name,
+  // client-side proxy will do a suffix match. For example, if host is
+  // `*.x.y.com`, client-side proxy will verify the presented server
+  // certificate SAN matches ``.x.y.com` suffix.
   repeated string subject_alt_names = 5;
 
   // SNI string to present to the server during TLS handshake.
   string sni = 6;
 
-  // User does not wish to use the MeshConfig.ProxyConfig settings for
-  // CA certification verification. DestinationRule takes priority over
-  // ProxyConfig settings, even if annotations are used.
+  // Boolean specifying if proxy should not check the CA signature for the host
+  // certificate. `InsecureSkipVerify` is `false` by default. If set to true,
+  // the proxy will skip verification of the host's certificate regardless of
+  // any CA certificate specified elsewhere.
   google.protobuf.BoolValue insecure_skip_verify = 8;
 }
 

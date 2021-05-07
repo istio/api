@@ -231,7 +231,7 @@
         "type": "object",
         "properties": {
           "verifyCertificateAtClient": {
-            "description": "`VerifyCertificateAtClient` sets the mesh global default for peer certificate validation at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination modes are used. This setting can be overridden at the host level via DestinationRule API. By default, `VerifyCertificateAtClient` is `true`.",
+            "description": "`VerifyCertificateAtClient` sets the mesh global default for peer certificate validation at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination modes are used. This setting can be overridden at the host level via DestinationRule API. By default, `VerifyCertificateAtClient` is `false`.",
             "type": "boolean",
             "nullable": true
           },
@@ -384,7 +384,7 @@
             }
           },
           "defaultCertificateAuthorityPath": {
-            "description": "`DefaultCertificateAuthorityPath` sets the mesh global default of the CA certificate path at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination modes are used. This setting can be overridden at the host level via DestinationRule API. If `VerifyCertificateAtClient` is `false`, `DefaultCertificateAuthorityPath` will default to empty. If `VerifyCertificateAtClient` is `true`, `DefaultCertificateAuthorityPath` will default to the OS CA bundle for the proxy.",
+            "description": "`DefaultCertificateAuthorityPath` sets the mesh global default of the CA certificate path at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination modes are used. This setting can be overridden at the host level via DestinationRule API.",
             "type": "string",
             "format": "string"
           }
@@ -1696,7 +1696,7 @@
             "format": "string"
           },
           "insecureSkipVerify": {
-            "description": "User does not wish to use the MeshConfig.ProxyConfig settings for CA certification verification. DestinationRule takes priority over ProxyConfig settings, even if annotations are used.",
+            "description": "Boolean specifying if proxy should not check the CA signature for the host certificate. `InsecureSkipVerify` is `false` by default. If set to true, the proxy will skip verification of the host's certificate regardless of any CA certificate specified elsewhere.",
             "type": "boolean",
             "nullable": true
           }

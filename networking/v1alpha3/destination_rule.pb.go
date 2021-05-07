@@ -1809,6 +1809,10 @@ type ClientTLSSettings struct {
 	// certificates to use in verifying a presented server certificate. If
 	// omitted, the proxy will not verify the server's certificate.
 	// Should be empty if mode is `ISTIO_MUTUAL`.
+	//
+	// If `CaCertificates`is set, proxy verifies CA signature based on given CaCertificates.
+	// This setting take priority over ProxyConfig `DefaultCertificateAuthorityPath` and
+	// `VerifyCertificateAtClient`.
 	CaCertificates string `protobuf:"bytes,4,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
 	// The name of the secret that holds the TLS certs for the
 	// client including the CA certificates. Secret must exist in the
@@ -1829,12 +1833,25 @@ type ClientTLSSettings struct {
 	// certificate's subject alt name matches one of the specified values.
 	// If specified, this list overrides the value of subject_alt_names
 	// from the ServiceEntry.
+	//
+	// If unset, and `VerifyCertificateAtClient` is true, proxy uses host in
+	// destination rule to verify the SANs. If unset, and
+	// `VerifyCertificateAtClient` is false, proxy does not verify SANs.
+	//
+	// Client-side proxy will exact match host as well as one level wildcard if
+	// the specified host doesn't contain a wildcard. For example, if the host is
+	// `x.y.com`, client-side proxy will match either `x.y.com` or `*.y.com` for
+	// the SAN in the presented server certificate. For wildcard host name,
+	// client-side proxy will do a suffix match. For example, if host is
+	// `*.x.y.com`, client-side proxy will verify the presented server
+	// certificate SAN matches ``.x.y.com` suffix.
 	SubjectAltNames []string `protobuf:"bytes,5,rep,name=subject_alt_names,json=subjectAltNames,proto3" json:"subject_alt_names,omitempty"`
 	// SNI string to present to the server during TLS handshake.
 	Sni string `protobuf:"bytes,6,opt,name=sni,proto3" json:"sni,omitempty"`
-	// User does not wish to use the MeshConfig.ProxyConfig settings for
-	// CA certification verification. DestinationRule takes priority over
-	// ProxyConfig settings, even if annotations are used.
+	// Boolean specifying if proxy should not check the CA signature for the host
+	// certificate. `InsecureSkipVerify` is `false` by default. If set to true,
+	// the proxy will skip verification of the host's certificate regardless of
+	// any CA certificate specified elsewhere.
 	InsecureSkipVerify   *types.BoolValue `protobuf:"bytes,8,opt,name=insecure_skip_verify,json=insecureSkipVerify,proto3" json:"insecure_skip_verify,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
 	XXX_unrecognized     []byte           `json:"-"`

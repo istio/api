@@ -1254,32 +1254,26 @@ type ProxyConfig struct {
 	// `VerifyCertificateAtClient` sets the mesh global default for peer certificate validation
 	// at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination
 	// modes are used. This setting can be overridden at the host level via DestinationRule API.
-	// By default, `VerifyCertificateAtClient` is `true`.
+	// By default, `VerifyCertificateAtClient` is `false`.
 	//
-	// `CaCertificates`: If set, proxy verifies CA signature based on given CaCertificates. If unset,
-	// and VerifyCertificateAtClient is true, proxy uses default System CA bundle. If unset and
-	// `VerifyCertificateAtClient` is false, proxy will not verify the CA.
+	// If unset and `VerifyCertificateAtClient` is `false`, proxy will not verify the CA.
 	//
-	// `SubjectAltNames`: If set, proxy verifies subject alt names are present in the SAN. If unset,
-	// and `VerifyCertificateAtClient` is true, proxy uses host in destination rule to verify the SANs.
-	// If unset, and `VerifyCertificateAtClient` is false, proxy does not verify SANs.
+	// If `DefaultCertificateAuthorityPath` is set, certificates will be checked against the CA cert
+	// provided regardless of `VerifyCertificateAtClient` being set.
 	//
-	// For SAN, client-side proxy will exact match host in `DestinationRule` as well as one level
-	// wildcard if the specified host in DestinationRule doesn't contain a wildcard.
-	// For example, if the host in `DestinationRule` is `x.y.com`, client-side proxy will
-	// match either `x.y.com` or `*.y.com` for the SAN in the presented server certificate.
-	// For wildcard host name in DestinationRule, client-side proxy will do a suffix match. For example,
-	// if host is `*.x.y.com`, client-side proxy will verify the presented server certificate SAN matches
-	// ``.x.y.com` suffix.
+	// If `VerifyCertificateAtClient` is true and `DefaultCertificateAuthorityPath` is unset, proxies
+	// will use the default System CA bundle
 	VerifyCertificateAtClient *types.BoolValue `protobuf:"bytes,35,opt,name=verify_certificate_at_client,json=verifyCertificateAtClient,proto3" json:"verifyCertificateAtClient,omitempty"`
 	// `DefaultCertificateAuthorityPath` sets the mesh global default of the CA
 	// certificate path at the client-side proxy when `SIMPLE` TLS or `MUTUAL`
 	// TLS (non `ISTIO_MUTUAL`) origination modes are used. This setting can be
-	// overridden at the host level via DestinationRule API. If
-	// `VerifyCertificateAtClient` is `false`, `DefaultCertificateAuthorityPath`
-	// will default to empty. If `VerifyCertificateAtClient` is `true`,
-	// `DefaultCertificateAuthorityPath` will default to
-	// the OS CA bundle for the proxy.
+	// overridden at the host level via DestinationRule API.
+	//
+	// If `VerifyCertificateAtClient` is `false`,
+	//`DefaultCertificateAuthorityPath` will default to empty.
+	//
+	// If `VerifyCertificateAtClient` is `true`,
+	// `DefaultCertificateAuthorityPath` will default to the OS CA bundle for the proxy.
 	DefaultCertificateAuthorityPath string   `protobuf:"bytes,36,opt,name=default_certificate_authority_path,json=defaultCertificateAuthorityPath,proto3" json:"defaultCertificateAuthorityPath,omitempty"`
 	XXX_NoUnkeyedLiteral            struct{} `json:"-"`
 	XXX_unrecognized                []byte   `json:"-"`

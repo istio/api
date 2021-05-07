@@ -232,7 +232,7 @@
             "format": "string"
           },
           "insecureSkipVerify": {
-            "description": "User does not wish to use the MeshConfig.ProxyConfig settings for CA certification verification. DestinationRule takes priority over ProxyConfig settings, even if annotations are used.",
+            "description": "Boolean specifying if proxy should not check the CA signature for the host certificate. `InsecureSkipVerify` is `false` by default. If set to true, the proxy will skip verification of the host's certificate regardless of any CA certificate specified elsewhere.",
             "type": "boolean",
             "nullable": true
           }
