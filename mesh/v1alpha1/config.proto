@@ -416,6 +416,7 @@ message MeshConfig {
   // If not specified, this will be enabled by default.
   google.protobuf.BoolValue enable_prometheus_merge = 51;
 
+  // $hide_from_docs
   // `VerifyCertificateAtClient` sets the mesh global default for peer certificate validation
   // at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination
   // modes are used. This setting can be overridden at the host level via DestinationRule API.

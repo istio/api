@@ -230,6 +230,11 @@
         "description": "ProxyConfig defines variables for individual Envoy instances.",
         "type": "object",
         "properties": {
+          "verifyCertificateAtClient": {
+            "description": "`VerifyCertificateAtClient` sets the mesh global default for peer certificate validation at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination modes are used. This setting can be overridden at the host level via DestinationRule API. By default, `VerifyCertificateAtClient` is `false`.",
+            "type": "boolean",
+            "nullable": true
+          },
           "tracing": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing"
           },
@@ -377,6 +382,11 @@
               "type": "string",
               "format": "string"
             }
+          },
+          "defaultCertificateAuthorityPath": {
+            "description": "`DefaultCertificateAuthorityPath` sets the mesh global default of the CA certificate path at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination modes are used. This setting can be overridden at the host level via DestinationRule API.",
+            "type": "string",
+            "format": "string"
           }
         }
       },
@@ -1684,6 +1694,11 @@
             "description": "SNI string to present to the server during TLS handshake.",
             "type": "string",
             "format": "string"
+          },
+          "insecureSkipVerify": {
+            "description": "Boolean specifying if proxy should not check the CA signature for the host certificate. `InsecureSkipVerify` is `false` by default. If set to true, the proxy will skip verification of the host's certificate regardless of any CA certificate specified elsewhere.",
+            "type": "boolean",
+            "nullable": true
           }
         }
       },
