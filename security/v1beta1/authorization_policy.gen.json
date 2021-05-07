@@ -37,6 +37,16 @@
                       "$ref": "#/components/schemas/istio.security.v1beta1.AuthorizationPolicy.ExtensionProvider"
                     }
                   }
+                },
+                {
+                  "required": [
+                    "customizeDeny"
+                  ],
+                  "properties": {
+                    "customizeDeny": {
+                      "$ref": "#/components/schemas/istio.security.v1beta1.AuthorizationPolicy.CustomizeDeny"
+                    }
+                  }
                 }
               ]
             }
@@ -48,6 +58,16 @@
             "properties": {
               "provider": {
                 "$ref": "#/components/schemas/istio.security.v1beta1.AuthorizationPolicy.ExtensionProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "customizeDeny"
+            ],
+            "properties": {
+              "customizeDeny": {
+                "$ref": "#/components/schemas/istio.security.v1beta1.AuthorizationPolicy.CustomizeDeny"
               }
             }
           }
@@ -95,6 +115,21 @@
         "properties": {
           "name": {
             "description": "Specifies the name of the extension provider. The list of available providers is defined in the MeshConfig. Note, currently at most 1 extension provider is allowed per workload. Different workloads can use different extension provider.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.security.v1beta1.AuthorizationPolicy.CustomizeDeny": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "description": "Custom response deny body",
+            "type": "string",
+            "format": "string"
+          },
+          "statusCode": {
+            "description": "Custom response deny status code",
             "type": "string",
             "format": "string"
           }

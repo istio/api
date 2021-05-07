@@ -304,9 +304,18 @@ message AuthorizationPolicy {
     string name = 1;
   }
 
+  message CustomizeDeny {
+    // Custom response deny status code
+    string status_code = 1;
+    // Custom response deny body
+    string body = 2;
+  }
+
   oneof action_detail {
     // Specifies detailed configuration of the CUSTOM action. Must be used only with CUSTOM action.
     ExtensionProvider provider = 4;
+    // Specifies detailed configuration of the ALLOW/DENY action.
+    CustomizeDeny customize_deny = 5;
   }
 }
 
