@@ -602,6 +602,7 @@ message HTTPRoute {
 
   // Rewrite HTTP URIs and Authority headers. Rewrite cannot be used with
   // Redirect primitive. Rewrite will be performed before forwarding.
+  // Downstream sidecars log the URI as it was before it was rewritten.
   HTTPRewrite rewrite = 4;
 
   reserved 5;
