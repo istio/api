@@ -94,6 +94,12 @@ func (InstallStatus_Status) EnumDescriptor() ([]byte, []int) {
 //       enabled: true
 // ```
 //
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=install.istio.io/v1alpha1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type IstioOperatorSpec struct {
 	// Path or name for the profile e.g.
 	//
