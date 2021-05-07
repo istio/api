@@ -1005,7 +1005,7 @@ message HTTPMatchRequest {
   //
   // - `prefix: "value"` for prefix-based match
   //
-  // - `regex: "value"` for ECMAscript style regex-based match
+  // - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
   //
   // **Note:** Case-insensitive matching could be enabled via the
   // `ignore_uri_case` flag.
@@ -1018,7 +1018,7 @@ message HTTPMatchRequest {
   //
   // - `prefix: "value"` for prefix-based match
   //
-  // - `regex: "value"` for ECMAscript style regex-based match
+  // - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
   //
   StringMatch scheme = 2;
 
@@ -1029,7 +1029,7 @@ message HTTPMatchRequest {
   //
   // - `prefix: "value"` for prefix-based match
   //
-  // - `regex: "value"` for ECMAscript style regex-based match
+  // - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
   //
   StringMatch method = 3;
 
@@ -1040,7 +1040,7 @@ message HTTPMatchRequest {
   //
   // - `prefix: "value"` for prefix-based match
   //
-  // - `regex: "value"` for ECMAscript style regex-based match
+  // - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
   //
   StringMatch authority = 4;
 
@@ -1053,7 +1053,7 @@ message HTTPMatchRequest {
   //
   // - `prefix: "value"` for prefix-based match
   //
-  // - `regex: "value"` for ECMAscript style regex-based match
+  // - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
   //
   // If the value is empty and only the name of header is specfied, presence of the header is checked.
   // **Note:** The keys `uri`, `scheme`, `method`, and `authority` will be ignored.

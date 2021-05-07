@@ -1497,7 +1497,7 @@ type HTTPMatchRequest struct {
 	//
 	// - `prefix: "value"` for prefix-based match
 	//
-	// - `regex: "value"` for ECMAscript style regex-based match
+	// - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
 	//
 	// **Note:** Case-insensitive matching could be enabled via the
 	// `ignore_uri_case` flag.
@@ -1509,7 +1509,7 @@ type HTTPMatchRequest struct {
 	//
 	// - `prefix: "value"` for prefix-based match
 	//
-	// - `regex: "value"` for ECMAscript style regex-based match
+	// - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
 	//
 	Scheme *StringMatch `protobuf:"bytes,2,opt,name=scheme,proto3" json:"scheme,omitempty"`
 	// HTTP Method
@@ -1519,7 +1519,7 @@ type HTTPMatchRequest struct {
 	//
 	// - `prefix: "value"` for prefix-based match
 	//
-	// - `regex: "value"` for ECMAscript style regex-based match
+	// - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
 	//
 	Method *StringMatch `protobuf:"bytes,3,opt,name=method,proto3" json:"method,omitempty"`
 	// HTTP Authority
@@ -1529,7 +1529,7 @@ type HTTPMatchRequest struct {
 	//
 	// - `prefix: "value"` for prefix-based match
 	//
-	// - `regex: "value"` for ECMAscript style regex-based match
+	// - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
 	//
 	Authority *StringMatch `protobuf:"bytes,4,opt,name=authority,proto3" json:"authority,omitempty"`
 	// The header keys must be lowercase and use hyphen as the separator,
@@ -1541,7 +1541,7 @@ type HTTPMatchRequest struct {
 	//
 	// - `prefix: "value"` for prefix-based match
 	//
-	// - `regex: "value"` for ECMAscript style regex-based match
+	// - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
 	//
 	// If the value is empty and only the name of header is specfied, presence of the header is checked.
 	// **Note:** The keys `uri`, `scheme`, `method`, and `authority` will be ignored.
