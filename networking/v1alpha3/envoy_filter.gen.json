@@ -305,7 +305,8 @@
           "UNSPECIFIED",
           "AUTHN",
           "AUTHZ",
-          "STATS"
+          "STATS",
+          "ROUTER"
         ]
       },
       "istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch": {

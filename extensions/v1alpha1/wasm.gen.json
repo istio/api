@@ -1,0 +1,75 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "",
+    "version": "v1alpha1"
+  },
+  "components": {
+    "schemas": {
+      "istio.extensions.v1alpha1.WasmExtension": {
+        "description": "WasmExtensions provides a mechanism to extend the functionality provided by the Istio proxy through Web Assembly filters.",
+        "type": "object",
+        "properties": {
+          "workloadSelector": {
+            "$ref": "#/components/schemas/istio.type.v1beta1.WorkloadSelector"
+          },
+          "config": {
+            "description": "The configuration that will be passed on to the extension.",
+            "type": "object"
+          },
+          "image": {
+            "description": "URL of a compatible OCI image.",
+            "type": "string",
+            "format": "string"
+          },
+          "imagePullPolicy": {
+            "description": "The pull behaviour to be applied when fetching the `image`. Can be one of `IfNotPresent`, `Always`. Only relevant when images are referenced by tag. If set to `Always`, we will always pull the latest version of an image when applying this `WasmExtension.` If set to `IfNotPresent`, and an existing version of the image has been pulled before, that will be used. If no version of the image is present locally, we will pull the latest version.",
+            "type": "string",
+            "format": "string"
+          },
+          "imagePullSecrets": {
+            "description": "Credentials to use for image pulling. List of K8s Secrets that contain docker pull secrets which are to be used to authenticate against the registry when pulling the image. If the name contains a forward-slash, it will be interpreted as \u003cnamespace\u003e/\u003cname\u003e. Names that do not contain forward-slashes are interpreted as the names of secrets in the same namespace as the `WasmExtension`.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "phase": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass"
+          },
+          "priority": {
+            "description": "Determines ordering of `WasmExtensions` in the same `phase`. When multiple `WasmExtensions` are applied to the same workload in the same `phase`, they will be applied by priority, in descending order. If `priority` is not set, or two `WasmExtensions` exist with the same value, the ordering will be deterministically derived from name and namespace of the `WasmExtensions`.",
+            "type": "integer",
+            "nullable": true
+          }
+        }
+      },
+      "istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass": {
+        "description": "Determines where in the filter chain this `WasmExtension` is to be injected.",
+        "type": "string",
+        "enum": [
+          "UNSPECIFIED",
+          "AUTHN",
+          "AUTHZ",
+          "STATS",
+          "ROUTER"
+        ]
+      },
+      "istio.type.v1beta1.WorkloadSelector": {
+        "description": "Criteria used to select the specific set of pods/VMs on which this Extension configuration should be applied. If omitted, this configuration will be applied to all workload instances in the same namespace. If omitted, the `WasmExtension` will be applied to all workloads in the same namespace. If the `WasmExtension` is present in the config root namespace, it will be applied to all applicable workloads in any namespace.",
+        "type": "object",
+        "properties": {
+          "matchLabels": {
+            "description": "One or more labels that indicate a specific set of pods/VMs on which a policy should be applied. The scope of label search is restricted to the configuration namespace in which the resource is present.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

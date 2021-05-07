@@ -1,0 +1,125 @@
+---
+title: istio.extensions.v1alpha1
+layout: protoc-gen-docs
+generator: protoc-gen-docs
+number_of_entries: 1
+---
+<h2 id="WasmExtension">WasmExtension</h2>
+<section>
+<p>WasmExtensions provides a mechanism to extend the functionality provided by
+the Istio proxy through Web Assembly filters.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="WasmExtension-config">
+<td><code>config</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">Struct</a></code></td>
+<td>
+<p>The configuration that will be passed on to the extension.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WasmExtension-image">
+<td><code>image</code></td>
+<td><code>string</code></td>
+<td>
+<p>URL of a compatible OCI image.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WasmExtension-image_pull_policy">
+<td><code>imagePullPolicy</code></td>
+<td><code>string</code></td>
+<td>
+<p>The pull behaviour to be applied when fetching the <code>image</code>.
+Can be one of <code>IfNotPresent</code>, <code>Always</code>. Only relevant when images
+are referenced by tag.
+If set to <code>Always</code>, we will always pull the latest version of
+an image when applying this <code>WasmExtension.</code>
+If set to <code>IfNotPresent</code>, and an existing version of the image
+has been pulled before, that will be used. If no version of the image
+is present locally, we will pull the latest version.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WasmExtension-image_pull_secrets">
+<td><code>imagePullSecrets</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Credentials to use for image pulling.
+List of K8s Secrets that contain docker pull secrets which are to
+be used to authenticate against the registry when pulling the image.
+If the name contains a forward-slash, it will be interpreted as
+<namespace>/<name>. Names that do not contain forward-slashes are
+interpreted as the names of secrets in the same namespace as the
+<code>WasmExtension</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WasmExtension-workload_selector">
+<td><code>workloadSelector</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#WorkloadSelector">WorkloadSelector</a></code></td>
+<td>
+<p>Criteria used to select the specific set of pods/VMs on which
+this Extension configuration should be applied. If omitted, this
+configuration will be applied to all workload instances in the same
+namespace.  If omitted, the <code>WasmExtension</code> will be applied to all
+workloads in the same namespace. If the <code>WasmExtension</code> is
+present in the config root namespace, it will be applied to all
+applicable workloads in any namespace.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WasmExtension-phase">
+<td><code>phase</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/envoy-filter.html#EnvoyFilter-Patch-FilterClass">FilterClass</a></code></td>
+<td>
+<p>Determines where in the filter chain this <code>WasmExtension</code> is to be injected.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WasmExtension-priority">
+<td><code>priority</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#int64value">Int64Value</a></code></td>
+<td>
+<p>Determines ordering of <code>WasmExtensions</code> in the same <code>phase</code>.
+When multiple <code>WasmExtensions</code> are applied to the same workload in the
+same <code>phase</code>, they will be applied by priority, in descending order.
+If <code>priority</code> is not set, or two <code>WasmExtensions</code> exist with the same
+value, the ordering will be deterministically derived from name and
+namespace of the <code>WasmExtensions</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>

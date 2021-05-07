@@ -9,6 +9,86 @@ metadata:
     chart: istio
     heritage: Tiller
     release: istio
+  name: wasmextensions.extensions.istio.io
+spec:
+  group: extensions.istio.io
+  names:
+    categories:
+    - istio-io
+    - extensions-istio-io
+    kind: WasmExtension
+    listKind: WasmExtensionList
+    plural: wasmextensions
+    singular: wasmextension
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              config:
+                description: The configuration that will be passed on to the extension.
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
+              image:
+                description: URL of a compatible OCI image.
+                format: string
+                type: string
+              imagePullPolicy:
+                description: The pull behaviour to be applied when fetching the `image`.
+                format: string
+                type: string
+              imagePullSecrets:
+                description: Credentials to use for image pulling.
+                items:
+                  format: string
+                  type: string
+                type: array
+              phase:
+                description: Determines where in the filter chain this `WasmExtension`
+                  is to be injected.
+                enum:
+                - UNSPECIFIED
+                - AUTHN
+                - AUTHZ
+                - STATS
+                - ROUTER
+                type: string
+              priority:
+                description: Determines ordering of `WasmExtensions` in the same `phase`.
+                nullable: true
+                type: integer
+              workloadSelector:
+                properties:
+                  matchLabels:
+                    additionalProperties:
+                      format: string
+                      type: string
+                    type: object
+                type: object
+            type: object
+          status:
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    app: istio-pilot
+    chart: istio
+    heritage: Tiller
+    release: istio
   name: destinationrules.networking.istio.io
 spec:
   group: networking.istio.io
@@ -2551,6 +2631,7 @@ spec:
                           - AUTHN
                           - AUTHZ
                           - STATS
+                          - ROUTER
                           type: string
                         operation:
                           description: Determines how the patch should be applied.

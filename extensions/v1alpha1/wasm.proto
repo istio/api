@@ -1,0 +1,92 @@
+// Copyright Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/struct.proto";
+import "networking/v1alpha3/envoy_filter.proto";
+import "type/v1beta1/selector.proto";
+
+package istio.extensions.v1alpha1;
+
+option go_package="istio.io/api/extensions/v1alpha1";
+
+// WasmExtensions provides a mechanism to extend the functionality provided by
+// the Istio proxy through Web Assembly filters.
+//
+// <!-- crd generation tags
+// +cue-gen:WasmExtension:groupName:extensions.istio.io
+// +cue-gen:WasmExtension:version:v1alpha1
+// +cue-gen:WasmExtension:storageVersion
+// +cue-gen:WasmExtension:annotations:helm.sh/resource-policy=keep
+// +cue-gen:WasmExtension:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
+// +cue-gen:WasmExtension:subresource:status
+// +cue-gen:WasmExtension:scope:Namespaced
+// +cue-gen:WasmExtension:resource:categories=istio-io,extensions-istio-io
+// +cue-gen:WasmExtension:preserveUnknownFields:config
+// -->
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=extensions.istio.io/v1alpha1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
+message WasmExtension {
+  // The configuration that will be passed on to the extension.
+  google.protobuf.Struct config = 1;
+
+  // URL of a compatible OCI image.
+  string image = 2;
+
+  // The pull behaviour to be applied when fetching the `image`.
+  // Can be one of `IfNotPresent`, `Always`. Only relevant when images
+  // are referenced by tag.
+  // If set to `Always`, we will always pull the latest version of
+  // an image when applying this `WasmExtension.`
+  // If set to `IfNotPresent`, and an existing version of the image
+  // has been pulled before, that will be used. If no version of the image
+  // is present locally, we will pull the latest version.
+  string image_pull_policy = 3;
+
+  // Credentials to use for image pulling.
+  // List of K8s Secrets that contain docker pull secrets which are to
+  // be used to authenticate against the registry when pulling the image.
+  // If the name contains a forward-slash, it will be interpreted as
+  // <namespace>/<name>. Names that do not contain forward-slashes are
+  // interpreted as the names of secrets in the same namespace as the
+  // `WasmExtension`.
+  repeated string image_pull_secrets = 4;
+
+  // Criteria used to select the specific set of pods/VMs on which
+  // this Extension configuration should be applied. If omitted, this
+  // configuration will be applied to all workload instances in the same
+  // namespace.  If omitted, the `WasmExtension` will be applied to all
+  // workloads in the same namespace. If the `WasmExtension` is
+  // present in the config root namespace, it will be applied to all
+  // applicable workloads in any namespace.
+  istio.type.v1beta1.WorkloadSelector workload_selector = 5;
+
+  // Determines where in the filter chain this `WasmExtension` is to be injected.
+  istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass phase = 6;
+
+  // Determines ordering of `WasmExtensions` in the same `phase`.
+  // When multiple `WasmExtensions` are applied to the same workload in the
+  // same `phase`, they will be applied by priority, in descending order.
+  // If `priority` is not set, or two `WasmExtensions` exist with the same
+  // value, the ordering will be deterministically derived from name and
+  // namespace of the `WasmExtensions`.
+  google.protobuf.Int64Value priority = 7;
+}
