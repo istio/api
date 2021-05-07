@@ -391,6 +391,28 @@ No
 Yes
 </td>
 </tr>
+<tr id="EnvoyFilter-order">
+<td><code>order</code></td>
+<td><code>int32</code></td>
+<td>
+<p>The order in which patches are applied within a context.
+When one patch depends on another patch, the order of patch application
+is significant. The API provides two primary ways to order patches.
+Patches in the root namespace are applied before the patches in the workload namespace.
+Patches within one configuration resource are processed in the order
+that they appear in the <code>configPatches</code> list.</p>
+
+<p>Use the <code>order</code> field to explicitly define ordering within a namespace.
+The range is [-5, 5] with the default value of 0.</p>
+
+<p>Patch sets are sorted by the following ordered keys:
+order, creation time, fully qualified resource name.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>

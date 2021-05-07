@@ -815,4 +815,18 @@ message EnvoyFilter {
 
   // One or more patches with match conditions.
   repeated EnvoyConfigObjectPatch config_patches = 4 [(google.api.field_behavior) = REQUIRED];
+
+  // The order in which patches are applied within a context.
+  // When one patch depends on another patch, the order of patch application
+  // is significant. The API provides two primary ways to order patches.
+  // Patches in the root namespace are applied before the patches in the workload namespace.
+  // Patches within one configuration resource are processed in the order
+  // that they appear in the `configPatches` list.
+  //
+  // Use the `order` field to explicitly define ordering within a namespace.
+  // The range is [-5, 5] with the default value of 0.
+  //
+  // Patch sets are sorted by the following ordered keys:
+  // order, creation time, fully qualified resource name.
+  int32 order = 5;
 }
