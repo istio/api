@@ -727,6 +727,8 @@ type HTTPRoute struct {
 	// Timeout for HTTP requests, default is disabled.
 	Timeout *types.Duration `protobuf:"bytes,6,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	// Retry policy for HTTP requests.
+	// Retries are enabled by default, with a default policy based on the
+	// default for each field.
 	Retries *HTTPRetry `protobuf:"bytes,7,opt,name=retries,proto3" json:"retries,omitempty"`
 	// Fault injection policy to apply on HTTP traffic at the client side.
 	// Note that timeouts or retries will not be enabled when faults are
@@ -2591,6 +2593,7 @@ type HTTPRetry struct {
 	// `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute)
 	// or `per_try_timeout` is configured, the actual number of retries attempted also depends on
 	// the specified request `timeout` and `per_try_timeout` values.
+	// Defaults to `2`.
 	Attempts int32 `protobuf:"varint,1,opt,name=attempts,proto3" json:"attempts,omitempty"`
 	// Timeout per attempt for a given request, including the initial call and any retries. Format: 1h/1m/1s/1ms. MUST BE >=1ms.
 	// Default is same value as request
@@ -2601,9 +2604,11 @@ type HTTPRetry struct {
 	// One or more policies can be specified using a ‘,’ delimited list.
 	// See the [retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on)
 	// and [gRPC retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on) for more details.
+	// Defaults to `connect-failure,refused-stream,unavailable,cancelled,retriable-status-codes`.
 	RetryOn string `protobuf:"bytes,3,opt,name=retry_on,json=retryOn,proto3" json:"retry_on,omitempty"`
 	// Flag to specify whether the retries should retry to other localities.
 	// See the [retry plugin configuration](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_connection_management#retry-plugin-configuration) for more details.
+	// Defaults to `false`.
 	RetryRemoteLocalities *types.BoolValue `protobuf:"bytes,4,opt,name=retry_remote_localities,json=retryRemoteLocalities,proto3" json:"retry_remote_localities,omitempty"`
 	XXX_NoUnkeyedLiteral  struct{}         `json:"-"`
 	XXX_unrecognized      []byte           `json:"-"`

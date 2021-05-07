@@ -608,6 +608,8 @@ message HTTPRoute {
   google.protobuf.Duration timeout = 6;
 
   // Retry policy for HTTP requests.
+  // Retries are enabled by default, with a default policy based on the
+  // default for each field.
   HTTPRetry retries = 7;
 
   // Fault injection policy to apply on HTTP traffic at the client side.
@@ -1544,7 +1546,8 @@ message HTTPRetry {
   // `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute) 
   // or `per_try_timeout` is configured, the actual number of retries attempted also depends on
   // the specified request `timeout` and `per_try_timeout` values.
-  int32 attempts = 1 [(google.api.field_behavior) = REQUIRED];
+  // Defaults to `2`.
+  int32 attempts = 1;
 
   // Timeout per attempt for a given request, including the initial call and any retries. Format: 1h/1m/1s/1ms. MUST BE >=1ms.
   // Default is same value as request 
@@ -1556,10 +1559,12 @@ message HTTPRetry {
   // One or more policies can be specified using a ‘,’ delimited list.
   // See the [retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on)
   // and [gRPC retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on) for more details.
+  // Defaults to `connect-failure,refused-stream,unavailable,cancelled,retriable-status-codes`.
   string retry_on = 3;
 
   // Flag to specify whether the retries should retry to other localities.
   // See the [retry plugin configuration](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_connection_management#retry-plugin-configuration) for more details.
+  // Defaults to `false`.
   google.protobuf.BoolValue retry_remote_localities = 4;
 }
 

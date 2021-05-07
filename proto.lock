@@ -38781,13 +38781,7 @@
               {
                 "id": 1,
                 "name": "attempts",
-                "type": "int32",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "int32"
               },
               {
                 "id": 2,
