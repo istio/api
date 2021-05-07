@@ -286,9 +286,45 @@ message Topology {
   }
 
   // $hide_from_docs
+  // SetCurrentClientCertDetails specifies the fields in the client certificate
+  // that should be added to the x-forwarded-client-cert (XFCC) header
+  // See [Envoy XFCC Details](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#x-forwarded-client-cert)
+  message SetCurrentClientCertDetails {
+    // Adds the subject of the client cert.
+    // Defaults to `true`.
+    google.protobuf.BoolValue subject = 1;
+
+    // Adds the entire client cert in URL encoded PEM format. This will appear in the
+    // XFCC header comma separated from other values with the value Cert="PEM".
+    // Defaults to `true`.
+    google.protobuf.BoolValue cert = 2;
+
+    // Adds the entire client cert chain (including the leaf cert)
+    // in URL encoded PEM format. This will appear in the XFCC header
+    // the XFCC header comma separated from other values with the value Chain=”PEM”.
+    // Defaults to `true`.
+    google.protobuf.BoolValue chain = 3;
+
+    // Adds the DNS type Subject Alternative Names of the client cert.
+    // Defaults to `true`.
+    google.protobuf.BoolValue dns = 4;
+
+    // Adds the URI type Subject Alternative Name of the client cert.
+    // Defaults to `true`.
+    google.protobuf.BoolValue uri = 5;
+  }
+
+  // $hide_from_docs
   // Configures how the gateway proxy handles x-forwarded-client-cert (XFCC)
   // header in the incoming request.
   ForwardClientCertDetails forward_client_cert_details = 2;
+
+  // $hide_from_docs
+  // Specifies the fields in the client certificate that should
+  // be added to the x-forwarded-client-cert (XFCC) header. This
+  // field is only valid when `forward_client_cert_details`
+  // is set to APPEND_FORWARD or SANITIZE_SET and the client connection is mTLS.
+  SetCurrentClientCertDetails set_current_client_cert_details = 3;
 }
 
 // ProxyConfig defines variables for individual Envoy instances.
