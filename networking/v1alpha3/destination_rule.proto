@@ -515,6 +515,10 @@ message LoadBalancerSettings {
   // Locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
   // between this object and the object one in MeshConfig
   LocalityLoadBalancerSetting locality_lb_setting = 3;
+
+  // Network load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
+  // between this object and the object one in MeshConfig
+  NetworkLoadBalancerSetting network_lb_setting = 4;
 }
 
 // Connection pool settings for an upstream host. The settings apply to
@@ -1064,5 +1068,49 @@ message LocalityLoadBalancerSetting{
 
     // enable locality load balancing, this is DestinationRule-level and will override mesh wide settings in entirety.
     // e.g. true means that turn on locality load balancing for this DestinationRule no matter what mesh wide settings is.
+    google.protobuf.BoolValue enabled = 3;
+}
+
+// The following example sets up a network failover policy for regions.
+// Assume a service resides in networks within network1, network2 & network3
+// this example specifies that when endpoints within network1 become unhealthy
+// traffic should failover to endpoints within network2
+// and similarly network2 should failover to network1.
+//
+// ```yaml
+//  failover:
+//    - from: network1
+//      to: network2
+//    - from: network2
+//      to: network1
+// ```
+// Network load balancing settings.
+// When it is specified simultaneously with locality load balancing, the priority order is network > locality.
+// e.g. if both service A and B resides in two networks{`network1`, `network2`} and two az{`az-1`, `az-2`}
+// for service A instance in `network1/us-east`, the expected endpoints priority will be:
+// ```
+//   `network1/az-1`: 0
+//   `network1/az-2`: 1
+//   `network2/az-1`: 2
+//   `network2/az-2`: 3
+// ```
+message NetworkLoadBalancerSetting{
+    // Specify the traffic failover policy across networks.
+    message Failover{
+        // Originating network.
+        string from = 1;
+
+        // Destination network the traffic will fail over to when endpoints in
+        // the 'from' network becomes unhealthy.
+        string to = 2;
+    };
+
+    // Explicitly specify the `network` traffic will land on when endpoints in local network becomes unhealthy.
+    // Should be used together with OutlierDetection to detect unhealthy endpoints.
+    // Note: if no OutlierDetection specified, this will not take effect.
+    repeated Failover failover = 2;
+
+    // enable network load balancing, this is DestinationRule-level and will override mesh wide settings in entirety.
+    // e.g. true means that turn on network load balancing for this DestinationRule no matter what mesh wide settings is.
     google.protobuf.BoolValue enabled = 3;
 }

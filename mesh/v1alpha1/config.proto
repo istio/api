@@ -283,6 +283,9 @@ message MeshConfig {
   // Locality based load balancing distribution or failover settings.
   istio.networking.v1alpha3.LocalityLoadBalancerSetting locality_lb_setting = 35;
 
+  // Network based load balancing failover settings.
+  istio.networking.v1alpha3.NetworkLoadBalancerSetting network_lb_setting = 62;
+
   // Configures DNS refresh rate for Envoy clusters of type `STRICT_DNS`
   // Default refresh rate is `5s`.
   google.protobuf.Duration dns_refresh_rate = 36;
@@ -848,7 +851,7 @@ message MeshConfig {
   ProxyPathNormalization path_normalization = 61;
 
   // $hide_from_docs
-  // Next available field number: 62
+  // Next available field number: 63
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
