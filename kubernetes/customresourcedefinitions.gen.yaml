@@ -266,6 +266,30 @@ spec:
                                     type: object
                                   type: array
                               type: object
+                            networkLbSetting:
+                              properties:
+                                enabled:
+                                  description: enable network load balancing, this
+                                    is DestinationRule-level and will override mesh
+                                    wide settings in entirety.
+                                  nullable: true
+                                  type: boolean
+                                failover:
+                                  description: Explicitly specify the `network` traffic
+                                    will land on when endpoints in local network becomes
+                                    unhealthy.
+                                  items:
+                                    properties:
+                                      from:
+                                        description: Originating network.
+                                        format: string
+                                        type: string
+                                      to:
+                                        format: string
+                                        type: string
+                                    type: object
+                                  type: array
+                              type: object
                             simple:
                               enum:
                               - ROUND_ROBIN
@@ -498,6 +522,30 @@ spec:
                                           properties:
                                             from:
                                               description: Originating region.
+                                              format: string
+                                              type: string
+                                            to:
+                                              format: string
+                                              type: string
+                                          type: object
+                                        type: array
+                                    type: object
+                                  networkLbSetting:
+                                    properties:
+                                      enabled:
+                                        description: enable network load balancing,
+                                          this is DestinationRule-level and will override
+                                          mesh wide settings in entirety.
+                                        nullable: true
+                                        type: boolean
+                                      failover:
+                                        description: Explicitly specify the `network`
+                                          traffic will land on when endpoints in local
+                                          network becomes unhealthy.
+                                        items:
+                                          properties:
+                                            from:
+                                              description: Originating network.
                                               format: string
                                               type: string
                                             to:
@@ -820,6 +868,29 @@ spec:
                               type: object
                             type: array
                         type: object
+                      networkLbSetting:
+                        properties:
+                          enabled:
+                            description: enable network load balancing, this is DestinationRule-level
+                              and will override mesh wide settings in entirety.
+                            nullable: true
+                            type: boolean
+                          failover:
+                            description: Explicitly specify the `network` traffic
+                              will land on when endpoints in local network becomes
+                              unhealthy.
+                            items:
+                              properties:
+                                from:
+                                  description: Originating network.
+                                  format: string
+                                  type: string
+                                to:
+                                  format: string
+                                  type: string
+                              type: object
+                            type: array
+                        type: object
                       simple:
                         enum:
                         - ROUND_ROBIN
@@ -1047,6 +1118,30 @@ spec:
                                     properties:
                                       from:
                                         description: Originating region.
+                                        format: string
+                                        type: string
+                                      to:
+                                        format: string
+                                        type: string
+                                    type: object
+                                  type: array
+                              type: object
+                            networkLbSetting:
+                              properties:
+                                enabled:
+                                  description: enable network load balancing, this
+                                    is DestinationRule-level and will override mesh
+                                    wide settings in entirety.
+                                  nullable: true
+                                  type: boolean
+                                failover:
+                                  description: Explicitly specify the `network` traffic
+                                    will land on when endpoints in local network becomes
+                                    unhealthy.
+                                  items:
+                                    properties:
+                                      from:
+                                        description: Originating network.
                                         format: string
                                         type: string
                                       to:
