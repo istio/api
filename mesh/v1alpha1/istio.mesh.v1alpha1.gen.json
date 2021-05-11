@@ -198,6 +198,9 @@
             "items": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider"
             }
+          },
+          "pathNormalization": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ProxyPathNormalization"
           }
         }
       },
@@ -536,6 +539,14 @@
           }
         ]
       },
+      "istio.mesh.v1alpha1.MeshConfig.ProxyPathNormalization": {
+        "type": "object",
+        "properties": {
+          "normalization": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ProxyPathNormalization.NormalizationType"
+          }
+        }
+      },
       "istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.Mode": {
         "type": "string",
         "enum": [
@@ -627,6 +638,16 @@
             "format": "string"
           }
         }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ProxyPathNormalization.NormalizationType": {
+        "type": "string",
+        "enum": [
+          "DEFAULT",
+          "NONE",
+          "BASE",
+          "MERGE_SLASHES",
+          "DECODE_AND_MERGE_SLASHES"
+        ]
       },
       "istio.mesh.v1alpha1.Resource": {
         "description": "Resource describes the source of configuration",
