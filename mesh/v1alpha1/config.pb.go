@@ -573,8 +573,13 @@ type MeshConfig struct {
 	// Refer to the [kubernetes selector docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors)
 	// for additional detail on selector semantics.
 	DiscoverySelectors []*v1.LabelSelector `protobuf:"bytes,59,rep,name=discovery_selectors,json=discoverySelectors,proto3" json:"discoverySelectors,omitempty"`
-	// ProxyPathNormalization configures how URL paths in incoming and outgoing HTTP requests are normalized by the proxy.
-	// The normalized paths, if configured, will be used in all aspects of the lifetime of the request of the proxy, which includes routing decisions in outbound direction (client proxy), authorization policy match and enforcement in inbound direction (server proxy), and the URL path proxied to the upstream service.
+	// ProxyPathNormalization configures how URL paths in incoming and outgoing HTTP requests are
+	// normalized by the sidecars and gateways.
+	// The normalized paths will be used in all aspects through the requests' lifetime on the
+	// sidecars and gateways, which includes routing decisions in outbound direction (client proxy),
+	// authorization policy match and enforcement in inbound direction (server proxy), and the URL
+	// path proxied to the upstream service.
+	// If not set, the NormalizationType.DEFAULT configuration will be used.
 	PathNormalization    *MeshConfig_ProxyPathNormalization `protobuf:"bytes,61,opt,name=path_normalization,json=pathNormalization,proto3" json:"pathNormalization,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                           `json:"-"`
 	XXX_unrecognized     []byte                             `json:"-"`

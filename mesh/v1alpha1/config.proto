@@ -838,8 +838,13 @@ message MeshConfig {
     NormalizationType normalization = 1;
   }
 
-  // ProxyPathNormalization configures how URL paths in incoming and outgoing HTTP requests are normalized by the proxy.
-  // The normalized paths, if configured, will be used in all aspects of the lifetime of the request of the proxy, which includes routing decisions in outbound direction (client proxy), authorization policy match and enforcement in inbound direction (server proxy), and the URL path proxied to the upstream service.
+  // ProxyPathNormalization configures how URL paths in incoming and outgoing HTTP requests are
+  // normalized by the sidecars and gateways.
+  // The normalized paths will be used in all aspects through the requests' lifetime on the
+  // sidecars and gateways, which includes routing decisions in outbound direction (client proxy),
+  // authorization policy match and enforcement in inbound direction (server proxy), and the URL
+  // path proxied to the upstream service.
+  // If not set, the NormalizationType.DEFAULT configuration will be used.
   ProxyPathNormalization path_normalization = 61;
 
   // $hide_from_docs

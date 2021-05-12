@@ -3,4 +3,4 @@ kind: feature
 area: security
 releaseNotes:
   - |
-    **Added** workload request URL path normalization configurations
+    **Added** workload request URL path normalization configuration for sidecar proxies and gateways.
