@@ -207,6 +207,9 @@
             "items": {
               "$ref": "#/components/schemas/k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
             }
+          },
+          "pathNormalization": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ProxyPathNormalization"
           }
         }
       },
@@ -717,6 +720,14 @@
           }
         }
       },
+      "istio.mesh.v1alpha1.MeshConfig.ProxyPathNormalization": {
+        "type": "object",
+        "properties": {
+          "normalization": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ProxyPathNormalization.NormalizationType"
+          }
+        }
+      },
       "istio.mesh.v1alpha1.MeshConfig.AuthPolicy": {
         "type": "string",
         "enum": [
@@ -989,6 +1000,16 @@
           "GRPC_BIN",
           "CLOUD_TRACE_CONTEXT",
           "B3"
+        ]
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ProxyPathNormalization.NormalizationType": {
+        "type": "string",
+        "enum": [
+          "DEFAULT",
+          "NONE",
+          "BASE",
+          "MERGE_SLASHES",
+          "DECODE_AND_MERGE_SLASHES"
         ]
       },
       "istio.mesh.v1alpha1.Resource": {

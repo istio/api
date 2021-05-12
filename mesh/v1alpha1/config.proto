@@ -794,8 +794,42 @@ message MeshConfig {
   // for additional detail on selector semantics.
   repeated k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector discovery_selectors = 59;
 
+  message ProxyPathNormalization {
+    enum NormalizationType {
+      // Apply default normalizations. Currently, this is BASE.
+      DEFAULT = 0;
+
+      // No normalization, paths are used as is.
+      NONE = 1;
+
+      // Normalize according to [RFC 3986](https://tools.ietf.org/html/rfc3986).
+      // For Envoy proxies, this is the [`normalize_path`](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/network/http_connection_manager/v3/http_connection_manager.proto.html) option.
+      // For example, `/a/../b` normalizes to `/b`.
+      BASE = 2;
+
+      // In addition to the `BASE` normalization, consecutive slashes are also merged.
+      // For example, `/a//b` normalizes to `a/b`.
+      MERGE_SLASHES = 3;
+
+      // In addition to normalization in `MERGE_SLASHES`, slash characters are UTF-8 decoded (case insensitive) prior to merging.
+      // This means `%2F`, `%2f`, `%5C`, and `%5c` sequences in the request path will be rewritten to `/` or `\`.
+      // For example, `/a%2f/b` normalizes to `a/b`.
+      DECODE_AND_MERGE_SLASHES = 4;
+    }
+    NormalizationType normalization = 1;
+  }
+
+  // ProxyPathNormalization configures how URL paths in incoming and outgoing HTTP requests are
+  // normalized by the sidecars and gateways.
+  // The normalized paths will be used in all aspects through the requests' lifetime on the
+  // sidecars and gateways, which includes routing decisions in outbound direction (client proxy),
+  // authorization policy match and enforcement in inbound direction (server proxy), and the URL
+  // path proxied to the upstream service.
+  // If not set, the NormalizationType.DEFAULT configuration will be used.
+  ProxyPathNormalization path_normalization = 61;
+
   // $hide_from_docs
-  // Next available field number: 61
+  // Next available field number: 62
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
