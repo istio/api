@@ -32789,6 +32789,18 @@
             ]
           },
           {
+            "name": "MultiRootCA.Mode",
+            "enum_fields": [
+              {
+                "name": "SELF_SIGNED"
+              },
+              {
+                "name": "PLUGIN",
+                "integer": 1
+              }
+            ]
+          },
+          {
             "name": "OpenCensusAgentTracingProvider.TraceContext",
             "enum_fields": [
               {
@@ -32808,6 +32820,30 @@
               },
               {
                 "name": "B3",
+                "integer": 4
+              }
+            ]
+          },
+          {
+            "name": "ProxyPathNormalization.NormalizationType",
+            "enum_fields": [
+              {
+                "name": "DEFAULT"
+              },
+              {
+                "name": "NONE",
+                "integer": 1
+              },
+              {
+                "name": "BASE",
+                "integer": 2
+              },
+              {
+                "name": "MERGE_SLASHES",
+                "integer": 3
+              },
+              {
+                "name": "DECODE_AND_MERGE_SLASHES",
                 "integer": 4
               }
             ]
@@ -33034,6 +33070,11 @@
                 "name": "discovery_selectors",
                 "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector",
                 "is_repeated": true
+              },
+              {
+                "id": 61,
+                "name": "path_normalization",
+                "type": "ProxyPathNormalization"
               }
             ],
             "reserved_ids": [
@@ -33169,6 +33210,36 @@
                     "id": 4,
                     "name": "istiod_side",
                     "type": "bool"
+                  },
+                  {
+                    "id": 5,
+                    "name": "multi_root_ca_setting",
+                    "type": "MultiRootCA"
+                  }
+                ]
+              },
+              {
+                "name": "MultiRootCA",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "enabled",
+                    "type": "bool"
+                  },
+                  {
+                    "id": 2,
+                    "name": "mode",
+                    "type": "Mode"
+                  }
+                ],
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 3,
+                      "name": "tenant_secret_ttl",
+                      "type": "google.protobuf.Duration"
+                    }
                   }
                 ]
               },
@@ -33501,6 +33572,16 @@
                     "id": 1,
                     "name": "tracing",
                     "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "ProxyPathNormalization",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "normalization",
+                    "type": "NormalizationType"
                   }
                 ]
               }

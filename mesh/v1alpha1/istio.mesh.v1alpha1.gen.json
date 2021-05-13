@@ -547,6 +547,9 @@
           "istiodSide": {
             "description": "Use istiod_side to specify CA Server integrate to Istiod side or Agent side Default: true",
             "type": "boolean"
+          },
+          "multiRootCaSetting": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.MultiRootCA"
           }
         }
       },
@@ -771,6 +774,32 @@
             "type": "boolean"
           }
         }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.MultiRootCA": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.MultiRootCA.Mode"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "tenantSecretTtl": {
+            "description": "Defines the workload cert TTL for every namespace tenant1: 10 default: 24 hours",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.MultiRootCA.Mode": {
+        "description": "Defines the acceptable multi Root MTLS mode.",
+        "type": "string",
+        "enum": [
+          "SELF_SIGNED",
+          "PLUGIN"
+        ]
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationHttpProvider": {
         "type": "object",

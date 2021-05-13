@@ -457,7 +457,26 @@ message MeshConfig {
     // Use istiod_side to specify CA Server integrate to Istiod side or Agent side
     // Default: true
     bool istiod_side = 4;
+    // Use MultiRootCA to specify multi root for workload mTLS
+    MultiRootCA  multi_root_ca_setting = 5;
   }
+  message MultiRootCA {
+  // Defines the acceptable multi Root MTLS mode.
+  enum Mode {
+	// istio will generate self signed root cert for the namespace. Default
+	SELF_SIGNED = 0;
+	// user will plugin root cert for the namespace
+	PLUGIN = 1;
+  };
+  bool enabled = 1;
+  // Defines the mode of MultiRootMtls.
+  Mode mode = 2;
+  // Defines the workload cert TTL for every namespace
+  // tenant1: 10
+  // default: 24 hours
+  map<string, google.protobuf.Duration> tenant_secret_ttl = 3;
+}
+
   // $hide_from_docs
   // If specified, Istiod will authorize and forward the CSRs from the workloads to the specified external CA
   // using the Istio CA gRPC API.
