@@ -34,8 +34,12 @@ option go_package="istio.io/api/mesh/v1alpha1";
 // MeshConfig defines mesh-wide settings for the Istio service mesh.
 message MeshConfig {
   // Port on which Envoy should listen for incoming connections from
-  // other services. Default port is 15001.
+  // local application. Default port is 15001.
   int32 proxy_listen_port = 4;
+
+  // Port on which Envoy should listen for incoming connections from
+  // other services. Default port is 15006.
+  int32 proxy_inbound_listen_port = 62;
 
   // Port on which Envoy should listen for HTTP PROXY requests if set.
   int32 proxy_http_port = 5;
@@ -848,7 +852,7 @@ message MeshConfig {
   ProxyPathNormalization path_normalization = 61;
 
   // $hide_from_docs
-  // Next available field number: 62
+  // Next available field number: 63
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;

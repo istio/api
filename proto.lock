@@ -32813,6 +32813,30 @@
             ]
           },
           {
+            "name": "ProxyPathNormalization.NormalizationType",
+            "enum_fields": [
+              {
+                "name": "DEFAULT"
+              },
+              {
+                "name": "NONE",
+                "integer": 1
+              },
+              {
+                "name": "BASE",
+                "integer": 2
+              },
+              {
+                "name": "MERGE_SLASHES",
+                "integer": 3
+              },
+              {
+                "name": "DECODE_AND_MERGE_SLASHES",
+                "integer": 4
+              }
+            ]
+          },
+          {
             "name": "Resource",
             "enum_fields": [
               {
@@ -32828,6 +32852,11 @@
               {
                 "id": 4,
                 "name": "proxy_listen_port",
+                "type": "int32"
+              },
+              {
+                "id": 62,
+                "name": "proxy_inbound_listen_port",
                 "type": "int32"
               },
               {
@@ -33034,6 +33063,11 @@
                 "name": "discovery_selectors",
                 "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector",
                 "is_repeated": true
+              },
+              {
+                "id": 61,
+                "name": "path_normalization",
+                "type": "ProxyPathNormalization"
               }
             ],
             "reserved_ids": [
@@ -33501,6 +33535,16 @@
                     "id": 1,
                     "name": "tracing",
                     "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "ProxyPathNormalization",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "normalization",
+                    "type": "NormalizationType"
                   }
                 ]
               }
