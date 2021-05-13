@@ -721,6 +721,19 @@ message OutlierDetection {
   // $hide_from_docs
   int32 consecutive_errors = 1 [deprecated=true];
 
+  // Determines whether to distinguish local origin failures from external errors. If set to true
+  // consecutive_local_origin_failure is taken into account for outlier detection calculations. 
+  // This should be used when we want to derive the outlier detection status based on the errors 
+  // seen locally such as failure to connect, timeout while connecting etc. rather than the status code
+  // retuned by upstream service.
+  // Defaults to false.
+  bool split_external_local_origin_errors = 8;
+
+  // The number of consecutive locally originated failures before ejection
+  // occurs. Defaults to 5. Parameter takes effect only when split_external_local_origin_errors
+  // is set to true.
+  google.protobuf.UInt32Value consecutive_local_origin_failure = 9;
+
   // Number of gateway errors before a host is ejected from the connection pool.
   // When the upstream host is accessed over HTTP, a 502, 503, or 504 return
   // code qualifies as a gateway error. When the upstream host is accessed over
