@@ -240,6 +240,14 @@ annotations:
     resources:
       - Pod
 
+  - name: sidecar.istio.io/agentLogLevel
+    featureStatus: Alpha
+    description: Specifies the log output level for pilot-agent.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+
   - name: readiness.status.sidecar.istio.io/initialDelaySeconds
     featureStatus: Alpha
     description: Specifies the initial delay (in seconds) for the Envoy sidecar readiness
@@ -388,6 +396,31 @@ annotations:
     featureStatus: Beta
     description: Overrides for the proxy configuration for this specific proxy. Available options
       can be found at https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#ProxyConfig.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+
+  - name: istio.io/dry-run
+    featureStatus: Alpha
+    description: Specifies whether or not the given resource is in dry-run mode.
+    deprecated: false
+    hidden: true
+    resources:
+      - AuthorizationPolicy
+
+  - name: proxy.istio.io/overrides
+    featureStatus: Alpha
+    description: Used internally to indicate user-specified overrides in the proxy container of the pod during injection.
+    deprecated: false
+    hidden: true
+    resources:
+      - Pod
+
+  - name: inject.istio.io/templates
+    featureStatus: Alpha
+    description: The name of the inject template(s) to use, as a comma separate list. See
+      https://istio.io/latest/docs/setup/additional-setup/sidecar-injection/#custom-templates-experimental for more information.
     deprecated: false
     hidden: false
     resources:

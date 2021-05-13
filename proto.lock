@@ -32789,6 +32789,54 @@
             ]
           },
           {
+            "name": "OpenCensusAgentTracingProvider.TraceContext",
+            "enum_fields": [
+              {
+                "name": "UNSPECIFIED"
+              },
+              {
+                "name": "W3C_TRACE_CONTEXT",
+                "integer": 1
+              },
+              {
+                "name": "GRPC_BIN",
+                "integer": 2
+              },
+              {
+                "name": "CLOUD_TRACE_CONTEXT",
+                "integer": 3
+              },
+              {
+                "name": "B3",
+                "integer": 4
+              }
+            ]
+          },
+          {
+            "name": "ProxyPathNormalization.NormalizationType",
+            "enum_fields": [
+              {
+                "name": "DEFAULT"
+              },
+              {
+                "name": "NONE",
+                "integer": 1
+              },
+              {
+                "name": "BASE",
+                "integer": 2
+              },
+              {
+                "name": "MERGE_SLASHES",
+                "integer": 3
+              },
+              {
+                "name": "DECODE_AND_MERGE_SLASHES",
+                "integer": 4
+              }
+            ]
+          },
+          {
             "name": "Resource",
             "enum_fields": [
               {
@@ -33001,10 +33049,20 @@
                 "is_repeated": true
               },
               {
+                "id": 60,
+                "name": "default_providers",
+                "type": "DefaultProviders"
+              },
+              {
                 "id": 59,
                 "name": "discovery_selectors",
                 "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector",
                 "is_repeated": true
+              },
+              {
+                "id": 61,
+                "name": "path_normalization",
+                "type": "ProxyPathNormalization"
               }
             ],
             "reserved_ids": [
@@ -33160,9 +33218,59 @@
                     "id": 3,
                     "name": "envoy_ext_authz_grpc",
                     "type": "EnvoyExternalAuthorizationGrpcProvider"
+                  },
+                  {
+                    "id": 4,
+                    "name": "zipkin",
+                    "type": "ZipkinTracingProvider"
+                  },
+                  {
+                    "id": 5,
+                    "name": "lightstep",
+                    "type": "LightstepTracingProvider"
+                  },
+                  {
+                    "id": 6,
+                    "name": "datadog",
+                    "type": "DatadogTracingProvider"
+                  },
+                  {
+                    "id": 7,
+                    "name": "stackdriver",
+                    "type": "StackdriverProvider"
+                  },
+                  {
+                    "id": 8,
+                    "name": "opencensus",
+                    "type": "OpenCensusAgentTracingProvider"
+                  },
+                  {
+                    "id": 9,
+                    "name": "skywalking",
+                    "type": "SkyWalkingTracingProvider"
                   }
                 ],
                 "messages": [
+                  {
+                    "name": "EnvoyExternalAuthorizationRequestBody",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "max_request_bytes",
+                        "type": "uint32"
+                      },
+                      {
+                        "id": 2,
+                        "name": "allow_partial_message",
+                        "type": "bool"
+                      },
+                      {
+                        "id": 3,
+                        "name": "pack_as_bytes",
+                        "type": "bool"
+                      }
+                    ]
+                  },
                   {
                     "name": "EnvoyExternalAuthorizationHttpProvider",
                     "fields": [
@@ -33175,6 +33283,11 @@
                         "id": 2,
                         "name": "port",
                         "type": "uint32"
+                      },
+                      {
+                        "id": 9,
+                        "name": "timeout",
+                        "type": "google.protobuf.Duration"
                       },
                       {
                         "id": 3,
@@ -33198,6 +33311,17 @@
                         "is_repeated": true
                       },
                       {
+                        "id": 10,
+                        "name": "include_request_headers_in_check",
+                        "type": "string",
+                        "is_repeated": true
+                      },
+                      {
+                        "id": 12,
+                        "name": "include_request_body_in_check",
+                        "type": "EnvoyExternalAuthorizationRequestBody"
+                      },
+                      {
                         "id": 7,
                         "name": "headers_to_upstream_on_allow",
                         "type": "string",
@@ -33208,6 +33332,16 @@
                         "name": "headers_to_downstream_on_deny",
                         "type": "string",
                         "is_repeated": true
+                      }
+                    ],
+                    "maps": [
+                      {
+                        "key_type": "string",
+                        "field": {
+                          "id": 11,
+                          "name": "include_additional_headers_in_check",
+                          "type": "string"
+                        }
                       }
                     ]
                   },
@@ -33225,6 +33359,11 @@
                         "type": "uint32"
                       },
                       {
+                        "id": 5,
+                        "name": "timeout",
+                        "type": "google.protobuf.Duration"
+                      },
+                      {
                         "id": 3,
                         "name": "fail_open",
                         "type": "bool"
@@ -33233,8 +33372,174 @@
                         "id": 4,
                         "name": "status_on_error",
                         "type": "string"
+                      },
+                      {
+                        "id": 6,
+                        "name": "include_request_body_in_check",
+                        "type": "EnvoyExternalAuthorizationRequestBody"
                       }
                     ]
+                  },
+                  {
+                    "name": "ZipkinTracingProvider",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "service",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "port",
+                        "type": "uint32"
+                      },
+                      {
+                        "id": 3,
+                        "name": "max_tag_length",
+                        "type": "uint32"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "LightstepTracingProvider",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "service",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "port",
+                        "type": "uint32"
+                      },
+                      {
+                        "id": 3,
+                        "name": "access_token",
+                        "type": "string"
+                      },
+                      {
+                        "id": 4,
+                        "name": "max_tag_length",
+                        "type": "uint32"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "DatadogTracingProvider",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "service",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "port",
+                        "type": "uint32"
+                      },
+                      {
+                        "id": 3,
+                        "name": "max_tag_length",
+                        "type": "uint32"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "SkyWalkingTracingProvider",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "service",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "port",
+                        "type": "uint32"
+                      },
+                      {
+                        "id": 3,
+                        "name": "access_token",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "StackdriverProvider",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "debug",
+                        "type": "bool"
+                      },
+                      {
+                        "id": 2,
+                        "name": "max_number_of_attributes",
+                        "type": "google.protobuf.Int64Value"
+                      },
+                      {
+                        "id": 3,
+                        "name": "max_number_of_annotations",
+                        "type": "google.protobuf.Int64Value"
+                      },
+                      {
+                        "id": 4,
+                        "name": "max_number_of_message_events",
+                        "type": "google.protobuf.Int64Value"
+                      },
+                      {
+                        "id": 5,
+                        "name": "max_tag_length",
+                        "type": "uint32"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "OpenCensusAgentTracingProvider",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "service",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "port",
+                        "type": "uint32"
+                      },
+                      {
+                        "id": 3,
+                        "name": "context",
+                        "type": "TraceContext",
+                        "is_repeated": true
+                      },
+                      {
+                        "id": 4,
+                        "name": "max_tag_length",
+                        "type": "uint32"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "DefaultProviders",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "tracing",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "ProxyPathNormalization",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "normalization",
+                    "type": "NormalizationType"
                   }
                 ]
               }
@@ -39802,7 +40107,7 @@
               {
                 "id": 1,
                 "name": "minAvailable",
-                "type": "uint32"
+                "type": "TypeIntOrStringForPB"
               },
               {
                 "id": 2,
@@ -39812,7 +40117,7 @@
               {
                 "id": 3,
                 "name": "maxUnavailable",
-                "type": "uint32"
+                "type": "TypeIntOrStringForPB"
               }
             ]
           },
@@ -40939,6 +41244,149 @@
           {
             "name": "go_package",
             "value": "istio.io/api/stability"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "telemetry:/:v1alpha1:/:telemetry.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "Telemetry",
+            "fields": [
+              {
+                "id": 1,
+                "name": "selector",
+                "type": "istio.type.v1beta1.WorkloadSelector"
+              },
+              {
+                "id": 2,
+                "name": "tracing",
+                "type": "Tracing",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "Tracing",
+            "fields": [
+              {
+                "id": 2,
+                "name": "providers",
+                "type": "ProviderRef",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "random_sampling_percentage",
+                "type": "google.protobuf.DoubleValue"
+              },
+              {
+                "id": 4,
+                "name": "disable_span_reporting",
+                "type": "google.protobuf.BoolValue"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 5,
+                  "name": "custom_tags",
+                  "type": "CustomTag"
+                }
+              }
+            ],
+            "messages": [
+              {
+                "name": "CustomTag",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "literal",
+                    "type": "Literal"
+                  },
+                  {
+                    "id": 2,
+                    "name": "environment",
+                    "type": "Environment"
+                  },
+                  {
+                    "id": 3,
+                    "name": "header",
+                    "type": "RequestHeader"
+                  }
+                ]
+              },
+              {
+                "name": "Literal",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "value",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "Environment",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "default_value",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "RequestHeader",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "default_value",
+                    "type": "string"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "ProviderRef",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "type/v1beta1/selector.proto"
+          },
+          {
+            "path": "google/protobuf/wrappers.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.telemetry.v1alpha1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/telemetry/v1alpha1"
           }
         ]
       }
