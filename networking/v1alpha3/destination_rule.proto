@@ -926,7 +926,8 @@ message ClientTLSSettings {
   //
   // If `CaCertificates`is set, proxy verifies CA signature based on given CaCertificates.
   // This setting take priority over ProxyConfig `DefaultCertificateAuthorityPath` and
-  // `VerifyCertificateAtClient`.
+  // `VerifyCertificateAtClient`. To not verify CA signatures, set `InsecureSkipVerify`
+  // to `true`.
   string ca_certificates = 4;
 
   // The name of the secret that holds the TLS certs for the

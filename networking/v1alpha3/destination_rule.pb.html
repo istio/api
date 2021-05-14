@@ -1010,7 +1010,8 @@ Should be empty if mode is <code>ISTIO_MUTUAL</code>.</p>
 
 <p>If <code>CaCertificates</code>is set, proxy verifies CA signature based on given CaCertificates.
 This setting take priority over ProxyConfig <code>DefaultCertificateAuthorityPath</code> and
-<code>VerifyCertificateAtClient</code>.</p>
+<code>VerifyCertificateAtClient</code>. To not verify CA signatures, set <code>InsecureSkipVerify</code>
+to <code>true</code>.</p>
 
 </td>
 <td>

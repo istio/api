@@ -231,7 +231,7 @@
         "type": "object",
         "properties": {
           "verifyCertificateAtClient": {
-            "description": "`VerifyCertificateAtClient` sets the mesh global default for peer certificate validation at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination modes are used. This setting can be overridden at the host level via DestinationRule API. By default, `VerifyCertificateAtClient` is `false`.",
+            "description": "`VerifyCertificateAtClient` sets the proxy default for peer certificate validation at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination modes are used. This setting can be overridden at the host level via DestinationRule API. By default, `VerifyCertificateAtClient` is `false`, proxy will not verify CA signatures unless overridden in the DestinationRule.",
             "type": "boolean",
             "nullable": true
           },
@@ -382,11 +382,6 @@
               "type": "string",
               "format": "string"
             }
-          },
-          "defaultCertificateAuthorityPath": {
-            "description": "`DefaultCertificateAuthorityPath` sets the mesh global default of the CA certificate path at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination modes are used. This setting can be overridden at the host level via DestinationRule API.",
-            "type": "string",
-            "format": "string"
           }
         }
       },

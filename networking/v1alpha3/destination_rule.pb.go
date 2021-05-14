@@ -1812,7 +1812,8 @@ type ClientTLSSettings struct {
 	//
 	// If `CaCertificates`is set, proxy verifies CA signature based on given CaCertificates.
 	// This setting take priority over ProxyConfig `DefaultCertificateAuthorityPath` and
-	// `VerifyCertificateAtClient`.
+	// `VerifyCertificateAtClient`. To not verify CA signatures, set `InsecureSkipVerify`
+	// to `true`.
 	CaCertificates string `protobuf:"bytes,4,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
 	// The name of the secret that holds the TLS certs for the
 	// client including the CA certificates. Secret must exist in the

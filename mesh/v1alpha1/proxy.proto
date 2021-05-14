@@ -499,31 +499,12 @@ message ProxyConfig {
   // are added automatically by Istiod.
   repeated string ca_certificates_pem = 34;
 
-  // `VerifyCertificateAtClient` sets the mesh global default for peer certificate validation
+  // `VerifyCertificateAtClient` sets the proxy default for peer certificate validation
   // at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination
   // modes are used. This setting can be overridden at the host level via DestinationRule API.
-  // By default, `VerifyCertificateAtClient` is `false`.
-  //
-  // If unset and `VerifyCertificateAtClient` is `false`, proxy will not verify the CA.
-  //
-  // If `DefaultCertificateAuthorityPath` is set, certificates will be checked against the CA cert
-  // provided regardless of `VerifyCertificateAtClient` being set.
-  //
-  // If `VerifyCertificateAtClient` is true and `DefaultCertificateAuthorityPath` is unset, proxies
-  // will use the default System CA bundle
+  // By default, `VerifyCertificateAtClient` is `false`, proxy will not verify CA signatures
+  // unless overridden in the DestinationRule.
   google.protobuf.BoolValue verify_certificate_at_client = 35;
-
-  // `DefaultCertificateAuthorityPath` sets the mesh global default of the CA
-  // certificate path at the client-side proxy when `SIMPLE` TLS or `MUTUAL`
-  // TLS (non `ISTIO_MUTUAL`) origination modes are used. This setting can be
-  // overridden at the host level via DestinationRule API.
-  //
-  // If `VerifyCertificateAtClient` is `false`,
-  //`DefaultCertificateAuthorityPath` will default to empty.
-  //
-  // If `VerifyCertificateAtClient` is `true`,
-  // `DefaultCertificateAuthorityPath` will default to the OS CA bundle for the proxy.
-  string default_certificate_authority_path = 36;
 }
 
 message RemoteService {

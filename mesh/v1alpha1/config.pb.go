@@ -489,14 +489,6 @@ type MeshConfig struct {
 	// `SubjectAltNames`: If set, proxy verifies subject alt names are present in the SAN. If unset,
 	// and `VerifyCertificateAtClient` is true, proxy uses host in destination rule to verify the SANs.
 	// If unset, and `VerifyCertificateAtClient` is false, proxy does not verify SANs.
-	//
-	// For SAN, client-side proxy will exact match host in `DestinationRule` as well as one level
-	// wildcard if the specified host in DestinationRule doesn't contain a wildcard.
-	// For example, if the host in `DestinationRule` is `x.y.com`, client-side proxy will
-	// match either `x.y.com` or `*.y.com` for the SAN in the presented server certificate.
-	// For wildcard host name in DestinationRule, client-side proxy will do a suffix match. For example,
-	// if host is `*.x.y.com`, client-side proxy will verify the presented server certificate SAN matches
-	// ``.x.y.com` suffix.
 	VerifyCertificateAtClient *types.BoolValue `protobuf:"bytes,54,opt,name=verify_certificate_at_client,json=verifyCertificateAtClient,proto3" json:"verifyCertificateAtClient,omitempty"`
 	// $hide_from_docs
 	// If specified, Istiod will authorize and forward the CSRs from the workloads to the specified external CA

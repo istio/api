@@ -2342,38 +2342,11 @@ No
 <td><code>verifyCertificateAtClient</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
-<p><code>VerifyCertificateAtClient</code> sets the mesh global default for peer certificate validation
+<p><code>VerifyCertificateAtClient</code> sets the proxy default for peer certificate validation
 at the client-side proxy when <code>SIMPLE</code> TLS or <code>MUTUAL</code> TLS (non <code>ISTIO_MUTUAL</code>) origination
 modes are used. This setting can be overridden at the host level via DestinationRule API.
-By default, <code>VerifyCertificateAtClient</code> is <code>false</code>.</p>
-
-<p>If unset and <code>VerifyCertificateAtClient</code> is <code>false</code>, proxy will not verify the CA.</p>
-
-<p>If <code>DefaultCertificateAuthorityPath</code> is set, certificates will be checked against the CA cert
-provided regardless of <code>VerifyCertificateAtClient</code> being set.</p>
-
-<p>If <code>VerifyCertificateAtClient</code> is true and <code>DefaultCertificateAuthorityPath</code> is unset, proxies
-will use the default System CA bundle</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="ProxyConfig-default_certificate_authority_path">
-<td><code>defaultCertificateAuthorityPath</code></td>
-<td><code>string</code></td>
-<td>
-<p><code>DefaultCertificateAuthorityPath</code> sets the mesh global default of the CA
-certificate path at the client-side proxy when <code>SIMPLE</code> TLS or <code>MUTUAL</code>
-TLS (non <code>ISTIO_MUTUAL</code>) origination modes are used. This setting can be
-overridden at the host level via DestinationRule API.</p>
-
-<p>If <code>VerifyCertificateAtClient</code> is <code>false</code>,
-<code>DefaultCertificateAuthorityPath</code> will default to empty.</p>
-
-<p>If <code>VerifyCertificateAtClient</code> is <code>true</code>,
-<code>DefaultCertificateAuthorityPath</code> will default to the OS CA bundle for the proxy.</p>
+By default, <code>VerifyCertificateAtClient</code> is <code>false</code>, proxy will not verify CA signatures
+unless overridden in the DestinationRule.</p>
 
 </td>
 <td>

@@ -34186,11 +34186,6 @@
                 "id": 35,
                 "name": "verify_certificate_at_client",
                 "type": "google.protobuf.BoolValue"
-              },
-              {
-                "id": 36,
-                "name": "default_certificate_authority_path",
-                "type": "string"
               }
             ],
             "maps": [
