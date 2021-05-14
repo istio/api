@@ -22,7 +22,6 @@ buf generate \
   --path security \
   --path type \
   --path analysis \
-  --path authentication \
   --path meta \
   --path telemetry
 
