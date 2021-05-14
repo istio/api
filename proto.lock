@@ -160,304 +160,6 @@
       }
     },
     {
-      "protopath": "authentication:/:v1alpha1:/:policy.proto",
-      "def": {
-        "enums": [
-          {
-            "name": "MutualTls.Mode",
-            "enum_fields": [
-              {
-                "name": "STRICT"
-              },
-              {
-                "name": "PERMISSIVE",
-                "integer": 1
-              }
-            ]
-          },
-          {
-            "name": "PrincipalBinding",
-            "enum_fields": [
-              {
-                "name": "USE_PEER"
-              },
-              {
-                "name": "USE_ORIGIN",
-                "integer": 1
-              }
-            ]
-          }
-        ],
-        "messages": [
-          {
-            "name": "StringMatch",
-            "fields": [
-              {
-                "id": 1,
-                "name": "exact",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "prefix",
-                "type": "string"
-              },
-              {
-                "id": 3,
-                "name": "suffix",
-                "type": "string"
-              },
-              {
-                "id": 4,
-                "name": "regex",
-                "type": "string"
-              }
-            ]
-          },
-          {
-            "name": "MutualTls",
-            "fields": [
-              {
-                "id": 1,
-                "name": "allow_tls",
-                "type": "bool",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
-                "id": 2,
-                "name": "mode",
-                "type": "Mode"
-              }
-            ]
-          },
-          {
-            "name": "Jwt",
-            "fields": [
-              {
-                "id": 1,
-                "name": "issuer",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "audiences",
-                "type": "string",
-                "is_repeated": true
-              },
-              {
-                "id": 3,
-                "name": "jwks_uri",
-                "type": "string"
-              },
-              {
-                "id": 10,
-                "name": "jwks",
-                "type": "string"
-              },
-              {
-                "id": 6,
-                "name": "jwt_headers",
-                "type": "string",
-                "is_repeated": true
-              },
-              {
-                "id": 7,
-                "name": "jwt_params",
-                "type": "string",
-                "is_repeated": true
-              },
-              {
-                "id": 9,
-                "name": "trigger_rules",
-                "type": "TriggerRule",
-                "is_repeated": true
-              }
-            ],
-            "messages": [
-              {
-                "name": "TriggerRule",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "excluded_paths",
-                    "type": "StringMatch",
-                    "is_repeated": true
-                  },
-                  {
-                    "id": 2,
-                    "name": "included_paths",
-                    "type": "StringMatch",
-                    "is_repeated": true
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "name": "PeerAuthenticationMethod",
-            "fields": [
-              {
-                "id": 1,
-                "name": "mtls",
-                "type": "MutualTls"
-              },
-              {
-                "id": 2,
-                "name": "jwt",
-                "type": "Jwt",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "name": "OriginAuthenticationMethod",
-            "fields": [
-              {
-                "id": 1,
-                "name": "jwt",
-                "type": "Jwt"
-              }
-            ]
-          },
-          {
-            "name": "Policy",
-            "fields": [
-              {
-                "id": 1,
-                "name": "targets",
-                "type": "TargetSelector",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
-                "id": 2,
-                "name": "peers",
-                "type": "PeerAuthenticationMethod",
-                "is_repeated": true
-              },
-              {
-                "id": 3,
-                "name": "peer_is_optional",
-                "type": "bool",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
-                "id": 4,
-                "name": "origins",
-                "type": "OriginAuthenticationMethod",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
-                "id": 5,
-                "name": "origin_is_optional",
-                "type": "bool",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
-                "id": 6,
-                "name": "principal_binding",
-                "type": "PrincipalBinding",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "name": "TargetSelector",
-            "fields": [
-              {
-                "id": 1,
-                "name": "name",
-                "type": "string",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
-              },
-              {
-                "id": 2,
-                "name": "ports",
-                "type": "PortSelector",
-                "is_repeated": true
-              }
-            ],
-            "reserved_ids": [
-              3
-            ],
-            "reserved_names": [
-              "labels"
-            ]
-          },
-          {
-            "name": "PortSelector",
-            "fields": [
-              {
-                "id": 1,
-                "name": "number",
-                "type": "uint32"
-              },
-              {
-                "id": 2,
-                "name": "name",
-                "type": "string"
-              }
-            ]
-          }
-        ],
-        "imports": [
-          {
-            "path": "google/api/field_behavior.proto"
-          }
-        ],
-        "package": {
-          "name": "istio.authentication.v1alpha1"
-        },
-        "options": [
-          {
-            "name": "go_package",
-            "value": "istio.io/api/authentication/v1alpha1"
-          }
-        ]
-      }
-    },
-    {
       "protopath": "common-protos:/:github.com:/:gogo:/:protobuf:/:protobuf:/:google:/:protobuf:/:any.proto",
       "def": {
         "messages": [
@@ -32059,11 +31761,6 @@
             "name": "FilterConfig",
             "fields": [
               {
-                "id": 1,
-                "name": "policy",
-                "type": "istio.authentication.v1alpha1.Policy"
-              },
-              {
                 "id": 3,
                 "name": "skip_validate_trust_domain",
                 "type": "bool"
@@ -32084,12 +31781,13 @@
                   "type": "string"
                 }
               }
+            ],
+            "reserved_ids": [
+              1
+            ],
+            "reserved_names": [
+              "policy"
             ]
-          }
-        ],
-        "imports": [
-          {
-            "path": "authentication/v1alpha1/policy.proto"
           }
         ],
         "package": {
@@ -32813,6 +32511,30 @@
             ]
           },
           {
+            "name": "ProxyPathNormalization.NormalizationType",
+            "enum_fields": [
+              {
+                "name": "DEFAULT"
+              },
+              {
+                "name": "NONE",
+                "integer": 1
+              },
+              {
+                "name": "BASE",
+                "integer": 2
+              },
+              {
+                "name": "MERGE_SLASHES",
+                "integer": 3
+              },
+              {
+                "name": "DECODE_AND_MERGE_SLASHES",
+                "integer": 4
+              }
+            ]
+          },
+          {
             "name": "Resource",
             "enum_fields": [
               {
@@ -33034,6 +32756,11 @@
                 "name": "discovery_selectors",
                 "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector",
                 "is_repeated": true
+              },
+              {
+                "id": 61,
+                "name": "path_normalization",
+                "type": "ProxyPathNormalization"
               }
             ],
             "reserved_ids": [
@@ -33501,6 +33228,16 @@
                     "id": 1,
                     "name": "tracing",
                     "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "ProxyPathNormalization",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "normalization",
+                    "type": "NormalizationType"
                   }
                 ]
               }
