@@ -166,7 +166,7 @@
             "deprecated": true
           },
           "splitExternalLocalOriginErrors": {
-            "description": "Determines whether to distinguish local origin failures from external errors. If set to true consecutive_local_origin_failure is taken into account for outlier detection calculations. This should be used when we want to derive the outlier detection status based on the errors seen locally such as failure to connect, timeout while connecting etc. rather than the status code retuned by upstream service. Defaults to false.",
+            "description": "Determines whether to distinguish local origin failures from external errors. If set to true consecutive_local_origin_failure is taken into account for outlier detection calculations. This should be used when you want to derive the outlier detection status based on the errors seen locally such as failure to connect, timeout while connecting etc. rather than the status code retuned by upstream service. This is especially useful when the upstream service explicitly returns a 5xx for some requests and you want to ignore those responses from upstream service while determining the outlier detection status of a host. Defaults to false.",
             "type": "boolean"
           },
           "consecutiveLocalOriginFailure": {

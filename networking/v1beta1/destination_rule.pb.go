@@ -1550,9 +1550,11 @@ type OutlierDetection struct {
 	ConsecutiveErrors int32 `protobuf:"varint,1,opt,name=consecutive_errors,json=consecutiveErrors,proto3" json:"consecutive_errors,omitempty"` // Deprecated: Do not use.
 	// Determines whether to distinguish local origin failures from external errors. If set to true
 	// consecutive_local_origin_failure is taken into account for outlier detection calculations.
-	// This should be used when we want to derive the outlier detection status based on the errors
+	// This should be used when you want to derive the outlier detection status based on the errors
 	// seen locally such as failure to connect, timeout while connecting etc. rather than the status code
-	// retuned by upstream service.
+	// retuned by upstream service. This is especially useful when the upstream service explicitly returns
+	// a 5xx for some requests and you want to ignore those responses from upstream service while determining
+	// the outlier detection status of a host.
 	// Defaults to false.
 	SplitExternalLocalOriginErrors bool `protobuf:"varint,8,opt,name=split_external_local_origin_errors,json=splitExternalLocalOriginErrors,proto3" json:"split_external_local_origin_errors,omitempty"`
 	// The number of consecutive locally originated failures before ejection
