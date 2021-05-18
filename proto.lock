@@ -32991,6 +32991,11 @@
                 "type": "istio.networking.v1alpha3.LocalityLoadBalancerSetting"
               },
               {
+                "id": 62,
+                "name": "network_lb_setting",
+                "type": "istio.networking.v1alpha3.NetworkLoadBalancerSetting"
+              },
+              {
                 "id": 36,
                 "name": "dns_refresh_rate",
                 "type": "google.protobuf.Duration"
@@ -34600,6 +34605,11 @@
                 "id": 3,
                 "name": "locality_lb_setting",
                 "type": "LocalityLoadBalancerSetting"
+              },
+              {
+                "id": 4,
+                "name": "network_lb_setting",
+                "type": "NetworkLoadBalancerSetting"
               }
             ],
             "messages": [
@@ -34913,6 +34923,39 @@
                   }
                 ]
               },
+              {
+                "name": "Failover",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "from",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "to",
+                    "type": "string"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "NetworkLoadBalancerSetting",
+            "fields": [
+              {
+                "id": 2,
+                "name": "failover",
+                "type": "Failover",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "enabled",
+                "type": "google.protobuf.BoolValue"
+              }
+            ],
+            "messages": [
               {
                 "name": "Failover",
                 "fields": [

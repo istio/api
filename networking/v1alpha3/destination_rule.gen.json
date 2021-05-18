@@ -88,6 +88,9 @@
         "properties": {
           "localityLbSetting": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.LocalityLoadBalancerSetting"
+          },
+          "networkLbSetting": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.NetworkLoadBalancerSetting"
           }
         },
         "oneOf": [
@@ -293,6 +296,24 @@
           },
           "enabled": {
             "description": "enable locality load balancing, this is DestinationRule-level and will override mesh wide settings in entirety. e.g. true means that turn on locality load balancing for this DestinationRule no matter what mesh wide settings is.",
+            "type": "boolean",
+            "nullable": true
+          }
+        }
+      },
+      "istio.networking.v1alpha3.NetworkLoadBalancerSetting": {
+        "description": "The following example sets up a network failover policy for regions. Assume a service resides in networks within network1, network2 \u0026 network3 this example specifies that when endpoints within network1 become unhealthy traffic should failover to endpoints within network2 and similarly network2 should failover to network1.",
+        "type": "object",
+        "properties": {
+          "failover": {
+            "description": "Explicitly specify the `network` traffic will land on when endpoints in local network becomes unhealthy. Should be used together with OutlierDetection to detect unhealthy endpoints. Note: if no OutlierDetection specified, this will not take effect.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.NetworkLoadBalancerSetting.Failover"
+            }
+          },
+          "enabled": {
+            "description": "enable network load balancing, this is DestinationRule-level and will override mesh wide settings in entirety. e.g. true means that turn on network load balancing for this DestinationRule no matter what mesh wide settings is.",
             "type": "boolean",
             "nullable": true
           }
@@ -557,6 +578,22 @@
           },
           "to": {
             "description": "Destination region the traffic will fail over to when endpoints in the 'from' region becomes unhealthy.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.NetworkLoadBalancerSetting.Failover": {
+        "description": "Specify the traffic failover policy across networks.",
+        "type": "object",
+        "properties": {
+          "from": {
+            "description": "Originating network.",
+            "type": "string",
+            "format": "string"
+          },
+          "to": {
+            "description": "Destination network the traffic will fail over to when endpoints in the 'from' network becomes unhealthy.",
             "type": "string",
             "format": "string"
           }

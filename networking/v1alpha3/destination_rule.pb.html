@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.DestinationRule
 aliases: [/docs/reference/config/networking/v1alpha3/destination-rule]
-number_of_entries: 20
+number_of_entries: 22
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -556,6 +556,18 @@ No
 <td><code><a href="#LocalityLoadBalancerSetting">LocalityLoadBalancerSetting</a></code></td>
 <td>
 <p>Locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
+between this object and the object one in MeshConfig</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LoadBalancerSettings-network_lb_setting">
+<td><code>networkLbSetting</code></td>
+<td><code><a href="#NetworkLoadBalancerSetting">NetworkLoadBalancerSetting</a></code></td>
+<td>
+<p>Network load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
 between this object and the object one in MeshConfig</p>
 
 </td>
@@ -1198,6 +1210,70 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="NetworkLoadBalancerSetting">NetworkLoadBalancerSetting</h2>
+<section>
+<p>The following example sets up a network failover policy for regions.
+Assume a service resides in networks within network1, network2 &amp; network3
+this example specifies that when endpoints within network1 become unhealthy
+traffic should failover to endpoints within network2
+and similarly network2 should failover to network1.</p>
+
+<pre><code class="language-yaml"> failover:
+   - from: network1
+     to: network2
+   - from: network2
+     to: network1
+</code></pre>
+
+<p>Network load balancing settings.
+When it is specified simultaneously with locality load balancing, the priority order is network &gt; locality.
+e.g. if both service A and B resides in two networks{<code>network1</code>, <code>network2</code>} and two az{<code>az-1</code>, <code>az-2</code>}
+for service A instance in <code>network1/us-east</code>, the expected endpoints priority will be:</p>
+
+<pre><code>  `network1/az-1`: 0
+  `network1/az-2`: 1
+  `network2/az-1`: 2
+  `network2/az-2`: 3
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="NetworkLoadBalancerSetting-failover">
+<td><code>failover</code></td>
+<td><code><a href="#NetworkLoadBalancerSetting-Failover">Failover[]</a></code></td>
+<td>
+<p>Explicitly specify the <code>network</code> traffic will land on when endpoints in local network becomes unhealthy.
+Should be used together with OutlierDetection to detect unhealthy endpoints.
+Note: if no OutlierDetection specified, this will not take effect.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="NetworkLoadBalancerSetting-enabled">
+<td><code>enabled</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+<p>enable network load balancing, this is DestinationRule-level and will override mesh wide settings in entirety.
+e.g. true means that turn on network load balancing for this DestinationRule no matter what mesh wide settings is.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="TrafficPolicy-PortTrafficPolicy">TrafficPolicy.PortTrafficPolicy</h2>
 <section>
 <p>Traffic policies that apply to specific ports of the service</p>
@@ -1703,6 +1779,46 @@ No
 <td>
 <p>Destination region the traffic will fail over to when endpoints in
 the &lsquo;from&rsquo; region becomes unhealthy.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="NetworkLoadBalancerSetting-Failover">NetworkLoadBalancerSetting.Failover</h2>
+<section>
+<p>Specify the traffic failover policy across networks.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="NetworkLoadBalancerSetting-Failover-from">
+<td><code>from</code></td>
+<td><code>string</code></td>
+<td>
+<p>Originating network.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="NetworkLoadBalancerSetting-Failover-to">
+<td><code>to</code></td>
+<td><code>string</code></td>
+<td>
+<p>Destination network the traffic will fail over to when endpoints in
+the &lsquo;from&rsquo; network becomes unhealthy.</p>
 
 </td>
 <td>

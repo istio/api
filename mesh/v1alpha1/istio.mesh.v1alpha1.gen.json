@@ -13,6 +13,9 @@
           "localityLbSetting": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.LocalityLoadBalancerSetting"
           },
+          "networkLbSetting": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.NetworkLoadBalancerSetting"
+          },
           "connectTimeout": {
             "description": "Connection timeout used by Envoy. (MUST BE \u003e=1ms) Default timeout is 10s.",
             "type": "string"
@@ -1751,6 +1754,24 @@
           }
         }
       },
+      "istio.networking.v1alpha3.NetworkLoadBalancerSetting": {
+        "description": "Network based load balancing failover settings.",
+        "type": "object",
+        "properties": {
+          "failover": {
+            "description": "Explicitly specify the `network` traffic will land on when endpoints in local network becomes unhealthy. Should be used together with OutlierDetection to detect unhealthy endpoints. Note: if no OutlierDetection specified, this will not take effect.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.NetworkLoadBalancerSetting.Failover"
+            }
+          },
+          "enabled": {
+            "description": "enable network load balancing, this is DestinationRule-level and will override mesh wide settings in entirety. e.g. true means that turn on network load balancing for this DestinationRule no matter what mesh wide settings is.",
+            "type": "boolean",
+            "nullable": true
+          }
+        }
+      },
       "istio.networking.v1alpha3.ReadinessProbe": {
         "description": "VM Health Checking readiness probe. This health check config exactly mirrors the kubernetes readiness probe configuration both in schema and logic. Only one health check method of 3 can be set at a time.",
         "type": "object",
@@ -2109,6 +2130,21 @@
           },
           "to": {
             "description": "Destination region the traffic will fail over to when endpoints in the 'from' region becomes unhealthy.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.NetworkLoadBalancerSetting.Failover": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "description": "Originating network.",
+            "type": "string",
+            "format": "string"
+          },
+          "to": {
+            "description": "Destination network the traffic will fail over to when endpoints in the 'from' network becomes unhealthy.",
             "type": "string",
             "format": "string"
           }
