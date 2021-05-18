@@ -740,8 +740,8 @@ type HTTPRoute struct {
 	// destination.
 	Mirror *Destination `protobuf:"bytes,9,opt,name=mirror,proto3" json:"mirror,omitempty"`
 	// Percentage of the traffic to be mirrored by the `mirror` field.
-	// Use of integer `mirror_percent` value is deprecated. Use the
-	// double `mirror_percentage` field instead
+	// Use of integer `mirrorPercent` value is deprecated. Use the
+	// double `mirrorPercentage` field instead
 	MirrorPercent *types.UInt32Value `protobuf:"bytes,18,opt,name=mirror_percent,json=mirrorPercent,proto3" json:"mirror_percent,omitempty"` // Deprecated: Do not use.
 	// Percentage of the traffic to be mirrored by the `mirror` field.
 	// If this field is absent, all the traffic (100%) will be mirrored.

@@ -416,7 +416,7 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.Destination"
           },
           "mirrorPercent": {
-            "description": "Percentage of the traffic to be mirrored by the `mirror` field. Use of integer `mirror_percent` value is deprecated. Use the double `mirror_percentage` field instead",
+            "description": "Percentage of the traffic to be mirrored by the `mirror` field. Use of integer `mirrorPercent` value is deprecated. Use the double `mirrorPercentage` field instead",
             "type": "integer",
             "deprecated": true,
             "nullable": true

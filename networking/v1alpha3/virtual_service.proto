@@ -627,8 +627,8 @@ message HTTPRoute {
   Destination mirror = 9;
 
   // Percentage of the traffic to be mirrored by the `mirror` field.
-  // Use of integer `mirror_percent` value is deprecated. Use the
-  // double `mirror_percentage` field instead
+  // Use of integer `mirrorPercent` value is deprecated. Use the
+  // double `mirrorPercentage` field instead
   google.protobuf.UInt32Value mirror_percent = 18 [deprecated=true];
 
   // Percentage of the traffic to be mirrored by the `mirror` field.
