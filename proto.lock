@@ -34783,6 +34783,16 @@
                 ]
               },
               {
+                "id": 8,
+                "name": "split_external_local_origin_errors",
+                "type": "bool"
+              },
+              {
+                "id": 9,
+                "name": "consecutive_local_origin_failure",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
                 "id": 6,
                 "name": "consecutive_gateway_errors",
                 "type": "google.protobuf.UInt32Value"
@@ -37473,6 +37483,16 @@
                     "value": "true"
                   }
                 ]
+              },
+              {
+                "id": 8,
+                "name": "split_external_local_origin_errors",
+                "type": "bool"
+              },
+              {
+                "id": 9,
+                "name": "consecutive_local_origin_failure",
+                "type": "google.protobuf.UInt32Value"
               },
               {
                 "id": 6,
