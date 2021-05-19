@@ -677,7 +677,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // metadata:
 //   name: details-vm-1
 // spec:
-//   serviceAccount: details
+//   serviceAccount: details-legacy
 //   address: 2.2.2.2
 //   labels:
 //     app: details
@@ -688,7 +688,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // metadata:
 //   name: details-vm-2
 // spec:
-//   serviceAccount: details
+//   serviceAccount: details-legacy
 //   address: 3.3.3.3
 //   labels:
 //     app: details
@@ -703,7 +703,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // metadata:
 //   name: details-vm-1
 // spec:
-//   serviceAccount: details
+//   serviceAccount: details-legacy
 //   address: 2.2.2.2
 //   labels:
 //     app: details
@@ -714,7 +714,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // metadata:
 //   name: details-vm-2
 // spec:
-//   serviceAccount: details
+//   serviceAccount: details-legacy
 //   address: 3.3.3.3
 //   labels:
 //     app: details

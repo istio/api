@@ -653,7 +653,7 @@
 // metadata:
 //   name: details-vm-1
 // spec:
-//   serviceAccount: details
+//   serviceAccount: details-legacy
 //   address: 2.2.2.2
 //   labels:
 //     app: details
@@ -664,7 +664,7 @@
 // metadata:
 //   name: details-vm-2
 // spec:
-//   serviceAccount: details
+//   serviceAccount: details-legacy
 //   address: 3.3.3.3
 //   labels:
 //     app: details
@@ -679,7 +679,7 @@
 // metadata:
 //   name: details-vm-1
 // spec:
-//   serviceAccount: details
+//   serviceAccount: details-legacy
 //   address: 2.2.2.2
 //   labels:
 //     app: details
@@ -690,7 +690,7 @@
 // metadata:
 //   name: details-vm-2
 // spec:
-//   serviceAccount: details
+//   serviceAccount: details-legacy
 //   address: 3.3.3.3
 //   labels:
 //     app: details
