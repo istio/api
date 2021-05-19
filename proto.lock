@@ -9726,7 +9726,13 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings"
+                        "name": "additional_bindings",
+                        "aggregated": [
+                          {
+                            "name": "get",
+                            "value": "/v1/services/{service_name}/config"
+                          }
+                        ]
                       }
                     ]
                   }
@@ -34789,7 +34795,7 @@
               },
               {
                 "id": 9,
-                "name": "consecutive_local_origin_failure",
+                "name": "consecutive_local_origin_failures",
                 "type": "google.protobuf.UInt32Value"
               },
               {
@@ -37491,7 +37497,7 @@
               },
               {
                 "id": 9,
-                "name": "consecutive_local_origin_failure",
+                "name": "consecutive_local_origin_failures",
                 "type": "google.protobuf.UInt32Value"
               },
               {
