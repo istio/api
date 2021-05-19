@@ -2041,6 +2041,11 @@ To set the mesh wide defaults, configure the <code>defaultConfig</code> section 
     discoveryAddress: istiod:15012
 </code></pre>
 
+<p>If both are configured, the two are merged with per field semantics; the field set in annotation will fully replace the field from mesh config defaults.
+This is different than a deep merge provided by protobuf.
+For example, <code>&quot;tracing&quot;: { &quot;sampling&quot;: 5 }</code> would completely override a setting configuring a tracing provider
+such as <code>&quot;tracing&quot;: { &quot;zipkin&quot;: { &quot;address&quot;: &quot;...&quot; } }</code>.</p>
+
 <table class="message-fields">
 <thead>
 <tr>

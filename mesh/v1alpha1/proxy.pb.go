@@ -1122,6 +1122,11 @@ func (m *Topology) GetForwardClientCertDetails() Topology_ForwardClientCertDetai
 //   proxy.istio.io/config: |
 //     discoveryAddress: istiod:15012
 // ```
+//
+// If both are configured, the two are merged with per field semantics; the field set in annotation will fully replace the field from mesh config defaults.
+// This is different than a deep merge provided by protobuf.
+// For example, `"tracing": { "sampling": 5 }` would completely override a setting configuring a tracing provider
+// such as `"tracing": { "zipkin": { "address": "..." } }`.
 type ProxyConfig struct {
 	// Path to the generated configuration file directory.
 	// Proxy agent generates the actual configuration and stores it in this directory.
