@@ -349,6 +349,9 @@
 // ```
 //
 // The following example adds a Wasm service extension for all proxies using a locally available Wasm file.
+// The singleton Wasm extension is used to maintain a shared state between workers executing Wasm filters.
+// For example, a local rate limit extension would rely on a singleton to limit requests across all workers.
+// As another example, an authorization Wasm extension can use a singleton to maintain a database of accounts.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
