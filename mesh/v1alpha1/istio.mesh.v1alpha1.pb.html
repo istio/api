@@ -2025,7 +2025,21 @@ No
 </section>
 <h2 id="ProxyConfig">ProxyConfig</h2>
 <section>
-<p>ProxyConfig defines variables for individual Envoy instances.</p>
+<p>ProxyConfig defines variables for individual Envoy instances. This can be configured on a per-workload basis
+as well as by the mesh-wide defaults.
+To set the mesh wide defaults, configure the <code>defaultConfig</code> section of <code>meshConfig</code>. For example:</p>
+
+<pre><code>meshConfig:
+  defaultConfig:
+    discoveryAddress: istiod:15012
+</code></pre>
+
+<p>This can also be configured on a per-workload basis by configuring the <code>proxy.istio.io/config</code> annotation on the pod. For example:</p>
+
+<pre><code>annotations:
+  proxy.istio.io/config: |
+    discoveryAddress: istiod:15012
+</code></pre>
 
 <table class="message-fields">
 <thead>
