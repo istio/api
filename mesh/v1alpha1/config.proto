@@ -283,6 +283,22 @@ message MeshConfig {
   // Locality based load balancing distribution or failover settings.
   istio.networking.v1alpha3.LocalityLoadBalancerSetting locality_lb_setting = 35;
 
+  // TopologyKeys is a preference-order list of topology keys
+  // used to sort endpoints to do priority load balancing.
+  // The below config specifies the priority levels:
+  //   1. for endpoints in same ["NETWORK", "REGION", "ZONE"] with the client proxy, the priority is 0.
+  //   2. endpoints in same ["NETWORK", "REGION"] but different ZONE with the client proxy, the priority is 1.
+  //   3. endpoints in same ["NETWORK"] but different REGION with the client proxy, the priority is 2.
+  //   4. all other endpoints, the priority is 3.
+  // ```yaml
+  // topologyKeys:
+  // - keys: ["NETWORK", "REGION", "ZONE"]
+  // - keys: ["NETWORK", "REGION"]
+  // - keys: ["NETWORK"]
+  // ```
+  // Note: topologyKeys can not be specified simultaneously with localityLoadBalancerSetting
+  repeated istio.networking.v1alpha3.TopologyKeys topologyKeys = 62;
+
   // Configures DNS refresh rate for Envoy clusters of type `STRICT_DNS`
   // Default refresh rate is `5s`.
   google.protobuf.Duration dns_refresh_rate = 36;
@@ -848,7 +864,7 @@ message MeshConfig {
   ProxyPathNormalization path_normalization = 61;
 
   // $hide_from_docs
-  // Next available field number: 62
+  // Next available field number: 63
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
