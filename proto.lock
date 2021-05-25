@@ -9726,13 +9726,7 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings",
-                        "aggregated": [
-                          {
-                            "name": "get",
-                            "value": "/v1/services/{service_name}/config"
-                          }
-                        ]
+                        "name": "additional_bindings"
                       }
                     ]
                   }
@@ -33069,6 +33063,11 @@
                 "id": 61,
                 "name": "path_normalization",
                 "type": "ProxyPathNormalization"
+              },
+              {
+                "id": 62,
+                "name": "preserve_header_key_casing",
+                "type": "bool"
               }
             ],
             "reserved_ids": [
