@@ -230,7 +230,7 @@
         ]
       },
       "istio.mesh.v1alpha1.ProxyConfig": {
-        "description": "ProxyConfig defines variables for individual Envoy instances.",
+        "description": "ProxyConfig defines variables for individual Envoy instances. This can be configured on a per-workload basis as well as by the mesh-wide defaults. To set the mesh wide defaults, configure the `defaultConfig` section of `meshConfig`. For example: ``` meshConfig: defaultConfig: discoveryAddress: istiod:15012 ```",
         "type": "object",
         "properties": {
           "tracing": {
