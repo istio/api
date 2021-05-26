@@ -14,8 +14,7 @@
             "description": "One or more labels that indicate a specific set of pods/VMs on which a policy should be applied. The scope of label search is restricted to the configuration namespace in which the resource is present.",
             "type": "object",
             "additionalProperties": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             }
           }
         }
