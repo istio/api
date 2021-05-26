@@ -12,8 +12,7 @@
         "properties": {
           "csr": {
             "description": "PEM-encoded certificate request. The public key in the CSR is used to generate the certificate, and other fields in the generated certificate may be overwritten by the CA.",
-            "type": "string",
-            "format": "string"
+            "type": "string"
           },
           "validityDuration": {
             "description": "Optional: requested certificate validity period, in seconds.",
@@ -34,8 +33,7 @@
             "description": "PEM-encoded certificate chain. The leaf cert is the first element, and the root cert is the last element.",
             "type": "array",
             "items": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             }
           }
         }
