@@ -516,13 +516,14 @@ message LoadBalancerSettings {
   // between this object and the object one in MeshConfig
   LocalityLoadBalancerSetting locality_lb_setting = 3;
 
-  // TopologyKeys is a preference-order list of topology keys
-  // used to sort endpoints to do priority load balancing.
-  // The below config specifies the priority levels:
-  //   1. for endpoints in same ["NETWORK", "REGION", "ZONE"] with the client proxy, the priority is 0.
-  //   2. endpoints in same ["NETWORK", "REGION"] but different ZONE with the client proxy, the priority is 1.
-  //   3. endpoints in same ["NETWORK"] but different REGION with the client proxy, the priority is 2.
-  //   4. all other endpoints, the priority is 3.
+  // TopologyKeys is a preference-order list of topology keys used to sort endpoints to do priority load balancing.
+  // This is to support traffic fail over across different topology keys.
+  // Should be used together with `OutlierDetection` to detect unhealthy endpoints, otherwise has no effect.
+  // The below topology config specifies the priority levels:
+  //   1. endpoints in same `["NETWORK", "REGION", "ZONE"]` with the client proxy have the highest priority.
+  //   2. endpoints in same `["NETWORK", "REGION"]` but different `ZONE` with the client proxy have the secondary-level priority.
+  //   3. endpoints in same `["NETWORK"]` but different `REGION` with the client proxy have the third-level priority.
+  //   4. all the other endpoints have the lowest priority.
   // ```yaml
   // topologyKeys:
   // - keys: ["NETWORK", "REGION", "ZONE"]
@@ -1087,13 +1088,18 @@ message LocalityLoadBalancerSetting{
 message TopologyKeys {
   // Supported topology key
   enum TopologyKey {
-    // match the network label of the cluster, `topology.istio.io/network`
+    // NETWORK is used to match the network metadata of the endpoint,
+    // it can be acquired from istio label `topology.istio.io/network`.
     NETWORK= 0;
-    // match the region label of the node, `topology.kubernetes.io/region`
+    // REGION is used to match the region metadata of the endpoint,
+    // it can be acquired from kubernetes node label `topology.kubernetes.io/region` or the deprecated label `failure-domain.beta.kubernetes.io/region`.
     REGION= 1;
-    // match the zone label of the node, `topology.kubernetes.io/zone`
+    // ZONE is used to match the region metadata of the endpoint,
+    // it can be acquired from kubernetes node label `topology.kubernetes.io/zone` or the deprecated label `failure-domain.beta.kubernetes.io/zone`.
     ZONE= 2;
-    // match the subzone label of the workload, `topology.istio.io/subzone`
+    // SUBZONE is used to match the subzone metadata of the endpoint,
+    // it can be acquired from k8s node label `topology.istio.io/subzone`.
+    // Note: the label is not applied by upstream kubernetes.
     SUBZONE= 3;
   }
   // keys contains the topology key that used to select endpoints
