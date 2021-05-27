@@ -584,7 +584,6 @@ type MeshConfig struct {
 	// Currently When handling HTTP/1.1, Istio will normalize the header keys to be all lowercase as
 	// per the HTTP/1.1 specification. This can potentially result in issues when migrating existing systems
 	// that might rely on specific header casing. Set this true to preserve header casing.
-	// Defaults to false.
 	PreserveHeaderKeyCasing bool     `protobuf:"varint,62,opt,name=preserve_header_key_casing,json=preserveHeaderKeyCasing,proto3" json:"preserveHeaderKeyCasing,omitempty"`
 	XXX_NoUnkeyedLiteral    struct{} `json:"-"`
 	XXX_unrecognized        []byte   `json:"-"`
