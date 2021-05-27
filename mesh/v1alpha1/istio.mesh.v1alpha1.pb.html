@@ -662,9 +662,9 @@ No
 <td><code>preserveHeaderKeyCasing</code></td>
 <td><code>bool</code></td>
 <td>
-<p>Currently When handling HTTP/1.1, Istio will normalize the header keys to be all lowercase as
-per the HTTP/1.1 specification. This can potentially result in issues when migrating existing systems
-that might rely on specific header casing. Set this true to preserve header casing.</p>
+<p>Istio proxies by default normalize HTTP/1.1 header keys to lowercase as per the HTTP/1.1 specification.
+This can potentially lead to issues when migrating existing systems that rely on header casing being preserved.
+Set this true to preserve HTTP/1.1 header casing.</p>
 
 </td>
 <td>
