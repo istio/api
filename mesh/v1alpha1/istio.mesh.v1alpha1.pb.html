@@ -427,6 +427,32 @@ No
 No
 </td>
 </tr>
+<tr id="MeshConfig-topologyKeys">
+<td><code>topologyKeys</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#TopologyKeys">TopologyKeys[]</a></code></td>
+<td>
+<p>TopologyKeys is a preference-order list of topology keys used to sort endpoints to do priority load balancing.
+This is to support traffic fail over across different topology keys.
+Should be used together with <code>OutlierDetection</code> to detect unhealthy endpoints, otherwise has no effect.
+The below topology config specifies the priority levels:
+  1. endpoints in same <code>[&quot;NETWORK&quot;, &quot;REGION&quot;, &quot;ZONE&quot;]</code> with the client proxy have the highest priority.
+  2. endpoints in same <code>[&quot;NETWORK&quot;, &quot;REGION&quot;]</code> but different <code>ZONE</code> with the client proxy have the secondary-level priority.
+  3. endpoints in same <code>[&quot;NETWORK&quot;]</code> but different <code>REGION</code> with the client proxy have the third-level priority.
+  4. all the other endpoints have the lowest priority.</p>
+
+<pre><code class="language-yaml">topologyKeys:
+- keys: [&quot;NETWORK&quot;, &quot;REGION&quot;, &quot;ZONE&quot;]
+- keys: [&quot;NETWORK&quot;, &quot;REGION&quot;]
+- keys: [&quot;NETWORK&quot;]
+</code></pre>
+
+<p>Note: topologyKeys can not be specified simultaneously with localityLoadBalancerSetting</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="MeshConfig-dns_refresh_rate">
 <td><code>dnsRefreshRate</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>

@@ -335,6 +335,17 @@ func (this *LocalityLoadBalancerSetting_Failover) UnmarshalJSON(b []byte) error 
 	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for TopologyKeys
+func (this *TopologyKeys) MarshalJSON() ([]byte, error) {
+	str, err := DestinationRuleMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for TopologyKeys
+func (this *TopologyKeys) UnmarshalJSON(b []byte) error {
+	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 var (
 	DestinationRuleMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
 	DestinationRuleUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}

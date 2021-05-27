@@ -179,6 +179,13 @@
         "properties": {
           "localityLbSetting": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.LocalityLoadBalancerSetting"
+          },
+          "topologyKeys": {
+            "description": "TopologyKeys is a preference-order list of topology keys used to sort endpoints to do priority load balancing. This is to support traffic fail over across different topology keys. Should be used together with `OutlierDetection` to detect unhealthy endpoints, otherwise has no effect. The below topology config specifies the priority levels: 1. endpoints in same `[\"NETWORK\", \"REGION\", \"ZONE\"]` with the client proxy have the highest priority. 2. endpoints in same `[\"NETWORK\", \"REGION\"]` but different `ZONE` with the client proxy have the secondary-level priority. 3. endpoints in same `[\"NETWORK\"]` but different `REGION` with the client proxy have the third-level priority. 4. all the other endpoints have the lowest priority. ```yaml topologyKeys: - keys: [\"NETWORK\", \"REGION\", \"ZONE\"] - keys: [\"NETWORK\", \"REGION\"] - keys: [\"NETWORK\"] ``` Note: topologyKeys can not be specified simultaneously with localityLoadBalancerSetting",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.TopologyKeys"
+            }
           }
         },
         "oneOf": [
@@ -496,6 +503,29 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.TrafficPolicy"
           }
         }
+      },
+      "istio.networking.v1alpha3.TopologyKeys": {
+        "description": "TopologyKeys is the topology key list that used to select a group of endpoints.",
+        "type": "object",
+        "properties": {
+          "keys": {
+            "description": "keys contains the topology key that used to select endpoints",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.TopologyKeys.TopologyKey"
+            }
+          }
+        }
+      },
+      "istio.networking.v1alpha3.TopologyKeys.TopologyKey": {
+        "description": "Supported topology key",
+        "type": "string",
+        "enum": [
+          "NETWORK",
+          "REGION",
+          "ZONE",
+          "SUBZONE"
+        ]
       },
       "istio.networking.v1alpha3.TrafficPolicy": {
         "description": "Traffic policies to apply for a specific destination, across all destination ports. See DestinationRule for examples.",

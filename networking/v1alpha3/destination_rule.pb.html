@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.DestinationRule
 aliases: [/docs/reference/config/networking/v1alpha3/destination-rule]
-number_of_entries: 20
+number_of_entries: 22
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -557,6 +557,32 @@ No
 <td>
 <p>Locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
 between this object and the object one in MeshConfig</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LoadBalancerSettings-topologyKeys">
+<td><code>topologyKeys</code></td>
+<td><code><a href="#TopologyKeys">TopologyKeys[]</a></code></td>
+<td>
+<p>TopologyKeys is a preference-order list of topology keys used to sort endpoints to do priority load balancing.
+This is to support traffic fail over across different topology keys.
+Should be used together with <code>OutlierDetection</code> to detect unhealthy endpoints, otherwise has no effect.
+The below topology config specifies the priority levels:
+  1. endpoints in same <code>[&quot;NETWORK&quot;, &quot;REGION&quot;, &quot;ZONE&quot;]</code> with the client proxy have the highest priority.
+  2. endpoints in same <code>[&quot;NETWORK&quot;, &quot;REGION&quot;]</code> but different <code>ZONE</code> with the client proxy have the secondary-level priority.
+  3. endpoints in same <code>[&quot;NETWORK&quot;]</code> but different <code>REGION</code> with the client proxy have the third-level priority.
+  4. all the other endpoints have the lowest priority.</p>
+
+<pre><code class="language-yaml">topologyKeys:
+- keys: [&quot;NETWORK&quot;, &quot;REGION&quot;, &quot;ZONE&quot;]
+- keys: [&quot;NETWORK&quot;, &quot;REGION&quot;]
+- keys: [&quot;NETWORK&quot;]
+</code></pre>
+
+<p>Note: topologyKeys can not be specified simultaneously with localityLoadBalancerSetting</p>
 
 </td>
 <td>
@@ -1189,6 +1215,34 @@ No
 <td>
 <p>enable locality load balancing, this is DestinationRule-level and will override mesh wide settings in entirety.
 e.g. true means that turn on locality load balancing for this DestinationRule no matter what mesh wide settings is.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="TopologyKeys">TopologyKeys</h2>
+<section>
+<p>TopologyKeys is the topology key list that used to select a group of endpoints.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="TopologyKeys-keys">
+<td><code>keys</code></td>
+<td><code><a href="#TopologyKeys-TopologyKey">TopologyKey[]</a></code></td>
+<td>
+<p>keys contains the topology key that used to select endpoints</p>
 
 </td>
 <td>
@@ -1873,6 +1927,54 @@ client certificates for authentication.
 Compared to Mutual mode, this mode uses certificates generated
 automatically by Istio for mTLS authentication. When this mode is
 used, all other fields in <code>ClientTLSSettings</code> should be empty.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="TopologyKeys-TopologyKey">TopologyKeys.TopologyKey</h2>
+<section>
+<p>Supported topology key</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="TopologyKeys-TopologyKey-NETWORK">
+<td><code>NETWORK</code></td>
+<td>
+<p>NETWORK is used to match the network metadata of the endpoint,
+it can be acquired from istio label <code>topology.istio.io/network</code>.</p>
+
+</td>
+</tr>
+<tr id="TopologyKeys-TopologyKey-REGION">
+<td><code>REGION</code></td>
+<td>
+<p>REGION is used to match the region metadata of the endpoint,
+it can be acquired from kubernetes node label <code>topology.kubernetes.io/region</code> or the deprecated label <code>failure-domain.beta.kubernetes.io/region</code>.</p>
+
+</td>
+</tr>
+<tr id="TopologyKeys-TopologyKey-ZONE">
+<td><code>ZONE</code></td>
+<td>
+<p>ZONE is used to match the region metadata of the endpoint,
+it can be acquired from kubernetes node label <code>topology.kubernetes.io/zone</code> or the deprecated label <code>failure-domain.beta.kubernetes.io/zone</code>.</p>
+
+</td>
+</tr>
+<tr id="TopologyKeys-TopologyKey-SUBZONE">
+<td><code>SUBZONE</code></td>
+<td>
+<p>SUBZONE is used to match the subzone metadata of the endpoint,
+it can be acquired from k8s node label <code>topology.istio.io/subzone</code>.
+Note: the label is not applied by upstream kubernetes.</p>
 
 </td>
 </tr>

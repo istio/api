@@ -9726,13 +9726,7 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings",
-                        "aggregated": [
-                          {
-                            "name": "get",
-                            "value": "/v1/services/{service_name}/config"
-                          }
-                        ]
+                        "name": "additional_bindings"
                       }
                     ]
                   }
@@ -32997,6 +32991,12 @@
                 "type": "istio.networking.v1alpha3.LocalityLoadBalancerSetting"
               },
               {
+                "id": 62,
+                "name": "topologyKeys",
+                "type": "istio.networking.v1alpha3.TopologyKeys",
+                "is_repeated": true
+              },
+              {
                 "id": 36,
                 "name": "dns_refresh_rate",
                 "type": "google.protobuf.Duration"
@@ -34459,6 +34459,26 @@
                 "integer": 3
               }
             ]
+          },
+          {
+            "name": "TopologyKeys.TopologyKey",
+            "enum_fields": [
+              {
+                "name": "NETWORK"
+              },
+              {
+                "name": "REGION",
+                "integer": 1
+              },
+              {
+                "name": "ZONE",
+                "integer": 2
+              },
+              {
+                "name": "SUBZONE",
+                "integer": 3
+              }
+            ]
           }
         ],
         "messages": [
@@ -34606,6 +34626,12 @@
                 "id": 3,
                 "name": "locality_lb_setting",
                 "type": "LocalityLoadBalancerSetting"
+              },
+              {
+                "id": 4,
+                "name": "topologyKeys",
+                "type": "TopologyKeys",
+                "is_repeated": true
               }
             ],
             "messages": [
@@ -34933,6 +34959,17 @@
                     "type": "string"
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "name": "TopologyKeys",
+            "fields": [
+              {
+                "id": 1,
+                "name": "keys",
+                "type": "TopologyKey",
+                "is_repeated": true
               }
             ]
           }

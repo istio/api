@@ -262,6 +262,23 @@ spec:
                               - RANDOM
                               - PASSTHROUGH
                               type: string
+                            topologyKeys:
+                              description: TopologyKeys is a preference-order list
+                                of topology keys used to sort endpoints to do priority
+                                load balancing.
+                              items:
+                                properties:
+                                  keys:
+                                    items:
+                                      enum:
+                                      - NETWORK
+                                      - REGION
+                                      - ZONE
+                                      - SUBZONE
+                                      type: string
+                                    type: array
+                                type: object
+                              type: array
                           type: object
                         outlierDetection:
                           properties:
@@ -502,6 +519,23 @@ spec:
                                     - RANDOM
                                     - PASSTHROUGH
                                     type: string
+                                  topologyKeys:
+                                    description: TopologyKeys is a preference-order
+                                      list of topology keys used to sort endpoints
+                                      to do priority load balancing.
+                                    items:
+                                      properties:
+                                        keys:
+                                          items:
+                                            enum:
+                                            - NETWORK
+                                            - REGION
+                                            - ZONE
+                                            - SUBZONE
+                                            type: string
+                                          type: array
+                                      type: object
+                                    type: array
                                 type: object
                               outlierDetection:
                                 properties:
@@ -804,6 +838,22 @@ spec:
                         - RANDOM
                         - PASSTHROUGH
                         type: string
+                      topologyKeys:
+                        description: TopologyKeys is a preference-order list of topology
+                          keys used to sort endpoints to do priority load balancing.
+                        items:
+                          properties:
+                            keys:
+                              items:
+                                enum:
+                                - NETWORK
+                                - REGION
+                                - ZONE
+                                - SUBZONE
+                                type: string
+                              type: array
+                          type: object
+                        type: array
                     type: object
                   outlierDetection:
                     properties:
@@ -1039,6 +1089,23 @@ spec:
                               - RANDOM
                               - PASSTHROUGH
                               type: string
+                            topologyKeys:
+                              description: TopologyKeys is a preference-order list
+                                of topology keys used to sort endpoints to do priority
+                                load balancing.
+                              items:
+                                properties:
+                                  keys:
+                                    items:
+                                      enum:
+                                      - NETWORK
+                                      - REGION
+                                      - ZONE
+                                      - SUBZONE
+                                      type: string
+                                    type: array
+                                type: object
+                              type: array
                           type: object
                         outlierDetection:
                           properties:
