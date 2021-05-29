@@ -236,9 +236,7 @@ message DestinationRule {
   // the destination rule is declared in. Similarly, the value "*" is reserved and
   // defines an export to all namespaces.
   //
-  // Services that have a wildcard "*" in the host name (e.g.
-  // "*.default.svc.cluster.local") are not exported to other namespaces.
-  // The only exception is the "istio-system" namespace.
+  // Destination rules can only export services from the same namespace.
   repeated string export_to = 4;
 }
 
