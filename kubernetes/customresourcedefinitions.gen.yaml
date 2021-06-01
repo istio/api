@@ -550,6 +550,12 @@ spec:
                                 properties:
                                   caCertificates:
                                     type: string
+                                  cipherSuites:
+                                    description: 'Optional: If specified, only support
+                                      the specified cipher list.'
+                                    items:
+                                      type: string
+                                    type: array
                                   clientCertificate:
                                     description: REQUIRED if mode is `MUTUAL`.
                                     type: string
@@ -582,6 +588,12 @@ spec:
                           properties:
                             caCertificates:
                               type: string
+                            cipherSuites:
+                              description: 'Optional: If specified, only support the
+                                specified cipher list.'
+                              items:
+                                type: string
+                              type: array
                             clientCertificate:
                               description: REQUIRED if mode is `MUTUAL`.
                               type: string
@@ -1086,6 +1098,12 @@ spec:
                           properties:
                             caCertificates:
                               type: string
+                            cipherSuites:
+                              description: 'Optional: If specified, only support the
+                                specified cipher list.'
+                              items:
+                                type: string
+                              type: array
                             clientCertificate:
                               description: REQUIRED if mode is `MUTUAL`.
                               type: string
@@ -1118,6 +1136,12 @@ spec:
                     properties:
                       caCertificates:
                         type: string
+                      cipherSuites:
+                        description: 'Optional: If specified, only support the specified
+                          cipher list.'
+                        items:
+                          type: string
+                        type: array
                       clientCertificate:
                         description: REQUIRED if mode is `MUTUAL`.
                         type: string
@@ -1678,6 +1702,12 @@ spec:
                                 properties:
                                   caCertificates:
                                     type: string
+                                  cipherSuites:
+                                    description: 'Optional: If specified, only support
+                                      the specified cipher list.'
+                                    items:
+                                      type: string
+                                    type: array
                                   clientCertificate:
                                     description: REQUIRED if mode is `MUTUAL`.
                                     type: string
@@ -1710,6 +1740,12 @@ spec:
                           properties:
                             caCertificates:
                               type: string
+                            cipherSuites:
+                              description: 'Optional: If specified, only support the
+                                specified cipher list.'
+                              items:
+                                type: string
+                              type: array
                             clientCertificate:
                               description: REQUIRED if mode is `MUTUAL`.
                               type: string
@@ -2214,6 +2250,12 @@ spec:
                           properties:
                             caCertificates:
                               type: string
+                            cipherSuites:
+                              description: 'Optional: If specified, only support the
+                                specified cipher list.'
+                              items:
+                                type: string
+                              type: array
                             clientCertificate:
                               description: REQUIRED if mode is `MUTUAL`.
                               type: string
@@ -2246,6 +2288,12 @@ spec:
                     properties:
                       caCertificates:
                         type: string
+                      cipherSuites:
+                        description: 'Optional: If specified, only support the specified
+                          cipher list.'
+                        items:
+                          type: string
+                        type: array
                       clientCertificate:
                         description: REQUIRED if mode is `MUTUAL`.
                         type: string

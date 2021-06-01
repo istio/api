@@ -964,6 +964,10 @@ message ClientTLSSettings {
 
   // SNI string to present to the server during TLS handshake.
   string sni = 6;
+
+  // Optional: If specified, only support the specified cipher list.
+  // Otherwise default to the default cipher list supported by Envoy.
+  repeated string cipher_suites = 8;
 }
 
 // Locality-weighted load balancing allows administrators to control the

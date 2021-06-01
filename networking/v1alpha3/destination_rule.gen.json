@@ -39,6 +39,13 @@
           "sni": {
             "description": "SNI string to present to the server during TLS handshake.",
             "type": "string"
+          },
+          "cipherSuites": {
+            "description": "Optional: If specified, only support the specified cipher list. Otherwise default to the default cipher list supported by Envoy.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
