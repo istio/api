@@ -1069,9 +1069,9 @@ message HTTPMatchRequest {
   // in these cases it is not required to explicitly select the port.
   uint32 port = 6;
 
-  // One or more labels that constrain the applicability of a rule to
-  // workloads with the given labels. If the VirtualService has a list of
-  // gateways specified in the top-level `gateways` field, it must include the reserved gateway
+  // One or more labels that constrain the applicability of a rule to source (client) workloads
+  // with the given labels. If the VirtualService has a list of gateways specified
+  // in the top-level `gateways` field, it must include the reserved gateway
   // `mesh` for this field to be applicable.
   map<string, string> source_labels = 7;
 
