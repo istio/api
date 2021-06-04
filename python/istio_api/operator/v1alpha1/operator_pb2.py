@@ -13,6 +13,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
+from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 from google.protobuf import any_pb2 as google_dot_protobuf_dot_any__pb2
 from k8s.io.apimachinery.pkg.apis.meta.v1 import generated_pb2 as k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2
 from k8s.io.api.core.v1 import generated_pb2 as k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2
@@ -24,9 +25,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.operator.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\036istio.io/api/operator/v1alpha1\310\342\036\000\320\342\036\000\340\342\036\000'),
-  serialized_pb=_b('\n operator/v1alpha1/operator.proto\x12\x17istio.operator.v1alpha1\x1a\x19google/protobuf/any.proto\x1a\x34k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto\x1a\"k8s.io/api/core/v1/generated.proto\x1a\x14gogoproto/gogo.proto\"\xec\x06\n\x11IstioOperatorSpec\x12\x18\n\x07profile\x18\n \x01(\tR\x07profile\x12\x30\n\x14install_package_path\x18\x0b \x01(\tR\x12installPackagePath\x12\x10\n\x03hub\x18\x0c \x01(\tR\x03hub\x12\x38\n\x03tag\x18\r \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x03tag\x12+\n\x0fresource_suffix\x18\x0e \x01(\tB\x02\x18\x01R\x0eresourceSuffix\x12\x1c\n\tnamespace\x18\x0f \x01(\tR\tnamespace\x12\x1a\n\x08revision\x18\x10 \x01(\tR\x08revision\x12)\n\x10\x64\x65\x66\x61ult_revision\x18\x11 \x01(\x08R\x0f\x64\x65\x66\x61ultRevision\x12P\n\x0bmesh_config\x18( \x01(\x0b\x32/.istio.operator.v1alpha1.TypeMapStringInterfaceR\nmeshConfig\x12N\n\ncomponents\x18\x32 \x01(\x0b\x32..istio.operator.v1alpha1.IstioComponentSetSpecR\ncomponents\x12n\n\x10\x61\x64\x64on_components\x18\x33 \x03(\x0b\x32?.istio.operator.v1alpha1.IstioOperatorSpec.AddonComponentsEntryB\x02\x18\x01R\x0f\x61\x64\x64onComponents\x12G\n\x06values\x18\x64 \x01(\x0b\x32/.istio.operator.v1alpha1.TypeMapStringInterfaceR\x06values\x12^\n\x12unvalidated_values\x18\x65 \x01(\x0b\x32/.istio.operator.v1alpha1.TypeMapStringInterfaceR\x11unvalidatedValues\x1ar\n\x14\x41\x64\x64onComponentsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x44\n\x05value\x18\x02 \x01(\x0b\x32..istio.operator.v1alpha1.ExternalComponentSpecR\x05value:\x02\x38\x01\"\xbb\x04\n\rInstallStatus\x12\x45\n\x06status\x18\x01 \x01(\x0e\x32-.istio.operator.v1alpha1.InstallStatus.StatusR\x06status\x12\x18\n\x07message\x18\x03 \x01(\tR\x07message\x12\x66\n\x10\x63omponent_status\x18\x02 \x03(\x0b\x32;.istio.operator.v1alpha1.InstallStatus.ComponentStatusEntryR\x0f\x63omponentStatus\x1a\x86\x01\n\rVersionStatus\x12\x18\n\x07version\x18\x01 \x01(\tR\x07version\x12\x45\n\x06status\x18\x02 \x01(\x0e\x32-.istio.operator.v1alpha1.InstallStatus.StatusR\x06status\x12\x14\n\x05\x65rror\x18\x04 \x01(\tR\x05\x65rror\x1ax\n\x14\x43omponentStatusEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12J\n\x05value\x18\x02 \x01(\x0b\x32\x34.istio.operator.v1alpha1.InstallStatus.VersionStatusR\x05value:\x02\x38\x01\"^\n\x06Status\x12\x08\n\x04NONE\x10\x00\x12\x0c\n\x08UPDATING\x10\x01\x12\x0f\n\x0bRECONCILING\x10\x02\x12\x0b\n\x07HEALTHY\x10\x03\x12\t\n\x05\x45RROR\x10\x04\x12\x13\n\x0f\x41\x43TION_REQUIRED\x10\x05\"\xf7\x03\n\x15IstioComponentSetSpec\x12>\n\x04\x62\x61se\x18\x1d \x01(\x0b\x32*.istio.operator.v1alpha1.BaseComponentSpecR\x04\x62\x61se\x12<\n\x05pilot\x18\x1e \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpecR\x05pilot\x12\x38\n\x03\x63ni\x18& \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpecR\x03\x63ni\x12O\n\x10ingress_gateways\x18( \x03(\x0b\x32$.istio.operator.v1alpha1.GatewaySpecR\x0fingressGateways\x12M\n\x0f\x65gress_gateways\x18) \x03(\x0b\x32$.istio.operator.v1alpha1.GatewaySpecR\x0e\x65gressGatewaysJ\x04\x08\x1f\x10 J\x04\x08 \x10!J\x04\x08!\x10\"J\x04\x08\"\x10#J\x04\x08#\x10$J\x04\x08$\x10%J\x04\x08%\x10&J\x04\x08\'\x10(R\x07\x63itadelR\x06policyR\ttelemetryR\x06galleyR\nnode_agentR\x05proxyR\x10sidecar_injectorR\ristiod_remote\"\x9e\x01\n\x11\x42\x61seComponentSpec\x12\x45\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPBR\x07\x65nabled\x12\x42\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpecR\x03k8s\"\xc0\x02\n\rComponentSpec\x12\x45\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPBR\x07\x65nabled\x12\x1c\n\tnamespace\x18\x02 \x01(\tR\tnamespace\x12\x10\n\x03hub\x18\n \x01(\tR\x03hub\x12\x38\n\x03tag\x18\x0b \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x03tag\x12:\n\x04spec\x18\x1e \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x04spec\x12\x42\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpecR\x03k8s\"\xc9\x02\n\x15\x45xternalComponentSpec\x12\x45\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPBR\x07\x65nabled\x12\x1c\n\tnamespace\x18\x02 \x01(\tR\tnamespace\x12:\n\x04spec\x18\n \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x04spec\x12\x1d\n\nchart_path\x18\x1e \x01(\tR\tchartPath\x12,\n\x06schema\x18# \x01(\x0b\x32\x14.google.protobuf.AnyR\x06schema\x12\x42\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpecR\x03k8s\"\x97\x03\n\x0bGatewaySpec\x12\x45\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPBR\x07\x65nabled\x12\x1c\n\tnamespace\x18\x02 \x01(\tR\tnamespace\x12\x12\n\x04name\x18\x03 \x01(\tR\x04name\x12\x45\n\x05label\x18\x04 \x03(\x0b\x32/.istio.operator.v1alpha1.GatewaySpec.LabelEntryR\x05label\x12\x10\n\x03hub\x18\n \x01(\tR\x03hub\x12\x38\n\x03tag\x18\x0b \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x03tag\x12\x42\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpecR\x03k8s\x1a\x38\n\nLabelEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xde\x0c\n\x17KubernetesResourcesSpec\x12=\n\x08\x61\x66\x66inity\x18\x01 \x01(\x0b\x32!.istio.operator.v1alpha1.AffinityR\x08\x61\x66\x66inity\x12\x31\n\x03\x65nv\x18\x02 \x03(\x0b\x32\x1f.istio.operator.v1alpha1.EnvVarR\x03\x65nv\x12O\n\x08hpa_spec\x18\x03 \x01(\x0b\x32\x34.istio.operator.v1alpha1.HorizontalPodAutoscalerSpecR\x07hpaSpec\x12*\n\x11image_pull_policy\x18\x04 \x01(\tR\x0fimagePullPolicy\x12g\n\rnode_selector\x18\x05 \x03(\x0b\x32\x42.istio.operator.v1alpha1.KubernetesResourcesSpec.NodeSelectorEntryR\x0cnodeSelector\x12\x64\n\x15pod_disruption_budget\x18\x06 \x01(\x0b\x32\x30.istio.operator.v1alpha1.PodDisruptionBudgetSpecR\x13podDisruptionBudget\x12m\n\x0fpod_annotations\x18\x07 \x03(\x0b\x32\x44.istio.operator.v1alpha1.KubernetesResourcesSpec.PodAnnotationsEntryR\x0epodAnnotations\x12.\n\x13priority_class_name\x18\x08 \x01(\tR\x11priorityClassName\x12P\n\x0freadiness_probe\x18\t \x01(\x0b\x32\'.istio.operator.v1alpha1.ReadinessProbeR\x0ereadinessProbe\x12#\n\rreplica_count\x18\n \x01(\rR\x0creplicaCount\x12@\n\tresources\x18\x0b \x01(\x0b\x32\".istio.operator.v1alpha1.ResourcesR\tresources\x12>\n\x07service\x18\x0c \x01(\x0b\x32$.istio.operator.v1alpha1.ServiceSpecR\x07service\x12G\n\x08strategy\x18\r \x01(\x0b\x32+.istio.operator.v1alpha1.DeploymentStrategyR\x08strategy\x12\x45\n\x0btolerations\x18\x0e \x03(\x0b\x32#.istio.operator.v1alpha1.TolerationR\x0btolerations\x12y\n\x13service_annotations\x18\x0f \x03(\x0b\x32H.istio.operator.v1alpha1.KubernetesResourcesSpec.ServiceAnnotationsEntryR\x12serviceAnnotations\x12U\n\x0fsecurityContext\x18\x10 \x01(\x0b\x32+.istio.operator.v1alpha1.PodSecurityContextR\x0fsecurityContext\x12\x34\n\x07volumes\x18\x11 \x03(\x0b\x32\x1a.k8s.io.api.core.v1.VolumeR\x07volumes\x12\x43\n\x0cvolumeMounts\x18\x12 \x03(\x0b\x32\x1f.k8s.io.api.core.v1.VolumeMountR\x0cvolumeMounts\x12\x45\n\x08overlays\x18\x64 \x03(\x0b\x32).istio.operator.v1alpha1.K8sObjectOverlayR\x08overlays\x1a?\n\x11NodeSelectorEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\x1a\x41\n\x13PodAnnotationsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\x1a\x45\n\x17ServiceAnnotationsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\x89\x02\n\x10K8sObjectOverlay\x12\x1f\n\x0b\x61pi_version\x18\x01 \x01(\tR\napiVersion\x12\x12\n\x04kind\x18\x02 \x01(\tR\x04kind\x12\x12\n\x04name\x18\x03 \x01(\tR\x04name\x12M\n\x07patches\x18\x04 \x03(\x0b\x32\x33.istio.operator.v1alpha1.K8sObjectOverlay.PathValueR\x07patches\x1a]\n\tPathValue\x12\x12\n\x04path\x18\x01 \x01(\tR\x04path\x12<\n\x05value\x18\x02 \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x05value\"\xf1\x01\n\x08\x41\x66\x66inity\x12I\n\x0cnodeAffinity\x18\x01 \x01(\x0b\x32%.istio.operator.v1alpha1.NodeAffinityR\x0cnodeAffinity\x12\x46\n\x0bpodAffinity\x18\x02 \x01(\x0b\x32$.istio.operator.v1alpha1.PodAffinityR\x0bpodAffinity\x12R\n\x0fpodAntiAffinity\x18\x03 \x01(\x0b\x32(.istio.operator.v1alpha1.PodAntiAffinityR\x0fpodAntiAffinity\"\xa7\x01\n\x14\x43onfigMapKeySelector\x12\x61\n\x14localObjectReference\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.LocalObjectReferenceR\x14localObjectReference\x12\x10\n\x03key\x18\x02 \x01(\tR\x03key\x12\x1a\n\x08optional\x18\x03 \x01(\x08R\x08optional\"8\n\x0e\x43lientIPConfig\x12&\n\x0etimeoutSeconds\x18\x01 \x01(\x05R\x0etimeoutSeconds\"e\n\x1b\x43rossVersionObjectReference\x12\x12\n\x04kind\x18\x01 \x01(\tR\x04kind\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12\x1e\n\napiVersion\x18\x03 \x01(\tR\napiVersion\"\x80\x01\n\x12\x44\x65ploymentStrategy\x12\x12\n\x04type\x18\x01 \x01(\tR\x04type\x12V\n\rrollingUpdate\x18\x02 \x01(\x0b\x32\x30.istio.operator.v1alpha1.RollingUpdateDeploymentR\rrollingUpdate\"w\n\x06\x45nvVar\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value\x12\x43\n\tvalueFrom\x18\x03 \x01(\x0b\x32%.istio.operator.v1alpha1.EnvVarSourceR\tvalueFrom\"\xdd\x02\n\x0c\x45nvVarSource\x12H\n\x08\x66ieldRef\x18\x01 \x01(\x0b\x32,.istio.operator.v1alpha1.ObjectFieldSelectorR\x08\x66ieldRef\x12Z\n\x10resourceFieldRef\x18\x02 \x01(\x0b\x32..istio.operator.v1alpha1.ResourceFieldSelectorR\x10resourceFieldRef\x12W\n\x0f\x63onfigMapKeyRef\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.ConfigMapKeySelectorR\x0f\x63onfigMapKeyRef\x12N\n\x0csecretKeyRef\x18\x04 \x01(\x0b\x32*.istio.operator.v1alpha1.SecretKeySelectorR\x0csecretKeyRef\"&\n\nExecAction\x12\x18\n\x07\x63ommand\x18\x01 \x03(\tR\x07\x63ommand\"\xc3\x02\n\x14\x45xternalMetricSource\x12\x1e\n\nmetricName\x18\x01 \x01(\tR\nmetricName\x12[\n\x0emetricSelector\x18\x02 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\x0emetricSelector\x12O\n\x0btargetValue\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0btargetValue\x12]\n\x12targetAverageValue\x18\x04 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x12targetAverageValue\"\xd9\x01\n\rHTTPGetAction\x12\x12\n\x04path\x18\x01 \x01(\tR\x04path\x12\x41\n\x04port\x18\x02 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x04port\x12\x12\n\x04host\x18\x03 \x01(\tR\x04host\x12\x16\n\x06scheme\x18\x04 \x01(\tR\x06scheme\x12\x45\n\x0bhttpHeaders\x18\x05 \x03(\x0b\x32#.istio.operator.v1alpha1.HTTPHeaderR\x0bhttpHeaders\"6\n\nHTTPHeader\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value\"\xfe\x01\n\x1bHorizontalPodAutoscalerSpec\x12\\\n\x0escaleTargetRef\x18\x01 \x01(\x0b\x32\x34.istio.operator.v1alpha1.CrossVersionObjectReferenceR\x0escaleTargetRef\x12 \n\x0bminReplicas\x18\x02 \x01(\x05R\x0bminReplicas\x12 \n\x0bmaxReplicas\x18\x03 \x01(\x05R\x0bmaxReplicas\x12=\n\x07metrics\x18\x04 \x03(\x0b\x32#.istio.operator.v1alpha1.MetricSpecR\x07metrics\"*\n\x14LocalObjectReference\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"\xba\x02\n\nMetricSpec\x12\x12\n\x04type\x18\x01 \x01(\tR\x04type\x12\x43\n\x06object\x18\x02 \x01(\x0b\x32+.istio.operator.v1alpha1.ObjectMetricSourceR\x06object\x12=\n\x04pods\x18\x03 \x01(\x0b\x32).istio.operator.v1alpha1.PodsMetricSourceR\x04pods\x12I\n\x08resource\x18\x04 \x01(\x0b\x32-.istio.operator.v1alpha1.ResourceMetricSourceR\x08resource\x12I\n\x08\x65xternal\x18\x05 \x01(\x0b\x32-.istio.operator.v1alpha1.ExternalMetricSourceR\x08\x65xternal\"\xbb\x02\n\x0cNodeAffinity\x12\x8d\x01\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x01(\x0b\x32%.istio.operator.v1alpha1.NodeSelectorR.requiredDuringSchedulingIgnoredDuringExecution\x12\x9a\x01\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.PreferredSchedulingTermR/preferredDuringSchedulingIgnoredDuringExecution\"g\n\x0cNodeSelector\x12W\n\x11nodeSelectorTerms\x18\x01 \x03(\x0b\x32).istio.operator.v1alpha1.NodeSelectorTermR\x11nodeSelectorTerms\"\xc4\x01\n\x10NodeSelectorTerm\x12\\\n\x10matchExpressions\x18\x01 \x03(\x0b\x32\x30.istio.operator.v1alpha1.NodeSelectorRequirementR\x10matchExpressions\x12R\n\x0bmatchFields\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.NodeSelectorRequirementR\x0bmatchFields\"_\n\x17NodeSelectorRequirement\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x1a\n\x08operator\x18\x02 \x01(\tR\x08operator\x12\x16\n\x06values\x18\x03 \x03(\tR\x06values\"S\n\x13ObjectFieldSelector\x12\x1e\n\napiVersion\x18\x01 \x01(\tR\napiVersion\x12\x1c\n\tfieldPath\x18\x02 \x01(\tR\tfieldPath\">\n\nObjectMeta\x12\x12\n\x04name\x18\x05 \x01(\tR\x04name\x12\x1c\n\tnamespace\x18\x06 \x01(\tR\tnamespace\"\xf7\x02\n\x12ObjectMetricSource\x12L\n\x06target\x18\x01 \x01(\x0b\x32\x34.istio.operator.v1alpha1.CrossVersionObjectReferenceR\x06target\x12\x1e\n\nmetricName\x18\x02 \x01(\tR\nmetricName\x12O\n\x0btargetValue\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0btargetValue\x12O\n\x08selector\x18\x04 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\x08selector\x12Q\n\x0c\x61verageValue\x18\x05 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0c\x61verageValue\"\xbd\x02\n\x0bPodAffinity\x12\x90\x01\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x03(\x0b\x32(.istio.operator.v1alpha1.PodAffinityTermR.requiredDuringSchedulingIgnoredDuringExecution\x12\x9a\x01\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.WeightedPodAffinityTermR/preferredDuringSchedulingIgnoredDuringExecution\"\xc1\x02\n\x0fPodAntiAffinity\x12\x90\x01\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x03(\x0b\x32(.istio.operator.v1alpha1.PodAffinityTermR.requiredDuringSchedulingIgnoredDuringExecution\x12\x9a\x01\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.WeightedPodAffinityTermR/preferredDuringSchedulingIgnoredDuringExecution\"\xae\x01\n\x0fPodAffinityTerm\x12Y\n\rlabelSelector\x18\x01 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\rlabelSelector\x12\x1e\n\nnamespaces\x18\x02 \x03(\tR\nnamespaces\x12 \n\x0btopologyKey\x18\x03 \x01(\tR\x0btopologyKey\"\x94\x02\n\x17PodDisruptionBudgetSpec\x12Q\n\x0cminAvailable\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0cminAvailable\x12O\n\x08selector\x18\x02 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\x08selector\x12U\n\x0emaxUnavailable\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0emaxUnavailable\"\xe2\x01\n\x10PodsMetricSource\x12\x1e\n\nmetricName\x18\x01 \x01(\tR\nmetricName\x12]\n\x12targetAverageValue\x18\x02 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x12targetAverageValue\x12O\n\x08selector\x18\x03 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\x08selector\"|\n\x17PreferredSchedulingTerm\x12\x16\n\x06weight\x18\x01 \x01(\x05R\x06weight\x12I\n\npreference\x18\x02 \x01(\x0b\x32).istio.operator.v1alpha1.NodeSelectorTermR\npreference\"\xab\x03\n\x0eReadinessProbe\x12\x37\n\x04\x65xec\x18\x01 \x01(\x0b\x32#.istio.operator.v1alpha1.ExecActionR\x04\x65xec\x12@\n\x07httpGet\x18\x02 \x01(\x0b\x32&.istio.operator.v1alpha1.HTTPGetActionR\x07httpGet\x12\x46\n\ttcpSocket\x18\x03 \x01(\x0b\x32(.istio.operator.v1alpha1.TCPSocketActionR\ttcpSocket\x12\x30\n\x13initialDelaySeconds\x18\x04 \x01(\x05R\x13initialDelaySeconds\x12&\n\x0etimeoutSeconds\x18\x05 \x01(\x05R\x0etimeoutSeconds\x12$\n\rperiodSeconds\x18\x06 \x01(\x05R\rperiodSeconds\x12*\n\x10successThreshold\x18\x07 \x01(\x05R\x10successThreshold\x12*\n\x10\x66\x61ilureThreshold\x18\x08 \x01(\x05R\x10\x66\x61ilureThreshold\"\xa2\x01\n\x15ResourceFieldSelector\x12$\n\rcontainerName\x18\x01 \x01(\tR\rcontainerName\x12\x1a\n\x08resource\x18\x02 \x01(\tR\x08resource\x12G\n\x07\x64ivisor\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x07\x64ivisor\"\xc5\x01\n\x14ResourceMetricSource\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12:\n\x18targetAverageUtilization\x18\x02 \x01(\x05R\x18targetAverageUtilization\x12]\n\x12targetAverageValue\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x12targetAverageValue\"\x99\x02\n\tResources\x12\x46\n\x06limits\x18\x01 \x03(\x0b\x32..istio.operator.v1alpha1.Resources.LimitsEntryR\x06limits\x12L\n\x08requests\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.Resources.RequestsEntryR\x08requests\x1a\x39\n\x0bLimitsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\x1a;\n\rRequestsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xbb\x01\n\x17RollingUpdateDeployment\x12U\n\x0emaxUnavailable\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0emaxUnavailable\x12I\n\x08maxSurge\x18\x02 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x08maxSurge\"\xa4\x01\n\x11SecretKeySelector\x12\x61\n\x14localObjectReference\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.LocalObjectReferenceR\x14localObjectReference\x12\x10\n\x03key\x18\x02 \x01(\tR\x03key\x12\x1a\n\x08optional\x18\x03 \x01(\x08R\x08optional\"\xe6\x05\n\x0bServiceSpec\x12:\n\x05ports\x18\x01 \x03(\x0b\x32$.istio.operator.v1alpha1.ServicePortR\x05ports\x12N\n\x08selector\x18\x02 \x03(\x0b\x32\x32.istio.operator.v1alpha1.ServiceSpec.SelectorEntryR\x08selector\x12\x1c\n\tclusterIP\x18\x03 \x01(\tR\tclusterIP\x12\x12\n\x04type\x18\x04 \x01(\tR\x04type\x12 \n\x0b\x65xternalIPs\x18\x05 \x03(\tR\x0b\x65xternalIPs\x12(\n\x0fsessionAffinity\x18\x07 \x01(\tR\x0fsessionAffinity\x12&\n\x0eloadBalancerIP\x18\x08 \x01(\tR\x0eloadBalancerIP\x12:\n\x18loadBalancerSourceRanges\x18\t \x03(\tR\x18loadBalancerSourceRanges\x12\"\n\x0c\x65xternalName\x18\n \x01(\tR\x0c\x65xternalName\x12\x34\n\x15\x65xternalTrafficPolicy\x18\x0b \x01(\tR\x15\x65xternalTrafficPolicy\x12\x30\n\x13healthCheckNodePort\x18\x0c \x01(\x05R\x13healthCheckNodePort\x12:\n\x18publishNotReadyAddresses\x18\r \x01(\x08R\x18publishNotReadyAddresses\x12\x64\n\x15sessionAffinityConfig\x18\x0e \x01(\x0b\x32..istio.operator.v1alpha1.SessionAffinityConfigR\x15sessionAffinityConfig\x1a;\n\rSelectorEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xbc\x01\n\x0bServicePort\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x1a\n\x08protocol\x18\x02 \x01(\tR\x08protocol\x12\x12\n\x04port\x18\x03 \x01(\x05R\x04port\x12M\n\ntargetPort\x18\x04 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\ntargetPort\x12\x1a\n\x08nodePort\x18\x05 \x01(\x05R\x08nodePort\"\\\n\x15SessionAffinityConfig\x12\x43\n\x08\x63lientIP\x18\x01 \x01(\x0b\x32\'.istio.operator.v1alpha1.ClientIPConfigR\x08\x63lientIP\"h\n\x0fTCPSocketAction\x12\x41\n\x04port\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x04port\x12\x12\n\x04host\x18\x02 \x01(\tR\x04host\"\x96\x01\n\nToleration\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x1a\n\x08operator\x18\x02 \x01(\tR\x08operator\x12\x14\n\x05value\x18\x03 \x01(\tR\x05value\x12\x16\n\x06\x65\x66\x66\x65\x63t\x18\x04 \x01(\tR\x06\x65\x66\x66\x65\x63t\x12,\n\x11tolerationSeconds\x18\x05 \x01(\x03R\x11tolerationSeconds\"\x85\x01\n\x17WeightedPodAffinityTerm\x12\x16\n\x06weight\x18\x01 \x01(\x05R\x06weight\x12R\n\x0fpodAffinityTerm\x18\x02 \x01(\x0b\x32(.istio.operator.v1alpha1.PodAffinityTermR\x0fpodAffinityTerm\"\xaf\x04\n\x12PodSecurityContext\x12O\n\x0eseLinuxOptions\x18\x01 \x01(\x0b\x32\'.istio.operator.v1alpha1.SELinuxOptionsR\x0eseLinuxOptions\x12\x1c\n\trunAsUser\x18\x02 \x01(\x03R\trunAsUser\x12\"\n\x0crunAsNonRoot\x18\x03 \x01(\x08R\x0crunAsNonRoot\x12.\n\x12supplementalGroups\x18\x04 \x03(\x03R\x12supplementalGroups\x12\x18\n\x07\x66sGroup\x18\x05 \x01(\x03R\x07\x66sGroup\x12\x1e\n\nrunAsGroup\x18\x06 \x01(\x03R\nrunAsGroup\x12\x39\n\x07sysctls\x18\x07 \x03(\x0b\x32\x1f.istio.operator.v1alpha1.SysctlR\x07sysctls\x12^\n\x0ewindowsOptions\x18\x08 \x01(\x0b\x32\x36.istio.operator.v1alpha1.WindowsSecurityContextOptionsR\x0ewindowsOptions\x12\x30\n\x13\x66sGroupChangePolicy\x18\t \x01(\tR\x13\x66sGroupChangePolicy\x12O\n\x0eseccompProfile\x18\n \x01(\x0b\x32\'.istio.operator.v1alpha1.SeccompProfileR\x0eseccompProfile\"b\n\x0eSELinuxOptions\x12\x12\n\x04user\x18\x01 \x01(\tR\x04user\x12\x12\n\x04role\x18\x02 \x01(\tR\x04role\x12\x12\n\x04type\x18\x03 \x01(\tR\x04type\x12\x14\n\x05level\x18\x04 \x01(\tR\x05level\"2\n\x06Sysctl\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value\"\xad\x01\n\x1dWindowsSecurityContextOptions\x12\x36\n\x16gmsaCredentialSpecName\x18\x01 \x01(\tR\x16gmsaCredentialSpecName\x12.\n\x12gmsaCredentialSpec\x18\x02 \x01(\tR\x12gmsaCredentialSpec\x12$\n\rrunAsUserName\x18\x03 \x01(\tR\rrunAsUserName\"P\n\x0eSeccompProfile\x12\x12\n\x04type\x18\x01 \x01(\tR\x04type\x12*\n\x10localhostProfile\x18\x02 \x01(\tR\x10localhostProfile\"\x0f\n\rTypeInterface\"\x18\n\x16TypeMapStringInterface\"\x16\n\x14TypeIntOrStringForPB\"\x14\n\x12TypeBoolValueForPBB,Z\x1eistio.io/api/operator/v1alpha1\xc8\xe2\x1e\x00\xd0\xe2\x1e\x00\xe0\xe2\x1e\x00\x62\x06proto3')
+  serialized_pb=_b('\n operator/v1alpha1/operator.proto\x12\x17istio.operator.v1alpha1\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x19google/protobuf/any.proto\x1a\x34k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto\x1a\"k8s.io/api/core/v1/generated.proto\x1a\x14gogoproto/gogo.proto\"\x88\x07\n\x11IstioOperatorSpec\x12\x18\n\x07profile\x18\n \x01(\tR\x07profile\x12\x30\n\x14install_package_path\x18\x0b \x01(\tR\x12installPackagePath\x12\x10\n\x03hub\x18\x0c \x01(\tR\x03hub\x12\x38\n\x03tag\x18\r \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x03tag\x12+\n\x0fresource_suffix\x18\x0e \x01(\tB\x02\x18\x01R\x0eresourceSuffix\x12\x1c\n\tnamespace\x18\x0f \x01(\tR\tnamespace\x12\x1a\n\x08revision\x18\x10 \x01(\tR\x08revision\x12\x45\n\x10\x64\x65\x66\x61ult_revision\x18\x11 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x0f\x64\x65\x66\x61ultRevision\x12P\n\x0bmesh_config\x18( \x01(\x0b\x32/.istio.operator.v1alpha1.TypeMapStringInterfaceR\nmeshConfig\x12N\n\ncomponents\x18\x32 \x01(\x0b\x32..istio.operator.v1alpha1.IstioComponentSetSpecR\ncomponents\x12n\n\x10\x61\x64\x64on_components\x18\x33 \x03(\x0b\x32?.istio.operator.v1alpha1.IstioOperatorSpec.AddonComponentsEntryB\x02\x18\x01R\x0f\x61\x64\x64onComponents\x12G\n\x06values\x18\x64 \x01(\x0b\x32/.istio.operator.v1alpha1.TypeMapStringInterfaceR\x06values\x12^\n\x12unvalidated_values\x18\x65 \x01(\x0b\x32/.istio.operator.v1alpha1.TypeMapStringInterfaceR\x11unvalidatedValues\x1ar\n\x14\x41\x64\x64onComponentsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x44\n\x05value\x18\x02 \x01(\x0b\x32..istio.operator.v1alpha1.ExternalComponentSpecR\x05value:\x02\x38\x01\"\xbb\x04\n\rInstallStatus\x12\x45\n\x06status\x18\x01 \x01(\x0e\x32-.istio.operator.v1alpha1.InstallStatus.StatusR\x06status\x12\x18\n\x07message\x18\x03 \x01(\tR\x07message\x12\x66\n\x10\x63omponent_status\x18\x02 \x03(\x0b\x32;.istio.operator.v1alpha1.InstallStatus.ComponentStatusEntryR\x0f\x63omponentStatus\x1a\x86\x01\n\rVersionStatus\x12\x18\n\x07version\x18\x01 \x01(\tR\x07version\x12\x45\n\x06status\x18\x02 \x01(\x0e\x32-.istio.operator.v1alpha1.InstallStatus.StatusR\x06status\x12\x14\n\x05\x65rror\x18\x04 \x01(\tR\x05\x65rror\x1ax\n\x14\x43omponentStatusEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12J\n\x05value\x18\x02 \x01(\x0b\x32\x34.istio.operator.v1alpha1.InstallStatus.VersionStatusR\x05value:\x02\x38\x01\"^\n\x06Status\x12\x08\n\x04NONE\x10\x00\x12\x0c\n\x08UPDATING\x10\x01\x12\x0f\n\x0bRECONCILING\x10\x02\x12\x0b\n\x07HEALTHY\x10\x03\x12\t\n\x05\x45RROR\x10\x04\x12\x13\n\x0f\x41\x43TION_REQUIRED\x10\x05\"\xf7\x03\n\x15IstioComponentSetSpec\x12>\n\x04\x62\x61se\x18\x1d \x01(\x0b\x32*.istio.operator.v1alpha1.BaseComponentSpecR\x04\x62\x61se\x12<\n\x05pilot\x18\x1e \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpecR\x05pilot\x12\x38\n\x03\x63ni\x18& \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpecR\x03\x63ni\x12O\n\x10ingress_gateways\x18( \x03(\x0b\x32$.istio.operator.v1alpha1.GatewaySpecR\x0fingressGateways\x12M\n\x0f\x65gress_gateways\x18) \x03(\x0b\x32$.istio.operator.v1alpha1.GatewaySpecR\x0e\x65gressGatewaysJ\x04\x08\x1f\x10 J\x04\x08 \x10!J\x04\x08!\x10\"J\x04\x08\"\x10#J\x04\x08#\x10$J\x04\x08$\x10%J\x04\x08%\x10&J\x04\x08\'\x10(R\x07\x63itadelR\x06policyR\ttelemetryR\x06galleyR\nnode_agentR\x05proxyR\x10sidecar_injectorR\ristiod_remote\"\x9e\x01\n\x11\x42\x61seComponentSpec\x12\x45\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPBR\x07\x65nabled\x12\x42\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpecR\x03k8s\"\xc0\x02\n\rComponentSpec\x12\x45\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPBR\x07\x65nabled\x12\x1c\n\tnamespace\x18\x02 \x01(\tR\tnamespace\x12\x10\n\x03hub\x18\n \x01(\tR\x03hub\x12\x38\n\x03tag\x18\x0b \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x03tag\x12:\n\x04spec\x18\x1e \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x04spec\x12\x42\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpecR\x03k8s\"\xc9\x02\n\x15\x45xternalComponentSpec\x12\x45\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPBR\x07\x65nabled\x12\x1c\n\tnamespace\x18\x02 \x01(\tR\tnamespace\x12:\n\x04spec\x18\n \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x04spec\x12\x1d\n\nchart_path\x18\x1e \x01(\tR\tchartPath\x12,\n\x06schema\x18# \x01(\x0b\x32\x14.google.protobuf.AnyR\x06schema\x12\x42\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpecR\x03k8s\"\x97\x03\n\x0bGatewaySpec\x12\x45\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPBR\x07\x65nabled\x12\x1c\n\tnamespace\x18\x02 \x01(\tR\tnamespace\x12\x12\n\x04name\x18\x03 \x01(\tR\x04name\x12\x45\n\x05label\x18\x04 \x03(\x0b\x32/.istio.operator.v1alpha1.GatewaySpec.LabelEntryR\x05label\x12\x10\n\x03hub\x18\n \x01(\tR\x03hub\x12\x38\n\x03tag\x18\x0b \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x03tag\x12\x42\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpecR\x03k8s\x1a\x38\n\nLabelEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xde\x0c\n\x17KubernetesResourcesSpec\x12=\n\x08\x61\x66\x66inity\x18\x01 \x01(\x0b\x32!.istio.operator.v1alpha1.AffinityR\x08\x61\x66\x66inity\x12\x31\n\x03\x65nv\x18\x02 \x03(\x0b\x32\x1f.istio.operator.v1alpha1.EnvVarR\x03\x65nv\x12O\n\x08hpa_spec\x18\x03 \x01(\x0b\x32\x34.istio.operator.v1alpha1.HorizontalPodAutoscalerSpecR\x07hpaSpec\x12*\n\x11image_pull_policy\x18\x04 \x01(\tR\x0fimagePullPolicy\x12g\n\rnode_selector\x18\x05 \x03(\x0b\x32\x42.istio.operator.v1alpha1.KubernetesResourcesSpec.NodeSelectorEntryR\x0cnodeSelector\x12\x64\n\x15pod_disruption_budget\x18\x06 \x01(\x0b\x32\x30.istio.operator.v1alpha1.PodDisruptionBudgetSpecR\x13podDisruptionBudget\x12m\n\x0fpod_annotations\x18\x07 \x03(\x0b\x32\x44.istio.operator.v1alpha1.KubernetesResourcesSpec.PodAnnotationsEntryR\x0epodAnnotations\x12.\n\x13priority_class_name\x18\x08 \x01(\tR\x11priorityClassName\x12P\n\x0freadiness_probe\x18\t \x01(\x0b\x32\'.istio.operator.v1alpha1.ReadinessProbeR\x0ereadinessProbe\x12#\n\rreplica_count\x18\n \x01(\rR\x0creplicaCount\x12@\n\tresources\x18\x0b \x01(\x0b\x32\".istio.operator.v1alpha1.ResourcesR\tresources\x12>\n\x07service\x18\x0c \x01(\x0b\x32$.istio.operator.v1alpha1.ServiceSpecR\x07service\x12G\n\x08strategy\x18\r \x01(\x0b\x32+.istio.operator.v1alpha1.DeploymentStrategyR\x08strategy\x12\x45\n\x0btolerations\x18\x0e \x03(\x0b\x32#.istio.operator.v1alpha1.TolerationR\x0btolerations\x12y\n\x13service_annotations\x18\x0f \x03(\x0b\x32H.istio.operator.v1alpha1.KubernetesResourcesSpec.ServiceAnnotationsEntryR\x12serviceAnnotations\x12U\n\x0fsecurityContext\x18\x10 \x01(\x0b\x32+.istio.operator.v1alpha1.PodSecurityContextR\x0fsecurityContext\x12\x34\n\x07volumes\x18\x11 \x03(\x0b\x32\x1a.k8s.io.api.core.v1.VolumeR\x07volumes\x12\x43\n\x0cvolumeMounts\x18\x12 \x03(\x0b\x32\x1f.k8s.io.api.core.v1.VolumeMountR\x0cvolumeMounts\x12\x45\n\x08overlays\x18\x64 \x03(\x0b\x32).istio.operator.v1alpha1.K8sObjectOverlayR\x08overlays\x1a?\n\x11NodeSelectorEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\x1a\x41\n\x13PodAnnotationsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\x1a\x45\n\x17ServiceAnnotationsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\x89\x02\n\x10K8sObjectOverlay\x12\x1f\n\x0b\x61pi_version\x18\x01 \x01(\tR\napiVersion\x12\x12\n\x04kind\x18\x02 \x01(\tR\x04kind\x12\x12\n\x04name\x18\x03 \x01(\tR\x04name\x12M\n\x07patches\x18\x04 \x03(\x0b\x32\x33.istio.operator.v1alpha1.K8sObjectOverlay.PathValueR\x07patches\x1a]\n\tPathValue\x12\x12\n\x04path\x18\x01 \x01(\tR\x04path\x12<\n\x05value\x18\x02 \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterfaceR\x05value\"\xf1\x01\n\x08\x41\x66\x66inity\x12I\n\x0cnodeAffinity\x18\x01 \x01(\x0b\x32%.istio.operator.v1alpha1.NodeAffinityR\x0cnodeAffinity\x12\x46\n\x0bpodAffinity\x18\x02 \x01(\x0b\x32$.istio.operator.v1alpha1.PodAffinityR\x0bpodAffinity\x12R\n\x0fpodAntiAffinity\x18\x03 \x01(\x0b\x32(.istio.operator.v1alpha1.PodAntiAffinityR\x0fpodAntiAffinity\"\xa7\x01\n\x14\x43onfigMapKeySelector\x12\x61\n\x14localObjectReference\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.LocalObjectReferenceR\x14localObjectReference\x12\x10\n\x03key\x18\x02 \x01(\tR\x03key\x12\x1a\n\x08optional\x18\x03 \x01(\x08R\x08optional\"8\n\x0e\x43lientIPConfig\x12&\n\x0etimeoutSeconds\x18\x01 \x01(\x05R\x0etimeoutSeconds\"e\n\x1b\x43rossVersionObjectReference\x12\x12\n\x04kind\x18\x01 \x01(\tR\x04kind\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12\x1e\n\napiVersion\x18\x03 \x01(\tR\napiVersion\"\x80\x01\n\x12\x44\x65ploymentStrategy\x12\x12\n\x04type\x18\x01 \x01(\tR\x04type\x12V\n\rrollingUpdate\x18\x02 \x01(\x0b\x32\x30.istio.operator.v1alpha1.RollingUpdateDeploymentR\rrollingUpdate\"w\n\x06\x45nvVar\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value\x12\x43\n\tvalueFrom\x18\x03 \x01(\x0b\x32%.istio.operator.v1alpha1.EnvVarSourceR\tvalueFrom\"\xdd\x02\n\x0c\x45nvVarSource\x12H\n\x08\x66ieldRef\x18\x01 \x01(\x0b\x32,.istio.operator.v1alpha1.ObjectFieldSelectorR\x08\x66ieldRef\x12Z\n\x10resourceFieldRef\x18\x02 \x01(\x0b\x32..istio.operator.v1alpha1.ResourceFieldSelectorR\x10resourceFieldRef\x12W\n\x0f\x63onfigMapKeyRef\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.ConfigMapKeySelectorR\x0f\x63onfigMapKeyRef\x12N\n\x0csecretKeyRef\x18\x04 \x01(\x0b\x32*.istio.operator.v1alpha1.SecretKeySelectorR\x0csecretKeyRef\"&\n\nExecAction\x12\x18\n\x07\x63ommand\x18\x01 \x03(\tR\x07\x63ommand\"\xc3\x02\n\x14\x45xternalMetricSource\x12\x1e\n\nmetricName\x18\x01 \x01(\tR\nmetricName\x12[\n\x0emetricSelector\x18\x02 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\x0emetricSelector\x12O\n\x0btargetValue\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0btargetValue\x12]\n\x12targetAverageValue\x18\x04 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x12targetAverageValue\"\xd9\x01\n\rHTTPGetAction\x12\x12\n\x04path\x18\x01 \x01(\tR\x04path\x12\x41\n\x04port\x18\x02 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x04port\x12\x12\n\x04host\x18\x03 \x01(\tR\x04host\x12\x16\n\x06scheme\x18\x04 \x01(\tR\x06scheme\x12\x45\n\x0bhttpHeaders\x18\x05 \x03(\x0b\x32#.istio.operator.v1alpha1.HTTPHeaderR\x0bhttpHeaders\"6\n\nHTTPHeader\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value\"\xfe\x01\n\x1bHorizontalPodAutoscalerSpec\x12\\\n\x0escaleTargetRef\x18\x01 \x01(\x0b\x32\x34.istio.operator.v1alpha1.CrossVersionObjectReferenceR\x0escaleTargetRef\x12 \n\x0bminReplicas\x18\x02 \x01(\x05R\x0bminReplicas\x12 \n\x0bmaxReplicas\x18\x03 \x01(\x05R\x0bmaxReplicas\x12=\n\x07metrics\x18\x04 \x03(\x0b\x32#.istio.operator.v1alpha1.MetricSpecR\x07metrics\"*\n\x14LocalObjectReference\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"\xba\x02\n\nMetricSpec\x12\x12\n\x04type\x18\x01 \x01(\tR\x04type\x12\x43\n\x06object\x18\x02 \x01(\x0b\x32+.istio.operator.v1alpha1.ObjectMetricSourceR\x06object\x12=\n\x04pods\x18\x03 \x01(\x0b\x32).istio.operator.v1alpha1.PodsMetricSourceR\x04pods\x12I\n\x08resource\x18\x04 \x01(\x0b\x32-.istio.operator.v1alpha1.ResourceMetricSourceR\x08resource\x12I\n\x08\x65xternal\x18\x05 \x01(\x0b\x32-.istio.operator.v1alpha1.ExternalMetricSourceR\x08\x65xternal\"\xbb\x02\n\x0cNodeAffinity\x12\x8d\x01\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x01(\x0b\x32%.istio.operator.v1alpha1.NodeSelectorR.requiredDuringSchedulingIgnoredDuringExecution\x12\x9a\x01\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.PreferredSchedulingTermR/preferredDuringSchedulingIgnoredDuringExecution\"g\n\x0cNodeSelector\x12W\n\x11nodeSelectorTerms\x18\x01 \x03(\x0b\x32).istio.operator.v1alpha1.NodeSelectorTermR\x11nodeSelectorTerms\"\xc4\x01\n\x10NodeSelectorTerm\x12\\\n\x10matchExpressions\x18\x01 \x03(\x0b\x32\x30.istio.operator.v1alpha1.NodeSelectorRequirementR\x10matchExpressions\x12R\n\x0bmatchFields\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.NodeSelectorRequirementR\x0bmatchFields\"_\n\x17NodeSelectorRequirement\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x1a\n\x08operator\x18\x02 \x01(\tR\x08operator\x12\x16\n\x06values\x18\x03 \x03(\tR\x06values\"S\n\x13ObjectFieldSelector\x12\x1e\n\napiVersion\x18\x01 \x01(\tR\napiVersion\x12\x1c\n\tfieldPath\x18\x02 \x01(\tR\tfieldPath\">\n\nObjectMeta\x12\x12\n\x04name\x18\x05 \x01(\tR\x04name\x12\x1c\n\tnamespace\x18\x06 \x01(\tR\tnamespace\"\xf7\x02\n\x12ObjectMetricSource\x12L\n\x06target\x18\x01 \x01(\x0b\x32\x34.istio.operator.v1alpha1.CrossVersionObjectReferenceR\x06target\x12\x1e\n\nmetricName\x18\x02 \x01(\tR\nmetricName\x12O\n\x0btargetValue\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0btargetValue\x12O\n\x08selector\x18\x04 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\x08selector\x12Q\n\x0c\x61verageValue\x18\x05 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0c\x61verageValue\"\xbd\x02\n\x0bPodAffinity\x12\x90\x01\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x03(\x0b\x32(.istio.operator.v1alpha1.PodAffinityTermR.requiredDuringSchedulingIgnoredDuringExecution\x12\x9a\x01\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.WeightedPodAffinityTermR/preferredDuringSchedulingIgnoredDuringExecution\"\xc1\x02\n\x0fPodAntiAffinity\x12\x90\x01\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x03(\x0b\x32(.istio.operator.v1alpha1.PodAffinityTermR.requiredDuringSchedulingIgnoredDuringExecution\x12\x9a\x01\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.WeightedPodAffinityTermR/preferredDuringSchedulingIgnoredDuringExecution\"\xae\x01\n\x0fPodAffinityTerm\x12Y\n\rlabelSelector\x18\x01 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\rlabelSelector\x12\x1e\n\nnamespaces\x18\x02 \x03(\tR\nnamespaces\x12 \n\x0btopologyKey\x18\x03 \x01(\tR\x0btopologyKey\"\x94\x02\n\x17PodDisruptionBudgetSpec\x12Q\n\x0cminAvailable\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0cminAvailable\x12O\n\x08selector\x18\x02 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\x08selector\x12U\n\x0emaxUnavailable\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0emaxUnavailable\"\xe2\x01\n\x10PodsMetricSource\x12\x1e\n\nmetricName\x18\x01 \x01(\tR\nmetricName\x12]\n\x12targetAverageValue\x18\x02 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x12targetAverageValue\x12O\n\x08selector\x18\x03 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelectorR\x08selector\"|\n\x17PreferredSchedulingTerm\x12\x16\n\x06weight\x18\x01 \x01(\x05R\x06weight\x12I\n\npreference\x18\x02 \x01(\x0b\x32).istio.operator.v1alpha1.NodeSelectorTermR\npreference\"\xab\x03\n\x0eReadinessProbe\x12\x37\n\x04\x65xec\x18\x01 \x01(\x0b\x32#.istio.operator.v1alpha1.ExecActionR\x04\x65xec\x12@\n\x07httpGet\x18\x02 \x01(\x0b\x32&.istio.operator.v1alpha1.HTTPGetActionR\x07httpGet\x12\x46\n\ttcpSocket\x18\x03 \x01(\x0b\x32(.istio.operator.v1alpha1.TCPSocketActionR\ttcpSocket\x12\x30\n\x13initialDelaySeconds\x18\x04 \x01(\x05R\x13initialDelaySeconds\x12&\n\x0etimeoutSeconds\x18\x05 \x01(\x05R\x0etimeoutSeconds\x12$\n\rperiodSeconds\x18\x06 \x01(\x05R\rperiodSeconds\x12*\n\x10successThreshold\x18\x07 \x01(\x05R\x10successThreshold\x12*\n\x10\x66\x61ilureThreshold\x18\x08 \x01(\x05R\x10\x66\x61ilureThreshold\"\xa2\x01\n\x15ResourceFieldSelector\x12$\n\rcontainerName\x18\x01 \x01(\tR\rcontainerName\x12\x1a\n\x08resource\x18\x02 \x01(\tR\x08resource\x12G\n\x07\x64ivisor\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x07\x64ivisor\"\xc5\x01\n\x14ResourceMetricSource\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12:\n\x18targetAverageUtilization\x18\x02 \x01(\x05R\x18targetAverageUtilization\x12]\n\x12targetAverageValue\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x12targetAverageValue\"\x99\x02\n\tResources\x12\x46\n\x06limits\x18\x01 \x03(\x0b\x32..istio.operator.v1alpha1.Resources.LimitsEntryR\x06limits\x12L\n\x08requests\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.Resources.RequestsEntryR\x08requests\x1a\x39\n\x0bLimitsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\x1a;\n\rRequestsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xbb\x01\n\x17RollingUpdateDeployment\x12U\n\x0emaxUnavailable\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x0emaxUnavailable\x12I\n\x08maxSurge\x18\x02 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x08maxSurge\"\xa4\x01\n\x11SecretKeySelector\x12\x61\n\x14localObjectReference\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.LocalObjectReferenceR\x14localObjectReference\x12\x10\n\x03key\x18\x02 \x01(\tR\x03key\x12\x1a\n\x08optional\x18\x03 \x01(\x08R\x08optional\"\xe6\x05\n\x0bServiceSpec\x12:\n\x05ports\x18\x01 \x03(\x0b\x32$.istio.operator.v1alpha1.ServicePortR\x05ports\x12N\n\x08selector\x18\x02 \x03(\x0b\x32\x32.istio.operator.v1alpha1.ServiceSpec.SelectorEntryR\x08selector\x12\x1c\n\tclusterIP\x18\x03 \x01(\tR\tclusterIP\x12\x12\n\x04type\x18\x04 \x01(\tR\x04type\x12 \n\x0b\x65xternalIPs\x18\x05 \x03(\tR\x0b\x65xternalIPs\x12(\n\x0fsessionAffinity\x18\x07 \x01(\tR\x0fsessionAffinity\x12&\n\x0eloadBalancerIP\x18\x08 \x01(\tR\x0eloadBalancerIP\x12:\n\x18loadBalancerSourceRanges\x18\t \x03(\tR\x18loadBalancerSourceRanges\x12\"\n\x0c\x65xternalName\x18\n \x01(\tR\x0c\x65xternalName\x12\x34\n\x15\x65xternalTrafficPolicy\x18\x0b \x01(\tR\x15\x65xternalTrafficPolicy\x12\x30\n\x13healthCheckNodePort\x18\x0c \x01(\x05R\x13healthCheckNodePort\x12:\n\x18publishNotReadyAddresses\x18\r \x01(\x08R\x18publishNotReadyAddresses\x12\x64\n\x15sessionAffinityConfig\x18\x0e \x01(\x0b\x32..istio.operator.v1alpha1.SessionAffinityConfigR\x15sessionAffinityConfig\x1a;\n\rSelectorEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xbc\x01\n\x0bServicePort\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x1a\n\x08protocol\x18\x02 \x01(\tR\x08protocol\x12\x12\n\x04port\x18\x03 \x01(\x05R\x04port\x12M\n\ntargetPort\x18\x04 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\ntargetPort\x12\x1a\n\x08nodePort\x18\x05 \x01(\x05R\x08nodePort\"\\\n\x15SessionAffinityConfig\x12\x43\n\x08\x63lientIP\x18\x01 \x01(\x0b\x32\'.istio.operator.v1alpha1.ClientIPConfigR\x08\x63lientIP\"h\n\x0fTCPSocketAction\x12\x41\n\x04port\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.TypeIntOrStringForPBR\x04port\x12\x12\n\x04host\x18\x02 \x01(\tR\x04host\"\x96\x01\n\nToleration\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x1a\n\x08operator\x18\x02 \x01(\tR\x08operator\x12\x14\n\x05value\x18\x03 \x01(\tR\x05value\x12\x16\n\x06\x65\x66\x66\x65\x63t\x18\x04 \x01(\tR\x06\x65\x66\x66\x65\x63t\x12,\n\x11tolerationSeconds\x18\x05 \x01(\x03R\x11tolerationSeconds\"\x85\x01\n\x17WeightedPodAffinityTerm\x12\x16\n\x06weight\x18\x01 \x01(\x05R\x06weight\x12R\n\x0fpodAffinityTerm\x18\x02 \x01(\x0b\x32(.istio.operator.v1alpha1.PodAffinityTermR\x0fpodAffinityTerm\"\xaf\x04\n\x12PodSecurityContext\x12O\n\x0eseLinuxOptions\x18\x01 \x01(\x0b\x32\'.istio.operator.v1alpha1.SELinuxOptionsR\x0eseLinuxOptions\x12\x1c\n\trunAsUser\x18\x02 \x01(\x03R\trunAsUser\x12\"\n\x0crunAsNonRoot\x18\x03 \x01(\x08R\x0crunAsNonRoot\x12.\n\x12supplementalGroups\x18\x04 \x03(\x03R\x12supplementalGroups\x12\x18\n\x07\x66sGroup\x18\x05 \x01(\x03R\x07\x66sGroup\x12\x1e\n\nrunAsGroup\x18\x06 \x01(\x03R\nrunAsGroup\x12\x39\n\x07sysctls\x18\x07 \x03(\x0b\x32\x1f.istio.operator.v1alpha1.SysctlR\x07sysctls\x12^\n\x0ewindowsOptions\x18\x08 \x01(\x0b\x32\x36.istio.operator.v1alpha1.WindowsSecurityContextOptionsR\x0ewindowsOptions\x12\x30\n\x13\x66sGroupChangePolicy\x18\t \x01(\tR\x13\x66sGroupChangePolicy\x12O\n\x0eseccompProfile\x18\n \x01(\x0b\x32\'.istio.operator.v1alpha1.SeccompProfileR\x0eseccompProfile\"b\n\x0eSELinuxOptions\x12\x12\n\x04user\x18\x01 \x01(\tR\x04user\x12\x12\n\x04role\x18\x02 \x01(\tR\x04role\x12\x12\n\x04type\x18\x03 \x01(\tR\x04type\x12\x14\n\x05level\x18\x04 \x01(\tR\x05level\"2\n\x06Sysctl\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value\"\xad\x01\n\x1dWindowsSecurityContextOptions\x12\x36\n\x16gmsaCredentialSpecName\x18\x01 \x01(\tR\x16gmsaCredentialSpecName\x12.\n\x12gmsaCredentialSpec\x18\x02 \x01(\tR\x12gmsaCredentialSpec\x12$\n\rrunAsUserName\x18\x03 \x01(\tR\rrunAsUserName\"P\n\x0eSeccompProfile\x12\x12\n\x04type\x18\x01 \x01(\tR\x04type\x12*\n\x10localhostProfile\x18\x02 \x01(\tR\x10localhostProfile\"\x0f\n\rTypeInterface\"\x18\n\x16TypeMapStringInterface\"\x16\n\x14TypeIntOrStringForPB\"\x14\n\x12TypeBoolValueForPBB,Z\x1eistio.io/api/operator/v1alpha1\xc8\xe2\x1e\x00\xd0\xe2\x1e\x00\xe0\xe2\x1e\x00\x62\x06proto3')
   ,
-  dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR,k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2.DESCRIPTOR,gogoproto_dot_gogo__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,google_dot_protobuf_dot_any__pb2.DESCRIPTOR,k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2.DESCRIPTOR,gogoproto_dot_gogo__pb2.DESCRIPTOR,])
 
 
 
@@ -63,8 +64,8 @@ _INSTALLSTATUS_STATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1557,
-  serialized_end=1651,
+  serialized_start=1617,
+  serialized_end=1711,
 )
 _sym_db.RegisterEnumDescriptor(_INSTALLSTATUS_STATUS)
 
@@ -102,8 +103,8 @@ _ISTIOOPERATORSPEC_ADDONCOMPONENTSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=963,
-  serialized_end=1077,
+  serialized_start=1023,
+  serialized_end=1137,
 )
 
 _ISTIOOPERATORSPEC = _descriptor.Descriptor(
@@ -164,8 +165,8 @@ _ISTIOOPERATORSPEC = _descriptor.Descriptor(
       serialized_options=None, json_name='revision', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='default_revision', full_name='istio.operator.v1alpha1.IstioOperatorSpec.default_revision', index=7,
-      number=17, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      number=17, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='defaultRevision', file=DESCRIPTOR),
@@ -216,8 +217,8 @@ _ISTIOOPERATORSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=201,
-  serialized_end=1077,
+  serialized_start=233,
+  serialized_end=1137,
 )
 
 
@@ -261,8 +262,8 @@ _INSTALLSTATUS_VERSIONSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1299,
-  serialized_end=1433,
+  serialized_start=1359,
+  serialized_end=1493,
 )
 
 _INSTALLSTATUS_COMPONENTSTATUSENTRY = _descriptor.Descriptor(
@@ -298,8 +299,8 @@ _INSTALLSTATUS_COMPONENTSTATUSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1435,
-  serialized_end=1555,
+  serialized_start=1495,
+  serialized_end=1615,
 )
 
 _INSTALLSTATUS = _descriptor.Descriptor(
@@ -343,8 +344,8 @@ _INSTALLSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1080,
-  serialized_end=1651,
+  serialized_start=1140,
+  serialized_end=1711,
 )
 
 
@@ -402,8 +403,8 @@ _ISTIOCOMPONENTSETSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1654,
-  serialized_end=2157,
+  serialized_start=1714,
+  serialized_end=2217,
 )
 
 
@@ -440,8 +441,8 @@ _BASECOMPONENTSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2160,
-  serialized_end=2318,
+  serialized_start=2220,
+  serialized_end=2378,
 )
 
 
@@ -506,8 +507,8 @@ _COMPONENTSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2321,
-  serialized_end=2641,
+  serialized_start=2381,
+  serialized_end=2701,
 )
 
 
@@ -572,8 +573,8 @@ _EXTERNALCOMPONENTSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2644,
-  serialized_end=2973,
+  serialized_start=2704,
+  serialized_end=3033,
 )
 
 
@@ -610,8 +611,8 @@ _GATEWAYSPEC_LABELENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3327,
-  serialized_end=3383,
+  serialized_start=3387,
+  serialized_end=3443,
 )
 
 _GATEWAYSPEC = _descriptor.Descriptor(
@@ -682,8 +683,8 @@ _GATEWAYSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2976,
-  serialized_end=3383,
+  serialized_start=3036,
+  serialized_end=3443,
 )
 
 
@@ -720,8 +721,8 @@ _KUBERNETESRESOURCESSPEC_NODESELECTORENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4815,
-  serialized_end=4878,
+  serialized_start=4875,
+  serialized_end=4938,
 )
 
 _KUBERNETESRESOURCESSPEC_PODANNOTATIONSENTRY = _descriptor.Descriptor(
@@ -757,8 +758,8 @@ _KUBERNETESRESOURCESSPEC_PODANNOTATIONSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4880,
-  serialized_end=4945,
+  serialized_start=4940,
+  serialized_end=5005,
 )
 
 _KUBERNETESRESOURCESSPEC_SERVICEANNOTATIONSENTRY = _descriptor.Descriptor(
@@ -794,8 +795,8 @@ _KUBERNETESRESOURCESSPEC_SERVICEANNOTATIONSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4947,
-  serialized_end=5016,
+  serialized_start=5007,
+  serialized_end=5076,
 )
 
 _KUBERNETESRESOURCESSPEC = _descriptor.Descriptor(
@@ -950,8 +951,8 @@ _KUBERNETESRESOURCESSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3386,
-  serialized_end=5016,
+  serialized_start=3446,
+  serialized_end=5076,
 )
 
 
@@ -988,8 +989,8 @@ _K8SOBJECTOVERLAY_PATHVALUE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5191,
-  serialized_end=5284,
+  serialized_start=5251,
+  serialized_end=5344,
 )
 
 _K8SOBJECTOVERLAY = _descriptor.Descriptor(
@@ -1039,8 +1040,8 @@ _K8SOBJECTOVERLAY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5019,
-  serialized_end=5284,
+  serialized_start=5079,
+  serialized_end=5344,
 )
 
 
@@ -1084,8 +1085,8 @@ _AFFINITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5287,
-  serialized_end=5528,
+  serialized_start=5347,
+  serialized_end=5588,
 )
 
 
@@ -1129,8 +1130,8 @@ _CONFIGMAPKEYSELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5531,
-  serialized_end=5698,
+  serialized_start=5591,
+  serialized_end=5758,
 )
 
 
@@ -1160,8 +1161,8 @@ _CLIENTIPCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5700,
-  serialized_end=5756,
+  serialized_start=5760,
+  serialized_end=5816,
 )
 
 
@@ -1205,8 +1206,8 @@ _CROSSVERSIONOBJECTREFERENCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5758,
-  serialized_end=5859,
+  serialized_start=5818,
+  serialized_end=5919,
 )
 
 
@@ -1243,8 +1244,8 @@ _DEPLOYMENTSTRATEGY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5862,
-  serialized_end=5990,
+  serialized_start=5922,
+  serialized_end=6050,
 )
 
 
@@ -1288,8 +1289,8 @@ _ENVVAR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5992,
-  serialized_end=6111,
+  serialized_start=6052,
+  serialized_end=6171,
 )
 
 
@@ -1340,8 +1341,8 @@ _ENVVARSOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6114,
-  serialized_end=6463,
+  serialized_start=6174,
+  serialized_end=6523,
 )
 
 
@@ -1371,8 +1372,8 @@ _EXECACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6465,
-  serialized_end=6503,
+  serialized_start=6525,
+  serialized_end=6563,
 )
 
 
@@ -1423,8 +1424,8 @@ _EXTERNALMETRICSOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6506,
-  serialized_end=6829,
+  serialized_start=6566,
+  serialized_end=6889,
 )
 
 
@@ -1482,8 +1483,8 @@ _HTTPGETACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6832,
-  serialized_end=7049,
+  serialized_start=6892,
+  serialized_end=7109,
 )
 
 
@@ -1520,8 +1521,8 @@ _HTTPHEADER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7051,
-  serialized_end=7105,
+  serialized_start=7111,
+  serialized_end=7165,
 )
 
 
@@ -1572,8 +1573,8 @@ _HORIZONTALPODAUTOSCALERSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7108,
-  serialized_end=7362,
+  serialized_start=7168,
+  serialized_end=7422,
 )
 
 
@@ -1603,8 +1604,8 @@ _LOCALOBJECTREFERENCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7364,
-  serialized_end=7406,
+  serialized_start=7424,
+  serialized_end=7466,
 )
 
 
@@ -1662,8 +1663,8 @@ _METRICSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7409,
-  serialized_end=7723,
+  serialized_start=7469,
+  serialized_end=7783,
 )
 
 
@@ -1700,8 +1701,8 @@ _NODEAFFINITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7726,
-  serialized_end=8041,
+  serialized_start=7786,
+  serialized_end=8101,
 )
 
 
@@ -1731,8 +1732,8 @@ _NODESELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8043,
-  serialized_end=8146,
+  serialized_start=8103,
+  serialized_end=8206,
 )
 
 
@@ -1769,8 +1770,8 @@ _NODESELECTORTERM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8149,
-  serialized_end=8345,
+  serialized_start=8209,
+  serialized_end=8405,
 )
 
 
@@ -1814,8 +1815,8 @@ _NODESELECTORREQUIREMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8347,
-  serialized_end=8442,
+  serialized_start=8407,
+  serialized_end=8502,
 )
 
 
@@ -1852,8 +1853,8 @@ _OBJECTFIELDSELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8444,
-  serialized_end=8527,
+  serialized_start=8504,
+  serialized_end=8587,
 )
 
 
@@ -1890,8 +1891,8 @@ _OBJECTMETA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8529,
-  serialized_end=8591,
+  serialized_start=8589,
+  serialized_end=8651,
 )
 
 
@@ -1949,8 +1950,8 @@ _OBJECTMETRICSOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8594,
-  serialized_end=8969,
+  serialized_start=8654,
+  serialized_end=9029,
 )
 
 
@@ -1987,8 +1988,8 @@ _PODAFFINITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8972,
-  serialized_end=9289,
+  serialized_start=9032,
+  serialized_end=9349,
 )
 
 
@@ -2025,8 +2026,8 @@ _PODANTIAFFINITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9292,
-  serialized_end=9613,
+  serialized_start=9352,
+  serialized_end=9673,
 )
 
 
@@ -2070,8 +2071,8 @@ _PODAFFINITYTERM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9616,
-  serialized_end=9790,
+  serialized_start=9676,
+  serialized_end=9850,
 )
 
 
@@ -2115,8 +2116,8 @@ _PODDISRUPTIONBUDGETSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9793,
-  serialized_end=10069,
+  serialized_start=9853,
+  serialized_end=10129,
 )
 
 
@@ -2160,8 +2161,8 @@ _PODSMETRICSOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10072,
-  serialized_end=10298,
+  serialized_start=10132,
+  serialized_end=10358,
 )
 
 
@@ -2198,8 +2199,8 @@ _PREFERREDSCHEDULINGTERM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10300,
-  serialized_end=10424,
+  serialized_start=10360,
+  serialized_end=10484,
 )
 
 
@@ -2278,8 +2279,8 @@ _READINESSPROBE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10427,
-  serialized_end=10854,
+  serialized_start=10487,
+  serialized_end=10914,
 )
 
 
@@ -2323,8 +2324,8 @@ _RESOURCEFIELDSELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10857,
-  serialized_end=11019,
+  serialized_start=10917,
+  serialized_end=11079,
 )
 
 
@@ -2368,8 +2369,8 @@ _RESOURCEMETRICSOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11022,
-  serialized_end=11219,
+  serialized_start=11082,
+  serialized_end=11279,
 )
 
 
@@ -2406,8 +2407,8 @@ _RESOURCES_LIMITSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11385,
-  serialized_end=11442,
+  serialized_start=11445,
+  serialized_end=11502,
 )
 
 _RESOURCES_REQUESTSENTRY = _descriptor.Descriptor(
@@ -2443,8 +2444,8 @@ _RESOURCES_REQUESTSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11444,
-  serialized_end=11503,
+  serialized_start=11504,
+  serialized_end=11563,
 )
 
 _RESOURCES = _descriptor.Descriptor(
@@ -2480,8 +2481,8 @@ _RESOURCES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11222,
-  serialized_end=11503,
+  serialized_start=11282,
+  serialized_end=11563,
 )
 
 
@@ -2518,8 +2519,8 @@ _ROLLINGUPDATEDEPLOYMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11506,
-  serialized_end=11693,
+  serialized_start=11566,
+  serialized_end=11753,
 )
 
 
@@ -2563,8 +2564,8 @@ _SECRETKEYSELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11696,
-  serialized_end=11860,
+  serialized_start=11756,
+  serialized_end=11920,
 )
 
 
@@ -2601,8 +2602,8 @@ _SERVICESPEC_SELECTORENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12546,
-  serialized_end=12605,
+  serialized_start=12606,
+  serialized_end=12665,
 )
 
 _SERVICESPEC = _descriptor.Descriptor(
@@ -2715,8 +2716,8 @@ _SERVICESPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11863,
-  serialized_end=12605,
+  serialized_start=11923,
+  serialized_end=12665,
 )
 
 
@@ -2774,8 +2775,8 @@ _SERVICEPORT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12608,
-  serialized_end=12796,
+  serialized_start=12668,
+  serialized_end=12856,
 )
 
 
@@ -2805,8 +2806,8 @@ _SESSIONAFFINITYCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12798,
-  serialized_end=12890,
+  serialized_start=12858,
+  serialized_end=12950,
 )
 
 
@@ -2843,8 +2844,8 @@ _TCPSOCKETACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12892,
-  serialized_end=12996,
+  serialized_start=12952,
+  serialized_end=13056,
 )
 
 
@@ -2902,8 +2903,8 @@ _TOLERATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12999,
-  serialized_end=13149,
+  serialized_start=13059,
+  serialized_end=13209,
 )
 
 
@@ -2940,8 +2941,8 @@ _WEIGHTEDPODAFFINITYTERM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13152,
-  serialized_end=13285,
+  serialized_start=13212,
+  serialized_end=13345,
 )
 
 
@@ -3034,8 +3035,8 @@ _PODSECURITYCONTEXT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13288,
-  serialized_end=13847,
+  serialized_start=13348,
+  serialized_end=13907,
 )
 
 
@@ -3086,8 +3087,8 @@ _SELINUXOPTIONS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13849,
-  serialized_end=13947,
+  serialized_start=13909,
+  serialized_end=14007,
 )
 
 
@@ -3124,8 +3125,8 @@ _SYSCTL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13949,
-  serialized_end=13999,
+  serialized_start=14009,
+  serialized_end=14059,
 )
 
 
@@ -3169,8 +3170,8 @@ _WINDOWSSECURITYCONTEXTOPTIONS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14002,
-  serialized_end=14175,
+  serialized_start=14062,
+  serialized_end=14235,
 )
 
 
@@ -3207,8 +3208,8 @@ _SECCOMPPROFILE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14177,
-  serialized_end=14257,
+  serialized_start=14237,
+  serialized_end=14317,
 )
 
 
@@ -3231,8 +3232,8 @@ _TYPEINTERFACE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14259,
-  serialized_end=14274,
+  serialized_start=14319,
+  serialized_end=14334,
 )
 
 
@@ -3255,8 +3256,8 @@ _TYPEMAPSTRINGINTERFACE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14276,
-  serialized_end=14300,
+  serialized_start=14336,
+  serialized_end=14360,
 )
 
 
@@ -3279,8 +3280,8 @@ _TYPEINTORSTRINGFORPB = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14302,
-  serialized_end=14324,
+  serialized_start=14362,
+  serialized_end=14384,
 )
 
 
@@ -3303,13 +3304,14 @@ _TYPEBOOLVALUEFORPB = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14326,
-  serialized_end=14346,
+  serialized_start=14386,
+  serialized_end=14406,
 )
 
 _ISTIOOPERATORSPEC_ADDONCOMPONENTSENTRY.fields_by_name['value'].message_type = _EXTERNALCOMPONENTSPEC
 _ISTIOOPERATORSPEC_ADDONCOMPONENTSENTRY.containing_type = _ISTIOOPERATORSPEC
 _ISTIOOPERATORSPEC.fields_by_name['tag'].message_type = _TYPEINTERFACE
+_ISTIOOPERATORSPEC.fields_by_name['default_revision'].message_type = google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _ISTIOOPERATORSPEC.fields_by_name['mesh_config'].message_type = _TYPEMAPSTRINGINTERFACE
 _ISTIOOPERATORSPEC.fields_by_name['components'].message_type = _ISTIOCOMPONENTSETSPEC
 _ISTIOOPERATORSPEC.fields_by_name['addon_components'].message_type = _ISTIOOPERATORSPEC_ADDONCOMPONENTSENTRY
