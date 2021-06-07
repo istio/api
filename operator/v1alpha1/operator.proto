@@ -167,13 +167,12 @@ message IstioComponentSetSpec {
     BaseComponentSpec base = 29;
     ComponentSpec pilot = 30;
     ComponentSpec cni = 38;
-    ComponentSpec istiod_remote = 39;
 
     repeated GatewaySpec ingress_gateways = 40;
     repeated GatewaySpec egress_gateways = 41;
 
-    reserved 31, 32, 33, 34, 35, 36, 37;
-    reserved "citadel", "policy", "telemetry", "galley", "node_agent", "proxy", "sidecar_injector";
+    reserved 31, 32, 33, 34, 35, 36, 37, 39;
+    reserved "citadel", "policy", "telemetry", "galley", "node_agent", "proxy", "sidecar_injector", "istiod_remote";
 }
 
 // Configuration for base component.
