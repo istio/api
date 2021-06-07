@@ -435,7 +435,7 @@ No
 This is to support traffic fail over across different topology keys.
 Should be used together with <code>OutlierDetection</code> to detect unhealthy endpoints, otherwise has no effect.
 The below topology config specifies the priority levels:
-  1. endpoints in same <code>[&quot;NETWORK&quot;, &quot;REGION&quot;, &quot;ZONE&quot;]</code> with the client proxy have the highest priority.
+  1. endpoints in same <code>[&quot;NETWORK&quot;, &quot;REGION&quot;, &quot;ZONE&quot;]</code> as the client proxy have the highest priority.
   2. endpoints in same <code>[&quot;NETWORK&quot;, &quot;REGION&quot;]</code> but different <code>ZONE</code> with the client proxy have the secondary-level priority.
   3. endpoints in same <code>[&quot;NETWORK&quot;]</code> but different <code>REGION</code> with the client proxy have the third-level priority.
   4. all the other endpoints have the lowest priority.</p>

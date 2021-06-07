@@ -464,7 +464,7 @@ type MeshConfig struct {
 	// This is to support traffic fail over across different topology keys.
 	// Should be used together with `OutlierDetection` to detect unhealthy endpoints, otherwise has no effect.
 	// The below topology config specifies the priority levels:
-	//   1. endpoints in same `["NETWORK", "REGION", "ZONE"]` with the client proxy have the highest priority.
+	//   1. endpoints in same `["NETWORK", "REGION", "ZONE"]` as the client proxy have the highest priority.
 	//   2. endpoints in same `["NETWORK", "REGION"]` but different `ZONE` with the client proxy have the secondary-level priority.
 	//   3. endpoints in same `["NETWORK"]` but different `REGION` with the client proxy have the third-level priority.
 	//   4. all the other endpoints have the lowest priority.

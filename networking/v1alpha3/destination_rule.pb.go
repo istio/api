@@ -288,18 +288,18 @@ func (ClientTLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) {
 type TopologyKeys_TopologyKey int32
 
 const (
-	// NETWORK is used to match the network metadata of the endpoint,
-	// it can be acquired from istio label `topology.istio.io/network`.
+	// NETWORK is used to match the network metadata of an endpoint.
+	// It maps to Istio pod/namespace label `topology.istio.io/network`, sidecar env `ISTIO_META_NETWORK` or MeshNetworks.
 	TopologyKeys_NETWORK TopologyKeys_TopologyKey = 0
-	// REGION is used to match the region metadata of the endpoint,
-	// it can be acquired from kubernetes node label `topology.kubernetes.io/region` or the deprecated label `failure-domain.beta.kubernetes.io/region`.
+	// REGION is used to match the region metadata of an endpoint.
+	// It maps to Kubernetes node label `topology.kubernetes.io/region` or the deprecated label `failure-domain.beta.kubernetes.io/region`.
 	TopologyKeys_REGION TopologyKeys_TopologyKey = 1
-	// ZONE is used to match the region metadata of the endpoint,
-	// it can be acquired from kubernetes node label `topology.kubernetes.io/zone` or the deprecated label `failure-domain.beta.kubernetes.io/zone`.
+	// ZONE is used to match the region metadata of an endpoint.
+	// It maps to Kubernetes node label `topology.kubernetes.io/zone` or the deprecated label `failure-domain.beta.kubernetes.io/zone`.
 	TopologyKeys_ZONE TopologyKeys_TopologyKey = 2
-	// SUBZONE is used to match the subzone metadata of the endpoint,
-	// it can be acquired from k8s node label `topology.istio.io/subzone`.
-	// Note: the label is not applied by upstream kubernetes.
+	// SUBZONE is used to match the subzone metadata of an endpoint.
+	// It maps to Istio node label `topology.istio.io/subzone`.
+	// Note that this label is not added by default by most Kubernetes distibutions and needs to be manually added.
 	TopologyKeys_SUBZONE TopologyKeys_TopologyKey = 3
 )
 
@@ -857,7 +857,7 @@ type LoadBalancerSettings struct {
 	// This is to support traffic fail over across different topology keys.
 	// Should be used together with `OutlierDetection` to detect unhealthy endpoints, otherwise has no effect.
 	// The below topology config specifies the priority levels:
-	//   1. endpoints in same `["NETWORK", "REGION", "ZONE"]` with the client proxy have the highest priority.
+	//   1. endpoints in same `["NETWORK", "REGION", "ZONE"]` as the client proxy have the highest priority.
 	//   2. endpoints in same `["NETWORK", "REGION"]` but different `ZONE` with the client proxy have the secondary-level priority.
 	//   3. endpoints in same `["NETWORK"]` but different `REGION` with the client proxy have the third-level priority.
 	//   4. all the other endpoints have the lowest priority.
@@ -2268,7 +2268,7 @@ func (m *LocalityLoadBalancerSetting_Failover) GetTo() string {
 
 // TopologyKeys is the topology key list that used to select a group of endpoints.
 type TopologyKeys struct {
-	// keys contains the topology key that used to select endpoints
+	// Keys contains the list of topology keys used to select endpoints for prioritized load balancing.
 	Keys                 []TopologyKeys_TopologyKey `protobuf:"varint,1,rep,packed,name=keys,proto3,enum=istio.networking.v1alpha3.TopologyKeys_TopologyKey" json:"keys,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                   `json:"-"`
 	XXX_unrecognized     []byte                     `json:"-"`

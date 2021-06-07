@@ -571,7 +571,7 @@ No
 This is to support traffic fail over across different topology keys.
 Should be used together with <code>OutlierDetection</code> to detect unhealthy endpoints, otherwise has no effect.
 The below topology config specifies the priority levels:
-  1. endpoints in same <code>[&quot;NETWORK&quot;, &quot;REGION&quot;, &quot;ZONE&quot;]</code> with the client proxy have the highest priority.
+  1. endpoints in same <code>[&quot;NETWORK&quot;, &quot;REGION&quot;, &quot;ZONE&quot;]</code> as the client proxy have the highest priority.
   2. endpoints in same <code>[&quot;NETWORK&quot;, &quot;REGION&quot;]</code> but different <code>ZONE</code> with the client proxy have the secondary-level priority.
   3. endpoints in same <code>[&quot;NETWORK&quot;]</code> but different <code>REGION</code> with the client proxy have the third-level priority.
   4. all the other endpoints have the lowest priority.</p>
@@ -1242,7 +1242,7 @@ No
 <td><code>keys</code></td>
 <td><code><a href="#TopologyKeys-TopologyKey">TopologyKey[]</a></code></td>
 <td>
-<p>keys contains the topology key that used to select endpoints</p>
+<p>Keys contains the list of topology keys used to select endpoints for prioritized load balancing.</p>
 
 </td>
 <td>
@@ -1948,33 +1948,33 @@ used, all other fields in <code>ClientTLSSettings</code> should be empty.</p>
 <tr id="TopologyKeys-TopologyKey-NETWORK">
 <td><code>NETWORK</code></td>
 <td>
-<p>NETWORK is used to match the network metadata of the endpoint,
-it can be acquired from istio label <code>topology.istio.io/network</code>.</p>
+<p>NETWORK is used to match the network metadata of an endpoint.
+It maps to Istio pod/namespace label <code>topology.istio.io/network</code>, sidecar env <code>ISTIO_META_NETWORK</code> or MeshNetworks.</p>
 
 </td>
 </tr>
 <tr id="TopologyKeys-TopologyKey-REGION">
 <td><code>REGION</code></td>
 <td>
-<p>REGION is used to match the region metadata of the endpoint,
-it can be acquired from kubernetes node label <code>topology.kubernetes.io/region</code> or the deprecated label <code>failure-domain.beta.kubernetes.io/region</code>.</p>
+<p>REGION is used to match the region metadata of an endpoint.
+It maps to Kubernetes node label <code>topology.kubernetes.io/region</code> or the deprecated label <code>failure-domain.beta.kubernetes.io/region</code>.</p>
 
 </td>
 </tr>
 <tr id="TopologyKeys-TopologyKey-ZONE">
 <td><code>ZONE</code></td>
 <td>
-<p>ZONE is used to match the region metadata of the endpoint,
-it can be acquired from kubernetes node label <code>topology.kubernetes.io/zone</code> or the deprecated label <code>failure-domain.beta.kubernetes.io/zone</code>.</p>
+<p>ZONE is used to match the region metadata of an endpoint.
+It maps to Kubernetes node label <code>topology.kubernetes.io/zone</code> or the deprecated label <code>failure-domain.beta.kubernetes.io/zone</code>.</p>
 
 </td>
 </tr>
 <tr id="TopologyKeys-TopologyKey-SUBZONE">
 <td><code>SUBZONE</code></td>
 <td>
-<p>SUBZONE is used to match the subzone metadata of the endpoint,
-it can be acquired from k8s node label <code>topology.istio.io/subzone</code>.
-Note: the label is not applied by upstream kubernetes.</p>
+<p>SUBZONE is used to match the subzone metadata of an endpoint.
+It maps to Istio node label <code>topology.istio.io/subzone</code>.
+Note that this label is not added by default by most Kubernetes distibutions and needs to be manually added.</p>
 
 </td>
 </tr>

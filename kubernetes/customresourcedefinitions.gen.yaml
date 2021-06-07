@@ -269,6 +269,9 @@ spec:
                               items:
                                 properties:
                                   keys:
+                                    description: Keys contains the list of topology
+                                      keys used to select endpoints for prioritized
+                                      load balancing.
                                     items:
                                       enum:
                                       - NETWORK
@@ -526,6 +529,9 @@ spec:
                                     items:
                                       properties:
                                         keys:
+                                          description: Keys contains the list of topology
+                                            keys used to select endpoints for prioritized
+                                            load balancing.
                                           items:
                                             enum:
                                             - NETWORK
@@ -844,6 +850,8 @@ spec:
                         items:
                           properties:
                             keys:
+                              description: Keys contains the list of topology keys
+                                used to select endpoints for prioritized load balancing.
                               items:
                                 enum:
                                 - NETWORK
@@ -1096,6 +1104,9 @@ spec:
                               items:
                                 properties:
                                   keys:
+                                    description: Keys contains the list of topology
+                                      keys used to select endpoints for prioritized
+                                      load balancing.
                                     items:
                                       enum:
                                       - NETWORK
