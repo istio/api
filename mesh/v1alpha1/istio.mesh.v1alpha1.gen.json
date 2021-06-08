@@ -52,6 +52,15 @@
           }
         }
       },
+      "istio.mesh.v1alpha1.HeaderOptions": {
+        "type": "object",
+        "properties": {
+          "preserveHeaderKeyCasing": {
+            "description": "Istio proxies by default normalize HTTP/1.1 header keys to lowercase as per the HTTP/1.1 specification. This can potentially lead to issues when migrating existing systems that rely on header casing being preserved. Set this true to preserve HTTP/1.1 header casing.",
+            "type": "boolean"
+          }
+        }
+      },
       "istio.mesh.v1alpha1.MeshConfig": {
         "description": "MeshConfig defines mesh-wide settings for the Istio service mesh.",
         "type": "object",
@@ -1156,6 +1165,9 @@
             "items": {
               "type": "string"
             }
+          },
+          "headerOptions": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.HeaderOptions"
           }
         }
       },
@@ -1582,15 +1594,6 @@
           "address": {
             "description": "Address of the Zipkin service (e.g. _zipkin:9411_).",
             "type": "string"
-          }
-        }
-      },
-      "istio.mesh.v1alpha1.HeaderOptions": {
-        "type": "object",
-        "properties": {
-          "preserveHeaderKeyCasing": {
-            "description": "Istio proxies by default normalize HTTP/1.1 header keys to lowercase as per the HTTP/1.1 specification. This can potentially lead to issues when migrating existing systems that rely on header casing being preserved. Set this true to preserve HTTP/1.1 header casing.",
-            "type": "boolean"
           }
         }
       },
