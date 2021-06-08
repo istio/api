@@ -9726,7 +9726,13 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings"
+                        "name": "additional_bindings",
+                        "aggregated": [
+                          {
+                            "name": "get",
+                            "value": "/v1/services/{service_name}/config"
+                          }
+                        ]
                       }
                     ]
                   }
@@ -33063,11 +33069,6 @@
                 "id": 61,
                 "name": "path_normalization",
                 "type": "ProxyPathNormalization"
-              },
-              {
-                "id": 62,
-                "name": "preserve_header_key_casing",
-                "type": "bool"
               }
             ],
             "reserved_ids": [
@@ -34225,6 +34226,11 @@
                 "name": "ca_certificates_pem",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 35,
+                "name": "header_options",
+                "type": "HeaderOptions"
               }
             ],
             "maps": [
@@ -34266,6 +34272,16 @@
                     "is_repeated": true
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "name": "HeaderOptions",
+            "fields": [
+              {
+                "id": 1,
+                "name": "preserve_header_key_casing",
+                "type": "bool"
               }
             ]
           },
@@ -35009,6 +35025,10 @@
               {
                 "name": "EXTENSION_CONFIG",
                 "integer": 9
+              },
+              {
+                "name": "BOOTSTRAP",
+                "integer": 10
               }
             ]
           },
