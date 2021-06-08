@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 45
+number_of_entries: 46
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -652,19 +652,6 @@ sidecars and gateways, which includes routing decisions in outbound direction (c
 authorization policy match and enforcement in inbound direction (server proxy), and the URL
 path proxied to the upstream service.
 If not set, the NormalizationType.DEFAULT configuration will be used.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-preserve_header_key_casing">
-<td><code>preserveHeaderKeyCasing</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Istio proxies by default normalize HTTP/1.1 header keys to lowercase as per the HTTP/1.1 specification.
-This can potentially lead to issues when migrating existing systems that rely on header casing being preserved.
-Set this true to preserve HTTP/1.1 header casing.</p>
 
 </td>
 <td>
@@ -2422,12 +2409,51 @@ are added automatically by Istiod.</p>
 No
 </td>
 </tr>
+<tr id="ProxyConfig-header_options">
+<td><code>headerOptions</code></td>
+<td><code><a href="#HeaderOptions">HeaderOptions</a></code></td>
+<td>
+<p>Options to manipulate HTTP headers.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="ProxyConfig-zipkin_address" class="deprecated ">
 <td><code>zipkinAddress</code></td>
 <td><code>string</code></td>
 <td>
 <p>Address of the Zipkin service (e.g. <em>zipkin:9411</em>).
 DEPRECATED: Use <a href="#ProxyConfig-tracing">tracing</a> instead.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HeaderOptions">HeaderOptions</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HeaderOptions-preserve_header_key_casing">
+<td><code>preserveHeaderKeyCasing</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Istio proxies by default normalize HTTP/1.1 header keys to lowercase as per the HTTP/1.1 specification.
+This can potentially lead to issues when migrating existing systems that rely on header casing being preserved.
+Set this true to preserve HTTP/1.1 header casing.</p>
 
 </td>
 <td>

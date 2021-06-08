@@ -498,6 +498,16 @@ message ProxyConfig {
   // The plugin certificates (the 'cacerts' secret), self-signed certificates (the 'istio-ca-secret' secret)
   // are added automatically by Istiod.
   repeated string ca_certificates_pem = 34;
+
+  // Options to manipulate HTTP headers.
+  HeaderOptions header_options = 35;
+}
+
+message HeaderOptions {
+  // Istio proxies by default normalize HTTP/1.1 header keys to lowercase as per the HTTP/1.1 specification.
+  // This can potentially lead to issues when migrating existing systems that rely on header casing being preserved.
+  // Set this true to preserve HTTP/1.1 header casing.
+  bool preserve_header_key_casing = 1;
 }
 
 message RemoteService {

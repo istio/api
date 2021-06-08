@@ -210,10 +210,6 @@
           },
           "pathNormalization": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ProxyPathNormalization"
-          },
-          "preserveHeaderKeyCasing": {
-            "description": "Istio proxies by default normalize HTTP/1.1 header keys to lowercase as per the HTTP/1.1 specification. This can potentially lead to issues when migrating existing systems that rely on header casing being preserved. Set this true to preserve HTTP/1.1 header casing.",
-            "type": "boolean"
           }
         }
       },
@@ -384,6 +380,9 @@
               "type": "string",
               "format": "string"
             }
+          },
+          "headerOptions": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.HeaderOptions"
           }
         }
       },
@@ -1667,6 +1666,15 @@
               "type": "string",
               "format": "string"
             }
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.HeaderOptions": {
+        "type": "object",
+        "properties": {
+          "preserveHeaderKeyCasing": {
+            "description": "Istio proxies by default normalize HTTP/1.1 header keys to lowercase as per the HTTP/1.1 specification. This can potentially lead to issues when migrating existing systems that rely on header casing being preserved. Set this true to preserve HTTP/1.1 header casing.",
+            "type": "boolean"
           }
         }
       },

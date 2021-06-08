@@ -847,13 +847,8 @@ message MeshConfig {
   // If not set, the NormalizationType.DEFAULT configuration will be used.
   ProxyPathNormalization path_normalization = 61;
 
-  // Istio proxies by default normalize HTTP/1.1 header keys to lowercase as per the HTTP/1.1 specification.
-  // This can potentially lead to issues when migrating existing systems that rely on header casing being preserved.
-  // Set this true to preserve HTTP/1.1 header casing.
-  bool preserve_header_key_casing = 62;
-
   // $hide_from_docs
-  // Next available field number: 63
+  // Next available field number: 62
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
