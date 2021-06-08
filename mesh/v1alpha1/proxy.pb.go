@@ -1127,6 +1127,8 @@ func (m *Topology) GetForwardClientCertDetails() Topology_ForwardClientCertDetai
 // This is different than a deep merge provided by protobuf.
 // For example, `"tracing": { "sampling": 5 }` would completely override a setting configuring a tracing provider
 // such as `"tracing": { "zipkin": { "address": "..." } }`.
+//
+// Note: fields in ProxyConfig are not dynamically configured; changes will require restart of workloads to take effect.
 type ProxyConfig struct {
 	// Path to the generated configuration file directory.
 	// Proxy agent generates the actual configuration and stores it in this directory.

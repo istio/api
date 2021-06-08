@@ -35,7 +35,8 @@
           "VIRTUAL_HOST",
           "HTTP_ROUTE",
           "CLUSTER",
-          "EXTENSION_CONFIG"
+          "EXTENSION_CONFIG",
+          "BOOTSTRAP"
         ]
       },
       "istio.networking.v1alpha3.EnvoyFilter.ClusterMatch": {
