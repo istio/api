@@ -2498,6 +2498,10 @@ spec:
                       type: object
                   type: object
                 type: array
+              order:
+                description: The order in which patch sets are applied within a context.
+                format: int32
+                type: integer
               workloadSelector:
                 properties:
                   labels:

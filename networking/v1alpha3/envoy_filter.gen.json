@@ -19,6 +19,11 @@
             "items": {
               "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch"
             }
+          },
+          "order": {
+            "description": "The order in which patch sets are applied within a context. When one patch depends on another patch, the order of patch application is significant. The API provides two primary ways to order patches. Patch sets in the root namespace are applied before the patch sets in the workload namespace. Patches within a patch set are processed in the order that they appear in the `configPatches` list.",
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
