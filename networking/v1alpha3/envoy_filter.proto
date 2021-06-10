@@ -362,12 +362,7 @@ import "networking/v1alpha3/sidecar.proto";
 //         name: my-wasm-extension # This must match the name above
 //         config_discovery:
 //           config_source:
-//             api_config_source:
-//               api_type: GRPC
-//               transport_api_version: V3
-//               grpc_services:
-//               - envoy_grpc:
-//                   cluster_name: xds-grpc
+//             ads: {}
 //           type_urls: ["envoy.extensions.filters.http.wasm.v3.Wasm"]
 // ```
 //
