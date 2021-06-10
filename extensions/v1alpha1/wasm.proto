@@ -35,7 +35,7 @@ option go_package="istio.io/api/extensions/v1alpha1";
 // +cue-gen:WasmPlugin:subresource:status
 // +cue-gen:WasmPlugin:scope:Namespaced
 // +cue-gen:WasmPlugin:resource:categories=istio-io,extensions-istio-io
-// +cue-gen:WasmPlugin:preserveUnknownFields:config
+// +cue-gen:WasmPlugin:preserveUnknownFields:pluginConfig
 // -->
 //
 // <!-- go code generation tags
@@ -72,7 +72,7 @@ message WasmPlugin {
   // `url` field will take precedence.
   string sha256 = 2;
 
-  // The pull behaviour to be applied when fetching a OCI image. Only
+  // The pull behaviour to be applied when fetching an OCI image. Only
   // relevant when images are referenced by tag instead of SHA. Ignored
   // if referencing a Wasm module directly using `file://` or `https://`
   PullPolicy pull_policy = 3;
