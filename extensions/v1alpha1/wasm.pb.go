@@ -68,7 +68,7 @@ func (WasmPlugin_PullPolicy) EnumDescriptor() ([]byte, []int) {
 // +cue-gen:WasmPlugin:subresource:status
 // +cue-gen:WasmPlugin:scope:Namespaced
 // +cue-gen:WasmPlugin:resource:categories=istio-io,extensions-istio-io
-// +cue-gen:WasmPlugin:preserveUnknownFields:config
+// +cue-gen:WasmPlugin:preserveUnknownFields:pluginConfig
 // -->
 //
 // <!-- go code generation tags
@@ -87,7 +87,7 @@ type WasmPlugin struct {
 	// already references a SHA256 (using the `@sha256:` notation), the
 	// `url` field will take precedence.
 	Sha256 string `protobuf:"bytes,2,opt,name=sha256,proto3" json:"sha256,omitempty"`
-	// The pull behaviour to be applied when fetching a OCI image. Only
+	// The pull behaviour to be applied when fetching an OCI image. Only
 	// relevant when images are referenced by tag instead of SHA. Ignored
 	// if referencing a Wasm module directly using `file://` or `https://`
 	PullPolicy WasmPlugin_PullPolicy `protobuf:"varint,3,opt,name=pull_policy,json=pullPolicy,proto3,enum=istio.extensions.v1alpha1.WasmPlugin_PullPolicy" json:"pull_policy,omitempty"`
