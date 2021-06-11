@@ -1105,7 +1105,30 @@ func (m *Topology) GetForwardClientCertDetails() Topology_ForwardClientCertDetai
 	return Topology_UNDEFINED
 }
 
-// ProxyConfig defines variables for individual Envoy instances.
+// ProxyConfig defines variables for individual Envoy instances. This can be configured on a per-workload basis
+// as well as by the mesh-wide defaults.
+// To set the mesh wide defaults, configure the `defaultConfig` section of `meshConfig`. For example:
+//
+// ```
+// meshConfig:
+//   defaultConfig:
+//     discoveryAddress: istiod:15012
+// ```
+//
+// This can also be configured on a per-workload basis by configuring the `proxy.istio.io/config` annotation on the pod. For example:
+//
+// ```
+// annotations:
+//   proxy.istio.io/config: |
+//     discoveryAddress: istiod:15012
+// ```
+//
+// If both are configured, the two are merged with per field semantics; the field set in annotation will fully replace the field from mesh config defaults.
+// This is different than a deep merge provided by protobuf.
+// For example, `"tracing": { "sampling": 5 }` would completely override a setting configuring a tracing provider
+// such as `"tracing": { "zipkin": { "address": "..." } }`.
+//
+// Note: fields in ProxyConfig are not dynamically configured; changes will require restart of workloads to take effect.
 type ProxyConfig struct {
 	// Path to the generated configuration file directory.
 	// Proxy agent generates the actual configuration and stores it in this directory.
