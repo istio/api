@@ -867,11 +867,13 @@ func (m *EnvoyFilter_ProxyMatch) GetMetadata() map[string]string {
 type EnvoyFilter_ClusterMatch struct {
 	// The service port for which this cluster was generated.  If
 	// omitted, applies to clusters for any port.
+	// **Note:** for inbound cluster, it is the service target port.
 	PortNumber uint32 `protobuf:"varint,1,opt,name=port_number,json=portNumber,proto3" json:"port_number,omitempty"`
 	// The fully qualified service name for this cluster. If omitted,
 	// applies to clusters for any service. For services defined
 	// through service entries, the service name is same as the hosts
 	// defined in the service entry.
+	// **Note:** for inbound cluster, this is ignorred.
 	Service string `protobuf:"bytes,2,opt,name=service,proto3" json:"service,omitempty"`
 	// The subset associated with the service. If omitted, applies to
 	// clusters for any subset of a service.
