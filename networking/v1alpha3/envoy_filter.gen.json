@@ -53,7 +53,7 @@
             "type": "integer"
           },
           "service": {
-            "description": "The fully qualified service name for this cluster. If omitted, applies to clusters for any service. For services defined through service entries, the service name is same as the hosts defined in the service entry. **Note:** for inbound cluster, this is ignorred.",
+            "description": "The fully qualified service name for this cluster. If omitted, applies to clusters for any service. For services defined through service entries, the service name is same as the hosts defined in the service entry. **Note:** for inbound cluster, this is ignored.",
             "type": "string"
           },
           "subset": {

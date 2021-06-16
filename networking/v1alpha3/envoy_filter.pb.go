@@ -873,7 +873,7 @@ type EnvoyFilter_ClusterMatch struct {
 	// applies to clusters for any service. For services defined
 	// through service entries, the service name is same as the hosts
 	// defined in the service entry.
-	// **Note:** for inbound cluster, this is ignorred.
+	// **Note:** for inbound cluster, this is ignored.
 	Service string `protobuf:"bytes,2,opt,name=service,proto3" json:"service,omitempty"`
 	// The subset associated with the service. If omitted, applies to
 	// clusters for any subset of a service.

@@ -524,7 +524,7 @@ message EnvoyFilter {
     // applies to clusters for any service. For services defined
     // through service entries, the service name is same as the hosts
     // defined in the service entry.
-    // **Note:** for inbound cluster, this is ignorred.
+    // **Note:** for inbound cluster, this is ignored.
     string service = 2;
 
     // The subset associated with the service. If omitted, applies to
