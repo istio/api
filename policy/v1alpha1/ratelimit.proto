@@ -1,0 +1,265 @@
+// Copyright Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "type/v1beta1/selector.proto";
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "istio.io/api/policy/v1alpha1";
+
+package istio.policy.v1alpha1;
+
+// $schema: istio.policy.v1alpha1.RateLimit
+// $title: Rate limiting
+// $description: Rate limiting configuration
+// $location: https://istio.io/docs/reference/config/policy/ratelimit.html
+// $aliases: [/docs/reference/config/policy/v1alpha1/ratelimit]
+//
+// <!-- crd generation tags
+// +cue-gen:Policy:groupName:policy.istio.io
+// +cue-gen:Policy:version:v1alpha1
+// +cue-gen:Policy:storageVersion
+// +cue-gen:Policy:annotations:helm.sh/resource-policy=keep
+// +cue-gen:Policy:labels:app=istio-pilot,chart=istio,istio=policy,heritage=Tiller,release=istio
+// +cue-gen:Policy:subresource:status
+// +cue-gen:Policy:scope:Namespaced
+// +cue-gen:Policy:resource:categories=istio-io,policy-istio-io,shortNames=policy,plural=telemetries
+// +cue-gen:Policy:preserveUnknownFields:false
+// +cue-gen:Policy:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
+// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
+// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// -->
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=policy.istio.io/v1alpha1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
+message RateLimit {
+  oneof binding {
+    // Optional. The workload selector decides where to apply the server-side rate limit in the same namespace.
+    istio.type.v1beta1.WorkloadSelector workload = 1;
+    // Optional. The route selector decides which client route rules enforce the client-side rate limit.
+    RouteSelector route = 2;
+  }
+  // Oiotonal. Specifies a set of descriptors that are evaluated against the
+  // rate limit policy.  The rate limit applies if any of the generated
+  // descriptors trigger a limit.
+  repeated RateLimitDescriptor descriptors = 3;
+
+  oneof policy {
+    // Global rate limiting provider reference.
+    ProviderRef global = 4;
+    // Local rate limit policy.
+    LocalRateLimit local = 5;
+  }
+}
+
+// Route selector references a client networking resource to overlay the rate
+// limit filter application. This can be a service, a virtual service, or a
+// gateway resource. Route name designation is optional.
+// If no route name is provided, the rate limit applies to all routes. However,
+// the rate limit for a named route takes priority over the rate limit for the
+// entire resource.
+//
+// For example, a selector addressing a Kubernetes service:
+// ```yaml
+// name: foo
+// group: core
+// kind: Service
+// ```
+//
+// This selector references an HTTPRoute from a Kubernetes gateway:
+// ```yaml
+// name: foo
+// group: networking.x-k8s.io
+// kind: HTTPRoute
+// ```
+//
+// This selector references an individual route from a VirtualService:
+// ```yaml
+// name: foo
+// group: networking.istio.io
+// kind: VirtualService
+// route: blah
+// ```
+message RouteSelector {
+  // Resource name.
+  string name = 1;
+  // Resource API group.
+  string group = 2;
+  // Resource kind.
+  string kind = 3;
+  // Optional. Individual route rule name within the resource.
+  string route = 4;
+}
+
+// RateLimitDescriptor is an ordered sequence of entries used for classification of requests.
+//
+// The following descriptor produces the sequence `[(path, /), (uid, john)]` for a request to `/`
+// with a header `user-id` set to `john`:
+// ```yaml
+// entries:
+// - header:
+//     key: path
+//     name: :path
+// - header:
+//     key: uid
+//     name: user-id
+// ```
+//
+// The following descriptor produces the client SPIFFE service account URI:
+// ```yaml
+// entries:
+// - expression:
+//     key: client-id
+//     text: connection.uri_san_peer_certificate
+// ```
+message RateLimitDescriptor {
+  repeated RateLimitEntry entries = 1;
+}
+
+// RateLimitEntry is a property of the request used for classification of requests.
+message RateLimitEntry {
+  // Entry obtained a request header value.
+  message RequestHeader {
+    // Descriptor entry key.
+    string key = 1;
+    // Request header name. The value of the header is used as the entry value.
+    string name = 2;
+    // When true, the descriptor entry is omitted from the descriptor if the header is absent.
+    // By default, the entire descriptor is skipped and the rate limit is not applied.
+    bool skip_if_absent = 3;
+  }
+  // Entry obtained by testing a request header value.
+  message RequestHeaderMatch {
+    // Descriptor entry value. The key is always `header_match`.
+    string value = 1;
+    // If set to true, the entry is appended when the request does not match.
+    // By default, the entry is appended if and only if the request matches.
+    bool expect_false = 2;
+
+    // Header match condition evaluates a request header against one of the patterns.
+    // Use `:authority` header to refer to HTTP/1.1 Host header and `:method`
+    // header to refer to HTTP method.
+    message HeaderMatchCondition {
+      // Header name.
+      string name = 1;
+
+      oneof condition {
+        // The header value must match exactly.
+        string exact = 2;
+        // The header value must start with the given value.
+        string prefix = 3;
+        // The header value must contain the given value.
+        string contains = 4;
+        // If specified as true, the header matches when it is present in the request.
+        // If specified as false, the header matches when it is absent from the request.
+        bool present = 5;
+      }
+    }
+
+    // The request matches when it matches all conditions.
+    repeated HeaderMatchCondition conditions = 3;
+  }
+  // Generic entry.
+  message GenericEntry {
+    // Descriptor entry key.
+    string key = 1;
+    // Descriptor entry value.
+    string value = 2;
+  }
+  // Generic CEL expression.
+  // For example, the expression `filter_state['wasm.downstream_peer'].labels['app'].value`
+  // produces the `app` label value for the downstream peer.
+  message Expression {
+    // Descriptor entry key.
+    string key = 1;
+    // If set to true, the descriptor entry is ommitted if the expression evaluates to an error.
+    // By default, the rate limit is not applied for this descriptor when an expression produces an error.
+    bool skip_if_error = 2;
+    // Descriptor expression.
+    string text = 3;
+  }
+  oneof entry_type {
+    // Entry obtained from a header value.
+    RequestHeader header = 1;
+    // Entry obtained by testing a header value against exact value, prefix, etc.
+    RequestHeaderMatch header_match = 2;
+    // Constant entry key and value.
+    GenericEntry generic = 3;
+    // Generic CEL expression entry.
+    Expression expression = 4;
+  }
+}
+
+// References a rate limit extension provider from the mesh configuration.
+message ProviderRef {
+  // Provider name.
+  string name = 1;
+}
+
+// Local rate limiting policy using a token bucket algorithm.
+message LocalRateLimit {
+  // Configures a token bucket.
+  message TokenBucket {
+    // The maximum tokens that the bucket can hold. This is also the number of tokens that the bucket
+    // initially contains.
+    uint32 max_tokens = 1;
+
+    // The number of tokens added to the bucket during each fill interval. If not specified, defaults
+    // to a single token.
+    google.protobuf.UInt32Value tokens_per_fill = 2;
+
+    // The fill interval that tokens are added to the bucket. During each fill interval
+    // `tokens_per_fill` are added to the bucket. The bucket will never contain more than
+    // `max_tokens` tokens. The interval must be >=50ms.
+    google.protobuf.Duration fill_interval = 3;
+  }
+
+  // The token bucket configuration to use for rate limiting requests that are
+  // processed by this filter. Each request processed by the filter consumes a
+  // single token. If the token is available, the request will be allowed. If
+  // no tokens are available, the proxy responds with 429.
+  TokenBucket token_bucket = 1;
+
+  // Per-descriptor local rate limit override.
+  message LocalRateLimitDescriptor {
+    // Override token bucket. The fill interval must be a multiple of the global
+    // token bucket.
+    TokenBucket token_bucket = 1;
+
+    // A descriptor entry.
+    message DescriptorEntry {
+      string key = 1;
+      string value = 2;
+    }
+
+    // Descriptor entries to be matched exactly.
+    repeated DescriptorEntry entries = 2;
+  }
+
+  // Descriptor overrides. The rate limit descriptor list to use in the local
+  // rate limit to override on. The rate limit descriptor is selected by the
+  // first full match from the request descriptors. Each descriptor token bucket
+  // fill interval must be a multiple of the global token bucket's interval.
+  // The descriptors match verbatim. If a descriptor match is detected, then the
+  // descriptor bucket is used to decide whether to rate limit the request instead of
+  // the global token bucket.
+  repeated LocalRateLimitDescriptor descriptors = 2;
+}

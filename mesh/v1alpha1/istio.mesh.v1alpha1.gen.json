@@ -436,6 +436,16 @@
                       "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SkyWalkingTracingProvider"
                     }
                   }
+                },
+                {
+                  "required": [
+                    "rateLimit"
+                  ],
+                  "properties": {
+                    "rateLimit": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.RateLimitProvider"
+                    }
+                  }
                 }
               ]
             }
@@ -517,6 +527,16 @@
             "properties": {
               "skywalking": {
                 "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SkyWalkingTracingProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "rateLimit"
+            ],
+            "properties": {
+              "rateLimit": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.RateLimitProvider"
               }
             }
           }
@@ -709,6 +729,28 @@
           "CLOUD_TRACE_CONTEXT",
           "B3"
         ]
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.RateLimitProvider": {
+        "description": "Defines configuration for a global rate limiting service provider.",
+        "type": "object",
+        "properties": {
+          "service": {
+            "description": "REQUIRED. Specifies the service that exposes the rate limit API. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
+            "type": "string"
+          },
+          "port": {
+            "description": "REQUIRED. Specifies the port of the service.",
+            "type": "integer"
+          },
+          "domain": {
+            "description": "The rate limit domain to use when calling the service.",
+            "type": "string"
+          },
+          "failureModeDeny": {
+            "description": "The behaviour in case the rate limiting service does not respond back. When it is set to true, the proxy will not allow traffic in case of communication failure between rate limiting service and the proxy.",
+            "type": "boolean"
+          }
+        }
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SkyWalkingTracingProvider": {
         "description": "Defines configuration for a SkyWalking tracer.",

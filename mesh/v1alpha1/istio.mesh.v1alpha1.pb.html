@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 45
+number_of_entries: 46
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -1061,6 +1061,17 @@ No
 No
 </td>
 </tr>
+<tr id="MeshConfig-ExtensionProvider-rate_limit" class="oneof">
+<td><code>rateLimit</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-RateLimitProvider">RateLimitProvider (oneof)</a></code></td>
+<td>
+<p>Configures a global rate limit service.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1831,6 +1842,74 @@ No
 <td>
 <p>Optional. Controls the overall path length allowed in a reported span.
 NOTE: currently only controls max length of the path tag.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-RateLimitProvider">MeshConfig.ExtensionProvider.RateLimitProvider</h2>
+<section>
+<p>Defines configuration for a global rate limiting service provider.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-RateLimitProvider-service">
+<td><code>service</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED. Specifies the service that exposes the rate limit API.
+The format is &ldquo;[<Namespace>/]<Hostname>&rdquo;. The specification of <Namespace> is required only when it is insufficient
+to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+service defined by the Kubernetes service or ServiceEntry.</p>
+
+<p>Example: &ldquo;rls.default.svc.cluster.local&rdquo; or &ldquo;bar/rls.example.com&rdquo;.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-RateLimitProvider-port">
+<td><code>port</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>REQUIRED. Specifies the port of the service.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-RateLimitProvider-domain">
+<td><code>domain</code></td>
+<td><code>string</code></td>
+<td>
+<p>The rate limit domain to use when calling the service.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-RateLimitProvider-failure_mode_deny">
+<td><code>failureModeDeny</code></td>
+<td><code>bool</code></td>
+<td>
+<p>The behaviour in case the rate limiting service does not respond back.
+When it is set to true, the proxy will not allow traffic in case of
+communication failure between rate limiting service and the proxy.</p>
 
 </td>
 <td>
