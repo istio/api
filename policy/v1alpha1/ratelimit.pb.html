@@ -26,7 +26,7 @@ $aliases: [/docs/reference/config/policy/v1alpha1/ratelimit]</p>
 <td><code>workload</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#WorkloadSelector">WorkloadSelector (oneof)</a></code></td>
 <td>
-<p>Optional. The workload selector decides where to apply the server side rate limit in the same namespace.</p>
+<p>Optional. The workload selector decides where to apply the server-side rate limit in the same namespace.</p>
 
 </td>
 <td>
@@ -37,7 +37,7 @@ No
 <td><code>route</code></td>
 <td><code><a href="#RouteSelector">RouteSelector (oneof)</a></code></td>
 <td>
-<p>Optional. The route selector decides which client route rules to enforce the client side rate limit.</p>
+<p>Optional. The route selector decides which client route rules enforce the client-side rate limit.</p>
 
 </td>
 <td>
@@ -48,7 +48,7 @@ No
 <td><code>descriptors</code></td>
 <td><code><a href="#RateLimitDescriptor">RateLimitDescriptor[]</a></code></td>
 <td>
-<p>Oiotonal. Specifies a set of descriptors that are evaluated against the
+<p>Optional. Specifies a set of descriptors that are evaluated against the
 rate limit policy.  The rate limit applies if any of the generated
 descriptors trigger a limit.</p>
 
@@ -85,7 +85,7 @@ No
 <h2 id="RouteSelector">RouteSelector</h2>
 <section>
 <p>Route selector references a client networking resource to overlay the rate
-limit filter application.  This can be a service, a virtual service, or a
+limit filter application. This can be a service, a virtual service, or a
 gateway resource. Route name designation is optional.
 If no route name is provided, the rate limit applies to all routes. However,
 the rate limit for a named route takes priority over the rate limit for the
@@ -525,7 +525,7 @@ No
 <td><code>skipIfError</code></td>
 <td><code>bool</code></td>
 <td>
-<p>If set to true, the descriptor entry is ommitted if the expression evaluates to an error.
+<p>If set to true, the descriptor entry is omitted if the expression evaluates to an error.
 By default, the rate limit is not applied for this descriptor when an expression produces an error.</p>
 
 </td>

@@ -57,7 +57,7 @@ message RateLimit {
     // Optional. The route selector decides which client route rules enforce the client-side rate limit.
     RouteSelector route = 2;
   }
-  // Oiotonal. Specifies a set of descriptors that are evaluated against the
+  // Optional. Specifies a set of descriptors that are evaluated against the
   // rate limit policy.  The rate limit applies if any of the generated
   // descriptors trigger a limit.
   repeated RateLimitDescriptor descriptors = 3;
@@ -190,7 +190,7 @@ message RateLimitEntry {
   message Expression {
     // Descriptor entry key.
     string key = 1;
-    // If set to true, the descriptor entry is ommitted if the expression evaluates to an error.
+    // If set to true, the descriptor entry is omitted if the expression evaluates to an error.
     // By default, the rate limit is not applied for this descriptor when an expression produces an error.
     bool skip_if_error = 2;
     // Descriptor expression.

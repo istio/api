@@ -57,7 +57,7 @@ type RateLimit struct {
 	//	*RateLimit_Workload
 	//	*RateLimit_Route
 	Binding isRateLimit_Binding `protobuf_oneof:"binding"`
-	// Oiotonal. Specifies a set of descriptors that are evaluated against the
+	// Optional. Specifies a set of descriptors that are evaluated against the
 	// rate limit policy.  The rate limit applies if any of the generated
 	// descriptors trigger a limit.
 	Descriptors []*RateLimitDescriptor `protobuf:"bytes,3,rep,name=descriptors,proto3" json:"descriptors,omitempty"`
@@ -191,7 +191,7 @@ func (*RateLimit) XXX_OneofWrappers() []interface{} {
 }
 
 // Route selector references a client networking resource to overlay the rate
-// limit filter application.  This can be a service, a virtual service, or a
+// limit filter application. This can be a service, a virtual service, or a
 // gateway resource. Route name designation is optional.
 // If no route name is provided, the rate limit applies to all routes. However,
 // the rate limit for a named route takes priority over the rate limit for the
@@ -810,7 +810,7 @@ func (m *RateLimitEntry_GenericEntry) GetValue() string {
 type RateLimitEntry_Expression struct {
 	// Descriptor entry key.
 	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	// If set to true, the descriptor entry is ommitted if the expression evaluates to an error.
+	// If set to true, the descriptor entry is omitted if the expression evaluates to an error.
 	// By default, the rate limit is not applied for this descriptor when an expression produces an error.
 	SkipIfError bool `protobuf:"varint,2,opt,name=skip_if_error,json=skipIfError,proto3" json:"skip_if_error,omitempty"`
 	// Descriptor expression.

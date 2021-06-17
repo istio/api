@@ -5139,7 +5139,7 @@ spec:
                 - local
             properties:
               descriptors:
-                description: Oiotonal.
+                description: Optional.
                 items:
                   properties:
                     entries:
@@ -5172,7 +5172,7 @@ spec:
                                 type: string
                               skipIfError:
                                 description: If set to true, the descriptor entry
-                                  is ommitted if the expression evaluates to an error.
+                                  is omitted if the expression evaluates to an error.
                                 type: boolean
                               text:
                                 description: Descriptor expression.
