@@ -1,4 +1,4 @@
-*                @linsun @dcberg @louiscryan @smawson @duderino @nrjpoddar
+*                @linsun @louiscryan @smawson @nrjpoddar
 /Makefile*       @istio/wg-test-and-release-maintainers
 /*.md            @istio/wg-test-and-release-maintainers
 /common/         @istio/wg-test-and-release-maintainers
