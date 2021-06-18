@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.policy.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\034istio.io/api/policy/v1alpha1'),
-  serialized_pb=_b('\n\x1fpolicy/v1alpha1/ratelimit.proto\x12\x15istio.policy.v1alpha1\x1a\x1btype/v1beta1/selector.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1egoogle/protobuf/duration.proto\"\xed\x02\n\tRateLimit\x12\x42\n\x08workload\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorH\x00R\x08workload\x12<\n\x05route\x18\x02 \x01(\x0b\x32$.istio.policy.v1alpha1.RouteSelectorH\x00R\x05route\x12L\n\x0b\x64\x65scriptors\x18\x03 \x03(\x0b\x32*.istio.policy.v1alpha1.RateLimitDescriptorR\x0b\x64\x65scriptors\x12<\n\x06global\x18\x04 \x01(\x0b\x32\".istio.policy.v1alpha1.ProviderRefH\x01R\x06global\x12=\n\x05local\x18\x05 \x01(\x0b\x32%.istio.policy.v1alpha1.LocalRateLimitH\x01R\x05localB\t\n\x07\x62indingB\x08\n\x06policy\"c\n\rRouteSelector\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n\x05group\x18\x02 \x01(\tR\x05group\x12\x12\n\x04kind\x18\x03 \x01(\tR\x04kind\x12\x14\n\x05route\x18\x04 \x01(\tR\x05route\"V\n\x13RateLimitDescriptor\x12?\n\x07\x65ntries\x18\x01 \x03(\x0b\x32%.istio.policy.v1alpha1.RateLimitEntryR\x07\x65ntries\"\xc2\x07\n\x0eRateLimitEntry\x12M\n\x06header\x18\x01 \x01(\x0b\x32\x33.istio.policy.v1alpha1.RateLimitEntry.RequestHeaderH\x00R\x06header\x12]\n\x0cheader_match\x18\x02 \x01(\x0b\x32\x38.istio.policy.v1alpha1.RateLimitEntry.RequestHeaderMatchH\x00R\x0bheaderMatch\x12N\n\x07generic\x18\x03 \x01(\x0b\x32\x32.istio.policy.v1alpha1.RateLimitEntry.GenericEntryH\x00R\x07generic\x12R\n\nexpression\x18\x04 \x01(\x0b\x32\x30.istio.policy.v1alpha1.RateLimitEntry.ExpressionH\x00R\nexpression\x1a[\n\rRequestHeader\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12$\n\x0eskip_if_absent\x18\x03 \x01(\x08R\x0cskipIfAbsent\x1a\xe2\x02\n\x12RequestHeaderMatch\x12\x14\n\x05value\x18\x01 \x01(\tR\x05value\x12!\n\x0c\x65xpect_false\x18\x02 \x01(\x08R\x0b\x65xpectFalse\x12m\n\nconditions\x18\x03 \x03(\x0b\x32M.istio.policy.v1alpha1.RateLimitEntry.RequestHeaderMatch.HeaderMatchConditionR\nconditions\x1a\xa3\x01\n\x14HeaderMatchCondition\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x16\n\x05\x65xact\x18\x02 \x01(\tH\x00R\x05\x65xact\x12\x18\n\x06prefix\x18\x03 \x01(\tH\x00R\x06prefix\x12\x1c\n\x08\x63ontains\x18\x04 \x01(\tH\x00R\x08\x63ontains\x12\x1a\n\x07present\x18\x05 \x01(\x08H\x00R\x07presentB\x0b\n\tcondition\x1a\x36\n\x0cGenericEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value\x1aV\n\nExpression\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\"\n\rskip_if_error\x18\x02 \x01(\x08R\x0bskipIfError\x12\x12\n\x04text\x18\x03 \x01(\tR\x04textB\x0c\n\nentry_type\"!\n\x0bProviderRef\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"\x95\x05\n\x0eLocalRateLimit\x12T\n\x0ctoken_bucket\x18\x01 \x01(\x0b\x32\x31.istio.policy.v1alpha1.LocalRateLimit.TokenBucketR\x0btokenBucket\x12`\n\x0b\x64\x65scriptors\x18\x02 \x03(\x0b\x32>.istio.policy.v1alpha1.LocalRateLimit.LocalRateLimitDescriptorR\x0b\x64\x65scriptors\x1a\xb2\x01\n\x0bTokenBucket\x12\x1d\n\nmax_tokens\x18\x01 \x01(\rR\tmaxTokens\x12\x44\n\x0ftokens_per_fill\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt32ValueR\rtokensPerFill\x12>\n\rfill_interval\x18\x03 \x01(\x0b\x32\x19.google.protobuf.DurationR\x0c\x66illInterval\x1a\x95\x02\n\x18LocalRateLimitDescriptor\x12T\n\x0ctoken_bucket\x18\x01 \x01(\x0b\x32\x31.istio.policy.v1alpha1.LocalRateLimit.TokenBucketR\x0btokenBucket\x12h\n\x07\x65ntries\x18\x02 \x03(\x0b\x32N.istio.policy.v1alpha1.LocalRateLimit.LocalRateLimitDescriptor.DescriptorEntryR\x07\x65ntries\x1a\x39\n\x0f\x44\x65scriptorEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05valueB\x1eZ\x1cistio.io/api/policy/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x1fpolicy/v1alpha1/ratelimit.proto\x12\x15istio.policy.v1alpha1\x1a\x1btype/v1beta1/selector.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1egoogle/protobuf/duration.proto\"\xed\x02\n\tRateLimit\x12\x42\n\x08workload\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorH\x00R\x08workload\x12<\n\x05route\x18\x02 \x01(\x0b\x32$.istio.policy.v1alpha1.RouteSelectorH\x00R\x05route\x12L\n\x0b\x64\x65scriptors\x18\x03 \x03(\x0b\x32*.istio.policy.v1alpha1.RateLimitDescriptorR\x0b\x64\x65scriptors\x12<\n\x06global\x18\x04 \x01(\x0b\x32\".istio.policy.v1alpha1.ProviderRefH\x01R\x06global\x12=\n\x05local\x18\x05 \x01(\x0b\x32%.istio.policy.v1alpha1.LocalRateLimitH\x01R\x05localB\t\n\x07\x62indingB\x08\n\x06policy\"c\n\rRouteSelector\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n\x05group\x18\x02 \x01(\tR\x05group\x12\x12\n\x04kind\x18\x03 \x01(\tR\x04kind\x12\x14\n\x05route\x18\x04 \x01(\tR\x05route\"V\n\x13RateLimitDescriptor\x12?\n\x07\x65ntries\x18\x01 \x03(\x0b\x32%.istio.policy.v1alpha1.RateLimitEntryR\x07\x65ntries\"\x85\x07\n\x0eRateLimitEntry\x12M\n\x06header\x18\x01 \x01(\x0b\x32\x33.istio.policy.v1alpha1.RateLimitEntry.RequestHeaderH\x00R\x06header\x12]\n\x0cheader_match\x18\x02 \x01(\x0b\x32\x38.istio.policy.v1alpha1.RateLimitEntry.RequestHeaderMatchH\x00R\x0bheaderMatch\x12Q\n\x08\x63onstant\x18\x03 \x01(\x0b\x32\x33.istio.policy.v1alpha1.RateLimitEntry.ConstantEntryH\x00R\x08\x63onstant\x12R\n\nexpression\x18\x04 \x01(\x0b\x32\x30.istio.policy.v1alpha1.RateLimitEntry.ExpressionH\x00R\nexpression\x1a[\n\rRequestHeader\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12$\n\x0eskip_if_absent\x18\x03 \x01(\x08R\x0cskipIfAbsent\x1a\xa1\x02\n\x12RequestHeaderMatch\x12\x14\n\x05value\x18\x01 \x01(\tR\x05value\x12m\n\nconditions\x18\x03 \x03(\x0b\x32M.istio.policy.v1alpha1.RateLimitEntry.RequestHeaderMatch.HeaderMatchConditionR\nconditions\x1a\x85\x01\n\x14HeaderMatchCondition\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x16\n\x05\x65xact\x18\x02 \x01(\tH\x00R\x05\x65xact\x12\x18\n\x06prefix\x18\x03 \x01(\tH\x00R\x06prefix\x12\x1a\n\x07present\x18\x04 \x01(\x08H\x00R\x07presentB\x0b\n\tcondition\x1a\x37\n\rConstantEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value\x1aV\n\nExpression\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\"\n\rskip_if_error\x18\x02 \x01(\x08R\x0bskipIfError\x12\x12\n\x04text\x18\x03 \x01(\tR\x04textB\x0c\n\nentry_type\"!\n\x0bProviderRef\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"\x95\x05\n\x0eLocalRateLimit\x12T\n\x0ctoken_bucket\x18\x01 \x01(\x0b\x32\x31.istio.policy.v1alpha1.LocalRateLimit.TokenBucketR\x0btokenBucket\x12`\n\x0b\x64\x65scriptors\x18\x02 \x03(\x0b\x32>.istio.policy.v1alpha1.LocalRateLimit.LocalRateLimitDescriptorR\x0b\x64\x65scriptors\x1a\xb2\x01\n\x0bTokenBucket\x12\x1d\n\nmax_tokens\x18\x01 \x01(\rR\tmaxTokens\x12\x44\n\x0ftokens_per_fill\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt32ValueR\rtokensPerFill\x12>\n\rfill_interval\x18\x03 \x01(\x0b\x32\x19.google.protobuf.DurationR\x0c\x66illInterval\x1a\x95\x02\n\x18LocalRateLimitDescriptor\x12T\n\x0ctoken_bucket\x18\x01 \x01(\x0b\x32\x31.istio.policy.v1alpha1.LocalRateLimit.TokenBucketR\x0btokenBucket\x12h\n\x07\x65ntries\x18\x02 \x03(\x0b\x32N.istio.policy.v1alpha1.LocalRateLimit.LocalRateLimitDescriptor.DescriptorEntryR\x07\x65ntries\x1a\x39\n\x0f\x44\x65scriptorEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05valueB\x1eZ\x1cistio.io/api/policy/v1alpha1b\x06proto3')
   ,
   dependencies=[type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,])
 
@@ -218,8 +218,8 @@ _RATELIMITENTRY_REQUESTHEADER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1065,
-  serialized_end=1156,
+  serialized_start=1068,
+  serialized_end=1159,
 )
 
 _RATELIMITENTRY_REQUESTHEADERMATCH_HEADERMATCHCONDITION = _descriptor.Descriptor(
@@ -251,15 +251,8 @@ _RATELIMITENTRY_REQUESTHEADERMATCH_HEADERMATCHCONDITION = _descriptor.Descriptor
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='prefix', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='contains', full_name='istio.policy.v1alpha1.RateLimitEntry.RequestHeaderMatch.HeaderMatchCondition.contains', index=3,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='contains', file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='present', full_name='istio.policy.v1alpha1.RateLimitEntry.RequestHeaderMatch.HeaderMatchCondition.present', index=4,
-      number=5, type=8, cpp_type=7, label=1,
+      name='present', full_name='istio.policy.v1alpha1.RateLimitEntry.RequestHeaderMatch.HeaderMatchCondition.present', index=3,
+      number=4, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -279,8 +272,8 @@ _RATELIMITENTRY_REQUESTHEADERMATCH_HEADERMATCHCONDITION = _descriptor.Descriptor
       name='condition', full_name='istio.policy.v1alpha1.RateLimitEntry.RequestHeaderMatch.HeaderMatchCondition.condition',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=1350,
-  serialized_end=1513,
+  serialized_start=1318,
+  serialized_end=1451,
 )
 
 _RATELIMITENTRY_REQUESTHEADERMATCH = _descriptor.Descriptor(
@@ -298,14 +291,7 @@ _RATELIMITENTRY_REQUESTHEADERMATCH = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='value', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='expect_false', full_name='istio.policy.v1alpha1.RateLimitEntry.RequestHeaderMatch.expect_false', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='expectFalse', file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='conditions', full_name='istio.policy.v1alpha1.RateLimitEntry.RequestHeaderMatch.conditions', index=2,
+      name='conditions', full_name='istio.policy.v1alpha1.RateLimitEntry.RequestHeaderMatch.conditions', index=1,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -323,26 +309,26 @@ _RATELIMITENTRY_REQUESTHEADERMATCH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1159,
-  serialized_end=1513,
+  serialized_start=1162,
+  serialized_end=1451,
 )
 
-_RATELIMITENTRY_GENERICENTRY = _descriptor.Descriptor(
-  name='GenericEntry',
-  full_name='istio.policy.v1alpha1.RateLimitEntry.GenericEntry',
+_RATELIMITENTRY_CONSTANTENTRY = _descriptor.Descriptor(
+  name='ConstantEntry',
+  full_name='istio.policy.v1alpha1.RateLimitEntry.ConstantEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='istio.policy.v1alpha1.RateLimitEntry.GenericEntry.key', index=0,
+      name='key', full_name='istio.policy.v1alpha1.RateLimitEntry.ConstantEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='key', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='value', full_name='istio.policy.v1alpha1.RateLimitEntry.GenericEntry.value', index=1,
+      name='value', full_name='istio.policy.v1alpha1.RateLimitEntry.ConstantEntry.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -360,8 +346,8 @@ _RATELIMITENTRY_GENERICENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1515,
-  serialized_end=1569,
+  serialized_start=1453,
+  serialized_end=1508,
 )
 
 _RATELIMITENTRY_EXPRESSION = _descriptor.Descriptor(
@@ -404,8 +390,8 @@ _RATELIMITENTRY_EXPRESSION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1571,
-  serialized_end=1657,
+  serialized_start=1510,
+  serialized_end=1596,
 )
 
 _RATELIMITENTRY = _descriptor.Descriptor(
@@ -430,12 +416,12 @@ _RATELIMITENTRY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='headerMatch', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='generic', full_name='istio.policy.v1alpha1.RateLimitEntry.generic', index=2,
+      name='constant', full_name='istio.policy.v1alpha1.RateLimitEntry.constant', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='generic', file=DESCRIPTOR),
+      serialized_options=None, json_name='constant', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='expression', full_name='istio.policy.v1alpha1.RateLimitEntry.expression', index=3,
       number=4, type=11, cpp_type=10, label=1,
@@ -446,7 +432,7 @@ _RATELIMITENTRY = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_RATELIMITENTRY_REQUESTHEADER, _RATELIMITENTRY_REQUESTHEADERMATCH, _RATELIMITENTRY_GENERICENTRY, _RATELIMITENTRY_EXPRESSION, ],
+  nested_types=[_RATELIMITENTRY_REQUESTHEADER, _RATELIMITENTRY_REQUESTHEADERMATCH, _RATELIMITENTRY_CONSTANTENTRY, _RATELIMITENTRY_EXPRESSION, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -459,7 +445,7 @@ _RATELIMITENTRY = _descriptor.Descriptor(
       index=0, containing_type=None, fields=[]),
   ],
   serialized_start=709,
-  serialized_end=1671,
+  serialized_end=1610,
 )
 
 
@@ -489,8 +475,8 @@ _PROVIDERREF = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1673,
-  serialized_end=1706,
+  serialized_start=1612,
+  serialized_end=1645,
 )
 
 
@@ -534,8 +520,8 @@ _LOCALRATELIMIT_TOKENBUCKET = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1912,
-  serialized_end=2090,
+  serialized_start=1851,
+  serialized_end=2029,
 )
 
 _LOCALRATELIMIT_LOCALRATELIMITDESCRIPTOR_DESCRIPTORENTRY = _descriptor.Descriptor(
@@ -571,8 +557,8 @@ _LOCALRATELIMIT_LOCALRATELIMITDESCRIPTOR_DESCRIPTORENTRY = _descriptor.Descripto
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2313,
-  serialized_end=2370,
+  serialized_start=2252,
+  serialized_end=2309,
 )
 
 _LOCALRATELIMIT_LOCALRATELIMITDESCRIPTOR = _descriptor.Descriptor(
@@ -608,8 +594,8 @@ _LOCALRATELIMIT_LOCALRATELIMITDESCRIPTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2093,
-  serialized_end=2370,
+  serialized_start=2032,
+  serialized_end=2309,
 )
 
 _LOCALRATELIMIT = _descriptor.Descriptor(
@@ -645,8 +631,8 @@ _LOCALRATELIMIT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1709,
-  serialized_end=2370,
+  serialized_start=1648,
+  serialized_end=2309,
 )
 
 _RATELIMIT.fields_by_name['workload'].message_type = type_dot_v1beta1_dot_selector__pb2._WORKLOADSELECTOR
@@ -676,18 +662,15 @@ _RATELIMITENTRY_REQUESTHEADERMATCH_HEADERMATCHCONDITION.oneofs_by_name['conditio
   _RATELIMITENTRY_REQUESTHEADERMATCH_HEADERMATCHCONDITION.fields_by_name['prefix'])
 _RATELIMITENTRY_REQUESTHEADERMATCH_HEADERMATCHCONDITION.fields_by_name['prefix'].containing_oneof = _RATELIMITENTRY_REQUESTHEADERMATCH_HEADERMATCHCONDITION.oneofs_by_name['condition']
 _RATELIMITENTRY_REQUESTHEADERMATCH_HEADERMATCHCONDITION.oneofs_by_name['condition'].fields.append(
-  _RATELIMITENTRY_REQUESTHEADERMATCH_HEADERMATCHCONDITION.fields_by_name['contains'])
-_RATELIMITENTRY_REQUESTHEADERMATCH_HEADERMATCHCONDITION.fields_by_name['contains'].containing_oneof = _RATELIMITENTRY_REQUESTHEADERMATCH_HEADERMATCHCONDITION.oneofs_by_name['condition']
-_RATELIMITENTRY_REQUESTHEADERMATCH_HEADERMATCHCONDITION.oneofs_by_name['condition'].fields.append(
   _RATELIMITENTRY_REQUESTHEADERMATCH_HEADERMATCHCONDITION.fields_by_name['present'])
 _RATELIMITENTRY_REQUESTHEADERMATCH_HEADERMATCHCONDITION.fields_by_name['present'].containing_oneof = _RATELIMITENTRY_REQUESTHEADERMATCH_HEADERMATCHCONDITION.oneofs_by_name['condition']
 _RATELIMITENTRY_REQUESTHEADERMATCH.fields_by_name['conditions'].message_type = _RATELIMITENTRY_REQUESTHEADERMATCH_HEADERMATCHCONDITION
 _RATELIMITENTRY_REQUESTHEADERMATCH.containing_type = _RATELIMITENTRY
-_RATELIMITENTRY_GENERICENTRY.containing_type = _RATELIMITENTRY
+_RATELIMITENTRY_CONSTANTENTRY.containing_type = _RATELIMITENTRY
 _RATELIMITENTRY_EXPRESSION.containing_type = _RATELIMITENTRY
 _RATELIMITENTRY.fields_by_name['header'].message_type = _RATELIMITENTRY_REQUESTHEADER
 _RATELIMITENTRY.fields_by_name['header_match'].message_type = _RATELIMITENTRY_REQUESTHEADERMATCH
-_RATELIMITENTRY.fields_by_name['generic'].message_type = _RATELIMITENTRY_GENERICENTRY
+_RATELIMITENTRY.fields_by_name['constant'].message_type = _RATELIMITENTRY_CONSTANTENTRY
 _RATELIMITENTRY.fields_by_name['expression'].message_type = _RATELIMITENTRY_EXPRESSION
 _RATELIMITENTRY.oneofs_by_name['entry_type'].fields.append(
   _RATELIMITENTRY.fields_by_name['header'])
@@ -696,8 +679,8 @@ _RATELIMITENTRY.oneofs_by_name['entry_type'].fields.append(
   _RATELIMITENTRY.fields_by_name['header_match'])
 _RATELIMITENTRY.fields_by_name['header_match'].containing_oneof = _RATELIMITENTRY.oneofs_by_name['entry_type']
 _RATELIMITENTRY.oneofs_by_name['entry_type'].fields.append(
-  _RATELIMITENTRY.fields_by_name['generic'])
-_RATELIMITENTRY.fields_by_name['generic'].containing_oneof = _RATELIMITENTRY.oneofs_by_name['entry_type']
+  _RATELIMITENTRY.fields_by_name['constant'])
+_RATELIMITENTRY.fields_by_name['constant'].containing_oneof = _RATELIMITENTRY.oneofs_by_name['entry_type']
 _RATELIMITENTRY.oneofs_by_name['entry_type'].fields.append(
   _RATELIMITENTRY.fields_by_name['expression'])
 _RATELIMITENTRY.fields_by_name['expression'].containing_oneof = _RATELIMITENTRY.oneofs_by_name['entry_type']
@@ -762,10 +745,10 @@ RateLimitEntry = _reflection.GeneratedProtocolMessageType('RateLimitEntry', (_me
     })
   ,
 
-  'GenericEntry' : _reflection.GeneratedProtocolMessageType('GenericEntry', (_message.Message,), {
-    'DESCRIPTOR' : _RATELIMITENTRY_GENERICENTRY,
+  'ConstantEntry' : _reflection.GeneratedProtocolMessageType('ConstantEntry', (_message.Message,), {
+    'DESCRIPTOR' : _RATELIMITENTRY_CONSTANTENTRY,
     '__module__' : 'policy.v1alpha1.ratelimit_pb2'
-    # @@protoc_insertion_point(class_scope:istio.policy.v1alpha1.RateLimitEntry.GenericEntry)
+    # @@protoc_insertion_point(class_scope:istio.policy.v1alpha1.RateLimitEntry.ConstantEntry)
     })
   ,
 
@@ -783,7 +766,7 @@ _sym_db.RegisterMessage(RateLimitEntry)
 _sym_db.RegisterMessage(RateLimitEntry.RequestHeader)
 _sym_db.RegisterMessage(RateLimitEntry.RequestHeaderMatch)
 _sym_db.RegisterMessage(RateLimitEntry.RequestHeaderMatch.HeaderMatchCondition)
-_sym_db.RegisterMessage(RateLimitEntry.GenericEntry)
+_sym_db.RegisterMessage(RateLimitEntry.ConstantEntry)
 _sym_db.RegisterMessage(RateLimitEntry.Expression)
 
 ProviderRef = _reflection.GeneratedProtocolMessageType('ProviderRef', (_message.Message,), {
