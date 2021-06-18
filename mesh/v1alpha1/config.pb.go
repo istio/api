@@ -2401,6 +2401,8 @@ func (m *MeshConfig_ExtensionProvider_OpenCensusAgentTracingProvider) GetMaxTagL
 }
 
 // Defines configuration for a global rate limiting service provider.
+// The service must implement Rate Limit Service (RLS):
+// https://www.envoyproxy.io/docs/envoy/latest/api-v3/service/ratelimit/v3/rls.proto.
 type MeshConfig_ExtensionProvider_RateLimitProvider struct {
 	// REQUIRED. Specifies the service that exposes the rate limit API.
 	// The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
@@ -2412,6 +2414,8 @@ type MeshConfig_ExtensionProvider_RateLimitProvider struct {
 	// REQUIRED. Specifies the port of the service.
 	Port uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
 	// The rate limit domain to use when calling the service.
+	// This corresponds to the `domain` field in the RateLimitRequest proto:
+	// https://www.envoyproxy.io/docs/envoy/latest/api-v3/service/ratelimit/v3/rls.proto#service-ratelimit-v3-ratelimitrequest.
 	Domain string `protobuf:"bytes,3,opt,name=domain,proto3" json:"domain,omitempty"`
 	// The behaviour in case the rate limiting service does not respond back.
 	// When it is set to true, the proxy will not allow traffic in case of

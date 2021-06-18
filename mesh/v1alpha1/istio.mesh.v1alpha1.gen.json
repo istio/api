@@ -731,7 +731,7 @@
         ]
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.RateLimitProvider": {
-        "description": "Defines configuration for a global rate limiting service provider.",
+        "description": "Defines configuration for a global rate limiting service provider. The service must implement Rate Limit Service (RLS): https://www.envoyproxy.io/docs/envoy/latest/api-v3/service/ratelimit/v3/rls.proto.",
         "type": "object",
         "properties": {
           "service": {
@@ -743,7 +743,7 @@
             "type": "integer"
           },
           "domain": {
-            "description": "The rate limit domain to use when calling the service.",
+            "description": "The rate limit domain to use when calling the service. This corresponds to the `domain` field in the RateLimitRequest proto: https://www.envoyproxy.io/docs/envoy/latest/api-v3/service/ratelimit/v3/rls.proto#service-ratelimit-v3-ratelimitrequest.",
             "type": "string"
           },
           "failureModeDeny": {

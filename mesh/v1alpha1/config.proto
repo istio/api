@@ -775,6 +775,8 @@ message MeshConfig {
     }
 
     // Defines configuration for a global rate limiting service provider.
+    // The service must implement Rate Limit Service (RLS):
+    // https://www.envoyproxy.io/docs/envoy/latest/api-v3/service/ratelimit/v3/rls.proto.
     message RateLimitProvider {
       // REQUIRED. Specifies the service that exposes the rate limit API.
       // The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
@@ -788,6 +790,8 @@ message MeshConfig {
       uint32 port = 2;
 
       // The rate limit domain to use when calling the service.
+      // This corresponds to the `domain` field in the RateLimitRequest proto:
+      // https://www.envoyproxy.io/docs/envoy/latest/api-v3/service/ratelimit/v3/rls.proto#service-ratelimit-v3-ratelimitrequest.
       string domain = 3;
 
       // The behaviour in case the rate limiting service does not respond back.

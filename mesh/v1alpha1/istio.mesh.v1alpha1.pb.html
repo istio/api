@@ -1853,7 +1853,9 @@ No
 </section>
 <h2 id="MeshConfig-ExtensionProvider-RateLimitProvider">MeshConfig.ExtensionProvider.RateLimitProvider</h2>
 <section>
-<p>Defines configuration for a global rate limiting service provider.</p>
+<p>Defines configuration for a global rate limiting service provider.
+The service must implement Rate Limit Service (RLS):
+https://www.envoyproxy.io/docs/envoy/latest/api-v3/service/ratelimit/v3/rls.proto.</p>
 
 <table class="message-fields">
 <thead>
@@ -1896,7 +1898,9 @@ No
 <td><code>domain</code></td>
 <td><code>string</code></td>
 <td>
-<p>The rate limit domain to use when calling the service.</p>
+<p>The rate limit domain to use when calling the service.
+This corresponds to the <code>domain</code> field in the RateLimitRequest proto:
+https://www.envoyproxy.io/docs/envoy/latest/api-v3/service/ratelimit/v3/rls.proto#service-ratelimit-v3-ratelimitrequest.</p>
 
 </td>
 <td>
