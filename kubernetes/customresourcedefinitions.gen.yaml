@@ -5152,7 +5152,7 @@ spec:
                             - required:
                               - headerMatch
                             - required:
-                              - generic
+                              - constant
                             - required:
                               - expression
                         - required:
@@ -5160,12 +5160,22 @@ spec:
                         - required:
                           - headerMatch
                         - required:
-                          - generic
+                          - constant
                         - required:
                           - expression
                         properties:
+                          constant:
+                            description: Constant entry key and value.
+                            properties:
+                              key:
+                                description: Descriptor entry key.
+                                type: string
+                              value:
+                                description: Descriptor entry value.
+                                type: string
+                            type: object
                           expression:
-                            description: Generic CEL expression entry.
+                            description: CEL expression entry.
                             properties:
                               key:
                                 description: Descriptor entry key.
@@ -5176,16 +5186,6 @@ spec:
                                 type: boolean
                               text:
                                 description: Descriptor expression.
-                                type: string
-                            type: object
-                          generic:
-                            description: Constant entry key and value.
-                            properties:
-                              key:
-                                description: Descriptor entry key.
-                                type: string
-                              value:
-                                description: Descriptor entry value.
                                 type: string
                             type: object
                           header:
@@ -5218,22 +5218,14 @@ spec:
                                       - required:
                                         - prefix
                                       - required:
-                                        - contains
-                                      - required:
                                         - present
                                   - required:
                                     - exact
                                   - required:
                                     - prefix
                                   - required:
-                                    - contains
-                                  - required:
                                     - present
                                   properties:
-                                    contains:
-                                      description: The header value must contain the
-                                        given value.
-                                      type: string
                                     exact:
                                       description: The header value must match exactly.
                                       type: string
@@ -5250,10 +5242,6 @@ spec:
                                       type: boolean
                                   type: object
                                 type: array
-                              expectFalse:
-                                description: If set to true, the entry is appended
-                                  when the request does not match.
-                                type: boolean
                               value:
                                 description: Descriptor entry value.
                                 type: string

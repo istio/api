@@ -95,14 +95,14 @@ func (this *RateLimitEntry_RequestHeaderMatch_HeaderMatchCondition) UnmarshalJSO
 	return RatelimitUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for RateLimitEntry_GenericEntry
-func (this *RateLimitEntry_GenericEntry) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for RateLimitEntry_ConstantEntry
+func (this *RateLimitEntry_ConstantEntry) MarshalJSON() ([]byte, error) {
 	str, err := RatelimitMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for RateLimitEntry_GenericEntry
-func (this *RateLimitEntry_GenericEntry) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for RateLimitEntry_ConstantEntry
+func (this *RateLimitEntry_ConstantEntry) UnmarshalJSON(b []byte) error {
 	return RatelimitUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

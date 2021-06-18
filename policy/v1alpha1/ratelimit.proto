@@ -150,9 +150,6 @@ message RateLimitEntry {
   message RequestHeaderMatch {
     // Descriptor entry value. The key is always `header_match`.
     string value = 1;
-    // If set to true, the entry is appended when the request does not match.
-    // By default, the entry is appended if and only if the request matches.
-    bool expect_false = 2;
 
     // Header match condition evaluates a request header against one of the patterns.
     // Use `:authority` header to refer to HTTP/1.1 Host header and `:method`
@@ -166,27 +163,26 @@ message RateLimitEntry {
         string exact = 2;
         // The header value must start with the given value.
         string prefix = 3;
-        // The header value must contain the given value.
-        string contains = 4;
         // If specified as true, the header matches when it is present in the request.
         // If specified as false, the header matches when it is absent from the request.
-        bool present = 5;
+        bool present = 4;
       }
     }
 
     // The request matches when it matches all conditions.
     repeated HeaderMatchCondition conditions = 3;
   }
-  // Generic entry.
-  message GenericEntry {
+  // Constant entry.
+  message ConstantEntry {
     // Descriptor entry key.
     string key = 1;
     // Descriptor entry value.
     string value = 2;
   }
-  // Generic CEL expression.
+  // CEL expression.
   // For example, the expression `filter_state['wasm.downstream_peer'].labels['app'].value`
   // produces the `app` label value for the downstream peer.
+  // See https://istio.io/latest/docs/tasks/observability/metrics/customize-metrics/#use-expressions-for-values.
   message Expression {
     // Descriptor entry key.
     string key = 1;
@@ -202,8 +198,8 @@ message RateLimitEntry {
     // Entry obtained by testing a header value against exact value, prefix, etc.
     RequestHeaderMatch header_match = 2;
     // Constant entry key and value.
-    GenericEntry generic = 3;
-    // Generic CEL expression entry.
+    ConstantEntry constant = 3;
+    // CEL expression entry.
     Expression expression = 4;
   }
 }

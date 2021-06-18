@@ -252,9 +252,9 @@ No
 No
 </td>
 </tr>
-<tr id="RateLimitEntry-generic" class="oneof">
-<td><code>generic</code></td>
-<td><code><a href="#RateLimitEntry-GenericEntry">GenericEntry (oneof)</a></code></td>
+<tr id="RateLimitEntry-constant" class="oneof">
+<td><code>constant</code></td>
+<td><code><a href="#RateLimitEntry-ConstantEntry">ConstantEntry (oneof)</a></code></td>
 <td>
 <p>Constant entry key and value.</p>
 
@@ -267,7 +267,7 @@ No
 <td><code>expression</code></td>
 <td><code><a href="#RateLimitEntry-Expression">Expression (oneof)</a></code></td>
 <td>
-<p>Generic CEL expression entry.</p>
+<p>CEL expression entry.</p>
 
 </td>
 <td>
@@ -429,18 +429,6 @@ No
 No
 </td>
 </tr>
-<tr id="RateLimitEntry-RequestHeaderMatch-expect_false">
-<td><code>expectFalse</code></td>
-<td><code>bool</code></td>
-<td>
-<p>If set to true, the entry is appended when the request does not match.
-By default, the entry is appended if and only if the request matches.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="RateLimitEntry-RequestHeaderMatch-conditions">
 <td><code>conditions</code></td>
 <td><code><a href="#RateLimitEntry-RequestHeaderMatch-HeaderMatchCondition">HeaderMatchCondition[]</a></code></td>
@@ -455,9 +443,9 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="RateLimitEntry-GenericEntry">RateLimitEntry.GenericEntry</h2>
+<h2 id="RateLimitEntry-ConstantEntry">RateLimitEntry.ConstantEntry</h2>
 <section>
-<p>Generic entry.</p>
+<p>Constant entry.</p>
 
 <table class="message-fields">
 <thead>
@@ -469,7 +457,7 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="RateLimitEntry-GenericEntry-key">
+<tr id="RateLimitEntry-ConstantEntry-key">
 <td><code>key</code></td>
 <td><code>string</code></td>
 <td>
@@ -480,7 +468,7 @@ No
 No
 </td>
 </tr>
-<tr id="RateLimitEntry-GenericEntry-value">
+<tr id="RateLimitEntry-ConstantEntry-value">
 <td><code>value</code></td>
 <td><code>string</code></td>
 <td>
@@ -496,9 +484,10 @@ No
 </section>
 <h2 id="RateLimitEntry-Expression">RateLimitEntry.Expression</h2>
 <section>
-<p>Generic CEL expression.
+<p>CEL expression.
 For example, the expression <code>filter_state['wasm.downstream_peer'].labels['app'].value</code>
-produces the <code>app</code> label value for the downstream peer.</p>
+produces the <code>app</code> label value for the downstream peer.
+See https://istio.io/latest/docs/tasks/observability/metrics/customize-metrics/#use-expressions-for-values.</p>
 
 <table class="message-fields">
 <thead>
@@ -590,17 +579,6 @@ No
 <td><code>string (oneof)</code></td>
 <td>
 <p>The header value must start with the given value.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="RateLimitEntry-RequestHeaderMatch-HeaderMatchCondition-contains" class="oneof">
-<td><code>contains</code></td>
-<td><code>string (oneof)</code></td>
-<td>
-<p>The header value must contain the given value.</p>
 
 </td>
 <td>
