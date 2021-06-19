@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 45
+number_of_entries: 46
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -1095,7 +1095,20 @@ in other Istio configuration resources if the provider is not specified.</p>
 <td><code>string</code></td>
 <td>
 <p>Name of the default provider for tracing. This must match a provider
-defined in <code>extension_providers</code> that is one of the support tracing
+defined in <code>extension_providers</code> that is one of the supported tracing
+providers.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-DefaultProviders-metrics">
+<td><code>metrics</code></td>
+<td><code>string</code></td>
+<td>
+<p>Name of the default provider for metrics. This must match a provider
+defined in <code>extension_providers</code> that is one of the supported metrics
 providers.</p>
 
 </td>
@@ -1778,6 +1791,31 @@ NOTE: currently only controls max length of the path tag.</p>
 No
 </td>
 </tr>
+<tr id="MeshConfig-ExtensionProvider-StackdriverProvider-address">
+<td><code>address</code></td>
+<td><code>string</code></td>
+<td>
+<p>Optional. An alternate address to use for Stackdriver reporting. This should ONLY be used to override
+the default endpoints for the Stackdriver APIs (monitoring.googleapis.com, logging.googleapis.com,
+cloudtrace.googleapis.com).</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-StackdriverProvider-project">
+<td><code>project</code></td>
+<td><code>string</code></td>
+<td>
+<p>Optional. Explicit configuration of the GCP project ID to use for reporting. This should only be used
+for cases in which the GCP project ID cannot be detected from the environment.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1842,6 +1880,39 @@ No
 <td>
 <p>Optional. Controls the overall path length allowed in a reported span.
 NOTE: currently only controls max length of the path tag.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-PrometheusMetricsProvider">MeshConfig.ExtensionProvider.PrometheusMetricsProvider</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-PrometheusMetricsProvider-disable_agent_metrics_merge">
+<td><code>disableAgentMetricsMerge</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+<p>By default, the Istio agent will merge metrics exposed by the application with metrics from Envoy
+and Istio agent. The sidecar injection will replace <code>prometheus.io</code> annotations present on the pod
+and redirect them towards Istio agent, which will then merge metrics of from the application with Istio metrics.
+This relies on the annotations <code>prometheus.io/scrape</code>, <code>prometheus.io/port</code>, and
+<code>prometheus.io/path</code> annotations.</p>
+
+<p>To disable this default behavior, set this to true in your provider and use the Telemetry API to apply this
+configuration to the desired workloads.</p>
 
 </td>
 <td>

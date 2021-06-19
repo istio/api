@@ -340,7 +340,11 @@
         "type": "object",
         "properties": {
           "tracing": {
-            "description": "Name of the default provider for tracing. This must match a provider defined in `extension_providers` that is one of the support tracing providers.",
+            "description": "Name of the default provider for tracing. This must match a provider defined in `extension_providers` that is one of the supported tracing providers.",
+            "type": "string"
+          },
+          "metrics": {
+            "description": "Name of the default provider for metrics. This must match a provider defined in `extension_providers` that is one of the supported metrics providers.",
             "type": "string"
           }
         }
@@ -731,7 +735,14 @@
         ]
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.PrometheusMetricsProvider": {
-        "type": "object"
+        "type": "object",
+        "properties": {
+          "disableAgentMetricsMerge": {
+            "description": "By default, the Istio agent will merge metrics exposed by the application with metrics from Envoy and Istio agent. The sidecar injection will replace `prometheus.io` annotations present on the pod and redirect them towards Istio agent, which will then merge metrics of from the application with Istio metrics. This relies on the annotations `prometheus.io/scrape`, `prometheus.io/port`, and `prometheus.io/path` annotations.",
+            "type": "boolean",
+            "nullable": true
+          }
+        }
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SkyWalkingTracingProvider": {
         "description": "Defines configuration for a SkyWalking tracer.",
@@ -777,18 +788,13 @@
           "maxTagLength": {
             "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
             "type": "integer"
-          }
-        }
-      },
-      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverTelemetryProvider": {
-        "type": "object",
-        "properties": {
+          },
           "address": {
-            "description": "OPTIONAL. An alternate address to use for Stackdriver reporting. This should ONLY be used to override the default endpoints for the Stackdriver APIs (monitoring.googleapis.com, logging.googleapis.com, cloudtrace.googleapis.com).",
+            "description": "Optional. An alternate address to use for Stackdriver reporting. This should ONLY be used to override the default endpoints for the Stackdriver APIs (monitoring.googleapis.com, logging.googleapis.com, cloudtrace.googleapis.com).",
             "type": "string"
           },
           "project": {
-            "description": "OPTIONAL. Explicit configuration of the GCP project ID to use for reporting. This should only be used for cases in which the GCP project ID cannot be detected from the environment.",
+            "description": "Optional. Explicit configuration of the GCP project ID to use for reporting. This should only be used for cases in which the GCP project ID cannot be detected from the environment.",
             "type": "string"
           }
         }

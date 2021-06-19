@@ -725,6 +725,15 @@ message MeshConfig {
       // Optional. Controls the overall path length allowed in a reported span.
       // NOTE: currently only controls max length of the path tag.
       uint32 max_tag_length = 5;
+
+      // Optional. An alternate address to use for Stackdriver reporting. This should ONLY be used to override
+      // the default endpoints for the Stackdriver APIs (monitoring.googleapis.com, logging.googleapis.com, 
+      // cloudtrace.googleapis.com).
+      string address = 6;
+
+      // Optional. Explicit configuration of the GCP project ID to use for reporting. This should only be used
+      // for cases in which the GCP project ID cannot be detected from the environment.
+      string project = 7;
     }
 
     // Defines configuration for an OpenCensus tracer writing to an OpenCensus backend.
@@ -774,20 +783,16 @@ message MeshConfig {
       uint32 max_tag_length = 4;
     }
 
-    // $hide_from_docs
-    message StackdriverTelemetryProvider {
-      // OPTIONAL. An alternate address to use for Stackdriver reporting. This should ONLY be used to override
-      // the default endpoints for the Stackdriver APIs (monitoring.googleapis.com, logging.googleapis.com, 
-      // cloudtrace.googleapis.com).
-      string address = 1;
-
-      // OPTIONAL. Explicit configuration of the GCP project ID to use for reporting. This should only be used
-      // for cases in which the GCP project ID cannot be detected from the environment.
-      string project = 2;
-    }
-
-    // $hide_from_docs
     message PrometheusMetricsProvider {
+        // By default, the Istio agent will merge metrics exposed by the application with metrics from Envoy
+        // and Istio agent. The sidecar injection will replace `prometheus.io` annotations present on the pod
+        // and redirect them towards Istio agent, which will then merge metrics of from the application with Istio metrics.
+        // This relies on the annotations `prometheus.io/scrape`, `prometheus.io/port`, and
+        // `prometheus.io/path` annotations.
+        //
+        // To disable this default behavior, set this to true in your provider and use the Telemetry API to apply this
+        // configuration to the desired workloads.
+        google.protobuf.BoolValue disable_agent_metrics_merge = 1;
     }
   }
 
@@ -799,9 +804,13 @@ message MeshConfig {
   // in other Istio configuration resources if the provider is not specified.
   message DefaultProviders {
     // Name of the default provider for tracing. This must match a provider
-    // defined in `extension_providers` that is one of the support tracing
+    // defined in `extension_providers` that is one of the supported tracing
     // providers.
     string tracing = 1;
+    // Name of the default provider for metrics. This must match a provider
+    // defined in `extension_providers` that is one of the supported metrics
+    // providers.
+    string metrics = 2;
   }
 
   // Specifies extension providers to use by default in Istio configuration resources.

@@ -2,7 +2,7 @@
 title: istio.telemetry.v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 15
+number_of_entries: 14
 ---
 <h2 id="Telemetry">Telemetry</h2>
 <section>
@@ -95,6 +95,22 @@ spec:
           value: &quot;foo&quot;
 </code></pre>
 
+<p>Policy to disable inbound metrics for an entire mesh:</p>
+
+<pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: mesh-default
+  namespace: istio-system
+spec:
+  metrics:
+  - match:
+      traffic_direction: INBOUND
+    config:
+      overrides:
+      - skip_reporting: true
+</code></pre>
+
 <table class="message-fields">
 <thead>
 <tr>
@@ -132,9 +148,9 @@ No
 </tr>
 <tr id="Telemetry-metrics">
 <td><code>metrics</code></td>
-<td><code><a href="#Metrics">Metrics[]</a></code></td>
+<td><code><a href="#MetricsRule">MetricsRule[]</a></code></td>
 <td>
-<p>Optional. Metrics configures the metrics behavior for all
+<p>Optional. MetricsRules configure the metrics behavior for all
 selected workloads.</p>
 
 </td>
@@ -266,7 +282,7 @@ No
 <section>
 <p>TelemetryRuleMatch defines conditions for selecting subsets of mesh traffic
 for a workload. TelemetryRuleMatch is concerned with simplified selection
-based on listener, protocol, and traffic direction.</p>
+based on protocol and traffic direction.</p>
 
 <table class="message-fields">
 <thead>
@@ -295,47 +311,6 @@ No
 <td><code><a href="#TelemetryRuleMatch-Protocol">Protocol</a></code></td>
 <td>
 <p>Optional. Specifies the protocol of the traffic being monitored.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="TelemetryRuleMatch-port">
-<td><code>port</code></td>
-<td><code><a href="#Port">Port</a></code></td>
-<td>
-<p>Optional. The port on which the traffic is received.
-Defaults to ALL if unset.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="Port">Port</h2>
-<section>
-<p>Port specifies the number of a port to be used for
-matching or selection for final routing.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Port-number">
-<td><code>number</code></td>
-<td><code>uint32</code></td>
-<td>
-<p>Valid port number</p>
 
 </td>
 <td>
@@ -394,9 +369,9 @@ customize the shape of the generated metrics.</p>
 <td><code>providers</code></td>
 <td><code><a href="#ProviderRef">ProviderRef[]</a></code></td>
 <td>
-<p>(Optional) Name of providers to which this configuration should apply.
-If not specified, this will apply to the full list of known metrics
-providers.</p>
+<p>Optional. Name of providers to which this configuration should apply.
+If a provider is not specified, the <em>default metrics provider</em>
+will be used.</p>
 
 </td>
 <td>
@@ -407,7 +382,7 @@ No
 <td><code>overrides</code></td>
 <td><code><a href="#MetricsOverrides">MetricsOverrides[]</a></code></td>
 <td>
-<p>Set of overrides to apply. These include customization of dimensions
+<p>Optional. Set of overrides to apply. These include customization of dimensions
 as well as enablement control.</p>
 
 </td>
@@ -462,9 +437,9 @@ or the set of all standard metrics.</p>
 <tbody>
 <tr id="MetricsOverrides-metric">
 <td><code>metric</code></td>
-<td><code><a href="#MetricsOverrides-StandardMetric">StandardMetric</a></code></td>
+<td><code><a href="#MetricsOverrides-StandardMetric">StandardMetric[]</a></code></td>
 <td>
-<p>(Optional) if not specified, config applied to all metrics.</p>
+<p>Optional. If not specified, config applied to all metrics.</p>
 
 </td>
 <td>
@@ -475,7 +450,7 @@ No
 <td><code>skipReporting</code></td>
 <td><code>bool</code></td>
 <td>
-<p>(Optional) Must explicitly set this to &ldquo;true&rdquo; to turn off collection.</p>
+<p>Optional. Must explicitly set this to &ldquo;true&rdquo; to turn off collection.</p>
 
 </td>
 <td>
@@ -486,7 +461,7 @@ No
 <td><code>dimensions</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>(Optional) Collection of tag names and tag expressions to include in the
+<p>Optional. Collection of tag names and tag expressions to include in the
 metric. Conflicts are resolved by the tag name by overriding previously
 supplied values.
 WARNING: some providers may not support adding custom dimensions.</p>
@@ -500,7 +475,7 @@ No
 <td><code>tagsToRemove</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>(Optional) A list of tags to remove.
+<p>Optional. A list of tags to remove.
 WARNING: may not be supported by some providers.</p>
 
 </td>

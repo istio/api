@@ -5522,57 +5522,80 @@ spec:
                 description: Optional.
                 items:
                   properties:
-                    enableHostHeaderFallback:
-                      description: Optional.
-                      type: boolean
-                    overrides:
-                      description: Set of overrides to apply.
-                      items:
-                        properties:
-                          dimensions:
-                            additionalProperties:
-                              type: string
+                    config:
+                      description: Customization of the default behavior for metrics.
+                      properties:
+                        enableHostHeaderFallback:
+                          description: Optional.
+                          type: boolean
+                        overrides:
+                          description: Optional.
+                          items:
+                            properties:
+                              dimensions:
+                                additionalProperties:
+                                  type: string
+                                description: Optional.
+                                type: object
+                              metric:
+                                description: Optional.
+                                items:
+                                  enum:
+                                  - ALL
+                                  - REQUEST_COUNT
+                                  - REQUEST_DURATION
+                                  - REQUEST_SIZE
+                                  - RESPONSE_SIZE
+                                  - TCP_OPEN_CONNECTIONS
+                                  - TCP_CLOSED_CONNECTIONS
+                                  - TCP_SENT_BYTES
+                                  - TCP_RECEIVED_BYTES
+                                  - GRPC_REQUEST_MESSAGES
+                                  - GRPC_RESPONSE_MESSAGES
+                                  type: string
+                                type: array
+                              skipReporting:
+                                description: Optional.
+                                type: boolean
+                              tagsToRemove:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
                             type: object
-                          metric:
-                            description: (Optional) if not specified, config applied
-                              to all metrics.
-                            enum:
-                            - ALL
-                            - REQUEST_COUNT
-                            - REQUEST_DURATION
-                            - REQUEST_SIZE
-                            - RESPONSE_SIZE
-                            - TCP_OPEN_CONNECTIONS
-                            - TCP_CLOSED_CONNECTIONS
-                            - TCP_SENT_BYTES
-                            - TCP_RECEIVED_BYTES
-                            - GRPC_REQUEST_MESSAGES
-                            - GRPC_RESPONSE_MESSAGES
-                            type: string
-                          skipReporting:
-                            description: (Optional) Must explicitly set this to "true"
-                              to turn off collection.
-                            type: boolean
-                          tagsToRemove:
-                            description: (Optional) A list of tags to remove.
-                            items:
-                              type: string
-                            type: array
-                        type: object
-                      type: array
-                    providers:
-                      description: (Optional) Name of providers to which this configuration
-                        should apply.
-                      items:
-                        properties:
-                          name:
-                            description: Required.
-                            type: string
-                        type: object
-                      type: array
-                    tcpReportingDuration:
-                      description: Optional.
-                      type: string
+                          type: array
+                        providers:
+                          description: Optional.
+                          items:
+                            properties:
+                              name:
+                                description: Required.
+                                type: string
+                            type: object
+                          type: array
+                        tcpReportingDuration:
+                          description: Optional.
+                          type: string
+                      type: object
+                    match:
+                      description: Defines the conditions under which the associated
+                        configuration applies.
+                      properties:
+                        protocol:
+                          description: Optional.
+                          enum:
+                          - ALL_PROTOCOLS
+                          - HTTP
+                          - TCP
+                          type: string
+                        trafficDirection:
+                          description: Optional.
+                          enum:
+                          - ALL_DIRECTIONS
+                          - OUTBOUND
+                          - INBOUND
+                          type: string
+                      type: object
                   type: object
                 type: array
               selector:

@@ -117,6 +117,22 @@ package istio.telemetry.v1alpha1;
 //           value: "foo"
 // ```
 //
+// Policy to disable inbound metrics for an entire mesh:
+// ```yaml
+// apiVersion: telemetry.istio.io/v1alpha1
+// kind: Telemetry
+// metadata:
+//   name: mesh-default
+//   namespace: istio-system
+// spec:
+//   metrics:
+//   - match:
+//       traffic_direction: INBOUND
+//     config:
+//       overrides:
+//       - skip_reporting: true
+// ```
+//
 // <!-- crd generation tags
 // +cue-gen:Telemetry:groupName:telemetry.istio.io
 // +cue-gen:Telemetry:version:v1alpha1
@@ -149,9 +165,9 @@ message Telemetry {
   // selected workloads.
   repeated Tracing tracing = 2;
 
-  // Optional. Metrics configures the metrics behavior for all
+  // Optional. MetricsRules configure the metrics behavior for all
   // selected workloads.
-  repeated Metrics metrics = 3;
+  repeated MetricsRule metrics = 3;
 }
 
 // Tracing configures tracing behavior for workloads within a mesh.
@@ -159,8 +175,8 @@ message Telemetry {
 // rates and custom tag extraction.
 message Tracing {
   
- // Optional. Name of provider(s) to use for span reporting. If a provider is
-  // not specified, the [default tracing provider][istio.mesh.v1alpha1.MeshConfig.default_tracing_provider]
+  // Optional. Name of provider(s) to use for span reporting. If a provider is
+  // not specified, the [default tracing provider][istio.mesh.v1alpha1.MeshConfig.default_providers.tracing]
   // will be used.
   // NOTE: At the moment, only a single provider can be specified in a given
   // Tracing rule.
@@ -234,7 +250,7 @@ message MetricsRule {
 
 // TelemetryRuleMatch defines conditions for selecting subsets of mesh traffic
 // for a workload. TelemetryRuleMatch is concerned with simplified selection 
-// based on listener, protocol, and traffic direction.
+// based on protocol and traffic direction.
 message TelemetryRuleMatch {
 
   // TrafficDirection selects for traffic relative to the local
@@ -263,17 +279,6 @@ message TelemetryRuleMatch {
 
   // Optional. Specifies the protocol of the traffic being monitored.
   Protocol protocol = 2; // Defaults to ALL_PROTOCOLS if unset.
-
-  // Optional. The port on which the traffic is received.
-  // Defaults to ALL if unset.
-  Port port = 3;
-}
-
-// Port specifies the number of a port to be used for
-// matching or selection for final routing.
-message Port {
-  // Valid port number
-  uint32 number = 1;
 }
 
 // Used to bind Telemetry configuration to specific providers for
@@ -287,12 +292,12 @@ message ProviderRef {
 // a mesh. It can be used to enable/disable metrics generation, as well as to 
 // customize the shape of the generated metrics.
 message Metrics {
-  // (Optional) Name of providers to which this configuration should apply.
-  // If not specified, this will apply to the full list of known metrics
-  // providers.
+  // Optional. Name of providers to which this configuration should apply.
+  // If a provider is not specified, the [default metrics provider][istio.mesh.v1alpha1.MeshConfig.default_providers.metrics]
+  // will be used.
   repeated ProviderRef providers = 1;
   
-  // Set of overrides to apply. These include customization of dimensions
+  // Optional. Set of overrides to apply. These include customization of dimensions
   // as well as enablement control.
   repeated MetricsOverrides overrides = 2;
 
@@ -329,19 +334,19 @@ message MetricsOverrides {
     GRPC_RESPONSE_MESSAGES = 10;
   }
 
-  // (Optional) if not specified, config applied to all metrics.
-  StandardMetric metric = 1;
+  // Optional. If not specified, config applied to all metrics.
+  repeated StandardMetric metric = 1;
 
-  // (Optional) Must explicitly set this to "true" to turn off collection.
+  // Optional. Must explicitly set this to "true" to turn off collection.
   bool skip_reporting = 2;
 
-  // (Optional) Collection of tag names and tag expressions to include in the
+  // Optional. Collection of tag names and tag expressions to include in the
   // metric. Conflicts are resolved by the tag name by overriding previously
   // supplied values.
   // WARNING: some providers may not support adding custom dimensions.
   map<string, string> dimensions = 3;
   
-  // (Optional) A list of tags to remove.
+  // Optional. A list of tags to remove.
   // WARNING: may not be supported by some providers.
   repeated string tags_to_remove = 4;
 }

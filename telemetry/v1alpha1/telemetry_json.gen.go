@@ -106,17 +106,6 @@ func (this *TelemetryRuleMatch) UnmarshalJSON(b []byte) error {
 	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for Port
-func (this *Port) MarshalJSON() ([]byte, error) {
-	str, err := TelemetryMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for Port
-func (this *Port) UnmarshalJSON(b []byte) error {
-	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
 // MarshalJSON is a custom marshaler for ProviderRef
 func (this *ProviderRef) MarshalJSON() ([]byte, error) {
 	str, err := TelemetryMarshaler.MarshalToString(this)
