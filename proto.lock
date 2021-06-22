@@ -39327,6 +39327,11 @@
                 "type": "ComponentSpec"
               },
               {
+                "id": 39,
+                "name": "istiod_remote",
+                "type": "ComponentSpec"
+              },
+              {
                 "id": 40,
                 "name": "ingress_gateways",
                 "type": "GatewaySpec",
@@ -39346,8 +39351,7 @@
               34,
               35,
               36,
-              37,
-              39
+              37
             ],
             "reserved_names": [
               "citadel",
@@ -39356,8 +39360,7 @@
               "galley",
               "node_agent",
               "proxy",
-              "sidecar_injector",
-              "istiod_remote"
+              "sidecar_injector"
             ]
           },
           {
