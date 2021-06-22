@@ -9726,7 +9726,13 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings"
+                        "name": "additional_bindings",
+                        "aggregated": [
+                          {
+                            "name": "get",
+                            "value": "/v1/services/{service_name}/config"
+                          }
+                        ]
                       }
                     ]
                   }
@@ -35004,10 +35010,6 @@
               {
                 "name": "EXTENSION_CONFIG",
                 "integer": 9
-              },
-              {
-                "name": "BOOTSTRAP",
-                "integer": 10
               }
             ]
           },
@@ -35128,11 +35130,6 @@
                     "value": "REQUIRED"
                   }
                 ]
-              },
-              {
-                "id": 5,
-                "name": "priority",
-                "type": "int32"
               }
             ],
             "reserved_ids": [
