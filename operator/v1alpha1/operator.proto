@@ -168,16 +168,14 @@ message IstioComponentSetSpec {
     ComponentSpec pilot = 30;
     ComponentSpec cni = 38;
 
+    // Remote cluster using an external control plane.
+    ComponentSpec istiod_remote = 39;
+
     repeated GatewaySpec ingress_gateways = 40;
     repeated GatewaySpec egress_gateways = 41;
 
-    // Resources on a remote cluster using an external control plane.
-    ComponentSpec remote = 42;
-    // Resources on a config cluster for an external control plane.
-    ComponentSpec config = 43;
-
-    reserved 31, 32, 33, 34, 35, 36, 37, 39;
-    reserved "citadel", "policy", "telemetry", "galley", "node_agent", "proxy", "sidecar_injector", "istiod_remote";
+    reserved 31, 32, 33, 34, 35, 36, 37;
+    reserved "citadel", "policy", "telemetry", "galley", "node_agent", "proxy", "sidecar_injector";
 }
 
 // Configuration for base component.
