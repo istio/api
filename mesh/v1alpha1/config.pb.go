@@ -1583,8 +1583,8 @@ func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationRequestBody) Get
 
 type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider struct {
 	// REQUIRED. Specifies the service that implements the Envoy ext_authz HTTP authorization service.
-	// The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
-	// to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+	// The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
+	// to unambiguously resolve a service in the service registry. The `<Hostname>` is a fully qualified host name of a
 	// service defined by the Kubernetes service or ServiceEntry.
 	//
 	// Example: "my-ext-authz.foo.svc.cluster.local" or "bar/my-ext-authz.example.com".
@@ -1780,8 +1780,8 @@ func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider) Ge
 
 type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider struct {
 	// REQUIRED. Specifies the service that implements the Envoy ext_authz gRPC authorization service.
-	// The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
-	// to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+	// The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
+	// to unambiguously resolve a service in the service registry. The `<Hostname>` is a fully qualified host name of a
 	// service defined by the Kubernetes service or ServiceEntry.
 	//
 	// Example: "my-ext-authz.foo.svc.cluster.local" or "bar/my-ext-authz.example.com".
@@ -1888,8 +1888,8 @@ func (m *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider) Ge
 // Defines configuration for a Zipkin tracer.
 type MeshConfig_ExtensionProvider_ZipkinTracingProvider struct {
 	// REQUIRED. Specifies the service that the Zipkin API.
-	// The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
-	// to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+	// The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
+	// to unambiguously resolve a service in the service registry. The `<Hostname>` is a fully qualified host name of a
 	// service defined by the Kubernetes service or ServiceEntry.
 	//
 	// Example: "zipkin.default.svc.cluster.local" or "bar/zipkin.example.com".
@@ -1965,8 +1965,8 @@ func (m *MeshConfig_ExtensionProvider_ZipkinTracingProvider) GetMaxTagLength() u
 // Defines configuration for a Lightstep tracer.
 type MeshConfig_ExtensionProvider_LightstepTracingProvider struct {
 	// REQUIRED. Specifies the service for the Lightstep collector.
-	// The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
-	// to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+	// The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
+	// to unambiguously resolve a service in the service registry. The `<Hostname>` is a fully qualified host name of a
 	// service defined by the Kubernetes service or ServiceEntry.
 	//
 	// Example: "lightstep.default.svc.cluster.local" or "bar/lightstep.example.com".
@@ -2051,8 +2051,8 @@ func (m *MeshConfig_ExtensionProvider_LightstepTracingProvider) GetMaxTagLength(
 // Defines configuration for a Datadog tracer.
 type MeshConfig_ExtensionProvider_DatadogTracingProvider struct {
 	// REQUIRED. Specifies the service for the Datadog agent.
-	// The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
-	// to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+	// The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
+	// to unambiguously resolve a service in the service registry. The `<Hostname>` is a fully qualified host name of a
 	// service defined by the Kubernetes service or ServiceEntry.
 	//
 	// Example: "datadog.default.svc.cluster.local" or "bar/datadog.example.com".
@@ -2128,8 +2128,8 @@ func (m *MeshConfig_ExtensionProvider_DatadogTracingProvider) GetMaxTagLength() 
 // Defines configuration for a SkyWalking tracer.
 type MeshConfig_ExtensionProvider_SkyWalkingTracingProvider struct {
 	// REQUIRED. Specifies the service for the SkyWalking receiver.
-	// The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
-	// to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+	// The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
+	// to unambiguously resolve a service in the service registry. The `<Hostname>` is a fully qualified host name of a
 	// service defined by the Kubernetes service or ServiceEntry.
 	//
 	// Example: "skywalking.default.svc.cluster.local" or "bar/skywalking.example.com".
@@ -2301,8 +2301,8 @@ func (m *MeshConfig_ExtensionProvider_StackdriverProvider) GetMaxTagLength() uin
 // Defines configuration for an OpenCensus tracer writing to an OpenCensus backend.
 type MeshConfig_ExtensionProvider_OpenCensusAgentTracingProvider struct {
 	// REQUIRED. Specifies the service for the OpenCensusAgent.
-	// The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
-	// to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+	// The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
+	// to unambiguously resolve a service in the service registry. The `<Hostname>` is a fully qualified host name of a
 	// service defined by the Kubernetes service or ServiceEntry.
 	//
 	// Example: "ocagent.default.svc.cluster.local" or "bar/ocagent.example.com".
