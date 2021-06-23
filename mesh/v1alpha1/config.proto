@@ -725,15 +725,6 @@ message MeshConfig {
       // Optional. Controls the overall path length allowed in a reported span.
       // NOTE: currently only controls max length of the path tag.
       uint32 max_tag_length = 5;
-
-      // Optional. An alternate address to use for Stackdriver reporting. This should ONLY be used to override
-      // the default endpoints for the Stackdriver APIs (monitoring.googleapis.com, logging.googleapis.com, 
-      // cloudtrace.googleapis.com).
-      string address = 6;
-
-      // Optional. Explicit configuration of the GCP project ID to use for reporting. This should only be used
-      // for cases in which the GCP project ID cannot be detected from the environment.
-      string project = 7;
     }
 
     // Defines configuration for an OpenCensus tracer writing to an OpenCensus backend.
@@ -783,16 +774,28 @@ message MeshConfig {
       uint32 max_tag_length = 4;
     }
 
-    message PrometheusMetricsProvider {
-        // By default, the Istio agent will merge metrics exposed by the application with metrics from Envoy
-        // and Istio agent. The sidecar injection will replace `prometheus.io` annotations present on the pod
-        // and redirect them towards Istio agent, which will then merge metrics of from the application with Istio metrics.
-        // This relies on the annotations `prometheus.io/scrape`, `prometheus.io/port`, and
-        // `prometheus.io/path` annotations.
-        //
-        // To disable this default behavior, set this to true in your provider and use the Telemetry API to apply this
-        // configuration to the desired workloads.
-        google.protobuf.BoolValue disable_agent_metrics_merge = 1;
+    message PrometheusMetricsProvider {}
+
+    message EnvoyFileBasedAccessLogger {
+      // File address for the proxy access log (e.g. /dev/stdout).
+      // If empty, no logs will be generated.
+      string file = 1;
+
+      // Format for the proxy access log
+      // Empty value results in proxy's default access log format
+      string format = 2;
+
+      enum AccessLogEncoding {
+        // text encoding for the proxy access log
+        TEXT = 0;
+
+        // json encoding for the proxy access log
+        JSON = 1;
+      }
+
+      // Encoding for the proxy access log (`TEXT` or `JSON`).
+      // Default value is `TEXT`.
+      AccessLogEncoding encoding = 3;
     }
   }
 
@@ -811,6 +814,10 @@ message MeshConfig {
     // defined in `extension_providers` that is one of the supported metrics
     // providers.
     string metrics = 2;
+    // Name of the default provider for access logging. This must match a provider
+    // defined in `extension_providers` that is one of the supported access logging
+    // providers.
+    string access_logging = 3;
   }
 
   // Specifies extension providers to use by default in Istio configuration resources.

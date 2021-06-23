@@ -2,7 +2,7 @@
 title: istio.telemetry.v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 14
+number_of_entries: 11
 ---
 <h2 id="Telemetry">Telemetry</h2>
 <section>
@@ -28,9 +28,6 @@ fully replace any values provided by parent configuration.</p>
 1. Workload-specific configuration
 1. Namespace-specific configuration
 1. Root namespace configuration</p>
-
-<p>WARNING: Support for Telemetry policies is under active development and is <em>not</em>
-stable or supported by Istio at this time.</p>
 
 <p>Examples:</p>
 
@@ -95,7 +92,7 @@ spec:
           value: &quot;foo&quot;
 </code></pre>
 
-<p>Policy to disable inbound metrics for an entire mesh:</p>
+<p>Policy to disable server-side metrics for Stackdriver for an entire mesh:</p>
 
 <pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
@@ -104,11 +101,74 @@ metadata:
   namespace: istio-system
 spec:
   metrics:
-  - match:
-      traffic_direction: INBOUND
-    config:
-      overrides:
-      - skip_reporting: true
+  - providers:
+    - name: stackdriver
+    overrides:
+    - metrics: [ ALL_SERVER_METRICS ]
+      disableReporting: true
+</code></pre>
+
+<p>Policy to add dimensions to all Prometheus metrics for a namespace:</p>
+
+<pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: namespace-metrics
+  namespace: foo
+spec:
+  metrics:
+  - providers:
+    - name: prometheus
+    overrides:
+    - metrics: [ ALL ]
+      dimensions:
+        destination_port: string(destination.port)
+        request_host: request.host
+</code></pre>
+
+<p>Policy to remove the source_workload dimension on some Prometheus metrics for a workload:</p>
+
+<pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: remove-source-workload
+  namespace: foo
+spec:
+  selector:
+    labels:
+      service.istio.io/canonical-name: bar
+  metrics:
+  - providers:
+    - name: prometheus
+    overrides:
+    - metrics: [ SERVER_REQUEST_COUNT, SERVER_REQUEST_DURATION, SERVER_REQUEST_SIZE, SERVER_RESPONSE_SIZE ]
+      removedTags:
+      - source_workload
+</code></pre>
+
+<p>Policy to enable access logging for the entire mesh:</p>
+
+<pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: mesh-default
+  namespace: istio-system
+spec:
+  accessLogging:
+  - providers:
+    - name: stdout
+</code></pre>
+
+<p>Policy to disable access logging for a namespace:</p>
+
+<pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: namespace-no-log
+  namespace: foo
+spec:
+  accessLogging:
+  - disableReporting: true
 </code></pre>
 
 <table class="message-fields">
@@ -148,9 +208,21 @@ No
 </tr>
 <tr id="Telemetry-metrics">
 <td><code>metrics</code></td>
-<td><code><a href="#MetricsRule">MetricsRule[]</a></code></td>
+<td><code><a href="#Metrics">Metrics[]</a></code></td>
 <td>
-<p>Optional. MetricsRules configure the metrics behavior for all
+<p>Optional. Metrics configure the metrics behavior for all
+selected workloads.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Telemetry-access_logging">
+<td><code>accessLogging</code></td>
+<td><code><a href="#AccessLogging">AccessLogging[]</a></code></td>
+<td>
+<p>Optional. AccessLogging configures the access logging behavior for all
 selected workloads.</p>
 
 </td>
@@ -238,88 +310,6 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="MetricsRule">MetricsRule</h2>
-<section>
-<p>MetricsRule defines how metrics should be reported and under what conditions
-the reporting should be conducted.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="MetricsRule-match">
-<td><code>match</code></td>
-<td><code><a href="#TelemetryRuleMatch">TelemetryRuleMatch</a></code></td>
-<td>
-<p>Defines the conditions under which the associated configuration applies.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MetricsRule-config">
-<td><code>config</code></td>
-<td><code><a href="#Metrics">Metrics</a></code></td>
-<td>
-<p>Customization of the default behavior for metrics.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="TelemetryRuleMatch">TelemetryRuleMatch</h2>
-<section>
-<p>TelemetryRuleMatch defines conditions for selecting subsets of mesh traffic
-for a workload. TelemetryRuleMatch is concerned with simplified selection
-based on protocol and traffic direction.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="TelemetryRuleMatch-traffic_direction">
-<td><code>trafficDirection</code></td>
-<td><code><a href="#TelemetryRuleMatch-TrafficDirection">TrafficDirection</a></code></td>
-<td>
-<p>Optional. Specifies the intended direction of the traffic relative to the local proxy.
-Defaults to ALL if unset.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="TelemetryRuleMatch-protocol">
-<td><code>protocol</code></td>
-<td><code><a href="#TelemetryRuleMatch-Protocol">Protocol</a></code></td>
-<td>
-<p>Optional. Specifies the protocol of the traffic being monitored.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="ProviderRef">ProviderRef</h2>
 <section>
 <p>Used to bind Telemetry configuration to specific providers for
@@ -390,33 +380,6 @@ as well as enablement control.</p>
 No
 </td>
 </tr>
-<tr id="Metrics-enable_host_header_fallback">
-<td><code>enableHostHeaderFallback</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Optional. Enable to configure the use of HTTP headers to provide values for
-destination services in telemetry if the metadata has not been supplied by
-the control plane. This should be enabled with caution, especially at
-ingress, as it can lead to incorrect/surprising results.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="Metrics-tcp_reporting_duration">
-<td><code>tcpReportingDuration</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
-<td>
-<p>Optional. Controls how frequently metrics for TCP connections are updated. This allows
-reporting of bytes transferred at intervals for long-lived TCP connections.
-Defaults to <code>15s</code>.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 </tbody>
 </table>
 </section>
@@ -435,8 +398,8 @@ or the set of all standard metrics.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="MetricsOverrides-metric">
-<td><code>metric</code></td>
+<tr id="MetricsOverrides-metrics">
+<td><code>metrics</code></td>
 <td><code><a href="#MetricsOverrides-StandardMetric">StandardMetric[]</a></code></td>
 <td>
 <p>Optional. If not specified, config applied to all metrics.</p>
@@ -446,11 +409,12 @@ or the set of all standard metrics.</p>
 No
 </td>
 </tr>
-<tr id="MetricsOverrides-skip_reporting">
-<td><code>skipReporting</code></td>
-<td><code>bool</code></td>
+<tr id="MetricsOverrides-disable_reporting">
+<td><code>disableReporting</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
-<p>Optional. Must explicitly set this to &ldquo;true&rdquo; to turn off collection.</p>
+<p>Optional. Must explicitly set this to &ldquo;true&rdquo; to turn off metrics reporting
+for the listed metrics.</p>
 
 </td>
 <td>
@@ -464,6 +428,9 @@ No
 <p>Optional. Collection of tag names and tag expressions to include in the
 metric. Conflicts are resolved by the tag name by overriding previously
 supplied values.
+The key in the map is the name of the tag.
+The value in the map is the attribute expression that will supply the
+value for the tag on the specified metrics.
 WARNING: some providers may not support adding custom dimensions.</p>
 
 </td>
@@ -471,12 +438,58 @@ WARNING: some providers may not support adding custom dimensions.</p>
 No
 </td>
 </tr>
-<tr id="MetricsOverrides-tags_to_remove">
-<td><code>tagsToRemove</code></td>
+<tr id="MetricsOverrides-removed_tags">
+<td><code>removedTags</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Optional. A list of tags to remove.
+<p>Optional. A list of tags to remove from the reported metrics.
+Specifying a tag here will drop this tag from all metrics specified in the
+override.
 WARNING: may not be supported by some providers.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="AccessLogging">AccessLogging</h2>
+<section>
+<p>Metrics defines the workload-level overrides for monitoring behavior within
+a mesh. It can be used to enable/disable metrics generation, as well as to
+customize the shape of the generated metrics.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AccessLogging-providers">
+<td><code>providers</code></td>
+<td><code><a href="#ProviderRef">ProviderRef[]</a></code></td>
+<td>
+<p>Optional. Name of providers to which this configuration should apply.
+If a provider is not specified, the <em>default metrics provider</em>
+will be used.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AccessLogging-disable_reporting">
+<td><code>disableReporting</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+<p>Controls logging. If set to true, no access logs will be generated for
+impacted workloads (for the specified providers).</p>
 
 </td>
 <td>
@@ -641,76 +654,6 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="TelemetryRuleMatch-TrafficDirection">TelemetryRuleMatch.TrafficDirection</h2>
-<section>
-<p>TrafficDirection selects for traffic relative to the local
-proxy.</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="TelemetryRuleMatch-TrafficDirection-ALL_DIRECTIONS">
-<td><code>ALL_DIRECTIONS</code></td>
-<td>
-<p>(Default) Match all traffic, regardless of direction.</p>
-
-</td>
-</tr>
-<tr id="TelemetryRuleMatch-TrafficDirection-OUTBOUND">
-<td><code>OUTBOUND</code></td>
-<td>
-<p>Match outbound traffic leaving the proxy. Use this to select &ldquo;client-side&rdquo;
-traffic in telemetry reporting.
-Note: Use OUTBOUND for gateways (even including ingress)</p>
-
-</td>
-</tr>
-<tr id="TelemetryRuleMatch-TrafficDirection-INBOUND">
-<td><code>INBOUND</code></td>
-<td>
-<p>Match incoming traffic for the proxy. Use this to select &ldquo;server-side&rdquo;
-traffic in telemetry reporting.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="TelemetryRuleMatch-Protocol">TelemetryRuleMatch.Protocol</h2>
-<section>
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="TelemetryRuleMatch-Protocol-ALL_PROTOCOLS">
-<td><code>ALL_PROTOCOLS</code></td>
-<td>
-</td>
-</tr>
-<tr id="TelemetryRuleMatch-Protocol-HTTP">
-<td><code>HTTP</code></td>
-<td>
-<p>includes HTTP/1.1, gRPC, HTTP/2</p>
-
-</td>
-</tr>
-<tr id="TelemetryRuleMatch-Protocol-TCP">
-<td><code>TCP</code></td>
-<td>
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="MetricsOverrides-StandardMetric">MetricsOverrides.StandardMetric</h2>
 <section>
 <p>Curated list of known metric types that Istio expects every Metrics
@@ -729,53 +672,115 @@ extension to be able to generate.</p>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-REQUEST_COUNT">
-<td><code>REQUEST_COUNT</code></td>
+<tr id="MetricsOverrides-StandardMetric-ALL_SERVER_METRICS">
+<td><code>ALL_SERVER_METRICS</code></td>
+<td>
+<p>Special values to provide general specification for directionality</p>
+
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-ALL_CLIENT_METRICS">
+<td><code>ALL_CLIENT_METRICS</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-REQUEST_DURATION">
-<td><code>REQUEST_DURATION</code></td>
+<tr id="MetricsOverrides-StandardMetric-SERVER_REQUEST_COUNT">
+<td><code>SERVER_REQUEST_COUNT</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-REQUEST_SIZE">
-<td><code>REQUEST_SIZE</code></td>
+<tr id="MetricsOverrides-StandardMetric-SERVER_REQUEST_DURATION">
+<td><code>SERVER_REQUEST_DURATION</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-RESPONSE_SIZE">
-<td><code>RESPONSE_SIZE</code></td>
+<tr id="MetricsOverrides-StandardMetric-SERVER_REQUEST_SIZE">
+<td><code>SERVER_REQUEST_SIZE</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-TCP_OPEN_CONNECTIONS">
-<td><code>TCP_OPEN_CONNECTIONS</code></td>
+<tr id="MetricsOverrides-StandardMetric-SERVER_RESPONSE_SIZE">
+<td><code>SERVER_RESPONSE_SIZE</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-TCP_CLOSED_CONNECTIONS">
-<td><code>TCP_CLOSED_CONNECTIONS</code></td>
+<tr id="MetricsOverrides-StandardMetric-SERVER_TCP_OPEN_CONNECTIONS">
+<td><code>SERVER_TCP_OPEN_CONNECTIONS</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-TCP_SENT_BYTES">
-<td><code>TCP_SENT_BYTES</code></td>
+<tr id="MetricsOverrides-StandardMetric-SERVER_TCP_CLOSED_CONNECTIONS">
+<td><code>SERVER_TCP_CLOSED_CONNECTIONS</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-TCP_RECEIVED_BYTES">
-<td><code>TCP_RECEIVED_BYTES</code></td>
+<tr id="MetricsOverrides-StandardMetric-SERVER_TCP_SENT_BYTES">
+<td><code>SERVER_TCP_SENT_BYTES</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-GRPC_REQUEST_MESSAGES">
-<td><code>GRPC_REQUEST_MESSAGES</code></td>
+<tr id="MetricsOverrides-StandardMetric-SERVER_TCP_RECEIVED_BYTES">
+<td><code>SERVER_TCP_RECEIVED_BYTES</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-GRPC_RESPONSE_MESSAGES">
-<td><code>GRPC_RESPONSE_MESSAGES</code></td>
+<tr id="MetricsOverrides-StandardMetric-SERVER_GRPC_REQUEST_MESSAGES">
+<td><code>SERVER_GRPC_REQUEST_MESSAGES</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-SERVER_GRPC_RESPONSE_MESSAGES">
+<td><code>SERVER_GRPC_RESPONSE_MESSAGES</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-CLIENT_REQUEST_COUNT">
+<td><code>CLIENT_REQUEST_COUNT</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-CLIENT_REQUEST_DURATION">
+<td><code>CLIENT_REQUEST_DURATION</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-CLIENT_REQUEST_SIZE">
+<td><code>CLIENT_REQUEST_SIZE</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-CLIENT_RESPONSE_SIZE">
+<td><code>CLIENT_RESPONSE_SIZE</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-CLIENT_TCP_OPEN_CONNECTIONS">
+<td><code>CLIENT_TCP_OPEN_CONNECTIONS</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-CLIENT_TCP_CLOSED_CONNECTIONS">
+<td><code>CLIENT_TCP_CLOSED_CONNECTIONS</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-CLIENT_TCP_SENT_BYTES">
+<td><code>CLIENT_TCP_SENT_BYTES</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-CLIENT_TCP_RECEIVED_BYTES">
+<td><code>CLIENT_TCP_RECEIVED_BYTES</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-CLIENT_GRPC_REQUEST_MESSAGES">
+<td><code>CLIENT_GRPC_REQUEST_MESSAGES</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-CLIENT_GRPC_RESPONSE_MESSAGES">
+<td><code>CLIENT_GRPC_RESPONSE_MESSAGES</code></td>
 <td>
 </td>
 </tr>

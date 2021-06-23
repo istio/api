@@ -346,6 +346,10 @@
           "metrics": {
             "description": "Name of the default provider for metrics. This must match a provider defined in `extension_providers` that is one of the supported metrics providers.",
             "type": "string"
+          },
+          "accessLogging": {
+            "description": "Name of the default provider for access logging. This must match a provider defined in `extension_providers` that is one of the supported access logging providers.",
+            "type": "string"
           }
         }
       },
@@ -676,6 +680,29 @@
           }
         }
       },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileBasedAccessLogger": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "description": "File address for the proxy access log (e.g. /dev/stdout). If empty, no logs will be generated.",
+            "type": "string"
+          },
+          "format": {
+            "description": "Format for the proxy access log Empty value results in proxy's default access log format",
+            "type": "string"
+          },
+          "encoding": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileBasedAccessLogger.AccessLogEncoding"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileBasedAccessLogger.AccessLogEncoding": {
+        "type": "string",
+        "enum": [
+          "TEXT",
+          "JSON"
+        ]
+      },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider": {
         "description": "Defines configuration for a Lightstep tracer.",
         "type": "object",
@@ -735,14 +762,7 @@
         ]
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.PrometheusMetricsProvider": {
-        "type": "object",
-        "properties": {
-          "disableAgentMetricsMerge": {
-            "description": "By default, the Istio agent will merge metrics exposed by the application with metrics from Envoy and Istio agent. The sidecar injection will replace `prometheus.io` annotations present on the pod and redirect them towards Istio agent, which will then merge metrics of from the application with Istio metrics. This relies on the annotations `prometheus.io/scrape`, `prometheus.io/port`, and `prometheus.io/path` annotations.",
-            "type": "boolean",
-            "nullable": true
-          }
-        }
+        "type": "object"
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SkyWalkingTracingProvider": {
         "description": "Defines configuration for a SkyWalking tracer.",
@@ -788,14 +808,6 @@
           "maxTagLength": {
             "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
             "type": "integer"
-          },
-          "address": {
-            "description": "Optional. An alternate address to use for Stackdriver reporting. This should ONLY be used to override the default endpoints for the Stackdriver APIs (monitoring.googleapis.com, logging.googleapis.com, cloudtrace.googleapis.com).",
-            "type": "string"
-          },
-          "project": {
-            "description": "Optional. Explicit configuration of the GCP project ID to use for reporting. This should only be used for cases in which the GCP project ID cannot be detected from the environment.",
-            "type": "string"
           }
         }
       },

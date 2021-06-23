@@ -24,114 +24,87 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// TrafficDirection selects for traffic relative to the local
-// proxy.
-type TelemetryRuleMatch_TrafficDirection int32
-
-const (
-	// (Default) Match all traffic, regardless of direction.
-	TelemetryRuleMatch_ALL_DIRECTIONS TelemetryRuleMatch_TrafficDirection = 0
-	// Match outbound traffic leaving the proxy. Use this to select "client-side"
-	// traffic in telemetry reporting.
-	// Note: Use OUTBOUND for gateways (even including ingress)
-	TelemetryRuleMatch_OUTBOUND TelemetryRuleMatch_TrafficDirection = 1
-	// Match incoming traffic for the proxy. Use this to select "server-side"
-	// traffic in telemetry reporting.
-	TelemetryRuleMatch_INBOUND TelemetryRuleMatch_TrafficDirection = 2
-)
-
-var TelemetryRuleMatch_TrafficDirection_name = map[int32]string{
-	0: "ALL_DIRECTIONS",
-	1: "OUTBOUND",
-	2: "INBOUND",
-}
-
-var TelemetryRuleMatch_TrafficDirection_value = map[string]int32{
-	"ALL_DIRECTIONS": 0,
-	"OUTBOUND":       1,
-	"INBOUND":        2,
-}
-
-func (x TelemetryRuleMatch_TrafficDirection) String() string {
-	return proto.EnumName(TelemetryRuleMatch_TrafficDirection_name, int32(x))
-}
-
-func (TelemetryRuleMatch_TrafficDirection) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_991c84745e2b7651, []int{3, 0}
-}
-
-type TelemetryRuleMatch_Protocol int32
-
-const (
-	TelemetryRuleMatch_ALL_PROTOCOLS TelemetryRuleMatch_Protocol = 0
-	TelemetryRuleMatch_HTTP          TelemetryRuleMatch_Protocol = 1
-	TelemetryRuleMatch_TCP           TelemetryRuleMatch_Protocol = 2
-)
-
-var TelemetryRuleMatch_Protocol_name = map[int32]string{
-	0: "ALL_PROTOCOLS",
-	1: "HTTP",
-	2: "TCP",
-}
-
-var TelemetryRuleMatch_Protocol_value = map[string]int32{
-	"ALL_PROTOCOLS": 0,
-	"HTTP":          1,
-	"TCP":           2,
-}
-
-func (x TelemetryRuleMatch_Protocol) String() string {
-	return proto.EnumName(TelemetryRuleMatch_Protocol_name, int32(x))
-}
-
-func (TelemetryRuleMatch_Protocol) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_991c84745e2b7651, []int{3, 1}
-}
-
 // Curated list of known metric types that Istio expects every Metrics
 // extension to be able to generate.
 type MetricsOverrides_StandardMetric int32
 
 const (
-	MetricsOverrides_ALL                    MetricsOverrides_StandardMetric = 0
-	MetricsOverrides_REQUEST_COUNT          MetricsOverrides_StandardMetric = 1
-	MetricsOverrides_REQUEST_DURATION       MetricsOverrides_StandardMetric = 2
-	MetricsOverrides_REQUEST_SIZE           MetricsOverrides_StandardMetric = 3
-	MetricsOverrides_RESPONSE_SIZE          MetricsOverrides_StandardMetric = 4
-	MetricsOverrides_TCP_OPEN_CONNECTIONS   MetricsOverrides_StandardMetric = 5
-	MetricsOverrides_TCP_CLOSED_CONNECTIONS MetricsOverrides_StandardMetric = 6
-	MetricsOverrides_TCP_SENT_BYTES         MetricsOverrides_StandardMetric = 7
-	MetricsOverrides_TCP_RECEIVED_BYTES     MetricsOverrides_StandardMetric = 8
-	MetricsOverrides_GRPC_REQUEST_MESSAGES  MetricsOverrides_StandardMetric = 9
-	MetricsOverrides_GRPC_RESPONSE_MESSAGES MetricsOverrides_StandardMetric = 10
+	MetricsOverrides_ALL MetricsOverrides_StandardMetric = 0
+	// Special values to provide general specification for directionality
+	MetricsOverrides_ALL_SERVER_METRICS            MetricsOverrides_StandardMetric = 21
+	MetricsOverrides_ALL_CLIENT_METRICS            MetricsOverrides_StandardMetric = 22
+	MetricsOverrides_SERVER_REQUEST_COUNT          MetricsOverrides_StandardMetric = 1
+	MetricsOverrides_SERVER_REQUEST_DURATION       MetricsOverrides_StandardMetric = 2
+	MetricsOverrides_SERVER_REQUEST_SIZE           MetricsOverrides_StandardMetric = 3
+	MetricsOverrides_SERVER_RESPONSE_SIZE          MetricsOverrides_StandardMetric = 4
+	MetricsOverrides_SERVER_TCP_OPEN_CONNECTIONS   MetricsOverrides_StandardMetric = 5
+	MetricsOverrides_SERVER_TCP_CLOSED_CONNECTIONS MetricsOverrides_StandardMetric = 6
+	MetricsOverrides_SERVER_TCP_SENT_BYTES         MetricsOverrides_StandardMetric = 7
+	MetricsOverrides_SERVER_TCP_RECEIVED_BYTES     MetricsOverrides_StandardMetric = 8
+	MetricsOverrides_SERVER_GRPC_REQUEST_MESSAGES  MetricsOverrides_StandardMetric = 9
+	MetricsOverrides_SERVER_GRPC_RESPONSE_MESSAGES MetricsOverrides_StandardMetric = 10
+	MetricsOverrides_CLIENT_REQUEST_COUNT          MetricsOverrides_StandardMetric = 11
+	MetricsOverrides_CLIENT_REQUEST_DURATION       MetricsOverrides_StandardMetric = 12
+	MetricsOverrides_CLIENT_REQUEST_SIZE           MetricsOverrides_StandardMetric = 13
+	MetricsOverrides_CLIENT_RESPONSE_SIZE          MetricsOverrides_StandardMetric = 14
+	MetricsOverrides_CLIENT_TCP_OPEN_CONNECTIONS   MetricsOverrides_StandardMetric = 15
+	MetricsOverrides_CLIENT_TCP_CLOSED_CONNECTIONS MetricsOverrides_StandardMetric = 16
+	MetricsOverrides_CLIENT_TCP_SENT_BYTES         MetricsOverrides_StandardMetric = 17
+	MetricsOverrides_CLIENT_TCP_RECEIVED_BYTES     MetricsOverrides_StandardMetric = 18
+	MetricsOverrides_CLIENT_GRPC_REQUEST_MESSAGES  MetricsOverrides_StandardMetric = 19
+	MetricsOverrides_CLIENT_GRPC_RESPONSE_MESSAGES MetricsOverrides_StandardMetric = 20
 )
 
 var MetricsOverrides_StandardMetric_name = map[int32]string{
 	0:  "ALL",
-	1:  "REQUEST_COUNT",
-	2:  "REQUEST_DURATION",
-	3:  "REQUEST_SIZE",
-	4:  "RESPONSE_SIZE",
-	5:  "TCP_OPEN_CONNECTIONS",
-	6:  "TCP_CLOSED_CONNECTIONS",
-	7:  "TCP_SENT_BYTES",
-	8:  "TCP_RECEIVED_BYTES",
-	9:  "GRPC_REQUEST_MESSAGES",
-	10: "GRPC_RESPONSE_MESSAGES",
+	21: "ALL_SERVER_METRICS",
+	22: "ALL_CLIENT_METRICS",
+	1:  "SERVER_REQUEST_COUNT",
+	2:  "SERVER_REQUEST_DURATION",
+	3:  "SERVER_REQUEST_SIZE",
+	4:  "SERVER_RESPONSE_SIZE",
+	5:  "SERVER_TCP_OPEN_CONNECTIONS",
+	6:  "SERVER_TCP_CLOSED_CONNECTIONS",
+	7:  "SERVER_TCP_SENT_BYTES",
+	8:  "SERVER_TCP_RECEIVED_BYTES",
+	9:  "SERVER_GRPC_REQUEST_MESSAGES",
+	10: "SERVER_GRPC_RESPONSE_MESSAGES",
+	11: "CLIENT_REQUEST_COUNT",
+	12: "CLIENT_REQUEST_DURATION",
+	13: "CLIENT_REQUEST_SIZE",
+	14: "CLIENT_RESPONSE_SIZE",
+	15: "CLIENT_TCP_OPEN_CONNECTIONS",
+	16: "CLIENT_TCP_CLOSED_CONNECTIONS",
+	17: "CLIENT_TCP_SENT_BYTES",
+	18: "CLIENT_TCP_RECEIVED_BYTES",
+	19: "CLIENT_GRPC_REQUEST_MESSAGES",
+	20: "CLIENT_GRPC_RESPONSE_MESSAGES",
 }
 
 var MetricsOverrides_StandardMetric_value = map[string]int32{
-	"ALL":                    0,
-	"REQUEST_COUNT":          1,
-	"REQUEST_DURATION":       2,
-	"REQUEST_SIZE":           3,
-	"RESPONSE_SIZE":          4,
-	"TCP_OPEN_CONNECTIONS":   5,
-	"TCP_CLOSED_CONNECTIONS": 6,
-	"TCP_SENT_BYTES":         7,
-	"TCP_RECEIVED_BYTES":     8,
-	"GRPC_REQUEST_MESSAGES":  9,
-	"GRPC_RESPONSE_MESSAGES": 10,
+	"ALL":                           0,
+	"ALL_SERVER_METRICS":            21,
+	"ALL_CLIENT_METRICS":            22,
+	"SERVER_REQUEST_COUNT":          1,
+	"SERVER_REQUEST_DURATION":       2,
+	"SERVER_REQUEST_SIZE":           3,
+	"SERVER_RESPONSE_SIZE":          4,
+	"SERVER_TCP_OPEN_CONNECTIONS":   5,
+	"SERVER_TCP_CLOSED_CONNECTIONS": 6,
+	"SERVER_TCP_SENT_BYTES":         7,
+	"SERVER_TCP_RECEIVED_BYTES":     8,
+	"SERVER_GRPC_REQUEST_MESSAGES":  9,
+	"SERVER_GRPC_RESPONSE_MESSAGES": 10,
+	"CLIENT_REQUEST_COUNT":          11,
+	"CLIENT_REQUEST_DURATION":       12,
+	"CLIENT_REQUEST_SIZE":           13,
+	"CLIENT_RESPONSE_SIZE":          14,
+	"CLIENT_TCP_OPEN_CONNECTIONS":   15,
+	"CLIENT_TCP_CLOSED_CONNECTIONS": 16,
+	"CLIENT_TCP_SENT_BYTES":         17,
+	"CLIENT_TCP_RECEIVED_BYTES":     18,
+	"CLIENT_GRPC_REQUEST_MESSAGES":  19,
+	"CLIENT_GRPC_RESPONSE_MESSAGES": 20,
 }
 
 func (x MetricsOverrides_StandardMetric) String() string {
@@ -139,7 +112,7 @@ func (x MetricsOverrides_StandardMetric) String() string {
 }
 
 func (MetricsOverrides_StandardMetric) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_991c84745e2b7651, []int{6, 0}
+	return fileDescriptor_991c84745e2b7651, []int{4, 0}
 }
 
 // Telemetry defines how the telemetry is generated for workloads within a mesh.
@@ -164,9 +137,6 @@ func (MetricsOverrides_StandardMetric) EnumDescriptor() ([]byte, []int) {
 // 1. Workload-specific configuration
 // 1. Namespace-specific configuration
 // 1. Root namespace configuration
-//
-// WARNING: Support for Telemetry policies is under active development and is *not*
-// stable or supported by Istio at this time.
 //
 // Examples:
 //
@@ -231,7 +201,7 @@ func (MetricsOverrides_StandardMetric) EnumDescriptor() ([]byte, []int) {
 //           value: "foo"
 // ```
 //
-// Policy to disable inbound metrics for an entire mesh:
+// Policy to disable server-side metrics for Stackdriver for an entire mesh:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1alpha1
 // kind: Telemetry
@@ -240,11 +210,74 @@ func (MetricsOverrides_StandardMetric) EnumDescriptor() ([]byte, []int) {
 //   namespace: istio-system
 // spec:
 //   metrics:
-//   - match:
-//       traffic_direction: INBOUND
-//     config:
-//       overrides:
-//       - skip_reporting: true
+//   - providers:
+//     - name: stackdriver
+//     overrides:
+//     - metrics: [ ALL_SERVER_METRICS ]
+//       disableReporting: true
+// ```
+//
+// Policy to add dimensions to all Prometheus metrics for a namespace:
+// ```yaml
+// apiVersion: telemetry.istio.io/v1alpha1
+// kind: Telemetry
+// metadata:
+//   name: namespace-metrics
+//   namespace: foo
+// spec:
+//   metrics:
+//   - providers:
+//     - name: prometheus
+//     overrides:
+//     - metrics: [ ALL ]
+//       dimensions:
+//         destination_port: string(destination.port)
+//         request_host: request.host
+// ```
+//
+// Policy to remove the source_workload dimension on some Prometheus metrics for a workload:
+// ```yaml
+// apiVersion: telemetry.istio.io/v1alpha1
+// kind: Telemetry
+// metadata:
+//   name: remove-source-workload
+//   namespace: foo
+// spec:
+//   selector:
+//     labels:
+//       service.istio.io/canonical-name: bar
+//   metrics:
+//   - providers:
+//     - name: prometheus
+//     overrides:
+//     - metrics: [ SERVER_REQUEST_COUNT, SERVER_REQUEST_DURATION, SERVER_REQUEST_SIZE, SERVER_RESPONSE_SIZE ]
+//       removedTags:
+//       - source_workload
+// ```
+//
+// Policy to enable access logging for the entire mesh:
+// ```yaml
+// apiVersion: telemetry.istio.io/v1alpha1
+// kind: Telemetry
+// metadata:
+//   name: mesh-default
+//   namespace: istio-system
+// spec:
+//   accessLogging:
+//   - providers:
+//     - name: stdout
+// ```
+//
+// Policy to disable access logging for a namespace:
+// ```yaml
+// apiVersion: telemetry.istio.io/v1alpha1
+// kind: Telemetry
+// metadata:
+//   name: namespace-no-log
+//   namespace: foo
+// spec:
+//   accessLogging:
+//   - disableReporting: true
 // ```
 //
 // <!-- crd generation tags
@@ -277,12 +310,15 @@ type Telemetry struct {
 	// Optional. Tracing configures the tracing behavior for all
 	// selected workloads.
 	Tracing []*Tracing `protobuf:"bytes,2,rep,name=tracing,proto3" json:"tracing,omitempty"`
-	// Optional. MetricsRules configure the metrics behavior for all
+	// Optional. Metrics configure the metrics behavior for all
 	// selected workloads.
-	Metrics              []*MetricsRule `protobuf:"bytes,3,rep,name=metrics,proto3" json:"metrics,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_unrecognized     []byte         `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Metrics []*Metrics `protobuf:"bytes,3,rep,name=metrics,proto3" json:"metrics,omitempty"`
+	// Optional. AccessLogging configures the access logging behavior for all
+	// selected workloads.
+	AccessLogging        []*AccessLogging `protobuf:"bytes,4,rep,name=access_logging,json=accessLogging,proto3" json:"access_logging,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
 }
 
 func (m *Telemetry) Reset()         { *m = Telemetry{} }
@@ -332,9 +368,16 @@ func (m *Telemetry) GetTracing() []*Tracing {
 	return nil
 }
 
-func (m *Telemetry) GetMetrics() []*MetricsRule {
+func (m *Telemetry) GetMetrics() []*Metrics {
 	if m != nil {
 		return m.Metrics
+	}
+	return nil
+}
+
+func (m *Telemetry) GetAccessLogging() []*AccessLogging {
+	if m != nil {
+		return m.AccessLogging
 	}
 	return nil
 }
@@ -700,126 +743,6 @@ func (m *Tracing_RequestHeader) GetDefaultValue() string {
 	return ""
 }
 
-// MetricsRule defines how metrics should be reported and under what conditions
-// the reporting should be conducted.
-type MetricsRule struct {
-	// Defines the conditions under which the associated configuration applies.
-	Match *TelemetryRuleMatch `protobuf:"bytes,1,opt,name=match,proto3" json:"match,omitempty"`
-	// Customization of the default behavior for metrics.
-	Config               *Metrics `protobuf:"bytes,2,opt,name=config,proto3" json:"config,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *MetricsRule) Reset()         { *m = MetricsRule{} }
-func (m *MetricsRule) String() string { return proto.CompactTextString(m) }
-func (*MetricsRule) ProtoMessage()    {}
-func (*MetricsRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_991c84745e2b7651, []int{2}
-}
-func (m *MetricsRule) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MetricsRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MetricsRule.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MetricsRule) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MetricsRule.Merge(m, src)
-}
-func (m *MetricsRule) XXX_Size() int {
-	return m.Size()
-}
-func (m *MetricsRule) XXX_DiscardUnknown() {
-	xxx_messageInfo_MetricsRule.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MetricsRule proto.InternalMessageInfo
-
-func (m *MetricsRule) GetMatch() *TelemetryRuleMatch {
-	if m != nil {
-		return m.Match
-	}
-	return nil
-}
-
-func (m *MetricsRule) GetConfig() *Metrics {
-	if m != nil {
-		return m.Config
-	}
-	return nil
-}
-
-// TelemetryRuleMatch defines conditions for selecting subsets of mesh traffic
-// for a workload. TelemetryRuleMatch is concerned with simplified selection
-// based on protocol and traffic direction.
-type TelemetryRuleMatch struct {
-	// Optional. Specifies the intended direction of the traffic relative to the local proxy.
-	// Defaults to ALL if unset.
-	TrafficDirection TelemetryRuleMatch_TrafficDirection `protobuf:"varint,1,opt,name=traffic_direction,json=trafficDirection,proto3,enum=istio.telemetry.v1alpha1.TelemetryRuleMatch_TrafficDirection" json:"traffic_direction,omitempty"`
-	// Optional. Specifies the protocol of the traffic being monitored.
-	Protocol             TelemetryRuleMatch_Protocol `protobuf:"varint,2,opt,name=protocol,proto3,enum=istio.telemetry.v1alpha1.TelemetryRuleMatch_Protocol" json:"protocol,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                    `json:"-"`
-	XXX_unrecognized     []byte                      `json:"-"`
-	XXX_sizecache        int32                       `json:"-"`
-}
-
-func (m *TelemetryRuleMatch) Reset()         { *m = TelemetryRuleMatch{} }
-func (m *TelemetryRuleMatch) String() string { return proto.CompactTextString(m) }
-func (*TelemetryRuleMatch) ProtoMessage()    {}
-func (*TelemetryRuleMatch) Descriptor() ([]byte, []int) {
-	return fileDescriptor_991c84745e2b7651, []int{3}
-}
-func (m *TelemetryRuleMatch) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *TelemetryRuleMatch) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_TelemetryRuleMatch.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *TelemetryRuleMatch) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TelemetryRuleMatch.Merge(m, src)
-}
-func (m *TelemetryRuleMatch) XXX_Size() int {
-	return m.Size()
-}
-func (m *TelemetryRuleMatch) XXX_DiscardUnknown() {
-	xxx_messageInfo_TelemetryRuleMatch.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_TelemetryRuleMatch proto.InternalMessageInfo
-
-func (m *TelemetryRuleMatch) GetTrafficDirection() TelemetryRuleMatch_TrafficDirection {
-	if m != nil {
-		return m.TrafficDirection
-	}
-	return TelemetryRuleMatch_ALL_DIRECTIONS
-}
-
-func (m *TelemetryRuleMatch) GetProtocol() TelemetryRuleMatch_Protocol {
-	if m != nil {
-		return m.Protocol
-	}
-	return TelemetryRuleMatch_ALL_PROTOCOLS
-}
-
 // Used to bind Telemetry configuration to specific providers for
 // targeted customization.
 type ProviderRef struct {
@@ -834,7 +757,7 @@ func (m *ProviderRef) Reset()         { *m = ProviderRef{} }
 func (m *ProviderRef) String() string { return proto.CompactTextString(m) }
 func (*ProviderRef) ProtoMessage()    {}
 func (*ProviderRef) Descriptor() ([]byte, []int) {
-	return fileDescriptor_991c84745e2b7651, []int{4}
+	return fileDescriptor_991c84745e2b7651, []int{2}
 }
 func (m *ProviderRef) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -880,26 +803,17 @@ type Metrics struct {
 	Providers []*ProviderRef `protobuf:"bytes,1,rep,name=providers,proto3" json:"providers,omitempty"`
 	// Optional. Set of overrides to apply. These include customization of dimensions
 	// as well as enablement control.
-	Overrides []*MetricsOverrides `protobuf:"bytes,2,rep,name=overrides,proto3" json:"overrides,omitempty"`
-	// Optional. Enable to configure the use of HTTP headers to provide values for
-	// destination services in telemetry if the metadata has not been supplied by
-	// the control plane. This should be enabled with caution, especially at
-	// ingress, as it can lead to incorrect/surprising results.
-	EnableHostHeaderFallback bool `protobuf:"varint,3,opt,name=enable_host_header_fallback,json=enableHostHeaderFallback,proto3" json:"enable_host_header_fallback,omitempty"`
-	// Optional. Controls how frequently metrics for TCP connections are updated. This allows
-	// reporting of bytes transferred at intervals for long-lived TCP connections.
-	// Defaults to `15s`.
-	TcpReportingDuration *types.Duration `protobuf:"bytes,4,opt,name=tcp_reporting_duration,json=tcpReportingDuration,proto3" json:"tcp_reporting_duration,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
-	XXX_unrecognized     []byte          `json:"-"`
-	XXX_sizecache        int32           `json:"-"`
+	Overrides            []*MetricsOverrides `protobuf:"bytes,2,rep,name=overrides,proto3" json:"overrides,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
 }
 
 func (m *Metrics) Reset()         { *m = Metrics{} }
 func (m *Metrics) String() string { return proto.CompactTextString(m) }
 func (*Metrics) ProtoMessage()    {}
 func (*Metrics) Descriptor() ([]byte, []int) {
-	return fileDescriptor_991c84745e2b7651, []int{5}
+	return fileDescriptor_991c84745e2b7651, []int{3}
 }
 func (m *Metrics) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -942,35 +856,27 @@ func (m *Metrics) GetOverrides() []*MetricsOverrides {
 	return nil
 }
 
-func (m *Metrics) GetEnableHostHeaderFallback() bool {
-	if m != nil {
-		return m.EnableHostHeaderFallback
-	}
-	return false
-}
-
-func (m *Metrics) GetTcpReportingDuration() *types.Duration {
-	if m != nil {
-		return m.TcpReportingDuration
-	}
-	return nil
-}
-
 // MetricsOverrides defines custom monitoring behavior for an individual metric
 // or the set of all standard metrics.
 type MetricsOverrides struct {
 	// Optional. If not specified, config applied to all metrics.
-	Metric []MetricsOverrides_StandardMetric `protobuf:"varint,1,rep,packed,name=metric,proto3,enum=istio.telemetry.v1alpha1.MetricsOverrides_StandardMetric" json:"metric,omitempty"`
-	// Optional. Must explicitly set this to "true" to turn off collection.
-	SkipReporting bool `protobuf:"varint,2,opt,name=skip_reporting,json=skipReporting,proto3" json:"skip_reporting,omitempty"`
+	Metrics []MetricsOverrides_StandardMetric `protobuf:"varint,1,rep,packed,name=metrics,proto3,enum=istio.telemetry.v1alpha1.MetricsOverrides_StandardMetric" json:"metrics,omitempty"`
+	// Optional. Must explicitly set this to "true" to turn off metrics reporting
+	// for the listed metrics.
+	DisableReporting *types.BoolValue `protobuf:"bytes,2,opt,name=disable_reporting,json=disableReporting,proto3" json:"disable_reporting,omitempty"`
 	// Optional. Collection of tag names and tag expressions to include in the
 	// metric. Conflicts are resolved by the tag name by overriding previously
 	// supplied values.
+	// The key in the map is the name of the tag.
+	// The value in the map is the attribute expression that will supply the
+	// value for the tag on the specified metrics.
 	// WARNING: some providers may not support adding custom dimensions.
 	Dimensions map[string]string `protobuf:"bytes,3,rep,name=dimensions,proto3" json:"dimensions,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// Optional. A list of tags to remove.
+	// Optional. A list of tags to remove from the reported metrics.
+	// Specifying a tag here will drop this tag from all metrics specified in the
+	// override.
 	// WARNING: may not be supported by some providers.
-	TagsToRemove         []string `protobuf:"bytes,4,rep,name=tags_to_remove,json=tagsToRemove,proto3" json:"tags_to_remove,omitempty"`
+	RemovedTags          []string `protobuf:"bytes,4,rep,name=removed_tags,json=removedTags,proto3" json:"removed_tags,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -980,7 +886,7 @@ func (m *MetricsOverrides) Reset()         { *m = MetricsOverrides{} }
 func (m *MetricsOverrides) String() string { return proto.CompactTextString(m) }
 func (*MetricsOverrides) ProtoMessage()    {}
 func (*MetricsOverrides) Descriptor() ([]byte, []int) {
-	return fileDescriptor_991c84745e2b7651, []int{6}
+	return fileDescriptor_991c84745e2b7651, []int{4}
 }
 func (m *MetricsOverrides) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1009,18 +915,18 @@ func (m *MetricsOverrides) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MetricsOverrides proto.InternalMessageInfo
 
-func (m *MetricsOverrides) GetMetric() []MetricsOverrides_StandardMetric {
+func (m *MetricsOverrides) GetMetrics() []MetricsOverrides_StandardMetric {
 	if m != nil {
-		return m.Metric
+		return m.Metrics
 	}
 	return nil
 }
 
-func (m *MetricsOverrides) GetSkipReporting() bool {
+func (m *MetricsOverrides) GetDisableReporting() *types.BoolValue {
 	if m != nil {
-		return m.SkipReporting
+		return m.DisableReporting
 	}
-	return false
+	return nil
 }
 
 func (m *MetricsOverrides) GetDimensions() map[string]string {
@@ -1030,16 +936,77 @@ func (m *MetricsOverrides) GetDimensions() map[string]string {
 	return nil
 }
 
-func (m *MetricsOverrides) GetTagsToRemove() []string {
+func (m *MetricsOverrides) GetRemovedTags() []string {
 	if m != nil {
-		return m.TagsToRemove
+		return m.RemovedTags
+	}
+	return nil
+}
+
+// Metrics defines the workload-level overrides for monitoring behavior within
+// a mesh. It can be used to enable/disable metrics generation, as well as to
+// customize the shape of the generated metrics.
+type AccessLogging struct {
+	// Optional. Name of providers to which this configuration should apply.
+	// If a provider is not specified, the [default metrics provider][istio.mesh.v1alpha1.MeshConfig.default_providers.metrics]
+	// will be used.
+	Providers []*ProviderRef `protobuf:"bytes,1,rep,name=providers,proto3" json:"providers,omitempty"`
+	// Controls logging. If set to true, no access logs will be generated for
+	// impacted workloads (for the specified providers).
+	DisableReporting     *types.BoolValue `protobuf:"bytes,2,opt,name=disable_reporting,json=disableReporting,proto3" json:"disable_reporting,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
+}
+
+func (m *AccessLogging) Reset()         { *m = AccessLogging{} }
+func (m *AccessLogging) String() string { return proto.CompactTextString(m) }
+func (*AccessLogging) ProtoMessage()    {}
+func (*AccessLogging) Descriptor() ([]byte, []int) {
+	return fileDescriptor_991c84745e2b7651, []int{5}
+}
+func (m *AccessLogging) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AccessLogging) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AccessLogging.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AccessLogging) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AccessLogging.Merge(m, src)
+}
+func (m *AccessLogging) XXX_Size() int {
+	return m.Size()
+}
+func (m *AccessLogging) XXX_DiscardUnknown() {
+	xxx_messageInfo_AccessLogging.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AccessLogging proto.InternalMessageInfo
+
+func (m *AccessLogging) GetProviders() []*ProviderRef {
+	if m != nil {
+		return m.Providers
+	}
+	return nil
+}
+
+func (m *AccessLogging) GetDisableReporting() *types.BoolValue {
+	if m != nil {
+		return m.DisableReporting
 	}
 	return nil
 }
 
 func init() {
-	proto.RegisterEnum("istio.telemetry.v1alpha1.TelemetryRuleMatch_TrafficDirection", TelemetryRuleMatch_TrafficDirection_name, TelemetryRuleMatch_TrafficDirection_value)
-	proto.RegisterEnum("istio.telemetry.v1alpha1.TelemetryRuleMatch_Protocol", TelemetryRuleMatch_Protocol_name, TelemetryRuleMatch_Protocol_value)
 	proto.RegisterEnum("istio.telemetry.v1alpha1.MetricsOverrides_StandardMetric", MetricsOverrides_StandardMetric_name, MetricsOverrides_StandardMetric_value)
 	proto.RegisterType((*Telemetry)(nil), "istio.telemetry.v1alpha1.Telemetry")
 	proto.RegisterType((*Tracing)(nil), "istio.telemetry.v1alpha1.Tracing")
@@ -1048,12 +1015,11 @@ func init() {
 	proto.RegisterType((*Tracing_Literal)(nil), "istio.telemetry.v1alpha1.Tracing.Literal")
 	proto.RegisterType((*Tracing_Environment)(nil), "istio.telemetry.v1alpha1.Tracing.Environment")
 	proto.RegisterType((*Tracing_RequestHeader)(nil), "istio.telemetry.v1alpha1.Tracing.RequestHeader")
-	proto.RegisterType((*MetricsRule)(nil), "istio.telemetry.v1alpha1.MetricsRule")
-	proto.RegisterType((*TelemetryRuleMatch)(nil), "istio.telemetry.v1alpha1.TelemetryRuleMatch")
 	proto.RegisterType((*ProviderRef)(nil), "istio.telemetry.v1alpha1.ProviderRef")
 	proto.RegisterType((*Metrics)(nil), "istio.telemetry.v1alpha1.Metrics")
 	proto.RegisterType((*MetricsOverrides)(nil), "istio.telemetry.v1alpha1.MetricsOverrides")
 	proto.RegisterMapType((map[string]string)(nil), "istio.telemetry.v1alpha1.MetricsOverrides.DimensionsEntry")
+	proto.RegisterType((*AccessLogging)(nil), "istio.telemetry.v1alpha1.AccessLogging")
 }
 
 func init() {
@@ -1061,79 +1027,72 @@ func init() {
 }
 
 var fileDescriptor_991c84745e2b7651 = []byte{
-	// 1142 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x56, 0xdf, 0x6e, 0xdb, 0xb6,
-	0x17, 0x8e, 0x6c, 0xc7, 0x7f, 0x8e, 0x1b, 0x57, 0x25, 0xf2, 0x0b, 0x5c, 0xf7, 0x87, 0xb4, 0xf5,
-	0x5a, 0xa0, 0xfb, 0x53, 0x7b, 0xc9, 0x30, 0x60, 0xed, 0x50, 0x6c, 0x89, 0xad, 0xd6, 0x01, 0x5c,
-	0xcb, 0xa1, 0x94, 0x0e, 0xcb, 0x8d, 0xc0, 0x48, 0xb4, 0xa3, 0x46, 0x16, 0x35, 0x8a, 0xf6, 0x90,
-	0xbb, 0x3d, 0xc0, 0x1e, 0x64, 0x8f, 0x52, 0x60, 0x37, 0x7d, 0x84, 0xa1, 0x97, 0x7b, 0x82, 0x5d,
-	0x0e, 0x94, 0x28, 0xdb, 0x49, 0xda, 0x7a, 0xe9, 0x9d, 0xf5, 0x9d, 0xf3, 0x7d, 0x3c, 0x3c, 0x3c,
-	0xfc, 0x68, 0x68, 0x0a, 0x1a, 0xd0, 0x09, 0x15, 0xfc, 0xbc, 0x3d, 0xdb, 0x21, 0x41, 0x74, 0x4a,
-	0x76, 0xda, 0x73, 0xa8, 0x15, 0x71, 0x26, 0x18, 0xaa, 0xfb, 0xb1, 0xf0, 0x59, 0x6b, 0x01, 0x67,
-	0x99, 0x8d, 0x3b, 0xe2, 0x3c, 0xa2, 0xed, 0xd9, 0xce, 0x09, 0x15, 0x64, 0xa7, 0x1d, 0xd3, 0x80,
-	0xba, 0x82, 0xf1, 0x94, 0xd6, 0xd8, 0x1e, 0x33, 0x36, 0x0e, 0x68, 0x3b, 0xf9, 0x3a, 0x99, 0x8e,
-	0xda, 0xbf, 0x72, 0x12, 0x45, 0x94, 0xc7, 0x1f, 0x8a, 0x7b, 0x53, 0x4e, 0x84, 0xcf, 0xc2, 0x34,
-	0xde, 0xfc, 0x53, 0x83, 0x8a, 0x9d, 0xad, 0x89, 0x7e, 0x84, 0x72, 0xa6, 0x5f, 0xd7, 0xee, 0x69,
-	0x8f, 0xaa, 0xbb, 0x0f, 0x5a, 0xaa, 0xae, 0xf3, 0x88, 0xb6, 0x54, 0x0d, 0xad, 0x9f, 0x18, 0x3f,
-	0x0b, 0x18, 0xf1, 0x2c, 0x95, 0x8b, 0xe7, 0x2c, 0xf4, 0x3d, 0x94, 0x04, 0x27, 0xae, 0x1f, 0x8e,
-	0xeb, 0xb9, 0x7b, 0xf9, 0x47, 0xd5, 0xdd, 0xfb, 0xad, 0x0f, 0x6d, 0xac, 0x65, 0xa7, 0x89, 0x38,
-	0x63, 0xa0, 0x1f, 0xa0, 0x24, 0x53, 0x7c, 0x37, 0xae, 0xe7, 0x13, 0xf2, 0xc3, 0x0f, 0x93, 0x5f,
-	0xa6, 0x89, 0x78, 0x1a, 0x50, 0x9c, 0xb1, 0x9a, 0x7f, 0x17, 0xa1, 0xa4, 0x54, 0x51, 0x07, 0x2a,
-	0x11, 0x67, 0x33, 0xdf, 0xa3, 0x3c, 0x56, 0xb5, 0x7c, 0x44, 0x6e, 0xa8, 0x52, 0x31, 0x1d, 0xe1,
-	0x05, 0x0f, 0x1d, 0x43, 0x83, 0x93, 0xd0, 0x63, 0x13, 0x27, 0x26, 0x93, 0x28, 0xf0, 0xc3, 0xb1,
-	0x13, 0x51, 0xee, 0xd2, 0x50, 0x90, 0x31, 0xad, 0xe7, 0x93, 0x16, 0xfd, 0xbf, 0x95, 0xf6, 0xb8,
-	0x95, 0xf5, 0xb8, 0xd5, 0x65, 0xd3, 0x93, 0x80, 0xbe, 0x22, 0xc1, 0x94, 0xe2, 0x7a, 0xca, 0xb7,
-	0x14, 0x7d, 0x38, 0x67, 0xa3, 0x21, 0x6c, 0x79, 0x7e, 0x4c, 0x4e, 0x02, 0xea, 0xc4, 0x11, 0x09,
-	0x1d, 0x4e, 0x23, 0xc6, 0x85, 0xec, 0x5c, 0x21, 0xd1, 0x6d, 0x5c, 0xd1, 0xdd, 0x67, 0x2c, 0x48,
-	0x55, 0x37, 0x15, 0xd3, 0x8a, 0x48, 0x88, 0x33, 0x1e, 0xc2, 0x50, 0x75, 0xa7, 0xb1, 0x60, 0x13,
-	0x47, 0x90, 0x71, 0x5c, 0x5f, 0x4f, 0x36, 0xbd, 0xb3, 0xf2, 0x00, 0x5a, 0x9d, 0x84, 0x64, 0x93,
-	0x71, 0x6c, 0x84, 0x82, 0x9f, 0x63, 0x70, 0xe7, 0x40, 0xe3, 0x1f, 0x0d, 0x2a, 0xf3, 0x38, 0x32,
-	0xa0, 0x14, 0xf8, 0x82, 0x72, 0x12, 0xa8, 0xf9, 0xf8, 0x7c, 0xb5, 0x7a, 0x3f, 0x25, 0xf4, 0xd6,
-	0x70, 0xc6, 0x45, 0x87, 0x50, 0xa5, 0xe1, 0xcc, 0xe7, 0x2c, 0x9c, 0xd0, 0x50, 0xd4, 0x73, 0x89,
-	0xd4, 0xe3, 0xd5, 0x52, 0xc6, 0x82, 0xd4, 0x5b, 0xc3, 0xcb, 0x1a, 0xe8, 0x00, 0x8a, 0xa7, 0x94,
-	0x78, 0x94, 0xab, 0x53, 0x69, 0xaf, 0x56, 0xc3, 0xf4, 0x97, 0x29, 0x8d, 0x45, 0x2f, 0xa1, 0xf5,
-	0xd6, 0xb0, 0x12, 0xd8, 0x2f, 0x42, 0x41, 0x8e, 0x7b, 0xe3, 0x2e, 0x94, 0x54, 0xed, 0x68, 0x13,
-	0xd6, 0x67, 0xb2, 0xf1, 0xc9, 0xae, 0x2b, 0x38, 0xfd, 0x68, 0x3c, 0x87, 0xea, 0x52, 0x45, 0x08,
-	0x41, 0x21, 0x24, 0x93, 0x2c, 0x27, 0xf9, 0x8d, 0x3e, 0x83, 0x0d, 0x8f, 0x8e, 0xc8, 0x34, 0x10,
-	0x4e, 0x2a, 0x90, 0x4b, 0x82, 0x37, 0x14, 0x98, 0x9c, 0x66, 0xa3, 0x07, 0x1b, 0x17, 0x6a, 0xf9,
-	0x74, 0xa5, 0xd7, 0x70, 0xf3, 0xd2, 0x61, 0x22, 0x1d, 0xf2, 0x67, 0xf4, 0x5c, 0x49, 0xc9, 0x9f,
-	0x68, 0x2f, 0xdb, 0x4c, 0xda, 0xf7, 0x2f, 0xaf, 0x31, 0x20, 0x6a, 0xe7, 0x4f, 0x73, 0xdf, 0x69,
-	0xcd, 0xdf, 0x35, 0xa8, 0x2e, 0xdd, 0x42, 0xb4, 0x0f, 0xeb, 0x13, 0x22, 0xdc, 0x53, 0x35, 0x19,
-	0x5f, 0x7d, 0x44, 0x36, 0x83, 0x24, 0xef, 0xa5, 0xe4, 0xe0, 0x94, 0x8a, 0x9e, 0x40, 0xd1, 0x65,
-	0xe1, 0xc8, 0x1f, 0xab, 0xda, 0xee, 0xaf, 0x36, 0x00, 0x45, 0x68, 0xbe, 0xc9, 0x01, 0xba, 0x2a,
-	0x8c, 0x5e, 0xc3, 0x2d, 0xc1, 0xc9, 0x68, 0xe4, 0xbb, 0x8e, 0xe7, 0x73, 0xea, 0x4a, 0xef, 0x4b,
-	0x2a, 0xac, 0xed, 0x3e, 0xbb, 0x4e, 0x85, 0xb2, 0x17, 0x52, 0xa5, 0x9b, 0x89, 0x60, 0x5d, 0x5c,
-	0x42, 0xd0, 0x21, 0x94, 0x93, 0xbb, 0xea, 0xb2, 0x20, 0xa9, 0xbf, 0xb6, 0xfb, 0xed, 0xb5, 0x96,
-	0x18, 0x2a, 0x32, 0x9e, 0xcb, 0x34, 0xf7, 0x40, 0xbf, 0xbc, 0x30, 0x42, 0x50, 0xdb, 0xeb, 0xf7,
-	0x9d, 0xee, 0x01, 0x36, 0x3a, 0xf6, 0x81, 0x39, 0xb0, 0xf4, 0x35, 0x74, 0x03, 0xca, 0xe6, 0x91,
-	0xbd, 0x6f, 0x1e, 0x0d, 0xba, 0xba, 0x86, 0xaa, 0x50, 0x3a, 0x18, 0xa4, 0x1f, 0xb9, 0xe6, 0xd7,
-	0x50, 0xce, 0x84, 0xd1, 0x2d, 0xd8, 0x90, 0xd4, 0x21, 0x36, 0x6d, 0xb3, 0x63, 0xf6, 0x25, 0xb3,
-	0x0c, 0x85, 0x9e, 0x6d, 0x0f, 0x75, 0x0d, 0x95, 0x20, 0x6f, 0x77, 0x86, 0x7a, 0xae, 0x79, 0x1f,
-	0xaa, 0x4b, 0x7e, 0xf8, 0xbe, 0x69, 0x6c, 0xfe, 0x91, 0x83, 0x92, 0x3a, 0x81, 0x8b, 0x4e, 0xab,
-	0x7d, 0xa2, 0xd3, 0xf6, 0xa0, 0xc2, 0x66, 0x94, 0x73, 0xdf, 0xa3, 0x99, 0x5d, 0x7f, 0xb1, 0xf2,
-	0xf0, 0xcd, 0x8c, 0x81, 0x17, 0x64, 0xf4, 0x0c, 0xee, 0xd0, 0x30, 0xb1, 0xd5, 0x53, 0x16, 0x0b,
-	0x27, 0xbd, 0xd4, 0xce, 0x88, 0x04, 0xc1, 0x09, 0x71, 0xcf, 0x12, 0x7b, 0x28, 0xe3, 0x7a, 0x9a,
-	0xd2, 0x63, 0xd9, 0x9d, 0x7b, 0xae, 0xe2, 0xc8, 0x84, 0x2d, 0xe1, 0x46, 0x0b, 0x37, 0x76, 0xb2,
-	0x17, 0x53, 0xd9, 0xf2, 0xed, 0xab, 0x76, 0xaf, 0x12, 0xf0, 0xa6, 0x70, 0xa3, 0xb9, 0x1b, 0x67,
-	0x68, 0xf3, 0x6d, 0x01, 0xf4, 0xcb, 0xf5, 0xa2, 0x43, 0x28, 0xa6, 0x8f, 0x56, 0xd2, 0xb0, 0xda,
-	0xee, 0x93, 0xff, 0xbe, 0xd7, 0x96, 0x25, 0x48, 0xe8, 0x11, 0xee, 0xa5, 0x01, 0xac, 0x84, 0xd0,
-	0x43, 0xa8, 0xc5, 0x67, 0xfe, 0x52, 0xe5, 0xc9, 0x0c, 0x96, 0xf1, 0x86, 0x44, 0x17, 0x8f, 0xc4,
-	0x31, 0x80, 0xe7, 0x4f, 0x68, 0x18, 0xfb, 0x2c, 0xcc, 0xde, 0xd9, 0xa7, 0xd7, 0x58, 0xbd, 0x3b,
-	0x27, 0xab, 0xc7, 0x62, 0xa1, 0x86, 0x1e, 0x40, 0x4d, 0xbe, 0x3c, 0x8e, 0x60, 0x0e, 0xa7, 0x13,
-	0x36, 0xa3, 0xf5, 0xc2, 0xbd, 0xbc, 0x34, 0x29, 0x89, 0xda, 0x0c, 0x27, 0x58, 0xe3, 0x19, 0xdc,
-	0xbc, 0x24, 0xf2, 0x1e, 0x93, 0xda, 0x5c, 0x36, 0xa9, 0xca, 0xb2, 0xef, 0xfc, 0x96, 0x83, 0xda,
-	0xc5, 0x16, 0xc8, 0xc9, 0xdd, 0xeb, 0xf7, 0xf5, 0x35, 0x39, 0xdf, 0xd8, 0x38, 0x3c, 0x32, 0x2c,
-	0xdb, 0xe9, 0x98, 0x47, 0x03, 0x5b, 0xd7, 0xd0, 0x26, 0xe8, 0x19, 0xd4, 0x3d, 0xc2, 0x7b, 0xf2,
-	0xc2, 0xe8, 0x39, 0xa4, 0xc3, 0x8d, 0x0c, 0xb5, 0x0e, 0x8e, 0x0d, 0x3d, 0x9f, 0x52, 0xad, 0xa1,
-	0x39, 0xb0, 0x8c, 0x14, 0x2a, 0xa0, 0x3a, 0x6c, 0xda, 0x9d, 0xa1, 0x63, 0x0e, 0x8d, 0x81, 0xd3,
-	0x31, 0x07, 0x83, 0xec, 0xba, 0xad, 0xa3, 0x06, 0x6c, 0xc9, 0x48, 0xa7, 0x6f, 0x5a, 0x46, 0xf7,
-	0x42, 0xac, 0x28, 0xaf, 0xa7, 0x8c, 0x59, 0xc6, 0xc0, 0x76, 0xf6, 0x7f, 0xb6, 0x0d, 0x4b, 0x2f,
-	0xa1, 0x2d, 0x40, 0x12, 0xc3, 0x46, 0xc7, 0x38, 0x78, 0x65, 0x74, 0x15, 0x5e, 0x46, 0xb7, 0xe1,
-	0x7f, 0x2f, 0xf0, 0xb0, 0xe3, 0x64, 0xb5, 0xbc, 0x34, 0x2c, 0x6b, 0xef, 0x85, 0x61, 0xe9, 0x15,
-	0xb9, 0x84, 0x0a, 0xa9, 0xa2, 0xe6, 0x31, 0xd8, 0x7f, 0xfc, 0xe6, 0xdd, 0xb6, 0xf6, 0xf6, 0xdd,
-	0xb6, 0xf6, 0xd7, 0xbb, 0x6d, 0xed, 0xf8, 0x6e, 0x7a, 0x78, 0x3e, 0x6b, 0x93, 0xc8, 0x6f, 0x5f,
-	0xfd, 0xaf, 0x79, 0x52, 0x4c, 0x46, 0xf5, 0x9b, 0x7f, 0x03, 0x00, 0x00, 0xff, 0xff, 0x2c, 0xb1,
-	0x00, 0xe5, 0x88, 0x0a, 0x00, 0x00,
+	// 1038 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0xcb, 0x6e, 0xdb, 0x46,
+	0x17, 0x36, 0x25, 0xdb, 0xb2, 0x8e, 0x7c, 0x61, 0x26, 0x8e, 0xa3, 0xc8, 0x89, 0x2f, 0xfa, 0xff,
+	0xa2, 0x69, 0x8b, 0x50, 0xb0, 0xbb, 0x69, 0x53, 0x14, 0xa8, 0x4c, 0x4f, 0x2d, 0x01, 0xb2, 0xa4,
+	0x0c, 0x65, 0x17, 0xf5, 0x86, 0x18, 0x8b, 0x63, 0x85, 0x0d, 0xc5, 0x61, 0x87, 0x94, 0x0a, 0xbf,
+	0x47, 0x81, 0x76, 0xd3, 0x55, 0x5f, 0xa6, 0xcb, 0x3e, 0x42, 0xe1, 0x65, 0x9f, 0xa0, 0xcb, 0x82,
+	0xe4, 0x90, 0xa2, 0x14, 0x0b, 0x6a, 0x82, 0xec, 0xc8, 0xf9, 0x2e, 0x3c, 0xf3, 0xcd, 0x9c, 0x03,
+	0x42, 0x35, 0x60, 0x0e, 0x1b, 0xb2, 0x40, 0xdc, 0xd6, 0xc6, 0x47, 0xd4, 0xf1, 0x5e, 0xd3, 0xa3,
+	0x5a, 0xba, 0xa4, 0x79, 0x82, 0x07, 0x1c, 0x95, 0x6d, 0x3f, 0xb0, 0xb9, 0x36, 0x59, 0x4e, 0x98,
+	0x95, 0xdd, 0xe0, 0xd6, 0x63, 0xb5, 0xf1, 0xd1, 0x35, 0x0b, 0xe8, 0x51, 0xcd, 0x67, 0x0e, 0xeb,
+	0x07, 0x5c, 0xc4, 0xb2, 0xca, 0xde, 0x80, 0xf3, 0x81, 0xc3, 0x6a, 0xd1, 0xdb, 0xf5, 0xe8, 0xa6,
+	0xf6, 0x93, 0xa0, 0x9e, 0xc7, 0x84, 0x3f, 0x0f, 0xb7, 0x46, 0x82, 0x06, 0x36, 0x77, 0x63, 0xbc,
+	0xfa, 0x4b, 0x0e, 0x8a, 0xbd, 0xe4, 0x9b, 0xe8, 0x1b, 0x58, 0x4b, 0xfc, 0xcb, 0xca, 0x81, 0xf2,
+	0xbc, 0x74, 0xfc, 0x7f, 0x4d, 0xd6, 0x75, 0xeb, 0x31, 0x4d, 0xd6, 0xa0, 0x7d, 0xc7, 0xc5, 0x1b,
+	0x87, 0x53, 0xcb, 0x90, 0x5c, 0x92, 0xaa, 0xd0, 0x57, 0x50, 0x08, 0x04, 0xed, 0xdb, 0xee, 0xa0,
+	0x9c, 0x3b, 0xc8, 0x3f, 0x2f, 0x1d, 0x1f, 0x6a, 0xf3, 0x36, 0xa6, 0xf5, 0x62, 0x22, 0x49, 0x14,
+	0xa1, 0x38, 0xa4, 0xd8, 0x7d, 0xbf, 0x9c, 0x5f, 0x24, 0x3e, 0x8f, 0x89, 0x24, 0x51, 0xa0, 0x36,
+	0x6c, 0xd2, 0x7e, 0x9f, 0xf9, 0xbe, 0xe9, 0xf0, 0xc1, 0x20, 0x2c, 0x60, 0x39, 0xf2, 0xf8, 0x78,
+	0xbe, 0x47, 0x3d, 0xe2, 0xb7, 0x62, 0x3a, 0xd9, 0xa0, 0xd9, 0xd7, 0xea, 0xdf, 0xab, 0x50, 0x90,
+	0x15, 0x22, 0x1d, 0x8a, 0x9e, 0xe0, 0x63, 0xdb, 0x62, 0xc2, 0x97, 0xfb, 0xfa, 0x68, 0xbe, 0x6d,
+	0x57, 0x52, 0x09, 0xbb, 0x21, 0x13, 0x1d, 0xba, 0x82, 0x8a, 0xa0, 0xae, 0xc5, 0x87, 0xa6, 0x4f,
+	0x87, 0x9e, 0x63, 0xbb, 0x03, 0xd3, 0x63, 0xa2, 0xcf, 0xdc, 0x80, 0x0e, 0x58, 0x39, 0x1f, 0xc5,
+	0xfd, 0x54, 0x8b, 0xcf, 0x4b, 0x4b, 0xce, 0x4b, 0x3b, 0xe5, 0xa3, 0x6b, 0x87, 0x5d, 0x52, 0x67,
+	0xc4, 0x48, 0x39, 0xd6, 0x1b, 0x52, 0xde, 0x4d, 0xd5, 0xa8, 0x0b, 0x3b, 0x96, 0xed, 0xd3, 0x6b,
+	0x87, 0x99, 0xbe, 0x47, 0x5d, 0x53, 0x30, 0x8f, 0x8b, 0x20, 0x0e, 0x21, 0xf4, 0xad, 0xbc, 0xe5,
+	0x7b, 0xc2, 0xb9, 0x13, 0xbb, 0x6e, 0x4b, 0xa5, 0xe1, 0x51, 0x97, 0x24, 0x3a, 0x44, 0xa0, 0xd4,
+	0x1f, 0xf9, 0x01, 0x1f, 0x9a, 0x01, 0x1d, 0xf8, 0xe5, 0x95, 0x68, 0xd3, 0x47, 0x0b, 0x0f, 0x53,
+	0xd3, 0x23, 0x51, 0x8f, 0x0e, 0x7c, 0xec, 0x06, 0xe2, 0x96, 0x40, 0x3f, 0x5d, 0xa8, 0xfc, 0xa3,
+	0x40, 0x31, 0xc5, 0x11, 0x86, 0x82, 0x63, 0x07, 0x4c, 0x50, 0x47, 0xde, 0xb5, 0x4f, 0x16, 0xbb,
+	0xb7, 0x62, 0x41, 0x63, 0x89, 0x24, 0x5a, 0xf4, 0x0a, 0x4a, 0xcc, 0x1d, 0xdb, 0x82, 0xbb, 0x43,
+	0xe6, 0x06, 0xe5, 0x5c, 0x64, 0xf5, 0x62, 0xb1, 0x15, 0x9e, 0x88, 0x1a, 0x4b, 0x24, 0xeb, 0x81,
+	0x9a, 0xb0, 0xfa, 0x9a, 0x51, 0x8b, 0x09, 0x79, 0x2a, 0xb5, 0xc5, 0x6e, 0x84, 0xfd, 0x38, 0x62,
+	0x7e, 0xd0, 0x88, 0x64, 0x8d, 0x25, 0x22, 0x0d, 0x4e, 0x56, 0x61, 0x39, 0x6c, 0x9d, 0xca, 0x3e,
+	0x14, 0x64, 0xed, 0x68, 0x1b, 0x56, 0xc6, 0x61, 0xf0, 0xd1, 0xae, 0x8b, 0x24, 0x7e, 0xa9, 0x7c,
+	0x0b, 0xa5, 0x4c, 0x45, 0x08, 0xc1, 0xb2, 0x4b, 0x87, 0x09, 0x27, 0x7a, 0x46, 0xff, 0x83, 0x0d,
+	0x8b, 0xdd, 0xd0, 0x91, 0x13, 0x98, 0xb1, 0x41, 0x2e, 0x02, 0xd7, 0xe5, 0x62, 0x74, 0x9a, 0x95,
+	0x06, 0x6c, 0x4c, 0xd5, 0xf2, 0xfe, 0x4e, 0x3f, 0xc0, 0xd6, 0xcc, 0x61, 0x22, 0x15, 0xf2, 0x6f,
+	0xd8, 0xad, 0xb4, 0x0a, 0x1f, 0x51, 0x3d, 0xd9, 0x4c, 0x9c, 0xfb, 0x67, 0xef, 0x70, 0x41, 0xe4,
+	0xce, 0x5f, 0xe6, 0xbe, 0x50, 0xaa, 0x87, 0x50, 0xca, 0x74, 0xcd, 0x7d, 0x35, 0x57, 0x7f, 0x55,
+	0xa0, 0x20, 0x9b, 0x7e, 0xba, 0x1f, 0x95, 0xf7, 0xec, 0xc7, 0x06, 0x14, 0xf9, 0x98, 0x09, 0x61,
+	0x5b, 0x2c, 0x69, 0xea, 0x4f, 0x17, 0xce, 0x9b, 0x4e, 0xa2, 0x20, 0x13, 0x71, 0xf5, 0xe7, 0x35,
+	0x50, 0x67, 0x71, 0x64, 0x4c, 0x86, 0x59, 0x58, 0xe1, 0xe6, 0xf1, 0x97, 0xff, 0xdd, 0x5c, 0x33,
+	0x02, 0xea, 0x5a, 0x54, 0x58, 0x31, 0x30, 0x19, 0x72, 0x67, 0xf0, 0x20, 0xe9, 0xf3, 0x49, 0x8b,
+	0xe7, 0x16, 0xb6, 0xb8, 0x2a, 0x45, 0x93, 0xf6, 0xbe, 0x02, 0xb0, 0xec, 0x21, 0x73, 0x7d, 0x9b,
+	0xbb, 0xc9, 0xb4, 0x7d, 0xf9, 0x0e, 0x05, 0x9e, 0xa6, 0x62, 0xd9, 0xe6, 0x13, 0x37, 0x74, 0x08,
+	0xeb, 0x82, 0x0d, 0xf9, 0x98, 0x59, 0xf1, 0xec, 0x08, 0xe7, 0x70, 0x91, 0x94, 0xe4, 0x5a, 0x34,
+	0x09, 0xbe, 0x86, 0xad, 0x19, 0x87, 0x7b, 0xee, 0xd6, 0x76, 0xf6, 0x6e, 0x15, 0xb3, 0xd7, 0xe5,
+	0xf7, 0x15, 0xd8, 0x9c, 0x8e, 0x08, 0x15, 0x20, 0x5f, 0x6f, 0xb5, 0xd4, 0x25, 0xb4, 0x03, 0xa8,
+	0xde, 0x6a, 0x99, 0x06, 0x26, 0x97, 0x98, 0x98, 0xe7, 0xb8, 0x47, 0x9a, 0xba, 0xa1, 0x3e, 0x4a,
+	0xd6, 0xf5, 0x56, 0x13, 0xb7, 0x7b, 0xe9, 0xfa, 0x0e, 0x2a, 0xc3, 0xb6, 0xe4, 0x12, 0xfc, 0xea,
+	0x02, 0x1b, 0x3d, 0x53, 0xef, 0x5c, 0xb4, 0x7b, 0xaa, 0x82, 0x76, 0xe1, 0xf1, 0x0c, 0x72, 0x7a,
+	0x41, 0xea, 0xbd, 0x66, 0xa7, 0xad, 0xe6, 0xd0, 0x63, 0x78, 0x38, 0x03, 0x1a, 0xcd, 0x2b, 0xac,
+	0xe6, 0xa7, 0xfc, 0x8c, 0x6e, 0xa7, 0x6d, 0xe0, 0x18, 0x59, 0x46, 0xfb, 0xb0, 0x2b, 0x91, 0x9e,
+	0xde, 0x35, 0x3b, 0x5d, 0xdc, 0x36, 0xf5, 0x4e, 0xbb, 0x8d, 0xf5, 0xd0, 0xd2, 0x50, 0x57, 0xd0,
+	0x21, 0x3c, 0xcb, 0x10, 0xf4, 0x56, 0xc7, 0xc0, 0xa7, 0x53, 0x94, 0x55, 0xf4, 0x04, 0x1e, 0x65,
+	0x28, 0x46, 0xb8, 0x95, 0x93, 0xef, 0x7b, 0xd8, 0x50, 0x0b, 0xe8, 0x19, 0x3c, 0xc9, 0x40, 0x04,
+	0xeb, 0xb8, 0x79, 0x89, 0x4f, 0x25, 0xbc, 0x86, 0x0e, 0xe0, 0xa9, 0x84, 0xcf, 0x48, 0x57, 0x4f,
+	0xab, 0x3e, 0xc7, 0x86, 0x51, 0x3f, 0xc3, 0x86, 0x5a, 0xcc, 0x7c, 0x5e, 0x32, 0x64, 0xf9, 0x29,
+	0x05, 0xc2, 0xcd, 0xc9, 0x00, 0xa7, 0xc3, 0x2a, 0x85, 0x61, 0xcd, 0x20, 0x69, 0x58, 0xeb, 0x61,
+	0x58, 0x33, 0x60, 0x14, 0xc9, 0xc6, 0x94, 0x5f, 0x36, 0xac, 0xcd, 0x30, 0x2c, 0x89, 0xdc, 0x1b,
+	0xd6, 0x56, 0x58, 0x6d, 0x86, 0x70, 0x4f, 0x58, 0x6a, 0x18, 0x56, 0x86, 0x92, 0x09, 0xeb, 0x41,
+	0x18, 0x56, 0x06, 0x9a, 0x09, 0x0b, 0x85, 0x61, 0x49, 0xf8, 0xfe, 0xb0, 0x1e, 0x66, 0x3e, 0x3f,
+	0x27, 0xac, 0xed, 0xea, 0x6f, 0x0a, 0x6c, 0x4c, 0xfd, 0x62, 0x7c, 0x98, 0xb9, 0xf5, 0xa1, 0x66,
+	0xc0, 0xc9, 0x8b, 0x3f, 0xee, 0xf6, 0x94, 0x3f, 0xef, 0xf6, 0x94, 0xbf, 0xee, 0xf6, 0x94, 0xab,
+	0xfd, 0xb8, 0x0e, 0x9b, 0xd7, 0xa8, 0x67, 0xd7, 0xde, 0xfe, 0x63, 0xbd, 0x5e, 0x8d, 0x4c, 0x3f,
+	0xff, 0x37, 0x00, 0x00, 0xff, 0xff, 0x73, 0x0d, 0x74, 0x6f, 0xce, 0x0a, 0x00, 0x00,
 }
 
 func (m *Telemetry) Marshal() (dAtA []byte, err error) {
@@ -1159,6 +1118,20 @@ func (m *Telemetry) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.XXX_unrecognized != nil {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.AccessLogging) > 0 {
+		for iNdEx := len(m.AccessLogging) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.AccessLogging[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTelemetry(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
 	}
 	if len(m.Metrics) > 0 {
 		for iNdEx := len(m.Metrics) - 1; iNdEx >= 0; iNdEx-- {
@@ -1509,94 +1482,6 @@ func (m *Tracing_RequestHeader) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MetricsRule) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MetricsRule) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MetricsRule) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if m.Config != nil {
-		{
-			size, err := m.Config.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTelemetry(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.Match != nil {
-		{
-			size, err := m.Match.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTelemetry(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *TelemetryRuleMatch) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *TelemetryRuleMatch) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *TelemetryRuleMatch) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if m.Protocol != 0 {
-		i = encodeVarintTelemetry(dAtA, i, uint64(m.Protocol))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.TrafficDirection != 0 {
-		i = encodeVarintTelemetry(dAtA, i, uint64(m.TrafficDirection))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
 func (m *ProviderRef) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1655,28 +1540,6 @@ func (m *Metrics) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	if m.TcpReportingDuration != nil {
-		{
-			size, err := m.TcpReportingDuration.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTelemetry(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.EnableHostHeaderFallback {
-		i--
-		if m.EnableHostHeaderFallback {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x18
-	}
 	if len(m.Overrides) > 0 {
 		for iNdEx := len(m.Overrides) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -1732,11 +1595,11 @@ func (m *MetricsOverrides) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	if len(m.TagsToRemove) > 0 {
-		for iNdEx := len(m.TagsToRemove) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.TagsToRemove[iNdEx])
-			copy(dAtA[i:], m.TagsToRemove[iNdEx])
-			i = encodeVarintTelemetry(dAtA, i, uint64(len(m.TagsToRemove[iNdEx])))
+	if len(m.RemovedTags) > 0 {
+		for iNdEx := len(m.RemovedTags) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.RemovedTags[iNdEx])
+			copy(dAtA[i:], m.RemovedTags[iNdEx])
+			i = encodeVarintTelemetry(dAtA, i, uint64(len(m.RemovedTags[iNdEx])))
 			i--
 			dAtA[i] = 0x22
 		}
@@ -1760,33 +1623,88 @@ func (m *MetricsOverrides) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x1a
 		}
 	}
-	if m.SkipReporting {
-		i--
-		if m.SkipReporting {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.Metric) > 0 {
-		dAtA12 := make([]byte, len(m.Metric)*10)
-		var j11 int
-		for _, num := range m.Metric {
-			for num >= 1<<7 {
-				dAtA12[j11] = uint8(uint64(num)&0x7f | 0x80)
-				num >>= 7
-				j11++
+	if m.DisableReporting != nil {
+		{
+			size, err := m.DisableReporting.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
 			}
-			dAtA12[j11] = uint8(num)
-			j11++
+			i -= size
+			i = encodeVarintTelemetry(dAtA, i, uint64(size))
 		}
-		i -= j11
-		copy(dAtA[i:], dAtA12[:j11])
-		i = encodeVarintTelemetry(dAtA, i, uint64(j11))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Metrics) > 0 {
+		dAtA10 := make([]byte, len(m.Metrics)*10)
+		var j9 int
+		for _, num := range m.Metrics {
+			for num >= 1<<7 {
+				dAtA10[j9] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j9++
+			}
+			dAtA10[j9] = uint8(num)
+			j9++
+		}
+		i -= j9
+		copy(dAtA[i:], dAtA10[:j9])
+		i = encodeVarintTelemetry(dAtA, i, uint64(j9))
 		i--
 		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AccessLogging) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AccessLogging) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AccessLogging) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.DisableReporting != nil {
+		{
+			size, err := m.DisableReporting.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTelemetry(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Providers) > 0 {
+		for iNdEx := len(m.Providers) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Providers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTelemetry(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
 	}
 	return len(dAtA) - i, nil
 }
@@ -1820,6 +1738,12 @@ func (m *Telemetry) Size() (n int) {
 	}
 	if len(m.Metrics) > 0 {
 		for _, e := range m.Metrics {
+			l = e.Size()
+			n += 1 + l + sovTelemetry(uint64(l))
+		}
+	}
+	if len(m.AccessLogging) > 0 {
+		for _, e := range m.AccessLogging {
 			l = e.Size()
 			n += 1 + l + sovTelemetry(uint64(l))
 		}
@@ -1976,44 +1900,6 @@ func (m *Tracing_RequestHeader) Size() (n int) {
 	return n
 }
 
-func (m *MetricsRule) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Match != nil {
-		l = m.Match.Size()
-		n += 1 + l + sovTelemetry(uint64(l))
-	}
-	if m.Config != nil {
-		l = m.Config.Size()
-		n += 1 + l + sovTelemetry(uint64(l))
-	}
-	if m.XXX_unrecognized != nil {
-		n += len(m.XXX_unrecognized)
-	}
-	return n
-}
-
-func (m *TelemetryRuleMatch) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.TrafficDirection != 0 {
-		n += 1 + sovTelemetry(uint64(m.TrafficDirection))
-	}
-	if m.Protocol != 0 {
-		n += 1 + sovTelemetry(uint64(m.Protocol))
-	}
-	if m.XXX_unrecognized != nil {
-		n += len(m.XXX_unrecognized)
-	}
-	return n
-}
-
 func (m *ProviderRef) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2048,13 +1934,6 @@ func (m *Metrics) Size() (n int) {
 			n += 1 + l + sovTelemetry(uint64(l))
 		}
 	}
-	if m.EnableHostHeaderFallback {
-		n += 2
-	}
-	if m.TcpReportingDuration != nil {
-		l = m.TcpReportingDuration.Size()
-		n += 1 + l + sovTelemetry(uint64(l))
-	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
 	}
@@ -2067,15 +1946,16 @@ func (m *MetricsOverrides) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if len(m.Metric) > 0 {
+	if len(m.Metrics) > 0 {
 		l = 0
-		for _, e := range m.Metric {
+		for _, e := range m.Metrics {
 			l += sovTelemetry(uint64(e))
 		}
 		n += 1 + sovTelemetry(uint64(l)) + l
 	}
-	if m.SkipReporting {
-		n += 2
+	if m.DisableReporting != nil {
+		l = m.DisableReporting.Size()
+		n += 1 + l + sovTelemetry(uint64(l))
 	}
 	if len(m.Dimensions) > 0 {
 		for k, v := range m.Dimensions {
@@ -2085,11 +1965,33 @@ func (m *MetricsOverrides) Size() (n int) {
 			n += mapEntrySize + 1 + sovTelemetry(uint64(mapEntrySize))
 		}
 	}
-	if len(m.TagsToRemove) > 0 {
-		for _, s := range m.TagsToRemove {
+	if len(m.RemovedTags) > 0 {
+		for _, s := range m.RemovedTags {
 			l = len(s)
 			n += 1 + l + sovTelemetry(uint64(l))
 		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *AccessLogging) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Providers) > 0 {
+		for _, e := range m.Providers {
+			l = e.Size()
+			n += 1 + l + sovTelemetry(uint64(l))
+		}
+	}
+	if m.DisableReporting != nil {
+		l = m.DisableReporting.Size()
+		n += 1 + l + sovTelemetry(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -2231,8 +2133,42 @@ func (m *Telemetry) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Metrics = append(m.Metrics, &MetricsRule{})
+			m.Metrics = append(m.Metrics, &Metrics{})
 			if err := m.Metrics[len(m.Metrics)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AccessLogging", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTelemetry
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AccessLogging = append(m.AccessLogging, &AccessLogging{})
+			if err := m.AccessLogging[len(m.AccessLogging)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3013,218 +2949,6 @@ func (m *Tracing_RequestHeader) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MetricsRule) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTelemetry
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MetricsRule: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MetricsRule: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Match", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTelemetry
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTelemetry
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTelemetry
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Match == nil {
-				m.Match = &TelemetryRuleMatch{}
-			}
-			if err := m.Match.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Config", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTelemetry
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTelemetry
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTelemetry
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Config == nil {
-				m.Config = &Metrics{}
-			}
-			if err := m.Config.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTelemetry(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTelemetry
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *TelemetryRuleMatch) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTelemetry
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: TelemetryRuleMatch: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: TelemetryRuleMatch: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TrafficDirection", wireType)
-			}
-			m.TrafficDirection = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTelemetry
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.TrafficDirection |= TelemetryRuleMatch_TrafficDirection(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Protocol", wireType)
-			}
-			m.Protocol = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTelemetry
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Protocol |= TelemetryRuleMatch_Protocol(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTelemetry(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTelemetry
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
 func (m *ProviderRef) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -3405,62 +3129,6 @@ func (m *Metrics) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EnableHostHeaderFallback", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTelemetry
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.EnableHostHeaderFallback = bool(v != 0)
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TcpReportingDuration", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTelemetry
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTelemetry
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTelemetry
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.TcpReportingDuration == nil {
-				m.TcpReportingDuration = &types.Duration{}
-			}
-			if err := m.TcpReportingDuration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTelemetry(dAtA[iNdEx:])
@@ -3529,7 +3197,7 @@ func (m *MetricsOverrides) Unmarshal(dAtA []byte) error {
 						break
 					}
 				}
-				m.Metric = append(m.Metric, v)
+				m.Metrics = append(m.Metrics, v)
 			} else if wireType == 2 {
 				var packedLen int
 				for shift := uint(0); ; shift += 7 {
@@ -3557,8 +3225,8 @@ func (m *MetricsOverrides) Unmarshal(dAtA []byte) error {
 					return io.ErrUnexpectedEOF
 				}
 				var elementCount int
-				if elementCount != 0 && len(m.Metric) == 0 {
-					m.Metric = make([]MetricsOverrides_StandardMetric, 0, elementCount)
+				if elementCount != 0 && len(m.Metrics) == 0 {
+					m.Metrics = make([]MetricsOverrides_StandardMetric, 0, elementCount)
 				}
 				for iNdEx < postIndex {
 					var v MetricsOverrides_StandardMetric
@@ -3576,16 +3244,16 @@ func (m *MetricsOverrides) Unmarshal(dAtA []byte) error {
 							break
 						}
 					}
-					m.Metric = append(m.Metric, v)
+					m.Metrics = append(m.Metrics, v)
 				}
 			} else {
-				return fmt.Errorf("proto: wrong wireType = %d for field Metric", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Metrics", wireType)
 			}
 		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SkipReporting", wireType)
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableReporting", wireType)
 			}
-			var v int
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTelemetry
@@ -3595,12 +3263,28 @@ func (m *MetricsOverrides) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= int(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			m.SkipReporting = bool(v != 0)
+			if msglen < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DisableReporting == nil {
+				m.DisableReporting = &types.BoolValue{}
+			}
+			if err := m.DisableReporting.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Dimensions", wireType)
@@ -3730,7 +3414,7 @@ func (m *MetricsOverrides) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TagsToRemove", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field RemovedTags", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -3758,7 +3442,128 @@ func (m *MetricsOverrides) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.TagsToRemove = append(m.TagsToRemove, string(dAtA[iNdEx:postIndex]))
+			m.RemovedTags = append(m.RemovedTags, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTelemetry(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AccessLogging) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTelemetry
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AccessLogging: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AccessLogging: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Providers", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTelemetry
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Providers = append(m.Providers, &ProviderRef{})
+			if err := m.Providers[len(m.Providers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableReporting", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTelemetry
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DisableReporting == nil {
+				m.DisableReporting = &types.BoolValue{}
+			}
+			if err := m.DisableReporting.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

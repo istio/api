@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 46
+number_of_entries: 48
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -1116,6 +1116,19 @@ providers.</p>
 No
 </td>
 </tr>
+<tr id="MeshConfig-DefaultProviders-access_logging">
+<td><code>accessLogging</code></td>
+<td><code>string</code></td>
+<td>
+<p>Name of the default provider for access logging. This must match a provider
+defined in <code>extension_providers</code> that is one of the supported access logging
+providers.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1791,31 +1804,6 @@ NOTE: currently only controls max length of the path tag.</p>
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-StackdriverProvider-address">
-<td><code>address</code></td>
-<td><code>string</code></td>
-<td>
-<p>Optional. An alternate address to use for Stackdriver reporting. This should ONLY be used to override
-the default endpoints for the Stackdriver APIs (monitoring.googleapis.com, logging.googleapis.com,
-cloudtrace.googleapis.com).</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-ExtensionProvider-StackdriverProvider-project">
-<td><code>project</code></td>
-<td><code>string</code></td>
-<td>
-<p>Optional. Explicit configuration of the GCP project ID to use for reporting. This should only be used
-for cases in which the GCP project ID cannot be detected from the environment.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 </tbody>
 </table>
 </section>
@@ -1891,6 +1879,9 @@ No
 </section>
 <h2 id="MeshConfig-ExtensionProvider-PrometheusMetricsProvider">MeshConfig.ExtensionProvider.PrometheusMetricsProvider</h2>
 <section>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-EnvoyFileBasedAccessLogger">MeshConfig.ExtensionProvider.EnvoyFileBasedAccessLogger</h2>
+<section>
 <table class="message-fields">
 <thead>
 <tr>
@@ -1901,18 +1892,36 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-ExtensionProvider-PrometheusMetricsProvider-disable_agent_metrics_merge">
-<td><code>disableAgentMetricsMerge</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<tr id="MeshConfig-ExtensionProvider-EnvoyFileBasedAccessLogger-file">
+<td><code>file</code></td>
+<td><code>string</code></td>
 <td>
-<p>By default, the Istio agent will merge metrics exposed by the application with metrics from Envoy
-and Istio agent. The sidecar injection will replace <code>prometheus.io</code> annotations present on the pod
-and redirect them towards Istio agent, which will then merge metrics of from the application with Istio metrics.
-This relies on the annotations <code>prometheus.io/scrape</code>, <code>prometheus.io/port</code>, and
-<code>prometheus.io/path</code> annotations.</p>
+<p>File address for the proxy access log (e.g. /dev/stdout).
+If empty, no logs will be generated.</p>
 
-<p>To disable this default behavior, set this to true in your provider and use the Telemetry API to apply this
-configuration to the desired workloads.</p>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyFileBasedAccessLogger-format">
+<td><code>format</code></td>
+<td><code>string</code></td>
+<td>
+<p>Format for the proxy access log
+Empty value results in proxy&rsquo;s default access log format</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyFileBasedAccessLogger-encoding">
+<td><code>encoding</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-EnvoyFileBasedAccessLogger-AccessLogEncoding">AccessLogEncoding</a></code></td>
+<td>
+<p>Encoding for the proxy access log (<code>TEXT</code> or <code>JSON</code>).
+Default value is <code>TEXT</code>.</p>
 
 </td>
 <td>
@@ -3093,6 +3102,33 @@ See the
 <code>X-B3-SpanId</code>, and <code>X-B3-Sampled</code> HTTP headers. See
 <a href="https://github.com/openzipkin/b3-propagation">B3 header propagation README</a>
 for details.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-EnvoyFileBasedAccessLogger-AccessLogEncoding">MeshConfig.ExtensionProvider.EnvoyFileBasedAccessLogger.AccessLogEncoding</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-EnvoyFileBasedAccessLogger-AccessLogEncoding-TEXT">
+<td><code>TEXT</code></td>
+<td>
+<p>text encoding for the proxy access log</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyFileBasedAccessLogger-AccessLogEncoding-JSON">
+<td><code>JSON</code></td>
+<td>
+<p>json encoding for the proxy access log</p>
 
 </td>
 </tr>

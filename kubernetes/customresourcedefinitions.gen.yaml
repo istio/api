@@ -5518,84 +5518,87 @@ spec:
             description: Telemetry defines how the telemetry is generated for workloads
               within a mesh.
             properties:
+              accessLogging:
+                description: Optional.
+                items:
+                  properties:
+                    disableReporting:
+                      description: Controls logging.
+                      nullable: true
+                      type: boolean
+                    providers:
+                      description: Optional.
+                      items:
+                        properties:
+                          name:
+                            description: Required.
+                            type: string
+                        type: object
+                      type: array
+                  type: object
+                type: array
               metrics:
                 description: Optional.
                 items:
                   properties:
-                    config:
-                      description: Customization of the default behavior for metrics.
-                      properties:
-                        enableHostHeaderFallback:
-                          description: Optional.
-                          type: boolean
-                        overrides:
-                          description: Optional.
-                          items:
-                            properties:
-                              dimensions:
-                                additionalProperties:
-                                  type: string
-                                description: Optional.
-                                type: object
-                              metric:
-                                description: Optional.
-                                items:
-                                  enum:
-                                  - ALL
-                                  - REQUEST_COUNT
-                                  - REQUEST_DURATION
-                                  - REQUEST_SIZE
-                                  - RESPONSE_SIZE
-                                  - TCP_OPEN_CONNECTIONS
-                                  - TCP_CLOSED_CONNECTIONS
-                                  - TCP_SENT_BYTES
-                                  - TCP_RECEIVED_BYTES
-                                  - GRPC_REQUEST_MESSAGES
-                                  - GRPC_RESPONSE_MESSAGES
-                                  type: string
-                                type: array
-                              skipReporting:
-                                description: Optional.
-                                type: boolean
-                              tagsToRemove:
-                                description: Optional.
-                                items:
-                                  type: string
-                                type: array
+                    overrides:
+                      description: Optional.
+                      items:
+                        properties:
+                          dimensions:
+                            additionalProperties:
+                              type: string
+                            description: Optional.
                             type: object
-                          type: array
-                        providers:
-                          description: Optional.
-                          items:
-                            properties:
-                              name:
-                                description: Required.
-                                type: string
-                            type: object
-                          type: array
-                        tcpReportingDuration:
-                          description: Optional.
-                          type: string
-                      type: object
-                    match:
-                      description: Defines the conditions under which the associated
-                        configuration applies.
-                      properties:
-                        protocol:
-                          description: Optional.
-                          enum:
-                          - ALL_PROTOCOLS
-                          - HTTP
-                          - TCP
-                          type: string
-                        trafficDirection:
-                          description: Optional.
-                          enum:
-                          - ALL_DIRECTIONS
-                          - OUTBOUND
-                          - INBOUND
-                          type: string
-                      type: object
+                          disableReporting:
+                            description: Optional.
+                            nullable: true
+                            type: boolean
+                          metrics:
+                            description: Optional.
+                            items:
+                              enum:
+                              - ALL
+                              - ALL_SERVER_METRICS
+                              - ALL_CLIENT_METRICS
+                              - SERVER_REQUEST_COUNT
+                              - SERVER_REQUEST_DURATION
+                              - SERVER_REQUEST_SIZE
+                              - SERVER_RESPONSE_SIZE
+                              - SERVER_TCP_OPEN_CONNECTIONS
+                              - SERVER_TCP_CLOSED_CONNECTIONS
+                              - SERVER_TCP_SENT_BYTES
+                              - SERVER_TCP_RECEIVED_BYTES
+                              - SERVER_GRPC_REQUEST_MESSAGES
+                              - SERVER_GRPC_RESPONSE_MESSAGES
+                              - CLIENT_REQUEST_COUNT
+                              - CLIENT_REQUEST_DURATION
+                              - CLIENT_REQUEST_SIZE
+                              - CLIENT_RESPONSE_SIZE
+                              - CLIENT_TCP_OPEN_CONNECTIONS
+                              - CLIENT_TCP_CLOSED_CONNECTIONS
+                              - CLIENT_TCP_SENT_BYTES
+                              - CLIENT_TCP_RECEIVED_BYTES
+                              - CLIENT_GRPC_REQUEST_MESSAGES
+                              - CLIENT_GRPC_RESPONSE_MESSAGES
+                              type: string
+                            type: array
+                          removedTags:
+                            description: Optional.
+                            items:
+                              type: string
+                            type: array
+                        type: object
+                      type: array
+                    providers:
+                      description: Optional.
+                      items:
+                        properties:
+                          name:
+                            description: Required.
+                            type: string
+                        type: object
+                      type: array
                   type: object
                 type: array
               selector:

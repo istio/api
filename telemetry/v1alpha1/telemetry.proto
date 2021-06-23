@@ -51,9 +51,6 @@ package istio.telemetry.v1alpha1;
 // 1. Namespace-specific configuration
 // 1. Root namespace configuration
 //
-// WARNING: Support for Telemetry policies is under active development and is *not* 
-// stable or supported by Istio at this time.
-//
 // Examples:
 //
 // Policy to enable random sampling for 10% of traffic:
@@ -117,7 +114,7 @@ package istio.telemetry.v1alpha1;
 //           value: "foo"
 // ```
 //
-// Policy to disable inbound metrics for an entire mesh:
+// Policy to disable server-side metrics for Stackdriver for an entire mesh:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1alpha1
 // kind: Telemetry
@@ -126,11 +123,74 @@ package istio.telemetry.v1alpha1;
 //   namespace: istio-system
 // spec:
 //   metrics:
-//   - match:
-//       traffic_direction: INBOUND
-//     config:
-//       overrides:
-//       - skip_reporting: true
+//   - providers:
+//     - name: stackdriver
+//     overrides:
+//     - metrics: [ ALL_SERVER_METRICS ]
+//       disableReporting: true
+// ```
+//
+// Policy to add dimensions to all Prometheus metrics for a namespace:
+// ```yaml
+// apiVersion: telemetry.istio.io/v1alpha1
+// kind: Telemetry
+// metadata:
+//   name: namespace-metrics
+//   namespace: foo
+// spec:
+//   metrics:
+//   - providers:
+//     - name: prometheus
+//     overrides:
+//     - metrics: [ ALL ]
+//       dimensions:
+//         destination_port: string(destination.port)
+//         request_host: request.host
+// ```
+//
+// Policy to remove the source_workload dimension on some Prometheus metrics for a workload:
+// ```yaml
+// apiVersion: telemetry.istio.io/v1alpha1
+// kind: Telemetry
+// metadata:
+//   name: remove-source-workload
+//   namespace: foo
+// spec:
+//   selector:
+//     labels:
+//       service.istio.io/canonical-name: bar
+//   metrics:
+//   - providers:
+//     - name: prometheus
+//     overrides:
+//     - metrics: [ SERVER_REQUEST_COUNT, SERVER_REQUEST_DURATION, SERVER_REQUEST_SIZE, SERVER_RESPONSE_SIZE ]
+//       removedTags:
+//       - source_workload
+// ```
+//
+// Policy to enable access logging for the entire mesh:
+// ```yaml
+// apiVersion: telemetry.istio.io/v1alpha1
+// kind: Telemetry
+// metadata:
+//   name: mesh-default
+//   namespace: istio-system
+// spec:
+//   accessLogging:
+//   - providers:
+//     - name: stdout
+// ```
+//
+// Policy to disable access logging for a namespace:
+// ```yaml
+// apiVersion: telemetry.istio.io/v1alpha1
+// kind: Telemetry
+// metadata:
+//   name: namespace-no-log
+//   namespace: foo
+// spec:
+//   accessLogging:
+//   - disableReporting: true
 // ```
 //
 // <!-- crd generation tags
@@ -165,9 +225,13 @@ message Telemetry {
   // selected workloads.
   repeated Tracing tracing = 2;
 
-  // Optional. MetricsRules configure the metrics behavior for all
+  // Optional. Metrics configure the metrics behavior for all
   // selected workloads.
-  repeated MetricsRule metrics = 3;
+  repeated Metrics metrics = 3;
+
+  // Optional. AccessLogging configures the access logging behavior for all
+  // selected workloads.
+  repeated AccessLogging access_logging = 4;
 }
 
 // Tracing configures tracing behavior for workloads within a mesh.
@@ -239,48 +303,6 @@ message Tracing {
   map<string, CustomTag> custom_tags = 5;
 }
 
-// MetricsRule defines how metrics should be reported and under what conditions
-// the reporting should be conducted.
-message MetricsRule {
-  // Defines the conditions under which the associated configuration applies.
-  TelemetryRuleMatch match = 1;
-  // Customization of the default behavior for metrics.
-  Metrics config = 2;
-}
-
-// TelemetryRuleMatch defines conditions for selecting subsets of mesh traffic
-// for a workload. TelemetryRuleMatch is concerned with simplified selection 
-// based on protocol and traffic direction.
-message TelemetryRuleMatch {
-
-  // TrafficDirection selects for traffic relative to the local
-  // proxy. 
-  enum TrafficDirection {
-    // (Default) Match all traffic, regardless of direction.
-    ALL_DIRECTIONS = 0;
-    // Match outbound traffic leaving the proxy. Use this to select "client-side"
-    // traffic in telemetry reporting.
-    // Note: Use OUTBOUND for gateways (even including ingress)
-    OUTBOUND = 1; 
-    // Match incoming traffic for the proxy. Use this to select "server-side"
-    // traffic in telemetry reporting.
-    INBOUND = 2;
-  }
-
-  enum Protocol {
-    ALL_PROTOCOLS = 0;
-    HTTP = 1; // includes HTTP/1.1, gRPC, HTTP/2
-    TCP = 2;
-  }
-
-  // Optional. Specifies the intended direction of the traffic relative to the local proxy.
-  // Defaults to ALL if unset.
-  TrafficDirection traffic_direction = 1; 
-
-  // Optional. Specifies the protocol of the traffic being monitored.
-  Protocol protocol = 2; // Defaults to ALL_PROTOCOLS if unset.
-}
-
 // Used to bind Telemetry configuration to specific providers for
 // targeted customization.
 message ProviderRef {
@@ -300,17 +322,6 @@ message Metrics {
   // Optional. Set of overrides to apply. These include customization of dimensions
   // as well as enablement control.
   repeated MetricsOverrides overrides = 2;
-
-  // Optional. Enable to configure the use of HTTP headers to provide values for
-  // destination services in telemetry if the metadata has not been supplied by
-  // the control plane. This should be enabled with caution, especially at 
-  // ingress, as it can lead to incorrect/surprising results.
-  bool enable_host_header_fallback = 3;
-
-  // Optional. Controls how frequently metrics for TCP connections are updated. This allows
-  // reporting of bytes transferred at intervals for long-lived TCP connections.
-  // Defaults to `15s`.
-  google.protobuf.Duration tcp_reporting_duration = 4;
 }
 
 // MetricsOverrides defines custom monitoring behavior for an individual metric
@@ -320,33 +331,72 @@ message MetricsOverrides {
   // extension to be able to generate. 
   enum StandardMetric {
     ALL = 0;
-    REQUEST_COUNT = 1;
-    REQUEST_DURATION = 2;
-    REQUEST_SIZE = 3;
-    RESPONSE_SIZE = 4;
+    // Special values to provide general specification for directionality
+    ALL_SERVER_METRICS = 21;
+    ALL_CLIENT_METRICS = 22;
 
-    TCP_OPEN_CONNECTIONS = 5;
-    TCP_CLOSED_CONNECTIONS = 6;
-    TCP_SENT_BYTES = 7;
-    TCP_RECEIVED_BYTES = 8;
+    // TODO? Add ALL_HTTP_METRICS, etc. for convenience, future-proofing?
 
-    GRPC_REQUEST_MESSAGES = 9;
-    GRPC_RESPONSE_MESSAGES = 10;
+    SERVER_REQUEST_COUNT = 1;
+    SERVER_REQUEST_DURATION = 2;
+    SERVER_REQUEST_SIZE = 3;
+    SERVER_RESPONSE_SIZE = 4;
+
+    SERVER_TCP_OPEN_CONNECTIONS = 5;
+    SERVER_TCP_CLOSED_CONNECTIONS = 6;
+    SERVER_TCP_SENT_BYTES = 7;
+    SERVER_TCP_RECEIVED_BYTES = 8;
+
+    SERVER_GRPC_REQUEST_MESSAGES = 9;
+    SERVER_GRPC_RESPONSE_MESSAGES = 10;
+
+    CLIENT_REQUEST_COUNT = 11;
+    CLIENT_REQUEST_DURATION = 12;
+    CLIENT_REQUEST_SIZE = 13;
+    CLIENT_RESPONSE_SIZE = 14;
+
+    CLIENT_TCP_OPEN_CONNECTIONS = 15;
+    CLIENT_TCP_CLOSED_CONNECTIONS = 16;
+    CLIENT_TCP_SENT_BYTES = 17;
+    CLIENT_TCP_RECEIVED_BYTES = 18;
+
+    CLIENT_GRPC_REQUEST_MESSAGES = 19;
+    CLIENT_GRPC_RESPONSE_MESSAGES = 20;
   }
 
   // Optional. If not specified, config applied to all metrics.
-  repeated StandardMetric metric = 1;
+  repeated StandardMetric metrics = 1;
 
-  // Optional. Must explicitly set this to "true" to turn off collection.
-  bool skip_reporting = 2;
+  // Optional. Must explicitly set this to "true" to turn off metrics reporting
+  // for the listed metrics.
+  google.protobuf.BoolValue disable_reporting = 2;
 
   // Optional. Collection of tag names and tag expressions to include in the
   // metric. Conflicts are resolved by the tag name by overriding previously
   // supplied values.
+  // The key in the map is the name of the tag.
+  // The value in the map is the attribute expression that will supply the 
+  // value for the tag on the specified metrics.
   // WARNING: some providers may not support adding custom dimensions.
   map<string, string> dimensions = 3;
   
-  // Optional. A list of tags to remove.
+  // Optional. A list of tags to remove from the reported metrics.
+  // Specifying a tag here will drop this tag from all metrics specified in the
+  // override.
   // WARNING: may not be supported by some providers.
-  repeated string tags_to_remove = 4;
+  repeated string removed_tags = 4;
+}
+
+// Metrics defines the workload-level overrides for monitoring behavior within
+// a mesh. It can be used to enable/disable metrics generation, as well as to 
+// customize the shape of the generated metrics.
+message AccessLogging {
+  // Optional. Name of providers to which this configuration should apply.
+  // If a provider is not specified, the [default metrics provider][istio.mesh.v1alpha1.MeshConfig.default_providers.metrics]
+  // will be used.
+  repeated ProviderRef providers = 1;
+
+  // Controls logging. If set to true, no access logs will be generated for
+  // impacted workloads (for the specified providers).
+  google.protobuf.BoolValue disable_reporting = 2;
 }
