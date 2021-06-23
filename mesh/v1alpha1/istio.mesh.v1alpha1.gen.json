@@ -704,11 +704,7 @@
         "type": "object",
         "properties": {
           "path": {
-            "description": "Required. Path to a local file to write the access log entries (e.g. /dev/stdout).",
-            "type": "string"
-          },
-          "textFormat": {
-            "description": "Optional. Text format for the access logger.",
+            "description": "REQUIRED. Path to a local file to write the access log entries (e.g. /dev/stdout).",
             "type": "string"
           }
         }

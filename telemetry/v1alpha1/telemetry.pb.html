@@ -39,6 +39,7 @@ metadata:
   name: mesh-default
   namespace: istio-system
 spec:
+  # no selector specified, applies to all workloads
   tracing:
   - randomSamplingPercentage: 10.00
 </code></pre>
@@ -84,6 +85,7 @@ metadata:
   name: mesh-default
   namespace: istio-system
 spec:
+  # no selector specified, applies to all workloads
   tracing:
   - randomSamplingPercentage: 10.00
     customTags:
@@ -100,6 +102,7 @@ metadata:
   name: mesh-default
   namespace: istio-system
 spec:
+  # no selector specified, applies to all workloads
   metrics:
   - providers:
     - name: stackdriver
@@ -116,6 +119,7 @@ metadata:
   name: namespace-metrics
   namespace: foo
 spec:
+  # no selector specified, applies to all workloads
   metrics:
   - providers:
     - name: prometheus
@@ -159,9 +163,10 @@ metadata:
   name: mesh-default
   namespace: istio-system
 spec:
+  # no selector specified, applies to all workloads
   accessLogging:
   - providers:
-    - name: stdout
+    - name: envoyFileAccessLogger
 </code></pre>
 
 <p>Policy to disable access logging for a namespace:</p>
@@ -172,6 +177,7 @@ metadata:
   name: namespace-no-log
   namespace: foo
 spec:
+  # no selector specified, applies to all workloads
   accessLogging:
   - disabled: true
 </code></pre>

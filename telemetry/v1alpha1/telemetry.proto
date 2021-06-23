@@ -16,7 +16,6 @@ syntax = "proto3";
 
 import "type/v1beta1/selector.proto";
 import "google/protobuf/wrappers.proto";
-import "google/protobuf/duration.proto";
 
 option go_package = "istio.io/api/telemetry/v1alpha1";
 
@@ -61,6 +60,7 @@ package istio.telemetry.v1alpha1;
 //   name: mesh-default
 //   namespace: istio-system
 // spec:
+//   # no selector specified, applies to all workloads
 //   tracing:
 //   - randomSamplingPercentage: 10.00
 // ```
@@ -106,6 +106,7 @@ package istio.telemetry.v1alpha1;
 //   name: mesh-default
 //   namespace: istio-system
 // spec:
+//   # no selector specified, applies to all workloads
 //   tracing:
 //   - randomSamplingPercentage: 10.00
 //     customTags:
@@ -122,6 +123,7 @@ package istio.telemetry.v1alpha1;
 //   name: mesh-default
 //   namespace: istio-system
 // spec:
+//   # no selector specified, applies to all workloads
 //   metrics:
 //   - providers:
 //     - name: stackdriver
@@ -138,6 +140,7 @@ package istio.telemetry.v1alpha1;
 //   name: namespace-metrics
 //   namespace: foo
 // spec:
+//   # no selector specified, applies to all workloads
 //   metrics:
 //   - providers:
 //     - name: prometheus
@@ -181,9 +184,10 @@ package istio.telemetry.v1alpha1;
 //   name: mesh-default
 //   namespace: istio-system
 // spec:
+//   # no selector specified, applies to all workloads
 //   accessLogging:
 //   - providers:
-//     - name: stdout
+//     - name: envoyFileAccessLogger
 // ```
 //
 // Policy to disable access logging for a namespace:
@@ -194,6 +198,7 @@ package istio.telemetry.v1alpha1;
 //   name: namespace-no-log
 //   namespace: foo
 // spec:
+//   # no selector specified, applies to all workloads
 //   accessLogging:
 //   - disabled: true
 // ```
@@ -339,8 +344,6 @@ message MetricsOverrides {
     // Special values to provide general specification for directionality
     ALL_SERVER_METRICS = 21;
     ALL_CLIENT_METRICS = 22;
-
-    // TODO? Add ALL_HTTP_METRICS, etc. for convenience, future-proofing?
 
     SERVER_REQUEST_COUNT = 1;
     SERVER_REQUEST_DURATION = 2;

@@ -15,7 +15,6 @@ _sym_db = _symbol_database.Default()
 
 from type.v1beta1 import selector_pb2 as type_dot_v1beta1_dot_selector__pb2
 from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
-from google.protobuf import duration_pb2 as google_dot_protobuf_dot_duration__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -23,9 +22,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.telemetry.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\037istio.io/api/telemetry/v1alpha1'),
-  serialized_pb=_b('\n\"telemetry/v1alpha1/telemetry.proto\x12\x18istio.telemetry.v1alpha1\x1a\x1btype/v1beta1/selector.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1egoogle/protobuf/duration.proto\"\x97\x02\n\tTelemetry\x12@\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x08selector\x12;\n\x07tracing\x18\x02 \x03(\x0b\x32!.istio.telemetry.v1alpha1.TracingR\x07tracing\x12;\n\x07metrics\x18\x03 \x03(\x0b\x32!.istio.telemetry.v1alpha1.MetricsR\x07metrics\x12N\n\x0e\x61\x63\x63\x65ss_logging\x18\x04 \x03(\x0b\x32\'.istio.telemetry.v1alpha1.AccessLoggingR\raccessLogging\"\xea\x06\n\x07Tracing\x12\x43\n\tproviders\x18\x02 \x03(\x0b\x32%.istio.telemetry.v1alpha1.ProviderRefR\tproviders\x12Z\n\x1arandom_sampling_percentage\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.DoubleValueR\x18randomSamplingPercentage\x12P\n\x16\x64isable_span_reporting\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x14\x64isableSpanReporting\x12R\n\x0b\x63ustom_tags\x18\x05 \x03(\x0b\x32\x31.istio.telemetry.v1alpha1.Tracing.CustomTagsEntryR\ncustomTags\x1a\xf8\x01\n\tCustomTag\x12\x45\n\x07literal\x18\x01 \x01(\x0b\x32).istio.telemetry.v1alpha1.Tracing.LiteralH\x00R\x07literal\x12Q\n\x0b\x65nvironment\x18\x02 \x01(\x0b\x32-.istio.telemetry.v1alpha1.Tracing.EnvironmentH\x00R\x0b\x65nvironment\x12I\n\x06header\x18\x03 \x01(\x0b\x32/.istio.telemetry.v1alpha1.Tracing.RequestHeaderH\x00R\x06headerB\x06\n\x04type\x1a\x1f\n\x07Literal\x12\x14\n\x05value\x18\x01 \x01(\tR\x05value\x1a\x46\n\x0b\x45nvironment\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1aH\n\rRequestHeader\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1aj\n\x0f\x43ustomTagsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x41\n\x05value\x18\x02 \x01(\x0b\x32+.istio.telemetry.v1alpha1.Tracing.CustomTagR\x05value:\x02\x38\x01\"!\n\x0bProviderRef\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"\x98\x01\n\x07Metrics\x12\x43\n\tproviders\x18\x01 \x03(\x0b\x32%.istio.telemetry.v1alpha1.ProviderRefR\tproviders\x12H\n\toverrides\x18\x02 \x03(\x0b\x32*.istio.telemetry.v1alpha1.MetricsOverridesR\toverrides\"\x94\n\n\x10MetricsOverrides\x12S\n\x07metrics\x18\x01 \x03(\x0e\x32\x39.istio.telemetry.v1alpha1.MetricsOverrides.StandardMetricR\x07metrics\x12%\n\x0e\x63ustom_metrics\x18\x02 \x03(\tR\rcustomMetrics\x12\x36\n\x08\x64isabled\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x08\x64isabled\x12\x61\n\rtag_overrides\x18\x04 \x03(\x0b\x32<.istio.telemetry.v1alpha1.MetricsOverrides.TagOverridesEntryR\x0ctagOverrides\x1a\xbc\x01\n\x0bTagOverride\x12^\n\toperation\x18\x01 \x01(\x0e\x32@.istio.telemetry.v1alpha1.MetricsOverrides.TagOverride.OperationR\toperation\x12\x1e\n\nexpression\x18\x02 \x01(\tR\nexpression\"-\n\tOperation\x12\x14\n\x10INSERT_OR_UPDATE\x10\x00\x12\n\n\x06REMOVE\x10\x01\x1aw\n\x11TagOverridesEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12L\n\x05value\x18\x02 \x01(\x0b\x32\x36.istio.telemetry.v1alpha1.MetricsOverrides.TagOverrideR\x05value:\x02\x38\x01\"\xb0\x05\n\x0eStandardMetric\x12\x07\n\x03\x41LL\x10\x00\x12\x16\n\x12\x41LL_SERVER_METRICS\x10\x15\x12\x16\n\x12\x41LL_CLIENT_METRICS\x10\x16\x12\x18\n\x14SERVER_REQUEST_COUNT\x10\x01\x12\x1b\n\x17SERVER_REQUEST_DURATION\x10\x02\x12\x17\n\x13SERVER_REQUEST_SIZE\x10\x03\x12\x18\n\x14SERVER_RESPONSE_SIZE\x10\x04\x12\x1f\n\x1bSERVER_TCP_OPEN_CONNECTIONS\x10\x05\x12!\n\x1dSERVER_TCP_CLOSED_CONNECTIONS\x10\x06\x12\x19\n\x15SERVER_TCP_SENT_BYTES\x10\x07\x12\x1d\n\x19SERVER_TCP_RECEIVED_BYTES\x10\x08\x12 \n\x1cSERVER_GRPC_REQUEST_MESSAGES\x10\t\x12!\n\x1dSERVER_GRPC_RESPONSE_MESSAGES\x10\n\x12\x18\n\x14\x43LIENT_REQUEST_COUNT\x10\x0b\x12\x1b\n\x17\x43LIENT_REQUEST_DURATION\x10\x0c\x12\x17\n\x13\x43LIENT_REQUEST_SIZE\x10\r\x12\x18\n\x14\x43LIENT_RESPONSE_SIZE\x10\x0e\x12\x1f\n\x1b\x43LIENT_TCP_OPEN_CONNECTIONS\x10\x0f\x12!\n\x1d\x43LIENT_TCP_CLOSED_CONNECTIONS\x10\x10\x12\x19\n\x15\x43LIENT_TCP_SENT_BYTES\x10\x11\x12\x1d\n\x19\x43LIENT_TCP_RECEIVED_BYTES\x10\x12\x12 \n\x1c\x43LIENT_GRPC_REQUEST_MESSAGES\x10\x13\x12!\n\x1d\x43LIENT_GRPC_RESPONSE_MESSAGES\x10\x14\x12\x0b\n\x06\x43USTOM\x10\xe7\x07\"\x8c\x01\n\rAccessLogging\x12\x43\n\tproviders\x18\x01 \x03(\x0b\x32%.istio.telemetry.v1alpha1.ProviderRefR\tproviders\x12\x36\n\x08\x64isabled\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x08\x64isabledB!Z\x1fistio.io/api/telemetry/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\"telemetry/v1alpha1/telemetry.proto\x12\x18istio.telemetry.v1alpha1\x1a\x1btype/v1beta1/selector.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x97\x02\n\tTelemetry\x12@\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x08selector\x12;\n\x07tracing\x18\x02 \x03(\x0b\x32!.istio.telemetry.v1alpha1.TracingR\x07tracing\x12;\n\x07metrics\x18\x03 \x03(\x0b\x32!.istio.telemetry.v1alpha1.MetricsR\x07metrics\x12N\n\x0e\x61\x63\x63\x65ss_logging\x18\x04 \x03(\x0b\x32\'.istio.telemetry.v1alpha1.AccessLoggingR\raccessLogging\"\xea\x06\n\x07Tracing\x12\x43\n\tproviders\x18\x02 \x03(\x0b\x32%.istio.telemetry.v1alpha1.ProviderRefR\tproviders\x12Z\n\x1arandom_sampling_percentage\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.DoubleValueR\x18randomSamplingPercentage\x12P\n\x16\x64isable_span_reporting\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x14\x64isableSpanReporting\x12R\n\x0b\x63ustom_tags\x18\x05 \x03(\x0b\x32\x31.istio.telemetry.v1alpha1.Tracing.CustomTagsEntryR\ncustomTags\x1a\xf8\x01\n\tCustomTag\x12\x45\n\x07literal\x18\x01 \x01(\x0b\x32).istio.telemetry.v1alpha1.Tracing.LiteralH\x00R\x07literal\x12Q\n\x0b\x65nvironment\x18\x02 \x01(\x0b\x32-.istio.telemetry.v1alpha1.Tracing.EnvironmentH\x00R\x0b\x65nvironment\x12I\n\x06header\x18\x03 \x01(\x0b\x32/.istio.telemetry.v1alpha1.Tracing.RequestHeaderH\x00R\x06headerB\x06\n\x04type\x1a\x1f\n\x07Literal\x12\x14\n\x05value\x18\x01 \x01(\tR\x05value\x1a\x46\n\x0b\x45nvironment\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1aH\n\rRequestHeader\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1aj\n\x0f\x43ustomTagsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x41\n\x05value\x18\x02 \x01(\x0b\x32+.istio.telemetry.v1alpha1.Tracing.CustomTagR\x05value:\x02\x38\x01\"!\n\x0bProviderRef\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"\x98\x01\n\x07Metrics\x12\x43\n\tproviders\x18\x01 \x03(\x0b\x32%.istio.telemetry.v1alpha1.ProviderRefR\tproviders\x12H\n\toverrides\x18\x02 \x03(\x0b\x32*.istio.telemetry.v1alpha1.MetricsOverridesR\toverrides\"\x94\n\n\x10MetricsOverrides\x12S\n\x07metrics\x18\x01 \x03(\x0e\x32\x39.istio.telemetry.v1alpha1.MetricsOverrides.StandardMetricR\x07metrics\x12%\n\x0e\x63ustom_metrics\x18\x02 \x03(\tR\rcustomMetrics\x12\x36\n\x08\x64isabled\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x08\x64isabled\x12\x61\n\rtag_overrides\x18\x04 \x03(\x0b\x32<.istio.telemetry.v1alpha1.MetricsOverrides.TagOverridesEntryR\x0ctagOverrides\x1a\xbc\x01\n\x0bTagOverride\x12^\n\toperation\x18\x01 \x01(\x0e\x32@.istio.telemetry.v1alpha1.MetricsOverrides.TagOverride.OperationR\toperation\x12\x1e\n\nexpression\x18\x02 \x01(\tR\nexpression\"-\n\tOperation\x12\x14\n\x10INSERT_OR_UPDATE\x10\x00\x12\n\n\x06REMOVE\x10\x01\x1aw\n\x11TagOverridesEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12L\n\x05value\x18\x02 \x01(\x0b\x32\x36.istio.telemetry.v1alpha1.MetricsOverrides.TagOverrideR\x05value:\x02\x38\x01\"\xb0\x05\n\x0eStandardMetric\x12\x07\n\x03\x41LL\x10\x00\x12\x16\n\x12\x41LL_SERVER_METRICS\x10\x15\x12\x16\n\x12\x41LL_CLIENT_METRICS\x10\x16\x12\x18\n\x14SERVER_REQUEST_COUNT\x10\x01\x12\x1b\n\x17SERVER_REQUEST_DURATION\x10\x02\x12\x17\n\x13SERVER_REQUEST_SIZE\x10\x03\x12\x18\n\x14SERVER_RESPONSE_SIZE\x10\x04\x12\x1f\n\x1bSERVER_TCP_OPEN_CONNECTIONS\x10\x05\x12!\n\x1dSERVER_TCP_CLOSED_CONNECTIONS\x10\x06\x12\x19\n\x15SERVER_TCP_SENT_BYTES\x10\x07\x12\x1d\n\x19SERVER_TCP_RECEIVED_BYTES\x10\x08\x12 \n\x1cSERVER_GRPC_REQUEST_MESSAGES\x10\t\x12!\n\x1dSERVER_GRPC_RESPONSE_MESSAGES\x10\n\x12\x18\n\x14\x43LIENT_REQUEST_COUNT\x10\x0b\x12\x1b\n\x17\x43LIENT_REQUEST_DURATION\x10\x0c\x12\x17\n\x13\x43LIENT_REQUEST_SIZE\x10\r\x12\x18\n\x14\x43LIENT_RESPONSE_SIZE\x10\x0e\x12\x1f\n\x1b\x43LIENT_TCP_OPEN_CONNECTIONS\x10\x0f\x12!\n\x1d\x43LIENT_TCP_CLOSED_CONNECTIONS\x10\x10\x12\x19\n\x15\x43LIENT_TCP_SENT_BYTES\x10\x11\x12\x1d\n\x19\x43LIENT_TCP_RECEIVED_BYTES\x10\x12\x12 \n\x1c\x43LIENT_GRPC_REQUEST_MESSAGES\x10\x13\x12!\n\x1d\x43LIENT_GRPC_RESPONSE_MESSAGES\x10\x14\x12\x0b\n\x06\x43USTOM\x10\xe7\x07\"\x8c\x01\n\rAccessLogging\x12\x43\n\tproviders\x18\x01 \x03(\x0b\x32%.istio.telemetry.v1alpha1.ProviderRefR\tproviders\x12\x36\n\x08\x64isabled\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x08\x64isabledB!Z\x1fistio.io/api/telemetry/v1alpha1b\x06proto3')
   ,
-  dependencies=[type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,])
+  dependencies=[type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,])
 
 
 
@@ -46,8 +45,8 @@ _METRICSOVERRIDES_TAGOVERRIDE_OPERATION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1950,
-  serialized_end=1995,
+  serialized_start=1918,
+  serialized_end=1963,
 )
 _sym_db.RegisterEnumDescriptor(_METRICSOVERRIDES_TAGOVERRIDE_OPERATION)
 
@@ -156,8 +155,8 @@ _METRICSOVERRIDES_STANDARDMETRIC = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2119,
-  serialized_end=2807,
+  serialized_start=2087,
+  serialized_end=2775,
 )
 _sym_db.RegisterEnumDescriptor(_METRICSOVERRIDES_STANDARDMETRIC)
 
@@ -209,8 +208,8 @@ _TELEMETRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=158,
-  serialized_end=437,
+  serialized_start=126,
+  serialized_end=405,
 )
 
 
@@ -257,8 +256,8 @@ _TRACING_CUSTOMTAG = _descriptor.Descriptor(
       name='type', full_name='istio.telemetry.v1alpha1.Tracing.CustomTag.type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=779,
-  serialized_end=1027,
+  serialized_start=747,
+  serialized_end=995,
 )
 
 _TRACING_LITERAL = _descriptor.Descriptor(
@@ -287,8 +286,8 @@ _TRACING_LITERAL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1029,
-  serialized_end=1060,
+  serialized_start=997,
+  serialized_end=1028,
 )
 
 _TRACING_ENVIRONMENT = _descriptor.Descriptor(
@@ -324,8 +323,8 @@ _TRACING_ENVIRONMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1062,
-  serialized_end=1132,
+  serialized_start=1030,
+  serialized_end=1100,
 )
 
 _TRACING_REQUESTHEADER = _descriptor.Descriptor(
@@ -361,8 +360,8 @@ _TRACING_REQUESTHEADER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1134,
-  serialized_end=1206,
+  serialized_start=1102,
+  serialized_end=1174,
 )
 
 _TRACING_CUSTOMTAGSENTRY = _descriptor.Descriptor(
@@ -398,8 +397,8 @@ _TRACING_CUSTOMTAGSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1208,
-  serialized_end=1314,
+  serialized_start=1176,
+  serialized_end=1282,
 )
 
 _TRACING = _descriptor.Descriptor(
@@ -449,8 +448,8 @@ _TRACING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=440,
-  serialized_end=1314,
+  serialized_start=408,
+  serialized_end=1282,
 )
 
 
@@ -480,8 +479,8 @@ _PROVIDERREF = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1316,
-  serialized_end=1349,
+  serialized_start=1284,
+  serialized_end=1317,
 )
 
 
@@ -518,8 +517,8 @@ _METRICS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1352,
-  serialized_end=1504,
+  serialized_start=1320,
+  serialized_end=1472,
 )
 
 
@@ -557,8 +556,8 @@ _METRICSOVERRIDES_TAGOVERRIDE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1807,
-  serialized_end=1995,
+  serialized_start=1775,
+  serialized_end=1963,
 )
 
 _METRICSOVERRIDES_TAGOVERRIDESENTRY = _descriptor.Descriptor(
@@ -594,8 +593,8 @@ _METRICSOVERRIDES_TAGOVERRIDESENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1997,
-  serialized_end=2116,
+  serialized_start=1965,
+  serialized_end=2084,
 )
 
 _METRICSOVERRIDES = _descriptor.Descriptor(
@@ -646,8 +645,8 @@ _METRICSOVERRIDES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1507,
-  serialized_end=2807,
+  serialized_start=1475,
+  serialized_end=2775,
 )
 
 
@@ -684,8 +683,8 @@ _ACCESSLOGGING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2810,
-  serialized_end=2950,
+  serialized_start=2778,
+  serialized_end=2918,
 )
 
 _TELEMETRY.fields_by_name['selector'].message_type = type_dot_v1beta1_dot_selector__pb2._WORKLOADSELECTOR
