@@ -454,6 +454,16 @@
                       "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.PrometheusMetricsProvider"
                     }
                   }
+                },
+                {
+                  "required": [
+                    "envoyFileAccessLog"
+                  ],
+                  "properties": {
+                    "envoyFileAccessLog": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider"
+                    }
+                  }
                 }
               ]
             }
@@ -545,6 +555,16 @@
             "properties": {
               "prometheus": {
                 "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.PrometheusMetricsProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "envoyFileAccessLog"
+            ],
+            "properties": {
+              "envoyFileAccessLog": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider"
               }
             }
           }
@@ -680,28 +700,18 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileBasedAccessLogger": {
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider": {
         "type": "object",
         "properties": {
-          "file": {
-            "description": "File address for the proxy access log (e.g. /dev/stdout). If empty, no logs will be generated.",
+          "path": {
+            "description": "Required. Path to a local file to write the access log entries (e.g. /dev/stdout).",
             "type": "string"
           },
-          "format": {
-            "description": "Format for the proxy access log Empty value results in proxy's default access log format",
+          "textFormat": {
+            "description": "Optional. Text format for the access logger.",
             "type": "string"
-          },
-          "encoding": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileBasedAccessLogger.AccessLogEncoding"
           }
         }
-      },
-      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileBasedAccessLogger.AccessLogEncoding": {
-        "type": "string",
-        "enum": [
-          "TEXT",
-          "JSON"
-        ]
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider": {
         "description": "Defines configuration for a Lightstep tracer.",

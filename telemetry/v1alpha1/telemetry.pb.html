@@ -2,7 +2,7 @@
 title: istio.telemetry.v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 11
+number_of_entries: 13
 ---
 <h2 id="Telemetry">Telemetry</h2>
 <section>
@@ -105,7 +105,7 @@ spec:
     - name: stackdriver
     overrides:
     - metrics: [ ALL_SERVER_METRICS ]
-      disableReporting: true
+      disabled: true
 </code></pre>
 
 <p>Policy to add dimensions to all Prometheus metrics for a namespace:</p>
@@ -121,9 +121,13 @@ spec:
     - name: prometheus
     overrides:
     - metrics: [ ALL ]
-      dimensions:
-        destination_port: string(destination.port)
-        request_host: request.host
+      tagOverrides:
+        destination_port:
+          operation: INSERT_OR_UPDATE
+          expression: &quot;string(destination.port)&quot;
+        request_host:
+          operation: INSERT_OR_UPDATE
+          expression: &quot;request.host&quot;
 </code></pre>
 
 <p>Policy to remove the source_workload dimension on some Prometheus metrics for a workload:</p>
@@ -142,8 +146,9 @@ spec:
     - name: prometheus
     overrides:
     - metrics: [ SERVER_REQUEST_COUNT, SERVER_REQUEST_DURATION, SERVER_REQUEST_SIZE, SERVER_RESPONSE_SIZE ]
-      removedTags:
-      - source_workload
+      tagOverrides:
+        source_workload:
+          operation: REMOVE
 </code></pre>
 
 <p>Policy to enable access logging for the entire mesh:</p>
@@ -168,7 +173,7 @@ metadata:
   namespace: foo
 spec:
   accessLogging:
-  - disableReporting: true
+  - disabled: true
 </code></pre>
 
 <table class="message-fields">
@@ -409,8 +414,21 @@ or the set of all standard metrics.</p>
 No
 </td>
 </tr>
-<tr id="MetricsOverrides-disable_reporting">
-<td><code>disableReporting</code></td>
+<tr id="MetricsOverrides-custom_metrics">
+<td><code>customMetrics</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Optional. Only valid for use with when metrics includes CUSTOM. Otherwise,
+it will be ignored. This provides a way to override behavior for non-standard
+metrics. The value should match the name of the metrics.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MetricsOverrides-disabled">
+<td><code>disabled</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
 <p>Optional. Must explicitly set this to &ldquo;true&rdquo; to turn off metrics reporting
@@ -421,31 +439,15 @@ for the listed metrics.</p>
 No
 </td>
 </tr>
-<tr id="MetricsOverrides-dimensions">
-<td><code>dimensions</code></td>
-<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<tr id="MetricsOverrides-tag_overrides">
+<td><code>tagOverrides</code></td>
+<td><code>map&lt;string,&nbsp;<a href="#MetricsOverrides-TagOverride">TagOverride</a>&gt;</code></td>
 <td>
-<p>Optional. Collection of tag names and tag expressions to include in the
-metric. Conflicts are resolved by the tag name by overriding previously
-supplied values.
+<p>Optional. Collection of tag names and tag expressions to override in the
+selected metric(s).
 The key in the map is the name of the tag.
-The value in the map is the attribute expression that will supply the
-value for the tag on the specified metrics.
-WARNING: some providers may not support adding custom dimensions.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MetricsOverrides-removed_tags">
-<td><code>removedTags</code></td>
-<td><code>string[]</code></td>
-<td>
-<p>Optional. A list of tags to remove from the reported metrics.
-Specifying a tag here will drop this tag from all metrics specified in the
-override.
-WARNING: may not be supported by some providers.</p>
+The value in the map is the operation to perform on the the tag.
+WARNING: some providers may not support adding/removing tags.</p>
 
 </td>
 <td>
@@ -476,7 +478,7 @@ customize the shape of the generated metrics.</p>
 <td><code><a href="#ProviderRef">ProviderRef[]</a></code></td>
 <td>
 <p>Optional. Name of providers to which this configuration should apply.
-If a provider is not specified, the <em>default metrics provider</em>
+If a provider is not specified, the <em>default logging provider</em>
 will be used.</p>
 
 </td>
@@ -484,8 +486,8 @@ will be used.</p>
 No
 </td>
 </tr>
-<tr id="AccessLogging-disable_reporting">
-<td><code>disableReporting</code></td>
+<tr id="AccessLogging-disabled">
+<td><code>disabled</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
 <p>Controls logging. If set to true, no access logs will be generated for
@@ -654,6 +656,69 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="MetricsOverrides-TagOverride">MetricsOverrides.TagOverride</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MetricsOverrides-TagOverride-operation">
+<td><code>operation</code></td>
+<td><code><a href="#MetricsOverrides-TagOverride-Operation">Operation</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MetricsOverrides-TagOverride-expression">
+<td><code>expression</code></td>
+<td><code>string</code></td>
+<td>
+<p>Expression is only considered if the operation is INSERT<em>OR</em>UPDATE.
+Expressions are <a href="https://opensource.google/projects/cel">CEL expressions</a> over attributes.
+Examples include: &ldquo;string(destination.port)&rdquo; and &ldquo;request.host&rdquo;.
+Istio exposes all standard <a href="https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/advanced/attributes">Envoy attributes</a>.
+Additionally, Istio exposes node metadata as attributes.
+More information is provided in the <a href="https://istio.io/latest/docs/tasks/observability/metrics/customize-metrics/#use-expressions-for-values">customization docs</a>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MetricsOverrides-TagOverride-Operation">MetricsOverrides.TagOverride.Operation</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MetricsOverrides-TagOverride-Operation-INSERT_OR_UPDATE">
+<td><code>INSERT_OR_UPDATE</code></td>
+<td>
+</td>
+</tr>
+<tr id="MetricsOverrides-TagOverride-Operation-REMOVE">
+<td><code>REMOVE</code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="MetricsOverrides-StandardMetric">MetricsOverrides.StandardMetric</h2>
 <section>
 <p>Curated list of known metric types that Istio expects every Metrics
@@ -782,6 +847,15 @@ extension to be able to generate.</p>
 <tr id="MetricsOverrides-StandardMetric-CLIENT_GRPC_RESPONSE_MESSAGES">
 <td><code>CLIENT_GRPC_RESPONSE_MESSAGES</code></td>
 <td>
+</td>
+</tr>
+<tr id="MetricsOverrides-StandardMetric-CUSTOM">
+<td><code>CUSTOM</code></td>
+<td>
+<p>Some providers may provide custom metrics that extend the Istio
+standard metrics set. This provides a way to configure those
+unknown metrics with this API.</p>
+
 </td>
 </tr>
 </tbody>

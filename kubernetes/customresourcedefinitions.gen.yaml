@@ -5522,7 +5522,7 @@ spec:
                 description: Optional.
                 items:
                   properties:
-                    disableReporting:
+                    disabled:
                       description: Controls logging.
                       nullable: true
                       type: boolean
@@ -5545,12 +5545,12 @@ spec:
                       description: Optional.
                       items:
                         properties:
-                          dimensions:
-                            additionalProperties:
-                              type: string
+                          customMetrics:
                             description: Optional.
-                            type: object
-                          disableReporting:
+                            items:
+                              type: string
+                            type: array
+                          disabled:
                             description: Optional.
                             nullable: true
                             type: boolean
@@ -5581,13 +5581,24 @@ spec:
                               - CLIENT_TCP_RECEIVED_BYTES
                               - CLIENT_GRPC_REQUEST_MESSAGES
                               - CLIENT_GRPC_RESPONSE_MESSAGES
+                              - CUSTOM
                               type: string
                             type: array
-                          removedTags:
+                          tagOverrides:
+                            additionalProperties:
+                              properties:
+                                expression:
+                                  description: Expression is only considered if the
+                                    operation is INSERT_OR_UPDATE.
+                                  type: string
+                                operation:
+                                  enum:
+                                  - INSERT_OR_UPDATE
+                                  - REMOVE
+                                  type: string
+                              type: object
                             description: Optional.
-                            items:
-                              type: string
-                            type: array
+                            type: object
                         type: object
                       type: array
                     providers:

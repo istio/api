@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 48
+number_of_entries: 47
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -1072,6 +1072,17 @@ No
 No
 </td>
 </tr>
+<tr id="MeshConfig-ExtensionProvider-envoy_file_access_log" class="oneof">
+<td><code>envoyFileAccessLog</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-EnvoyFileAccessLogProvider">EnvoyFileAccessLogProvider (oneof)</a></code></td>
+<td>
+<p>Configures an Envoy File Access Log provider.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1880,7 +1891,7 @@ No
 <h2 id="MeshConfig-ExtensionProvider-PrometheusMetricsProvider">MeshConfig.ExtensionProvider.PrometheusMetricsProvider</h2>
 <section>
 </section>
-<h2 id="MeshConfig-ExtensionProvider-EnvoyFileBasedAccessLogger">MeshConfig.ExtensionProvider.EnvoyFileBasedAccessLogger</h2>
+<h2 id="MeshConfig-ExtensionProvider-EnvoyFileAccessLogProvider">MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider</h2>
 <section>
 <table class="message-fields">
 <thead>
@@ -1892,36 +1903,22 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-ExtensionProvider-EnvoyFileBasedAccessLogger-file">
-<td><code>file</code></td>
+<tr id="MeshConfig-ExtensionProvider-EnvoyFileAccessLogProvider-path">
+<td><code>path</code></td>
 <td><code>string</code></td>
 <td>
-<p>File address for the proxy access log (e.g. /dev/stdout).
-If empty, no logs will be generated.</p>
+<p>Required. Path to a local file to write the access log entries (e.g. /dev/stdout).</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-EnvoyFileBasedAccessLogger-format">
-<td><code>format</code></td>
+<tr id="MeshConfig-ExtensionProvider-EnvoyFileAccessLogProvider-text_format">
+<td><code>textFormat</code></td>
 <td><code>string</code></td>
 <td>
-<p>Format for the proxy access log
-Empty value results in proxy&rsquo;s default access log format</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-ExtensionProvider-EnvoyFileBasedAccessLogger-encoding">
-<td><code>encoding</code></td>
-<td><code><a href="#MeshConfig-ExtensionProvider-EnvoyFileBasedAccessLogger-AccessLogEncoding">AccessLogEncoding</a></code></td>
-<td>
-<p>Encoding for the proxy access log (<code>TEXT</code> or <code>JSON</code>).
-Default value is <code>TEXT</code>.</p>
+<p>Optional. Text format for the access logger.</p>
 
 </td>
 <td>
@@ -3102,33 +3099,6 @@ See the
 <code>X-B3-SpanId</code>, and <code>X-B3-Sampled</code> HTTP headers. See
 <a href="https://github.com/openzipkin/b3-propagation">B3 header propagation README</a>
 for details.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="MeshConfig-ExtensionProvider-EnvoyFileBasedAccessLogger-AccessLogEncoding">MeshConfig.ExtensionProvider.EnvoyFileBasedAccessLogger.AccessLogEncoding</h2>
-<section>
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="MeshConfig-ExtensionProvider-EnvoyFileBasedAccessLogger-AccessLogEncoding-TEXT">
-<td><code>TEXT</code></td>
-<td>
-<p>text encoding for the proxy access log</p>
-
-</td>
-</tr>
-<tr id="MeshConfig-ExtensionProvider-EnvoyFileBasedAccessLogger-AccessLogEncoding-JSON">
-<td><code>JSON</code></td>
-<td>
-<p>json encoding for the proxy access log</p>
 
 </td>
 </tr>

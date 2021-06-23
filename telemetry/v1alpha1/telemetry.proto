@@ -127,7 +127,7 @@ package istio.telemetry.v1alpha1;
 //     - name: stackdriver
 //     overrides:
 //     - metrics: [ ALL_SERVER_METRICS ]
-//       disableReporting: true
+//       disabled: true
 // ```
 //
 // Policy to add dimensions to all Prometheus metrics for a namespace:
@@ -143,9 +143,13 @@ package istio.telemetry.v1alpha1;
 //     - name: prometheus
 //     overrides:
 //     - metrics: [ ALL ]
-//       dimensions:
-//         destination_port: string(destination.port)
-//         request_host: request.host
+//       tagOverrides:
+//         destination_port:
+//           operation: INSERT_OR_UPDATE
+//           expression: "string(destination.port)"
+//         request_host:
+//           operation: INSERT_OR_UPDATE
+//           expression: "request.host"
 // ```
 //
 // Policy to remove the source_workload dimension on some Prometheus metrics for a workload:
@@ -164,8 +168,9 @@ package istio.telemetry.v1alpha1;
 //     - name: prometheus
 //     overrides:
 //     - metrics: [ SERVER_REQUEST_COUNT, SERVER_REQUEST_DURATION, SERVER_REQUEST_SIZE, SERVER_RESPONSE_SIZE ]
-//       removedTags:
-//       - source_workload
+//       tagOverrides:
+//         source_workload:
+//           operation: REMOVE
 // ```
 //
 // Policy to enable access logging for the entire mesh:
@@ -190,7 +195,7 @@ package istio.telemetry.v1alpha1;
 //   namespace: foo
 // spec:
 //   accessLogging:
-//   - disableReporting: true
+//   - disabled: true
 // ```
 //
 // <!-- crd generation tags
@@ -362,29 +367,47 @@ message MetricsOverrides {
 
     CLIENT_GRPC_REQUEST_MESSAGES = 19;
     CLIENT_GRPC_RESPONSE_MESSAGES = 20;
+
+    // Some providers may provide custom metrics that extend the Istio
+    // standard metrics set. This provides a way to configure those
+    // unknown metrics with this API.
+    CUSTOM = 999;
   }
 
   // Optional. If not specified, config applied to all metrics.
   repeated StandardMetric metrics = 1;
 
+  // Optional. Only valid for use with when metrics includes CUSTOM. Otherwise,
+  // it will be ignored. This provides a way to override behavior for non-standard
+  // metrics. The value should match the name of the metrics.
+  repeated string custom_metrics = 2;
+
   // Optional. Must explicitly set this to "true" to turn off metrics reporting
   // for the listed metrics.
-  google.protobuf.BoolValue disable_reporting = 2;
+  google.protobuf.BoolValue disabled = 3;
 
-  // Optional. Collection of tag names and tag expressions to include in the
-  // metric. Conflicts are resolved by the tag name by overriding previously
-  // supplied values.
+  message TagOverride {
+    enum Operation {
+      INSERT_OR_UPDATE = 0;
+      REMOVE = 1;
+    }
+    Operation operation = 1;
+
+    // Expression is only considered if the operation is INSERT_OR_UPDATE.
+    // Expressions are [CEL expressions](https://opensource.google/projects/cel) over attributes.
+    // Examples include: "string(destination.port)" and "request.host".
+    // Istio exposes all standard [Envoy attributes](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/advanced/attributes).
+    // Additionally, Istio exposes node metadata as attributes.
+    // More information is provided in the [customization docs](https://istio.io/latest/docs/tasks/observability/metrics/customize-metrics/#use-expressions-for-values).
+    string expression = 2;
+  }
+
+  // Optional. Collection of tag names and tag expressions to override in the
+  // selected metric(s).
   // The key in the map is the name of the tag.
-  // The value in the map is the attribute expression that will supply the 
-  // value for the tag on the specified metrics.
-  // WARNING: some providers may not support adding custom dimensions.
-  map<string, string> dimensions = 3;
-  
-  // Optional. A list of tags to remove from the reported metrics.
-  // Specifying a tag here will drop this tag from all metrics specified in the
-  // override.
-  // WARNING: may not be supported by some providers.
-  repeated string removed_tags = 4;
+  // The value in the map is the operation to perform on the the tag. 
+  // WARNING: some providers may not support adding/removing tags.
+  map<string, TagOverride> tag_overrides = 4;
 }
 
 // Metrics defines the workload-level overrides for monitoring behavior within
@@ -392,11 +415,11 @@ message MetricsOverrides {
 // customize the shape of the generated metrics.
 message AccessLogging {
   // Optional. Name of providers to which this configuration should apply.
-  // If a provider is not specified, the [default metrics provider][istio.mesh.v1alpha1.MeshConfig.default_providers.metrics]
+  // If a provider is not specified, the [default logging provider][istio.mesh.v1alpha1.MeshConfig.default_providers.]
   // will be used.
   repeated ProviderRef providers = 1;
 
   // Controls logging. If set to true, no access logs will be generated for
   // impacted workloads (for the specified providers).
-  google.protobuf.BoolValue disable_reporting = 2;
+  google.protobuf.BoolValue disabled = 2;
 }
