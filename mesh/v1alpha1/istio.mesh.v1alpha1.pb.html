@@ -1036,8 +1036,8 @@ No
 <td><code>string</code></td>
 <td>
 <p>REQUIRED. Specifies the service that implements the Envoy ext_authz HTTP authorization service.
-The format is &ldquo;[<Namespace>/]<Hostname>&rdquo;. The specification of <Namespace> is required only when it is insufficient
-to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+The format is <code>[&lt;Namespace&gt;/]&lt;Hostname&gt;</code>. The specification of <code>&lt;Namespace&gt;</code> is required only when it is insufficient
+to unambiguously resolve a service in the service registry. The <code>&lt;Hostname&gt;</code> is a fully qualified host name of a
 service defined by the Kubernetes service or ServiceEntry.</p>
 
 <p>Example: &ldquo;my-ext-authz.foo.svc.cluster.local&rdquo; or &ldquo;bar/my-ext-authz.example.com&rdquo;.</p>
@@ -1161,8 +1161,8 @@ No
 <td><code>string</code></td>
 <td>
 <p>REQUIRED. Specifies the service that implements the Envoy ext_authz gRPC authorization service.
-The format is &ldquo;[<Namespace>/]<Hostname>&rdquo;. The specification of <Namespace> is required only when it is insufficient
-to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+The format is <code>[&lt;Namespace&gt;/]&lt;Hostname&gt;</code>. The specification of <code>&lt;Namespace&gt;</code> is required only when it is insufficient
+to unambiguously resolve a service in the service registry. The <code>&lt;Hostname&gt;</code> is a fully qualified host name of a
 service defined by the Kubernetes service or ServiceEntry.</p>
 
 <p>Example: &ldquo;my-ext-authz.foo.svc.cluster.local&rdquo; or &ldquo;bar/my-ext-authz.example.com&rdquo;.</p>
