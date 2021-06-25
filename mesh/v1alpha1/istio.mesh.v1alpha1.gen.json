@@ -639,7 +639,7 @@
             "type": "integer"
           },
           "service": {
-            "description": "REQUIRED. Specifies the service that implements the Envoy ext_authz HTTP authorization service. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
+            "description": "REQUIRED. Specifies the service that implements the Envoy ext_authz HTTP authorization service. The format is `[\u003cNamespace\u003e/]\u003cHostname\u003e`. The specification of `\u003cNamespace\u003e` is required only when it is insufficient to unambiguously resolve a service in the service registry. The `\u003cHostname\u003e` is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
             "type": "string",
             "format": "string"
           },
@@ -691,7 +691,7 @@
             "type": "integer"
           },
           "service": {
-            "description": "REQUIRED. Specifies the service that implements the Envoy ext_authz gRPC authorization service. The format is \"[\u003cNamespace\u003e/]\u003cHostname\u003e\". The specification of \u003cNamespace\u003e is required only when it is insufficient to unambiguously resolve a service in the service registry. The \u003cHostname\u003e is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
+            "description": "REQUIRED. Specifies the service that implements the Envoy ext_authz gRPC authorization service. The format is `[\u003cNamespace\u003e/]\u003cHostname\u003e`. The specification of `\u003cNamespace\u003e` is required only when it is insufficient to unambiguously resolve a service in the service registry. The `\u003cHostname\u003e` is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
             "type": "string",
             "format": "string"
           },
