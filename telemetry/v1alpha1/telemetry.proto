@@ -128,7 +128,8 @@ package istio.telemetry.v1alpha1;
 //   - providers:
 //     - name: stackdriver
 //     overrides:
-//     - metrics: [ ALL_SERVER_METRICS ]
+//     - metrics: [ ALL_METRICS ]
+//       trafficMatch: INBOUND_TRAFFIC
 //       disabled: true
 // ```
 //
@@ -145,7 +146,8 @@ package istio.telemetry.v1alpha1;
 //   - providers:
 //     - name: prometheus
 //     overrides:
-//     - metrics: [ ALL ]
+//     - metrics: [ ALL_METRICS ]
+//       trafficMatch: ALL_TRAFFIC
 //       tagOverrides:
 //         destination_port:
 //           operation: INSERT_OR_UPDATE
@@ -170,7 +172,8 @@ package istio.telemetry.v1alpha1;
 //   - providers:
 //     - name: prometheus
 //     overrides:
-//     - metrics: [ SERVER_REQUEST_COUNT, SERVER_REQUEST_DURATION, SERVER_REQUEST_SIZE, SERVER_RESPONSE_SIZE ]
+//     - metrics: [ REQUEST_COUNT, REQUEST_DURATION, REQUEST_SIZE, RESPONSE_SIZE ]
+//       trafficMatch: ALL_TRAFFIC
 //       tagOverrides:
 //         source_workload:
 //           operation: REMOVE
@@ -320,9 +323,9 @@ message ProviderRef {
   string name = 1;
 }
 
-// Metrics defines the workload-level overrides for monitoring behavior within
-// a mesh. It can be used to enable/disable metrics generation, as well as to 
-// customize the shape of the generated metrics.
+// Metrics defines the workload-level overrides for metrics generation behavior
+// within a mesh. It can be used to enable/disable metrics generation, as well
+// as to customize the dimensions of the generated metrics.
 message Metrics {
   // Optional. Name of providers to which this configuration should apply.
   // If a provider is not specified, the [default metrics provider][istio.mesh.v1alpha1.MeshConfig.default_providers.metrics]
@@ -334,56 +337,40 @@ message Metrics {
   repeated MetricsOverrides overrides = 2;
 }
 
-// MetricsOverrides defines custom monitoring behavior for an individual metric
-// or the set of all standard metrics.
+// MetricsOverrides defines custom metric generation behavior for an individual
+// metric or the set of all standard metrics.
 message MetricsOverrides {
-  // Curated list of known metric types that Istio expects every Metrics
-  // extension to be able to generate. 
+
+  // Curated list of known metric types that is supported by all metric providers.
   enum StandardMetric {
-    ALL = 0;
-    // Special values to provide general specification for directionality
-    ALL_SERVER_METRICS = 21;
-    ALL_CLIENT_METRICS = 22;
+    ALL_METRICS = 0;
 
-    SERVER_REQUEST_COUNT = 1;
-    SERVER_REQUEST_DURATION = 2;
-    SERVER_REQUEST_SIZE = 3;
-    SERVER_RESPONSE_SIZE = 4;
+    REQUEST_COUNT = 1;
+    REQUEST_DURATION = 2;
+    REQUEST_SIZE = 3;
+    RESPONSE_SIZE = 4;
 
-    SERVER_TCP_OPEN_CONNECTIONS = 5;
-    SERVER_TCP_CLOSED_CONNECTIONS = 6;
-    SERVER_TCP_SENT_BYTES = 7;
-    SERVER_TCP_RECEIVED_BYTES = 8;
+    TCP_OPEN_CONNECTIONS = 5;
+    TCP_CLOSED_CONNECTIONS = 6;
+    TCP_SENT_BYTES = 7;
+    TCP_RECEIVED_BYTES = 8;
 
-    SERVER_GRPC_REQUEST_MESSAGES = 9;
-    SERVER_GRPC_RESPONSE_MESSAGES = 10;
-
-    CLIENT_REQUEST_COUNT = 11;
-    CLIENT_REQUEST_DURATION = 12;
-    CLIENT_REQUEST_SIZE = 13;
-    CLIENT_RESPONSE_SIZE = 14;
-
-    CLIENT_TCP_OPEN_CONNECTIONS = 15;
-    CLIENT_TCP_CLOSED_CONNECTIONS = 16;
-    CLIENT_TCP_SENT_BYTES = 17;
-    CLIENT_TCP_RECEIVED_BYTES = 18;
-
-    CLIENT_GRPC_REQUEST_MESSAGES = 19;
-    CLIENT_GRPC_RESPONSE_MESSAGES = 20;
-
-    // Some providers may provide custom metrics that extend the Istio
-    // standard metrics set. This provides a way to configure those
-    // unknown metrics with this API.
-    CUSTOM = 999;
+    GRPC_REQUEST_MESSAGES = 9;
+    GRPC_RESPONSE_MESSAGES = 10;
   }
 
   // Optional. If not specified, config applied to all metrics.
   repeated StandardMetric metrics = 1;
 
-  // Optional. Only valid for use with when metrics includes CUSTOM. Otherwise,
-  // it will be ignored. This provides a way to override behavior for non-standard
-  // metrics. The value should match the name of the metrics.
-  repeated string custom_metrics = 2;
+  enum TrafficMatch {
+    ALL_TRAFFIC = 0;
+    INBOUND_TRAFFIC = 1;
+    OUTBOUND_TRAFFIC = 2;
+  }
+
+  // Optional. Matches traffic direction *from the perspective of the
+  // workload*. 
+  TrafficMatch traffic_match = 2;
 
   // Optional. Must explicitly set this to "true" to turn off metrics reporting
   // for the listed metrics.
@@ -413,9 +400,8 @@ message MetricsOverrides {
   map<string, TagOverride> tag_overrides = 4;
 }
 
-// Metrics defines the workload-level overrides for monitoring behavior within
-// a mesh. It can be used to enable/disable metrics generation, as well as to 
-// customize the shape of the generated metrics.
+// Access logging defines the workload-level overrides for access log generation.
+// It can be used to select provider or enable/disable access log generation for a workload.
 message AccessLogging {
   // Optional. Name of providers to which this configuration should apply.
   // If a provider is not specified, the [default logging provider][istio.mesh.v1alpha1.MeshConfig.default_providers.]

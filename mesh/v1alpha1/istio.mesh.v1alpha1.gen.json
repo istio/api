@@ -340,16 +340,25 @@
         "type": "object",
         "properties": {
           "tracing": {
-            "description": "Name of the default provider for tracing. This must match a provider defined in `extension_providers` that is one of the supported tracing providers.",
-            "type": "string"
+            "description": "Name of the default provider(s) for tracing.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "metrics": {
-            "description": "Name of the default provider for metrics. This must match a provider defined in `extension_providers` that is one of the supported metrics providers.",
-            "type": "string"
+            "description": "Name of the default provider(s) for metrics.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "accessLogging": {
-            "description": "Name of the default provider for access logging. This must match a provider defined in `extension_providers` that is one of the supported access logging providers.",
-            "type": "string"
+            "description": "Name of the default provider(s) for access logging.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },

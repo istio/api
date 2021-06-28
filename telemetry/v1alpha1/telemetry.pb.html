@@ -2,7 +2,7 @@
 title: istio.telemetry.v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 13
+number_of_entries: 14
 ---
 <h2 id="Telemetry">Telemetry</h2>
 <section>
@@ -107,7 +107,8 @@ spec:
   - providers:
     - name: stackdriver
     overrides:
-    - metrics: [ ALL_SERVER_METRICS ]
+    - metrics: [ ALL_METRICS ]
+      trafficMatch: INBOUND_TRAFFIC
       disabled: true
 </code></pre>
 
@@ -124,7 +125,8 @@ spec:
   - providers:
     - name: prometheus
     overrides:
-    - metrics: [ ALL ]
+    - metrics: [ ALL_METRICS ]
+      trafficMatch: ALL_TRAFFIC
       tagOverrides:
         destination_port:
           operation: INSERT_OR_UPDATE
@@ -149,7 +151,8 @@ spec:
   - providers:
     - name: prometheus
     overrides:
-    - metrics: [ SERVER_REQUEST_COUNT, SERVER_REQUEST_DURATION, SERVER_REQUEST_SIZE, SERVER_RESPONSE_SIZE ]
+    - metrics: [ REQUEST_COUNT, REQUEST_DURATION, REQUEST_SIZE, RESPONSE_SIZE ]
+      trafficMatch: ALL_TRAFFIC
       tagOverrides:
         source_workload:
           operation: REMOVE
@@ -352,9 +355,9 @@ No
 </section>
 <h2 id="Metrics">Metrics</h2>
 <section>
-<p>Metrics defines the workload-level overrides for monitoring behavior within
-a mesh. It can be used to enable/disable metrics generation, as well as to
-customize the shape of the generated metrics.</p>
+<p>Metrics defines the workload-level overrides for metrics generation behavior
+within a mesh. It can be used to enable/disable metrics generation, as well
+as to customize the dimensions of the generated metrics.</p>
 
 <table class="message-fields">
 <thead>
@@ -396,8 +399,8 @@ No
 </section>
 <h2 id="MetricsOverrides">MetricsOverrides</h2>
 <section>
-<p>MetricsOverrides defines custom monitoring behavior for an individual metric
-or the set of all standard metrics.</p>
+<p>MetricsOverrides defines custom metric generation behavior for an individual
+metric or the set of all standard metrics.</p>
 
 <table class="message-fields">
 <thead>
@@ -420,13 +423,12 @@ or the set of all standard metrics.</p>
 No
 </td>
 </tr>
-<tr id="MetricsOverrides-custom_metrics">
-<td><code>customMetrics</code></td>
-<td><code>string[]</code></td>
+<tr id="MetricsOverrides-traffic_match">
+<td><code>trafficMatch</code></td>
+<td><code><a href="#MetricsOverrides-TrafficMatch">TrafficMatch</a></code></td>
 <td>
-<p>Optional. Only valid for use with when metrics includes CUSTOM. Otherwise,
-it will be ignored. This provides a way to override behavior for non-standard
-metrics. The value should match the name of the metrics.</p>
+<p>Optional. Matches traffic direction <em>from the perspective of the
+workload</em>.</p>
 
 </td>
 <td>
@@ -465,9 +467,8 @@ No
 </section>
 <h2 id="AccessLogging">AccessLogging</h2>
 <section>
-<p>Metrics defines the workload-level overrides for monitoring behavior within
-a mesh. It can be used to enable/disable metrics generation, as well as to
-customize the shape of the generated metrics.</p>
+<p>Access logging defines the workload-level overrides for access log generation.
+It can be used to select provider or enable/disable access log generation for a workload.</p>
 
 <table class="message-fields">
 <thead>
@@ -727,8 +728,7 @@ No
 </section>
 <h2 id="MetricsOverrides-StandardMetric">MetricsOverrides.StandardMetric</h2>
 <section>
-<p>Curated list of known metric types that Istio expects every Metrics
-extension to be able to generate.</p>
+<p>Curated list of known metric types that is supported by all metric providers.</p>
 
 <table class="enum-values">
 <thead>
@@ -738,130 +738,87 @@ extension to be able to generate.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="MetricsOverrides-StandardMetric-ALL">
-<td><code>ALL</code></td>
+<tr id="MetricsOverrides-StandardMetric-ALL_METRICS">
+<td><code>ALL_METRICS</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-ALL_SERVER_METRICS">
-<td><code>ALL_SERVER_METRICS</code></td>
-<td>
-<p>Special values to provide general specification for directionality</p>
-
-</td>
-</tr>
-<tr id="MetricsOverrides-StandardMetric-ALL_CLIENT_METRICS">
-<td><code>ALL_CLIENT_METRICS</code></td>
+<tr id="MetricsOverrides-StandardMetric-REQUEST_COUNT">
+<td><code>REQUEST_COUNT</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-SERVER_REQUEST_COUNT">
-<td><code>SERVER_REQUEST_COUNT</code></td>
+<tr id="MetricsOverrides-StandardMetric-REQUEST_DURATION">
+<td><code>REQUEST_DURATION</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-SERVER_REQUEST_DURATION">
-<td><code>SERVER_REQUEST_DURATION</code></td>
+<tr id="MetricsOverrides-StandardMetric-REQUEST_SIZE">
+<td><code>REQUEST_SIZE</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-SERVER_REQUEST_SIZE">
-<td><code>SERVER_REQUEST_SIZE</code></td>
+<tr id="MetricsOverrides-StandardMetric-RESPONSE_SIZE">
+<td><code>RESPONSE_SIZE</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-SERVER_RESPONSE_SIZE">
-<td><code>SERVER_RESPONSE_SIZE</code></td>
+<tr id="MetricsOverrides-StandardMetric-TCP_OPEN_CONNECTIONS">
+<td><code>TCP_OPEN_CONNECTIONS</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-SERVER_TCP_OPEN_CONNECTIONS">
-<td><code>SERVER_TCP_OPEN_CONNECTIONS</code></td>
+<tr id="MetricsOverrides-StandardMetric-TCP_CLOSED_CONNECTIONS">
+<td><code>TCP_CLOSED_CONNECTIONS</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-SERVER_TCP_CLOSED_CONNECTIONS">
-<td><code>SERVER_TCP_CLOSED_CONNECTIONS</code></td>
+<tr id="MetricsOverrides-StandardMetric-TCP_SENT_BYTES">
+<td><code>TCP_SENT_BYTES</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-SERVER_TCP_SENT_BYTES">
-<td><code>SERVER_TCP_SENT_BYTES</code></td>
+<tr id="MetricsOverrides-StandardMetric-TCP_RECEIVED_BYTES">
+<td><code>TCP_RECEIVED_BYTES</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-SERVER_TCP_RECEIVED_BYTES">
-<td><code>SERVER_TCP_RECEIVED_BYTES</code></td>
+<tr id="MetricsOverrides-StandardMetric-GRPC_REQUEST_MESSAGES">
+<td><code>GRPC_REQUEST_MESSAGES</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-SERVER_GRPC_REQUEST_MESSAGES">
-<td><code>SERVER_GRPC_REQUEST_MESSAGES</code></td>
+<tr id="MetricsOverrides-StandardMetric-GRPC_RESPONSE_MESSAGES">
+<td><code>GRPC_RESPONSE_MESSAGES</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-SERVER_GRPC_RESPONSE_MESSAGES">
-<td><code>SERVER_GRPC_RESPONSE_MESSAGES</code></td>
+</tbody>
+</table>
+</section>
+<h2 id="MetricsOverrides-TrafficMatch">MetricsOverrides.TrafficMatch</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MetricsOverrides-TrafficMatch-ALL_TRAFFIC">
+<td><code>ALL_TRAFFIC</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-CLIENT_REQUEST_COUNT">
-<td><code>CLIENT_REQUEST_COUNT</code></td>
+<tr id="MetricsOverrides-TrafficMatch-INBOUND_TRAFFIC">
+<td><code>INBOUND_TRAFFIC</code></td>
 <td>
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-CLIENT_REQUEST_DURATION">
-<td><code>CLIENT_REQUEST_DURATION</code></td>
+<tr id="MetricsOverrides-TrafficMatch-OUTBOUND_TRAFFIC">
+<td><code>OUTBOUND_TRAFFIC</code></td>
 <td>
-</td>
-</tr>
-<tr id="MetricsOverrides-StandardMetric-CLIENT_REQUEST_SIZE">
-<td><code>CLIENT_REQUEST_SIZE</code></td>
-<td>
-</td>
-</tr>
-<tr id="MetricsOverrides-StandardMetric-CLIENT_RESPONSE_SIZE">
-<td><code>CLIENT_RESPONSE_SIZE</code></td>
-<td>
-</td>
-</tr>
-<tr id="MetricsOverrides-StandardMetric-CLIENT_TCP_OPEN_CONNECTIONS">
-<td><code>CLIENT_TCP_OPEN_CONNECTIONS</code></td>
-<td>
-</td>
-</tr>
-<tr id="MetricsOverrides-StandardMetric-CLIENT_TCP_CLOSED_CONNECTIONS">
-<td><code>CLIENT_TCP_CLOSED_CONNECTIONS</code></td>
-<td>
-</td>
-</tr>
-<tr id="MetricsOverrides-StandardMetric-CLIENT_TCP_SENT_BYTES">
-<td><code>CLIENT_TCP_SENT_BYTES</code></td>
-<td>
-</td>
-</tr>
-<tr id="MetricsOverrides-StandardMetric-CLIENT_TCP_RECEIVED_BYTES">
-<td><code>CLIENT_TCP_RECEIVED_BYTES</code></td>
-<td>
-</td>
-</tr>
-<tr id="MetricsOverrides-StandardMetric-CLIENT_GRPC_REQUEST_MESSAGES">
-<td><code>CLIENT_GRPC_REQUEST_MESSAGES</code></td>
-<td>
-</td>
-</tr>
-<tr id="MetricsOverrides-StandardMetric-CLIENT_GRPC_RESPONSE_MESSAGES">
-<td><code>CLIENT_GRPC_RESPONSE_MESSAGES</code></td>
-<td>
-</td>
-</tr>
-<tr id="MetricsOverrides-StandardMetric-CUSTOM">
-<td><code>CUSTOM</code></td>
-<td>
-<p>Some providers may provide custom metrics that extend the Istio
-standard metrics set. This provides a way to configure those
-unknown metrics with this API.</p>
-
 </td>
 </tr>
 </tbody>

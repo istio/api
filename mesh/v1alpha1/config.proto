@@ -790,19 +790,16 @@ message MeshConfig {
 
   // Holds the name references to the providers that will be used by default
   // in other Istio configuration resources if the provider is not specified.
+  //
+  // These names must match a provider defined in `extension_providers` that is
+  // one of the supported tracing providers.
   message DefaultProviders {
-    // Name of the default provider for tracing. This must match a provider
-    // defined in `extension_providers` that is one of the supported tracing
-    // providers.
-    string tracing = 1;
-    // Name of the default provider for metrics. This must match a provider
-    // defined in `extension_providers` that is one of the supported metrics
-    // providers.
-    string metrics = 2;
-    // Name of the default provider for access logging. This must match a provider
-    // defined in `extension_providers` that is one of the supported access logging
-    // providers.
-    string access_logging = 3;
+    // Name of the default provider(s) for tracing.
+    repeated string tracing = 1;
+    // Name of the default provider(s) for metrics.
+    repeated string metrics = 2;
+    // Name of the default provider(s) for access logging.
+    repeated string access_logging = 3;
   }
 
   // Specifies extension providers to use by default in Istio configuration resources.
