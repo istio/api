@@ -498,13 +498,6 @@ message ProxyConfig {
   // The plugin certificates (the 'cacerts' secret), self-signed certificates (the 'istio-ca-secret' secret)
   // are added automatically by Istiod.
   repeated string ca_certificates_pem = 34;
-
-  // `VerifyCertificateAtClient` sets the proxy default for peer certificate validation
-  // at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination
-  // modes are used. This setting can be overridden at the host level via DestinationRule API.
-  // By default, `VerifyCertificateAtClient` is `false`, proxy will not verify CA signatures
-  // unless overridden in the DestinationRule.
-  google.protobuf.BoolValue verify_certificate_at_client = 35;
 }
 
 message RemoteService {
