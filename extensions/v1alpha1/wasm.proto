@@ -91,8 +91,8 @@ message WasmPlugin {
   google.protobuf.Struct plugin_config = 6;
 
   // The plugin name to be used in the Envoy configuration (used to be called
-  // `rootID`). This is used to select a Wasm plugin from a module that
-  // contains multiple plugins.
+  // `rootID`). Some .wasm modules might require this value to select the Wasm
+  // plugin to execute.
   string plugin_name = 7;
 
   // Configuration for the Wasm sandbox the plugin will run in.

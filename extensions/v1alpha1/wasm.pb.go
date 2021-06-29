@@ -102,8 +102,8 @@ type WasmPlugin struct {
 	// The configuration that will be passed on to the plugin.
 	PluginConfig *types.Struct `protobuf:"bytes,6,opt,name=plugin_config,json=pluginConfig,proto3" json:"plugin_config,omitempty"`
 	// The plugin name to be used in the Envoy configuration (used to be called
-	// `rootID`). This is used to select a Wasm plugin from a module that
-	// contains multiple plugins.
+	// `rootID`). Some .wasm modules might require this value to select the Wasm
+	// plugin to execute.
 	PluginName string `protobuf:"bytes,7,opt,name=plugin_name,json=pluginName,proto3" json:"plugin_name,omitempty"`
 	// Configuration for the Wasm sandbox the plugin will run in.
 	SandboxConfig *WasmPlugin_SandboxConfig `protobuf:"bytes,8,opt,name=sandbox_config,json=sandboxConfig,proto3" json:"sandbox_config,omitempty"`

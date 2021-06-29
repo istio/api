@@ -34,7 +34,7 @@
             "type": "object"
           },
           "pluginName": {
-            "description": "The plugin name to be used in the Envoy configuration (used to be called `rootID`). This is used to select a Wasm plugin from a module that contains multiple plugins.",
+            "description": "The plugin name to be used in the Envoy configuration (used to be called `rootID`). Some .wasm modules might require this value to select the Wasm plugin to execute.",
             "type": "string"
           },
           "sandboxConfig": {
