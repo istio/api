@@ -19,6 +19,23 @@ the Istio proxy through WebAssembly filters.</p>
 </tr>
 </thead>
 <tbody>
+<tr id="WasmPlugin-selector">
+<td><code>selector</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#WorkloadSelector">WorkloadSelector</a></code></td>
+<td>
+<p>Criteria used to select the specific set of pods/VMs on which
+this plugin configuration should be applied. If omitted, this
+configuration will be applied to all workload instances in the same
+namespace.  If omitted, the <code>WasmPlugin</code> will be applied to all
+workloads in the same namespace. If the <code>WasmPlugin</code> is
+present in the config root namespace, it will be applied to all
+applicable workloads in any namespace.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="WasmPlugin-url">
 <td><code>url</code></td>
 <td><code>string</code></td>
@@ -114,23 +131,6 @@ No
 <td><code><a href="#WasmPlugin-SandboxConfig">SandboxConfig</a></code></td>
 <td>
 <p>Configuration for the Wasm sandbox the plugin will run in.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="WasmPlugin-selector">
-<td><code>selector</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#WorkloadSelector">WorkloadSelector</a></code></td>
-<td>
-<p>Criteria used to select the specific set of pods/VMs on which
-this plugin configuration should be applied. If omitted, this
-configuration will be applied to all workload instances in the same
-namespace.  If omitted, the <code>WasmPlugin</code> will be applied to all
-workloads in the same namespace. If the <code>WasmPlugin</code> is
-present in the config root namespace, it will be applied to all
-applicable workloads in any namespace.</p>
 
 </td>
 <td>
