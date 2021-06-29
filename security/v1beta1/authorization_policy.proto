@@ -243,6 +243,9 @@ message AuthorizationPolicy {
   //
   // If not set, the match will never occur. This is equivalent to setting a
   // default of deny for the target workloads.
+  //
+  // If set but left empty, the match will always occur. This is equivalent to
+  // setting a default of allow for the target workloads.
   repeated Rule rules = 2;
 
   // Action specifies the operation to take.
