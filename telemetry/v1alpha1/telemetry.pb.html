@@ -107,8 +107,18 @@ spec:
   - providers:
     - name: stackdriver
     overrides:
-    - metrics: [ ALL_METRICS ]
-      trafficMatch: INBOUND_TRAFFIC
+    - trafficMatch: INBOUND_TRAFFIC
+      metrics:
+      - REQUEST_COUNT
+      - REQUEST_DURATION
+      - REQUEST_SIZE
+      - RESPONSE_SIZE
+      - TCP_OPENED_CONNECTIONS
+      - TCP_CLOSED_CONNECTIONS
+      - TCP_SENT_BYTES
+      - TCP_RECEIVED_BYTES
+      - GRPC_REQUEST_MESSAGES
+      - GRPC_RESPONSE_MESSAGES
       disabled: true
 </code></pre>
 
@@ -125,8 +135,18 @@ spec:
   - providers:
     - name: prometheus
     overrides:
-    - metrics: [ ALL_METRICS ]
-      trafficMatch: ALL_TRAFFIC
+    - trafficMatch: ALL_TRAFFIC
+      metrics:
+      - REQUEST_COUNT
+      - REQUEST_DURATION
+      - REQUEST_SIZE
+      - RESPONSE_SIZE
+      - TCP_OPENED_CONNECTIONS
+      - TCP_CLOSED_CONNECTIONS
+      - TCP_SENT_BYTES
+      - TCP_RECEIVED_BYTES
+      - GRPC_REQUEST_MESSAGES
+      - GRPC_RESPONSE_MESSAGES
       tagOverrides:
         destination_port:
           operation: INSERT_OR_UPDATE
@@ -151,7 +171,11 @@ spec:
   - providers:
     - name: prometheus
     overrides:
-    - metrics: [ REQUEST_COUNT, REQUEST_DURATION, REQUEST_SIZE, RESPONSE_SIZE ]
+    - metrics:
+      - REQUEST_COUNT
+      - REQUEST_DURATION
+      - REQUEST_SIZE
+      - RESPONSE_SIZE
       trafficMatch: ALL_TRAFFIC
       tagOverrides:
         source_workload:
@@ -416,7 +440,7 @@ metric or the set of all standard metrics.</p>
 <td><code>metrics</code></td>
 <td><code><a href="#MetricsOverrides-StandardMetric">StandardMetric[]</a></code></td>
 <td>
-<p>Optional. If not specified, config applied to all metrics.</p>
+<p>Optional. If not specified, config will not be applied.</p>
 
 </td>
 <td>
@@ -455,7 +479,8 @@ No
 selected metric(s).
 The key in the map is the name of the tag.
 The value in the map is the operation to perform on the the tag.
-WARNING: some providers may not support adding/removing tags.</p>
+WARNING: some providers may not support adding/removing tags.
+See also: https://istio.io/latest/docs/reference/config/metrics/#labels</p>
 
 </td>
 <td>
@@ -679,6 +704,8 @@ No
 <td><code>operation</code></td>
 <td><code><a href="#MetricsOverrides-TagOverride-Operation">Operation</a></code></td>
 <td>
+<p>Operation controls whether or not to update/add a tag, or to remove it.</p>
+
 </td>
 <td>
 No
@@ -728,7 +755,8 @@ No
 </section>
 <h2 id="MetricsOverrides-StandardMetric">MetricsOverrides.StandardMetric</h2>
 <section>
-<p>Curated list of known metric types that is supported by all metric providers.</p>
+<p>Curated list of known metric types that is supported by Istio metric providers.
+See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
 
 <table class="enum-values">
 <thead>
@@ -738,59 +766,133 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="MetricsOverrides-StandardMetric-ALL_METRICS">
-<td><code>ALL_METRICS</code></td>
+<tr id="MetricsOverrides-StandardMetric-METRIC_UNSPECIFIED">
+<td><code>METRIC_UNSPECIFIED</code></td>
 <td>
+<p>Use of this enum will mean that none of the configuration will apply.</p>
+
 </td>
 </tr>
 <tr id="MetricsOverrides-StandardMetric-REQUEST_COUNT">
 <td><code>REQUEST_COUNT</code></td>
 <td>
+<p>Counter of requests to/from an application, generated for HTTP, HTTP/2, and GRPC traffic.</p>
+
+<p>The Prometheus provider exports this metric as: <code>istio_requests_total</code>.</p>
+
+<p>The Stackdriver provider exports this metric as:
+- <code>istio.io/service/server/request_count</code> (for inbound traffic)
+- <code>istio.io/service/client/request_count</code> (for outbound traffic)</p>
+
 </td>
 </tr>
 <tr id="MetricsOverrides-StandardMetric-REQUEST_DURATION">
 <td><code>REQUEST_DURATION</code></td>
 <td>
+<p>Histogram of request durations, generated for HTTP, HTTP/2, and GRPC traffic.</p>
+
+<p>The Prometheus provider exports this metric as: <code>istio_request_duration_milliseconds</code>.</p>
+
+<p>The Stackdriver provider exports this metric as:
+- <code>istio.io/service/server/response_latencies</code> (for inbound traffic)
+- <code>istio.io/service/client/roundtrip_latencies</code> (for outbound traffic)</p>
+
 </td>
 </tr>
 <tr id="MetricsOverrides-StandardMetric-REQUEST_SIZE">
 <td><code>REQUEST_SIZE</code></td>
 <td>
+<p>Histogram of request body sizes, generated for HTTP, HTTP/2, and GRPC traffic.</p>
+
+<p>The Prometheus provider exports this metric as: <code>istio_request_bytes</code>.</p>
+
+<p>The Stackdriver provider exports this metric as:
+- <code>istio.io/service/server/request_bytes</code> (for inbound traffic)
+- <code>istio.io/service/client/request_bytes</code> (for outbound traffic)</p>
+
 </td>
 </tr>
 <tr id="MetricsOverrides-StandardMetric-RESPONSE_SIZE">
 <td><code>RESPONSE_SIZE</code></td>
 <td>
+<p>Histogram of response body sizes, generated for HTTP, HTTP/2, and GRPC traffic.</p>
+
+<p>The Prometheus provider exports this metric as: <code>istio_response_bytes</code>.</p>
+
+<p>The Stackdriver provider exports this metric as:
+- <code>istio.io/service/server/response_bytes</code> (for inbound traffic)
+- <code>istio.io/service/client/response_bytes</code> (for outbound traffic)</p>
+
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-TCP_OPEN_CONNECTIONS">
-<td><code>TCP_OPEN_CONNECTIONS</code></td>
+<tr id="MetricsOverrides-StandardMetric-TCP_OPENED_CONNECTIONS">
+<td><code>TCP_OPENED_CONNECTIONS</code></td>
 <td>
+<p>Counter of TCP connections opened over lifetime of workload.</p>
+
+<p>The Prometheus provider exports this metric as: <code>istio_tcp_connections_opened_total</code>.</p>
+
+<p>The Stackdriver provider exports this metric as:
+- <code>istio.io/service/server/connection_open_count</code> (for inbound traffic)
+- <code>istio.io/service/client/connection_open_count</code> (for outbound traffic)</p>
+
 </td>
 </tr>
 <tr id="MetricsOverrides-StandardMetric-TCP_CLOSED_CONNECTIONS">
 <td><code>TCP_CLOSED_CONNECTIONS</code></td>
 <td>
+<p>Counter of TCP connections closed over lifetime of workload.</p>
+
+<p>The Prometheus provider exports this metric as: <code>istio_tcp_connections_closed_total</code>.</p>
+
+<p>The Stackdriver provider exports this metric as:
+- <code>istio.io/service/server/connection_close_count</code> (for inbound traffic)
+- <code>istio.io/service/client/connection_close_count</code> (for outbound traffic)</p>
+
 </td>
 </tr>
 <tr id="MetricsOverrides-StandardMetric-TCP_SENT_BYTES">
 <td><code>TCP_SENT_BYTES</code></td>
 <td>
+<p>Counter of bytes sent during a response over a TCP connection.</p>
+
+<p>The Prometheus provider exports this metric as: <code>istio_tcp_sent_bytes_total</code>.</p>
+
+<p>The Stackdriver provider exports this metric as:
+- <code>istio.io/service/server/sent_bytes_count</code> (for inbound traffic)
+- <code>istio.io/service/client/sent_bytes_count</code> (for outbound traffic)</p>
+
 </td>
 </tr>
 <tr id="MetricsOverrides-StandardMetric-TCP_RECEIVED_BYTES">
 <td><code>TCP_RECEIVED_BYTES</code></td>
 <td>
+<p>Counter of bytes received during a request over a TCP connection.</p>
+
+<p>The Prometheus provider exports this metric as: <code>istio_tcp_received_bytes_total</code>.</p>
+
+<p>The Stackdriver provider exports this metric as:
+- <code>istio.io/service/server/received_bytes_count</code> (for inbound traffic)
+- <code>istio.io/service/client/received_bytes_count</code> (for outbound traffic)</p>
+
 </td>
 </tr>
 <tr id="MetricsOverrides-StandardMetric-GRPC_REQUEST_MESSAGES">
 <td><code>GRPC_REQUEST_MESSAGES</code></td>
 <td>
+<p>Counter incremented for every gRPC messages sent from a client.</p>
+
+<p>The Prometheus provider epxorts this metric as: <code>istio_request_messages_total</code></p>
+
 </td>
 </tr>
 <tr id="MetricsOverrides-StandardMetric-GRPC_RESPONSE_MESSAGES">
 <td><code>GRPC_RESPONSE_MESSAGES</code></td>
 <td>
+<p>Counter incremented for every gRPC messages sent from a server.</p>
+
+<p>The Prometheus provider epxorts this metric as: <code>istio_response_messages_total</code></p>
+
 </td>
 </tr>
 </tbody>
@@ -809,16 +911,22 @@ No
 <tr id="MetricsOverrides-TrafficMatch-ALL_TRAFFIC">
 <td><code>ALL_TRAFFIC</code></td>
 <td>
+<p>Matches all traffic, both inbound and outbound.</p>
+
 </td>
 </tr>
 <tr id="MetricsOverrides-TrafficMatch-INBOUND_TRAFFIC">
 <td><code>INBOUND_TRAFFIC</code></td>
 <td>
+<p>Matches only inbound (server) traffic.</p>
+
 </td>
 </tr>
 <tr id="MetricsOverrides-TrafficMatch-OUTBOUND_TRAFFIC">
 <td><code>OUTBOUND_TRAFFIC</code></td>
 <td>
+<p>Matches only outbound (client) traffic.</p>
+
 </td>
 </tr>
 </tbody>

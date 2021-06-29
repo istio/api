@@ -5553,12 +5553,12 @@ spec:
                             description: Optional.
                             items:
                               enum:
-                              - ALL_METRICS
+                              - METRIC_UNSPECIFIED
                               - REQUEST_COUNT
                               - REQUEST_DURATION
                               - REQUEST_SIZE
                               - RESPONSE_SIZE
-                              - TCP_OPEN_CONNECTIONS
+                              - TCP_OPENED_CONNECTIONS
                               - TCP_CLOSED_CONNECTIONS
                               - TCP_SENT_BYTES
                               - TCP_RECEIVED_BYTES
@@ -5574,6 +5574,8 @@ spec:
                                     operation is INSERT_OR_UPDATE.
                                   type: string
                                 operation:
+                                  description: Operation controls whether or not to
+                                    update/add a tag, or to remove it.
                                   enum:
                                   - INSERT_OR_UPDATE
                                   - REMOVE
