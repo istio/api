@@ -520,6 +520,7 @@ type MeshConfig struct {
 	// `prometheus.istio.io/merge-metrics: "false"` annotation.
 	// If not specified, this will be enabled by default.
 	EnablePrometheusMerge *types.BoolValue `protobuf:"bytes,51,opt,name=enable_prometheus_merge,json=enablePrometheusMerge,proto3" json:"enablePrometheusMerge,omitempty"`
+	// $hide_from_docs
 	// `VerifyCertificateAtClient` sets the mesh global default for peer certificate validation
 	// at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination
 	// modes are used. This setting can be overridden at the host level via DestinationRule API.

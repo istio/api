@@ -34868,6 +34868,11 @@
                 "id": 6,
                 "name": "sni",
                 "type": "string"
+              },
+              {
+                "id": 8,
+                "name": "insecure_skip_verify",
+                "type": "google.protobuf.BoolValue"
               }
             ]
           },
