@@ -57,10 +57,6 @@ spec:
               pullSecret:
                 description: Credentials to use for OCI image pulling.
                 type: string
-              sandboxConfig:
-                description: Configuration for the Wasm sandbox the plugin will run
-                  in.
-                type: object
               selector:
                 properties:
                   matchLabels:
