@@ -104,8 +104,8 @@ type WasmPlugin struct {
 	// contains a docker pull secret which is to be used to authenticate
 	// against the registry when pulling the image.
 	PullSecret string `protobuf:"bytes,5,opt,name=pull_secret,json=pullSecret,proto3" json:"pull_secret,omitempty"`
-	// URL of a public key that will be used to verify signatures of signed
-	// OCI images or Wasm modules.
+	// Public key that will be used to verify signatures of signed OCI images
+	// or Wasm modules. Must be supplied in PEM format.
 	VerificationKey string `protobuf:"bytes,6,opt,name=verification_key,json=verificationKey,proto3" json:"verification_key,omitempty"`
 	// The configuration that will be passed on to the plugin.
 	PluginConfig *types.Struct `protobuf:"bytes,7,opt,name=plugin_config,json=pluginConfig,proto3" json:"plugin_config,omitempty"`
