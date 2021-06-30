@@ -69,8 +69,8 @@ _MESHCONFIG_OUTBOUNDTRAFFICPOLICY_MODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=3311,
-  serialized_end=3379,
+  serialized_start=3315,
+  serialized_end=3383,
 )
 _sym_db.RegisterEnumDescriptor(_MESHCONFIG_OUTBOUNDTRAFFICPOLICY_MODE)
 
@@ -266,8 +266,8 @@ _MESHCONFIG_OUTBOUNDTRAFFICPOLICY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3206,
-  serialized_end=3379,
+  serialized_start=3210,
+  serialized_end=3383,
 )
 
 _MESHCONFIG_CERTIFICATEDATA = _descriptor.Descriptor(
@@ -306,8 +306,8 @@ _MESHCONFIG_CERTIFICATEDATA = _descriptor.Descriptor(
       name='certificate_data', full_name='istio.mesh.v1alpha1.MeshConfig.CertificateData.certificate_data',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=3381,
-  serialized_end=3484,
+  serialized_start=3385,
+  serialized_end=3488,
 )
 
 _MESHCONFIG_THRIFTCONFIG = _descriptor.Descriptor(
@@ -343,8 +343,8 @@ _MESHCONFIG_THRIFTCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3486,
-  serialized_end=3611,
+  serialized_start=3490,
+  serialized_end=3615,
 )
 
 _MESHCONFIG_SERVICESETTINGS_SETTINGS = _descriptor.Descriptor(
@@ -373,8 +373,8 @@ _MESHCONFIG_SERVICESETTINGS_SETTINGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3741,
-  serialized_end=3788,
+  serialized_start=3745,
+  serialized_end=3792,
 )
 
 _MESHCONFIG_SERVICESETTINGS = _descriptor.Descriptor(
@@ -410,8 +410,8 @@ _MESHCONFIG_SERVICESETTINGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3614,
-  serialized_end=3788,
+  serialized_start=3618,
+  serialized_end=3792,
 )
 
 _MESHCONFIG_CA = _descriptor.Descriptor(
@@ -461,8 +461,8 @@ _MESHCONFIG_CA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3791,
-  serialized_end=4003,
+  serialized_start=3795,
+  serialized_end=4007,
 )
 
 _MESHCONFIG_EXTENSIONPROVIDER_ENVOYEXTERNALAUTHORIZATIONREQUESTBODY = _descriptor.Descriptor(
@@ -1500,7 +1500,7 @@ _MESHCONFIG = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='verifyCertificateAtClient', file=DESCRIPTOR),
+      serialized_options=_b('\030\001'), json_name='verifyCertificateAtClient', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='ca', full_name='istio.mesh.v1alpha1.MeshConfig.ca', index=36,
       number=55, type=11, cpp_type=10, label=1,
@@ -1951,4 +1951,5 @@ _sym_db.RegisterMessage(Certificate)
 
 DESCRIPTOR._options = None
 _MESHCONFIG_EXTENSIONPROVIDER_ENVOYEXTERNALAUTHORIZATIONHTTPPROVIDER_INCLUDEADDITIONALHEADERSINCHECKENTRY._options = None
+_MESHCONFIG.fields_by_name['verify_certificate_at_client']._options = None
 # @@protoc_insertion_point(module_scope)

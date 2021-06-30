@@ -33035,7 +33035,13 @@
               {
                 "id": 54,
                 "name": "verify_certificate_at_client",
-                "type": "google.protobuf.BoolValue"
+                "type": "google.protobuf.BoolValue",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 55,

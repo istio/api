@@ -1,0 +1,10 @@
+apiVersion: release-notes/v2
+kind: feature
+area: networking
+issue:
+  - 25652
+
+releaseNotes:
+  - |
+    **Added** InsecureSkipVerify to DestinationRule. Users can choose to opt-out of validating external site certificates on hosts basis if a user has enabled certificate validation.
+    **Modified** VerifyCertificateAtClient is now deprecated in meshconfig. This will be removed in a future release and was never implemented.

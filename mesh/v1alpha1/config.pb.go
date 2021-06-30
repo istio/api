@@ -541,7 +541,7 @@ type MeshConfig struct {
 	// For wildcard host name in DestinationRule, client-side proxy will do a suffix match. For example,
 	// if host is `*.x.y.com`, client-side proxy will verify the presented server certificate SAN matches
 	// ``.x.y.com` suffix.
-	VerifyCertificateAtClient *types.BoolValue `protobuf:"bytes,54,opt,name=verify_certificate_at_client,json=verifyCertificateAtClient,proto3" json:"verifyCertificateAtClient,omitempty"`
+	VerifyCertificateAtClient *types.BoolValue `protobuf:"bytes,54,opt,name=verify_certificate_at_client,json=verifyCertificateAtClient,proto3" json:"verifyCertificateAtClient,omitempty"` // Deprecated: Do not use.
 	// $hide_from_docs
 	// If specified, Istiod will authorize and forward the CSRs from the workloads to the specified external CA
 	// using the Istio CA gRPC API.
@@ -865,6 +865,7 @@ func (m *MeshConfig) GetEnablePrometheusMerge() *types.BoolValue {
 	return nil
 }
 
+// Deprecated: Do not use.
 func (m *MeshConfig) GetVerifyCertificateAtClient() *types.BoolValue {
 	if m != nil {
 		return m.VerifyCertificateAtClient
