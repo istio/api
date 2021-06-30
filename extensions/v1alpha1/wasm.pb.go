@@ -95,8 +95,9 @@ type WasmPlugin struct {
 	//	*WasmPlugin_Sha256
 	XSha256 isWasmPlugin_XSha256 `protobuf_oneof:"_sha256"`
 	// The pull behaviour to be applied when fetching an OCI image. Only
-	// relevant when images are referenced by tag instead of SHA. Ignored
-	// if referencing a Wasm module directly using `file://` or `https://`
+	// relevant when images are referenced by tag instead of SHA. Defaults
+	// to IfNotPresent. Ignored if `url` field is referencing a Wasm module
+	// directly using `file://` or `http[s]://`
 	PullPolicy WasmPlugin_PullPolicy `protobuf:"varint,4,opt,name=pull_policy,json=pullPolicy,proto3,enum=istio.extensions.v1alpha1.WasmPlugin_PullPolicy" json:"pull_policy,omitempty"`
 	// Credentials to use for OCI image pulling.
 	// Name of a K8s Secret in the same namespace as the `WasmPlugin` that
