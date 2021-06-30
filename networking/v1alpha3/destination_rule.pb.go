@@ -310,6 +310,9 @@ func (ClientTLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) {
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
+// <!-- istio code generation tags
+// +istio.io/sync-start
+// -->
 type DestinationRule struct {
 	// The name of a service from the service registry. Service
 	// names are looked up from the platform's service registry (e.g.,

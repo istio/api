@@ -200,6 +200,9 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
+// <!-- istio code generation tags
+// +istio.io/sync-start
+// -->
 type VirtualService struct {
 	// The destination hosts to which traffic is being sent. Could
 	// be a DNS name with wildcard prefix or an IP address.  Depending on the
@@ -277,9 +280,6 @@ type VirtualService struct {
 	// The value "." is reserved and defines an export to the same namespace that
 	// the virtual service is declared in. Similarly the value "*" is reserved and
 	// defines an export to all namespaces.
-	//
-	// NOTE: in the current release, the `exportTo` value is restricted to
-	// "." or "*" (i.e., the current namespace or all namespaces).
 	ExportTo             []string `protobuf:"bytes,6,rep,name=export_to,json=exportTo,proto3" json:"export_to,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -586,7 +586,7 @@ func (m *VirtualService) GetExportTo() []string {
 //     protocol: HTTP
 //   resolution: DNS
 // ---
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
 //   name: my-wiki-rule
