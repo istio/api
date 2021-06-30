@@ -18,7 +18,7 @@
             "type": "string"
           },
           "sha256": {
-            "description": "SHA256 checksum of Wasm module or OCI container. If the `url` field already references a SHA256 (using the `@sha256:` notation), the `url` field will take precedence.",
+            "description": "SHA256 checksum of Wasm module or OCI container. If the `url` field already references a SHA256 (using the `@sha256:` notation), the `url` field will take precedence. If the `sha256` field is set, and the `url` field contains the URL of an OCI image that is referenced by tag, the reference will be replaced by the value of the `sha256` field (using the `@sha256:` notation).",
             "type": "string"
           },
           "pullPolicy": {
