@@ -4,6 +4,7 @@
 
 import sys
 _b=sys.version_info[0]<3 and (lambda x:x) or (lambda x:x.encode('latin1'))
+from google.protobuf.internal import enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
@@ -15,7 +16,6 @@ _sym_db = _symbol_database.Default()
 
 from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 from google.protobuf import struct_pb2 as google_dot_protobuf_dot_struct__pb2
-from networking.v1alpha3 import envoy_filter_pb2 as networking_dot_v1alpha3_dot_envoy__filter__pb2
 from type.v1beta1 import selector_pb2 as type_dot_v1beta1_dot_selector__pb2
 
 
@@ -24,10 +24,45 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.extensions.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z istio.io/api/extensions/v1alpha1'),
-  serialized_pb=_b('\n\x1e\x65xtensions/v1alpha1/wasm.proto\x12\x19istio.extensions.v1alpha1\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a&networking/v1alpha3/envoy_filter.proto\x1a\x1btype/v1beta1/selector.proto\"\xb8\x04\n\nWasmPlugin\x12@\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x08selector\x12\x10\n\x03url\x18\x02 \x01(\tR\x03url\x12\x18\n\x06sha256\x18\x03 \x01(\tH\x00R\x06sha256\x12Q\n\x0bpull_policy\x18\x04 \x01(\x0e\x32\x30.istio.extensions.v1alpha1.WasmPlugin.PullPolicyR\npullPolicy\x12\x1f\n\x0bpull_secret\x18\x05 \x01(\tR\npullSecret\x12)\n\x10verification_key\x18\x06 \x01(\tR\x0fverificationKey\x12<\n\rplugin_config\x18\x07 \x01(\x0b\x32\x17.google.protobuf.StructR\x0cpluginConfig\x12\x1f\n\x0bplugin_name\x18\x08 \x01(\tR\npluginName\x12N\n\x05phase\x18\t \x01(\x0e\x32\x38.istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClassR\x05phase\x12\x37\n\x08priority\x18\n \x01(\x0b\x32\x1b.google.protobuf.Int64ValueR\x08priority\"*\n\nPullPolicy\x12\x10\n\x0cIfNotPresent\x10\x00\x12\n\n\x06\x41lways\x10\x01\x42\t\n\x07_sha256B\"Z istio.io/api/extensions/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x1e\x65xtensions/v1alpha1/wasm.proto\x12\x19istio.extensions.v1alpha1\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1btype/v1beta1/selector.proto\"\xa6\x04\n\nWasmPlugin\x12@\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x08selector\x12\x10\n\x03url\x18\x02 \x01(\tR\x03url\x12\x18\n\x06sha256\x18\x03 \x01(\tH\x00R\x06sha256\x12Q\n\x0bpull_policy\x18\x04 \x01(\x0e\x32\x30.istio.extensions.v1alpha1.WasmPlugin.PullPolicyR\npullPolicy\x12\x1f\n\x0bpull_secret\x18\x05 \x01(\tR\npullSecret\x12)\n\x10verification_key\x18\x06 \x01(\tR\x0fverificationKey\x12<\n\rplugin_config\x18\x07 \x01(\x0b\x32\x17.google.protobuf.StructR\x0cpluginConfig\x12\x1f\n\x0bplugin_name\x18\x08 \x01(\tR\npluginName\x12<\n\x05phase\x18\t \x01(\x0e\x32&.istio.extensions.v1alpha1.PluginPhaseR\x05phase\x12\x37\n\x08priority\x18\n \x01(\x0b\x32\x1b.google.protobuf.Int64ValueR\x08priority\"*\n\nPullPolicy\x12\x10\n\x0cIfNotPresent\x10\x00\x12\n\n\x06\x41lways\x10\x01\x42\t\n\x07_sha256*?\n\x0bPluginPhase\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\t\n\x05\x41UTHN\x10\x01\x12\t\n\x05\x41UTHZ\x10\x02\x12\t\n\x05STATS\x10\x03\x42\"Z istio.io/api/extensions/v1alpha1b\x06proto3')
   ,
-  dependencies=[google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_envoy__filter__pb2.DESCRIPTOR,type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,])
 
+_PLUGINPHASE = _descriptor.EnumDescriptor(
+  name='PluginPhase',
+  full_name='istio.extensions.v1alpha1.PluginPhase',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='UNSPECIFIED', index=0, number=0,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='AUTHN', index=1, number=1,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='AUTHZ', index=2, number=2,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='STATS', index=3, number=3,
+      serialized_options=None,
+      type=None),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=705,
+  serialized_end=768,
+)
+_sym_db.RegisterEnumDescriptor(_PLUGINPHASE)
+
+PluginPhase = enum_type_wrapper.EnumTypeWrapper(_PLUGINPHASE)
+UNSPECIFIED = 0
+AUTHN = 1
+AUTHZ = 2
+STATS = 3
 
 
 _WASMPLUGIN_PULLPOLICY = _descriptor.EnumDescriptor(
@@ -47,8 +82,8 @@ _WASMPLUGIN_PULLPOLICY = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=708,
-  serialized_end=750,
+  serialized_start=650,
+  serialized_end=692,
 )
 _sym_db.RegisterEnumDescriptor(_WASMPLUGIN_PULLPOLICY)
 
@@ -146,20 +181,21 @@ _WASMPLUGIN = _descriptor.Descriptor(
       name='_sha256', full_name='istio.extensions.v1alpha1.WasmPlugin._sha256',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=193,
-  serialized_end=761,
+  serialized_start=153,
+  serialized_end=703,
 )
 
 _WASMPLUGIN.fields_by_name['selector'].message_type = type_dot_v1beta1_dot_selector__pb2._WORKLOADSELECTOR
 _WASMPLUGIN.fields_by_name['pull_policy'].enum_type = _WASMPLUGIN_PULLPOLICY
 _WASMPLUGIN.fields_by_name['plugin_config'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
-_WASMPLUGIN.fields_by_name['phase'].enum_type = networking_dot_v1alpha3_dot_envoy__filter__pb2._ENVOYFILTER_PATCH_FILTERCLASS
+_WASMPLUGIN.fields_by_name['phase'].enum_type = _PLUGINPHASE
 _WASMPLUGIN.fields_by_name['priority'].message_type = google_dot_protobuf_dot_wrappers__pb2._INT64VALUE
 _WASMPLUGIN_PULLPOLICY.containing_type = _WASMPLUGIN
 _WASMPLUGIN.oneofs_by_name['_sha256'].fields.append(
   _WASMPLUGIN.fields_by_name['sha256'])
 _WASMPLUGIN.fields_by_name['sha256'].containing_oneof = _WASMPLUGIN.oneofs_by_name['_sha256']
 DESCRIPTOR.message_types_by_name['WasmPlugin'] = _WASMPLUGIN
+DESCRIPTOR.enum_types_by_name['PluginPhase'] = _PLUGINPHASE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 WasmPlugin = _reflection.GeneratedProtocolMessageType('WasmPlugin', (_message.Message,), {
