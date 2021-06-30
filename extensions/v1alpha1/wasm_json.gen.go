@@ -9,7 +9,6 @@ import (
 	github_com_gogo_protobuf_jsonpb "github.com/gogo/protobuf/jsonpb"
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/gogo/protobuf/types"
-	_ "istio.io/api/networking/v1alpha3"
 	_ "istio.io/api/type/v1beta1"
 	math "math"
 )
