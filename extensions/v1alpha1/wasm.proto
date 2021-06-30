@@ -88,8 +88,8 @@ message WasmPlugin {
   // against the registry when pulling the image.
   string pull_secret = 5;
 
-  // URL of a public key that will be used to verify signatures of signed
-  // OCI images or Wasm modules.
+  // Public key that will be used to verify signatures of signed OCI images
+  // or Wasm modules. Must be supplied in PEM format.
   string verification_key = 6;
 
   // The configuration that will be passed on to the plugin.
