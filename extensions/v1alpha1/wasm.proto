@@ -81,8 +81,9 @@ message WasmPlugin {
   optional string sha256 = 3;
 
   // The pull behaviour to be applied when fetching an OCI image. Only
-  // relevant when images are referenced by tag instead of SHA. Ignored
-  // if referencing a Wasm module directly using `file://` or `https://`
+  // relevant when images are referenced by tag instead of SHA. Defaults
+  // to IfNotPresent. Ignored if `url` field is referencing a Wasm module
+  // directly using `file://` or `http[s]://`
   PullPolicy pull_policy = 4;
 
   // Credentials to use for OCI image pulling.
