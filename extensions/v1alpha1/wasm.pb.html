@@ -2,13 +2,10 @@
 title: istio.extensions.v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 2
+number_of_entries: 3
 ---
 <h2 id="WasmPlugin">WasmPlugin</h2>
 <section>
-<p>WasmPlugins provides a mechanism to extend the functionality provided by
-the Istio proxy through WebAssembly filters.</p>
-
 <table class="message-fields">
 <thead>
 <tr>
@@ -132,7 +129,7 @@ No
 </tr>
 <tr id="WasmPlugin-phase">
 <td><code>phase</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/networking/envoy-filter.html#EnvoyFilter-Patch-FilterClass">FilterClass</a></code></td>
+<td><code><a href="#PluginPhase">PluginPhase</a></code></td>
 <td>
 <p>Determines where in the filter chain this <code>WasmPlugin</code> is to be injected.</p>
 
@@ -186,6 +183,49 @@ will pull the latest version.</p>
 <td>
 <p>We will always pull the latest version of an image when applying
 this <code>WasmPlugin</code>.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="PluginPhase">PluginPhase</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="PluginPhase-UNSPECIFIED">
+<td><code>UNSPECIFIED</code></td>
+<td>
+<p>Control plane decides where to insert the plugin. This will generally
+be at the end of the filter chain, right before the Router.
+Do not specify <code>PluginPhase</code> if the plugin is independent of others.</p>
+
+</td>
+</tr>
+<tr id="PluginPhase-AUTHN">
+<td><code>AUTHN</code></td>
+<td>
+<p>Insert plugin before Istio authentication filters.</p>
+
+</td>
+</tr>
+<tr id="PluginPhase-AUTHZ">
+<td><code>AUTHZ</code></td>
+<td>
+<p>Insert plugin before Istio authorization filters.</p>
+
+</td>
+</tr>
+<tr id="PluginPhase-STATS">
+<td><code>STATS</code></td>
+<td>
+<p>Insert plugin before Istio stats filters.</p>
 
 </td>
 </tr>

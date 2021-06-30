@@ -6,8 +6,16 @@
   },
   "components": {
     "schemas": {
+      "istio.extensions.v1alpha1.PluginPhase": {
+        "type": "string",
+        "enum": [
+          "UNSPECIFIED",
+          "AUTHN",
+          "AUTHZ",
+          "STATS"
+        ]
+      },
       "istio.extensions.v1alpha1.WasmPlugin": {
-        "description": "WasmPlugins provides a mechanism to extend the functionality provided by the Istio proxy through WebAssembly filters.",
         "type": "object",
         "properties": {
           "selector": {
@@ -41,7 +49,7 @@
             "type": "string"
           },
           "phase": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass"
+            "$ref": "#/components/schemas/istio.extensions.v1alpha1.PluginPhase"
           },
           "priority": {
             "description": "Determines ordering of `WasmPlugins` in the same `phase`. When multiple `WasmPlugins` are applied to the same workload in the same `phase`, they will be applied by priority, in descending order. If `priority` is not set, or two `WasmPlugins` exist with the same value, the ordering will be deterministically derived from name and namespace of the `WasmPlugins`.",
@@ -56,16 +64,6 @@
         "enum": [
           "IfNotPresent",
           "Always"
-        ]
-      },
-      "istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass": {
-        "description": "FilterClass determines the filter insertion point in the filter chain relative to the filters implicitly inserted by the control plane. It is used in conjuction with the `ADD` operation. This is the preferred insertion mechanism for adding filters over the `INSERT_*` operations since those operations rely on potentially unstable filter names. Filter ordering is important if your filter depends on or affects the functioning of a another filter in the filter chain. Within a filter class, filters are inserted in the order of processing.",
-        "type": "string",
-        "enum": [
-          "UNSPECIFIED",
-          "AUTHN",
-          "AUTHZ",
-          "STATS"
         ]
       },
       "istio.type.v1beta1.WorkloadSelector": {

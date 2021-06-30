@@ -16,7 +16,6 @@ syntax = "proto3";
 
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/struct.proto";
-import "networking/v1alpha3/envoy_filter.proto";
 import "type/v1beta1/selector.proto";
 
 package istio.extensions.v1alpha1;
@@ -44,6 +43,23 @@ option go_package="istio.io/api/extensions/v1alpha1";
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
+
+enum PluginPhase {
+  // Control plane decides where to insert the plugin. This will generally
+  // be at the end of the filter chain, right before the Router.
+  // Do not specify `PluginPhase` if the plugin is independent of others.
+  UNSPECIFIED = 0;
+
+  // Insert plugin before Istio authentication filters.      
+  AUTHN = 1;
+
+  // Insert plugin before Istio authorization filters.
+  AUTHZ = 2;
+
+  // Insert plugin before Istio stats filters.
+  STATS = 3;
+}
+
 message WasmPlugin {
   // buf:lint:ignore ENUM_VALUE_UPPER_SNAKE_CASE
   enum PullPolicy {
@@ -105,7 +121,7 @@ message WasmPlugin {
   string plugin_name = 8;
 
   // Determines where in the filter chain this `WasmPlugin` is to be injected.
-  istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass phase = 9;
+  PluginPhase phase = 9;
 
   // Determines ordering of `WasmPlugins` in the same `phase`.
   // When multiple `WasmPlugins` are applied to the same workload in the
