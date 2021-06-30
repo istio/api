@@ -50,13 +50,16 @@ within the proxy container, and <code>http[s]://</code> for files hosted remotel
 No
 </td>
 </tr>
-<tr id="WasmPlugin-sha256">
+<tr id="WasmPlugin-sha256" class="oneof oneof-start">
 <td><code>sha256</code></td>
-<td><code>string</code></td>
+<td><code>string (oneof)</code></td>
 <td>
 <p>SHA256 checksum of Wasm module or OCI container. If the <code>url</code> field
 already references a SHA256 (using the <code>@sha256:</code> notation), the
-<code>url</code> field will take precedence.</p>
+<code>url</code> field will take precedence. If the <code>sha256</code> field is set, and
+the <code>url</code> field contains the URL of an OCI image that is referenced
+by tag, the reference will be replaced by the value of the <code>sha256</code>
+field (using the <code>@sha256:</code> notation).</p>
 
 </td>
 <td>
