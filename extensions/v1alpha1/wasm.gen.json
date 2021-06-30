@@ -40,9 +40,6 @@
             "description": "The plugin name to be used in the Envoy configuration (used to be called `rootID`). Some .wasm modules might require this value to select the Wasm plugin to execute.",
             "type": "string"
           },
-          "sandboxConfig": {
-            "$ref": "#/components/schemas/istio.extensions.v1alpha1.WasmPlugin.SandboxConfig"
-          },
           "phase": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass"
           },
@@ -60,9 +57,6 @@
           "IfNotPresent",
           "Always"
         ]
-      },
-      "istio.extensions.v1alpha1.WasmPlugin.SandboxConfig": {
-        "type": "object"
       },
       "istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass": {
         "description": "FilterClass determines the filter insertion point in the filter chain relative to the filters implicitly inserted by the control plane. It is used in conjuction with the `ADD` operation. This is the preferred insertion mechanism for adding filters over the `INSERT_*` operations since those operations rely on potentially unstable filter names. Filter ordering is important if your filter depends on or affects the functioning of a another filter in the filter chain. Within a filter class, filters are inserted in the order of processing.",

@@ -30,17 +30,6 @@ func (this *WasmPlugin) UnmarshalJSON(b []byte) error {
 	return WasmUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for WasmPlugin_SandboxConfig
-func (this *WasmPlugin_SandboxConfig) MarshalJSON() ([]byte, error) {
-	str, err := WasmMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for WasmPlugin_SandboxConfig
-func (this *WasmPlugin_SandboxConfig) UnmarshalJSON(b []byte) error {
-	return WasmUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
 var (
 	WasmMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
 	WasmUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
