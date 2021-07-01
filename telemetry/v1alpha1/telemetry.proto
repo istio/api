@@ -477,7 +477,7 @@ message MetricSelector {
   }
 
   // Controls which metric(s) are selected by the selector.
-  oneof metricMatch {
+  oneof metric_match {
     // One of the well-known Istio Standard Metrics.
     IstioMetric metric = 1;
     
