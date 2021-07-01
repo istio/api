@@ -1067,17 +1067,53 @@ message LocalityLoadBalancerSetting{
         string to = 2;
     };
 
-    // Optional: only one of distribute or failover can be set.
+    // Optional: only one of distribute, failover or topologyKeys can be set.
     // Explicitly specify loadbalancing weight across different zones and geographical locations.
     // Refer to [Locality weighted load balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight)
     // If empty, the locality weight is set according to the endpoints number within it.
     repeated Distribute distribute = 1;
 
-    // Optional: only failover or distribute can be set.
+    // Optional: only one of distribute, failover or topologyKeys can be set.
     // Explicitly specify the region traffic will land on when endpoints in local region becomes unhealthy.
     // Should be used together with OutlierDetection to detect unhealthy endpoints.
     // Note: if no OutlierDetection specified, this will not take effect.
     repeated Failover failover = 2;
+
+    // TopologyKeys is a list of topology keys in the order provided, used to sort endpoints to do priority load balancing.
+    // This is to support traffic fail over across different group of endpoints.
+    // Suppose there are total N keys specified:
+    //
+    // 1. endpoints match topologyKeys[0:N] with downstream proxy have priority P(0).
+    // 2. endpoints match topologyKeys[0:N-1] with downstream proxy have priority P(1).
+    // 3. by analogy, endpoints match topologyKeys[0:1] with downstream proxy have priority P(N-1).
+    // 4. endpoints match no keys have priority P(N).
+    //
+    // It can be any label specified on both client and server workload.
+    // The following special labels are also supported:
+    //
+    //   - `topology.istio.io/network` is used to match the network metadata of an endpoint, which can be specified by pod/namespace label `topology.istio.io/network`, sidecar env `ISTIO_META_NETWORK` or MeshNetworks.
+    //   - `topology.kubernetes.io/region` is used to match the region metadata of an endpoint, which maps to Kubernetes node label `topology.kubernetes.io/region` or the deprecated label `failure-domain.beta.kubernetes.io/region`.
+    //   - `topology.kubernetes.io/zone` is used to match the zone metadata of an endpoint, which maps to Kubernetes node label `topology.kubernetes.io/zone` or the deprecated label `failure-domain.beta.kubernetes.io/zone`.
+    //   - `topology.istio.io/subzone` is used to match the subzone metadata of an endpoint, which maps to Istio node label `topology.istio.io/subzone`.
+    //
+    // The below topology config indicates the following priority levels:
+    // 
+    // 1. endpoints match same [network, region, zone, subzone] attributes with the client proxy have the highest priority.
+    // 2. endpoints have same [network, region, zone] but different [subzone] attributes with the client proxy have the secondary-level priority.
+    // 3. endpoints have same [network, region] but different [zone, subzone] attributes with the client proxy have the third-level priority.
+    // 4. endpoints have same [network] but different [region, zone, subzone] attributes with the client proxy have the fourth-level priority.
+    // 5. all the other endpoints that does not match any key have the lowest priority.
+    //
+    // ```yaml
+    // topologyKeys:
+    // - "topology.istio.io/network"
+    // - "topology.kubernetes.io/region"
+    // - "topology.kubernetes.io/zone"
+    // - "topology.istio.io/subzone"
+    // ```
+    // Optional: only one of distribute, failover or topologyKeys can be set.
+    // And it should be used together with `OutlierDetection` to detect unhealthy endpoints, otherwise has no effect.
+    repeated string topologyKeys = 4;
 
     // enable locality load balancing, this is DestinationRule-level and will override mesh wide settings in entirety.
     // e.g. true means that turn on locality load balancing for this DestinationRule no matter what mesh wide settings is.
