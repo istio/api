@@ -498,6 +498,9 @@ message MetricsOverrides {
   // for the listed metrics. If not set, this will default to "false".
   google.protobuf.BoolValue disabled = 2;
 
+  // TagOverride specifies an operation to perform on a metric dimension (also
+  // known as a `label`). Tags may be added, removed, or have their default
+  // values overridden.
   message TagOverride {
     enum Operation {
       // Insert or Update the tag with the provided value expression. The `value`

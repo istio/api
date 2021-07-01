@@ -1166,6 +1166,9 @@ func (m *MetricsOverrides) GetTagOverrides() map[string]*MetricsOverrides_TagOve
 	return nil
 }
 
+// TagOverride specifies an operation to perform on a metric dimension (also
+// known as a `label`). Tags may be added, removed, or have their default
+// values overridden.
 type MetricsOverrides_TagOverride struct {
 	// Operation controls whether or not to update/add a tag, or to remove it.
 	Operation MetricsOverrides_TagOverride_Operation `protobuf:"varint,1,opt,name=operation,proto3,enum=istio.telemetry.v1alpha1.MetricsOverrides_TagOverride_Operation" json:"operation,omitempty"`
