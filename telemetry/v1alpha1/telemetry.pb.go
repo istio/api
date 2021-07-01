@@ -381,6 +381,10 @@ func (MetricsOverrides_TagOverride_Operation) EnumDescriptor() ([]byte, []int) {
 //   accessLogging:
 //   - providers:
 //     - name: envoyFileAccessLogger
+//     # By default, this turns on access logging (no need to set `disabled: false`).
+//     # Unspecified `disabled` will be treated as `disabled: false`, except in
+//     # cases where a parent configuration has marked as `disabled: true`. In
+//     # those cases, `disabled: false` must be set explicitly to override.
 // ```
 //
 // Policy to disable access logging for the `foo` namespace:
