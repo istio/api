@@ -187,7 +187,8 @@ const (
 	// Insert or Update the tag with the provided value expression. The `value`
 	// field MUST be specified if UPSERT is used as the operation.
 	MetricsOverrides_TagOverride_UPSERT MetricsOverrides_TagOverride_Operation = 0
-	// Specifies that
+	// Specifies that the tag should not be included in the metric when
+	// generated.
 	MetricsOverrides_TagOverride_REMOVE MetricsOverrides_TagOverride_Operation = 1
 )
 
@@ -991,15 +992,20 @@ func (m *Metrics) GetOverrides() []*MetricsOverrides {
 	return nil
 }
 
+// Provides a mechanism for matching metrics for the application of override
+// behaviors.
 type MetricSelector struct {
+	// Controls which metric(s) are selected by the selector.
+	//
 	// Types that are valid to be assigned to MetricMatch:
 	//	*MetricSelector_Metric
 	//	*MetricSelector_CustomMetric
-	MetricMatch          isMetricSelector_MetricMatch `protobuf_oneof:"metricMatch"`
-	Mode                 WorkloadMode                 `protobuf:"varint,3,opt,name=mode,proto3,enum=istio.telemetry.v1alpha1.WorkloadMode" json:"mode,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                     `json:"-"`
-	XXX_unrecognized     []byte                       `json:"-"`
-	XXX_sizecache        int32                        `json:"-"`
+	MetricMatch isMetricSelector_MetricMatch `protobuf_oneof:"metricMatch"`
+	// Controls which mode of metrics generation is selected: CLIENT and/or SERVER.
+	Mode                 WorkloadMode `protobuf:"varint,3,opt,name=mode,proto3,enum=istio.telemetry.v1alpha1.WorkloadMode" json:"mode,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_unrecognized     []byte       `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
 }
 
 func (m *MetricSelector) Reset()         { *m = MetricSelector{} }

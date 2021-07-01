@@ -423,6 +423,9 @@ No
 </section>
 <h2 id="MetricSelector">MetricSelector</h2>
 <section>
+<p>Provides a mechanism for matching metrics for the application of override
+behaviors.</p>
+
 <table class="message-fields">
 <thead>
 <tr>
@@ -437,6 +440,8 @@ No
 <td><code>metric</code></td>
 <td><code><a href="#MetricSelector-IstioMetric">IstioMetric (oneof)</a></code></td>
 <td>
+<p>One of the well-known Istio Standard Metrics.</p>
+
 </td>
 <td>
 No
@@ -446,6 +451,9 @@ No
 <td><code>customMetric</code></td>
 <td><code>string (oneof)</code></td>
 <td>
+<p>Allows free-form specification of a metric. No validation of custom metrics
+is provided.</p>
+
 </td>
 <td>
 No
@@ -455,6 +463,8 @@ No
 <td><code>mode</code></td>
 <td><code><a href="#WorkloadMode">WorkloadMode</a></code></td>
 <td>
+<p>Controls which mode of metrics generation is selected: CLIENT and/or SERVER.</p>
+
 </td>
 <td>
 No
@@ -938,7 +948,8 @@ field MUST be specified if UPSERT is used as the operation.</p>
 <tr id="MetricsOverrides-TagOverride-Operation-REMOVE">
 <td><code>REMOVE</code></td>
 <td>
-<p>Specifies that</p>
+<p>Specifies that the tag should not be included in the metric when
+generated.</p>
 
 </td>
 </tr>

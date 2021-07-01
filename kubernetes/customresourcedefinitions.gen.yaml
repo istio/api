@@ -5564,8 +5564,11 @@ spec:
                               - customMetric
                             properties:
                               customMetric:
+                                description: Allows free-form specification of a metric.
                                 type: string
                               metric:
+                                description: One of the well-known Istio Standard
+                                  Metrics.
                                 enum:
                                 - ALL_ISTIO_METRICS
                                 - REQUEST_COUNT
@@ -5580,6 +5583,8 @@ spec:
                                 - GRPC_RESPONSE_MESSAGES
                                 type: string
                               mode:
+                                description: 'Controls which mode of metrics generation
+                                  is selected: CLIENT and/or SERVER.'
                                 enum:
                                 - CLIENT_AND_SERVER
                                 - CLIENT

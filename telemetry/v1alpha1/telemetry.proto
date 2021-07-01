@@ -384,6 +384,8 @@ enum WorkloadMode {
   SERVER = 2;
 }
 
+// Provides a mechanism for matching metrics for the application of override
+// behaviors.
 message MetricSelector {
   // Curated list of known metric types that is supported by Istio metric providers.
   // See also: https://istio.io/latest/docs/reference/config/metrics/#metrics
@@ -474,11 +476,17 @@ message MetricSelector {
     GRPC_RESPONSE_MESSAGES = 10;
   }
 
+  // Controls which metric(s) are selected by the selector.
   oneof metricMatch {
+    // One of the well-known Istio Standard Metrics.
     IstioMetric metric = 1;
+    
+    // Allows free-form specification of a metric. No validation of custom metrics
+    // is provided.
     string custom_metric = 2;
   }
 
+  // Controls which mode of metrics generation is selected: CLIENT and/or SERVER.
   WorkloadMode mode = 3;
 }
 
@@ -507,7 +515,8 @@ message MetricsOverrides {
       // field MUST be specified if UPSERT is used as the operation.
       UPSERT = 0;
 
-      // Specifies that 
+      // Specifies that the tag should not be included in the metric when
+      // generated.
       REMOVE = 1;
     }
 
