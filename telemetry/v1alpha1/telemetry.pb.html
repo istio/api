@@ -2,7 +2,7 @@
 title: istio.telemetry.v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 14
+number_of_entries: 15
 ---
 <h2 id="Telemetry">Telemetry</h2>
 <section>
@@ -16,13 +16,6 @@ to have a single workload selector-less Telemetry resource.</p>
 
 <p>For resources with a workload selector, it is only valid to have one resource selecting
 any given workload.</p>
-
-<p>Telemetry configuration will use a &ldquo;shallow merge&rdquo; semantic for configuration override
-for each telemetry type (Tracing, Metrics, AccessLogging). For example, Tracing configuration
-will support overrides of the fields <code>providers</code>, <code>random_sampling_percentage</code>, <code>disable_span_reporting</code>,
-and <code>custom_tags</code> at each level in the configuration hierarchy, with missing values filled in
-from parent resources. However, when specified, fields like <code>custom_tags</code> will
-fully replace any values provided by parent configuration.</p>
 
 <p>The hierarchy of Telemetry configuration is as follows:
 1. Workload-specific configuration
@@ -107,22 +100,13 @@ spec:
   - providers:
     - name: stackdriver
     overrides:
-    - trafficMatch: INBOUND_TRAFFIC
-      metrics:
-      - REQUEST_COUNT
-      - REQUEST_DURATION
-      - REQUEST_SIZE
-      - RESPONSE_SIZE
-      - TCP_OPENED_CONNECTIONS
-      - TCP_CLOSED_CONNECTIONS
-      - TCP_SENT_BYTES
-      - TCP_RECEIVED_BYTES
-      - GRPC_REQUEST_MESSAGES
-      - GRPC_RESPONSE_MESSAGES
+    - match:
+        metric: ALL_ISTIO_METRICS
+        mode: SERVER
       disabled: true
 </code></pre>
 
-<p>Policy to add dimensions to all Prometheus metrics for a namespace:</p>
+<p>Policy to add dimensions to all Prometheus metrics for the <code>foo</code> namespace:</p>
 
 <pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
@@ -130,33 +114,21 @@ metadata:
   name: namespace-metrics
   namespace: foo
 spec:
-  # no selector specified, applies to all workloads
+  # no selector specified, applies to all workloads in the namespace
   metrics:
   - providers:
     - name: prometheus
     overrides:
-    - trafficMatch: ALL_TRAFFIC
-      metrics:
-      - REQUEST_COUNT
-      - REQUEST_DURATION
-      - REQUEST_SIZE
-      - RESPONSE_SIZE
-      - TCP_OPENED_CONNECTIONS
-      - TCP_CLOSED_CONNECTIONS
-      - TCP_SENT_BYTES
-      - TCP_RECEIVED_BYTES
-      - GRPC_REQUEST_MESSAGES
-      - GRPC_RESPONSE_MESSAGES
-      tagOverrides:
+    # match clause left off matches all istio metrics, client and server
+    - tagOverrides:
         destination_port:
-          operation: INSERT_OR_UPDATE
-          expression: &quot;string(destination.port)&quot;
+          value: &quot;string(destination.port)&quot;
         request_host:
-          operation: INSERT_OR_UPDATE
-          expression: &quot;request.host&quot;
+          value: &quot;request.host&quot;
 </code></pre>
 
-<p>Policy to remove the source_workload dimension on some Prometheus metrics for a workload:</p>
+<p>Policy to remove the source_workload dimension on some Prometheus metrics for
+the <code>bar.foo</code> workload:</p>
 
 <pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
@@ -171,12 +143,23 @@ spec:
   - providers:
     - name: prometheus
     overrides:
-    - metrics:
-      - REQUEST_COUNT
-      - REQUEST_DURATION
-      - REQUEST_SIZE
-      - RESPONSE_SIZE
-      trafficMatch: ALL_TRAFFIC
+    - match:
+        metric: REQUEST_COUNT
+      tagOverrides:
+        source_workload:
+          operation: REMOVE
+    - match:
+        metric: REQUEST_DURATION
+      tagOverrides:
+        source_workload:
+          operation: REMOVE
+    - match:
+        metric: REQUEST_BYTES
+      tagOverrides:
+        source_workload:
+          operation: REMOVE
+    - match:
+        metric: RESPONSE_BYTES
       tagOverrides:
         source_workload:
           operation: REMOVE
@@ -196,7 +179,7 @@ spec:
     - name: envoyFileAccessLogger
 </code></pre>
 
-<p>Policy to disable access logging for a namespace:</p>
+<p>Policy to disable access logging for the <code>foo</code> namespace:</p>
 
 <pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
@@ -204,7 +187,7 @@ metadata:
   name: namespace-no-log
   namespace: foo
 spec:
-  # no selector specified, applies to all workloads
+  # no selector specified, applies to all workloads in the namespace
   accessLogging:
   - disabled: true
 </code></pre>
@@ -276,6 +259,12 @@ No
 <p>Tracing configures tracing behavior for workloads within a mesh.
 It can be used to enable/disable tracing, as well as to set sampling
 rates and custom tag extraction.</p>
+
+<p>Tracing configuration support overrides of the fields <code>providers</code>,
+<code>random_sampling_percentage</code>, <code>disable_span_reporting</code>, and <code>custom_tags</code> at
+each level in the configuration hierarchy, with missing values filled in
+from parent resources. However, when specified, <code>custom_tags</code> will
+fully replace any values provided by parent configuration.</p>
 
 <table class="message-fields">
 <thead>
@@ -410,9 +399,62 @@ No
 <td><code>overrides</code></td>
 <td><code><a href="#MetricsOverrides">MetricsOverrides[]</a></code></td>
 <td>
-<p>Optional. Set of overrides to apply. These include customization of dimensions
-as well as enablement control.</p>
+<p>Optional. Ordered list of overrides to metrics generation behavior.</p>
 
+<p>Specified overrides will be applied in order. They will be applied on
+top of inherited overrides from other resources in the hierarchy in the
+following order:
+1. Mesh-scoped overrides
+2. Namespace-scoped overrides
+3. Workload-scoped overrides</p>
+
+<p>Because overrides are applied in order, users are advised to order their
+overrides from least specific to most specific matches. That is, it is
+a best practice to list any universal overrides first, with tailored
+overrides following.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MetricSelector">MetricSelector</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MetricSelector-metric" class="oneof oneof-start">
+<td><code>metric</code></td>
+<td><code><a href="#MetricSelector-IstioMetric">IstioMetric (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MetricSelector-custom_metric" class="oneof">
+<td><code>customMetric</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MetricSelector-mode">
+<td><code>mode</code></td>
+<td><code><a href="#WorkloadMode">WorkloadMode</a></code></td>
+<td>
 </td>
 <td>
 No
@@ -436,23 +478,16 @@ metric or the set of all standard metrics.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="MetricsOverrides-metrics">
-<td><code>metrics</code></td>
-<td><code><a href="#MetricsOverrides-StandardMetric">StandardMetric[]</a></code></td>
+<tr id="MetricsOverrides-match">
+<td><code>match</code></td>
+<td><code><a href="#MetricSelector">MetricSelector</a></code></td>
 <td>
-<p>Optional. If not specified, config will not be applied.</p>
+<p>Match allows provides the scope of the override. It can be used to select
+individual metrics, as well as the workload modes (server and/or client)
+in which the metrics will be generated.</p>
 
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MetricsOverrides-traffic_match">
-<td><code>trafficMatch</code></td>
-<td><code><a href="#MetricsOverrides-TrafficMatch">TrafficMatch</a></code></td>
-<td>
-<p>Optional. Matches traffic direction <em>from the perspective of the
-workload</em>.</p>
+<p>If match is not specified, the overrides will apply to <em>all</em> metrics for
+<em>both</em> modes of operation (client and server).</p>
 
 </td>
 <td>
@@ -464,7 +499,7 @@ No
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
 <p>Optional. Must explicitly set this to &ldquo;true&rdquo; to turn off metrics reporting
-for the listed metrics.</p>
+for the listed metrics. If not set, this will default to &ldquo;false&rdquo;.</p>
 
 </td>
 <td>
@@ -539,6 +574,9 @@ No
 an operator-supplied value. This value can either be a hard-coded value,
 a value taken from an environment variable known to the sidecar proxy, or
 from a request header.</p>
+
+<p>NOTE: when specified, <code>custom_tags</code> will fully replace any values provided
+by parent configuration.</p>
 
 <table class="message-fields">
 <thead>
@@ -711,12 +749,12 @@ No
 No
 </td>
 </tr>
-<tr id="MetricsOverrides-TagOverride-expression">
-<td><code>expression</code></td>
+<tr id="MetricsOverrides-TagOverride-value">
+<td><code>value</code></td>
 <td><code>string</code></td>
 <td>
-<p>Expression is only considered if the operation is INSERT<em>OR</em>UPDATE.
-Expressions are <a href="https://opensource.google/projects/cel">CEL expressions</a> over attributes.
+<p>Value is only considered if the operation is <code>UPSERT</code>.
+Values are <a href="https://opensource.google/projects/cel">CEL expressions</a> over attributes.
 Examples include: &ldquo;string(destination.port)&rdquo; and &ldquo;request.host&rdquo;.
 Istio exposes all standard <a href="https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/advanced/attributes">Envoy attributes</a>.
 Additionally, Istio exposes node metadata as attributes.
@@ -725,6 +763,151 @@ More information is provided in the <a href="https://istio.io/latest/docs/tasks/
 </td>
 <td>
 No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MetricSelector-IstioMetric">MetricSelector.IstioMetric</h2>
+<section>
+<p>Curated list of known metric types that is supported by Istio metric providers.
+See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MetricSelector-IstioMetric-ALL_ISTIO_METRICS">
+<td><code>ALL_ISTIO_METRICS</code></td>
+<td>
+<p>Use of this enum indicates that the override should apply to all metrics.</p>
+
+</td>
+</tr>
+<tr id="MetricSelector-IstioMetric-REQUEST_COUNT">
+<td><code>REQUEST_COUNT</code></td>
+<td>
+<p>Counter of requests to/from an application, generated for HTTP, HTTP/2, and GRPC traffic.</p>
+
+<p>The Prometheus provider exports this metric as: <code>istio_requests_total</code>.</p>
+
+<p>The Stackdriver provider exports this metric as:
+- <code>istio.io/service/server/request_count</code> (for inbound traffic)
+- <code>istio.io/service/client/request_count</code> (for outbound traffic)</p>
+
+</td>
+</tr>
+<tr id="MetricSelector-IstioMetric-REQUEST_DURATION">
+<td><code>REQUEST_DURATION</code></td>
+<td>
+<p>Histogram of request durations, generated for HTTP, HTTP/2, and GRPC traffic.</p>
+
+<p>The Prometheus provider exports this metric as: <code>istio_request_duration_milliseconds</code>.</p>
+
+<p>The Stackdriver provider exports this metric as:
+- <code>istio.io/service/server/response_latencies</code> (for inbound traffic)
+- <code>istio.io/service/client/roundtrip_latencies</code> (for outbound traffic)</p>
+
+</td>
+</tr>
+<tr id="MetricSelector-IstioMetric-REQUEST_SIZE">
+<td><code>REQUEST_SIZE</code></td>
+<td>
+<p>Histogram of request body sizes, generated for HTTP, HTTP/2, and GRPC traffic.</p>
+
+<p>The Prometheus provider exports this metric as: <code>istio_request_bytes</code>.</p>
+
+<p>The Stackdriver provider exports this metric as:
+- <code>istio.io/service/server/request_bytes</code> (for inbound traffic)
+- <code>istio.io/service/client/request_bytes</code> (for outbound traffic)</p>
+
+</td>
+</tr>
+<tr id="MetricSelector-IstioMetric-RESPONSE_SIZE">
+<td><code>RESPONSE_SIZE</code></td>
+<td>
+<p>Histogram of response body sizes, generated for HTTP, HTTP/2, and GRPC traffic.</p>
+
+<p>The Prometheus provider exports this metric as: <code>istio_response_bytes</code>.</p>
+
+<p>The Stackdriver provider exports this metric as:
+- <code>istio.io/service/server/response_bytes</code> (for inbound traffic)
+- <code>istio.io/service/client/response_bytes</code> (for outbound traffic)</p>
+
+</td>
+</tr>
+<tr id="MetricSelector-IstioMetric-TCP_OPENED_CONNECTIONS">
+<td><code>TCP_OPENED_CONNECTIONS</code></td>
+<td>
+<p>Counter of TCP connections opened over lifetime of workload.</p>
+
+<p>The Prometheus provider exports this metric as: <code>istio_tcp_connections_opened_total</code>.</p>
+
+<p>The Stackdriver provider exports this metric as:
+- <code>istio.io/service/server/connection_open_count</code> (for inbound traffic)
+- <code>istio.io/service/client/connection_open_count</code> (for outbound traffic)</p>
+
+</td>
+</tr>
+<tr id="MetricSelector-IstioMetric-TCP_CLOSED_CONNECTIONS">
+<td><code>TCP_CLOSED_CONNECTIONS</code></td>
+<td>
+<p>Counter of TCP connections closed over lifetime of workload.</p>
+
+<p>The Prometheus provider exports this metric as: <code>istio_tcp_connections_closed_total</code>.</p>
+
+<p>The Stackdriver provider exports this metric as:
+- <code>istio.io/service/server/connection_close_count</code> (for inbound traffic)
+- <code>istio.io/service/client/connection_close_count</code> (for outbound traffic)</p>
+
+</td>
+</tr>
+<tr id="MetricSelector-IstioMetric-TCP_SENT_BYTES">
+<td><code>TCP_SENT_BYTES</code></td>
+<td>
+<p>Counter of bytes sent during a response over a TCP connection.</p>
+
+<p>The Prometheus provider exports this metric as: <code>istio_tcp_sent_bytes_total</code>.</p>
+
+<p>The Stackdriver provider exports this metric as:
+- <code>istio.io/service/server/sent_bytes_count</code> (for inbound traffic)
+- <code>istio.io/service/client/sent_bytes_count</code> (for outbound traffic)</p>
+
+</td>
+</tr>
+<tr id="MetricSelector-IstioMetric-TCP_RECEIVED_BYTES">
+<td><code>TCP_RECEIVED_BYTES</code></td>
+<td>
+<p>Counter of bytes received during a request over a TCP connection.</p>
+
+<p>The Prometheus provider exports this metric as: <code>istio_tcp_received_bytes_total</code>.</p>
+
+<p>The Stackdriver provider exports this metric as:
+- <code>istio.io/service/server/received_bytes_count</code> (for inbound traffic)
+- <code>istio.io/service/client/received_bytes_count</code> (for outbound traffic)</p>
+
+</td>
+</tr>
+<tr id="MetricSelector-IstioMetric-GRPC_REQUEST_MESSAGES">
+<td><code>GRPC_REQUEST_MESSAGES</code></td>
+<td>
+<p>Counter incremented for every gRPC messages sent from a client.</p>
+
+<p>The Prometheus provider exports this metric as: <code>istio_request_messages_total</code></p>
+
+</td>
+</tr>
+<tr id="MetricSelector-IstioMetric-GRPC_RESPONSE_MESSAGES">
+<td><code>GRPC_RESPONSE_MESSAGES</code></td>
+<td>
+<p>Counter incremented for every gRPC messages sent from a server.</p>
+
+<p>The Prometheus provider exports this metric as: <code>istio_response_messages_total</code></p>
+
 </td>
 </tr>
 </tbody>
@@ -740,23 +923,32 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="MetricsOverrides-TagOverride-Operation-INSERT_OR_UPDATE">
-<td><code>INSERT_OR_UPDATE</code></td>
+<tr id="MetricsOverrides-TagOverride-Operation-UPSERT">
+<td><code>UPSERT</code></td>
 <td>
+<p>Insert or Update the tag with the provided value expression. The <code>value</code>
+field MUST be specified if UPSERT is used as the operation.</p>
+
 </td>
 </tr>
 <tr id="MetricsOverrides-TagOverride-Operation-REMOVE">
 <td><code>REMOVE</code></td>
 <td>
+<p>Specifies that</p>
+
 </td>
 </tr>
 </tbody>
 </table>
 </section>
-<h2 id="MetricsOverrides-StandardMetric">MetricsOverrides.StandardMetric</h2>
+<h2 id="WorkloadMode">WorkloadMode</h2>
 <section>
-<p>Curated list of known metric types that is supported by Istio metric providers.
-See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
+<p>WorkloadMode allows selection of the role of the underlying workload in
+network traffic. A workload is considered as acting as a SERVER if it is
+the destination of the traffic (that is, traffic direction, from the
+perspective of the workload is <em>inbound</em>). If the workload is the source of
+the network traffic, it is considered to be in CLIENT mode (traffic is
+<em>outbound</em> from the workload).</p>
 
 <table class="enum-values">
 <thead>
@@ -766,166 +958,27 @@ See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
 </tr>
 </thead>
 <tbody>
-<tr id="MetricsOverrides-StandardMetric-METRIC_UNSPECIFIED">
-<td><code>METRIC_UNSPECIFIED</code></td>
+<tr id="WorkloadMode-CLIENT_AND_SERVER">
+<td><code>CLIENT_AND_SERVER</code></td>
 <td>
-<p>Use of this enum will mean that none of the configuration will apply.</p>
+<p>Selects for scenarios when the workload is either the
+source or destination of the network traffic.</p>
 
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-REQUEST_COUNT">
-<td><code>REQUEST_COUNT</code></td>
+<tr id="WorkloadMode-CLIENT">
+<td><code>CLIENT</code></td>
 <td>
-<p>Counter of requests to/from an application, generated for HTTP, HTTP/2, and GRPC traffic.</p>
-
-<p>The Prometheus provider exports this metric as: <code>istio_requests_total</code>.</p>
-
-<p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/request_count</code> (for inbound traffic)
-- <code>istio.io/service/client/request_count</code> (for outbound traffic)</p>
+<p>Selects for scenarios when the workload is the
+source of the network traffic.</p>
 
 </td>
 </tr>
-<tr id="MetricsOverrides-StandardMetric-REQUEST_DURATION">
-<td><code>REQUEST_DURATION</code></td>
+<tr id="WorkloadMode-SERVER">
+<td><code>SERVER</code></td>
 <td>
-<p>Histogram of request durations, generated for HTTP, HTTP/2, and GRPC traffic.</p>
-
-<p>The Prometheus provider exports this metric as: <code>istio_request_duration_milliseconds</code>.</p>
-
-<p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/response_latencies</code> (for inbound traffic)
-- <code>istio.io/service/client/roundtrip_latencies</code> (for outbound traffic)</p>
-
-</td>
-</tr>
-<tr id="MetricsOverrides-StandardMetric-REQUEST_SIZE">
-<td><code>REQUEST_SIZE</code></td>
-<td>
-<p>Histogram of request body sizes, generated for HTTP, HTTP/2, and GRPC traffic.</p>
-
-<p>The Prometheus provider exports this metric as: <code>istio_request_bytes</code>.</p>
-
-<p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/request_bytes</code> (for inbound traffic)
-- <code>istio.io/service/client/request_bytes</code> (for outbound traffic)</p>
-
-</td>
-</tr>
-<tr id="MetricsOverrides-StandardMetric-RESPONSE_SIZE">
-<td><code>RESPONSE_SIZE</code></td>
-<td>
-<p>Histogram of response body sizes, generated for HTTP, HTTP/2, and GRPC traffic.</p>
-
-<p>The Prometheus provider exports this metric as: <code>istio_response_bytes</code>.</p>
-
-<p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/response_bytes</code> (for inbound traffic)
-- <code>istio.io/service/client/response_bytes</code> (for outbound traffic)</p>
-
-</td>
-</tr>
-<tr id="MetricsOverrides-StandardMetric-TCP_OPENED_CONNECTIONS">
-<td><code>TCP_OPENED_CONNECTIONS</code></td>
-<td>
-<p>Counter of TCP connections opened over lifetime of workload.</p>
-
-<p>The Prometheus provider exports this metric as: <code>istio_tcp_connections_opened_total</code>.</p>
-
-<p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/connection_open_count</code> (for inbound traffic)
-- <code>istio.io/service/client/connection_open_count</code> (for outbound traffic)</p>
-
-</td>
-</tr>
-<tr id="MetricsOverrides-StandardMetric-TCP_CLOSED_CONNECTIONS">
-<td><code>TCP_CLOSED_CONNECTIONS</code></td>
-<td>
-<p>Counter of TCP connections closed over lifetime of workload.</p>
-
-<p>The Prometheus provider exports this metric as: <code>istio_tcp_connections_closed_total</code>.</p>
-
-<p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/connection_close_count</code> (for inbound traffic)
-- <code>istio.io/service/client/connection_close_count</code> (for outbound traffic)</p>
-
-</td>
-</tr>
-<tr id="MetricsOverrides-StandardMetric-TCP_SENT_BYTES">
-<td><code>TCP_SENT_BYTES</code></td>
-<td>
-<p>Counter of bytes sent during a response over a TCP connection.</p>
-
-<p>The Prometheus provider exports this metric as: <code>istio_tcp_sent_bytes_total</code>.</p>
-
-<p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/sent_bytes_count</code> (for inbound traffic)
-- <code>istio.io/service/client/sent_bytes_count</code> (for outbound traffic)</p>
-
-</td>
-</tr>
-<tr id="MetricsOverrides-StandardMetric-TCP_RECEIVED_BYTES">
-<td><code>TCP_RECEIVED_BYTES</code></td>
-<td>
-<p>Counter of bytes received during a request over a TCP connection.</p>
-
-<p>The Prometheus provider exports this metric as: <code>istio_tcp_received_bytes_total</code>.</p>
-
-<p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/received_bytes_count</code> (for inbound traffic)
-- <code>istio.io/service/client/received_bytes_count</code> (for outbound traffic)</p>
-
-</td>
-</tr>
-<tr id="MetricsOverrides-StandardMetric-GRPC_REQUEST_MESSAGES">
-<td><code>GRPC_REQUEST_MESSAGES</code></td>
-<td>
-<p>Counter incremented for every gRPC messages sent from a client.</p>
-
-<p>The Prometheus provider epxorts this metric as: <code>istio_request_messages_total</code></p>
-
-</td>
-</tr>
-<tr id="MetricsOverrides-StandardMetric-GRPC_RESPONSE_MESSAGES">
-<td><code>GRPC_RESPONSE_MESSAGES</code></td>
-<td>
-<p>Counter incremented for every gRPC messages sent from a server.</p>
-
-<p>The Prometheus provider epxorts this metric as: <code>istio_response_messages_total</code></p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="MetricsOverrides-TrafficMatch">MetricsOverrides.TrafficMatch</h2>
-<section>
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="MetricsOverrides-TrafficMatch-ALL_TRAFFIC">
-<td><code>ALL_TRAFFIC</code></td>
-<td>
-<p>Matches all traffic, both inbound and outbound.</p>
-
-</td>
-</tr>
-<tr id="MetricsOverrides-TrafficMatch-INBOUND_TRAFFIC">
-<td><code>INBOUND_TRAFFIC</code></td>
-<td>
-<p>Matches only inbound (server) traffic.</p>
-
-</td>
-</tr>
-<tr id="MetricsOverrides-TrafficMatch-OUTBOUND_TRAFFIC">
-<td><code>OUTBOUND_TRAFFIC</code></td>
-<td>
-<p>Matches only outbound (client) traffic.</p>
+<p>Selects for scenarios when the workload is the
+destination of the network traffic.</p>
 
 </td>
 </tr>

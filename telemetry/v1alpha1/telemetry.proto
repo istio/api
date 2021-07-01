@@ -38,13 +38,6 @@ package istio.telemetry.v1alpha1;
 // For resources with a workload selector, it is only valid to have one resource selecting
 // any given workload.
 //
-// Telemetry configuration will use a "shallow merge" semantic for configuration override
-// for each telemetry type (Tracing, Metrics, AccessLogging). For example, Tracing configuration
-// will support overrides of the fields `providers`, `random_sampling_percentage`, `disable_span_reporting`,
-// and `custom_tags` at each level in the configuration hierarchy, with missing values filled in
-// from parent resources. However, when specified, fields like `custom_tags` will
-// fully replace any values provided by parent configuration.
-//
 // The hierarchy of Telemetry configuration is as follows:
 // 1. Workload-specific configuration
 // 1. Namespace-specific configuration
@@ -128,22 +121,13 @@ package istio.telemetry.v1alpha1;
 //   - providers:
 //     - name: stackdriver
 //     overrides:
-//     - trafficMatch: INBOUND_TRAFFIC
-//       metrics:
-//       - REQUEST_COUNT
-//       - REQUEST_DURATION
-//       - REQUEST_SIZE
-//       - RESPONSE_SIZE
-//       - TCP_OPENED_CONNECTIONS
-//       - TCP_CLOSED_CONNECTIONS
-//       - TCP_SENT_BYTES
-//       - TCP_RECEIVED_BYTES
-//       - GRPC_REQUEST_MESSAGES
-//       - GRPC_RESPONSE_MESSAGES
+//     - match:
+//         metric: ALL_ISTIO_METRICS
+//         mode: SERVER
 //       disabled: true
 // ```
 //
-// Policy to add dimensions to all Prometheus metrics for a namespace:
+// Policy to add dimensions to all Prometheus metrics for the `foo` namespace:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1alpha1
 // kind: Telemetry
@@ -151,33 +135,21 @@ package istio.telemetry.v1alpha1;
 //   name: namespace-metrics
 //   namespace: foo
 // spec:
-//   # no selector specified, applies to all workloads
+//   # no selector specified, applies to all workloads in the namespace
 //   metrics:
 //   - providers:
 //     - name: prometheus
 //     overrides:
-//     - trafficMatch: ALL_TRAFFIC
-//       metrics:
-//       - REQUEST_COUNT
-//       - REQUEST_DURATION
-//       - REQUEST_SIZE
-//       - RESPONSE_SIZE
-//       - TCP_OPENED_CONNECTIONS
-//       - TCP_CLOSED_CONNECTIONS
-//       - TCP_SENT_BYTES
-//       - TCP_RECEIVED_BYTES
-//       - GRPC_REQUEST_MESSAGES
-//       - GRPC_RESPONSE_MESSAGES
-//       tagOverrides:
+//     # match clause left off matches all istio metrics, client and server
+//     - tagOverrides:
 //         destination_port:
-//           operation: INSERT_OR_UPDATE
-//           expression: "string(destination.port)"
+//           value: "string(destination.port)"
 //         request_host:
-//           operation: INSERT_OR_UPDATE
-//           expression: "request.host"
+//           value: "request.host"
 // ```
 //
-// Policy to remove the source_workload dimension on some Prometheus metrics for a workload:
+// Policy to remove the source_workload dimension on some Prometheus metrics for 
+// the `bar.foo` workload:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1alpha1
 // kind: Telemetry
@@ -192,12 +164,23 @@ package istio.telemetry.v1alpha1;
 //   - providers:
 //     - name: prometheus
 //     overrides:
-//     - metrics:
-//       - REQUEST_COUNT
-//       - REQUEST_DURATION
-//       - REQUEST_SIZE
-//       - RESPONSE_SIZE
-//       trafficMatch: ALL_TRAFFIC
+//     - match:
+//         metric: REQUEST_COUNT
+//       tagOverrides:
+//         source_workload:
+//           operation: REMOVE
+//     - match:
+//         metric: REQUEST_DURATION
+//       tagOverrides:
+//         source_workload:
+//           operation: REMOVE
+//     - match:
+//         metric: REQUEST_BYTES
+//       tagOverrides:
+//         source_workload:
+//           operation: REMOVE
+//     - match:
+//         metric: RESPONSE_BYTES
 //       tagOverrides:
 //         source_workload:
 //           operation: REMOVE
@@ -217,7 +200,7 @@ package istio.telemetry.v1alpha1;
 //     - name: envoyFileAccessLogger
 // ```
 //
-// Policy to disable access logging for a namespace:
+// Policy to disable access logging for the `foo` namespace:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1alpha1
 // kind: Telemetry
@@ -225,7 +208,7 @@ package istio.telemetry.v1alpha1;
 //   name: namespace-no-log
 //   namespace: foo
 // spec:
-//   # no selector specified, applies to all workloads
+//   # no selector specified, applies to all workloads in the namespace
 //   accessLogging:
 //   - disabled: true
 // ```
@@ -274,6 +257,12 @@ message Telemetry {
 // Tracing configures tracing behavior for workloads within a mesh.
 // It can be used to enable/disable tracing, as well as to set sampling
 // rates and custom tag extraction.
+//
+// Tracing configuration support overrides of the fields `providers`, 
+// `random_sampling_percentage`, `disable_span_reporting`, and `custom_tags` at
+// each level in the configuration hierarchy, with missing values filled in
+// from parent resources. However, when specified, `custom_tags` will
+// fully replace any values provided by parent configuration.
 message Tracing {
   
   // Optional. Name of provider(s) to use for span reporting. If a provider is
@@ -303,6 +292,9 @@ message Tracing {
   // an operator-supplied value. This value can either be a hard-coded value,
   // a value taken from an environment variable known to the sidecar proxy, or
   // from a request header.
+  // 
+  // NOTE: when specified, `custom_tags` will fully replace any values provided 
+  // by parent configuration.
   message CustomTag {
     oneof type {
       // Literal adds the same, hard-coded value to each span.
@@ -356,20 +348,48 @@ message Metrics {
   // will be used.
   repeated ProviderRef providers = 1;
   
-  // Optional. Set of overrides to apply. These include customization of dimensions
-  // as well as enablement control.
+  // Optional. Ordered list of overrides to metrics generation behavior.
+  //
+  // Specified overrides will be applied in order. They will be applied on
+  // top of inherited overrides from other resources in the hierarchy in the
+  // following order:
+  // 1. Mesh-scoped overrides
+  // 2. Namespace-scoped overrides
+  // 3. Workload-scoped overrides
+  //
+  // Because overrides are applied in order, users are advised to order their
+  // overrides from least specific to most specific matches. That is, it is
+  // a best practice to list any universal overrides first, with tailored 
+  // overrides following.
   repeated MetricsOverrides overrides = 2;
 }
 
-// MetricsOverrides defines custom metric generation behavior for an individual
-// metric or the set of all standard metrics.
-message MetricsOverrides {
+// WorkloadMode allows selection of the role of the underlying workload in
+// network traffic. A workload is considered as acting as a SERVER if it is
+// the destination of the traffic (that is, traffic direction, from the 
+// perspective of the workload is *inbound*). If the workload is the source of
+// the network traffic, it is considered to be in CLIENT mode (traffic is
+// *outbound* from the workload).
+enum WorkloadMode {
+  // Selects for scenarios when the workload is either the
+  // source or destination of the network traffic.
+  CLIENT_AND_SERVER = 0;
 
+  // Selects for scenarios when the workload is the
+  // source of the network traffic.
+  CLIENT = 1;
+
+  // Selects for scenarios when the workload is the
+  // destination of the network traffic.
+  SERVER = 2;
+}
+
+message MetricSelector {
   // Curated list of known metric types that is supported by Istio metric providers.
   // See also: https://istio.io/latest/docs/reference/config/metrics/#metrics
-  enum StandardMetric {
-    // Use of this enum will mean that none of the configuration will apply.
-    METRIC_UNSPECIFIED = 0;
+  enum IstioMetric {
+    // Use of this enum indicates that the override should apply to all metrics.
+    ALL_ISTIO_METRICS = 0;
 
     // Counter of requests to/from an application, generated for HTTP, HTTP/2, and GRPC traffic.
     //
@@ -445,53 +465,59 @@ message MetricsOverrides {
 
     // Counter incremented for every gRPC messages sent from a client.
     //
-    // The Prometheus provider epxorts this metric as: `istio_request_messages_total`
+    // The Prometheus provider exports this metric as: `istio_request_messages_total`
     GRPC_REQUEST_MESSAGES = 9;
 
     // Counter incremented for every gRPC messages sent from a server.
     //
-    // The Prometheus provider epxorts this metric as: `istio_response_messages_total`
+    // The Prometheus provider exports this metric as: `istio_response_messages_total`
     GRPC_RESPONSE_MESSAGES = 10;
   }
 
-  // Optional. If not specified, config will not be applied.
-  repeated StandardMetric metrics = 1;
-
-  enum TrafficMatch {
-    // Matches all traffic, both inbound and outbound.
-    ALL_TRAFFIC = 0;
-
-    // Matches only inbound (server) traffic.
-    INBOUND_TRAFFIC = 1;
-
-    // Matches only outbound (client) traffic.
-    OUTBOUND_TRAFFIC = 2;
+  oneof metricMatch {
+    IstioMetric metric = 1;
+    string custom_metric = 2;
   }
 
-  // Optional. Matches traffic direction *from the perspective of the
-  // workload*. 
-  TrafficMatch traffic_match = 2;
+  WorkloadMode mode = 3;
+}
+
+// MetricsOverrides defines custom metric generation behavior for an individual
+// metric or the set of all standard metrics.
+message MetricsOverrides {
+
+  // Match allows provides the scope of the override. It can be used to select
+  // individual metrics, as well as the workload modes (server and/or client)
+  // in which the metrics will be generated.
+  //
+  // If match is not specified, the overrides will apply to *all* metrics for
+  // *both* modes of operation (client and server).
+  MetricSelector match = 1;
 
   // Optional. Must explicitly set this to "true" to turn off metrics reporting
-  // for the listed metrics.
-  google.protobuf.BoolValue disabled = 3;
+  // for the listed metrics. If not set, this will default to "false".
+  google.protobuf.BoolValue disabled = 2;
 
   message TagOverride {
     enum Operation {
-      INSERT_OR_UPDATE = 0;
+      // Insert or Update the tag with the provided value expression. The `value`
+      // field MUST be specified if UPSERT is used as the operation.
+      UPSERT = 0;
+
+      // Specifies that 
       REMOVE = 1;
     }
 
     // Operation controls whether or not to update/add a tag, or to remove it.
     Operation operation = 1;
 
-    // Expression is only considered if the operation is INSERT_OR_UPDATE.
-    // Expressions are [CEL expressions](https://opensource.google/projects/cel) over attributes.
+    // Value is only considered if the operation is `UPSERT`.
+    // Values are [CEL expressions](https://opensource.google/projects/cel) over attributes.
     // Examples include: "string(destination.port)" and "request.host".
     // Istio exposes all standard [Envoy attributes](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/advanced/attributes).
     // Additionally, Istio exposes node metadata as attributes.
     // More information is provided in the [customization docs](https://istio.io/latest/docs/tasks/observability/metrics/customize-metrics/#use-expressions-for-values).
-    string expression = 2;
+    string value = 2;
   }
 
   // Optional. Collection of tag names and tag expressions to override in the
@@ -500,7 +526,7 @@ message MetricsOverrides {
   // The value in the map is the operation to perform on the the tag. 
   // WARNING: some providers may not support adding/removing tags.
   // See also: https://istio.io/latest/docs/reference/config/metrics/#labels
-  map<string, TagOverride> tag_overrides = 4;
+  map<string, TagOverride> tag_overrides = 3;
 }
 
 // Access logging defines the workload-level overrides for access log generation.
