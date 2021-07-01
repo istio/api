@@ -36012,7 +36012,7 @@
               {
                 "id": 2,
                 "name": "egress_proxy",
-                "type": "istio.networking.v1alpha3.Destination"
+                "type": "Destination"
               }
             ]
           }
@@ -38249,7 +38249,7 @@
               {
                 "id": 2,
                 "name": "egress_proxy",
-                "type": "istio.networking.v1beta1.Destination"
+                "type": "Destination"
               }
             ]
           }
