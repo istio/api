@@ -2457,7 +2457,8 @@ func (m *MeshConfig_ExtensionProvider_PrometheusMetricsProvider) XXX_DiscardUnkn
 var xxx_messageInfo_MeshConfig_ExtensionProvider_PrometheusMetricsProvider proto.InternalMessageInfo
 
 type MeshConfig_ExtensionProvider_EnvoyFileAccessLogProvider struct {
-	// REQUIRED. Path to a local file to write the access log entries (e.g. /dev/stdout).
+	// Path to a local file to write the access log entries.
+	// If unspecified, defaults to `/dev/stdout`.
 	Path                 string   `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`

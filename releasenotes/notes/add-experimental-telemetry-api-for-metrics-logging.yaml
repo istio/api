@@ -7,7 +7,7 @@ issue:
 
 releaseNotes:
 - |
-    **Added** experimental Telemetry API support for workload-level specification of metrics generation
+    **Added** experimental Telemetry API for workload-level specification of metrics generation
     and access logging behavior. The new metrics functionality allows customization of metrics behavior,
     including adding and removing metrics tags. The access logging behavior is restricted to enablement
     in this release.

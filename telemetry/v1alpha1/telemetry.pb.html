@@ -101,7 +101,7 @@ spec:
     - name: stackdriver
     overrides:
     - match:
-        metric: ALL_ISTIO_METRICS
+        metric: ALL_METRICS
         mode: SERVER
       disabled: true
 </code></pre>
@@ -121,19 +121,19 @@ spec:
     overrides:
     # match clause left off matches all istio metrics, client and server
     - tagOverrides:
-        destination_port:
-          value: &quot;string(destination.port)&quot;
+        request_method:
+          value: &quot;request.method&quot;
         request_host:
           value: &quot;request.host&quot;
 </code></pre>
 
-<p>Policy to remove the source_workload dimension on some Prometheus metrics for
+<p>Policy to remove the response_code dimension on some Prometheus metrics for
 the <code>bar.foo</code> workload:</p>
 
 <pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
 metadata:
-  name: remove-source-workload
+  name: remove-response-code
   namespace: foo
 spec:
   selector:
@@ -146,22 +146,22 @@ spec:
     - match:
         metric: REQUEST_COUNT
       tagOverrides:
-        source_workload:
+        response_code:
           operation: REMOVE
     - match:
         metric: REQUEST_DURATION
       tagOverrides:
-        source_workload:
+        response_code:
           operation: REMOVE
     - match:
         metric: REQUEST_BYTES
       tagOverrides:
-        source_workload:
+        response_code:
           operation: REMOVE
     - match:
         metric: RESPONSE_BYTES
       tagOverrides:
-        source_workload:
+        response_code:
           operation: REMOVE
 </code></pre>
 
@@ -411,7 +411,7 @@ following order:
 <p>Because overrides are applied in order, users are advised to order their
 overrides from least specific to most specific matches. That is, it is
 a best practice to list any universal overrides first, with tailored
-overrides following.</p>
+overrides following them.</p>
 
 </td>
 <td>
@@ -509,7 +509,9 @@ No
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
 <p>Optional. Must explicitly set this to &ldquo;true&rdquo; to turn off metrics reporting
-for the listed metrics. If not set, this will default to &ldquo;false&rdquo;.</p>
+for the listed metrics. If disabled has been set to &ldquo;true&rdquo; in a parent
+configuration, it must explicitly be set to &ldquo;false&rdquo; to turn metrics
+reporting on in the workloads selected by the Telemetry resource.</p>
 
 </td>
 <td>
@@ -568,7 +570,10 @@ No
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
 <p>Controls logging. If set to true, no access logs will be generated for
-impacted workloads (for the specified providers).</p>
+impacted workloads (for the specified providers).
+NOTE: currently default behavior will be controlled by the provider(s)
+selected above. Customization controls will be added to this API in
+future releases.</p>
 
 </td>
 <td>
@@ -795,10 +800,10 @@ See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
 </tr>
 </thead>
 <tbody>
-<tr id="MetricSelector-IstioMetric-ALL_ISTIO_METRICS">
-<td><code>ALL_ISTIO_METRICS</code></td>
+<tr id="MetricSelector-IstioMetric-ALL_METRICS">
+<td><code>ALL_METRICS</code></td>
 <td>
-<p>Use of this enum indicates that the override should apply to all metrics.</p>
+<p>Use of this enum indicates that the override should apply to all Istio default metrics.</p>
 
 </td>
 </tr>
@@ -810,8 +815,8 @@ See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
 <p>The Prometheus provider exports this metric as: <code>istio_requests_total</code>.</p>
 
 <p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/request_count</code> (for inbound traffic)
-- <code>istio.io/service/client/request_count</code> (for outbound traffic)</p>
+- <code>istio.io/service/server/request_count</code> (SERVER mode)
+- <code>istio.io/service/client/request_count</code> (CLIENT mode)</p>
 
 </td>
 </tr>
@@ -823,8 +828,8 @@ See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
 <p>The Prometheus provider exports this metric as: <code>istio_request_duration_milliseconds</code>.</p>
 
 <p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/response_latencies</code> (for inbound traffic)
-- <code>istio.io/service/client/roundtrip_latencies</code> (for outbound traffic)</p>
+- <code>istio.io/service/server/response_latencies</code> (SERVER mode)
+- <code>istio.io/service/client/roundtrip_latencies</code> (CLIENT mode)</p>
 
 </td>
 </tr>
@@ -836,8 +841,8 @@ See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
 <p>The Prometheus provider exports this metric as: <code>istio_request_bytes</code>.</p>
 
 <p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/request_bytes</code> (for inbound traffic)
-- <code>istio.io/service/client/request_bytes</code> (for outbound traffic)</p>
+- <code>istio.io/service/server/request_bytes</code> (SERVER mode)
+- <code>istio.io/service/client/request_bytes</code> (CLIENT mode)</p>
 
 </td>
 </tr>
@@ -849,8 +854,8 @@ See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
 <p>The Prometheus provider exports this metric as: <code>istio_response_bytes</code>.</p>
 
 <p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/response_bytes</code> (for inbound traffic)
-- <code>istio.io/service/client/response_bytes</code> (for outbound traffic)</p>
+- <code>istio.io/service/server/response_bytes</code> (SERVER mode)
+- <code>istio.io/service/client/response_bytes</code> (CLIENT mode)</p>
 
 </td>
 </tr>
@@ -862,8 +867,8 @@ See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
 <p>The Prometheus provider exports this metric as: <code>istio_tcp_connections_opened_total</code>.</p>
 
 <p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/connection_open_count</code> (for inbound traffic)
-- <code>istio.io/service/client/connection_open_count</code> (for outbound traffic)</p>
+- <code>istio.io/service/server/connection_open_count</code> (SERVER mode)
+- <code>istio.io/service/client/connection_open_count</code> (CLIENT mode)</p>
 
 </td>
 </tr>
@@ -875,8 +880,8 @@ See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
 <p>The Prometheus provider exports this metric as: <code>istio_tcp_connections_closed_total</code>.</p>
 
 <p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/connection_close_count</code> (for inbound traffic)
-- <code>istio.io/service/client/connection_close_count</code> (for outbound traffic)</p>
+- <code>istio.io/service/server/connection_close_count</code> (SERVER mode)
+- <code>istio.io/service/client/connection_close_count</code> (CLIENT mode)</p>
 
 </td>
 </tr>
@@ -888,8 +893,8 @@ See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
 <p>The Prometheus provider exports this metric as: <code>istio_tcp_sent_bytes_total</code>.</p>
 
 <p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/sent_bytes_count</code> (for inbound traffic)
-- <code>istio.io/service/client/sent_bytes_count</code> (for outbound traffic)</p>
+- <code>istio.io/service/server/sent_bytes_count</code> (SERVER mode)
+- <code>istio.io/service/client/sent_bytes_count</code> (CLIENT mode)</p>
 
 </td>
 </tr>
@@ -901,8 +906,8 @@ See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
 <p>The Prometheus provider exports this metric as: <code>istio_tcp_received_bytes_total</code>.</p>
 
 <p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/received_bytes_count</code> (for inbound traffic)
-- <code>istio.io/service/client/received_bytes_count</code> (for outbound traffic)</p>
+- <code>istio.io/service/server/received_bytes_count</code> (SERVER mode)
+- <code>istio.io/service/client/received_bytes_count</code> (CLIENT mode)</p>
 
 </td>
 </tr>

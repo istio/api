@@ -713,7 +713,7 @@
         "type": "object",
         "properties": {
           "path": {
-            "description": "REQUIRED. Path to a local file to write the access log entries (e.g. /dev/stdout).",
+            "description": "Path to a local file to write the access log entries. If unspecified, defaults to `/dev/stdout`.",
             "type": "string"
           }
         }

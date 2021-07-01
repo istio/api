@@ -122,7 +122,7 @@ package istio.telemetry.v1alpha1;
 //     - name: stackdriver
 //     overrides:
 //     - match:
-//         metric: ALL_ISTIO_METRICS
+//         metric: ALL_METRICS
 //         mode: SERVER
 //       disabled: true
 // ```
@@ -142,19 +142,19 @@ package istio.telemetry.v1alpha1;
 //     overrides:
 //     # match clause left off matches all istio metrics, client and server
 //     - tagOverrides:
-//         destination_port:
-//           value: "string(destination.port)"
+//         request_method:
+//           value: "request.method"
 //         request_host:
 //           value: "request.host"
 // ```
 //
-// Policy to remove the source_workload dimension on some Prometheus metrics for 
+// Policy to remove the response_code dimension on some Prometheus metrics for 
 // the `bar.foo` workload:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1alpha1
 // kind: Telemetry
 // metadata:
-//   name: remove-source-workload
+//   name: remove-response-code
 //   namespace: foo
 // spec:
 //   selector:
@@ -167,22 +167,22 @@ package istio.telemetry.v1alpha1;
 //     - match:
 //         metric: REQUEST_COUNT
 //       tagOverrides:
-//         source_workload:
+//         response_code:
 //           operation: REMOVE
 //     - match:
 //         metric: REQUEST_DURATION
 //       tagOverrides:
-//         source_workload:
+//         response_code:
 //           operation: REMOVE
 //     - match:
 //         metric: REQUEST_BYTES
 //       tagOverrides:
-//         source_workload:
+//         response_code:
 //           operation: REMOVE
 //     - match:
 //         metric: RESPONSE_BYTES
 //       tagOverrides:
-//         source_workload:
+//         response_code:
 //           operation: REMOVE
 // ```
 //
@@ -360,7 +360,7 @@ message Metrics {
   // Because overrides are applied in order, users are advised to order their
   // overrides from least specific to most specific matches. That is, it is
   // a best practice to list any universal overrides first, with tailored 
-  // overrides following.
+  // overrides following them.
   repeated MetricsOverrides overrides = 2;
 }
 
@@ -390,16 +390,16 @@ message MetricSelector {
   // Curated list of known metric types that is supported by Istio metric providers.
   // See also: https://istio.io/latest/docs/reference/config/metrics/#metrics
   enum IstioMetric {
-    // Use of this enum indicates that the override should apply to all metrics.
-    ALL_ISTIO_METRICS = 0;
+    // Use of this enum indicates that the override should apply to all Istio default metrics.
+    ALL_METRICS = 0;
 
     // Counter of requests to/from an application, generated for HTTP, HTTP/2, and GRPC traffic.
     //
     // The Prometheus provider exports this metric as: `istio_requests_total`.
     //
     // The Stackdriver provider exports this metric as:
-    // - `istio.io/service/server/request_count` (for inbound traffic)
-    // - `istio.io/service/client/request_count` (for outbound traffic)
+    // - `istio.io/service/server/request_count` (SERVER mode)
+    // - `istio.io/service/client/request_count` (CLIENT mode)
     REQUEST_COUNT = 1;
 
     // Histogram of request durations, generated for HTTP, HTTP/2, and GRPC traffic.
@@ -407,8 +407,8 @@ message MetricSelector {
     // The Prometheus provider exports this metric as: `istio_request_duration_milliseconds`.
     //
     // The Stackdriver provider exports this metric as:
-    // - `istio.io/service/server/response_latencies` (for inbound traffic)
-    // - `istio.io/service/client/roundtrip_latencies` (for outbound traffic)
+    // - `istio.io/service/server/response_latencies` (SERVER mode)
+    // - `istio.io/service/client/roundtrip_latencies` (CLIENT mode)
     REQUEST_DURATION = 2;
 
     // Histogram of request body sizes, generated for HTTP, HTTP/2, and GRPC traffic.
@@ -416,8 +416,8 @@ message MetricSelector {
     // The Prometheus provider exports this metric as: `istio_request_bytes`.
     //
     // The Stackdriver provider exports this metric as:
-    // - `istio.io/service/server/request_bytes` (for inbound traffic)
-    // - `istio.io/service/client/request_bytes` (for outbound traffic)
+    // - `istio.io/service/server/request_bytes` (SERVER mode)
+    // - `istio.io/service/client/request_bytes` (CLIENT mode)
     REQUEST_SIZE = 3;
 
     // Histogram of response body sizes, generated for HTTP, HTTP/2, and GRPC traffic.
@@ -425,8 +425,8 @@ message MetricSelector {
     // The Prometheus provider exports this metric as: `istio_response_bytes`.
     //
     // The Stackdriver provider exports this metric as:
-    // - `istio.io/service/server/response_bytes` (for inbound traffic)
-    // - `istio.io/service/client/response_bytes` (for outbound traffic)
+    // - `istio.io/service/server/response_bytes` (SERVER mode)
+    // - `istio.io/service/client/response_bytes` (CLIENT mode)
     RESPONSE_SIZE = 4;
 
     // Counter of TCP connections opened over lifetime of workload.
@@ -434,8 +434,8 @@ message MetricSelector {
     // The Prometheus provider exports this metric as: `istio_tcp_connections_opened_total`.
     //
     // The Stackdriver provider exports this metric as:
-    // - `istio.io/service/server/connection_open_count` (for inbound traffic)
-    // - `istio.io/service/client/connection_open_count` (for outbound traffic)
+    // - `istio.io/service/server/connection_open_count` (SERVER mode)
+    // - `istio.io/service/client/connection_open_count` (CLIENT mode)
     TCP_OPENED_CONNECTIONS = 5;
 
     // Counter of TCP connections closed over lifetime of workload.
@@ -443,8 +443,8 @@ message MetricSelector {
     // The Prometheus provider exports this metric as: `istio_tcp_connections_closed_total`.
     //
     // The Stackdriver provider exports this metric as:
-    // - `istio.io/service/server/connection_close_count` (for inbound traffic)
-    // - `istio.io/service/client/connection_close_count` (for outbound traffic)
+    // - `istio.io/service/server/connection_close_count` (SERVER mode)
+    // - `istio.io/service/client/connection_close_count` (CLIENT mode)
     TCP_CLOSED_CONNECTIONS = 6;
 
     // Counter of bytes sent during a response over a TCP connection.
@@ -452,8 +452,8 @@ message MetricSelector {
     // The Prometheus provider exports this metric as: `istio_tcp_sent_bytes_total`.
     //
     // The Stackdriver provider exports this metric as:
-    // - `istio.io/service/server/sent_bytes_count` (for inbound traffic)
-    // - `istio.io/service/client/sent_bytes_count` (for outbound traffic)
+    // - `istio.io/service/server/sent_bytes_count` (SERVER mode)
+    // - `istio.io/service/client/sent_bytes_count` (CLIENT mode)
     TCP_SENT_BYTES = 7;
 
     // Counter of bytes received during a request over a TCP connection.
@@ -461,8 +461,8 @@ message MetricSelector {
     // The Prometheus provider exports this metric as: `istio_tcp_received_bytes_total`.
     //
     // The Stackdriver provider exports this metric as:
-    // - `istio.io/service/server/received_bytes_count` (for inbound traffic)
-    // - `istio.io/service/client/received_bytes_count` (for outbound traffic)
+    // - `istio.io/service/server/received_bytes_count` (SERVER mode)
+    // - `istio.io/service/client/received_bytes_count` (CLIENT mode)
     TCP_RECEIVED_BYTES = 8;
 
     // Counter incremented for every gRPC messages sent from a client.
@@ -503,7 +503,9 @@ message MetricsOverrides {
   MetricSelector match = 1;
 
   // Optional. Must explicitly set this to "true" to turn off metrics reporting
-  // for the listed metrics. If not set, this will default to "false".
+  // for the listed metrics. If disabled has been set to "true" in a parent
+  // configuration, it must explicitly be set to "false" to turn metrics
+  // reporting on in the workloads selected by the Telemetry resource.
   google.protobuf.BoolValue disabled = 2;
 
   // TagOverride specifies an operation to perform on a metric dimension (also
@@ -551,5 +553,8 @@ message AccessLogging {
 
   // Controls logging. If set to true, no access logs will be generated for
   // impacted workloads (for the specified providers).
+  // NOTE: currently default behavior will be controlled by the provider(s)
+  // selected above. Customization controls will be added to this API in
+  // future releases.
   google.protobuf.BoolValue disabled = 2;
 }

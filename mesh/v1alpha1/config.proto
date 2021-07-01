@@ -779,7 +779,8 @@ message MeshConfig {
     message PrometheusMetricsProvider {}
 
     message EnvoyFileAccessLogProvider {
-      // REQUIRED. Path to a local file to write the access log entries (e.g. /dev/stdout).
+      // Path to a local file to write the access log entries.
+      // If unspecified, defaults to `/dev/stdout`.
       string path = 1;
     }
   }

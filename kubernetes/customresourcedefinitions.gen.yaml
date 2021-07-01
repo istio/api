@@ -5570,7 +5570,7 @@ spec:
                                 description: One of the well-known Istio Standard
                                   Metrics.
                                 enum:
-                                - ALL_ISTIO_METRICS
+                                - ALL_METRICS
                                 - REQUEST_COUNT
                                 - REQUEST_DURATION
                                 - REQUEST_SIZE
