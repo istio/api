@@ -1155,6 +1155,8 @@ CONFLICT: "ObjectMetricSource" ID: "2" has been removed, but is not reserved [op
 CONFLICT: "ObjectMetricSource" ID: "3" has been removed, but is not reserved [operator/v1alpha1/kubernetes.proto]
 CONFLICT: "ObjectMetricSource" ID: "4" has been removed, but is not reserved [operator/v1alpha1/kubernetes.proto]
 CONFLICT: "ObjectMetricSource" ID: "5" has been removed, but is not reserved [operator/v1alpha1/kubernetes.proto]
+CONFLICT: "OutboundTrafficPolicy" field: "egress_proxy" has a different type: Destination, previously istio.networking.v1alpha3.Destination [networking/v1alpha3/sidecar.proto]
+CONFLICT: "OutboundTrafficPolicy" field: "egress_proxy" has a different type: Destination, previously istio.networking.v1beta1.Destination [networking/v1beta1/sidecar.proto]
 CONFLICT: "PodAffinity" field: "preferredDuringSchedulingIgnoredDuringExecution" has been removed, but is not reserved [operator/v1alpha1/kubernetes.proto]
 CONFLICT: "PodAffinity" field: "requiredDuringSchedulingIgnoredDuringExecution" has been removed, but is not reserved [operator/v1alpha1/kubernetes.proto]
 CONFLICT: "PodAffinity" ID: "1" has been removed, but is not reserved [operator/v1alpha1/kubernetes.proto]

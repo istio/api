@@ -16,6 +16,9 @@
 
 set -eu
 
+# Sync API versions
+scripts/sync.sh
+
 # Generate all protos
 buf generate \
   --path networking \

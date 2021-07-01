@@ -16,14 +16,25 @@
 
 set -eu
 
+LC_ALL=c
 locks=$(find ./releaselocks -type d -name 'release-*' | sort)
 fail=none
+REFRESH="${REFRESH:-false}"
 
 for lock in $locks; do
     echo "Testing $lock"
     # shellcheck disable=SC2094
     protolock status --lockdir="${lock}" | sort -fd > status && :
     diff status "${lock}"/proto.lock.status > diff.out || fail=$lock
+    if [[ "${REFRESH}" == "true" ]]; then
+      if [[ $fail != "none" ]]; then
+        echo "Overwriting changes: $fail"
+        cat diff.out
+      fi
+      rm diff.out
+      mv status "${lock}"/proto.lock.status
+      continue
+    fi
     rm status
     if [[ $fail != "none" ]]; then
         echo "Error $fail"
