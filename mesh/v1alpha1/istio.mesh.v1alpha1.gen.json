@@ -1690,7 +1690,7 @@
             "type": "string"
           },
           "insecureSkipVerify": {
-            "description": "Boolean specifying if proxy should not check the CA signature for the host certificate. `InsecureSkipVerify` is `false` by default. If set to true, the proxy will skip verification of the host's certificate regardless of any CA certificate specified elsewhere.",
+            "description": "Boolean specifying if the proxy should not check the CA signature for the host certificate. `InsecureSkipVerify` is `false` by default. If set to true, the proxy will skip verification of the host's certificate, regardless of any CA certificate specified elsewhere.",
             "type": "boolean",
             "nullable": true
           }

@@ -1862,9 +1862,9 @@ type ClientTLSSettings struct {
 	SubjectAltNames []string `protobuf:"bytes,5,rep,name=subject_alt_names,json=subjectAltNames,proto3" json:"subject_alt_names,omitempty"`
 	// SNI string to present to the server during TLS handshake.
 	Sni string `protobuf:"bytes,6,opt,name=sni,proto3" json:"sni,omitempty"`
-	// Boolean specifying if proxy should not check the CA signature for the host
+	// Boolean specifying if the proxy should not check the CA signature for the host
 	// certificate. `InsecureSkipVerify` is `false` by default. If set to true,
-	// the proxy will skip verification of the host's certificate regardless of
+	// the proxy will skip verification of the host's certificate, regardless of
 	// any CA certificate specified elsewhere.
 	InsecureSkipVerify   *types.BoolValue `protobuf:"bytes,8,opt,name=insecure_skip_verify,json=insecureSkipVerify,proto3" json:"insecure_skip_verify,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
