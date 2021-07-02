@@ -485,6 +485,10 @@ message MeshConfig {
       OpenCensusAgentTracingProvider opencensus = 8;
       // Configures a Apache SkyWalking provider.
       SkyWalkingTracingProvider skywalking = 9;
+      // Configures a Prometheus metrics provider.
+      PrometheusMetricsProvider prometheus = 10;
+      // Configures an Envoy File Access Log provider.
+      EnvoyFileAccessLogProvider envoy_file_access_log = 11;
     }
 
     message EnvoyExternalAuthorizationRequestBody {
@@ -771,6 +775,14 @@ message MeshConfig {
       // NOTE: currently only controls max length of the path tag.
       uint32 max_tag_length = 4;
     }
+
+    message PrometheusMetricsProvider {}
+
+    message EnvoyFileAccessLogProvider {
+      // Path to a local file to write the access log entries.
+      // If unspecified, defaults to `/dev/stdout`.
+      string path = 1;
+    }
   }
 
   // Defines a list of extension providers that extend Istio's functionality. For example, the AuthorizationPolicy
@@ -779,11 +791,16 @@ message MeshConfig {
 
   // Holds the name references to the providers that will be used by default
   // in other Istio configuration resources if the provider is not specified.
+  //
+  // These names must match a provider defined in `extension_providers` that is
+  // one of the supported tracing providers.
   message DefaultProviders {
-    // Name of the default provider for tracing. This must match a provider
-    // defined in `extension_providers` that is one of the support tracing
-    // providers.
-    string tracing = 1;
+    // Name of the default provider(s) for tracing.
+    repeated string tracing = 1;
+    // Name of the default provider(s) for metrics.
+    repeated string metrics = 2;
+    // Name of the default provider(s) for access logging.
+    repeated string access_logging = 3;
   }
 
   // Specifies extension providers to use by default in Istio configuration resources.
