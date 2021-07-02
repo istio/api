@@ -485,6 +485,8 @@ message MeshConfig {
       OpenCensusAgentTracingProvider opencensus = 8;
       // Configures a Apache SkyWalking provider.
       SkyWalkingTracingProvider skywalking = 9;
+      // Configures a global rate limit service.
+      RateLimitProvider rate_limit = 10;
     }
 
     message EnvoyExternalAuthorizationRequestBody {
@@ -770,6 +772,32 @@ message MeshConfig {
       // Optional. Controls the overall path length allowed in a reported span.
       // NOTE: currently only controls max length of the path tag.
       uint32 max_tag_length = 4;
+    }
+
+    // Defines configuration for a global rate limiting service provider.
+    // The service must implement Rate Limit Service (RLS):
+    // https://www.envoyproxy.io/docs/envoy/latest/api-v3/service/ratelimit/v3/rls.proto.
+    message RateLimitProvider {
+      // REQUIRED. Specifies the service that exposes the rate limit API.
+      // The format is "[<Namespace>/]<Hostname>". The specification of <Namespace> is required only when it is insufficient
+      // to unambiguously resolve a service in the service registry. The <Hostname> is a fully qualified host name of a
+      // service defined by the Kubernetes service or ServiceEntry.
+      //
+      // Example: "rls.default.svc.cluster.local" or "bar/rls.example.com".
+      string service = 1;
+
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 2;
+
+      // The rate limit domain to use when calling the service.
+      // This corresponds to the `domain` field in the RateLimitRequest proto:
+      // https://www.envoyproxy.io/docs/envoy/latest/api-v3/service/ratelimit/v3/rls.proto#service-ratelimit-v3-ratelimitrequest.
+      string domain = 3;
+
+      // The behaviour in case the rate limiting service does not respond back.
+      // When it is set to true, the proxy will not allow traffic in case of
+      // communication failure between rate limiting service and the proxy.
+      bool failure_mode_deny = 4;
     }
   }
 

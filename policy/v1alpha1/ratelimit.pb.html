@@ -1,0 +1,761 @@
+---
+title: istio.policy.v1alpha1
+layout: protoc-gen-docs
+generator: protoc-gen-docs
+number_of_entries: 15
+---
+<h2 id="RateLimit">RateLimit</h2>
+<section>
+<p>$schema: istio.policy.v1alpha1.RateLimit
+$title: Rate limiting
+$description: Rate limiting configuration
+$location: https://istio.io/docs/reference/config/policy/ratelimit.html
+$aliases: [/docs/reference/config/policy/v1alpha1/ratelimit]</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RateLimit-workload" class="oneof oneof-start">
+<td><code>workload</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#WorkloadSelector">WorkloadSelector (oneof)</a></code></td>
+<td>
+<p>Optional. The workload selector decides where to apply the server-side rate limit in the same namespace.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimit-route" class="oneof">
+<td><code>route</code></td>
+<td><code><a href="#RouteSelector">RouteSelector (oneof)</a></code></td>
+<td>
+<p>Optional. The route selector decides which client route rules enforce the client-side rate limit.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimit-descriptors">
+<td><code>descriptors</code></td>
+<td><code><a href="#RateLimitDescriptor">RateLimitDescriptor[]</a></code></td>
+<td>
+<p>Optional. Specifies a set of descriptors that are evaluated against the
+rate limit policy.  The rate limit applies if any of the generated
+descriptors trigger a limit.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimit-global" class="oneof oneof-start">
+<td><code>global</code></td>
+<td><code><a href="#ProviderRef">ProviderRef (oneof)</a></code></td>
+<td>
+<p>Global rate limiting provider reference.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimit-local" class="oneof">
+<td><code>local</code></td>
+<td><code><a href="#LocalRateLimit">LocalRateLimit (oneof)</a></code></td>
+<td>
+<p>Local rate limit policy.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RouteSelector">RouteSelector</h2>
+<section>
+<p>Route selector references a client networking resource to overlay the rate
+limit filter application. This can be a service, a virtual service, or a
+gateway resource. Route name designation is optional.
+If no route name is provided, the rate limit applies to all routes. However,
+the rate limit for a named route takes priority over the rate limit for the
+entire resource.</p>
+
+<p>For example, a selector addressing a Kubernetes service:</p>
+
+<pre><code class="language-yaml">name: foo
+group: core
+kind: Service
+</code></pre>
+
+<p>This selector references an HTTPRoute from a Kubernetes gateway:</p>
+
+<pre><code class="language-yaml">name: foo
+group: networking.x-k8s.io
+kind: HTTPRoute
+</code></pre>
+
+<p>This selector references an individual route from a VirtualService:</p>
+
+<pre><code class="language-yaml">name: foo
+group: networking.istio.io
+kind: VirtualService
+route: blah
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RouteSelector-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>Resource name.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RouteSelector-group">
+<td><code>group</code></td>
+<td><code>string</code></td>
+<td>
+<p>Resource API group.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RouteSelector-kind">
+<td><code>kind</code></td>
+<td><code>string</code></td>
+<td>
+<p>Resource kind.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RouteSelector-route">
+<td><code>route</code></td>
+<td><code>string</code></td>
+<td>
+<p>Optional. Individual route rule name within the resource.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RateLimitDescriptor">RateLimitDescriptor</h2>
+<section>
+<p>RateLimitDescriptor is an ordered sequence of entries used for classification of requests.</p>
+
+<p>The following descriptor produces the sequence <code>[(path, /), (uid, john)]</code> for a request to <code>/</code>
+with a header <code>user-id</code> set to <code>john</code>:</p>
+
+<pre><code class="language-yaml">entries:
+- header:
+    key: path
+    name: :path
+- header:
+    key: uid
+    name: user-id
+</code></pre>
+
+<p>The following descriptor produces the client SPIFFE service account URI:</p>
+
+<pre><code class="language-yaml">entries:
+- expression:
+    key: client-id
+    text: connection.uri_san_peer_certificate
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RateLimitDescriptor-entries">
+<td><code>entries</code></td>
+<td><code><a href="#RateLimitEntry">RateLimitEntry[]</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RateLimitEntry">RateLimitEntry</h2>
+<section>
+<p>RateLimitEntry is a property of the request used for classification of requests.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RateLimitEntry-header" class="oneof oneof-start">
+<td><code>header</code></td>
+<td><code><a href="#RateLimitEntry-RequestHeader">RequestHeader (oneof)</a></code></td>
+<td>
+<p>Entry obtained from a header value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimitEntry-header_match" class="oneof">
+<td><code>headerMatch</code></td>
+<td><code><a href="#RateLimitEntry-RequestHeaderMatch">RequestHeaderMatch (oneof)</a></code></td>
+<td>
+<p>Entry obtained by testing a header value against exact value, prefix, etc.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimitEntry-constant" class="oneof">
+<td><code>constant</code></td>
+<td><code><a href="#RateLimitEntry-ConstantEntry">ConstantEntry (oneof)</a></code></td>
+<td>
+<p>Constant entry key and value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimitEntry-expression" class="oneof">
+<td><code>expression</code></td>
+<td><code><a href="#RateLimitEntry-Expression">Expression (oneof)</a></code></td>
+<td>
+<p>CEL expression entry.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ProviderRef">ProviderRef</h2>
+<section>
+<p>References a rate limit extension provider from the mesh configuration.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProviderRef-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>Provider name.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="LocalRateLimit">LocalRateLimit</h2>
+<section>
+<p>Local rate limiting policy using a token bucket algorithm.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LocalRateLimit-token_bucket">
+<td><code>tokenBucket</code></td>
+<td><code><a href="#LocalRateLimit-TokenBucket">TokenBucket</a></code></td>
+<td>
+<p>The token bucket configuration to use for rate limiting requests that are
+processed by this filter. Each request processed by the filter consumes a
+single token. If the token is available, the request will be allowed. If
+no tokens are available, the proxy responds with 429.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LocalRateLimit-descriptors">
+<td><code>descriptors</code></td>
+<td><code><a href="#LocalRateLimit-LocalRateLimitDescriptor">LocalRateLimitDescriptor[]</a></code></td>
+<td>
+<p>Descriptor overrides. The rate limit descriptor list to use in the local
+rate limit to override on. The rate limit descriptor is selected by the
+first full match from the request descriptors. Each descriptor token bucket
+fill interval must be a multiple of the global token bucket&rsquo;s interval.
+The descriptors match verbatim. If a descriptor match is detected, then the
+descriptor bucket is used to decide whether to rate limit the request instead of
+the global token bucket.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RateLimitEntry-RequestHeader">RateLimitEntry.RequestHeader</h2>
+<section>
+<p>Entry obtained a request header value.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RateLimitEntry-RequestHeader-key">
+<td><code>key</code></td>
+<td><code>string</code></td>
+<td>
+<p>Descriptor entry key.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimitEntry-RequestHeader-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>Request header name. The value of the header is used as the entry value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimitEntry-RequestHeader-skip_if_absent">
+<td><code>skipIfAbsent</code></td>
+<td><code>bool</code></td>
+<td>
+<p>When true, the descriptor entry is omitted from the descriptor if the header is absent.
+By default, the entire descriptor is skipped and the rate limit is not applied.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RateLimitEntry-RequestHeaderMatch">RateLimitEntry.RequestHeaderMatch</h2>
+<section>
+<p>Entry obtained by testing a request header value.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RateLimitEntry-RequestHeaderMatch-value">
+<td><code>value</code></td>
+<td><code>string</code></td>
+<td>
+<p>Descriptor entry value. The key is always <code>header_match</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimitEntry-RequestHeaderMatch-conditions">
+<td><code>conditions</code></td>
+<td><code><a href="#RateLimitEntry-RequestHeaderMatch-HeaderMatchCondition">HeaderMatchCondition[]</a></code></td>
+<td>
+<p>The request matches when it matches all conditions.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RateLimitEntry-ConstantEntry">RateLimitEntry.ConstantEntry</h2>
+<section>
+<p>Constant entry.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RateLimitEntry-ConstantEntry-key">
+<td><code>key</code></td>
+<td><code>string</code></td>
+<td>
+<p>Descriptor entry key.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimitEntry-ConstantEntry-value">
+<td><code>value</code></td>
+<td><code>string</code></td>
+<td>
+<p>Descriptor entry value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RateLimitEntry-Expression">RateLimitEntry.Expression</h2>
+<section>
+<p>CEL expression.
+For example, the expression <code>filter_state['wasm.downstream_peer'].labels['app'].value</code>
+produces the <code>app</code> label value for the downstream peer.
+See https://istio.io/latest/docs/tasks/observability/metrics/customize-metrics/#use-expressions-for-values.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RateLimitEntry-Expression-key">
+<td><code>key</code></td>
+<td><code>string</code></td>
+<td>
+<p>Descriptor entry key.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimitEntry-Expression-skip_if_error">
+<td><code>skipIfError</code></td>
+<td><code>bool</code></td>
+<td>
+<p>If set to true, the descriptor entry is omitted if the expression evaluates to an error.
+By default, the rate limit is not applied for this descriptor when an expression produces an error.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimitEntry-Expression-text">
+<td><code>text</code></td>
+<td><code>string</code></td>
+<td>
+<p>Descriptor expression.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RateLimitEntry-RequestHeaderMatch-HeaderMatchCondition">RateLimitEntry.RequestHeaderMatch.HeaderMatchCondition</h2>
+<section>
+<p>Header match condition evaluates a request header against one of the patterns.
+Use <code>:authority</code> header to refer to HTTP/1.1 Host header and <code>:method</code>
+header to refer to HTTP method.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RateLimitEntry-RequestHeaderMatch-HeaderMatchCondition-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>Header name.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimitEntry-RequestHeaderMatch-HeaderMatchCondition-exact" class="oneof oneof-start">
+<td><code>exact</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>The header value must match exactly.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimitEntry-RequestHeaderMatch-HeaderMatchCondition-prefix" class="oneof">
+<td><code>prefix</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>The header value must start with the given value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RateLimitEntry-RequestHeaderMatch-HeaderMatchCondition-present" class="oneof">
+<td><code>present</code></td>
+<td><code>bool (oneof)</code></td>
+<td>
+<p>If specified as true, the header matches when it is present in the request.
+If specified as false, the header matches when it is absent from the request.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="LocalRateLimit-TokenBucket">LocalRateLimit.TokenBucket</h2>
+<section>
+<p>Configures a token bucket.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LocalRateLimit-TokenBucket-max_tokens">
+<td><code>maxTokens</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>The maximum tokens that the bucket can hold. This is also the number of tokens that the bucket
+initially contains.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LocalRateLimit-TokenBucket-tokens_per_fill">
+<td><code>tokensPerFill</code></td>
+<td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
+<td>
+<p>The number of tokens added to the bucket during each fill interval. If not specified, defaults
+to a single token.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LocalRateLimit-TokenBucket-fill_interval">
+<td><code>fillInterval</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>The fill interval that tokens are added to the bucket. During each fill interval
+<code>tokens_per_fill</code> are added to the bucket. The bucket will never contain more than
+<code>max_tokens</code> tokens. The interval must be &gt;=50ms.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="LocalRateLimit-LocalRateLimitDescriptor">LocalRateLimit.LocalRateLimitDescriptor</h2>
+<section>
+<p>Per-descriptor local rate limit override.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LocalRateLimit-LocalRateLimitDescriptor-token_bucket">
+<td><code>tokenBucket</code></td>
+<td><code><a href="#LocalRateLimit-TokenBucket">TokenBucket</a></code></td>
+<td>
+<p>Override token bucket. The fill interval must be a multiple of the global
+token bucket.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LocalRateLimit-LocalRateLimitDescriptor-entries">
+<td><code>entries</code></td>
+<td><code><a href="#LocalRateLimit-LocalRateLimitDescriptor-DescriptorEntry">DescriptorEntry[]</a></code></td>
+<td>
+<p>Descriptor entries to be matched exactly.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="LocalRateLimit-LocalRateLimitDescriptor-DescriptorEntry">LocalRateLimit.LocalRateLimitDescriptor.DescriptorEntry</h2>
+<section>
+<p>A descriptor entry.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LocalRateLimit-LocalRateLimitDescriptor-DescriptorEntry-key">
+<td><code>key</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LocalRateLimit-LocalRateLimitDescriptor-DescriptorEntry-value">
+<td><code>value</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="google-protobuf-UInt32Value">google.protobuf.UInt32Value</h2>
+<section>
+<p>Wrapper message for <code>uint32</code>.</p>
+
+<p>The JSON representation for <code>UInt32Value</code> is JSON number.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="google-protobuf-UInt32Value-value">
+<td><code>value</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>The uint32 value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>

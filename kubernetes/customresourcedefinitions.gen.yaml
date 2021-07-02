@@ -5083,6 +5083,276 @@ metadata:
     app: istio-pilot
     chart: istio
     heritage: Tiller
+    istio: policy
+    release: istio
+  name: telemetries.policy.istio.io
+spec:
+  group: policy.istio.io
+  names:
+    categories:
+    - istio-io
+    - policy-istio-io
+    kind: Policy
+    listKind: PolicyList
+    plural: telemetries
+    shortNames:
+    - policy
+    singular: policy
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: 'CreationTimestamp is a timestamp representing the server time
+        when this object was created. It is not guaranteed to be set in happens-before
+        order across separate operations. Clients may not set this value. It is represented
+        in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for
+        lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata'
+      jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            allOf:
+            - oneOf:
+              - not:
+                  anyOf:
+                  - required:
+                    - workload
+                  - required:
+                    - route
+              - required:
+                - workload
+              - required:
+                - route
+            - oneOf:
+              - not:
+                  anyOf:
+                  - required:
+                    - global
+                  - required:
+                    - local
+              - required:
+                - global
+              - required:
+                - local
+            properties:
+              descriptors:
+                description: Optional.
+                items:
+                  properties:
+                    entries:
+                      items:
+                        oneOf:
+                        - not:
+                            anyOf:
+                            - required:
+                              - header
+                            - required:
+                              - headerMatch
+                            - required:
+                              - constant
+                            - required:
+                              - expression
+                        - required:
+                          - header
+                        - required:
+                          - headerMatch
+                        - required:
+                          - constant
+                        - required:
+                          - expression
+                        properties:
+                          constant:
+                            description: Constant entry key and value.
+                            properties:
+                              key:
+                                description: Descriptor entry key.
+                                type: string
+                              value:
+                                description: Descriptor entry value.
+                                type: string
+                            type: object
+                          expression:
+                            description: CEL expression entry.
+                            properties:
+                              key:
+                                description: Descriptor entry key.
+                                type: string
+                              skipIfError:
+                                description: If set to true, the descriptor entry
+                                  is omitted if the expression evaluates to an error.
+                                type: boolean
+                              text:
+                                description: Descriptor expression.
+                                type: string
+                            type: object
+                          header:
+                            description: Entry obtained from a header value.
+                            properties:
+                              key:
+                                description: Descriptor entry key.
+                                type: string
+                              name:
+                                description: Request header name.
+                                type: string
+                              skipIfAbsent:
+                                description: When true, the descriptor entry is omitted
+                                  from the descriptor if the header is absent.
+                                type: boolean
+                            type: object
+                          headerMatch:
+                            description: Entry obtained by testing a header value
+                              against exact value, prefix, etc.
+                            properties:
+                              conditions:
+                                description: The request matches when it matches all
+                                  conditions.
+                                items:
+                                  oneOf:
+                                  - not:
+                                      anyOf:
+                                      - required:
+                                        - exact
+                                      - required:
+                                        - prefix
+                                      - required:
+                                        - present
+                                  - required:
+                                    - exact
+                                  - required:
+                                    - prefix
+                                  - required:
+                                    - present
+                                  properties:
+                                    exact:
+                                      description: The header value must match exactly.
+                                      type: string
+                                    name:
+                                      description: Header name.
+                                      type: string
+                                    prefix:
+                                      description: The header value must start with
+                                        the given value.
+                                      type: string
+                                    present:
+                                      description: If specified as true, the header
+                                        matches when it is present in the request.
+                                      type: boolean
+                                  type: object
+                                type: array
+                              value:
+                                description: Descriptor entry value.
+                                type: string
+                            type: object
+                        type: object
+                      type: array
+                  type: object
+                type: array
+              global:
+                description: Global rate limiting provider reference.
+                properties:
+                  name:
+                    description: Provider name.
+                    type: string
+                type: object
+              local:
+                description: Local rate limit policy.
+                properties:
+                  descriptors:
+                    description: Descriptor overrides.
+                    items:
+                      properties:
+                        entries:
+                          description: Descriptor entries to be matched exactly.
+                          items:
+                            properties:
+                              key:
+                                type: string
+                              value:
+                                type: string
+                            type: object
+                          type: array
+                        tokenBucket:
+                          description: Override token bucket.
+                          properties:
+                            fillInterval:
+                              description: The fill interval that tokens are added
+                                to the bucket.
+                              type: string
+                            maxTokens:
+                              description: The maximum tokens that the bucket can
+                                hold.
+                              type: integer
+                            tokensPerFill:
+                              description: The number of tokens added to the bucket
+                                during each fill interval.
+                              nullable: true
+                              type: integer
+                          type: object
+                      type: object
+                    type: array
+                  tokenBucket:
+                    properties:
+                      fillInterval:
+                        description: The fill interval that tokens are added to the
+                          bucket.
+                        type: string
+                      maxTokens:
+                        description: The maximum tokens that the bucket can hold.
+                        type: integer
+                      tokensPerFill:
+                        description: The number of tokens added to the bucket during
+                          each fill interval.
+                        nullable: true
+                        type: integer
+                    type: object
+                type: object
+              route:
+                description: Optional.
+                properties:
+                  group:
+                    description: Resource API group.
+                    type: string
+                  kind:
+                    description: Resource kind.
+                    type: string
+                  name:
+                    description: Resource name.
+                    type: string
+                  route:
+                    description: Optional.
+                    type: string
+                type: object
+              workload:
+                description: Optional.
+                properties:
+                  matchLabels:
+                    additionalProperties:
+                      type: string
+                    type: object
+                type: object
+            type: object
+          status:
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    app: istio-pilot
+    chart: istio
+    heritage: Tiller
     istio: security
     release: istio
   name: authorizationpolicies.security.istio.io
