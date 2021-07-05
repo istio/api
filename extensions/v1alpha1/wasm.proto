@@ -131,9 +131,10 @@ message WasmPlugin {
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
   // URL of a Wasm module or OCI container. If no scheme is present,
-  // defaults to `docker://`, referencing an OCI image. Valid schemes
-  // for Wasm modules are `file://` for referencing files present locally
-  // within the proxy container, and `http[s]://` for files hosted remotely.
+  // defaults to `oci://`, referencing an OCI image. Other valid schemes
+  // are `file://` for referencing .wasm module files present locally
+  // within the proxy container, and `http[s]://` for .wasm module files
+  // hosted remotely.
   string url = 2;
 
   // SHA256 checksum of Wasm module or OCI container. If the `url` field
@@ -146,15 +147,18 @@ message WasmPlugin {
 
   // The pull behaviour to be applied when fetching an OCI image. Only
   // relevant when images are referenced by tag instead of SHA. Defaults
-  // to IfNotPresent. Ignored if `url` field is referencing a Wasm module
-  // directly using `file://` or `http[s]://`
-  PullPolicy pull_policy = 4;
+  // to IfNotPresent, except when an OCI image is referenced in the `url`
+  // and the `latest` tag is used, in which case `Always` is the default,
+  // mirroring K8s behaviour.
+  // Setting is ignored if `url` field is referencing a Wasm module directly
+  // using `file://` or `http[s]://`
+  PullPolicy image_pull_policy = 4;
 
   // Credentials to use for OCI image pulling.
   // Name of a K8s Secret in the same namespace as the `WasmPlugin` that
   // contains a docker pull secret which is to be used to authenticate
   // against the registry when pulling the image.
-  string pull_secret = 5;
+  string image_pull_secret = 5;
 
   // Public key that will be used to verify signatures of signed OCI images
   // or Wasm modules. Must be supplied in PEM format.
