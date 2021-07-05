@@ -40,7 +40,7 @@ option go_package="istio.io/api/extensions/v1alpha1";
 // kind: WasmPlugin
 // metadata:
 //   name: openid-connect
-//   namespace: istio-system
+//   namespace: istio-ingress
 // spec:
 //   selector:
 //     labels:
@@ -60,13 +60,14 @@ option go_package="istio.io/api/extensions/v1alpha1";
 // kind: WasmPlugin
 // metadata:
 //   name: openid-connect
-//   namespace: istio-system
+//   namespace: istio-ingress
 // spec:
 //   selector:
 //     labels:
 //       istio: ingressgateway
-//   url: oci://docker.io/openid-connect/openid:latest
+//   url: oci://private-registry:5000/openid-connect/openid:latest
 //   image_pull_policy: IfNotPresent
+//   image_pull_secret: private-registry-pull-secret
 //   phase: AUTHN
 //   pluginConfig:
 //     openid_server: authn
