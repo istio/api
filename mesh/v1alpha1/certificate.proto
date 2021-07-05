@@ -1,0 +1,43 @@
+// Copyright 2021 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "google/protobuf/duration.proto";
+
+package istio.mesh.v1alpha1;
+
+option go_package="istio.io/api/mesh/v1alpha1";
+
+// CertificateParameters are the parameters used to configure certificates issued
+// adapted from cert-manager (see https://cert-manager.io/docs/reference/api-docs)
+message CertificateParameters {
+  // The cert lifetime of the self-signed CA certificate.
+  // Default TTL duration is `8760h0m0s` for self-signed root
+  // cert and `24h0m0s` for created workloads.
+  google.protobuf.Duration duration = 1;
+
+  message Key {
+    // Specify the signature algorithm to use when generating private keys
+    string algorithm = 1;
+
+    // Specify the private key size
+    int32 size = 2;
+   }
+   Key private_key = 3;
+
+   // The cert signer which will be used to sign certificates for workload-to-workload communication.
+   // This only takes effect if Istiod is acting as RA (registration authority)
+   string cert_signer = 4;
+}

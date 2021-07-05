@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 47
+number_of_entries: 49
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -1960,6 +1960,95 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="CertificateParameters">CertificateParameters</h2>
+<section>
+<p>CertificateParameters are the parameters used to configure certificates issued
+adapted from cert-manager (see https://cert-manager.io/docs/reference/api-docs)</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="CertificateParameters-duration">
+<td><code>duration</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>The cert lifetime of the self-signed CA certificate.
+Default TTL duration is <code>8760h0m0s</code> for self-signed root
+cert and <code>24h0m0s</code> for created workloads.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CertificateParameters-private_key">
+<td><code>privateKey</code></td>
+<td><code><a href="#CertificateParameters-Key">Key</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CertificateParameters-cert_signer">
+<td><code>certSigner</code></td>
+<td><code>string</code></td>
+<td>
+<p>The cert signer which will be used to sign certificates for workload-to-workload communication.
+This only takes effect if Istiod is acting as RA (registration authority)</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="CertificateParameters-Key">CertificateParameters.Key</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="CertificateParameters-Key-algorithm">
+<td><code>algorithm</code></td>
+<td><code>string</code></td>
+<td>
+<p>Specify the signature algorithm to use when generating private keys</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CertificateParameters-Key-size">
+<td><code>size</code></td>
+<td><code>int32</code></td>
+<td>
+<p>Specify the private key size</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="Tracing">Tracing</h2>
 <section>
 <p>Tracing defines configuration for the tracing performed by Envoy instances.</p>
@@ -2500,6 +2589,15 @@ This includes the certificates defined in MeshConfig and any other certificates 
 The plugin certificates (the &lsquo;cacerts&rsquo; secret), self-signed certificates (the &lsquo;istio-ca-secret&rsquo; secret)
 are added automatically by Istiod.</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-certificate">
+<td><code>certificate</code></td>
+<td><code><a href="#CertificateParameters">CertificateParameters</a></code></td>
+<td>
 </td>
 <td>
 No

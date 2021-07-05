@@ -16,6 +16,7 @@ syntax = "proto3";
 
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
+import "mesh/v1alpha1/certificate.proto";
 import "networking/v1alpha3/destination_rule.proto";
 import "networking/v1alpha3/workload_group.proto";
 
@@ -521,6 +522,8 @@ message ProxyConfig {
   // The plugin certificates (the 'cacerts' secret), self-signed certificates (the 'istio-ca-secret' secret)
   // are added automatically by Istiod.
   repeated string ca_certificates_pem = 34;
+
+  CertificateParameters certificate = 35;
 }
 
 message RemoteService {
