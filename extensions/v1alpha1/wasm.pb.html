@@ -38,9 +38,10 @@ No
 <td><code>string</code></td>
 <td>
 <p>URL of a Wasm module or OCI container. If no scheme is present,
-defaults to <code>docker://</code>, referencing an OCI image. Valid schemes
-for Wasm modules are <code>file://</code> for referencing files present locally
-within the proxy container, and <code>http[s]://</code> for files hosted remotely.</p>
+defaults to <code>oci://</code>, referencing an OCI image. Other valid schemes
+are <code>file://</code> for referencing .wasm module files present locally
+within the proxy container, and <code>http[s]://</code> for .wasm module files
+hosted remotely.</p>
 
 </td>
 <td>
@@ -63,22 +64,25 @@ field (using the <code>@sha256:</code> notation).</p>
 No
 </td>
 </tr>
-<tr id="WasmPlugin-pull_policy">
-<td><code>pullPolicy</code></td>
+<tr id="WasmPlugin-image_pull_policy">
+<td><code>imagePullPolicy</code></td>
 <td><code><a href="#WasmPlugin-PullPolicy">PullPolicy</a></code></td>
 <td>
 <p>The pull behaviour to be applied when fetching an OCI image. Only
 relevant when images are referenced by tag instead of SHA. Defaults
-to IfNotPresent. Ignored if <code>url</code> field is referencing a Wasm module
-directly using <code>file://</code> or <code>http[s]://</code></p>
+to IfNotPresent, except when an OCI image is referenced in the <code>url</code>
+and the <code>latest</code> tag is used, in which case <code>Always</code> is the default,
+mirroring K8s behaviour.
+Setting is ignored if <code>url</code> field is referencing a Wasm module directly
+using <code>file://</code> or <code>http[s]://</code></p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="WasmPlugin-pull_secret">
-<td><code>pullSecret</code></td>
+<tr id="WasmPlugin-image_pull_secret">
+<td><code>imagePullSecret</code></td>
 <td><code>string</code></td>
 <td>
 <p>Credentials to use for OCI image pulling.

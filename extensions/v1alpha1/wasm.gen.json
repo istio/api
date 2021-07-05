@@ -22,17 +22,17 @@
             "$ref": "#/components/schemas/istio.type.v1beta1.WorkloadSelector"
           },
           "url": {
-            "description": "URL of a Wasm module or OCI container. If no scheme is present, defaults to `docker://`, referencing an OCI image. Valid schemes for Wasm modules are `file://` for referencing files present locally within the proxy container, and `http[s]://` for files hosted remotely.",
+            "description": "URL of a Wasm module or OCI container. If no scheme is present, defaults to `oci://`, referencing an OCI image. Other valid schemes are `file://` for referencing .wasm module files present locally within the proxy container, and `http[s]://` for .wasm module files hosted remotely.",
             "type": "string"
           },
           "sha256": {
             "description": "SHA256 checksum of Wasm module or OCI container. If the `url` field already references a SHA256 (using the `@sha256:` notation), the `url` field will take precedence. If the `sha256` field is set, and the `url` field contains the URL of an OCI image that is referenced by tag, the reference will be replaced by the value of the `sha256` field (using the `@sha256:` notation).",
             "type": "string"
           },
-          "pullPolicy": {
+          "imagePullPolicy": {
             "$ref": "#/components/schemas/istio.extensions.v1alpha1.WasmPlugin.PullPolicy"
           },
-          "pullSecret": {
+          "imagePullSecret": {
             "description": "Credentials to use for OCI image pulling. Name of a K8s Secret in the same namespace as the `WasmPlugin` that contains a docker pull secret which is to be used to authenticate against the registry when pulling the image.",
             "type": "string"
           },
