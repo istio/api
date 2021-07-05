@@ -53,6 +53,26 @@ option go_package="istio.io/api/extensions/v1alpha1";
 //     openid_realm: ingress
 // ```
 //
+// This is the same as the last example, but using an OCI image
+//
+// ```yaml
+// apiVersion: extensions.istio.io/v1alpha1
+// kind: WasmPlugin
+// metadata:
+//   name: openid-connect
+//   namespace: istio-system
+// spec:
+//   selector:
+//     labels:
+//       istio: ingressgateway
+//   url: oci://docker.io/openid-connect/openid:latest
+//   image_pull_policy: IfNotPresent
+//   phase: AUTHN
+//   pluginConfig:
+//     openid_server: authn
+//     openid_realm: ingress
+// ```
+//
 // <!-- crd generation tags
 // +cue-gen:WasmPlugin:groupName:extensions.istio.io
 // +cue-gen:WasmPlugin:version:v1alpha1
