@@ -1201,7 +1201,7 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.Topology"
           },
           "terminationDrainDuration": {
-            "description": "The amount of time allowed for connections to complete on proxy shutdown. On receiving `SIGTERM` or `SIGINT`, `istio-agent` tells the active Envoy to start draining, preventing any new connections and allowing existing connections to complete. It then sleeps for the `termination_drain_duration` and then kills any remaining active Envoy processes. If not set, a default of `5s` will be applied.",
+            "description": "The amount of time allowed for connections to complete on proxy shutdown. On receiving `SIGTERM` or `SIGINT`, `istio-agent` tells the active Envoy to start gracefully draining, discouraging any new connections and allowing existing connections to complete. It then sleeps for the `termination_drain_duration` and then kills any remaining active Envoy processes. If not set, a default of `5s` will be applied.",
             "type": "string"
           },
           "meshId": {
