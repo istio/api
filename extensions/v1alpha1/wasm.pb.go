@@ -24,7 +24,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// Some docstring
+// The phase in the filter chain where the plugin will be injected.
 type PluginPhase int32
 
 const (
@@ -62,6 +62,9 @@ func (PluginPhase) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_4d60b240916c4e18, []int{0}
 }
 
+// The pull behaviour to be applied when fetching an OCI image,
+// mirroring K8s behaviour.
+//
 // buf:lint:ignore ENUM_VALUE_UPPER_SNAKE_CASE
 type PullPolicy int32
 
@@ -71,7 +74,7 @@ const (
 	// will pull the latest version.
 	PullPolicy_IfNotPresent PullPolicy = 0
 	// We will always pull the latest version of an image when applying
-	// this `WasmPlugin`.
+	// this plugin.
 	PullPolicy_Always PullPolicy = 1
 )
 

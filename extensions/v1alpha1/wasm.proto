@@ -36,7 +36,8 @@ import "type/v1beta1/selector.proto";
 //
 // AuthN Filter deployed to ingress-gateway that implements an OpenID flow
 // and populates the `Authorization` header with a JWT to be consumed by
-// Istio AuthN
+// Istio AuthN.
+//
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
 // kind: WasmPlugin
@@ -55,7 +56,7 @@ import "type/v1beta1/selector.proto";
 //     openid_realm: ingress
 // ```
 //
-// This is the same as the last example, but using an OCI image
+// This is the same as the last example, but using an OCI image.
 //
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
@@ -76,6 +77,80 @@ import "type/v1beta1/selector.proto";
 //     openid_realm: ingress
 // ```
 //
+// And a more complex example that deploys three WasmPlugins and orders them
+// using `phase` and `priority`. The (hypothetical) setup is that the
+// `openid-connect` filter performs an OpenID Connect flow to authenticate the
+// user, writing a signed JWT into the Authorization header of the request,
+// which can be verified by the Istio authn plugin. Then, the `acl-check` plugin
+// kicks in, passing the JWT to a policy server, which in turn responds with a
+// signed token that contains information about which files and functions of the
+// system are available to the user that was previously authenticated. The 
+// `acl-check` filter writes this token to a header. Finally, the `check-header`
+// filter verifies the token in that header and makes sure that the token's
+// contents (the permitted 'function') matches its plugin configuration.
+//
+// The resulting filter chain looks like this:
+// -> openid-connect -> istio.authn -> acl-check -> check-header -> router
+//
+// ```yaml
+// apiVersion: extensions.istio.io/v1alpha1
+// kind: WasmPlugin
+// metadata:
+//   name: openid-connect
+//   namespace: istio-ingress
+// spec:
+//   selector:
+//     labels:
+//       istio: ingressgateway
+//   url: oci://private-registry:5000/openid-connect/openid:latest
+//   image_pull_policy: IfNotPresent
+//   image_pull_secret: private-registry-pull-secret
+//   phase: AUTHN
+//   pluginConfig:
+//     openid_server: authn
+//     openid_realm: ingress
+// ```
+//
+// ```yaml
+// apiVersion: extensions.istio.io/v1alpha1
+// kind: WasmPlugin
+// metadata:
+//   name: acl-check
+//   namespace: istio-ingress
+// spec:
+//   selector:
+//     labels:
+//       istio: ingressgateway
+//   url: oci://private-registry:5000/acl-check/acl:latest
+//   image_pull_policy: Always
+//   image_pull_secret: private-registry-pull-secret
+//   phase: AUTHZ
+//   priority: 1000
+//   pluginConfig:
+//     acl_server: some_server
+//     set_header: authz_complete
+// ```
+//
+// ```yaml
+// apiVersion: extensions.istio.io/v1alpha1
+// kind: WasmPlugin
+// metadata:
+//   name: check-header
+//   namespace: istio-ingress
+// spec:
+//   selector:
+//     labels:
+//       istio: ingressgateway
+//   url: oci://private-registry:5000/check-header:latest
+//   image_pull_policy: IfNotPresent
+//   image_pull_secret: private-registry-pull-secret
+//   phase: AUTHZ
+//   priority: 10
+//   pluginConfig:
+//     read_header: authz_complete
+//     verification_key: a89gAzxvls0JKAKIJSBnnvvvkIO
+//     function: read_data
+// ```
 
 package istio.extensions.v1alpha1;
 
@@ -170,7 +245,7 @@ message WasmPlugin {
   google.protobuf.Int64Value priority = 10;
 }
 
-// Some docstring
+// The phase in the filter chain where the plugin will be injected.
 enum PluginPhase {
   // Control plane decides where to insert the plugin. This will generally
   // be at the end of the filter chain, right before the Router.
@@ -187,6 +262,9 @@ enum PluginPhase {
   STATS = 3;
 }
 
+// The pull behaviour to be applied when fetching an OCI image,
+// mirroring K8s behaviour.
+//
 // buf:lint:ignore ENUM_VALUE_UPPER_SNAKE_CASE
 enum PullPolicy {
   // If an existing version of the image has been pulled before, that
@@ -195,6 +273,6 @@ enum PullPolicy {
   IfNotPresent = 0;
 
   // We will always pull the latest version of an image when applying
-  // this `WasmPlugin`.
+  // this plugin.
   Always = 1;
 }
