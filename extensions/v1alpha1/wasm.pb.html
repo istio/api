@@ -170,7 +170,7 @@ No
 </section>
 <h2 id="PluginPhase">PluginPhase</h2>
 <section>
-<p>Some docstring</p>
+<p>The phase in the filter chain where the plugin will be injected.</p>
 
 <table class="enum-values">
 <thead>
@@ -215,6 +215,9 @@ Do not specify <code>PluginPhase</code> if the plugin is independent of others.<
 </section>
 <h2 id="PullPolicy">PullPolicy</h2>
 <section>
+<p>The pull behaviour to be applied when fetching an OCI image,
+mirroring K8s behaviour.</p>
+
 <p>buf:lint:ignore ENUM<em>VALUE</em>UPPER<em>SNAKE</em>CASE</p>
 
 <table class="enum-values">
@@ -238,7 +241,7 @@ will pull the latest version.</p>
 <td><code>Always</code></td>
 <td>
 <p>We will always pull the latest version of an image when applying
-this <code>WasmPlugin</code>.</p>
+this plugin.</p>
 
 </td>
 </tr>
