@@ -18,10 +18,12 @@ import "google/protobuf/wrappers.proto";
 import "google/protobuf/struct.proto";
 import "type/v1beta1/selector.proto";
 
-package istio.extensions.v1alpha1;
-
-option go_package="istio.io/api/extensions/v1alpha1";
-
+// $schema: istio.extensions.v1alpha1.WasmPlugin
+// $title: Wasm Plugin
+// $description: Extend the functionality provided by the Istio proxy through WebAssembly filters
+// $location: https://istio.io/docs/reference/config/extensions/wasm-plugin.html
+// $aliases: [/docs/reference/config/extensions/v1alpha1/wasm-plugin]
+//
 // WasmPlugins provides a mechanism to extend the functionality provided by
 // the Istio proxy through WebAssembly filters.
 //
@@ -74,6 +76,14 @@ option go_package="istio.io/api/extensions/v1alpha1";
 //     openid_realm: ingress
 // ```
 //
+
+package istio.extensions.v1alpha1;
+
+option go_package="istio.io/api/extensions/v1alpha1";
+
+// WasmPlugins provides a mechanism to extend the functionality provided by
+// the Istio proxy through WebAssembly filters.
+//
 // <!-- crd generation tags
 // +cue-gen:WasmPlugin:groupName:extensions.istio.io
 // +cue-gen:WasmPlugin:version:v1alpha1
@@ -84,6 +94,10 @@ option go_package="istio.io/api/extensions/v1alpha1";
 // +cue-gen:WasmPlugin:scope:Namespaced
 // +cue-gen:WasmPlugin:resource:categories=istio-io,extensions-istio-io
 // +cue-gen:WasmPlugin:preserveUnknownFields:pluginConfig
+// +cue-gen:WasmPlugin:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
+// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
+// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
 // -->
 //
 // <!-- go code generation tags
@@ -92,36 +106,7 @@ option go_package="istio.io/api/extensions/v1alpha1";
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-
-enum PluginPhase {
-  // Control plane decides where to insert the plugin. This will generally
-  // be at the end of the filter chain, right before the Router.
-  // Do not specify `PluginPhase` if the plugin is independent of others.
-  UNSPECIFIED = 0;
-
-  // Insert plugin before Istio authentication filters.      
-  AUTHN = 1;
-
-  // Insert plugin before Istio authorization filters.
-  AUTHZ = 2;
-
-  // Insert plugin before Istio stats filters.
-  STATS = 3;
-}
-
 message WasmPlugin {
-  // buf:lint:ignore ENUM_VALUE_UPPER_SNAKE_CASE
-  enum PullPolicy {
-    // If an existing version of the image has been pulled before, that
-    // will be used. If no version of the image is present locally, we
-    // will pull the latest version.
-    IfNotPresent = 0;
-
-    // We will always pull the latest version of an image when applying
-    // this `WasmPlugin`.
-    Always = 1;
-  }
-
   // Criteria used to select the specific set of pods/VMs on which
   // this plugin configuration should be applied. If omitted, this
   // configuration will be applied to all workload instances in the same
@@ -183,4 +168,33 @@ message WasmPlugin {
   // value, the ordering will be deterministically derived from name and
   // namespace of the `WasmPlugins`.
   google.protobuf.Int64Value priority = 10;
+}
+
+// Some docstring
+enum PluginPhase {
+  // Control plane decides where to insert the plugin. This will generally
+  // be at the end of the filter chain, right before the Router.
+  // Do not specify `PluginPhase` if the plugin is independent of others.
+  UNSPECIFIED = 0;
+
+  // Insert plugin before Istio authentication filters.      
+  AUTHN = 1;
+
+  // Insert plugin before Istio authorization filters.
+  AUTHZ = 2;
+
+  // Insert plugin before Istio stats filters.
+  STATS = 3;
+}
+
+// buf:lint:ignore ENUM_VALUE_UPPER_SNAKE_CASE
+enum PullPolicy {
+  // If an existing version of the image has been pulled before, that
+  // will be used. If no version of the image is present locally, we
+  // will pull the latest version.
+  IfNotPresent = 0;
+
+  // We will always pull the latest version of an image when applying
+  // this `WasmPlugin`.
+  Always = 1;
 }

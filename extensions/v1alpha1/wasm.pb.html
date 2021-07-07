@@ -1,11 +1,18 @@
 ---
-title: istio.extensions.v1alpha1
+title: Wasm Plugin
+description: Extend the functionality provided by the Istio proxy through WebAssembly filters
+location: https://istio.io/docs/reference/config/extensions/wasm-plugin.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
+schema: istio.extensions.v1alpha1.WasmPlugin
+aliases: [/docs/reference/config/extensions/v1alpha1/wasm-plugin]
 number_of_entries: 3
 ---
 <h2 id="WasmPlugin">WasmPlugin</h2>
 <section>
+<p>WasmPlugins provides a mechanism to extend the functionality provided by
+the Istio proxy through WebAssembly filters.</p>
+
 <table class="message-fields">
 <thead>
 <tr>
@@ -66,7 +73,7 @@ No
 </tr>
 <tr id="WasmPlugin-image_pull_policy">
 <td><code>imagePullPolicy</code></td>
-<td><code><a href="#WasmPlugin-PullPolicy">PullPolicy</a></code></td>
+<td><code><a href="#PullPolicy">PullPolicy</a></code></td>
 <td>
 <p>The pull behaviour to be applied when fetching an OCI image. Only
 relevant when images are referenced by tag instead of SHA. Defaults
@@ -161,40 +168,10 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="WasmPlugin-PullPolicy">WasmPlugin.PullPolicy</h2>
-<section>
-<p>buf:lint:ignore ENUM<em>VALUE</em>UPPER<em>SNAKE</em>CASE</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="WasmPlugin-PullPolicy-IfNotPresent">
-<td><code>IfNotPresent</code></td>
-<td>
-<p>If an existing version of the image has been pulled before, that
-will be used. If no version of the image is present locally, we
-will pull the latest version.</p>
-
-</td>
-</tr>
-<tr id="WasmPlugin-PullPolicy-Always">
-<td><code>Always</code></td>
-<td>
-<p>We will always pull the latest version of an image when applying
-this <code>WasmPlugin</code>.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="PluginPhase">PluginPhase</h2>
 <section>
+<p>Some docstring</p>
+
 <table class="enum-values">
 <thead>
 <tr>
@@ -230,6 +207,38 @@ Do not specify <code>PluginPhase</code> if the plugin is independent of others.<
 <td><code>STATS</code></td>
 <td>
 <p>Insert plugin before Istio stats filters.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="PullPolicy">PullPolicy</h2>
+<section>
+<p>buf:lint:ignore ENUM<em>VALUE</em>UPPER<em>SNAKE</em>CASE</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="PullPolicy-IfNotPresent">
+<td><code>IfNotPresent</code></td>
+<td>
+<p>If an existing version of the image has been pulled before, that
+will be used. If no version of the image is present locally, we
+will pull the latest version.</p>
+
+</td>
+</tr>
+<tr id="PullPolicy-Always">
+<td><code>Always</code></td>
+<td>
+<p>We will always pull the latest version of an image when applying
+this <code>WasmPlugin</code>.</p>
 
 </td>
 </tr>
