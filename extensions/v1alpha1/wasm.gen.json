@@ -1,12 +1,13 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "",
+    "title": "Extend the functionality provided by the Istio proxy through WebAssembly filters",
     "version": "v1alpha1"
   },
   "components": {
     "schemas": {
       "istio.extensions.v1alpha1.PluginPhase": {
+        "description": "Some docstring",
         "type": "string",
         "enum": [
           "UNSPECIFIED",
@@ -15,7 +16,16 @@
           "STATS"
         ]
       },
+      "istio.extensions.v1alpha1.PullPolicy": {
+        "description": "buf:lint:ignore ENUM_VALUE_UPPER_SNAKE_CASE",
+        "type": "string",
+        "enum": [
+          "IfNotPresent",
+          "Always"
+        ]
+      },
       "istio.extensions.v1alpha1.WasmPlugin": {
+        "description": "WasmPlugins provides a mechanism to extend the functionality provided by the Istio proxy through WebAssembly filters.",
         "type": "object",
         "properties": {
           "selector": {
@@ -30,7 +40,7 @@
             "type": "string"
           },
           "imagePullPolicy": {
-            "$ref": "#/components/schemas/istio.extensions.v1alpha1.WasmPlugin.PullPolicy"
+            "$ref": "#/components/schemas/istio.extensions.v1alpha1.PullPolicy"
           },
           "imagePullSecret": {
             "description": "Credentials to use for OCI image pulling. Name of a K8s Secret in the same namespace as the `WasmPlugin` that contains a docker pull secret which is to be used to authenticate against the registry when pulling the image.",
@@ -57,14 +67,6 @@
             "nullable": true
           }
         }
-      },
-      "istio.extensions.v1alpha1.WasmPlugin.PullPolicy": {
-        "description": "buf:lint:ignore ENUM_VALUE_UPPER_SNAKE_CASE",
-        "type": "string",
-        "enum": [
-          "IfNotPresent",
-          "Always"
-        ]
       },
       "istio.type.v1beta1.WorkloadSelector": {
         "description": "WorkloadSelector specifies the criteria used to determine if a policy can be applied to a proxy. The matching criteria includes the metadata associated with a proxy, workload instance info such as labels attached to the pod/VM, or any other info that the proxy provides to Istio during the initial handshake. If multiple conditions are specified, all conditions need to match in order for the workload instance to be selected. Currently, only label based selection mechanism is supported.",
