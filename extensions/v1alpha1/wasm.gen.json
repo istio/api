@@ -7,7 +7,7 @@
   "components": {
     "schemas": {
       "istio.extensions.v1alpha1.PluginPhase": {
-        "description": "Some docstring",
+        "description": "The phase in the filter chain where the plugin will be injected.",
         "type": "string",
         "enum": [
           "UNSPECIFIED",
@@ -17,7 +17,7 @@
         ]
       },
       "istio.extensions.v1alpha1.PullPolicy": {
-        "description": "buf:lint:ignore ENUM_VALUE_UPPER_SNAKE_CASE",
+        "description": "The pull behaviour to be applied when fetching an OCI image, mirroring K8s behaviour.",
         "type": "string",
         "enum": [
           "IfNotPresent",
