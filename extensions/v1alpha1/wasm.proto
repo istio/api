@@ -69,8 +69,8 @@ import "type/v1beta1/selector.proto";
 //     labels:
 //       istio: ingressgateway
 //   url: oci://private-registry:5000/openid-connect/openid:latest
-//   image_pull_policy: IfNotPresent
-//   image_pull_secret: private-registry-pull-secret
+//   imagePullPolicy: IfNotPresent
+//   imagePullSecret: private-registry-pull-secret
 //   phase: AUTHN
 //   pluginConfig:
 //     openid_server: authn
@@ -103,8 +103,8 @@ import "type/v1beta1/selector.proto";
 //     labels:
 //       istio: ingressgateway
 //   url: oci://private-registry:5000/openid-connect/openid:latest
-//   image_pull_policy: IfNotPresent
-//   image_pull_secret: private-registry-pull-secret
+//   imagePullPolicy: IfNotPresent
+//   imagePullSecret: private-registry-pull-secret
 //   phase: AUTHN
 //   pluginConfig:
 //     openid_server: authn
@@ -122,8 +122,8 @@ import "type/v1beta1/selector.proto";
 //     labels:
 //       istio: ingressgateway
 //   url: oci://private-registry:5000/acl-check/acl:latest
-//   image_pull_policy: Always
-//   image_pull_secret: private-registry-pull-secret
+//   imagePullPolicy: Always
+//   imagePullSecret: private-registry-pull-secret
 //   phase: AUTHZ
 //   priority: 1000
 //   pluginConfig:
@@ -142,8 +142,8 @@ import "type/v1beta1/selector.proto";
 //     labels:
 //       istio: ingressgateway
 //   url: oci://private-registry:5000/check-header:latest
-//   image_pull_policy: IfNotPresent
-//   image_pull_secret: private-registry-pull-secret
+//   imagePullPolicy: IfNotPresent
+//   imagePullSecret: private-registry-pull-secret
 //   phase: AUTHZ
 //   priority: 10
 //   pluginConfig:
