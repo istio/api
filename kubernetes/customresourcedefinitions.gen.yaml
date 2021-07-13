@@ -3794,6 +3794,196 @@ spec:
                               type: object
                           type: object
                       type: object
+                    loadBalance:
+                      properties:
+                        headerToMetadata:
+                          properties:
+                            requestRules:
+                              description: The list of rules to apply to requests.
+                              items:
+                                properties:
+                                  header:
+                                    description: Specifies that a match will be performed
+                                      on the value of a header.
+                                    type: string
+                                  onMissing:
+                                    description: If the header is not present, apply
+                                      this metadata KeyValuePair.
+                                    oneOf:
+                                    - not:
+                                        anyOf:
+                                        - required:
+                                          - value
+                                        - required:
+                                          - regexValueRewrite
+                                    - required:
+                                      - value
+                                    - required:
+                                      - regexValueRewrite
+                                    properties:
+                                      key:
+                                        description: The key to use within the namespace.
+                                        type: string
+                                      regexValueRewrite:
+                                        description: If present, the header's value
+                                          will be matched and substituted with this.
+                                        properties:
+                                          regex:
+                                            type: string
+                                          substitution:
+                                            type: string
+                                        type: object
+                                      type:
+                                        description: The value's type — defaults to
+                                          string.
+                                        enum:
+                                        - STRING
+                                        - NUMBER
+                                        type: string
+                                      value:
+                                        description: The value to pair with the given
+                                          key.
+                                        type: string
+                                    type: object
+                                  onPresent:
+                                    description: If the header is present, apply this
+                                      metadata KeyValuePair.
+                                    oneOf:
+                                    - not:
+                                        anyOf:
+                                        - required:
+                                          - value
+                                        - required:
+                                          - regexValueRewrite
+                                    - required:
+                                      - value
+                                    - required:
+                                      - regexValueRewrite
+                                    properties:
+                                      key:
+                                        description: The key to use within the namespace.
+                                        type: string
+                                      regexValueRewrite:
+                                        description: If present, the header's value
+                                          will be matched and substituted with this.
+                                        properties:
+                                          regex:
+                                            type: string
+                                          substitution:
+                                            type: string
+                                        type: object
+                                      type:
+                                        description: The value's type — defaults to
+                                          string.
+                                        enum:
+                                        - STRING
+                                        - NUMBER
+                                        type: string
+                                      value:
+                                        description: The value to pair with the given
+                                          key.
+                                        type: string
+                                    type: object
+                                  remove:
+                                    description: Whether or not to remove the header
+                                      after a rule is applied.
+                                    type: boolean
+                                type: object
+                              type: array
+                            responseRules:
+                              description: The list of rules to apply to responses.
+                              items:
+                                properties:
+                                  header:
+                                    description: Specifies that a match will be performed
+                                      on the value of a header.
+                                    type: string
+                                  onMissing:
+                                    description: If the header is not present, apply
+                                      this metadata KeyValuePair.
+                                    oneOf:
+                                    - not:
+                                        anyOf:
+                                        - required:
+                                          - value
+                                        - required:
+                                          - regexValueRewrite
+                                    - required:
+                                      - value
+                                    - required:
+                                      - regexValueRewrite
+                                    properties:
+                                      key:
+                                        description: The key to use within the namespace.
+                                        type: string
+                                      regexValueRewrite:
+                                        description: If present, the header's value
+                                          will be matched and substituted with this.
+                                        properties:
+                                          regex:
+                                            type: string
+                                          substitution:
+                                            type: string
+                                        type: object
+                                      type:
+                                        description: The value's type — defaults to
+                                          string.
+                                        enum:
+                                        - STRING
+                                        - NUMBER
+                                        type: string
+                                      value:
+                                        description: The value to pair with the given
+                                          key.
+                                        type: string
+                                    type: object
+                                  onPresent:
+                                    description: If the header is present, apply this
+                                      metadata KeyValuePair.
+                                    oneOf:
+                                    - not:
+                                        anyOf:
+                                        - required:
+                                          - value
+                                        - required:
+                                          - regexValueRewrite
+                                    - required:
+                                      - value
+                                    - required:
+                                      - regexValueRewrite
+                                    properties:
+                                      key:
+                                        description: The key to use within the namespace.
+                                        type: string
+                                      regexValueRewrite:
+                                        description: If present, the header's value
+                                          will be matched and substituted with this.
+                                        properties:
+                                          regex:
+                                            type: string
+                                          substitution:
+                                            type: string
+                                        type: object
+                                      type:
+                                        description: The value's type — defaults to
+                                          string.
+                                        enum:
+                                        - STRING
+                                        - NUMBER
+                                        type: string
+                                      value:
+                                        description: The value to pair with the given
+                                          key.
+                                        type: string
+                                    type: object
+                                  remove:
+                                    description: Whether or not to remove the header
+                                      after a rule is applied.
+                                    type: boolean
+                                type: object
+                              type: array
+                          type: object
+                      type: object
                     match:
                       items:
                         properties:
@@ -4511,6 +4701,196 @@ spec:
                               additionalProperties:
                                 type: string
                               type: object
+                          type: object
+                      type: object
+                    loadBalance:
+                      properties:
+                        headerToMetadata:
+                          properties:
+                            requestRules:
+                              description: The list of rules to apply to requests.
+                              items:
+                                properties:
+                                  header:
+                                    description: Specifies that a match will be performed
+                                      on the value of a header.
+                                    type: string
+                                  onMissing:
+                                    description: If the header is not present, apply
+                                      this metadata KeyValuePair.
+                                    oneOf:
+                                    - not:
+                                        anyOf:
+                                        - required:
+                                          - value
+                                        - required:
+                                          - regexValueRewrite
+                                    - required:
+                                      - value
+                                    - required:
+                                      - regexValueRewrite
+                                    properties:
+                                      key:
+                                        description: The key to use within the namespace.
+                                        type: string
+                                      regexValueRewrite:
+                                        description: If present, the header's value
+                                          will be matched and substituted with this.
+                                        properties:
+                                          regex:
+                                            type: string
+                                          substitution:
+                                            type: string
+                                        type: object
+                                      type:
+                                        description: The value's type — defaults to
+                                          string.
+                                        enum:
+                                        - STRING
+                                        - NUMBER
+                                        type: string
+                                      value:
+                                        description: The value to pair with the given
+                                          key.
+                                        type: string
+                                    type: object
+                                  onPresent:
+                                    description: If the header is present, apply this
+                                      metadata KeyValuePair.
+                                    oneOf:
+                                    - not:
+                                        anyOf:
+                                        - required:
+                                          - value
+                                        - required:
+                                          - regexValueRewrite
+                                    - required:
+                                      - value
+                                    - required:
+                                      - regexValueRewrite
+                                    properties:
+                                      key:
+                                        description: The key to use within the namespace.
+                                        type: string
+                                      regexValueRewrite:
+                                        description: If present, the header's value
+                                          will be matched and substituted with this.
+                                        properties:
+                                          regex:
+                                            type: string
+                                          substitution:
+                                            type: string
+                                        type: object
+                                      type:
+                                        description: The value's type — defaults to
+                                          string.
+                                        enum:
+                                        - STRING
+                                        - NUMBER
+                                        type: string
+                                      value:
+                                        description: The value to pair with the given
+                                          key.
+                                        type: string
+                                    type: object
+                                  remove:
+                                    description: Whether or not to remove the header
+                                      after a rule is applied.
+                                    type: boolean
+                                type: object
+                              type: array
+                            responseRules:
+                              description: The list of rules to apply to responses.
+                              items:
+                                properties:
+                                  header:
+                                    description: Specifies that a match will be performed
+                                      on the value of a header.
+                                    type: string
+                                  onMissing:
+                                    description: If the header is not present, apply
+                                      this metadata KeyValuePair.
+                                    oneOf:
+                                    - not:
+                                        anyOf:
+                                        - required:
+                                          - value
+                                        - required:
+                                          - regexValueRewrite
+                                    - required:
+                                      - value
+                                    - required:
+                                      - regexValueRewrite
+                                    properties:
+                                      key:
+                                        description: The key to use within the namespace.
+                                        type: string
+                                      regexValueRewrite:
+                                        description: If present, the header's value
+                                          will be matched and substituted with this.
+                                        properties:
+                                          regex:
+                                            type: string
+                                          substitution:
+                                            type: string
+                                        type: object
+                                      type:
+                                        description: The value's type — defaults to
+                                          string.
+                                        enum:
+                                        - STRING
+                                        - NUMBER
+                                        type: string
+                                      value:
+                                        description: The value to pair with the given
+                                          key.
+                                        type: string
+                                    type: object
+                                  onPresent:
+                                    description: If the header is present, apply this
+                                      metadata KeyValuePair.
+                                    oneOf:
+                                    - not:
+                                        anyOf:
+                                        - required:
+                                          - value
+                                        - required:
+                                          - regexValueRewrite
+                                    - required:
+                                      - value
+                                    - required:
+                                      - regexValueRewrite
+                                    properties:
+                                      key:
+                                        description: The key to use within the namespace.
+                                        type: string
+                                      regexValueRewrite:
+                                        description: If present, the header's value
+                                          will be matched and substituted with this.
+                                        properties:
+                                          regex:
+                                            type: string
+                                          substitution:
+                                            type: string
+                                        type: object
+                                      type:
+                                        description: The value's type — defaults to
+                                          string.
+                                        enum:
+                                        - STRING
+                                        - NUMBER
+                                        type: string
+                                      value:
+                                        description: The value to pair with the given
+                                          key.
+                                        type: string
+                                    type: object
+                                  remove:
+                                    description: Whether or not to remove the header
+                                      after a rule is applied.
+                                    type: boolean
+                                type: object
+                              type: array
                           type: object
                       type: object
                     match:

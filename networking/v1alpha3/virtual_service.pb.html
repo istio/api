@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.VirtualService
 aliases: [/docs/reference/config/networking/v1alpha3/virtual-service]
-number_of_entries: 24
+number_of_entries: 30
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -810,6 +810,15 @@ No
 <td>
 <p>Header manipulation rules</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPRoute-load_balance">
+<td><code>loadBalance</code></td>
+<td><code><a href="#HTTPLoadBalance">HTTPLoadBalance</a></code></td>
+<td>
 </td>
 <td>
 No
@@ -2577,6 +2586,123 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="HTTPLoadBalance">HTTPLoadBalance</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HTTPLoadBalance-header_to_metadata">
+<td><code>headerToMetadata</code></td>
+<td><code><a href="#HTTPHeaderToMetadata">HTTPHeaderToMetadata</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RegexMatchAndSubstitute">RegexMatchAndSubstitute</h2>
+<section>
+<p>Describes how to match a string and then produce a new string using a regular
+expression and a substitution string.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RegexMatchAndSubstitute-regex">
+<td><code>regex</code></td>
+<td><code>string</code></td>
+<td>
+<p>The regular expression used to find portions of a string (hereafter called
+the &ldquo;subject string&rdquo;) that should be replaced. When a new string is
+produced during the substitution operation, the new string is initially
+the same as the subject string, but then all matches in the subject string
+are replaced by the substitution string. If replacing all matches isn&rsquo;t
+desired, regular expression anchors can be used to ensure a single match,
+so as to replace just one occurrence of a pattern. Capture groups can be
+used in the pattern to extract portions of the subject string, and then
+referenced in the substitution string.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RegexMatchAndSubstitute-substitution">
+<td><code>substitution</code></td>
+<td><code>string</code></td>
+<td>
+<p>The string that should be substituted into matching portions of the
+subject string during a substitution operation to produce a new string.
+Capture groups in the pattern can be referenced in the substitution
+string. Note, however, that the syntax for referring to capture groups is
+defined by the chosen regular expression engine. Google&rsquo;s <code>RE2
+&lt;https://github.com/google/re2&gt;</code>_ regular expression engine uses a
+backslash followed by the capture group number to denote a numbered
+capture group. E.g., <code>\1</code> refers to capture group 1, and <code>\2</code> refers
+to capture group 2.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HTTPHeaderToMetadata">HTTPHeaderToMetadata</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HTTPHeaderToMetadata-request_rules">
+<td><code>requestRules</code></td>
+<td><code><a href="#HTTPHeaderToMetadata-Rule">Rule[]</a></code></td>
+<td>
+<p>The list of rules to apply to requests.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPHeaderToMetadata-response_rules">
+<td><code>responseRules</code></td>
+<td><code><a href="#HTTPHeaderToMetadata-Rule">Rule[]</a></code></td>
+<td>
+<p>The list of rules to apply to responses.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="Headers-HeaderOperations">Headers.HeaderOperations</h2>
 <section>
 <p>HeaderOperations Describes the header manipulations to apply</p>
@@ -2836,6 +2962,145 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="HTTPHeaderToMetadata-KeyValuePair">HTTPHeaderToMetadata.KeyValuePair</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HTTPHeaderToMetadata-KeyValuePair-key">
+<td><code>key</code></td>
+<td><code>string</code></td>
+<td>
+<p>The key to use within the namespace.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPHeaderToMetadata-KeyValuePair-type">
+<td><code>type</code></td>
+<td><code><a href="#HTTPHeaderToMetadata-ValueType">ValueType</a></code></td>
+<td>
+<p>The value&rsquo;s type — defaults to string.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPHeaderToMetadata-KeyValuePair-value" class="oneof oneof-start">
+<td><code>value</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>The value to pair with the given key.</p>
+
+<p>When used for a <code>on_present</code>
+case, if value is non-empty it&rsquo;ll be used instead of the header value. If both are empty, no metadata is added.</p>
+
+<p>When used for a <code>on_missing</code>
+case, a non-empty value must be provided otherwise no metadata is added.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPHeaderToMetadata-KeyValuePair-regex_value_rewrite" class="oneof">
+<td><code>regexValueRewrite</code></td>
+<td><code><a href="#RegexMatchAndSubstitute">RegexMatchAndSubstitute (oneof)</a></code></td>
+<td>
+<p>If present, the header&rsquo;s value will be matched and substituted with this. If there is no match or substitution, the header value
+is used as-is.</p>
+
+<p>This is only used for <code>on_present</code>.</p>
+
+<p>Note: if the <code>value</code> field is non-empty this field should be empty.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HTTPHeaderToMetadata-Rule">HTTPHeaderToMetadata.Rule</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HTTPHeaderToMetadata-Rule-header">
+<td><code>header</code></td>
+<td><code>string</code></td>
+<td>
+<p>Specifies that a match will be performed on the value of a header.</p>
+
+<p>The header to be extracted.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPHeaderToMetadata-Rule-on_present">
+<td><code>onPresent</code></td>
+<td><code><a href="#HTTPHeaderToMetadata-KeyValuePair">KeyValuePair</a></code></td>
+<td>
+<p>If the header is present, apply this metadata KeyValuePair.</p>
+
+<p>If the value in the KeyValuePair is non-empty, it&rsquo;ll be used instead
+of the header value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPHeaderToMetadata-Rule-on_missing">
+<td><code>onMissing</code></td>
+<td><code><a href="#HTTPHeaderToMetadata-KeyValuePair">KeyValuePair</a></code></td>
+<td>
+<p>If the header is not present, apply this metadata KeyValuePair.</p>
+
+<p>The value in the KeyValuePair must be set, since it&rsquo;ll be used in lieu
+of the missing header value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPHeaderToMetadata-Rule-remove">
+<td><code>remove</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Whether or not to remove the header after a rule is applied.</p>
+
+<p>This prevents headers from leaking.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="google-protobuf-UInt32Value">google.protobuf.UInt32Value</h2>
 <section>
 <p>Wrapper message for <code>uint32</code>.</p>
@@ -2861,6 +3126,29 @@ No
 </td>
 <td>
 No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HTTPHeaderToMetadata-ValueType">HTTPHeaderToMetadata.ValueType</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HTTPHeaderToMetadata-ValueType-STRING">
+<td><code>STRING</code></td>
+<td>
+</td>
+</tr>
+<tr id="HTTPHeaderToMetadata-ValueType-NUMBER">
+<td><code>NUMBER</code></td>
+<td>
 </td>
 </tr>
 </tbody>
