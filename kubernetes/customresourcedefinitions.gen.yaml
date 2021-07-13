@@ -217,6 +217,37 @@ spec:
                                   description: Hash based on the source IP address.
                                   type: boolean
                               type: object
+                            lbSubsetSetting:
+                              properties:
+                                fallbackPolicy:
+                                  enum:
+                                  - NO_FALLBACK
+                                  - ANY_ENDPOINT
+                                  - DEFAULT_SUBSET
+                                  type: string
+                                metadata:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                                subsetSelectors:
+                                  items:
+                                    properties:
+                                      fallbackPolicy:
+                                        enum:
+                                        - NOT_DEFINED
+                                        - NO_FALLBACK
+                                        - ANY_ENDPOINT
+                                        - DEFAULT_SUBSET
+                                        type: string
+                                      keys:
+                                        description: List of keys to match with the
+                                          weighted cluster metadata.
+                                        items:
+                                          type: string
+                                        type: array
+                                    type: object
+                                  type: array
+                              type: object
                             localityLbSetting:
                               properties:
                                 distribute:
@@ -456,6 +487,37 @@ spec:
                                       useSourceIp:
                                         description: Hash based on the source IP address.
                                         type: boolean
+                                    type: object
+                                  lbSubsetSetting:
+                                    properties:
+                                      fallbackPolicy:
+                                        enum:
+                                        - NO_FALLBACK
+                                        - ANY_ENDPOINT
+                                        - DEFAULT_SUBSET
+                                        type: string
+                                      metadata:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                      subsetSelectors:
+                                        items:
+                                          properties:
+                                            fallbackPolicy:
+                                              enum:
+                                              - NOT_DEFINED
+                                              - NO_FALLBACK
+                                              - ANY_ENDPOINT
+                                              - DEFAULT_SUBSET
+                                              type: string
+                                            keys:
+                                              description: List of keys to match with
+                                                the weighted cluster metadata.
+                                              items:
+                                                type: string
+                                              type: array
+                                          type: object
+                                        type: array
                                     type: object
                                   localityLbSetting:
                                     properties:
@@ -760,6 +822,37 @@ spec:
                             description: Hash based on the source IP address.
                             type: boolean
                         type: object
+                      lbSubsetSetting:
+                        properties:
+                          fallbackPolicy:
+                            enum:
+                            - NO_FALLBACK
+                            - ANY_ENDPOINT
+                            - DEFAULT_SUBSET
+                            type: string
+                          metadata:
+                            additionalProperties:
+                              type: string
+                            type: object
+                          subsetSelectors:
+                            items:
+                              properties:
+                                fallbackPolicy:
+                                  enum:
+                                  - NOT_DEFINED
+                                  - NO_FALLBACK
+                                  - ANY_ENDPOINT
+                                  - DEFAULT_SUBSET
+                                  type: string
+                                keys:
+                                  description: List of keys to match with the weighted
+                                    cluster metadata.
+                                  items:
+                                    type: string
+                                  type: array
+                              type: object
+                            type: array
+                        type: object
                       localityLbSetting:
                         properties:
                           distribute:
@@ -993,6 +1086,37 @@ spec:
                                 useSourceIp:
                                   description: Hash based on the source IP address.
                                   type: boolean
+                              type: object
+                            lbSubsetSetting:
+                              properties:
+                                fallbackPolicy:
+                                  enum:
+                                  - NO_FALLBACK
+                                  - ANY_ENDPOINT
+                                  - DEFAULT_SUBSET
+                                  type: string
+                                metadata:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                                subsetSelectors:
+                                  items:
+                                    properties:
+                                      fallbackPolicy:
+                                        enum:
+                                        - NOT_DEFINED
+                                        - NO_FALLBACK
+                                        - ANY_ENDPOINT
+                                        - DEFAULT_SUBSET
+                                        type: string
+                                      keys:
+                                        description: List of keys to match with the
+                                          weighted cluster metadata.
+                                        items:
+                                          type: string
+                                        type: array
+                                    type: object
+                                  type: array
                               type: object
                             localityLbSetting:
                               properties:
@@ -1345,6 +1469,37 @@ spec:
                                   description: Hash based on the source IP address.
                                   type: boolean
                               type: object
+                            lbSubsetSetting:
+                              properties:
+                                fallbackPolicy:
+                                  enum:
+                                  - NO_FALLBACK
+                                  - ANY_ENDPOINT
+                                  - DEFAULT_SUBSET
+                                  type: string
+                                metadata:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                                subsetSelectors:
+                                  items:
+                                    properties:
+                                      fallbackPolicy:
+                                        enum:
+                                        - NOT_DEFINED
+                                        - NO_FALLBACK
+                                        - ANY_ENDPOINT
+                                        - DEFAULT_SUBSET
+                                        type: string
+                                      keys:
+                                        description: List of keys to match with the
+                                          weighted cluster metadata.
+                                        items:
+                                          type: string
+                                        type: array
+                                    type: object
+                                  type: array
+                              type: object
                             localityLbSetting:
                               properties:
                                 distribute:
@@ -1584,6 +1739,37 @@ spec:
                                       useSourceIp:
                                         description: Hash based on the source IP address.
                                         type: boolean
+                                    type: object
+                                  lbSubsetSetting:
+                                    properties:
+                                      fallbackPolicy:
+                                        enum:
+                                        - NO_FALLBACK
+                                        - ANY_ENDPOINT
+                                        - DEFAULT_SUBSET
+                                        type: string
+                                      metadata:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                      subsetSelectors:
+                                        items:
+                                          properties:
+                                            fallbackPolicy:
+                                              enum:
+                                              - NOT_DEFINED
+                                              - NO_FALLBACK
+                                              - ANY_ENDPOINT
+                                              - DEFAULT_SUBSET
+                                              type: string
+                                            keys:
+                                              description: List of keys to match with
+                                                the weighted cluster metadata.
+                                              items:
+                                                type: string
+                                              type: array
+                                          type: object
+                                        type: array
                                     type: object
                                   localityLbSetting:
                                     properties:
@@ -1888,6 +2074,37 @@ spec:
                             description: Hash based on the source IP address.
                             type: boolean
                         type: object
+                      lbSubsetSetting:
+                        properties:
+                          fallbackPolicy:
+                            enum:
+                            - NO_FALLBACK
+                            - ANY_ENDPOINT
+                            - DEFAULT_SUBSET
+                            type: string
+                          metadata:
+                            additionalProperties:
+                              type: string
+                            type: object
+                          subsetSelectors:
+                            items:
+                              properties:
+                                fallbackPolicy:
+                                  enum:
+                                  - NOT_DEFINED
+                                  - NO_FALLBACK
+                                  - ANY_ENDPOINT
+                                  - DEFAULT_SUBSET
+                                  type: string
+                                keys:
+                                  description: List of keys to match with the weighted
+                                    cluster metadata.
+                                  items:
+                                    type: string
+                                  type: array
+                              type: object
+                            type: array
+                        type: object
                       localityLbSetting:
                         properties:
                           distribute:
@@ -2121,6 +2338,37 @@ spec:
                                 useSourceIp:
                                   description: Hash based on the source IP address.
                                   type: boolean
+                              type: object
+                            lbSubsetSetting:
+                              properties:
+                                fallbackPolicy:
+                                  enum:
+                                  - NO_FALLBACK
+                                  - ANY_ENDPOINT
+                                  - DEFAULT_SUBSET
+                                  type: string
+                                metadata:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                                subsetSelectors:
+                                  items:
+                                    properties:
+                                      fallbackPolicy:
+                                        enum:
+                                        - NOT_DEFINED
+                                        - NO_FALLBACK
+                                        - ANY_ENDPOINT
+                                        - DEFAULT_SUBSET
+                                        type: string
+                                      keys:
+                                        description: List of keys to match with the
+                                          weighted cluster metadata.
+                                        items:
+                                          type: string
+                                        type: array
+                                    type: object
+                                  type: array
                               type: object
                             localityLbSetting:
                               properties:

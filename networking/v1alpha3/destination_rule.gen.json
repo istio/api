@@ -179,6 +179,9 @@
         "properties": {
           "localityLbSetting": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.LocalityLoadBalancerSetting"
+          },
+          "lbSubsetSetting": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSubsetSetting"
           }
         },
         "oneOf": [
@@ -360,6 +363,64 @@
           "LEAST_CONN",
           "RANDOM",
           "PASSTHROUGH"
+        ]
+      },
+      "istio.networking.v1alpha3.LoadBalancerSubsetSetting": {
+        "description": "Locality load balancing settings.",
+        "type": "object",
+        "properties": {
+          "fallbackPolicy": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSubsetSetting.LbSubsetFallbackPolicy"
+          },
+          "metadata": {
+            "description": "Metadata on endpoint",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "subsetSelectors": {
+            "description": "One or more subset selectors",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSubsetSetting.SubsetSelector"
+            }
+          }
+        }
+      },
+      "istio.networking.v1alpha3.LoadBalancerSubsetSetting.LbSubsetFallbackPolicy": {
+        "description": "If NO_FALLBACK is selected, a result equivalent to no healthy hosts is reported. If ANY_ENDPOINT is selected, any cluster endpoint may be returned (subject to policy, health checks, etc). If DEFAULT_SUBSET is selected, load balancing is performed over the endpoints matching the values from the default_subset field.",
+        "type": "string",
+        "enum": [
+          "NO_FALLBACK",
+          "ANY_ENDPOINT",
+          "DEFAULT_SUBSET"
+        ]
+      },
+      "istio.networking.v1alpha3.LoadBalancerSubsetSetting.SubsetSelector": {
+        "description": "Specifications for subsets.",
+        "type": "object",
+        "properties": {
+          "keys": {
+            "description": "List of keys to match with the weighted cluster metadata.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "fallbackPolicy": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSubsetSetting.SubsetSelector.SubsetSelectorFallbackPolicy"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.LoadBalancerSubsetSetting.SubsetSelector.SubsetSelectorFallbackPolicy": {
+        "description": "Allows to override top level fallback policy per selector.",
+        "type": "string",
+        "enum": [
+          "NOT_DEFINED",
+          "NO_FALLBACK",
+          "ANY_ENDPOINT",
+          "DEFAULT_SUBSET"
         ]
       },
       "istio.networking.v1alpha3.LocalityLoadBalancerSetting": {

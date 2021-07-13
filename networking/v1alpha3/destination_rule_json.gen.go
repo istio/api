@@ -335,6 +335,28 @@ func (this *LocalityLoadBalancerSetting_Failover) UnmarshalJSON(b []byte) error 
 	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for LoadBalancerSubsetSetting
+func (this *LoadBalancerSubsetSetting) MarshalJSON() ([]byte, error) {
+	str, err := DestinationRuleMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for LoadBalancerSubsetSetting
+func (this *LoadBalancerSubsetSetting) UnmarshalJSON(b []byte) error {
+	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for LoadBalancerSubsetSetting_SubsetSelector
+func (this *LoadBalancerSubsetSetting_SubsetSelector) MarshalJSON() ([]byte, error) {
+	str, err := DestinationRuleMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for LoadBalancerSubsetSetting_SubsetSelector
+func (this *LoadBalancerSubsetSetting_SubsetSelector) UnmarshalJSON(b []byte) error {
+	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 var (
 	DestinationRuleMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
 	DestinationRuleUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}

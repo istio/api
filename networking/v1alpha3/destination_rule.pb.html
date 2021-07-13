@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.DestinationRule
 aliases: [/docs/reference/config/networking/v1alpha3/destination-rule]
-number_of_entries: 20
+number_of_entries: 24
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -558,6 +558,15 @@ No
 <p>Locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
 between this object and the object one in MeshConfig</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LoadBalancerSettings-lb_subset_setting">
+<td><code>lbSubsetSetting</code></td>
+<td><code><a href="#LoadBalancerSubsetSetting">LoadBalancerSubsetSetting</a></code></td>
+<td>
 </td>
 <td>
 No
@@ -1198,6 +1207,54 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="LoadBalancerSubsetSetting">LoadBalancerSubsetSetting</h2>
+<section>
+<p>Locality load balancing settings.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LoadBalancerSubsetSetting-fallback_policy">
+<td><code>fallbackPolicy</code></td>
+<td><code><a href="#LoadBalancerSubsetSetting-LbSubsetFallbackPolicy">LbSubsetFallbackPolicy</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LoadBalancerSubsetSetting-metadata">
+<td><code>metadata</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>Metadata on endpoint</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LoadBalancerSubsetSetting-subset_selectors">
+<td><code>subsetSelectors</code></td>
+<td><code><a href="#LoadBalancerSubsetSetting-SubsetSelector">SubsetSelector[]</a></code></td>
+<td>
+<p>One or more subset selectors</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="TrafficPolicy-PortTrafficPolicy">TrafficPolicy.PortTrafficPolicy</h2>
 <section>
 <p>Traffic policies that apply to specific ports of the service</p>
@@ -1712,6 +1769,46 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="LoadBalancerSubsetSetting-SubsetSelector">LoadBalancerSubsetSetting.SubsetSelector</h2>
+<section>
+<p>Specifications for subsets.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LoadBalancerSubsetSetting-SubsetSelector-keys">
+<td><code>keys</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>List of keys to match with the weighted cluster metadata.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LoadBalancerSubsetSetting-SubsetSelector-fallback_policy">
+<td><code>fallbackPolicy</code></td>
+<td><code><a href="#LoadBalancerSubsetSetting-SubsetSelector-SubsetSelectorFallbackPolicy">SubsetSelectorFallbackPolicy</a></code></td>
+<td>
+<p>The behavior used when no endpoint subset matches the selected route&rsquo;s
+metadata.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="google-protobuf-UInt32Value">google.protobuf.UInt32Value</h2>
 <section>
 <p>Wrapper message for <code>uint32</code>.</p>
@@ -1874,6 +1971,85 @@ Compared to Mutual mode, this mode uses certificates generated
 automatically by Istio for mTLS authentication. When this mode is
 used, all other fields in <code>ClientTLSSettings</code> should be empty.</p>
 
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="LoadBalancerSubsetSetting-SubsetSelector-SubsetSelectorFallbackPolicy">LoadBalancerSubsetSetting.SubsetSelector.SubsetSelectorFallbackPolicy</h2>
+<section>
+<p>Allows to override top level fallback policy per selector.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LoadBalancerSubsetSetting-SubsetSelector-SubsetSelectorFallbackPolicy-NOT_DEFINED">
+<td><code>NOT_DEFINED</code></td>
+<td>
+<p>If NOT_DEFINED top level config fallback policy is used instead.</p>
+
+</td>
+</tr>
+<tr id="LoadBalancerSubsetSetting-SubsetSelector-SubsetSelectorFallbackPolicy-NO_FALLBACK">
+<td><code>NO_FALLBACK</code></td>
+<td>
+<p>If NO_FALLBACK is selected, a result equivalent to no healthy hosts is reported.</p>
+
+</td>
+</tr>
+<tr id="LoadBalancerSubsetSetting-SubsetSelector-SubsetSelectorFallbackPolicy-ANY_ENDPOINT">
+<td><code>ANY_ENDPOINT</code></td>
+<td>
+<p>If ANY_ENDPOINT is selected, any cluster endpoint may be returned
+(subject to policy, health checks, etc).</p>
+
+</td>
+</tr>
+<tr id="LoadBalancerSubsetSetting-SubsetSelector-SubsetSelectorFallbackPolicy-DEFAULT_SUBSET">
+<td><code>DEFAULT_SUBSET</code></td>
+<td>
+<p>If DEFAULT<em>SUBSET is selected, load balancing is performed over the
+endpoints matching the values from the default</em>subset field.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="LoadBalancerSubsetSetting-LbSubsetFallbackPolicy">LoadBalancerSubsetSetting.LbSubsetFallbackPolicy</h2>
+<section>
+<p>If NO<em>FALLBACK is selected, a result
+equivalent to no healthy hosts is reported. If ANY</em>ENDPOINT is selected,
+any cluster endpoint may be returned (subject to policy, health checks,
+etc). If DEFAULT<em>SUBSET is selected, load balancing is performed over the
+endpoints matching the values from the default</em>subset field.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LoadBalancerSubsetSetting-LbSubsetFallbackPolicy-NO_FALLBACK">
+<td><code>NO_FALLBACK</code></td>
+<td>
+</td>
+</tr>
+<tr id="LoadBalancerSubsetSetting-LbSubsetFallbackPolicy-ANY_ENDPOINT">
+<td><code>ANY_ENDPOINT</code></td>
+<td>
+</td>
+</tr>
+<tr id="LoadBalancerSubsetSetting-LbSubsetFallbackPolicy-DEFAULT_SUBSET">
+<td><code>DEFAULT_SUBSET</code></td>
+<td>
 </td>
 </tr>
 </tbody>
