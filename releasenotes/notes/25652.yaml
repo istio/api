@@ -6,5 +6,5 @@ issue:
 
 releaseNotes:
   - |
-    **Added** InsecureSkipVerify to DestinationRule. Users can choose to opt-out of validating external site certificates on a per-host basis if a user has enabled certificate validation.
+    **Added** InsecureSkipVerify to DestinationRule. Users can opt-out of validating server certificates on a per-host basis if certificate validation is enabled.
     **Modified** VerifyCertificateAtClient is now deprecated in meshConfig. This feature was not implemented, and will be removed in a future release.
