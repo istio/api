@@ -1,6 +1,1 @@
-*                @linsun @louiscryan @smawson @nrjpoddar @howardjohn @brian-avery
-/Makefile*       @istio/wg-test-and-release-maintainers
-/*.md            @istio/wg-test-and-release-maintainers
-/common/         @istio/wg-test-and-release-maintainers
-/common-protos/  @istio/wg-test-and-release-maintainers
-/scripts/        @istio/wg-test-and-release-maintainers
+* @istio/release-managers-1-11
