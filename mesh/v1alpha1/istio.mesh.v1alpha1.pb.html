@@ -658,6 +658,20 @@ If not set, the NormalizationType.DEFAULT configuration will be used.</p>
 No
 </td>
 </tr>
+<tr id="MeshConfig-default_http_retry_policy">
+<td><code>defaultHttpRetryPolicy</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/virtual-service.html#HTTPRetry">HTTPRetry</a></code></td>
+<td>
+<p>Configure the default HTTP retry policy. The default number of retry
+attempts is set at 2.
+Setting the number of attempts to 0 disables retries globally.
+This setting can be overriden on a per-host basis using Virtual Services.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
