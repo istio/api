@@ -868,7 +868,7 @@ message MeshConfig {
   // Configure the default HTTP retry policy.
   // The default number of retry attempts is set at 2 for these errors:
   //   "connect-failure,refused-stream,unavailable,cancelled,retriable-status-codes".
-  // Setting the number of attempts to -1 disables retry policy globally.
+  // Setting the number of attempts to 0 disables retry policy globally.
   // This setting can be overriden on a per-host basis using the Virtual Service
   // API.
   istio.networking.v1alpha3.HTTPRetry default_http_retry_policy = 62;

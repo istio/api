@@ -584,7 +584,7 @@ type MeshConfig struct {
 	// Configure the default HTTP retry policy.
 	// The default number of retry attempts is set at 2 for these errors:
 	//   "connect-failure,refused-stream,unavailable,cancelled,retriable-status-codes".
-	// Setting the number of attempts to -1 disables retry policy globally.
+	// Setting the number of attempts to 0 disables retry policy globally.
 	// This setting can be overriden on a per-host basis using the Virtual Service
 	// API.
 	DefaultHttpRetryPolicy *v1alpha3.HTTPRetry `protobuf:"bytes,62,opt,name=default_http_retry_policy,json=defaultHttpRetryPolicy,proto3" json:"defaultHttpRetryPolicy,omitempty"`
