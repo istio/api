@@ -972,7 +972,7 @@ message ClientTLSSettings {
   // for the server certificate corresponding to the host. `InsecureSkipVerify`
   // is `false` by default. If set to true, the proxy will skip verification of
   // the server certificate, regardless of any certificate validation
-  // configureation provided elsewhere.
+  // configuration provided elsewhere.
   google.protobuf.BoolValue insecure_skip_verify = 8;
 }
 

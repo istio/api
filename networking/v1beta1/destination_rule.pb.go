@@ -1865,7 +1865,7 @@ type ClientTLSSettings struct {
 	// for the server certificate corresponding to the host. `InsecureSkipVerify`
 	// is `false` by default. If set to true, the proxy will skip verification of
 	// the server certificate, regardless of any certificate validation
-	// configureation provided elsewhere.
+	// configuration provided elsewhere.
 	InsecureSkipVerify   *types.BoolValue `protobuf:"bytes,8,opt,name=insecure_skip_verify,json=insecureSkipVerify,proto3" json:"insecure_skip_verify,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
 	XXX_unrecognized     []byte           `json:"-"`
