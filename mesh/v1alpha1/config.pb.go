@@ -581,10 +581,12 @@ type MeshConfig struct {
 	// path proxied to the upstream service.
 	// If not set, the NormalizationType.DEFAULT configuration will be used.
 	PathNormalization *MeshConfig_ProxyPathNormalization `protobuf:"bytes,61,opt,name=path_normalization,json=pathNormalization,proto3" json:"pathNormalization,omitempty"`
-	// Configure the default HTTP retry policy. The default number of retry
-	// attempts is set at 2.
-	// Setting the number of attempts to 0 disables retries globally.
-	// This setting can be overriden on a per-host basis using Virtual Services.
+	// Configure the default HTTP retry policy.
+	// The default number of retry attempts is set at 2 for these errors:
+	//   "connect-failure,refused-stream,unavailable,cancelled,retriable-status-codes".
+	// Setting the number of attempts to -1 disables retry policy globally.
+	// This setting can be overriden on a per-host basis using the Virtual Service
+	// API.
 	DefaultHttpRetryPolicy *v1alpha3.HTTPRetry `protobuf:"bytes,62,opt,name=default_http_retry_policy,json=defaultHttpRetryPolicy,proto3" json:"defaultHttpRetryPolicy,omitempty"`
 	XXX_NoUnkeyedLiteral   struct{}            `json:"-"`
 	XXX_unrecognized       []byte              `json:"-"`
