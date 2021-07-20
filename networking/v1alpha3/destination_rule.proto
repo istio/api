@@ -968,11 +968,11 @@ message ClientTLSSettings {
   // SNI string to present to the server during TLS handshake.
   string sni = 6;
 
-  // Boolean specifying if the proxy should not check the CA signature and SAN
-  // for the server certificate corresponding to the host. `InsecureSkipVerify`
-  // is `false` by default. If set to true, the proxy will skip verification of
-  // the server certificate, regardless of any certificate validation
-  // configuration provided elsewhere.
+  // InsecureSkipverify specifies whether the proxy should skip verifying the
+  // CA signature and SAN for the server certificate corresponding to the host.
+  // `InsecureSkipVerify` is `false` by default. If set to true, the proxy will
+  // skip verification of the server certificate, regardless of any certificate
+  // validation configuration provided elsewhere.
   google.protobuf.BoolValue insecure_skip_verify = 8;
 }
 
