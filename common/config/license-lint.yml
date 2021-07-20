@@ -111,3 +111,6 @@ allowlisted_modules:
 
 # MIT: https://github.com/felixge/fgprof/blob/master/LICENSE.txt
 - github.com/felixge/fgprof
+
+# Apache 2.0
+- github.com/google/pprof
