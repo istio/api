@@ -41,6 +41,7 @@ spec:
                 description: The pull behaviour to be applied when fetching an OCI
                   image.
                 enum:
+                - UNSPECIFIED_POLICY
                 - IfNotPresent
                 - Always
                 type: string
@@ -51,7 +52,7 @@ spec:
                 description: Determines where in the filter chain this `WasmPlugin`
                   is to be injected.
                 enum:
-                - UNSPECIFIED
+                - UNSPECIFIED_PHASE
                 - AUTHN
                 - AUTHZ
                 - STATS
@@ -74,7 +75,8 @@ spec:
                     type: object
                 type: object
               sha256:
-                description: SHA256 checksum of Wasm module or OCI container.
+                description: SHA256 checksum that will be used to verify Wasm module
+                  or OCI container.
                 type: string
               url:
                 description: URL of a Wasm module or OCI container.

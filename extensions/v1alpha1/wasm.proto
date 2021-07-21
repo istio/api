@@ -185,10 +185,9 @@ message WasmPlugin {
   // Criteria used to select the specific set of pods/VMs on which
   // this plugin configuration should be applied. If omitted, this
   // configuration will be applied to all workload instances in the same
-  // namespace.  If omitted, the `WasmPlugin` will be applied to all
-  // workloads in the same namespace. If the `WasmPlugin` is
-  // present in the config root namespace, it will be applied to all
-  // applicable workloads in any namespace.
+  // namespace. If the `WasmPlugin` is present in the config root
+  // namespace, it will be applied to all applicable workloads in any
+  // namespace.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
   // URL of a Wasm module or OCI container. If no scheme is present,
@@ -198,12 +197,11 @@ message WasmPlugin {
   // hosted remotely.
   string url = 2;
 
-  // SHA256 checksum of Wasm module or OCI container. If the `url` field
-  // already references a SHA256 (using the `@sha256:` notation), the
-  // `url` field will take precedence. If the `sha256` field is set, and
-  // the `url` field contains the URL of an OCI image that is referenced
-  // by tag, the reference will be replaced by the value of the `sha256`
-  // field (using the `@sha256:` notation).
+  // SHA256 checksum that will be used to verify Wasm module or OCI container.
+  // If the `url` field already references a SHA256 (using the `@sha256:`
+  // notation), it must match the value of this field. If an OCI image is
+  // referenced by tag and this field is set, its checksum will be verified
+  // against the contents of this field after pulling.
   optional string sha256 = 3;
 
   // The pull behaviour to be applied when fetching an OCI image. Only
@@ -241,7 +239,7 @@ message WasmPlugin {
   // same `phase`, they will be applied by priority, in descending order.
   // If `priority` is not set, or two `WasmPlugins` exist with the same
   // value, the ordering will be deterministically derived from name and
-  // namespace of the `WasmPlugins`.
+  // namespace of the `WasmPlugins`. Defaults to `0`.
   google.protobuf.Int64Value priority = 10;
 }
 
@@ -250,15 +248,15 @@ enum PluginPhase {
   // Control plane decides where to insert the plugin. This will generally
   // be at the end of the filter chain, right before the Router.
   // Do not specify `PluginPhase` if the plugin is independent of others.
-  UNSPECIFIED = 0;
+  UNSPECIFIED_PHASE = 0;
 
   // Insert plugin before Istio authentication filters.      
   AUTHN = 1;
 
-  // Insert plugin before Istio authorization filters.
+  // Insert plugin before Istio authorization filters and after Istio authentication filters.
   AUTHZ = 2;
 
-  // Insert plugin before Istio stats filters.
+  // Insert plugin before Istio stats filters and after Istio authorization filters.
   STATS = 3;
 }
 
@@ -267,12 +265,16 @@ enum PluginPhase {
 //
 // buf:lint:ignore ENUM_VALUE_UPPER_SNAKE_CASE
 enum PullPolicy {
+  // Defaults to IfNotPresent, except for OCI images with tag `latest`, for which
+  // the default will be Always.
+  UNSPECIFIED_POLICY = 0;
+
   // If an existing version of the image has been pulled before, that
   // will be used. If no version of the image is present locally, we
   // will pull the latest version.
-  IfNotPresent = 0;
+  IfNotPresent = 1;
 
   // We will always pull the latest version of an image when applying
   // this plugin.
-  Always = 1;
+  Always = 2;
 }
