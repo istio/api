@@ -255,7 +255,7 @@ API version.
 
 ## Exceptions
 
-Many of the guidelines above are related to limiting breaking changes.
+Many of the guidelines above are related to limiting backward incompatible changes.
 These guidelines apply only between released versions of Istio (including patches
 and minor releases). This means that if a commit is merged into the `master` branch,
 breaking changes can still be made to it (such as removal, renaming, etc) up until
