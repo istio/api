@@ -30,10 +30,9 @@ the Istio proxy through WebAssembly filters.</p>
 <p>Criteria used to select the specific set of pods/VMs on which
 this plugin configuration should be applied. If omitted, this
 configuration will be applied to all workload instances in the same
-namespace.  If omitted, the <code>WasmPlugin</code> will be applied to all
-workloads in the same namespace. If the <code>WasmPlugin</code> is
-present in the config root namespace, it will be applied to all
-applicable workloads in any namespace.</p>
+namespace. If the <code>WasmPlugin</code> is present in the config root
+namespace, it will be applied to all applicable workloads in any
+namespace.</p>
 
 </td>
 <td>
@@ -59,12 +58,11 @@ No
 <td><code>sha256</code></td>
 <td><code>string (oneof)</code></td>
 <td>
-<p>SHA256 checksum of Wasm module or OCI container. If the <code>url</code> field
-already references a SHA256 (using the <code>@sha256:</code> notation), the
-<code>url</code> field will take precedence. If the <code>sha256</code> field is set, and
-the <code>url</code> field contains the URL of an OCI image that is referenced
-by tag, the reference will be replaced by the value of the <code>sha256</code>
-field (using the <code>@sha256:</code> notation).</p>
+<p>SHA256 checksum that will be used to verify Wasm module or OCI container.
+If the <code>url</code> field already references a SHA256 (using the <code>@sha256:</code>
+notation), it must match the value of this field. If an OCI image is
+referenced by tag and this field is set, its checksum will be verified
+against the contents of this field after pulling.</p>
 
 </td>
 <td>
@@ -158,7 +156,7 @@ When multiple <code>WasmPlugins</code> are applied to the same workload in the
 same <code>phase</code>, they will be applied by priority, in descending order.
 If <code>priority</code> is not set, or two <code>WasmPlugins</code> exist with the same
 value, the ordering will be deterministically derived from name and
-namespace of the <code>WasmPlugins</code>.</p>
+namespace of the <code>WasmPlugins</code>. Defaults to <code>0</code>.</p>
 
 </td>
 <td>
@@ -180,8 +178,8 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="PluginPhase-UNSPECIFIED">
-<td><code>UNSPECIFIED</code></td>
+<tr id="PluginPhase-UNSPECIFIED_PHASE">
+<td><code>UNSPECIFIED_PHASE</code></td>
 <td>
 <p>Control plane decides where to insert the plugin. This will generally
 be at the end of the filter chain, right before the Router.
@@ -199,14 +197,14 @@ Do not specify <code>PluginPhase</code> if the plugin is independent of others.<
 <tr id="PluginPhase-AUTHZ">
 <td><code>AUTHZ</code></td>
 <td>
-<p>Insert plugin before Istio authorization filters.</p>
+<p>Insert plugin before Istio authorization filters and after Istio authentication filters.</p>
 
 </td>
 </tr>
 <tr id="PluginPhase-STATS">
 <td><code>STATS</code></td>
 <td>
-<p>Insert plugin before Istio stats filters.</p>
+<p>Insert plugin before Istio stats filters and after Istio authorization filters.</p>
 
 </td>
 </tr>
@@ -228,6 +226,14 @@ mirroring K8s behaviour.</p>
 </tr>
 </thead>
 <tbody>
+<tr id="PullPolicy-UNSPECIFIED_POLICY">
+<td><code>UNSPECIFIED_POLICY</code></td>
+<td>
+<p>Defaults to IfNotPresent, except for OCI images with tag <code>latest</code>, for which
+the default will be Always.</p>
+
+</td>
+</tr>
 <tr id="PullPolicy-IfNotPresent">
 <td><code>IfNotPresent</code></td>
 <td>

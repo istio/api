@@ -10,7 +10,7 @@
         "description": "The phase in the filter chain where the plugin will be injected.",
         "type": "string",
         "enum": [
-          "UNSPECIFIED",
+          "UNSPECIFIED_PHASE",
           "AUTHN",
           "AUTHZ",
           "STATS"
@@ -20,6 +20,7 @@
         "description": "The pull behaviour to be applied when fetching an OCI image, mirroring K8s behaviour.",
         "type": "string",
         "enum": [
+          "UNSPECIFIED_POLICY",
           "IfNotPresent",
           "Always"
         ]
@@ -36,7 +37,7 @@
             "type": "string"
           },
           "sha256": {
-            "description": "SHA256 checksum of Wasm module or OCI container. If the `url` field already references a SHA256 (using the `@sha256:` notation), the `url` field will take precedence. If the `sha256` field is set, and the `url` field contains the URL of an OCI image that is referenced by tag, the reference will be replaced by the value of the `sha256` field (using the `@sha256:` notation).",
+            "description": "SHA256 checksum that will be used to verify Wasm module or OCI container. If the `url` field already references a SHA256 (using the `@sha256:` notation), it must match the value of this field. If an OCI image is referenced by tag and this field is set, its checksum will be verified against the contents of this field after pulling.",
             "type": "string"
           },
           "imagePullPolicy": {
@@ -62,7 +63,7 @@
             "$ref": "#/components/schemas/istio.extensions.v1alpha1.PluginPhase"
           },
           "priority": {
-            "description": "Determines ordering of `WasmPlugins` in the same `phase`. When multiple `WasmPlugins` are applied to the same workload in the same `phase`, they will be applied by priority, in descending order. If `priority` is not set, or two `WasmPlugins` exist with the same value, the ordering will be deterministically derived from name and namespace of the `WasmPlugins`.",
+            "description": "Determines ordering of `WasmPlugins` in the same `phase`. When multiple `WasmPlugins` are applied to the same workload in the same `phase`, they will be applied by priority, in descending order. If `priority` is not set, or two `WasmPlugins` exist with the same value, the ordering will be deterministically derived from name and namespace of the `WasmPlugins`. Defaults to `0`.",
             "type": "integer",
             "nullable": true
           }

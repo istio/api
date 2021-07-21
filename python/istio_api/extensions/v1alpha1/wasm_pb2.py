@@ -24,7 +24,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.extensions.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z istio.io/api/extensions/v1alpha1'),
-  serialized_pb=_b('\n\x1e\x65xtensions/v1alpha1/wasm.proto\x12\x19istio.extensions.v1alpha1\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1btype/v1beta1/selector.proto\"\x85\x04\n\nWasmPlugin\x12@\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x08selector\x12\x10\n\x03url\x18\x02 \x01(\tR\x03url\x12\x18\n\x06sha256\x18\x03 \x01(\tH\x00R\x06sha256\x12Q\n\x11image_pull_policy\x18\x04 \x01(\x0e\x32%.istio.extensions.v1alpha1.PullPolicyR\x0fimagePullPolicy\x12*\n\x11image_pull_secret\x18\x05 \x01(\tR\x0fimagePullSecret\x12)\n\x10verification_key\x18\x06 \x01(\tR\x0fverificationKey\x12<\n\rplugin_config\x18\x07 \x01(\x0b\x32\x17.google.protobuf.StructR\x0cpluginConfig\x12\x1f\n\x0bplugin_name\x18\x08 \x01(\tR\npluginName\x12<\n\x05phase\x18\t \x01(\x0e\x32&.istio.extensions.v1alpha1.PluginPhaseR\x05phase\x12\x37\n\x08priority\x18\n \x01(\x0b\x32\x1b.google.protobuf.Int64ValueR\x08priorityB\t\n\x07_sha256*?\n\x0bPluginPhase\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\t\n\x05\x41UTHN\x10\x01\x12\t\n\x05\x41UTHZ\x10\x02\x12\t\n\x05STATS\x10\x03**\n\nPullPolicy\x12\x10\n\x0cIfNotPresent\x10\x00\x12\n\n\x06\x41lways\x10\x01\x42\"Z istio.io/api/extensions/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x1e\x65xtensions/v1alpha1/wasm.proto\x12\x19istio.extensions.v1alpha1\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1btype/v1beta1/selector.proto\"\x85\x04\n\nWasmPlugin\x12@\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x08selector\x12\x10\n\x03url\x18\x02 \x01(\tR\x03url\x12\x18\n\x06sha256\x18\x03 \x01(\tH\x00R\x06sha256\x12Q\n\x11image_pull_policy\x18\x04 \x01(\x0e\x32%.istio.extensions.v1alpha1.PullPolicyR\x0fimagePullPolicy\x12*\n\x11image_pull_secret\x18\x05 \x01(\tR\x0fimagePullSecret\x12)\n\x10verification_key\x18\x06 \x01(\tR\x0fverificationKey\x12<\n\rplugin_config\x18\x07 \x01(\x0b\x32\x17.google.protobuf.StructR\x0cpluginConfig\x12\x1f\n\x0bplugin_name\x18\x08 \x01(\tR\npluginName\x12<\n\x05phase\x18\t \x01(\x0e\x32&.istio.extensions.v1alpha1.PluginPhaseR\x05phase\x12\x37\n\x08priority\x18\n \x01(\x0b\x32\x1b.google.protobuf.Int64ValueR\x08priorityB\t\n\x07_sha256*E\n\x0bPluginPhase\x12\x15\n\x11UNSPECIFIED_PHASE\x10\x00\x12\t\n\x05\x41UTHN\x10\x01\x12\t\n\x05\x41UTHZ\x10\x02\x12\t\n\x05STATS\x10\x03*B\n\nPullPolicy\x12\x16\n\x12UNSPECIFIED_POLICY\x10\x00\x12\x10\n\x0cIfNotPresent\x10\x01\x12\n\n\x06\x41lways\x10\x02\x42\"Z istio.io/api/extensions/v1alpha1b\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,])
 
@@ -35,7 +35,7 @@ _PLUGINPHASE = _descriptor.EnumDescriptor(
   file=DESCRIPTOR,
   values=[
     _descriptor.EnumValueDescriptor(
-      name='UNSPECIFIED', index=0, number=0,
+      name='UNSPECIFIED_PHASE', index=0, number=0,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
@@ -54,7 +54,7 @@ _PLUGINPHASE = _descriptor.EnumDescriptor(
   containing_type=None,
   serialized_options=None,
   serialized_start=672,
-  serialized_end=735,
+  serialized_end=741,
 )
 _sym_db.RegisterEnumDescriptor(_PLUGINPHASE)
 
@@ -66,28 +66,33 @@ _PULLPOLICY = _descriptor.EnumDescriptor(
   file=DESCRIPTOR,
   values=[
     _descriptor.EnumValueDescriptor(
-      name='IfNotPresent', index=0, number=0,
+      name='UNSPECIFIED_POLICY', index=0, number=0,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='Always', index=1, number=1,
+      name='IfNotPresent', index=1, number=1,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='Always', index=2, number=2,
       serialized_options=None,
       type=None),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=737,
-  serialized_end=779,
+  serialized_start=743,
+  serialized_end=809,
 )
 _sym_db.RegisterEnumDescriptor(_PULLPOLICY)
 
 PullPolicy = enum_type_wrapper.EnumTypeWrapper(_PULLPOLICY)
-UNSPECIFIED = 0
+UNSPECIFIED_PHASE = 0
 AUTHN = 1
 AUTHZ = 2
 STATS = 3
-IfNotPresent = 0
-Always = 1
+UNSPECIFIED_POLICY = 0
+IfNotPresent = 1
+Always = 2
 
 
 
