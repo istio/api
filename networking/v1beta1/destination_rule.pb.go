@@ -1861,11 +1861,17 @@ type ClientTLSSettings struct {
 	SubjectAltNames []string `protobuf:"bytes,5,rep,name=subject_alt_names,json=subjectAltNames,proto3" json:"subject_alt_names,omitempty"`
 	// SNI string to present to the server during TLS handshake.
 	Sni string `protobuf:"bytes,6,opt,name=sni,proto3" json:"sni,omitempty"`
-	// InsecureSkipverify specifies whether the proxy should skip verifying the
+	// InsecureSkipVerify specifies whether the proxy should skip verifying the
 	// CA signature and SAN for the server certificate corresponding to the host.
-	// `InsecureSkipVerify` is `false` by default. If set to true, the proxy will
-	// skip verification of the server certificate, regardless of any certificate
-	// validation configuration provided elsewhere.
+	// This flag should only be set if global CA signature verifcation is
+	// enabled, `VerifyCertAtClient` environmental variable is set to `true`,
+	// but no verification is desired for a specific host. If enabled with or
+	// without `VerifyCertAtClient` enabled, verification of the CA signature and
+	// SAN will be skipped.
+	//
+	// `InsecureSkipVerify` is `false` by default.
+	// `VerifyCertAtClient` is `false` by default in Istio version 1.9 until
+	// Istio version 1.13 where, going forward, it will be enabled by default.
 	InsecureSkipVerify   *types.BoolValue `protobuf:"bytes,8,opt,name=insecure_skip_verify,json=insecureSkipVerify,proto3" json:"insecure_skip_verify,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
 	XXX_unrecognized     []byte           `json:"-"`
