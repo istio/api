@@ -977,8 +977,9 @@ message ClientTLSSettings {
   // SAN will be skipped.
   //
   // `InsecureSkipVerify` is `false` by default.
-  // `VerifyCertAtClient` is `false` by default in Istio version 1.9 until
-  // Istio version 1.13 where, going forward, it will be enabled by default.
+  // `VerifyCertAtClient` is `false` by default in Istio version 1.9 but will
+  // be `true` by default in a later version where, going forward, it will be
+  // enabled by default.
   google.protobuf.BoolValue insecure_skip_verify = 8;
 }
 

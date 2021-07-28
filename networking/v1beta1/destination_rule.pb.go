@@ -1870,8 +1870,9 @@ type ClientTLSSettings struct {
 	// SAN will be skipped.
 	//
 	// `InsecureSkipVerify` is `false` by default.
-	// `VerifyCertAtClient` is `false` by default in Istio version 1.9 until
-	// Istio version 1.13 where, going forward, it will be enabled by default.
+	// `VerifyCertAtClient` is `false` by default in Istio version 1.9 but will
+	// be `true` by default in a later version where, going forward, it will be
+	// enabled by default.
 	InsecureSkipVerify   *types.BoolValue `protobuf:"bytes,8,opt,name=insecure_skip_verify,json=insecureSkipVerify,proto3" json:"insecure_skip_verify,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
 	XXX_unrecognized     []byte           `json:"-"`
