@@ -416,6 +416,7 @@ message MeshConfig {
   // If not specified, this will be enabled by default.
   google.protobuf.BoolValue enable_prometheus_merge = 51;
 
+  // $hide_from_docs
   // `VerifyCertificateAtClient` sets the mesh global default for peer certificate validation
   // at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination
   // modes are used. This setting can be overridden at the host level via DestinationRule API.
@@ -436,7 +437,7 @@ message MeshConfig {
   // For wildcard host name in DestinationRule, client-side proxy will do a suffix match. For example,
   // if host is `*.x.y.com`, client-side proxy will verify the presented server certificate SAN matches
   // ``.x.y.com` suffix.
-  google.protobuf.BoolValue verify_certificate_at_client = 54;
+  google.protobuf.BoolValue verify_certificate_at_client = 54 [deprecated=true];
 
   message CA {
     // REQUIRED. Address of the CA server implementing the Istio CA gRPC API.

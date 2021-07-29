@@ -33035,7 +33035,13 @@
               {
                 "id": 54,
                 "name": "verify_certificate_at_client",
-                "type": "google.protobuf.BoolValue"
+                "type": "google.protobuf.BoolValue",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 55,
@@ -33248,6 +33254,16 @@
                     "id": 9,
                     "name": "skywalking",
                     "type": "SkyWalkingTracingProvider"
+                  },
+                  {
+                    "id": 10,
+                    "name": "prometheus",
+                    "type": "PrometheusMetricsProvider"
+                  },
+                  {
+                    "id": 11,
+                    "name": "envoy_file_access_log",
+                    "type": "EnvoyFileAccessLogProvider"
                   }
                 ],
                 "messages": [
@@ -33520,6 +33536,19 @@
                         "type": "uint32"
                       }
                     ]
+                  },
+                  {
+                    "name": "PrometheusMetricsProvider"
+                  },
+                  {
+                    "name": "EnvoyFileAccessLogProvider",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "path",
+                        "type": "string"
+                      }
+                    ]
                   }
                 ]
               },
@@ -33529,7 +33558,20 @@
                   {
                     "id": 1,
                     "name": "tracing",
-                    "type": "string"
+                    "type": "string",
+                    "is_repeated": true
+                  },
+                  {
+                    "id": 2,
+                    "name": "metrics",
+                    "type": "string",
+                    "is_repeated": true
+                  },
+                  {
+                    "id": 3,
+                    "name": "access_logging",
+                    "type": "string",
+                    "is_repeated": true
                   }
                 ]
               },
@@ -34868,6 +34910,11 @@
                 "id": 6,
                 "name": "sni",
                 "type": "string"
+              },
+              {
+                "id": 8,
+                "name": "insecure_skip_verify",
+                "type": "google.protobuf.BoolValue"
               }
             ]
           },
@@ -37579,6 +37626,11 @@
                 "id": 6,
                 "name": "sni",
                 "type": "string"
+              },
+              {
+                "id": 8,
+                "name": "insecure_skip_verify",
+                "type": "google.protobuf.BoolValue"
               }
             ]
           },
@@ -41260,6 +41312,84 @@
     {
       "protopath": "telemetry:/:v1alpha1:/:telemetry.proto",
       "def": {
+        "enums": [
+          {
+            "name": "WorkloadMode",
+            "enum_fields": [
+              {
+                "name": "CLIENT_AND_SERVER"
+              },
+              {
+                "name": "CLIENT",
+                "integer": 1
+              },
+              {
+                "name": "SERVER",
+                "integer": 2
+              }
+            ]
+          },
+          {
+            "name": "MetricSelector.IstioMetric",
+            "enum_fields": [
+              {
+                "name": "ALL_METRICS"
+              },
+              {
+                "name": "REQUEST_COUNT",
+                "integer": 1
+              },
+              {
+                "name": "REQUEST_DURATION",
+                "integer": 2
+              },
+              {
+                "name": "REQUEST_SIZE",
+                "integer": 3
+              },
+              {
+                "name": "RESPONSE_SIZE",
+                "integer": 4
+              },
+              {
+                "name": "TCP_OPENED_CONNECTIONS",
+                "integer": 5
+              },
+              {
+                "name": "TCP_CLOSED_CONNECTIONS",
+                "integer": 6
+              },
+              {
+                "name": "TCP_SENT_BYTES",
+                "integer": 7
+              },
+              {
+                "name": "TCP_RECEIVED_BYTES",
+                "integer": 8
+              },
+              {
+                "name": "GRPC_REQUEST_MESSAGES",
+                "integer": 9
+              },
+              {
+                "name": "GRPC_RESPONSE_MESSAGES",
+                "integer": 10
+              }
+            ]
+          },
+          {
+            "name": "TagOverride.Operation",
+            "enum_fields": [
+              {
+                "name": "UPSERT"
+              },
+              {
+                "name": "REMOVE",
+                "integer": 1
+              }
+            ]
+          }
+        ],
         "messages": [
           {
             "name": "Telemetry",
@@ -41273,6 +41403,18 @@
                 "id": 2,
                 "name": "tracing",
                 "type": "Tracing",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "metrics",
+                "type": "Metrics",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "access_logging",
+                "type": "AccessLogging",
                 "is_repeated": true
               }
             ]
@@ -41377,6 +41519,101 @@
                 "id": 1,
                 "name": "name",
                 "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "Metrics",
+            "fields": [
+              {
+                "id": 1,
+                "name": "providers",
+                "type": "ProviderRef",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "overrides",
+                "type": "MetricsOverrides",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "MetricSelector",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metric",
+                "type": "IstioMetric"
+              },
+              {
+                "id": 2,
+                "name": "custom_metric",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "mode",
+                "type": "WorkloadMode"
+              }
+            ]
+          },
+          {
+            "name": "MetricsOverrides",
+            "fields": [
+              {
+                "id": 1,
+                "name": "match",
+                "type": "MetricSelector"
+              },
+              {
+                "id": 2,
+                "name": "disabled",
+                "type": "google.protobuf.BoolValue"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 3,
+                  "name": "tag_overrides",
+                  "type": "TagOverride"
+                }
+              }
+            ],
+            "messages": [
+              {
+                "name": "TagOverride",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "operation",
+                    "type": "Operation"
+                  },
+                  {
+                    "id": 2,
+                    "name": "value",
+                    "type": "string"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "AccessLogging",
+            "fields": [
+              {
+                "id": 1,
+                "name": "providers",
+                "type": "ProviderRef",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "disabled",
+                "type": "google.protobuf.BoolValue"
               }
             ]
           }
