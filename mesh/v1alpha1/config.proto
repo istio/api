@@ -871,6 +871,8 @@ message MeshConfig {
   // Setting the number of attempts to 0 disables retry policy globally.
   // This setting can be overriden on a per-host basis using the Virtual Service
   // API.
+  // All settings in the retry policy except `perTryTimeout` can currently be
+  // configured globally via this field.
   istio.networking.v1alpha3.HTTPRetry default_http_retry_policy = 62;
 
   // $hide_from_docs

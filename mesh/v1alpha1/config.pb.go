@@ -587,6 +587,8 @@ type MeshConfig struct {
 	// Setting the number of attempts to 0 disables retry policy globally.
 	// This setting can be overriden on a per-host basis using the Virtual Service
 	// API.
+	// All settings in the retry policy except `perTryTimeout` can currently be
+	// configured globally via this field.
 	DefaultHttpRetryPolicy *v1alpha3.HTTPRetry `protobuf:"bytes,62,opt,name=default_http_retry_policy,json=defaultHttpRetryPolicy,proto3" json:"defaultHttpRetryPolicy,omitempty"`
 	XXX_NoUnkeyedLiteral   struct{}            `json:"-"`
 	XXX_unrecognized       []byte              `json:"-"`
