@@ -17,9 +17,6 @@ syntax = "proto3";
 import "type/v1beta1/selector.proto";
 import "google/protobuf/wrappers.proto";
 
-option go_package = "istio.io/api/telemetry/v1alpha1";
-
-package istio.telemetry.v1alpha1;
 
 // $schema: istio.telemetry.v1alpha1.Telemetry
 // $title: Telemetry
@@ -216,7 +213,11 @@ package istio.telemetry.v1alpha1;
 //   accessLogging:
 //   - disabled: true
 // ```
-//
+
+package istio.telemetry.v1alpha1;
+
+option go_package = "istio.io/api/telemetry/v1alpha1";
+
 // <!-- crd generation tags
 // +cue-gen:Telemetry:groupName:telemetry.istio.io
 // +cue-gen:Telemetry:version:v1alpha1
