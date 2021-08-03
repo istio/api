@@ -1844,7 +1844,8 @@ type ClientTLSSettings struct {
 	// same namespace with the proxy using the certificates.
 	// The secret (of type `generic`)should contain the
 	// following keys and values: `key: <privateKey>`,
-	// `cert: <serverCert>`, `cacert: <CACertificate>`.
+	// `cert: <clientCert>`, `cacert: <CACertificate>`.
+	// Here CACertificate is used to verify the server certificate.
 	// Secret of type tls for client certificates along with
 	// ca.crt key for CA certificates is also supported.
 	// Only one of client certificates and CA certificate
