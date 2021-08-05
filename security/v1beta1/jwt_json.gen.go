@@ -39,6 +39,17 @@ func (this *JWTHeader) UnmarshalJSON(b []byte) error {
 	return JwtUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for ClaimToHeader
+func (this *ClaimToHeader) MarshalJSON() ([]byte, error) {
+	str, err := JwtMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ClaimToHeader
+func (this *ClaimToHeader) UnmarshalJSON(b []byte) error {
+	return JwtUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 var (
 	JwtMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
 	JwtUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}

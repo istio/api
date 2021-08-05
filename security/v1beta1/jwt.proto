@@ -133,6 +133,18 @@ message JWTRule {
   // the payload will not be emitted.
   string output_payload_to_header = 8;
 
+  // This field specifies a list of operations to copy the claim to HTTP headers on a successfully verified token.
+  // This differs from the `output_payload_to_header` by allowing outputting individual claims instead of the whole payload.
+  // The header specified in each operation in the list must be unique.
+  // ```
+  //   outputClaimToHeader:
+  //   - header: x-my-company-jwt-group
+  //     claim: my-group
+  //   - header: x-test-environment-flag
+  //     claim: test-flag
+  // ```
+  repeated ClaimToHeader output_claim_to_header = 11;
+
   // If set to true, the orginal token will be kept for the ustream request. Default is false.
   bool forward_original_token = 9;
 }
@@ -146,4 +158,14 @@ message JWTHeader {
   // For example, for "Authorization: Bearer <token>", prefix="Bearer " with a space at the end.
   // If the header doesn't have this exact prefix, it is considerred invalid.
   string prefix = 2;
+}
+
+// This message specifies the detail for copying claim to header.
+message ClaimToHeader {
+  // The name of the header to be created. The header will be overridden if it already exists in the request.
+  string header = 1;
+
+  // The name of the claim to be copied from. Only claim of type string is supported.
+  // The header will be set to an empty value if the claim does not exist or the type of the claim is not string.
+  string claim = 2;
 }

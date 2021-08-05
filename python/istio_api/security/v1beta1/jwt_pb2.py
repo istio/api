@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.security.v1beta1',
   syntax='proto3',
   serialized_options=_b('Z\035istio.io/api/security/v1beta1'),
-  serialized_pb=_b('\n\x1asecurity/v1beta1/jwt.proto\x12\x16istio.security.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\"\xca\x02\n\x07JWTRule\x12\x1c\n\x06issuer\x18\x01 \x01(\tB\x04\xe2\x41\x01\x02R\x06issuer\x12\x1c\n\taudiences\x18\x02 \x03(\tR\taudiences\x12\x19\n\x08jwks_uri\x18\x03 \x01(\tR\x07jwksUri\x12\x12\n\x04jwks\x18\n \x01(\tR\x04jwks\x12\x44\n\x0c\x66rom_headers\x18\x06 \x03(\x0b\x32!.istio.security.v1beta1.JWTHeaderR\x0b\x66romHeaders\x12\x1f\n\x0b\x66rom_params\x18\x07 \x03(\tR\nfromParams\x12\x37\n\x18output_payload_to_header\x18\x08 \x01(\tR\x15outputPayloadToHeader\x12\x34\n\x16\x66orward_original_token\x18\t \x01(\x08R\x14\x66orwardOriginalToken\"=\n\tJWTHeader\x12\x18\n\x04name\x18\x01 \x01(\tB\x04\xe2\x41\x01\x02R\x04name\x12\x16\n\x06prefix\x18\x02 \x01(\tR\x06prefixB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
+  serialized_pb=_b('\n\x1asecurity/v1beta1/jwt.proto\x12\x16istio.security.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\"\xa6\x03\n\x07JWTRule\x12\x1c\n\x06issuer\x18\x01 \x01(\tB\x04\xe2\x41\x01\x02R\x06issuer\x12\x1c\n\taudiences\x18\x02 \x03(\tR\taudiences\x12\x19\n\x08jwks_uri\x18\x03 \x01(\tR\x07jwksUri\x12\x12\n\x04jwks\x18\n \x01(\tR\x04jwks\x12\x44\n\x0c\x66rom_headers\x18\x06 \x03(\x0b\x32!.istio.security.v1beta1.JWTHeaderR\x0b\x66romHeaders\x12\x1f\n\x0b\x66rom_params\x18\x07 \x03(\tR\nfromParams\x12\x37\n\x18output_payload_to_header\x18\x08 \x01(\tR\x15outputPayloadToHeader\x12Z\n\x16output_claim_to_header\x18\x0b \x03(\x0b\x32%.istio.security.v1beta1.ClaimToHeaderR\x13outputClaimToHeader\x12\x34\n\x16\x66orward_original_token\x18\t \x01(\x08R\x14\x66orwardOriginalToken\"=\n\tJWTHeader\x12\x18\n\x04name\x18\x01 \x01(\tB\x04\xe2\x41\x01\x02R\x04name\x12\x16\n\x06prefix\x18\x02 \x01(\tR\x06prefix\"=\n\rClaimToHeader\x12\x16\n\x06header\x18\x01 \x01(\tR\x06header\x12\x14\n\x05\x63laim\x18\x02 \x01(\tR\x05\x63laimB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,])
 
@@ -85,7 +85,14 @@ _JWTRULE = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='outputPayloadToHeader', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='forward_original_token', full_name='istio.security.v1beta1.JWTRule.forward_original_token', index=7,
+      name='output_claim_to_header', full_name='istio.security.v1beta1.JWTRule.output_claim_to_header', index=7,
+      number=11, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='outputClaimToHeader', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='forward_original_token', full_name='istio.security.v1beta1.JWTRule.forward_original_token', index=8,
       number=9, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
@@ -104,7 +111,7 @@ _JWTRULE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=88,
-  serialized_end=418,
+  serialized_end=510,
 )
 
 
@@ -141,13 +148,53 @@ _JWTHEADER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=420,
-  serialized_end=481,
+  serialized_start=512,
+  serialized_end=573,
+)
+
+
+_CLAIMTOHEADER = _descriptor.Descriptor(
+  name='ClaimToHeader',
+  full_name='istio.security.v1beta1.ClaimToHeader',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='header', full_name='istio.security.v1beta1.ClaimToHeader.header', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='header', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='claim', full_name='istio.security.v1beta1.ClaimToHeader.claim', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='claim', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=575,
+  serialized_end=636,
 )
 
 _JWTRULE.fields_by_name['from_headers'].message_type = _JWTHEADER
+_JWTRULE.fields_by_name['output_claim_to_header'].message_type = _CLAIMTOHEADER
 DESCRIPTOR.message_types_by_name['JWTRule'] = _JWTRULE
 DESCRIPTOR.message_types_by_name['JWTHeader'] = _JWTHEADER
+DESCRIPTOR.message_types_by_name['ClaimToHeader'] = _CLAIMTOHEADER
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 JWTRule = _reflection.GeneratedProtocolMessageType('JWTRule', (_message.Message,), {
@@ -163,6 +210,13 @@ JWTHeader = _reflection.GeneratedProtocolMessageType('JWTHeader', (_message.Mess
   # @@protoc_insertion_point(class_scope:istio.security.v1beta1.JWTHeader)
   })
 _sym_db.RegisterMessage(JWTHeader)
+
+ClaimToHeader = _reflection.GeneratedProtocolMessageType('ClaimToHeader', (_message.Message,), {
+  'DESCRIPTOR' : _CLAIMTOHEADER,
+  '__module__' : 'security.v1beta1.jwt_pb2'
+  # @@protoc_insertion_point(class_scope:istio.security.v1beta1.ClaimToHeader)
+  })
+_sym_db.RegisterMessage(ClaimToHeader)
 
 
 DESCRIPTOR._options = None
