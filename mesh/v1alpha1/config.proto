@@ -866,6 +866,7 @@ message MeshConfig {
   // If not set, the NormalizationType.DEFAULT configuration will be used.
   ProxyPathNormalization path_normalization = 61;
 
+  // $hide_from_docs
   // Configure the default HTTP retry policy.
   // The default number of retry attempts is set at 2 for these errors:
   //   "connect-failure,refused-stream,unavailable,cancelled,retriable-status-codes".

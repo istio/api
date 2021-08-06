@@ -582,6 +582,7 @@ type MeshConfig struct {
 	// path proxied to the upstream service.
 	// If not set, the NormalizationType.DEFAULT configuration will be used.
 	PathNormalization *MeshConfig_ProxyPathNormalization `protobuf:"bytes,61,opt,name=path_normalization,json=pathNormalization,proto3" json:"pathNormalization,omitempty"`
+	// $hide_from_docs
 	// Configure the default HTTP retry policy.
 	// The default number of retry attempts is set at 2 for these errors:
 	//   "connect-failure,refused-stream,unavailable,cancelled,retriable-status-codes".
