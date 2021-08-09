@@ -164,14 +164,13 @@ var (
 
 	TopologyCluster = Instance {
 		Name:          "topology.istio.io/cluster",
-		Description:   "A workload label that indicates the name of the cluster "+
-                        "that contains the workload. This is typically configured "+
-                        "during control plane installation, using either an "+
-                        "auto-generated or admin-specified value. Setting this "+
-                        "allows workload selection by cluster. For example, a "+
-                        "service owner could create a DestinationRule containing a "+
-                        "subset per cluster and then use these subsets to control "+
-                        "traffic flow to each cluster independently.",
+		Description:   "This label indicates the name of a cluster for its "+
+                        "workloads, which can be configured during Istio control "+
+                        "plane installation. Setting this allows workload "+
+                        "selection by cluster using DestinationRules. For example, "+
+                        "a service owner could create a DestinationRule containing "+
+                        "a subset per cluster and then use these subsets to "+
+                        "control traffic flow to each cluster independently.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
