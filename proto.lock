@@ -32290,6 +32290,126 @@
       }
     },
     {
+      "protopath": "extensions:/:v1alpha1:/:wasm.proto",
+      "def": {
+        "enums": [
+          {
+            "name": "PluginPhase",
+            "enum_fields": [
+              {
+                "name": "UNSPECIFIED_PHASE"
+              },
+              {
+                "name": "AUTHN",
+                "integer": 1
+              },
+              {
+                "name": "AUTHZ",
+                "integer": 2
+              },
+              {
+                "name": "STATS",
+                "integer": 3
+              }
+            ]
+          },
+          {
+            "name": "PullPolicy",
+            "enum_fields": [
+              {
+                "name": "UNSPECIFIED_POLICY"
+              },
+              {
+                "name": "IfNotPresent",
+                "integer": 1
+              },
+              {
+                "name": "Always",
+                "integer": 2
+              }
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "name": "WasmPlugin",
+            "fields": [
+              {
+                "id": 1,
+                "name": "selector",
+                "type": "istio.type.v1beta1.WorkloadSelector"
+              },
+              {
+                "id": 2,
+                "name": "url",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "sha256",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "image_pull_policy",
+                "type": "PullPolicy"
+              },
+              {
+                "id": 5,
+                "name": "image_pull_secret",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "verification_key",
+                "type": "string"
+              },
+              {
+                "id": 7,
+                "name": "plugin_config",
+                "type": "google.protobuf.Struct"
+              },
+              {
+                "id": 8,
+                "name": "plugin_name",
+                "type": "string"
+              },
+              {
+                "id": 9,
+                "name": "phase",
+                "type": "PluginPhase"
+              },
+              {
+                "id": 10,
+                "name": "priority",
+                "type": "google.protobuf.Int64Value"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/wrappers.proto"
+          },
+          {
+            "path": "google/protobuf/struct.proto"
+          },
+          {
+            "path": "type/v1beta1/selector.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.extensions.v1alpha1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/extensions/v1alpha1"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "mcp:/:v1alpha1:/:mcp.proto",
       "def": {
         "messages": [
@@ -34931,6 +35051,12 @@
                 "id": 2,
                 "name": "failover",
                 "type": "Failover",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "failover_priority",
+                "type": "string",
                 "is_repeated": true
               },
               {
@@ -37647,6 +37773,12 @@
                 "id": 2,
                 "name": "failover",
                 "type": "Failover",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "failover_priority",
+                "type": "string",
                 "is_repeated": true
               },
               {
