@@ -166,11 +166,11 @@ var (
 		Name:          "topology.istio.io/cluster",
 		Description:   "This label indicates the name of a cluster for its "+
                         "workloads, which can be configured during Istio control "+
-                        "plane installation. Setting this allows workload "+
-                        "selection by cluster using DestinationRules. For example, "+
-                        "a service owner could create a DestinationRule containing "+
-                        "a subset per cluster and then use these subsets to "+
-                        "control traffic flow to each cluster independently.",
+                        "plane installation. This allows workload selection by "+
+                        "cluster using DestinationRules. For example, a service "+
+                        "owner could create a DestinationRule containing a subset "+
+                        "per cluster and then use these subsets to control traffic "+
+                        "flow to each cluster independently.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
