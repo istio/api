@@ -372,17 +372,24 @@
         "type": "object",
         "properties": {
           "distribute": {
-            "description": "Optional: only one of distribute or failover can be set. Explicitly specify loadbalancing weight across different zones and geographical locations. Refer to [Locality weighted load balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight) If empty, the locality weight is set according to the endpoints number within it.",
+            "description": "Optional: only one of distribute, failover or failoverPriority can be set. Explicitly specify loadbalancing weight across different zones and geographical locations. Refer to [Locality weighted load balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight) If empty, the locality weight is set according to the endpoints number within it.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.networking.v1beta1.LocalityLoadBalancerSetting.Distribute"
             }
           },
           "failover": {
-            "description": "Optional: only failover or distribute can be set. Explicitly specify the region traffic will land on when endpoints in local region becomes unhealthy. Should be used together with OutlierDetection to detect unhealthy endpoints. Note: if no OutlierDetection specified, this will not take effect.",
+            "description": "Optional: only one of distribute, failover or failoverPriority can be set. Explicitly specify the region traffic will land on when endpoints in local region becomes unhealthy. Should be used together with OutlierDetection to detect unhealthy endpoints. Note: if no OutlierDetection specified, this will not take effect.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.networking.v1beta1.LocalityLoadBalancerSetting.Failover"
+            }
+          },
+          "failoverPriority": {
+            "description": "failoverPriority is an ordered list of labels used to sort endpoints to do priority based load balancing. This is to support traffic failover across different groups of endpoints. Suppose there are total N labels specified: 1. Endpoints matching all N labels with the client proxy have priority P(0) i.e. the highest priority. 2. Endpoints matching the first N-1 labels with the client proxy have priority P(1) i.e. second highest priority. 3. By extension of this logic, endpoints matching only the first label with the client proxy has priority P(N-1) i.e. second lowest priority. 4. Endpoints matching no labels with the client proxy have priority P(N) i.e. lowest priority.",
+            "type": "array",
+            "items": {
+              "type": "string"
             }
           },
           "enabled": {
