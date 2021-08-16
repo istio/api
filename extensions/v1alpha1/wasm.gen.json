@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Extend the functionality provided by the Istio proxy through WebAssembly filters",
+    "title": "Extend the functionality provided by the Istio proxy through WebAssembly filters.",
     "version": "v1alpha1"
   },
   "components": {
