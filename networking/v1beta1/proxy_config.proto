@@ -1,0 +1,73 @@
+// Copyright 2021 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/wrappers.proto";
+import "networking/v1beta1/sidecar.proto";
+
+package istio.networking.v1beta1;
+
+option go_package="istio.io/api/networking/v1beta1";
+
+// `ProxyConfig` defines configuration for individual workloads. `ProxyConfig` can be configured on a per-workload basis, a per-revision
+// basis, a per-namespace basis, or mesh-wide. `ProxyConfig` is not a required resource; there are default values in place.
+//
+// To set the mesh wide defaults, create a `ProxyConfig` resource in the root namespace.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: ProxyConfig
+// metadata:
+//   name: my-proxyconfig
+//   namespace: istio-system
+// spec:
+//   concurrency: 0
+// ```
+//
+// This can also be configured per-workload basis by setting the `workloadSelector` field on the `ProxyConfig` resource. For example:
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: ProxyConfig
+// metadata:
+//   name: per-workload-proxyconfig
+//   namespace: example
+// spec:
+//   workloadSelector:
+//     labels:
+//       app: ratings
+//   concurrency: 0
+// ```
+//
+//
+// If a `ProxyConfig` CRD is defined that matches a workload it will take precedence over the annotation for that workload.
+// Furthermore, options configured in a `ProxyConfig` CRD matching a workload will take precedence over mesh wide defaults.
+//
+// Note: fields in ProxyConfig are not dynamically configured; changes will require restart of workloads to take effect.
+message ProxyConfig {
+  // Criteria used to select the specific set of pods/VMs on which this
+  // `ProxyConfig` configuration should be applied.
+  WorkloadSelector workload_selector = 1;
+
+  // The number of worker threads to run.
+  // If unset, defaults to 2. If set to 0, this will be configured to use all cores on the machine using
+  // CPU requests and limits.
+  google.protobuf.Int32Value concurrency = 2;
+
+  // Additional environment variables for the proxy.
+  // Names starting with `ISTIO_META_` will be included in the generated bootstrap and sent to the XDS server.
+  map<string,string> proxy_metadata = 3;
+}
