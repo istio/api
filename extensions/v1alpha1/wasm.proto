@@ -20,14 +20,14 @@ import "type/v1beta1/selector.proto";
 
 // $schema: istio.extensions.v1alpha1.WasmPlugin
 // $title: Wasm Plugin
-// $description: Extend the functionality provided by the Istio proxy through WebAssembly filters
+// $description: Extend the functionality provided by the Istio proxy through WebAssembly filters.
 // $location: https://istio.io/docs/reference/config/extensions/wasm-plugin.html
 // $aliases: [/docs/reference/config/extensions/v1alpha1/wasm-plugin]
 //
 // WasmPlugins provides a mechanism to extend the functionality provided by
 // the Istio proxy through WebAssembly filters.
 //
-// Order of execution (as part of Envoy's filter chain) is determined by 
+// Order of execution (as part of Envoy's filter chain) is determined by
 // phase and priority settings, allowing the configuration of complex
 // interactions between user-supplied WasmPlugins and Istio's internal
 // filters.
@@ -84,7 +84,7 @@ import "type/v1beta1/selector.proto";
 // which can be verified by the Istio authn plugin. Then, the `acl-check` plugin
 // kicks in, passing the JWT to a policy server, which in turn responds with a
 // signed token that contains information about which files and functions of the
-// system are available to the user that was previously authenticated. The 
+// system are available to the user that was previously authenticated. The
 // `acl-check` filter writes this token to a header. Finally, the `check-header`
 // filter verifies the token in that header and makes sure that the token's
 // contents (the permitted 'function') matches its plugin configuration.
@@ -250,7 +250,7 @@ enum PluginPhase {
   // Do not specify `PluginPhase` if the plugin is independent of others.
   UNSPECIFIED_PHASE = 0;
 
-  // Insert plugin before Istio authentication filters.      
+  // Insert plugin before Istio authentication filters.
   AUTHN = 1;
 
   // Insert plugin before Istio authorization filters and after Istio authentication filters.
