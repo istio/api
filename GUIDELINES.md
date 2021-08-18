@@ -260,3 +260,6 @@ These guidelines apply only between released versions of Istio (including patche
 and minor releases). This means that if a commit is merged into the `master` branch,
 breaking changes can still be made to it (such as removal, renaming, etc) up until
 it has been officially released.
+
+While violating the above guidelines is generally disallowed, exceptions may be made
+on a case-by-case basis.
