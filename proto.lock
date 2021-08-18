@@ -33189,6 +33189,11 @@
                 "id": 61,
                 "name": "path_normalization",
                 "type": "ProxyPathNormalization"
+              },
+              {
+                "id": 62,
+                "name": "default_http_retry_policy",
+                "type": "istio.networking.v1alpha3.HTTPRetry"
               }
             ],
             "reserved_ids": [
@@ -33757,6 +33762,9 @@
           },
           {
             "path": "networking/v1alpha3/destination_rule.proto"
+          },
+          {
+            "path": "networking/v1alpha3/virtual_service.proto"
           },
           {
             "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
