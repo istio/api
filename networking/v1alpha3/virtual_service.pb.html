@@ -2303,6 +2303,19 @@ See the <a href="https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview
 No
 </td>
 </tr>
+<tr id="HTTPRetry-retriable_status_codes">
+<td><code>retriableStatusCodes</code></td>
+<td><code>string</code></td>
+<td>
+<p>Specifies status codes for which a retry is attempted if the upstream server
+responds with any status code listed here.
+Default retry policy retries Service Unavailable(503) status code.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>

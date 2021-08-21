@@ -1567,6 +1567,11 @@ message HTTPRetry {
   // Flag to specify whether the retries should retry to other localities.
   // See the [retry plugin configuration](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_connection_management#retry-plugin-configuration) for more details.
   google.protobuf.BoolValue retry_remote_localities = 4;
+
+  // Specifies status codes for which a retry is attempted if the upstream server
+  // responds with any status code listed here.
+  // Default retry policy retries Service Unavailable(503) status code.
+  string retriable_status_codes = 5;
 }
 
 // Describes the Cross-Origin Resource Sharing (CORS) policy, for a given

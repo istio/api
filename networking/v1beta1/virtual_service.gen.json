@@ -354,6 +354,10 @@
             "description": "Flag to specify whether the retries should retry to other localities. See the [retry plugin configuration](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_connection_management#retry-plugin-configuration) for more details.",
             "type": "boolean",
             "nullable": true
+          },
+          "retriableStatusCodes": {
+            "description": "Specifies status codes for which a retry is attempted if the upstream server responds with any status code listed here. Default retry policy retries Service Unavailable(503) status code.",
+            "type": "string"
           }
         }
       },
