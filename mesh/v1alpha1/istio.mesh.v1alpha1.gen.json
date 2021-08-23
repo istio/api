@@ -1781,7 +1781,7 @@
         }
       },
       "istio.networking.v1alpha3.HTTPRetry": {
-        "description": "Describes the retry policy to use when a HTTP request fails. For example, the following rule sets the maximum number of retries to 3 when calling ratings:v1 service, with a 2s timeout per retry attempt.",
+        "description": "Describes the retry policy to use when a HTTP request fails. For example, the following rule sets the maximum number of retries to 3 when calling ratings:v1 service, with a 2s timeout per retry attempt. A retry will be attempted if there is a gateway-error, connect-failure, refused_stream or when the upstream server responds with Service Unavailable(503).",
         "type": "object",
         "properties": {
           "attempts": {
@@ -1794,17 +1794,13 @@
             "type": "string"
           },
           "retryOn": {
-            "description": "Specifies the conditions under which retry takes place. One or more policies can be specified using a ‘,’ delimited list. See the [retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on) and [gRPC retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on) for more details.",
+            "description": "Specifies the conditions under which retry takes place. One or more policies can be specified using a ‘,’ delimited list. If retry_on specifies a valid HTTP status, it will be added to retriable_status_codes retry policy. See the [retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on) and [gRPC retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on) for more details.",
             "type": "string"
           },
           "retryRemoteLocalities": {
             "description": "Flag to specify whether the retries should retry to other localities. See the [retry plugin configuration](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_connection_management#retry-plugin-configuration) for more details.",
             "type": "boolean",
             "nullable": true
-          },
-          "retriableStatusCodes": {
-            "description": "Specifies status codes for which a retry is attempted if the upstream server responds with any status code listed here. Default retry policy retries Service Unavailable(503) status code.",
-            "type": "string"
           }
         }
       },
