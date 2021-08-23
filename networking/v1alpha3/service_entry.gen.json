@@ -99,7 +99,8 @@
         "enum": [
           "NONE",
           "STATIC",
-          "DNS"
+          "DNS",
+          "LOGICAL"
         ]
       },
       "istio.networking.v1alpha3.WorkloadEntry": {

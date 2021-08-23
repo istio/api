@@ -1063,6 +1063,19 @@ domain socket endpoints.</p>
 
 </td>
 </tr>
+<tr id="ServiceEntry-Resolution-LOGICAL">
+<td><code>LOGICAL</code></td>
+<td>
+<p>Attempt to resolve the IP address by querying the ambient DNS,
+during request processing. Unlike DNS, connections made to
+hosts will be retained even if DNS records change frequently under
+LOGICAL. This is best suited for large web scale services that
+must be accessed via DNS. The proxy will resolve the DNS address
+specified in the hosts field, if wildcards are not used. DNS resolution
+cannot be used with Unix domain socket endpoints.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
