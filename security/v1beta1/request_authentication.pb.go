@@ -61,8 +61,8 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //         requestPrincipals: ["*"]
 // ```
 //
-// - A policy in root namespace ("istio-system") applies to workloads in all namespaces in a mesh.
-// The following policy makes all sidecars perform JWT authentication.
+// - A policy in root namespace, "istio-system" by default, applies to workloads in all namespaces
+// in a mesh. The following policy makes all workloads perform JWT authentication.
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
