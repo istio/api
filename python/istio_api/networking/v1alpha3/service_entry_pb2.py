@@ -80,7 +80,7 @@ _SERVICEENTRY_RESOLUTION = _descriptor.EnumDescriptor(
   containing_type=None,
   serialized_options=None,
   serialized_start=804,
-  serialized_end=860,
+  serialized_end=868,
 )
 _sym_db.RegisterEnumDescriptor(_SERVICEENTRY_RESOLUTION)
 
@@ -171,7 +171,7 @@ _SERVICEENTRY = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=216,
-  serialized_end=860,
+  serialized_end=868,
 )
 
 _SERVICEENTRY.fields_by_name['ports'].message_type = networking_dot_v1alpha3_dot_gateway__pb2._PORT

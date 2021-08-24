@@ -100,7 +100,7 @@
           "NONE",
           "STATIC",
           "DNS",
-          "LOGICAL"
+          "DNS_ROUND_ROBIN"
         ]
       },
       "istio.networking.v1alpha3.WorkloadEntry": {
