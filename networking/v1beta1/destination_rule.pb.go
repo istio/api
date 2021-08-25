@@ -2034,7 +2034,9 @@ type LocalityLoadBalancerSetting struct {
 	// 1. Endpoints matching all N labels with the client proxy have priority P(0) i.e. the highest priority.
 	// 2. Endpoints matching the first N-1 labels with the client proxy have priority P(1) i.e. second highest priority.
 	// 3. By extension of this logic, endpoints matching only the first label with the client proxy has priority P(N-1) i.e. second lowest priority.
-	// 4. Endpoints matching no labels with the client proxy have priority P(N) i.e. lowest priority.
+	// 4. All the other endpoints have priority P(N) i.e. lowest priority.
+	//
+	// Note: For a label to be considered for match, the previous labels must match, i.e. nth label would be considered matched only if first n-1 labels match.
 	//
 	// It can be any label specified on both client and server workloads.
 	// The following labels which have special semantic meaning are also supported:
@@ -2057,9 +2059,9 @@ type LocalityLoadBalancerSetting struct {
 	//
 	// 1. endpoints match same [network, region, zone, subzone] label with the client proxy have the highest priority.
 	// 2. endpoints have same [network, region, zone] label but different [subzone] label with the client proxy have the second highest priority.
-	// 3. endpoints have same [network, region] label but different [zone, subzone] label with the client proxy have the third highest priority.
-	// 4. endpoints have same [network] but different [region, zone, subzone] labels with the client proxy have the fourth highest priority.
-	// 5. all the other endpoints that does not match any labels have the same lowest priority.
+	// 3. endpoints have same [network, region] label but different [zone] label with the client proxy have the third highest priority.
+	// 4. endpoints have same [network] but different [region] labels with the client proxy have the fourth highest priority.
+	// 5. all the other endpoints have the same lowest priority.
 	//
 	// Optional: only one of distribute, failover or failoverPriority can be set.
 	// And it should be used together with `OutlierDetection` to detect unhealthy endpoints, otherwise has no effect.
