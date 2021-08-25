@@ -1089,7 +1089,7 @@ message LocalityLoadBalancerSetting{
     // 3. By extension of this logic, endpoints matching only the first label with the client proxy has priority P(N-1) i.e. second lowest priority.
     // 4. All the other endpoints have priority P(N) i.e. lowest priority.
     //
-    // Note: For a label to be considered to match, the previous labels must match, i.e. nth label would be considered only if first n-1 labels matche"
+    // Note: For a label to be considered for match, the previous labels must match, i.e. nth label would be considered matched only if first n-1 labels match.
     //
     // It can be any label specified on both client and server workloads.
     // The following labels which have special semantic meaning are also supported:
