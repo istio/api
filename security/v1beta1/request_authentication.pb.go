@@ -62,18 +62,30 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // ```
 //
 // - A policy in root namespace, "istio-system" by default, applies to workloads in all namespaces
-// in a mesh. The following policy makes all workloads perform JWT authentication.
+// in a mesh. The following policy makes all workloads only accept the requests that contain a
+// valid JWT token.
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
 // kind: RequestAuthentication
 // metadata:
-//   name: requre-jwt-for-all
+//   name: req-authn-for-all
 //   namespace: istio-system
 // spec:
 //   jwtRules:
 //   - issuer: "issuer-foo"
 //     jwksUri: https://example.com/.well-known/jwks.json
+// ---
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//   name: require-jwt-for-all
+//   namespace: istio-system
+// spec:
+//   rules:
+//   - from:
+//     - source:
+//         requestPrincipals: ["*"]
 // ```
 //
 // - The next example shows how to set a different JWT requirement for a different `host`. The `RequestAuthentication`
