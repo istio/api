@@ -838,9 +838,12 @@ const (
 	// domain socket endpoints.
 	ServiceEntry_DNS ServiceEntry_Resolution = 2
 	// Attempt to resolve the IP address by querying the ambient DNS,
-	// during request processing. Unlike DNS, connections made to
-	// hosts will be retained even if DNS records change frequently under
-	// DNS_ROUND_ROBIN. This is best suited for large web scale services that
+	// asynchronously. Unlike DNS, DNS_ROUND_ROBIN only uses the
+	// first IP address returned when a new connection needs to be initiated
+	// without relying on complete results of DNS resolution and connections
+	// made to hosts will be retained even if DNS records change frequently
+	// eliminating draining connection pools and connection cycling.
+	// This is best suited for large web scale services that
 	// must be accessed via DNS. The proxy will resolve the DNS address
 	// specified in the hosts field, if wildcards are not used. DNS resolution
 	// cannot be used with Unix domain socket endpoints.
