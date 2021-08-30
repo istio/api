@@ -2027,6 +2027,32 @@ this value.</p>
 No
 </td>
 </tr>
+<tr id="HTTPRedirect-port">
+<td><code>port</code></td>
+<td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
+<td>
+<p>On a redirect, overwrite the port portion of the URL with this value.
+If unset, the port will be unset (resulting in port 80 for HTTP and 443 for HTTPS).
+If set to 0, the port from the original request will be used</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPRedirect-scheme">
+<td><code>scheme</code></td>
+<td><code>string</code></td>
+<td>
+<p>On a redirect, overwrite the scheme portion of the URL with this value.
+For example, &ldquo;http&rdquo; or &ldquo;https&rdquo;.
+If unset, the original scheme will be used.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="HTTPRedirect-redirect_code">
 <td><code>redirectCode</code></td>
 <td><code>uint32</code></td>

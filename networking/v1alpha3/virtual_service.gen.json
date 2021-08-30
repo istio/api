@@ -327,6 +327,15 @@
             "description": "On a redirect, overwrite the Authority/Host portion of the URL with this value.",
             "type": "string"
           },
+          "port": {
+            "description": "On a redirect, overwrite the port portion of the URL with this value. If unset, the port will be unset (resulting in port 80 for HTTP and 443 for HTTPS). If set to 0, the port from the original request will be used",
+            "type": "integer",
+            "nullable": true
+          },
+          "scheme": {
+            "description": "On a redirect, overwrite the scheme portion of the URL with this value. For example, \"http\" or \"https\". If unset, the original scheme will be used.",
+            "type": "string"
+          },
           "redirectCode": {
             "description": "On a redirect, Specifies the HTTP status code to use in the redirect response. The default response code is MOVED_PERMANENTLY (301).",
             "type": "integer"

@@ -3976,8 +3976,17 @@ spec:
                       properties:
                         authority:
                           type: string
+                        port:
+                          description: On a redirect, overwrite the port portion of
+                            the URL with this value.
+                          nullable: true
+                          type: integer
                         redirectCode:
                           type: integer
+                        scheme:
+                          description: On a redirect, overwrite the scheme portion
+                            of the URL with this value.
+                          type: string
                         uri:
                           type: string
                       type: object
@@ -4695,8 +4704,17 @@ spec:
                       properties:
                         authority:
                           type: string
+                        port:
+                          description: On a redirect, overwrite the port portion of
+                            the URL with this value.
+                          nullable: true
+                          type: integer
                         redirectCode:
                           type: integer
+                        scheme:
+                          description: On a redirect, overwrite the scheme portion
+                            of the URL with this value.
+                          type: string
                         uri:
                           type: string
                       type: object
