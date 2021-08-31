@@ -2540,8 +2540,8 @@ func (*StringMatch) XXX_OneofWrappers() []interface{} {
 // Describes the retry policy to use when a HTTP request fails. For
 // example, the following rule sets the maximum number of retries to 3 when
 // calling ratings:v1 service, with a 2s timeout per retry attempt.
-// A retry will be attempted if there is a gateway-error, connect-failure,
-// refused_stream or when the upstream server responds with Service Unavailable(503).
+// A retry will be attempted if there is a connect-failure, refused_stream
+// or when the upstream server responds with Service Unavailable(503).
 //
 // {{<tabset category-name="example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}
@@ -2561,7 +2561,7 @@ func (*StringMatch) XXX_OneofWrappers() []interface{} {
 //     retries:
 //       attempts: 3
 //       perTryTimeout: 2s
-//       retryOn: gateway-error,connect-failure,refused-stream,503
+//       retryOn: connect-failure,refused-stream,503
 // ```
 // {{</tab>}}
 //
