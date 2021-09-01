@@ -2541,6 +2541,8 @@ func (*StringMatch) XXX_OneofWrappers() []interface{} {
 // Describes the retry policy to use when a HTTP request fails. For
 // example, the following rule sets the maximum number of retries to 3 when
 // calling ratings:v1 service, with a 2s timeout per retry attempt.
+// A retry will be attempted if there is a connect-failure, refused_stream
+// or when the upstream server responds with Service Unavailable(503).
 //
 // {{<tabset category-name="example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}
@@ -2560,7 +2562,7 @@ func (*StringMatch) XXX_OneofWrappers() []interface{} {
 //     retries:
 //       attempts: 3
 //       perTryTimeout: 2s
-//       retryOn: gateway-error,connect-failure,refused-stream
+//       retryOn: connect-failure,refused-stream,503
 // ```
 // {{</tab>}}
 //
@@ -2600,6 +2602,7 @@ type HTTPRetry struct {
 	PerTryTimeout *types.Duration `protobuf:"bytes,2,opt,name=per_try_timeout,json=perTryTimeout,proto3" json:"per_try_timeout,omitempty"`
 	// Specifies the conditions under which retry takes place.
 	// One or more policies can be specified using a ‘,’ delimited list.
+	// If retry_on specifies a valid HTTP status, it will be added to retriable_status_codes retry policy.
 	// See the [retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on)
 	// and [gRPC retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on) for more details.
 	RetryOn string `protobuf:"bytes,3,opt,name=retry_on,json=retryOn,proto3" json:"retry_on,omitempty"`
