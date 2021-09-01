@@ -830,7 +830,7 @@ const (
 	// backing instances associated with the service.
 	ServiceEntry_STATIC ServiceEntry_Resolution = 1
 	// Attempt to resolve the IP address by querying the ambient DNS,
-	// during request processing. If no endpoints are specified, the proxy
+	// asynchronously. If no endpoints are specified, the proxy
 	// will resolve the DNS address specified in the hosts field, if
 	// wildcards are not used. If endpoints are specified, the DNS
 	// addresses specified in the endpoints will be resolved to determine
