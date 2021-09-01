@@ -327,11 +327,6 @@
             "description": "On a redirect, overwrite the Authority/Host portion of the URL with this value.",
             "type": "string"
           },
-          "port": {
-            "description": "On a redirect, overwrite the port portion of the URL with this value. If unset, the port will be unset (resulting in port 80 for HTTP and 443 for HTTPS). If set to 0, the port from the original request will be used",
-            "type": "integer",
-            "nullable": true
-          },
           "scheme": {
             "description": "On a redirect, overwrite the scheme portion of the URL with this value. For example, \"http\" or \"https\". If unset, the original scheme will be used.",
             "type": "string"
@@ -340,7 +335,64 @@
             "description": "On a redirect, Specifies the HTTP status code to use in the redirect response. The default response code is MOVED_PERMANENTLY (301).",
             "type": "integer"
           }
-        }
+        },
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "port"
+                  ],
+                  "properties": {
+                    "port": {
+                      "description": "On a redirect, overwrite the port portion of the URL with this value.",
+                      "type": "integer"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "derivePort"
+                  ],
+                  "properties": {
+                    "derivePort": {
+                      "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPRedirect.RedirectPortSelection"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "port"
+            ],
+            "properties": {
+              "port": {
+                "description": "On a redirect, overwrite the port portion of the URL with this value.",
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "required": [
+              "derivePort"
+            ],
+            "properties": {
+              "derivePort": {
+                "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPRedirect.RedirectPortSelection"
+              }
+            }
+          }
+        ]
+      },
+      "istio.networking.v1alpha3.HTTPRedirect.RedirectPortSelection": {
+        "type": "string",
+        "enum": [
+          "INFER",
+          "REQUEST_PORT"
+        ]
       },
       "istio.networking.v1alpha3.HTTPRetry": {
         "description": "Describes the retry policy to use when a HTTP request fails. For example, the following rule sets the maximum number of retries to 3 when calling ratings:v1 service, with a 2s timeout per retry attempt.",

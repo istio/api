@@ -3973,13 +3973,28 @@ spec:
                     redirect:
                       description: A HTTP rule can either redirect or forward (default)
                         traffic.
+                      oneOf:
+                      - not:
+                          anyOf:
+                          - required:
+                            - port
+                          - required:
+                            - derivePort
+                      - required:
+                        - port
+                      - required:
+                        - derivePort
                       properties:
                         authority:
+                          type: string
+                        derivePort:
+                          enum:
+                          - INFER
+                          - REQUEST_PORT
                           type: string
                         port:
                           description: On a redirect, overwrite the port portion of
                             the URL with this value.
-                          nullable: true
                           type: integer
                         redirectCode:
                           type: integer
@@ -4701,13 +4716,28 @@ spec:
                     redirect:
                       description: A HTTP rule can either redirect or forward (default)
                         traffic.
+                      oneOf:
+                      - not:
+                          anyOf:
+                          - required:
+                            - port
+                          - required:
+                            - derivePort
+                      - required:
+                        - port
+                      - required:
+                        - derivePort
                       properties:
                         authority:
+                          type: string
+                        derivePort:
+                          enum:
+                          - INFER
+                          - REQUEST_PORT
                           type: string
                         port:
                           description: On a redirect, overwrite the port portion of
                             the URL with this value.
-                          nullable: true
                           type: integer
                         redirectCode:
                           type: integer
