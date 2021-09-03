@@ -50,4 +50,9 @@ message FilterConfig {
   // When this field is set, the skip_validate_trust_domain field is ignored.
   // This field has no effect for plaintext traffic.
   repeated string allowed_trust_domains = 4;
+
+  // If true, the authn filter will clear the route cache so that the validated
+  // JWT token claims can be used in routing.
+  // This should be set to true for routing based on JWT claims.
+  bool clear_route_cache = 5;
 }
