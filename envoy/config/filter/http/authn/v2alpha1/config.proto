@@ -51,8 +51,10 @@ message FilterConfig {
   // This field has no effect for plaintext traffic.
   repeated string allowed_trust_domains = 4;
 
-  // If true, the authn filter will clear the route cache so that the validated
+  // By default the authn filter will clear the route cache so that the validated
   // JWT token claims can be used in routing.
-  // This should be set to true for routing based on JWT claims.
-  bool clear_route_cache = 5;
+  // Advanced users can set this to true to disable the behavior if they do not
+  // want the authn filter to clear the route cache for any reasons.
+  // Warning: setting this to true will break the JWT claim based routing.
+  bool disable_clear_route_cache = 5;
 }
