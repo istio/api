@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.telemetry.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\037istio.io/api/telemetry/v1alpha1'),
-  serialized_pb=_b('\n\"telemetry/v1alpha1/telemetry.proto\x12\x18istio.telemetry.v1alpha1\x1a\x1btype/v1beta1/selector.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x97\x02\n\tTelemetry\x12@\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x08selector\x12;\n\x07tracing\x18\x02 \x03(\x0b\x32!.istio.telemetry.v1alpha1.TracingR\x07tracing\x12;\n\x07metrics\x18\x03 \x03(\x0b\x32!.istio.telemetry.v1alpha1.MetricsR\x07metrics\x12N\n\x0e\x61\x63\x63\x65ss_logging\x18\x04 \x03(\x0b\x32\'.istio.telemetry.v1alpha1.AccessLoggingR\raccessLogging\"\xea\x06\n\x07Tracing\x12\x43\n\tproviders\x18\x02 \x03(\x0b\x32%.istio.telemetry.v1alpha1.ProviderRefR\tproviders\x12Z\n\x1arandom_sampling_percentage\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.DoubleValueR\x18randomSamplingPercentage\x12P\n\x16\x64isable_span_reporting\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x14\x64isableSpanReporting\x12R\n\x0b\x63ustom_tags\x18\x05 \x03(\x0b\x32\x31.istio.telemetry.v1alpha1.Tracing.CustomTagsEntryR\ncustomTags\x1a\xf8\x01\n\tCustomTag\x12\x45\n\x07literal\x18\x01 \x01(\x0b\x32).istio.telemetry.v1alpha1.Tracing.LiteralH\x00R\x07literal\x12Q\n\x0b\x65nvironment\x18\x02 \x01(\x0b\x32-.istio.telemetry.v1alpha1.Tracing.EnvironmentH\x00R\x0b\x65nvironment\x12I\n\x06header\x18\x03 \x01(\x0b\x32/.istio.telemetry.v1alpha1.Tracing.RequestHeaderH\x00R\x06headerB\x06\n\x04type\x1a\x1f\n\x07Literal\x12\x14\n\x05value\x18\x01 \x01(\tR\x05value\x1a\x46\n\x0b\x45nvironment\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1aH\n\rRequestHeader\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1aj\n\x0f\x43ustomTagsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x41\n\x05value\x18\x02 \x01(\x0b\x32+.istio.telemetry.v1alpha1.Tracing.CustomTagR\x05value:\x02\x38\x01\"!\n\x0bProviderRef\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"\x98\x01\n\x07Metrics\x12\x43\n\tproviders\x18\x01 \x03(\x0b\x32%.istio.telemetry.v1alpha1.ProviderRefR\tproviders\x12H\n\toverrides\x18\x02 \x03(\x0b\x32*.istio.telemetry.v1alpha1.MetricsOverridesR\toverrides\"\xdd\x03\n\x0eMetricSelector\x12N\n\x06metric\x18\x01 \x01(\x0e\x32\x34.istio.telemetry.v1alpha1.MetricSelector.IstioMetricH\x00R\x06metric\x12%\n\rcustom_metric\x18\x02 \x01(\tH\x00R\x0c\x63ustomMetric\x12:\n\x04mode\x18\x03 \x01(\x0e\x32&.istio.telemetry.v1alpha1.WorkloadModeR\x04mode\"\x87\x02\n\x0bIstioMetric\x12\x0f\n\x0b\x41LL_METRICS\x10\x00\x12\x11\n\rREQUEST_COUNT\x10\x01\x12\x14\n\x10REQUEST_DURATION\x10\x02\x12\x10\n\x0cREQUEST_SIZE\x10\x03\x12\x11\n\rRESPONSE_SIZE\x10\x04\x12\x1a\n\x16TCP_OPENED_CONNECTIONS\x10\x05\x12\x1a\n\x16TCP_CLOSED_CONNECTIONS\x10\x06\x12\x12\n\x0eTCP_SENT_BYTES\x10\x07\x12\x16\n\x12TCP_RECEIVED_BYTES\x10\x08\x12\x19\n\x15GRPC_REQUEST_MESSAGES\x10\t\x12\x1a\n\x16GRPC_RESPONSE_MESSAGES\x10\nB\x0e\n\x0cmetric_match\"\x91\x04\n\x10MetricsOverrides\x12>\n\x05match\x18\x01 \x01(\x0b\x32(.istio.telemetry.v1alpha1.MetricSelectorR\x05match\x12\x36\n\x08\x64isabled\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x08\x64isabled\x12\x61\n\rtag_overrides\x18\x03 \x03(\x0b\x32<.istio.telemetry.v1alpha1.MetricsOverrides.TagOverridesEntryR\x0ctagOverrides\x1a\xa8\x01\n\x0bTagOverride\x12^\n\toperation\x18\x01 \x01(\x0e\x32@.istio.telemetry.v1alpha1.MetricsOverrides.TagOverride.OperationR\toperation\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value\"#\n\tOperation\x12\n\n\x06UPSERT\x10\x00\x12\n\n\x06REMOVE\x10\x01\x1aw\n\x11TagOverridesEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12L\n\x05value\x18\x02 \x01(\x0b\x32\x36.istio.telemetry.v1alpha1.MetricsOverrides.TagOverrideR\x05value:\x02\x38\x01\"\x8c\x01\n\rAccessLogging\x12\x43\n\tproviders\x18\x01 \x03(\x0b\x32%.istio.telemetry.v1alpha1.ProviderRefR\tproviders\x12\x36\n\x08\x64isabled\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x08\x64isabled*=\n\x0cWorkloadMode\x12\x15\n\x11\x43LIENT_AND_SERVER\x10\x00\x12\n\n\x06\x43LIENT\x10\x01\x12\n\n\x06SERVER\x10\x02\x42!Z\x1fistio.io/api/telemetry/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\"telemetry/v1alpha1/telemetry.proto\x12\x18istio.telemetry.v1alpha1\x1a\x1btype/v1beta1/selector.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x97\x02\n\tTelemetry\x12@\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x08selector\x12;\n\x07tracing\x18\x02 \x03(\x0b\x32!.istio.telemetry.v1alpha1.TracingR\x07tracing\x12;\n\x07metrics\x18\x03 \x03(\x0b\x32!.istio.telemetry.v1alpha1.MetricsR\x07metrics\x12N\n\x0e\x61\x63\x63\x65ss_logging\x18\x04 \x03(\x0b\x32\'.istio.telemetry.v1alpha1.AccessLoggingR\raccessLogging\"\xea\x06\n\x07Tracing\x12\x43\n\tproviders\x18\x02 \x03(\x0b\x32%.istio.telemetry.v1alpha1.ProviderRefR\tproviders\x12Z\n\x1arandom_sampling_percentage\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.DoubleValueR\x18randomSamplingPercentage\x12P\n\x16\x64isable_span_reporting\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x14\x64isableSpanReporting\x12R\n\x0b\x63ustom_tags\x18\x05 \x03(\x0b\x32\x31.istio.telemetry.v1alpha1.Tracing.CustomTagsEntryR\ncustomTags\x1a\xf8\x01\n\tCustomTag\x12\x45\n\x07literal\x18\x01 \x01(\x0b\x32).istio.telemetry.v1alpha1.Tracing.LiteralH\x00R\x07literal\x12Q\n\x0b\x65nvironment\x18\x02 \x01(\x0b\x32-.istio.telemetry.v1alpha1.Tracing.EnvironmentH\x00R\x0b\x65nvironment\x12I\n\x06header\x18\x03 \x01(\x0b\x32/.istio.telemetry.v1alpha1.Tracing.RequestHeaderH\x00R\x06headerB\x06\n\x04type\x1a\x1f\n\x07Literal\x12\x14\n\x05value\x18\x01 \x01(\tR\x05value\x1a\x46\n\x0b\x45nvironment\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1aH\n\rRequestHeader\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12#\n\rdefault_value\x18\x02 \x01(\tR\x0c\x64\x65\x66\x61ultValue\x1aj\n\x0f\x43ustomTagsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x41\n\x05value\x18\x02 \x01(\x0b\x32+.istio.telemetry.v1alpha1.Tracing.CustomTagR\x05value:\x02\x38\x01\"!\n\x0bProviderRef\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"\x98\x01\n\x07Metrics\x12\x43\n\tproviders\x18\x01 \x03(\x0b\x32%.istio.telemetry.v1alpha1.ProviderRefR\tproviders\x12H\n\toverrides\x18\x02 \x03(\x0b\x32*.istio.telemetry.v1alpha1.MetricsOverridesR\toverrides\"\xdd\x03\n\x0eMetricSelector\x12N\n\x06metric\x18\x01 \x01(\x0e\x32\x34.istio.telemetry.v1alpha1.MetricSelector.IstioMetricH\x00R\x06metric\x12%\n\rcustom_metric\x18\x02 \x01(\tH\x00R\x0c\x63ustomMetric\x12:\n\x04mode\x18\x03 \x01(\x0e\x32&.istio.telemetry.v1alpha1.WorkloadModeR\x04mode\"\x87\x02\n\x0bIstioMetric\x12\x0f\n\x0b\x41LL_METRICS\x10\x00\x12\x11\n\rREQUEST_COUNT\x10\x01\x12\x14\n\x10REQUEST_DURATION\x10\x02\x12\x10\n\x0cREQUEST_SIZE\x10\x03\x12\x11\n\rRESPONSE_SIZE\x10\x04\x12\x1a\n\x16TCP_OPENED_CONNECTIONS\x10\x05\x12\x1a\n\x16TCP_CLOSED_CONNECTIONS\x10\x06\x12\x12\n\x0eTCP_SENT_BYTES\x10\x07\x12\x16\n\x12TCP_RECEIVED_BYTES\x10\x08\x12\x19\n\x15GRPC_REQUEST_MESSAGES\x10\t\x12\x1a\n\x16GRPC_RESPONSE_MESSAGES\x10\nB\x0e\n\x0cmetric_match\"\x91\x04\n\x10MetricsOverrides\x12>\n\x05match\x18\x01 \x01(\x0b\x32(.istio.telemetry.v1alpha1.MetricSelectorR\x05match\x12\x36\n\x08\x64isabled\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x08\x64isabled\x12\x61\n\rtag_overrides\x18\x03 \x03(\x0b\x32<.istio.telemetry.v1alpha1.MetricsOverrides.TagOverridesEntryR\x0ctagOverrides\x1a\xa8\x01\n\x0bTagOverride\x12^\n\toperation\x18\x01 \x01(\x0e\x32@.istio.telemetry.v1alpha1.MetricsOverrides.TagOverride.OperationR\toperation\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value\"#\n\tOperation\x12\n\n\x06UPSERT\x10\x00\x12\n\n\x06REMOVE\x10\x01\x1aw\n\x11TagOverridesEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12L\n\x05value\x18\x02 \x01(\x0b\x32\x36.istio.telemetry.v1alpha1.MetricsOverrides.TagOverrideR\x05value:\x02\x38\x01\"\xd0\x01\n\rAccessLogging\x12\x43\n\tproviders\x18\x01 \x03(\x0b\x32%.istio.telemetry.v1alpha1.ProviderRefR\tproviders\x12\x36\n\x08\x64isabled\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x08\x64isabled\x12\x42\n\nlog_format\x18\x03 \x01(\x0b\x32#.istio.telemetry.v1alpha1.LogFormatR\tlogFormat\"\x8b\x01\n\tLogFormat\x12\x36\n\x04\x62ody\x18\x01 \x01(\x0b\x32\".istio.telemetry.v1alpha1.AnyValueR\x04\x62ody\x12\x46\n\nattributes\x18\x02 \x01(\x0b\x32&.istio.telemetry.v1alpha1.KeyValueListR\nattributes\"\xd6\x02\n\x08\x41nyValue\x12#\n\x0cstring_value\x18\x01 \x01(\tH\x00R\x0bstringValue\x12\x1f\n\nbool_value\x18\x02 \x01(\x08H\x00R\tboolValue\x12\x1d\n\tint_value\x18\x03 \x01(\x03H\x00R\x08intValue\x12#\n\x0c\x64ouble_value\x18\x04 \x01(\x01H\x00R\x0b\x64oubleValue\x12G\n\x0b\x61rray_value\x18\x05 \x01(\x0b\x32$.istio.telemetry.v1alpha1.ArrayValueH\x00R\narrayValue\x12K\n\x0ckvlist_value\x18\x06 \x01(\x0b\x32&.istio.telemetry.v1alpha1.KeyValueListH\x00R\x0bkvlistValue\x12!\n\x0b\x62ytes_value\x18\x07 \x01(\x0cH\x00R\nbytesValueB\x07\n\x05value\"H\n\nArrayValue\x12:\n\x06values\x18\x01 \x03(\x0b\x32\".istio.telemetry.v1alpha1.AnyValueR\x06values\"J\n\x0cKeyValueList\x12:\n\x06values\x18\x01 \x03(\x0b\x32\".istio.telemetry.v1alpha1.KeyValueR\x06values\"V\n\x08KeyValue\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x38\n\x05value\x18\x02 \x01(\x0b\x32\".istio.telemetry.v1alpha1.AnyValueR\x05value*=\n\x0cWorkloadMode\x12\x15\n\x11\x43LIENT_AND_SERVER\x10\x00\x12\n\n\x06\x43LIENT\x10\x01\x12\n\n\x06SERVER\x10\x02\x42!Z\x1fistio.io/api/telemetry/v1alpha1b\x06proto3')
   ,
   dependencies=[type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,])
 
@@ -48,8 +48,8 @@ _WORKLOADMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2629,
-  serialized_end=2690,
+  serialized_start=3422,
+  serialized_end=3483,
 )
 _sym_db.RegisterEnumDescriptor(_WORKLOADMODE)
 
@@ -691,6 +691,13 @@ _ACCESSLOGGING = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='disabled', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='log_format', full_name='istio.telemetry.v1alpha1.AccessLogging.log_format', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='logFormat', file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -704,7 +711,221 @@ _ACCESSLOGGING = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=2487,
-  serialized_end=2627,
+  serialized_end=2695,
+)
+
+
+_LOGFORMAT = _descriptor.Descriptor(
+  name='LogFormat',
+  full_name='istio.telemetry.v1alpha1.LogFormat',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='body', full_name='istio.telemetry.v1alpha1.LogFormat.body', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='body', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='attributes', full_name='istio.telemetry.v1alpha1.LogFormat.attributes', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='attributes', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2698,
+  serialized_end=2837,
+)
+
+
+_ANYVALUE = _descriptor.Descriptor(
+  name='AnyValue',
+  full_name='istio.telemetry.v1alpha1.AnyValue',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='string_value', full_name='istio.telemetry.v1alpha1.AnyValue.string_value', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='stringValue', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='bool_value', full_name='istio.telemetry.v1alpha1.AnyValue.bool_value', index=1,
+      number=2, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='boolValue', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='int_value', full_name='istio.telemetry.v1alpha1.AnyValue.int_value', index=2,
+      number=3, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='intValue', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='double_value', full_name='istio.telemetry.v1alpha1.AnyValue.double_value', index=3,
+      number=4, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='doubleValue', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='array_value', full_name='istio.telemetry.v1alpha1.AnyValue.array_value', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='arrayValue', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='kvlist_value', full_name='istio.telemetry.v1alpha1.AnyValue.kvlist_value', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='kvlistValue', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='bytes_value', full_name='istio.telemetry.v1alpha1.AnyValue.bytes_value', index=6,
+      number=7, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b(""),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='bytesValue', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='value', full_name='istio.telemetry.v1alpha1.AnyValue.value',
+      index=0, containing_type=None, fields=[]),
+  ],
+  serialized_start=2840,
+  serialized_end=3182,
+)
+
+
+_ARRAYVALUE = _descriptor.Descriptor(
+  name='ArrayValue',
+  full_name='istio.telemetry.v1alpha1.ArrayValue',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='values', full_name='istio.telemetry.v1alpha1.ArrayValue.values', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='values', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3184,
+  serialized_end=3256,
+)
+
+
+_KEYVALUELIST = _descriptor.Descriptor(
+  name='KeyValueList',
+  full_name='istio.telemetry.v1alpha1.KeyValueList',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='values', full_name='istio.telemetry.v1alpha1.KeyValueList.values', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='values', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3258,
+  serialized_end=3332,
+)
+
+
+_KEYVALUE = _descriptor.Descriptor(
+  name='KeyValue',
+  full_name='istio.telemetry.v1alpha1.KeyValue',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.telemetry.v1alpha1.KeyValue.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='key', file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.telemetry.v1alpha1.KeyValue.value', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='value', file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3334,
+  serialized_end=3420,
 )
 
 _TELEMETRY.fields_by_name['selector'].message_type = type_dot_v1beta1_dot_selector__pb2._WORKLOADSELECTOR
@@ -754,6 +975,35 @@ _METRICSOVERRIDES.fields_by_name['disabled'].message_type = google_dot_protobuf_
 _METRICSOVERRIDES.fields_by_name['tag_overrides'].message_type = _METRICSOVERRIDES_TAGOVERRIDESENTRY
 _ACCESSLOGGING.fields_by_name['providers'].message_type = _PROVIDERREF
 _ACCESSLOGGING.fields_by_name['disabled'].message_type = google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_ACCESSLOGGING.fields_by_name['log_format'].message_type = _LOGFORMAT
+_LOGFORMAT.fields_by_name['body'].message_type = _ANYVALUE
+_LOGFORMAT.fields_by_name['attributes'].message_type = _KEYVALUELIST
+_ANYVALUE.fields_by_name['array_value'].message_type = _ARRAYVALUE
+_ANYVALUE.fields_by_name['kvlist_value'].message_type = _KEYVALUELIST
+_ANYVALUE.oneofs_by_name['value'].fields.append(
+  _ANYVALUE.fields_by_name['string_value'])
+_ANYVALUE.fields_by_name['string_value'].containing_oneof = _ANYVALUE.oneofs_by_name['value']
+_ANYVALUE.oneofs_by_name['value'].fields.append(
+  _ANYVALUE.fields_by_name['bool_value'])
+_ANYVALUE.fields_by_name['bool_value'].containing_oneof = _ANYVALUE.oneofs_by_name['value']
+_ANYVALUE.oneofs_by_name['value'].fields.append(
+  _ANYVALUE.fields_by_name['int_value'])
+_ANYVALUE.fields_by_name['int_value'].containing_oneof = _ANYVALUE.oneofs_by_name['value']
+_ANYVALUE.oneofs_by_name['value'].fields.append(
+  _ANYVALUE.fields_by_name['double_value'])
+_ANYVALUE.fields_by_name['double_value'].containing_oneof = _ANYVALUE.oneofs_by_name['value']
+_ANYVALUE.oneofs_by_name['value'].fields.append(
+  _ANYVALUE.fields_by_name['array_value'])
+_ANYVALUE.fields_by_name['array_value'].containing_oneof = _ANYVALUE.oneofs_by_name['value']
+_ANYVALUE.oneofs_by_name['value'].fields.append(
+  _ANYVALUE.fields_by_name['kvlist_value'])
+_ANYVALUE.fields_by_name['kvlist_value'].containing_oneof = _ANYVALUE.oneofs_by_name['value']
+_ANYVALUE.oneofs_by_name['value'].fields.append(
+  _ANYVALUE.fields_by_name['bytes_value'])
+_ANYVALUE.fields_by_name['bytes_value'].containing_oneof = _ANYVALUE.oneofs_by_name['value']
+_ARRAYVALUE.fields_by_name['values'].message_type = _ANYVALUE
+_KEYVALUELIST.fields_by_name['values'].message_type = _KEYVALUE
+_KEYVALUE.fields_by_name['value'].message_type = _ANYVALUE
 DESCRIPTOR.message_types_by_name['Telemetry'] = _TELEMETRY
 DESCRIPTOR.message_types_by_name['Tracing'] = _TRACING
 DESCRIPTOR.message_types_by_name['ProviderRef'] = _PROVIDERREF
@@ -761,6 +1011,11 @@ DESCRIPTOR.message_types_by_name['Metrics'] = _METRICS
 DESCRIPTOR.message_types_by_name['MetricSelector'] = _METRICSELECTOR
 DESCRIPTOR.message_types_by_name['MetricsOverrides'] = _METRICSOVERRIDES
 DESCRIPTOR.message_types_by_name['AccessLogging'] = _ACCESSLOGGING
+DESCRIPTOR.message_types_by_name['LogFormat'] = _LOGFORMAT
+DESCRIPTOR.message_types_by_name['AnyValue'] = _ANYVALUE
+DESCRIPTOR.message_types_by_name['ArrayValue'] = _ARRAYVALUE
+DESCRIPTOR.message_types_by_name['KeyValueList'] = _KEYVALUELIST
+DESCRIPTOR.message_types_by_name['KeyValue'] = _KEYVALUE
 DESCRIPTOR.enum_types_by_name['WorkloadMode'] = _WORKLOADMODE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -868,6 +1123,41 @@ AccessLogging = _reflection.GeneratedProtocolMessageType('AccessLogging', (_mess
   # @@protoc_insertion_point(class_scope:istio.telemetry.v1alpha1.AccessLogging)
   })
 _sym_db.RegisterMessage(AccessLogging)
+
+LogFormat = _reflection.GeneratedProtocolMessageType('LogFormat', (_message.Message,), {
+  'DESCRIPTOR' : _LOGFORMAT,
+  '__module__' : 'telemetry.v1alpha1.telemetry_pb2'
+  # @@protoc_insertion_point(class_scope:istio.telemetry.v1alpha1.LogFormat)
+  })
+_sym_db.RegisterMessage(LogFormat)
+
+AnyValue = _reflection.GeneratedProtocolMessageType('AnyValue', (_message.Message,), {
+  'DESCRIPTOR' : _ANYVALUE,
+  '__module__' : 'telemetry.v1alpha1.telemetry_pb2'
+  # @@protoc_insertion_point(class_scope:istio.telemetry.v1alpha1.AnyValue)
+  })
+_sym_db.RegisterMessage(AnyValue)
+
+ArrayValue = _reflection.GeneratedProtocolMessageType('ArrayValue', (_message.Message,), {
+  'DESCRIPTOR' : _ARRAYVALUE,
+  '__module__' : 'telemetry.v1alpha1.telemetry_pb2'
+  # @@protoc_insertion_point(class_scope:istio.telemetry.v1alpha1.ArrayValue)
+  })
+_sym_db.RegisterMessage(ArrayValue)
+
+KeyValueList = _reflection.GeneratedProtocolMessageType('KeyValueList', (_message.Message,), {
+  'DESCRIPTOR' : _KEYVALUELIST,
+  '__module__' : 'telemetry.v1alpha1.telemetry_pb2'
+  # @@protoc_insertion_point(class_scope:istio.telemetry.v1alpha1.KeyValueList)
+  })
+_sym_db.RegisterMessage(KeyValueList)
+
+KeyValue = _reflection.GeneratedProtocolMessageType('KeyValue', (_message.Message,), {
+  'DESCRIPTOR' : _KEYVALUE,
+  '__module__' : 'telemetry.v1alpha1.telemetry_pb2'
+  # @@protoc_insertion_point(class_scope:istio.telemetry.v1alpha1.KeyValue)
+  })
+_sym_db.RegisterMessage(KeyValue)
 
 
 DESCRIPTOR._options = None

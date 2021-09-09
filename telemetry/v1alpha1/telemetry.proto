@@ -213,6 +213,42 @@ import "google/protobuf/wrappers.proto";
 //   accessLogging:
 //   - disabled: true
 // ```
+//
+// Policy to change the access logging format for text loggers:
+// ```yaml
+// apiVersion: telemetry.istio.io/v1alpha1
+// kind: Telemetry
+// metadata:
+//   name: custom-format
+//   namespace: foo
+// spec:
+//   # no selector specified, applies to all workloads in the namespace
+//   accessLogging:
+//   - log_format:
+//       body:
+//         string_value: "[%START_TIME%] "%REQ(:METHOD)% %RESPONSE_CODE% %RESPONSE_FLAGS%\n"
+// ```
+//
+// Policy to change the access logging format for JSON loggers:
+// ```yaml
+// apiVersion: telemetry.istio.io/v1alpha1
+// kind: Telemetry
+// metadata:
+//   name: custom-format
+//   namespace: foo
+// spec:
+//   # no selector specified, applies to all workloads in the namespace
+//   accessLogging:
+//   - log_format:
+//       body:
+//         kvlist_value:
+//         - key: "request_id"
+//           value:
+//             string_value: "%REQ(X-REQUEST-ID)%"
+//         - key: "duration"
+//           value:
+//             string_value: "%DURATION%"
+// ```
 
 package istio.telemetry.v1alpha1;
 
@@ -562,4 +598,68 @@ message AccessLogging {
   // selected above. Customization controls will be added to this API in
   // future releases.
   google.protobuf.BoolValue disabled = 2;
+
+  // Optional. Controls the format of the generated log records.
+  // If not specified, the istio default logging format will be used.
+  LogFormat log_format = 3;
+}
+
+// LogFormat provides control over the generated access log records.
+// It adopts portions of the Open Telemetry model for record formatting,
+// allowing mapping into various access logging providers.
+message LogFormat {
+  // Optional. A value containing the body of the log record. Valid uses include 
+  // a human-readable free-form string message and  structured data composed of arrays and maps
+  // of other values.
+  //
+  // TODO(dougreid): discuss mapping into supported providers?
+  //
+  // Example: ``body { string_value: "%PROTOCOL%" }``.
+  AnyValue body = 1;
+}
+
+// Taken from OTel ("opentelemetry/proto/common/v1/common.proto")
+message AnyValue {
+  // The value is one of the listed fields. It is valid for all values to be unspecified
+  // in which case this AnyValue is considered to be "null".
+  oneof value {
+    string string_value = 1;
+    bool bool_value = 2;
+    int64 int_value = 3;
+    double double_value = 4;
+    ArrayValue array_value = 5;
+    KeyValueList kvlist_value = 6;
+    bytes bytes_value = 7;
+  }
+}
+
+// ArrayValue is a list of AnyValue messages. We need ArrayValue as a message
+// since oneof in AnyValue does not allow repeated fields.
+//
+// Taken from OTel ("opentelemetry/proto/common/v1/common.proto")
+message ArrayValue {
+  // Array of values. The array may be empty (contain 0 elements).
+  repeated AnyValue values = 1;
+}
+
+// KeyValueList is a list of KeyValue messages. We need KeyValueList as a message
+// since `oneof` in AnyValue does not allow repeated fields. Everywhere else where we need
+// a list of KeyValue messages (e.g. in Span) we use `repeated KeyValue` directly to
+// avoid unnecessary extra wrapping (which slows down the protocol). The 2 approaches
+// are semantically equivalent.
+//
+// Taken from OTel ("opentelemetry/proto/common/v1/common.proto")
+message KeyValueList {
+  // A collection of key/value pairs of key-value pairs. The list may be empty (may
+  // contain 0 elements).
+  repeated KeyValue values = 1;
+}
+
+// KeyValue is a key-value pair that is used to store Span attributes, Link
+// attributes, etc.
+//
+// Taken from OTel ("opentelemetry/proto/common/v1/common.proto")
+message KeyValue {
+  string key = 1;
+  AnyValue value = 2;
 }

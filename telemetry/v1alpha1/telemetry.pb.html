@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.telemetry.v1alpha1.Telemetry
 aliases: [/docs/reference/config/telemetry/v1alpha1/telemetry]
-number_of_entries: 15
+number_of_entries: 20
 ---
 <h2 id="Telemetry">Telemetry</h2>
 <section>
@@ -394,6 +394,253 @@ NOTE: currently default behavior will be controlled by the provider(s)
 selected above. Customization controls will be added to this API in
 future releases.</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AccessLogging-log_format">
+<td><code>logFormat</code></td>
+<td><code><a href="#LogFormat">LogFormat</a></code></td>
+<td>
+<p>Optional. Controls the format of the generated log records.
+If not specified, the istio default logging format will be used.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="LogFormat">LogFormat</h2>
+<section>
+<p>LogFormat provides control over the generated access log records.
+It adopts portions of the Open Telemetry model for record formatting,
+allowing mapping into various access logging providers.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LogFormat-body">
+<td><code>body</code></td>
+<td><code><a href="#AnyValue">AnyValue</a></code></td>
+<td>
+<p>Optional. A value containing the body of the log record. Valid uses include
+a human-readable free-form string message and  structured data composed of arrays and maps
+of other values.</p>
+
+<p>TODO(dougreid): discuss mapping into supported providers?</p>
+
+<p>Example: <code>body { string_value: &quot;%PROTOCOL%&quot; }</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LogFormat-attributes">
+<td><code>attributes</code></td>
+<td><code><a href="#KeyValueList">KeyValueList</a></code></td>
+<td>
+<p>Optional. Provides additional information about the specific event occurrence.
+This can be used in structured logging scenarios to provide request context info
+beyond what is included in the body.</p>
+
+<p>Example: <code>attributes { values { key: &quot;user_agent&quot; value { string_value: &quot;%REQ(USER-AGENT)%&quot; } } }</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="AnyValue">AnyValue</h2>
+<section>
+<p>Taken from OTel (&ldquo;opentelemetry/proto/common/v1/common.proto&rdquo;)</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AnyValue-string_value" class="oneof oneof-start">
+<td><code>stringValue</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AnyValue-bool_value" class="oneof">
+<td><code>boolValue</code></td>
+<td><code>bool (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AnyValue-int_value" class="oneof">
+<td><code>intValue</code></td>
+<td><code>int64 (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AnyValue-double_value" class="oneof">
+<td><code>doubleValue</code></td>
+<td><code>double (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AnyValue-array_value" class="oneof">
+<td><code>arrayValue</code></td>
+<td><code><a href="#ArrayValue">ArrayValue (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AnyValue-kvlist_value" class="oneof">
+<td><code>kvlistValue</code></td>
+<td><code><a href="#KeyValueList">KeyValueList (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AnyValue-bytes_value" class="oneof">
+<td><code>bytesValue</code></td>
+<td><code>bytes (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ArrayValue">ArrayValue</h2>
+<section>
+<p>ArrayValue is a list of AnyValue messages. We need ArrayValue as a message
+since oneof in AnyValue does not allow repeated fields.</p>
+
+<p>Taken from OTel (&ldquo;opentelemetry/proto/common/v1/common.proto&rdquo;)</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ArrayValue-values">
+<td><code>values</code></td>
+<td><code><a href="#AnyValue">AnyValue[]</a></code></td>
+<td>
+<p>Array of values. The array may be empty (contain 0 elements).</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="KeyValueList">KeyValueList</h2>
+<section>
+<p>KeyValueList is a list of KeyValue messages. We need KeyValueList as a message
+since <code>oneof</code> in AnyValue does not allow repeated fields. Everywhere else where we need
+a list of KeyValue messages (e.g. in Span) we use <code>repeated KeyValue</code> directly to
+avoid unnecessary extra wrapping (which slows down the protocol). The 2 approaches
+are semantically equivalent.</p>
+
+<p>Taken from OTel (&ldquo;opentelemetry/proto/common/v1/common.proto&rdquo;)</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="KeyValueList-values">
+<td><code>values</code></td>
+<td><code><a href="#KeyValue">KeyValue[]</a></code></td>
+<td>
+<p>A collection of key/value pairs of key-value pairs. The list may be empty (may
+contain 0 elements).</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="KeyValue">KeyValue</h2>
+<section>
+<p>KeyValue is a key-value pair that is used to store Span attributes, Link
+attributes, etc.</p>
+
+<p>Taken from OTel (&ldquo;opentelemetry/proto/common/v1/common.proto&rdquo;)</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="KeyValue-key">
+<td><code>key</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="KeyValue-value">
+<td><code>value</code></td>
+<td><code><a href="#AnyValue">AnyValue</a></code></td>
+<td>
 </td>
 <td>
 No
