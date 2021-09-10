@@ -1413,6 +1413,25 @@ message HTTPRedirect {
   // this value.
   string authority = 2;
 
+  enum RedirectPortSelection {
+    FROM_PROTOCOL_DEFAULT = 0;
+    FROM_REQUEST_PORT = 1;
+  }
+  oneof redirect_port {
+    // On a redirect, overwrite the port portion of the URL with this value.
+    uint32 port = 4;
+    // On a redirect, dynamically set the port:
+    // * FROM_PROTOCOL_DEFAULT: automatically set to 80 for HTTP and 443 for HTTPS.
+    // * FROM_REQUEST_PORT: automatically use the port of the request.
+    RedirectPortSelection derive_port = 5;
+  }
+
+  // On a redirect, overwrite the scheme portion of the URL with this value.
+  // For example, `http` or `https`.
+  // If unset, the original scheme will be used.
+  // If `derivePort` is set to `FROM_PROTOCOL_DEFAULT`, this will impact the port used as well
+  string scheme = 6;
+
   // On a redirect, Specifies the HTTP status code to use in the redirect
   // response. The default response code is MOVED_PERMANENTLY (301).
   uint32 redirect_code = 3;
