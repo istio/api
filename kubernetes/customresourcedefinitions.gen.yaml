@@ -3989,8 +3989,8 @@ spec:
                           type: string
                         derivePort:
                           enum:
-                          - INFER
-                          - REQUEST_PORT
+                          - FROM_PROTOCOL_DEFAULT
+                          - FROM_REQUEST_PORT
                           type: string
                         port:
                           description: On a redirect, overwrite the port portion of
@@ -4732,8 +4732,8 @@ spec:
                           type: string
                         derivePort:
                           enum:
-                          - INFER
-                          - REQUEST_PORT
+                          - FROM_PROTOCOL_DEFAULT
+                          - FROM_REQUEST_PORT
                           type: string
                         port:
                           description: On a redirect, overwrite the port portion of

@@ -328,7 +328,7 @@
             "type": "string"
           },
           "scheme": {
-            "description": "On a redirect, overwrite the scheme portion of the URL with this value. For example, \"http\" or \"https\". If unset, the original scheme will be used.",
+            "description": "On a redirect, overwrite the scheme portion of the URL with this value. For example, `http` or `https`. If unset, the original scheme will be used. If `derivePort` is set to `FROM_PROTOCOL_DEFAULT`, this will impact the port used as well",
             "type": "string"
           },
           "redirectCode": {
@@ -390,8 +390,8 @@
       "istio.networking.v1alpha3.HTTPRedirect.RedirectPortSelection": {
         "type": "string",
         "enum": [
-          "INFER",
-          "REQUEST_PORT"
+          "FROM_PROTOCOL_DEFAULT",
+          "FROM_REQUEST_PORT"
         ]
       },
       "istio.networking.v1alpha3.HTTPRetry": {

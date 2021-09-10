@@ -2043,8 +2043,8 @@ No
 <td><code><a href="#HTTPRedirect-RedirectPortSelection">RedirectPortSelection (oneof)</a></code></td>
 <td>
 <p>On a redirect, dynamically set the port:
-* INFER: automatically set to 80 for HTTP and 443 for HTTPS.
-* REQUEST_PORT: automatically use the port of the request.</p>
+* FROM<em>PROTOCOL</em>DEFAULT: automatically set to 80 for HTTP and 443 for HTTPS.
+* FROM<em>REQUEST</em>PORT: automatically use the port of the request.</p>
 
 </td>
 <td>
@@ -2056,8 +2056,9 @@ No
 <td><code>string</code></td>
 <td>
 <p>On a redirect, overwrite the scheme portion of the URL with this value.
-For example, &ldquo;http&rdquo; or &ldquo;https&rdquo;.
-If unset, the original scheme will be used.</p>
+For example, <code>http</code> or <code>https</code>.
+If unset, the original scheme will be used.
+If <code>derivePort</code> is set to <code>FROM_PROTOCOL_DEFAULT</code>, this will impact the port used as well</p>
 
 </td>
 <td>
@@ -2900,13 +2901,13 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="HTTPRedirect-RedirectPortSelection-INFER">
-<td><code>INFER</code></td>
+<tr id="HTTPRedirect-RedirectPortSelection-FROM_PROTOCOL_DEFAULT">
+<td><code>FROM_PROTOCOL_DEFAULT</code></td>
 <td>
 </td>
 </tr>
-<tr id="HTTPRedirect-RedirectPortSelection-REQUEST_PORT">
-<td><code>REQUEST_PORT</code></td>
+<tr id="HTTPRedirect-RedirectPortSelection-FROM_REQUEST_PORT">
+<td><code>FROM_REQUEST_PORT</code></td>
 <td>
 </td>
 </tr>
