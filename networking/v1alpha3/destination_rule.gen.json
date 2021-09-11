@@ -236,7 +236,7 @@
         ]
       },
       "istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB": {
-        "description": "Consistent Hash-based load balancing can be used to provide soft session affinity based on HTTP headers, cookies or other properties. This load balancing policy is applicable only for HTTP connections. The affinity to a particular destination host will be lost when one or more hosts are added/removed from the destination service.",
+        "description": "Consistent Hash-based load balancing can be used to provide soft session affinity based on HTTP headers, cookies or other properties. The affinity to a particular destination host will be lost when one or more hosts are added/removed from the destination service.",
         "type": "object",
         "properties": {
           "minimumRingSize": {
@@ -275,7 +275,7 @@
                   ],
                   "properties": {
                     "useSourceIp": {
-                      "description": "Hash based on the source IP address.",
+                      "description": "Hash based on the source IP address. This is applicable for both TCP and HTTP connections.",
                       "type": "boolean"
                     }
                   }
@@ -321,7 +321,7 @@
             ],
             "properties": {
               "useSourceIp": {
-                "description": "Hash based on the source IP address.",
+                "description": "Hash based on the source IP address. This is applicable for both TCP and HTTP connections.",
                 "type": "boolean"
               }
             }
