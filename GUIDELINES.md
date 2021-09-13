@@ -198,6 +198,22 @@ protos.
         }
         ```
 
+- **Do not** remove fields.
+
+    - This is backwards compatible for protobuf, but not for CRDs which have strict validation preventing unknown fields.
+
+- **Do not** make validation stricter than in previous versions.
+
+    - This applies to OpenAPI schema validation, validation webhooks, or any similar validation that would reject and API.
+
+    - Previously valid APIs must continue to remain valid in future upgrades; a change to validation is just as impactful as
+      removal of a field.
+
+    - For example, changing a `string` value to have a max length of X characters would break users with
+      configurations beyond X characters upon upgrade, and would not be permitted.
+
+    - Loosening validation is permitted. As a result, it is recommended to err on the side of stricter validation.
+
 ## CRD Guidelines
 
 ### CRD Style
@@ -226,11 +242,9 @@ message Gateway {
 
 Istio APIs should use a simple versioning strategy based on
 major versions and releases, such as `v1alpha`, `v2beta`, or
-`v3`. Within each release, there should not be any breaking
-change to released features, such as changing the type of
-a field type, renaming a field, or changing a field number.
-Breaking changes are allowed between different releases,
-such as `v1alpha1` and `v1alpha2`.
+`v3`. Due to current limitations in Istio's CRD versioning, namely
+a lack of a conversion webhook, the schema of all versions of an API
+must be strictly identical.
 
 Deprecating a feature in an API release is allowed by following
 the applicable deprecation process. The reason to allow
@@ -238,3 +252,14 @@ deprecation of individual features in a release is that it is
 significantly cheaper and simpler for everyone involved. In
 practice, it works out much better than deprecating an entire
 API version.
+
+## Exceptions
+
+Many of the guidelines above are related to limiting backward incompatible changes.
+These guidelines apply only between released versions of Istio (including patches
+and minor releases). This means that if a commit is merged into the `master` branch,
+breaking changes can still be made to it (such as removal, renaming, etc) up until
+it has been officially released.
+
+While violating the above guidelines is generally disallowed, exceptions may be made
+on a case-by-case basis.

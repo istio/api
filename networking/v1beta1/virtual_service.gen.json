@@ -327,14 +327,75 @@
             "description": "On a redirect, overwrite the Authority/Host portion of the URL with this value.",
             "type": "string"
           },
+          "scheme": {
+            "description": "On a redirect, overwrite the scheme portion of the URL with this value. For example, `http` or `https`. If unset, the original scheme will be used. If `derivePort` is set to `FROM_PROTOCOL_DEFAULT`, this will impact the port used as well",
+            "type": "string"
+          },
           "redirectCode": {
             "description": "On a redirect, Specifies the HTTP status code to use in the redirect response. The default response code is MOVED_PERMANENTLY (301).",
             "type": "integer"
           }
-        }
+        },
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "port"
+                  ],
+                  "properties": {
+                    "port": {
+                      "description": "On a redirect, overwrite the port portion of the URL with this value.",
+                      "type": "integer"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "derivePort"
+                  ],
+                  "properties": {
+                    "derivePort": {
+                      "$ref": "#/components/schemas/istio.networking.v1beta1.HTTPRedirect.RedirectPortSelection"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "port"
+            ],
+            "properties": {
+              "port": {
+                "description": "On a redirect, overwrite the port portion of the URL with this value.",
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "required": [
+              "derivePort"
+            ],
+            "properties": {
+              "derivePort": {
+                "$ref": "#/components/schemas/istio.networking.v1beta1.HTTPRedirect.RedirectPortSelection"
+              }
+            }
+          }
+        ]
+      },
+      "istio.networking.v1beta1.HTTPRedirect.RedirectPortSelection": {
+        "type": "string",
+        "enum": [
+          "FROM_PROTOCOL_DEFAULT",
+          "FROM_REQUEST_PORT"
+        ]
       },
       "istio.networking.v1beta1.HTTPRetry": {
-        "description": "Describes the retry policy to use when a HTTP request fails. For example, the following rule sets the maximum number of retries to 3 when calling ratings:v1 service, with a 2s timeout per retry attempt.",
+        "description": "Describes the retry policy to use when a HTTP request fails. For example, the following rule sets the maximum number of retries to 3 when calling ratings:v1 service, with a 2s timeout per retry attempt. A retry will be attempted if there is a connect-failure, refused_stream or when the upstream server responds with Service Unavailable(503).",
         "type": "object",
         "properties": {
           "attempts": {
@@ -347,7 +408,7 @@
             "type": "string"
           },
           "retryOn": {
-            "description": "Specifies the conditions under which retry takes place. One or more policies can be specified using a ‘,’ delimited list. See the [retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on) and [gRPC retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on) for more details.",
+            "description": "Specifies the conditions under which retry takes place. One or more policies can be specified using a ‘,’ delimited list. If retry_on specifies a valid HTTP status, it will be added to retriable_status_codes retry policy. See the [retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on) and [gRPC retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on) for more details.",
             "type": "string"
           },
           "retryRemoteLocalities": {
@@ -416,7 +477,7 @@
             "$ref": "#/components/schemas/istio.networking.v1beta1.Destination"
           },
           "mirrorPercent": {
-            "description": "Percentage of the traffic to be mirrored by the `mirror` field. Use of integer `mirror_percent` value is deprecated. Use the double `mirror_percentage` field instead",
+            "description": "Percentage of the traffic to be mirrored by the `mirror` field. Use of integer `mirror_percent` value is deprecated. Use the double `mirror_percentage` field instead $hide_from_docs",
             "type": "integer",
             "deprecated": true,
             "nullable": true

@@ -18,6 +18,7 @@ import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 import "mesh/v1alpha1/proxy.proto";
 import "networking/v1alpha3/destination_rule.proto";
+import "networking/v1alpha3/virtual_service.proto";
 import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
 
 // $title: Global Mesh Options
@@ -866,7 +867,18 @@ message MeshConfig {
   ProxyPathNormalization path_normalization = 61;
 
   // $hide_from_docs
-  // Next available field number: 62
+  // Configure the default HTTP retry policy.
+  // The default number of retry attempts is set at 2 for these errors:
+  //   "connect-failure,refused-stream,unavailable,cancelled,retriable-status-codes".
+  // Setting the number of attempts to 0 disables retry policy globally.
+  // This setting can be overriden on a per-host basis using the Virtual Service
+  // API.
+  // All settings in the retry policy except `perTryTimeout` can currently be
+  // configured globally via this field.
+  istio.networking.v1alpha3.HTTPRetry default_http_retry_policy = 62;
+
+  // $hide_from_docs
+  // Next available field number: 63
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;

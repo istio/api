@@ -1,0 +1,10 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - 6861
+
+releaseNotes:
+  - |
+    **Added** `defaultHttpRetryPolicy` option in `MeshConfig` to enable
+    configuring default HTTP retry policy.
