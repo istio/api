@@ -61,8 +61,8 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //         requestPrincipals: ["*"]
 // ```
 //
-// - A policy in root namespace, "istio-system" by default, applies to workloads in all namespaces
-// in a mesh. The following policy makes all workloads only accept the requests that contain a
+// - A policy in the root namespace ("istio-system" by default) applies to workloads in all namespaces
+// in a mesh. The following policy makes all workloads only accept requests that contain a
 // valid JWT token.
 //
 // ```yaml
