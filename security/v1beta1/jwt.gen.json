@@ -15,7 +15,7 @@
             "type": "string"
           },
           "prefix": {
-            "description": "The prefix that should be stripped before decoding the token. For example, for \"Authorization: Bearer \u003ctoken\u003e\", prefix=\"Bearer \" with a space at the end. If the header doesn't have this exact prefix, it is considerred invalid.",
+            "description": "The prefix that should be stripped before decoding the token. For example, for \"Authorization: Bearer \u003ctoken\u003e\", prefix=\"Bearer \" with a space at the end. If the header doesn't have this exact prefix, it is considered invalid.",
             "type": "string"
           }
         }
@@ -44,14 +44,14 @@
             "type": "string"
           },
           "fromHeaders": {
-            "description": "List of header locations from which JWT is expected. For example, below is the location spec if JWT is expected to be found in `x-jwt-assertion` header, and have \"Bearer \" prefix: ``` fromHeaders: - name: x-jwt-assertion prefix: \"Bearer \" ```",
+            "description": "List of header locations from which JWT is expected. For example, below is the location spec if JWT is expected to be found in `x-jwt-assertion` header, and have \"Bearer \" prefix: ```yaml fromHeaders: - name: x-jwt-assertion prefix: \"Bearer \" ```",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.security.v1beta1.JWTHeader"
             }
           },
           "fromParams": {
-            "description": "List of query parameters from which JWT is expected. For example, if JWT is provided via query parameter `my_token` (e.g /path?my_token=\u003cJWT\u003e), the config is: ``` fromParams: - \"my_token\" ```",
+            "description": "List of query parameters from which JWT is expected. For example, if JWT is provided via query parameter `my_token` (e.g /path?my_token=\u003cJWT\u003e), the config is: ```yaml fromParams: - \"my_token\" ```",
             "type": "array",
             "items": {
               "type": "string"
@@ -62,7 +62,7 @@
             "type": "string"
           },
           "forwardOriginalToken": {
-            "description": "If set to true, the orginal token will be kept for the ustream request. Default is false.",
+            "description": "If set to true, the original token will be kept for the upstream request. Default is false.",
             "type": "boolean"
           }
         }
