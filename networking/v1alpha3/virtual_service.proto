@@ -186,11 +186,11 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // +cue-gen:VirtualService:subresource:status
 // +cue-gen:VirtualService:scope:Namespaced
 // +cue-gen:VirtualService:resource:categories=istio-io,networking-istio-io,shortNames=vs
-// +cue-gen:VirtualService:printerColumn:name=Gateways,type=string,JSONPath=.spec.gateways,description="The names of gateways and sidecars 
+// +cue-gen:VirtualService:printerColumn:name=Gateways,type=string,JSONPath=.spec.gateways,description="The names of gateways and sidecars
 // that should apply these routes"
 // +cue-gen:VirtualService:printerColumn:name=Hosts,type=string,JSONPath=.spec.hosts,description="The destination hosts to which traffic is being sent"
-// +cue-gen:VirtualService:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp 
-// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. 
+// +cue-gen:VirtualService:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
+// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
 // Clients may not set this value. It is represented in RFC3339 form and is in UTC.
 // Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
 // +cue-gen:VirtualService:preserveUnknownFields:false
@@ -1061,8 +1061,24 @@ message HTTPMatchRequest {
   //
   // - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
   //
-  // If the value is empty and only the name of header is specfied, presence of the header is checked.
-  // **Note:** The keys `uri`, `scheme`, `method`, and `authority` will be ignored.
+  // If the value is empty and only the name of header is specified, presence of the header is checked.
+  // **Note 1:** The keys `uri`, `scheme`, `method`, and `authority` will be ignored.
+  //
+  // **Note 2:** The special key `x-jwt-claim` is reserved for matching with JWT claims on ingress gateway.
+  // Claim of type string or list of string is supported. Nested claims is also supported using the separator "." or "-"
+  // between each claim. For example,
+  //
+  // Use "." as the separator:
+  // - "x-jwt-claim.admin" matches the claim "admin".
+  // - "x-jwt-claim.group.id" matches the nested claims "group" and "id".
+  // - "x-jwt-claim.some-key.another" matches the nested claims "some-key" and "another".
+  // Use "-" as the separator:
+  // - "x-jwt-claim-admin" matches to the claim "admin".
+  // - "x-jwt-claim-group-id" matches to the nested claims "group" and "id".
+  // - "x-jwt-claim-www.example.com-name" matches the nested claims "www.example.com" and "name".
+  //
+  // This key is only supported on ingress gateway and requires a proper RequestAuthentication applied on the ingress
+  // gateway to validate the JWT and make the claims available for route matching.
   map<string, StringMatch> headers = 5;
 
   // Specifies the ports on the host that is being addressed. Many services
@@ -1567,15 +1583,15 @@ message StringMatch {
 //
 message HTTPRetry {
   // Number of retries to be allowed for a given request. The interval
-  // between retries will be determined automatically (25ms+). When request 
-  // `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute) 
+  // between retries will be determined automatically (25ms+). When request
+  // `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute)
   // or `per_try_timeout` is configured, the actual number of retries attempted also depends on
   // the specified request `timeout` and `per_try_timeout` values.
   int32 attempts = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Timeout per attempt for a given request, including the initial call and any retries. Format: 1h/1m/1s/1ms. MUST BE >=1ms.
-  // Default is same value as request 
-  // `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute), 
+  // Default is same value as request
+  // `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute),
   // which means no timeout.
   google.protobuf.Duration per_try_timeout = 2;
 
