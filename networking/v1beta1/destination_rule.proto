@@ -590,7 +590,7 @@ message ConnectionPoolSettings {
       google.protobuf.Duration interval = 3;
     };
 
-    // Maximum number of HTTP1 /TCP connections to a destination host. Default 2^32-1.
+    // Maximum number of HTTP1 /TCP connections to a destination host. Default 2^31-1.
     int32 max_connections = 1;
 
     // TCP connection timeout. format:
@@ -603,10 +603,10 @@ message ConnectionPoolSettings {
 
   // Settings applicable to HTTP1.1/HTTP2/GRPC connections.
   message HTTPSettings {
-    // Maximum number of pending HTTP requests to a destination. Default 2^32-1.
+    // Maximum number of pending HTTP requests to a destination. Default 2^31-1.
     int32 http1_max_pending_requests = 1;
 
-    // Maximum number of requests to a backend. Default 2^32-1.
+    // Maximum number of requests to a backend. Default 2^31-1.
     int32 http2_max_requests = 2;
 
     // Maximum number of requests per connection to a backend. Setting this
@@ -615,7 +615,7 @@ message ConnectionPoolSettings {
     int32 max_requests_per_connection = 3;
 
     // Maximum number of retries that can be outstanding to all hosts in a
-    // cluster at a given time. Defaults to 2^32-1.
+    // cluster at a given time. Defaults to 2^31-1.
     int32 max_retries = 4;
 
     // The idle timeout for upstream connection pool connections. The idle timeout
