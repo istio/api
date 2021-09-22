@@ -186,11 +186,11 @@ option go_package = "istio.io/api/networking/v1beta1";
 // +cue-gen:VirtualService:subresource:status
 // +cue-gen:VirtualService:scope:Namespaced
 // +cue-gen:VirtualService:resource:categories=istio-io,networking-istio-io,shortNames=vs
-// +cue-gen:VirtualService:printerColumn:name=Gateways,type=string,JSONPath=.spec.gateways,description="The names of gateways and sidecars 
+// +cue-gen:VirtualService:printerColumn:name=Gateways,type=string,JSONPath=.spec.gateways,description="The names of gateways and sidecars
 // that should apply these routes"
 // +cue-gen:VirtualService:printerColumn:name=Hosts,type=string,JSONPath=.spec.hosts,description="The destination hosts to which traffic is being sent"
-// +cue-gen:VirtualService:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp 
-// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. 
+// +cue-gen:VirtualService:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
+// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
 // Clients may not set this value. It is represented in RFC3339 form and is in UTC.
 // Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
 // +cue-gen:VirtualService:preserveUnknownFields:false
@@ -1065,17 +1065,12 @@ message HTTPMatchRequest {
   // **Note 1:** The keys `uri`, `scheme`, `method`, and `authority` will be ignored.
   //
   // **Note 2:** The special key `x-jwt-claim` is reserved for matching with JWT claims on ingress gateway.
-  // Claim of type string or list of string is supported. Nested claims is also supported using the separator "." or "-"
-  // between each claim. For example,
+  // Claim of type string or list of string is supported and nested claims is also supported using the separator "." between
+  // claim names.
   //
-  // Use "." as the separator:
+  // Examples:
   // - "x-jwt-claim.admin" matches the claim "admin".
   // - "x-jwt-claim.group.id" matches the nested claims "group" and "id".
-  // - "x-jwt-claim.some-key.another" matches the nested claims "some-key" and "another".
-  // Use "-" as the separator:
-  // - "x-jwt-claim-admin" matches to the claim "admin".
-  // - "x-jwt-claim-group-id" matches to the nested claims "group" and "id".
-  // - "x-jwt-claim-www.example.com-name" matches the nested claims "www.example.com" and "name".
   //
   // This key is only supported on ingress gateway and requires a proper RequestAuthentication applied on the ingress
   // gateway to validate the JWT and make the claims available for route matching.

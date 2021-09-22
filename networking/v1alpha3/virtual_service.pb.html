@@ -1408,17 +1408,12 @@ e.g. <em>x-request-id</em>.</p>
 <strong>Note 1:</strong> The keys <code>uri</code>, <code>scheme</code>, <code>method</code>, and <code>authority</code> will be ignored.</p>
 
 <p><strong>Note 2:</strong> The special key <code>x-jwt-claim</code> is reserved for matching with JWT claims on ingress gateway.
-Claim of type string or list of string is supported. Nested claims is also supported using the separator &ldquo;.&rdquo; or &ldquo;-&rdquo;
-between each claim. For example,</p>
+Claim of type string or list of string is supported and nested claims is also supported using the separator &ldquo;.&rdquo; between
+claim names.</p>
 
-<p>Use &ldquo;.&rdquo; as the separator:
+<p>Examples:
 - &ldquo;x-jwt-claim.admin&rdquo; matches the claim &ldquo;admin&rdquo;.
-- &ldquo;x-jwt-claim.group.id&rdquo; matches the nested claims &ldquo;group&rdquo; and &ldquo;id&rdquo;.
-- &ldquo;x-jwt-claim.some-key.another&rdquo; matches the nested claims &ldquo;some-key&rdquo; and &ldquo;another&rdquo;.
-Use &ldquo;-&rdquo; as the separator:
-- &ldquo;x-jwt-claim-admin&rdquo; matches to the claim &ldquo;admin&rdquo;.
-- &ldquo;x-jwt-claim-group-id&rdquo; matches to the nested claims &ldquo;group&rdquo; and &ldquo;id&rdquo;.
-- &ldquo;x-jwt-claim-www.example.com-name&rdquo; matches the nested claims &ldquo;www.example.com&rdquo; and &ldquo;name&rdquo;.</p>
+- &ldquo;x-jwt-claim.group.id&rdquo; matches the nested claims &ldquo;group&rdquo; and &ldquo;id&rdquo;.</p>
 
 <p>This key is only supported on ingress gateway and requires a proper RequestAuthentication applied on the ingress
 gateway to validate the JWT and make the claims available for route matching.</p>

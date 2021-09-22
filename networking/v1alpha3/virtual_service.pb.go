@@ -1577,17 +1577,12 @@ type HTTPMatchRequest struct {
 	// **Note 1:** The keys `uri`, `scheme`, `method`, and `authority` will be ignored.
 	//
 	// **Note 2:** The special key `x-jwt-claim` is reserved for matching with JWT claims on ingress gateway.
-	// Claim of type string or list of string is supported. Nested claims is also supported using the separator "." or "-"
-	// between each claim. For example,
+	// Claim of type string or list of string is supported and nested claims is also supported using the separator "." between
+	// claim names.
 	//
-	// Use "." as the separator:
+	// Examples:
 	// - "x-jwt-claim.admin" matches the claim "admin".
 	// - "x-jwt-claim.group.id" matches the nested claims "group" and "id".
-	// - "x-jwt-claim.some-key.another" matches the nested claims "some-key" and "another".
-	// Use "-" as the separator:
-	// - "x-jwt-claim-admin" matches to the claim "admin".
-	// - "x-jwt-claim-group-id" matches to the nested claims "group" and "id".
-	// - "x-jwt-claim-www.example.com-name" matches the nested claims "www.example.com" and "name".
 	//
 	// This key is only supported on ingress gateway and requires a proper RequestAuthentication applied on the ingress
 	// gateway to validate the JWT and make the claims available for route matching.
