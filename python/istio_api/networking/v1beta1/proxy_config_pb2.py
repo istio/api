@@ -23,29 +23,29 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.networking.v1beta1',
   syntax='proto3',
   serialized_options=_b('Z\037istio.io/api/networking/v1beta1'),
-  serialized_pb=_b('\n%networking/v1beta1/proxy_config.proto\x12\x18istio.networking.v1beta1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a networking/v1beta1/sidecar.proto\"\xc8\x02\n\x0bProxyConfig\x12W\n\x11workload_selector\x18\x01 \x01(\x0b\x32*.istio.networking.v1beta1.WorkloadSelectorR\x10workloadSelector\x12=\n\x0b\x63oncurrency\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int32ValueR\x0b\x63oncurrency\x12_\n\x0eproxy_metadata\x18\x03 \x03(\x0b\x32\x38.istio.networking.v1beta1.ProxyConfig.ProxyMetadataEntryR\rproxyMetadata\x1a@\n\x12ProxyMetadataEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\x42!Z\x1fistio.io/api/networking/v1beta1b\x06proto3')
+  serialized_pb=_b('\n%networking/v1beta1/proxy_config.proto\x12\x18istio.networking.v1beta1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a networking/v1beta1/sidecar.proto\"\xd3\x02\n\x0bProxyConfig\x12\x46\n\x08selector\x18\x01 \x01(\x0b\x32*.istio.networking.v1beta1.WorkloadSelectorR\x08selector\x12=\n\x0b\x63oncurrency\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int32ValueR\x0b\x63oncurrency\x12t\n\x15\x65nvironment_variables\x18\x03 \x03(\x0b\x32?.istio.networking.v1beta1.ProxyConfig.EnvironmentVariablesEntryR\x14\x65nvironmentVariables\x1aG\n\x19\x45nvironmentVariablesEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\x42!Z\x1fistio.io/api/networking/v1beta1b\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,networking_dot_v1beta1_dot_sidecar__pb2.DESCRIPTOR,])
 
 
 
 
-_PROXYCONFIG_PROXYMETADATAENTRY = _descriptor.Descriptor(
-  name='ProxyMetadataEntry',
-  full_name='istio.networking.v1beta1.ProxyConfig.ProxyMetadataEntry',
+_PROXYCONFIG_ENVIRONMENTVARIABLESENTRY = _descriptor.Descriptor(
+  name='EnvironmentVariablesEntry',
+  full_name='istio.networking.v1beta1.ProxyConfig.EnvironmentVariablesEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='istio.networking.v1beta1.ProxyConfig.ProxyMetadataEntry.key', index=0,
+      name='key', full_name='istio.networking.v1beta1.ProxyConfig.EnvironmentVariablesEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='key', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='value', full_name='istio.networking.v1beta1.ProxyConfig.ProxyMetadataEntry.value', index=1,
+      name='value', full_name='istio.networking.v1beta1.ProxyConfig.EnvironmentVariablesEntry.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -63,8 +63,8 @@ _PROXYCONFIG_PROXYMETADATAENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=430,
-  serialized_end=494,
+  serialized_start=434,
+  serialized_end=505,
 )
 
 _PROXYCONFIG = _descriptor.Descriptor(
@@ -75,12 +75,12 @@ _PROXYCONFIG = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='workload_selector', full_name='istio.networking.v1beta1.ProxyConfig.workload_selector', index=0,
+      name='selector', full_name='istio.networking.v1beta1.ProxyConfig.selector', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='workloadSelector', file=DESCRIPTOR),
+      serialized_options=None, json_name='selector', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='concurrency', full_name='istio.networking.v1beta1.ProxyConfig.concurrency', index=1,
       number=2, type=11, cpp_type=10, label=1,
@@ -89,16 +89,16 @@ _PROXYCONFIG = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='concurrency', file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='proxy_metadata', full_name='istio.networking.v1beta1.ProxyConfig.proxy_metadata', index=2,
+      name='environment_variables', full_name='istio.networking.v1beta1.ProxyConfig.environment_variables', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='proxyMetadata', file=DESCRIPTOR),
+      serialized_options=None, json_name='environmentVariables', file=DESCRIPTOR),
   ],
   extensions=[
   ],
-  nested_types=[_PROXYCONFIG_PROXYMETADATAENTRY, ],
+  nested_types=[_PROXYCONFIG_ENVIRONMENTVARIABLESENTRY, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -108,22 +108,22 @@ _PROXYCONFIG = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=166,
-  serialized_end=494,
+  serialized_end=505,
 )
 
-_PROXYCONFIG_PROXYMETADATAENTRY.containing_type = _PROXYCONFIG
-_PROXYCONFIG.fields_by_name['workload_selector'].message_type = networking_dot_v1beta1_dot_sidecar__pb2._WORKLOADSELECTOR
+_PROXYCONFIG_ENVIRONMENTVARIABLESENTRY.containing_type = _PROXYCONFIG
+_PROXYCONFIG.fields_by_name['selector'].message_type = networking_dot_v1beta1_dot_sidecar__pb2._WORKLOADSELECTOR
 _PROXYCONFIG.fields_by_name['concurrency'].message_type = google_dot_protobuf_dot_wrappers__pb2._INT32VALUE
-_PROXYCONFIG.fields_by_name['proxy_metadata'].message_type = _PROXYCONFIG_PROXYMETADATAENTRY
+_PROXYCONFIG.fields_by_name['environment_variables'].message_type = _PROXYCONFIG_ENVIRONMENTVARIABLESENTRY
 DESCRIPTOR.message_types_by_name['ProxyConfig'] = _PROXYCONFIG
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 ProxyConfig = _reflection.GeneratedProtocolMessageType('ProxyConfig', (_message.Message,), {
 
-  'ProxyMetadataEntry' : _reflection.GeneratedProtocolMessageType('ProxyMetadataEntry', (_message.Message,), {
-    'DESCRIPTOR' : _PROXYCONFIG_PROXYMETADATAENTRY,
+  'EnvironmentVariablesEntry' : _reflection.GeneratedProtocolMessageType('EnvironmentVariablesEntry', (_message.Message,), {
+    'DESCRIPTOR' : _PROXYCONFIG_ENVIRONMENTVARIABLESENTRY,
     '__module__' : 'networking.v1beta1.proxy_config_pb2'
-    # @@protoc_insertion_point(class_scope:istio.networking.v1beta1.ProxyConfig.ProxyMetadataEntry)
+    # @@protoc_insertion_point(class_scope:istio.networking.v1beta1.ProxyConfig.EnvironmentVariablesEntry)
     })
   ,
   'DESCRIPTOR' : _PROXYCONFIG,
@@ -131,9 +131,9 @@ ProxyConfig = _reflection.GeneratedProtocolMessageType('ProxyConfig', (_message.
   # @@protoc_insertion_point(class_scope:istio.networking.v1beta1.ProxyConfig)
   })
 _sym_db.RegisterMessage(ProxyConfig)
-_sym_db.RegisterMessage(ProxyConfig.ProxyMetadataEntry)
+_sym_db.RegisterMessage(ProxyConfig.EnvironmentVariablesEntry)
 
 
 DESCRIPTOR._options = None
-_PROXYCONFIG_PROXYMETADATAENTRY._options = None
+_PROXYCONFIG_ENVIRONMENTVARIABLESENTRY._options = None
 # @@protoc_insertion_point(module_scope)

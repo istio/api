@@ -25,7 +25,8 @@ option go_package="istio.io/api/networking/v1beta1";
 // `ProxyConfig` defines configuration for individual workloads. `ProxyConfig` can be configured on a per-workload basis, a per-revision
 // basis, a per-namespace basis, or mesh-wide. `ProxyConfig` is not a required resource; there are default values in place.
 //
-// To set the mesh wide defaults, create a `ProxyConfig` resource in the root namespace.
+// For mesh level configuration, put the resource in the root configuration namespace for
+// your Istio installation *without* a workload selector:
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
@@ -37,7 +38,7 @@ option go_package="istio.io/api/networking/v1beta1";
 //   concurrency: 0
 // ```
 //
-// This can also be configured per-workload basis by setting the `workloadSelector` field on the `ProxyConfig` resource. For example:
+// For workload level configuration, set the `selector` field on the `ProxyConfig` resource:
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
@@ -46,21 +47,21 @@ option go_package="istio.io/api/networking/v1beta1";
 //   name: per-workload-proxyconfig
 //   namespace: example
 // spec:
-//   workloadSelector:
+//   selector:
 //     labels:
 //       app: ratings
 //   concurrency: 0
 // ```
 //
+// If a `ProxyConfig` CR is defined that matches a workload it will merge with its `proxy.istio.io/config` annotation if present,
+// with the CR taking precedence over the annotation for overlapping fields. Furthermore, options configured in a `ProxyConfig`
+// CR matching a workload will similarly merge with mesh-wide and namespace-wide defaults.
 //
-// If a `ProxyConfig` CRD is defined that matches a workload it will take precedence over the annotation for that workload.
-// Furthermore, options configured in a `ProxyConfig` CRD matching a workload will take precedence over mesh wide defaults.
-//
-// Note: fields in ProxyConfig are not dynamically configured; changes will require restart of workloads to take effect.
+// **NOTE**: fields in ProxyConfig are not dynamically configured- changes will require restart of workloads to take effect.
 message ProxyConfig {
-  // Criteria used to select the specific set of pods/VMs on which this
-  // `ProxyConfig` configuration should be applied.
-  WorkloadSelector workload_selector = 1;
+  // Criteria used to select the specific set of pods/VMs on which this `ProxyConfig` configuration should be applied.
+  // If not set, the `ProxyConfig` resource will be applied to all workloads in the same namespace.
+  WorkloadSelector selector = 1;
 
   // The number of worker threads to run.
   // If unset, defaults to 2. If set to 0, this will be configured to use all cores on the machine using
@@ -69,5 +70,5 @@ message ProxyConfig {
 
   // Additional environment variables for the proxy.
   // Names starting with `ISTIO_META_` will be included in the generated bootstrap and sent to the XDS server.
-  map<string,string> proxy_metadata = 3;
+  map<string,string> environment_variables = 3;
 }

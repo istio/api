@@ -10,7 +10,7 @@
         "description": "`ProxyConfig` defines configuration for individual workloads. `ProxyConfig` can be configured on a per-workload basis, a per-revision basis, a per-namespace basis, or mesh-wide. `ProxyConfig` is not a required resource; there are default values in place.",
         "type": "object",
         "properties": {
-          "workloadSelector": {
+          "selector": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.WorkloadSelector"
           },
           "concurrency": {
@@ -18,7 +18,7 @@
             "type": "integer",
             "nullable": true
           },
-          "proxyMetadata": {
+          "environmentVariables": {
             "description": "Additional environment variables for the proxy. Names starting with `ISTIO_META_` will be included in the generated bootstrap and sent to the XDS server.",
             "type": "object",
             "additionalProperties": {
