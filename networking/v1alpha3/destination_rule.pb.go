@@ -907,8 +907,7 @@ func (*LoadBalancerSettings) XXX_OneofWrappers() []interface{} {
 
 // Consistent Hash-based load balancing can be used to provide soft
 // session affinity based on HTTP headers, cookies or other
-// properties. This load balancing policy is applicable only for HTTP
-// connections. The affinity to a particular destination host will be
+// properties. The affinity to a particular destination host will be
 // lost when one or more hosts are added/removed from the destination
 // service.
 type LoadBalancerSettings_ConsistentHashLB struct {

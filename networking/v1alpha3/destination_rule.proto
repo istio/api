@@ -465,8 +465,7 @@ message LoadBalancerSettings {
 
   // Consistent Hash-based load balancing can be used to provide soft
   // session affinity based on HTTP headers, cookies or other
-  // properties. This load balancing policy is applicable only for HTTP
-  // connections. The affinity to a particular destination host will be
+  // properties. The affinity to a particular destination host will be
   // lost when one or more hosts are added/removed from the destination
   // service.
   message ConsistentHashLB {
@@ -491,6 +490,7 @@ message LoadBalancerSettings {
       HTTPCookie http_cookie = 2;
 
       // Hash based on the source IP address.
+      // This is applicable for both TCP and HTTP connections.
       bool use_source_ip = 3;
 
       // Hash based on a specific HTTP query parameter.
