@@ -144,6 +144,72 @@ spec:
         paths: [&quot;/healthz&quot;]
 </code></pre>
 
+<ul>
+<li>When applied on gateway, you can also use the special header name <code>x-jwt-claim</code> for matching with JWT claims in
+the virtual service. Claim of type string or list of string is supported and nested claims is also supported using
+the <code>.</code> as separator for claim names. Examples: <code>x-jwt-claim.admin</code> matches the claim &ldquo;admin&rdquo; and <code>x-jwt-claim.group.id</code>
+matches the nested claims &ldquo;group&rdquo; and &ldquo;id&rdquo;.</li>
+</ul>
+
+<p>The following example creates the request authentication and authorization policy for JWT validation on ingress
+gateway and route the request based on the &ldquo;version&rdquo; claim in the validated JWT.</p>
+
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: jwt-on-ingress
+  namespace: istio-system
+spec:
+ selector:
+   matchLabels:
+     app: istio-ingressgateway
+  jwtRules:
+  - issuer: &quot;issuer-foo&quot;
+    jwksUri: https://example.com/.well-known/jwks.json
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: require-jwt
+  namespace: istio-system
+spec:
+ selector:
+   matchLabels:
+     app: istio-ingressgateway
+  rules:
+  - from:
+    - source:
+        requestPrincipals: [&quot;*&quot;]
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: route-jwt
+spec:
+  hosts:
+  - foo.prod.svc.cluster.local
+  gateways:
+  - istio-ingressgateway
+  http:
+  - name: &quot;v2-route&quot;
+    match:
+    - headers:
+        x-jwt-claim.version:
+          exact: &quot;v2&quot;
+    route:
+    - destination:
+        host: foo.prod.svc.cluster.local
+        subset: v2
+  - name: &quot;default-route&quot;
+    route:
+    - destination:
+        host: foo.prod.svc.cluster.local
+        subset: v1
+</code></pre>
+
+<p><strong>Note:</strong> This only supports gateway and a proper request authentication must first be applied to validate the JWT.
+The special key <code>x-jwt-claim</code> is matched with internal metadata populated after successful JWT validation.</p>
+
 <table class="message-fields">
 <thead>
 <tr>

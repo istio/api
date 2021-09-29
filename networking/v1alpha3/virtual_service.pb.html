@@ -1404,19 +1404,8 @@ e.g. <em>x-request-id</em>.</p>
 <li><p><code>regex: &quot;value&quot;</code> for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).</p></li>
 </ul>
 
-<p>If the value is empty and only the name of header is specified, presence of the header is checked.
-<strong>Note 1:</strong> The keys <code>uri</code>, <code>scheme</code>, <code>method</code>, and <code>authority</code> will be ignored.</p>
-
-<p><strong>Note 2:</strong> The special key <code>x-jwt-claim</code> is reserved for matching with JWT claims on ingress gateway.
-Claim of type string or list of string is supported and nested claims is also supported using the separator &ldquo;.&rdquo; between
-claim names.</p>
-
-<p>Examples:
-- &ldquo;x-jwt-claim.admin&rdquo; matches the claim &ldquo;admin&rdquo;.
-- &ldquo;x-jwt-claim.group.id&rdquo; matches the nested claims &ldquo;group&rdquo; and &ldquo;id&rdquo;.</p>
-
-<p>This key is only supported on ingress gateway and requires a proper RequestAuthentication applied on the ingress
-gateway to validate the JWT and make the claims available for route matching.</p>
+<p>If the value is empty and only the name of header is specfied, presence of the header is checked.
+<strong>Note:</strong> The keys <code>uri</code>, <code>scheme</code>, <code>method</code>, and <code>authority</code> will be ignored.</p>
 
 </td>
 <td>

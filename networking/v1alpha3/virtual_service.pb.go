@@ -1573,19 +1573,8 @@ type HTTPMatchRequest struct {
 	//
 	// - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
 	//
-	// If the value is empty and only the name of header is specified, presence of the header is checked.
-	// **Note 1:** The keys `uri`, `scheme`, `method`, and `authority` will be ignored.
-	//
-	// **Note 2:** The special key `x-jwt-claim` is reserved for matching with JWT claims on ingress gateway.
-	// Claim of type string or list of string is supported and nested claims is also supported using the separator "." between
-	// claim names.
-	//
-	// Examples:
-	// - "x-jwt-claim.admin" matches the claim "admin".
-	// - "x-jwt-claim.group.id" matches the nested claims "group" and "id".
-	//
-	// This key is only supported on ingress gateway and requires a proper RequestAuthentication applied on the ingress
-	// gateway to validate the JWT and make the claims available for route matching.
+	// If the value is empty and only the name of header is specfied, presence of the header is checked.
+	// **Note:** The keys `uri`, `scheme`, `method`, and `authority` will be ignored.
 	Headers map[string]*StringMatch `protobuf:"bytes,5,rep,name=headers,proto3" json:"headers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Specifies the ports on the host that is being addressed. Many services
 	// only expose a single port or label ports with the protocols they support,
