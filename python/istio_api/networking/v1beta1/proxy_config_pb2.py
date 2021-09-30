@@ -13,7 +13,6 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from google.protobuf import duration_pb2 as google_dot_protobuf_dot_duration__pb2
 from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 from networking.v1beta1 import sidecar_pb2 as networking_dot_v1beta1_dot_sidecar__pb2
 
@@ -23,9 +22,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.networking.v1beta1',
   syntax='proto3',
   serialized_options=_b('Z\037istio.io/api/networking/v1beta1'),
-  serialized_pb=_b('\n%networking/v1beta1/proxy_config.proto\x12\x18istio.networking.v1beta1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a networking/v1beta1/sidecar.proto\"\xd3\x02\n\x0bProxyConfig\x12\x46\n\x08selector\x18\x01 \x01(\x0b\x32*.istio.networking.v1beta1.WorkloadSelectorR\x08selector\x12=\n\x0b\x63oncurrency\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int32ValueR\x0b\x63oncurrency\x12t\n\x15\x65nvironment_variables\x18\x03 \x03(\x0b\x32?.istio.networking.v1beta1.ProxyConfig.EnvironmentVariablesEntryR\x14\x65nvironmentVariables\x1aG\n\x19\x45nvironmentVariablesEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\x42!Z\x1fistio.io/api/networking/v1beta1b\x06proto3')
+  serialized_pb=_b('\n%networking/v1beta1/proxy_config.proto\x12\x18istio.networking.v1beta1\x1a\x1egoogle/protobuf/wrappers.proto\x1a networking/v1beta1/sidecar.proto\"\xd3\x02\n\x0bProxyConfig\x12\x46\n\x08selector\x18\x01 \x01(\x0b\x32*.istio.networking.v1beta1.WorkloadSelectorR\x08selector\x12=\n\x0b\x63oncurrency\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int32ValueR\x0b\x63oncurrency\x12t\n\x15\x65nvironment_variables\x18\x03 \x03(\x0b\x32?.istio.networking.v1beta1.ProxyConfig.EnvironmentVariablesEntryR\x14\x65nvironmentVariables\x1aG\n\x19\x45nvironmentVariablesEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\x42!Z\x1fistio.io/api/networking/v1beta1b\x06proto3')
   ,
-  dependencies=[google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,networking_dot_v1beta1_dot_sidecar__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,networking_dot_v1beta1_dot_sidecar__pb2.DESCRIPTOR,])
 
 
 
@@ -63,8 +62,8 @@ _PROXYCONFIG_ENVIRONMENTVARIABLESENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=434,
-  serialized_end=505,
+  serialized_start=402,
+  serialized_end=473,
 )
 
 _PROXYCONFIG = _descriptor.Descriptor(
@@ -107,8 +106,8 @@ _PROXYCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=166,
-  serialized_end=505,
+  serialized_start=134,
+  serialized_end=473,
 )
 
 _PROXYCONFIG_ENVIRONMENTVARIABLESENTRY.containing_type = _PROXYCONFIG

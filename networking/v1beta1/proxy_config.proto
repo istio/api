@@ -14,13 +14,19 @@
 
 syntax = "proto3";
 
-import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 import "networking/v1beta1/sidecar.proto";
 
 package istio.networking.v1beta1;
 
-option go_package="istio.io/api/networking/v1beta1";
+option go_package= "istio.io/api/networking/v1beta1";
+
+// $schema: istio.networking.v1beta1.ProxyConfig
+// $title: ProxyConfig
+// $description: Proxy configuration for workloads.
+// $location: https://istio.io/docs/reference/config/networking/proxy-config.html
+// $aliases: [/docs/reference/config/networking/v1beta1/proxy-config]
+// $mode: none
 
 // `ProxyConfig` defines configuration for individual workloads. `ProxyConfig` can be configured on a per-workload basis, a per-revision
 // basis, a per-namespace basis, or mesh-wide. `ProxyConfig` is not a required resource; there are default values in place.
