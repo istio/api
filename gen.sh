@@ -37,6 +37,10 @@ buf generate --template buf.gen-noncrd.yaml \
   --path mcp \
   --path mesh
 
+# These plugins are sent to Envoy, which uses golang/protobuf, so do not use gogo
+buf generate --template buf.gen-golang.yaml \
+  --path envoy
+
 # Custom hacks to post-process some outputs
 go run ./operator/fixup_structs/main.go -f operator/v1alpha1/operator.pb.go
 go run ./operator/fixup_structs/main.go -f mesh/v1alpha1/config.pb.go
