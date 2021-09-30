@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 47
+number_of_entries: 48
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -1876,6 +1876,44 @@ No
 <td>
 <p>Path to a local file to write the access log entries.
 If unspecified, defaults to <code>/dev/stdout</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-StackdriverProvider-LoggingOptions">MeshConfig.ExtensionProvider.StackdriverProvider.LoggingOptions</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-StackdriverProvider-LoggingOptions-compress_logs">
+<td><code>compressLogs</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+<p>Turns on gzip-compression of logs when sending to Cloud Logging.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-StackdriverProvider-LoggingOptions-only_errors">
+<td><code>onlyErrors</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+<p>For access logs, only generate for requests with a response.code &gt;= 400.
+TODO: replace with filter options in Telemetry API (when ready)</p>
 
 </td>
 <td>

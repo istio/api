@@ -729,6 +729,19 @@ message MeshConfig {
       // Optional. Controls the overall path length allowed in a reported span.
       // NOTE: currently only controls max length of the path tag.
       uint32 max_tag_length = 5;
+
+      message LoggingOptions {
+        // Turns on gzip-compression of logs when sending to Cloud Logging.
+        google.protobuf.BoolValue compress_logs = 1;
+
+        // For access logs, only generate for requests with a response.code >= 400.
+        // TODO: replace with filter options in Telemetry API (when ready)
+        google.protobuf.BoolValue only_errors = 2;
+      }
+
+      // Customize the logging behavior of the Stackdriver provider.
+      // $hide_from_docs.
+      LoggingOptions logging_options = 6;
     }
 
     // Defines configuration for an OpenCensus tracer writing to an OpenCensus backend.

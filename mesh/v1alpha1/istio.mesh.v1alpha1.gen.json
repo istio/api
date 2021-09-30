@@ -827,6 +827,24 @@
           "maxTagLength": {
             "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
             "type": "integer"
+          },
+          "loggingOptions": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.LoggingOptions"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.LoggingOptions": {
+        "type": "object",
+        "properties": {
+          "compressLogs": {
+            "description": "Turns on gzip-compression of logs when sending to Cloud Logging.",
+            "type": "boolean",
+            "nullable": true
+          },
+          "onlyErrors": {
+            "description": "For access logs, only generate for requests with a response.code \u003e= 400. TODO: replace with filter options in Telemetry API (when ready)",
+            "type": "boolean",
+            "nullable": true
           }
         }
       },
