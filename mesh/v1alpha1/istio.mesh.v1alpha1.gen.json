@@ -735,6 +735,296 @@
           "path": {
             "description": "Path to a local file to write the access log entries. If unspecified, defaults to `/dev/stdout`.",
             "type": "string"
+          },
+          "logFormat": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider.LogFormat"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider.LogFormat": {
+        "type": "object",
+        "properties": {
+          "textFormat": {
+            "description": "ex: text_format: \"%LOCAL_REPLY_BODY%:%RESPONSE_CODE%:path=%REQ(:path)%\\n\"",
+            "type": "string"
+          },
+          "jsonFormat": {
+            "description": "ex: json_format: status: \"%RESPONSE_CODE%\" message: \"%LOCAL_REPLY_BODY%\"",
+            "type": "object"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyHttpGrpcV3LogProvider": {
+        "type": "object",
+        "properties": {
+          "logName": {
+            "type": "string"
+          },
+          "service": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer"
+          },
+          "bufferFlushInterval": {
+            "type": "string"
+          },
+          "bufferSizeBytes": {
+            "type": "integer",
+            "nullable": true
+          },
+          "filterStateObjectsToLog": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "additionalRequestHeadersToLog": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "additionalResponseHeadersToLog": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "additionalResponseTrailersToLog": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider": {
+        "type": "object",
+        "properties": {
+          "logName": {
+            "type": "string"
+          },
+          "service": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer"
+          },
+          "bufferFlushInterval": {
+            "type": "string"
+          },
+          "bufferSizeBytes": {
+            "type": "integer",
+            "nullable": true
+          },
+          "filterStateObjectsToLog": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "body": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.AnyValue"
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.AnyValue"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.AnyValue": {
+        "description": "Taken from OTel (\"opentelemetry/proto/common/v1/common.proto\")",
+        "type": "object",
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "stringValue"
+                  ],
+                  "properties": {
+                    "stringValue": {
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "boolValue"
+                  ],
+                  "properties": {
+                    "boolValue": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "intValue"
+                  ],
+                  "properties": {
+                    "intValue": {
+                      "type": "integer",
+                      "format": "int64"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "doubleValue"
+                  ],
+                  "properties": {
+                    "doubleValue": {
+                      "type": "number",
+                      "format": "double"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "arrayValue"
+                  ],
+                  "properties": {
+                    "arrayValue": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.ArrayValue"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "kvlistValue"
+                  ],
+                  "properties": {
+                    "kvlistValue": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.KeyValueList"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "bytesValue"
+                  ],
+                  "properties": {
+                    "bytesValue": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "stringValue"
+            ],
+            "properties": {
+              "stringValue": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "boolValue"
+            ],
+            "properties": {
+              "boolValue": {
+                "type": "boolean"
+              }
+            }
+          },
+          {
+            "required": [
+              "intValue"
+            ],
+            "properties": {
+              "intValue": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          },
+          {
+            "required": [
+              "doubleValue"
+            ],
+            "properties": {
+              "doubleValue": {
+                "type": "number",
+                "format": "double"
+              }
+            }
+          },
+          {
+            "required": [
+              "arrayValue"
+            ],
+            "properties": {
+              "arrayValue": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.ArrayValue"
+              }
+            }
+          },
+          {
+            "required": [
+              "kvlistValue"
+            ],
+            "properties": {
+              "kvlistValue": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.KeyValueList"
+              }
+            }
+          },
+          {
+            "required": [
+              "bytesValue"
+            ],
+            "properties": {
+              "bytesValue": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        ]
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.ArrayValue": {
+        "description": "ArrayValue is a list of AnyValue messages. We need ArrayValue as a message since oneof in AnyValue does not allow repeated fields.",
+        "type": "object",
+        "properties": {
+          "values": {
+            "description": "Array of values. The array may be empty (contain 0 elements).",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.AnyValue"
+            }
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.KeyValue": {
+        "description": "KeyValue is a key-value pair that is used to store Span attributes, Link attributes, etc.",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.AnyValue"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.KeyValueList": {
+        "description": "KeyValueList is a list of KeyValue messages. We need KeyValueList as a message since `oneof` in AnyValue does not allow repeated fields. Everywhere else where we need a list of KeyValue messages (e.g. in Span) we use `repeated KeyValue` directly to avoid unnecessary extra wrapping (which slows down the protocol). The 2 approaches are semantically equivalent.",
+        "type": "object",
+        "properties": {
+          "values": {
+            "description": "A collection of key/value pairs of key-value pairs. The list may be empty (may contain 0 elements).",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.KeyValue"
+            }
           }
         }
       },
@@ -843,6 +1133,24 @@
           "maxTagLength": {
             "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
             "type": "integer"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.LoggingOptions": {
+        "type": "object",
+        "properties": {
+          "dimensions": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "reportDuration": {
+            "type": "string"
+          },
+          "errorsOnly": {
+            "type": "boolean",
+            "nullable": true
           }
         }
       },

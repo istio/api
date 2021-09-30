@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 47
+number_of_entries: 56
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -1932,6 +1932,467 @@ If unspecified, defaults to <code>/dev/stdout</code>.</p>
 No
 </td>
 </tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyFileAccessLogProvider-log_format">
+<td><code>logFormat</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-EnvoyFileAccessLogProvider-LogFormat">LogFormat</a></code></td>
+<td>
+<p>Optional. Allows overriding of the default text log format.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-EnvoyHttpGrpcV3LogProvider">MeshConfig.ExtensionProvider.EnvoyHttpGrpcV3LogProvider</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-EnvoyHttpGrpcV3LogProvider-log_name">
+<td><code>logName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyHttpGrpcV3LogProvider-service">
+<td><code>service</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyHttpGrpcV3LogProvider-port">
+<td><code>port</code></td>
+<td><code>uint32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyHttpGrpcV3LogProvider-buffer_flush_interval">
+<td><code>bufferFlushInterval</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyHttpGrpcV3LogProvider-buffer_size_bytes">
+<td><code>bufferSizeBytes</code></td>
+<td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyHttpGrpcV3LogProvider-filter_state_objects_to_log">
+<td><code>filterStateObjectsToLog</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyHttpGrpcV3LogProvider-additional_request_headers_to_log">
+<td><code>additionalRequestHeadersToLog</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyHttpGrpcV3LogProvider-additional_response_headers_to_log">
+<td><code>additionalResponseHeadersToLog</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyHttpGrpcV3LogProvider-additional_response_trailers_to_log">
+<td><code>additionalResponseTrailersToLog</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider">MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-log_name">
+<td><code>logName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-service">
+<td><code>service</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-port">
+<td><code>port</code></td>
+<td><code>uint32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-buffer_flush_interval">
+<td><code>bufferFlushInterval</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-buffer_size_bytes">
+<td><code>bufferSizeBytes</code></td>
+<td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-filter_state_objects_to_log">
+<td><code>filterStateObjectsToLog</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-body">
+<td><code>body</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-AnyValue">AnyValue</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-attributes">
+<td><code>attributes</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-AnyValue">AnyValue</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-StackdriverProvider-LoggingOptions">MeshConfig.ExtensionProvider.StackdriverProvider.LoggingOptions</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-StackdriverProvider-LoggingOptions-dimensions">
+<td><code>dimensions</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-StackdriverProvider-LoggingOptions-report_duration">
+<td><code>reportDuration</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-StackdriverProvider-LoggingOptions-errors_only">
+<td><code>errorsOnly</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-EnvoyFileAccessLogProvider-LogFormat">MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider.LogFormat</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-EnvoyFileAccessLogProvider-LogFormat-text_format">
+<td><code>textFormat</code></td>
+<td><code>string</code></td>
+<td>
+<p>ex:
+text<em>format: &ldquo;%LOCAL</em>REPLY<em>BODY%:%RESPONSE</em>CODE%:path=%REQ(:path)%\n&rdquo;</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyFileAccessLogProvider-LogFormat-json_format">
+<td><code>jsonFormat</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">Struct</a></code></td>
+<td>
+<p>ex:
+json<em>format:
+  status: &ldquo;%RESPONSE</em>CODE%&rdquo;
+  message: &ldquo;%LOCAL<em>REPLY</em>BODY%&rdquo;</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-AnyValue">MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.AnyValue</h2>
+<section>
+<p>Taken from OTel (&ldquo;opentelemetry/proto/common/v1/common.proto&rdquo;)</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-AnyValue-string_value" class="oneof oneof-start">
+<td><code>stringValue</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-AnyValue-bool_value" class="oneof">
+<td><code>boolValue</code></td>
+<td><code>bool (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-AnyValue-int_value" class="oneof">
+<td><code>intValue</code></td>
+<td><code>int64 (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-AnyValue-double_value" class="oneof">
+<td><code>doubleValue</code></td>
+<td><code>double (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-AnyValue-array_value" class="oneof">
+<td><code>arrayValue</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-ArrayValue">ArrayValue (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-AnyValue-kvlist_value" class="oneof">
+<td><code>kvlistValue</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-KeyValueList">KeyValueList (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-AnyValue-bytes_value" class="oneof">
+<td><code>bytesValue</code></td>
+<td><code>bytes (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-ArrayValue">MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.ArrayValue</h2>
+<section>
+<p>ArrayValue is a list of AnyValue messages. We need ArrayValue as a message
+since oneof in AnyValue does not allow repeated fields.</p>
+
+<p>Taken from OTel (&ldquo;opentelemetry/proto/common/v1/common.proto&rdquo;)</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-ArrayValue-values">
+<td><code>values</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-AnyValue">AnyValue[]</a></code></td>
+<td>
+<p>Array of values. The array may be empty (contain 0 elements).</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-KeyValueList">MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.KeyValueList</h2>
+<section>
+<p>KeyValueList is a list of KeyValue messages. We need KeyValueList as a message
+since <code>oneof</code> in AnyValue does not allow repeated fields. Everywhere else where we need
+a list of KeyValue messages (e.g. in Span) we use <code>repeated KeyValue</code> directly to
+avoid unnecessary extra wrapping (which slows down the protocol). The 2 approaches
+are semantically equivalent.</p>
+
+<p>Taken from OTel (&ldquo;opentelemetry/proto/common/v1/common.proto&rdquo;)</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-KeyValueList-values">
+<td><code>values</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-KeyValue">KeyValue[]</a></code></td>
+<td>
+<p>A collection of key/value pairs of key-value pairs. The list may be empty (may
+contain 0 elements).</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-KeyValue">MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.KeyValue</h2>
+<section>
+<p>KeyValue is a key-value pair that is used to store Span attributes, Link
+attributes, etc.</p>
+
+<p>Taken from OTel (&ldquo;opentelemetry/proto/common/v1/common.proto&rdquo;)</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-KeyValue-key">
+<td><code>key</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-KeyValue-value">
+<td><code>value</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-AnyValue">AnyValue</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1971,6 +2432,36 @@ No
 <td>
 <p>matchExpressions is a list of label selector requirements. The requirements are ANDed.
 +optional</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="google-protobuf-UInt32Value">google.protobuf.UInt32Value</h2>
+<section>
+<p>Wrapper message for <code>uint32</code>.</p>
+
+<p>The JSON representation for <code>UInt32Value</code> is JSON number.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="google-protobuf-UInt32Value-value">
+<td><code>value</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>The uint32 value.</p>
 
 </td>
 <td>
