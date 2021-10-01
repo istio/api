@@ -39751,6 +39751,12 @@
                 "is_repeated": true
               },
               {
+                "id": 19,
+                "name": "topologySpreadConstraints",
+                "type": "TopologySpreadConstraint",
+                "is_repeated": true
+              },
+              {
                 "id": 16,
                 "name": "securityContext",
                 "type": "PodSecurityContext"
@@ -40658,6 +40664,31 @@
                 "id": 5,
                 "name": "tolerationSeconds",
                 "type": "int64"
+              }
+            ]
+          },
+          {
+            "name": "TopologySpreadConstraint",
+            "fields": [
+              {
+                "id": 1,
+                "name": "maxSkew",
+                "type": "int32"
+              },
+              {
+                "id": 2,
+                "name": "topologyKey",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "whenUnsatisfiable",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "labelSelector",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
               }
             ]
           },

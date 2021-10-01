@@ -289,6 +289,9 @@ message KubernetesResourcesSpec {
     // k8s toleration
     // [https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)
     repeated Toleration tolerations = 14;
+    // k8s topologySpreadConstraint
+    // [https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/)
+    repeated TopologySpreadConstraint topologySpreadConstraints = 19;
     // k8s service annotations.
     // [https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
     map<string, string> service_annotations = 15;
@@ -605,6 +608,14 @@ message Toleration {
     string value = 3;
     string effect = 4;
     int64 tolerationSeconds = 5;
+}
+
+// See k8s.io.api.core.v1.TopologySpreadConstraint
+message TopologySpreadConstraint {
+    optional int32 maxSkew = 1;
+    optional string topologyKey = 2;
+    optional string whenUnsatisfiable = 3;
+    optional k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector labelSelector = 4;
 }
 
 // See k8s.io.api.core.v1.WeightedPodAffinityTerm.

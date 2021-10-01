@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.operator.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 63
+number_of_entries: 64
 ---
 <p>Configuration affecting Istio control plane installation version and shape.</p>
 
@@ -808,6 +808,18 @@ No
 <td>
 <p>k8s toleration
 <a href="https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/">https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/</a></p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="KubernetesResourcesSpec-topologySpreadConstraints">
+<td><code>topologySpreadConstraints</code></td>
+<td><code><a href="#TopologySpreadConstraint">TopologySpreadConstraint[]</a></code></td>
+<td>
+<p>k8s topologySpreadConstraint
+<a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/">https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/</a></p>
 
 </td>
 <td>
@@ -2656,6 +2668,59 @@ No
 <tr id="Toleration-tolerationSeconds">
 <td><code>tolerationSeconds</code></td>
 <td><code>int64</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="TopologySpreadConstraint">TopologySpreadConstraint</h2>
+<section>
+<p>See k8s.io.api.core.v1.TopologySpreadConstraint</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="TopologySpreadConstraint-maxSkew" class="oneof oneof-start">
+<td><code>maxSkew</code></td>
+<td><code>int32 (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="TopologySpreadConstraint-topologyKey" class="oneof oneof-start">
+<td><code>topologyKey</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="TopologySpreadConstraint-whenUnsatisfiable" class="oneof oneof-start">
+<td><code>whenUnsatisfiable</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="TopologySpreadConstraint-labelSelector" class="oneof oneof-start">
+<td><code>labelSelector</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-apis-meta-v1-LabelSelector">LabelSelector (oneof)</a></code></td>
 <td>
 </td>
 <td>
