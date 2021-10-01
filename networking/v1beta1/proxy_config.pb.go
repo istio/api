@@ -32,7 +32,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // +cue-gen:ProxyConfig:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:ProxyConfig:subresource:status
 // +cue-gen:ProxyConfig:scope:Namespaced
-// +cue-gen:ProxyConfig:resource:categories=istio-io,networking-istio-io
+// +cue-gen:ProxyConfig:resource:categories=istio-io,networking-istio-io,plural=proxyconfigs
 // +cue-gen:ProxyConfig:preserveUnknownFields:false
 // -->
 //
