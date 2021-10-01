@@ -28,6 +28,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // <!-- crd generation tags
 // +cue-gen:ProxyConfig:groupName:networking.istio.io
 // +cue-gen:ProxyConfig:version:v1beta1
+// +cue-gen:ProxyConfig:storageVersion
 // +cue-gen:ProxyConfig:annotations:helm.sh/resource-policy=keep
 // +cue-gen:ProxyConfig:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:ProxyConfig:subresource:status
