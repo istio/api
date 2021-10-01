@@ -17,13 +17,9 @@ syntax = "proto3";
 import "google/protobuf/wrappers.proto";
 import "networking/v1beta1/sidecar.proto";
 
-package istio.networking.v1beta1;
-
-option go_package= "istio.io/api/networking/v1beta1";
-
 // $schema: istio.networking.v1beta1.ProxyConfig
 // $title: ProxyConfig
-// $description: Proxy configuration for workloads.
+// $description: Provides configuration for individual workloads.
 // $location: https://istio.io/docs/reference/config/networking/proxy-config.html
 // $aliases: [/docs/reference/config/networking/v1beta1/proxy-config]
 // $mode: none
@@ -64,6 +60,30 @@ option go_package= "istio.io/api/networking/v1beta1";
 // CR matching a workload will similarly merge with mesh-wide and namespace-wide defaults.
 //
 // **NOTE**: fields in ProxyConfig are not dynamically configured- changes will require restart of workloads to take effect.
+
+package istio.networking.v1beta1;
+
+option go_package= "istio.io/api/networking/v1beta1";
+
+// `ProxyConfig` defines configuration for individual workloads.
+//
+// <!-- crd generation tags
+// +cue-gen:ProxyConfig:groupName:networking.istio.io
+// +cue-gen:ProxyConfig:version:v1beta1
+// +cue-gen:ProxyConfig:annotations:helm.sh/resource-policy=keep
+// +cue-gen:ProxyConfig:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
+// +cue-gen:ProxyConfig:subresource:status
+// +cue-gen:ProxyConfig:scope:Namespaced
+// +cue-gen:ProxyConfig:resource:categories=istio-io,networking-istio-io
+// +cue-gen:ProxyConfig:preserveUnknownFields:false
+// -->
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=networking.istio.io/v1beta1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message ProxyConfig {
   // Criteria used to select the specific set of pods/VMs on which this `ProxyConfig` configuration should be applied.
   // If not set, the `ProxyConfig` resource will be applied to all workloads in the same namespace.

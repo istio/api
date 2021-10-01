@@ -23,42 +23,25 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// `ProxyConfig` defines configuration for individual workloads. `ProxyConfig` can be configured on a per-workload basis, a per-revision
-// basis, a per-namespace basis, or mesh-wide. `ProxyConfig` is not a required resource; there are default values in place.
+// `ProxyConfig` defines configuration for individual workloads.
 //
-// For mesh level configuration, put the resource in the root configuration namespace for
-// your Istio installation *without* a workload selector:
+// <!-- crd generation tags
+// +cue-gen:ProxyConfig:groupName:networking.istio.io
+// +cue-gen:ProxyConfig:version:v1beta1
+// +cue-gen:ProxyConfig:annotations:helm.sh/resource-policy=keep
+// +cue-gen:ProxyConfig:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
+// +cue-gen:ProxyConfig:subresource:status
+// +cue-gen:ProxyConfig:scope:Namespaced
+// +cue-gen:ProxyConfig:resource:categories=istio-io,networking-istio-io
+// +cue-gen:ProxyConfig:preserveUnknownFields:false
+// -->
 //
-// ```yaml
-// apiVersion: networking.istio.io/v1beta1
-// kind: ProxyConfig
-// metadata:
-//   name: my-proxyconfig
-//   namespace: istio-system
-// spec:
-//   concurrency: 0
-// ```
-//
-// For workload level configuration, set the `selector` field on the `ProxyConfig` resource:
-//
-// ```yaml
-// apiVersion: networking.istio.io/v1beta1
-// kind: ProxyConfig
-// metadata:
-//   name: per-workload-proxyconfig
-//   namespace: example
-// spec:
-//   selector:
-//     labels:
-//       app: ratings
-//   concurrency: 0
-// ```
-//
-// If a `ProxyConfig` CR is defined that matches a workload it will merge with its `proxy.istio.io/config` annotation if present,
-// with the CR taking precedence over the annotation for overlapping fields. Furthermore, options configured in a `ProxyConfig`
-// CR matching a workload will similarly merge with mesh-wide and namespace-wide defaults.
-//
-// **NOTE**: fields in ProxyConfig are not dynamically configured- changes will require restart of workloads to take effect.
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=networking.istio.io/v1beta1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type ProxyConfig struct {
 	// Criteria used to select the specific set of pods/VMs on which this `ProxyConfig` configuration should be applied.
 	// If not set, the `ProxyConfig` resource will be applied to all workloads in the same namespace.

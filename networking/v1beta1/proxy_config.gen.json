@@ -1,13 +1,13 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "",
+    "title": "Provides configuration for individual workloads.",
     "version": "v1beta1"
   },
   "components": {
     "schemas": {
       "istio.networking.v1beta1.ProxyConfig": {
-        "description": "`ProxyConfig` defines configuration for individual workloads. `ProxyConfig` can be configured on a per-workload basis, a per-revision basis, a per-namespace basis, or mesh-wide. `ProxyConfig` is not a required resource; there are default values in place.",
+        "description": "`ProxyConfig` defines configuration for individual workloads.",
         "type": "object",
         "properties": {
           "selector": {
