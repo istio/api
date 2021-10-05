@@ -99,7 +99,8 @@
         "enum": [
           "NONE",
           "STATIC",
-          "DNS"
+          "DNS",
+          "DNS_ROUND_ROBIN"
         ]
       },
       "istio.networking.v1beta1.WorkloadEntry": {
