@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z\037istio.io/api/networking/v1beta1',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=_b('\n&networking/v1beta1/service_entry.proto\x12\x18istio.networking.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\x1a networking/v1beta1/gateway.proto\x1a networking/v1beta1/sidecar.proto\x1a\'networking/v1beta1/workload_entry.proto\"\xf2\x04\n\x0cServiceEntry\x12\x1a\n\x05hosts\x18\x01 \x03(\tB\x04\xe2\x41\x01\x02R\x05hosts\x12\x1c\n\taddresses\x18\x02 \x03(\tR\taddresses\x12:\n\x05ports\x18\x03 \x03(\x0b\x32\x1e.istio.networking.v1beta1.PortB\x04\xe2\x41\x01\x02R\x05ports\x12K\n\x08location\x18\x04 \x01(\x0e\x32/.istio.networking.v1beta1.ServiceEntry.LocationR\x08location\x12W\n\nresolution\x18\x05 \x01(\x0e\x32\x31.istio.networking.v1beta1.ServiceEntry.ResolutionB\x04\xe2\x41\x01\x02R\nresolution\x12\x45\n\tendpoints\x18\x06 \x03(\x0b\x32\'.istio.networking.v1beta1.WorkloadEntryR\tendpoints\x12W\n\x11workload_selector\x18\t \x01(\x0b\x32*.istio.networking.v1beta1.WorkloadSelectorR\x10workloadSelector\x12\x1b\n\texport_to\x18\x07 \x03(\tR\x08\x65xportTo\x12*\n\x11subject_alt_names\x18\x08 \x03(\tR\x0fsubjectAltNames\"0\n\x08Location\x12\x11\n\rMESH_EXTERNAL\x10\x00\x12\x11\n\rMESH_INTERNAL\x10\x01\"+\n\nResolution\x12\x08\n\x04NONE\x10\x00\x12\n\n\x06STATIC\x10\x01\x12\x07\n\x03\x44NS\x10\x02\x42!Z\x1fistio.io/api/networking/v1beta1b\x06proto3')
+  serialized_pb=b'\n&networking/v1beta1/service_entry.proto\x12\x18istio.networking.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\x1a networking/v1beta1/gateway.proto\x1a networking/v1beta1/sidecar.proto\x1a\'networking/v1beta1/workload_entry.proto\"\x87\x05\n\x0cServiceEntry\x12\x1a\n\x05hosts\x18\x01 \x03(\tB\x04\xe2\x41\x01\x02R\x05hosts\x12\x1c\n\taddresses\x18\x02 \x03(\tR\taddresses\x12:\n\x05ports\x18\x03 \x03(\x0b\x32\x1e.istio.networking.v1beta1.PortB\x04\xe2\x41\x01\x02R\x05ports\x12K\n\x08location\x18\x04 \x01(\x0e\x32/.istio.networking.v1beta1.ServiceEntry.LocationR\x08location\x12W\n\nresolution\x18\x05 \x01(\x0e\x32\x31.istio.networking.v1beta1.ServiceEntry.ResolutionB\x04\xe2\x41\x01\x02R\nresolution\x12\x45\n\tendpoints\x18\x06 \x03(\x0b\x32\'.istio.networking.v1beta1.WorkloadEntryR\tendpoints\x12W\n\x11workload_selector\x18\t \x01(\x0b\x32*.istio.networking.v1beta1.WorkloadSelectorR\x10workloadSelector\x12\x1b\n\texport_to\x18\x07 \x03(\tR\x08\x65xportTo\x12*\n\x11subject_alt_names\x18\x08 \x03(\tR\x0fsubjectAltNames\"0\n\x08Location\x12\x11\n\rMESH_EXTERNAL\x10\x00\x12\x11\n\rMESH_INTERNAL\x10\x01\"@\n\nResolution\x12\x08\n\x04NONE\x10\x00\x12\n\n\x06STATIC\x10\x01\x12\x07\n\x03\x44NS\x10\x02\x12\x13\n\x0f\x44NS_ROUND_ROBIN\x10\x03\x42!Z\x1fistio.io/api/networking/v1beta1b\x06proto3'
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,networking_dot_v1beta1_dot_gateway__pb2.DESCRIPTOR,networking_dot_v1beta1_dot_sidecar__pb2.DESCRIPTOR,networking_dot_v1beta1_dot_workload__entry__pb2.DESCRIPTOR,])
 
@@ -73,6 +73,11 @@ _SERVICEENTRY_RESOLUTION = _descriptor.EnumDescriptor(
       create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
       name='DNS', index=2, number=2,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='DNS_ROUND_ROBIN', index=3, number=3,
       serialized_options=None,
       type=None,
       create_key=_descriptor._internal_create_key),
