@@ -164,7 +164,9 @@ by the proxy that receives user traffic first is not specific to Envoy, Envoy
 will break the trace because it cannot interpret the Request ID. By setting
 this value to false, we can prevent Envoy from sampling based on the Request
 ID. As a result, the trace will not be broken even if the Request ID is
-not in the Envoy format.</p>
+not in the Envoy format.
+<a href="https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/observability/tracing#trace-context-propagation">Trace Context Propagation</a>
+provides more information on Request ID handling.</p>
 
 </td>
 <td>

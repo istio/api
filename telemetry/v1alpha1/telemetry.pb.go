@@ -352,6 +352,8 @@ type Tracing struct {
 	// this value to false, we can prevent Envoy from sampling based on the Request
 	// ID. As a result, the trace will not be broken even if the Request ID is
 	// not in the Envoy format.
+	// [Trace Context Propagation](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/observability/tracing#trace-context-propagation)
+	// provides more information on Request ID handling.
 	UseRequestIdForTraceSampling *types.BoolValue `protobuf:"bytes,6,opt,name=use_request_id_for_trace_sampling,json=useRequestIdForTraceSampling,proto3" json:"use_request_id_for_trace_sampling,omitempty"`
 	XXX_NoUnkeyedLiteral         struct{}         `json:"-"`
 	XXX_unrecognized             []byte           `json:"-"`
