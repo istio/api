@@ -2994,10 +2994,9 @@ spec:
                 description: Additional environment variables for the proxy.
                 type: object
               selector:
-                description: Criteria used to select the specific set of pods/VMs
-                  on which this `ProxyConfig` configuration should be applied.
+                description: Optional.
                 properties:
-                  labels:
+                  matchLabels:
                     additionalProperties:
                       type: string
                     type: object

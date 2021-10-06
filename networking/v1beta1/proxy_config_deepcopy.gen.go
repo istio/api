@@ -7,6 +7,7 @@ import (
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/gogo/protobuf/types"
+	_ "istio.io/api/type/v1beta1"
 	math "math"
 )
 
