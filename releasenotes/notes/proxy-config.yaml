@@ -3,4 +3,4 @@ kind: feature
 area: traffic-management
 releaseNotes:
   - |
-    **Added** an API for configuring `ProxyConfig` values containing a stable subset of the configuration from `MeshConfig.DefaultConfig`.
+    **Added** an API (CRD) for configuring `ProxyConfig` values containing a stable subset of the configuration from `MeshConfig.DefaultConfig`.
