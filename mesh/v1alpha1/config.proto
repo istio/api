@@ -54,7 +54,7 @@ message MeshConfig {
   // the specified period, defaulting to non mTLS plain TCP
   // traffic. Set this field to tweak the period that Envoy will wait
   // for the client to send the first bits of data. (MUST BE >=1ms or
-  // 0s to disable). Default detection timeout is 5s.
+  // 0s to disable). Default detection timeout is 0s (no timeout).
   google.protobuf.Duration protocol_detection_timeout = 42;
 
   // If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalives.
