@@ -32073,6 +32073,11 @@
                 "name": "allowed_trust_domains",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 5,
+                "name": "disable_clear_route_cache",
+                "type": "bool"
               }
             ],
             "maps": [
@@ -32259,6 +32264,44 @@
       }
     },
     {
+      "protopath": "envoy:/:config:/:filter:/:network:/:metadata_exchange:/:metadata_exchange.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "MetadataExchange",
+            "fields": [
+              {
+                "id": 1,
+                "name": "protocol",
+                "type": "string"
+              }
+            ]
+          }
+        ],
+        "package": {
+          "name": "envoy.tcp.metadataexchange.config"
+        },
+        "options": [
+          {
+            "name": "java_outer_classname",
+            "value": "MetadataExchangeProto"
+          },
+          {
+            "name": "java_multiple_files",
+            "value": "true"
+          },
+          {
+            "name": "java_package",
+            "value": "io.envoyproxy.envoy.tcp.metadataexchange.config"
+          },
+          {
+            "name": "go_package",
+            "value": "istio.io/api/envoy/config/filter/network/metadata_exchange"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "envoy:/:config:/:filter:/:network:/:tcp_cluster_rewrite:/:v2alpha1:/:config.proto",
       "def": {
         "messages": [
@@ -32285,6 +32328,350 @@
           {
             "name": "go_package",
             "value": "istio.io/api/envoy/config/filter/network/tcp_cluster_rewrite/v2alpha1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "envoy:/:extensions:/:stackdriver:/:config:/:v1alpha1:/:config.proto",
+      "def": {
+        "enums": [
+          {
+            "name": "PluginConfig.AccessLogging",
+            "enum_fields": [
+              {
+                "name": "NONE"
+              },
+              {
+                "name": "FULL",
+                "integer": 1
+              },
+              {
+                "name": "ERRORS_ONLY",
+                "integer": 2
+              }
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "name": "CustomConfig",
+            "fields": [
+              {
+                "id": 2,
+                "name": "tags_to_remove",
+                "type": "string",
+                "is_repeated": true
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 1,
+                  "name": "dimensions",
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          {
+            "name": "PluginConfig",
+            "fields": [
+              {
+                "id": 1,
+                "name": "disable_server_access_logging",
+                "type": "bool",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
+              },
+              {
+                "id": 12,
+                "name": "max_log_batch_size_in_bytes",
+                "type": "int32"
+              },
+              {
+                "id": 13,
+                "name": "log_report_duration",
+                "type": "google.protobuf.Duration"
+              },
+              {
+                "id": 11,
+                "name": "enable_audit_log",
+                "type": "bool"
+              },
+              {
+                "id": 2,
+                "name": "destination_service_name",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "enable_mesh_edges_reporting",
+                "type": "bool",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "name": "mesh_edges_reporting_duration",
+                "type": "google.protobuf.Duration",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
+              },
+              {
+                "id": 5,
+                "name": "max_peer_cache_size",
+                "type": "int32"
+              },
+              {
+                "id": 6,
+                "name": "disable_host_header_fallback",
+                "type": "bool"
+              },
+              {
+                "id": 7,
+                "name": "max_edges_batch_size",
+                "type": "int32"
+              },
+              {
+                "id": 8,
+                "name": "disable_http_size_metrics",
+                "type": "bool",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
+              },
+              {
+                "id": 9,
+                "name": "enable_log_compression",
+                "type": "google.protobuf.BoolValue"
+              },
+              {
+                "id": 10,
+                "name": "access_logging",
+                "type": "AccessLogging"
+              },
+              {
+                "id": 14,
+                "name": "custom_log_config",
+                "type": "CustomConfig"
+              },
+              {
+                "id": 15,
+                "name": "metric_expiry_duration",
+                "type": "google.protobuf.Duration"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 16,
+                  "name": "metrics_overrides",
+                  "type": "MetricsOverride"
+                }
+              }
+            ]
+          },
+          {
+            "name": "MetricsOverride",
+            "fields": [
+              {
+                "id": 1,
+                "name": "drop",
+                "type": "bool"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 2,
+                  "name": "tag_overrides",
+                  "type": "string"
+                }
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/duration.proto"
+          },
+          {
+            "path": "google/protobuf/wrappers.proto"
+          }
+        ],
+        "package": {
+          "name": "stackdriver.config.v1alpha1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/envoy/extensions/stackdriver/config/v1alpha1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "envoy:/:extensions:/:stats:/:config.proto",
+      "def": {
+        "enums": [
+          {
+            "name": "MetricType",
+            "enum_fields": [
+              {
+                "name": "COUNTER"
+              },
+              {
+                "name": "GAUGE",
+                "integer": 1
+              },
+              {
+                "name": "HISTOGRAM",
+                "integer": 2
+              }
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "name": "MetricConfig",
+            "fields": [
+              {
+                "id": 2,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "tags_to_remove",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "match",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "drop",
+                "type": "bool"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 1,
+                  "name": "dimensions",
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          {
+            "name": "MetricDefinition",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "value",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "type",
+                "type": "MetricType"
+              }
+            ]
+          },
+          {
+            "name": "PluginConfig",
+            "fields": [
+              {
+                "id": 1,
+                "name": "debug",
+                "type": "bool"
+              },
+              {
+                "id": 2,
+                "name": "max_peer_cache_size",
+                "type": "int32"
+              },
+              {
+                "id": 3,
+                "name": "stat_prefix",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "field_separator",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "value_separator",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "disable_host_header_fallback",
+                "type": "bool"
+              },
+              {
+                "id": 7,
+                "name": "tcp_reporting_duration",
+                "type": "google.protobuf.Duration"
+              },
+              {
+                "id": 8,
+                "name": "metrics",
+                "type": "MetricConfig",
+                "is_repeated": true
+              },
+              {
+                "id": 9,
+                "name": "definitions",
+                "type": "MetricDefinition",
+                "is_repeated": true
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/duration.proto"
+          }
+        ],
+        "package": {
+          "name": "stats"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/envoy/extensions/stats"
           }
         ]
       }
@@ -33261,6 +33648,18 @@
                     "id": 2,
                     "name": "spiffe_bundle_url",
                     "type": "string"
+                  },
+                  {
+                    "id": 3,
+                    "name": "cert_signers",
+                    "type": "string",
+                    "is_repeated": true
+                  },
+                  {
+                    "id": 4,
+                    "name": "trust_domains",
+                    "type": "string",
+                    "is_repeated": true
                   }
                 ]
               },
@@ -35907,6 +36306,10 @@
               {
                 "name": "DNS",
                 "integer": 2
+              },
+              {
+                "name": "DNS_ROUND_ROBIN",
+                "integer": 3
               }
             ]
           }
@@ -36223,6 +36626,20 @@
     {
       "protopath": "networking:/:v1alpha3:/:virtual_service.proto",
       "def": {
+        "enums": [
+          {
+            "name": "HTTPRedirect.RedirectPortSelection",
+            "enum_fields": [
+              {
+                "name": "FROM_PROTOCOL_DEFAULT"
+              },
+              {
+                "name": "FROM_REQUEST_PORT",
+                "integer": 1
+              }
+            ]
+          }
+        ],
         "messages": [
           {
             "name": "VirtualService",
@@ -36743,6 +37160,21 @@
               {
                 "id": 2,
                 "name": "authority",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "port",
+                "type": "uint32"
+              },
+              {
+                "id": 5,
+                "name": "derive_port",
+                "type": "RedirectPortSelection"
+              },
+              {
+                "id": 6,
+                "name": "scheme",
                 "type": "string"
               },
               {
@@ -38155,6 +38587,10 @@
               {
                 "name": "DNS",
                 "integer": 2
+              },
+              {
+                "name": "DNS_ROUND_ROBIN",
+                "integer": 3
               }
             ]
           }
@@ -38471,6 +38907,20 @@
     {
       "protopath": "networking:/:v1beta1:/:virtual_service.proto",
       "def": {
+        "enums": [
+          {
+            "name": "HTTPRedirect.RedirectPortSelection",
+            "enum_fields": [
+              {
+                "name": "FROM_PROTOCOL_DEFAULT"
+              },
+              {
+                "name": "FROM_REQUEST_PORT",
+                "integer": 1
+              }
+            ]
+          }
+        ],
         "messages": [
           {
             "name": "VirtualService",
@@ -38991,6 +39441,21 @@
               {
                 "id": 2,
                 "name": "authority",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "port",
+                "type": "uint32"
+              },
+              {
+                "id": 5,
+                "name": "derive_port",
+                "type": "RedirectPortSelection"
+              },
+              {
+                "id": 6,
+                "name": "scheme",
                 "type": "string"
               },
               {

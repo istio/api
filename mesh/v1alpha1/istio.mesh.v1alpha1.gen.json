@@ -286,6 +286,22 @@
       },
       "istio.mesh.v1alpha1.MeshConfig.CertificateData": {
         "type": "object",
+        "properties": {
+          "certSigners": {
+            "description": "Optional. Specify the kubernetes signers (External CA) that use this trustAnchor when Istiod is acting as RA(registration authority) If set, they are used for these signers. Otherwise, this trustAnchor is used for all signers.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "trustDomains": {
+            "description": "Optional. Specify the list of trust domains to which this trustAnchor data belongs. If set, they are used for these trust domains. Otherwise, this trustAnchor is used for default trust domain and its aliases. Note that we can have multiple trustAnchor data for a same trust_domain. In that case, trustAnchors with a same trust domain will be merged and used together to verify peer certificates. If neither cert_signers nor trust_domains is set, this trustAnchor is used for all trust domains and all signers. If only trust_domains is set, this trustAnchor is used for these trust_domains and all signers. If only cert_signers is set, this trustAnchor is used for these cert_signers and all trust domains. If both cert_signers and trust_domains is set, this trustAnchor is only used for these signers and trust domains.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
         "oneOf": [
           {
             "not": {
