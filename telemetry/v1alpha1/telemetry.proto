@@ -21,7 +21,7 @@ import "google/protobuf/wrappers.proto";
 // $schema: istio.telemetry.v1alpha1.Telemetry
 // $title: Telemetry
 // $description: Telemetry configuration for workloads.
-// $location: https://istio.io/docs/reference/config/telemetry/telemetry.html
+// $location: https://istio.io/docs/reference/config/telemetry.html
 // $aliases: [/docs/reference/config/telemetry/v1alpha1/telemetry]
 
 // Telemetry defines how the telemetry is generated for workloads within a mesh.
