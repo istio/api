@@ -65,7 +65,7 @@ import "google/protobuf/wrappers.proto";
 //   namespace: bar
 // spec:
 //   selector:
-//     labels:
+//     matchLabels:
 //       service.istio.io/canonical-name: foo
 //   tracing:
 //   - disableSpanReporting: true
@@ -80,7 +80,7 @@ import "google/protobuf/wrappers.proto";
 //   namespace: baz
 // spec:
 //   selector:
-//     labels:
+//     matchLabels:
 //       service.istio.io/canonical-name: foo
 //   tracing:
 //   - providers:
@@ -155,7 +155,7 @@ import "google/protobuf/wrappers.proto";
 //   namespace: foo
 // spec:
 //   selector:
-//     labels:
+//     matchLabels:
 //       service.istio.io/canonical-name: bar
 //   metrics:
 //   - providers:
