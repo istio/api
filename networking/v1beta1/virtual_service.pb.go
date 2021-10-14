@@ -1168,7 +1168,7 @@ type Headers_HeaderOperations struct {
 	// Append the given values to the headers specified by keys
 	// (will create a comma-separated list of values)
 	Add map[string]string `protobuf:"bytes,2,rep,name=add,proto3" json:"add,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// Remove a the specified headers
+	// Remove the specified headers
 	Remove               []string `protobuf:"bytes,3,rep,name=remove,proto3" json:"remove,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
