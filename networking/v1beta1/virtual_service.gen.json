@@ -541,7 +541,7 @@
             }
           },
           "remove": {
-            "description": "Remove a the specified headers",
+            "description": "Remove the specified headers",
             "type": "array",
             "items": {
               "type": "string"
