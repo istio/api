@@ -22,4 +22,6 @@ const (
 	// will take precedence, which will inject a standard sidecar.
 	// The format is a comma separated list. For example, `inject.istio.io/templates: sidecar,debug`.
 	TemplatesAnnotation = "inject.istio.io/templates"
+
+	ExtraTagsAnnotation = "sidecar.istio.io/extraStatTags"
 )
