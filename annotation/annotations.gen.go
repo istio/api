@@ -372,6 +372,19 @@ var (
 		},
 	}
 
+	SidecarExtraStatTags = Instance {
+		Name:          "sidecar.istio.io/extraStatTags",
+		Description:   "An additional list of tags to extract from the in-proxy "+
+                        "Istio telemetry. each additional tag needs to be present "+
+                        "in this list.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	SidecarInject = Instance {
 		Name:          "sidecar.istio.io/inject",
 		Description:   "Specifies whether or not an Envoy sidecar should be "+
@@ -682,6 +695,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarControlPlaneAuthPolicy,
 		&SidecarDiscoveryAddress,
 		&SidecarEnableCoreDump,
+		&SidecarExtraStatTags,
 		&SidecarInject,
 		&SidecarInterceptionMode,
 		&SidecarLogLevel,
