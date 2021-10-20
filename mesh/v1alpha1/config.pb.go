@@ -318,7 +318,7 @@ type MeshConfig struct {
 	// the specified period, defaulting to non mTLS plain TCP
 	// traffic. Set this field to tweak the period that Envoy will wait
 	// for the client to send the first bits of data. (MUST BE >=1ms or
-	// 0s to disable). Default detection timeout is 5s.
+	// 0s to disable). Default detection timeout is 0s (no timeout).
 	ProtocolDetectionTimeout *types.Duration `protobuf:"bytes,42,opt,name=protocol_detection_timeout,json=protocolDetectionTimeout,proto3" json:"protocolDetectionTimeout,omitempty"`
 	// If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalives.
 	TcpKeepalive *v1alpha3.ConnectionPoolSettings_TCPSettings_TcpKeepalive `protobuf:"bytes,28,opt,name=tcp_keepalive,json=tcpKeepalive,proto3" json:"tcpKeepalive,omitempty"`
