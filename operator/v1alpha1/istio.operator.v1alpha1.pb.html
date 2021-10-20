@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.operator.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 63
+number_of_entries: 65
 ---
 <p>Configuration affecting Istio control plane installation version and shape.</p>
 
@@ -1255,9 +1255,9 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="ExternalMetricSource">ExternalMetricSource</h2>
+<h2 id="MetricIdentifier">MetricIdentifier</h2>
 <section>
-<p>See k8s.io.api.autoscaling.v2beta2.CrossVersionObjectReference.</p>
+<p>See k8s.io.apis.autoscaling.MetricIdentifier</p>
 
 <table class="message-fields">
 <thead>
@@ -1269,8 +1269,8 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="ExternalMetricSource-metricName">
-<td><code>metricName</code></td>
+<tr id="MetricIdentifier-name">
+<td><code>name</code></td>
 <td><code>string</code></td>
 <td>
 </td>
@@ -1278,8 +1278,8 @@ No
 No
 </td>
 </tr>
-<tr id="ExternalMetricSource-metricSelector">
-<td><code>metricSelector</code></td>
+<tr id="MetricIdentifier-selector">
+<td><code>selector</code></td>
 <td><code><a href="#k8s-io-apimachinery-pkg-apis-meta-v1-LabelSelector">LabelSelector</a></code></td>
 <td>
 </td>
@@ -1287,18 +1287,35 @@ No
 No
 </td>
 </tr>
-<tr id="ExternalMetricSource-targetValue">
-<td><code>targetValue</code></td>
-<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
+</tbody>
+</table>
+</section>
+<h2 id="ExternalMetricSource">ExternalMetricSource</h2>
+<section>
+<p>See k8s.io.apis.autoscaling.CrossVersionObjectReference.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ExternalMetricSource-metric">
+<td><code>metric</code></td>
+<td><code><a href="#MetricIdentifier">MetricIdentifier</a></code></td>
 <td>
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="ExternalMetricSource-targetAverageValue">
-<td><code>targetAverageValue</code></td>
-<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
+<tr id="ExternalMetricSource-target">
+<td><code>target</code></td>
+<td><code><a href="#ResourceMetricTarget">ResourceMetricTarget</a></code></td>
 <td>
 </td>
 <td>
@@ -1758,7 +1775,7 @@ No
 </section>
 <h2 id="ObjectMetricSource">ObjectMetricSource</h2>
 <section>
-<p>See k8s.io.autoscaling.v2beta1.ObjectMetricSource.</p>
+<p>See k8s.io.apis.autoscaling.ObjectMetricSource.</p>
 
 <table class="message-fields">
 <thead>
@@ -1770,8 +1787,8 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="ObjectMetricSource-target">
-<td><code>target</code></td>
+<tr id="ObjectMetricSource-describedObject">
+<td><code>describedObject</code></td>
 <td><code><a href="#CrossVersionObjectReference">CrossVersionObjectReference</a></code></td>
 <td>
 </td>
@@ -1779,36 +1796,18 @@ No
 No
 </td>
 </tr>
-<tr id="ObjectMetricSource-metricName">
-<td><code>metricName</code></td>
-<td><code>string</code></td>
+<tr id="ObjectMetricSource-metric">
+<td><code>metric</code></td>
+<td><code><a href="#MetricIdentifier">MetricIdentifier</a></code></td>
 <td>
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="ObjectMetricSource-targetValue">
-<td><code>targetValue</code></td>
-<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="ObjectMetricSource-selector">
-<td><code>selector</code></td>
-<td><code><a href="#k8s-io-apimachinery-pkg-apis-meta-v1-LabelSelector">LabelSelector</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="ObjectMetricSource-averageValue">
-<td><code>averageValue</code></td>
-<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
+<tr id="ObjectMetricSource-target">
+<td><code>target</code></td>
+<td><code><a href="#ResourceMetricTarget">ResourceMetricTarget</a></code></td>
 <td>
 </td>
 <td>
@@ -1978,7 +1977,7 @@ No
 </section>
 <h2 id="PodsMetricSource">PodsMetricSource</h2>
 <section>
-<p>See k8s.io.api.core.v1.PodsMetricSource.</p>
+<p>See k8s.io.apis.autoscaling.PodsMetricSource.</p>
 
 <table class="message-fields">
 <thead>
@@ -1990,27 +1989,18 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="PodsMetricSource-metricName">
-<td><code>metricName</code></td>
-<td><code>string</code></td>
+<tr id="PodsMetricSource-metric">
+<td><code>metric</code></td>
+<td><code><a href="#MetricIdentifier">MetricIdentifier</a></code></td>
 <td>
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="PodsMetricSource-targetAverageValue">
-<td><code>targetAverageValue</code></td>
-<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="PodsMetricSource-selector">
-<td><code>selector</code></td>
-<td><code><a href="#k8s-io-apimachinery-pkg-apis-meta-v1-LabelSelector">LabelSelector</a></code></td>
+<tr id="PodsMetricSource-target">
+<td><code>target</code></td>
+<td><code><a href="#ResourceMetricTarget">ResourceMetricTarget</a></code></td>
 <td>
 </td>
 <td>
@@ -2188,9 +2178,62 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="ResourceMetricTarget">ResourceMetricTarget</h2>
+<section>
+<p>See k8s.io.apis.autoscaling.MetricTarget</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ResourceMetricTarget-type">
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ResourceMetricTarget-value">
+<td><code>value</code></td>
+<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ResourceMetricTarget-averageValue">
+<td><code>averageValue</code></td>
+<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ResourceMetricTarget-averageUtilization">
+<td><code>averageUtilization</code></td>
+<td><code>int32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="ResourceMetricSource">ResourceMetricSource</h2>
 <section>
-<p>See k8s.io.api.core.v1.ResourceMetricSource.</p>
+<p>See k8s.io.apis.autoscaling.ResourceMetricSource</p>
 
 <table class="message-fields">
 <thead>
@@ -2211,18 +2254,9 @@ No
 No
 </td>
 </tr>
-<tr id="ResourceMetricSource-targetAverageUtilization">
-<td><code>targetAverageUtilization</code></td>
-<td><code>int32</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="ResourceMetricSource-targetAverageValue">
-<td><code>targetAverageValue</code></td>
-<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
+<tr id="ResourceMetricSource-target">
+<td><code>target</code></td>
+<td><code><a href="#ResourceMetricTarget">ResourceMetricTarget</a></code></td>
 <td>
 </td>
 <td>

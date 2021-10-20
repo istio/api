@@ -387,12 +387,16 @@ message ExecAction {
     repeated string command = 1;
 }
 
-// See k8s.io.api.autoscaling.v2beta2.CrossVersionObjectReference.
+// See k8s.io.apis.autoscaling.MetricIdentifier
+message MetricIdentifier {
+    string name = 1;
+    k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 2;
+}
+
+// See k8s.io.apis.autoscaling.CrossVersionObjectReference.
 message ExternalMetricSource {
-    string metricName = 1;
-    k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector metricSelector = 2;
-    TypeIntOrStringForPB targetValue = 3;
-    TypeIntOrStringForPB targetAverageValue = 4;
+    MetricIdentifier metric = 1;
+    ResourceMetricTarget target = 2;
 }
 
 // See k8s.io.api.core.v1.HTTPGetAction.
@@ -468,13 +472,11 @@ message ObjectMeta {
     string namespace = 6;
 }
 
-// See k8s.io.autoscaling.v2beta1.ObjectMetricSource.
+// See k8s.io.apis.autoscaling.ObjectMetricSource.
 message ObjectMetricSource {
-    CrossVersionObjectReference target = 1;
-    string metricName = 2;
-    TypeIntOrStringForPB targetValue = 3;
-    k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 4;
-    TypeIntOrStringForPB averageValue = 5;
+    CrossVersionObjectReference describedObject = 1;
+    MetricIdentifier metric = 2;
+    ResourceMetricTarget target = 3;
 }
 
 // See k8s.io.api.core.v1.PodAffinity.
@@ -503,11 +505,10 @@ message PodDisruptionBudgetSpec {
     TypeIntOrStringForPB maxUnavailable = 3;
 }
 
-// See k8s.io.api.core.v1.PodsMetricSource.
+// See k8s.io.apis.autoscaling.PodsMetricSource.
 message PodsMetricSource {
-    string metricName = 1;
-    TypeIntOrStringForPB targetAverageValue = 2;
-    k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 3;
+    MetricIdentifier metric = 1;
+    ResourceMetricTarget target = 2;
 }
 
 // See k8s.io.api.core.v1.PreferredSchedulingTerm.
@@ -535,11 +536,18 @@ message ResourceFieldSelector {
     TypeIntOrStringForPB divisor = 3;
 }
 
-// See k8s.io.api.core.v1.ResourceMetricSource.
+// See k8s.io.apis.autoscaling.MetricTarget
+message ResourceMetricTarget {
+    string type = 1;
+    TypeIntOrStringForPB value = 2;
+    TypeIntOrStringForPB averageValue = 3;
+    int32 averageUtilization = 4;
+}
+
+// See k8s.io.apis.autoscaling.ResourceMetricSource
 message ResourceMetricSource {
     string name = 1;
-    int32 targetAverageUtilization = 2;
-    TypeIntOrStringForPB targetAverageValue = 3;
+    ResourceMetricTarget target = 2;
 }
 
 // See k8s.io.api.core.v1.ResourceRequirements.
