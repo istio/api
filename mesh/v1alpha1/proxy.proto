@@ -217,8 +217,12 @@ message Tracing {
   // mode as `ISTIO_MUTUAL`.
   istio.networking.v1alpha3.ClientTLSSettings tls_settings = 8;
 
+  // Whether to annotate spans with additional data. If true, spans will include logs
+  // for stream events.
+  bool verbose = 10;
+
   // $hide_from_docs
-  // Next available field number: 10
+  // Next available field number: 11
 
 }
 

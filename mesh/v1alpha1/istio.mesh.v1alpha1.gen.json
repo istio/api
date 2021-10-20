@@ -1366,6 +1366,10 @@
           },
           "tlsSettings": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
+          },
+          "verbose": {
+            "description": "Whether to annotate spans with additional data. If true, spans will include logs for stream events.",
+            "type": "boolean"
           }
         },
         "oneOf": [

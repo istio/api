@@ -34425,6 +34425,11 @@
                 "id": 8,
                 "name": "tls_settings",
                 "type": "istio.networking.v1alpha3.ClientTLSSettings"
+              },
+              {
+                "id": 10,
+                "name": "verbose",
+                "type": "bool"
               }
             ],
             "maps": [
@@ -38545,6 +38550,55 @@
         "imports": [
           {
             "path": "google/api/field_behavior.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.networking.v1beta1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/networking/v1beta1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "networking:/:v1beta1:/:proxy_config.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "ProxyConfig",
+            "fields": [
+              {
+                "id": 1,
+                "name": "selector",
+                "type": "istio.type.v1beta1.WorkloadSelector"
+              },
+              {
+                "id": 2,
+                "name": "concurrency",
+                "type": "google.protobuf.Int32Value"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 3,
+                  "name": "environment_variables",
+                  "type": "string"
+                }
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/wrappers.proto"
+          },
+          {
+            "path": "type/v1beta1/selector.proto"
           }
         ],
         "package": {
