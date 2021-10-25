@@ -32,6 +32,7 @@ const (
     Ingress
     Pod
     Service
+    WorkloadEntry
 )
 
 func (r ResourceTypes) String() string {
@@ -46,6 +47,8 @@ func (r ResourceTypes) String() string {
 		return "Pod"
 	case 5:
 		return "Service"
+	case 6:
+		return "WorkloadEntry"
 	}
 	return "Unknown"
 }
@@ -175,6 +178,42 @@ var (
 		},
 	}
 
+	IoIstioAutoRegistrationGroup = Instance {
+		Name:          "istio.io/autoRegistrationGroup",
+		Description:   "On a WorkloadEntry stores the associated WorkloadGroup.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			WorkloadEntry,
+		},
+	}
+
+	IoIstioConnectedAt = Instance {
+		Name:          "istio.io/connectedAt",
+		Description:   "On a WorkloadEntry stores the time in nanoseconds when "+
+                        "the associated workload connected to a Pilot instance.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			WorkloadEntry,
+		},
+	}
+
+	IoIstioDisconnectedAt = Instance {
+		Name:          "istio.io/disconnectedAt",
+		Description:   "On a WorkloadEntry stores the time in nanoseconds when "+
+                        "the associated workload disconnected from a Pilot "+
+                        "instance.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			WorkloadEntry,
+		},
+	}
+
 	IoIstioDryRun = Instance {
 		Name:          "istio.io/dry-run",
 		Description:   "Specifies whether or not the given resource is in dry-run "+
@@ -184,6 +223,18 @@ var (
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			AuthorizationPolicy,
+		},
+	}
+
+	IoIstioWorkloadController = Instance {
+		Name:          "istio.io/workloadController",
+		Description:   "On a WorkloadEntry should store the current/last pilot "+
+                        "instance connected to the workload for XDS.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			WorkloadEntry,
 		},
 	}
 
@@ -679,7 +730,11 @@ func AllResourceAnnotations() []*Instance {
 		&OperatorInstallChartOwner,
 		&OperatorInstallOwnerGeneration,
 		&OperatorInstallVersion,
+		&IoIstioAutoRegistrationGroup,
+		&IoIstioConnectedAt,
+		&IoIstioDisconnectedAt,
 		&IoIstioDryRun,
+		&IoIstioWorkloadController,
 		&IoKubernetesIngressClass,
 		&NetworkingExportTo,
 		&PrometheusMergeMetrics,
@@ -729,5 +784,6 @@ func AllResourceTypes() []string {
 		"Ingress",
 		"Pod",
 		"Service",
+		"WorkloadEntry",
 	}
 }
