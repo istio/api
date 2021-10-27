@@ -730,4 +730,11 @@ message ServerTLSSettings {
   // Optional: If specified, only support the specified cipher list.
   // Otherwise default to the default cipher list supported by Envoy.
   repeated string cipher_suites = 9;
+
+  // Supplies the list of ALPN protocols that the listener should expose. In
+  // practice this is likely to be set to one of two values :
+  //
+  // * "h2,http/1.1" If the listener is going to support both HTTP/2 and HTTP/1.1.
+  // * "http/1.1" If the listener is only going to support HTTP/1.1.
+  repeated string alpn_protocols = 13;
 }

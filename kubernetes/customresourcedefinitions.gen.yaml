@@ -2766,6 +2766,12 @@ spec:
                       description: Set of TLS related options that govern the server's
                         behavior.
                       properties:
+                        alpnProtocols:
+                          description: Supplies the list of ALPN protocols that the
+                            listener should expose.
+                          items:
+                            type: string
+                          type: array
                         caCertificates:
                           description: REQUIRED if mode is `MUTUAL`.
                           type: string
@@ -2882,6 +2888,12 @@ spec:
                       description: Set of TLS related options that govern the server's
                         behavior.
                       properties:
+                        alpnProtocols:
+                          description: Supplies the list of ALPN protocols that the
+                            listener should expose.
+                          items:
+                            type: string
+                          type: array
                         caCertificates:
                           description: REQUIRED if mode is `MUTUAL`.
                           type: string

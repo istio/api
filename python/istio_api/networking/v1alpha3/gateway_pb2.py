@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z istio.io/api/networking/v1alpha3',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n!networking/v1alpha3/gateway.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\"\xdd\x01\n\x07Gateway\x12\x41\n\x07servers\x18\x01 \x03(\x0b\x32!.istio.networking.v1alpha3.ServerB\x04\xe2\x41\x01\x02R\x07servers\x12R\n\x08selector\x18\x02 \x03(\x0b\x32\x30.istio.networking.v1alpha3.Gateway.SelectorEntryB\x04\xe2\x41\x01\x02R\x08selector\x1a;\n\rSelectorEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xf2\x01\n\x06Server\x12\x39\n\x04port\x18\x01 \x01(\x0b\x32\x1f.istio.networking.v1alpha3.PortB\x04\xe2\x41\x01\x02R\x04port\x12\x12\n\x04\x62ind\x18\x04 \x01(\tR\x04\x62ind\x12\x1a\n\x05hosts\x18\x02 \x03(\tB\x04\xe2\x41\x01\x02R\x05hosts\x12>\n\x03tls\x18\x03 \x01(\x0b\x32,.istio.networking.v1alpha3.ServerTLSSettingsR\x03tls\x12)\n\x10\x64\x65\x66\x61ult_endpoint\x18\x05 \x01(\tR\x0f\x64\x65\x66\x61ultEndpoint\x12\x12\n\x04name\x18\x06 \x01(\tR\x04name\"\x81\x01\n\x04Port\x12\x1c\n\x06number\x18\x01 \x01(\rB\x04\xe2\x41\x01\x02R\x06number\x12 \n\x08protocol\x18\x02 \x01(\tB\x04\xe2\x41\x01\x02R\x08protocol\x12\x18\n\x04name\x18\x03 \x01(\tB\x04\xe2\x41\x01\x02R\x04name\x12\x1f\n\x0btarget_port\x18\x04 \x01(\rR\ntargetPort\"\xec\x06\n\x11ServerTLSSettings\x12%\n\x0ehttps_redirect\x18\x01 \x01(\x08R\rhttpsRedirect\x12H\n\x04mode\x18\x02 \x01(\x0e\x32\x34.istio.networking.v1alpha3.ServerTLSSettings.TLSmodeR\x04mode\x12-\n\x12server_certificate\x18\x03 \x01(\tR\x11serverCertificate\x12\x1f\n\x0bprivate_key\x18\x04 \x01(\tR\nprivateKey\x12\'\n\x0f\x63\x61_certificates\x18\x05 \x01(\tR\x0e\x63\x61\x43\x65rtificates\x12\'\n\x0f\x63redential_name\x18\n \x01(\tR\x0e\x63redentialName\x12*\n\x11subject_alt_names\x18\x06 \x03(\tR\x0fsubjectAltNames\x12\x36\n\x17verify_certificate_spki\x18\x0b \x03(\tR\x15verifyCertificateSpki\x12\x36\n\x17verify_certificate_hash\x18\x0c \x03(\tR\x15verifyCertificateHash\x12j\n\x14min_protocol_version\x18\x07 \x01(\x0e\x32\x38.istio.networking.v1alpha3.ServerTLSSettings.TLSProtocolR\x12minProtocolVersion\x12j\n\x14max_protocol_version\x18\x08 \x01(\x0e\x32\x38.istio.networking.v1alpha3.ServerTLSSettings.TLSProtocolR\x12maxProtocolVersion\x12#\n\rcipher_suites\x18\t \x03(\tR\x0c\x63ipherSuites\"Z\n\x07TLSmode\x12\x0f\n\x0bPASSTHROUGH\x10\x00\x12\n\n\x06SIMPLE\x10\x01\x12\n\n\x06MUTUAL\x10\x02\x12\x14\n\x10\x41UTO_PASSTHROUGH\x10\x03\x12\x10\n\x0cISTIO_MUTUAL\x10\x04\"O\n\x0bTLSProtocol\x12\x0c\n\x08TLS_AUTO\x10\x00\x12\x0b\n\x07TLSV1_0\x10\x01\x12\x0b\n\x07TLSV1_1\x10\x02\x12\x0b\n\x07TLSV1_2\x10\x03\x12\x0b\n\x07TLSV1_3\x10\x04\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3'
+  serialized_pb=b'\n!networking/v1alpha3/gateway.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\"\xdd\x01\n\x07Gateway\x12\x41\n\x07servers\x18\x01 \x03(\x0b\x32!.istio.networking.v1alpha3.ServerB\x04\xe2\x41\x01\x02R\x07servers\x12R\n\x08selector\x18\x02 \x03(\x0b\x32\x30.istio.networking.v1alpha3.Gateway.SelectorEntryB\x04\xe2\x41\x01\x02R\x08selector\x1a;\n\rSelectorEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xf2\x01\n\x06Server\x12\x39\n\x04port\x18\x01 \x01(\x0b\x32\x1f.istio.networking.v1alpha3.PortB\x04\xe2\x41\x01\x02R\x04port\x12\x12\n\x04\x62ind\x18\x04 \x01(\tR\x04\x62ind\x12\x1a\n\x05hosts\x18\x02 \x03(\tB\x04\xe2\x41\x01\x02R\x05hosts\x12>\n\x03tls\x18\x03 \x01(\x0b\x32,.istio.networking.v1alpha3.ServerTLSSettingsR\x03tls\x12)\n\x10\x64\x65\x66\x61ult_endpoint\x18\x05 \x01(\tR\x0f\x64\x65\x66\x61ultEndpoint\x12\x12\n\x04name\x18\x06 \x01(\tR\x04name\"\x81\x01\n\x04Port\x12\x1c\n\x06number\x18\x01 \x01(\rB\x04\xe2\x41\x01\x02R\x06number\x12 \n\x08protocol\x18\x02 \x01(\tB\x04\xe2\x41\x01\x02R\x08protocol\x12\x18\n\x04name\x18\x03 \x01(\tB\x04\xe2\x41\x01\x02R\x04name\x12\x1f\n\x0btarget_port\x18\x04 \x01(\rR\ntargetPort\"\x93\x07\n\x11ServerTLSSettings\x12%\n\x0ehttps_redirect\x18\x01 \x01(\x08R\rhttpsRedirect\x12H\n\x04mode\x18\x02 \x01(\x0e\x32\x34.istio.networking.v1alpha3.ServerTLSSettings.TLSmodeR\x04mode\x12-\n\x12server_certificate\x18\x03 \x01(\tR\x11serverCertificate\x12\x1f\n\x0bprivate_key\x18\x04 \x01(\tR\nprivateKey\x12\'\n\x0f\x63\x61_certificates\x18\x05 \x01(\tR\x0e\x63\x61\x43\x65rtificates\x12\'\n\x0f\x63redential_name\x18\n \x01(\tR\x0e\x63redentialName\x12*\n\x11subject_alt_names\x18\x06 \x03(\tR\x0fsubjectAltNames\x12\x36\n\x17verify_certificate_spki\x18\x0b \x03(\tR\x15verifyCertificateSpki\x12\x36\n\x17verify_certificate_hash\x18\x0c \x03(\tR\x15verifyCertificateHash\x12j\n\x14min_protocol_version\x18\x07 \x01(\x0e\x32\x38.istio.networking.v1alpha3.ServerTLSSettings.TLSProtocolR\x12minProtocolVersion\x12j\n\x14max_protocol_version\x18\x08 \x01(\x0e\x32\x38.istio.networking.v1alpha3.ServerTLSSettings.TLSProtocolR\x12maxProtocolVersion\x12#\n\rcipher_suites\x18\t \x03(\tR\x0c\x63ipherSuites\x12%\n\x0e\x61lpn_protocols\x18\r \x03(\tR\ralpnProtocols\"Z\n\x07TLSmode\x12\x0f\n\x0bPASSTHROUGH\x10\x00\x12\n\n\x06SIMPLE\x10\x01\x12\n\n\x06MUTUAL\x10\x02\x12\x14\n\x10\x41UTO_PASSTHROUGH\x10\x03\x12\x10\n\x0cISTIO_MUTUAL\x10\x04\"O\n\x0bTLSProtocol\x12\x0c\n\x08TLS_AUTO\x10\x00\x12\x0b\n\x07TLSV1_0\x10\x01\x12\x0b\n\x07TLSV1_1\x10\x02\x12\x0b\n\x07TLSV1_2\x10\x03\x12\x0b\n\x07TLSV1_3\x10\x04\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3'
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,])
 
@@ -61,8 +61,8 @@ _SERVERTLSSETTINGS_TLSMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1404,
-  serialized_end=1494,
+  serialized_start=1443,
+  serialized_end=1533,
 )
 _sym_db.RegisterEnumDescriptor(_SERVERTLSSETTINGS_TLSMODE)
 
@@ -101,8 +101,8 @@ _SERVERTLSSETTINGS_TLSPROTOCOL = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1496,
-  serialized_end=1575,
+  serialized_start=1535,
+  serialized_end=1614,
 )
 _sym_db.RegisterEnumDescriptor(_SERVERTLSSETTINGS_TLSPROTOCOL)
 
@@ -396,6 +396,13 @@ _SERVERTLSSETTINGS = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='cipherSuites', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='alpn_protocols', full_name='istio.networking.v1alpha3.ServerTLSSettings.alpn_protocols', index=12,
+      number=13, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='alpnProtocols', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -411,7 +418,7 @@ _SERVERTLSSETTINGS = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=699,
-  serialized_end=1575,
+  serialized_end=1614,
 )
 
 _GATEWAY_SELECTORENTRY.containing_type = _GATEWAY

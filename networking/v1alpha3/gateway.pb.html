@@ -880,6 +880,23 @@ Otherwise default to the default cipher list supported by Envoy.</p>
 No
 </td>
 </tr>
+<tr id="ServerTLSSettings-alpn_protocols">
+<td><code>alpnProtocols</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Supplies the list of ALPN protocols that the listener should expose. In
+practice this is likely to be set to one of two values :</p>
+
+<ul>
+<li>&ldquo;h2,http/1.1&rdquo; If the listener is going to support both HTTP/2 and HTTP/1.1.</li>
+<li>&ldquo;http/1.1&rdquo; If the listener is only going to support HTTP/1.1.</li>
+</ul>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
