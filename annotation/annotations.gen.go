@@ -182,7 +182,7 @@ var (
 		Name:          "istio.io/autoRegistrationGroup",
 		Description:   "On a WorkloadEntry stores the associated WorkloadGroup.",
 		FeatureStatus: Alpha,
-		Hidden:        false,
+		Hidden:        true,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			WorkloadEntry,
@@ -194,7 +194,7 @@ var (
 		Description:   "On a WorkloadEntry stores the time in nanoseconds when "+
                         "the associated workload connected to a Pilot instance.",
 		FeatureStatus: Alpha,
-		Hidden:        false,
+		Hidden:        true,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			WorkloadEntry,
@@ -207,7 +207,7 @@ var (
                         "the associated workload disconnected from a Pilot "+
                         "instance.",
 		FeatureStatus: Alpha,
-		Hidden:        false,
+		Hidden:        true,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			WorkloadEntry,
@@ -231,7 +231,7 @@ var (
 		Description:   "On a WorkloadEntry should store the current/last pilot "+
                         "instance connected to the workload for XDS.",
 		FeatureStatus: Alpha,
-		Hidden:        false,
+		Hidden:        true,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			WorkloadEntry,

@@ -438,7 +438,7 @@ annotations:
     featureStatus: Alpha
     description: On a WorkloadEntry stores the associated WorkloadGroup.
     deprecated: false
-    hidden: false
+    hidden: true
     resources:
       - WorkloadEntry
 
@@ -446,7 +446,7 @@ annotations:
     featureStatus: Alpha
     description: On a WorkloadEntry should store the current/last pilot instance connected to the workload for XDS.
     deprecated: false
-    hidden: false
+    hidden: true
     resources:
       - WorkloadEntry
 
@@ -454,7 +454,7 @@ annotations:
     featureStatus: Alpha
     description: On a WorkloadEntry stores the time in nanoseconds when the associated workload connected to a Pilot instance.
     deprecated: false
-    hidden: false
+    hidden: true
     resources:
       - WorkloadEntry
 
@@ -462,6 +462,6 @@ annotations:
     featureStatus: Alpha
     description: On a WorkloadEntry stores the time in nanoseconds when the associated workload disconnected from a Pilot instance.
     deprecated: false
-    hidden: false
+    hidden: true
     resources:
       - WorkloadEntry
