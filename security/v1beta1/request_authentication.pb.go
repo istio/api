@@ -153,13 +153,18 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //         paths: ["/healthz"]
 // ```
 //
-// - When applied on a Gateway, you can also use the special header name `x-jwt-claim` for matching JWT claims in
-// the VirtualService. Claims of type string or list of string are supported and nested claims are also supported using
-// `.` as a separator for claim names. Examples: `x-jwt-claim.admin` matches the claim "admin" and `x-jwt-claim.group.id`
-// matches the nested claims "group" and "id".
+// - [Experimental] When applied on a Gateway, a special variable `{request.auth.claims[...]}` will be available for use in
+// the header matching field in the virtual service. This can be used for routing based on JWT claims. The special variable
+// is enclosed by a `{}` pair indicating that it is matching with attributes derived from validated JWT instead of normal HTTP headers.
 //
-// The following example creates the request authentication and authorization policies for JWT validation on ingress
-// gateway and routes requests based on the "version" claim in the validated JWT.
+// Claims of type string or list of string are supported and nested claims are also supported. Examples:
+// `{request.auth.claims[admin]}` refers to the claim "admin" and `{request.auth.claims[group][id]}` refers to the nested claims "group" and "id".
+//
+// **Note:** This routing is an experimental feature and only supported on Gateways. The request authentication must
+// first be applied on gateways to validate the JWT to make the JWT claims available for routing.
+//
+// The following example creates the request authentication and authorization policy for JWT validation on ingress
+// gateway and virtual service for routing based on the "version" JWT claim.
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -202,7 +207,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //   - name: "v2-route"
 //     match:
 //     - headers:
-//         x-jwt-claim.version:
+//         {request.auth.claims[version]}:
 //           exact: "v2"
 //     route:
 //     - destination:
@@ -214,8 +219,6 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //         host: foo.prod.svc.cluster.local
 //         subset: v1
 // ```
-//
-// **Note:** This routing is only supported on Gateways and proper request authentication must first be applied to validate the JWT.
 //
 // <!-- crd generation tags
 // +cue-gen:RequestAuthentication:groupName:security.istio.io
