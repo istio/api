@@ -156,15 +156,17 @@ option go_package="istio.io/api/security/v1beta1";
 //         paths: ["/healthz"]
 // ```
 //
-// - [Experimental] When applied on a Gateway, a special variable `{request.auth.claims[...]}` will be available for use in
-// the header matching field in the virtual service. This can be used for routing based on JWT claims. The special variable
-// is enclosed by a `{}` pair indicating that it is matching with attributes derived from validated JWT instead of normal HTTP headers.
+// - [Experimental] When applied on a Gateway, a special attribute `@request.auth.claims[...]` will be available to be
+// used in the header field in the virtual service route matching. This can be used for routing based on JWT claims.
+// The special prefix `@` indicates that it is matching with attributes derived from validated JWT and not with normal
+// HTTP headers.
 //
-// Claims of type string or list of string are supported and nested claims are also supported. Examples:
-// `{request.auth.claims[admin]}` refers to the claim "admin" and `{request.auth.claims[group][id]}` refers to the nested claims "group" and "id".
+// JWT claims of type string or list of string are supported and nested claims are also supported.
+// Examples: `@request.auth.claims[admin]` refers to the claim "admin" and
+// `@request.auth.claims[group][id]` refers to the nested claims "group" and "id".
 //
-// **Note:** This routing is an experimental feature and only supported on Gateways. The request authentication must
-// first be applied on gateways to validate the JWT to make the JWT claims available for routing.
+// **Note:** The JWT claim routing and the special attribute is an experimental feature and only supported on Gateways. The
+// request authentication must first be applied on gateways to validate the JWT to make the JWT claims available for routing.
 //
 // The following example creates the request authentication and authorization policy for JWT validation on ingress
 // gateway and virtual service for routing based on the "version" JWT claim.
@@ -210,7 +212,7 @@ option go_package="istio.io/api/security/v1beta1";
 //   - name: "v2-route"
 //     match:
 //     - headers:
-//         {request.auth.claims[version]}:
+//         @request.auth.claims[version]:
 //           exact: "v2"
 //     route:
 //     - destination:
