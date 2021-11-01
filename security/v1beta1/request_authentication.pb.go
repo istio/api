@@ -153,14 +153,13 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //         paths: ["/healthz"]
 // ```
 //
-// - [Experimental] When applied on a Gateway, a special attribute `@request.auth.claims[...]` will be available to be
-// used in the header field in the virtual service route matching. This can be used for routing based on JWT claims.
-// The special prefix `@` indicates that it is matching with attributes derived from validated JWT and not with normal
-// HTTP headers.
+// - [Experimental] When applied on a Gateway, a special attribute `@request.auth.claims` will be available for using
+// in the header field of the virtual service for JWT claim based routing. The prefix `@` indicates that it is
+// matching with special attributes derived from validated JWT and not with normal HTTP headers.
 //
-// JWT claims of type string or list of string are supported and nested claims are also supported.
-// Examples: `@request.auth.claims[admin]` refers to the claim "admin" and
-// `@request.auth.claims[group][id]` refers to the nested claims "group" and "id".
+// Currently JWT claims of type string, list of string and nested claims are supported. The claim name itself must
+// not include the `.` character for now.
+// Examples: `@request.auth.claims.admin` refers to the claim "admin" and `@request.auth.claims.group.id` refers to the nested claims "group" and "id".
 //
 // **Note:** The JWT claim routing and the special attribute is an experimental feature and only supported on Gateways. The
 // request authentication must first be applied on gateways to validate the JWT to make the JWT claims available for routing.
@@ -209,7 +208,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //   - name: "v2-route"
 //     match:
 //     - headers:
-//         @request.auth.claims[version]:
+//         @request.auth.claims.version:
 //           exact: "v2"
 //     route:
 //     - destination:

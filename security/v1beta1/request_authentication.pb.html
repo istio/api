@@ -145,15 +145,14 @@ spec:
 </code></pre>
 
 <ul>
-<li>[Experimental] When applied on a Gateway, a special attribute <code>@request.auth.claims[...]</code> will be available to be
-used in the header field in the virtual service route matching. This can be used for routing based on JWT claims.
-The special prefix <code>@</code> indicates that it is matching with attributes derived from validated JWT and not with normal
-HTTP headers.</li>
+<li>[Experimental] When applied on a Gateway, a special attribute <code>@request.auth.claims</code> will be available for using
+in the header field of the virtual service for JWT claim based routing. The prefix <code>@</code> indicates that it is
+matching with special attributes derived from validated JWT and not with normal HTTP headers.</li>
 </ul>
 
-<p>JWT claims of type string or list of string are supported and nested claims are also supported.
-Examples: <code>@request.auth.claims[admin]</code> refers to the claim &ldquo;admin&rdquo; and
-<code>@request.auth.claims*group*</code> refers to the nested claims &ldquo;group&rdquo; and &ldquo;id&rdquo;.</p>
+<p>Currently JWT claims of type string, list of string and nested claims are supported. The claim name itself must
+not include the <code>.</code> character for now.
+Examples: <code>@request.auth.claims.admin</code> refers to the claim &ldquo;admin&rdquo; and <code>@request.auth.claims.group.id</code> refers to the nested claims &ldquo;group&rdquo; and &ldquo;id&rdquo;.</p>
 
 <p><strong>Note:</strong> The JWT claim routing and the special attribute is an experimental feature and only supported on Gateways. The
 request authentication must first be applied on gateways to validate the JWT to make the JWT claims available for routing.</p>
@@ -201,7 +200,7 @@ spec:
   - name: &quot;v2-route&quot;
     match:
     - headers:
-        @request.auth.claims[version]:
+        @request.auth.claims.version:
           exact: &quot;v2&quot;
     route:
     - destination:
