@@ -153,19 +153,16 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //         paths: ["/healthz"]
 // ```
 //
-// - [Experimental] When applied on a Gateway, a special attribute `@request.auth.claims` will be available for using
-// in the header field of the virtual service for JWT claim based routing. The prefix `@` indicates that it is
-// matching with special attributes derived from validated JWT and not with normal HTTP headers.
+// [Experimental] Routing based on internally derived [metadata](https://istio.io/latest/docs/reference/config/security/conditions/)
+// is now supported. A prefix '@' is used to denote a match against internal metadata instead of the headers in the request.
+// Currently this feature is only supported for the following metadata:
 //
-// Currently JWT claims of type string, list of string and nested claims are supported. The claim name itself must
-// not include the `.` character for now.
-// Examples: `@request.auth.claims.admin` refers to the claim "admin" and `@request.auth.claims.group.id` refers to the nested claims "group" and "id".
+// - `request.auth.claims.{claim-name}[.{sub-claim}]*` which are extracted from validated JWT tokens. The claim name
+// currently does not support the `.` character. Examples: `request.auth.claims.name` and `request.auth.claims.group.id`.
 //
-// **Note:** The JWT claim routing and the special attribute is an experimental feature and only supported on Gateways. The
-// request authentication must first be applied on gateways to validate the JWT to make the JWT claims available for routing.
-//
-// The following example creates the request authentication and authorization policy for JWT validation on ingress
-// gateway and virtual service for routing based on the "version" JWT claim.
+// You could use the `request.auth.claims` attribute for JWT claim based routing on gateways. The following example creates
+// the request authentication and authorization policy for JWT validation on ingress gateway and virtual service for
+// routing based on the "version" JWT claim.
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
