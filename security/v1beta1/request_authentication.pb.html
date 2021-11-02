@@ -144,21 +144,18 @@ spec:
         paths: [&quot;/healthz&quot;]
 </code></pre>
 
+<p>[Experimental] Routing based on internally derived <a href="https://istio.io/latest/docs/reference/config/security/conditions/">metadata</a>
+is now supported. A prefix &lsquo;@&rsquo; is used to denote a match against internal metadata instead of the headers in the request.
+Currently this feature is only supported for the following metadata:</p>
+
 <ul>
-<li>[Experimental] When applied on a Gateway, a special attribute <code>@request.auth.claims</code> will be available for using
-in the header field of the virtual service for JWT claim based routing. The prefix <code>@</code> indicates that it is
-matching with special attributes derived from validated JWT and not with normal HTTP headers.</li>
+<li><code>request.auth.claims.{claim-name}[.{sub-claim}]*</code> which are extracted from validated JWT tokens. The claim name
+currently does not support the <code>.</code> character. Examples: <code>request.auth.claims.name</code> and <code>request.auth.claims.group.id</code>.</li>
 </ul>
 
-<p>Currently JWT claims of type string, list of string and nested claims are supported. The claim name itself must
-not include the <code>.</code> character for now.
-Examples: <code>@request.auth.claims.admin</code> refers to the claim &ldquo;admin&rdquo; and <code>@request.auth.claims.group.id</code> refers to the nested claims &ldquo;group&rdquo; and &ldquo;id&rdquo;.</p>
-
-<p><strong>Note:</strong> The JWT claim routing and the special attribute is an experimental feature and only supported on Gateways. The
-request authentication must first be applied on gateways to validate the JWT to make the JWT claims available for routing.</p>
-
-<p>The following example creates the request authentication and authorization policy for JWT validation on ingress
-gateway and virtual service for routing based on the &ldquo;version&rdquo; JWT claim.</p>
+<p>You could use the <code>request.auth.claims</code> attribute for JWT claim based routing on gateways. The following example creates
+the request authentication and authorization policy for JWT validation on ingress gateway and virtual service for
+routing based on the &ldquo;version&rdquo; JWT claim.</p>
 
 <pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
 kind: RequestAuthentication
