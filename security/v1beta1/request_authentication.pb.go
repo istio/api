@@ -160,7 +160,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // - `request.auth.claims.{claim-name}[.{sub-claim}]*` which are extracted from validated JWT tokens. The claim name
 // currently does not support the `.` character. Examples: `request.auth.claims.name` and `request.auth.claims.group.id`.
 //
-// You could use the `request.auth.claims` attribute for JWT claim based routing on gateways. The following example creates
+// The use of matches against JWT claim metadata is only supported in Gateways. The following example creates
 // the request authentication and authorization policy for JWT validation on ingress gateway and virtual service for
 // routing based on the "version" JWT claim.
 //

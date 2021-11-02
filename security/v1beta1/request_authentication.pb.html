@@ -153,7 +153,7 @@ Currently this feature is only supported for the following metadata:</p>
 currently does not support the <code>.</code> character. Examples: <code>request.auth.claims.name</code> and <code>request.auth.claims.group.id</code>.</li>
 </ul>
 
-<p>You could use the <code>request.auth.claims</code> attribute for JWT claim based routing on gateways. The following example creates
+<p>The use of matches against JWT claim metadata is only supported in Gateways. The following example creates
 the request authentication and authorization policy for JWT validation on ingress gateway and virtual service for
 routing based on the &ldquo;version&rdquo; JWT claim.</p>
 
