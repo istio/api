@@ -208,7 +208,7 @@ option go_package="istio.io/api/security/v1beta1";
 //   - name: "v2-route"
 //     match:
 //     - headers:
-//         @request.auth.claims.version:
+//         "@request.auth.claims.version":
 //           exact: "v2"
 //     route:
 //     - destination:

@@ -205,7 +205,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //   - name: "v2-route"
 //     match:
 //     - headers:
-//         @request.auth.claims.version:
+//         "@request.auth.claims.version":
 //           exact: "v2"
 //     route:
 //     - destination:
