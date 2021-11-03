@@ -160,9 +160,11 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // - `request.auth.claims.{claim-name}[.{sub-claim}]*` which are extracted from validated JWT tokens. The claim name
 // currently does not support the `.` character. Examples: `request.auth.claims.sub` and `request.auth.claims.name.givenName`.
 //
-// The use of matches against JWT claim metadata is only supported in Gateways. The following example creates
-// the request authentication and authorization policy for JWT validation on ingress gateway and virtual service for
-// routing based on the "sub" JWT claim.
+// The use of matches against JWT claim metadata is only supported in Gateways. The following example shows:
+//
+// - RequestAuthentication to decode and validate a JWT. This also makes the `@request.auth.claims` available for use in the VirtualService.
+// - AuthorizationPolicy to check for valid principals in the request. This makes the JWT required for the request.
+// - VirtualService to route the request based on the "sub" claim.
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -175,7 +177,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //    matchLabels:
 //      app: istio-ingressgateway
 //   jwtRules:
-//   - issuer: "issuer-foo"
+//   - issuer: "example.com"
 //     jwksUri: https://example.com/.well-known/jwks.json
 // ---
 // apiVersion: security.istio.io/v1beta1
@@ -202,7 +204,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //   gateways:
 //   - istio-ingressgateway
 //   http:
-//   - name: "v2-route"
+//   - name: "v2"
 //     match:
 //     - headers:
 //         "@request.auth.claims.sub":
@@ -211,7 +213,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //     - destination:
 //         host: foo.prod.svc.cluster.local
 //         subset: v2
-//   - name: "default-route"
+//   - name: "default"
 //     route:
 //     - destination:
 //         host: foo.prod.svc.cluster.local
