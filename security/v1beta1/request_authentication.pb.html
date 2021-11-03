@@ -153,9 +153,13 @@ Currently this feature is only supported for the following metadata:</p>
 currently does not support the <code>.</code> character. Examples: <code>request.auth.claims.sub</code> and <code>request.auth.claims.name.givenName</code>.</li>
 </ul>
 
-<p>The use of matches against JWT claim metadata is only supported in Gateways. The following example creates
-the request authentication and authorization policy for JWT validation on ingress gateway and virtual service for
-routing based on the &ldquo;sub&rdquo; JWT claim.</p>
+<p>The use of matches against JWT claim metadata is only supported in Gateways. The following example shows:</p>
+
+<ul>
+<li>RequestAuthentication to decode and validate a JWT. This also makes the <code>@request.auth.claims</code> available for use in the VirtualService.</li>
+<li>AuthorizationPolicy to check for valid principals in the request. This makes the JWT required for the request.</li>
+<li>VirtualService to route the request based on the &ldquo;sub&rdquo; claim.</li>
+</ul>
 
 <pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
 kind: RequestAuthentication
@@ -167,7 +171,7 @@ spec:
    matchLabels:
      app: istio-ingressgateway
   jwtRules:
-  - issuer: &quot;issuer-foo&quot;
+  - issuer: &quot;example.com&quot;
     jwksUri: https://example.com/.well-known/jwks.json
 ---
 apiVersion: security.istio.io/v1beta1
@@ -194,7 +198,7 @@ spec:
   gateways:
   - istio-ingressgateway
   http:
-  - name: &quot;v2-route&quot;
+  - name: &quot;v2&quot;
     match:
     - headers:
         &quot;@request.auth.claims.sub&quot;:
@@ -203,7 +207,7 @@ spec:
     - destination:
         host: foo.prod.svc.cluster.local
         subset: v2
-  - name: &quot;default-route&quot;
+  - name: &quot;default&quot;
     route:
     - destination:
         host: foo.prod.svc.cluster.local
