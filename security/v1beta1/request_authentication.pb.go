@@ -153,16 +153,16 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //         paths: ["/healthz"]
 // ```
 //
-// [Experimental] Routing based on internally derived [metadata](https://istio.io/latest/docs/reference/config/security/conditions/)
+// [Experimental] Routing based on derived [metadata](https://istio.io/latest/docs/reference/config/security/conditions/)
 // is now supported. A prefix '@' is used to denote a match against internal metadata instead of the headers in the request.
 // Currently this feature is only supported for the following metadata:
 //
 // - `request.auth.claims.{claim-name}[.{sub-claim}]*` which are extracted from validated JWT tokens. The claim name
-// currently does not support the `.` character. Examples: `request.auth.claims.name` and `request.auth.claims.group.id`.
+// currently does not support the `.` character. Examples: `request.auth.claims.sub` and `request.auth.claims.name.givenName`.
 //
 // The use of matches against JWT claim metadata is only supported in Gateways. The following example creates
 // the request authentication and authorization policy for JWT validation on ingress gateway and virtual service for
-// routing based on the "version" JWT claim.
+// routing based on the "sub" JWT claim.
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -205,8 +205,8 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //   - name: "v2-route"
 //     match:
 //     - headers:
-//         "@request.auth.claims.version":
-//           exact: "v2"
+//         "@request.auth.claims.sub":
+//           exact: "dev"
 //     route:
 //     - destination:
 //         host: foo.prod.svc.cluster.local
