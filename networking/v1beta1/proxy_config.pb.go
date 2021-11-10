@@ -55,9 +55,11 @@ type ProxyConfig struct {
 	// Additional environment variables for the proxy.
 	// Names starting with `ISTIO_META_` will be included in the generated bootstrap configuration and sent to the XDS server.
 	EnvironmentVariables map[string]string `protobuf:"bytes,3,rep,name=environment_variables,json=environmentVariables,proto3" json:"environment_variables,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
-	XXX_unrecognized     []byte            `json:"-"`
-	XXX_sizecache        int32             `json:"-"`
+	// Specifies the details of the proxy image.
+	Image                *ProxyImage `protobuf:"bytes,4,opt,name=image,proto3" json:"image,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
 }
 
 func (m *ProxyConfig) Reset()         { *m = ProxyConfig{} }
@@ -114,9 +116,102 @@ func (m *ProxyConfig) GetEnvironmentVariables() map[string]string {
 	return nil
 }
 
+func (m *ProxyConfig) GetImage() *ProxyImage {
+	if m != nil {
+		return m.Image
+	}
+	return nil
+}
+
+// The following values are used to construct proxy image url.
+// $hub/$image_name/$tag-$image_type
+// example: docker.io/istio/proxyv2:1.11.1 or docker.io/istio/proxyv2:1.11.1-distroless
+// This information was previously part of the Values API.
+type ProxyImage struct {
+	// The repository of the released image.
+	// hub: docker.io/istio (default), gcr.io/gke-release/asm, or a private repository.
+	Hub string `protobuf:"bytes,1,opt,name=hub,proto3" json:"hub,omitempty"`
+	// The release tag of the image.
+	// example: 1.11.1
+	Tag string `protobuf:"bytes,2,opt,name=tag,proto3" json:"tag,omitempty"`
+	// The image type of the image.
+	// Istio publishes base(""), debug and distroless images.
+	// Other values are allowed if those image types (example: centos) are published to the specified hub.
+	// supported values: ""(default),  debug, distroless.
+	ImageType string `protobuf:"bytes,3,opt,name=image_type,json=imageType,proto3" json:"image_type,omitempty"`
+	// $hide_from_docs
+	// image_name: proxyv2 (default)
+	ImageName            string   `protobuf:"bytes,4,opt,name=image_name,json=imageName,proto3" json:"image_name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ProxyImage) Reset()         { *m = ProxyImage{} }
+func (m *ProxyImage) String() string { return proto.CompactTextString(m) }
+func (*ProxyImage) ProtoMessage()    {}
+func (*ProxyImage) Descriptor() ([]byte, []int) {
+	return fileDescriptor_88cf428724cc0d23, []int{1}
+}
+func (m *ProxyImage) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ProxyImage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ProxyImage.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ProxyImage) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProxyImage.Merge(m, src)
+}
+func (m *ProxyImage) XXX_Size() int {
+	return m.Size()
+}
+func (m *ProxyImage) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProxyImage.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ProxyImage proto.InternalMessageInfo
+
+func (m *ProxyImage) GetHub() string {
+	if m != nil {
+		return m.Hub
+	}
+	return ""
+}
+
+func (m *ProxyImage) GetTag() string {
+	if m != nil {
+		return m.Tag
+	}
+	return ""
+}
+
+func (m *ProxyImage) GetImageType() string {
+	if m != nil {
+		return m.ImageType
+	}
+	return ""
+}
+
+func (m *ProxyImage) GetImageName() string {
+	if m != nil {
+		return m.ImageName
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*ProxyConfig)(nil), "istio.networking.v1beta1.ProxyConfig")
 	proto.RegisterMapType((map[string]string)(nil), "istio.networking.v1beta1.ProxyConfig.EnvironmentVariablesEntry")
+	proto.RegisterType((*ProxyImage)(nil), "istio.networking.v1beta1.ProxyImage")
 }
 
 func init() {
@@ -124,28 +219,32 @@ func init() {
 }
 
 var fileDescriptor_88cf428724cc0d23 = []byte{
-	// 325 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x91, 0x41, 0x4b, 0xc3, 0x40,
-	0x10, 0x85, 0x49, 0x8b, 0x62, 0x37, 0x17, 0x09, 0x15, 0x62, 0x0b, 0xb1, 0x88, 0x42, 0x2f, 0x6e,
-	0x68, 0x7b, 0x11, 0x41, 0x14, 0xa5, 0x88, 0x37, 0x89, 0x50, 0xc1, 0x4b, 0xd9, 0xc4, 0x69, 0x58,
-	0x1a, 0x77, 0xc2, 0x64, 0x9b, 0x9a, 0x7f, 0xe8, 0x45, 0xf0, 0x27, 0x48, 0x7e, 0x89, 0x24, 0x69,
-	0xda, 0x82, 0xf6, 0x96, 0x30, 0xdf, 0xbc, 0xf7, 0xe6, 0x2d, 0x3b, 0x57, 0xa0, 0x97, 0x48, 0x73,
-	0xa9, 0x42, 0x37, 0x1d, 0xf8, 0xa0, 0xc5, 0xc0, 0x8d, 0x09, 0x3f, 0xb2, 0x69, 0x80, 0x6a, 0x26,
-	0x43, 0x1e, 0x13, 0x6a, 0xb4, 0x6c, 0x99, 0x68, 0x89, 0x7c, 0x03, 0xf3, 0x15, 0xdc, 0x71, 0x42,
-	0xc4, 0x30, 0x02, 0xb7, 0xe4, 0xfc, 0xc5, 0xcc, 0x5d, 0x92, 0x88, 0x63, 0xa0, 0xa4, 0xda, 0xec,
-	0x74, 0x75, 0x16, 0xc3, 0x5a, 0x3a, 0x81, 0x08, 0x02, 0x8d, 0x54, 0x0d, 0x4f, 0xbf, 0x1a, 0xcc,
-	0x7c, 0x2a, 0xdc, 0xee, 0x4b, 0x33, 0xeb, 0x96, 0x1d, 0xd4, 0x84, 0x6d, 0xf4, 0x8c, 0xbe, 0x39,
-	0x3c, 0xe3, 0x95, 0x73, 0xa1, 0x52, 0x7b, 0xf2, 0x17, 0xa4, 0x79, 0x84, 0xe2, 0xed, 0x79, 0xc5,
-	0x7a, 0xeb, 0x2d, 0xeb, 0x9a, 0x99, 0x01, 0xaa, 0x60, 0x41, 0x04, 0x2a, 0xc8, 0xec, 0x46, 0x29,
-	0xd2, 0xe5, 0x55, 0x48, 0x5e, 0x87, 0xe4, 0x8f, 0x4a, 0x8f, 0x86, 0x13, 0x11, 0x2d, 0xc0, 0xdb,
-	0xe6, 0x2d, 0xcd, 0x8e, 0x40, 0xa5, 0x92, 0x50, 0xbd, 0x83, 0xd2, 0xd3, 0x54, 0x90, 0x14, 0x7e,
-	0x04, 0x89, 0xdd, 0xec, 0x35, 0xfb, 0xe6, 0xf0, 0x86, 0xef, 0xea, 0x81, 0x6f, 0x9d, 0xc1, 0xc7,
-	0x1b, 0x89, 0x49, 0xad, 0x30, 0x56, 0x9a, 0x32, 0xaf, 0x0d, 0xff, 0x8c, 0x3a, 0x0f, 0xec, 0x78,
-	0xe7, 0x8a, 0x75, 0xc8, 0x9a, 0x73, 0xc8, 0xca, 0x3a, 0x5a, 0x5e, 0xf1, 0x69, 0xb5, 0xd9, 0x5e,
-	0x5a, 0x44, 0x2f, 0xaf, 0x6b, 0x79, 0xd5, 0xcf, 0x55, 0xe3, 0xd2, 0xb8, 0xbb, 0xf8, 0xcc, 0x1d,
-	0xe3, 0x3b, 0x77, 0x8c, 0x9f, 0xdc, 0x31, 0x5e, 0x4f, 0xaa, 0xb0, 0x12, 0x5d, 0x11, 0x4b, 0xf7,
-	0xef, 0x43, 0xfb, 0xfb, 0x65, 0x1f, 0xa3, 0xdf, 0x00, 0x00, 0x00, 0xff, 0xff, 0xfc, 0xda, 0x4c,
-	0x3b, 0x05, 0x02, 0x00, 0x00,
+	// 392 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x52, 0x4f, 0xeb, 0xd3, 0x30,
+	0x18, 0xa6, 0xbf, 0x3a, 0x71, 0xe9, 0x45, 0xc2, 0x84, 0xba, 0x61, 0x1d, 0x43, 0x61, 0x17, 0x53,
+	0xb6, 0x5d, 0x64, 0x20, 0x8a, 0x32, 0x64, 0x17, 0x91, 0x2a, 0x13, 0xbc, 0x8c, 0xb4, 0xbe, 0xeb,
+	0xc2, 0xda, 0xa4, 0xa4, 0x69, 0x67, 0x3f, 0x82, 0xdf, 0xcc, 0xa3, 0x1f, 0x41, 0xf6, 0x49, 0x24,
+	0xc9, 0xba, 0x4e, 0x74, 0xb7, 0x34, 0xcf, 0xbf, 0xf7, 0x79, 0x53, 0xf4, 0x9c, 0x83, 0x3a, 0x0a,
+	0x79, 0x60, 0x3c, 0x0d, 0xeb, 0x59, 0x0c, 0x8a, 0xce, 0xc2, 0x42, 0x8a, 0xef, 0xcd, 0x36, 0x11,
+	0x7c, 0xc7, 0x52, 0x52, 0x48, 0xa1, 0x04, 0xf6, 0x59, 0xa9, 0x98, 0x20, 0x1d, 0x99, 0x9c, 0xc9,
+	0xc3, 0x20, 0x15, 0x22, 0xcd, 0x20, 0x34, 0xbc, 0xb8, 0xda, 0x85, 0x47, 0x49, 0x8b, 0x02, 0x64,
+	0x69, 0x95, 0xc3, 0x91, 0x6a, 0x0a, 0xb8, 0x58, 0x97, 0x90, 0x41, 0xa2, 0x84, 0xb4, 0xe0, 0xe4,
+	0x87, 0x8b, 0xbc, 0x8f, 0x3a, 0xed, 0x9d, 0x09, 0xc3, 0x6f, 0xd0, 0x83, 0x96, 0xe1, 0x3b, 0x63,
+	0x67, 0xea, 0xcd, 0x9f, 0x11, 0x9b, 0xac, 0x5d, 0xda, 0x4c, 0xf2, 0x45, 0xc8, 0x43, 0x26, 0xe8,
+	0xb7, 0x4f, 0x67, 0x6e, 0x74, 0x51, 0xe1, 0x57, 0xc8, 0x4b, 0x04, 0x4f, 0x2a, 0x29, 0x81, 0x27,
+	0x8d, 0x7f, 0x67, 0x4c, 0x46, 0xc4, 0x0e, 0x49, 0xda, 0x21, 0xc9, 0x9a, 0xab, 0xc5, 0x7c, 0x43,
+	0xb3, 0x0a, 0xa2, 0x6b, 0x3e, 0x56, 0xe8, 0x11, 0xf0, 0x9a, 0x49, 0xc1, 0x73, 0xe0, 0x6a, 0x5b,
+	0x53, 0xc9, 0x68, 0x9c, 0x41, 0xe9, 0xbb, 0x63, 0x77, 0xea, 0xcd, 0x5f, 0x93, 0x5b, 0x7b, 0x20,
+	0x57, 0x35, 0xc8, 0xaa, 0xb3, 0xd8, 0xb4, 0x0e, 0x2b, 0xae, 0x64, 0x13, 0x0d, 0xe0, 0x3f, 0x10,
+	0x5e, 0xa2, 0x1e, 0xcb, 0x69, 0x0a, 0xfe, 0xbd, 0xbf, 0x3a, 0xdf, 0x4a, 0x59, 0x6b, 0x6e, 0x64,
+	0x25, 0xc3, 0xf7, 0xe8, 0xf1, 0xcd, 0x38, 0xfc, 0x10, 0xb9, 0x07, 0x68, 0xcc, 0x2a, 0xfb, 0x91,
+	0x3e, 0xe2, 0x01, 0xea, 0xd5, 0xba, 0xb6, 0xd9, 0x4c, 0x3f, 0xb2, 0x1f, 0xcb, 0xbb, 0x97, 0xce,
+	0x84, 0x23, 0xd4, 0xb9, 0x6b, 0xe5, 0xbe, 0x8a, 0x5b, 0xe5, 0xbe, 0x8a, 0xf5, 0x8d, 0xa2, 0xe9,
+	0x59, 0xa7, 0x8f, 0xf8, 0x09, 0x42, 0x66, 0x86, 0xad, 0x7e, 0x1c, 0xdf, 0x35, 0x40, 0xdf, 0xdc,
+	0x7c, 0x6e, 0x0a, 0xe8, 0x60, 0x4e, 0x73, 0x5b, 0xad, 0x85, 0x3f, 0xd0, 0x1c, 0xde, 0xbe, 0xf8,
+	0x79, 0x0a, 0x9c, 0x5f, 0xa7, 0xc0, 0xf9, 0x7d, 0x0a, 0x9c, 0xaf, 0x4f, 0x6d, 0x65, 0x26, 0x42,
+	0x5a, 0xb0, 0xf0, 0xdf, 0x9f, 0x32, 0xbe, 0x6f, 0xde, 0x6e, 0xf1, 0x27, 0x00, 0x00, 0xff, 0xff,
+	0x9c, 0x19, 0x6e, 0xf3, 0xb1, 0x02, 0x00, 0x00,
 }
 
 func (m *ProxyConfig) Marshal() (dAtA []byte, err error) {
@@ -171,6 +270,18 @@ func (m *ProxyConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.XXX_unrecognized != nil {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.Image != nil {
+		{
+			size, err := m.Image.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintProxyConfig(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
 	}
 	if len(m.EnvironmentVariables) > 0 {
 		for k := range m.EnvironmentVariables {
@@ -218,6 +329,61 @@ func (m *ProxyConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *ProxyImage) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ProxyImage) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ProxyImage) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.ImageName) > 0 {
+		i -= len(m.ImageName)
+		copy(dAtA[i:], m.ImageName)
+		i = encodeVarintProxyConfig(dAtA, i, uint64(len(m.ImageName)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.ImageType) > 0 {
+		i -= len(m.ImageType)
+		copy(dAtA[i:], m.ImageType)
+		i = encodeVarintProxyConfig(dAtA, i, uint64(len(m.ImageType)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Tag) > 0 {
+		i -= len(m.Tag)
+		copy(dAtA[i:], m.Tag)
+		i = encodeVarintProxyConfig(dAtA, i, uint64(len(m.Tag)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Hub) > 0 {
+		i -= len(m.Hub)
+		copy(dAtA[i:], m.Hub)
+		i = encodeVarintProxyConfig(dAtA, i, uint64(len(m.Hub)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintProxyConfig(dAtA []byte, offset int, v uint64) int {
 	offset -= sovProxyConfig(v)
 	base := offset
@@ -250,6 +416,38 @@ func (m *ProxyConfig) Size() (n int) {
 			mapEntrySize := 1 + len(k) + sovProxyConfig(uint64(len(k))) + 1 + len(v) + sovProxyConfig(uint64(len(v)))
 			n += mapEntrySize + 1 + sovProxyConfig(uint64(mapEntrySize))
 		}
+	}
+	if m.Image != nil {
+		l = m.Image.Size()
+		n += 1 + l + sovProxyConfig(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *ProxyImage) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Hub)
+	if l > 0 {
+		n += 1 + l + sovProxyConfig(uint64(l))
+	}
+	l = len(m.Tag)
+	if l > 0 {
+		n += 1 + l + sovProxyConfig(uint64(l))
+	}
+	l = len(m.ImageType)
+	if l > 0 {
+		n += 1 + l + sovProxyConfig(uint64(l))
+	}
+	l = len(m.ImageName)
+	if l > 0 {
+		n += 1 + l + sovProxyConfig(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -490,6 +688,221 @@ func (m *ProxyConfig) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.EnvironmentVariables[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Image", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowProxyConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthProxyConfig
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthProxyConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Image == nil {
+				m.Image = &ProxyImage{}
+			}
+			if err := m.Image.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipProxyConfig(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthProxyConfig
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ProxyImage) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowProxyConfig
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ProxyImage: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ProxyImage: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Hub", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowProxyConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthProxyConfig
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthProxyConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Hub = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Tag", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowProxyConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthProxyConfig
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthProxyConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Tag = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ImageType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowProxyConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthProxyConfig
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthProxyConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ImageType = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ImageName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowProxyConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthProxyConfig
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthProxyConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ImageName = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

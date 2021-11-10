@@ -24,6 +24,31 @@
             "additionalProperties": {
               "type": "string"
             }
+          },
+          "image": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.ProxyImage"
+          }
+        }
+      },
+      "istio.networking.v1beta1.ProxyImage": {
+        "description": "The following values are used to construct proxy image url. $hub/$image_name/$tag-$image_type example: docker.io/istio/proxyv2:1.11.1 or docker.io/istio/proxyv2:1.11.1-distroless This information was previously part of the Values API.",
+        "type": "object",
+        "properties": {
+          "hub": {
+            "description": "The repository of the released image. hub: docker.io/istio (default), gcr.io/gke-release/asm, or a private repository.",
+            "type": "string"
+          },
+          "tag": {
+            "description": "The release tag of the image. example: 1.11.1",
+            "type": "string"
+          },
+          "imageType": {
+            "description": "The image type of the image. Istio publishes base(\"\"), debug and distroless images. Other values are allowed if those image types (example: centos) are published to the specified hub. supported values: \"\"(default), debug, distroless.",
+            "type": "string"
+          },
+          "imageName": {
+            "description": "image_name: proxyv2 (default)",
+            "type": "string"
           }
         }
       },
