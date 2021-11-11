@@ -101,49 +101,49 @@
         "type": "object",
         "properties": {
           "hosts": {
-            "description": "Optional. A list of hosts, which matches to the \"request.host\" attribute.",
+            "description": "Optional. A list of hosts as specified in the HTTP request. The match is case-insensitive. See the [security best practices](https://istio.io/latest/docs/ops/best-practices/security/#writing-host-match-policies) for recommended usage of this field.",
             "type": "array",
             "items": {
               "type": "string"
             }
           },
           "notHosts": {
-            "description": "Optional. A list of negative match of hosts.",
+            "description": "Optional. A list of negative match of hosts as specified in the HTTP request. The match is case-insensitive.",
             "type": "array",
             "items": {
               "type": "string"
             }
           },
           "ports": {
-            "description": "Optional. A list of ports, which matches to the \"destination.port\" attribute.",
+            "description": "Optional. A list of ports as specified in the connection.",
             "type": "array",
             "items": {
               "type": "string"
             }
           },
           "notPorts": {
-            "description": "Optional. A list of negative match of ports.",
+            "description": "Optional. A list of negative match of ports as specified in the connection.",
             "type": "array",
             "items": {
               "type": "string"
             }
           },
           "methods": {
-            "description": "Optional. A list of methods, which matches to the \"request.method\" attribute. For gRPC service, this will always be \"POST\".",
+            "description": "Optional. A list of methods as specified in the HTTP request. For gRPC service, this will always be \"POST\".",
             "type": "array",
             "items": {
               "type": "string"
             }
           },
           "notMethods": {
-            "description": "Optional. A list of negative match of methods.",
+            "description": "Optional. A list of negative match of methods as specified in the HTTP request.",
             "type": "array",
             "items": {
               "type": "string"
             }
           },
           "paths": {
-            "description": "Optional. A list of paths, which matches to the \"request.url_path\" attribute. For gRPC service, this will be the fully-qualified name in the form of \"/package.service/method\".",
+            "description": "Optional. A list of paths as specified in the HTTP request. See the [Authorization Policy Normalization](https://istio.io/latest/docs/reference/config/security/normalization/) for details of the path normalization. For gRPC service, this will be the fully-qualified name in the form of \"/package.service/method\".",
             "type": "array",
             "items": {
               "type": "string"
@@ -208,21 +208,21 @@
         "type": "object",
         "properties": {
           "principals": {
-            "description": "Optional. A list of source peer identities (i.e. service account), which matches to the \"source.principal\" attribute. This field requires mTLS enabled.",
+            "description": "Optional. A list of peer identities derived from the peer certificate. The peer identity is in the format of `\"\u003cTRUST_DOMAIN\u003e/ns/\u003cNAMESPACE\u003e/sa/\u003cSERVICE_ACCOUNT\u003e\"`, for example, `\"cluster.local/ns/default/sa/productpage\"`. This field requires mTLS enabled and is the same as the `source.principal` attribute.",
             "type": "array",
             "items": {
               "type": "string"
             }
           },
           "notPrincipals": {
-            "description": "Optional. A list of negative match of source peer identities.",
+            "description": "Optional. A list of negative match of peer identities.",
             "type": "array",
             "items": {
               "type": "string"
             }
           },
           "requestPrincipals": {
-            "description": "Optional. A list of request identities (i.e. \"iss/sub\" claims), which matches to the \"request.auth.principal\" attribute.",
+            "description": "Optional. A list of request identities derived from the JWT. The request identity is in the format of `\"\u003cISS\u003e/\u003cSUB\u003e\"`, for example, `\"example.com/sub-1\"`. This field requires request authentication enabled and is the same as the `request.auth.principal` attribute.",
             "type": "array",
             "items": {
               "type": "string"
@@ -236,7 +236,7 @@
             }
           },
           "namespaces": {
-            "description": "Optional. A list of namespaces, which matches to the \"source.namespace\" attribute. This field requires mTLS enabled.",
+            "description": "Optional. A list of namespaces derived from the peer certificate. This field requires mTLS enabled and is the same as the `source.namespace` attribute.",
             "type": "array",
             "items": {
               "type": "string"
@@ -250,7 +250,7 @@
             }
           },
           "ipBlocks": {
-            "description": "Optional. A list of IP blocks, which matches to the \"source.ip\" attribute. Populated from the source address of the IP packet. Single IP (e.g. \"1.2.3.4\") and CIDR (e.g. \"1.2.3.0/24\") are supported.",
+            "description": "Optional. A list of IP blocks, populated from the source address of the IP packet. Single IP (e.g. \"1.2.3.4\") and CIDR (e.g. \"1.2.3.0/24\") are supported. This is the same as the `source.ip` attribute.",
             "type": "array",
             "items": {
               "type": "string"
@@ -264,7 +264,7 @@
             }
           },
           "remoteIpBlocks": {
-            "description": "Optional. A list of IP blocks, which matches to the \"remote.ip\" attribute. Populated from X-Forwarded-For header or proxy protocol. To make use of this field, you must configure the numTrustedProxies field of the gatewayTopology under the meshConfig when you install Istio or using an annotation on the ingress gateway. See the documentation here: [Configuring Gateway Network Topology](https://istio.io/latest/docs/ops/configuration/traffic-management/network-topologies/). Single IP (e.g. \"1.2.3.4\") and CIDR (e.g. \"1.2.3.0/24\") are supported.",
+            "description": "Optional. A list of IP blocks, populated from X-Forwarded-For header or proxy protocol. To make use of this field, you must configure the numTrustedProxies field of the gatewayTopology under the meshConfig when you install Istio or using an annotation on the ingress gateway. See the documentation here: [Configuring Gateway Network Topology](https://istio.io/latest/docs/ops/configuration/traffic-management/network-topologies/). Single IP (e.g. \"1.2.3.4\") and CIDR (e.g. \"1.2.3.0/24\") are supported. This is the same as the `remote.ip` attribute.",
             "type": "array",
             "items": {
               "type": "string"
