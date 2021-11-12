@@ -148,8 +148,4 @@ message ProxyImage {
   // Other values are allowed if those image types (example: centos) are published to the specified hub.
   // supported values: ""(default),  debug, distroless.
   string image_type = 3;
-
-  // $hide_from_docs
-  // image_name: proxyv2 (default)
-  string image_name = 4;
 }

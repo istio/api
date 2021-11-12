@@ -2999,8 +2999,6 @@ spec:
                   hub:
                     description: The repository of the released image.
                     type: string
-                  imageName:
-                    type: string
                   imageType:
                     description: The image type of the image.
                     type: string

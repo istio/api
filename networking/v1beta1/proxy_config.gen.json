@@ -45,10 +45,6 @@
           "imageType": {
             "description": "The image type of the image. Istio publishes base(\"\"), debug and distroless images. Other values are allowed if those image types (example: centos) are published to the specified hub. supported values: \"\"(default), debug, distroless.",
             "type": "string"
-          },
-          "imageName": {
-            "description": "image_name: proxyv2 (default)",
-            "type": "string"
           }
         }
       },
