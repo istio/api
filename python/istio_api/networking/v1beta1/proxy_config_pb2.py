@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z\037istio.io/api/networking/v1beta1',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n%networking/v1beta1/proxy_config.proto\x12\x18istio.networking.v1beta1\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1btype/v1beta1/selector.proto\"\x89\x03\n\x0bProxyConfig\x12@\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x08selector\x12=\n\x0b\x63oncurrency\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int32ValueR\x0b\x63oncurrency\x12t\n\x15\x65nvironment_variables\x18\x03 \x03(\x0b\x32?.istio.networking.v1beta1.ProxyConfig.EnvironmentVariablesEntryR\x14\x65nvironmentVariables\x12:\n\x05image\x18\x04 \x01(\x0b\x32$.istio.networking.v1beta1.ProxyImageR\x05image\x1aG\n\x19\x45nvironmentVariablesEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"O\n\nProxyImage\x12\x10\n\x03hub\x18\x01 \x01(\tR\x03hub\x12\x10\n\x03tag\x18\x02 \x01(\tR\x03tag\x12\x1d\n\nimage_type\x18\x03 \x01(\tR\timageTypeB!Z\x1fistio.io/api/networking/v1beta1b\x06proto3'
+  serialized_pb=b'\n%networking/v1beta1/proxy_config.proto\x12\x18istio.networking.v1beta1\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1btype/v1beta1/selector.proto\"\x89\x03\n\x0bProxyConfig\x12@\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x08selector\x12=\n\x0b\x63oncurrency\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int32ValueR\x0b\x63oncurrency\x12t\n\x15\x65nvironment_variables\x18\x03 \x03(\x0b\x32?.istio.networking.v1beta1.ProxyConfig.EnvironmentVariablesEntryR\x14\x65nvironmentVariables\x12:\n\x05image\x18\x04 \x01(\x0b\x32$.istio.networking.v1beta1.ProxyImageR\x05image\x1aG\n\x19\x45nvironmentVariablesEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"+\n\nProxyImage\x12\x1d\n\nimage_type\x18\x01 \x01(\tR\timageTypeB!Z\x1fistio.io/api/networking/v1beta1b\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,])
 
@@ -128,22 +128,8 @@ _PROXYIMAGE = _descriptor.Descriptor(
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='hub', full_name='istio.networking.v1beta1.ProxyImage.hub', index=0,
+      name='image_type', full_name='istio.networking.v1beta1.ProxyImage.image_type', index=0,
       number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='hub', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='tag', full_name='istio.networking.v1beta1.ProxyImage.tag', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='tag', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='image_type', full_name='istio.networking.v1beta1.ProxyImage.image_type', index=2,
-      number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -161,7 +147,7 @@ _PROXYIMAGE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=524,
-  serialized_end=603,
+  serialized_end=567,
 )
 
 _PROXYCONFIG_ENVIRONMENTVARIABLESENTRY.containing_type = _PROXYCONFIG

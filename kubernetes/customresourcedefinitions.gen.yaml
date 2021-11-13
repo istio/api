@@ -2996,14 +2996,8 @@ spec:
               image:
                 description: Specifies the details of the proxy image.
                 properties:
-                  hub:
-                    description: The repository of the released image.
-                    type: string
                   imageType:
                     description: The image type of the image.
-                    type: string
-                  tag:
-                    description: The release tag of the image.
                     type: string
                 type: object
               selector:
