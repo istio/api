@@ -118,7 +118,7 @@ annotations:
   - name: sidecar.istio.io/proxyImageType
     featureStatus: Alpha
     description: Specifies the Docker image type to be used by the Envoy sidecar. Istio publishes debug
-      and distroless images types for every release tag.
+      and distroless image types for every release tag.
     deprecated: false
     hidden: false
     resources:
