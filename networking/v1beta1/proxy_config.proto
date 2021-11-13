@@ -42,8 +42,6 @@ import "type/v1beta1/selector.proto";
 // spec:
 //   concurrency: 0
 //   image:
-//     hub: docker.io/istio
-//     tag: 1.11
 //     type: distroless
 // ```
 //
