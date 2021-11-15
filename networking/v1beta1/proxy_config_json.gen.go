@@ -29,6 +29,17 @@ func (this *ProxyConfig) UnmarshalJSON(b []byte) error {
 	return ProxyConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for ProxyImage
+func (this *ProxyImage) MarshalJSON() ([]byte, error) {
+	str, err := ProxyConfigMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ProxyImage
+func (this *ProxyImage) UnmarshalJSON(b []byte) error {
+	return ProxyConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 var (
 	ProxyConfigMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
 	ProxyConfigUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
