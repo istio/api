@@ -1,0 +1,10 @@
+apiVersion: release-notes/v2
+
+kind: feature
+area: traffic-management
+issue:
+- 21228
+
+releaseNotes:
+- |
+    **Added** the ability for users to configure a service to specify warm duration.
