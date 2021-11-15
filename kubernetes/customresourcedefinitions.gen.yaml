@@ -364,6 +364,9 @@ spec:
                               - RANDOM
                               - PASSTHROUGH
                               type: string
+                            warmupDurationSecs:
+                              description: Represents the warmup duration of Service.
+                              type: string
                           type: object
                         outlierDetection:
                           properties:
@@ -610,6 +613,10 @@ spec:
                                     - LEAST_CONN
                                     - RANDOM
                                     - PASSTHROUGH
+                                    type: string
+                                  warmupDurationSecs:
+                                    description: Represents the warmup duration of
+                                      Service.
                                     type: string
                                 type: object
                               outlierDetection:
@@ -925,6 +932,9 @@ spec:
                         - RANDOM
                         - PASSTHROUGH
                         type: string
+                      warmupDurationSecs:
+                        description: Represents the warmup duration of Service.
+                        type: string
                     type: object
                   outlierDetection:
                     properties:
@@ -1166,6 +1176,9 @@ spec:
                               - LEAST_CONN
                               - RANDOM
                               - PASSTHROUGH
+                              type: string
+                            warmupDurationSecs:
+                              description: Represents the warmup duration of Service.
                               type: string
                           type: object
                         outlierDetection:
@@ -1531,6 +1544,9 @@ spec:
                               - RANDOM
                               - PASSTHROUGH
                               type: string
+                            warmupDurationSecs:
+                              description: Represents the warmup duration of Service.
+                              type: string
                           type: object
                         outlierDetection:
                           properties:
@@ -1777,6 +1793,10 @@ spec:
                                     - LEAST_CONN
                                     - RANDOM
                                     - PASSTHROUGH
+                                    type: string
+                                  warmupDurationSecs:
+                                    description: Represents the warmup duration of
+                                      Service.
                                     type: string
                                 type: object
                               outlierDetection:
@@ -2092,6 +2112,9 @@ spec:
                         - RANDOM
                         - PASSTHROUGH
                         type: string
+                      warmupDurationSecs:
+                        description: Represents the warmup duration of Service.
+                        type: string
                     type: object
                   outlierDetection:
                     properties:
@@ -2333,6 +2356,9 @@ spec:
                               - LEAST_CONN
                               - RANDOM
                               - PASSTHROUGH
+                              type: string
+                            warmupDurationSecs:
+                              description: Represents the warmup duration of Service.
                               type: string
                           type: object
                         outlierDetection:

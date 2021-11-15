@@ -563,6 +563,21 @@ between this object and the object one in MeshConfig</p>
 No
 </td>
 </tr>
+<tr id="LoadBalancerSettings-warmup_duration_secs">
+<td><code>warmupDurationSecs</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>Represents the warmup duration of Service. If set, the newly created endpoint of service
+remains in warmup mode starting from its creation time for the duration of this window and
+Istio progressively increases amount of traffic for that endpoint instead of sending proportional amount of traffic.
+This should be enabled for services that require warm up time to serve full production load with reasonable latency.
+Currently this is only supported for ROUND<em>ROBIN and LEAST</em>CONN load balancers.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
