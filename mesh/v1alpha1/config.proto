@@ -755,6 +755,9 @@ message MeshConfig {
         google.protobuf.Duration report_duration = 2;
         google.protobuf.BoolValue errors_only = 3;
       }
+
+      // Optional. Controls Stackdriver logging behavior.
+      LoggingOptions logging_options = 6;
     }
 
     // Defines configuration for an OpenCensus tracer writing to an OpenCensus backend.

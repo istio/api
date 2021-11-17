@@ -971,6 +971,9 @@
           "maxTagLength": {
             "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
             "type": "integer"
+          },
+          "loggingOptions": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.LoggingOptions"
           }
         }
       },
