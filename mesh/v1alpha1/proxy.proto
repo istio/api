@@ -521,6 +521,10 @@ message ProxyConfig {
   // The plugin certificates (the 'cacerts' secret), self-signed certificates (the 'istio-ca-secret' secret)
   // are added automatically by Istiod.
   repeated string ca_certificates_pem = 34;
+
+  // Specifies the details of the proxy image.
+  // $hide_from_docs
+  ProxyImage image = 35;
 }
 
 message RemoteService {
@@ -536,4 +540,17 @@ message RemoteService {
 
   // If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalives.
   istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive tcp_keepalive = 3;
+}
+
+// The following values are used to construct proxy image url.
+// $hub/$image_name/$tag-$image_type
+// example: docker.io/istio/proxyv2:1.11.1 or docker.io/istio/proxyv2:1.11.1-distroless
+// This information was previously part of the Values API.
+// $hide_from_docs
+message ProxyImage {
+  // The image type of the image.
+  // Istio publishes default, debug, and distroless images.
+  // Other values are allowed if those image types (example: centos) are published to the specified hub.
+  // supported values: default, debug, distroless.
+  string image_type = 1;
 }

@@ -115,6 +115,15 @@ annotations:
     resources:
       - Pod
 
+  - name: sidecar.istio.io/proxyImageType
+    featureStatus: Alpha
+    description: Specifies the Docker image type to be used by the Envoy sidecar. Istio publishes debug
+      and distroless image types for every release tag.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+
   - name: sidecar.istio.io/proxyCPU
     featureStatus: Alpha
     description: Specifies the requested CPU setting for the Envoy sidecar.
