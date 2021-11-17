@@ -802,6 +802,8 @@ message MeshConfig {
 
     message PrometheusMetricsProvider {}
 
+    // Defines configuration for Envoy-based access logging that writes to
+    // local files (and/or standard streams).
     message EnvoyFileAccessLogProvider {
       // Path to a local file to write the access log entries.
       // This may be used to write to streams, via `/dev/stderr` and `/dev/stdout`
@@ -834,6 +836,7 @@ message MeshConfig {
       LogFormat log_format = 2;
     }
 
+    // Defines configuration for an Envoy ALS integration for HTTP traffic.
     message EnvoyHttpGrpcV3LogProvider {
       // REQUIRED. Specifies the service that implements the Envoy ALS gRPC authorization service.
       // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
@@ -862,6 +865,7 @@ message MeshConfig {
       repeated string additional_response_trailers_to_log = 7;
     }
 
+    // Defines configuration for an Envoy ALS integration for TCP traffic.
     message EnvoyTcpGrpcV3LogProvider {
       // REQUIRED. Specifies the service that implements the Envoy ALS gRPC authorization service.
       // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient

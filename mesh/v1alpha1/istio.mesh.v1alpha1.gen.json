@@ -730,6 +730,7 @@
         }
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider": {
+        "description": "Defines configuration for Envoy-based access logging that writes to local files (and/or standard streams).",
         "type": "object",
         "properties": {
           "path": {
@@ -755,6 +756,7 @@
         }
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyHttpGrpcV3LogProvider": {
+        "description": "Defines configuration for an Envoy ALS integration for HTTP traffic.",
         "type": "object",
         "properties": {
           "service": {
@@ -800,6 +802,7 @@
         }
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTcpGrpcV3LogProvider": {
+        "description": "Defines configuration for an Envoy ALS integration for TCP traffic.",
         "type": "object",
         "properties": {
           "service": {

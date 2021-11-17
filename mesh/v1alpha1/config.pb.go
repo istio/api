@@ -2569,6 +2569,8 @@ func (m *MeshConfig_ExtensionProvider_PrometheusMetricsProvider) XXX_DiscardUnkn
 
 var xxx_messageInfo_MeshConfig_ExtensionProvider_PrometheusMetricsProvider proto.InternalMessageInfo
 
+// Defines configuration for Envoy-based access logging that writes to
+// local files (and/or standard streams).
 type MeshConfig_ExtensionProvider_EnvoyFileAccessLogProvider struct {
 	// Path to a local file to write the access log entries.
 	// This may be used to write to streams, via `/dev/stderr` and `/dev/stdout`
@@ -2707,6 +2709,7 @@ func (m *MeshConfig_ExtensionProvider_EnvoyFileAccessLogProvider_LogFormat) GetJ
 	return nil
 }
 
+// Defines configuration for an Envoy ALS integration for HTTP traffic.
 type MeshConfig_ExtensionProvider_EnvoyHttpGrpcV3LogProvider struct {
 	// REQUIRED. Specifies the service that implements the Envoy ALS gRPC authorization service.
 	// The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
@@ -2818,6 +2821,7 @@ func (m *MeshConfig_ExtensionProvider_EnvoyHttpGrpcV3LogProvider) GetAdditionalR
 	return nil
 }
 
+// Defines configuration for an Envoy ALS integration for TCP traffic.
 type MeshConfig_ExtensionProvider_EnvoyTcpGrpcV3LogProvider struct {
 	// REQUIRED. Specifies the service that implements the Envoy ALS gRPC authorization service.
 	// The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
