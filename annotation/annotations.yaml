@@ -120,7 +120,7 @@ annotations:
     description: Specifies the Docker image type to be used by the Envoy sidecar. Istio publishes debug
       and distroless image types for every release tag.
     deprecated: false
-    hidden: false
+    hidden: true
     resources:
       - Pod
 
