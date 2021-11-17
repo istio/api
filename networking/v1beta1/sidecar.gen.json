@@ -72,8 +72,18 @@
           "defaultEndpoint": {
             "description": "The IP endpoint or Unix domain socket to which traffic should be forwarded to. This configuration can be used to redirect traffic arriving at the bind `IP:Port` on the sidecar to a `localhost:port` or Unix domain socket where the application workload instance is listening for connections. Arbitrary IPs are not supported. Format should be one of `127.0.0.1:PORT`, `0.0.0.0:PORT` (which will forward to the instance IP), or `unix:///path/to/socket`",
             "type": "string"
+          },
+          "mode": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.IstioIngressListener.Mode"
           }
         }
+      },
+      "istio.networking.v1beta1.IstioIngressListener.Mode": {
+        "type": "string",
+        "enum": [
+          "DEFAULT",
+          "GATEWAY"
+        ]
       },
       "istio.networking.v1beta1.OutboundTrafficPolicy": {
         "description": "`OutboundTrafficPolicy` sets the default behavior of the sidecar for handling outbound traffic from the application. If your application uses one or more external services that are not known apriori, setting the policy to `ALLOW_ANY` will cause the sidecars to route any unknown traffic originating from the application to its requested destination. Users are strongly encouraged to use `ServiceEntry` configurations to explicitly declare any external dependencies, instead of using `ALLOW_ANY`, so that traffic to these services can be monitored.",

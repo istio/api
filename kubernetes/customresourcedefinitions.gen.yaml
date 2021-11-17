@@ -3305,6 +3305,11 @@ spec:
                       type: string
                     defaultEndpoint:
                       type: string
+                    mode:
+                      enum:
+                      - DEFAULT
+                      - GATEWAY
+                      type: string
                     port:
                       description: The port associated with the listener.
                       properties:
@@ -3416,6 +3421,11 @@ spec:
                       - NONE
                       type: string
                     defaultEndpoint:
+                      type: string
+                    mode:
+                      enum:
+                      - DEFAULT
+                      - GATEWAY
                       type: string
                     port:
                       description: The port associated with the listener.
