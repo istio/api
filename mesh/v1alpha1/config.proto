@@ -804,18 +804,29 @@ message MeshConfig {
 
     message EnvoyFileAccessLogProvider {
       // Path to a local file to write the access log entries.
+      // This may be used to write to streams, via `/dev/stderr` and `/dev/stdout`
       // If unspecified, defaults to `/dev/stdout`.
       string path = 1;
 
       message LogFormat {
-        // ex:
-        // text_format: "%LOCAL_REPLY_BODY%:%RESPONSE_CODE%:path=%REQ(:path)%\n"
+        // Textual format for the envoy access logs. Envoy command operators may be
+        // used in the format. The [format string documentation](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-strings)
+        // provides more information.
+        //
+        // Example: `text_format: "%LOCAL_REPLY_BODY%:%RESPONSE_CODE%:path=%REQ(:path)%\n"`
         string text_format = 1;
 
-        // ex:
+        // Structured format for the envoy access logs. Envoy command operators
+        // can be used as values for fields within the Struct. Values are rendered
+        // as strings, numbers, or boolean values, as appropriate
+        // (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)).
+        //
+        // Example
+        // ```
         // json_format:
         //   status: "%RESPONSE_CODE%"
         //   message: "%LOCAL_REPLY_BODY%"
+        // ```
         google.protobuf.Struct json_format = 2;
       }
 
@@ -824,75 +835,51 @@ message MeshConfig {
     }
 
     message EnvoyHttpGrpcV3LogProvider {
-      string log_name = 1;
-      string service = 2;
-      uint32 port = 3;
-      google.protobuf.Duration buffer_flush_interval = 4;
-      google.protobuf.UInt32Value buffer_size_bytes = 5;
-      repeated string filter_state_objects_to_log = 6;
-      repeated string additional_request_headers_to_log = 7;
-      repeated string additional_response_headers_to_log = 8;
-      repeated string additional_response_trailers_to_log = 9;
+      // REQUIRED. Specifies the service that implements the Envoy ALS gRPC authorization service.
+      // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
+      // to unambiguously resolve a service in the service registry. The `<Hostname>` is a fully qualified host name of a
+      // service defined by the Kubernetes service or ServiceEntry.
+      //
+      // Example: "envoy-als.foo.svc.cluster.local" or "bar/envoy-als.example.com".
+      string service = 1;
+
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 2;
+
+      // REQUIRED. The friendly name of the access log
+      string log_name = 3;
+
+      // Optional. Additional filter state objects to log.
+      repeated string filter_state_objects_to_log = 4;
+
+      // Optional. Additional request headers to log.
+      repeated string additional_request_headers_to_log = 5;
+
+      // Optional. Additional response headers to log.
+      repeated string additional_response_headers_to_log = 6;
+
+      // Optional. Additional response trailers to log.
+      repeated string additional_response_trailers_to_log = 7;
     }
 
-    message EnvoyOpenTelemetryLogProvider {
-      string log_name = 1;
-      string service = 2;
-      uint32 port = 3;
-      google.protobuf.Duration buffer_flush_interval = 4;
-      google.protobuf.UInt32Value buffer_size_bytes = 5;
-      repeated string filter_state_objects_to_log = 6;
+    message EnvoyTcpGrpcV3LogProvider {
+      // REQUIRED. Specifies the service that implements the Envoy ALS gRPC authorization service.
+      // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
+      // to unambiguously resolve a service in the service registry. The `<Hostname>` is a fully qualified host name of a
+      // service defined by the Kubernetes service or ServiceEntry.
+      //
+      // Example: "envoy-als.foo.svc.cluster.local" or "bar/envoy-als.example.com".
+      string service = 1;
 
-      AnyValue body = 7;
-      AnyValue attributes = 8;
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 2;
 
-          // Taken from OTel ("opentelemetry/proto/common/v1/common.proto")
-      message AnyValue {
-        // The value is one of the listed fields. It is valid for all values to be unspecified
-        // in which case this AnyValue is considered to be "null".
-        oneof value {
-          string string_value = 1;
-          bool bool_value = 2;
-          int64 int_value = 3;
-          double double_value = 4;
-          ArrayValue array_value = 5;
-          KeyValueList kvlist_value = 6;
-          bytes bytes_value = 7;
-        }
-      }
-      
-      // ArrayValue is a list of AnyValue messages. We need ArrayValue as a message
-      // since oneof in AnyValue does not allow repeated fields.
-      //
-      // Taken from OTel ("opentelemetry/proto/common/v1/common.proto")
-      message ArrayValue {
-        // Array of values. The array may be empty (contain 0 elements).
-        repeated AnyValue values = 1;
-      }
-      
-      // KeyValueList is a list of KeyValue messages. We need KeyValueList as a message
-      // since `oneof` in AnyValue does not allow repeated fields. Everywhere else where we need
-      // a list of KeyValue messages (e.g. in Span) we use `repeated KeyValue` directly to
-      // avoid unnecessary extra wrapping (which slows down the protocol). The 2 approaches
-      // are semantically equivalent.
-      //
-      // Taken from OTel ("opentelemetry/proto/common/v1/common.proto")
-      message KeyValueList {
-        // A collection of key/value pairs of key-value pairs. The list may be empty (may
-        // contain 0 elements).
-        repeated KeyValue values = 1;
-      }
-      
-      // KeyValue is a key-value pair that is used to store Span attributes, Link
-      // attributes, etc.
-      //
-      // Taken from OTel ("opentelemetry/proto/common/v1/common.proto")
-      message KeyValue {
-        string key = 1;
-        AnyValue value = 2;
-      } 
+      // REQUIRED. The friendly name of the access log
+      string log_name = 3;
+
+      // Optional. Additional filter state objects to log.
+      repeated string filter_state_objects_to_log = 4;
     }
-    
   }
 
   // Defines a list of extension providers that extend Istio's functionality. For example, the AuthorizationPolicy
