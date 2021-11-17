@@ -784,16 +784,58 @@
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider.LogFormat": {
         "type": "object",
-        "properties": {
-          "textFormat": {
-            "description": "Textual format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) may be used in the format. The [format string documentation](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-strings) provides more information.",
-            "type": "string"
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "text"
+                  ],
+                  "properties": {
+                    "text": {
+                      "description": "Textual format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) may be used in the format. The [format string documentation](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-strings) provides more information.",
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "json"
+                  ],
+                  "properties": {
+                    "json": {
+                      "description": "Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) can be used as values for fields within the Struct. Values are rendered as strings, numbers, or boolean values, as appropriate (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)).",
+                      "type": "object"
+                    }
+                  }
+                }
+              ]
+            }
           },
-          "jsonFormat": {
-            "description": "Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) can be used as values for fields within the Struct. Values are rendered as strings, numbers, or boolean values, as appropriate (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)).",
-            "type": "object"
+          {
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "description": "Textual format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) may be used in the format. The [format string documentation](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-strings) provides more information.",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "json"
+            ],
+            "properties": {
+              "json": {
+                "description": "Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) can be used as values for fields within the Struct. Values are rendered as strings, numbers, or boolean values, as appropriate (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)).",
+                "type": "object"
+              }
+            }
           }
-        }
+        ]
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyHttpGrpcV3LogProvider": {
         "description": "Defines configuration for an Envoy [Access Logging Service](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/grpc/v3/als.proto#grpc-access-log-service-als) integration for HTTP traffic.",
@@ -981,17 +1023,11 @@
         "type": "object",
         "properties": {
           "dimensions": {
+            "description": "Collection of tag names and tag expressions to include in the entry. Conflicts are resolved by the tag name by overriding previously supplied values.",
             "type": "object",
             "additionalProperties": {
               "type": "string"
             }
-          },
-          "reportDuration": {
-            "type": "string"
-          },
-          "errorsOnly": {
-            "type": "boolean",
-            "nullable": true
           }
         }
       },

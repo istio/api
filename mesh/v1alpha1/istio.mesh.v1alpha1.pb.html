@@ -2166,24 +2166,15 @@ No
 <td><code>dimensions</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-ExtensionProvider-StackdriverProvider-LoggingOptions-report_duration">
-<td><code>reportDuration</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-ExtensionProvider-StackdriverProvider-LoggingOptions-errors_only">
-<td><code>errorsOnly</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
-<td>
+<p>Collection of tag names and tag expressions to include in the
+entry. Conflicts are resolved by the tag name by overriding previously
+supplied values.</p>
+
+<p>Example:
+  dimensions:
+    path: request.url_path
+    foo: request.headers[&lsquo;x-foo&rsquo;]</p>
+
 </td>
 <td>
 No
@@ -2204,24 +2195,26 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-ExtensionProvider-EnvoyFileAccessLogProvider-LogFormat-text_format">
-<td><code>textFormat</code></td>
-<td><code>string</code></td>
+<tr id="MeshConfig-ExtensionProvider-EnvoyFileAccessLogProvider-LogFormat-text" class="oneof oneof-start">
+<td><code>text</code></td>
+<td><code>string (oneof)</code></td>
 <td>
 <p>Textual format for the envoy access logs. Envoy <a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators">command operators</a> may be
 used in the format. The <a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-strings">format string documentation</a>
 provides more information.</p>
 
-<p>Example: <code>textFormat: &quot;%LOCAL_REPLY_BODY%:%RESPONSE_CODE%:path=%REQ(:path)%\n&quot;</code></p>
+<p>NOTE: Istio will insert a newline (&lsquo;\n&rsquo;) on all formats (if missing).</p>
+
+<p>Example: <code>text: &quot;%LOCAL_REPLY_BODY%:%RESPONSE_CODE%:path=%REQ(:path)%&quot;</code></p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-EnvoyFileAccessLogProvider-LogFormat-json_format">
-<td><code>jsonFormat</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">Struct</a></code></td>
+<tr id="MeshConfig-ExtensionProvider-EnvoyFileAccessLogProvider-LogFormat-json" class="oneof">
+<td><code>json</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">Struct (oneof)</a></code></td>
 <td>
 <p>Structured format for the envoy access logs. Envoy <a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators">command operators</a>
 can be used as values for fields within the Struct. Values are rendered
@@ -2230,7 +2223,7 @@ as strings, numbers, or boolean values, as appropriate
 
 <p>Example</p>
 
-<pre><code>jsonFormat:
+<pre><code>json:
   status: &quot;%RESPONSE_CODE%&quot;
   message: &quot;%LOCAL_REPLY_BODY%&quot;
 </code></pre>

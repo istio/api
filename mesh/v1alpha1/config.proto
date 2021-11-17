@@ -751,9 +751,15 @@ message MeshConfig {
       uint32 max_tag_length = 5;
 
       message LoggingOptions {
+        // Collection of tag names and tag expressions to include in the
+        // entry. Conflicts are resolved by the tag name by overriding previously
+        // supplied values.
+        //
+        // Example:
+        //   dimensions:
+        //     path: request.url_path
+        //     foo: request.headers['x-foo']
         map<string, string> dimensions = 1;
-        google.protobuf.Duration report_duration = 2;
-        google.protobuf.BoolValue errors_only = 3;
       }
 
       // Optional. Controls Stackdriver logging behavior.
@@ -818,25 +824,29 @@ message MeshConfig {
       string path = 1;
 
       message LogFormat {
-        // Textual format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) may be
-        // used in the format. The [format string documentation](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-strings)
-        // provides more information.
-        //
-        // Example: `textFormat: "%LOCAL_REPLY_BODY%:%RESPONSE_CODE%:path=%REQ(:path)%\n"`
-        string text_format = 1;
+        oneof log_format {
+          // Textual format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) may be
+          // used in the format. The [format string documentation](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-strings)
+          // provides more information.
+          //
+          // NOTE: Istio will insert a newline ('\n') on all formats (if missing).
+          //
+          // Example: `text: "%LOCAL_REPLY_BODY%:%RESPONSE_CODE%:path=%REQ(:path)%"`
+          string text = 1;
 
-        // Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators)
-        // can be used as values for fields within the Struct. Values are rendered
-        // as strings, numbers, or boolean values, as appropriate
-        // (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)).
-        //
-        // Example
-        // ```
-        // jsonFormat:
-        //   status: "%RESPONSE_CODE%"
-        //   message: "%LOCAL_REPLY_BODY%"
-        // ```
-        google.protobuf.Struct json_format = 2;
+          // Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators)
+          // can be used as values for fields within the Struct. Values are rendered
+          // as strings, numbers, or boolean values, as appropriate
+          // (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)).
+          //
+          // Example
+          // ```
+          // json:
+          //   status: "%RESPONSE_CODE%"
+          //   message: "%LOCAL_REPLY_BODY%"
+          // ```
+          google.protobuf.Struct json = 2;
+        }
       }
 
       // Optional. Allows overriding of the default text log format.
