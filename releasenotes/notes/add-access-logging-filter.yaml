@@ -6,9 +6,8 @@ issue: []
 
 releaseNotes:
 - |
-    **Added** experimental support in the Telemetry API for access logging filters. Additional
-    controls over access logging formats has been added to the set of extension providers
-    in mesh configuration.
+    **Added** access logging providers and controls for access log filtering to
+    the Telemetry API.
 
 # docs is a list of related docs to the change.
 docs:

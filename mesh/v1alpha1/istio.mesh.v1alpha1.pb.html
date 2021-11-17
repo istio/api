@@ -1103,6 +1103,28 @@ No
 No
 </td>
 </tr>
+<tr id="MeshConfig-ExtensionProvider-envoy_http_als" class="oneof">
+<td><code>envoyHttpAls</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-EnvoyHttpGrpcV3LogProvider">EnvoyHttpGrpcV3LogProvider (oneof)</a></code></td>
+<td>
+<p>Configures an Envoy Access Logging Service provider for HTTP traffic.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-envoy_tcp_als" class="oneof">
+<td><code>envoyTcpAls</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-EnvoyTcpGrpcV3LogProvider">EnvoyTcpGrpcV3LogProvider (oneof)</a></code></td>
+<td>
+<p>Configures an Envoy Access Logging Service provider for TCP traffic.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1952,7 +1974,8 @@ No
 </section>
 <h2 id="MeshConfig-ExtensionProvider-EnvoyHttpGrpcV3LogProvider">MeshConfig.ExtensionProvider.EnvoyHttpGrpcV3LogProvider</h2>
 <section>
-<p>Defines configuration for an Envoy ALS integration for HTTP traffic.</p>
+<p>Defines configuration for an Envoy <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/grpc/v3/als.proto#grpc-access-log-service-als">Access Logging Service</a>
+integration for HTTP traffic.</p>
 
 <table class="message-fields">
 <thead>
@@ -2051,7 +2074,8 @@ No
 </section>
 <h2 id="MeshConfig-ExtensionProvider-EnvoyTcpGrpcV3LogProvider">MeshConfig.ExtensionProvider.EnvoyTcpGrpcV3LogProvider</h2>
 <section>
-<p>Defines configuration for an Envoy ALS integration for TCP traffic.</p>
+<p>Defines configuration for an Envoy <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/grpc/v3/als.proto#grpc-access-log-service-als">Access Logging Service</a>
+integration for TCP traffic.</p>
 
 <table class="message-fields">
 <thead>
@@ -2173,11 +2197,11 @@ No
 <td><code>textFormat</code></td>
 <td><code>string</code></td>
 <td>
-<p>Textual format for the envoy access logs. Envoy command operators may be
+<p>Textual format for the envoy access logs. Envoy <a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators">command operators</a> may be
 used in the format. The <a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-strings">format string documentation</a>
 provides more information.</p>
 
-<p>Example: <code>text_format: &quot;%LOCAL_REPLY_BODY%:%RESPONSE_CODE%:path=%REQ(:path)%\n&quot;</code></p>
+<p>Example: <code>textFormat: &quot;%LOCAL_REPLY_BODY%:%RESPONSE_CODE%:path=%REQ(:path)%\n&quot;</code></p>
 
 </td>
 <td>
@@ -2188,14 +2212,14 @@ No
 <td><code>jsonFormat</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">Struct</a></code></td>
 <td>
-<p>Structured format for the envoy access logs. Envoy command operators
+<p>Structured format for the envoy access logs. Envoy <a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators">command operators</a>
 can be used as values for fields within the Struct. Values are rendered
 as strings, numbers, or boolean values, as appropriate
 (see: <a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries">format dictionaries</a>).</p>
 
 <p>Example</p>
 
-<pre><code>json_format:
+<pre><code>jsonFormat:
   status: &quot;%RESPONSE_CODE%&quot;
   message: &quot;%LOCAL_REPLY_BODY%&quot;
 </code></pre>

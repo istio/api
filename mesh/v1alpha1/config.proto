@@ -507,6 +507,10 @@ message MeshConfig {
       PrometheusMetricsProvider prometheus = 10;
       // Configures an Envoy File Access Log provider.
       EnvoyFileAccessLogProvider envoy_file_access_log = 11;
+      // Configures an Envoy Access Logging Service provider for HTTP traffic.
+      EnvoyHttpGrpcV3LogProvider envoy_http_als = 12;
+      // Configures an Envoy Access Logging Service provider for TCP traffic.
+      EnvoyTcpGrpcV3LogProvider envoy_tcp_als = 13;
     }
 
     message EnvoyExternalAuthorizationRequestBody {
@@ -811,21 +815,21 @@ message MeshConfig {
       string path = 1;
 
       message LogFormat {
-        // Textual format for the envoy access logs. Envoy command operators may be
+        // Textual format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) may be
         // used in the format. The [format string documentation](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-strings)
         // provides more information.
         //
-        // Example: `text_format: "%LOCAL_REPLY_BODY%:%RESPONSE_CODE%:path=%REQ(:path)%\n"`
+        // Example: `textFormat: "%LOCAL_REPLY_BODY%:%RESPONSE_CODE%:path=%REQ(:path)%\n"`
         string text_format = 1;
 
-        // Structured format for the envoy access logs. Envoy command operators
+        // Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators)
         // can be used as values for fields within the Struct. Values are rendered
         // as strings, numbers, or boolean values, as appropriate
         // (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)).
         //
         // Example
         // ```
-        // json_format:
+        // jsonFormat:
         //   status: "%RESPONSE_CODE%"
         //   message: "%LOCAL_REPLY_BODY%"
         // ```
@@ -836,7 +840,8 @@ message MeshConfig {
       LogFormat log_format = 2;
     }
 
-    // Defines configuration for an Envoy ALS integration for HTTP traffic.
+    // Defines configuration for an Envoy [Access Logging Service](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/grpc/v3/als.proto#grpc-access-log-service-als)
+    // integration for HTTP traffic.
     message EnvoyHttpGrpcV3LogProvider {
       // REQUIRED. Specifies the service that implements the Envoy ALS gRPC authorization service.
       // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
@@ -865,7 +870,8 @@ message MeshConfig {
       repeated string additional_response_trailers_to_log = 7;
     }
 
-    // Defines configuration for an Envoy ALS integration for TCP traffic.
+    // Defines configuration for an Envoy [Access Logging Service](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/grpc/v3/als.proto#grpc-access-log-service-als)
+    // integration for TCP traffic.
     message EnvoyTcpGrpcV3LogProvider {
       // REQUIRED. Specifies the service that implements the Envoy ALS gRPC authorization service.
       // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient

@@ -493,6 +493,26 @@
                       "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider"
                     }
                   }
+                },
+                {
+                  "required": [
+                    "envoyHttpAls"
+                  ],
+                  "properties": {
+                    "envoyHttpAls": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyHttpGrpcV3LogProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "envoyTcpAls"
+                  ],
+                  "properties": {
+                    "envoyTcpAls": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTcpGrpcV3LogProvider"
+                    }
+                  }
                 }
               ]
             }
@@ -594,6 +614,26 @@
             "properties": {
               "envoyFileAccessLog": {
                 "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "envoyHttpAls"
+            ],
+            "properties": {
+              "envoyHttpAls": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyHttpGrpcV3LogProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "envoyTcpAls"
+            ],
+            "properties": {
+              "envoyTcpAls": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTcpGrpcV3LogProvider"
               }
             }
           }
@@ -746,17 +786,17 @@
         "type": "object",
         "properties": {
           "textFormat": {
-            "description": "Textual format for the envoy access logs. Envoy command operators may be used in the format. The [format string documentation](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-strings) provides more information.",
+            "description": "Textual format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) may be used in the format. The [format string documentation](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-strings) provides more information.",
             "type": "string"
           },
           "jsonFormat": {
-            "description": "Structured format for the envoy access logs. Envoy command operators can be used as values for fields within the Struct. Values are rendered as strings, numbers, or boolean values, as appropriate (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)).",
+            "description": "Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) can be used as values for fields within the Struct. Values are rendered as strings, numbers, or boolean values, as appropriate (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)).",
             "type": "object"
           }
         }
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyHttpGrpcV3LogProvider": {
-        "description": "Defines configuration for an Envoy ALS integration for HTTP traffic.",
+        "description": "Defines configuration for an Envoy [Access Logging Service](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/grpc/v3/als.proto#grpc-access-log-service-als) integration for HTTP traffic.",
         "type": "object",
         "properties": {
           "service": {
@@ -802,7 +842,7 @@
         }
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTcpGrpcV3LogProvider": {
-        "description": "Defines configuration for an Envoy ALS integration for TCP traffic.",
+        "description": "Defines configuration for an Envoy [Access Logging Service](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/grpc/v3/als.proto#grpc-access-log-service-als) integration for TCP traffic.",
         "type": "object",
         "properties": {
           "service": {
