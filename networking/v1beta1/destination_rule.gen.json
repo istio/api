@@ -122,7 +122,7 @@
           "maxConnections": {
             "description": "Maximum number of HTTP1 /TCP connections to a destination host. Default 2^32-1.",
             "type": "integer",
-            "format": "int32"
+            "format": "int64"
           },
           "connectTimeout": {
             "description": "TCP connection timeout. format: 1h/1m/1s/1ms. MUST BE \u003e=1ms. Default is 10s.",
