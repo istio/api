@@ -1225,7 +1225,7 @@ func (m *ConnectionPoolSettings) GetHttp() *ConnectionPoolSettings_HTTPSettings 
 // Settings common to both HTTP and TCP upstream connections.
 type ConnectionPoolSettings_TCPSettings struct {
 	// Maximum number of HTTP1 /TCP connections to a destination host. Default 2^32-1.
-	MaxConnections int32 `protobuf:"varint,1,opt,name=max_connections,json=maxConnections,proto3" json:"max_connections,omitempty"`
+	MaxConnections int64 `protobuf:"varint,1,opt,name=max_connections,json=maxConnections,proto3" json:"max_connections,omitempty"`
 	// TCP connection timeout. format:
 	// 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
 	ConnectTimeout *types.Duration `protobuf:"bytes,2,opt,name=connect_timeout,json=connectTimeout,proto3" json:"connect_timeout,omitempty"`
@@ -1269,7 +1269,7 @@ func (m *ConnectionPoolSettings_TCPSettings) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ConnectionPoolSettings_TCPSettings proto.InternalMessageInfo
 
-func (m *ConnectionPoolSettings_TCPSettings) GetMaxConnections() int32 {
+func (m *ConnectionPoolSettings_TCPSettings) GetMaxConnections() int64{
 	if m != nil {
 		return m.MaxConnections
 	}
@@ -5654,7 +5654,7 @@ func (m *ConnectionPoolSettings_TCPSettings) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.MaxConnections |= int32(b&0x7F) << shift
+				m.MaxConnections |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

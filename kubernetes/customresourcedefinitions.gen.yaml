@@ -211,7 +211,7 @@ spec:
                                 maxConnections:
                                   description: Maximum number of HTTP1 /TCP connections
                                     to a destination host.
-                                  format: int32
+                                  format: int64
                                   type: integer
                                 tcpKeepalive:
                                   description: If set then set SO_KEEPALIVE on the
@@ -456,7 +456,7 @@ spec:
                                       maxConnections:
                                         description: Maximum number of HTTP1 /TCP
                                           connections to a destination host.
-                                        format: int32
+                                        format: int64
                                         type: integer
                                       tcpKeepalive:
                                         description: If set then set SO_KEEPALIVE
@@ -775,7 +775,7 @@ spec:
                           maxConnections:
                             description: Maximum number of HTTP1 /TCP connections
                               to a destination host.
-                            format: int32
+                            format: int64
                             type: integer
                           tcpKeepalive:
                             description: If set then set SO_KEEPALIVE on the socket
@@ -1014,7 +1014,7 @@ spec:
                                 maxConnections:
                                   description: Maximum number of HTTP1 /TCP connections
                                     to a destination host.
-                                  format: int32
+                                  format: int64
                                   type: integer
                                 tcpKeepalive:
                                   description: If set then set SO_KEEPALIVE on the
@@ -1378,7 +1378,7 @@ spec:
                                 maxConnections:
                                   description: Maximum number of HTTP1 /TCP connections
                                     to a destination host.
-                                  format: int32
+                                  format: int64
                                   type: integer
                                 tcpKeepalive:
                                   description: If set then set SO_KEEPALIVE on the
@@ -1623,7 +1623,7 @@ spec:
                                       maxConnections:
                                         description: Maximum number of HTTP1 /TCP
                                           connections to a destination host.
-                                        format: int32
+                                        format: int64
                                         type: integer
                                       tcpKeepalive:
                                         description: If set then set SO_KEEPALIVE
@@ -1942,7 +1942,7 @@ spec:
                           maxConnections:
                             description: Maximum number of HTTP1 /TCP connections
                               to a destination host.
-                            format: int32
+                            format: int64
                             type: integer
                           tcpKeepalive:
                             description: If set then set SO_KEEPALIVE on the socket
@@ -2181,7 +2181,7 @@ spec:
                                 maxConnections:
                                   description: Maximum number of HTTP1 /TCP connections
                                     to a destination host.
-                                  format: int32
+                                  format: int64
                                   type: integer
                                 tcpKeepalive:
                                   description: If set then set SO_KEEPALIVE on the
