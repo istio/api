@@ -869,7 +869,9 @@ message MeshConfig {
       uint32 port = 2;
 
       // Optional. The friendly name of the access log.
-      // Defaults to `istio-proxy`.
+      // Defaults:
+      // -  "http_envoy_accesslog"
+      // -  "listener_envoy_accesslog"
       string log_name = 3;
 
       // Optional. Additional filter state objects to log.
@@ -900,7 +902,9 @@ message MeshConfig {
       uint32 port = 2;
 
       // Optional. The friendly name of the access log.
-      // Defaults to `istio-proxy`.
+      // Defaults:
+      // - "tcp_envoy_accesslog"
+      // - "listener_envoy_accesslog"
       string log_name = 3;
 
       // Optional. Additional filter state objects to log.

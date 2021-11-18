@@ -850,7 +850,7 @@
             "type": "integer"
           },
           "logName": {
-            "description": "Optional. The friendly name of the access log. Defaults to `istio-proxy`.",
+            "description": "Optional. The friendly name of the access log. Defaults: - \"http_envoy_accesslog\" - \"listener_envoy_accesslog\"",
             "type": "string"
           },
           "filterStateObjectsToLog": {
@@ -896,7 +896,7 @@
             "type": "integer"
           },
           "logName": {
-            "description": "Optional. The friendly name of the access log. Defaults to `istio-proxy`.",
+            "description": "Optional. The friendly name of the access log. Defaults: - \"tcp_envoy_accesslog\" - \"listener_envoy_accesslog\"",
             "type": "string"
           },
           "filterStateObjectsToLog": {

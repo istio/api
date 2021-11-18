@@ -2768,7 +2768,9 @@ type MeshConfig_ExtensionProvider_EnvoyHttpGrpcV3LogProvider struct {
 	// REQUIRED. Specifies the port of the service.
 	Port uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
 	// Optional. The friendly name of the access log.
-	// Defaults to `istio-proxy`.
+	// Defaults:
+	// -  "http_envoy_accesslog"
+	// -  "listener_envoy_accesslog"
 	LogName string `protobuf:"bytes,3,opt,name=log_name,json=logName,proto3" json:"logName,omitempty"`
 	// Optional. Additional filter state objects to log.
 	FilterStateObjectsToLog []string `protobuf:"bytes,4,rep,name=filter_state_objects_to_log,json=filterStateObjectsToLog,proto3" json:"filterStateObjectsToLog,omitempty"`
@@ -2882,7 +2884,9 @@ type MeshConfig_ExtensionProvider_EnvoyTcpGrpcV3LogProvider struct {
 	// REQUIRED. Specifies the port of the service.
 	Port uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
 	// Optional. The friendly name of the access log.
-	// Defaults to `istio-proxy`.
+	// Defaults:
+	// - "tcp_envoy_accesslog"
+	// - "listener_envoy_accesslog"
 	LogName string `protobuf:"bytes,3,opt,name=log_name,json=logName,proto3" json:"logName,omitempty"`
 	// Optional. Additional filter state objects to log.
 	FilterStateObjectsToLog []string `protobuf:"bytes,4,rep,name=filter_state_objects_to_log,json=filterStateObjectsToLog,proto3" json:"filterStateObjectsToLog,omitempty"`
