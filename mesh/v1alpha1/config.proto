@@ -750,20 +750,20 @@ message MeshConfig {
       // NOTE: currently only controls max length of the path tag.
       uint32 max_tag_length = 5;
 
-      message LoggingOptions {
-        // Collection of tag names and tag expressions to include in the
+      message Logging {
+        // Collection of tag names and tag expressions to include in the log
         // entry. Conflicts are resolved by the tag name by overriding previously
         // supplied values.
         //
         // Example:
-        //   dimensions:
+        //   labels:
         //     path: request.url_path
         //     foo: request.headers['x-foo']
-        map<string, string> dimensions = 1;
+        map<string, string> labels = 1;
       }
 
       // Optional. Controls Stackdriver logging behavior.
-      LoggingOptions logging_options = 6;
+      Logging logging = 6;
     }
 
     // Defines configuration for an OpenCensus tracer writing to an OpenCensus backend.
@@ -837,19 +837,20 @@ message MeshConfig {
           // Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators)
           // can be used as values for fields within the Struct. Values are rendered
           // as strings, numbers, or boolean values, as appropriate
-          // (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)).
+          // (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)). Nested JSON is
+          // supported for some command operators (e.g. FILTER_STATE or DYNAMIC_METADATA).
           //
-          // Example
+          // Example:
           // ```
-          // json:
+          // labels:
           //   status: "%RESPONSE_CODE%"
           //   message: "%LOCAL_REPLY_BODY%"
           // ```
-          google.protobuf.Struct json = 2;
+          google.protobuf.Struct labels = 2;
         }
       }
 
-      // Optional. Allows overriding of the default text log format.
+      // Optional. Allows overriding of the default access log format.
       LogFormat log_format = 2;
     }
 
@@ -867,7 +868,8 @@ message MeshConfig {
       // REQUIRED. Specifies the port of the service.
       uint32 port = 2;
 
-      // REQUIRED. The friendly name of the access log
+      // Optional. The friendly name of the access log.
+      // Defaults to `istio-proxy`.
       string log_name = 3;
 
       // Optional. Additional filter state objects to log.
@@ -897,7 +899,8 @@ message MeshConfig {
       // REQUIRED. Specifies the port of the service.
       uint32 port = 2;
 
-      // REQUIRED. The friendly name of the access log
+      // Optional. The friendly name of the access log.
+      // Defaults to `istio-proxy`.
       string log_name = 3;
 
       // Optional. Additional filter state objects to log.

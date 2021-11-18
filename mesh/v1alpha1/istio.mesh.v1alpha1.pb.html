@@ -1854,9 +1854,9 @@ NOTE: currently only controls max length of the path tag.</p>
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-StackdriverProvider-logging_options">
-<td><code>loggingOptions</code></td>
-<td><code><a href="#MeshConfig-ExtensionProvider-StackdriverProvider-LoggingOptions">LoggingOptions</a></code></td>
+<tr id="MeshConfig-ExtensionProvider-StackdriverProvider-logging">
+<td><code>logging</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-StackdriverProvider-Logging">Logging</a></code></td>
 <td>
 <p>Optional. Controls Stackdriver logging behavior.</p>
 
@@ -1973,7 +1973,7 @@ No
 <td><code>logFormat</code></td>
 <td><code><a href="#MeshConfig-ExtensionProvider-EnvoyFileAccessLogProvider-LogFormat">LogFormat</a></code></td>
 <td>
-<p>Optional. Allows overriding of the default text log format.</p>
+<p>Optional. Allows overriding of the default access log format.</p>
 
 </td>
 <td>
@@ -2029,7 +2029,8 @@ No
 <td><code>logName</code></td>
 <td><code>string</code></td>
 <td>
-<p>REQUIRED. The friendly name of the access log</p>
+<p>Optional. The friendly name of the access log.
+Defaults to <code>istio-proxy</code>.</p>
 
 </td>
 <td>
@@ -2129,7 +2130,8 @@ No
 <td><code>logName</code></td>
 <td><code>string</code></td>
 <td>
-<p>REQUIRED. The friendly name of the access log</p>
+<p>Optional. The friendly name of the access log.
+Defaults to <code>istio-proxy</code>.</p>
 
 </td>
 <td>
@@ -2150,7 +2152,7 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="MeshConfig-ExtensionProvider-StackdriverProvider-LoggingOptions">MeshConfig.ExtensionProvider.StackdriverProvider.LoggingOptions</h2>
+<h2 id="MeshConfig-ExtensionProvider-StackdriverProvider-Logging">MeshConfig.ExtensionProvider.StackdriverProvider.Logging</h2>
 <section>
 <table class="message-fields">
 <thead>
@@ -2162,16 +2164,16 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-ExtensionProvider-StackdriverProvider-LoggingOptions-dimensions">
-<td><code>dimensions</code></td>
+<tr id="MeshConfig-ExtensionProvider-StackdriverProvider-Logging-labels">
+<td><code>labels</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>Collection of tag names and tag expressions to include in the
+<p>Collection of tag names and tag expressions to include in the log
 entry. Conflicts are resolved by the tag name by overriding previously
 supplied values.</p>
 
 <p>Example:
-  dimensions:
+  labels:
     path: request.url_path
     foo: request.headers[&lsquo;x-foo&rsquo;]</p>
 
@@ -2212,18 +2214,19 @@ provides more information.</p>
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-EnvoyFileAccessLogProvider-LogFormat-json" class="oneof">
-<td><code>json</code></td>
+<tr id="MeshConfig-ExtensionProvider-EnvoyFileAccessLogProvider-LogFormat-labels" class="oneof">
+<td><code>labels</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">Struct (oneof)</a></code></td>
 <td>
 <p>Structured format for the envoy access logs. Envoy <a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators">command operators</a>
 can be used as values for fields within the Struct. Values are rendered
 as strings, numbers, or boolean values, as appropriate
-(see: <a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries">format dictionaries</a>).</p>
+(see: <a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries">format dictionaries</a>). Nested JSON is
+supported for some command operators (e.g. FILTER<em>STATE or DYNAMIC</em>METADATA).</p>
 
-<p>Example</p>
+<p>Example:</p>
 
-<pre><code>json:
+<pre><code>labels:
   status: &quot;%RESPONSE_CODE%&quot;
   message: &quot;%LOCAL_REPLY_BODY%&quot;
 </code></pre>

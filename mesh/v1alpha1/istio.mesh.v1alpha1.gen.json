@@ -801,11 +801,11 @@
                 },
                 {
                   "required": [
-                    "json"
+                    "labels"
                   ],
                   "properties": {
-                    "json": {
-                      "description": "Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) can be used as values for fields within the Struct. Values are rendered as strings, numbers, or boolean values, as appropriate (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)).",
+                    "labels": {
+                      "description": "Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) can be used as values for fields within the Struct. Values are rendered as strings, numbers, or boolean values, as appropriate (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)). Nested JSON is supported for some command operators (e.g. FILTER_STATE or DYNAMIC_METADATA).",
                       "type": "object"
                     }
                   }
@@ -826,11 +826,11 @@
           },
           {
             "required": [
-              "json"
+              "labels"
             ],
             "properties": {
-              "json": {
-                "description": "Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) can be used as values for fields within the Struct. Values are rendered as strings, numbers, or boolean values, as appropriate (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)).",
+              "labels": {
+                "description": "Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) can be used as values for fields within the Struct. Values are rendered as strings, numbers, or boolean values, as appropriate (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)). Nested JSON is supported for some command operators (e.g. FILTER_STATE or DYNAMIC_METADATA).",
                 "type": "object"
               }
             }
@@ -850,7 +850,7 @@
             "type": "integer"
           },
           "logName": {
-            "description": "REQUIRED. The friendly name of the access log",
+            "description": "Optional. The friendly name of the access log. Defaults to `istio-proxy`.",
             "type": "string"
           },
           "filterStateObjectsToLog": {
@@ -896,7 +896,7 @@
             "type": "integer"
           },
           "logName": {
-            "description": "REQUIRED. The friendly name of the access log",
+            "description": "Optional. The friendly name of the access log. Defaults to `istio-proxy`.",
             "type": "string"
           },
           "filterStateObjectsToLog": {
@@ -1014,16 +1014,16 @@
             "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
             "type": "integer"
           },
-          "loggingOptions": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.LoggingOptions"
+          "logging": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.Logging"
           }
         }
       },
-      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.LoggingOptions": {
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.Logging": {
         "type": "object",
         "properties": {
-          "dimensions": {
-            "description": "Collection of tag names and tag expressions to include in the entry. Conflicts are resolved by the tag name by overriding previously supplied values.",
+          "labels": {
+            "description": "Collection of tag names and tag expressions to include in the log entry. Conflicts are resolved by the tag name by overriding previously supplied values.",
             "type": "object",
             "additionalProperties": {
               "type": "string"
