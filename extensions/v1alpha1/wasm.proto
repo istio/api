@@ -23,7 +23,7 @@ import "type/v1beta1/selector.proto";
 // $description: Extend the functionality provided by the Istio proxy through WebAssembly filters.
 // $location: https://istio.io/docs/reference/config/proxy_extensions/wasm-plugin.html
 // $aliases: [/docs/reference/config/extensions/v1alpha1/wasm-plugin]
-//
+
 // WasmPlugins provides a mechanism to extend the functionality provided by
 // the Istio proxy through WebAssembly filters.
 //
@@ -151,7 +151,7 @@ import "type/v1beta1/selector.proto";
 //     verification_key: a89gAzxvls0JKAKIJSBnnvvvkIO
 //     function: read_data
 // ```
-
+//
 package istio.extensions.v1alpha1;
 
 option go_package="istio.io/api/extensions/v1alpha1";
@@ -263,7 +263,9 @@ enum PluginPhase {
 // The pull behaviour to be applied when fetching an OCI image,
 // mirroring K8s behaviour.
 //
+// <!--
 // buf:lint:ignore ENUM_VALUE_UPPER_SNAKE_CASE
+// -->
 enum PullPolicy {
   // Defaults to IfNotPresent, except for OCI images with tag `latest`, for which
   // the default will be Always.
