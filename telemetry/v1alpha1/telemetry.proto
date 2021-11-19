@@ -213,7 +213,7 @@ import "google/protobuf/wrappers.proto";
 //   accessLogging:
 //   - disabled: true
 // ```
-
+//
 package istio.telemetry.v1alpha1;
 
 option go_package = "istio.io/api/telemetry/v1alpha1";
