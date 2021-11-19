@@ -493,6 +493,26 @@
                       "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider"
                     }
                   }
+                },
+                {
+                  "required": [
+                    "envoyHttpAls"
+                  ],
+                  "properties": {
+                    "envoyHttpAls": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyHttpGrpcV3LogProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "envoyTcpAls"
+                  ],
+                  "properties": {
+                    "envoyTcpAls": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTcpGrpcV3LogProvider"
+                    }
+                  }
                 }
               ]
             }
@@ -594,6 +614,26 @@
             "properties": {
               "envoyFileAccessLog": {
                 "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "envoyHttpAls"
+            ],
+            "properties": {
+              "envoyHttpAls": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyHttpGrpcV3LogProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "envoyTcpAls"
+            ],
+            "properties": {
+              "envoyTcpAls": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTcpGrpcV3LogProvider"
               }
             }
           }
@@ -730,11 +770,141 @@
         }
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider": {
+        "description": "Defines configuration for Envoy-based access logging that writes to local files (and/or standard streams).",
         "type": "object",
         "properties": {
           "path": {
-            "description": "Path to a local file to write the access log entries. If unspecified, defaults to `/dev/stdout`.",
+            "description": "Path to a local file to write the access log entries. This may be used to write to streams, via `/dev/stderr` and `/dev/stdout` If unspecified, defaults to `/dev/stdout`.",
             "type": "string"
+          },
+          "logFormat": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider.LogFormat"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider.LogFormat": {
+        "type": "object",
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "text"
+                  ],
+                  "properties": {
+                    "text": {
+                      "description": "Textual format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) may be used in the format. The [format string documentation](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-strings) provides more information.",
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "labels"
+                  ],
+                  "properties": {
+                    "labels": {
+                      "description": "Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) can be used as values for fields within the Struct. Values are rendered as strings, numbers, or boolean values, as appropriate (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)). Nested JSON is supported for some command operators (e.g. FILTER_STATE or DYNAMIC_METADATA).",
+                      "type": "object"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "description": "Textual format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) may be used in the format. The [format string documentation](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-strings) provides more information.",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "labels"
+            ],
+            "properties": {
+              "labels": {
+                "description": "Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) can be used as values for fields within the Struct. Values are rendered as strings, numbers, or boolean values, as appropriate (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)). Nested JSON is supported for some command operators (e.g. FILTER_STATE or DYNAMIC_METADATA).",
+                "type": "object"
+              }
+            }
+          }
+        ]
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyHttpGrpcV3LogProvider": {
+        "description": "Defines configuration for an Envoy [Access Logging Service](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/grpc/v3/als.proto#grpc-access-log-service-als) integration for HTTP traffic.",
+        "type": "object",
+        "properties": {
+          "service": {
+            "description": "REQUIRED. Specifies the service that implements the Envoy ALS gRPC authorization service. The format is `[\u003cNamespace\u003e/]\u003cHostname\u003e`. The specification of `\u003cNamespace\u003e` is required only when it is insufficient to unambiguously resolve a service in the service registry. The `\u003cHostname\u003e` is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
+            "type": "string"
+          },
+          "port": {
+            "description": "REQUIRED. Specifies the port of the service.",
+            "type": "integer"
+          },
+          "logName": {
+            "description": "Optional. The friendly name of the access log. Defaults: - \"http_envoy_accesslog\" - \"listener_envoy_accesslog\"",
+            "type": "string"
+          },
+          "filterStateObjectsToLog": {
+            "description": "Optional. Additional filter state objects to log.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "additionalRequestHeadersToLog": {
+            "description": "Optional. Additional request headers to log.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "additionalResponseHeadersToLog": {
+            "description": "Optional. Additional response headers to log.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "additionalResponseTrailersToLog": {
+            "description": "Optional. Additional response trailers to log.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTcpGrpcV3LogProvider": {
+        "description": "Defines configuration for an Envoy [Access Logging Service](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/grpc/v3/als.proto#grpc-access-log-service-als) integration for TCP traffic.",
+        "type": "object",
+        "properties": {
+          "service": {
+            "description": "REQUIRED. Specifies the service that implements the Envoy ALS gRPC authorization service. The format is `[\u003cNamespace\u003e/]\u003cHostname\u003e`. The specification of `\u003cNamespace\u003e` is required only when it is insufficient to unambiguously resolve a service in the service registry. The `\u003cHostname\u003e` is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
+            "type": "string"
+          },
+          "port": {
+            "description": "REQUIRED. Specifies the port of the service.",
+            "type": "integer"
+          },
+          "logName": {
+            "description": "Optional. The friendly name of the access log. Defaults: - \"tcp_envoy_accesslog\" - \"listener_envoy_accesslog\"",
+            "type": "string"
+          },
+          "filterStateObjectsToLog": {
+            "description": "Optional. Additional filter state objects to log.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
@@ -843,6 +1013,21 @@
           "maxTagLength": {
             "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
             "type": "integer"
+          },
+          "logging": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.Logging"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.Logging": {
+        "type": "object",
+        "properties": {
+          "labels": {
+            "description": "Collection of tag names and tag expressions to include in the log entry. Conflicts are resolved by the tag name by overriding previously supplied values.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
           }
         }
       },

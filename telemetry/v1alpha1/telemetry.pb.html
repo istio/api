@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.telemetry.v1alpha1.Telemetry
 aliases: [/docs/reference/config/telemetry/v1alpha1/telemetry]
-number_of_entries: 15
+number_of_entries: 16
 ---
 <h2 id="Telemetry">Telemetry</h2>
 <section>
@@ -399,6 +399,18 @@ future releases.</p>
 No
 </td>
 </tr>
+<tr id="AccessLogging-filter">
+<td><code>filter</code></td>
+<td><code><a href="#AccessLogging-Filter">Filter</a></code></td>
+<td>
+<p>Optional. If specified, this filter will be used to select specific
+requests/connections for logging.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -597,6 +609,37 @@ Examples include: &ldquo;string(destination.port)&rdquo; and &ldquo;request.host
 Istio exposes all standard <a href="https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/advanced/attributes">Envoy attributes</a>.
 Additionally, Istio exposes node metadata as attributes.
 More information is provided in the <a href="https://istio.io/latest/docs/tasks/observability/metrics/customize-metrics/#use-expressions-for-values">customization docs</a>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="AccessLogging-Filter">AccessLogging.Filter</h2>
+<section>
+<p>Allows specification of an access log filter.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AccessLogging-Filter-expression">
+<td><code>expression</code></td>
+<td><code>string</code></td>
+<td>
+<p>CEL expression for selecting when requests/connections should be logged.
+Examples:
+- <code>response.code &gt;= 400</code>
+- <code>connection.mtls &amp;&amp; request.url_path.contains('v1beta3')</code></p>
 
 </td>
 <td>
