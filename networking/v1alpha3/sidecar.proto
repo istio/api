@@ -492,13 +492,7 @@ message IstioIngressListener {
   reserved "localhost_client_tls";
   reserved 5, 6;
 
-  enum Mode {
-    DEFAULT = 0;
-    GATEWAY = 1;
-  }
-
-  Mode mode = 7;
-
+  ServerTLSSettings tls = 7;
 }
 
 // `IstioEgressListener` specifies the properties of an outbound traffic

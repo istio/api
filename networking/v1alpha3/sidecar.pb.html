@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.Sidecar
 aliases: [/docs/reference/config/networking/v1alpha3/sidecar]
-number_of_entries: 8
+number_of_entries: 7
 ---
 <p><code>Sidecar</code> describes the configuration of the sidecar proxy that mediates
 inbound and outbound communication to the workload instance it is attached to. By
@@ -546,9 +546,9 @@ connections. Arbitrary IPs are not supported. Format should be one of <code>127.
 Yes
 </td>
 </tr>
-<tr id="IstioIngressListener-mode">
-<td><code>mode</code></td>
-<td><code><a href="#IstioIngressListener-Mode">Mode</a></code></td>
+<tr id="IstioIngressListener-tls">
+<td><code>tls</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/gateway.html#ServerTLSSettings">ServerTLSSettings</a></code></td>
 <td>
 </td>
 <td>
@@ -730,29 +730,6 @@ services can be monitored.</p>
 </td>
 <td>
 No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="IstioIngressListener-Mode">IstioIngressListener.Mode</h2>
-<section>
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="IstioIngressListener-Mode-DEFAULT">
-<td><code>DEFAULT</code></td>
-<td>
-</td>
-</tr>
-<tr id="IstioIngressListener-Mode-GATEWAY">
-<td><code>GATEWAY</code></td>
-<td>
 </td>
 </tr>
 </tbody>
