@@ -21,7 +21,6 @@ import "google/api/field_behavior.proto";
 // $description: Configuration affecting edge load balancer.
 // $location: https://istio.io/docs/reference/config/networking/gateway.html
 // $aliases: [/docs/reference/config/networking/v1beta1/gateway]
-// $mode: none
 
 // `Gateway` describes a load balancer operating at the edge of the mesh
 // receiving incoming or outgoing HTTP/TCP connections. The specification
