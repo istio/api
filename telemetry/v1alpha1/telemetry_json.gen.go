@@ -352,6 +352,39 @@ func (this *AccessLogging_Filter) UnmarshalJSON(b []byte) error {
 	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for AccessLogging_LogOption
+func (this *AccessLogging_LogOption) MarshalJSON() ([]byte, error) {
+	str, err := TelemetryMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for AccessLogging_LogOption
+func (this *AccessLogging_LogOption) UnmarshalJSON(b []byte) error {
+	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for AccessLogging_LogOption_EnvoyFileAccessLogOption
+func (this *AccessLogging_LogOption_EnvoyFileAccessLogOption) MarshalJSON() ([]byte, error) {
+	str, err := TelemetryMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for AccessLogging_LogOption_EnvoyFileAccessLogOption
+func (this *AccessLogging_LogOption_EnvoyFileAccessLogOption) UnmarshalJSON(b []byte) error {
+	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for AccessLogging_LogOption_EnvoyHttpGrpcV3LogOption
+func (this *AccessLogging_LogOption_EnvoyHttpGrpcV3LogOption) MarshalJSON() ([]byte, error) {
+	str, err := TelemetryMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for AccessLogging_LogOption_EnvoyHttpGrpcV3LogOption
+func (this *AccessLogging_LogOption_EnvoyHttpGrpcV3LogOption) UnmarshalJSON(b []byte) error {
+	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 var (
 	TelemetryMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
 	TelemetryUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}

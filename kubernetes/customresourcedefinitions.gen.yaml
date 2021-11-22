@@ -5825,6 +5825,43 @@ spec:
                             should be logged.
                           type: string
                       type: object
+                    option:
+                      oneOf:
+                      - not:
+                          anyOf:
+                          - required:
+                            - envoyFileAccessLog
+                          - required:
+                            - envoyHttpGrpcLog
+                      - required:
+                        - envoyFileAccessLog
+                      - required:
+                        - envoyHttpGrpcLog
+                      properties:
+                        envoyFileAccessLog:
+                          properties:
+                            format:
+                              type: string
+                          type: object
+                        envoyHttpGrpcLog:
+                          properties:
+                            additionalRequestHeadersToLog:
+                              description: Optional.
+                              items:
+                                type: string
+                              type: array
+                            additionalResponseHeadersToLog:
+                              description: Optional.
+                              items:
+                                type: string
+                              type: array
+                            additionalResponseTrailersToLog:
+                              description: Optional.
+                              items:
+                                type: string
+                              type: array
+                          type: object
+                      type: object
                     providers:
                       description: Optional.
                       items:

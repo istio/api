@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.telemetry.v1alpha1.Telemetry
 aliases: [/docs/reference/config/telemetry/v1alpha1/telemetry]
-number_of_entries: 16
+number_of_entries: 19
 ---
 <p>Telemetry defines how the telemetry is generated for workloads within a mesh.</p>
 
@@ -601,6 +601,15 @@ requests/connections for logging.</p>
 No
 </td>
 </tr>
+<tr id="AccessLogging-option">
+<td><code>option</code></td>
+<td><code><a href="#AccessLogging-LogOption">LogOption</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -830,6 +839,111 @@ No
 Examples:
 - <code>response.code &gt;= 400</code>
 - <code>connection.mtls &amp;&amp; request.url_path.contains('v1beta3')</code></p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="AccessLogging-LogOption">AccessLogging.LogOption</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AccessLogging-LogOption-envoy_file_access_log" class="oneof oneof-start">
+<td><code>envoyFileAccessLog</code></td>
+<td><code><a href="#AccessLogging-LogOption-EnvoyFileAccessLogOption">EnvoyFileAccessLogOption (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AccessLogging-LogOption-envoy_http_grpc_log" class="oneof">
+<td><code>envoyHttpGrpcLog</code></td>
+<td><code><a href="#AccessLogging-LogOption-EnvoyHttpGrpcV3LogOption">EnvoyHttpGrpcV3LogOption (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="AccessLogging-LogOption-EnvoyFileAccessLogOption">AccessLogging.LogOption.EnvoyFileAccessLogOption</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AccessLogging-LogOption-EnvoyFileAccessLogOption-format">
+<td><code>format</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="AccessLogging-LogOption-EnvoyHttpGrpcV3LogOption">AccessLogging.LogOption.EnvoyHttpGrpcV3LogOption</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AccessLogging-LogOption-EnvoyHttpGrpcV3LogOption-additional_request_headers_to_log">
+<td><code>additionalRequestHeadersToLog</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Optional. Additional request headers to log.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AccessLogging-LogOption-EnvoyHttpGrpcV3LogOption-additional_response_headers_to_log">
+<td><code>additionalResponseHeadersToLog</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Optional. Additional response headers to log.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AccessLogging-LogOption-EnvoyHttpGrpcV3LogOption-additional_response_trailers_to_log">
+<td><code>additionalResponseTrailersToLog</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Optional. Additional response trailers to log.</p>
 
 </td>
 <td>

@@ -589,4 +589,29 @@ message AccessLogging {
   // Optional. If specified, this filter will be used to select specific
   // requests/connections for logging.
   Filter filter = 3;
+
+  message LogOption {
+    oneof option {
+      EnvoyFileAccessLogOption envoy_file_access_log = 1;
+
+      EnvoyHttpGrpcV3LogOption envoy_http_grpc_log = 2;
+    }
+
+    message EnvoyFileAccessLogOption {
+      string format = 1;
+    }
+
+    message EnvoyHttpGrpcV3LogOption{
+      // Optional. Additional request headers to log.
+      repeated string additional_request_headers_to_log = 1;
+
+      // Optional. Additional response headers to log.
+      repeated string additional_response_headers_to_log = 2;
+
+      // Optional. Additional response trailers to log.
+      repeated string additional_response_trailers_to_log = 3;
+    }
+  }
+
+  LogOption option = 4;
 }
