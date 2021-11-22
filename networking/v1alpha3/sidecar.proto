@@ -491,6 +491,8 @@ message IstioIngressListener {
 
   reserved "localhost_client_tls";
   reserved 5, 6;
+
+  ServerTLSSettings tls = 7;
 }
 
 // `IstioEgressListener` specifies the properties of an outbound traffic
