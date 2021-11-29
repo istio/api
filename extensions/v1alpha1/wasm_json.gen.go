@@ -23,7 +23,7 @@
 //   namespace: istio-ingress
 // spec:
 //   selector:
-//     labels:
+//     matchLabels:
 //       istio: ingressgateway
 //   url: file:///opt/filters/openid.wasm
 //   sha256: 1ef0c9a92b0420cf25f7fe5d481b231464bc88f486ca3b9c83ed5cc21d2f6210
@@ -77,7 +77,7 @@
 //   namespace: istio-ingress
 // spec:
 //   selector:
-//     labels:
+//     matchLabels:
 //       istio: ingressgateway
 //   url: oci://private-registry:5000/openid-connect/openid:latest
 //   imagePullPolicy: IfNotPresent
@@ -96,7 +96,7 @@
 //   namespace: istio-ingress
 // spec:
 //   selector:
-//     labels:
+//     matchLabels:
 //       istio: ingressgateway
 //   url: oci://private-registry:5000/acl-check/acl:latest
 //   imagePullPolicy: Always
@@ -116,7 +116,7 @@
 //   namespace: istio-ingress
 // spec:
 //   selector:
-//     labels:
+//     matchLabels:
 //       istio: ingressgateway
 //   url: oci://private-registry:5000/check-header:latest
 //   imagePullPolicy: IfNotPresent
