@@ -506,6 +506,19 @@ var (
 		},
 	}
 
+	SidecarProxyImageType = Instance {
+		Name:          "sidecar.istio.io/proxyImageType",
+		Description:   "Specifies the Docker image type to be used by the Envoy "+
+                        "sidecar. Istio publishes debug and distroless image types "+
+                        "for every release tag.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	SidecarProxyMemory = Instance {
 		Name:          "sidecar.istio.io/proxyMemory",
 		Description:   "Specifies the requested memory setting for the Envoy "+
@@ -757,6 +770,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarProxyCPU,
 		&SidecarProxyCPULimit,
 		&SidecarProxyImage,
+		&SidecarProxyImageType,
 		&SidecarProxyMemory,
 		&SidecarProxyMemoryLimit,
 		&SidecarRewriteAppHTTPProbers,

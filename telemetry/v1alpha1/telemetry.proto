@@ -26,10 +26,10 @@ import "google/protobuf/wrappers.proto";
 
 // Telemetry defines how the telemetry is generated for workloads within a mesh.
 //
-// For mesh level configuration, put the resource in root configuration namespace for 
+// For mesh level configuration, put the resource in root configuration namespace for
 // your Istio installation *without* a workload selector.
 //
-// For any namespace, including the root configuration namespace, it is only valid 
+// For any namespace, including the root configuration namespace, it is only valid
 // to have a single workload selector-less Telemetry resource.
 //
 // For resources with a workload selector, it is only valid to have one resource selecting
@@ -145,7 +145,7 @@ import "google/protobuf/wrappers.proto";
 //           value: "request.host"
 // ```
 //
-// Policy to remove the response_code dimension on some Prometheus metrics for 
+// Policy to remove the response_code dimension on some Prometheus metrics for
 // the `bar.foo` workload:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1alpha1
@@ -196,7 +196,7 @@ import "google/protobuf/wrappers.proto";
 //   - providers:
 //     - name: envoyFileAccessLogger
 //     # By default, this turns on access logging (no need to set `disabled: false`).
-//     # Unspecified `disabled` will be treated as `disabled: false`, except in 
+//     # Unspecified `disabled` will be treated as `disabled: false`, except in
 //     # cases where a parent configuration has marked as `disabled: true`. In
 //     # those cases, `disabled: false` must be set explicitly to override.
 // ```
@@ -213,7 +213,7 @@ import "google/protobuf/wrappers.proto";
 //   accessLogging:
 //   - disabled: true
 // ```
-
+//
 package istio.telemetry.v1alpha1;
 
 option go_package = "istio.io/api/telemetry/v1alpha1";
@@ -263,13 +263,13 @@ message Telemetry {
 // It can be used to enable/disable tracing, as well as to set sampling
 // rates and custom tag extraction.
 //
-// Tracing configuration support overrides of the fields `providers`, 
+// Tracing configuration support overrides of the fields `providers`,
 // `random_sampling_percentage`, `disable_span_reporting`, and `custom_tags` at
 // each level in the configuration hierarchy, with missing values filled in
 // from parent resources. However, when specified, `custom_tags` will
 // fully replace any values provided by parent configuration.
 message Tracing {
-  
+
   // Optional. Name of provider(s) to use for span reporting. If a provider is
   // not specified, the [default tracing provider][istio.mesh.v1alpha1.MeshConfig.default_providers.tracing]
   // will be used.
@@ -289,16 +289,16 @@ message Tracing {
   google.protobuf.DoubleValue random_sampling_percentage = 3;
 
   // Controls span reporting. If set to true, no spans will be reported for
-  // impacted workloads. This does NOT impact context propagation or trace 
+  // impacted workloads. This does NOT impact context propagation or trace
   // sampling behavior.
   google.protobuf.BoolValue disable_span_reporting = 4;
- 
+
   // CustomTag defines a tag to be added to a trace span that is based on
   // an operator-supplied value. This value can either be a hard-coded value,
   // a value taken from an environment variable known to the sidecar proxy, or
   // from a request header.
-  // 
-  // NOTE: when specified, `custom_tags` will fully replace any values provided 
+  //
+  // NOTE: when specified, `custom_tags` will fully replace any values provided
   // by parent configuration.
   message CustomTag {
     oneof type {
@@ -366,7 +366,7 @@ message Metrics {
   // If a provider is not specified, the [default metrics provider][istio.mesh.v1alpha1.MeshConfig.default_providers.metrics]
   // will be used.
   repeated ProviderRef providers = 1;
-  
+
   // Optional. Ordered list of overrides to metrics generation behavior.
   //
   // Specified overrides will be applied in order. They will be applied on
@@ -378,14 +378,14 @@ message Metrics {
   //
   // Because overrides are applied in order, users are advised to order their
   // overrides from least specific to most specific matches. That is, it is
-  // a best practice to list any universal overrides first, with tailored 
+  // a best practice to list any universal overrides first, with tailored
   // overrides following them.
   repeated MetricsOverrides overrides = 2;
 }
 
 // WorkloadMode allows selection of the role of the underlying workload in
 // network traffic. A workload is considered as acting as a SERVER if it is
-// the destination of the traffic (that is, traffic direction, from the 
+// the destination of the traffic (that is, traffic direction, from the
 // perspective of the workload is *inbound*). If the workload is the source of
 // the network traffic, it is considered to be in CLIENT mode (traffic is
 // *outbound* from the workload).
@@ -499,7 +499,7 @@ message MetricSelector {
   oneof metric_match {
     // One of the well-known Istio Standard Metrics.
     IstioMetric metric = 1;
-    
+
     // Allows free-form specification of a metric. No validation of custom metrics
     // is provided.
     string custom_metric = 2;
@@ -556,7 +556,7 @@ message MetricsOverrides {
   // Optional. Collection of tag names and tag expressions to override in the
   // selected metric(s).
   // The key in the map is the name of the tag.
-  // The value in the map is the operation to perform on the the tag. 
+  // The value in the map is the operation to perform on the the tag.
   // WARNING: some providers may not support adding/removing tags.
   // See also: https://istio.io/latest/docs/reference/config/metrics/#labels
   map<string, TagOverride> tag_overrides = 3;
@@ -576,4 +576,17 @@ message AccessLogging {
   // selected above. Customization controls will be added to this API in
   // future releases.
   google.protobuf.BoolValue disabled = 2;
+
+  // Allows specification of an access log filter.
+  message Filter {
+    // CEL expression for selecting when requests/connections should be logged.
+    // Examples:
+    // - `response.code >= 400`
+    // - `connection.mtls && request.url_path.contains('v1beta3')`
+    string expression = 1;
+  }
+
+  // Optional. If specified, this filter will be used to select specific
+  // requests/connections for logging.
+  Filter filter = 3;
 }

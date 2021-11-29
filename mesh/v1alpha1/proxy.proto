@@ -18,6 +18,7 @@ import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 import "networking/v1alpha3/destination_rule.proto";
 import "networking/v1alpha3/workload_group.proto";
+import "networking/v1beta1/proxy_config.proto";
 
 package istio.mesh.v1alpha1;
 
@@ -521,6 +522,9 @@ message ProxyConfig {
   // The plugin certificates (the 'cacerts' secret), self-signed certificates (the 'istio-ca-secret' secret)
   // are added automatically by Istiod.
   repeated string ca_certificates_pem = 34;
+
+  // Specifies the details of the proxy image.
+  istio.networking.v1beta1.ProxyImage image = 35;
 }
 
 message RemoteService {
