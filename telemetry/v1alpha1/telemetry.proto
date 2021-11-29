@@ -589,4 +589,61 @@ message AccessLogging {
   // Optional. If specified, this filter will be used to select specific
   // requests/connections for logging.
   Filter filter = 3;
+
+  message CustomLoggingFormat {
+    // Optional. Textual message format to generate for logging event. This
+    // field is mapped into different provider formats in provider-specific
+    // ways.
+    //
+    // For some structured logging providers (including Envoy Access Logging
+    // Service providers), this field may be dropped entirely, as there is no
+    // place for it in the target schema.
+    //
+    // For unstructured providers, this field will be used exclusively,
+    // regardless if additional attributes are provided.
+    string message = 1;
+
+    // Optional. Used in structured logging to control the attributes captured
+    // in the access logs.
+    //
+    // For providers that define rigid schemas, use of this field is restricted
+    // to adding *additional* attributes to the existing set (where possible).
+    // Examples include adding additional headers/trailers to Envoy Access
+    // Logging Service providers. The Istio control plane **MUST** be able to
+    // translate Envoy command operators for request headers and trailers into
+    // known provider formats.
+    //
+    // Example:
+    // ```
+    // attributes:
+    //   status: "%RESPONSE_CODE%"
+    //   message: "%LOCAL_REPLY_BODY%"
+    // ```
+    google.protobuf.Struct attributes = 2;
+  }
+
+  // Optional. Overrides the default provider format for access logs.
+  //
+  // NOTE: Some of the format options may be invalid when combined with
+  // differing providers.
+  //
+  // Example mappings:
+  // - Envoy streams provider:
+  //   - `message` maps to `log_format.text_format`
+  //   - `attributes` maps to `log_format.json_format`
+  // - Envoy ALS provider:
+  //   - `message` is dropped
+  //   - `attributes` are processed to extract `%REQ()%`, `%RESP()%`, and
+  //     `%TRAILER()%` command operators. These are used to populate
+  //     `additional_request_headers_to_log`,
+  //     `additional_request_headers_to_log`,
+  //      and `additional_response_trailers_to_log` fields.
+  // - OpenTelemetry provider:
+  //   - `message` maps to `body.string_value`
+  //   - `attributes` maps to `attributes.values`
+  // - Stackdriver provider:
+  //   - `message` maps to `text_payload` (attributes is discarded)
+  //   - `attributes` maps to `json_payload` (only valid when `message` is
+  //      unspecified)
+  CustomLoggingFormat format = 4;
 }
