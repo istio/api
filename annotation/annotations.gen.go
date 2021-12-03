@@ -217,9 +217,11 @@ var (
 	IoIstioDryRun = Instance {
 		Name:          "istio.io/dry-run",
 		Description:   "Specifies whether or not the given resource is in dry-run "+
-                        "mode.",
+                        "mode. See "+
+                        "https://istio.io/latest/docs/tasks/security/authorization/authz-dry-run/ "+
+                        "for more information.",
 		FeatureStatus: Alpha,
-		Hidden:        true,
+		Hidden:        false,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			AuthorizationPolicy,
