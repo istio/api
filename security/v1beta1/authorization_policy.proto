@@ -241,8 +241,11 @@ message AuthorizationPolicy {
   // Optional. A list of rules to match the request. A match occurs when at least
   // one rule matches the request.
   //
-  // If not set, the match will never occur. This is equivalent to setting a
-  // default of deny for the target workloads.
+  // If there are no elements in the list, the match will never occur. This is
+  // equivalent to setting a default of deny for the target workloads.
+  //
+  // If an empty match rule is added to the list, the match will always occur.
+  // This is equivalent to setting a default of allow for the target workloads.
   repeated Rule rules = 2;
 
   // Action specifies the operation to take.
