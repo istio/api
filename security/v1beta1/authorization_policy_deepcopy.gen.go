@@ -118,14 +118,40 @@
 //
 // For example,
 //
-// The following authorization policy applies to workloads containing label
-// "app: httpbin" in namespace bar.
+// The following authorization policy applies to all workloads in namespace foo. It allows nothing and effectively denies
+// all requests to workloads in namespace foo.
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
 // kind: AuthorizationPolicy
 // metadata:
-//   name: policy
+//  name: allow-nothing
+//  namespace: foo
+// spec:
+//   {}
+// ```
+//
+// The following authorization policy allows all requests to workloads in namespace foo.
+//
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//  name: allow-all
+//  namespace: foo
+// spec:
+//  rules:
+//  - {}
+// ```
+//
+// The following authorization policy applies to workloads containing label "app: httpbin" in namespace bar. It allows
+// nothing and effectively denies all requests to the selected workloads.
+//
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//   name: allow-nothing
 //   namespace: bar
 // spec:
 //   selector:
@@ -133,28 +159,15 @@
 //       app: httpbin
 // ```
 //
-// The following authorization policy applies to all workloads in namespace foo.
+// The following authorization policy applies to workloads containing label "version: v1" in all namespaces in the mesh.
+// (Assuming the root namespace is configured to "istio-system").
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
 // kind: AuthorizationPolicy
 // metadata:
-//  name: policy
-//  namespace: foo
-// spec:
-//   {}
-// ```
-//
-// The following authorization policy applies to workloads containing label
-// "version: v1" in all namespaces in the mesh. (Assuming the root namespace is
-// configured to "istio-config").
-//
-// ```yaml
-// apiVersion: security.istio.io/v1beta1
-// kind: AuthorizationPolicy
-// metadata:
-//  name: policy
-//  namespace: istio-config
+//  name: allow-nothing
+//  namespace: istio-system
 // spec:
 //  selector:
 //    matchLabels:
