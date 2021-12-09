@@ -7,6 +7,12 @@
 //
 // **NOTE**: fields in ProxyConfig are not dynamically configured - changes will require restart of workloads to take effect.
 //
+// For any namespace, including the root configuration namespace, it is only valid
+// to have a single workload selector-less `ProxyConfig` resource.
+//
+// For resources with a workload selector, it is only valid to have one resource selecting
+// any given workload.
+//
 // For mesh level configuration, put the resource in the root configuration namespace for
 // your Istio installation *without* a workload selector:
 //
@@ -34,9 +40,6 @@
 //   concurrency: 0
 // ```
 //
-// If multiple `ProxyConfig` CRs without a `selector` field exist in the same namespace the CRs will be merged together
-// with no guaranteed field precedence.
-//
 // For workload level configuration, set the `selector` field on the `ProxyConfig` resource:
 //
 // ```yaml
@@ -53,9 +56,6 @@
 //   image:
 //     type: debug
 // ```
-//
-// If multiple workload level `ProxyConfig` CRs select the same workload the resources will be merged together
-// with no guaranteed field precedence.
 //
 // If a `ProxyConfig` CR is defined that matches a workload it will merge with its `proxy.istio.io/config` annotation if present,
 // with the CR taking precedence over the annotation for overlapping fields. Similarly, if a mesh wide `ProxyConfig` CR is defined and
