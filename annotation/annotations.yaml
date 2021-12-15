@@ -115,6 +115,15 @@ annotations:
     resources:
       - Pod
 
+  - name: sidecar.istio.io/proxyImageType
+    featureStatus: Alpha
+    description: Specifies the Docker image type to be used by the Envoy sidecar. Istio publishes debug
+      and distroless image types for every release tag.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+
   - name: sidecar.istio.io/proxyCPU
     featureStatus: Alpha
     description: Specifies the requested CPU setting for the Envoy sidecar.
@@ -403,9 +412,10 @@ annotations:
 
   - name: istio.io/dry-run
     featureStatus: Alpha
-    description: Specifies whether or not the given resource is in dry-run mode.
+    description: Specifies whether or not the given resource is in dry-run mode. See
+      https://istio.io/latest/docs/tasks/security/authorization/authz-dry-run/ for more information.
     deprecated: false
-    hidden: true
+    hidden: false
     resources:
       - AuthorizationPolicy
 
@@ -433,3 +443,35 @@ annotations:
     hidden: false
     resources:
       - Pod
+
+  - name: istio.io/autoRegistrationGroup
+    featureStatus: Alpha
+    description: On a WorkloadEntry stores the associated WorkloadGroup.
+    deprecated: false
+    hidden: true
+    resources:
+      - WorkloadEntry
+
+  - name: istio.io/workloadController
+    featureStatus: Alpha
+    description: On a WorkloadEntry should store the current/last pilot instance connected to the workload for XDS.
+    deprecated: false
+    hidden: true
+    resources:
+      - WorkloadEntry
+
+  - name: istio.io/connectedAt
+    featureStatus: Alpha
+    description: On a WorkloadEntry stores the time in nanoseconds when the associated workload connected to a Pilot instance.
+    deprecated: false
+    hidden: true
+    resources:
+      - WorkloadEntry
+
+  - name: istio.io/disconnectedAt
+    featureStatus: Alpha
+    description: On a WorkloadEntry stores the time in nanoseconds when the associated workload disconnected from a Pilot instance.
+    deprecated: false
+    hidden: true
+    resources:
+      - WorkloadEntry

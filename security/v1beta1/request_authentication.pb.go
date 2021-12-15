@@ -153,13 +153,18 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //         paths: ["/healthz"]
 // ```
 //
-// - When applied on a Gateway, you can also use the special header name `x-jwt-claim` for matching JWT claims in
-// the VirtualService. Claims of type string or list of string are supported and nested claims are also supported using
-// `.` as a separator for claim names. Examples: `x-jwt-claim.admin` matches the claim "admin" and `x-jwt-claim.group.id`
-// matches the nested claims "group" and "id".
+// [Experimental] Routing based on derived [metadata](https://istio.io/latest/docs/reference/config/security/conditions/)
+// is now supported. A prefix '@' is used to denote a match against internal metadata instead of the headers in the request.
+// Currently this feature is only supported for the following metadata:
 //
-// The following example creates the request authentication and authorization policies for JWT validation on ingress
-// gateway and routes requests based on the "version" claim in the validated JWT.
+// - `request.auth.claims.{claim-name}[.{sub-claim}]*` which are extracted from validated JWT tokens. The claim name
+// currently does not support the `.` character. Examples: `request.auth.claims.sub` and `request.auth.claims.name.givenName`.
+//
+// The use of matches against JWT claim metadata is only supported in Gateways. The following example shows:
+//
+// - RequestAuthentication to decode and validate a JWT. This also makes the `@request.auth.claims` available for use in the VirtualService.
+// - AuthorizationPolicy to check for valid principals in the request. This makes the JWT required for the request.
+// - VirtualService to route the request based on the "sub" claim.
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -172,7 +177,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //    matchLabels:
 //      app: istio-ingressgateway
 //   jwtRules:
-//   - issuer: "issuer-foo"
+//   - issuer: "example.com"
 //     jwksUri: https://example.com/.well-known/jwks.json
 // ---
 // apiVersion: security.istio.io/v1beta1
@@ -199,23 +204,21 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //   gateways:
 //   - istio-ingressgateway
 //   http:
-//   - name: "v2-route"
+//   - name: "v2"
 //     match:
 //     - headers:
-//         x-jwt-claim.version:
-//           exact: "v2"
+//         "@request.auth.claims.sub":
+//           exact: "dev"
 //     route:
 //     - destination:
 //         host: foo.prod.svc.cluster.local
 //         subset: v2
-//   - name: "default-route"
+//   - name: "default"
 //     route:
 //     - destination:
 //         host: foo.prod.svc.cluster.local
 //         subset: v1
 // ```
-//
-// **Note:** This routing is only supported on Gateways and proper request authentication must first be applied to validate the JWT.
 //
 // <!-- crd generation tags
 // +cue-gen:RequestAuthentication:groupName:security.istio.io
@@ -236,12 +239,15 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // +k8s:deepcopy-gen=true
 // -->
 type RequestAuthentication struct {
-	// The selector determines the workloads to apply the RequestAuthentication on.
-	// If not set, the policy will be applied to all workloads in the same namespace as the policy.
+	// Optional. The selector decides where to apply the request authentication policy. The selector will match with workloads
+	// in the same namespace as the request authentication policy. If the request authentication policy is in the root namespace,
+	// the selector will additionally match with workloads in all namespaces.
+	//
+	// If not set, the selector will match all workloads.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
 	// Define the list of JWTs that can be validated at the selected workloads' proxy. A valid token
 	// will be used to extract the authenticated identity.
-	// Each rule will be activated only when a token is presented at the location recorgnized by the
+	// Each rule will be activated only when a token is presented at the location recognized by the
 	// rule. The token will be validated based on the JWT rule config. If validation fails, the request will
 	// be rejected.
 	// Note: if more than one token is presented (at different locations), the output principal is nondeterministic.

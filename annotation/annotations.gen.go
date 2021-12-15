@@ -32,6 +32,7 @@ const (
     Ingress
     Pod
     Service
+    WorkloadEntry
 )
 
 func (r ResourceTypes) String() string {
@@ -46,6 +47,8 @@ func (r ResourceTypes) String() string {
 		return "Pod"
 	case 5:
 		return "Service"
+	case 6:
+		return "WorkloadEntry"
 	}
 	return "Unknown"
 }
@@ -175,15 +178,65 @@ var (
 		},
 	}
 
-	IoIstioDryRun = Instance {
-		Name:          "istio.io/dry-run",
-		Description:   "Specifies whether or not the given resource is in dry-run "+
-                        "mode.",
+	IoIstioAutoRegistrationGroup = Instance {
+		Name:          "istio.io/autoRegistrationGroup",
+		Description:   "On a WorkloadEntry stores the associated WorkloadGroup.",
 		FeatureStatus: Alpha,
 		Hidden:        true,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
+			WorkloadEntry,
+		},
+	}
+
+	IoIstioConnectedAt = Instance {
+		Name:          "istio.io/connectedAt",
+		Description:   "On a WorkloadEntry stores the time in nanoseconds when "+
+                        "the associated workload connected to a Pilot instance.",
+		FeatureStatus: Alpha,
+		Hidden:        true,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			WorkloadEntry,
+		},
+	}
+
+	IoIstioDisconnectedAt = Instance {
+		Name:          "istio.io/disconnectedAt",
+		Description:   "On a WorkloadEntry stores the time in nanoseconds when "+
+                        "the associated workload disconnected from a Pilot "+
+                        "instance.",
+		FeatureStatus: Alpha,
+		Hidden:        true,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			WorkloadEntry,
+		},
+	}
+
+	IoIstioDryRun = Instance {
+		Name:          "istio.io/dry-run",
+		Description:   "Specifies whether or not the given resource is in dry-run "+
+                        "mode. See "+
+                        "https://istio.io/latest/docs/tasks/security/authorization/authz-dry-run/ "+
+                        "for more information.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
 			AuthorizationPolicy,
+		},
+	}
+
+	IoIstioWorkloadController = Instance {
+		Name:          "istio.io/workloadController",
+		Description:   "On a WorkloadEntry should store the current/last pilot "+
+                        "instance connected to the workload for XDS.",
+		FeatureStatus: Alpha,
+		Hidden:        true,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			WorkloadEntry,
 		},
 	}
 
@@ -455,6 +508,19 @@ var (
 		},
 	}
 
+	SidecarProxyImageType = Instance {
+		Name:          "sidecar.istio.io/proxyImageType",
+		Description:   "Specifies the Docker image type to be used by the Envoy "+
+                        "sidecar. Istio publishes debug and distroless image types "+
+                        "for every release tag.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	SidecarProxyMemory = Instance {
 		Name:          "sidecar.istio.io/proxyMemory",
 		Description:   "Specifies the requested memory setting for the Envoy "+
@@ -679,7 +745,11 @@ func AllResourceAnnotations() []*Instance {
 		&OperatorInstallChartOwner,
 		&OperatorInstallOwnerGeneration,
 		&OperatorInstallVersion,
+		&IoIstioAutoRegistrationGroup,
+		&IoIstioConnectedAt,
+		&IoIstioDisconnectedAt,
 		&IoIstioDryRun,
+		&IoIstioWorkloadController,
 		&IoKubernetesIngressClass,
 		&NetworkingExportTo,
 		&PrometheusMergeMetrics,
@@ -702,6 +772,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarProxyCPU,
 		&SidecarProxyCPULimit,
 		&SidecarProxyImage,
+		&SidecarProxyImageType,
 		&SidecarProxyMemory,
 		&SidecarProxyMemoryLimit,
 		&SidecarRewriteAppHTTPProbers,
@@ -729,5 +800,6 @@ func AllResourceTypes() []string {
 		"Ingress",
 		"Pod",
 		"Service",
+		"WorkloadEntry",
 	}
 }
