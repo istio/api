@@ -1695,7 +1695,7 @@ Yes
 <td><code>int32</code></td>
 <td>
 <p>The proportion of traffic to be forwarded to the service
-version. (0-100). Sum of weights across destinations SHOULD BE == 100.
+version. Must be in range [0, infinite).
 If there is only one destination in a rule, the weight value is assumed to
 be 100.</p>
 
@@ -1749,7 +1749,8 @@ Yes
 <td><code>int32</code></td>
 <td>
 <p>The proportion of traffic to be forwarded to the service
-version. If there is only one destination in a rule, all traffic will be
+version. Must be in range [0, infinite).
+If there is only one destination in a rule, all traffic will be
 routed to it irrespective of the weight.</p>
 
 </td>

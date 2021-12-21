@@ -1889,7 +1889,7 @@ type HTTPRouteDestination struct {
 	// to which the request/connection should be forwarded to.
 	Destination *Destination `protobuf:"bytes,1,opt,name=destination,proto3" json:"destination,omitempty"`
 	// The proportion of traffic to be forwarded to the service
-	// version. (0-100). Sum of weights across destinations SHOULD BE == 100.
+	// version. Must be in range [0, infinite).
 	// If there is only one destination in a rule, the weight value is assumed to
 	// be 100.
 	Weight int32 `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
@@ -1960,7 +1960,8 @@ type RouteDestination struct {
 	// to which the request/connection should be forwarded to.
 	Destination *Destination `protobuf:"bytes,1,opt,name=destination,proto3" json:"destination,omitempty"`
 	// The proportion of traffic to be forwarded to the service
-	// version. If there is only one destination in a rule, all traffic will be
+	// version. Must be in range [0, infinite).
+	// If there is only one destination in a rule, all traffic will be
 	// routed to it irrespective of the weight.
 	Weight               int32    `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
