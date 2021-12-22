@@ -13,9 +13,10 @@
 // any given workload.
 //
 // The hierarchy of Telemetry configuration is as follows:
-// 1. Workload-specific configuration
-// 1. Namespace-specific configuration
-// 1. Root namespace configuration
+//
+// - Workload-specific configuration
+// - Namespace-specific configuration
+// - Root namespace configuration
 //
 // Examples:
 //
@@ -267,6 +268,7 @@ const (
 	// The Prometheus provider exports this metric as: `istio_requests_total`.
 	//
 	// The Stackdriver provider exports this metric as:
+	//
 	// - `istio.io/service/server/request_count` (SERVER mode)
 	// - `istio.io/service/client/request_count` (CLIENT mode)
 	MetricSelector_REQUEST_COUNT MetricSelector_IstioMetric = 1
@@ -275,6 +277,7 @@ const (
 	// The Prometheus provider exports this metric as: `istio_request_duration_milliseconds`.
 	//
 	// The Stackdriver provider exports this metric as:
+	//
 	// - `istio.io/service/server/response_latencies` (SERVER mode)
 	// - `istio.io/service/client/roundtrip_latencies` (CLIENT mode)
 	MetricSelector_REQUEST_DURATION MetricSelector_IstioMetric = 2
@@ -283,6 +286,7 @@ const (
 	// The Prometheus provider exports this metric as: `istio_request_bytes`.
 	//
 	// The Stackdriver provider exports this metric as:
+	//
 	// - `istio.io/service/server/request_bytes` (SERVER mode)
 	// - `istio.io/service/client/request_bytes` (CLIENT mode)
 	MetricSelector_REQUEST_SIZE MetricSelector_IstioMetric = 3
@@ -291,6 +295,7 @@ const (
 	// The Prometheus provider exports this metric as: `istio_response_bytes`.
 	//
 	// The Stackdriver provider exports this metric as:
+	//
 	// - `istio.io/service/server/response_bytes` (SERVER mode)
 	// - `istio.io/service/client/response_bytes` (CLIENT mode)
 	MetricSelector_RESPONSE_SIZE MetricSelector_IstioMetric = 4
@@ -299,6 +304,7 @@ const (
 	// The Prometheus provider exports this metric as: `istio_tcp_connections_opened_total`.
 	//
 	// The Stackdriver provider exports this metric as:
+	//
 	// - `istio.io/service/server/connection_open_count` (SERVER mode)
 	// - `istio.io/service/client/connection_open_count` (CLIENT mode)
 	MetricSelector_TCP_OPENED_CONNECTIONS MetricSelector_IstioMetric = 5
@@ -307,6 +313,7 @@ const (
 	// The Prometheus provider exports this metric as: `istio_tcp_connections_closed_total`.
 	//
 	// The Stackdriver provider exports this metric as:
+	//
 	// - `istio.io/service/server/connection_close_count` (SERVER mode)
 	// - `istio.io/service/client/connection_close_count` (CLIENT mode)
 	MetricSelector_TCP_CLOSED_CONNECTIONS MetricSelector_IstioMetric = 6
@@ -315,6 +322,7 @@ const (
 	// The Prometheus provider exports this metric as: `istio_tcp_sent_bytes_total`.
 	//
 	// The Stackdriver provider exports this metric as:
+	//
 	// - `istio.io/service/server/sent_bytes_count` (SERVER mode)
 	// - `istio.io/service/client/sent_bytes_count` (CLIENT mode)
 	MetricSelector_TCP_SENT_BYTES MetricSelector_IstioMetric = 7
@@ -323,6 +331,7 @@ const (
 	// The Prometheus provider exports this metric as: `istio_tcp_received_bytes_total`.
 	//
 	// The Stackdriver provider exports this metric as:
+	//
 	// - `istio.io/service/server/received_bytes_count` (SERVER mode)
 	// - `istio.io/service/client/received_bytes_count` (CLIENT mode)
 	MetricSelector_TCP_RECEIVED_BYTES MetricSelector_IstioMetric = 8
@@ -1341,7 +1350,9 @@ func (m *AccessLogging) GetFilter() *AccessLogging_Filter {
 // Allows specification of an access log filter.
 type AccessLogging_Filter struct {
 	// CEL expression for selecting when requests/connections should be logged.
+	//
 	// Examples:
+	//
 	// - `response.code >= 400`
 	// - `connection.mtls && request.url_path.contains('v1beta3')`
 	Expression           string   `protobuf:"bytes,1,opt,name=expression,proto3" json:"expression,omitempty"`

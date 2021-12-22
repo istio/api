@@ -19,10 +19,13 @@ to have a single workload selector-less Telemetry resource.</p>
 <p>For resources with a workload selector, it is only valid to have one resource selecting
 any given workload.</p>
 
-<p>The hierarchy of Telemetry configuration is as follows:
-1. Workload-specific configuration
-1. Namespace-specific configuration
-1. Root namespace configuration</p>
+<p>The hierarchy of Telemetry configuration is as follows:</p>
+
+<ul>
+<li>Workload-specific configuration</li>
+<li>Namespace-specific configuration</li>
+<li>Root namespace configuration</li>
+</ul>
 
 <p>Examples:</p>
 
@@ -826,10 +829,14 @@ No
 <td><code>expression</code></td>
 <td><code>string</code></td>
 <td>
-<p>CEL expression for selecting when requests/connections should be logged.
-Examples:
-- <code>response.code &gt;= 400</code>
-- <code>connection.mtls &amp;&amp; request.url_path.contains('v1beta3')</code></p>
+<p>CEL expression for selecting when requests/connections should be logged.</p>
+
+<p>Examples:</p>
+
+<ul>
+<li><code>response.code &gt;= 400</code></li>
+<li><code>connection.mtls &amp;&amp; request.url_path.contains('v1beta3')</code></li>
+</ul>
 
 </td>
 <td>
@@ -866,9 +873,12 @@ See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
 
 <p>The Prometheus provider exports this metric as: <code>istio_requests_total</code>.</p>
 
-<p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/request_count</code> (SERVER mode)
-- <code>istio.io/service/client/request_count</code> (CLIENT mode)</p>
+<p>The Stackdriver provider exports this metric as:</p>
+
+<ul>
+<li><code>istio.io/service/server/request_count</code> (SERVER mode)</li>
+<li><code>istio.io/service/client/request_count</code> (CLIENT mode)</li>
+</ul>
 
 </td>
 </tr>
@@ -879,9 +889,12 @@ See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
 
 <p>The Prometheus provider exports this metric as: <code>istio_request_duration_milliseconds</code>.</p>
 
-<p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/response_latencies</code> (SERVER mode)
-- <code>istio.io/service/client/roundtrip_latencies</code> (CLIENT mode)</p>
+<p>The Stackdriver provider exports this metric as:</p>
+
+<ul>
+<li><code>istio.io/service/server/response_latencies</code> (SERVER mode)</li>
+<li><code>istio.io/service/client/roundtrip_latencies</code> (CLIENT mode)</li>
+</ul>
 
 </td>
 </tr>
@@ -892,9 +905,12 @@ See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
 
 <p>The Prometheus provider exports this metric as: <code>istio_request_bytes</code>.</p>
 
-<p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/request_bytes</code> (SERVER mode)
-- <code>istio.io/service/client/request_bytes</code> (CLIENT mode)</p>
+<p>The Stackdriver provider exports this metric as:</p>
+
+<ul>
+<li><code>istio.io/service/server/request_bytes</code> (SERVER mode)</li>
+<li><code>istio.io/service/client/request_bytes</code> (CLIENT mode)</li>
+</ul>
 
 </td>
 </tr>
@@ -905,9 +921,12 @@ See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
 
 <p>The Prometheus provider exports this metric as: <code>istio_response_bytes</code>.</p>
 
-<p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/response_bytes</code> (SERVER mode)
-- <code>istio.io/service/client/response_bytes</code> (CLIENT mode)</p>
+<p>The Stackdriver provider exports this metric as:</p>
+
+<ul>
+<li><code>istio.io/service/server/response_bytes</code> (SERVER mode)</li>
+<li><code>istio.io/service/client/response_bytes</code> (CLIENT mode)</li>
+</ul>
 
 </td>
 </tr>
@@ -918,9 +937,12 @@ See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
 
 <p>The Prometheus provider exports this metric as: <code>istio_tcp_connections_opened_total</code>.</p>
 
-<p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/connection_open_count</code> (SERVER mode)
-- <code>istio.io/service/client/connection_open_count</code> (CLIENT mode)</p>
+<p>The Stackdriver provider exports this metric as:</p>
+
+<ul>
+<li><code>istio.io/service/server/connection_open_count</code> (SERVER mode)</li>
+<li><code>istio.io/service/client/connection_open_count</code> (CLIENT mode)</li>
+</ul>
 
 </td>
 </tr>
@@ -931,9 +953,12 @@ See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
 
 <p>The Prometheus provider exports this metric as: <code>istio_tcp_connections_closed_total</code>.</p>
 
-<p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/connection_close_count</code> (SERVER mode)
-- <code>istio.io/service/client/connection_close_count</code> (CLIENT mode)</p>
+<p>The Stackdriver provider exports this metric as:</p>
+
+<ul>
+<li><code>istio.io/service/server/connection_close_count</code> (SERVER mode)</li>
+<li><code>istio.io/service/client/connection_close_count</code> (CLIENT mode)</li>
+</ul>
 
 </td>
 </tr>
@@ -944,9 +969,12 @@ See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
 
 <p>The Prometheus provider exports this metric as: <code>istio_tcp_sent_bytes_total</code>.</p>
 
-<p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/sent_bytes_count</code> (SERVER mode)
-- <code>istio.io/service/client/sent_bytes_count</code> (CLIENT mode)</p>
+<p>The Stackdriver provider exports this metric as:</p>
+
+<ul>
+<li><code>istio.io/service/server/sent_bytes_count</code> (SERVER mode)</li>
+<li><code>istio.io/service/client/sent_bytes_count</code> (CLIENT mode)</li>
+</ul>
 
 </td>
 </tr>
@@ -957,9 +985,12 @@ See also: https://istio.io/latest/docs/reference/config/metrics/#metrics</p>
 
 <p>The Prometheus provider exports this metric as: <code>istio_tcp_received_bytes_total</code>.</p>
 
-<p>The Stackdriver provider exports this metric as:
-- <code>istio.io/service/server/received_bytes_count</code> (SERVER mode)
-- <code>istio.io/service/client/received_bytes_count</code> (CLIENT mode)</p>
+<p>The Stackdriver provider exports this metric as:</p>
+
+<ul>
+<li><code>istio.io/service/server/received_bytes_count</code> (SERVER mode)</li>
+<li><code>istio.io/service/client/received_bytes_count</code> (CLIENT mode)</li>
+</ul>
 
 </td>
 </tr>

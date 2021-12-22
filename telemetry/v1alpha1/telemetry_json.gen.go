@@ -13,9 +13,10 @@
 // any given workload.
 //
 // The hierarchy of Telemetry configuration is as follows:
-// 1. Workload-specific configuration
-// 1. Namespace-specific configuration
-// 1. Root namespace configuration
+//
+// - Workload-specific configuration
+// - Namespace-specific configuration
+// - Root namespace configuration
 //
 // Examples:
 //
