@@ -68,7 +68,6 @@ annotations:
     hidden: false
     resources:
       - Service
-      - Pod
 
   - name: sidecar.istio.io/inject
     featureStatus: Beta

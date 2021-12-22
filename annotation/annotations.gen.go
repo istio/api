@@ -275,7 +275,6 @@ var (
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Service,
-			Pod,
 		},
 	}
 
