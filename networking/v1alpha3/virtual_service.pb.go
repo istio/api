@@ -1889,10 +1889,9 @@ type HTTPRouteDestination struct {
 	// Destination uniquely identifies the instances of a service
 	// to which the request/connection should be forwarded to.
 	Destination *Destination `protobuf:"bytes,1,opt,name=destination,proto3" json:"destination,omitempty"`
-	// The proportion of traffic to be forwarded to the service
-	// version. Must be in range [0, infinite).
-	// If there is only one destination in a rule, the weight value is assumed to
-	// be 100.
+	// Weight specifies the relative proportion of traffic to be forwarded to the destination. A destination will receive `weight/(sum of all weights)` requests.
+	// If there is only one destination in a rule, it will receive all traffic.
+	// Otherwise, if weight is `0`, the destination will not receive any traffic.
 	Weight int32 `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
 	// Header manipulation rules
 	Headers              *Headers `protobuf:"bytes,7,opt,name=headers,proto3" json:"headers,omitempty"`
@@ -1960,10 +1959,9 @@ type RouteDestination struct {
 	// Destination uniquely identifies the instances of a service
 	// to which the request/connection should be forwarded to.
 	Destination *Destination `protobuf:"bytes,1,opt,name=destination,proto3" json:"destination,omitempty"`
-	// The proportion of traffic to be forwarded to the service
-	// version. Must be in range [0, infinite).
-	// If there is only one destination in a rule, all traffic will be
-	// routed to it irrespective of the weight.
+	// Weight specifies the relative proportion of traffic to be forwarded to the destination. A destination will receive `weight/(sum of all weights)` requests.
+	// If there is only one destination in a rule, it will receive all traffic.
+	// Otherwise, if weight is `0`, the destination will not receive any traffic.
 	Weight               int32    `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
