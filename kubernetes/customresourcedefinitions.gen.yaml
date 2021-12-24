@@ -675,6 +675,7 @@ spec:
                                     - SIMPLE
                                     - MUTUAL
                                     - ISTIO_MUTUAL
+                                    - START_TLS
                                     type: string
                                   privateKey:
                                     description: REQUIRED if mode is `MUTUAL`.
@@ -710,6 +711,7 @@ spec:
                               - SIMPLE
                               - MUTUAL
                               - ISTIO_MUTUAL
+                              - START_TLS
                               type: string
                             privateKey:
                               description: REQUIRED if mode is `MUTUAL`.
@@ -1230,6 +1232,7 @@ spec:
                               - SIMPLE
                               - MUTUAL
                               - ISTIO_MUTUAL
+                              - START_TLS
                               type: string
                             privateKey:
                               description: REQUIRED if mode is `MUTUAL`.
@@ -1265,6 +1268,7 @@ spec:
                         - SIMPLE
                         - MUTUAL
                         - ISTIO_MUTUAL
+                        - START_TLS
                         type: string
                       privateKey:
                         description: REQUIRED if mode is `MUTUAL`.
@@ -1842,6 +1846,7 @@ spec:
                                     - SIMPLE
                                     - MUTUAL
                                     - ISTIO_MUTUAL
+                                    - START_TLS
                                     type: string
                                   privateKey:
                                     description: REQUIRED if mode is `MUTUAL`.
@@ -1877,6 +1882,7 @@ spec:
                               - SIMPLE
                               - MUTUAL
                               - ISTIO_MUTUAL
+                              - START_TLS
                               type: string
                             privateKey:
                               description: REQUIRED if mode is `MUTUAL`.
@@ -2397,6 +2403,7 @@ spec:
                               - SIMPLE
                               - MUTUAL
                               - ISTIO_MUTUAL
+                              - START_TLS
                               type: string
                             privateKey:
                               description: REQUIRED if mode is `MUTUAL`.
@@ -2432,6 +2439,7 @@ spec:
                         - SIMPLE
                         - MUTUAL
                         - ISTIO_MUTUAL
+                        - START_TLS
                         type: string
                       privateKey:
                         description: REQUIRED if mode is `MUTUAL`.

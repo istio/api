@@ -1910,7 +1910,8 @@
           "DISABLE",
           "SIMPLE",
           "MUTUAL",
-          "ISTIO_MUTUAL"
+          "ISTIO_MUTUAL",
+          "START_TLS"
         ]
       },
       "istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive": {

@@ -921,6 +921,11 @@ message ClientTLSSettings {
     // automatically by Istio for mTLS authentication. When this mode is
     // used, all other fields in `ClientTLSSettings` should be empty.
     ISTIO_MUTUAL = 3;
+
+    // Initiates "StartTLS" command to server. For server first protocols 
+    // like Postgres that expect clients to use "StartTLS" this mode 
+    // should be used.
+    START_TLS = 4;
   };
 
   // Indicates whether connections to this port should be secured
