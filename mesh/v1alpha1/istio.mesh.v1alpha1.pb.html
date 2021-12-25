@@ -2739,7 +2739,7 @@ No
 On receiving <code>SIGTERM</code> or <code>SIGINT</code>, <code>istio-agent</code> tells the active Envoy to start draining,
 preventing any new connections and allowing existing connections to complete. It then
 sleeps for the <code>termination_drain_duration</code> and then kills any remaining active Envoy processes.
-If not set, a default of <code>5s</code> will be applied.</p>
+If not set, a default of <code>30s</code> will be applied.</p>
 
 </td>
 <td>
