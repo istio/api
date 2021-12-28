@@ -266,6 +266,18 @@ var (
 		},
 	}
 
+	NetworkingGatewayPort = Instance {
+		Name:          "networking.istio.io/gatewayPort",
+		Description:   "IstioGatewayPortLabel overrides the default 15443 value "+
+                        "to use for a multi-network gateway's port",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Service,
+		},
+	}
+
 	PrometheusMergeMetrics = Instance {
 		Name:          "prometheus.istio.io/merge-metrics",
 		Description:   "Specifies if application Prometheus metric will be merged "+
@@ -752,6 +764,7 @@ func AllResourceAnnotations() []*Instance {
 		&IoIstioWorkloadController,
 		&IoKubernetesIngressClass,
 		&NetworkingExportTo,
+		&NetworkingGatewayPort,
 		&PrometheusMergeMetrics,
 		&ProxyConfig,
 		&ProxyOverrides,
