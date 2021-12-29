@@ -37,9 +37,9 @@ import "google/protobuf/wrappers.proto";
 //
 // The hierarchy of Telemetry configuration is as follows:
 //
-// - Workload-specific configuration
-// - Namespace-specific configuration
-// - Root namespace configuration
+// 1. Workload-specific configuration
+// 2. Namespace-specific configuration
+// 3. Root namespace configuration
 //
 // Examples:
 //
