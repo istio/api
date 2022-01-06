@@ -266,7 +266,7 @@
 //   namespace : egress
 // spec:
 //   hosts:
-//   - httpbin.com
+//   - httpbin.org
 //   exportTo:
 //   - "."
 //   location: MESH_EXTERNAL
@@ -287,7 +287,7 @@
 //   namespace : egress
 // spec:
 //   hosts:
-//   - httpbin.com
+//   - httpbin.org
 //   exportTo:
 //   - "."
 //   location: MESH_EXTERNAL
@@ -361,7 +361,7 @@
 //   namespace: egress
 // spec:
 //   hosts:
-//   - httpbin.com
+//   - httpbin.org
 //   exportTo:
 //   - "*"
 //   gateways:
@@ -381,7 +381,7 @@
 //       - istio-egressgateway
 //     route:
 //     - destination:
-//         host: httpbin.com
+//         host: httpbin.org
 // ```
 // {{</tab>}}
 //
@@ -394,7 +394,7 @@
 //   namespace: egress
 // spec:
 //   hosts:
-//   - httpbin.com
+//   - httpbin.org
 //   exportTo:
 //   - "*"
 //   gateways:
@@ -414,7 +414,7 @@
 //       - istio-egressgateway
 //     route:
 //     - destination:
-//         host: httpbin.com
+//         host: httpbin.org
 // ```
 // {{</tab>}}
 // {{</tabset>}}
@@ -593,7 +593,7 @@
 //   namespace : httpbin-ns
 // spec:
 //   hosts:
-//   - httpbin.com
+//   - httpbin.org
 //   location: MESH_INTERNAL
 //   ports:
 //   - number: 80
@@ -617,7 +617,7 @@
 //   namespace : httpbin-ns
 // spec:
 //   hosts:
-//   - httpbin.com
+//   - httpbin.org
 //   location: MESH_INTERNAL
 //   ports:
 //   - number: 80
