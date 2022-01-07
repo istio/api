@@ -615,6 +615,7 @@ message Port {
 message ServerTLSSettings {
   // If set to true, the load balancer will send a 301 redirect for
   // all http connections, asking the clients to use HTTPS.
+  // Cannot be used in the Sidecar IstioIngressListener API.
   bool https_redirect = 1;
 
   // TLS modes enforced by the proxy
@@ -642,6 +643,7 @@ message ServerTLSSettings {
     // not have direct connectivity between their respective
     // endpoints. Use of this mode assumes that both the source and
     // the destination are using Istio mTLS to secure traffic.
+    // Cannot be used in the Sidecar IstioIngressListener API.
     AUTO_PASSTHROUGH = 3;
 
     // Secure connections from the downstream using mutual TLS by
@@ -650,6 +652,7 @@ message ServerTLSSettings {
     // gateway workload identity, generated automatically by Istio
     // for mTLS authentication. When this mode is used, all other
     // fields in `TLSOptions` should be empty.
+    // Cannot be used in the Sidecar IstioIngressListener API.
     ISTIO_MUTUAL = 4;
   };
 

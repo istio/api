@@ -373,6 +373,7 @@ const (
 	// not have direct connectivity between their respective
 	// endpoints. Use of this mode assumes that both the source and
 	// the destination are using Istio mTLS to secure traffic.
+	// Cannot be used in the Sidecar IstioIngressListener API.
 	ServerTLSSettings_AUTO_PASSTHROUGH ServerTLSSettings_TLSmode = 3
 	// Secure connections from the downstream using mutual TLS by
 	// presenting server certificates for authentication.  Compared
@@ -380,6 +381,7 @@ const (
 	// gateway workload identity, generated automatically by Istio
 	// for mTLS authentication. When this mode is used, all other
 	// fields in `TLSOptions` should be empty.
+	// Cannot be used in the Sidecar IstioIngressListener API.
 	ServerTLSSettings_ISTIO_MUTUAL ServerTLSSettings_TLSmode = 4
 )
 
@@ -894,6 +896,7 @@ func (m *Port) GetTargetPort() uint32 {
 type ServerTLSSettings struct {
 	// If set to true, the load balancer will send a 301 redirect for
 	// all http connections, asking the clients to use HTTPS.
+	// Cannot be used in the Sidecar IstioIngressListener API.
 	HttpsRedirect bool `protobuf:"varint,1,opt,name=https_redirect,json=httpsRedirect,proto3" json:"https_redirect,omitempty"`
 	// Optional: Indicates whether connections to this port should be
 	// secured using TLS. The value of this field determines how TLS is

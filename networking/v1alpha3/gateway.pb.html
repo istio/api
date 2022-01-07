@@ -725,7 +725,8 @@ No
 <td><code>bool</code></td>
 <td>
 <p>If set to true, the load balancer will send a 301 redirect for
-all http connections, asking the clients to use HTTPS.</p>
+all http connections, asking the clients to use HTTPS.
+Cannot be used in the Sidecar IstioIngressListener API.</p>
 
 </td>
 <td>
@@ -932,7 +933,8 @@ value. This server is typically used to provide connectivity
 between services in disparate L3 networks that otherwise do
 not have direct connectivity between their respective
 endpoints. Use of this mode assumes that both the source and
-the destination are using Istio mTLS to secure traffic.</p>
+the destination are using Istio mTLS to secure traffic.
+Cannot be used in the Sidecar IstioIngressListener API.</p>
 
 </td>
 </tr>
@@ -944,7 +946,8 @@ presenting server certificates for authentication.  Compared
 to Mutual mode, this mode uses certificates, representing
 gateway workload identity, generated automatically by Istio
 for mTLS authentication. When this mode is used, all other
-fields in <code>TLSOptions</code> should be empty.</p>
+fields in <code>TLSOptions</code> should be empty.
+Cannot be used in the Sidecar IstioIngressListener API.</p>
 
 </td>
 </tr>

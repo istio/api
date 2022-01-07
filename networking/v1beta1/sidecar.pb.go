@@ -603,7 +603,10 @@ type IstioIngressListener struct {
 	// or Unix domain socket where the application workload instance is listening for
 	// connections. Arbitrary IPs are not supported. Format should be one of `127.0.0.1:PORT`, `0.0.0.0:PORT`
 	// (which will forward to the instance IP), or `unix:///path/to/socket`
-	DefaultEndpoint      string             `protobuf:"bytes,4,opt,name=default_endpoint,json=defaultEndpoint,proto3" json:"default_endpoint,omitempty"`
+	DefaultEndpoint string `protobuf:"bytes,4,opt,name=default_endpoint,json=defaultEndpoint,proto3" json:"default_endpoint,omitempty"`
+	// Set of TLS related options that will enable TLS termination on the
+	// sidecar for requests originating from outside the mesh.
+	// Currently supports only SIMPLE and MUTUAL TLS modes.
 	Tls                  *ServerTLSSettings `protobuf:"bytes,7,opt,name=tls,proto3" json:"tls,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
 	XXX_unrecognized     []byte             `json:"-"`
