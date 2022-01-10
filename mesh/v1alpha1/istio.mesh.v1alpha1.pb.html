@@ -3697,39 +3697,17 @@ a cluster name. If the <code>app</code> label does not exist <code>istio-proxy</
 
 </td>
 </tr>
-<tr id="ProxyConfig-TracingServiceName-WORKLOAD_NAME_AND_NAMESPACE">
-<td><code>WORKLOAD_NAME_AND_NAMESPACE</code></td>
+<tr id="ProxyConfig-TracingServiceName-CANONICAL_NAME_ONLY">
+<td><code>CANONICAL_NAME_ONLY</code></td>
 <td>
-<p>Uses the workload instance name and namespace to construct
-a cluster name.</p>
+<p>Uses the canonical name for a workload (<em>excluding namespace</em>).</p>
 
 </td>
 </tr>
-<tr id="ProxyConfig-TracingServiceName-CANONICAL_SERVICE_NAME_AND_NAMESPACE">
-<td><code>CANONICAL_SERVICE_NAME_AND_NAMESPACE</code></td>
+<tr id="ProxyConfig-TracingServiceName-CANONICAL_NAME_AND_NAMESPACE">
+<td><code>CANONICAL_NAME_AND_NAMESPACE</code></td>
 <td>
-<p>Uses the canonical service name and namespace.</p>
-
-</td>
-</tr>
-<tr id="ProxyConfig-TracingServiceName-APP_LABEL_ONLY">
-<td><code>APP_LABEL_ONLY</code></td>
-<td>
-<p>Similar to <code>APP_LABEL_AND_NAMESPACE</code> but without the namespace appended.</p>
-
-</td>
-</tr>
-<tr id="ProxyConfig-TracingServiceName-WORKLOAD_NAME_ONLY">
-<td><code>WORKLOAD_NAME_ONLY</code></td>
-<td>
-<p>Similar to <code>WORKLOAD_NAME_AND_NAMESPACE</code> but without the namespace appended.</p>
-
-</td>
-</tr>
-<tr id="ProxyConfig-TracingServiceName-CANONICAL_SERVICE_NAME_ONLY">
-<td><code>CANONICAL_SERVICE_NAME_ONLY</code></td>
-<td>
-<p>Similar to <code>CANONICAL_SERVICE_NAME_AND_NAMESPACE</code> but without the namespace appended.</p>
+<p>Uses the canonical name and namespace for a workload.</p>
 
 </td>
 </tr>

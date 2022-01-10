@@ -331,17 +331,10 @@ message ProxyConfig {
     // Default scheme. Uses the `app` label and workload namespace to construct
     // a cluster name. If the `app` label does not exist `istio-proxy` is used.
     APP_LABEL_AND_NAMESPACE = 0;
-    // Uses the workload instance name and namespace to construct
-    // a cluster name.
-    WORKLOAD_NAME_AND_NAMESPACE = 1;
-    // Uses the canonical service name and namespace.
-    CANONICAL_SERVICE_NAME_AND_NAMESPACE = 2;
-    // Similar to `APP_LABEL_AND_NAMESPACE` but without the namespace appended.
-    APP_LABEL_ONLY = 3;
-    // Similar to `WORKLOAD_NAME_AND_NAMESPACE` but without the namespace appended.
-    WORKLOAD_NAME_ONLY = 4;
-    // Similar to `CANONICAL_SERVICE_NAME_AND_NAMESPACE` but without the namespace appended.
-    CANONICAL_SERVICE_NAME_ONLY = 5;
+    // Uses the canonical name for a workload (*excluding namespace*).
+    CANONICAL_NAME_ONLY = 1;
+    // Uses the canonical name and namespace for a workload.
+    CANONICAL_NAME_AND_NAMESPACE = 2;
   }
   
   oneof cluster_name {

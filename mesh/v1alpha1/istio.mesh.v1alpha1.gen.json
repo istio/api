@@ -1522,11 +1522,8 @@
         "type": "string",
         "enum": [
           "APP_LABEL_AND_NAMESPACE",
-          "WORKLOAD_NAME_AND_NAMESPACE",
-          "CANONICAL_SERVICE_NAME_AND_NAMESPACE",
-          "APP_LABEL_ONLY",
-          "WORKLOAD_NAME_ONLY",
-          "CANONICAL_SERVICE_NAME_ONLY"
+          "CANONICAL_NAME_ONLY",
+          "CANONICAL_NAME_AND_NAMESPACE"
         ]
       },
       "istio.mesh.v1alpha1.RemoteService": {
