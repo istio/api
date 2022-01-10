@@ -1,0 +1,10 @@
+apiVersion: release-notes/v2
+kind: feature
+area: telemetry
+issue:
+  - 36162
+  - 12644
+
+releaseNotes:
+  - |
+    **Added** configuration for selecting service name generation scheme in Envoy-generated trace spans.
