@@ -427,7 +427,7 @@
 // spec:
 //   ports:
 //   - port: 8443
-//     name: http
+//     name: https
 //     targetPort: 80
 //   selector:
 //     app: ratings
