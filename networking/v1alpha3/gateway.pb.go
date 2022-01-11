@@ -381,7 +381,7 @@ const (
 	// gateway workload identity, generated automatically by Istio
 	// for mTLS authentication. When this mode is used, all other
 	// fields in `TLSOptions` should be empty.
-	// Cannot be used in Sidecar.ingress API..
+	// Cannot be used in Sidecar.ingress API.
 	ServerTLSSettings_ISTIO_MUTUAL ServerTLSSettings_TLSmode = 4
 )
 
