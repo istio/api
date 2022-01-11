@@ -83,7 +83,7 @@
         "type": "object",
         "properties": {
           "httpsRedirect": {
-            "description": "If set to true, the load balancer will send a 301 redirect for all http connections, asking the clients to use HTTPS. Cannot be used in the Sidecar IstioIngressListener API.",
+            "description": "If set to true, the load balancer will send a 301 redirect for all http connections, asking the clients to use HTTPS. Cannot be used in the Sidecar.ingress API.",
             "type": "boolean"
           },
           "mode": {
