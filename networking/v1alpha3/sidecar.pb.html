@@ -405,9 +405,10 @@ one way TLS using the given server certificates.
 The traffic is then forwarded to the attached workload instance
 listening on a Unix domain socket.
 It is expected that PeerAuthentication policy would be configured
-in order to either set mTLS mode to &ldquo;DISABLE&rdquo; on specific
+in order to set mTLS mode to &ldquo;DISABLE&rdquo; on specific
 ports.
-In this example, the mTLS mode is disabled on PORT 80.</p>
+In this example, the mTLS mode is disabled on PORT 80.
+This feature is currently experimental.</p>
 
 <p>{{<tabset category-name="example">}}
 {{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
@@ -623,19 +624,6 @@ connections. Arbitrary IPs are not supported. Format should be one of <code>127.
 </td>
 <td>
 Yes
-</td>
-</tr>
-<tr id="IstioIngressListener-tls">
-<td><code>tls</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/networking/gateway.html#ServerTLSSettings">ServerTLSSettings</a></code></td>
-<td>
-<p>Set of TLS related options that will enable TLS termination on the
-sidecar for requests originating from outside the mesh.
-Currently supports only SIMPLE and MUTUAL TLS modes.</p>
-
-</td>
-<td>
-No
 </td>
 </tr>
 </tbody>

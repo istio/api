@@ -386,9 +386,10 @@
 // The traffic is then forwarded to the attached workload instance
 // listening on a Unix domain socket.
 // It is expected that PeerAuthentication policy would be configured
-// in order to either set mTLS mode to "DISABLE" on specific
+// in order to set mTLS mode to "DISABLE" on specific
 // ports.
 // In this example, the mTLS mode is disabled on PORT 80.
+// This feature is currently experimental.
 //
 // {{<tabset category-name="example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}

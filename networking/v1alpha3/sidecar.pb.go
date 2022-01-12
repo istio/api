@@ -386,9 +386,10 @@
 // The traffic is then forwarded to the attached workload instance
 // listening on a Unix domain socket.
 // It is expected that PeerAuthentication policy would be configured
-// in order to either set mTLS mode to "DISABLE" on specific
+// in order to set mTLS mode to "DISABLE" on specific
 // ports.
 // In this example, the mTLS mode is disabled on PORT 80.
+// This feature is currently experimental.
 //
 // {{<tabset category-name="example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}
@@ -683,6 +684,7 @@ type IstioIngressListener struct {
 	// Set of TLS related options that will enable TLS termination on the
 	// sidecar for requests originating from outside the mesh.
 	// Currently supports only SIMPLE and MUTUAL TLS modes.
+	// $hide_from_docs
 	Tls                  *ServerTLSSettings `protobuf:"bytes,7,opt,name=tls,proto3" json:"tls,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
 	XXX_unrecognized     []byte             `json:"-"`
