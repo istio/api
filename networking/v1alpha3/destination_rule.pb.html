@@ -150,6 +150,29 @@ spec:
         simple: ROUND_ROBIN
 </code></pre>
 
+<p>{{</tab>}}</p>
+
+<p>{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: configure-client-mtls-dr
+  workloadSelector:
+    labels:
+      app: ratings
+  spec:
+    trafficPolicy:
+      loadBalancer:
+        simple: ROUND_ROBIN
+      portLevelSettings:
+        - port:
+            number: 31443
+          tls:
+            credentialName: client-credential
+            mode: MUTUAL
+</code></pre>
+
 <p>{{</tab>}}
 {{</tabset>}}</p>
 
@@ -236,6 +259,19 @@ namespaces by default.</p>
 <p>The value &ldquo;.&rdquo; is reserved and defines an export to the same namespace that
 the destination rule is declared in. Similarly, the value &ldquo;*&rdquo; is reserved and
 defines an export to all namespaces.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="DestinationRule-workload_selector">
+<td><code>workloadSelector</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/sidecar.html#WorkloadSelector">WorkloadSelector</a></code></td>
+<td>
+<p>Criteria used to select the specific set of pods/VMs on which this
+ <code>Sidecar</code> configuration should be applied. If omitted, the <code>Sidecar</code>
+ configuration will be applied to all workload instances in the same namespace.</p>
 
 </td>
 <td>
