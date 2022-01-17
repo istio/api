@@ -1323,7 +1323,7 @@ spec:
                 type: object
               workloadSelector:
                 properties:
-                  labels:
+                  matchLabels:
                     additionalProperties:
                       type: string
                     type: object
@@ -2518,7 +2518,7 @@ spec:
                 type: object
               workloadSelector:
                 properties:
-                  labels:
+                  matchLabels:
                     additionalProperties:
                       type: string
                     type: object
