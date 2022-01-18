@@ -324,20 +324,39 @@ message ProxyConfig {
   // Path to the proxy binary
   string binary_path = 2;
 
-  // Service cluster defines the name for the `service_cluster` that is
-  // shared by all Envoy instances. This setting corresponds to
-  // `--service-cluster` flag in Envoy.  In a typical Envoy deployment, the
-  // `service-cluster` flag is used to identify the caller, for
-  // source-based routing scenarios.
-  //
-  // Since Istio does not assign a local `service/service` version to each
-  // Envoy instance, the name is same for all of them.  However, the
-  // source/caller's identity (e.g., IP address) is encoded in the
-  // `--service-node` flag when launching Envoy.  When the RDS service
-  // receives API calls from Envoy, it uses the value of the `service-node`
-  // flag to compute routes that are relative to the service instances
-  // located at that IP address.
-  string service_cluster = 3;
+  // Allows specification of various Istio-supported naming schemes for the
+  // Envoy `service_cluster` value. The `servce_cluster` value is primarily used
+  // by Envoys to provide service names for tracing spans.
+  enum TracingServiceName {
+    // Default scheme. Uses the `app` label and workload namespace to construct
+    // a cluster name. If the `app` label does not exist `istio-proxy` is used.
+    APP_LABEL_AND_NAMESPACE = 0;
+    // Uses the canonical name for a workload (*excluding namespace*).
+    CANONICAL_NAME_ONLY = 1;
+    // Uses the canonical name and namespace for a workload.
+    CANONICAL_NAME_AND_NAMESPACE = 2;
+  }
+  
+  oneof cluster_name {
+    // Service cluster defines the name for the `service_cluster` that is
+    // shared by all Envoy instances. This setting corresponds to
+    // `--service-cluster` flag in Envoy.  In a typical Envoy deployment, the
+    // `service-cluster` flag is used to identify the caller, for
+    // source-based routing scenarios.
+    //
+    // Since Istio does not assign a local `service/service` version to each
+    // Envoy instance, the name is same for all of them.  However, the
+    // source/caller's identity (e.g., IP address) is encoded in the
+    // `--service-node` flag when launching Envoy.  When the RDS service
+    // receives API calls from Envoy, it uses the value of the `service-node`
+    // flag to compute routes that are relative to the service instances
+    // located at that IP address.
+    string service_cluster = 3;
+    
+    // Used by Envoy proxies to assign the values for the service names in trace
+    // spans.
+    TracingServiceName tracing_service_name = 36;
+  }
 
   // The time in seconds that Envoy will drain connections during a hot
   // restart. MUST be >=1s (e.g., _1s/1m/1h_)
