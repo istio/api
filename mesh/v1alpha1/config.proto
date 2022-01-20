@@ -1063,8 +1063,31 @@ message MeshConfig {
   // configured globally via this field.
   istio.networking.v1alpha3.HTTPRetry default_http_retry_policy = 62;
 
+  // A list of Kubernetes selectors that specify the set of namespaces,
+  // Istio will create istio-ca-root-cert configmap in selected namespaces.
+  // If omitted, Istio will create istio-ca-root-cert configmap in all namespaces except kubernetes system namespaces.
+  // Elements in the list are disjunctive (OR semantics), i.e. a namespace will be included if it matches any selector.
+  // The following example selects any namespace that matches either below:
+  // 1. The namespace has both of these labels: `env: prod` and `region: us-east1`
+  // 2. The namespace has label `app` equal to `cassandra` or `spark`.
+  // ```yaml
+  // discoverySelectors:
+  //   - matchLabels:
+  //       env: prod
+  //       region: us-east1
+  //   - matchExpressions:
+  //     - key: app
+  //       operator: In
+  //       values:
+  //         - cassandra
+  //         - spark
+  // ```
+  // Refer to the [kubernetes selector docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors)
+  // for additional detail on selector semantics.
+  repeated k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector namespace_selectors = 63;
+
   // $hide_from_docs
-  // Next available field number: 63
+  // Next available field number: 64
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
