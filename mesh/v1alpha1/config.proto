@@ -511,8 +511,6 @@ message MeshConfig {
       EnvoyHttpGrpcV3LogProvider envoy_http_als = 12;
       // Configures an Envoy Access Logging Service provider for TCP traffic.
       EnvoyTcpGrpcV3LogProvider envoy_tcp_als = 13;
-      // Configures an Envoy Open Telemetry Access Logging Service provider.
-      EnvoyOpenTelemetryLogProvider envoy_otel_als = 14;
     }
 
     message EnvoyExternalAuthorizationRequestBody {
@@ -911,54 +909,6 @@ message MeshConfig {
 
       // Optional. Additional filter state objects to log.
       repeated string filter_state_objects_to_log = 4;
-    }
-
-    // Defines configuration for an Envoy [OpenTelemetry (gRPC) Access Log](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/open_telemetry/v3/logs_service.proto)
-    message EnvoyOpenTelemetryLogProvider {
-      // REQUIRED. Specifies the service that implements the Envoy ALS gRPC authorization service.
-      // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
-      // to unambiguously resolve a service in the service registry. The `<Hostname>` is a fully qualified host name of a
-      // service defined by the Kubernetes service or ServiceEntry.
-      //
-      // Example: "envoy-als.foo.svc.cluster.local" or "bar/envoy-als.example.com".
-      string service = 1;
-
-      // REQUIRED. Specifies the port of the service.
-      uint32 port = 2;
-
-      // Optional. The friendly name of the access log.
-      // Defaults:
-      // - "otel_envoy_accesslog"
-      string log_name = 3;
-
-      // Optional. Format for the proxy access log
-      // Empty value results in proxy's default access log format, following Envoy access logging formatting.
-      LogFormat log_format = 4;
-
-      message LogFormat {
-          // Textual format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) may be
-          // used in the format. The [format string documentation](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-strings)
-          // provides more information.
-          // Alias to `body` filed in [Open Telemetry](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/open_telemetry/v3/logs_service.proto)
-          // Example: `text: "%LOCAL_REPLY_BODY%:%RESPONSE_CODE%:path=%REQ(:path)%"`
-          string text = 1;
-
-          // Optional. Additional attributes that describe the specific event occurrence.
-          // Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators)
-          // can be used as values for fields within the Struct. Values are rendered
-          // as strings, numbers, or boolean values, as appropriate
-          // (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)). Nested JSON is
-          // supported for some command operators (e.g. FILTER_STATE or DYNAMIC_METADATA).
-          // Alias to `attributes` filed in [Open Telemetry](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/open_telemetry/v3/logs_service.proto)
-          //
-          // Example:
-          // ```
-          // labels:
-          //   status: "%RESPONSE_CODE%"
-          //   message: "%LOCAL_REPLY_BODY%"
-          // ```
-          google.protobuf.Struct labels = 2;   
-      }
     }
   }
 
