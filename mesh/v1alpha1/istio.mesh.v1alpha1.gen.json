@@ -513,16 +513,6 @@
                       "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTcpGrpcV3LogProvider"
                     }
                   }
-                },
-                {
-                  "required": [
-                    "envoyOtelAls"
-                  ],
-                  "properties": {
-                    "envoyOtelAls": {
-                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider"
-                    }
-                  }
                 }
               ]
             }
@@ -644,16 +634,6 @@
             "properties": {
               "envoyTcpAls": {
                 "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTcpGrpcV3LogProvider"
-              }
-            }
-          },
-          {
-            "required": [
-              "envoyOtelAls"
-            ],
-            "properties": {
-              "envoyOtelAls": {
-                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider"
               }
             }
           }
@@ -900,40 +880,6 @@
             "items": {
               "type": "string"
             }
-          }
-        }
-      },
-      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider": {
-        "description": "Defines configuration for an Envoy [OpenTelemetry (gRPC) Access Log](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/open_telemetry/v3/logs_service.proto)",
-        "type": "object",
-        "properties": {
-          "service": {
-            "description": "REQUIRED. Specifies the service that implements the Envoy ALS gRPC authorization service. The format is `[\u003cNamespace\u003e/]\u003cHostname\u003e`. The specification of `\u003cNamespace\u003e` is required only when it is insufficient to unambiguously resolve a service in the service registry. The `\u003cHostname\u003e` is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
-            "type": "string"
-          },
-          "port": {
-            "description": "REQUIRED. Specifies the port of the service.",
-            "type": "integer"
-          },
-          "logName": {
-            "description": "Optional. The friendly name of the access log. Defaults: - \"otel_envoy_accesslog\"",
-            "type": "string"
-          },
-          "logFormat": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.LogFormat"
-          }
-        }
-      },
-      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.LogFormat": {
-        "type": "object",
-        "properties": {
-          "text": {
-            "description": "Textual format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) may be used in the format. The [format string documentation](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-strings) provides more information. Alias to `body` filed in [Open Telemetry](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/open_telemetry/v3/logs_service.proto) Example: `text: \"%LOCAL_REPLY_BODY%:%RESPONSE_CODE%:path=%REQ(:path)%\"`",
-            "type": "string"
-          },
-          "labels": {
-            "description": "Optional. Additional attributes that describe the specific event occurrence. Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) can be used as values for fields within the Struct. Values are rendered as strings, numbers, or boolean values, as appropriate (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)). Nested JSON is supported for some command operators (e.g. FILTER_STATE or DYNAMIC_METADATA). Alias to `attributes` filed in [Open Telemetry](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/open_telemetry/v3/logs_service.proto)",
-            "type": "object"
           }
         }
       },
