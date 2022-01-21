@@ -411,9 +411,10 @@ message ProxyConfig {
   int32 stat_name_length = 15;
 
   // The number of worker threads to run.
-  // If unset, this will be automatically determined based on CPU requests/limits.
-  // If set to 0, all cores on the machine will be used.
-  // Default is 2 worker threads.
+  // For sidecars:
+  // If set to 0, this will be automatically determined based on CPU requests/limits.
+  // If positive n, then n worker threads will be used.
+  // Otherwise, defaults to 2 worker threads.
   google.protobuf.Int32Value concurrency = 16;
 
   // Path to the proxy bootstrap template file
