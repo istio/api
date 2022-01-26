@@ -101,7 +101,7 @@ type JWTRule struct {
 	//     prefix: "Bearer "
 	// ```
 	//
-	// Note: Requests with more than one tokens (at different locations) are not supported, the output principal of
+	// Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
 	// such requests is undefined.
 	FromHeaders []*JWTHeader `protobuf:"bytes,6,rep,name=from_headers,json=fromHeaders,proto3" json:"from_headers,omitempty"`
 	// List of query parameters from which JWT is expected. For example, if JWT is provided via query
@@ -112,7 +112,7 @@ type JWTRule struct {
 	//   - "my_token"
 	// ```
 	//
-	// Note: Requests with more than one tokens (at different locations) are not supported, the output principal of
+	// Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
 	// such requests is undefined.
 	FromParams []string `protobuf:"bytes,7,rep,name=from_params,json=fromParams,proto3" json:"from_params,omitempty"`
 	// This field specifies the header name to output a successfully verified JWT payload to the

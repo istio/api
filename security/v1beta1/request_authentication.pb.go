@@ -250,7 +250,7 @@ type RequestAuthentication struct {
 	// Each rule will be activated only when a token is presented at the location recognized by the
 	// rule. The token will be validated based on the JWT rule config. If validation fails, the request will
 	// be rejected.
-	// Note: Requests with more than one tokens (at different locations) are not supported, the output principal of
+	// Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
 	// such requests is undefined.
 	JwtRules             []*JWTRule `protobuf:"bytes,2,rep,name=jwt_rules,json=jwtRules,proto3" json:"jwt_rules,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`

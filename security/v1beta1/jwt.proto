@@ -120,7 +120,7 @@ message JWTRule {
   //     prefix: "Bearer "
   // ```
   //
-  // Note: Requests with more than one tokens (at different locations) are not supported, the output principal of
+  // Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
   // such requests is undefined.
   repeated JWTHeader from_headers = 6;
 
@@ -132,7 +132,7 @@ message JWTRule {
   //   - "my_token"
   // ```
   //
-  // Note: Requests with more than one tokens (at different locations) are not supported, the output principal of
+  // Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
   // such requests is undefined.
   repeated string from_params = 7;
 
