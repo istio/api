@@ -431,6 +431,9 @@ message ProxyConfig {
     // filtering and manipulation. This mode also configures the sidecar to run with the
     // `CAP_NET_ADMIN` capability, which is required to use `TPROXY`.
     TPROXY = 1;
+    // The `NONE` mode does not configure redirect to Envoy at all. This is an advanced
+    // configuration that typically requires changes to user applications.
+    NONE = 2;
   }
 
   // The mode used to redirect inbound traffic to Envoy.

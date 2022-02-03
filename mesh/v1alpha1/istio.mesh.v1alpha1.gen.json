@@ -1541,7 +1541,8 @@
         "type": "string",
         "enum": [
           "REDIRECT",
-          "TPROXY"
+          "TPROXY",
+          "NONE"
         ]
       },
       "istio.mesh.v1alpha1.ProxyConfig.ProxyStatsMatcher": {
