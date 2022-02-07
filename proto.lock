@@ -35181,11 +35181,17 @@
             "name": "LoadBalancerSettings.SimpleLB",
             "enum_fields": [
               {
-                "name": "ROUND_ROBIN"
+                "name": "UNSPECIFIED"
               },
               {
                 "name": "LEAST_CONN",
-                "integer": 1
+                "integer": 1,
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "name": "RANDOM",
@@ -35194,6 +35200,14 @@
               {
                 "name": "PASSTHROUGH",
                 "integer": 3
+              },
+              {
+                "name": "ROUND_ROBIN",
+                "integer": 4
+              },
+              {
+                "name": "LEAST_REQUEST",
+                "integer": 5
               }
             ]
           },
@@ -37941,11 +37955,17 @@
             "name": "LoadBalancerSettings.SimpleLB",
             "enum_fields": [
               {
-                "name": "ROUND_ROBIN"
+                "name": "UNSPECIFIED"
               },
               {
                 "name": "LEAST_CONN",
-                "integer": 1
+                "integer": 1,
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "name": "RANDOM",
@@ -37954,6 +37974,14 @@
               {
                 "name": "PASSTHROUGH",
                 "integer": 3
+              },
+              {
+                "name": "ROUND_ROBIN",
+                "integer": 4
+              },
+              {
+                "name": "LEAST_REQUEST",
+                "integer": 5
               }
             ]
           },
