@@ -32468,6 +32468,11 @@
                 "type": "AccessLogging"
               },
               {
+                "id": 17,
+                "name": "access_logging_filter_expression",
+                "type": "string"
+              },
+              {
                 "id": 14,
                 "name": "custom_log_config",
                 "type": "CustomConfig"
@@ -33788,6 +33793,21 @@
                     "id": 11,
                     "name": "envoy_file_access_log",
                     "type": "EnvoyFileAccessLogProvider"
+                  },
+                  {
+                    "id": 12,
+                    "name": "envoy_http_als",
+                    "type": "EnvoyHttpGrpcV3LogProvider"
+                  },
+                  {
+                    "id": 13,
+                    "name": "envoy_tcp_als",
+                    "type": "EnvoyTcpGrpcV3LogProvider"
+                  },
+                  {
+                    "id": 14,
+                    "name": "envoy_otel_als",
+                    "type": "EnvoyOpenTelemetryLogProvider"
                   }
                 ],
                 "messages": [
@@ -34032,6 +34052,26 @@
                         "id": 5,
                         "name": "max_tag_length",
                         "type": "uint32"
+                      },
+                      {
+                        "id": 6,
+                        "name": "logging",
+                        "type": "Logging"
+                      }
+                    ],
+                    "messages": [
+                      {
+                        "name": "Logging",
+                        "maps": [
+                          {
+                            "key_type": "string",
+                            "field": {
+                              "id": 1,
+                              "name": "labels",
+                              "type": "string"
+                            }
+                          }
+                        ]
                       }
                     ]
                   },
@@ -34071,6 +34111,140 @@
                         "id": 1,
                         "name": "path",
                         "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "log_format",
+                        "type": "LogFormat"
+                      }
+                    ],
+                    "messages": [
+                      {
+                        "name": "LogFormat",
+                        "fields": [
+                          {
+                            "id": 1,
+                            "name": "text",
+                            "type": "string"
+                          },
+                          {
+                            "id": 2,
+                            "name": "labels",
+                            "type": "google.protobuf.Struct"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "EnvoyHttpGrpcV3LogProvider",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "service",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "port",
+                        "type": "uint32"
+                      },
+                      {
+                        "id": 3,
+                        "name": "log_name",
+                        "type": "string"
+                      },
+                      {
+                        "id": 4,
+                        "name": "filter_state_objects_to_log",
+                        "type": "string",
+                        "is_repeated": true
+                      },
+                      {
+                        "id": 5,
+                        "name": "additional_request_headers_to_log",
+                        "type": "string",
+                        "is_repeated": true
+                      },
+                      {
+                        "id": 6,
+                        "name": "additional_response_headers_to_log",
+                        "type": "string",
+                        "is_repeated": true
+                      },
+                      {
+                        "id": 7,
+                        "name": "additional_response_trailers_to_log",
+                        "type": "string",
+                        "is_repeated": true
+                      }
+                    ]
+                  },
+                  {
+                    "name": "EnvoyTcpGrpcV3LogProvider",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "service",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "port",
+                        "type": "uint32"
+                      },
+                      {
+                        "id": 3,
+                        "name": "log_name",
+                        "type": "string"
+                      },
+                      {
+                        "id": 4,
+                        "name": "filter_state_objects_to_log",
+                        "type": "string",
+                        "is_repeated": true
+                      }
+                    ]
+                  },
+                  {
+                    "name": "EnvoyOpenTelemetryLogProvider",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "service",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "port",
+                        "type": "uint32"
+                      },
+                      {
+                        "id": 3,
+                        "name": "log_name",
+                        "type": "string"
+                      },
+                      {
+                        "id": 4,
+                        "name": "log_format",
+                        "type": "LogFormat"
+                      }
+                    ],
+                    "messages": [
+                      {
+                        "name": "LogFormat",
+                        "fields": [
+                          {
+                            "id": 1,
+                            "name": "text",
+                            "type": "string"
+                          },
+                          {
+                            "id": 2,
+                            "name": "labels",
+                            "type": "google.protobuf.Struct"
+                          }
+                        ]
                       }
                     ]
                   }
@@ -34152,6 +34326,9 @@
         "imports": [
           {
             "path": "google/protobuf/duration.proto"
+          },
+          {
+            "path": "google/protobuf/struct.proto"
           },
           {
             "path": "google/protobuf/wrappers.proto"
@@ -34370,6 +34547,22 @@
             ]
           },
           {
+            "name": "ProxyConfig.TracingServiceName",
+            "enum_fields": [
+              {
+                "name": "APP_LABEL_AND_NAMESPACE"
+              },
+              {
+                "name": "CANONICAL_NAME_ONLY",
+                "integer": 1
+              },
+              {
+                "name": "CANONICAL_NAME_AND_NAMESPACE",
+                "integer": 2
+              }
+            ]
+          },
+          {
             "name": "ProxyConfig.InboundInterceptionMode",
             "enum_fields": [
               {
@@ -34378,6 +34571,10 @@
               {
                 "name": "TPROXY",
                 "integer": 1
+              },
+              {
+                "name": "NONE",
+                "integer": 2
               }
             ]
           }
@@ -34625,6 +34822,11 @@
                 "type": "string"
               },
               {
+                "id": 36,
+                "name": "tracing_service_name",
+                "type": "TracingServiceName"
+              },
+              {
                 "id": 4,
                 "name": "drain_duration",
                 "type": "google.protobuf.Duration"
@@ -34789,6 +34991,11 @@
                 "name": "ca_certificates_pem",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 35,
+                "name": "image",
+                "type": "istio.networking.v1beta1.ProxyImage"
               }
             ],
             "maps": [
@@ -34866,6 +35073,9 @@
           },
           {
             "path": "networking/v1alpha3/workload_group.proto"
+          },
+          {
+            "path": "networking/v1beta1/proxy_config.proto"
           }
         ],
         "package": {
@@ -36517,6 +36727,11 @@
                     "value": "REQUIRED"
                   }
                 ]
+              },
+              {
+                "id": 7,
+                "name": "tls",
+                "type": "ServerTLSSettings"
               }
             ],
             "reserved_ids": [
@@ -38559,6 +38774,70 @@
       }
     },
     {
+      "protopath": "networking:/:v1beta1:/:proxy_config.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "ProxyConfig",
+            "fields": [
+              {
+                "id": 1,
+                "name": "selector",
+                "type": "istio.type.v1beta1.WorkloadSelector"
+              },
+              {
+                "id": 2,
+                "name": "concurrency",
+                "type": "google.protobuf.Int32Value"
+              },
+              {
+                "id": 4,
+                "name": "image",
+                "type": "ProxyImage"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 3,
+                  "name": "environment_variables",
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          {
+            "name": "ProxyImage",
+            "fields": [
+              {
+                "id": 1,
+                "name": "image_type",
+                "type": "string"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/wrappers.proto"
+          },
+          {
+            "path": "type/v1beta1/selector.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.networking.v1beta1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/networking/v1beta1"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "networking:/:v1beta1:/:service_entry.proto",
       "def": {
         "enums": [
@@ -38798,6 +39077,11 @@
                     "value": "REQUIRED"
                   }
                 ]
+              },
+              {
+                "id": 7,
+                "name": "tls",
+                "type": "ServerTLSSettings"
               }
             ],
             "reserved_ids": [
@@ -39784,6 +40068,208 @@
         "imports": [
           {
             "path": "google/api/field_behavior.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.networking.v1beta1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/networking/v1beta1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "networking:/:v1beta1:/:workload_group.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "WorkloadGroup",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "ObjectMeta"
+              },
+              {
+                "id": 2,
+                "name": "template",
+                "type": "WorkloadEntry",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "name": "probe",
+                "type": "ReadinessProbe"
+              }
+            ],
+            "messages": [
+              {
+                "name": "ObjectMeta",
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 1,
+                      "name": "labels",
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 2,
+                      "name": "annotations",
+                      "type": "string"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "ReadinessProbe",
+            "fields": [
+              {
+                "id": 2,
+                "name": "initial_delay_seconds",
+                "type": "int32"
+              },
+              {
+                "id": 3,
+                "name": "timeout_seconds",
+                "type": "int32"
+              },
+              {
+                "id": 4,
+                "name": "period_seconds",
+                "type": "int32"
+              },
+              {
+                "id": 5,
+                "name": "success_threshold",
+                "type": "int32"
+              },
+              {
+                "id": 6,
+                "name": "failure_threshold",
+                "type": "int32"
+              },
+              {
+                "id": 7,
+                "name": "http_get",
+                "type": "HTTPHealthCheckConfig"
+              },
+              {
+                "id": 8,
+                "name": "tcp_socket",
+                "type": "TCPHealthCheckConfig"
+              },
+              {
+                "id": 9,
+                "name": "exec",
+                "type": "ExecHealthCheckConfig"
+              }
+            ]
+          },
+          {
+            "name": "HTTPHealthCheckConfig",
+            "fields": [
+              {
+                "id": 1,
+                "name": "path",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "port",
+                "type": "uint32",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "name": "host",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "scheme",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "http_headers",
+                "type": "HTTPHeader",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "HTTPHeader",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "value",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "TCPHealthCheckConfig",
+            "fields": [
+              {
+                "id": 1,
+                "name": "host",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "port",
+                "type": "uint32",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "ExecHealthCheckConfig",
+            "fields": [
+              {
+                "id": 1,
+                "name": "command",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/api/field_behavior.proto"
+          },
+          {
+            "path": "networking/v1beta1/workload_entry.proto"
           }
         ],
         "package": {
@@ -42042,6 +42528,11 @@
                 "id": 4,
                 "name": "disable_span_reporting",
                 "type": "google.protobuf.BoolValue"
+              },
+              {
+                "id": 6,
+                "name": "use_request_id_for_trace_sampling",
+                "type": "google.protobuf.BoolValue"
               }
             ],
             "maps": [
@@ -42219,6 +42710,23 @@
                 "id": 2,
                 "name": "disabled",
                 "type": "google.protobuf.BoolValue"
+              },
+              {
+                "id": 3,
+                "name": "filter",
+                "type": "Filter"
+              }
+            ],
+            "messages": [
+              {
+                "name": "Filter",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "expression",
+                    "type": "string"
+                  }
+                ]
               }
             ]
           }
