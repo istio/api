@@ -119,6 +119,9 @@ message JWTRule {
   //   - name: x-jwt-assertion
   //     prefix: "Bearer "
   // ```
+  //
+  // Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
+  // such requests is undefined.
   repeated JWTHeader from_headers = 6;
 
   // List of query parameters from which JWT is expected. For example, if JWT is provided via query
@@ -128,6 +131,9 @@ message JWTRule {
   //   fromParams:
   //   - "my_token"
   // ```
+  //
+  // Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
+  // such requests is undefined.
   repeated string from_params = 7;
 
   // This field specifies the header name to output a successfully verified JWT payload to the

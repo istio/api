@@ -100,6 +100,9 @@ type JWTRule struct {
 	//   - name: x-jwt-assertion
 	//     prefix: "Bearer "
 	// ```
+	//
+	// Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
+	// such requests is undefined.
 	FromHeaders []*JWTHeader `protobuf:"bytes,6,rep,name=from_headers,json=fromHeaders,proto3" json:"from_headers,omitempty"`
 	// List of query parameters from which JWT is expected. For example, if JWT is provided via query
 	// parameter `my_token` (e.g /path?my_token=<JWT>), the config is:
@@ -108,6 +111,9 @@ type JWTRule struct {
 	//   fromParams:
 	//   - "my_token"
 	// ```
+	//
+	// Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
+	// such requests is undefined.
 	FromParams []string `protobuf:"bytes,7,rep,name=from_params,json=fromParams,proto3" json:"from_params,omitempty"`
 	// This field specifies the header name to output a successfully verified JWT payload to the
 	// backend. The forwarded data is `base64_encoded(jwt_payload_in_JSON)`. If it is not specified,
