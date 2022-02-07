@@ -39284,6 +39284,11 @@
                 "name": "export_to",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 5,
+                "name": "workload_selector",
+                "type": "istio.type.v1beta1.WorkloadSelector"
               }
             ]
           },
@@ -39747,6 +39752,9 @@
         ],
         "imports": [
           {
+            "path": "gogoproto/gogo.proto"
+          },
+          {
             "path": "google/api/field_behavior.proto"
           },
           {
@@ -39759,7 +39767,7 @@
             "path": "networking/v1alpha3/virtual_service.proto"
           },
           {
-            "path": "gogoproto/gogo.proto"
+            "path": "type/v1beta1/selector.proto"
           }
         ],
         "package": {
@@ -42063,6 +42071,11 @@
                 "name": "export_to",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 5,
+                "name": "workload_selector",
+                "type": "istio.type.v1beta1.WorkloadSelector"
               }
             ]
           },
@@ -42526,6 +42539,9 @@
         ],
         "imports": [
           {
+            "path": "gogoproto/gogo.proto"
+          },
+          {
             "path": "google/api/field_behavior.proto"
           },
           {
@@ -42538,7 +42554,7 @@
             "path": "networking/v1beta1/virtual_service.proto"
           },
           {
-            "path": "gogoproto/gogo.proto"
+            "path": "type/v1beta1/selector.proto"
           }
         ],
         "package": {
