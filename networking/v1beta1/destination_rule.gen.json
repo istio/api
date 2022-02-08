@@ -361,10 +361,12 @@
         "description": "Standard load balancing algorithms that require no tuning.",
         "type": "string",
         "enum": [
-          "ROUND_ROBIN",
+          "UNSPECIFIED",
           "LEAST_CONN",
           "RANDOM",
-          "PASSTHROUGH"
+          "PASSTHROUGH",
+          "ROUND_ROBIN",
+          "LEAST_REQUEST"
         ]
       },
       "istio.networking.v1beta1.LocalityLoadBalancerSetting": {

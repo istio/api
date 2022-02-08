@@ -369,6 +369,8 @@ CONFLICT: "ListenerMatch.ListenerType" integer: "0" has been removed, but is not
 CONFLICT: "ListenerMatch.ListenerType" integer: "1" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
 CONFLICT: "ListenerMatch.ListenerType" integer: "2" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
 CONFLICT: "ListenerMatch.ListenerType" integer: "3" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
+CONFLICT: "LoadBalancerSettings.SimpleLB" field: "ROUND_ROBIN" has a different integer: 4, previously 0 [networking/v1alpha3/destination_rule.proto]
+CONFLICT: "LoadBalancerSettings.SimpleLB" field: "UNSPECIFIED" integer: 0 has an updated name, previously "ROUND_ROBIN" [networking/v1alpha3/destination_rule.proto]
 CONFLICT: "LocalityLoadBalancerSetting" field: "distribute" has been removed, but is not reserved [mesh/v1alpha1/config.proto]
 CONFLICT: "LocalityLoadBalancerSetting" field: "failover" has been removed, but is not reserved [mesh/v1alpha1/config.proto]
 CONFLICT: "LocalityLoadBalancerSetting" ID: "1" has been removed, but is not reserved [mesh/v1alpha1/config.proto]
