@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 59
+number_of_entries: 65
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -3104,6 +3104,34 @@ No
 No
 </td>
 </tr>
+<tr id="ProxyConfig-proxy_headers">
+<td><code>proxyHeaders</code></td>
+<td><code><a href="#ProxyConfig-ProxyHeaders">ProxyHeaders</a></code></td>
+<td>
+<p>Define the set of headers to add/modify for HTTP request/responses.</p>
+<p>To enable a header, simply configure it. If no specific configuration is required, an empty object (<code>{}</code>) will enable it.</p>
+<pre><code class="language-yaml">proxyHeaders:
+  forwardedClientCert: {}
+</code></pre>
+<p>Some headers are enabled by default, and require explicitly disabling. See below for an example of disabling all default-enabled headers:</p>
+<pre><code class="language-yaml">proxyHeaders:
+  forwardedClientCert:
+    disabled: true
+  server:
+    disabled: true
+  requestId:
+    disabled: true
+  attemptCount:
+    disabled: true
+  envoyHeaders:
+    disabled: true
+</code></pre>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="ProxyConfig-zipkin_address" class="deprecated ">
 <td><code>zipkinAddress</code></td>
 <td><code>string</code></td>
@@ -3409,6 +3437,204 @@ No
 <td>
 <p>Proxy stats name regexps matcher for inclusion.</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ProxyConfig-ProxyHeaders">ProxyConfig.ProxyHeaders</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProxyConfig-ProxyHeaders-forwarded_client_cert">
+<td><code>forwardedClientCert</code></td>
+<td><code><a href="#ProxyConfig-ProxyHeaders-ForwardedClientCert">ForwardedClientCert</a></code></td>
+<td>
+<p>Controls the <code>X-Forwarded-Client-Cert</code> header. If enabled, the client certificate properties will be inserted for
+mTLS connections.
+If disabled, the client certificate properties will not be inserted, and any existing header will be removed.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-ProxyHeaders-request_id">
+<td><code>requestId</code></td>
+<td><code><a href="#ProxyConfig-ProxyHeaders-RequestId">RequestId</a></code></td>
+<td>
+<p>Controls the <code>X-Request-Id</code> header. If enabled, a request ID is generated for each request if one is not already set.
+If disabled, no request ID will be generate for the request. If it is already present, it will be preserved.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-ProxyHeaders-server">
+<td><code>server</code></td>
+<td><code><a href="#ProxyConfig-ProxyHeaders-Server">Server</a></code></td>
+<td>
+<p>Controls the <code>server</code> header. If enabled, the <code>Server: istio-envoy</code> header is set.
+If disabled, the <code>Server</code> header is not modified. If it is already present, it will be preserved.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-ProxyHeaders-attempt_count">
+<td><code>attemptCount</code></td>
+<td><code><a href="#ProxyConfig-ProxyHeaders-AttemptCount">AttemptCount</a></code></td>
+<td>
+<p>Controls the <code>X-Envoy-Attempt-Count</code> header. If enabled, this header will be added on requests that have retries configured.
+If disabled, this header will not be set. If it is already present, it will be preserved.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-ProxyHeaders-envoy_headers">
+<td><code>envoyHeaders</code></td>
+<td><code><a href="#ProxyConfig-ProxyHeaders-EnvoyHeaders">EnvoyHeaders</a></code></td>
+<td>
+<p>Controls various <code>X-Envoy-*</code> headers, such as <code>X-Envoy-Overloaded</code> and `X-Envoy-Upstream-Service-Time. If enabled,
+these headers will be included.
+If disabled, they header will not be set. If it is already present, it will be preserved.
+See the <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/router/v3/router.proto#envoy-v3-api-field-extensions-filters-http-router-v3-router-suppress-envoy-headers">Envoy documentation</a> for more details.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ProxyConfig-ProxyHeaders-ForwardedClientCert">ProxyConfig.ProxyHeaders.ForwardedClientCert</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProxyConfig-ProxyHeaders-ForwardedClientCert-disabled">
+<td><code>disabled</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ProxyConfig-ProxyHeaders-Server">ProxyConfig.ProxyHeaders.Server</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProxyConfig-ProxyHeaders-Server-disabled">
+<td><code>disabled</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ProxyConfig-ProxyHeaders-RequestId">ProxyConfig.ProxyHeaders.RequestId</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProxyConfig-ProxyHeaders-RequestId-disabled">
+<td><code>disabled</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ProxyConfig-ProxyHeaders-AttemptCount">ProxyConfig.ProxyHeaders.AttemptCount</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProxyConfig-ProxyHeaders-AttemptCount-disabled">
+<td><code>disabled</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ProxyConfig-ProxyHeaders-EnvoyHeaders">ProxyConfig.ProxyHeaders.EnvoyHeaders</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProxyConfig-ProxyHeaders-EnvoyHeaders-disabled">
+<td><code>disabled</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
 </td>
 <td>
 No
