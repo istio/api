@@ -592,6 +592,68 @@ message ProxyConfig {
 
   // Specifies the details of the Private Key Provider configuration for gateway and sidecar proxies.
   PrivateKeyProvider private_key_provider = 38;
+
+  // Define the set of headers to add/modify for HTTP request/responses.
+  //
+  // To enable a header, simply configure it. If no specific configuration is required, an empty object (`{}`) will enable it.
+  //
+  // ```yaml
+  // proxyHeaders:
+  //   forwardedClientCert: {}
+  // ```
+  //
+  // Some headers are enabled by default, and require explicitly disabling. See below for an example of disabling all default-enabled headers:
+  //
+  // ```yaml
+  // proxyHeaders:
+  //   forwardedClientCert:
+  //     disabled: true
+  //   server:
+  //     disabled: true
+  //   requestId:
+  //     disabled: true
+  //   attemptCount:
+  //     disabled: true
+  //   envoyHeaders:
+  //     disabled: true
+  // ```
+  ProxyHeaders proxy_headers = 39;
+
+  message ProxyHeaders {
+    message ForwardedClientCert {
+      google.protobuf.BoolValue disabled = 1;
+    }
+    message Server {
+      google.protobuf.BoolValue disabled = 1;
+    }
+    message RequestId {
+      google.protobuf.BoolValue disabled = 1;
+    }
+    message AttemptCount {
+      google.protobuf.BoolValue disabled = 1;
+    }
+    message EnvoyHeaders {
+      google.protobuf.BoolValue disabled = 1;
+    }
+    // Controls the `X-Forwarded-Client-Cert` header. If enabled, the client certificate properties will be inserted for
+    // mTLS connections.
+    // If disabled, the client certificate properties will not be inserted, and any existing header will be removed.
+    ForwardedClientCert forwarded_client_cert = 1;
+    // Controls the `X-Request-Id` header. If enabled, a request ID is generated for each request if one is not already set.
+    // If disabled, no request ID will be generate for the request. If it is already present, it will be preserved.
+    RequestId request_id = 3;
+    // Controls the `server` header. If enabled, the `Server: istio-envoy` header is set.
+    // If disabled, the `Server` header is not modified. If it is already present, it will be preserved.
+    Server server = 2;
+    // Controls the `X-Envoy-Attempt-Count` header. If enabled, this header will be added on requests that have retries configured.
+    // If disabled, this header will not be set. If it is already present, it will be preserved.
+    AttemptCount attempt_count = 4;
+    // Controls various `X-Envoy-*` headers, such as `X-Envoy-Overloaded` and `X-Envoy-Upstream-Service-Time. If enabled,
+    // these headers will be included.
+    // If disabled, they header will not be set. If it is already present, it will be preserved.
+    // See the [Envoy documentation](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/router/v3/router.proto#envoy-v3-api-field-extensions-filters-http-router-v3-router-suppress-envoy-headers) for more details.
+    EnvoyHeaders envoy_headers = 5;
+  }
 }
 
 message RemoteService {
