@@ -237,6 +237,11 @@ message VirtualService {
   // *Note*: It must be empty for a delegate VirtualService.
   repeated string hosts = 1;
 
+  // An option to flag whether the domain name is complete or not.
+  // If it is true, the host will never be interpreted to
+  // another host such as FQDN by istio. The default value is false.
+  bool is_fully_host = 7;
+
   // The names of gateways and sidecars that should apply these routes.
   // Gateways in other namespaces may be referred to by
   // `<gateway namespace>/<gateway name>`; specifying a gateway with no

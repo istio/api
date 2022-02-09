@@ -211,6 +211,19 @@ only for services defined via the Gateway.</p>
 No
 </td>
 </tr>
+<tr id="VirtualService-is_fully_host">
+<td><code>isFullyHost</code></td>
+<td><code>bool</code></td>
+<td>
+<p>An option to flag whether the domain name is complete or not.
+If it is true, the host will never be interpreted to
+another host such as FQDN by istio. The default value is false.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="VirtualService-gateways">
 <td><code>gateways</code></td>
 <td><code>string[]</code></td>

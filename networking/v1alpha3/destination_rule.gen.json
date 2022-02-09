@@ -159,6 +159,10 @@
             "description": "The name of a service from the service registry. Service names are looked up from the platform's service registry (e.g., Kubernetes services, Consul services, etc.) and from the hosts declared by [ServiceEntries](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry). Rules defined for services that do not exist in the service registry will be ignored.",
             "type": "string"
           },
+          "isFullyHost": {
+            "description": "An option to flag whether the domain name is complete or not. If it is true, the host will never be interpreted to another host such as FQDN by istio. The default value is false.",
+            "type": "boolean"
+          },
           "trafficPolicy": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.TrafficPolicy"
           },
