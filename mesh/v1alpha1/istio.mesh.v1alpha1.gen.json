@@ -1440,6 +1440,13 @@
               "type": "string"
             }
           },
+          "runtimeValues": {
+            "description": "Envoy [runtime configuration](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/operations/runtime) to set during bootstrapping. This enables setting experimental, unsafe, unsupported, and deprecated features that should be used with extreme caution.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
           "statusPort": {
             "description": "Port on which the agent should listen for administrative commands such as readiness probe. Default is set to port `15020`.",
             "type": "integer",

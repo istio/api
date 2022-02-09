@@ -460,6 +460,10 @@ message ProxyConfig {
   // Names starting with `ISTIO_META_` will be included in the generated bootstrap and sent to the XDS server.
   map<string,string> proxy_metadata = 24;
 
+  // Envoy [runtime configuration](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/operations/runtime) to set during bootstrapping.
+  // This enables setting experimental, unsafe, unsupported, and deprecated features that should be used with extreme caution.
+  map<string,string>  runtime_values = 37;
+
   // Port on which the agent should listen for administrative commands such as readiness probe.
   // Default is set to port `15020`.
   int32 status_port = 26;
