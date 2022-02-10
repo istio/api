@@ -258,9 +258,9 @@ type VirtualService struct {
 	//
 	// *Note*: It must be empty for a delegate VirtualService.
 	Hosts []string `protobuf:"bytes,1,rep,name=hosts,proto3" json:"hosts,omitempty"`
-	// An option to flag whether the domain name is complete or not.
+	// An option to flag whether the domain name is already FQDN or not.
 	// If it is true, the host will never be interpreted to
-	// another host such as FQDN by istio. The default value is false.
+	// another host by istio. The default value is false.
 	IsFullyHost bool `protobuf:"varint,7,opt,name=is_fully_host,json=isFullyHost,proto3" json:"is_fully_host,omitempty"`
 	// The names of gateways and sidecars that should apply these routes.
 	// Gateways in other namespaces may be referred to by

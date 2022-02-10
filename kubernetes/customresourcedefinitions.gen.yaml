@@ -152,8 +152,8 @@ spec:
                 description: The name of a service from the service registry.
                 type: string
               isFullyHost:
-                description: An option to flag whether the domain name is complete
-                  or not.
+                description: An option to flag whether the domain name is already
+                  FQDN or not.
                 type: boolean
               subsets:
                 items:
@@ -1331,8 +1331,8 @@ spec:
                 description: The name of a service from the service registry.
                 type: string
               isFullyHost:
-                description: An option to flag whether the domain name is complete
-                  or not.
+                description: An option to flag whether the domain name is already
+                  FQDN or not.
                 type: boolean
               subsets:
                 items:
@@ -4319,8 +4319,8 @@ spec:
                   type: object
                 type: array
               isFullyHost:
-                description: An option to flag whether the domain name is complete
-                  or not.
+                description: An option to flag whether the domain name is already
+                  FQDN or not.
                 type: boolean
               tcp:
                 description: An ordered list of route rules for opaque TCP traffic.
@@ -5072,8 +5072,8 @@ spec:
                   type: object
                 type: array
               isFullyHost:
-                description: An option to flag whether the domain name is complete
-                  or not.
+                description: An option to flag whether the domain name is already
+                  FQDN or not.
                 type: boolean
               tcp:
                 description: An ordered list of route rules for opaque TCP traffic.

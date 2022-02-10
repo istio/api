@@ -344,9 +344,9 @@ type DestinationRule struct {
 	//
 	// Note that the host field applies to both HTTP and TCP services.
 	Host string `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
-	// An option to flag whether the domain name is complete or not.
+	// An option to flag whether the domain name is already FQDN or not.
 	// If it is true, the host will never be interpreted to
-	// another host such as FQDN by istio. The default value is false.
+	// another host by istio. The default value is false.
 	IsFullyHost bool `protobuf:"varint,5,opt,name=is_fully_host,json=isFullyHost,proto3" json:"is_fully_host,omitempty"`
 	// Traffic policies to apply (load balancing policy, connection pool
 	// sizes, outlier detection).
