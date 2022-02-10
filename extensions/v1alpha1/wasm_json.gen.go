@@ -54,6 +54,33 @@
 //     openid_realm: ingress
 // ```
 //
+// This is the same as the last example, but using VmConfig to configure environment variables in the VM.
+//
+// ```yaml
+// apiVersion: extensions.istio.io/v1alpha1
+// kind: WasmPlugin
+// metadata:
+//   name: openid-connect
+//   namespace: istio-ingress
+// spec:
+//   selector:
+//     labels:
+//       istio: ingressgateway
+//   url: oci://private-registry:5000/openid-connect/openid:latest
+//   imagePullPolicy: IfNotPresent
+//   imagePullSecret: private-registry-pull-secret
+//   phase: AUTHN
+//   pluginConfig:
+//     openid_server: authn
+//     openid_realm: ingress
+//   vmConfig:
+//     env:
+//     - name: POD_NAME
+//       valueFrom: HOST
+//     - name: TRUST_DOMAIN
+//       value: "cluster.local"
+// ```
+//
 // And a more complex example that deploys three WasmPlugins and orders them
 // using `phase` and `priority`. The (hypothetical) setup is that the
 // `openid-connect` filter performs an OpenID Connect flow to authenticate the
@@ -155,6 +182,28 @@ func (this *WasmPlugin) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for WasmPlugin
 func (this *WasmPlugin) UnmarshalJSON(b []byte) error {
+	return WasmUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for VmConfig
+func (this *VmConfig) MarshalJSON() ([]byte, error) {
+	str, err := WasmMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for VmConfig
+func (this *VmConfig) UnmarshalJSON(b []byte) error {
+	return WasmUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for EnvVar
+func (this *EnvVar) MarshalJSON() ([]byte, error) {
+	str, err := WasmMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for EnvVar
+func (this *EnvVar) UnmarshalJSON(b []byte) error {
 	return WasmUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
