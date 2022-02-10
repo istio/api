@@ -333,8 +333,7 @@ message EnvVar {
   // Value for the environment variable.
   // Note that if `value_from` is `HOST`, it will be ignored.
   // Defaults to "". 
-  // +optional
-  optional string value = 2;
+  string value = 2;
 }
 
 enum EnvValueSource {
