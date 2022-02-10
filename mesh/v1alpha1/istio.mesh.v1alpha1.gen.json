@@ -771,7 +771,7 @@
             }
           },
           "headersToDownstreamOnAllow": {
-            "description": "List of headers from the authorization service that should be forwarded to downstream when the authorization check result is allowed (HTTP code 200). If not specified, the original request will not be modified and forwarded to backend as-is. Note, any existing headers will be overridden.",
+            "description": "List of headers from the authorization service that should be forwarded to downstream when the authorization check result is allowed (HTTP code 200). If not specified, the original request will not be modified and forwarded to downstream as-is. Note, any existing headers will be overridden.",
             "type": "array",
             "items": {
               "type": "string"

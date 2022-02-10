@@ -1765,7 +1765,7 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider struct 
 	HeadersToDownstreamOnDeny []string `protobuf:"bytes,8,rep,name=headers_to_downstream_on_deny,json=headersToDownstreamOnDeny,proto3" json:"headersToDownstreamOnDeny,omitempty"`
 	// List of headers from the authorization service that should be forwarded to downstream when the authorization
 	// check result is allowed (HTTP code 200).
-	// If not specified, the original request will not be modified and forwarded to backend as-is.
+	// If not specified, the original request will not be modified and forwarded to downstream as-is.
 	// Note, any existing headers will be overridden.
 	//
 	// Exact, prefix and suffix matches are supported (similar to the authorization policy rule syntax except the presence match
