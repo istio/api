@@ -96,6 +96,7 @@ spec:
                         name:
                           type: string
                         value:
+                          description: Value for the environment variable.
                           type: string
                         valueFrom:
                           enum:

@@ -330,7 +330,7 @@ message EnvVar {
   // Source for the environment variable's value.
   EnvValueSource value_from = 3;
 
-  // Variable references $(VAR_NAME) are expanded
+  // Value for the environment variable.
   // Note that if `value_from` is `HOST`, it will be ignored.
   // Defaults to "". 
   // +optional

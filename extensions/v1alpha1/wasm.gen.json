@@ -24,7 +24,7 @@
             "$ref": "#/components/schemas/istio.extensions.v1alpha1.EnvValueSource"
           },
           "value": {
-            "description": "Variable references $(VAR_NAME) are expanded Note that if `value_from` is `HOST`, it will be ignored. Defaults to \"\". +optional",
+            "description": "Value for the environment variable. Note that if `value_from` is `HOST`, it will be ignored. Defaults to \"\". +optional",
             "type": "string"
           }
         }
