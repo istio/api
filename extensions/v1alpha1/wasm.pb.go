@@ -541,7 +541,6 @@ type EnvVar struct {
 	// Value for the environment variable.
 	// Note that if `value_from` is `HOST`, it will be ignored.
 	// Defaults to "".
-	// +optional
 	Value                string   `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`

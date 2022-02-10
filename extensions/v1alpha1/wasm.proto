@@ -333,7 +333,6 @@ message EnvVar {
   // Value for the environment variable.
   // Note that if `value_from` is `HOST`, it will be ignored.
   // Defaults to "". 
-  // +optional
   string value = 2;
 }
 
