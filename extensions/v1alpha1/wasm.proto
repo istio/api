@@ -14,6 +14,7 @@
 
 syntax = "proto3";
 
+import "google/protobuf/any.proto";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/struct.proto";
 import "type/v1beta1/selector.proto";
@@ -75,6 +76,33 @@ import "type/v1beta1/selector.proto";
 //   pluginConfig:
 //     openid_server: authn
 //     openid_realm: ingress
+// ```
+//
+// This is the same as the last example, but using VmConfig to configure environment variables in the VM.
+//
+// ```yaml
+// apiVersion: extensions.istio.io/v1alpha1
+// kind: WasmPlugin
+// metadata:
+//   name: openid-connect
+//   namespace: istio-ingress
+// spec:
+//   selector:
+//     labels:
+//       istio: ingressgateway
+//   url: oci://private-registry:5000/openid-connect/openid:latest
+//   imagePullPolicy: IfNotPresent
+//   imagePullSecret: private-registry-pull-secret
+//   phase: AUTHN
+//   pluginConfig:
+//     openid_server: authn
+//     openid_realm: ingress
+//   vmConfig:
+//     env:
+//     - name: POD_NAME
+//       valueFrom: HOST
+//     - name: TRUST_DOMAIN
+//       value: "cluster.local"
 // ```
 //
 // And a more complex example that deploys three WasmPlugins and orders them
@@ -241,6 +269,10 @@ message WasmPlugin {
   // value, the ordering will be deterministically derived from name and
   // namespace of the `WasmPlugins`. Defaults to `0`.
   google.protobuf.Int64Value priority = 10;
+
+  // Configuration for a Wasm VM.
+  // more details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).
+  VmConfig vm_config = 11;
 }
 
 // The phase in the filter chain where the plugin will be injected.
@@ -279,4 +311,36 @@ enum PullPolicy {
   // We will always pull the latest version of an image when applying
   // this plugin.
   Always = 2;
+}
+
+// Configuration for a Wasm VM.
+// more details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).
+message VmConfig {
+  // Specifies environment variables to be injected to this VM.
+  // Note that if a key does not exist, it will be ignored.
+  repeated EnvVar env = 1;
+}
+
+message EnvVar {
+  // Required
+  // Name of the environment variable. Must be a C_IDENTIFIER.
+  string name = 1;
+
+  // Required
+  // Source for the environment variable's value.
+  EnvValueSource value_from = 3;
+
+  // Variable references $(VAR_NAME) are expanded
+  // Note that if `value_from` is `HOST`, it will be ignored.
+  // Defaults to "". 
+  // +optional
+  optional string value = 2;
+}
+
+enum EnvValueSource {
+  // Explicitly given key-value pairs to be injected to this VM
+  INLINE = 0;
+
+  // *Istio-proxy's* environment variables exposed to this VM.
+  HOST = 1;
 }

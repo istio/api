@@ -54,6 +54,33 @@
 //     openid_realm: ingress
 // ```
 //
+// This is the same as the last example, but using VmConfig to configure environment variables in the VM.
+//
+// ```yaml
+// apiVersion: extensions.istio.io/v1alpha1
+// kind: WasmPlugin
+// metadata:
+//   name: openid-connect
+//   namespace: istio-ingress
+// spec:
+//   selector:
+//     labels:
+//       istio: ingressgateway
+//   url: oci://private-registry:5000/openid-connect/openid:latest
+//   imagePullPolicy: IfNotPresent
+//   imagePullSecret: private-registry-pull-secret
+//   phase: AUTHN
+//   pluginConfig:
+//     openid_server: authn
+//     openid_realm: ingress
+//   vmConfig:
+//     env:
+//     - name: POD_NAME
+//       valueFrom: HOST
+//     - name: TRUST_DOMAIN
+//       value: "cluster.local"
+// ```
+//
 // And a more complex example that deploys three WasmPlugins and orders them
 // using `phase` and `priority`. The (hypothetical) setup is that the
 // `openid-connect` filter performs an OpenID Connect flow to authenticate the
@@ -232,6 +259,33 @@ func (PullPolicy) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_4d60b240916c4e18, []int{1}
 }
 
+type EnvValueSource int32
+
+const (
+	// Explicitly given key-value pairs to be injected to this VM
+	EnvValueSource_INLINE EnvValueSource = 0
+	// *Istio-proxy's* environment variables exposed to this VM.
+	EnvValueSource_HOST EnvValueSource = 1
+)
+
+var EnvValueSource_name = map[int32]string{
+	0: "INLINE",
+	1: "HOST",
+}
+
+var EnvValueSource_value = map[string]int32{
+	"INLINE": 0,
+	"HOST":   1,
+}
+
+func (x EnvValueSource) String() string {
+	return proto.EnumName(EnvValueSource_name, int32(x))
+}
+
+func (EnvValueSource) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_4d60b240916c4e18, []int{2}
+}
+
 // WasmPlugins provides a mechanism to extend the functionality provided by
 // the Istio proxy through WebAssembly filters.
 //
@@ -307,10 +361,13 @@ type WasmPlugin struct {
 	// If `priority` is not set, or two `WasmPlugins` exist with the same
 	// value, the ordering will be deterministically derived from name and
 	// namespace of the `WasmPlugins`. Defaults to `0`.
-	Priority             *types.Int64Value `protobuf:"bytes,10,opt,name=priority,proto3" json:"priority,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
-	XXX_unrecognized     []byte            `json:"-"`
-	XXX_sizecache        int32             `json:"-"`
+	Priority *types.Int64Value `protobuf:"bytes,10,opt,name=priority,proto3" json:"priority,omitempty"`
+	// Configuration for a Wasm VM.
+	// more details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).
+	VmConfig             *VmConfig `protobuf:"bytes,11,opt,name=vm_config,json=vmConfig,proto3" json:"vm_config,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *WasmPlugin) Reset()         { *m = WasmPlugin{} }
@@ -416,49 +473,214 @@ func (m *WasmPlugin) GetPriority() *types.Int64Value {
 	return nil
 }
 
+func (m *WasmPlugin) GetVmConfig() *VmConfig {
+	if m != nil {
+		return m.VmConfig
+	}
+	return nil
+}
+
+// Configuration for a Wasm VM.
+// more details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).
+type VmConfig struct {
+	// Specifies environment variables to be injected to this VM.
+	// Note that if a key does not exist, it will be ignored.
+	Env                  []*EnvVar `protobuf:"bytes,1,rep,name=env,proto3" json:"env,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *VmConfig) Reset()         { *m = VmConfig{} }
+func (m *VmConfig) String() string { return proto.CompactTextString(m) }
+func (*VmConfig) ProtoMessage()    {}
+func (*VmConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4d60b240916c4e18, []int{1}
+}
+func (m *VmConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *VmConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_VmConfig.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *VmConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VmConfig.Merge(m, src)
+}
+func (m *VmConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *VmConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_VmConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VmConfig proto.InternalMessageInfo
+
+func (m *VmConfig) GetEnv() []*EnvVar {
+	if m != nil {
+		return m.Env
+	}
+	return nil
+}
+
+type EnvVar struct {
+	// Required
+	// Name of the environment variable. Must be a C_IDENTIFIER.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Required
+	// Source for the environment variable's value.
+	ValueFrom EnvValueSource `protobuf:"varint,3,opt,name=value_from,json=valueFrom,proto3,enum=istio.extensions.v1alpha1.EnvValueSource" json:"value_from,omitempty"`
+	// Types that are valid to be assigned to XValue:
+	//	*EnvVar_Value
+	XValue               isEnvVar_XValue `protobuf_oneof:"_value"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
+}
+
+func (m *EnvVar) Reset()         { *m = EnvVar{} }
+func (m *EnvVar) String() string { return proto.CompactTextString(m) }
+func (*EnvVar) ProtoMessage()    {}
+func (*EnvVar) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4d60b240916c4e18, []int{2}
+}
+func (m *EnvVar) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *EnvVar) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_EnvVar.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *EnvVar) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EnvVar.Merge(m, src)
+}
+func (m *EnvVar) XXX_Size() int {
+	return m.Size()
+}
+func (m *EnvVar) XXX_DiscardUnknown() {
+	xxx_messageInfo_EnvVar.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EnvVar proto.InternalMessageInfo
+
+type isEnvVar_XValue interface {
+	isEnvVar_XValue()
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type EnvVar_Value struct {
+	Value string `protobuf:"bytes,2,opt,name=value,proto3,oneof" json:"value,omitempty"`
+}
+
+func (*EnvVar_Value) isEnvVar_XValue() {}
+
+func (m *EnvVar) GetXValue() isEnvVar_XValue {
+	if m != nil {
+		return m.XValue
+	}
+	return nil
+}
+
+func (m *EnvVar) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *EnvVar) GetValueFrom() EnvValueSource {
+	if m != nil {
+		return m.ValueFrom
+	}
+	return EnvValueSource_INLINE
+}
+
+func (m *EnvVar) GetValue() string {
+	if x, ok := m.GetXValue().(*EnvVar_Value); ok {
+		return x.Value
+	}
+	return ""
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*EnvVar) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*EnvVar_Value)(nil),
+	}
+}
+
 func init() {
 	proto.RegisterEnum("istio.extensions.v1alpha1.PluginPhase", PluginPhase_name, PluginPhase_value)
 	proto.RegisterEnum("istio.extensions.v1alpha1.PullPolicy", PullPolicy_name, PullPolicy_value)
+	proto.RegisterEnum("istio.extensions.v1alpha1.EnvValueSource", EnvValueSource_name, EnvValueSource_value)
 	proto.RegisterType((*WasmPlugin)(nil), "istio.extensions.v1alpha1.WasmPlugin")
+	proto.RegisterType((*VmConfig)(nil), "istio.extensions.v1alpha1.VmConfig")
+	proto.RegisterType((*EnvVar)(nil), "istio.extensions.v1alpha1.EnvVar")
 }
 
 func init() { proto.RegisterFile("extensions/v1alpha1/wasm.proto", fileDescriptor_4d60b240916c4e18) }
 
 var fileDescriptor_4d60b240916c4e18 = []byte{
-	// 520 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x93, 0xdf, 0x6e, 0x12, 0x41,
-	0x14, 0xc6, 0xbb, 0xc5, 0x22, 0x1c, 0xaa, 0x6e, 0x27, 0xb1, 0xae, 0xad, 0x41, 0x62, 0xd4, 0x20,
-	0x17, 0xb3, 0x01, 0xb5, 0xde, 0xf4, 0x42, 0x8a, 0x98, 0x12, 0x0d, 0xae, 0xbb, 0xd4, 0xc6, 0xde,
-	0x90, 0x61, 0x1d, 0x60, 0xd2, 0x61, 0x67, 0x33, 0x33, 0x0b, 0xee, 0x1b, 0x7a, 0xe9, 0x23, 0x18,
-	0x9e, 0xc2, 0x4b, 0xc3, 0x2c, 0x14, 0xea, 0xbf, 0xbb, 0xc3, 0x39, 0xbf, 0xef, 0x9b, 0x73, 0x3e,
-	0xb2, 0x50, 0xa6, 0x5f, 0x35, 0x8d, 0x14, 0x13, 0x91, 0x72, 0xa7, 0x75, 0xc2, 0xe3, 0x31, 0xa9,
-	0xbb, 0x33, 0xa2, 0x26, 0x38, 0x96, 0x42, 0x0b, 0x74, 0x9f, 0x29, 0xcd, 0x04, 0x5e, 0x53, 0x78,
-	0x45, 0x1d, 0x94, 0x47, 0x42, 0x8c, 0x38, 0x75, 0x0d, 0x38, 0x48, 0x86, 0xee, 0x4c, 0x92, 0x38,
-	0xa6, 0x52, 0x65, 0xd2, 0x83, 0x07, 0xbf, 0xcf, 0x95, 0x96, 0x49, 0xa8, 0x97, 0xd3, 0x43, 0x9d,
-	0xc6, 0xd4, 0x9d, 0xd6, 0x07, 0x54, 0x93, 0xba, 0xab, 0x28, 0xa7, 0xa1, 0x16, 0x32, 0x1b, 0x3e,
-	0xfa, 0x99, 0x03, 0x38, 0x27, 0x6a, 0xe2, 0xf1, 0x64, 0xc4, 0x22, 0xf4, 0x1a, 0x0a, 0x2b, 0xc0,
-	0xb1, 0x2a, 0x56, 0xb5, 0xd4, 0x78, 0x8c, 0xb3, 0xbd, 0x16, 0x26, 0x78, 0x69, 0x82, 0xcf, 0x85,
-	0xbc, 0xe4, 0x82, 0x7c, 0x09, 0x96, 0xac, 0x7f, 0xa5, 0x42, 0x36, 0xe4, 0x12, 0xc9, 0x9d, 0xed,
-	0x8a, 0x55, 0x2d, 0xfa, 0x8b, 0x12, 0xed, 0x43, 0x5e, 0x8d, 0x49, 0xe3, 0xe5, 0x91, 0x93, 0x33,
-	0xcd, 0xe5, 0x2f, 0xf4, 0x11, 0xf6, 0xd8, 0x84, 0x8c, 0x68, 0x3f, 0x4e, 0x38, 0xef, 0xc7, 0x82,
-	0xb3, 0x30, 0x75, 0x6e, 0x54, 0xac, 0xea, 0xed, 0xc6, 0x13, 0xfc, 0xcf, 0x30, 0xb0, 0x97, 0x70,
-	0xee, 0x19, 0xd8, 0xbf, 0x63, 0xf4, 0xeb, 0x06, 0xaa, 0x5d, 0xb3, 0x54, 0x34, 0x94, 0x54, 0x3b,
-	0x3b, 0xe6, 0xd5, 0x35, 0x1b, 0x98, 0x36, 0x7a, 0x06, 0xf6, 0x94, 0x4a, 0x36, 0x64, 0x21, 0xd1,
-	0x4c, 0x44, 0xfd, 0x4b, 0x9a, 0x3a, 0xf9, 0x0c, 0xdd, 0xec, 0xbf, 0xa3, 0x29, 0x3a, 0x86, 0x5b,
-	0xb1, 0xc9, 0xa7, 0x1f, 0x8a, 0x68, 0xc8, 0x46, 0xce, 0x4d, 0x13, 0xcd, 0x3d, 0x9c, 0xe5, 0x8e,
-	0x57, 0xb9, 0xe3, 0xc0, 0xe4, 0xee, 0xef, 0x66, 0x74, 0xcb, 0xc0, 0xe8, 0x21, 0x94, 0x96, 0xea,
-	0x88, 0x4c, 0xa8, 0x53, 0x30, 0x6f, 0x40, 0xd6, 0xea, 0x92, 0x09, 0x45, 0xc7, 0xb0, 0x13, 0x8f,
-	0x89, 0xa2, 0x4e, 0xd1, 0x1c, 0xff, 0xf4, 0x7f, 0xc7, 0x1b, 0x95, 0xb7, 0xa0, 0xfd, 0x4c, 0x84,
-	0x5e, 0x41, 0x21, 0x96, 0x4c, 0x48, 0xa6, 0x53, 0x07, 0xcc, 0x5e, 0x87, 0x7f, 0xec, 0xd5, 0x89,
-	0xf4, 0xd1, 0x8b, 0x4f, 0x84, 0x27, 0xd4, 0xbf, 0x82, 0x6b, 0x6d, 0x28, 0x6d, 0xd8, 0xa1, 0xbb,
-	0xb0, 0x77, 0xd6, 0x0d, 0xbc, 0x76, 0xab, 0xf3, 0xb6, 0xd3, 0x7e, 0xd3, 0xf7, 0x4e, 0x9b, 0x41,
-	0xdb, 0xde, 0x42, 0x45, 0xd8, 0x69, 0x9e, 0xf5, 0x4e, 0xbb, 0xb6, 0xb5, 0x2a, 0x2f, 0xec, 0xed,
-	0x45, 0x19, 0xf4, 0x9a, 0xbd, 0xc0, 0xce, 0xd5, 0x4e, 0x00, 0x36, 0xfe, 0x81, 0x7d, 0x40, 0xd7,
-	0x5c, 0x3e, 0xbc, 0xef, 0xb4, 0x3e, 0xdb, 0x5b, 0xc8, 0x86, 0xdd, 0xce, 0xb0, 0x2b, 0xb4, 0x27,
-	0xa9, 0xa2, 0x91, 0xb6, 0x2d, 0x04, 0x90, 0x6f, 0xf2, 0x19, 0x49, 0x95, 0xbd, 0x7d, 0x82, 0xbf,
-	0xcd, 0xcb, 0xd6, 0xf7, 0x79, 0xd9, 0xfa, 0x31, 0x2f, 0x5b, 0x17, 0x95, 0xec, 0x7e, 0x26, 0x5c,
-	0x12, 0x33, 0xf7, 0x2f, 0x9f, 0xcd, 0x20, 0x6f, 0x2e, 0x7b, 0xfe, 0x2b, 0x00, 0x00, 0xff, 0xff,
-	0x4c, 0xa9, 0xbd, 0xec, 0x54, 0x03, 0x00, 0x00,
+	// 666 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x54, 0xdd, 0x4e, 0x13, 0x41,
+	0x14, 0x66, 0xe8, 0x8f, 0xed, 0x29, 0xe2, 0x32, 0x89, 0xb8, 0x80, 0xa9, 0x15, 0x95, 0x94, 0x5e,
+	0xec, 0xa6, 0x45, 0xf1, 0x86, 0x44, 0x0a, 0x96, 0xb4, 0x91, 0x94, 0xba, 0x5b, 0x20, 0x72, 0xd3,
+	0x0c, 0x75, 0x5a, 0x36, 0xcc, 0xee, 0x6c, 0x66, 0x67, 0x17, 0xfb, 0x06, 0x26, 0xbe, 0x91, 0x4f,
+	0xe0, 0xa5, 0x8f, 0x60, 0x78, 0x12, 0xb3, 0xb3, 0x5b, 0xfe, 0x54, 0xbc, 0x3b, 0x3f, 0xdf, 0xf7,
+	0xcd, 0x39, 0x5f, 0x4e, 0x06, 0xca, 0xf4, 0x8b, 0xa4, 0x5e, 0xe0, 0x70, 0x2f, 0x30, 0xa3, 0x3a,
+	0x61, 0xfe, 0x19, 0xa9, 0x9b, 0x17, 0x24, 0x70, 0x0d, 0x5f, 0x70, 0xc9, 0xf1, 0x92, 0x13, 0x48,
+	0x87, 0x1b, 0xd7, 0x28, 0x63, 0x8a, 0x5a, 0x5e, 0x1a, 0x73, 0x3e, 0x66, 0xd4, 0x54, 0xc0, 0xd3,
+	0x70, 0x64, 0x12, 0x6f, 0x92, 0xb0, 0x96, 0xcb, 0x77, 0x5b, 0x17, 0x82, 0xf8, 0x3e, 0x15, 0x41,
+	0xda, 0x7f, 0x7a, 0xb7, 0x1f, 0x48, 0x11, 0x0e, 0x65, 0xda, 0x5d, 0x91, 0x13, 0x9f, 0x9a, 0x51,
+	0xfd, 0x94, 0x4a, 0x52, 0x37, 0x03, 0xca, 0xe8, 0x50, 0x72, 0x91, 0x34, 0x57, 0xbf, 0x67, 0x01,
+	0x8e, 0x49, 0xe0, 0xf6, 0x58, 0x38, 0x76, 0x3c, 0xbc, 0x0d, 0x85, 0x29, 0x40, 0x47, 0x15, 0x54,
+	0x2d, 0x35, 0x5e, 0x1a, 0xc9, 0xc8, 0xb1, 0x88, 0x91, 0x8a, 0x18, 0xc7, 0x5c, 0x9c, 0x33, 0x4e,
+	0x3e, 0xdb, 0x29, 0xd6, 0xba, 0x62, 0x61, 0x0d, 0x32, 0xa1, 0x60, 0xfa, 0x6c, 0x05, 0x55, 0x8b,
+	0x56, 0x1c, 0xe2, 0x45, 0xc8, 0x07, 0x67, 0xa4, 0xf1, 0x66, 0x53, 0xcf, 0xa8, 0x62, 0x9a, 0xe1,
+	0x8f, 0xb0, 0xe0, 0xb8, 0x64, 0x4c, 0x07, 0x7e, 0xc8, 0xd8, 0xc0, 0xe7, 0xcc, 0x19, 0x4e, 0xf4,
+	0x6c, 0x05, 0x55, 0xe7, 0x1b, 0xaf, 0x8c, 0x7f, 0xfa, 0x64, 0xf4, 0x42, 0xc6, 0x7a, 0x0a, 0x6c,
+	0x3d, 0x52, 0xfc, 0xeb, 0x02, 0xae, 0xdd, 0x92, 0x0c, 0xe8, 0x50, 0x50, 0xa9, 0xe7, 0xd4, 0xab,
+	0xd7, 0x58, 0x5b, 0x95, 0xf1, 0x3a, 0x68, 0x11, 0x15, 0xce, 0xc8, 0x19, 0x12, 0xe9, 0x70, 0x6f,
+	0x70, 0x4e, 0x27, 0x7a, 0x3e, 0x81, 0xde, 0xac, 0x7f, 0xa0, 0x13, 0xbc, 0x05, 0x0f, 0x7d, 0xe5,
+	0xcf, 0x60, 0xc8, 0xbd, 0x91, 0x33, 0xd6, 0x1f, 0x28, 0x6b, 0x9e, 0x18, 0x89, 0xef, 0xc6, 0xd4,
+	0x77, 0xc3, 0x56, 0xbe, 0x5b, 0x73, 0x09, 0x7a, 0x57, 0x81, 0xf1, 0x33, 0x28, 0xa5, 0x6c, 0x8f,
+	0xb8, 0x54, 0x2f, 0xa8, 0x37, 0x20, 0x29, 0x75, 0x89, 0x4b, 0xf1, 0x16, 0xe4, 0xfc, 0x33, 0x12,
+	0x50, 0xbd, 0xa8, 0x96, 0x5f, 0xbb, 0x6f, 0x79, 0xc5, 0xea, 0xc5, 0x68, 0x2b, 0x21, 0xe1, 0xb7,
+	0x50, 0xf0, 0x85, 0xc3, 0x85, 0x23, 0x27, 0x3a, 0xa8, 0xb9, 0x56, 0xfe, 0x98, 0xab, 0xe3, 0xc9,
+	0xcd, 0xd7, 0x47, 0x84, 0x85, 0xd4, 0xba, 0x02, 0xe3, 0x6d, 0x28, 0x46, 0xee, 0x74, 0xa3, 0x92,
+	0x62, 0xbe, 0xb8, 0xe7, 0xe9, 0x23, 0x37, 0xd9, 0xc7, 0x2a, 0x44, 0x69, 0xb4, 0xfa, 0x0e, 0x0a,
+	0xd3, 0x2a, 0xde, 0x80, 0x0c, 0xf5, 0x22, 0x1d, 0x55, 0x32, 0xd5, 0x52, 0xe3, 0xf9, 0x3d, 0x3a,
+	0x2d, 0x2f, 0x3a, 0x22, 0xc2, 0x8a, 0xd1, 0xab, 0xdf, 0x10, 0xe4, 0x93, 0x1c, 0x63, 0xc8, 0x2a,
+	0x7b, 0x90, 0xb2, 0x47, 0xc5, 0xb8, 0x0d, 0x10, 0xc5, 0x43, 0x0f, 0x46, 0x82, 0xbb, 0xea, 0x7a,
+	0xe6, 0x1b, 0xeb, 0xff, 0x93, 0x66, 0x21, 0xb5, 0x79, 0x28, 0x86, 0xd4, 0x2a, 0x2a, 0xf2, 0x9e,
+	0xe0, 0x2e, 0x5e, 0x82, 0x9c, 0x4a, 0x92, 0xbb, 0x6c, 0xcf, 0x58, 0x49, 0xfa, 0x15, 0xa1, 0x9d,
+	0x02, 0xe4, 0x07, 0x2a, 0xa9, 0xb5, 0xa0, 0x74, 0xc3, 0x5f, 0xfc, 0x18, 0x16, 0x0e, 0xbb, 0x76,
+	0xaf, 0xb5, 0xdb, 0xd9, 0xeb, 0xb4, 0xde, 0x0f, 0x7a, 0xed, 0xa6, 0xdd, 0xd2, 0x66, 0x70, 0x11,
+	0x72, 0xcd, 0xc3, 0x7e, 0xbb, 0xab, 0xa1, 0x69, 0x78, 0xa2, 0xcd, 0xc6, 0xa1, 0xdd, 0x6f, 0xf6,
+	0x6d, 0x2d, 0x53, 0xdb, 0x01, 0xb8, 0x71, 0x92, 0x8b, 0x80, 0x6f, 0xa9, 0x1c, 0xec, 0x77, 0x76,
+	0x3f, 0x69, 0x33, 0x58, 0x83, 0xb9, 0xce, 0xa8, 0xcb, 0x65, 0x4f, 0xd0, 0x80, 0x7a, 0x52, 0x43,
+	0x18, 0x20, 0xdf, 0x64, 0x17, 0x64, 0x12, 0x68, 0xb3, 0xb5, 0x35, 0x98, 0xbf, 0xbd, 0x4c, 0xdc,
+	0xed, 0x74, 0xf7, 0x3b, 0xdd, 0x78, 0x84, 0x02, 0x64, 0xdb, 0x07, 0x76, 0x5f, 0x43, 0x3b, 0xc6,
+	0x8f, 0xcb, 0x32, 0xfa, 0x79, 0x59, 0x46, 0xbf, 0x2e, 0xcb, 0xe8, 0xa4, 0x92, 0x58, 0xe3, 0x70,
+	0x93, 0xf8, 0x8e, 0xf9, 0x97, 0xaf, 0xe8, 0x34, 0xaf, 0x4e, 0x62, 0xe3, 0x77, 0x00, 0x00, 0x00,
+	0xff, 0xff, 0x0e, 0x37, 0x9b, 0xc9, 0xa8, 0x04, 0x00, 0x00,
 }
 
 func (m *WasmPlugin) Marshal() (dAtA []byte, err error) {
@@ -484,6 +706,18 @@ func (m *WasmPlugin) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.XXX_unrecognized != nil {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.VmConfig != nil {
+		{
+			size, err := m.VmConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintWasm(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
 	}
 	if m.Priority != nil {
 		{
@@ -569,6 +803,109 @@ func (m *WasmPlugin) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *VmConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *VmConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VmConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.Env) > 0 {
+		for iNdEx := len(m.Env) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Env[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintWasm(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *EnvVar) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *EnvVar) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *EnvVar) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.ValueFrom != 0 {
+		i = encodeVarintWasm(dAtA, i, uint64(m.ValueFrom))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.XValue != nil {
+		{
+			size := m.XValue.Size()
+			i -= size
+			if _, err := m.XValue.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintWasm(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *EnvVar_Value) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *EnvVar_Value) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Value)
+	copy(dAtA[i:], m.Value)
+	i = encodeVarintWasm(dAtA, i, uint64(len(m.Value)))
+	i--
+	dAtA[i] = 0x12
+	return len(dAtA) - i, nil
+}
 func encodeVarintWasm(dAtA []byte, offset int, v uint64) int {
 	offset -= sovWasm(v)
 	base := offset
@@ -624,9 +961,64 @@ func (m *WasmPlugin) Size() (n int) {
 		l = m.Priority.Size()
 		n += 1 + l + sovWasm(uint64(l))
 	}
+	if m.VmConfig != nil {
+		l = m.VmConfig.Size()
+		n += 1 + l + sovWasm(uint64(l))
+	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
 	}
+	return n
+}
+
+func (m *VmConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Env) > 0 {
+		for _, e := range m.Env {
+			l = e.Size()
+			n += 1 + l + sovWasm(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *EnvVar) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovWasm(uint64(l))
+	}
+	if m.XValue != nil {
+		n += m.XValue.Size()
+	}
+	if m.ValueFrom != 0 {
+		n += 1 + sovWasm(uint64(m.ValueFrom))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *EnvVar_Value) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Value)
+	n += 1 + l + sovWasm(uint64(l))
 	return n
 }
 
@@ -971,6 +1363,261 @@ func (m *WasmPlugin) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VmConfig", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWasm
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthWasm
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthWasm
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VmConfig == nil {
+				m.VmConfig = &VmConfig{}
+			}
+			if err := m.VmConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipWasm(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthWasm
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *VmConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowWasm
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: VmConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: VmConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Env", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWasm
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthWasm
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthWasm
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Env = append(m.Env, &EnvVar{})
+			if err := m.Env[len(m.Env)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipWasm(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthWasm
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EnvVar) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowWasm
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EnvVar: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EnvVar: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWasm
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthWasm
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthWasm
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWasm
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthWasm
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthWasm
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XValue = &EnvVar_Value{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ValueFrom", wireType)
+			}
+			m.ValueFrom = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWasm
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ValueFrom |= EnvValueSource(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipWasm(dAtA[iNdEx:])
