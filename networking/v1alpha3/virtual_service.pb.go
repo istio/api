@@ -1889,10 +1889,9 @@ type HTTPRouteDestination struct {
 	// Destination uniquely identifies the instances of a service
 	// to which the request/connection should be forwarded to.
 	Destination *Destination `protobuf:"bytes,1,opt,name=destination,proto3" json:"destination,omitempty"`
-	// The proportion of traffic to be forwarded to the service
-	// version. (0-100). Sum of weights across destinations SHOULD BE == 100.
-	// If there is only one destination in a rule, the weight value is assumed to
-	// be 100.
+	// Weight specifies the relative proportion of traffic to be forwarded to the destination. A destination will receive `weight/(sum of all weights)` requests.
+	// If there is only one destination in a rule, it will receive all traffic.
+	// Otherwise, if weight is `0`, the destination will not receive any traffic.
 	Weight int32 `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
 	// Header manipulation rules
 	Headers              *Headers `protobuf:"bytes,7,opt,name=headers,proto3" json:"headers,omitempty"`
@@ -1960,9 +1959,9 @@ type RouteDestination struct {
 	// Destination uniquely identifies the instances of a service
 	// to which the request/connection should be forwarded to.
 	Destination *Destination `protobuf:"bytes,1,opt,name=destination,proto3" json:"destination,omitempty"`
-	// The proportion of traffic to be forwarded to the service
-	// version. If there is only one destination in a rule, all traffic will be
-	// routed to it irrespective of the weight.
+	// Weight specifies the relative proportion of traffic to be forwarded to the destination. A destination will receive `weight/(sum of all weights)` requests.
+	// If there is only one destination in a rule, it will receive all traffic.
+	// Otherwise, if weight is `0`, the destination will not receive any traffic.
 	Weight               int32    `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -2688,7 +2687,7 @@ type HTTPRetry struct {
 	PerTryTimeout *types.Duration `protobuf:"bytes,2,opt,name=per_try_timeout,json=perTryTimeout,proto3" json:"per_try_timeout,omitempty"`
 	// Specifies the conditions under which retry takes place.
 	// One or more policies can be specified using a ‘,’ delimited list.
-	// If retry_on specifies a valid HTTP status, it will be added to retriable_status_codes retry policy.
+	// If `retry_on` specifies a valid HTTP status, it will be added to retriable_status_codes retry policy.
 	// See the [retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on)
 	// and [gRPC retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on) for more details.
 	RetryOn string `protobuf:"bytes,3,opt,name=retry_on,json=retryOn,proto3" json:"retry_on,omitempty"`

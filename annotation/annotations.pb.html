@@ -98,6 +98,17 @@ Istio supports to control its behavior.
 			
 		
 			
+				
+					<tr>
+				
+					<td><code>istio.io/dry-run</code></td>
+				
+					<td>Alpha</td>
+				
+					<td>[AuthorizationPolicy]</td>
+					<td>Specifies whether or not the given resource is in dry-run mode. See https://istio.io/latest/docs/tasks/security/authorization/authz-dry-run/ for more information.</td>
+				</tr>
+			
 		
 			
 		
@@ -124,6 +135,19 @@ Istio supports to control its behavior.
 				
 					<td>[Service]</td>
 					<td>Specifies the namespaces to which this service should be exported to. A value of '*' indicates it is reachable within the mesh '.' indicates it is reachable within its namespace.</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
+					<td><code>networking.istio.io/gatewayPort</code></td>
+				
+					<td>Alpha</td>
+				
+					<td>[Service]</td>
+					<td>IstioGatewayPortLabel overrides the default 15443 value to use for a multi-network gateway's port</td>
 				</tr>
 			
 		
@@ -373,6 +397,19 @@ Istio supports to control its behavior.
 				
 					<td>[Pod]</td>
 					<td>Specifies the Docker image to be used by the Envoy sidecar.</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
+					<td><code>sidecar.istio.io/proxyImageType</code></td>
+				
+					<td>Alpha</td>
+				
+					<td>[Pod]</td>
+					<td>Specifies the Docker image type to be used by the Envoy sidecar. Istio publishes debug and distroless image types for every release tag.</td>
 				</tr>
 			
 		

@@ -61,6 +61,14 @@ annotations:
     resources:
       - Service
 
+  - name: networking.istio.io/gatewayPort
+    featureStatus: Alpha
+    description: IstioGatewayPortLabel overrides the default 15443 value to use for a multi-network gateway's port
+    deprecated: false
+    hidden: false
+    resources:
+      - Service
+
   - name: sidecar.istio.io/inject
     featureStatus: Beta
     description: Specifies whether or not an Envoy sidecar should be automatically
@@ -110,6 +118,15 @@ annotations:
   - name: sidecar.istio.io/proxyImage
     featureStatus: Alpha
     description: Specifies the Docker image to be used by the Envoy sidecar.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+
+  - name: sidecar.istio.io/proxyImageType
+    featureStatus: Alpha
+    description: Specifies the Docker image type to be used by the Envoy sidecar. Istio publishes debug
+      and distroless image types for every release tag.
     deprecated: false
     hidden: false
     resources:
@@ -403,9 +420,10 @@ annotations:
 
   - name: istio.io/dry-run
     featureStatus: Alpha
-    description: Specifies whether or not the given resource is in dry-run mode.
+    description: Specifies whether or not the given resource is in dry-run mode. See
+      https://istio.io/latest/docs/tasks/security/authorization/authz-dry-run/ for more information.
     deprecated: false
-    hidden: true
+    hidden: false
     resources:
       - AuthorizationPolicy
 

@@ -645,8 +645,7 @@ func (m *Gateway) GetSelector() map[string]string {
 //     - "*"
 //     tls:
 //       mode: SIMPLE
-//       serverCertificate: /etc/certs/server.pem
-//       privateKey: /etc/certs/privatekey.pem
+//       credentialName: tls-cert
 // ```
 // {{</tab>}}
 //
@@ -668,8 +667,7 @@ func (m *Gateway) GetSelector() map[string]string {
 //     - "*"
 //     tls:
 //       mode: SIMPLE
-//       serverCertificate: /etc/certs/server.pem
-//       privateKey: /etc/certs/privatekey.pem
+//       credentialName: tls-cert
 // ```
 // {{</tab>}}
 // {{</tabset>}}

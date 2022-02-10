@@ -6,6 +6,29 @@
   },
   "components": {
     "schemas": {
+      "istio.extensions.v1alpha1.EnvValueSource": {
+        "type": "string",
+        "enum": [
+          "INLINE",
+          "HOST"
+        ]
+      },
+      "istio.extensions.v1alpha1.EnvVar": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required Name of the environment variable. Must be a C_IDENTIFIER.",
+            "type": "string"
+          },
+          "valueFrom": {
+            "$ref": "#/components/schemas/istio.extensions.v1alpha1.EnvValueSource"
+          },
+          "value": {
+            "description": "Value for the environment variable. Note that if `value_from` is `HOST`, it will be ignored. Defaults to \"\".",
+            "type": "string"
+          }
+        }
+      },
       "istio.extensions.v1alpha1.PluginPhase": {
         "description": "The phase in the filter chain where the plugin will be injected.",
         "type": "string",
@@ -24,6 +47,19 @@
           "IfNotPresent",
           "Always"
         ]
+      },
+      "istio.extensions.v1alpha1.VmConfig": {
+        "description": "Configuration for a Wasm VM. more details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).",
+        "type": "object",
+        "properties": {
+          "env": {
+            "description": "Specifies environment variables to be injected to this VM. Note that if a key does not exist, it will be ignored.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.extensions.v1alpha1.EnvVar"
+            }
+          }
+        }
       },
       "istio.extensions.v1alpha1.WasmPlugin": {
         "description": "WasmPlugins provides a mechanism to extend the functionality provided by the Istio proxy through WebAssembly filters.",
@@ -66,6 +102,9 @@
             "description": "Determines ordering of `WasmPlugins` in the same `phase`. When multiple `WasmPlugins` are applied to the same workload in the same `phase`, they will be applied by priority, in descending order. If `priority` is not set, or two `WasmPlugins` exist with the same value, the ordering will be deterministically derived from name and namespace of the `WasmPlugins`. Defaults to `0`.",
             "type": "integer",
             "nullable": true
+          },
+          "vmConfig": {
+            "$ref": "#/components/schemas/istio.extensions.v1alpha1.VmConfig"
           }
         }
       },

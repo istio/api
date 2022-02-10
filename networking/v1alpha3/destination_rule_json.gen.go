@@ -19,7 +19,7 @@
 //   host: ratings.prod.svc.cluster.local
 //   trafficPolicy:
 //     loadBalancer:
-//       simple: LEAST_CONN
+//       simple: LEAST_REQUEST
 // ```
 // {{</tab>}}
 //
@@ -33,7 +33,7 @@
 //   host: ratings.prod.svc.cluster.local
 //   trafficPolicy:
 //     loadBalancer:
-//       simple: LEAST_CONN
+//       simple: LEAST_REQUEST
 // ```
 // {{</tab>}}
 // {{</tabset>}}
@@ -55,7 +55,7 @@
 //   host: ratings.prod.svc.cluster.local
 //   trafficPolicy:
 //     loadBalancer:
-//       simple: LEAST_CONN
+//       simple: LEAST_REQUEST
 //   subsets:
 //   - name: testversion
 //     labels:
@@ -76,7 +76,7 @@
 //   host: ratings.prod.svc.cluster.local
 //   trafficPolicy:
 //     loadBalancer:
-//       simple: LEAST_CONN
+//       simple: LEAST_REQUEST
 //   subsets:
 //   - name: testversion
 //     labels:
@@ -110,7 +110,7 @@
 //     - port:
 //         number: 80
 //       loadBalancer:
-//         simple: LEAST_CONN
+//         simple: LEAST_REQUEST
 //     - port:
 //         number: 9080
 //       loadBalancer:
@@ -131,7 +131,7 @@
 //     - port:
 //         number: 80
 //       loadBalancer:
-//         simple: LEAST_CONN
+//         simple: LEAST_REQUEST
 //     - port:
 //         number: 9080
 //       loadBalancer:

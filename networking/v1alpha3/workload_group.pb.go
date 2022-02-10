@@ -101,6 +101,9 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
+// <!-- istio code generation tags
+// +istio.io/sync-start
+// -->
 type WorkloadGroup struct {
 	// Metadata that will be used for all corresponding `WorkloadEntries`.
 	// User labels for a workload group should be set here in `metadata` rather than in `template`.

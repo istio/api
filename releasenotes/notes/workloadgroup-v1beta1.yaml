@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: security
+issue:
+  - 25652
+
+releaseNotes:
+  - |
+    **Promoted** WorkloadGroup to v1beta1.

@@ -217,9 +217,11 @@ var (
 	IoIstioDryRun = Instance {
 		Name:          "istio.io/dry-run",
 		Description:   "Specifies whether or not the given resource is in dry-run "+
-                        "mode.",
+                        "mode. See "+
+                        "https://istio.io/latest/docs/tasks/security/authorization/authz-dry-run/ "+
+                        "for more information.",
 		FeatureStatus: Alpha,
-		Hidden:        true,
+		Hidden:        false,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			AuthorizationPolicy,
@@ -256,6 +258,18 @@ var (
                         "exported to. A value of '*' indicates it is reachable "+
                         "within the mesh '.' indicates it is reachable within its "+
                         "namespace.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Service,
+		},
+	}
+
+	NetworkingGatewayPort = Instance {
+		Name:          "networking.istio.io/gatewayPort",
+		Description:   "IstioGatewayPortLabel overrides the default 15443 value "+
+                        "to use for a multi-network gateway's port",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -506,6 +520,19 @@ var (
 		},
 	}
 
+	SidecarProxyImageType = Instance {
+		Name:          "sidecar.istio.io/proxyImageType",
+		Description:   "Specifies the Docker image type to be used by the Envoy "+
+                        "sidecar. Istio publishes debug and distroless image types "+
+                        "for every release tag.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	SidecarProxyMemory = Instance {
 		Name:          "sidecar.istio.io/proxyMemory",
 		Description:   "Specifies the requested memory setting for the Envoy "+
@@ -737,6 +764,7 @@ func AllResourceAnnotations() []*Instance {
 		&IoIstioWorkloadController,
 		&IoKubernetesIngressClass,
 		&NetworkingExportTo,
+		&NetworkingGatewayPort,
 		&PrometheusMergeMetrics,
 		&ProxyConfig,
 		&ProxyOverrides,
@@ -757,6 +785,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarProxyCPU,
 		&SidecarProxyCPULimit,
 		&SidecarProxyImage,
+		&SidecarProxyImageType,
 		&SidecarProxyMemory,
 		&SidecarProxyMemoryLimit,
 		&SidecarRewriteAppHTTPProbers,

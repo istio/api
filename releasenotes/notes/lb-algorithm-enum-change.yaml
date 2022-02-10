@@ -1,0 +1,15 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - https://github.com/istio/istio/issues/35111
+releaseNotes:
+  - |
+    **Updated** Using a new default value for the load balancing algorithm. The
+    new zero-value will be interpreted as UNSPECIFIED, where Istio will select
+    an appropriate default algorithm. ROUND_ROBIN is still supported, but is now
+    assigned a new integer value.
+    
+    In addition, the value LEAST_CONN is now deprecated in favor of a new value
+    LEAST_REQUEST. It was previously poorly named and only remains for backward
+    compatibility.

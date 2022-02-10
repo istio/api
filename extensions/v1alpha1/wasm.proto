@@ -14,6 +14,7 @@
 
 syntax = "proto3";
 
+import "google/protobuf/any.proto";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/struct.proto";
 import "type/v1beta1/selector.proto";
@@ -23,7 +24,7 @@ import "type/v1beta1/selector.proto";
 // $description: Extend the functionality provided by the Istio proxy through WebAssembly filters.
 // $location: https://istio.io/docs/reference/config/proxy_extensions/wasm-plugin.html
 // $aliases: [/docs/reference/config/extensions/v1alpha1/wasm-plugin]
-//
+
 // WasmPlugins provides a mechanism to extend the functionality provided by
 // the Istio proxy through WebAssembly filters.
 //
@@ -46,7 +47,7 @@ import "type/v1beta1/selector.proto";
 //   namespace: istio-ingress
 // spec:
 //   selector:
-//     labels:
+//     matchLabels:
 //       istio: ingressgateway
 //   url: file:///opt/filters/openid.wasm
 //   sha256: 1ef0c9a92b0420cf25f7fe5d481b231464bc88f486ca3b9c83ed5cc21d2f6210
@@ -77,6 +78,33 @@ import "type/v1beta1/selector.proto";
 //     openid_realm: ingress
 // ```
 //
+// This is the same as the last example, but using VmConfig to configure environment variables in the VM.
+//
+// ```yaml
+// apiVersion: extensions.istio.io/v1alpha1
+// kind: WasmPlugin
+// metadata:
+//   name: openid-connect
+//   namespace: istio-ingress
+// spec:
+//   selector:
+//     labels:
+//       istio: ingressgateway
+//   url: oci://private-registry:5000/openid-connect/openid:latest
+//   imagePullPolicy: IfNotPresent
+//   imagePullSecret: private-registry-pull-secret
+//   phase: AUTHN
+//   pluginConfig:
+//     openid_server: authn
+//     openid_realm: ingress
+//   vmConfig:
+//     env:
+//     - name: POD_NAME
+//       valueFrom: HOST
+//     - name: TRUST_DOMAIN
+//       value: "cluster.local"
+// ```
+//
 // And a more complex example that deploys three WasmPlugins and orders them
 // using `phase` and `priority`. The (hypothetical) setup is that the
 // `openid-connect` filter performs an OpenID Connect flow to authenticate the
@@ -100,7 +128,7 @@ import "type/v1beta1/selector.proto";
 //   namespace: istio-ingress
 // spec:
 //   selector:
-//     labels:
+//     matchLabels:
 //       istio: ingressgateway
 //   url: oci://private-registry:5000/openid-connect/openid:latest
 //   imagePullPolicy: IfNotPresent
@@ -119,7 +147,7 @@ import "type/v1beta1/selector.proto";
 //   namespace: istio-ingress
 // spec:
 //   selector:
-//     labels:
+//     matchLabels:
 //       istio: ingressgateway
 //   url: oci://private-registry:5000/acl-check/acl:latest
 //   imagePullPolicy: Always
@@ -139,7 +167,7 @@ import "type/v1beta1/selector.proto";
 //   namespace: istio-ingress
 // spec:
 //   selector:
-//     labels:
+//     matchLabels:
 //       istio: ingressgateway
 //   url: oci://private-registry:5000/check-header:latest
 //   imagePullPolicy: IfNotPresent
@@ -151,7 +179,7 @@ import "type/v1beta1/selector.proto";
 //     verification_key: a89gAzxvls0JKAKIJSBnnvvvkIO
 //     function: read_data
 // ```
-
+//
 package istio.extensions.v1alpha1;
 
 option go_package="istio.io/api/extensions/v1alpha1";
@@ -241,6 +269,10 @@ message WasmPlugin {
   // value, the ordering will be deterministically derived from name and
   // namespace of the `WasmPlugins`. Defaults to `0`.
   google.protobuf.Int64Value priority = 10;
+
+  // Configuration for a Wasm VM.
+  // more details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).
+  VmConfig vm_config = 11;
 }
 
 // The phase in the filter chain where the plugin will be injected.
@@ -263,7 +295,9 @@ enum PluginPhase {
 // The pull behaviour to be applied when fetching an OCI image,
 // mirroring K8s behaviour.
 //
+// <!--
 // buf:lint:ignore ENUM_VALUE_UPPER_SNAKE_CASE
+// -->
 enum PullPolicy {
   // Defaults to IfNotPresent, except for OCI images with tag `latest`, for which
   // the default will be Always.
@@ -277,4 +311,35 @@ enum PullPolicy {
   // We will always pull the latest version of an image when applying
   // this plugin.
   Always = 2;
+}
+
+// Configuration for a Wasm VM.
+// more details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).
+message VmConfig {
+  // Specifies environment variables to be injected to this VM.
+  // Note that if a key does not exist, it will be ignored.
+  repeated EnvVar env = 1;
+}
+
+message EnvVar {
+  // Required
+  // Name of the environment variable. Must be a C_IDENTIFIER.
+  string name = 1;
+
+  // Required
+  // Source for the environment variable's value.
+  EnvValueSource value_from = 3;
+
+  // Value for the environment variable.
+  // Note that if `value_from` is `HOST`, it will be ignored.
+  // Defaults to "". 
+  string value = 2;
+}
+
+enum EnvValueSource {
+  // Explicitly given key-value pairs to be injected to this VM
+  INLINE = 0;
+
+  // *Istio-proxy's* environment variables exposed to this VM.
+  HOST = 1;
 }
