@@ -24,7 +24,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z istio.io/api/networking/v1alpha3',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n*networking/v1alpha3/destination_rule.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a)networking/v1alpha3/virtual_service.proto\x1a\x14gogoproto/gogo.proto\"\xd6\x01\n\x0f\x44\x65stinationRule\x12\x18\n\x04host\x18\x01 \x01(\tB\x04\xe2\x41\x01\x02R\x04host\x12O\n\x0etraffic_policy\x18\x02 \x01(\x0b\x32(.istio.networking.v1alpha3.TrafficPolicyR\rtrafficPolicy\x12;\n\x07subsets\x18\x03 \x03(\x0b\x32!.istio.networking.v1alpha3.SubsetR\x07subsets\x12\x1b\n\texport_to\x18\x04 \x03(\tR\x08\x65xportTo\"\xe6\x06\n\rTrafficPolicy\x12T\n\rload_balancer\x18\x01 \x01(\x0b\x32/.istio.networking.v1alpha3.LoadBalancerSettingsR\x0cloadBalancer\x12Z\n\x0f\x63onnection_pool\x18\x02 \x01(\x0b\x32\x31.istio.networking.v1alpha3.ConnectionPoolSettingsR\x0e\x63onnectionPool\x12X\n\x11outlier_detection\x18\x03 \x01(\x0b\x32+.istio.networking.v1alpha3.OutlierDetectionR\x10outlierDetection\x12>\n\x03tls\x18\x04 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettingsR\x03tls\x12j\n\x13port_level_settings\x18\x05 \x03(\x0b\x32:.istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicyR\x11portLevelSettings\x1a\x9c\x03\n\x11PortTrafficPolicy\x12;\n\x04port\x18\x01 \x01(\x0b\x32\'.istio.networking.v1alpha3.PortSelectorR\x04port\x12T\n\rload_balancer\x18\x02 \x01(\x0b\x32/.istio.networking.v1alpha3.LoadBalancerSettingsR\x0cloadBalancer\x12Z\n\x0f\x63onnection_pool\x18\x03 \x01(\x0b\x32\x31.istio.networking.v1alpha3.ConnectionPoolSettingsR\x0e\x63onnectionPool\x12X\n\x11outlier_detection\x18\x04 \x01(\x0b\x32+.istio.networking.v1alpha3.OutlierDetectionR\x10outlierDetection\x12>\n\x03tls\x18\x05 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettingsR\x03tls\"\xf5\x01\n\x06Subset\x12\x18\n\x04name\x18\x01 \x01(\tB\x04\xe2\x41\x01\x02R\x04name\x12\x45\n\x06labels\x18\x02 \x03(\x0b\x32-.istio.networking.v1alpha3.Subset.LabelsEntryR\x06labels\x12O\n\x0etraffic_policy\x18\x03 \x01(\x0b\x32(.istio.networking.v1alpha3.TrafficPolicyR\rtrafficPolicy\x1a\x39\n\x0bLabelsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xf9\x06\n\x14LoadBalancerSettings\x12R\n\x06simple\x18\x01 \x01(\x0e\x32\x38.istio.networking.v1alpha3.LoadBalancerSettings.SimpleLBH\x00R\x06simple\x12k\n\x0f\x63onsistent_hash\x18\x02 \x01(\x0b\x32@.istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLBH\x00R\x0e\x63onsistentHash\x12\x66\n\x13locality_lb_setting\x18\x03 \x01(\x0b\x32\x36.istio.networking.v1alpha3.LocalityLoadBalancerSettingR\x11localityLbSetting\x1a\xb8\x03\n\x10\x43onsistentHashLB\x12*\n\x10http_header_name\x18\x01 \x01(\tH\x00R\x0ehttpHeaderName\x12n\n\x0bhttp_cookie\x18\x02 \x01(\x0b\x32K.istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookieH\x00R\nhttpCookie\x12$\n\ruse_source_ip\x18\x03 \x01(\x08H\x00R\x0buseSourceIp\x12;\n\x19http_query_parameter_name\x18\x05 \x01(\tH\x00R\x16httpQueryParameterName\x12*\n\x11minimum_ring_size\x18\x04 \x01(\x04R\x0fminimumRingSize\x1am\n\nHTTPCookie\x12\x18\n\x04name\x18\x01 \x01(\tB\x04\xe2\x41\x01\x02R\x04name\x12\x12\n\x04path\x18\x02 \x01(\tR\x04path\x12\x31\n\x03ttl\x18\x03 \x01(\x0b\x32\x19.google.protobuf.DurationB\x04\xe2\x41\x01\x02R\x03ttlB\n\n\x08hash_key\"p\n\x08SimpleLB\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x12\n\nLEAST_CONN\x10\x01\x1a\x02\x08\x01\x12\n\n\x06RANDOM\x10\x02\x12\x0f\n\x0bPASSTHROUGH\x10\x03\x12\x0f\n\x0bROUND_ROBIN\x10\x04\x12\x11\n\rLEAST_REQUEST\x10\x05\x42\x0b\n\tlb_policy\"\xc1\x08\n\x16\x43onnectionPoolSettings\x12O\n\x03tcp\x18\x01 \x01(\x0b\x32=.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettingsR\x03tcp\x12R\n\x04http\x18\x02 \x01(\x0b\x32>.istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettingsR\x04http\x1a\xfa\x02\n\x0bTCPSettings\x12\'\n\x0fmax_connections\x18\x01 \x01(\x05R\x0emaxConnections\x12\x42\n\x0f\x63onnect_timeout\x18\x02 \x01(\x0b\x32\x19.google.protobuf.DurationR\x0e\x63onnectTimeout\x12o\n\rtcp_keepalive\x18\x03 \x01(\x0b\x32J.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepaliveR\x0ctcpKeepalive\x1a\x8c\x01\n\x0cTcpKeepalive\x12\x16\n\x06probes\x18\x01 \x01(\rR\x06probes\x12-\n\x04time\x18\x02 \x01(\x0b\x32\x19.google.protobuf.DurationR\x04time\x12\x35\n\x08interval\x18\x03 \x01(\x0b\x32\x19.google.protobuf.DurationR\x08interval\x1a\x84\x04\n\x0cHTTPSettings\x12;\n\x1ahttp1_max_pending_requests\x18\x01 \x01(\x05R\x17http1MaxPendingRequests\x12,\n\x12http2_max_requests\x18\x02 \x01(\x05R\x10http2MaxRequests\x12=\n\x1bmax_requests_per_connection\x18\x03 \x01(\x05R\x18maxRequestsPerConnection\x12\x1f\n\x0bmax_retries\x18\x04 \x01(\x05R\nmaxRetries\x12<\n\x0cidle_timeout\x18\x05 \x01(\x0b\x32\x19.google.protobuf.DurationR\x0bidleTimeout\x12z\n\x11h2_upgrade_policy\x18\x06 \x01(\x0e\x32N.istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicyR\x0fh2UpgradePolicy\x12.\n\x13use_client_protocol\x18\x07 \x01(\x08R\x11useClientProtocol\"?\n\x0fH2UpgradePolicy\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x00\x12\x12\n\x0e\x44O_NOT_UPGRADE\x10\x01\x12\x0b\n\x07UPGRADE\x10\x02\"\x8a\x05\n\x10OutlierDetection\x12\x31\n\x12\x63onsecutive_errors\x18\x01 \x01(\x05\x42\x02\x18\x01R\x11\x63onsecutiveErrors\x12J\n\"split_external_local_origin_errors\x18\x08 \x01(\x08R\x1esplitExternalLocalOriginErrors\x12g\n!consecutive_local_origin_failures\x18\t \x01(\x0b\x32\x1c.google.protobuf.UInt32ValueR\x1e\x63onsecutiveLocalOriginFailures\x12Z\n\x1a\x63onsecutive_gateway_errors\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt32ValueR\x18\x63onsecutiveGatewayErrors\x12R\n\x16\x63onsecutive_5xx_errors\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.UInt32ValueR\x14\x63onsecutive5xxErrors\x12\x35\n\x08interval\x18\x02 \x01(\x0b\x32\x19.google.protobuf.DurationR\x08interval\x12G\n\x12\x62\x61se_ejection_time\x18\x03 \x01(\x0b\x32\x19.google.protobuf.DurationR\x10\x62\x61seEjectionTime\x12\x30\n\x14max_ejection_percent\x18\x04 \x01(\x05R\x12maxEjectionPercent\x12,\n\x12min_health_percent\x18\x05 \x01(\x05R\x10minHealthPercent\"\xd3\x03\n\x11\x43lientTLSSettings\x12N\n\x04mode\x18\x01 \x01(\x0e\x32\x34.istio.networking.v1alpha3.ClientTLSSettings.TLSmodeB\x04\xe2\x41\x01\x02R\x04mode\x12-\n\x12\x63lient_certificate\x18\x02 \x01(\tR\x11\x63lientCertificate\x12\x1f\n\x0bprivate_key\x18\x03 \x01(\tR\nprivateKey\x12\'\n\x0f\x63\x61_certificates\x18\x04 \x01(\tR\x0e\x63\x61\x43\x65rtificates\x12\'\n\x0f\x63redential_name\x18\x07 \x01(\tR\x0e\x63redentialName\x12*\n\x11subject_alt_names\x18\x05 \x03(\tR\x0fsubjectAltNames\x12\x10\n\x03sni\x18\x06 \x01(\tR\x03sni\x12L\n\x14insecure_skip_verify\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x12insecureSkipVerify\"@\n\x07TLSmode\x12\x0b\n\x07\x44ISABLE\x10\x00\x12\n\n\x06SIMPLE\x10\x01\x12\n\n\x06MUTUAL\x10\x02\x12\x10\n\x0cISTIO_MUTUAL\x10\x03\"\xa5\x04\n\x1bLocalityLoadBalancerSetting\x12\x61\n\ndistribute\x18\x01 \x03(\x0b\x32\x41.istio.networking.v1alpha3.LocalityLoadBalancerSetting.DistributeR\ndistribute\x12[\n\x08\x66\x61ilover\x18\x02 \x03(\x0b\x32?.istio.networking.v1alpha3.LocalityLoadBalancerSetting.FailoverR\x08\x66\x61ilover\x12+\n\x11\x66\x61ilover_priority\x18\x04 \x03(\tR\x10\x66\x61iloverPriority\x12\x34\n\x07\x65nabled\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x07\x65nabled\x1a\xb2\x01\n\nDistribute\x12\x12\n\x04\x66rom\x18\x01 \x01(\tR\x04\x66rom\x12Y\n\x02to\x18\x02 \x03(\x0b\x32I.istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.ToEntryR\x02to\x1a\x35\n\x07ToEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\rR\x05value:\x02\x38\x01\x1a.\n\x08\x46\x61ilover\x12\x12\n\x04\x66rom\x18\x01 \x01(\tR\x04\x66rom\x12\x0e\n\x02to\x18\x02 \x01(\tR\x02toB\"Z istio.io/api/networking/v1alpha3b\x06proto3'
+  serialized_pb=b'\n*networking/v1alpha3/destination_rule.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a)networking/v1alpha3/virtual_service.proto\x1a\x14gogoproto/gogo.proto\"\xd6\x01\n\x0f\x44\x65stinationRule\x12\x18\n\x04host\x18\x01 \x01(\tB\x04\xe2\x41\x01\x02R\x04host\x12O\n\x0etraffic_policy\x18\x02 \x01(\x0b\x32(.istio.networking.v1alpha3.TrafficPolicyR\rtrafficPolicy\x12;\n\x07subsets\x18\x03 \x03(\x0b\x32!.istio.networking.v1alpha3.SubsetR\x07subsets\x12\x1b\n\texport_to\x18\x04 \x03(\tR\x08\x65xportTo\"\xe6\x06\n\rTrafficPolicy\x12T\n\rload_balancer\x18\x01 \x01(\x0b\x32/.istio.networking.v1alpha3.LoadBalancerSettingsR\x0cloadBalancer\x12Z\n\x0f\x63onnection_pool\x18\x02 \x01(\x0b\x32\x31.istio.networking.v1alpha3.ConnectionPoolSettingsR\x0e\x63onnectionPool\x12X\n\x11outlier_detection\x18\x03 \x01(\x0b\x32+.istio.networking.v1alpha3.OutlierDetectionR\x10outlierDetection\x12>\n\x03tls\x18\x04 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettingsR\x03tls\x12j\n\x13port_level_settings\x18\x05 \x03(\x0b\x32:.istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicyR\x11portLevelSettings\x1a\x9c\x03\n\x11PortTrafficPolicy\x12;\n\x04port\x18\x01 \x01(\x0b\x32\'.istio.networking.v1alpha3.PortSelectorR\x04port\x12T\n\rload_balancer\x18\x02 \x01(\x0b\x32/.istio.networking.v1alpha3.LoadBalancerSettingsR\x0cloadBalancer\x12Z\n\x0f\x63onnection_pool\x18\x03 \x01(\x0b\x32\x31.istio.networking.v1alpha3.ConnectionPoolSettingsR\x0e\x63onnectionPool\x12X\n\x11outlier_detection\x18\x04 \x01(\x0b\x32+.istio.networking.v1alpha3.OutlierDetectionR\x10outlierDetection\x12>\n\x03tls\x18\x05 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettingsR\x03tls\"\xf5\x01\n\x06Subset\x12\x18\n\x04name\x18\x01 \x01(\tB\x04\xe2\x41\x01\x02R\x04name\x12\x45\n\x06labels\x18\x02 \x03(\x0b\x32-.istio.networking.v1alpha3.Subset.LabelsEntryR\x06labels\x12O\n\x0etraffic_policy\x18\x03 \x01(\x0b\x32(.istio.networking.v1alpha3.TrafficPolicyR\rtrafficPolicy\x1a\x39\n\x0bLabelsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value:\x02\x38\x01\"\xc6\x07\n\x14LoadBalancerSettings\x12R\n\x06simple\x18\x01 \x01(\x0e\x32\x38.istio.networking.v1alpha3.LoadBalancerSettings.SimpleLBH\x00R\x06simple\x12k\n\x0f\x63onsistent_hash\x18\x02 \x01(\x0b\x32@.istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLBH\x00R\x0e\x63onsistentHash\x12\x66\n\x13locality_lb_setting\x18\x03 \x01(\x0b\x32\x36.istio.networking.v1alpha3.LocalityLoadBalancerSettingR\x11localityLbSetting\x12K\n\x14warmup_duration_secs\x18\x04 \x01(\x0b\x32\x19.google.protobuf.DurationR\x12warmupDurationSecs\x1a\xb8\x03\n\x10\x43onsistentHashLB\x12*\n\x10http_header_name\x18\x01 \x01(\tH\x00R\x0ehttpHeaderName\x12n\n\x0bhttp_cookie\x18\x02 \x01(\x0b\x32K.istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookieH\x00R\nhttpCookie\x12$\n\ruse_source_ip\x18\x03 \x01(\x08H\x00R\x0buseSourceIp\x12;\n\x19http_query_parameter_name\x18\x05 \x01(\tH\x00R\x16httpQueryParameterName\x12*\n\x11minimum_ring_size\x18\x04 \x01(\x04R\x0fminimumRingSize\x1am\n\nHTTPCookie\x12\x18\n\x04name\x18\x01 \x01(\tB\x04\xe2\x41\x01\x02R\x04name\x12\x12\n\x04path\x18\x02 \x01(\tR\x04path\x12\x31\n\x03ttl\x18\x03 \x01(\x0b\x32\x19.google.protobuf.DurationB\x04\xe2\x41\x01\x02R\x03ttlB\n\n\x08hash_key\"p\n\x08SimpleLB\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x12\n\nLEAST_CONN\x10\x01\x1a\x02\x08\x01\x12\n\n\x06RANDOM\x10\x02\x12\x0f\n\x0bPASSTHROUGH\x10\x03\x12\x0f\n\x0bROUND_ROBIN\x10\x04\x12\x11\n\rLEAST_REQUEST\x10\x05\x42\x0b\n\tlb_policy\"\xc1\x08\n\x16\x43onnectionPoolSettings\x12O\n\x03tcp\x18\x01 \x01(\x0b\x32=.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettingsR\x03tcp\x12R\n\x04http\x18\x02 \x01(\x0b\x32>.istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettingsR\x04http\x1a\xfa\x02\n\x0bTCPSettings\x12\'\n\x0fmax_connections\x18\x01 \x01(\x05R\x0emaxConnections\x12\x42\n\x0f\x63onnect_timeout\x18\x02 \x01(\x0b\x32\x19.google.protobuf.DurationR\x0e\x63onnectTimeout\x12o\n\rtcp_keepalive\x18\x03 \x01(\x0b\x32J.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepaliveR\x0ctcpKeepalive\x1a\x8c\x01\n\x0cTcpKeepalive\x12\x16\n\x06probes\x18\x01 \x01(\rR\x06probes\x12-\n\x04time\x18\x02 \x01(\x0b\x32\x19.google.protobuf.DurationR\x04time\x12\x35\n\x08interval\x18\x03 \x01(\x0b\x32\x19.google.protobuf.DurationR\x08interval\x1a\x84\x04\n\x0cHTTPSettings\x12;\n\x1ahttp1_max_pending_requests\x18\x01 \x01(\x05R\x17http1MaxPendingRequests\x12,\n\x12http2_max_requests\x18\x02 \x01(\x05R\x10http2MaxRequests\x12=\n\x1bmax_requests_per_connection\x18\x03 \x01(\x05R\x18maxRequestsPerConnection\x12\x1f\n\x0bmax_retries\x18\x04 \x01(\x05R\nmaxRetries\x12<\n\x0cidle_timeout\x18\x05 \x01(\x0b\x32\x19.google.protobuf.DurationR\x0bidleTimeout\x12z\n\x11h2_upgrade_policy\x18\x06 \x01(\x0e\x32N.istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicyR\x0fh2UpgradePolicy\x12.\n\x13use_client_protocol\x18\x07 \x01(\x08R\x11useClientProtocol\"?\n\x0fH2UpgradePolicy\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x00\x12\x12\n\x0e\x44O_NOT_UPGRADE\x10\x01\x12\x0b\n\x07UPGRADE\x10\x02\"\x8a\x05\n\x10OutlierDetection\x12\x31\n\x12\x63onsecutive_errors\x18\x01 \x01(\x05\x42\x02\x18\x01R\x11\x63onsecutiveErrors\x12J\n\"split_external_local_origin_errors\x18\x08 \x01(\x08R\x1esplitExternalLocalOriginErrors\x12g\n!consecutive_local_origin_failures\x18\t \x01(\x0b\x32\x1c.google.protobuf.UInt32ValueR\x1e\x63onsecutiveLocalOriginFailures\x12Z\n\x1a\x63onsecutive_gateway_errors\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt32ValueR\x18\x63onsecutiveGatewayErrors\x12R\n\x16\x63onsecutive_5xx_errors\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.UInt32ValueR\x14\x63onsecutive5xxErrors\x12\x35\n\x08interval\x18\x02 \x01(\x0b\x32\x19.google.protobuf.DurationR\x08interval\x12G\n\x12\x62\x61se_ejection_time\x18\x03 \x01(\x0b\x32\x19.google.protobuf.DurationR\x10\x62\x61seEjectionTime\x12\x30\n\x14max_ejection_percent\x18\x04 \x01(\x05R\x12maxEjectionPercent\x12,\n\x12min_health_percent\x18\x05 \x01(\x05R\x10minHealthPercent\"\xd3\x03\n\x11\x43lientTLSSettings\x12N\n\x04mode\x18\x01 \x01(\x0e\x32\x34.istio.networking.v1alpha3.ClientTLSSettings.TLSmodeB\x04\xe2\x41\x01\x02R\x04mode\x12-\n\x12\x63lient_certificate\x18\x02 \x01(\tR\x11\x63lientCertificate\x12\x1f\n\x0bprivate_key\x18\x03 \x01(\tR\nprivateKey\x12\'\n\x0f\x63\x61_certificates\x18\x04 \x01(\tR\x0e\x63\x61\x43\x65rtificates\x12\'\n\x0f\x63redential_name\x18\x07 \x01(\tR\x0e\x63redentialName\x12*\n\x11subject_alt_names\x18\x05 \x03(\tR\x0fsubjectAltNames\x12\x10\n\x03sni\x18\x06 \x01(\tR\x03sni\x12L\n\x14insecure_skip_verify\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x12insecureSkipVerify\"@\n\x07TLSmode\x12\x0b\n\x07\x44ISABLE\x10\x00\x12\n\n\x06SIMPLE\x10\x01\x12\n\n\x06MUTUAL\x10\x02\x12\x10\n\x0cISTIO_MUTUAL\x10\x03\"\xa5\x04\n\x1bLocalityLoadBalancerSetting\x12\x61\n\ndistribute\x18\x01 \x03(\x0b\x32\x41.istio.networking.v1alpha3.LocalityLoadBalancerSetting.DistributeR\ndistribute\x12[\n\x08\x66\x61ilover\x18\x02 \x03(\x0b\x32?.istio.networking.v1alpha3.LocalityLoadBalancerSetting.FailoverR\x08\x66\x61ilover\x12+\n\x11\x66\x61ilover_priority\x18\x04 \x03(\tR\x10\x66\x61iloverPriority\x12\x34\n\x07\x65nabled\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.BoolValueR\x07\x65nabled\x1a\xb2\x01\n\nDistribute\x12\x12\n\x04\x66rom\x18\x01 \x01(\tR\x04\x66rom\x12Y\n\x02to\x18\x02 \x03(\x0b\x32I.istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.ToEntryR\x02to\x1a\x35\n\x07ToEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\rR\x05value:\x02\x38\x01\x1a.\n\x08\x46\x61ilover\x12\x12\n\x04\x66rom\x18\x01 \x01(\tR\x04\x66rom\x12\x0e\n\x02to\x18\x02 \x01(\tR\x02toB\"Z istio.io/api/networking/v1alpha3b\x06proto3'
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_virtual__service__pb2.DESCRIPTOR,gogoproto_dot_gogo__pb2.DESCRIPTOR,])
 
@@ -70,8 +70,8 @@ _LOADBALANCERSETTINGS_SIMPLELB = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2338,
-  serialized_end=2450,
+  serialized_start=2415,
+  serialized_end=2527,
 )
 _sym_db.RegisterEnumDescriptor(_LOADBALANCERSETTINGS_SIMPLELB)
 
@@ -100,8 +100,8 @@ _CONNECTIONPOOLSETTINGS_HTTPSETTINGS_H2UPGRADEPOLICY = _descriptor.EnumDescripto
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=3492,
-  serialized_end=3555,
+  serialized_start=3569,
+  serialized_end=3632,
 )
 _sym_db.RegisterEnumDescriptor(_CONNECTIONPOOLSETTINGS_HTTPSETTINGS_H2UPGRADEPOLICY)
 
@@ -135,8 +135,8 @@ _CLIENTTLSSETTINGS_TLSMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=4614,
-  serialized_end=4678,
+  serialized_start=4691,
+  serialized_end=4755,
 )
 _sym_db.RegisterEnumDescriptor(_CLIENTTLSSETTINGS_TLSMODE)
 
@@ -438,8 +438,8 @@ _LOADBALANCERSETTINGS_CONSISTENTHASHLB_HTTPCOOKIE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2215,
-  serialized_end=2324,
+  serialized_start=2292,
+  serialized_end=2401,
 )
 
 _LOADBALANCERSETTINGS_CONSISTENTHASHLB = _descriptor.Descriptor(
@@ -502,8 +502,8 @@ _LOADBALANCERSETTINGS_CONSISTENTHASHLB = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=1896,
-  serialized_end=2336,
+  serialized_start=1973,
+  serialized_end=2413,
 )
 
 _LOADBALANCERSETTINGS = _descriptor.Descriptor(
@@ -535,6 +535,13 @@ _LOADBALANCERSETTINGS = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='localityLbSetting', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='warmup_duration_secs', full_name='istio.networking.v1alpha3.LoadBalancerSettings.warmup_duration_secs', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='warmupDurationSecs', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -554,7 +561,7 @@ _LOADBALANCERSETTINGS = _descriptor.Descriptor(
     fields=[]),
   ],
   serialized_start=1574,
-  serialized_end=2463,
+  serialized_end=2540,
 )
 
 
@@ -599,8 +606,8 @@ _CONNECTIONPOOLSETTINGS_TCPSETTINGS_TCPKEEPALIVE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2896,
-  serialized_end=3036,
+  serialized_start=2973,
+  serialized_end=3113,
 )
 
 _CONNECTIONPOOLSETTINGS_TCPSETTINGS = _descriptor.Descriptor(
@@ -644,8 +651,8 @@ _CONNECTIONPOOLSETTINGS_TCPSETTINGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2658,
-  serialized_end=3036,
+  serialized_start=2735,
+  serialized_end=3113,
 )
 
 _CONNECTIONPOOLSETTINGS_HTTPSETTINGS = _descriptor.Descriptor(
@@ -718,8 +725,8 @@ _CONNECTIONPOOLSETTINGS_HTTPSETTINGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3039,
-  serialized_end=3555,
+  serialized_start=3116,
+  serialized_end=3632,
 )
 
 _CONNECTIONPOOLSETTINGS = _descriptor.Descriptor(
@@ -756,8 +763,8 @@ _CONNECTIONPOOLSETTINGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2466,
-  serialized_end=3555,
+  serialized_start=2543,
+  serialized_end=3632,
 )
 
 
@@ -844,8 +851,8 @@ _OUTLIERDETECTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3558,
-  serialized_end=4208,
+  serialized_start=3635,
+  serialized_end=4285,
 )
 
 
@@ -926,8 +933,8 @@ _CLIENTTLSSETTINGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4211,
-  serialized_end=4678,
+  serialized_start=4288,
+  serialized_end=4755,
 )
 
 
@@ -965,8 +972,8 @@ _LOCALITYLOADBALANCERSETTING_DISTRIBUTE_TOENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5129,
-  serialized_end=5182,
+  serialized_start=5206,
+  serialized_end=5259,
 )
 
 _LOCALITYLOADBALANCERSETTING_DISTRIBUTE = _descriptor.Descriptor(
@@ -1003,8 +1010,8 @@ _LOCALITYLOADBALANCERSETTING_DISTRIBUTE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5004,
-  serialized_end=5182,
+  serialized_start=5081,
+  serialized_end=5259,
 )
 
 _LOCALITYLOADBALANCERSETTING_FAILOVER = _descriptor.Descriptor(
@@ -1041,8 +1048,8 @@ _LOCALITYLOADBALANCERSETTING_FAILOVER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5184,
-  serialized_end=5230,
+  serialized_start=5261,
+  serialized_end=5307,
 )
 
 _LOCALITYLOADBALANCERSETTING = _descriptor.Descriptor(
@@ -1093,8 +1100,8 @@ _LOCALITYLOADBALANCERSETTING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4681,
-  serialized_end=5230,
+  serialized_start=4758,
+  serialized_end=5307,
 )
 
 _DESTINATIONRULE.fields_by_name['traffic_policy'].message_type = _TRAFFICPOLICY
@@ -1132,6 +1139,7 @@ _LOADBALANCERSETTINGS_CONSISTENTHASHLB.fields_by_name['http_query_parameter_name
 _LOADBALANCERSETTINGS.fields_by_name['simple'].enum_type = _LOADBALANCERSETTINGS_SIMPLELB
 _LOADBALANCERSETTINGS.fields_by_name['consistent_hash'].message_type = _LOADBALANCERSETTINGS_CONSISTENTHASHLB
 _LOADBALANCERSETTINGS.fields_by_name['locality_lb_setting'].message_type = _LOCALITYLOADBALANCERSETTING
+_LOADBALANCERSETTINGS.fields_by_name['warmup_duration_secs'].message_type = google_dot_protobuf_dot_duration__pb2._DURATION
 _LOADBALANCERSETTINGS_SIMPLELB.containing_type = _LOADBALANCERSETTINGS
 _LOADBALANCERSETTINGS.oneofs_by_name['lb_policy'].fields.append(
   _LOADBALANCERSETTINGS.fields_by_name['simple'])
