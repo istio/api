@@ -1410,7 +1410,7 @@
             "format": "int32"
           },
           "concurrency": {
-            "description": "The number of worker threads to run. If unset, this will be automatically determined based on CPU requests/limits. If set to 0, all cores on the machine will be used. Default is 2 worker threads.",
+            "description": "The number of worker threads to run. If set to 0, this will be automatically determined based on CPU requests/limits. Default is 2 worker threads.",
             "type": "integer",
             "nullable": true
           },
