@@ -33892,6 +33892,12 @@
                         "name": "headers_to_downstream_on_deny",
                         "type": "string",
                         "is_repeated": true
+                      },
+                      {
+                        "id": 13,
+                        "name": "headers_to_downstream_on_allow",
+                        "type": "string",
+                        "is_repeated": true
                       }
                     ],
                     "maps": [

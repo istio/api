@@ -619,8 +619,20 @@ message MeshConfig {
       // - Suffix match: "*abc" will match on value "abc" and "xabc".
       repeated string headers_to_downstream_on_deny = 8;
 
+      // List of headers from the authorization service that should be forwarded to downstream when the authorization
+      // check result is allowed (HTTP code 200).
+      // If not specified, the original response will not be modified and forwarded to downstream as-is.
+      // Note, any existing headers will be overridden.
+      //
+      // Exact, prefix and suffix matches are supported (similar to the authorization policy rule syntax except the presence match
+      // https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule):
+      // - Exact match: "abc" will match on value "abc".
+      // - Prefix match: "abc*" will match on value "abc" and "abcd".
+      // - Suffix match: "*abc" will match on value "abc" and "xabc".
+      repeated string headers_to_downstream_on_allow = 13;
+
       // $hide_from_docs
-      // Next available field number: 13
+      // Next available field number: 14
     }
 
     message EnvoyExternalAuthorizationGrpcProvider {
