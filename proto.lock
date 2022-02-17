@@ -32720,6 +32720,18 @@
                 "integer": 2
               }
             ]
+          },
+          {
+            "name": "EnvValueSource",
+            "enum_fields": [
+              {
+                "name": "INLINE"
+              },
+              {
+                "name": "HOST",
+                "integer": 1
+              }
+            ]
           }
         ],
         "messages": [
@@ -32775,11 +32787,50 @@
                 "id": 10,
                 "name": "priority",
                 "type": "google.protobuf.Int64Value"
+              },
+              {
+                "id": 11,
+                "name": "vm_config",
+                "type": "VmConfig"
+              }
+            ]
+          },
+          {
+            "name": "VmConfig",
+            "fields": [
+              {
+                "id": 1,
+                "name": "env",
+                "type": "EnvVar",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "EnvVar",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "value_from",
+                "type": "EnvValueSource"
+              },
+              {
+                "id": 2,
+                "name": "value",
+                "type": "string"
               }
             ]
           }
         ],
         "imports": [
+          {
+            "path": "google/protobuf/any.proto"
+          },
           {
             "path": "google/protobuf/wrappers.proto"
           },
@@ -35012,6 +35063,14 @@
                   "name": "proxy_metadata",
                   "type": "string"
                 }
+              },
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 37,
+                  "name": "runtime_values",
+                  "type": "string"
+                }
               }
             ],
             "reserved_ids": [
@@ -35399,6 +35458,11 @@
                 "id": 3,
                 "name": "locality_lb_setting",
                 "type": "LocalityLoadBalancerSetting"
+              },
+              {
+                "id": 4,
+                "name": "warmup_duration_secs",
+                "type": "google.protobuf.Duration"
               }
             ],
             "messages": [
@@ -38173,6 +38237,11 @@
                 "id": 3,
                 "name": "locality_lb_setting",
                 "type": "LocalityLoadBalancerSetting"
+              },
+              {
+                "id": 4,
+                "name": "warmup_duration_secs",
+                "type": "google.protobuf.Duration"
               }
             ],
             "messages": [
