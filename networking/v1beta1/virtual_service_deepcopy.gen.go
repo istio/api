@@ -155,6 +155,7 @@ import (
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/gogo/protobuf/types"
+	_ "istio.io/api/istio.io/extensions"
 	_ "istio.io/gogo-genproto/googleapis/google/api"
 	math "math"
 )

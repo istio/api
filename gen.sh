@@ -41,6 +41,9 @@ buf generate --template buf.gen-noncrd.yaml \
 buf generate --template buf.gen-golang.yaml \
   --path envoy
 
+# Add field option extension for istio feature label
+buf generate --path istio.io/extensions/istio_feature.proto
+
 # Custom hacks to post-process some outputs
 go run ./operator/fixup_structs/main.go -f operator/v1alpha1/operator.pb.go
 go run ./operator/fixup_structs/main.go -f mesh/v1alpha1/config.pb.go
