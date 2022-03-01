@@ -292,6 +292,26 @@ message Topology {
   ForwardClientCertDetails forward_client_cert_details = 2;
 }
 
+// PrivateKeyProvider defines private key configuration for gateways and sidecars. This can be configured
+// mesh wide or individual per-workload basis.
+message PrivateKeyProvider {
+  // CryptoMb PrivateKeyProvider configuration
+  message CryptoMb {
+    // How long to wait until the per-thread processing queue should be processed. If the processing queue
+    // gets full (eight sign or decrypt requests are received) it is processed immediately.
+    // However, if the queue is not filled before the delay has expired, the requests already in the queue
+    // are processed, even if the queue is not full.
+    // In effect, this value controls the balance between latency and throughput.
+    // The duration needs to be set to a non-zero value.
+    google.protobuf.Duration poll_delay = 1;
+  }
+
+  // REQUIRED. Specifies detailed configuration for the Private key provider.
+  oneof provider {
+    CryptoMb cryptomb = 2;
+  }
+}
+
 // ProxyConfig defines variables for individual Envoy instances. This can be configured on a per-workload basis
 // as well as by the mesh-wide defaults.
 // To set the mesh wide defaults, configure the `defaultConfig` section of `meshConfig`. For example:
@@ -551,6 +571,9 @@ message ProxyConfig {
 
   // Specifies the details of the proxy image.
   istio.networking.v1beta1.ProxyImage image = 35;
+
+  // Specifies the details of the Private Key Provider configuration for gateway and sidecar proxies.
+  PrivateKeyProvider private_key_provider = 38;
 }
 
 message RemoteService {
