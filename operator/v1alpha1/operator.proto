@@ -26,13 +26,11 @@ package istio.operator.v1alpha1;
 option go_package="istio.io/api/operator/v1alpha1";
 
 import "google/protobuf/any.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/wrappers.proto";
 import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
+import "k8s.io/apimachinery/pkg/util/intstr/generated.proto";
 import "k8s.io/api/core/v1/generated.proto";
-import "gogoproto/gogo.proto";
-
-option (gogoproto.marshaler_all) = false;
-option (gogoproto.unmarshaler_all) = false;
-option (gogoproto.sizer_all) = false;
 
 // <!-- go code generation tags
 // +kubetype-gen
@@ -40,7 +38,6 @@ option (gogoproto.sizer_all) = false;
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-
 // IstioOperatorSpec defines the desired installed state of Istio components.
 // The spec is a used to define a customization of the default profile values that are supplied with each Istio release.
 // Because the spec is a customization API, specifying an empty IstioOperatorSpec results in a default Istio
@@ -79,7 +76,7 @@ message IstioOperatorSpec {
     // Root for docker image paths e.g. `docker.io/istio`
     string hub = 12;
     // Version tag for docker images e.g. `1.7.2`
-    TypeInterface tag = 13;
+    google.protobuf.Value tag = 13;
 
     // $hide_from_docs
     // Resource suffix is appended to all resources installed by each component.
@@ -100,7 +97,7 @@ message IstioOperatorSpec {
     bool default_revision = 17;
 
     // Config used by control plane components internally.
-    TypeMapStringInterface mesh_config = 40;
+    google.protobuf.Struct mesh_config = 40;
 
     // Kubernetes resource settings, enablement and component-specific settings that are not internal to the
     // component.
@@ -115,9 +112,9 @@ message IstioOperatorSpec {
     // See the [Helm installation options](https://istio.io/v1.5/docs/reference/config/installation-options/) for schema details.
     // Anything that is available in `IstioOperatorSpec` should be set above rather than using the passthrough. This
     // includes Kubernetes resource settings for components in `KubernetesResourcesSpec`.
-    TypeMapStringInterface values = 100;
+    google.protobuf.Struct values = 100;
     // Unvalidated overrides for default `values.yaml`. Used for custom templates where new parameters are added.
-    TypeMapStringInterface unvalidated_values = 101;
+    google.protobuf.Struct unvalidated_values = 101;
 }
 
 // Observed state of IstioOperator
@@ -181,7 +178,7 @@ message IstioComponentSetSpec {
 // Configuration for base component.
 message BaseComponentSpec {
     // Selects whether this component is installed.
-    TypeBoolValueForPB enabled = 1;
+    google.protobuf.BoolValue enabled = 1;
 
     // Kubernetes resource spec.
     KubernetesResourcesSpec k8s = 50;
@@ -190,16 +187,16 @@ message BaseComponentSpec {
 // Configuration for internal components.
 message ComponentSpec {
     // Selects whether this component is installed.
-    TypeBoolValueForPB enabled = 1;
+    google.protobuf.BoolValue enabled = 1;
     // Namespace for the component.
     string namespace = 2;
     // Hub for the component (overrides top level hub setting).
     string hub = 10;
     // Tag for the component (overrides top level tag setting).
-    TypeInterface tag = 11;
+    google.protobuf.Value tag = 11;
 
     // Arbitrary install time configuration for the component.
-    TypeInterface spec = 30;
+    google.protobuf.Struct spec = 30;
 
     // Kubernetes resource spec.
     KubernetesResourcesSpec k8s = 50;
@@ -208,12 +205,12 @@ message ComponentSpec {
 // Configuration for external components.
 message ExternalComponentSpec {
     // Selects whether this component is installed.
-    TypeBoolValueForPB enabled = 1;
+    google.protobuf.BoolValue enabled = 1;
     // Namespace for the component.
     string namespace = 2;
 
     // Arbitrary install time configuration for the component.
-    TypeInterface spec = 10;
+    google.protobuf.Struct spec = 10;
 
     // Chart path for addon components.
     string chart_path = 30;
@@ -227,7 +224,7 @@ message ExternalComponentSpec {
 // Configuration for gateways.
 message GatewaySpec {
     // Selects whether this gateway is installed.
-    TypeBoolValueForPB enabled = 1;
+    google.protobuf.BoolValue enabled = 1;
     // Namespace for the gateway.
     string namespace = 2;
     // Name for the gateway.
@@ -238,7 +235,7 @@ message GatewaySpec {
     // Hub for the component (overrides top level hub setting).
     string hub = 10;
     // Tag for the component (overrides top level tag setting).
-    TypeInterface tag = 11;
+    google.protobuf.Value tag = 11;
 
     // Kubernetes resource spec.
     KubernetesResourcesSpec k8s = 50;
@@ -320,7 +317,7 @@ message K8sObjectOverlay {
         // For delete, value should be unset.
         // For replace, path should reference an existing node.
         // All values are strings but are converted into appropriate type based on schema.
-        TypeInterface value = 2;
+        google.protobuf.Value value = 2;
     }
     // Resource API version.
     string api_version = 1;
@@ -391,14 +388,14 @@ message ExecAction {
 message ExternalMetricSource {
     string metricName = 1;
     k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector metricSelector = 2;
-    TypeIntOrStringForPB targetValue = 3;
-    TypeIntOrStringForPB targetAverageValue = 4;
+    IntOrString targetValue = 3;
+    IntOrString targetAverageValue = 4;
 }
 
 // See k8s.io.api.core.v1.HTTPGetAction.
 message HTTPGetAction {
     string path = 1;
-    TypeIntOrStringForPB port = 2;
+    IntOrString port = 2;
     string host = 3;
     string scheme = 4;
     repeated HTTPHeader httpHeaders = 5;
@@ -472,9 +469,9 @@ message ObjectMeta {
 message ObjectMetricSource {
     CrossVersionObjectReference target = 1;
     string metricName = 2;
-    TypeIntOrStringForPB targetValue = 3;
+    IntOrString targetValue = 3;
     k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 4;
-    TypeIntOrStringForPB averageValue = 5;
+    IntOrString averageValue = 5;
 }
 
 // See k8s.io.api.core.v1.PodAffinity.
@@ -498,15 +495,15 @@ message PodAffinityTerm {
 
 // See k8s.io.api.policy.v1beta1.PodDisruptionBudget.
 message PodDisruptionBudgetSpec {
-    TypeIntOrStringForPB minAvailable = 1;
+    IntOrString minAvailable = 1;
     k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 2;
-    TypeIntOrStringForPB maxUnavailable = 3;
+    IntOrString maxUnavailable = 3;
 }
 
 // See k8s.io.api.core.v1.PodsMetricSource.
 message PodsMetricSource {
     string metricName = 1;
-    TypeIntOrStringForPB targetAverageValue = 2;
+    IntOrString targetAverageValue = 2;
     k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 3;
 }
 
@@ -532,14 +529,14 @@ message ReadinessProbe {
 message ResourceFieldSelector {
     string containerName = 1;
     string resource = 2;
-    TypeIntOrStringForPB divisor = 3;
+    IntOrString divisor = 3;
 }
 
 // See k8s.io.api.core.v1.ResourceMetricSource.
 message ResourceMetricSource {
     string name = 1;
     int32 targetAverageUtilization = 2;
-    TypeIntOrStringForPB targetAverageValue = 3;
+    IntOrString targetAverageValue = 3;
 }
 
 // See k8s.io.api.core.v1.ResourceRequirements.
@@ -550,8 +547,8 @@ message Resources {
 
 // See k8s.io.api.apps.v1.RollingUpdateDeployment.
 message RollingUpdateDeployment {
-    TypeIntOrStringForPB maxUnavailable = 1;
-    TypeIntOrStringForPB maxSurge = 2;
+    IntOrString maxUnavailable = 1;
+    IntOrString maxSurge = 2;
 }
 
 // See k8s.io.api.core.v1.SecretKeySelector.
@@ -583,7 +580,7 @@ message ServicePort {
     string name = 1;
     string protocol = 2;
     int32 port = 3;
-    TypeIntOrStringForPB targetPort = 4;
+    IntOrString targetPort = 4;
     int32 nodePort = 5;
 }
 
@@ -594,7 +591,7 @@ message SessionAffinityConfig {
 
 // See k8s.io.api.core.v1.TCPSocketAction.
 message TCPSocketAction {
-    TypeIntOrStringForPB port = 1;
+    IntOrString port = 1;
     string host = 2;
 }
 
@@ -654,19 +651,15 @@ message SeccompProfile {
     string localhostProfile = 2;
 }
 
-// Synthetic type for generating Go structs.
-// GOTYPE: interface{}
-message TypeInterface {}
+// IntOrString is a type that can hold an int32 or a string.  When used in
+// JSON or YAML marshalling and unmarshalling, it produces or consumes the
+// inner type.  This allows you to have, for example, a JSON field that can
+// accept a name or number.
+message IntOrString {
+  int64 type = 1;
 
-// Synthetic type for generating Go structs.
-// GOTYPE: map[string]interface{}
-message TypeMapStringInterface {}
+  google.protobuf.Int32Value intVal = 2;
 
-// Synthetic type for generating Go structs.
-// GOTYPE: *IntOrStringForPB
-message TypeIntOrStringForPB {}
-
-// Synthetic type for generating Go structs.
-// GOTYPE: *BoolValueForPB
-message TypeBoolValueForPB {}
+  google.protobuf.StringValue strVal = 3;
+}
 

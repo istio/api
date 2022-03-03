@@ -41,12 +41,6 @@ buf generate --template buf.gen-noncrd.yaml \
 buf generate --template buf.gen-golang.yaml \
   --path envoy
 
-# Custom hacks to post-process some outputs
-go run ./operator/fixup_structs/main.go -f operator/v1alpha1/operator.pb.go
-go run ./operator/fixup_structs/main.go -f mesh/v1alpha1/config.pb.go
-go run ./operator/fixup_structs/main.go -f mesh/v1alpha1/network.pb.go
-go run ./operator/fixup_structs/main.go -f mesh/v1alpha1/proxy.pb.go
-
 # Generate CRDs and open-api schema
 cue-gen -paths=common-protos -f=./cue.yaml
 cue-gen -paths=common-protos -f=./cue.yaml --crd=true -snake=jwksUri,apiKeys,apiSpecs,includedPaths,jwtHeaders,triggerRules,excludedPaths,mirrorPercent

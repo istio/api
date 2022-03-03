@@ -303,12 +303,12 @@ func (MeshConfig_ProxyPathNormalization_NormalizationType) EnumDescriptor() ([]b
 type MeshConfig struct {
 	// Port on which Envoy should listen for incoming connections from
 	// other services. Default port is 15001.
-	ProxyListenPort int32 `protobuf:"varint,4,opt,name=proxy_listen_port,json=proxyListenPort,proto3" json:"proxyListenPort,omitempty"`
+	ProxyListenPort int32 `protobuf:"varint,4,opt,name=proxy_listen_port,json=proxyListenPort,proto3" json:"proxy_listen_port,omitempty"`
 	// Port on which Envoy should listen for HTTP PROXY requests if set.
-	ProxyHttpPort int32 `protobuf:"varint,5,opt,name=proxy_http_port,json=proxyHttpPort,proto3" json:"proxyHttpPort,omitempty"`
+	ProxyHttpPort int32 `protobuf:"varint,5,opt,name=proxy_http_port,json=proxyHttpPort,proto3" json:"proxy_http_port,omitempty"`
 	// Connection timeout used by Envoy. (MUST BE >=1ms)
 	// Default timeout is 10s.
-	ConnectTimeout *types.Duration `protobuf:"bytes,6,opt,name=connect_timeout,json=connectTimeout,proto3" json:"connectTimeout,omitempty"`
+	ConnectTimeout *types.Duration `protobuf:"bytes,6,opt,name=connect_timeout,json=connectTimeout,proto3" json:"connect_timeout,omitempty"`
 	// Automatic protocol detection uses a set of heuristics to
 	// determine whether the connection is using TLS or not (on the
 	// server side), as well as the application protocol being used
@@ -319,53 +319,53 @@ type MeshConfig struct {
 	// traffic. Set this field to tweak the period that Envoy will wait
 	// for the client to send the first bits of data. (MUST BE >=1ms or
 	// 0s to disable). Default detection timeout is 0s (no timeout).
-	ProtocolDetectionTimeout *types.Duration `protobuf:"bytes,42,opt,name=protocol_detection_timeout,json=protocolDetectionTimeout,proto3" json:"protocolDetectionTimeout,omitempty"`
+	ProtocolDetectionTimeout *types.Duration `protobuf:"bytes,42,opt,name=protocol_detection_timeout,json=protocolDetectionTimeout,proto3" json:"protocol_detection_timeout,omitempty"`
 	// If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalives.
-	TcpKeepalive *v1alpha3.ConnectionPoolSettings_TCPSettings_TcpKeepalive `protobuf:"bytes,28,opt,name=tcp_keepalive,json=tcpKeepalive,proto3" json:"tcpKeepalive,omitempty"`
+	TcpKeepalive *v1alpha3.ConnectionPoolSettings_TCPSettings_TcpKeepalive `protobuf:"bytes,28,opt,name=tcp_keepalive,json=tcpKeepalive,proto3" json:"tcp_keepalive,omitempty"`
 	// Class of ingress resources to be processed by Istio ingress
 	// controller. This corresponds to the value of
 	// `kubernetes.io/ingress.class` annotation.
-	IngressClass string `protobuf:"bytes,7,opt,name=ingress_class,json=ingressClass,proto3" json:"ingressClass,omitempty"`
+	IngressClass string `protobuf:"bytes,7,opt,name=ingress_class,json=ingressClass,proto3" json:"ingress_class,omitempty"`
 	// Name of the Kubernetes service used for the istio ingress controller.
 	// If no ingress controller is specified, the default value `istio-ingressgateway` is used.
-	IngressService string `protobuf:"bytes,8,opt,name=ingress_service,json=ingressService,proto3" json:"ingressService,omitempty"`
+	IngressService string `protobuf:"bytes,8,opt,name=ingress_service,json=ingressService,proto3" json:"ingress_service,omitempty"`
 	// Defines whether to use Istio ingress controller for annotated or all ingress resources.
 	// Default mode is `STRICT`.
-	IngressControllerMode MeshConfig_IngressControllerMode `protobuf:"varint,9,opt,name=ingress_controller_mode,json=ingressControllerMode,proto3,enum=istio.mesh.v1alpha1.MeshConfig_IngressControllerMode" json:"ingressControllerMode,omitempty"`
+	IngressControllerMode MeshConfig_IngressControllerMode `protobuf:"varint,9,opt,name=ingress_controller_mode,json=ingressControllerMode,proto3,enum=istio.mesh.v1alpha1.MeshConfig_IngressControllerMode" json:"ingress_controller_mode,omitempty"`
 	// Defines which gateway deployment to use as the Ingress controller. This field corresponds to
 	// the Gateway.selector field, and will be set as `istio: INGRESS_SELECTOR`.
 	// By default, `ingressgateway` is used, which will select the default IngressGateway as it has the
 	// `istio: ingressgateway` labels.
 	// It is recommended that this is the same value as ingress_service.
-	IngressSelector string `protobuf:"bytes,52,opt,name=ingress_selector,json=ingressSelector,proto3" json:"ingressSelector,omitempty"`
+	IngressSelector string `protobuf:"bytes,52,opt,name=ingress_selector,json=ingressSelector,proto3" json:"ingress_selector,omitempty"`
 	// Flag to control generation of trace spans and request IDs.
 	// Requires a trace span collector defined in the proxy configuration.
-	EnableTracing bool `protobuf:"varint,12,opt,name=enable_tracing,json=enableTracing,proto3" json:"enableTracing,omitempty"`
+	EnableTracing bool `protobuf:"varint,12,opt,name=enable_tracing,json=enableTracing,proto3" json:"enable_tracing,omitempty"`
 	// File address for the proxy access log (e.g. /dev/stdout).
 	// Empty value disables access logging.
-	AccessLogFile string `protobuf:"bytes,13,opt,name=access_log_file,json=accessLogFile,proto3" json:"accessLogFile,omitempty"`
+	AccessLogFile string `protobuf:"bytes,13,opt,name=access_log_file,json=accessLogFile,proto3" json:"access_log_file,omitempty"`
 	// Format for the proxy access log
 	// Empty value results in proxy's default access log format
-	AccessLogFormat string `protobuf:"bytes,24,opt,name=access_log_format,json=accessLogFormat,proto3" json:"accessLogFormat,omitempty"`
+	AccessLogFormat string `protobuf:"bytes,24,opt,name=access_log_format,json=accessLogFormat,proto3" json:"access_log_format,omitempty"`
 	// Encoding for the proxy access log (`TEXT` or `JSON`).
 	// Default value is `TEXT`.
-	AccessLogEncoding MeshConfig_AccessLogEncoding `protobuf:"varint,27,opt,name=access_log_encoding,json=accessLogEncoding,proto3,enum=istio.mesh.v1alpha1.MeshConfig_AccessLogEncoding" json:"accessLogEncoding,omitempty"`
+	AccessLogEncoding MeshConfig_AccessLogEncoding `protobuf:"varint,27,opt,name=access_log_encoding,json=accessLogEncoding,proto3,enum=istio.mesh.v1alpha1.MeshConfig_AccessLogEncoding" json:"access_log_encoding,omitempty"`
 	// This flag enables Envoy's gRPC Access Log Service.
 	// See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto)
 	// for details about Envoy's gRPC Access Log Service API.
 	// Default value is `false`.
-	EnableEnvoyAccessLogService bool `protobuf:"varint,40,opt,name=enable_envoy_access_log_service,json=enableEnvoyAccessLogService,proto3" json:"enableEnvoyAccessLogService,omitempty"`
+	EnableEnvoyAccessLogService bool `protobuf:"varint,40,opt,name=enable_envoy_access_log_service,json=enableEnvoyAccessLogService,proto3" json:"enable_envoy_access_log_service,omitempty"`
 	// This flag disables Envoy Listener logs.
 	// See [Listener Access Log](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/listener/v3/listener.proto#envoy-v3-api-field-config-listener-v3-listener-access-log)
 	// Istio Enables Envoy's listener access logs on "NoRoute" response flag.
 	// Default value is `false`.
-	DisableEnvoyListenerLog bool `protobuf:"varint,56,opt,name=disable_envoy_listener_log,json=disableEnvoyListenerLog,proto3" json:"disableEnvoyListenerLog,omitempty"`
+	DisableEnvoyListenerLog bool `protobuf:"varint,56,opt,name=disable_envoy_listener_log,json=disableEnvoyListenerLog,proto3" json:"disable_envoy_listener_log,omitempty"`
 	// Default proxy config used by gateway and sidecars.
 	// In case of Kubernetes, the proxy config is applied once during the injection process,
 	// and remain constant for the duration of the pod. The rest of the mesh config can be changed
 	// at runtime and config gets distributed dynamically.
 	// On Kubernetes, this can be overridden on individual pods with the `proxy.istio.io/config` annotation.
-	DefaultConfig *ProxyConfig `protobuf:"bytes,14,opt,name=default_config,json=defaultConfig,proto3" json:"defaultConfig,omitempty"`
+	DefaultConfig *ProxyConfig `protobuf:"bytes,14,opt,name=default_config,json=defaultConfig,proto3" json:"default_config,omitempty"`
 	// Set the default behavior of the sidecar for handling outbound
 	// traffic from the application.  If your application uses one or
 	// more external services that are not known apriori, setting the
@@ -378,11 +378,11 @@ type MeshConfig struct {
 	// `OutboundTrafficPolicy` in the [Sidecar
 	// API](https://istio.io/docs/reference/config/networking/sidecar/#OutboundTrafficPolicy).
 	// Default mode is `ALLOW_ANY` which means outbound traffic to unknown destinations will be allowed.
-	OutboundTrafficPolicy *MeshConfig_OutboundTrafficPolicy `protobuf:"bytes,17,opt,name=outbound_traffic_policy,json=outboundTrafficPolicy,proto3" json:"outboundTrafficPolicy,omitempty"`
+	OutboundTrafficPolicy *MeshConfig_OutboundTrafficPolicy `protobuf:"bytes,17,opt,name=outbound_traffic_policy,json=outboundTrafficPolicy,proto3" json:"outbound_traffic_policy,omitempty"`
 	// ConfigSource describes a source of configuration data for networking
 	// rules, and other Istio configuration artifacts. Multiple data sources
 	// can be configured for a single control plane.
-	ConfigSources []*ConfigSource `protobuf:"bytes,22,rep,name=config_sources,json=configSources,proto3" json:"configSources,omitempty"`
+	ConfigSources []*ConfigSource `protobuf:"bytes,22,rep,name=config_sources,json=configSources,proto3" json:"config_sources,omitempty"`
 	// This flag is used to enable mutual `TLS` automatically for service to service communication
 	// within the mesh, default true.
 	// If set to true, and a given service does not have a corresponding `DestinationRule` configured,
@@ -394,10 +394,10 @@ type MeshConfig struct {
 	// If the upstream authentication policy is in PERMISSIVE mode, Istio configures clients to use
 	// mutual `TLS` when server sides are capable of accepting mutual `TLS` traffic.
 	// If service `DestinationRule` exists and has `ClientTLSSettings` specified, that is always used instead.
-	EnableAutoMtls *types.BoolValue `protobuf:"bytes,43,opt,name=enable_auto_mtls,json=enableAutoMtls,proto3" json:"enableAutoMtls,omitempty"`
+	EnableAutoMtls *types.BoolValue `protobuf:"bytes,43,opt,name=enable_auto_mtls,json=enableAutoMtls,proto3" json:"enable_auto_mtls,omitempty"`
 	// The trust domain corresponds to the trust root of a system.
 	// Refer to [SPIFFE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)
-	TrustDomain string `protobuf:"bytes,26,opt,name=trust_domain,json=trustDomain,proto3" json:"trustDomain,omitempty"`
+	TrustDomain string `protobuf:"bytes,26,opt,name=trust_domain,json=trustDomain,proto3" json:"trust_domain,omitempty"`
 	// The trust domain aliases represent the aliases of `trust_domain`.
 	// For example, if we have
 	// ```yaml
@@ -406,12 +406,12 @@ type MeshConfig struct {
 	// ```
 	// Any service with the identity `td1/ns/foo/sa/a-service-account`, `td2/ns/foo/sa/a-service-account`,
 	// or `td3/ns/foo/sa/a-service-account` will be treated the same in the Istio mesh.
-	TrustDomainAliases []string `protobuf:"bytes,46,rep,name=trust_domain_aliases,json=trustDomainAliases,proto3" json:"trustDomainAliases,omitempty"`
+	TrustDomainAliases []string `protobuf:"bytes,46,rep,name=trust_domain_aliases,json=trustDomainAliases,proto3" json:"trust_domain_aliases,omitempty"`
 	// The extra root certificates for workload-to-workload communication.
 	// The plugin certificates (the 'cacerts' secret) or self-signed certificates (the 'istio-ca-secret' secret)
 	// are automatically added by Istiod.
 	// The CA certificate that signs the workload certificates is automatically added by Istio Agent.
-	CaCertificates []*MeshConfig_CertificateData `protobuf:"bytes,58,rep,name=ca_certificates,json=caCertificates,proto3" json:"caCertificates,omitempty"`
+	CaCertificates []*MeshConfig_CertificateData `protobuf:"bytes,58,rep,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
 	// The default value for the ServiceEntry.export_to field and services
 	// imported through container registry integrations, e.g. this applies to
 	// Kubernetes Service resources. The value is a list of namespace names and
@@ -436,19 +436,19 @@ type MeshConfig struct {
 	//
 	// For further discussion see the reference documentation for `ServiceEntry`,
 	// `Sidecar`, and `Gateway`.
-	DefaultServiceExportTo []string `protobuf:"bytes,31,rep,name=default_service_export_to,json=defaultServiceExportTo,proto3" json:"defaultServiceExportTo,omitempty"`
+	DefaultServiceExportTo []string `protobuf:"bytes,31,rep,name=default_service_export_to,json=defaultServiceExportTo,proto3" json:"default_service_export_to,omitempty"`
 	// The default value for the VirtualService.export_to field. Has the same
 	// syntax as `default_service_export_to`.
 	//
 	// If not set the system will use "*" as the default value which implies that
 	// virtual services are exported to all namespaces
-	DefaultVirtualServiceExportTo []string `protobuf:"bytes,32,rep,name=default_virtual_service_export_to,json=defaultVirtualServiceExportTo,proto3" json:"defaultVirtualServiceExportTo,omitempty"`
+	DefaultVirtualServiceExportTo []string `protobuf:"bytes,32,rep,name=default_virtual_service_export_to,json=defaultVirtualServiceExportTo,proto3" json:"default_virtual_service_export_to,omitempty"`
 	// The default value for the `DestinationRule.export_to` field. Has the same
 	// syntax as `default_service_export_to`.
 	//
 	// If not set the system will use "*" as the default value which implies that
 	// destination rules are exported to all namespaces
-	DefaultDestinationRuleExportTo []string `protobuf:"bytes,33,rep,name=default_destination_rule_export_to,json=defaultDestinationRuleExportTo,proto3" json:"defaultDestinationRuleExportTo,omitempty"`
+	DefaultDestinationRuleExportTo []string `protobuf:"bytes,33,rep,name=default_destination_rule_export_to,json=defaultDestinationRuleExportTo,proto3" json:"default_destination_rule_export_to,omitempty"`
 	// The namespace to treat as the administrative root namespace for
 	// Istio configuration. When processing a leaf namespace Istio will search for
 	// declarations in that namespace first and if none are found it will
@@ -457,17 +457,17 @@ type MeshConfig struct {
 	//
 	// The precise semantics of this processing are documented on each resource
 	// type.
-	RootNamespace string `protobuf:"bytes,34,opt,name=root_namespace,json=rootNamespace,proto3" json:"rootNamespace,omitempty"`
+	RootNamespace string `protobuf:"bytes,34,opt,name=root_namespace,json=rootNamespace,proto3" json:"root_namespace,omitempty"`
 	// Locality based load balancing distribution or failover settings.
-	LocalityLbSetting *v1alpha3.LocalityLoadBalancerSetting `protobuf:"bytes,35,opt,name=locality_lb_setting,json=localityLbSetting,proto3" json:"localityLbSetting,omitempty"`
+	LocalityLbSetting *v1alpha3.LocalityLoadBalancerSetting `protobuf:"bytes,35,opt,name=locality_lb_setting,json=localityLbSetting,proto3" json:"locality_lb_setting,omitempty"`
 	// Configures DNS refresh rate for Envoy clusters of type `STRICT_DNS`
 	// Default refresh rate is `5s`.
-	DnsRefreshRate *types.Duration `protobuf:"bytes,36,opt,name=dns_refresh_rate,json=dnsRefreshRate,proto3" json:"dnsRefreshRate,omitempty"`
+	DnsRefreshRate *types.Duration `protobuf:"bytes,36,opt,name=dns_refresh_rate,json=dnsRefreshRate,proto3" json:"dns_refresh_rate,omitempty"`
 	// Specify if http1.1 connections should be upgraded to http2 by default.
 	// if sidecar is installed on all pods in the mesh, then this should be set to `UPGRADE`.
 	// If one or more services or namespaces do not have sidecar(s), then this should be set to `DO_NOT_UPGRADE`.
 	// It can be enabled by destination using the `destinationRule.trafficPolicy.connectionPool.http.h2UpgradePolicy` override.
-	H2UpgradePolicy MeshConfig_H2UpgradePolicy `protobuf:"varint,41,opt,name=h2_upgrade_policy,json=h2UpgradePolicy,proto3,enum=istio.mesh.v1alpha1.MeshConfig_H2UpgradePolicy" json:"h2UpgradePolicy,omitempty"`
+	H2UpgradePolicy MeshConfig_H2UpgradePolicy `protobuf:"varint,41,opt,name=h2_upgrade_policy,json=h2UpgradePolicy,proto3,enum=istio.mesh.v1alpha1.MeshConfig_H2UpgradePolicy" json:"h2_upgrade_policy,omitempty"`
 	// Name to be used while emitting statistics for inbound clusters. The same pattern is used while computing stat prefix for
 	// network filters like TCP and Redis.
 	// By default, Istio emits statistics with the pattern `inbound|<port>|<port-name>|<service-FQDN>`.
@@ -484,7 +484,7 @@ type MeshConfig struct {
 	//
 	// - `%SERVICE_FQDN%_%SERVICE_PORT%` will use reviews.prod.svc.cluster.local_7443 as the stats name.
 	// - `%SERVICE%` will use reviews.prod as the stats name.
-	InboundClusterStatName string `protobuf:"bytes,44,opt,name=inbound_cluster_stat_name,json=inboundClusterStatName,proto3" json:"inboundClusterStatName,omitempty"`
+	InboundClusterStatName string `protobuf:"bytes,44,opt,name=inbound_cluster_stat_name,json=inboundClusterStatName,proto3" json:"inbound_cluster_stat_name,omitempty"`
 	// Name to be used while emitting statistics for outbound clusters. The same pattern is used while computing stat prefix for
 	// network filters like TCP and Redis.
 	// By default, Istio emits statistics with the pattern `outbound|<port>|<subsetname>|<service-FQDN>`.
@@ -502,14 +502,14 @@ type MeshConfig struct {
 	//
 	// - `%SERVICE_FQDN%_%SERVICE_PORT%` will use `reviews.prod.svc.cluster.local_7443` as the stats name.
 	// - `%SERVICE%` will use reviews.prod as the stats name.
-	OutboundClusterStatName string `protobuf:"bytes,45,opt,name=outbound_cluster_stat_name,json=outboundClusterStatName,proto3" json:"outboundClusterStatName,omitempty"`
+	OutboundClusterStatName string `protobuf:"bytes,45,opt,name=outbound_cluster_stat_name,json=outboundClusterStatName,proto3" json:"outbound_cluster_stat_name,omitempty"`
 	// Configure the provision of certificates.
 	Certificates []*Certificate `protobuf:"bytes,47,rep,name=certificates,proto3" json:"certificates,omitempty"`
 	// Set configuration for Thrift protocol
-	ThriftConfig *MeshConfig_ThriftConfig `protobuf:"bytes,49,opt,name=thrift_config,json=thriftConfig,proto3" json:"thriftConfig,omitempty"`
+	ThriftConfig *MeshConfig_ThriftConfig `protobuf:"bytes,49,opt,name=thrift_config,json=thriftConfig,proto3" json:"thrift_config,omitempty"`
 	// $hide_from_docs
 	// Settings to be applied to select services.
-	ServiceSettings []*MeshConfig_ServiceSettings `protobuf:"bytes,50,rep,name=service_settings,json=serviceSettings,proto3" json:"serviceSettings,omitempty"`
+	ServiceSettings []*MeshConfig_ServiceSettings `protobuf:"bytes,50,rep,name=service_settings,json=serviceSettings,proto3" json:"service_settings,omitempty"`
 	// If enabled, Istio agent will merge metrics exposed by the application with metrics from Envoy
 	// and Istio agent. The sidecar injection will replace `prometheus.io` annotations present on the pod
 	// and redirect them towards Istio agent, which will then merge metrics of from the application with Istio metrics.
@@ -519,7 +519,7 @@ type MeshConfig struct {
 	// In this case, it is recommended to disable aggregation on that deployment with the
 	// `prometheus.istio.io/merge-metrics: "false"` annotation.
 	// If not specified, this will be enabled by default.
-	EnablePrometheusMerge *types.BoolValue `protobuf:"bytes,51,opt,name=enable_prometheus_merge,json=enablePrometheusMerge,proto3" json:"enablePrometheusMerge,omitempty"`
+	EnablePrometheusMerge *types.BoolValue `protobuf:"bytes,51,opt,name=enable_prometheus_merge,json=enablePrometheusMerge,proto3" json:"enable_prometheus_merge,omitempty"`
 	// $hide_from_docs
 	// `VerifyCertificateAtClient` sets the mesh global default for peer certificate validation
 	// at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination
@@ -541,16 +541,16 @@ type MeshConfig struct {
 	// For wildcard host name in DestinationRule, client-side proxy will do a suffix match. For example,
 	// if host is `*.x.y.com`, client-side proxy will verify the presented server certificate SAN matches
 	// ``.x.y.com` suffix.
-	VerifyCertificateAtClient *types.BoolValue `protobuf:"bytes,54,opt,name=verify_certificate_at_client,json=verifyCertificateAtClient,proto3" json:"verifyCertificateAtClient,omitempty"` // Deprecated: Do not use.
+	VerifyCertificateAtClient *types.BoolValue `protobuf:"bytes,54,opt,name=verify_certificate_at_client,json=verifyCertificateAtClient,proto3" json:"verify_certificate_at_client,omitempty"` // Deprecated: Do not use.
 	// $hide_from_docs
 	// If specified, Istiod will authorize and forward the CSRs from the workloads to the specified external CA
 	// using the Istio CA gRPC API.
 	Ca *MeshConfig_CA `protobuf:"bytes,55,opt,name=ca,proto3" json:"ca,omitempty"`
 	// Defines a list of extension providers that extend Istio's functionality. For example, the AuthorizationPolicy
 	// can be used with an extension provider to delegate the authorization decision to a custom authorization system.
-	ExtensionProviders []*MeshConfig_ExtensionProvider `protobuf:"bytes,57,rep,name=extension_providers,json=extensionProviders,proto3" json:"extensionProviders,omitempty"`
+	ExtensionProviders []*MeshConfig_ExtensionProvider `protobuf:"bytes,57,rep,name=extension_providers,json=extensionProviders,proto3" json:"extension_providers,omitempty"`
 	// Specifies extension providers to use by default in Istio configuration resources.
-	DefaultProviders *MeshConfig_DefaultProviders `protobuf:"bytes,60,opt,name=default_providers,json=defaultProviders,proto3" json:"defaultProviders,omitempty"`
+	DefaultProviders *MeshConfig_DefaultProviders `protobuf:"bytes,60,opt,name=default_providers,json=defaultProviders,proto3" json:"default_providers,omitempty"`
 	// A list of Kubernetes selectors that specify the set of namespaces that Istio considers when
 	// computing configuration updates for sidecars. This can be used to reduce Istio's computational load
 	// by limiting the number of entities (including services, pods, and endpoints) that are watched and processed.
@@ -573,7 +573,7 @@ type MeshConfig struct {
 	// ```
 	// Refer to the [kubernetes selector docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors)
 	// for additional detail on selector semantics.
-	DiscoverySelectors []*v1.LabelSelector `protobuf:"bytes,59,rep,name=discovery_selectors,json=discoverySelectors,proto3" json:"discoverySelectors,omitempty"`
+	DiscoverySelectors []*v1.LabelSelector `protobuf:"bytes,59,rep,name=discovery_selectors,json=discoverySelectors,proto3" json:"discovery_selectors,omitempty"`
 	// ProxyPathNormalization configures how URL paths in incoming and outgoing HTTP requests are
 	// normalized by the sidecars and gateways.
 	// The normalized paths will be used in all aspects through the requests' lifetime on the
@@ -581,7 +581,7 @@ type MeshConfig struct {
 	// authorization policy match and enforcement in inbound direction (server proxy), and the URL
 	// path proxied to the upstream service.
 	// If not set, the NormalizationType.DEFAULT configuration will be used.
-	PathNormalization *MeshConfig_ProxyPathNormalization `protobuf:"bytes,61,opt,name=path_normalization,json=pathNormalization,proto3" json:"pathNormalization,omitempty"`
+	PathNormalization *MeshConfig_ProxyPathNormalization `protobuf:"bytes,61,opt,name=path_normalization,json=pathNormalization,proto3" json:"path_normalization,omitempty"`
 	// Configure the default HTTP retry policy.
 	// The default number of retry attempts is set at 2 for these errors:
 	//   "connect-failure,refused-stream,unavailable,cancelled,retriable-status-codes".
@@ -590,7 +590,7 @@ type MeshConfig struct {
 	// API.
 	// All settings in the retry policy except `perTryTimeout` can currently be
 	// configured globally via this field.
-	DefaultHttpRetryPolicy *v1alpha3.HTTPRetry `protobuf:"bytes,62,opt,name=default_http_retry_policy,json=defaultHttpRetryPolicy,proto3" json:"defaultHttpRetryPolicy,omitempty"`
+	DefaultHttpRetryPolicy *v1alpha3.HTTPRetry `protobuf:"bytes,62,opt,name=default_http_retry_policy,json=defaultHttpRetryPolicy,proto3" json:"default_http_retry_policy,omitempty"`
 	XXX_NoUnkeyedLiteral   struct{}            `json:"-"`
 	XXX_unrecognized       []byte              `json:"-"`
 	XXX_sizecache          int32               `json:"-"`
@@ -979,7 +979,7 @@ type MeshConfig_CertificateData struct {
 	// Optional. Specify the kubernetes signers (External CA) that use this trustAnchor
 	// when Istiod is acting as RA(registration authority)
 	// If set, they are used for these signers. Otherwise, this trustAnchor is used for all signers.
-	CertSigners []string `protobuf:"bytes,3,rep,name=cert_signers,json=certSigners,proto3" json:"certSigners,omitempty"`
+	CertSigners []string `protobuf:"bytes,3,rep,name=cert_signers,json=certSigners,proto3" json:"cert_signers,omitempty"`
 	// Optional. Specify the list of trust domains to which this trustAnchor data belongs.
 	// If set, they are used for these trust domains. Otherwise, this trustAnchor is used for default trust domain
 	// and its aliases.
@@ -989,7 +989,7 @@ type MeshConfig_CertificateData struct {
 	// If only trust_domains is set, this trustAnchor is used for these trust_domains and all signers.
 	// If only cert_signers is set, this trustAnchor is used for these cert_signers and all trust domains.
 	// If both cert_signers and trust_domains is set, this trustAnchor is only used for these signers and trust domains.
-	TrustDomains         []string `protobuf:"bytes,4,rep,name=trust_domains,json=trustDomains,proto3" json:"trustDomains,omitempty"`
+	TrustDomains         []string `protobuf:"bytes,4,rep,name=trust_domains,json=trustDomains,proto3" json:"trust_domains,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -1038,7 +1038,7 @@ type MeshConfig_CertificateData_Pem struct {
 	Pem string `protobuf:"bytes,1,opt,name=pem,proto3,oneof" json:"pem,omitempty"`
 }
 type MeshConfig_CertificateData_SpiffeBundleUrl struct {
-	SpiffeBundleUrl string `protobuf:"bytes,2,opt,name=spiffe_bundle_url,json=spiffeBundleUrl,proto3,oneof" json:"spiffeBundleUrl,omitempty"`
+	SpiffeBundleUrl string `protobuf:"bytes,2,opt,name=spiffe_bundle_url,json=spiffeBundleUrl,proto3,oneof" json:"spiffe_bundle_url,omitempty"`
 }
 
 func (*MeshConfig_CertificateData_Pem) isMeshConfig_CertificateData_CertificateData()             {}
@@ -1091,9 +1091,9 @@ type MeshConfig_ThriftConfig struct {
 	// Specify thrift rate limit service URL. If pilot has thrift protocol support enabled,
 	// this will enable the rate limit service for destinations that have matching rate
 	// limit configurations.
-	RateLimitUrl string `protobuf:"bytes,1,opt,name=rate_limit_url,json=rateLimitUrl,proto3" json:"rateLimitUrl,omitempty"`
+	RateLimitUrl string `protobuf:"bytes,1,opt,name=rate_limit_url,json=rateLimitUrl,proto3" json:"rate_limit_url,omitempty"`
 	// Specify thrift rate limit service timeout, in milliseconds. Default is `50ms`
-	RateLimitTimeout     *types.Duration `protobuf:"bytes,2,opt,name=rate_limit_timeout,json=rateLimitTimeout,proto3" json:"rateLimitTimeout,omitempty"`
+	RateLimitTimeout     *types.Duration `protobuf:"bytes,2,opt,name=rate_limit_timeout,json=rateLimitTimeout,proto3" json:"rate_limit_timeout,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_unrecognized     []byte          `json:"-"`
 	XXX_sizecache        int32           `json:"-"`
@@ -1239,7 +1239,7 @@ type MeshConfig_ServiceSettings_Settings struct {
 	//
 	// By default Istio will consider kubernetes.default.svc (i.e. the API Server) as well as all
 	// services in the kube-system namespace to be cluster-local, unless explicitly overridden here.
-	ClusterLocal         bool     `protobuf:"varint,1,opt,name=cluster_local,json=clusterLocal,proto3" json:"clusterLocal,omitempty"`
+	ClusterLocal         bool     `protobuf:"varint,1,opt,name=cluster_local,json=clusterLocal,proto3" json:"cluster_local,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -1297,13 +1297,13 @@ type MeshConfig_CA struct {
 	// - TLS MUTUAL MODE be on by default. If the CA certificates
 	// (cert bundle to verify the CA server's certificate) is omitted, Istiod will
 	// use the system root certs to verify the CA server's certificate.
-	TlsSettings *v1alpha3.ClientTLSSettings `protobuf:"bytes,2,opt,name=tls_settings,json=tlsSettings,proto3" json:"tlsSettings,omitempty"`
+	TlsSettings *v1alpha3.ClientTLSSettings `protobuf:"bytes,2,opt,name=tls_settings,json=tlsSettings,proto3" json:"tls_settings,omitempty"`
 	// timeout for forward CSR requests from Istiod to External CA
 	// Default: 10s
-	RequestTimeout *types.Duration `protobuf:"bytes,3,opt,name=request_timeout,json=requestTimeout,proto3" json:"requestTimeout,omitempty"`
+	RequestTimeout *types.Duration `protobuf:"bytes,3,opt,name=request_timeout,json=requestTimeout,proto3" json:"request_timeout,omitempty"`
 	// Use istiod_side to specify CA Server integrate to Istiod side or Agent side
 	// Default: true
-	IstiodSide           bool     `protobuf:"varint,4,opt,name=istiod_side,json=istiodSide,proto3" json:"istiodSide,omitempty"`
+	IstiodSide           bool     `protobuf:"varint,4,opt,name=istiod_side,json=istiodSide,proto3" json:"istiod_side,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -1435,10 +1435,10 @@ type isMeshConfig_ExtensionProvider_Provider interface {
 }
 
 type MeshConfig_ExtensionProvider_EnvoyExtAuthzHttp struct {
-	EnvoyExtAuthzHttp *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider `protobuf:"bytes,2,opt,name=envoy_ext_authz_http,json=envoyExtAuthzHttp,proto3,oneof" json:"envoyExtAuthzHttp,omitempty"`
+	EnvoyExtAuthzHttp *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider `protobuf:"bytes,2,opt,name=envoy_ext_authz_http,json=envoyExtAuthzHttp,proto3,oneof" json:"envoy_ext_authz_http,omitempty"`
 }
 type MeshConfig_ExtensionProvider_EnvoyExtAuthzGrpc struct {
-	EnvoyExtAuthzGrpc *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider `protobuf:"bytes,3,opt,name=envoy_ext_authz_grpc,json=envoyExtAuthzGrpc,proto3,oneof" json:"envoyExtAuthzGrpc,omitempty"`
+	EnvoyExtAuthzGrpc *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider `protobuf:"bytes,3,opt,name=envoy_ext_authz_grpc,json=envoyExtAuthzGrpc,proto3,oneof" json:"envoy_ext_authz_grpc,omitempty"`
 }
 type MeshConfig_ExtensionProvider_Zipkin struct {
 	Zipkin *MeshConfig_ExtensionProvider_ZipkinTracingProvider `protobuf:"bytes,4,opt,name=zipkin,proto3,oneof" json:"zipkin,omitempty"`
@@ -1462,16 +1462,16 @@ type MeshConfig_ExtensionProvider_Prometheus struct {
 	Prometheus *MeshConfig_ExtensionProvider_PrometheusMetricsProvider `protobuf:"bytes,10,opt,name=prometheus,proto3,oneof" json:"prometheus,omitempty"`
 }
 type MeshConfig_ExtensionProvider_EnvoyFileAccessLog struct {
-	EnvoyFileAccessLog *MeshConfig_ExtensionProvider_EnvoyFileAccessLogProvider `protobuf:"bytes,11,opt,name=envoy_file_access_log,json=envoyFileAccessLog,proto3,oneof" json:"envoyFileAccessLog,omitempty"`
+	EnvoyFileAccessLog *MeshConfig_ExtensionProvider_EnvoyFileAccessLogProvider `protobuf:"bytes,11,opt,name=envoy_file_access_log,json=envoyFileAccessLog,proto3,oneof" json:"envoy_file_access_log,omitempty"`
 }
 type MeshConfig_ExtensionProvider_EnvoyHttpAls struct {
-	EnvoyHttpAls *MeshConfig_ExtensionProvider_EnvoyHttpGrpcV3LogProvider `protobuf:"bytes,12,opt,name=envoy_http_als,json=envoyHttpAls,proto3,oneof" json:"envoyHttpAls,omitempty"`
+	EnvoyHttpAls *MeshConfig_ExtensionProvider_EnvoyHttpGrpcV3LogProvider `protobuf:"bytes,12,opt,name=envoy_http_als,json=envoyHttpAls,proto3,oneof" json:"envoy_http_als,omitempty"`
 }
 type MeshConfig_ExtensionProvider_EnvoyTcpAls struct {
-	EnvoyTcpAls *MeshConfig_ExtensionProvider_EnvoyTcpGrpcV3LogProvider `protobuf:"bytes,13,opt,name=envoy_tcp_als,json=envoyTcpAls,proto3,oneof" json:"envoyTcpAls,omitempty"`
+	EnvoyTcpAls *MeshConfig_ExtensionProvider_EnvoyTcpGrpcV3LogProvider `protobuf:"bytes,13,opt,name=envoy_tcp_als,json=envoyTcpAls,proto3,oneof" json:"envoy_tcp_als,omitempty"`
 }
 type MeshConfig_ExtensionProvider_EnvoyOtelAls struct {
-	EnvoyOtelAls *MeshConfig_ExtensionProvider_EnvoyOpenTelemetryLogProvider `protobuf:"bytes,14,opt,name=envoy_otel_als,json=envoyOtelAls,proto3,oneof" json:"envoyOtelAls,omitempty"`
+	EnvoyOtelAls *MeshConfig_ExtensionProvider_EnvoyOpenTelemetryLogProvider `protobuf:"bytes,14,opt,name=envoy_otel_als,json=envoyOtelAls,proto3,oneof" json:"envoy_otel_als,omitempty"`
 }
 
 func (*MeshConfig_ExtensionProvider_EnvoyExtAuthzHttp) isMeshConfig_ExtensionProvider_Provider()  {}
@@ -1618,17 +1618,17 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationRequestBody struct {
 	// Otherwise the request will be sent to the provider with a partial message.
 	// Note that this setting will have precedence over the fail_open field, the 413 will be returned even when the
 	// fail_open is set to true.
-	MaxRequestBytes uint32 `protobuf:"varint,1,opt,name=max_request_bytes,json=maxRequestBytes,proto3" json:"maxRequestBytes,omitempty"`
+	MaxRequestBytes uint32 `protobuf:"varint,1,opt,name=max_request_bytes,json=maxRequestBytes,proto3" json:"max_request_bytes,omitempty"`
 	// When this field is true, ext-authz filter will buffer the message until max_request_bytes is reached.
 	// The authorization request will be dispatched and no 413 HTTP error will be returned by the filter.
 	// A "x-envoy-auth-partial-body: false|true" metadata header will be added to the authorization request message
 	// indicating if the body data is partial.
-	AllowPartialMessage bool `protobuf:"varint,2,opt,name=allow_partial_message,json=allowPartialMessage,proto3" json:"allowPartialMessage,omitempty"`
+	AllowPartialMessage bool `protobuf:"varint,2,opt,name=allow_partial_message,json=allowPartialMessage,proto3" json:"allow_partial_message,omitempty"`
 	// If true, the body sent to the external authorization service in the gRPC authorization request is set with raw bytes
 	// in the raw_body field (https://github.com/envoyproxy/envoy/blame/cffb095d59d7935abda12b9509bcd136808367bb/api/envoy/service/auth/v3/attribute_context.proto#L153).
 	// Otherwise, it will be filled with UTF-8 string in the body field (https://github.com/envoyproxy/envoy/blame/cffb095d59d7935abda12b9509bcd136808367bb/api/envoy/service/auth/v3/attribute_context.proto#L147).
 	// This field only works with the envoy_ext_authz_grpc provider and has no effect for the envoy_ext_authz_http provider.
-	PackAsBytes          bool     `protobuf:"varint,3,opt,name=pack_as_bytes,json=packAsBytes,proto3" json:"packAsBytes,omitempty"`
+	PackAsBytes          bool     `protobuf:"varint,3,opt,name=pack_as_bytes,json=packAsBytes,proto3" json:"pack_as_bytes,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -1709,16 +1709,16 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider struct 
 	// Sets a prefix to the value of authorization request header *Path*.
 	// For example, setting this to "/check" for an original user request at path "/admin" will cause the
 	// authorization check request to be sent to the authorization service at the path "/check/admin" instead of "/admin".
-	PathPrefix string `protobuf:"bytes,3,opt,name=path_prefix,json=pathPrefix,proto3" json:"pathPrefix,omitempty"`
+	PathPrefix string `protobuf:"bytes,3,opt,name=path_prefix,json=pathPrefix,proto3" json:"path_prefix,omitempty"`
 	// If true, the user request will be allowed even if the communication with the authorization service has failed,
 	// or if the authorization service has returned a HTTP 5xx error.
 	// Default is false and the request will be rejected with "Forbidden" response.
-	FailOpen bool `protobuf:"varint,4,opt,name=fail_open,json=failOpen,proto3" json:"failOpen,omitempty"`
+	FailOpen bool `protobuf:"varint,4,opt,name=fail_open,json=failOpen,proto3" json:"fail_open,omitempty"`
 	// Sets the HTTP status that is returned to the client when there is a network error to the authorization service.
 	// The default status is "403" (HTTP Forbidden).
-	StatusOnError string `protobuf:"bytes,5,opt,name=status_on_error,json=statusOnError,proto3" json:"statusOnError,omitempty"`
+	StatusOnError string `protobuf:"bytes,5,opt,name=status_on_error,json=statusOnError,proto3" json:"status_on_error,omitempty"`
 	// DEPRECATED. Use include_request_headers_in_check instead.
-	IncludeHeadersInCheck []string `protobuf:"bytes,6,rep,name=include_headers_in_check,json=includeHeadersInCheck,proto3" json:"includeHeadersInCheck,omitempty"`
+	IncludeHeadersInCheck []string `protobuf:"bytes,6,rep,name=include_headers_in_check,json=includeHeadersInCheck,proto3" json:"include_headers_in_check,omitempty"`
 	// List of client request headers that should be included in the authorization request sent to the authorization service.
 	// Note that in addition to the headers specified here following headers are included by default:
 	// 1. *Host*, *Method*, *Path* and *Content-Length* are automatically sent.
@@ -1731,13 +1731,13 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider struct 
 	// - Exact match: "abc" will match on value "abc".
 	// - Prefix match: "abc*" will match on value "abc" and "abcd".
 	// - Suffix match: "*abc" will match on value "abc" and "xabc".
-	IncludeRequestHeadersInCheck []string `protobuf:"bytes,10,rep,name=include_request_headers_in_check,json=includeRequestHeadersInCheck,proto3" json:"includeRequestHeadersInCheck,omitempty"`
+	IncludeRequestHeadersInCheck []string `protobuf:"bytes,10,rep,name=include_request_headers_in_check,json=includeRequestHeadersInCheck,proto3" json:"include_request_headers_in_check,omitempty"`
 	// Set of additional fixed headers that should be included in the authorization request sent to the authorization service.
 	// Key is the header name and value is the header value.
 	// Note that client request of the same key or headers specified in include_request_headers_in_check will be overridden.
-	IncludeAdditionalHeadersInCheck map[string]string `protobuf:"bytes,11,rep,name=include_additional_headers_in_check,json=includeAdditionalHeadersInCheck,proto3" json:"includeAdditionalHeadersInCheck,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	IncludeAdditionalHeadersInCheck map[string]string `protobuf:"bytes,11,rep,name=include_additional_headers_in_check,json=includeAdditionalHeadersInCheck,proto3" json:"include_additional_headers_in_check,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// If set, the client request body will be included in the authorization request sent to the authorization service.
-	IncludeRequestBodyInCheck *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationRequestBody `protobuf:"bytes,12,opt,name=include_request_body_in_check,json=includeRequestBodyInCheck,proto3" json:"includeRequestBodyInCheck,omitempty"`
+	IncludeRequestBodyInCheck *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationRequestBody `protobuf:"bytes,12,opt,name=include_request_body_in_check,json=includeRequestBodyInCheck,proto3" json:"include_request_body_in_check,omitempty"`
 	// List of headers from the authorization service that should be added or overridden in the original request and
 	// forwarded to the upstream when the authorization check result is allowed (HTTP code 200).
 	// If not specified, the original request will not be modified and forwarded to backend as-is.
@@ -1748,7 +1748,7 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider struct 
 	// - Exact match: "abc" will match on value "abc".
 	// - Prefix match: "abc*" will match on value "abc" and "abcd".
 	// - Suffix match: "*abc" will match on value "abc" and "xabc".
-	HeadersToUpstreamOnAllow []string `protobuf:"bytes,7,rep,name=headers_to_upstream_on_allow,json=headersToUpstreamOnAllow,proto3" json:"headersToUpstreamOnAllow,omitempty"`
+	HeadersToUpstreamOnAllow []string `protobuf:"bytes,7,rep,name=headers_to_upstream_on_allow,json=headersToUpstreamOnAllow,proto3" json:"headers_to_upstream_on_allow,omitempty"`
 	// List of headers from the authorization service that should be forwarded to downstream when the authorization
 	// check result is not allowed (HTTP code other than 200).
 	// If not specified, all the authorization response headers, except *Authority (Host)* will be in the response to
@@ -1762,7 +1762,7 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider struct 
 	// - Exact match: "abc" will match on value "abc".
 	// - Prefix match: "abc*" will match on value "abc" and "abcd".
 	// - Suffix match: "*abc" will match on value "abc" and "xabc".
-	HeadersToDownstreamOnDeny []string `protobuf:"bytes,8,rep,name=headers_to_downstream_on_deny,json=headersToDownstreamOnDeny,proto3" json:"headersToDownstreamOnDeny,omitempty"`
+	HeadersToDownstreamOnDeny []string `protobuf:"bytes,8,rep,name=headers_to_downstream_on_deny,json=headersToDownstreamOnDeny,proto3" json:"headers_to_downstream_on_deny,omitempty"`
 	// List of headers from the authorization service that should be forwarded to downstream when the authorization
 	// check result is allowed (HTTP code 200).
 	// If not specified, the original response will not be modified and forwarded to downstream as-is.
@@ -1773,7 +1773,7 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider struct 
 	// - Exact match: "abc" will match on value "abc".
 	// - Prefix match: "abc*" will match on value "abc" and "abcd".
 	// - Suffix match: "*abc" will match on value "abc" and "xabc".
-	HeadersToDownstreamOnAllow []string `protobuf:"bytes,13,rep,name=headers_to_downstream_on_allow,json=headersToDownstreamOnAllow,proto3" json:"headersToDownstreamOnAllow,omitempty"`
+	HeadersToDownstreamOnAllow []string `protobuf:"bytes,13,rep,name=headers_to_downstream_on_allow,json=headersToDownstreamOnAllow,proto3" json:"headers_to_downstream_on_allow,omitempty"`
 	XXX_NoUnkeyedLiteral       struct{} `json:"-"`
 	XXX_unrecognized           []byte   `json:"-"`
 	XXX_sizecache              int32    `json:"-"`
@@ -1924,12 +1924,12 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationGrpcProvider struct 
 	// If true, the HTTP request or TCP connection will be allowed even if the communication with the authorization service has failed,
 	// or if the authorization service has returned a HTTP 5xx error.
 	// Default is false. For HTTP request, it will be rejected with 403 (HTTP Forbidden). For TCP connection, it will be closed immediately.
-	FailOpen bool `protobuf:"varint,3,opt,name=fail_open,json=failOpen,proto3" json:"failOpen,omitempty"`
+	FailOpen bool `protobuf:"varint,3,opt,name=fail_open,json=failOpen,proto3" json:"fail_open,omitempty"`
 	// Sets the HTTP status that is returned to the client when there is a network error to the authorization service.
 	// The default status is "403" (HTTP Forbidden).
-	StatusOnError string `protobuf:"bytes,4,opt,name=status_on_error,json=statusOnError,proto3" json:"statusOnError,omitempty"`
+	StatusOnError string `protobuf:"bytes,4,opt,name=status_on_error,json=statusOnError,proto3" json:"status_on_error,omitempty"`
 	// If set, the client request body will be included in the authorization request sent to the authorization service.
-	IncludeRequestBodyInCheck *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationRequestBody `protobuf:"bytes,6,opt,name=include_request_body_in_check,json=includeRequestBodyInCheck,proto3" json:"includeRequestBodyInCheck,omitempty"`
+	IncludeRequestBodyInCheck *MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationRequestBody `protobuf:"bytes,6,opt,name=include_request_body_in_check,json=includeRequestBodyInCheck,proto3" json:"include_request_body_in_check,omitempty"`
 	XXX_NoUnkeyedLiteral      struct{}                                                            `json:"-"`
 	XXX_unrecognized          []byte                                                              `json:"-"`
 	XXX_sizecache             int32                                                               `json:"-"`
@@ -2027,7 +2027,7 @@ type MeshConfig_ExtensionProvider_ZipkinTracingProvider struct {
 	Port uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
 	// Optional. Controls the overall path length allowed in a reported span.
 	// NOTE: currently only controls max length of the path tag.
-	MaxTagLength         uint32   `protobuf:"varint,3,opt,name=max_tag_length,json=maxTagLength,proto3" json:"maxTagLength,omitempty"`
+	MaxTagLength         uint32   `protobuf:"varint,3,opt,name=max_tag_length,json=maxTagLength,proto3" json:"max_tag_length,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -2103,10 +2103,10 @@ type MeshConfig_ExtensionProvider_LightstepTracingProvider struct {
 	// REQUIRED. Specifies the port of the service.
 	Port uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
 	// The Lightstep access token.
-	AccessToken string `protobuf:"bytes,3,opt,name=access_token,json=accessToken,proto3" json:"accessToken,omitempty"`
+	AccessToken string `protobuf:"bytes,3,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
 	// Optional. Controls the overall path length allowed in a reported span.
 	// NOTE: currently only controls max length of the path tag.
-	MaxTagLength         uint32   `protobuf:"varint,4,opt,name=max_tag_length,json=maxTagLength,proto3" json:"maxTagLength,omitempty"`
+	MaxTagLength         uint32   `protobuf:"varint,4,opt,name=max_tag_length,json=maxTagLength,proto3" json:"max_tag_length,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -2190,7 +2190,7 @@ type MeshConfig_ExtensionProvider_DatadogTracingProvider struct {
 	Port uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
 	// Optional. Controls the overall path length allowed in a reported span.
 	// NOTE: currently only controls max length of the path tag.
-	MaxTagLength         uint32   `protobuf:"varint,3,opt,name=max_tag_length,json=maxTagLength,proto3" json:"maxTagLength,omitempty"`
+	MaxTagLength         uint32   `protobuf:"varint,3,opt,name=max_tag_length,json=maxTagLength,proto3" json:"max_tag_length,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -2266,7 +2266,7 @@ type MeshConfig_ExtensionProvider_SkyWalkingTracingProvider struct {
 	// REQUIRED. Specifies the port of the service.
 	Port uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
 	// Optional. The SkyWalking OAP access token.
-	AccessToken          string   `protobuf:"bytes,3,opt,name=access_token,json=accessToken,proto3" json:"accessToken,omitempty"`
+	AccessToken          string   `protobuf:"bytes,3,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -2338,18 +2338,18 @@ type MeshConfig_ExtensionProvider_StackdriverProvider struct {
 	// The global default max number of attributes per span.
 	// default is 200.
 	// $hide_from_docs
-	MaxNumberOfAttributes *types.Int64Value `protobuf:"bytes,2,opt,name=max_number_of_attributes,json=maxNumberOfAttributes,proto3" json:"maxNumberOfAttributes,omitempty"`
+	MaxNumberOfAttributes *types.Int64Value `protobuf:"bytes,2,opt,name=max_number_of_attributes,json=maxNumberOfAttributes,proto3" json:"max_number_of_attributes,omitempty"`
 	// The global default max number of annotation events per span.
 	// default is 200.
 	// $hide_from_docs
-	MaxNumberOfAnnotations *types.Int64Value `protobuf:"bytes,3,opt,name=max_number_of_annotations,json=maxNumberOfAnnotations,proto3" json:"maxNumberOfAnnotations,omitempty"`
+	MaxNumberOfAnnotations *types.Int64Value `protobuf:"bytes,3,opt,name=max_number_of_annotations,json=maxNumberOfAnnotations,proto3" json:"max_number_of_annotations,omitempty"`
 	// The global default max number of message events per span.
 	// default is 200.
 	// $hide_from_docs
-	MaxNumberOfMessageEvents *types.Int64Value `protobuf:"bytes,4,opt,name=max_number_of_message_events,json=maxNumberOfMessageEvents,proto3" json:"maxNumberOfMessageEvents,omitempty"`
+	MaxNumberOfMessageEvents *types.Int64Value `protobuf:"bytes,4,opt,name=max_number_of_message_events,json=maxNumberOfMessageEvents,proto3" json:"max_number_of_message_events,omitempty"`
 	// Optional. Controls the overall path length allowed in a reported span.
 	// NOTE: currently only controls max length of the path tag.
-	MaxTagLength uint32 `protobuf:"varint,5,opt,name=max_tag_length,json=maxTagLength,proto3" json:"maxTagLength,omitempty"`
+	MaxTagLength uint32 `protobuf:"varint,5,opt,name=max_tag_length,json=maxTagLength,proto3" json:"max_tag_length,omitempty"`
 	// Optional. Controls Stackdriver logging behavior.
 	Logging              *MeshConfig_ExtensionProvider_StackdriverProvider_Logging `protobuf:"bytes,6,opt,name=logging,proto3" json:"logging,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                                                  `json:"-"`
@@ -2513,7 +2513,7 @@ type MeshConfig_ExtensionProvider_OpenCensusAgentTracingProvider struct {
 	Context []MeshConfig_ExtensionProvider_OpenCensusAgentTracingProvider_TraceContext `protobuf:"varint,3,rep,packed,name=context,proto3,enum=istio.mesh.v1alpha1.MeshConfig_ExtensionProvider_OpenCensusAgentTracingProvider_TraceContext" json:"context,omitempty"`
 	// Optional. Controls the overall path length allowed in a reported span.
 	// NOTE: currently only controls max length of the path tag.
-	MaxTagLength         uint32   `protobuf:"varint,4,opt,name=max_tag_length,json=maxTagLength,proto3" json:"maxTagLength,omitempty"`
+	MaxTagLength         uint32   `protobuf:"varint,4,opt,name=max_tag_length,json=maxTagLength,proto3" json:"max_tag_length,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -2635,7 +2635,7 @@ type MeshConfig_ExtensionProvider_EnvoyFileAccessLogProvider struct {
 	// If unspecified, defaults to `/dev/stdout`.
 	Path string `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
 	// Optional. Allows overriding of the default access log format.
-	LogFormat            *MeshConfig_ExtensionProvider_EnvoyFileAccessLogProvider_LogFormat `protobuf:"bytes,2,opt,name=log_format,json=logFormat,proto3" json:"logFormat,omitempty"`
+	LogFormat            *MeshConfig_ExtensionProvider_EnvoyFileAccessLogProvider_LogFormat `protobuf:"bytes,2,opt,name=log_format,json=logFormat,proto3" json:"log_format,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                                                           `json:"-"`
 	XXX_unrecognized     []byte                                                             `json:"-"`
 	XXX_sizecache        int32                                                              `json:"-"`
@@ -2802,15 +2802,15 @@ type MeshConfig_ExtensionProvider_EnvoyHttpGrpcV3LogProvider struct {
 	// Defaults:
 	// -  "http_envoy_accesslog"
 	// -  "listener_envoy_accesslog"
-	LogName string `protobuf:"bytes,3,opt,name=log_name,json=logName,proto3" json:"logName,omitempty"`
+	LogName string `protobuf:"bytes,3,opt,name=log_name,json=logName,proto3" json:"log_name,omitempty"`
 	// Optional. Additional filter state objects to log.
-	FilterStateObjectsToLog []string `protobuf:"bytes,4,rep,name=filter_state_objects_to_log,json=filterStateObjectsToLog,proto3" json:"filterStateObjectsToLog,omitempty"`
+	FilterStateObjectsToLog []string `protobuf:"bytes,4,rep,name=filter_state_objects_to_log,json=filterStateObjectsToLog,proto3" json:"filter_state_objects_to_log,omitempty"`
 	// Optional. Additional request headers to log.
-	AdditionalRequestHeadersToLog []string `protobuf:"bytes,5,rep,name=additional_request_headers_to_log,json=additionalRequestHeadersToLog,proto3" json:"additionalRequestHeadersToLog,omitempty"`
+	AdditionalRequestHeadersToLog []string `protobuf:"bytes,5,rep,name=additional_request_headers_to_log,json=additionalRequestHeadersToLog,proto3" json:"additional_request_headers_to_log,omitempty"`
 	// Optional. Additional response headers to log.
-	AdditionalResponseHeadersToLog []string `protobuf:"bytes,6,rep,name=additional_response_headers_to_log,json=additionalResponseHeadersToLog,proto3" json:"additionalResponseHeadersToLog,omitempty"`
+	AdditionalResponseHeadersToLog []string `protobuf:"bytes,6,rep,name=additional_response_headers_to_log,json=additionalResponseHeadersToLog,proto3" json:"additional_response_headers_to_log,omitempty"`
 	// Optional. Additional response trailers to log.
-	AdditionalResponseTrailersToLog []string `protobuf:"bytes,7,rep,name=additional_response_trailers_to_log,json=additionalResponseTrailersToLog,proto3" json:"additionalResponseTrailersToLog,omitempty"`
+	AdditionalResponseTrailersToLog []string `protobuf:"bytes,7,rep,name=additional_response_trailers_to_log,json=additionalResponseTrailersToLog,proto3" json:"additional_response_trailers_to_log,omitempty"`
 	XXX_NoUnkeyedLiteral            struct{} `json:"-"`
 	XXX_unrecognized                []byte   `json:"-"`
 	XXX_sizecache                   int32    `json:"-"`
@@ -2918,9 +2918,9 @@ type MeshConfig_ExtensionProvider_EnvoyTcpGrpcV3LogProvider struct {
 	// Defaults:
 	// - "tcp_envoy_accesslog"
 	// - "listener_envoy_accesslog"
-	LogName string `protobuf:"bytes,3,opt,name=log_name,json=logName,proto3" json:"logName,omitempty"`
+	LogName string `protobuf:"bytes,3,opt,name=log_name,json=logName,proto3" json:"log_name,omitempty"`
 	// Optional. Additional filter state objects to log.
-	FilterStateObjectsToLog []string `protobuf:"bytes,4,rep,name=filter_state_objects_to_log,json=filterStateObjectsToLog,proto3" json:"filterStateObjectsToLog,omitempty"`
+	FilterStateObjectsToLog []string `protobuf:"bytes,4,rep,name=filter_state_objects_to_log,json=filterStateObjectsToLog,proto3" json:"filter_state_objects_to_log,omitempty"`
 	XXX_NoUnkeyedLiteral    struct{} `json:"-"`
 	XXX_unrecognized        []byte   `json:"-"`
 	XXX_sizecache           int32    `json:"-"`
@@ -3005,10 +3005,10 @@ type MeshConfig_ExtensionProvider_EnvoyOpenTelemetryLogProvider struct {
 	// Optional. The friendly name of the access log.
 	// Defaults:
 	// - "otel_envoy_accesslog"
-	LogName string `protobuf:"bytes,3,opt,name=log_name,json=logName,proto3" json:"logName,omitempty"`
+	LogName string `protobuf:"bytes,3,opt,name=log_name,json=logName,proto3" json:"log_name,omitempty"`
 	// Optional. Format for the proxy access log
 	// Empty value results in proxy's default access log format, following Envoy access logging formatting.
-	LogFormat            *MeshConfig_ExtensionProvider_EnvoyOpenTelemetryLogProvider_LogFormat `protobuf:"bytes,4,opt,name=log_format,json=logFormat,proto3" json:"logFormat,omitempty"`
+	LogFormat            *MeshConfig_ExtensionProvider_EnvoyOpenTelemetryLogProvider_LogFormat `protobuf:"bytes,4,opt,name=log_format,json=logFormat,proto3" json:"log_format,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                                                              `json:"-"`
 	XXX_unrecognized     []byte                                                                `json:"-"`
 	XXX_sizecache        int32                                                                 `json:"-"`
@@ -3168,7 +3168,7 @@ type MeshConfig_DefaultProviders struct {
 	// Name of the default provider(s) for metrics.
 	Metrics []string `protobuf:"bytes,2,rep,name=metrics,proto3" json:"metrics,omitempty"`
 	// Name of the default provider(s) for access logging.
-	AccessLogging        []string `protobuf:"bytes,3,rep,name=access_logging,json=accessLogging,proto3" json:"accessLogging,omitempty"`
+	AccessLogging        []string `protobuf:"bytes,3,rep,name=access_logging,json=accessLogging,proto3" json:"access_logging,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -3286,9 +3286,9 @@ type ConfigSource struct {
 	// Use the tls_settings to specify the tls mode to use. If the MCP server
 	// uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
 	// mode as `ISTIO_MUTUAL`.
-	TlsSettings *v1alpha3.ClientTLSSettings `protobuf:"bytes,2,opt,name=tls_settings,json=tlsSettings,proto3" json:"tlsSettings,omitempty"`
+	TlsSettings *v1alpha3.ClientTLSSettings `protobuf:"bytes,2,opt,name=tls_settings,json=tlsSettings,proto3" json:"tls_settings,omitempty"`
 	// Describes the source of configuration, if nothing is specified default is MCP
-	SubscribedResources  []Resource `protobuf:"varint,3,rep,packed,name=subscribed_resources,json=subscribedResources,proto3,enum=istio.mesh.v1alpha1.Resource" json:"subscribedResources,omitempty"`
+	SubscribedResources  []Resource `protobuf:"varint,3,rep,packed,name=subscribed_resources,json=subscribedResources,proto3,enum=istio.mesh.v1alpha1.Resource" json:"subscribed_resources,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
 	XXX_unrecognized     []byte     `json:"-"`
 	XXX_sizecache        int32      `json:"-"`
@@ -3370,10 +3370,10 @@ type Certificate struct {
 	// Name of the secret the certificate and its key will be stored into.
 	// If it is empty, it will not be stored into a secret.
 	// Instead, the certificate and its key will be stored into a hard-coded directory.
-	SecretName string `protobuf:"bytes,1,opt,name=secret_name,json=secretName,proto3" json:"secretName,omitempty"`
+	SecretName string `protobuf:"bytes,1,opt,name=secret_name,json=secretName,proto3" json:"secret_name,omitempty"`
 	// The DNS names for the certificate. A certificate may contain
 	// multiple DNS names.
-	DnsNames             []string `protobuf:"bytes,2,rep,name=dns_names,json=dnsNames,proto3" json:"dnsNames,omitempty"`
+	DnsNames             []string `protobuf:"bytes,2,rep,name=dns_names,json=dnsNames,proto3" json:"dns_names,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`

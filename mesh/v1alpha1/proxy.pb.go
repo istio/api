@@ -259,19 +259,19 @@ type Tracing struct {
 	//       default_value: defaulted-value-from-custom-header
 	// ```
 	// $hide_from_docs
-	CustomTags map[string]*Tracing_CustomTag `protobuf:"bytes,5,rep,name=custom_tags,json=customTags,proto3" json:"customTags,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	CustomTags map[string]*Tracing_CustomTag `protobuf:"bytes,5,rep,name=custom_tags,json=customTags,proto3" json:"custom_tags,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Configures the maximum length of the request path to extract and include in the
 	// HttpUrl tag. Used to truncate length request paths to meet the needs of tracing
 	// backend. If not set, then a length of 256 will be used.
 	// $hide_from_docs
-	MaxPathTagLength uint32 `protobuf:"varint,6,opt,name=max_path_tag_length,json=maxPathTagLength,proto3" json:"maxPathTagLength,omitempty"`
+	MaxPathTagLength uint32 `protobuf:"varint,6,opt,name=max_path_tag_length,json=maxPathTagLength,proto3" json:"max_path_tag_length,omitempty"`
 	// The percentage of requests (0.0 - 100.0) that will be randomly selected for trace generation,
 	// if not requested by the client or not forced. Default is 1.0.
 	Sampling float64 `protobuf:"fixed64,7,opt,name=sampling,proto3" json:"sampling,omitempty"`
 	// Use the tls_settings to specify the tls mode to use. If the remote tracing service
 	// uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
 	// mode as `ISTIO_MUTUAL`.
-	TlsSettings          *v1alpha3.ClientTLSSettings `protobuf:"bytes,8,opt,name=tls_settings,json=tlsSettings,proto3" json:"tlsSettings,omitempty"`
+	TlsSettings          *v1alpha3.ClientTLSSettings `protobuf:"bytes,8,opt,name=tls_settings,json=tlsSettings,proto3" json:"tls_settings,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                    `json:"-"`
 	XXX_unrecognized     []byte                      `json:"-"`
 	XXX_sizecache        int32                       `json:"-"`
@@ -329,7 +329,7 @@ type Tracing_Stackdriver_ struct {
 	Stackdriver *Tracing_Stackdriver `protobuf:"bytes,4,opt,name=stackdriver,proto3,oneof" json:"stackdriver,omitempty"`
 }
 type Tracing_OpenCensusAgent_ struct {
-	OpenCensusAgent *Tracing_OpenCensusAgent `protobuf:"bytes,9,opt,name=open_census_agent,json=openCensusAgent,proto3,oneof" json:"openCensusAgent,omitempty"`
+	OpenCensusAgent *Tracing_OpenCensusAgent `protobuf:"bytes,9,opt,name=open_census_agent,json=openCensusAgent,proto3,oneof" json:"open_census_agent,omitempty"`
 }
 
 func (*Tracing_Zipkin_) isTracing_Tracer()          {}
@@ -473,7 +473,7 @@ type Tracing_Lightstep struct {
 	// Address of the Lightstep Satellite pool.
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	// The Lightstep access token.
-	AccessToken          string   `protobuf:"bytes,2,opt,name=access_token,json=accessToken,proto3" json:"accessToken,omitempty"`
+	AccessToken          string   `protobuf:"bytes,2,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -586,15 +586,15 @@ type Tracing_Stackdriver struct {
 	// The global default max number of attributes per span.
 	// default is 200.
 	// $hide_from_docs
-	MaxNumberOfAttributes *types.Int64Value `protobuf:"bytes,2,opt,name=max_number_of_attributes,json=maxNumberOfAttributes,proto3" json:"maxNumberOfAttributes,omitempty"`
+	MaxNumberOfAttributes *types.Int64Value `protobuf:"bytes,2,opt,name=max_number_of_attributes,json=maxNumberOfAttributes,proto3" json:"max_number_of_attributes,omitempty"`
 	// The global default max number of annotation events per span.
 	// default is 200.
 	// $hide_from_docs
-	MaxNumberOfAnnotations *types.Int64Value `protobuf:"bytes,3,opt,name=max_number_of_annotations,json=maxNumberOfAnnotations,proto3" json:"maxNumberOfAnnotations,omitempty"`
+	MaxNumberOfAnnotations *types.Int64Value `protobuf:"bytes,3,opt,name=max_number_of_annotations,json=maxNumberOfAnnotations,proto3" json:"max_number_of_annotations,omitempty"`
 	// The global default max number of message events per span.
 	// default is 200.
 	// $hide_from_docs
-	MaxNumberOfMessageEvents *types.Int64Value `protobuf:"bytes,4,opt,name=max_number_of_message_events,json=maxNumberOfMessageEvents,proto3" json:"maxNumberOfMessageEvents,omitempty"`
+	MaxNumberOfMessageEvents *types.Int64Value `protobuf:"bytes,4,opt,name=max_number_of_message_events,json=maxNumberOfMessageEvents,proto3" json:"max_number_of_message_events,omitempty"`
 	XXX_NoUnkeyedLiteral     struct{}          `json:"-"`
 	XXX_unrecognized         []byte            `json:"-"`
 	XXX_sizecache            int32             `json:"-"`
@@ -894,7 +894,7 @@ type Tracing_Environment struct {
 	// When the environment variable is not found,
 	// the tag's value will be populated with this default value if specified,
 	// otherwise the tag will not be populated.
-	DefaultValue         string   `protobuf:"bytes,2,opt,name=default_value,json=defaultValue,proto3" json:"defaultValue,omitempty"`
+	DefaultValue         string   `protobuf:"bytes,2,opt,name=default_value,json=defaultValue,proto3" json:"default_value,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -955,7 +955,7 @@ type Tracing_RequestHeader struct {
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// Default value to be used for the tag when the named HTTP header does not exist.
 	// The tag will be skipped if no default value is provided.
-	DefaultValue         string   `protobuf:"bytes,2,opt,name=default_value,json=defaultValue,proto3" json:"defaultValue,omitempty"`
+	DefaultValue         string   `protobuf:"bytes,2,opt,name=default_value,json=defaultValue,proto3" json:"default_value,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -1015,7 +1015,7 @@ type SDS struct {
 	// True if SDS is enabled.
 	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
 	// Path of k8s service account JWT path.
-	K8SSaJwtPath         string   `protobuf:"bytes,2,opt,name=k8s_sa_jwt_path,json=k8sSaJwtPath,proto3" json:"k8sSaJwtPath,omitempty"`
+	K8SSaJwtPath         string   `protobuf:"bytes,2,opt,name=k8s_sa_jwt_path,json=k8sSaJwtPath,proto3" json:"k8s_sa_jwt_path,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -1089,11 +1089,11 @@ type Topology struct {
 	// The default value of num_trusted_proxies is 0.
 	// See [Envoy XFF] (https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#config-http-conn-man-headers-x-forwarded-for)
 	// header handling for more details.
-	NumTrustedProxies uint32 `protobuf:"varint,1,opt,name=num_trusted_proxies,json=numTrustedProxies,proto3" json:"numTrustedProxies,omitempty"`
+	NumTrustedProxies uint32 `protobuf:"varint,1,opt,name=num_trusted_proxies,json=numTrustedProxies,proto3" json:"num_trusted_proxies,omitempty"`
 	// $hide_from_docs
 	// Configures how the gateway proxy handles x-forwarded-client-cert (XFCC)
 	// header in the incoming request.
-	ForwardClientCertDetails Topology_ForwardClientCertDetails `protobuf:"varint,2,opt,name=forward_client_cert_details,json=forwardClientCertDetails,proto3,enum=istio.mesh.v1alpha1.Topology_ForwardClientCertDetails" json:"forwardClientCertDetails,omitempty"`
+	ForwardClientCertDetails Topology_ForwardClientCertDetails `protobuf:"varint,2,opt,name=forward_client_cert_details,json=forwardClientCertDetails,proto3,enum=istio.mesh.v1alpha1.Topology_ForwardClientCertDetails" json:"forward_client_cert_details,omitempty"`
 	XXX_NoUnkeyedLiteral     struct{}                          `json:"-"`
 	XXX_unrecognized         []byte                            `json:"-"`
 	XXX_sizecache            int32                             `json:"-"`
@@ -1173,9 +1173,9 @@ func (m *Topology) GetForwardClientCertDetails() Topology_ForwardClientCertDetai
 type ProxyConfig struct {
 	// Path to the generated configuration file directory.
 	// Proxy agent generates the actual configuration and stores it in this directory.
-	ConfigPath string `protobuf:"bytes,1,opt,name=config_path,json=configPath,proto3" json:"configPath,omitempty"`
+	ConfigPath string `protobuf:"bytes,1,opt,name=config_path,json=configPath,proto3" json:"config_path,omitempty"`
 	// Path to the proxy binary
-	BinaryPath string `protobuf:"bytes,2,opt,name=binary_path,json=binaryPath,proto3" json:"binaryPath,omitempty"`
+	BinaryPath string `protobuf:"bytes,2,opt,name=binary_path,json=binaryPath,proto3" json:"binary_path,omitempty"`
 	// Types that are valid to be assigned to ClusterName:
 	//	*ProxyConfig_ServiceCluster
 	//	*ProxyConfig_TracingServiceName_
@@ -1183,50 +1183,50 @@ type ProxyConfig struct {
 	// The time in seconds that Envoy will drain connections during a hot
 	// restart. MUST be >=1s (e.g., _1s/1m/1h_)
 	// Default drain duration is `45s`.
-	DrainDuration *types.Duration `protobuf:"bytes,4,opt,name=drain_duration,json=drainDuration,proto3" json:"drainDuration,omitempty"`
+	DrainDuration *types.Duration `protobuf:"bytes,4,opt,name=drain_duration,json=drainDuration,proto3" json:"drain_duration,omitempty"`
 	// The time in seconds that Envoy will wait before shutting down the
 	// parent process during a hot restart. MUST be >=1s (e.g., `1s/1m/1h`).
 	// MUST BE greater than `drain_duration` parameter.
 	// Default shutdown duration is `60s`.
-	ParentShutdownDuration *types.Duration `protobuf:"bytes,5,opt,name=parent_shutdown_duration,json=parentShutdownDuration,proto3" json:"parentShutdownDuration,omitempty"`
+	ParentShutdownDuration *types.Duration `protobuf:"bytes,5,opt,name=parent_shutdown_duration,json=parentShutdownDuration,proto3" json:"parent_shutdown_duration,omitempty"`
 	// Address of the discovery service exposing xDS with mTLS connection.
 	// The inject configuration may override this value.
-	DiscoveryAddress string `protobuf:"bytes,6,opt,name=discovery_address,json=discoveryAddress,proto3" json:"discoveryAddress,omitempty"`
+	DiscoveryAddress string `protobuf:"bytes,6,opt,name=discovery_address,json=discoveryAddress,proto3" json:"discovery_address,omitempty"`
 	// $hide_from_docs
-	DiscoveryRefreshDelay *types.Duration `protobuf:"bytes,7,opt,name=discovery_refresh_delay,json=discoveryRefreshDelay,proto3" json:"discoveryRefreshDelay,omitempty"` // Deprecated: Do not use.
+	DiscoveryRefreshDelay *types.Duration `protobuf:"bytes,7,opt,name=discovery_refresh_delay,json=discoveryRefreshDelay,proto3" json:"discovery_refresh_delay,omitempty"` // Deprecated: Do not use.
 	// Address of the Zipkin service (e.g. _zipkin:9411_).
 	// DEPRECATED: Use [tracing][istio.mesh.v1alpha1.ProxyConfig.tracing] instead.
-	ZipkinAddress string `protobuf:"bytes,8,opt,name=zipkin_address,json=zipkinAddress,proto3" json:"zipkinAddress,omitempty"` // Deprecated: Do not use.
+	ZipkinAddress string `protobuf:"bytes,8,opt,name=zipkin_address,json=zipkinAddress,proto3" json:"zipkin_address,omitempty"` // Deprecated: Do not use.
 	// IP Address and Port of a statsd UDP listener (e.g. `10.75.241.127:9125`).
-	StatsdUdpAddress string `protobuf:"bytes,10,opt,name=statsd_udp_address,json=statsdUdpAddress,proto3" json:"statsdUdpAddress,omitempty"`
+	StatsdUdpAddress string `protobuf:"bytes,10,opt,name=statsd_udp_address,json=statsdUdpAddress,proto3" json:"statsd_udp_address,omitempty"`
 	// $hide_from_docs
-	EnvoyMetricsServiceAddress string `protobuf:"bytes,20,opt,name=envoy_metrics_service_address,json=envoyMetricsServiceAddress,proto3" json:"envoyMetricsServiceAddress,omitempty"` // Deprecated: Do not use.
+	EnvoyMetricsServiceAddress string `protobuf:"bytes,20,opt,name=envoy_metrics_service_address,json=envoyMetricsServiceAddress,proto3" json:"envoy_metrics_service_address,omitempty"` // Deprecated: Do not use.
 	// Port on which Envoy should listen for administrative commands.
 	// Default port is `15000`.
-	ProxyAdminPort int32 `protobuf:"varint,11,opt,name=proxy_admin_port,json=proxyAdminPort,proto3" json:"proxyAdminPort,omitempty"`
+	ProxyAdminPort int32 `protobuf:"varint,11,opt,name=proxy_admin_port,json=proxyAdminPort,proto3" json:"proxy_admin_port,omitempty"`
 	// $hide_from_docs
-	AvailabilityZone string `protobuf:"bytes,12,opt,name=availability_zone,json=availabilityZone,proto3" json:"availabilityZone,omitempty"` // Deprecated: Do not use.
+	AvailabilityZone string `protobuf:"bytes,12,opt,name=availability_zone,json=availabilityZone,proto3" json:"availability_zone,omitempty"` // Deprecated: Do not use.
 	// AuthenticationPolicy defines how the proxy is authenticated when it connects to the control plane.
 	// Default is set to `MUTUAL_TLS`.
-	ControlPlaneAuthPolicy AuthenticationPolicy `protobuf:"varint,13,opt,name=control_plane_auth_policy,json=controlPlaneAuthPolicy,proto3,enum=istio.mesh.v1alpha1.AuthenticationPolicy" json:"controlPlaneAuthPolicy,omitempty"`
+	ControlPlaneAuthPolicy AuthenticationPolicy `protobuf:"varint,13,opt,name=control_plane_auth_policy,json=controlPlaneAuthPolicy,proto3,enum=istio.mesh.v1alpha1.AuthenticationPolicy" json:"control_plane_auth_policy,omitempty"`
 	// File path of custom proxy configuration, currently used by proxies
 	// in front of Mixer and Pilot.
-	CustomConfigFile string `protobuf:"bytes,14,opt,name=custom_config_file,json=customConfigFile,proto3" json:"customConfigFile,omitempty"`
+	CustomConfigFile string `protobuf:"bytes,14,opt,name=custom_config_file,json=customConfigFile,proto3" json:"custom_config_file,omitempty"`
 	// Maximum length of name field in Envoy's metrics. The length of the name field
 	// is determined by the length of a name field in a service and the set of labels that
 	// comprise a particular version of the service. The default value is set to 189 characters.
 	// Envoy's internal metrics take up 67 characters, for a total of 256 character name per metric.
 	// Increase the value of this field if you find that the metrics from Envoys are truncated.
-	StatNameLength int32 `protobuf:"varint,15,opt,name=stat_name_length,json=statNameLength,proto3" json:"statNameLength,omitempty"`
+	StatNameLength int32 `protobuf:"varint,15,opt,name=stat_name_length,json=statNameLength,proto3" json:"stat_name_length,omitempty"`
 	// The number of worker threads to run.
 	// If unset, this will be automatically determined based on CPU requests/limits.
 	// If set to 0, all cores on the machine will be used.
 	// Default is 2 worker threads.
 	Concurrency *types.Int32Value `protobuf:"bytes,16,opt,name=concurrency,proto3" json:"concurrency,omitempty"`
 	// Path to the proxy bootstrap template file
-	ProxyBootstrapTemplatePath string `protobuf:"bytes,17,opt,name=proxy_bootstrap_template_path,json=proxyBootstrapTemplatePath,proto3" json:"proxyBootstrapTemplatePath,omitempty"`
+	ProxyBootstrapTemplatePath string `protobuf:"bytes,17,opt,name=proxy_bootstrap_template_path,json=proxyBootstrapTemplatePath,proto3" json:"proxy_bootstrap_template_path,omitempty"`
 	// The mode used to redirect inbound traffic to Envoy.
-	InterceptionMode ProxyConfig_InboundInterceptionMode `protobuf:"varint,18,opt,name=interception_mode,json=interceptionMode,proto3,enum=istio.mesh.v1alpha1.ProxyConfig_InboundInterceptionMode" json:"interceptionMode,omitempty"`
+	InterceptionMode ProxyConfig_InboundInterceptionMode `protobuf:"varint,18,opt,name=interception_mode,json=interceptionMode,proto3,enum=istio.mesh.v1alpha1.ProxyConfig_InboundInterceptionMode" json:"interception_mode,omitempty"`
 	// Tracing configuration to be used by the proxy.
 	Tracing *Tracing `protobuf:"bytes,19,opt,name=tracing,proto3" json:"tracing,omitempty"`
 	// Secret Discovery Service(SDS) configuration to be used by the proxy.
@@ -1235,46 +1235,46 @@ type ProxyConfig struct {
 	// sent. (e.g. `accesslog-service:15000`). See [Access Log
 	// Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto)
 	// for details about Envoy's gRPC Access Log Service API.
-	EnvoyAccessLogService *RemoteService `protobuf:"bytes,22,opt,name=envoy_access_log_service,json=envoyAccessLogService,proto3" json:"envoyAccessLogService,omitempty"`
+	EnvoyAccessLogService *RemoteService `protobuf:"bytes,22,opt,name=envoy_access_log_service,json=envoyAccessLogService,proto3" json:"envoy_access_log_service,omitempty"`
 	// Address of the Envoy Metrics Service implementation (e.g. `metrics-service:15000`).
 	// See [Metric Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/metrics/v2/metrics_service.proto)
 	// for details about Envoy's Metrics Service API.
-	EnvoyMetricsService *RemoteService `protobuf:"bytes,23,opt,name=envoy_metrics_service,json=envoyMetricsService,proto3" json:"envoyMetricsService,omitempty"`
+	EnvoyMetricsService *RemoteService `protobuf:"bytes,23,opt,name=envoy_metrics_service,json=envoyMetricsService,proto3" json:"envoy_metrics_service,omitempty"`
 	// Additional environment variables for the proxy.
 	// Names starting with `ISTIO_META_` will be included in the generated bootstrap and sent to the XDS server.
-	ProxyMetadata map[string]string `protobuf:"bytes,24,rep,name=proxy_metadata,json=proxyMetadata,proto3" json:"proxyMetadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	ProxyMetadata map[string]string `protobuf:"bytes,24,rep,name=proxy_metadata,json=proxyMetadata,proto3" json:"proxy_metadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Envoy [runtime configuration](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/operations/runtime) to set during bootstrapping.
 	// This enables setting experimental, unsafe, unsupported, and deprecated features that should be used with extreme caution.
-	RuntimeValues map[string]string `protobuf:"bytes,37,rep,name=runtime_values,json=runtimeValues,proto3" json:"runtimeValues,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	RuntimeValues map[string]string `protobuf:"bytes,37,rep,name=runtime_values,json=runtimeValues,proto3" json:"runtime_values,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Port on which the agent should listen for administrative commands such as readiness probe.
 	// Default is set to port `15020`.
-	StatusPort int32 `protobuf:"varint,26,opt,name=status_port,json=statusPort,proto3" json:"statusPort,omitempty"`
+	StatusPort int32 `protobuf:"varint,26,opt,name=status_port,json=statusPort,proto3" json:"status_port,omitempty"`
 	// An additional list of tags to extract from the in-proxy Istio telemetry. These extra tags can be
 	// added by configuring the telemetry extension. Each additional tag needs to be present in this list.
 	// Extra tags emitted by the telemetry extensions must be listed here so that they can be processed
 	// and exposed as Prometheus metrics.
-	ExtraStatTags []string `protobuf:"bytes,27,rep,name=extra_stat_tags,json=extraStatTags,proto3" json:"extraStatTags,omitempty"`
+	ExtraStatTags []string `protobuf:"bytes,27,rep,name=extra_stat_tags,json=extraStatTags,proto3" json:"extra_stat_tags,omitempty"`
 	// $hide_from_docs
 	// Topology encapsulates the configuration which describes where the proxy is
 	// located i.e. behind a (or N) trusted proxy (proxies) or directly exposed
 	// to the internet. This configuration only effects gateways and is applied
 	// to all the gateways in the cluster unless overriden via annotations of the
 	// gateway workloads.
-	GatewayTopology *Topology `protobuf:"bytes,28,opt,name=gateway_topology,json=gatewayTopology,proto3" json:"gatewayTopology,omitempty"`
+	GatewayTopology *Topology `protobuf:"bytes,28,opt,name=gateway_topology,json=gatewayTopology,proto3" json:"gateway_topology,omitempty"`
 	// The amount of time allowed for connections to complete on proxy shutdown.
 	// On receiving `SIGTERM` or `SIGINT`, `istio-agent` tells the active Envoy to start draining,
 	// preventing any new connections and allowing existing connections to complete. It then
 	// sleeps for the `termination_drain_duration` and then kills any remaining active Envoy processes.
 	// If not set, a default of `5s` will be applied.
-	TerminationDrainDuration *types.Duration `protobuf:"bytes,29,opt,name=termination_drain_duration,json=terminationDrainDuration,proto3" json:"terminationDrainDuration,omitempty"`
+	TerminationDrainDuration *types.Duration `protobuf:"bytes,29,opt,name=termination_drain_duration,json=terminationDrainDuration,proto3" json:"termination_drain_duration,omitempty"`
 	// The unique identifier for the [service mesh](https://istio.io/docs/reference/glossary/#service-mesh)
 	// All control planes running in the same service mesh should specify the same mesh ID.
 	// Mesh ID is used to label telemetry reports for cases where telemetry from multiple meshes is mixed together.
-	MeshId string `protobuf:"bytes,30,opt,name=mesh_id,json=meshId,proto3" json:"meshId,omitempty"`
+	MeshId string `protobuf:"bytes,30,opt,name=mesh_id,json=meshId,proto3" json:"mesh_id,omitempty"`
 	// VM Health Checking readiness probe. This health check config exactly mirrors the
 	// kubernetes readiness probe configuration both in schema and logic.
 	// Only one health check method of 3 can be set at a time.
-	ReadinessProbe *v1alpha3.ReadinessProbe `protobuf:"bytes,31,opt,name=readiness_probe,json=readinessProbe,proto3" json:"readinessProbe,omitempty"`
+	ReadinessProbe *v1alpha3.ReadinessProbe `protobuf:"bytes,31,opt,name=readiness_probe,json=readinessProbe,proto3" json:"readiness_probe,omitempty"`
 	// Proxy stats matcher defines configuration for reporting custom Envoy stats.
 	// To reduce memory and CPU overhead from Envoy stats system, Istio proxies by
 	// default create and expose only a subset of Envoy stats. This option is to
@@ -1297,17 +1297,17 @@ type ProxyConfig struct {
 	// Note including more Envoy stats might increase number of time series
 	// collected by prometheus significantly. Care needs to be taken on Prometheus
 	// resource provision and configuration to reduce cardinality.
-	ProxyStatsMatcher *ProxyConfig_ProxyStatsMatcher `protobuf:"bytes,32,opt,name=proxy_stats_matcher,json=proxyStatsMatcher,proto3" json:"proxyStatsMatcher,omitempty"`
+	ProxyStatsMatcher *ProxyConfig_ProxyStatsMatcher `protobuf:"bytes,32,opt,name=proxy_stats_matcher,json=proxyStatsMatcher,proto3" json:"proxy_stats_matcher,omitempty"`
 	// Boolean flag for enabling/disabling the holdApplicationUntilProxyStarts behavior.
 	// This feature adds hooks to delay application startup until the pod proxy
 	// is ready to accept traffic, mitigating some startup race conditions.
 	// Default value is 'false'.
-	HoldApplicationUntilProxyStarts *types.BoolValue `protobuf:"bytes,33,opt,name=hold_application_until_proxy_starts,json=holdApplicationUntilProxyStarts,proto3" json:"holdApplicationUntilProxyStarts,omitempty"`
+	HoldApplicationUntilProxyStarts *types.BoolValue `protobuf:"bytes,33,opt,name=hold_application_until_proxy_starts,json=holdApplicationUntilProxyStarts,proto3" json:"hold_application_until_proxy_starts,omitempty"`
 	// The PEM data of the extra root certificates for workload-to-workload communication.
 	// This includes the certificates defined in MeshConfig and any other certificates that Istiod uses as CA.
 	// The plugin certificates (the 'cacerts' secret), self-signed certificates (the 'istio-ca-secret' secret)
 	// are added automatically by Istiod.
-	CaCertificatesPem []string `protobuf:"bytes,34,rep,name=ca_certificates_pem,json=caCertificatesPem,proto3" json:"caCertificatesPem,omitempty"`
+	CaCertificatesPem []string `protobuf:"bytes,34,rep,name=ca_certificates_pem,json=caCertificatesPem,proto3" json:"ca_certificates_pem,omitempty"`
 	// Specifies the details of the proxy image.
 	Image                *v1beta1.ProxyImage `protobuf:"bytes,35,opt,name=image,proto3" json:"image,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
@@ -1355,10 +1355,10 @@ type isProxyConfig_ClusterName interface {
 }
 
 type ProxyConfig_ServiceCluster struct {
-	ServiceCluster string `protobuf:"bytes,3,opt,name=service_cluster,json=serviceCluster,proto3,oneof" json:"serviceCluster,omitempty"`
+	ServiceCluster string `protobuf:"bytes,3,opt,name=service_cluster,json=serviceCluster,proto3,oneof" json:"service_cluster,omitempty"`
 }
 type ProxyConfig_TracingServiceName_ struct {
-	TracingServiceName ProxyConfig_TracingServiceName `protobuf:"varint,36,opt,name=tracing_service_name,json=tracingServiceName,proto3,enum=istio.mesh.v1alpha1.ProxyConfig_TracingServiceName,oneof" json:"tracingServiceName,omitempty"`
+	TracingServiceName ProxyConfig_TracingServiceName `protobuf:"varint,36,opt,name=tracing_service_name,json=tracingServiceName,proto3,enum=istio.mesh.v1alpha1.ProxyConfig_TracingServiceName,oneof" json:"tracing_service_name,omitempty"`
 }
 
 func (*ProxyConfig_ServiceCluster) isProxyConfig_ClusterName()      {}
@@ -1632,11 +1632,11 @@ func (*ProxyConfig) XXX_OneofWrappers() []interface{} {
 // the minimum Envoy stats that Istio generates by default.
 type ProxyConfig_ProxyStatsMatcher struct {
 	// Proxy stats name prefix matcher for inclusion.
-	InclusionPrefixes []string `protobuf:"bytes,1,rep,name=inclusion_prefixes,json=inclusionPrefixes,proto3" json:"inclusionPrefixes,omitempty"`
+	InclusionPrefixes []string `protobuf:"bytes,1,rep,name=inclusion_prefixes,json=inclusionPrefixes,proto3" json:"inclusion_prefixes,omitempty"`
 	// Proxy stats name suffix matcher for inclusion.
-	InclusionSuffixes []string `protobuf:"bytes,2,rep,name=inclusion_suffixes,json=inclusionSuffixes,proto3" json:"inclusionSuffixes,omitempty"`
+	InclusionSuffixes []string `protobuf:"bytes,2,rep,name=inclusion_suffixes,json=inclusionSuffixes,proto3" json:"inclusion_suffixes,omitempty"`
 	// Proxy stats name regexps matcher for inclusion.
-	InclusionRegexps     []string `protobuf:"bytes,3,rep,name=inclusion_regexps,json=inclusionRegexps,proto3" json:"inclusionRegexps,omitempty"`
+	InclusionRegexps     []string `protobuf:"bytes,3,rep,name=inclusion_regexps,json=inclusionRegexps,proto3" json:"inclusion_regexps,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -1704,9 +1704,9 @@ type RemoteService struct {
 	// Use the `tls_settings` to specify the tls mode to use. If the remote service
 	// uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
 	// mode as `ISTIO_MUTUAL`.
-	TlsSettings *v1alpha3.ClientTLSSettings `protobuf:"bytes,2,opt,name=tls_settings,json=tlsSettings,proto3" json:"tlsSettings,omitempty"`
+	TlsSettings *v1alpha3.ClientTLSSettings `protobuf:"bytes,2,opt,name=tls_settings,json=tlsSettings,proto3" json:"tls_settings,omitempty"`
 	// If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalives.
-	TcpKeepalive         *v1alpha3.ConnectionPoolSettings_TCPSettings_TcpKeepalive `protobuf:"bytes,3,opt,name=tcp_keepalive,json=tcpKeepalive,proto3" json:"tcpKeepalive,omitempty"`
+	TcpKeepalive         *v1alpha3.ConnectionPoolSettings_TCPSettings_TcpKeepalive `protobuf:"bytes,3,opt,name=tcp_keepalive,json=tcpKeepalive,proto3" json:"tcp_keepalive,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                                                  `json:"-"`
 	XXX_unrecognized     []byte                                                    `json:"-"`
 	XXX_sizecache        int32                                                     `json:"-"`
