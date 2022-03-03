@@ -16,7 +16,7 @@
 
 set -eu
 
-LC_ALL=c
+LC_ALL=C
 locks=$(find ./releaselocks -type d -name 'release-*' | sort)
 fail=none
 REFRESH="${REFRESH:-false}"
