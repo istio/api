@@ -3,14 +3,14 @@
 
 // Telemetry defines how the telemetry is generated for workloads within a mesh.
 //
-// For mesh level configuration, put the resource in root configuration namespace for
-// your Istio installation *without* a workload selector.
+// For mesh level configuration, put the resource in root configuration
+// namespace for your Istio installation *without* a workload selector.
 //
-// For any namespace, including the root configuration namespace, it is only valid
-// to have a single workload selector-less Telemetry resource.
+// For any namespace, including the root configuration namespace, it is only
+// valid to have a single workload selector-less Telemetry resource.
 //
-// For resources with a workload selector, it is only valid to have one resource selecting
-// any given workload.
+// For resources with a workload selector, it is only valid to have one resource
+// selecting any given workload.
 //
 // The hierarchy of Telemetry configuration is as follows:
 //
@@ -173,10 +173,11 @@
 //   accessLogging:
 //   - providers:
 //     - name: envoy
-//     # By default, this turns on access logging (no need to set `disabled: false`).
-//     # Unspecified `disabled` will be treated as `disabled: false`, except in
-//     # cases where a parent configuration has marked as `disabled: true`. In
-//     # those cases, `disabled: false` must be set explicitly to override.
+//     # By default, this turns on access logging (no need to set `disabled:
+//     false`). # Unspecified `disabled` will be treated as `disabled: false`,
+//     except in # cases where a parent configuration has marked as `disabled:
+//     true`. In # those cases, `disabled: false` must be set explicitly to
+//     override.
 // ```
 //
 // Policy to disable access logging for the `foo` namespace:
@@ -256,14 +257,45 @@ func (WorkloadMode) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_991c84745e2b7651, []int{0}
 }
 
-// Curated list of known metric types that is supported by Istio metric providers.
-// See also: https://istio.io/latest/docs/reference/config/metrics/#metrics
+type Tracing_TracingSelector_TrafficDirection int32
+
+const (
+	Tracing_TracingSelector_ALL_TRAFFIC   Tracing_TracingSelector_TrafficDirection = 0
+	Tracing_TracingSelector_INBOUND_ONLY  Tracing_TracingSelector_TrafficDirection = 1
+	Tracing_TracingSelector_OUTBOUND_ONLY Tracing_TracingSelector_TrafficDirection = 2
+)
+
+var Tracing_TracingSelector_TrafficDirection_name = map[int32]string{
+	0: "ALL_TRAFFIC",
+	1: "INBOUND_ONLY",
+	2: "OUTBOUND_ONLY",
+}
+
+var Tracing_TracingSelector_TrafficDirection_value = map[string]int32{
+	"ALL_TRAFFIC":   0,
+	"INBOUND_ONLY":  1,
+	"OUTBOUND_ONLY": 2,
+}
+
+func (x Tracing_TracingSelector_TrafficDirection) String() string {
+	return proto.EnumName(Tracing_TracingSelector_TrafficDirection_name, int32(x))
+}
+
+func (Tracing_TracingSelector_TrafficDirection) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_991c84745e2b7651, []int{1, 5, 0}
+}
+
+// Curated list of known metric types that is supported by Istio metric
+// providers. See also:
+// https://istio.io/latest/docs/reference/config/metrics/#metrics
 type MetricSelector_IstioMetric int32
 
 const (
-	// Use of this enum indicates that the override should apply to all Istio default metrics.
+	// Use of this enum indicates that the override should apply to all Istio
+	// default metrics.
 	MetricSelector_ALL_METRICS MetricSelector_IstioMetric = 0
-	// Counter of requests to/from an application, generated for HTTP, HTTP/2, and GRPC traffic.
+	// Counter of requests to/from an application, generated for HTTP, HTTP/2,
+	// and GRPC traffic.
 	//
 	// The Prometheus provider exports this metric as: `istio_requests_total`.
 	//
@@ -272,16 +304,19 @@ const (
 	// - `istio.io/service/server/request_count` (SERVER mode)
 	// - `istio.io/service/client/request_count` (CLIENT mode)
 	MetricSelector_REQUEST_COUNT MetricSelector_IstioMetric = 1
-	// Histogram of request durations, generated for HTTP, HTTP/2, and GRPC traffic.
+	// Histogram of request durations, generated for HTTP, HTTP/2, and GRPC
+	// traffic.
 	//
-	// The Prometheus provider exports this metric as: `istio_request_duration_milliseconds`.
+	// The Prometheus provider exports this metric as:
+	// `istio_request_duration_milliseconds`.
 	//
 	// The Stackdriver provider exports this metric as:
 	//
 	// - `istio.io/service/server/response_latencies` (SERVER mode)
 	// - `istio.io/service/client/roundtrip_latencies` (CLIENT mode)
 	MetricSelector_REQUEST_DURATION MetricSelector_IstioMetric = 2
-	// Histogram of request body sizes, generated for HTTP, HTTP/2, and GRPC traffic.
+	// Histogram of request body sizes, generated for HTTP, HTTP/2, and GRPC
+	// traffic.
 	//
 	// The Prometheus provider exports this metric as: `istio_request_bytes`.
 	//
@@ -290,7 +325,8 @@ const (
 	// - `istio.io/service/server/request_bytes` (SERVER mode)
 	// - `istio.io/service/client/request_bytes` (CLIENT mode)
 	MetricSelector_REQUEST_SIZE MetricSelector_IstioMetric = 3
-	// Histogram of response body sizes, generated for HTTP, HTTP/2, and GRPC traffic.
+	// Histogram of response body sizes, generated for HTTP, HTTP/2, and GRPC
+	// traffic.
 	//
 	// The Prometheus provider exports this metric as: `istio_response_bytes`.
 	//
@@ -301,7 +337,8 @@ const (
 	MetricSelector_RESPONSE_SIZE MetricSelector_IstioMetric = 4
 	// Counter of TCP connections opened over lifetime of workload.
 	//
-	// The Prometheus provider exports this metric as: `istio_tcp_connections_opened_total`.
+	// The Prometheus provider exports this metric as:
+	// `istio_tcp_connections_opened_total`.
 	//
 	// The Stackdriver provider exports this metric as:
 	//
@@ -310,7 +347,8 @@ const (
 	MetricSelector_TCP_OPENED_CONNECTIONS MetricSelector_IstioMetric = 5
 	// Counter of TCP connections closed over lifetime of workload.
 	//
-	// The Prometheus provider exports this metric as: `istio_tcp_connections_closed_total`.
+	// The Prometheus provider exports this metric as:
+	// `istio_tcp_connections_closed_total`.
 	//
 	// The Stackdriver provider exports this metric as:
 	//
@@ -319,7 +357,8 @@ const (
 	MetricSelector_TCP_CLOSED_CONNECTIONS MetricSelector_IstioMetric = 6
 	// Counter of bytes sent during a response over a TCP connection.
 	//
-	// The Prometheus provider exports this metric as: `istio_tcp_sent_bytes_total`.
+	// The Prometheus provider exports this metric as:
+	// `istio_tcp_sent_bytes_total`.
 	//
 	// The Stackdriver provider exports this metric as:
 	//
@@ -328,7 +367,8 @@ const (
 	MetricSelector_TCP_SENT_BYTES MetricSelector_IstioMetric = 7
 	// Counter of bytes received during a request over a TCP connection.
 	//
-	// The Prometheus provider exports this metric as: `istio_tcp_received_bytes_total`.
+	// The Prometheus provider exports this metric as:
+	// `istio_tcp_received_bytes_total`.
 	//
 	// The Stackdriver provider exports this metric as:
 	//
@@ -337,11 +377,13 @@ const (
 	MetricSelector_TCP_RECEIVED_BYTES MetricSelector_IstioMetric = 8
 	// Counter incremented for every gRPC messages sent from a client.
 	//
-	// The Prometheus provider exports this metric as: `istio_request_messages_total`
+	// The Prometheus provider exports this metric as:
+	// `istio_request_messages_total`
 	MetricSelector_GRPC_REQUEST_MESSAGES MetricSelector_IstioMetric = 9
 	// Counter incremented for every gRPC messages sent from a server.
 	//
-	// The Prometheus provider exports this metric as: `istio_response_messages_total`
+	// The Prometheus provider exports this metric as:
+	// `istio_response_messages_total`
 	MetricSelector_GRPC_RESPONSE_MESSAGES MetricSelector_IstioMetric = 10
 )
 
@@ -384,8 +426,8 @@ func (MetricSelector_IstioMetric) EnumDescriptor() ([]byte, []int) {
 type MetricsOverrides_TagOverride_Operation int32
 
 const (
-	// Insert or Update the tag with the provided value expression. The `value`
-	// field MUST be specified if UPSERT is used as the operation.
+	// Insert or Update the tag with the provided value expression. The
+	// `value` field MUST be specified if UPSERT is used as the operation.
 	MetricsOverrides_TagOverride_UPSERT MetricsOverrides_TagOverride_Operation = 0
 	// Specifies that the tag should not be included in the metric when
 	// generated.
@@ -410,6 +452,34 @@ func (MetricsOverrides_TagOverride_Operation) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_991c84745e2b7651, []int{5, 0, 0}
 }
 
+type AccessLogging_LogSelector_TrafficDirection int32
+
+const (
+	AccessLogging_LogSelector_ALL_TRAFFIC   AccessLogging_LogSelector_TrafficDirection = 0
+	AccessLogging_LogSelector_INBOUND_ONLY  AccessLogging_LogSelector_TrafficDirection = 1
+	AccessLogging_LogSelector_OUTBOUND_ONLY AccessLogging_LogSelector_TrafficDirection = 2
+)
+
+var AccessLogging_LogSelector_TrafficDirection_name = map[int32]string{
+	0: "ALL_TRAFFIC",
+	1: "INBOUND_ONLY",
+	2: "OUTBOUND_ONLY",
+}
+
+var AccessLogging_LogSelector_TrafficDirection_value = map[string]int32{
+	"ALL_TRAFFIC":   0,
+	"INBOUND_ONLY":  1,
+	"OUTBOUND_ONLY": 2,
+}
+
+func (x AccessLogging_LogSelector_TrafficDirection) String() string {
+	return proto.EnumName(AccessLogging_LogSelector_TrafficDirection_name, int32(x))
+}
+
+func (AccessLogging_LogSelector_TrafficDirection) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_991c84745e2b7651, []int{6, 1, 0}
+}
+
 // <!-- crd generation tags
 // +cue-gen:Telemetry:groupName:telemetry.istio.io
 // +cue-gen:Telemetry:version:v1alpha1
@@ -420,10 +490,12 @@ func (MetricsOverrides_TagOverride_Operation) EnumDescriptor() ([]byte, []int) {
 // +cue-gen:Telemetry:scope:Namespaced
 // +cue-gen:Telemetry:resource:categories=istio-io,telemetry-istio-io,shortNames=telemetry,plural=telemetries
 // +cue-gen:Telemetry:preserveUnknownFields:false
-// +cue-gen:Telemetry:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
-// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
-// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
-// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// +cue-gen:Telemetry:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp
+// is a timestamp representing the server time when this object was created. It
+// is not guaranteed to be set in happens-before order across separate
+// operations. Clients may not set this value. It is represented in RFC3339 form
+// and is in UTC. Populated by the system. Read-only. Null for lists. More info:
+// https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
 // -->
 //
 // <!-- go code generation tags
@@ -523,17 +595,17 @@ func (m *Telemetry) GetAccessLogging() []*AccessLogging {
 // fully replace any values provided by parent configuration.
 type Tracing struct {
 	// Optional. Name of provider(s) to use for span reporting. If a provider is
-	// not specified, the [default tracing provider][istio.mesh.v1alpha1.MeshConfig.default_providers.tracing]
-	// will be used.
-	// NOTE: At the moment, only a single provider can be specified in a given
-	// Tracing rule.
+	// not specified, the [default tracing
+	// provider][istio.mesh.v1alpha1.MeshConfig.default_providers.tracing] will be
+	// used. NOTE: At the moment, only a single provider can be specified in a
+	// given Tracing rule.
 	Providers []*ProviderRef `protobuf:"bytes,2,rep,name=providers,proto3" json:"providers,omitempty"`
 	// Controls the rate at which traffic will be selected for tracing if no
-	// prior sampling decision has been made. If a prior sampling decision has been
-	// made, that decision will be respected. However, if no sampling decision
-	// has been made (example: no `x-b3-sampled` tracing header was present in the
-	// requests), the traffic will be selected for telemetry generation at the
-	// percentage specified.
+	// prior sampling decision has been made. If a prior sampling decision has
+	// been made, that decision will be respected. However, if no sampling
+	// decision has been made (example: no `x-b3-sampled` tracing header was
+	// present in the requests), the traffic will be selected for telemetry
+	// generation at the percentage specified.
 	//
 	// Defaults to 0%. Valid values [0.00-100.00]. Can be specified in 0.01%
 	// increments.
@@ -544,21 +616,23 @@ type Tracing struct {
 	DisableSpanReporting *types.BoolValue `protobuf:"bytes,4,opt,name=disable_span_reporting,json=disableSpanReporting,proto3" json:"disable_span_reporting,omitempty"`
 	// Optional. Configures additional custom tags to the generated trace spans.
 	CustomTags map[string]*Tracing_CustomTag `protobuf:"bytes,5,rep,name=custom_tags,json=customTags,proto3" json:"custom_tags,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// This value is true by default; Envoy decides whether or not to sample based on
-	// the value of the Request ID generated by Ingress in distributed tracing.
-	// The format of this Request ID is specific to Envoy, and if the Request ID generated
-	// by the proxy that receives user traffic first is not specific to Envoy, Envoy
-	// will break the trace because it cannot interpret the Request ID. By setting
-	// this value to false, we can prevent Envoy from sampling based on the Request
-	// ID. As a result, the trace will not be broken even if the Request ID is
-	// not in the Envoy format.
-	// [Trace Context Propagation](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/observability/tracing#trace-context-propagation)
+	// This value is true by default; Envoy decides whether or not to sample based
+	// on the value of the Request ID generated by Ingress in distributed tracing.
+	// The format of this Request ID is specific to Envoy, and if the Request ID
+	// generated by the proxy that receives user traffic first is not specific to
+	// Envoy, Envoy will break the trace because it cannot interpret the Request
+	// ID. By setting this value to false, we can prevent Envoy from sampling
+	// based on the Request ID. As a result, the trace will not be broken even if
+	// the Request ID is not in the Envoy format. [Trace Context
+	// Propagation](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/observability/tracing#trace-context-propagation)
 	// provides more information on Request ID handling.
 	// $hide_from_docs
 	UseRequestIdForTraceSampling *types.BoolValue `protobuf:"bytes,6,opt,name=use_request_id_for_trace_sampling,json=useRequestIdForTraceSampling,proto3" json:"use_request_id_for_trace_sampling,omitempty"`
-	XXX_NoUnkeyedLiteral         struct{}         `json:"-"`
-	XXX_unrecognized             []byte           `json:"-"`
-	XXX_sizecache                int32            `json:"-"`
+	// Allows tailoring of behavior to specific conditions.
+	Match                *Tracing_TracingSelector `protobuf:"bytes,7,opt,name=match,proto3" json:"match,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
+	XXX_unrecognized     []byte                   `json:"-"`
+	XXX_sizecache        int32                    `json:"-"`
 }
 
 func (m *Tracing) Reset()         { *m = Tracing{} }
@@ -625,6 +699,13 @@ func (m *Tracing) GetCustomTags() map[string]*Tracing_CustomTag {
 func (m *Tracing) GetUseRequestIdForTraceSampling() *types.BoolValue {
 	if m != nil {
 		return m.UseRequestIdForTraceSampling
+	}
+	return nil
+}
+
+func (m *Tracing) GetMatch() *Tracing_TracingSelector {
+	if m != nil {
+		return m.Match
 	}
 	return nil
 }
@@ -901,6 +982,55 @@ func (m *Tracing_RequestHeader) GetDefaultValue() string {
 	return ""
 }
 
+type Tracing_TracingSelector struct {
+	// This determines whether or not to apply the access logging configuration
+	// based on the direction of traffic relative to the proxied workload.
+	TrafficDirection     Tracing_TracingSelector_TrafficDirection `protobuf:"varint,1,opt,name=traffic_direction,json=trafficDirection,proto3,enum=istio.telemetry.v1alpha1.Tracing_TracingSelector_TrafficDirection" json:"traffic_direction,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                                 `json:"-"`
+	XXX_unrecognized     []byte                                   `json:"-"`
+	XXX_sizecache        int32                                    `json:"-"`
+}
+
+func (m *Tracing_TracingSelector) Reset()         { *m = Tracing_TracingSelector{} }
+func (m *Tracing_TracingSelector) String() string { return proto.CompactTextString(m) }
+func (*Tracing_TracingSelector) ProtoMessage()    {}
+func (*Tracing_TracingSelector) Descriptor() ([]byte, []int) {
+	return fileDescriptor_991c84745e2b7651, []int{1, 5}
+}
+func (m *Tracing_TracingSelector) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Tracing_TracingSelector) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Tracing_TracingSelector.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Tracing_TracingSelector) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Tracing_TracingSelector.Merge(m, src)
+}
+func (m *Tracing_TracingSelector) XXX_Size() int {
+	return m.Size()
+}
+func (m *Tracing_TracingSelector) XXX_DiscardUnknown() {
+	xxx_messageInfo_Tracing_TracingSelector.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Tracing_TracingSelector proto.InternalMessageInfo
+
+func (m *Tracing_TracingSelector) GetTrafficDirection() Tracing_TracingSelector_TrafficDirection {
+	if m != nil {
+		return m.TrafficDirection
+	}
+	return Tracing_TracingSelector_ALL_TRAFFIC
+}
+
 // Used to bind Telemetry configuration to specific providers for
 // targeted customization.
 type ProviderRef struct {
@@ -956,8 +1086,9 @@ func (m *ProviderRef) GetName() string {
 // as to customize the dimensions of the generated metrics.
 type Metrics struct {
 	// Optional. Name of providers to which this configuration should apply.
-	// If a provider is not specified, the [default metrics provider][istio.mesh.v1alpha1.MeshConfig.default_providers.metrics]
-	// will be used.
+	// If a provider is not specified, the [default metrics
+	// provider][istio.mesh.v1alpha1.MeshConfig.default_providers.metrics] will be
+	// used.
 	Providers []*ProviderRef `protobuf:"bytes,1,rep,name=providers,proto3" json:"providers,omitempty"`
 	// Optional. Ordered list of overrides to metrics generation behavior.
 	//
@@ -1034,7 +1165,8 @@ type MetricSelector struct {
 	//	*MetricSelector_Metric
 	//	*MetricSelector_CustomMetric
 	MetricMatch isMetricSelector_MetricMatch `protobuf_oneof:"metric_match"`
-	// Controls which mode of metrics generation is selected: CLIENT and/or SERVER.
+	// Controls which mode of metrics generation is selected: CLIENT and/or
+	// SERVER.
 	Mode                 WorkloadMode `protobuf:"varint,3,opt,name=mode,proto3,enum=istio.telemetry.v1alpha1.WorkloadMode" json:"mode,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
 	XXX_unrecognized     []byte       `json:"-"`
@@ -1214,11 +1346,13 @@ type MetricsOverrides_TagOverride struct {
 	// Operation controls whether or not to update/add a tag, or to remove it.
 	Operation MetricsOverrides_TagOverride_Operation `protobuf:"varint,1,opt,name=operation,proto3,enum=istio.telemetry.v1alpha1.MetricsOverrides_TagOverride_Operation" json:"operation,omitempty"`
 	// Value is only considered if the operation is `UPSERT`.
-	// Values are [CEL expressions](https://opensource.google/projects/cel) over attributes.
-	// Examples include: "string(destination.port)" and "request.host".
-	// Istio exposes all standard [Envoy attributes](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/advanced/attributes).
+	// Values are [CEL expressions](https://opensource.google/projects/cel) over
+	// attributes. Examples include: "string(destination.port)" and
+	// "request.host". Istio exposes all standard [Envoy
+	// attributes](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/advanced/attributes).
 	// Additionally, Istio exposes node metadata as attributes.
-	// More information is provided in the [customization docs](https://istio.io/latest/docs/tasks/observability/metrics/customize-metrics/#use-expressions-for-values).
+	// More information is provided in the [customization
+	// docs](https://istio.io/latest/docs/tasks/observability/metrics/customize-metrics/#use-expressions-for-values).
 	Value                string   `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -1272,12 +1406,13 @@ func (m *MetricsOverrides_TagOverride) GetValue() string {
 	return ""
 }
 
-// Access logging defines the workload-level overrides for access log generation.
-// It can be used to select provider or enable/disable access log generation for a workload.
+// Access logging defines the workload-level overrides for access log
+// generation. It can be used to select provider or enable/disable access log
+// generation for a workload.
 type AccessLogging struct {
 	// Optional. Name of providers to which this configuration should apply.
-	// If a provider is not specified, the [default logging provider][istio.mesh.v1alpha1.MeshConfig.default_providers.]
-	// will be used.
+	// If a provider is not specified, the [default logging
+	// provider][istio.mesh.v1alpha1.MeshConfig.default_providers.] will be used.
 	Providers []*ProviderRef `protobuf:"bytes,1,rep,name=providers,proto3" json:"providers,omitempty"`
 	// Controls logging. If set to true, no access logs will be generated for
 	// impacted workloads (for the specified providers).
@@ -1287,10 +1422,12 @@ type AccessLogging struct {
 	Disabled *types.BoolValue `protobuf:"bytes,2,opt,name=disabled,proto3" json:"disabled,omitempty"`
 	// Optional. If specified, this filter will be used to select specific
 	// requests/connections for logging.
-	Filter               *AccessLogging_Filter `protobuf:"bytes,3,opt,name=filter,proto3" json:"filter,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
-	XXX_unrecognized     []byte                `json:"-"`
-	XXX_sizecache        int32                 `json:"-"`
+	Filter *AccessLogging_Filter `protobuf:"bytes,3,opt,name=filter,proto3" json:"filter,omitempty"`
+	// Allows tailoring of behavior to specific conditions.
+	Match                *AccessLogging_LogSelector `protobuf:"bytes,4,opt,name=match,proto3" json:"match,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                   `json:"-"`
+	XXX_unrecognized     []byte                     `json:"-"`
+	XXX_sizecache        int32                      `json:"-"`
 }
 
 func (m *AccessLogging) Reset()         { *m = AccessLogging{} }
@@ -1343,6 +1480,13 @@ func (m *AccessLogging) GetDisabled() *types.BoolValue {
 func (m *AccessLogging) GetFilter() *AccessLogging_Filter {
 	if m != nil {
 		return m.Filter
+	}
+	return nil
+}
+
+func (m *AccessLogging) GetMatch() *AccessLogging_LogSelector {
+	if m != nil {
+		return m.Match
 	}
 	return nil
 }
@@ -1401,10 +1545,61 @@ func (m *AccessLogging_Filter) GetExpression() string {
 	return ""
 }
 
+type AccessLogging_LogSelector struct {
+	// This determines whether or not to apply the access logging configuration
+	// based on the direction of traffic relative to the proxied workload.
+	TrafficDirection     AccessLogging_LogSelector_TrafficDirection `protobuf:"varint,1,opt,name=traffic_direction,json=trafficDirection,proto3,enum=istio.telemetry.v1alpha1.AccessLogging_LogSelector_TrafficDirection" json:"traffic_direction,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                                   `json:"-"`
+	XXX_unrecognized     []byte                                     `json:"-"`
+	XXX_sizecache        int32                                      `json:"-"`
+}
+
+func (m *AccessLogging_LogSelector) Reset()         { *m = AccessLogging_LogSelector{} }
+func (m *AccessLogging_LogSelector) String() string { return proto.CompactTextString(m) }
+func (*AccessLogging_LogSelector) ProtoMessage()    {}
+func (*AccessLogging_LogSelector) Descriptor() ([]byte, []int) {
+	return fileDescriptor_991c84745e2b7651, []int{6, 1}
+}
+func (m *AccessLogging_LogSelector) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AccessLogging_LogSelector) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AccessLogging_LogSelector.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AccessLogging_LogSelector) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AccessLogging_LogSelector.Merge(m, src)
+}
+func (m *AccessLogging_LogSelector) XXX_Size() int {
+	return m.Size()
+}
+func (m *AccessLogging_LogSelector) XXX_DiscardUnknown() {
+	xxx_messageInfo_AccessLogging_LogSelector.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AccessLogging_LogSelector proto.InternalMessageInfo
+
+func (m *AccessLogging_LogSelector) GetTrafficDirection() AccessLogging_LogSelector_TrafficDirection {
+	if m != nil {
+		return m.TrafficDirection
+	}
+	return AccessLogging_LogSelector_ALL_TRAFFIC
+}
+
 func init() {
 	proto.RegisterEnum("istio.telemetry.v1alpha1.WorkloadMode", WorkloadMode_name, WorkloadMode_value)
+	proto.RegisterEnum("istio.telemetry.v1alpha1.Tracing_TracingSelector_TrafficDirection", Tracing_TracingSelector_TrafficDirection_name, Tracing_TracingSelector_TrafficDirection_value)
 	proto.RegisterEnum("istio.telemetry.v1alpha1.MetricSelector_IstioMetric", MetricSelector_IstioMetric_name, MetricSelector_IstioMetric_value)
 	proto.RegisterEnum("istio.telemetry.v1alpha1.MetricsOverrides_TagOverride_Operation", MetricsOverrides_TagOverride_Operation_name, MetricsOverrides_TagOverride_Operation_value)
+	proto.RegisterEnum("istio.telemetry.v1alpha1.AccessLogging_LogSelector_TrafficDirection", AccessLogging_LogSelector_TrafficDirection_name, AccessLogging_LogSelector_TrafficDirection_value)
 	proto.RegisterType((*Telemetry)(nil), "istio.telemetry.v1alpha1.Telemetry")
 	proto.RegisterType((*Tracing)(nil), "istio.telemetry.v1alpha1.Tracing")
 	proto.RegisterMapType((map[string]*Tracing_CustomTag)(nil), "istio.telemetry.v1alpha1.Tracing.CustomTagsEntry")
@@ -1412,6 +1607,7 @@ func init() {
 	proto.RegisterType((*Tracing_Literal)(nil), "istio.telemetry.v1alpha1.Tracing.Literal")
 	proto.RegisterType((*Tracing_Environment)(nil), "istio.telemetry.v1alpha1.Tracing.Environment")
 	proto.RegisterType((*Tracing_RequestHeader)(nil), "istio.telemetry.v1alpha1.Tracing.RequestHeader")
+	proto.RegisterType((*Tracing_TracingSelector)(nil), "istio.telemetry.v1alpha1.Tracing.TracingSelector")
 	proto.RegisterType((*ProviderRef)(nil), "istio.telemetry.v1alpha1.ProviderRef")
 	proto.RegisterType((*Metrics)(nil), "istio.telemetry.v1alpha1.Metrics")
 	proto.RegisterType((*MetricSelector)(nil), "istio.telemetry.v1alpha1.MetricSelector")
@@ -1420,6 +1616,7 @@ func init() {
 	proto.RegisterType((*MetricsOverrides_TagOverride)(nil), "istio.telemetry.v1alpha1.MetricsOverrides.TagOverride")
 	proto.RegisterType((*AccessLogging)(nil), "istio.telemetry.v1alpha1.AccessLogging")
 	proto.RegisterType((*AccessLogging_Filter)(nil), "istio.telemetry.v1alpha1.AccessLogging.Filter")
+	proto.RegisterType((*AccessLogging_LogSelector)(nil), "istio.telemetry.v1alpha1.AccessLogging.LogSelector")
 }
 
 func init() {
@@ -1427,80 +1624,88 @@ func init() {
 }
 
 var fileDescriptor_991c84745e2b7651 = []byte{
-	// 1154 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0xdd, 0x72, 0xdb, 0x44,
-	0x14, 0xb6, 0x6c, 0xc7, 0xae, 0x8f, 0x7f, 0xaa, 0xee, 0xb4, 0x1d, 0x23, 0x3a, 0x69, 0xeb, 0x52,
-	0x08, 0x65, 0x2a, 0x4f, 0x02, 0xd3, 0x61, 0xca, 0xcf, 0xd4, 0x71, 0x94, 0xda, 0x33, 0x8e, 0xed,
-	0xae, 0x94, 0x30, 0xf4, 0x02, 0xcd, 0xc6, 0xda, 0xb8, 0xa2, 0xb2, 0x56, 0xac, 0x64, 0x97, 0x3c,
-	0x01, 0xd7, 0x5c, 0xc1, 0x23, 0xf0, 0x28, 0xdc, 0xc1, 0x0b, 0x30, 0xc3, 0xe4, 0x29, 0xb8, 0x62,
-	0x18, 0x69, 0x57, 0xb6, 0x93, 0x34, 0x38, 0x64, 0xb8, 0x93, 0xbe, 0x73, 0xbe, 0x6f, 0xcf, 0xd9,
-	0xb3, 0xfb, 0x49, 0xd0, 0x88, 0xa8, 0x47, 0x27, 0x34, 0xe2, 0xc7, 0xcd, 0xd9, 0x26, 0xf1, 0x82,
-	0x57, 0x64, 0xb3, 0x39, 0x87, 0xf4, 0x80, 0xb3, 0x88, 0xa1, 0xba, 0x1b, 0x46, 0x2e, 0xd3, 0x17,
-	0x70, 0x9a, 0xa9, 0xbd, 0x1b, 0x1d, 0x07, 0xb4, 0x39, 0xdb, 0x3c, 0xa4, 0x11, 0xd9, 0x6c, 0x86,
-	0xd4, 0xa3, 0xa3, 0x88, 0x71, 0x41, 0xd3, 0xd6, 0xc7, 0x8c, 0x8d, 0x3d, 0xda, 0x4c, 0xde, 0x0e,
-	0xa7, 0x47, 0xcd, 0x37, 0x9c, 0x04, 0x01, 0xe5, 0xa1, 0x88, 0x37, 0x7e, 0xca, 0x42, 0xc9, 0x4a,
-	0x35, 0xd1, 0x33, 0xb8, 0x96, 0xf2, 0xeb, 0xca, 0x3d, 0x65, 0xa3, 0xbc, 0xf5, 0x9e, 0x2e, 0xd7,
-	0x3d, 0x0e, 0xa8, 0x2e, 0xd7, 0xd0, 0xbf, 0x62, 0xfc, 0xb5, 0xc7, 0x88, 0x63, 0xca, 0x5c, 0x3c,
-	0x67, 0xa1, 0xcf, 0xa0, 0x18, 0x71, 0x32, 0x72, 0xfd, 0x71, 0x3d, 0x7b, 0x2f, 0xb7, 0x51, 0xde,
-	0xba, 0xaf, 0x5f, 0x54, 0xb8, 0x6e, 0x89, 0x44, 0x9c, 0x32, 0x62, 0x72, 0x9c, 0xe2, 0x8e, 0xc2,
-	0x7a, 0x6e, 0x15, 0x79, 0x4f, 0x24, 0xe2, 0x94, 0x81, 0xfa, 0x50, 0x23, 0xa3, 0x11, 0x0d, 0x43,
-	0xdb, 0x63, 0xe3, 0x71, 0x5c, 0x40, 0x3e, 0xd1, 0xf8, 0xe0, 0x62, 0x8d, 0x56, 0x92, 0xdf, 0x13,
-	0xe9, 0xb8, 0x4a, 0x96, 0x5f, 0x1b, 0xbf, 0x15, 0xa1, 0x28, 0x2b, 0x44, 0x6d, 0x28, 0x05, 0x9c,
-	0xcd, 0x5c, 0x87, 0xf2, 0x50, 0xf6, 0xf5, 0xf0, 0x62, 0xd9, 0xa1, 0x4c, 0xc5, 0xf4, 0x08, 0x2f,
-	0x78, 0xe8, 0x25, 0x68, 0x9c, 0xf8, 0x0e, 0x9b, 0xd8, 0x21, 0x99, 0x04, 0x9e, 0xeb, 0x8f, 0xed,
-	0x80, 0xf2, 0x11, 0xf5, 0x23, 0x32, 0xa6, 0xf5, 0x5c, 0xb2, 0xdd, 0x77, 0x74, 0x31, 0x2f, 0x3d,
-	0x9d, 0x97, 0xbe, 0xc3, 0xa6, 0x87, 0x1e, 0x3d, 0x20, 0xde, 0x94, 0xe2, 0xba, 0xe0, 0x9b, 0x92,
-	0x3e, 0x9c, 0xb3, 0xd1, 0x10, 0x6e, 0x3b, 0x6e, 0x48, 0x0e, 0x3d, 0x6a, 0x87, 0x01, 0xf1, 0x6d,
-	0x4e, 0x03, 0xc6, 0x23, 0xb1, 0x09, 0xb1, 0xae, 0x76, 0x4e, 0x77, 0x9b, 0x31, 0x4f, 0xa8, 0xde,
-	0x94, 0x4c, 0x33, 0x20, 0x3e, 0x4e, 0x79, 0x08, 0x43, 0x79, 0x34, 0x0d, 0x23, 0x36, 0xb1, 0x23,
-	0x32, 0x0e, 0xeb, 0x6b, 0x49, 0xd3, 0x9b, 0x2b, 0x87, 0xa9, 0xb7, 0x13, 0x92, 0x45, 0xc6, 0xa1,
-	0xe1, 0x47, 0xfc, 0x18, 0xc3, 0x68, 0x0e, 0xa0, 0x11, 0xdc, 0x9f, 0x86, 0xd4, 0xe6, 0xf4, 0xbb,
-	0x29, 0x0d, 0x23, 0xdb, 0x75, 0xec, 0x23, 0xc6, 0xed, 0x78, 0xfa, 0x74, 0xbe, 0x27, 0xf5, 0xc2,
-	0xca, 0x82, 0xef, 0x4c, 0x43, 0x8a, 0x85, 0x46, 0xd7, 0xd9, 0x65, 0x3c, 0x5e, 0x9a, 0xa6, 0x9b,
-	0xa2, 0xfd, 0xa5, 0x40, 0x69, 0x5e, 0x04, 0x32, 0xa0, 0xe8, 0xb9, 0x11, 0xe5, 0xc4, 0x93, 0x07,
-	0xfa, 0xc3, 0xd5, 0x2d, 0xf4, 0x04, 0xa1, 0x93, 0xc1, 0x29, 0x17, 0xbd, 0x80, 0x32, 0xf5, 0x67,
-	0x2e, 0x67, 0xfe, 0x84, 0xfa, 0x51, 0x3d, 0x9b, 0x48, 0x3d, 0x5e, 0x2d, 0x65, 0x2c, 0x48, 0x9d,
-	0x0c, 0x5e, 0xd6, 0x40, 0x5d, 0x28, 0xbc, 0xa2, 0xc4, 0xa1, 0x5c, 0x8e, 0xbe, 0xb9, 0x5a, 0x4d,
-	0x36, 0xdd, 0x49, 0x68, 0x9d, 0x0c, 0x96, 0x02, 0xdb, 0x05, 0xc8, 0xc7, 0xf7, 0x53, 0xbb, 0x0b,
-	0x45, 0x59, 0x3b, 0xba, 0x09, 0x6b, 0xb3, 0x78, 0xb3, 0x92, 0xae, 0x4b, 0x58, 0xbc, 0x68, 0xbb,
-	0x50, 0x5e, 0xaa, 0x08, 0x21, 0xc8, 0xfb, 0x64, 0x92, 0xe6, 0x24, 0xcf, 0xe8, 0x01, 0x54, 0x1d,
-	0x7a, 0x44, 0xa6, 0x5e, 0x64, 0x0b, 0x81, 0x6c, 0x12, 0xac, 0x48, 0x30, 0x99, 0x80, 0xd6, 0x81,
-	0xea, 0xa9, 0x5a, 0xae, 0xae, 0xf4, 0x2d, 0x5c, 0x3f, 0x73, 0x62, 0x90, 0x0a, 0xb9, 0xd7, 0xf4,
-	0x58, 0x4a, 0xc5, 0x8f, 0xa8, 0x95, 0x36, 0x23, 0xf6, 0xfd, 0xa3, 0xff, 0x70, 0x0a, 0x65, 0xe7,
-	0x4f, 0xb3, 0x9f, 0x2a, 0x8d, 0xfb, 0x50, 0x5e, 0xba, 0x9a, 0x6f, 0xab, 0xb9, 0xf1, 0xb3, 0x02,
-	0x45, 0xe9, 0x2c, 0xa7, 0x2f, 0xbd, 0x72, 0xc5, 0x4b, 0xdf, 0x81, 0x12, 0x9b, 0x51, 0xce, 0x5d,
-	0x87, 0xa6, 0xce, 0xf1, 0x68, 0xa5, 0xa9, 0x0d, 0x52, 0x06, 0x5e, 0x90, 0x1b, 0x7f, 0xe4, 0xa0,
-	0x26, 0xe2, 0xa9, 0xed, 0xa2, 0x3e, 0x14, 0x84, 0xfb, 0x25, 0x3d, 0xd4, 0xb6, 0x3e, 0x59, 0xa5,
-	0x9c, 0x32, 0xf5, 0x6e, 0x9c, 0x27, 0xb0, 0xf8, 0x1c, 0x09, 0x15, 0xf4, 0x10, 0xaa, 0xf2, 0xce,
-	0x4b, 0xd9, 0x64, 0x62, 0x9d, 0x0c, 0xae, 0x08, 0x58, 0x10, 0xd0, 0x53, 0xc8, 0x4f, 0x98, 0x23,
-	0x2c, 0xab, 0xb6, 0xf5, 0xfe, 0xc5, 0x8b, 0xa6, 0xdf, 0x89, 0x3d, 0xe6, 0x50, 0x9c, 0x70, 0x1a,
-	0x3f, 0x64, 0xa1, 0xbc, 0xb4, 0x38, 0xba, 0x0e, 0xe5, 0x56, 0xaf, 0x67, 0xef, 0x19, 0x16, 0xee,
-	0xb6, 0x4d, 0x35, 0x83, 0x6e, 0x40, 0x15, 0x1b, 0x2f, 0xf6, 0x0d, 0xd3, 0xb2, 0xdb, 0x83, 0xfd,
-	0xbe, 0xa5, 0x2a, 0xe8, 0x26, 0xa8, 0x29, 0xb4, 0xb3, 0x8f, 0x5b, 0x56, 0x77, 0xd0, 0x57, 0xb3,
-	0x48, 0x85, 0x4a, 0x8a, 0x9a, 0xdd, 0x97, 0x86, 0x9a, 0x13, 0x54, 0x73, 0x38, 0xe8, 0x9b, 0x86,
-	0x80, 0xf2, 0x48, 0x83, 0xdb, 0x56, 0x7b, 0x68, 0x0f, 0x86, 0x46, 0xdf, 0xd8, 0xb1, 0xdb, 0x83,
-	0x7e, 0xdf, 0x68, 0xc7, 0x7c, 0x53, 0x5d, 0x4b, 0x63, 0xed, 0xde, 0xc0, 0x3c, 0x13, 0x2b, 0x20,
-	0x04, 0xb5, 0x38, 0x66, 0x1a, 0x7d, 0xcb, 0xde, 0xfe, 0xda, 0x32, 0x4c, 0xb5, 0x88, 0x6e, 0x03,
-	0x8a, 0x31, 0x6c, 0xb4, 0x8d, 0xee, 0x81, 0xb1, 0x23, 0xf1, 0x6b, 0xe8, 0x1d, 0xb8, 0xf5, 0x1c,
-	0x0f, 0xdb, 0x76, 0x5a, 0xcd, 0x9e, 0x61, 0x9a, 0xad, 0xe7, 0x86, 0xa9, 0x96, 0xe2, 0x25, 0x64,
-	0x48, 0x96, 0x35, 0x8f, 0xc1, 0x76, 0x0d, 0x2a, 0x62, 0x97, 0xed, 0x09, 0x89, 0x46, 0xaf, 0x1a,
-	0x3f, 0xe6, 0x41, 0x3d, 0x3b, 0x7f, 0xf4, 0x25, 0xac, 0x25, 0x51, 0x69, 0x5e, 0x1b, 0x97, 0x1d,
-	0x30, 0x16, 0x34, 0xf4, 0x04, 0xae, 0x49, 0x77, 0x77, 0xe4, 0xe5, 0xf9, 0x37, 0x63, 0x9d, 0xe7,
-	0x22, 0x02, 0xd5, 0x88, 0x8c, 0xed, 0xc5, 0xd1, 0x15, 0xdf, 0xe3, 0xcf, 0x2f, 0x7f, 0x74, 0x75,
-	0x8b, 0x8c, 0xe7, 0x2f, 0xe2, 0x53, 0x50, 0x89, 0x96, 0x20, 0xed, 0x17, 0x05, 0xca, 0x4b, 0x39,
-	0xe8, 0x1b, 0x28, 0xb1, 0x80, 0x72, 0x12, 0xb9, 0xcc, 0x97, 0xe7, 0xf9, 0xd9, 0xd5, 0x96, 0xd3,
-	0x07, 0xa9, 0x0e, 0x5e, 0x48, 0x2e, 0x1c, 0x31, 0xbb, 0xe4, 0x88, 0x8d, 0x07, 0x50, 0x9a, 0x67,
-	0x23, 0x80, 0xc2, 0xfe, 0xd0, 0x34, 0xb0, 0xa5, 0x66, 0xe2, 0x67, 0x6c, 0xec, 0x0d, 0x0e, 0x0c,
-	0x55, 0xd1, 0xde, 0xc0, 0x8d, 0x73, 0xdd, 0xbc, 0xc5, 0xa6, 0x7a, 0xa7, 0x6d, 0xea, 0xc9, 0xd5,
-	0xaa, 0x5f, 0x76, 0xac, 0xbf, 0x15, 0xa8, 0x9e, 0xfa, 0x49, 0xf9, 0x7f, 0x4c, 0xe9, 0xaa, 0xa7,
-	0x62, 0x17, 0x0a, 0x47, 0xae, 0x17, 0xcd, 0x3f, 0x59, 0xfa, 0x25, 0x7f, 0xad, 0xf4, 0xdd, 0x84,
-	0x85, 0x25, 0x5b, 0xdb, 0x80, 0x82, 0x40, 0xd0, 0x3a, 0x00, 0xfd, 0x3e, 0xe0, 0x34, 0x0c, 0xd3,
-	0xa9, 0x97, 0xf0, 0x12, 0xf2, 0xe8, 0x0b, 0xa8, 0x2c, 0x9b, 0x08, 0xba, 0x05, 0x37, 0xda, 0xbd,
-	0x6e, 0x7c, 0x2b, 0x5b, 0xfd, 0x1d, 0xdb, 0x34, 0xf0, 0x81, 0x81, 0xc5, 0xb0, 0x04, 0xac, 0x2a,
-	0xf1, 0xb3, 0xc4, 0xb3, 0xdb, 0x8f, 0x7f, 0x3d, 0x59, 0x57, 0x7e, 0x3f, 0x59, 0x57, 0xfe, 0x3c,
-	0x59, 0x57, 0x5e, 0xde, 0x15, 0xd5, 0xba, 0xac, 0x49, 0x02, 0xb7, 0x79, 0xfe, 0x9f, 0xfb, 0xb0,
-	0x90, 0x74, 0xff, 0xf1, 0x3f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x90, 0x95, 0x3b, 0xcd, 0x90, 0x0b,
-	0x00, 0x00,
+	// 1284 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x57, 0xcd, 0x6e, 0xdb, 0xc6,
+	0x16, 0x16, 0x65, 0x59, 0x8a, 0x8e, 0x2c, 0x87, 0x1e, 0x24, 0x81, 0xae, 0x6e, 0xe0, 0x24, 0xca,
+	0xcd, 0xbd, 0xbe, 0x29, 0x42, 0xc1, 0x4e, 0x11, 0x14, 0xe9, 0x0f, 0xa2, 0x1f, 0x3a, 0x12, 0x20,
+	0x4b, 0xca, 0x90, 0x76, 0x91, 0x2c, 0x4a, 0x8c, 0xc5, 0x91, 0xc2, 0x86, 0xd2, 0x30, 0x43, 0xca,
+	0xa9, 0x9f, 0xa0, 0xeb, 0x6e, 0xda, 0x3e, 0x42, 0x1f, 0xa5, 0x28, 0xba, 0xe8, 0x0b, 0x14, 0x28,
+	0xb2, 0xe9, 0x2b, 0x74, 0x59, 0x90, 0x33, 0xa4, 0x68, 0x3b, 0xae, 0x1c, 0xa3, 0xe8, 0x4a, 0x33,
+	0x67, 0xce, 0xf7, 0xcd, 0x99, 0x73, 0x0e, 0xbf, 0x19, 0x41, 0x2d, 0xa0, 0x2e, 0x9d, 0xd2, 0x80,
+	0x1f, 0xd7, 0x8f, 0xb6, 0x89, 0xeb, 0xbd, 0x24, 0xdb, 0xf5, 0xc4, 0xa4, 0x79, 0x9c, 0x05, 0x0c,
+	0x55, 0x1c, 0x3f, 0x70, 0x98, 0xb6, 0x30, 0xc7, 0x9e, 0xd5, 0x7f, 0x07, 0xc7, 0x1e, 0xad, 0x1f,
+	0x6d, 0x1f, 0xd2, 0x80, 0x6c, 0xd7, 0x7d, 0xea, 0xd2, 0x51, 0xc0, 0xb8, 0x80, 0x55, 0x37, 0x27,
+	0x8c, 0x4d, 0x5c, 0x5a, 0x8f, 0x66, 0x87, 0xf3, 0x71, 0xfd, 0x0d, 0x27, 0x9e, 0x47, 0xb9, 0x2f,
+	0xd6, 0x6b, 0xdf, 0x65, 0xa1, 0x68, 0xc6, 0x9c, 0xe8, 0x09, 0x5c, 0x89, 0xf1, 0x15, 0xe5, 0xb6,
+	0xb2, 0x55, 0xda, 0xf9, 0x8f, 0x26, 0xf7, 0x3d, 0xf6, 0xa8, 0x26, 0xf7, 0xd0, 0x3e, 0x67, 0xfc,
+	0x95, 0xcb, 0x88, 0x6d, 0x48, 0x5f, 0x9c, 0xa0, 0xd0, 0xc7, 0x50, 0x08, 0x38, 0x19, 0x39, 0xb3,
+	0x49, 0x25, 0x7b, 0x7b, 0x65, 0xab, 0xb4, 0x73, 0x47, 0x3b, 0x2f, 0x70, 0xcd, 0x14, 0x8e, 0x38,
+	0x46, 0x84, 0xe0, 0xd0, 0xc5, 0x19, 0xf9, 0x95, 0x95, 0x65, 0xe0, 0x3d, 0xe1, 0x88, 0x63, 0x04,
+	0xea, 0xc3, 0x3a, 0x19, 0x8d, 0xa8, 0xef, 0x5b, 0x2e, 0x9b, 0x4c, 0xc2, 0x00, 0x72, 0x11, 0xc7,
+	0xff, 0xce, 0xe7, 0x68, 0x44, 0xfe, 0x3d, 0xe1, 0x8e, 0xcb, 0x24, 0x3d, 0xad, 0xfd, 0x5e, 0x84,
+	0x82, 0x8c, 0x10, 0xb5, 0xa0, 0xe8, 0x71, 0x76, 0xe4, 0xd8, 0x94, 0xfb, 0xf2, 0x5c, 0xf7, 0xce,
+	0xa7, 0x1d, 0x4a, 0x57, 0x4c, 0xc7, 0x78, 0x81, 0x43, 0x2f, 0xa0, 0xca, 0xc9, 0xcc, 0x66, 0x53,
+	0xcb, 0x27, 0x53, 0xcf, 0x75, 0x66, 0x13, 0xcb, 0xa3, 0x7c, 0x44, 0x67, 0x01, 0x99, 0xd0, 0xca,
+	0x4a, 0x94, 0xee, 0x9b, 0x9a, 0xa8, 0x97, 0x16, 0xd7, 0x4b, 0x6b, 0xb3, 0xf9, 0xa1, 0x4b, 0x0f,
+	0x88, 0x3b, 0xa7, 0xb8, 0x22, 0xf0, 0x86, 0x84, 0x0f, 0x13, 0x34, 0x1a, 0xc2, 0x0d, 0xdb, 0xf1,
+	0xc9, 0xa1, 0x4b, 0x2d, 0xdf, 0x23, 0x33, 0x8b, 0x53, 0x8f, 0xf1, 0x40, 0x24, 0x21, 0xe4, 0xad,
+	0x9e, 0xe1, 0x6d, 0x32, 0xe6, 0x0a, 0xd6, 0x6b, 0x12, 0x69, 0x78, 0x64, 0x86, 0x63, 0x1c, 0xc2,
+	0x50, 0x1a, 0xcd, 0xfd, 0x80, 0x4d, 0xad, 0x80, 0x4c, 0xfc, 0xca, 0x6a, 0x74, 0xe8, 0xed, 0xa5,
+	0xc5, 0xd4, 0x5a, 0x11, 0xc8, 0x24, 0x13, 0x5f, 0x9f, 0x05, 0xfc, 0x18, 0xc3, 0x28, 0x31, 0xa0,
+	0x11, 0xdc, 0x99, 0xfb, 0xd4, 0xe2, 0xf4, 0xf5, 0x9c, 0xfa, 0x81, 0xe5, 0xd8, 0xd6, 0x98, 0x71,
+	0x2b, 0xac, 0x3e, 0x4d, 0x72, 0x52, 0xc9, 0x2f, 0x0d, 0xf8, 0xe6, 0xdc, 0xa7, 0x58, 0x70, 0x74,
+	0xed, 0x5d, 0xc6, 0xc3, 0xad, 0x69, 0x9c, 0x14, 0xf4, 0x14, 0x56, 0xa7, 0x24, 0x18, 0xbd, 0xac,
+	0x14, 0x22, 0xa2, 0x0b, 0x84, 0x2c, 0x7f, 0x93, 0x6e, 0x16, 0xf8, 0xea, 0x1f, 0x0a, 0x14, 0x93,
+	0xd3, 0x20, 0x1d, 0x0a, 0xae, 0x13, 0x50, 0x4e, 0x5c, 0xf9, 0x65, 0xfc, 0x7f, 0x39, 0x71, 0x4f,
+	0x00, 0x3a, 0x19, 0x1c, 0x63, 0xd1, 0x33, 0x28, 0xd1, 0xd9, 0x91, 0xc3, 0xd9, 0x6c, 0x4a, 0x67,
+	0x41, 0x25, 0x1b, 0x51, 0x3d, 0x58, 0x4e, 0xa5, 0x2f, 0x40, 0x9d, 0x0c, 0x4e, 0x73, 0xa0, 0x2e,
+	0xe4, 0x5f, 0x52, 0x62, 0x53, 0x2e, 0x7b, 0xa8, 0xbe, 0x9c, 0x4d, 0x66, 0xaf, 0x13, 0xc1, 0x3a,
+	0x19, 0x2c, 0x09, 0x9a, 0x79, 0xc8, 0x85, 0x1f, 0x7a, 0xf5, 0x16, 0x14, 0x64, 0xec, 0xe8, 0x1a,
+	0xac, 0x1e, 0x85, 0x59, 0x8f, 0x4e, 0x5d, 0xc4, 0x62, 0x52, 0xdd, 0x85, 0x52, 0x2a, 0x22, 0x84,
+	0x20, 0x37, 0x23, 0xd3, 0xd8, 0x27, 0x1a, 0xa3, 0xbb, 0x50, 0xb6, 0xe9, 0x98, 0xcc, 0xdd, 0xc0,
+	0x12, 0x04, 0xd9, 0x68, 0x71, 0x4d, 0x1a, 0xa3, 0x52, 0x56, 0x3b, 0x50, 0x3e, 0x11, 0xcb, 0xe5,
+	0x99, 0xbe, 0x84, 0xab, 0xa7, 0x5a, 0x0f, 0xa9, 0xb0, 0xf2, 0x8a, 0x1e, 0x4b, 0xaa, 0x70, 0x88,
+	0x1a, 0xf1, 0x61, 0x44, 0xde, 0x3f, 0x78, 0x8f, 0x76, 0x96, 0x27, 0x7f, 0x9c, 0xfd, 0x48, 0xa9,
+	0xfe, 0xac, 0xc0, 0xd5, 0x53, 0x4d, 0x83, 0x18, 0x6c, 0x04, 0x9c, 0x8c, 0xc7, 0xce, 0xc8, 0xb2,
+	0x1d, 0x4e, 0x47, 0x81, 0xc3, 0x66, 0xd1, 0xd6, 0xeb, 0x3b, 0xcd, 0xf7, 0x6e, 0xc1, 0x70, 0x1e,
+	0x52, 0xb5, 0x63, 0x26, 0xac, 0x06, 0xa7, 0x2c, 0xb5, 0x0e, 0xa8, 0xa7, 0xbd, 0xd0, 0x55, 0x28,
+	0x35, 0x7a, 0x3d, 0xcb, 0xc4, 0x8d, 0xdd, 0xdd, 0x6e, 0x4b, 0xcd, 0x20, 0x15, 0xd6, 0xba, 0xfd,
+	0xe6, 0x60, 0xbf, 0xdf, 0xb6, 0x06, 0xfd, 0xde, 0x73, 0x55, 0x41, 0x1b, 0x50, 0x1e, 0xec, 0x9b,
+	0x29, 0x53, 0xb6, 0x76, 0x07, 0x4a, 0x29, 0xc9, 0x7a, 0x57, 0x09, 0x6a, 0xdf, 0x2b, 0x50, 0x90,
+	0x8a, 0x7b, 0x52, 0x0c, 0x95, 0x4b, 0x8a, 0x61, 0x07, 0x8a, 0xec, 0x88, 0x72, 0xee, 0xd8, 0x34,
+	0x56, 0xd4, 0xfb, 0x4b, 0xc5, 0x7e, 0x10, 0x23, 0xf0, 0x02, 0x5c, 0xfb, 0x75, 0x05, 0xd6, 0xc5,
+	0x7a, 0x52, 0x8b, 0x3e, 0xe4, 0xc5, 0xad, 0x20, 0x0b, 0xf0, 0xe1, 0x32, 0xe6, 0x24, 0xef, 0xdd,
+	0xd0, 0x4f, 0xd8, 0xc2, 0xcf, 0x42, 0xb0, 0xa0, 0x7b, 0x50, 0x96, 0x5a, 0x28, 0x69, 0xa3, 0x06,
+	0xec, 0x64, 0xf0, 0x9a, 0x30, 0x0b, 0x00, 0x7a, 0x0c, 0xb9, 0x29, 0xb3, 0x85, 0x94, 0xaf, 0xef,
+	0xfc, 0xf7, 0xfc, 0x4d, 0xe3, 0xfb, 0x73, 0x8f, 0xd9, 0x14, 0x47, 0x98, 0xda, 0xd7, 0x59, 0x28,
+	0xa5, 0x36, 0x8f, 0x2b, 0xb9, 0xa7, 0x9b, 0xb8, 0xdb, 0x32, 0xd4, 0x4c, 0x58, 0x37, 0xac, 0x3f,
+	0xdb, 0xd7, 0x0d, 0xd3, 0x6a, 0x0d, 0xf6, 0xfb, 0xa6, 0xaa, 0xa0, 0x6b, 0xa0, 0xc6, 0xa6, 0xf6,
+	0x3e, 0x6e, 0x98, 0xdd, 0x41, 0x5f, 0xcd, 0x86, 0x25, 0x8f, 0xad, 0x46, 0xf7, 0x85, 0xae, 0xae,
+	0x08, 0xa8, 0x31, 0x1c, 0xf4, 0x0d, 0x5d, 0x98, 0x72, 0xa8, 0x0a, 0x37, 0xcc, 0xd6, 0xd0, 0x1a,
+	0x0c, 0xf5, 0xbe, 0xde, 0xb6, 0x5a, 0x83, 0x7e, 0x5f, 0x6f, 0x85, 0x78, 0x43, 0x5d, 0x8d, 0xd7,
+	0x5a, 0xbd, 0x81, 0x71, 0x6a, 0x2d, 0x8f, 0x10, 0xac, 0x87, 0x6b, 0x86, 0xde, 0x37, 0xad, 0xe6,
+	0x73, 0x53, 0x37, 0xd4, 0x02, 0xba, 0x01, 0x28, 0xb4, 0x61, 0xbd, 0xa5, 0x77, 0x0f, 0xf4, 0xb6,
+	0xb4, 0x5f, 0x41, 0xff, 0x82, 0xeb, 0x4f, 0xf1, 0xb0, 0x65, 0xc5, 0xd1, 0xec, 0xe9, 0x86, 0xd1,
+	0x78, 0xaa, 0x1b, 0x6a, 0x31, 0xdc, 0x42, 0x2e, 0xc9, 0xb0, 0x92, 0x35, 0x68, 0xae, 0xc3, 0x9a,
+	0xc8, 0xb2, 0x15, 0xc9, 0x70, 0xed, 0x9b, 0x1c, 0xa8, 0xa7, 0xeb, 0x8f, 0x3e, 0x8b, 0x45, 0x5e,
+	0x68, 0xf1, 0xd6, 0x45, 0x0b, 0x2c, 0xb5, 0x1d, 0x3d, 0x82, 0x2b, 0xf2, 0xd6, 0xb3, 0xa5, 0x16,
+	0xfc, 0xd5, 0x85, 0x93, 0xf8, 0x22, 0x02, 0xe5, 0x80, 0x4c, 0xac, 0x45, 0xeb, 0x8a, 0x77, 0xca,
+	0x27, 0x17, 0x6f, 0x5d, 0xcd, 0x24, 0x93, 0x64, 0x22, 0xae, 0xc8, 0xb5, 0x20, 0x65, 0xaa, 0xfe,
+	0xa0, 0x40, 0x29, 0xe5, 0x83, 0xbe, 0x80, 0x22, 0xf3, 0x28, 0x27, 0x29, 0x41, 0x79, 0x72, 0xb9,
+	0xed, 0xb4, 0x41, 0xcc, 0x83, 0x17, 0x94, 0x0b, 0x81, 0xcf, 0xa6, 0x04, 0xbe, 0x76, 0x17, 0x8a,
+	0x89, 0x37, 0x02, 0xc8, 0xef, 0x0f, 0x0d, 0x1d, 0x9b, 0x6a, 0x26, 0x1c, 0x63, 0x7d, 0x6f, 0x70,
+	0xa0, 0xab, 0x4a, 0xf5, 0x0d, 0x6c, 0x9c, 0x39, 0xcd, 0x3b, 0x54, 0xb7, 0x77, 0x52, 0x75, 0x1f,
+	0x5d, 0x2e, 0xfa, 0x94, 0x00, 0xd7, 0xbe, 0xcd, 0x41, 0xf9, 0xc4, 0xe3, 0xed, 0xef, 0x11, 0xa5,
+	0xcb, 0x76, 0xc5, 0x2e, 0xe4, 0xc7, 0x8e, 0x1b, 0x24, 0x37, 0xb0, 0x76, 0xc1, 0x27, 0xa7, 0xb6,
+	0x1b, 0xa1, 0xb0, 0x44, 0xa3, 0x6e, 0xdc, 0xd5, 0xe2, 0xd1, 0xf6, 0xf0, 0xa2, 0x34, 0x3d, 0x76,
+	0xe6, 0xf1, 0xb2, 0x05, 0x79, 0x41, 0x8e, 0x36, 0x01, 0xe8, 0x57, 0x1e, 0xa7, 0xbe, 0x1f, 0x37,
+	0x50, 0x11, 0xa7, 0x2c, 0xd5, 0x9f, 0x14, 0x28, 0xa5, 0x08, 0xd0, 0xeb, 0xf3, 0x2f, 0xb2, 0xf6,
+	0x25, 0x02, 0xfa, 0x47, 0xaf, 0xb2, 0xfb, 0x9f, 0xc2, 0x5a, 0x5a, 0x5c, 0xd1, 0x75, 0xd8, 0x68,
+	0xf5, 0xba, 0xa1, 0x5a, 0x35, 0xfa, 0x6d, 0xcb, 0xd0, 0xf1, 0x81, 0x8e, 0x45, 0x13, 0x0b, 0xb3,
+	0xaa, 0x84, 0x63, 0x69, 0xcf, 0x36, 0x1f, 0xfc, 0xf8, 0x76, 0x53, 0xf9, 0xe5, 0xed, 0xa6, 0xf2,
+	0xdb, 0xdb, 0x4d, 0xe5, 0xc5, 0x2d, 0x71, 0x5a, 0x87, 0xd5, 0x89, 0xe7, 0xd4, 0xcf, 0xfe, 0x47,
+	0x3b, 0xcc, 0x47, 0x5d, 0xf1, 0xf0, 0xcf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x54, 0xb1, 0x7a, 0xfa,
+	0xc0, 0x0d, 0x00, 0x00,
 }
 
 func (m *Telemetry) Marshal() (dAtA []byte, err error) {
@@ -1607,6 +1812,18 @@ func (m *Tracing) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.XXX_unrecognized != nil {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.Match != nil {
+		{
+			size, err := m.Match.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTelemetry(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
 	}
 	if m.UseRequestIdForTraceSampling != nil {
 		{
@@ -1898,6 +2115,38 @@ func (m *Tracing_RequestHeader) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintTelemetry(dAtA, i, uint64(len(m.Name)))
 		i--
 		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Tracing_TracingSelector) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Tracing_TracingSelector) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Tracing_TracingSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.TrafficDirection != 0 {
+		i = encodeVarintTelemetry(dAtA, i, uint64(m.TrafficDirection))
+		i--
+		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
@@ -2198,6 +2447,18 @@ func (m *AccessLogging) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
+	if m.Match != nil {
+		{
+			size, err := m.Match.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTelemetry(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
 	if m.Filter != nil {
 		{
 			size, err := m.Filter.MarshalToSizedBuffer(dAtA[:i])
@@ -2269,6 +2530,38 @@ func (m *AccessLogging_Filter) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintTelemetry(dAtA, i, uint64(len(m.Expression)))
 		i--
 		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AccessLogging_LogSelector) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AccessLogging_LogSelector) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AccessLogging_LogSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.TrafficDirection != 0 {
+		i = encodeVarintTelemetry(dAtA, i, uint64(m.TrafficDirection))
+		i--
+		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
@@ -2353,6 +2646,10 @@ func (m *Tracing) Size() (n int) {
 	}
 	if m.UseRequestIdForTraceSampling != nil {
 		l = m.UseRequestIdForTraceSampling.Size()
+		n += 1 + l + sovTelemetry(uint64(l))
+	}
+	if m.Match != nil {
+		l = m.Match.Size()
 		n += 1 + l + sovTelemetry(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
@@ -2461,6 +2758,21 @@ func (m *Tracing_RequestHeader) Size() (n int) {
 	l = len(m.DefaultValue)
 	if l > 0 {
 		n += 1 + l + sovTelemetry(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Tracing_TracingSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TrafficDirection != 0 {
+		n += 1 + sovTelemetry(uint64(m.TrafficDirection))
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -2617,6 +2929,10 @@ func (m *AccessLogging) Size() (n int) {
 		l = m.Filter.Size()
 		n += 1 + l + sovTelemetry(uint64(l))
 	}
+	if m.Match != nil {
+		l = m.Match.Size()
+		n += 1 + l + sovTelemetry(uint64(l))
+	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
 	}
@@ -2632,6 +2948,21 @@ func (m *AccessLogging_Filter) Size() (n int) {
 	l = len(m.Expression)
 	if l > 0 {
 		n += 1 + l + sovTelemetry(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *AccessLogging_LogSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TrafficDirection != 0 {
+		n += 1 + sovTelemetry(uint64(m.TrafficDirection))
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -3134,6 +3465,42 @@ func (m *Tracing) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Match", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTelemetry
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Match == nil {
+				m.Match = &Tracing_TracingSelector{}
+			}
+			if err := m.Match.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTelemetry(dAtA[iNdEx:])
@@ -3603,6 +3970,76 @@ func (m *Tracing_RequestHeader) Unmarshal(dAtA []byte) error {
 			}
 			m.DefaultValue = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTelemetry(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Tracing_TracingSelector) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTelemetry
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TracingSelector: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TracingSelector: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TrafficDirection", wireType)
+			}
+			m.TrafficDirection = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTelemetry
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TrafficDirection |= Tracing_TracingSelector_TrafficDirection(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTelemetry(dAtA[iNdEx:])
@@ -4438,6 +4875,42 @@ func (m *AccessLogging) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Match", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTelemetry
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Match == nil {
+				m.Match = &AccessLogging_LogSelector{}
+			}
+			if err := m.Match.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTelemetry(dAtA[iNdEx:])
@@ -4521,6 +4994,76 @@ func (m *AccessLogging_Filter) Unmarshal(dAtA []byte) error {
 			}
 			m.Expression = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTelemetry(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTelemetry
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AccessLogging_LogSelector) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTelemetry
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: LogSelector: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: LogSelector: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TrafficDirection", wireType)
+			}
+			m.TrafficDirection = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTelemetry
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TrafficDirection |= AccessLogging_LogSelector_TrafficDirection(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTelemetry(dAtA[iNdEx:])

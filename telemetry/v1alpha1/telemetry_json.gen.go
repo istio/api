@@ -3,14 +3,14 @@
 
 // Telemetry defines how the telemetry is generated for workloads within a mesh.
 //
-// For mesh level configuration, put the resource in root configuration namespace for
-// your Istio installation *without* a workload selector.
+// For mesh level configuration, put the resource in root configuration
+// namespace for your Istio installation *without* a workload selector.
 //
-// For any namespace, including the root configuration namespace, it is only valid
-// to have a single workload selector-less Telemetry resource.
+// For any namespace, including the root configuration namespace, it is only
+// valid to have a single workload selector-less Telemetry resource.
 //
-// For resources with a workload selector, it is only valid to have one resource selecting
-// any given workload.
+// For resources with a workload selector, it is only valid to have one resource
+// selecting any given workload.
 //
 // The hierarchy of Telemetry configuration is as follows:
 //
@@ -173,10 +173,11 @@
 //   accessLogging:
 //   - providers:
 //     - name: envoy
-//     # By default, this turns on access logging (no need to set `disabled: false`).
-//     # Unspecified `disabled` will be treated as `disabled: false`, except in
-//     # cases where a parent configuration has marked as `disabled: true`. In
-//     # those cases, `disabled: false` must be set explicitly to override.
+//     # By default, this turns on access logging (no need to set `disabled:
+//     false`). # Unspecified `disabled` will be treated as `disabled: false`,
+//     except in # cases where a parent configuration has marked as `disabled:
+//     true`. In # those cases, `disabled: false` must be set explicitly to
+//     override.
 // ```
 //
 // Policy to disable access logging for the `foo` namespace:
@@ -276,6 +277,17 @@ func (this *Tracing_RequestHeader) UnmarshalJSON(b []byte) error {
 	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for Tracing_TracingSelector
+func (this *Tracing_TracingSelector) MarshalJSON() ([]byte, error) {
+	str, err := TelemetryMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for Tracing_TracingSelector
+func (this *Tracing_TracingSelector) UnmarshalJSON(b []byte) error {
+	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 // MarshalJSON is a custom marshaler for ProviderRef
 func (this *ProviderRef) MarshalJSON() ([]byte, error) {
 	str, err := TelemetryMarshaler.MarshalToString(this)
@@ -350,6 +362,17 @@ func (this *AccessLogging_Filter) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for AccessLogging_Filter
 func (this *AccessLogging_Filter) UnmarshalJSON(b []byte) error {
+	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for AccessLogging_LogSelector
+func (this *AccessLogging_LogSelector) MarshalJSON() ([]byte, error) {
+	str, err := TelemetryMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for AccessLogging_LogSelector
+func (this *AccessLogging_LogSelector) UnmarshalJSON(b []byte) error {
 	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
