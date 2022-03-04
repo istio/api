@@ -1,0 +1,7 @@
+apiVersion: release-notes/v2
+kind: feature
+area: security
+
+releaseNotes:
+  - |
+    **Added** configuration for selecting private key provider for gateways and sidecars.
