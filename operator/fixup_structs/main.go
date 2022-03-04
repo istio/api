@@ -137,6 +137,8 @@ func main() {
 				lvs := strings.Split(m, "_")
 				for i, v := range lvs {
 					if i > 0 {
+						// This is deprecated but we do not want to add a depency on x/text
+						//nolint: staticcheck
 						lvs[i] = strings.Title(v)
 					}
 				}
