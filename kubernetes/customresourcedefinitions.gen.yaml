@@ -6169,13 +6169,14 @@ spec:
                           type: string
                       type: object
                     match:
-                      description: Allows tailoring of behavior to specific conditions.
+                      description: Allows tailoring of logging behavior to specific
+                        conditions.
                       properties:
-                        trafficDirection:
+                        mode:
                           enum:
-                          - ALL_TRAFFIC
-                          - INBOUND_ONLY
-                          - OUTBOUND_ONLY
+                          - CLIENT_AND_SERVER
+                          - CLIENT
+                          - SERVER
                           type: string
                       type: object
                     providers:
@@ -6341,11 +6342,11 @@ spec:
                     match:
                       description: Allows tailoring of behavior to specific conditions.
                       properties:
-                        trafficDirection:
+                        mode:
                           enum:
-                          - ALL_TRAFFIC
-                          - INBOUND_ONLY
-                          - OUTBOUND_ONLY
+                          - CLIENT_AND_SERVER
+                          - CLIENT
+                          - SERVER
                           type: string
                       type: object
                     providers:

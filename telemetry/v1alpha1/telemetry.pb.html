@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.telemetry.v1alpha1.Telemetry
 aliases: [/docs/reference/config/telemetry/v1alpha1/telemetry]
-number_of_entries: 20
+number_of_entries: 18
 ---
 <p>Telemetry defines how the telemetry is generated for workloads within a mesh.</p>
 
@@ -623,7 +623,7 @@ No
 <td><code>match</code></td>
 <td><code><a href="#AccessLogging-LogSelector">LogSelector</a></code></td>
 <td>
-<p>Allows tailoring of behavior to specific conditions.</p>
+<p>Allows tailoring of logging behavior to specific conditions.</p>
 
 </td>
 <td>
@@ -794,6 +794,9 @@ No
 </section>
 <h2 id="Tracing-TracingSelector">Tracing.TracingSelector</h2>
 <section>
+<p>TracingSelector provides a coarse-grained ability to configure tracing
+behavior based on certain traffic metadata (such as traffic direction).</p>
+
 <table class="message-fields">
 <thead>
 <tr>
@@ -804,11 +807,11 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="Tracing-TracingSelector-traffic_direction">
-<td><code>trafficDirection</code></td>
-<td><code><a href="#Tracing-TracingSelector-TrafficDirection">TrafficDirection</a></code></td>
+<tr id="Tracing-TracingSelector-mode">
+<td><code>mode</code></td>
+<td><code><a href="#WorkloadMode">WorkloadMode</a></code></td>
 <td>
-<p>This determines whether or not to apply the access logging configuration
+<p>This determines whether or not to apply the tracing configuration
 based on the direction of traffic relative to the proxied workload.</p>
 
 </td>
@@ -904,6 +907,13 @@ No
 </section>
 <h2 id="AccessLogging-LogSelector">AccessLogging.LogSelector</h2>
 <section>
+<p>LogSelector provides a coarse-grained ability to configure logging behavior
+based on certain traffic metadata (such as traffic direction). LogSelector
+applies to traffic metadata which is not represented in the attribute set
+currently supported by Filters. It allows control planes to limit the
+configuration sent to individual workloads. Finer-grained logging behavior
+can be further configured via <code>filter</code>.</p>
+
 <table class="message-fields">
 <thead>
 <tr>
@@ -914,9 +924,9 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="AccessLogging-LogSelector-traffic_direction">
-<td><code>trafficDirection</code></td>
-<td><code><a href="#AccessLogging-LogSelector-TrafficDirection">TrafficDirection</a></code></td>
+<tr id="AccessLogging-LogSelector-mode">
+<td><code>mode</code></td>
+<td><code><a href="#WorkloadMode">WorkloadMode</a></code></td>
 <td>
 <p>This determines whether or not to apply the access logging configuration
 based on the direction of traffic relative to the proxied workload.</p>
@@ -924,34 +934,6 @@ based on the direction of traffic relative to the proxied workload.</p>
 </td>
 <td>
 No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="Tracing-TracingSelector-TrafficDirection">Tracing.TracingSelector.TrafficDirection</h2>
-<section>
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Tracing-TracingSelector-TrafficDirection-ALL_TRAFFIC">
-<td><code>ALL_TRAFFIC</code></td>
-<td>
-</td>
-</tr>
-<tr id="Tracing-TracingSelector-TrafficDirection-INBOUND_ONLY">
-<td><code>INBOUND_ONLY</code></td>
-<td>
-</td>
-</tr>
-<tr id="Tracing-TracingSelector-TrafficDirection-OUTBOUND_ONLY">
-<td><code>OUTBOUND_ONLY</code></td>
-<td>
 </td>
 </tr>
 </tbody>
@@ -1163,34 +1145,6 @@ traffic.</p>
 <p>Specifies that the tag should not be included in the metric when
 generated.</p>
 
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="AccessLogging-LogSelector-TrafficDirection">AccessLogging.LogSelector.TrafficDirection</h2>
-<section>
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="AccessLogging-LogSelector-TrafficDirection-ALL_TRAFFIC">
-<td><code>ALL_TRAFFIC</code></td>
-<td>
-</td>
-</tr>
-<tr id="AccessLogging-LogSelector-TrafficDirection-INBOUND_ONLY">
-<td><code>INBOUND_ONLY</code></td>
-<td>
-</td>
-</tr>
-<tr id="AccessLogging-LogSelector-TrafficDirection-OUTBOUND_ONLY">
-<td><code>OUTBOUND_ONLY</code></td>
-<td>
 </td>
 </tr>
 </tbody>
