@@ -42151,6 +42151,46 @@
             ]
           },
           {
+            "name": "ContainerResourceMetricSource",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "target",
+                "type": "MetricTarget"
+              },
+              {
+                "id": 3,
+                "name": "container",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "ContainerResourceMetricStatus",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "current",
+                "type": "MetricValueStatus"
+              },
+              {
+                "id": 3,
+                "name": "container",
+                "type": "string"
+              }
+            ]
+          },
+          {
             "name": "ClientIPConfig",
             "fields": [
               {
@@ -42257,22 +42297,71 @@
               {
                 "id": 1,
                 "name": "metricName",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 2,
                 "name": "metricSelector",
-                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 3,
                 "name": "targetValue",
-                "type": "IntOrString"
+                "type": "IntOrString",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 4,
                 "name": "targetAverageValue",
-                "type": "IntOrString"
+                "type": "IntOrString",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
+              },
+              {
+                "id": 5,
+                "name": "metric",
+                "type": "MetricIdentifier"
+              },
+              {
+                "id": 6,
+                "name": "target",
+                "type": "MetricTarget"
+              }
+            ]
+          },
+          {
+            "name": "ExternalMetricStatus",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metric",
+                "type": "MetricIdentifier"
+              },
+              {
+                "id": 2,
+                "name": "current",
+                "type": "MetricValueStatus"
               }
             ]
           },
@@ -42345,6 +42434,66 @@
                 "name": "metrics",
                 "type": "MetricSpec",
                 "is_repeated": true
+              },
+              {
+                "id": 5,
+                "name": "behavior",
+                "type": "HorizontalPodAutoScalerBehavior"
+              }
+            ]
+          },
+          {
+            "name": "HorizontalPodAutoScalerBehavior",
+            "fields": [
+              {
+                "id": 1,
+                "name": "scaleUp",
+                "type": "HPAScalingRules"
+              },
+              {
+                "id": 2,
+                "name": "scaleDown",
+                "type": "HPAScalingRules"
+              }
+            ]
+          },
+          {
+            "name": "HPAScalingRules",
+            "fields": [
+              {
+                "id": 3,
+                "name": "stabilizationWindowSeconds",
+                "type": "int32"
+              },
+              {
+                "id": 1,
+                "name": "selectPolicy",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "policies",
+                "type": "HPAScalingPolicy"
+              }
+            ]
+          },
+          {
+            "name": "HPAScalingPolicy",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "value",
+                "type": "int32"
+              },
+              {
+                "id": 3,
+                "name": "periodSeconds",
+                "type": "int32"
               }
             ]
           },
@@ -42355,6 +42504,21 @@
                 "id": 1,
                 "name": "name",
                 "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "MetricIdentifier",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "selector",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
               }
             ]
           },
@@ -42382,9 +42546,94 @@
                 "type": "ResourceMetricSource"
               },
               {
+                "id": 7,
+                "name": "containerResource",
+                "type": "ContainerResourceMetricSource"
+              },
+              {
                 "id": 5,
                 "name": "external",
                 "type": "ExternalMetricSource"
+              }
+            ]
+          },
+          {
+            "name": "MetricStatus",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "object",
+                "type": "ObjectMetricStatus"
+              },
+              {
+                "id": 3,
+                "name": "pods",
+                "type": "PodsMetricStatus"
+              },
+              {
+                "id": 4,
+                "name": "resource",
+                "type": "ResourceMetricStatus"
+              },
+              {
+                "id": 7,
+                "name": "containerResource",
+                "type": "ContainerResourceMetricStatus"
+              },
+              {
+                "id": 5,
+                "name": "external",
+                "type": "ExternalMetricStatus"
+              }
+            ]
+          },
+          {
+            "name": "MetricTarget",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "value",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              },
+              {
+                "id": 3,
+                "name": "averageValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              },
+              {
+                "id": 4,
+                "name": "averageUtilization",
+                "type": "int32"
+              }
+            ]
+          },
+          {
+            "name": "MetricValueStatus",
+            "fields": [
+              {
+                "id": 1,
+                "name": "value",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              },
+              {
+                "id": 2,
+                "name": "averageValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              },
+              {
+                "id": 3,
+                "name": "averageUtilization",
+                "type": "int32"
               }
             ]
           },
@@ -42487,29 +42736,83 @@
             "name": "ObjectMetricSource",
             "fields": [
               {
-                "id": 1,
-                "name": "target",
-                "type": "CrossVersionObjectReference"
-              },
-              {
                 "id": 2,
                 "name": "metricName",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 3,
                 "name": "targetValue",
-                "type": "IntOrString"
+                "type": "IntOrString",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 4,
                 "name": "selector",
-                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 5,
                 "name": "averageValue",
-                "type": "IntOrString"
+                "type": "IntOrString",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
+              },
+              {
+                "id": 1,
+                "name": "target",
+                "type": "google.protobuf.Value"
+              },
+              {
+                "id": 6,
+                "name": "describedObject",
+                "type": "CrossVersionObjectReference"
+              },
+              {
+                "id": 8,
+                "name": "metric",
+                "type": "MetricIdentifier"
+              }
+            ]
+          },
+          {
+            "name": "ObjectMetricStatus",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metric",
+                "type": "MetricIdentifier"
+              },
+              {
+                "id": 2,
+                "name": "current",
+                "type": "MetricValueStatus"
+              },
+              {
+                "id": 3,
+                "name": "describedObject",
+                "type": "CrossVersionObjectReference"
               }
             ]
           },
@@ -42594,17 +42897,60 @@
               {
                 "id": 1,
                 "name": "metricName",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 2,
                 "name": "targetAverageValue",
-                "type": "IntOrString"
+                "type": "IntOrString",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 3,
                 "name": "selector",
-                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "name": "metric",
+                "type": "MetricIdentifier"
+              },
+              {
+                "id": 5,
+                "name": "target",
+                "type": "MetricTarget"
+              }
+            ]
+          },
+          {
+            "name": "PodsMetricStatus",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metric",
+                "type": "MetricIdentifier"
+              },
+              {
+                "id": 2,
+                "name": "current",
+                "type": "MetricValueStatus"
               }
             ]
           },
@@ -42699,12 +43045,44 @@
               {
                 "id": 2,
                 "name": "targetAverageUtilization",
-                "type": "int32"
+                "type": "int32",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 3,
                 "name": "targetAverageValue",
-                "type": "IntOrString"
+                "type": "IntOrString",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "name": "target",
+                "type": "MetricTarget"
+              }
+            ]
+          },
+          {
+            "name": "ResourceMetricStatus",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "current",
+                "type": "MetricValueStatus"
               }
             ]
           },
@@ -43110,6 +43488,9 @@
           },
           {
             "path": "k8s.io/api/core/v1/generated.proto"
+          },
+          {
+            "path": "k8s.io/apimachinery/pkg/api/resource/generated.proto"
           }
         ],
         "package": {
