@@ -39712,6 +39712,16 @@
                 "id": 8,
                 "name": "insecure_skip_verify",
                 "type": "google.protobuf.BoolValue"
+              },
+              {
+                "id": 9,
+                "name": "auto_sni",
+                "type": "bool"
+              },
+              {
+                "id": 10,
+                "name": "auto_san",
+                "type": "bool"
               }
             ]
           },
@@ -42499,6 +42509,16 @@
                 "id": 8,
                 "name": "insecure_skip_verify",
                 "type": "google.protobuf.BoolValue"
+              },
+              {
+                "id": 9,
+                "name": "auto_sni",
+                "type": "bool"
+              },
+              {
+                "id": 10,
+                "name": "auto_san",
+                "type": "bool"
               }
             ]
           },

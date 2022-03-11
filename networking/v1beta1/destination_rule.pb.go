@@ -1917,10 +1917,19 @@ type ClientTLSSettings struct {
 	// `VerifyCertAtClient` is `false` by default in Istio version 1.9 but will
 	// be `true` by default in a later version where, going forward, it will be
 	// enabled by default.
-	InsecureSkipVerify   *types.BoolValue `protobuf:"bytes,8,opt,name=insecure_skip_verify,json=insecureSkipVerify,proto3" json:"insecure_skip_verify,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
-	XXX_unrecognized     []byte           `json:"-"`
-	XXX_sizecache        int32            `json:"-"`
+	InsecureSkipVerify *types.BoolValue `protobuf:"bytes,8,opt,name=insecure_skip_verify,json=insecureSkipVerify,proto3" json:"insecure_skip_verify,omitempty"`
+	// auto_sni and auto_san could automatically set the outbound SNI
+	// based on host/authority
+	// **NOTE:** auto_sni and auto_san fields are only applicable for HTTPs traffic
+	// when auto_sni field set as true, it will override the sni set above.
+	// Additional context:
+	// https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-upstreamhttpprotocoloptions-auto-sni
+	// https://github.com/istio/istio/issues/27847
+	AutoSni              bool     `protobuf:"varint,9,opt,name=auto_sni,json=autoSni,proto3" json:"auto_sni,omitempty"`
+	AutoSan              bool     `protobuf:"varint,10,opt,name=auto_san,json=autoSan,proto3" json:"auto_san,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *ClientTLSSettings) Reset()         { *m = ClientTLSSettings{} }
@@ -2010,6 +2019,20 @@ func (m *ClientTLSSettings) GetInsecureSkipVerify() *types.BoolValue {
 		return m.InsecureSkipVerify
 	}
 	return nil
+}
+
+func (m *ClientTLSSettings) GetAutoSni() bool {
+	if m != nil {
+		return m.AutoSni
+	}
+	return false
+}
+
+func (m *ClientTLSSettings) GetAutoSan() bool {
+	if m != nil {
+		return m.AutoSan
+	}
+	return false
 }
 
 // Locality-weighted load balancing allows administrators to control the
@@ -3421,6 +3444,26 @@ func (m *ClientTLSSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
+	if m.AutoSan {
+		i--
+		if m.AutoSan {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x50
+	}
+	if m.AutoSni {
+		i--
+		if m.AutoSni {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x48
+	}
 	if m.InsecureSkipVerify != nil {
 		{
 			size, err := m.InsecureSkipVerify.MarshalToSizedBuffer(dAtA[:i])
@@ -4103,6 +4146,12 @@ func (m *ClientTLSSettings) Size() (n int) {
 	if m.InsecureSkipVerify != nil {
 		l = m.InsecureSkipVerify.Size()
 		n += 1 + l + sovDestinationRule(uint64(l))
+	}
+	if m.AutoSni {
+		n += 2
+	}
+	if m.AutoSan {
+		n += 2
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -6833,6 +6882,46 @@ func (m *ClientTLSSettings) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 9:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AutoSni", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDestinationRule
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.AutoSni = bool(v != 0)
+		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AutoSan", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDestinationRule
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.AutoSan = bool(v != 0)
 		default:
 			iNdEx = preIndex
 			skippy, err := skipDestinationRule(dAtA[iNdEx:])

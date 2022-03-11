@@ -44,6 +44,13 @@
             "description": "InsecureSkipVerify specifies whether the proxy should skip verifying the CA signature and SAN for the server certificate corresponding to the host. This flag should only be set if global CA signature verifcation is enabled, `VerifyCertAtClient` environmental variable is set to `true`, but no verification is desired for a specific host. If enabled with or without `VerifyCertAtClient` enabled, verification of the CA signature and SAN will be skipped.",
             "type": "boolean",
             "nullable": true
+          },
+          "autoSni": {
+            "description": "auto_sni and auto_san could automatically set the outbound SNI based on host/authority **NOTE:** auto_sni and auto_san fields are only applicable for HTTPs traffic when auto_sni field set as true, it will override the sni set above. Additional context: https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-upstreamhttpprotocoloptions-auto-sni https://github.com/istio/istio/issues/27847",
+            "type": "boolean"
+          },
+          "autoSan": {
+            "type": "boolean"
           }
         }
       },

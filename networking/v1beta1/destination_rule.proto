@@ -1011,6 +1011,16 @@ message ClientTLSSettings {
   // be `true` by default in a later version where, going forward, it will be
   // enabled by default.
   google.protobuf.BoolValue insecure_skip_verify = 8;
+
+  // auto_sni and auto_san could automatically set the outbound SNI
+  // based on host/authority
+  // **NOTE:** auto_sni and auto_san fields are only applicable for HTTPs traffic
+  // when auto_sni field set as true, it will override the sni set above.
+  // Additional context:
+  // https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-upstreamhttpprotocoloptions-auto-sni
+  // https://github.com/istio/istio/issues/27847 
+  bool auto_sni = 9;
+  bool auto_san = 10;
 }
 
 // Locality-weighted load balancing allows administrators to control the

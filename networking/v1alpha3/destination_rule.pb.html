@@ -1199,6 +1199,32 @@ enabled by default.</p>
 No
 </td>
 </tr>
+<tr id="ClientTLSSettings-auto_sni">
+<td><code>autoSni</code></td>
+<td><code>bool</code></td>
+<td>
+<p>auto<em>sni and auto</em>san could automatically set the outbound SNI
+based on host/authority
+<strong>NOTE:</strong> auto<em>sni and auto</em>san fields are only applicable for HTTPs traffic
+when auto_sni field set as true, it will override the sni set above.
+Additional context:
+https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-upstreamhttpprotocoloptions-auto-sni
+https://github.com/istio/istio/issues/27847</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ClientTLSSettings-auto_san">
+<td><code>autoSan</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>

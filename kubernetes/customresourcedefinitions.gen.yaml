@@ -691,6 +691,10 @@ spec:
                                 description: TLS related settings for connections
                                   to the upstream service.
                                 properties:
+                                  autoSan:
+                                    type: boolean
+                                  autoSni:
+                                    type: boolean
                                   caCertificates:
                                     type: string
                                   clientCertificate:
@@ -726,6 +730,10 @@ spec:
                           description: TLS related settings for connections to the
                             upstream service.
                           properties:
+                            autoSan:
+                              type: boolean
+                            autoSni:
+                              type: boolean
                             caCertificates:
                               type: string
                             clientCertificate:
@@ -1256,6 +1264,10 @@ spec:
                           description: TLS related settings for connections to the
                             upstream service.
                           properties:
+                            autoSan:
+                              type: boolean
+                            autoSni:
+                              type: boolean
                             caCertificates:
                               type: string
                             clientCertificate:
@@ -1291,6 +1303,10 @@ spec:
                     description: TLS related settings for connections to the upstream
                       service.
                     properties:
+                      autoSan:
+                        type: boolean
+                      autoSni:
+                        type: boolean
                       caCertificates:
                         type: string
                       clientCertificate:
@@ -1886,6 +1902,10 @@ spec:
                                 description: TLS related settings for connections
                                   to the upstream service.
                                 properties:
+                                  autoSan:
+                                    type: boolean
+                                  autoSni:
+                                    type: boolean
                                   caCertificates:
                                     type: string
                                   clientCertificate:
@@ -1921,6 +1941,10 @@ spec:
                           description: TLS related settings for connections to the
                             upstream service.
                           properties:
+                            autoSan:
+                              type: boolean
+                            autoSni:
+                              type: boolean
                             caCertificates:
                               type: string
                             clientCertificate:
@@ -2451,6 +2475,10 @@ spec:
                           description: TLS related settings for connections to the
                             upstream service.
                           properties:
+                            autoSan:
+                              type: boolean
+                            autoSni:
+                              type: boolean
                             caCertificates:
                               type: string
                             clientCertificate:
@@ -2486,6 +2514,10 @@ spec:
                     description: TLS related settings for connections to the upstream
                       service.
                     properties:
+                      autoSan:
+                        type: boolean
+                      autoSni:
+                        type: boolean
                       caCertificates:
                         type: string
                       clientCertificate:
