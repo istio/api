@@ -271,10 +271,13 @@ type Tracing struct {
 	// Use the tls_settings to specify the tls mode to use. If the remote tracing service
 	// uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
 	// mode as `ISTIO_MUTUAL`.
-	TlsSettings          *v1alpha3.ClientTLSSettings `protobuf:"bytes,8,opt,name=tls_settings,json=tlsSettings,proto3" json:"tlsSettings,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                    `json:"-"`
-	XXX_unrecognized     []byte                      `json:"-"`
-	XXX_sizecache        int32                       `json:"-"`
+	TlsSettings *v1alpha3.ClientTLSSettings `protobuf:"bytes,8,opt,name=tls_settings,json=tlsSettings,proto3" json:"tlsSettings,omitempty"`
+	// Whether to annotate spans with additional data. If true, spans will include logs
+	// for stream events.
+	Verbose              bool     `protobuf:"varint,10,opt,name=verbose,proto3" json:"verbose,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *Tracing) Reset()         { *m = Tracing{} }
@@ -406,6 +409,13 @@ func (m *Tracing) GetTlsSettings() *v1alpha3.ClientTLSSettings {
 		return m.TlsSettings
 	}
 	return nil
+}
+
+func (m *Tracing) GetVerbose() bool {
+	if m != nil {
+		return m.Verbose
+	}
+	return false
 }
 
 // XXX_OneofWrappers is for the internal use of the proto package.
@@ -1968,6 +1978,16 @@ func (m *Tracing) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
+	if m.Verbose {
+		i--
+		if m.Verbose {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x50
+	}
 	if m.Tracer != nil {
 		{
 			size := m.Tracer.Size()
@@ -3242,6 +3262,9 @@ func (m *Tracing) Size() (n int) {
 		l = m.TlsSettings.Size()
 		n += 1 + l + sovProxy(uint64(l))
 	}
+	if m.Verbose {
+		n += 2
+	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
 	}
@@ -4186,6 +4209,26 @@ func (m *Tracing) Unmarshal(dAtA []byte) error {
 			}
 			m.Tracer = &Tracing_OpenCensusAgent_{v}
 			iNdEx = postIndex
+		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Verbose", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowProxy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Verbose = bool(v != 0)
 		default:
 			iNdEx = preIndex
 			skippy, err := skipProxy(dAtA[iNdEx:])
