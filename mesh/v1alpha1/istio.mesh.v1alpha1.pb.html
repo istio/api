@@ -646,6 +646,38 @@ configured globally via this field.</p>
 No
 </td>
 </tr>
+<tr id="MeshConfig-injection_selectors">
+<td><code>injectionSelectors</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-apis-meta-v1-LabelSelector">LabelSelector[]</a></code></td>
+<td>
+<p>A list of Kubernetes selectors that specify the set of namespaces,
+Istio will create istio-ca-root-cert configmap in selected namespaces.
+If omitted, Istio will create istio-ca-root-cert configmap in all namespaces except kubernetes system namespaces.
+Elements in the list are disjunctive (OR semantics), i.e. a namespace will be included if it matches any selector.
+The following example selects any namespace that matches either below:
+1. The namespace has both of these labels: <code>env: prod</code> and <code>region: us-east1</code>
+2. The namespace has label <code>app</code> equal to <code>cassandra</code> or <code>spark</code>.</p>
+
+<pre><code class="language-yaml">injectionSelectors:
+  - matchLabels:
+      env: prod
+      region: us-east1
+  - matchExpressions:
+    - key: app
+      operator: In
+      values:
+        - cassandra
+        - spark
+</code></pre>
+
+<p>Refer to the <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors">kubernetes selector docs</a>
+for additional detail on selector semantics.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>

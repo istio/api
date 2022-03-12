@@ -1,0 +1,10 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - https://github.com/istio/istio/issues/31115
+
+releaseNotes:
+  - |
+    **Added** Add injection selectors to mesh config, a list of Kubernetes selectors
+    used to limit the namespaces that istiod create istio-ca-root-cert configmap.
