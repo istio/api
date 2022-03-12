@@ -17,6 +17,7 @@ syntax = "proto3";
 import "google/api/field_behavior.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
+import "istio.io/extensions/istio_feature.proto";
 
 // $schema: istio.networking.v1alpha3.VirtualService
 // $title: Virtual Service
@@ -287,7 +288,7 @@ message VirtualService {
   // The value "." is reserved and defines an export to the same namespace that
   // the virtual service is declared in. Similarly the value "*" is reserved and
   // defines an export to all namespaces.
-  repeated string export_to = 6;
+  repeated string export_to = 6 [(istio.extensions.feature) = {status: STABLE, id: "traffic.control"}];
 }
 
 // Destination indicates the network addressable service to which the

@@ -18,6 +18,7 @@ import "google/api/field_behavior.proto";
 import "networking/v1alpha3/gateway.proto";
 import "networking/v1alpha3/sidecar.proto";
 import "networking/v1alpha3/workload_entry.proto";
+import "istio.io/extensions/istio_feature.proto";
 
 // $schema: istio.networking.v1alpha3.ServiceEntry
 // $title: Service Entry
@@ -956,7 +957,7 @@ message ServiceEntry {
   // For a Kubernetes Service, the equivalent effect can be achieved by setting
   // the annotation "networking.istio.io/exportTo" to a comma-separated list
   // of namespace names.
-  repeated string export_to = 7;
+  repeated string export_to = 7 [(istio.extensions.feature) = {status: STABLE, id: "traffic.control"}];
 
   // If specified, the proxy will verify that the server certificate's
   // subject alternate name matches one of the specified values.

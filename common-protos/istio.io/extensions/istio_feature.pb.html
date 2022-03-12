@@ -1,0 +1,83 @@
+---
+title: istio.extensions
+layout: protoc-gen-docs
+generator: protoc-gen-docs
+number_of_entries: 2
+---
+<h2 id="IstioFeature">IstioFeature</h2>
+<section>
+<p>These options should be used during schema definition, applying them to some of the fields in protobuf
+Below are 1 related repo and 1 PR for this repo:
+Repo: https://github.com/istio/enhancements
+Repo PR: https://github.com/istio/enhancements/pull/88</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="IstioFeature-status" class="oneof oneof-start">
+<td><code>status</code></td>
+<td><code><a href="#FeatureStatus">FeatureStatus (oneof)</a></code></td>
+<td>
+<p>label the feature&rsquo;s status, available status values may be alpha, beta and stable
+there would be experimental in future.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="IstioFeature-id" class="oneof oneof-start">
+<td><code>id</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>id means the feature id which can be mapped here: https://github.com/istio/enhancements/blob/master/features.yaml
+it should be contained in id section of features under this yaml file.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="FeatureStatus">FeatureStatus</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="FeatureStatus-ALPHA">
+<td><code>ALPHA</code></td>
+<td>
+</td>
+</tr>
+<tr id="FeatureStatus-BETA">
+<td><code>BETA</code></td>
+<td>
+</td>
+</tr>
+<tr id="FeatureStatus-STABLE">
+<td><code>STABLE</code></td>
+<td>
+</td>
+</tr>
+<tr id="FeatureStatus-EXPERIMENTAL">
+<td><code>EXPERIMENTAL</code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
