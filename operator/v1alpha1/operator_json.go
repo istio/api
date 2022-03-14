@@ -21,17 +21,12 @@ package v1alpha1
 
 import (
 	bytes "bytes"
-	fmt "fmt"
-	math "math"
+	"encoding/json"
 
 	github_com_golang_protobuf_jsonpb "github.com/gogo/protobuf/jsonpb"
-	proto "github.com/gogo/protobuf/proto"
+	"github.com/gogo/protobuf/types"
+	"k8s.io/apimachinery/pkg/util/intstr"
 )
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ = proto.Marshal
-var _ = fmt.Errorf
-var _ = math.Inf
 
 // MarshalJSON is a custom marshaler for IstioOperatorSpec
 func (this *IstioOperatorSpec) MarshalJSON() ([]byte, error) {
@@ -64,6 +59,50 @@ func (this *InstallStatus_VersionStatus) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON is a custom unmarshaler for InstallStatus_VersionStatus
 func (this *InstallStatus_VersionStatus) UnmarshalJSON(b []byte) error {
 	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// UnmarshalJSON implements the json.Unmarshaller interface.
+func (this *IntOrString) UnmarshalJSON(value []byte) error {
+	if value[0] == '"' {
+		this.Type = int64(intstr.String)
+		var s string
+		err := json.Unmarshal(value, &s)
+		if err != nil {
+			return err
+		}
+		this.StrVal = &types.StringValue{Value: s}
+		return nil
+	}
+	this.Type = int64(intstr.Int)
+	var s int32
+	err := json.Unmarshal(value, &s)
+	if err != nil {
+		return err
+	}
+	this.IntVal = &types.Int32Value{Value: s}
+	return nil
+}
+
+func (this *IntOrString) MarshalJSONPB(_ *github_com_golang_protobuf_jsonpb.Marshaler) ([]byte, error) {
+	return this.MarshalJSON()
+}
+
+func (this *IntOrString) MarshalJSON() ([]byte, error) {
+	if this.IntVal != nil {
+		return json.Marshal(this.IntVal.GetValue())
+	}
+	return json.Marshal(this.StrVal.GetValue())
+}
+
+func (this *IntOrString) UnmarshalJSONPB(_ *github_com_golang_protobuf_jsonpb.Unmarshaler, value []byte) error {
+	return this.UnmarshalJSON(value)
+}
+
+func (this *IntOrString) ToKubernetes() intstr.IntOrString {
+	if this.IntVal != nil {
+		return intstr.FromInt(int(this.GetIntVal().GetValue()))
+	}
+	return intstr.FromString(this.GetStrVal().GetValue())
 }
 
 var (

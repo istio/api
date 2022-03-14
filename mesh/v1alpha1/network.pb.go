@@ -157,10 +157,10 @@ type isNetwork_NetworkEndpoints_Ne interface {
 }
 
 type Network_NetworkEndpoints_FromCidr struct {
-	FromCidr string `protobuf:"bytes,1,opt,name=from_cidr,json=fromCidr,proto3,oneof" json:"fromCidr,omitempty"`
+	FromCidr string `protobuf:"bytes,1,opt,name=from_cidr,json=fromCidr,proto3,oneof" json:"from_cidr,omitempty"`
 }
 type Network_NetworkEndpoints_FromRegistry struct {
-	FromRegistry string `protobuf:"bytes,2,opt,name=from_registry,json=fromRegistry,proto3,oneof" json:"fromRegistry,omitempty"`
+	FromRegistry string `protobuf:"bytes,2,opt,name=from_registry,json=fromRegistry,proto3,oneof" json:"from_registry,omitempty"`
 }
 
 func (*Network_NetworkEndpoints_FromCidr) isNetwork_NetworkEndpoints_Ne()     {}
@@ -252,7 +252,7 @@ type isNetwork_IstioNetworkGateway_Gw interface {
 }
 
 type Network_IstioNetworkGateway_RegistryServiceName struct {
-	RegistryServiceName string `protobuf:"bytes,1,opt,name=registry_service_name,json=registryServiceName,proto3,oneof" json:"registryServiceName,omitempty"`
+	RegistryServiceName string `protobuf:"bytes,1,opt,name=registry_service_name,json=registryServiceName,proto3,oneof" json:"registry_service_name,omitempty"`
 }
 type Network_IstioNetworkGateway_Address struct {
 	Address string `protobuf:"bytes,2,opt,name=address,proto3,oneof" json:"address,omitempty"`

@@ -44354,7 +44354,7 @@
               {
                 "id": 13,
                 "name": "tag",
-                "type": "TypeInterface"
+                "type": "google.protobuf.Value"
               },
               {
                 "id": 14,
@@ -44385,7 +44385,7 @@
               {
                 "id": 40,
                 "name": "mesh_config",
-                "type": "TypeMapStringInterface"
+                "type": "google.protobuf.Struct"
               },
               {
                 "id": 50,
@@ -44395,12 +44395,12 @@
               {
                 "id": 100,
                 "name": "values",
-                "type": "TypeMapStringInterface"
+                "type": "google.protobuf.Struct"
               },
               {
                 "id": 101,
                 "name": "unvalidated_values",
-                "type": "TypeMapStringInterface"
+                "type": "google.protobuf.Struct"
               }
             ],
             "maps": [
@@ -44528,7 +44528,7 @@
               {
                 "id": 1,
                 "name": "enabled",
-                "type": "TypeBoolValueForPB"
+                "type": "google.protobuf.BoolValue"
               },
               {
                 "id": 50,
@@ -44543,7 +44543,7 @@
               {
                 "id": 1,
                 "name": "enabled",
-                "type": "TypeBoolValueForPB"
+                "type": "google.protobuf.BoolValue"
               },
               {
                 "id": 2,
@@ -44558,12 +44558,12 @@
               {
                 "id": 11,
                 "name": "tag",
-                "type": "TypeInterface"
+                "type": "google.protobuf.Value"
               },
               {
                 "id": 30,
                 "name": "spec",
-                "type": "TypeInterface"
+                "type": "google.protobuf.Struct"
               },
               {
                 "id": 50,
@@ -44578,7 +44578,7 @@
               {
                 "id": 1,
                 "name": "enabled",
-                "type": "TypeBoolValueForPB"
+                "type": "google.protobuf.BoolValue"
               },
               {
                 "id": 2,
@@ -44588,7 +44588,7 @@
               {
                 "id": 10,
                 "name": "spec",
-                "type": "TypeInterface"
+                "type": "google.protobuf.Struct"
               },
               {
                 "id": 30,
@@ -44613,7 +44613,7 @@
               {
                 "id": 1,
                 "name": "enabled",
-                "type": "TypeBoolValueForPB"
+                "type": "google.protobuf.BoolValue"
               },
               {
                 "id": 2,
@@ -44633,7 +44633,7 @@
               {
                 "id": 11,
                 "name": "tag",
-                "type": "TypeInterface"
+                "type": "google.protobuf.Value"
               },
               {
                 "id": 50,
@@ -44805,7 +44805,7 @@
                   {
                     "id": 2,
                     "name": "value",
-                    "type": "TypeInterface"
+                    "type": "google.protobuf.Value"
                   }
                 ]
               }
@@ -44968,12 +44968,12 @@
               {
                 "id": 3,
                 "name": "targetValue",
-                "type": "TypeIntOrStringForPB"
+                "type": "IntOrString"
               },
               {
                 "id": 4,
                 "name": "targetAverageValue",
-                "type": "TypeIntOrStringForPB"
+                "type": "IntOrString"
               }
             ]
           },
@@ -44988,7 +44988,7 @@
               {
                 "id": 2,
                 "name": "port",
-                "type": "TypeIntOrStringForPB"
+                "type": "IntOrString"
               },
               {
                 "id": 3,
@@ -45200,7 +45200,7 @@
               {
                 "id": 3,
                 "name": "targetValue",
-                "type": "TypeIntOrStringForPB"
+                "type": "IntOrString"
               },
               {
                 "id": 4,
@@ -45210,7 +45210,7 @@
               {
                 "id": 5,
                 "name": "averageValue",
-                "type": "TypeIntOrStringForPB"
+                "type": "IntOrString"
               }
             ]
           },
@@ -45275,7 +45275,7 @@
               {
                 "id": 1,
                 "name": "minAvailable",
-                "type": "TypeIntOrStringForPB"
+                "type": "IntOrString"
               },
               {
                 "id": 2,
@@ -45285,7 +45285,7 @@
               {
                 "id": 3,
                 "name": "maxUnavailable",
-                "type": "TypeIntOrStringForPB"
+                "type": "IntOrString"
               }
             ]
           },
@@ -45300,7 +45300,7 @@
               {
                 "id": 2,
                 "name": "targetAverageValue",
-                "type": "TypeIntOrStringForPB"
+                "type": "IntOrString"
               },
               {
                 "id": 3,
@@ -45385,7 +45385,7 @@
               {
                 "id": 3,
                 "name": "divisor",
-                "type": "TypeIntOrStringForPB"
+                "type": "IntOrString"
               }
             ]
           },
@@ -45405,7 +45405,7 @@
               {
                 "id": 3,
                 "name": "targetAverageValue",
-                "type": "TypeIntOrStringForPB"
+                "type": "IntOrString"
               }
             ]
           },
@@ -45436,12 +45436,12 @@
               {
                 "id": 1,
                 "name": "maxUnavailable",
-                "type": "TypeIntOrStringForPB"
+                "type": "IntOrString"
               },
               {
                 "id": 2,
                 "name": "maxSurge",
-                "type": "TypeIntOrStringForPB"
+                "type": "IntOrString"
               }
             ]
           },
@@ -45564,7 +45564,7 @@
               {
                 "id": 4,
                 "name": "targetPort",
-                "type": "TypeIntOrStringForPB"
+                "type": "IntOrString"
               },
               {
                 "id": 5,
@@ -45589,7 +45589,7 @@
               {
                 "id": 1,
                 "name": "port",
-                "type": "TypeIntOrStringForPB"
+                "type": "IntOrString"
               },
               {
                 "id": 2,
@@ -45776,16 +45776,24 @@
             ]
           },
           {
-            "name": "TypeInterface"
-          },
-          {
-            "name": "TypeMapStringInterface"
-          },
-          {
-            "name": "TypeIntOrStringForPB"
-          },
-          {
-            "name": "TypeBoolValueForPB"
+            "name": "IntOrString",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "int64"
+              },
+              {
+                "id": 2,
+                "name": "intVal",
+                "type": "google.protobuf.Int32Value"
+              },
+              {
+                "id": 3,
+                "name": "strVal",
+                "type": "google.protobuf.StringValue"
+              }
+            ]
           }
         ],
         "imports": [
@@ -45793,13 +45801,19 @@
             "path": "google/protobuf/any.proto"
           },
           {
+            "path": "google/protobuf/struct.proto"
+          },
+          {
+            "path": "google/protobuf/wrappers.proto"
+          },
+          {
             "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
           },
           {
-            "path": "k8s.io/api/core/v1/generated.proto"
+            "path": "k8s.io/apimachinery/pkg/util/intstr/generated.proto"
           },
           {
-            "path": "gogoproto/gogo.proto"
+            "path": "k8s.io/api/core/v1/generated.proto"
           }
         ],
         "package": {
@@ -45809,18 +45823,6 @@
           {
             "name": "go_package",
             "value": "istio.io/api/operator/v1alpha1"
-          },
-          {
-            "name": "(gogoproto.marshaler_all)",
-            "value": "false"
-          },
-          {
-            "name": "(gogoproto.unmarshaler_all)",
-            "value": "false"
-          },
-          {
-            "name": "(gogoproto.sizer_all)",
-            "value": "false"
           }
         ]
       }
