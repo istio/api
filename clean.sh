@@ -22,4 +22,3 @@ shopt -s globstar
 for p in $PATTERNS; do
     rm -f ./**/*"${p}"
 done
-rm -rf python/istio_api
