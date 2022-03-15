@@ -38774,6 +38774,28 @@
             ]
           },
           {
+            "name": "PrivateKeyProvider",
+            "fields": [
+              {
+                "id": 2,
+                "name": "cryptomb",
+                "type": "CryptoMb"
+              }
+            ],
+            "messages": [
+              {
+                "name": "CryptoMb",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "poll_delay",
+                    "type": "google.protobuf.Duration"
+                  }
+                ]
+              }
+            ]
+          },
+          {
             "name": "ProxyConfig",
             "fields": [
               {
@@ -38966,6 +38988,11 @@
                 "id": 35,
                 "name": "image",
                 "type": "istio.networking.v1beta1.ProxyImage"
+              },
+              {
+                "id": 38,
+                "name": "private_key_provider",
+                "type": "PrivateKeyProvider"
               }
             ],
             "maps": [
