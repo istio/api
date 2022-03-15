@@ -4,6 +4,7 @@
 """Generated protocol buffer code."""
 from google.protobuf.internal import enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
+from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
@@ -18,108 +19,13 @@ from google.protobuf import struct_pb2 as google_dot_protobuf_dot_struct__pb2
 from type.v1beta1 import selector_pb2 as type_dot_v1beta1_dot_selector__pb2
 
 
-DESCRIPTOR = _descriptor.FileDescriptor(
-  name='extensions/v1alpha1/wasm.proto',
-  package='istio.extensions.v1alpha1',
-  syntax='proto3',
-  serialized_options=b'Z istio.io/api/extensions/v1alpha1',
-  create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1e\x65xtensions/v1alpha1/wasm.proto\x12\x19istio.extensions.v1alpha1\x1a\x19google/protobuf/any.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1btype/v1beta1/selector.proto\"\xba\x04\n\nWasmPlugin\x12@\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x08selector\x12\x10\n\x03url\x18\x02 \x01(\tR\x03url\x12\x16\n\x06sha256\x18\x03 \x01(\tR\x06sha256\x12Q\n\x11image_pull_policy\x18\x04 \x01(\x0e\x32%.istio.extensions.v1alpha1.PullPolicyR\x0fimagePullPolicy\x12*\n\x11image_pull_secret\x18\x05 \x01(\tR\x0fimagePullSecret\x12)\n\x10verification_key\x18\x06 \x01(\tR\x0fverificationKey\x12<\n\rplugin_config\x18\x07 \x01(\x0b\x32\x17.google.protobuf.StructR\x0cpluginConfig\x12\x1f\n\x0bplugin_name\x18\x08 \x01(\tR\npluginName\x12<\n\x05phase\x18\t \x01(\x0e\x32&.istio.extensions.v1alpha1.PluginPhaseR\x05phase\x12\x37\n\x08priority\x18\n \x01(\x0b\x32\x1b.google.protobuf.Int64ValueR\x08priority\x12@\n\tvm_config\x18\x0b \x01(\x0b\x32#.istio.extensions.v1alpha1.VmConfigR\x08vmConfig\"?\n\x08VmConfig\x12\x33\n\x03\x65nv\x18\x01 \x03(\x0b\x32!.istio.extensions.v1alpha1.EnvVarR\x03\x65nv\"|\n\x06\x45nvVar\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12H\n\nvalue_from\x18\x03 \x01(\x0e\x32).istio.extensions.v1alpha1.EnvValueSourceR\tvalueFrom\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value*E\n\x0bPluginPhase\x12\x15\n\x11UNSPECIFIED_PHASE\x10\x00\x12\t\n\x05\x41UTHN\x10\x01\x12\t\n\x05\x41UTHZ\x10\x02\x12\t\n\x05STATS\x10\x03*B\n\nPullPolicy\x12\x16\n\x12UNSPECIFIED_POLICY\x10\x00\x12\x10\n\x0cIfNotPresent\x10\x01\x12\n\n\x06\x41lways\x10\x02*&\n\x0e\x45nvValueSource\x12\n\n\x06INLINE\x10\x00\x12\x08\n\x04HOST\x10\x01\x42\"Z istio.io/api/extensions/v1alpha1b\x06proto3'
-  ,
-  dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,])
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1e\x65xtensions/v1alpha1/wasm.proto\x12\x19istio.extensions.v1alpha1\x1a\x19google/protobuf/any.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1btype/v1beta1/selector.proto\"\xba\x04\n\nWasmPlugin\x12@\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x08selector\x12\x10\n\x03url\x18\x02 \x01(\tR\x03url\x12\x16\n\x06sha256\x18\x03 \x01(\tR\x06sha256\x12Q\n\x11image_pull_policy\x18\x04 \x01(\x0e\x32%.istio.extensions.v1alpha1.PullPolicyR\x0fimagePullPolicy\x12*\n\x11image_pull_secret\x18\x05 \x01(\tR\x0fimagePullSecret\x12)\n\x10verification_key\x18\x06 \x01(\tR\x0fverificationKey\x12<\n\rplugin_config\x18\x07 \x01(\x0b\x32\x17.google.protobuf.StructR\x0cpluginConfig\x12\x1f\n\x0bplugin_name\x18\x08 \x01(\tR\npluginName\x12<\n\x05phase\x18\t \x01(\x0e\x32&.istio.extensions.v1alpha1.PluginPhaseR\x05phase\x12\x37\n\x08priority\x18\n \x01(\x0b\x32\x1b.google.protobuf.Int64ValueR\x08priority\x12@\n\tvm_config\x18\x0b \x01(\x0b\x32#.istio.extensions.v1alpha1.VmConfigR\x08vmConfig\"?\n\x08VmConfig\x12\x33\n\x03\x65nv\x18\x01 \x03(\x0b\x32!.istio.extensions.v1alpha1.EnvVarR\x03\x65nv\"|\n\x06\x45nvVar\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12H\n\nvalue_from\x18\x03 \x01(\x0e\x32).istio.extensions.v1alpha1.EnvValueSourceR\tvalueFrom\x12\x14\n\x05value\x18\x02 \x01(\tR\x05value*E\n\x0bPluginPhase\x12\x15\n\x11UNSPECIFIED_PHASE\x10\x00\x12\t\n\x05\x41UTHN\x10\x01\x12\t\n\x05\x41UTHZ\x10\x02\x12\t\n\x05STATS\x10\x03*B\n\nPullPolicy\x12\x16\n\x12UNSPECIFIED_POLICY\x10\x00\x12\x10\n\x0cIfNotPresent\x10\x01\x12\n\n\x06\x41lways\x10\x02*&\n\x0e\x45nvValueSource\x12\n\n\x06INLINE\x10\x00\x12\x08\n\x04HOST\x10\x01\x42\"Z istio.io/api/extensions/v1alpha1b\x06proto3')
 
-_PLUGINPHASE = _descriptor.EnumDescriptor(
-  name='PluginPhase',
-  full_name='istio.extensions.v1alpha1.PluginPhase',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='UNSPECIFIED_PHASE', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='AUTHN', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='AUTHZ', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STATS', index=3, number=3,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=943,
-  serialized_end=1012,
-)
-_sym_db.RegisterEnumDescriptor(_PLUGINPHASE)
-
+_PLUGINPHASE = DESCRIPTOR.enum_types_by_name['PluginPhase']
 PluginPhase = enum_type_wrapper.EnumTypeWrapper(_PLUGINPHASE)
-_PULLPOLICY = _descriptor.EnumDescriptor(
-  name='PullPolicy',
-  full_name='istio.extensions.v1alpha1.PullPolicy',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='UNSPECIFIED_POLICY', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='IfNotPresent', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='Always', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=1014,
-  serialized_end=1080,
-)
-_sym_db.RegisterEnumDescriptor(_PULLPOLICY)
-
+_PULLPOLICY = DESCRIPTOR.enum_types_by_name['PullPolicy']
 PullPolicy = enum_type_wrapper.EnumTypeWrapper(_PULLPOLICY)
-_ENVVALUESOURCE = _descriptor.EnumDescriptor(
-  name='EnvValueSource',
-  full_name='istio.extensions.v1alpha1.EnvValueSource',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='INLINE', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='HOST', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=1082,
-  serialized_end=1120,
-)
-_sym_db.RegisterEnumDescriptor(_ENVVALUESOURCE)
-
+_ENVVALUESOURCE = DESCRIPTOR.enum_types_by_name['EnvValueSource']
 EnvValueSource = enum_type_wrapper.EnumTypeWrapper(_ENVVALUESOURCE)
 UNSPECIFIED_PHASE = 0
 AUTHN = 1
@@ -132,202 +38,9 @@ INLINE = 0
 HOST = 1
 
 
-
-_WASMPLUGIN = _descriptor.Descriptor(
-  name='WasmPlugin',
-  full_name='istio.extensions.v1alpha1.WasmPlugin',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='selector', full_name='istio.extensions.v1alpha1.WasmPlugin.selector', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='selector', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='url', full_name='istio.extensions.v1alpha1.WasmPlugin.url', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='url', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='sha256', full_name='istio.extensions.v1alpha1.WasmPlugin.sha256', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='sha256', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='image_pull_policy', full_name='istio.extensions.v1alpha1.WasmPlugin.image_pull_policy', index=3,
-      number=4, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='imagePullPolicy', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='image_pull_secret', full_name='istio.extensions.v1alpha1.WasmPlugin.image_pull_secret', index=4,
-      number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='imagePullSecret', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='verification_key', full_name='istio.extensions.v1alpha1.WasmPlugin.verification_key', index=5,
-      number=6, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='verificationKey', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='plugin_config', full_name='istio.extensions.v1alpha1.WasmPlugin.plugin_config', index=6,
-      number=7, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='pluginConfig', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='plugin_name', full_name='istio.extensions.v1alpha1.WasmPlugin.plugin_name', index=7,
-      number=8, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='pluginName', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='phase', full_name='istio.extensions.v1alpha1.WasmPlugin.phase', index=8,
-      number=9, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='phase', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='priority', full_name='istio.extensions.v1alpha1.WasmPlugin.priority', index=9,
-      number=10, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='priority', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='vm_config', full_name='istio.extensions.v1alpha1.WasmPlugin.vm_config', index=10,
-      number=11, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='vmConfig', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=180,
-  serialized_end=750,
-)
-
-
-_VMCONFIG = _descriptor.Descriptor(
-  name='VmConfig',
-  full_name='istio.extensions.v1alpha1.VmConfig',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='env', full_name='istio.extensions.v1alpha1.VmConfig.env', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='env', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=752,
-  serialized_end=815,
-)
-
-
-_ENVVAR = _descriptor.Descriptor(
-  name='EnvVar',
-  full_name='istio.extensions.v1alpha1.EnvVar',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='name', full_name='istio.extensions.v1alpha1.EnvVar.name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='name', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='value_from', full_name='istio.extensions.v1alpha1.EnvVar.value_from', index=1,
-      number=3, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='valueFrom', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='istio.extensions.v1alpha1.EnvVar.value', index=2,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='value', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=817,
-  serialized_end=941,
-)
-
-_WASMPLUGIN.fields_by_name['selector'].message_type = type_dot_v1beta1_dot_selector__pb2._WORKLOADSELECTOR
-_WASMPLUGIN.fields_by_name['image_pull_policy'].enum_type = _PULLPOLICY
-_WASMPLUGIN.fields_by_name['plugin_config'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
-_WASMPLUGIN.fields_by_name['phase'].enum_type = _PLUGINPHASE
-_WASMPLUGIN.fields_by_name['priority'].message_type = google_dot_protobuf_dot_wrappers__pb2._INT64VALUE
-_WASMPLUGIN.fields_by_name['vm_config'].message_type = _VMCONFIG
-_VMCONFIG.fields_by_name['env'].message_type = _ENVVAR
-_ENVVAR.fields_by_name['value_from'].enum_type = _ENVVALUESOURCE
-DESCRIPTOR.message_types_by_name['WasmPlugin'] = _WASMPLUGIN
-DESCRIPTOR.message_types_by_name['VmConfig'] = _VMCONFIG
-DESCRIPTOR.message_types_by_name['EnvVar'] = _ENVVAR
-DESCRIPTOR.enum_types_by_name['PluginPhase'] = _PLUGINPHASE
-DESCRIPTOR.enum_types_by_name['PullPolicy'] = _PULLPOLICY
-DESCRIPTOR.enum_types_by_name['EnvValueSource'] = _ENVVALUESOURCE
-_sym_db.RegisterFileDescriptor(DESCRIPTOR)
-
+_WASMPLUGIN = DESCRIPTOR.message_types_by_name['WasmPlugin']
+_VMCONFIG = DESCRIPTOR.message_types_by_name['VmConfig']
+_ENVVAR = DESCRIPTOR.message_types_by_name['EnvVar']
 WasmPlugin = _reflection.GeneratedProtocolMessageType('WasmPlugin', (_message.Message,), {
   'DESCRIPTOR' : _WASMPLUGIN,
   '__module__' : 'extensions.v1alpha1.wasm_pb2'
@@ -349,6 +62,20 @@ EnvVar = _reflection.GeneratedProtocolMessageType('EnvVar', (_message.Message,),
   })
 _sym_db.RegisterMessage(EnvVar)
 
+if _descriptor._USE_C_DESCRIPTORS == False:
 
-DESCRIPTOR._options = None
+  DESCRIPTOR._options = None
+  DESCRIPTOR._serialized_options = b'Z istio.io/api/extensions/v1alpha1'
+  _PLUGINPHASE._serialized_start=943
+  _PLUGINPHASE._serialized_end=1012
+  _PULLPOLICY._serialized_start=1014
+  _PULLPOLICY._serialized_end=1080
+  _ENVVALUESOURCE._serialized_start=1082
+  _ENVVALUESOURCE._serialized_end=1120
+  _WASMPLUGIN._serialized_start=180
+  _WASMPLUGIN._serialized_end=750
+  _VMCONFIG._serialized_start=752
+  _VMCONFIG._serialized_end=815
+  _ENVVAR._serialized_start=817
+  _ENVVAR._serialized_end=941
 # @@protoc_insertion_point(module_scope)
