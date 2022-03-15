@@ -1354,6 +1354,48 @@
           }
         ]
       },
+      "istio.mesh.v1alpha1.PrivateKeyProvider": {
+        "description": "PrivateKeyProvider defines private key configuration for gateways and sidecars. This can be configured mesh wide or individual per-workload basis.",
+        "type": "object",
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "cryptomb"
+                  ],
+                  "properties": {
+                    "cryptomb": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.PrivateKeyProvider.CryptoMb"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "cryptomb"
+            ],
+            "properties": {
+              "cryptomb": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.PrivateKeyProvider.CryptoMb"
+              }
+            }
+          }
+        ]
+      },
+      "istio.mesh.v1alpha1.PrivateKeyProvider.CryptoMb": {
+        "description": "CryptoMb PrivateKeyProvider configuration",
+        "type": "object",
+        "properties": {
+          "pollDelay": {
+            "description": "How long to wait until the per-thread processing queue should be processed. If the processing queue gets full (eight sign or decrypt requests are received) it is processed immediately. However, if the queue is not filled before the delay has expired, the requests already in the queue are processed, even if the queue is not full. In effect, this value controls the balance between latency and throughput. The duration needs to be set to a non-zero value.",
+            "type": "string"
+          }
+        }
+      },
       "istio.mesh.v1alpha1.ProxyConfig": {
         "description": "ProxyConfig defines variables for individual Envoy instances. This can be configured on a per-workload basis as well as by the mesh-wide defaults. To set the mesh wide defaults, configure the `defaultConfig` section of `meshConfig`. For example: ``` meshConfig: defaultConfig: discoveryAddress: istiod:15012 ```",
         "type": "object",
@@ -1497,6 +1539,9 @@
           },
           "image": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.ProxyImage"
+          },
+          "privateKeyProvider": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.PrivateKeyProvider"
           }
         },
         "oneOf": [
