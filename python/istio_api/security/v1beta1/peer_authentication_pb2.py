@@ -3,6 +3,7 @@
 # source: security/v1beta1/peer_authentication.proto
 """Generated protocol buffer code."""
 from google.protobuf import descriptor as _descriptor
+from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
@@ -14,180 +15,14 @@ _sym_db = _symbol_database.Default()
 from type.v1beta1 import selector_pb2 as type_dot_v1beta1_dot_selector__pb2
 
 
-DESCRIPTOR = _descriptor.FileDescriptor(
-  name='security/v1beta1/peer_authentication.proto',
-  package='istio.security.v1beta1',
-  syntax='proto3',
-  serialized_options=b'Z\035istio.io/api/security/v1beta1',
-  create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n*security/v1beta1/peer_authentication.proto\x12\x16istio.security.v1beta1\x1a\x1btype/v1beta1/selector.proto\"\x98\x04\n\x12PeerAuthentication\x12@\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x08selector\x12H\n\x04mtls\x18\x02 \x01(\x0b\x32\x34.istio.security.v1beta1.PeerAuthentication.MutualTLSR\x04mtls\x12\x65\n\x0fport_level_mtls\x18\x03 \x03(\x0b\x32=.istio.security.v1beta1.PeerAuthentication.PortLevelMtlsEntryR\rportLevelMtls\x1a\x96\x01\n\tMutualTLS\x12M\n\x04mode\x18\x01 \x01(\x0e\x32\x39.istio.security.v1beta1.PeerAuthentication.MutualTLS.ModeR\x04mode\":\n\x04Mode\x12\t\n\x05UNSET\x10\x00\x12\x0b\n\x07\x44ISABLE\x10\x01\x12\x0e\n\nPERMISSIVE\x10\x02\x12\n\n\x06STRICT\x10\x03\x1av\n\x12PortLevelMtlsEntry\x12\x10\n\x03key\x18\x01 \x01(\rR\x03key\x12J\n\x05value\x18\x02 \x01(\x0b\x32\x34.istio.security.v1beta1.PeerAuthentication.MutualTLSR\x05value:\x02\x38\x01\x42\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3'
-  ,
-  dependencies=[type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,])
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n*security/v1beta1/peer_authentication.proto\x12\x16istio.security.v1beta1\x1a\x1btype/v1beta1/selector.proto\"\x98\x04\n\x12PeerAuthentication\x12@\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelectorR\x08selector\x12H\n\x04mtls\x18\x02 \x01(\x0b\x32\x34.istio.security.v1beta1.PeerAuthentication.MutualTLSR\x04mtls\x12\x65\n\x0fport_level_mtls\x18\x03 \x03(\x0b\x32=.istio.security.v1beta1.PeerAuthentication.PortLevelMtlsEntryR\rportLevelMtls\x1a\x96\x01\n\tMutualTLS\x12M\n\x04mode\x18\x01 \x01(\x0e\x32\x39.istio.security.v1beta1.PeerAuthentication.MutualTLS.ModeR\x04mode\":\n\x04Mode\x12\t\n\x05UNSET\x10\x00\x12\x0b\n\x07\x44ISABLE\x10\x01\x12\x0e\n\nPERMISSIVE\x10\x02\x12\n\n\x06STRICT\x10\x03\x1av\n\x12PortLevelMtlsEntry\x12\x10\n\x03key\x18\x01 \x01(\rR\x03key\x12J\n\x05value\x18\x02 \x01(\x0b\x32\x34.istio.security.v1beta1.PeerAuthentication.MutualTLSR\x05value:\x02\x38\x01\x42\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
 
 
 
-_PEERAUTHENTICATION_MUTUALTLS_MODE = _descriptor.EnumDescriptor(
-  name='Mode',
-  full_name='istio.security.v1beta1.PeerAuthentication.MutualTLS.Mode',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='UNSET', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='DISABLE', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='PERMISSIVE', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STRICT', index=3, number=3,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=458,
-  serialized_end=516,
-)
-_sym_db.RegisterEnumDescriptor(_PEERAUTHENTICATION_MUTUALTLS_MODE)
-
-
-_PEERAUTHENTICATION_MUTUALTLS = _descriptor.Descriptor(
-  name='MutualTLS',
-  full_name='istio.security.v1beta1.PeerAuthentication.MutualTLS',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='mode', full_name='istio.security.v1beta1.PeerAuthentication.MutualTLS.mode', index=0,
-      number=1, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='mode', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-    _PEERAUTHENTICATION_MUTUALTLS_MODE,
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=366,
-  serialized_end=516,
-)
-
-_PEERAUTHENTICATION_PORTLEVELMTLSENTRY = _descriptor.Descriptor(
-  name='PortLevelMtlsEntry',
-  full_name='istio.security.v1beta1.PeerAuthentication.PortLevelMtlsEntry',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='istio.security.v1beta1.PeerAuthentication.PortLevelMtlsEntry.key', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='key', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='istio.security.v1beta1.PeerAuthentication.PortLevelMtlsEntry.value', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='value', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b'8\001',
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=518,
-  serialized_end=636,
-)
-
-_PEERAUTHENTICATION = _descriptor.Descriptor(
-  name='PeerAuthentication',
-  full_name='istio.security.v1beta1.PeerAuthentication',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='selector', full_name='istio.security.v1beta1.PeerAuthentication.selector', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='selector', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='mtls', full_name='istio.security.v1beta1.PeerAuthentication.mtls', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='mtls', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='port_level_mtls', full_name='istio.security.v1beta1.PeerAuthentication.port_level_mtls', index=2,
-      number=3, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='portLevelMtls', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_PEERAUTHENTICATION_MUTUALTLS, _PEERAUTHENTICATION_PORTLEVELMTLSENTRY, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=100,
-  serialized_end=636,
-)
-
-_PEERAUTHENTICATION_MUTUALTLS.fields_by_name['mode'].enum_type = _PEERAUTHENTICATION_MUTUALTLS_MODE
-_PEERAUTHENTICATION_MUTUALTLS.containing_type = _PEERAUTHENTICATION
-_PEERAUTHENTICATION_MUTUALTLS_MODE.containing_type = _PEERAUTHENTICATION_MUTUALTLS
-_PEERAUTHENTICATION_PORTLEVELMTLSENTRY.fields_by_name['value'].message_type = _PEERAUTHENTICATION_MUTUALTLS
-_PEERAUTHENTICATION_PORTLEVELMTLSENTRY.containing_type = _PEERAUTHENTICATION
-_PEERAUTHENTICATION.fields_by_name['selector'].message_type = type_dot_v1beta1_dot_selector__pb2._WORKLOADSELECTOR
-_PEERAUTHENTICATION.fields_by_name['mtls'].message_type = _PEERAUTHENTICATION_MUTUALTLS
-_PEERAUTHENTICATION.fields_by_name['port_level_mtls'].message_type = _PEERAUTHENTICATION_PORTLEVELMTLSENTRY
-DESCRIPTOR.message_types_by_name['PeerAuthentication'] = _PEERAUTHENTICATION
-_sym_db.RegisterFileDescriptor(DESCRIPTOR)
-
+_PEERAUTHENTICATION = DESCRIPTOR.message_types_by_name['PeerAuthentication']
+_PEERAUTHENTICATION_MUTUALTLS = _PEERAUTHENTICATION.nested_types_by_name['MutualTLS']
+_PEERAUTHENTICATION_PORTLEVELMTLSENTRY = _PEERAUTHENTICATION.nested_types_by_name['PortLevelMtlsEntry']
+_PEERAUTHENTICATION_MUTUALTLS_MODE = _PEERAUTHENTICATION_MUTUALTLS.enum_types_by_name['Mode']
 PeerAuthentication = _reflection.GeneratedProtocolMessageType('PeerAuthentication', (_message.Message,), {
 
   'MutualTLS' : _reflection.GeneratedProtocolMessageType('MutualTLS', (_message.Message,), {
@@ -211,7 +46,18 @@ _sym_db.RegisterMessage(PeerAuthentication)
 _sym_db.RegisterMessage(PeerAuthentication.MutualTLS)
 _sym_db.RegisterMessage(PeerAuthentication.PortLevelMtlsEntry)
 
+if _descriptor._USE_C_DESCRIPTORS == False:
 
-DESCRIPTOR._options = None
-_PEERAUTHENTICATION_PORTLEVELMTLSENTRY._options = None
+  DESCRIPTOR._options = None
+  DESCRIPTOR._serialized_options = b'Z\035istio.io/api/security/v1beta1'
+  _PEERAUTHENTICATION_PORTLEVELMTLSENTRY._options = None
+  _PEERAUTHENTICATION_PORTLEVELMTLSENTRY._serialized_options = b'8\001'
+  _PEERAUTHENTICATION._serialized_start=100
+  _PEERAUTHENTICATION._serialized_end=636
+  _PEERAUTHENTICATION_MUTUALTLS._serialized_start=366
+  _PEERAUTHENTICATION_MUTUALTLS._serialized_end=516
+  _PEERAUTHENTICATION_MUTUALTLS_MODE._serialized_start=458
+  _PEERAUTHENTICATION_MUTUALTLS_MODE._serialized_end=516
+  _PEERAUTHENTICATION_PORTLEVELMTLSENTRY._serialized_start=518
+  _PEERAUTHENTICATION_PORTLEVELMTLSENTRY._serialized_end=636
 # @@protoc_insertion_point(module_scope)
