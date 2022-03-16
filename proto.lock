@@ -44370,7 +44370,7 @@
               },
               {
                 "id": 11,
-                "name": "install_package_path",
+                "name": "installPackagePath",
                 "type": "string"
               },
               {
@@ -44385,7 +44385,7 @@
               },
               {
                 "id": 14,
-                "name": "resource_suffix",
+                "name": "resourceSuffix",
                 "type": "string",
                 "options": [
                   {
@@ -44406,12 +44406,12 @@
               },
               {
                 "id": 17,
-                "name": "default_revision",
+                "name": "defaultRevision",
                 "type": "bool"
               },
               {
                 "id": 40,
-                "name": "mesh_config",
+                "name": "meshConfig",
                 "type": "google.protobuf.Struct"
               },
               {
@@ -44426,7 +44426,7 @@
               },
               {
                 "id": 101,
-                "name": "unvalidated_values",
+                "name": "unvalidatedValues",
                 "type": "google.protobuf.Struct"
               }
             ],
@@ -44435,7 +44435,7 @@
                 "key_type": "string",
                 "field": {
                   "id": 51,
-                  "name": "addon_components",
+                  "name": "addonComponents",
                   "type": "ExternalComponentSpec",
                   "options": [
                     {
@@ -44466,7 +44466,7 @@
                 "key_type": "string",
                 "field": {
                   "id": 2,
-                  "name": "component_status",
+                  "name": "componentStatus",
                   "type": "VersionStatus"
                 }
               }
@@ -44514,18 +44514,18 @@
               },
               {
                 "id": 39,
-                "name": "istiod_remote",
+                "name": "istiodRemote",
                 "type": "ComponentSpec"
               },
               {
                 "id": 40,
-                "name": "ingress_gateways",
+                "name": "ingressGateways",
                 "type": "GatewaySpec",
                 "is_repeated": true
               },
               {
                 "id": 41,
-                "name": "egress_gateways",
+                "name": "egressGateways",
                 "type": "GatewaySpec",
                 "is_repeated": true
               }
@@ -44619,7 +44619,7 @@
               },
               {
                 "id": 30,
-                "name": "chart_path",
+                "name": "chartPath",
                 "type": "string"
               },
               {
@@ -44695,32 +44695,32 @@
               },
               {
                 "id": 3,
-                "name": "hpa_spec",
+                "name": "hpaSpec",
                 "type": "HorizontalPodAutoscalerSpec"
               },
               {
                 "id": 4,
-                "name": "image_pull_policy",
+                "name": "imagePullPolicy",
                 "type": "string"
               },
               {
                 "id": 6,
-                "name": "pod_disruption_budget",
+                "name": "podDisruptionBudget",
                 "type": "PodDisruptionBudgetSpec"
               },
               {
                 "id": 8,
-                "name": "priority_class_name",
+                "name": "priorityClassName",
                 "type": "string"
               },
               {
                 "id": 9,
-                "name": "readiness_probe",
+                "name": "readinessProbe",
                 "type": "ReadinessProbe"
               },
               {
                 "id": 10,
-                "name": "replica_count",
+                "name": "replicaCount",
                 "type": "uint32"
               },
               {
@@ -44773,7 +44773,7 @@
                 "key_type": "string",
                 "field": {
                   "id": 5,
-                  "name": "node_selector",
+                  "name": "nodeSelector",
                   "type": "string"
                 }
               },
@@ -44781,7 +44781,7 @@
                 "key_type": "string",
                 "field": {
                   "id": 7,
-                  "name": "pod_annotations",
+                  "name": "podAnnotations",
                   "type": "string"
                 }
               },
@@ -44789,7 +44789,7 @@
                 "key_type": "string",
                 "field": {
                   "id": 15,
-                  "name": "service_annotations",
+                  "name": "serviceAnnotations",
                   "type": "string"
                 }
               }
@@ -44800,7 +44800,7 @@
             "fields": [
               {
                 "id": 1,
-                "name": "api_version",
+                "name": "apiVersion",
                 "type": "string"
               },
               {

@@ -108,9 +108,11 @@ release-lock-status:
 # lint-protos is different for istio/api. List all other lint-all targets and add local-lint-protos
 local-lint-protos:
 	@buf lint
+	@./scripts/check-operator-proto.sh
 
 lint: lint-dockerfiles lint-scripts lint-yaml lint-helm lint-copyright-banner lint-go lint-python lint-markdown lint-sass lint-typescript lint-licenses local-lint-protos
  	@$(htmlproofer) . --url-swap "istio.io:preliminary.istio.io" --assume-extension --check-html --check-external-hash --check-opengraph --timeframe 2d --storage-dir $(repo_dir)/.htmlproofer --url-ignore "/localhost/"
+
 
 fmt: format-python
 
