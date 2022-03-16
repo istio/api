@@ -23,7 +23,6 @@ all: gen
 repo_dir := .
 
 protolock = protolock
-protolock_release = /bin/bash scripts/check-release-locks.sh
 annotations_prep = annotations_prep
 htmlproofer = htmlproofer
 cue = cue-gen -paths=common-protos
@@ -98,9 +97,6 @@ proto-commit-force:
 proto-status:
 	@$(protolock) status
 
-release-lock-status:
-	@$(protolock_release)
-
 #####################
 # Misc
 #####################
@@ -119,7 +115,7 @@ fmt: format-python
 # CI System
 #####################
 
-presubmit: proto-commit lint release-lock-status
+presubmit: proto-commit lint
 postsubmit: presubmit
 
 #####################
