@@ -37313,6 +37313,22 @@
             ]
           },
           {
+            "name": "TLSConfig.TLSProtocol",
+            "enum_fields": [
+              {
+                "name": "TLS_AUTO"
+              },
+              {
+                "name": "TLSV1_2",
+                "integer": 1
+              },
+              {
+                "name": "TLSV1_3",
+                "integer": 2
+              }
+            ]
+          },
+          {
             "name": "Resource",
             "enum_fields": [
               {
@@ -37550,6 +37566,11 @@
                 "id": 62,
                 "name": "default_http_retry_policy",
                 "type": "istio.networking.v1alpha3.HTTPRetry"
+              },
+              {
+                "id": 63,
+                "name": "mesh_mTLS",
+                "type": "TLSConfig"
               }
             ],
             "reserved_ids": [
@@ -38250,6 +38271,16 @@
                     "id": 1,
                     "name": "normalization",
                     "type": "NormalizationType"
+                  }
+                ]
+              },
+              {
+                "name": "TLSConfig",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "min_protocol_version",
+                    "type": "TLSProtocol"
                   }
                 ]
               }
@@ -46559,6 +46590,11 @@
             "name": "Tracing",
             "fields": [
               {
+                "id": 7,
+                "name": "match",
+                "type": "TracingSelector"
+              },
+              {
                 "id": 2,
                 "name": "providers",
                 "type": "ProviderRef",
@@ -46591,6 +46627,16 @@
               }
             ],
             "messages": [
+              {
+                "name": "TracingSelector",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "mode",
+                    "type": "WorkloadMode"
+                  }
+                ]
+              },
               {
                 "name": "CustomTag",
                 "fields": [
@@ -46746,6 +46792,11 @@
             "name": "AccessLogging",
             "fields": [
               {
+                "id": 4,
+                "name": "match",
+                "type": "LogSelector"
+              },
+              {
                 "id": 1,
                 "name": "providers",
                 "type": "ProviderRef",
@@ -46763,6 +46814,16 @@
               }
             ],
             "messages": [
+              {
+                "name": "LogSelector",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "mode",
+                    "type": "WorkloadMode"
+                  }
+                ]
+              },
               {
                 "name": "Filter",
                 "fields": [
