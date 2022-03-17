@@ -21,6 +21,10 @@ syntax = "proto3";
 // $mode: package
 
 // Configuration affecting Istio control plane installation version and shape.
+// Note: unlike other Istio protos, field names must use camelCase. This is asserted in tests.
+// Without camelCase, the `json` tag on the Go struct will not match the user's JSON representation.
+// This leads to Kubernetes merge libraries, which rely on this tag, to fail.
+// All other usages use jsonpb which does not use the `json` tag.
 package istio.operator.v1alpha1;
 
 option go_package="istio.io/api/operator/v1alpha1";
@@ -72,7 +76,7 @@ message IstioOperatorSpec {
     //
     // * /tmp/istio-installer/nightly (local file path)
     //
-    string install_package_path = 11;
+    string installPackagePath = 11;
     // Root for docker image paths e.g. `docker.io/istio`
     string hub = 12;
     // Version tag for docker images e.g. `1.7.2`
@@ -81,7 +85,7 @@ message IstioOperatorSpec {
     // $hide_from_docs
     // Resource suffix is appended to all resources installed by each component.
     // Never implemented; replaced by revision.
-    string resource_suffix = 14 [deprecated = true];
+    string resourceSuffix = 14 [deprecated = true];
     // Namespace to install control plane resources into. If unset, Istio will be installed into the same namespace
     // as the `IstioOperator` CR. You must also set `values.global.istioNamespace` if you wish to install Istio in
     // a custom namespace.
@@ -94,10 +98,10 @@ message IstioOperatorSpec {
 
     // Identify whether this revision is the default revision for the cluster
     // This option is currently experimental.
-    bool default_revision = 17;
+    bool defaultRevision = 17;
 
     // Config used by control plane components internally.
-    google.protobuf.Struct mesh_config = 40;
+    google.protobuf.Struct meshConfig = 40;
 
     // Kubernetes resource settings, enablement and component-specific settings that are not internal to the
     // component.
@@ -106,7 +110,7 @@ message IstioOperatorSpec {
     // Deprecated.
     // Users should manage the installation of addon components on their own.
     // Refer to samples/addons for demo installation of addon components.
-    map<string, ExternalComponentSpec> addon_components = 51 [deprecated = true];
+    map<string, ExternalComponentSpec> addonComponents = 51 [deprecated = true];
 
     // Overrides for default `values.yaml`. This is a validated pass-through to Helm templates.
     // See the [Helm installation options](https://istio.io/v1.5/docs/reference/config/installation-options/) for schema details.
@@ -114,7 +118,7 @@ message IstioOperatorSpec {
     // includes Kubernetes resource settings for components in `KubernetesResourcesSpec`.
     google.protobuf.Struct values = 100;
     // Unvalidated overrides for default `values.yaml`. Used for custom templates where new parameters are added.
-    google.protobuf.Struct unvalidated_values = 101;
+    google.protobuf.Struct unvalidatedValues = 101;
 }
 
 // Observed state of IstioOperator
@@ -156,7 +160,7 @@ message InstallStatus {
     // Optional message providing additional information about the existing overall status.
     string message = 3;
     // Individual status of each component controlled by the operator. The map key is the name of the component.
-    map<string, VersionStatus> component_status = 2;
+    map<string, VersionStatus> componentStatus = 2;
 }
 
 // IstioComponentSpec defines the desired installed state of Istio components.
@@ -166,10 +170,10 @@ message IstioComponentSetSpec {
     ComponentSpec cni = 38;
 
     // Remote cluster using an external control plane.
-    ComponentSpec istiod_remote = 39;
+    ComponentSpec istiodRemote = 39;
 
-    repeated GatewaySpec ingress_gateways = 40;
-    repeated GatewaySpec egress_gateways = 41;
+    repeated GatewaySpec ingressGateways = 40;
+    repeated GatewaySpec egressGateways = 41;
 
     reserved 31, 32, 33, 34, 35, 36, 37;
     reserved "citadel", "policy", "telemetry", "galley", "node_agent", "proxy", "sidecar_injector";
@@ -213,7 +217,7 @@ message ExternalComponentSpec {
     google.protobuf.Struct spec = 10;
 
     // Chart path for addon components.
-    string chart_path = 30;
+    string chartPath = 30;
     // Optional schema to validate spec against.
     google.protobuf.Any schema = 35;
 
@@ -251,29 +255,29 @@ message KubernetesResourcesSpec {
     repeated EnvVar env = 2;
     // k8s HorizontalPodAutoscaler settings.
     // [https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
-    HorizontalPodAutoscalerSpec hpa_spec = 3;
+    HorizontalPodAutoscalerSpec hpaSpec = 3;
     // k8s imagePullPolicy.
     // [https://kubernetes.io/docs/concepts/containers/images/](https://kubernetes.io/docs/concepts/containers/images/)
-    string image_pull_policy = 4;
+    string imagePullPolicy = 4;
     // k8s nodeSelector.
     // [https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector)
-    map<string, string> node_selector = 5;
+    map<string, string> nodeSelector = 5;
     // k8s PodDisruptionBudget settings.
     // [https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#how-disruption-budgets-work](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#how-disruption-budgets-work)
-    PodDisruptionBudgetSpec pod_disruption_budget = 6;
+    PodDisruptionBudgetSpec podDisruptionBudget = 6;
     // k8s pod annotations.
     // [https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
-    map<string, string> pod_annotations = 7;
+    map<string, string> podAnnotations = 7;
     // k8s priority_class_name. Default for all resources unless overridden.
     // [https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass](https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass)
-    string priority_class_name = 8;
+    string priorityClassName = 8;
     // k8s readinessProbe settings.
     // [https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/)
     // k8s.io.api.core.v1.Probe readiness_probe = 9;
-    ReadinessProbe readiness_probe = 9;
+    ReadinessProbe readinessProbe = 9;
     // k8s Deployment replicas setting.
     // [https://kubernetes.io/docs/concepts/workloads/controllers/deployment/](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
-    uint32 replica_count = 10;
+    uint32 replicaCount = 10;
     // k8s resources settings.
     // [https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container)
     Resources resources = 11;
@@ -288,7 +292,7 @@ message KubernetesResourcesSpec {
     repeated Toleration tolerations = 14;
     // k8s service annotations.
     // [https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
-    map<string, string> service_annotations = 15;
+    map<string, string> serviceAnnotations = 15;
     // k8s pod security context
     // [https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)
     PodSecurityContext securityContext = 16;
@@ -320,7 +324,7 @@ message K8sObjectOverlay {
         google.protobuf.Value value = 2;
     }
     // Resource API version.
-    string api_version = 1;
+    string apiVersion = 1;
     // Resource kind.
     string kind = 2;
     // Name of resource.

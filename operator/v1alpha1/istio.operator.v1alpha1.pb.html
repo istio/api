@@ -7,7 +7,11 @@ generator: protoc-gen-docs
 weight: 20
 number_of_entries: 61
 ---
-<p>Configuration affecting Istio control plane installation version and shape.</p>
+<p>Configuration affecting Istio control plane installation version and shape.
+Note: unlike other Istio protos, field names must use camelCase. This is asserted in tests.
+Without camelCase, the <code>json</code> tag on the Go struct will not match the user&rsquo;s JSON representation.
+This leads to Kubernetes merge libraries, which rely on this tag, to fail.
+All other usages use jsonpb which does not use the <code>json</code> tag.</p>
 
 <h2 id="IstioOperatorSpec">IstioOperatorSpec</h2>
 <section>
@@ -60,7 +64,7 @@ spec:
 No
 </td>
 </tr>
-<tr id="IstioOperatorSpec-install_package_path">
+<tr id="IstioOperatorSpec-installPackagePath">
 <td><code>installPackagePath</code></td>
 <td><code>string</code></td>
 <td>
@@ -123,7 +127,7 @@ This option is currently experimental.</p>
 No
 </td>
 </tr>
-<tr id="IstioOperatorSpec-default_revision">
+<tr id="IstioOperatorSpec-defaultRevision">
 <td><code>defaultRevision</code></td>
 <td><code>bool</code></td>
 <td>
@@ -135,7 +139,7 @@ This option is currently experimental.</p>
 No
 </td>
 </tr>
-<tr id="IstioOperatorSpec-mesh_config">
+<tr id="IstioOperatorSpec-meshConfig">
 <td><code>meshConfig</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">Struct</a></code></td>
 <td>
@@ -172,7 +176,7 @@ includes Kubernetes resource settings for components in <code>KubernetesResource
 No
 </td>
 </tr>
-<tr id="IstioOperatorSpec-unvalidated_values">
+<tr id="IstioOperatorSpec-unvalidatedValues">
 <td><code>unvalidatedValues</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">Struct</a></code></td>
 <td>
@@ -183,7 +187,7 @@ No
 No
 </td>
 </tr>
-<tr id="IstioOperatorSpec-addon_components" class="deprecated ">
+<tr id="IstioOperatorSpec-addonComponents" class="deprecated ">
 <td><code>addonComponents</code></td>
 <td><code>map&lt;string,&nbsp;<a href="#ExternalComponentSpec">ExternalComponentSpec</a>&gt;</code></td>
 <td>
@@ -245,7 +249,7 @@ No
 No
 </td>
 </tr>
-<tr id="InstallStatus-component_status">
+<tr id="InstallStatus-componentStatus">
 <td><code>componentStatus</code></td>
 <td><code>map&lt;string,&nbsp;<a href="#InstallStatus-VersionStatus">VersionStatus</a>&gt;</code></td>
 <td>
@@ -300,7 +304,7 @@ No
 No
 </td>
 </tr>
-<tr id="IstioComponentSetSpec-istiod_remote">
+<tr id="IstioComponentSetSpec-istiodRemote">
 <td><code>istiodRemote</code></td>
 <td><code><a href="#ComponentSpec">ComponentSpec</a></code></td>
 <td>
@@ -311,7 +315,7 @@ No
 No
 </td>
 </tr>
-<tr id="IstioComponentSetSpec-ingress_gateways">
+<tr id="IstioComponentSetSpec-ingressGateways">
 <td><code>ingressGateways</code></td>
 <td><code><a href="#GatewaySpec">GatewaySpec[]</a></code></td>
 <td>
@@ -320,7 +324,7 @@ No
 No
 </td>
 </tr>
-<tr id="IstioComponentSetSpec-egress_gateways">
+<tr id="IstioComponentSetSpec-egressGateways">
 <td><code>egressGateways</code></td>
 <td><code><a href="#GatewaySpec">GatewaySpec[]</a></code></td>
 <td>
@@ -501,7 +505,7 @@ No
 No
 </td>
 </tr>
-<tr id="ExternalComponentSpec-chart_path">
+<tr id="ExternalComponentSpec-chartPath">
 <td><code>chartPath</code></td>
 <td><code>string</code></td>
 <td>
@@ -669,7 +673,7 @@ No
 No
 </td>
 </tr>
-<tr id="KubernetesResourcesSpec-hpa_spec">
+<tr id="KubernetesResourcesSpec-hpaSpec">
 <td><code>hpaSpec</code></td>
 <td><code><a href="#HorizontalPodAutoscalerSpec">HorizontalPodAutoscalerSpec</a></code></td>
 <td>
@@ -681,7 +685,7 @@ No
 No
 </td>
 </tr>
-<tr id="KubernetesResourcesSpec-image_pull_policy">
+<tr id="KubernetesResourcesSpec-imagePullPolicy">
 <td><code>imagePullPolicy</code></td>
 <td><code>string</code></td>
 <td>
@@ -693,7 +697,7 @@ No
 No
 </td>
 </tr>
-<tr id="KubernetesResourcesSpec-node_selector">
+<tr id="KubernetesResourcesSpec-nodeSelector">
 <td><code>nodeSelector</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
@@ -705,7 +709,7 @@ No
 No
 </td>
 </tr>
-<tr id="KubernetesResourcesSpec-pod_disruption_budget">
+<tr id="KubernetesResourcesSpec-podDisruptionBudget">
 <td><code>podDisruptionBudget</code></td>
 <td><code><a href="#PodDisruptionBudgetSpec">PodDisruptionBudgetSpec</a></code></td>
 <td>
@@ -717,7 +721,7 @@ No
 No
 </td>
 </tr>
-<tr id="KubernetesResourcesSpec-pod_annotations">
+<tr id="KubernetesResourcesSpec-podAnnotations">
 <td><code>podAnnotations</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
@@ -729,7 +733,7 @@ No
 No
 </td>
 </tr>
-<tr id="KubernetesResourcesSpec-priority_class_name">
+<tr id="KubernetesResourcesSpec-priorityClassName">
 <td><code>priorityClassName</code></td>
 <td><code>string</code></td>
 <td>
@@ -741,7 +745,7 @@ No
 No
 </td>
 </tr>
-<tr id="KubernetesResourcesSpec-readiness_probe">
+<tr id="KubernetesResourcesSpec-readinessProbe">
 <td><code>readinessProbe</code></td>
 <td><code><a href="#ReadinessProbe">ReadinessProbe</a></code></td>
 <td>
@@ -754,7 +758,7 @@ k8s.io.api.core.v1.Probe readiness_probe = 9;</p>
 No
 </td>
 </tr>
-<tr id="KubernetesResourcesSpec-replica_count">
+<tr id="KubernetesResourcesSpec-replicaCount">
 <td><code>replicaCount</code></td>
 <td><code>uint32</code></td>
 <td>
@@ -814,7 +818,7 @@ No
 No
 </td>
 </tr>
-<tr id="KubernetesResourcesSpec-service_annotations">
+<tr id="KubernetesResourcesSpec-serviceAnnotations">
 <td><code>serviceAnnotations</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
@@ -891,7 +895,7 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="K8sObjectOverlay-api_version">
+<tr id="K8sObjectOverlay-apiVersion">
 <td><code>apiVersion</code></td>
 <td><code>string</code></td>
 <td>
