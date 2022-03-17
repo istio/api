@@ -3,7 +3,7 @@
 
 // Configuration affecting Istio control plane installation version and shape.
 // Note: unlike other Istio protos, field names must use camelCase. This is asserted in tests.
-// Without camelCase, the `json` tag on the Go struct will not match user's the JSON representation.
+// Without camelCase, the `json` tag on the Go struct will not match the user's JSON representation.
 // This leads to Kubernetes merge libraries, which rely on this tag, to fail.
 // All other usages use jsonpb which does not use the `json` tag.
 
