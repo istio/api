@@ -139,12 +139,38 @@
 // ```
 // {{</tab>}}
 //
+// Destination Rules can be customized to specific workloads as well.
+// The following example shows how a destination rule can be applied to a
+// specific workload using the workloadSelector configuration.
+//
+// {{<tabset category-name="selector-example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: DestinationRule
+// metadata:
+//   name: configure-client-mtls-dr-with-workloadselector
+//   workloadSelector:
+//     labels:
+//       app: ratings
+//   spec:
+//     trafficPolicy:
+//       loadBalancer:
+//         simple: ROUND_ROBIN
+//       portLevelSettings:
+//         - port:
+//             number: 31443
+//           tls:
+//             credentialName: client-credential
+//             mode: MUTUAL
+// ```
+// {{</tab>}}
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
 // metadata:
-//   name: configure-client-mtls-dr
+//   name: configure-client-mtls-dr-with-workloadselector
 //   workloadSelector:
 //     labels:
 //       app: ratings
@@ -390,8 +416,10 @@ type DestinationRule struct {
 	ExportTo []string `protobuf:"bytes,4,rep,name=export_to,json=exportTo,proto3" json:"export_to,omitempty"`
 	//
 	// Criteria used to select the specific set of pods/VMs on which this
-	// `DestinationRule` configuration should be applied. If omitted, the `DestinationRule`
-	// configuration will be applied to all workload instances in the same namespace.
+	// `DestinationRule` configuration should be applied. If specified, the `DestinationRule`
+	// configuration will be applied only to the workload instances matching the workload selector
+	// label in the same namespace. Workload selectors do not apply across namespace boundaries.
+	// If omitted, the `DestinationRule` falls back to its default behavior.
 	WorkloadSelector     *v1beta1.WorkloadSelector `protobuf:"bytes,5,opt,name=workload_selector,json=workloadSelector,proto3" json:"workload_selector,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                  `json:"-"`
 	XXX_unrecognized     []byte                    `json:"-"`

@@ -242,8 +242,10 @@ message DestinationRule {
   repeated string export_to = 4;
   //
   // Criteria used to select the specific set of pods/VMs on which this
-  // `DestinationRule` configuration should be applied. If omitted, the `DestinationRule`
-  // configuration will be applied to all workload instances in the same namespace.
+  // `DestinationRule` configuration should be applied. If specified, the `DestinationRule`
+  // configuration will be applied only to the workload instances matching the workload selector
+  // label in the same namespace. Workload selectors do not apply across namespace boundaries.
+  // If omitted, the `DestinationRule` falls back to its default behavior.
   istio.type.v1beta1.WorkloadSelector workload_selector = 5;
 }
 

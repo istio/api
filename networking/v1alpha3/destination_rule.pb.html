@@ -152,12 +152,39 @@ spec:
 
 <p>{{</tab>}}</p>
 
-<p>{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
+<p>Destination Rules can be customized to specific workloads as well.
+The following example shows how a destination rule can be applied to a
+specific workload using the workloadSelector configuration.</p>
+
+<p>{{<tabset category-name="selector-example">}}
+{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: configure-client-mtls-dr-with-workloadselector
+  workloadSelector:
+    labels:
+      app: ratings
+  spec:
+    trafficPolicy:
+      loadBalancer:
+        simple: ROUND_ROBIN
+      portLevelSettings:
+        - port:
+            number: 31443
+          tls:
+            credentialName: client-credential
+            mode: MUTUAL
+</code></pre>
+
+<p>{{</tab>}}
+{{<tab name="v1beta1" category-value="v1beta1">}}</p>
 
 <pre><code class="language-yaml">apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
-  name: configure-client-mtls-dr
+  name: configure-client-mtls-dr-with-workloadselector
   workloadSelector:
     labels:
       app: ratings
@@ -270,8 +297,10 @@ No
 <td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#WorkloadSelector">WorkloadSelector</a></code></td>
 <td>
 <p>Criteria used to select the specific set of pods/VMs on which this
- <code>DestinationRule</code> configuration should be applied. If omitted, the <code>DestinationRule</code>
- configuration will be applied to all workload instances in the same namespace.</p>
+ <code>DestinationRule</code> configuration should be applied. If specified, the <code>DestinationRule</code>
+ configuration will be applied only to the workload instances matching the workload selector
+ label in the same namespace. Workload selectors do not apply across namespace boundaries.
+ If omitted, the <code>DestinationRule</code> falls back to its default behavior.</p>
 
 </td>
 <td>
