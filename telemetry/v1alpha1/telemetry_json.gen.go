@@ -233,6 +233,17 @@ func (this *Tracing) UnmarshalJSON(b []byte) error {
 	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for Tracing_TracingSelector
+func (this *Tracing_TracingSelector) MarshalJSON() ([]byte, error) {
+	str, err := TelemetryMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for Tracing_TracingSelector
+func (this *Tracing_TracingSelector) UnmarshalJSON(b []byte) error {
+	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 // MarshalJSON is a custom marshaler for Tracing_CustomTag
 func (this *Tracing_CustomTag) MarshalJSON() ([]byte, error) {
 	str, err := TelemetryMarshaler.MarshalToString(this)
@@ -274,17 +285,6 @@ func (this *Tracing_RequestHeader) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for Tracing_RequestHeader
 func (this *Tracing_RequestHeader) UnmarshalJSON(b []byte) error {
-	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
-// MarshalJSON is a custom marshaler for Tracing_TracingSelector
-func (this *Tracing_TracingSelector) MarshalJSON() ([]byte, error) {
-	str, err := TelemetryMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for Tracing_TracingSelector
-func (this *Tracing_TracingSelector) UnmarshalJSON(b []byte) error {
 	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
@@ -354,17 +354,6 @@ func (this *AccessLogging) UnmarshalJSON(b []byte) error {
 	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for AccessLogging_Filter
-func (this *AccessLogging_Filter) MarshalJSON() ([]byte, error) {
-	str, err := TelemetryMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for AccessLogging_Filter
-func (this *AccessLogging_Filter) UnmarshalJSON(b []byte) error {
-	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
 // MarshalJSON is a custom marshaler for AccessLogging_LogSelector
 func (this *AccessLogging_LogSelector) MarshalJSON() ([]byte, error) {
 	str, err := TelemetryMarshaler.MarshalToString(this)
@@ -373,6 +362,17 @@ func (this *AccessLogging_LogSelector) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for AccessLogging_LogSelector
 func (this *AccessLogging_LogSelector) UnmarshalJSON(b []byte) error {
+	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for AccessLogging_Filter
+func (this *AccessLogging_Filter) MarshalJSON() ([]byte, error) {
+	str, err := TelemetryMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for AccessLogging_Filter
+func (this *AccessLogging_Filter) UnmarshalJSON(b []byte) error {
 	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
