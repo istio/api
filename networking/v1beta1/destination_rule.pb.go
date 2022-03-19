@@ -371,6 +371,9 @@ type DestinationRule struct {
 	// configuration will be applied only to the workload instances matching the workload selector
 	// label in the same namespace. Workload selectors do not apply across namespace boundaries.
 	// If omitted, the `DestinationRule` falls back to its default behavior.
+	// For example, if specific sidecars need to have egress TLS settings for services outside
+	// of the mesh, instead of every sidecar in the mesh needing to have the
+	// configuration (which is the default behaviour), a workload selector can be specified.
 	WorkloadSelector     *v1beta1.WorkloadSelector `protobuf:"bytes,5,opt,name=workload_selector,json=workloadSelector,proto3" json:"workload_selector,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                  `json:"-"`
 	XXX_unrecognized     []byte                    `json:"-"`
