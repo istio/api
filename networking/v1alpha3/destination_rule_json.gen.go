@@ -138,6 +138,54 @@
 //         simple: ROUND_ROBIN
 // ```
 // {{</tab>}}
+//
+// Destination Rules can be customized to specific workloads as well.
+// The following example shows how a destination rule can be applied to a
+// specific workload using the workloadSelector configuration.
+//
+// {{<tabset category-name="selector-example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: DestinationRule
+// metadata:
+//   name: configure-client-mtls-dr-with-workloadselector
+//   workloadSelector:
+//     labels:
+//       app: ratings
+//   spec:
+//     trafficPolicy:
+//       loadBalancer:
+//         simple: ROUND_ROBIN
+//       portLevelSettings:
+//         - port:
+//             number: 31443
+//           tls:
+//             credentialName: client-credential
+//             mode: MUTUAL
+// ```
+// {{</tab>}}
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: DestinationRule
+// metadata:
+//   name: configure-client-mtls-dr-with-workloadselector
+//   workloadSelector:
+//     labels:
+//       app: ratings
+//   spec:
+//     trafficPolicy:
+//       loadBalancer:
+//         simple: ROUND_ROBIN
+//       portLevelSettings:
+//         - port:
+//             number: 31443
+//           tls:
+//             credentialName: client-credential
+//             mode: MUTUAL
+// ```
+// {{</tab>}}
 // {{</tabset>}}
 //
 
@@ -150,6 +198,7 @@ import (
 	github_com_gogo_protobuf_jsonpb "github.com/gogo/protobuf/jsonpb"
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/gogo/protobuf/types"
+	_ "istio.io/api/type/v1beta1"
 	_ "istio.io/gogo-genproto/googleapis/google/api"
 	math "math"
 )
