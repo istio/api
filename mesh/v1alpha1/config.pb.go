@@ -3320,8 +3320,8 @@ type MeshConfig_TLSConfig struct {
 	// Optional: the minimum TLS protocol version. The default minimum
 	// TLS version will be TLS 1.2. As servers may not be Envoy and be
 	// set to TLS 1.2 (e.g., workloads using mTLS without sidecars), the
-	// minimum TLS version for clients may be TLS 1.2 too.
-	// In current Istio implementation, the maximum TLS protocol version
+	// minimum TLS version for clients may also be TLS 1.2.
+	// In the current Istio implementation, the maximum TLS protocol version
 	// is TLS 1.3.
 	MinProtocolVersion   MeshConfig_TLSConfig_TLSProtocol `protobuf:"varint,1,opt,name=min_protocol_version,json=minProtocolVersion,proto3,enum=istio.mesh.v1alpha1.MeshConfig_TLSConfig_TLSProtocol" json:"min_protocol_version,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                         `json:"-"`
