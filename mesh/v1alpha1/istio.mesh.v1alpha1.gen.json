@@ -247,6 +247,9 @@
           },
           "defaultHttpRetryPolicy": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPRetry"
+          },
+          "meshMTLS": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig"
           }
         }
       },
@@ -1185,6 +1188,23 @@
             "type": "boolean"
           }
         }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.TLSConfig": {
+        "type": "object",
+        "properties": {
+          "minProtocolVersion": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig.TLSProtocol"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.TLSConfig.TLSProtocol": {
+        "description": "TLS protocol versions.",
+        "type": "string",
+        "enum": [
+          "TLS_AUTO",
+          "TLSV1_2",
+          "TLSV1_3"
+        ]
       },
       "istio.mesh.v1alpha1.MeshConfig.ThriftConfig": {
         "type": "object",
