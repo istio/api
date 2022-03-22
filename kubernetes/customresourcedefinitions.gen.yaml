@@ -5853,6 +5853,34 @@ spec:
                                 items:
                                   type: string
                                 type: array
+                              matchPaths:
+                                description: Optional.
+                                items:
+                                  oneOf:
+                                  - not:
+                                      anyOf:
+                                      - required:
+                                        - exact
+                                      - required:
+                                        - prefix
+                                      - required:
+                                        - regex
+                                  - required:
+                                    - exact
+                                  - required:
+                                    - prefix
+                                  - required:
+                                    - regex
+                                  properties:
+                                    exact:
+                                      type: string
+                                    prefix:
+                                      type: string
+                                    regex:
+                                      description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                      type: string
+                                  type: object
+                                type: array
                               methods:
                                 description: Optional.
                                 items:
@@ -5862,6 +5890,34 @@ spec:
                                 description: Optional.
                                 items:
                                   type: string
+                                type: array
+                              notMatchPaths:
+                                description: Optional.
+                                items:
+                                  oneOf:
+                                  - not:
+                                      anyOf:
+                                      - required:
+                                        - exact
+                                      - required:
+                                        - prefix
+                                      - required:
+                                        - regex
+                                  - required:
+                                    - exact
+                                  - required:
+                                    - prefix
+                                  - required:
+                                    - regex
+                                  properties:
+                                    exact:
+                                      type: string
+                                    prefix:
+                                      type: string
+                                    regex:
+                                      description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                      type: string
+                                  type: object
                                 type: array
                               notMethods:
                                 description: Optional.
@@ -5898,6 +5954,62 @@ spec:
                           key:
                             description: The name of an Istio attribute.
                             type: string
+                          matches:
+                            description: Optional.
+                            items:
+                              oneOf:
+                              - not:
+                                  anyOf:
+                                  - required:
+                                    - exact
+                                  - required:
+                                    - prefix
+                                  - required:
+                                    - regex
+                              - required:
+                                - exact
+                              - required:
+                                - prefix
+                              - required:
+                                - regex
+                              properties:
+                                exact:
+                                  type: string
+                                prefix:
+                                  type: string
+                                regex:
+                                  description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                  type: string
+                              type: object
+                            type: array
+                          notMatches:
+                            description: Optional.
+                            items:
+                              oneOf:
+                              - not:
+                                  anyOf:
+                                  - required:
+                                    - exact
+                                  - required:
+                                    - prefix
+                                  - required:
+                                    - regex
+                              - required:
+                                - exact
+                              - required:
+                                - prefix
+                              - required:
+                                - regex
+                              properties:
+                                exact:
+                                  type: string
+                                prefix:
+                                  type: string
+                                regex:
+                                  description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                  type: string
+                              type: object
+                            type: array
                           notValues:
                             description: Optional.
                             items:

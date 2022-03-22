@@ -15,6 +15,7 @@ syntax = "proto3";
 
 import "google/api/field_behavior.proto";
 import "type/v1beta1/selector.proto";
+import "networking/v1beta1/virtual_service.proto";
 
 // $schema: istio.security.v1beta1.AuthorizationPolicy
 // $title: Authorization Policy
@@ -447,8 +448,19 @@ message Operation {
   // If not set, any path is allowed. Must be used only with HTTP.
   repeated string paths = 4;
 
+  // Optional. A list of paths matchers as specified in the HTTP request. See the [Authorization Policy Normalization](https://istio.io/latest/docs/reference/config/security/normalization/)
+  // for details of the path normalization.
+  // For gRPC service, this will be the fully-qualified name in the form of
+  // "/package.service/method".
+  //
+  // If not set, any path is allowed Must be used only with HTTP.
+  repeated istio.networking.v1beta1.StringMatch match_paths = 9;
+
   // Optional. A list of negative match of paths.
   repeated string not_paths = 8;
+
+  // Optional. A list of negative match of paths.
+  repeated istio.networking.v1beta1.StringMatch not_match_paths = 10;
 }
 
 // Condition specifies additional required attributes.
@@ -461,7 +473,15 @@ message Condition {
   // Note: at least one of values or not_values must be set.
   repeated string values = 2;
 
+  // Optional. A list of allowed matchers for the attribute value.
+  // Note: at least one of values, matches, not_values or not_matches must be set.
+  repeated istio.networking.v1beta1.StringMatch matches = 4;
+
   // Optional. A list of negative match of values for the attribute.
   // Note: at least one of values or not_values must be set.
   repeated string not_values = 3;
+
+  // Optional. A list of negative match of values for the attribute.
+  // Note: at least one of values, matches, not_values or not_matches must be set.
+  repeated istio.networking.v1beta1.StringMatch not_matches = 5;
 }

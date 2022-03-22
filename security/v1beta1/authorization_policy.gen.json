@@ -6,6 +6,84 @@
   },
   "components": {
     "schemas": {
+      "istio.networking.v1beta1.StringMatch": {
+        "description": "Describes how to match a given string in HTTP headers. Match is case-sensitive.",
+        "type": "object",
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "exact"
+                  ],
+                  "properties": {
+                    "exact": {
+                      "description": "exact string match",
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "prefix"
+                  ],
+                  "properties": {
+                    "prefix": {
+                      "description": "prefix-based match",
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "regex"
+                  ],
+                  "properties": {
+                    "regex": {
+                      "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "exact"
+            ],
+            "properties": {
+              "exact": {
+                "description": "exact string match",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "prefix"
+            ],
+            "properties": {
+              "prefix": {
+                "description": "prefix-based match",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "regex"
+            ],
+            "properties": {
+              "regex": {
+                "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
       "istio.security.v1beta1.AuthorizationPolicy": {
         "description": "AuthorizationPolicy enables access control on workloads.",
         "type": "object",
@@ -87,11 +165,25 @@
               "type": "string"
             }
           },
+          "matches": {
+            "description": "Optional. A list of allowed matchers for the attribute value. Note: at least one of values, matches, not_values or not_matches must be set.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1beta1.StringMatch"
+            }
+          },
           "notValues": {
             "description": "Optional. A list of negative match of values for the attribute. Note: at least one of values or not_values must be set.",
             "type": "array",
             "items": {
               "type": "string"
+            }
+          },
+          "notMatches": {
+            "description": "Optional. A list of negative match of values for the attribute. Note: at least one of values, matches, not_values or not_matches must be set.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1beta1.StringMatch"
             }
           }
         }
@@ -149,11 +241,25 @@
               "type": "string"
             }
           },
+          "matchPaths": {
+            "description": "Optional. A list of paths matchers as specified in the HTTP request. See the [Authorization Policy Normalization](https://istio.io/latest/docs/reference/config/security/normalization/) for details of the path normalization. For gRPC service, this will be the fully-qualified name in the form of \"/package.service/method\".",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1beta1.StringMatch"
+            }
+          },
           "notPaths": {
             "description": "Optional. A list of negative match of paths.",
             "type": "array",
             "items": {
               "type": "string"
+            }
+          },
+          "notMatchPaths": {
+            "description": "Optional. A list of negative match of paths.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1beta1.StringMatch"
             }
           }
         }

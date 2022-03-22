@@ -588,9 +588,36 @@ For gRPC service, this will be the fully-qualified name in the form of &ldquo;/p
 No
 </td>
 </tr>
+<tr id="Operation-match_paths">
+<td><code>matchPaths</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/virtual-service.html#StringMatch">StringMatch[]</a></code></td>
+<td>
+<p>Optional. A list of paths matchers as specified in the HTTP request. See the <a href="https://istio.io/latest/docs/reference/config/security/normalization/">Authorization Policy Normalization</a>
+for details of the path normalization.
+For gRPC service, this will be the fully-qualified name in the form of
+&ldquo;/package.service/method&rdquo;.</p>
+
+<p>If not set, any path is allowed Must be used only with HTTP.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="Operation-not_paths">
 <td><code>notPaths</code></td>
 <td><code>string[]</code></td>
+<td>
+<p>Optional. A list of negative match of paths.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Operation-not_match_paths">
+<td><code>notMatchPaths</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/virtual-service.html#StringMatch">StringMatch[]</a></code></td>
 <td>
 <p>Optional. A list of negative match of paths.</p>
 
@@ -640,12 +667,36 @@ Note: at least one of values or not_values must be set.</p>
 No
 </td>
 </tr>
+<tr id="Condition-matches">
+<td><code>matches</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/virtual-service.html#StringMatch">StringMatch[]</a></code></td>
+<td>
+<p>Optional. A list of allowed matchers for the attribute value.
+Note: at least one of values, matches, not_values or not_matches must be set.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="Condition-not_values">
 <td><code>notValues</code></td>
 <td><code>string[]</code></td>
 <td>
 <p>Optional. A list of negative match of values for the attribute.
 Note: at least one of values or not_values must be set.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Condition-not_matches">
+<td><code>notMatches</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/virtual-service.html#StringMatch">StringMatch[]</a></code></td>
+<td>
+<p>Optional. A list of negative match of values for the attribute.
+Note: at least one of values, matches, not_values or not_matches must be set.</p>
 
 </td>
 <td>
