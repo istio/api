@@ -17,17 +17,7 @@
 package v1alpha1
 
 import (
-	"fmt"
-	"math"
-
-	"github.com/gogo/protobuf/proto"
-)
-
-// Reference imports to suppress errors if they are not otherwise used.
-var (
-	_ = proto.Marshal
-	_ = fmt.Errorf
-	_ = math.Inf
+	"google.golang.org/protobuf/proto"
 )
 
 // DeepCopyInto supports using IstioOperatorSpec within kubernetes types, where deepcopy-gen is used.
