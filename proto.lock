@@ -46185,9 +46185,21 @@
                 "is_repeated": true
               },
               {
+                "id": 9,
+                "name": "match_paths",
+                "type": "istio.networking.v1beta1.StringMatch",
+                "is_repeated": true
+              },
+              {
                 "id": 8,
                 "name": "not_paths",
                 "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 10,
+                "name": "not_match_paths",
+                "type": "istio.networking.v1beta1.StringMatch",
                 "is_repeated": true
               }
             ]
@@ -46213,9 +46225,21 @@
                 "is_repeated": true
               },
               {
+                "id": 4,
+                "name": "matches",
+                "type": "istio.networking.v1beta1.StringMatch",
+                "is_repeated": true
+              },
+              {
                 "id": 3,
                 "name": "not_values",
                 "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 5,
+                "name": "not_matches",
+                "type": "istio.networking.v1beta1.StringMatch",
                 "is_repeated": true
               }
             ]
@@ -46227,6 +46251,9 @@
           },
           {
             "path": "type/v1beta1/selector.proto"
+          },
+          {
+            "path": "networking/v1beta1/virtual_service.proto"
           }
         ],
         "package": {
