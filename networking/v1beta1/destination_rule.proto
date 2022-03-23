@@ -13,7 +13,6 @@
 //   limitations under the License.
 syntax = "proto3";
 
-import "gogoproto/gogo.proto";
 import "google/api/field_behavior.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
