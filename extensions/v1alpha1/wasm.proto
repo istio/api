@@ -14,7 +14,6 @@
 
 syntax = "proto3";
 
-import "google/protobuf/any.proto";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/struct.proto";
 import "type/v1beta1/selector.proto";
