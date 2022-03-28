@@ -226,6 +226,7 @@ message Tracing {
 // SDS defines secret discovery service(SDS) configuration to be used by the proxy.
 // For workload, its values are set in sidecar injector(passed as arguments to istio-proxy container).
 // For pilot/mixer, it's passed as arguments to istio-proxy container in pilot/mixer deployment yaml files directly.
+// $hide_from_docs
 message SDS {
   // True if SDS is enabled.
   bool enabled = 1;
@@ -463,7 +464,8 @@ message ProxyConfig {
   Tracing tracing = 19;
 
   // Secret Discovery Service(SDS) configuration to be used by the proxy.
-  SDS sds = 21;
+  // $hide_from_docs
+  SDS sds = 21 [deprecated=true];
 
   // Address of the service to which access logs from Envoys should be
   // sent. (e.g. `accesslog-service:15000`). See [Access Log
