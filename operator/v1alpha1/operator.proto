@@ -496,15 +496,15 @@ message MetricStatus {
 // See k8s.io.autoscaling.v2beta2.MetricTarget.
 message MetricTarget {
     string type = 1;
-    k8s.io.apimachinery.pkg.api.resource.Quantity value = 2;
-    k8s.io.apimachinery.pkg.api.resource.Quantity averageValue = 3;
+    IntOrString value = 2;
+    IntOrString averageValue = 3;
     int32 averageUtilization = 4;
 }
 
 // See k8s.io.autoscaling.v2beta2.MetricValueStatus.
 message MetricValueStatus {
-    k8s.io.apimachinery.pkg.api.resource.Quantity value = 1;
-    k8s.io.apimachinery.pkg.api.resource.Quantity averageValue = 2;
+    IntOrString value = 1;
+    IntOrString averageValue = 2;
     int32 averageUtilization = 3;
 }
 
