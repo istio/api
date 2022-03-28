@@ -1494,7 +1494,8 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing"
           },
           "sds": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.SDS"
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.SDS",
+            "deprecated": true
           },
           "envoyAccessLogService": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.RemoteService"
@@ -1683,7 +1684,7 @@
         ]
       },
       "istio.mesh.v1alpha1.SDS": {
-        "description": "SDS defines secret discovery service(SDS) configuration to be used by the proxy. For workload, its values are set in sidecar injector(passed as arguments to istio-proxy container). For pilot/mixer, it's passed as arguments to istio-proxy container in pilot/mixer deployment yaml files directly.",
+        "description": "SDS defines secret discovery service(SDS) configuration to be used by the proxy. For workload, its values are set in sidecar injector(passed as arguments to istio-proxy container). For pilot/mixer, it's passed as arguments to istio-proxy container in pilot/mixer deployment yaml files directly. $hide_from_docs",
         "type": "object",
         "properties": {
           "enabled": {
