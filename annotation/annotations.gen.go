@@ -30,6 +30,7 @@ const (
     Any
     AuthorizationPolicy
     Ingress
+    Node
     Pod
     Service
     WorkloadEntry
@@ -44,10 +45,12 @@ func (r ResourceTypes) String() string {
 	case 3:
 		return "Ingress"
 	case 4:
-		return "Pod"
+		return "Node"
 	case 5:
-		return "Service"
+		return "Pod"
 	case 6:
+		return "Service"
+	case 7:
 		return "WorkloadEntry"
 	}
 	return "Unknown"
@@ -654,6 +657,21 @@ var (
 		},
 	}
 
+	TrafficNodeSelector = Instance {
+		Name:          "traffic.istio.io/nodeSelector",
+		Description:   "the value for this annotation is a set of key value pairs "+
+                        "(node labels) that can be used to select a subset of "+
+                        "nodes from the pool of k8s nodes It is used for "+
+                        "multi-cluster scenario, and with nodePort type gateway "+
+                        "service.",
+		FeatureStatus: Stable,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Node,
+		},
+	}
+
 	SidecarTrafficExcludeInboundPorts = Instance {
 		Name:          "traffic.sidecar.istio.io/excludeInboundPorts",
 		Description:   "A comma separated list of inbound ports to be excluded "+
@@ -796,6 +814,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarUserVolume,
 		&SidecarUserVolumeMount,
 		&SidecarStatusPort,
+		&TrafficNodeSelector,
 		&SidecarTrafficExcludeInboundPorts,
 		&SidecarTrafficExcludeOutboundIPRanges,
 		&SidecarTrafficExcludeOutboundPorts,
@@ -811,6 +830,7 @@ func AllResourceTypes() []string {
 		"Any",
 		"AuthorizationPolicy",
 		"Ingress",
+		"Node",
 		"Pod",
 		"Service",
 		"WorkloadEntry",

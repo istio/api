@@ -547,6 +547,19 @@ Istio supports to control its behavior.
 				
 					<tr>
 				
+					<td><code>traffic.istio.io/nodeSelector</code></td>
+				
+					<td>Stable</td>
+				
+					<td>[Node]</td>
+					<td>the value for this annotation is a set of key value pairs (node labels) that can be used to select a subset of nodes from the pool of k8s nodes It is used for multi-cluster scenario, and with nodePort type gateway service.</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
 					<td><code>traffic.sidecar.istio.io/excludeInboundPorts</code></td>
 				
 					<td>Alpha</td>

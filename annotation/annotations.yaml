@@ -300,6 +300,14 @@ annotations:
     resources:
       - Pod
 
+  - name: traffic.istio.io/nodeSelector
+    featureStatus: Stable
+    description:  the value for this annotation is a set of key value pairs (node labels) that can be used to select a subset of nodes from the pool of k8s nodes It is used for multi-cluster scenario, and with nodePort type gateway service.
+    deprecated: false
+    hidden: false
+    resources:
+      - Node
+
   - name: traffic.sidecar.istio.io/includeOutboundIPRanges
     featureStatus: Alpha
     description: A comma separated list of IP ranges in CIDR form to redirect to Envoy
