@@ -61,14 +61,6 @@ annotations:
     resources:
       - Service
 
-  - name: networking.istio.io/gatewayPort
-    featureStatus: Alpha
-    description: IstioGatewayPortLabel overrides the default 15443 value to use for a multi-network gateway's port
-    deprecated: false
-    hidden: false
-    resources:
-      - Service
-
   - name: sidecar.istio.io/inject
     featureStatus: Beta
     description: Specifies whether or not an Envoy sidecar should be automatically
