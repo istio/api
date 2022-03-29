@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.DestinationRule
 aliases: [/docs/reference/config/networking/v1alpha3/destination-rule]
-number_of_entries: 20
+number_of_entries: 22
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -287,6 +287,17 @@ No
 <td><code><a href="#OutlierDetection">OutlierDetection</a></code></td>
 <td>
 <p>Settings controlling eviction of unhealthy hosts from the load balancing pool</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="TrafficPolicy-healthy_check">
+<td><code>healthyCheck</code></td>
+<td><code><a href="#HealthyCheck">HealthyCheck</a></code></td>
+<td>
+<p>Settings controlling healthy check hosts from the load balancing pool</p>
 
 </td>
 <td>
@@ -865,6 +876,80 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="HealthyCheck">HealthyCheck</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HealthyCheck-interval">
+<td><code>interval</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>The interval between health checks.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HealthyCheck-timeout">
+<td><code>timeout</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>The time to wait for a health check response.
+If the timeout is reached the health check attempt will be considered a failure.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HealthyCheck-healthy_threshold">
+<td><code>healthyThreshold</code></td>
+<td><code>int32</code></td>
+<td>
+<p>number of healthy health checks required before a host is marked healthy.
+Note that during startup, only a single successful health check is required to mark a host healthy.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HealthyCheck-unhealthy_threshold">
+<td><code>unhealthyThreshold</code></td>
+<td><code>int32</code></td>
+<td>
+<p>The number of unhealthy health checks required before a host is marked unhealthy.
+Note that for http health checking if a host responds with a code not in expected<em>statuses or retriable</em>statuses,
+this threshold is ignored and the host is considered immediately unhealthy.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HealthyCheck-HttpHealthyCheck">
+<td><code>HttpHealthyCheck</code></td>
+<td><code><a href="#HealthyCheck-http_health_check">http_health_check</a></code></td>
+<td>
+<p>HTTP health check.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="ClientTLSSettings">ClientTLSSettings</h2>
 <section>
 <p>SSL/TLS related settings for upstream connections. See Envoy&rsquo;s <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto.html#common-tls-configuration">TLS
@@ -1333,6 +1418,17 @@ No
 No
 </td>
 </tr>
+<tr id="TrafficPolicy-PortTrafficPolicy-healthy_check">
+<td><code>healthyCheck</code></td>
+<td><code><a href="#HealthyCheck">HealthyCheck</a></code></td>
+<td>
+<p>Settings controlling healthy check hosts from the load balancing pool</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="TrafficPolicy-PortTrafficPolicy-tls">
 <td><code>tls</code></td>
 <td><code><a href="#ClientTLSSettings">ClientTLSSettings</a></code></td>
@@ -1683,6 +1779,45 @@ No
 <p>The time duration between keep-alive probes.
 Default is to use the OS level configuration
 (unless overridden, Linux defaults to 75s.)</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HealthyCheck-http_health_check">HealthyCheck.http_health_check</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HealthyCheck-http_health_check-host">
+<td><code>host</code></td>
+<td><code>string</code></td>
+<td>
+<p>The value of the host header in the HTTP health check request. If left empty (default value),
+the name of the cluster this health check is associated with will be used.
+The host header can be customized for a specific endpoint by setting the hostname field.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HealthyCheck-http_health_check-path">
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>
+<p>Specifies the HTTP path that will be requested during health checking. For example /healthcheck.</p>
 
 </td>
 <td>

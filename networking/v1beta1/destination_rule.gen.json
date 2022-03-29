@@ -178,6 +178,45 @@
           }
         }
       },
+      "istio.networking.v1beta1.HealthyCheck": {
+        "type": "object",
+        "properties": {
+          "interval": {
+            "description": "The interval between health checks.",
+            "type": "string"
+          },
+          "timeout": {
+            "description": "The time to wait for a health check response. If the timeout is reached the health check attempt will be considered a failure.",
+            "type": "string"
+          },
+          "healthyThreshold": {
+            "description": "number of healthy health checks required before a host is marked healthy. Note that during startup, only a single successful health check is required to mark a host healthy.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "unhealthyThreshold": {
+            "description": "The number of unhealthy health checks required before a host is marked unhealthy. Note that for http health checking if a host responds with a code not in expected_statuses or retriable_statuses, this threshold is ignored and the host is considered immediately unhealthy.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "HttpHealthyCheck": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.HealthyCheck.http.health.check"
+          }
+        }
+      },
+      "istio.networking.v1beta1.HealthyCheck.http.health.check": {
+        "type": "object",
+        "properties": {
+          "host": {
+            "description": "The value of the host header in the HTTP health check request. If left empty (default value), the name of the cluster this health check is associated with will be used. The host header can be customized for a specific endpoint by setting the hostname field.",
+            "type": "string"
+          },
+          "path": {
+            "description": "Specifies the HTTP path that will be requested during health checking. For example /healthcheck.",
+            "type": "string"
+          }
+        }
+      },
       "istio.networking.v1beta1.LoadBalancerSettings": {
         "description": "Load balancing policies to apply for a specific destination. See Envoy's load balancing [documentation](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancing) for more details.",
         "type": "object",
@@ -522,6 +561,9 @@
           "outlierDetection": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.OutlierDetection"
           },
+          "healthyCheck": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.HealthyCheck"
+          },
           "tls": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.ClientTLSSettings"
           },
@@ -549,6 +591,9 @@
           },
           "outlierDetection": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.OutlierDetection"
+          },
+          "healthyCheck": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.HealthyCheck"
           },
           "tls": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.ClientTLSSettings"

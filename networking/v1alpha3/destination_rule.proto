@@ -253,8 +253,11 @@ message TrafficPolicy {
   // Settings controlling eviction of unhealthy hosts from the load balancing pool
   OutlierDetection outlier_detection = 3;
 
-  // TLS related settings for connections to the upstream service.
-  ClientTLSSettings tls = 4;
+  // Settings controlling healthy check hosts from the load balancing pool
+  HealthyCheck healthy_check = 4;
+  
+// TLS related settings for connections to the upstream service.
+  ClientTLSSettings tls = 5;
 
   // Traffic policies that apply to specific ports of the service
   message PortTrafficPolicy {
@@ -272,8 +275,11 @@ message TrafficPolicy {
     // Settings controlling eviction of unhealthy hosts from the load balancing pool
     OutlierDetection outlier_detection = 4;
 
+    // Settings controlling healthy check hosts from the load balancing pool
+    HealthyCheck healthy_check = 5;
+    
     // TLS related settings for connections to the upstream service.
-    ClientTLSSettings tls = 5;
+    ClientTLSSettings tls = 6;
   }
 
   // Traffic policies specific to individual ports. Note that port level
@@ -281,7 +287,7 @@ message TrafficPolicy {
   // settings specified at the destination-level will not be inherited when
   // overridden by port-level settings, i.e. default values will be applied
   // to fields omitted in port-level traffic policies.
-  repeated PortTrafficPolicy port_level_settings = 5;
+  repeated PortTrafficPolicy port_level_settings = 6;
 }
 
 // A subset of endpoints of a service. Subsets can be used for scenarios
@@ -791,6 +797,37 @@ message OutlierDetection {
   // disabled by setting it to 0%. The default is 0% as it's not typically
   // applicable in k8s environments with few pods per service.
   int32 min_health_percent = 5;
+}
+
+message HealthyCheck {
+  // The interval between health checks.
+  google.protobuf.Duration interval = 1;
+
+  // The time to wait for a health check response.
+  // If the timeout is reached the health check attempt will be considered a failure.
+  google.protobuf.Duration timeout = 2;
+
+  //  number of healthy health checks required before a host is marked healthy.
+  // Note that during startup, only a single successful health check is required to mark a host healthy.
+  int32  healthy_threshold = 3;
+
+  // The number of unhealthy health checks required before a host is marked unhealthy.
+  // Note that for http health checking if a host responds with a code not in expected_statuses or retriable_statuses,
+  // this threshold is ignored and the host is considered immediately unhealthy.
+  int32  unhealthy_threshold = 4;
+
+  message http_health_check {
+    // The value of the host header in the HTTP health check request. If left empty (default value),
+    // the name of the cluster this health check is associated with will be used.
+    // The host header can be customized for a specific endpoint by setting the hostname field.
+    string host = 1;
+
+    // Specifies the HTTP path that will be requested during health checking. For example /healthcheck.
+    string path = 2;
+  }
+
+  // HTTP health check.
+  http_health_check HttpHealthyCheck = 5;
 }
 
 // SSL/TLS related settings for upstream connections. See Envoy's [TLS
