@@ -30,7 +30,6 @@ const (
     Any
     AuthorizationPolicy
     Ingress
-    Node
     Pod
     Service
     WorkloadEntry
@@ -45,12 +44,10 @@ func (r ResourceTypes) String() string {
 	case 3:
 		return "Ingress"
 	case 4:
-		return "Node"
-	case 5:
 		return "Pod"
-	case 6:
+	case 5:
 		return "Service"
-	case 7:
+	case 6:
 		return "WorkloadEntry"
 	}
 	return "Unknown"
@@ -668,7 +665,7 @@ var (
 		Hidden:        false,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
-			Node,
+			Service,
 		},
 	}
 
@@ -830,7 +827,6 @@ func AllResourceTypes() []string {
 		"Any",
 		"AuthorizationPolicy",
 		"Ingress",
-		"Node",
 		"Pod",
 		"Service",
 		"WorkloadEntry",

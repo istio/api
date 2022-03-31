@@ -306,7 +306,7 @@ annotations:
     deprecated: false
     hidden: false
     resources:
-      - Node
+      - Service
 
   - name: traffic.sidecar.istio.io/includeOutboundIPRanges
     featureStatus: Alpha
