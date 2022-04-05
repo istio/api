@@ -250,6 +250,13 @@
           },
           "meshMTLS": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig"
+          },
+          "internalAddresses": {
+            "description": "List of CIDR ranges that are treated as internal. If unset, then RFC1918 / RFC4193 IP addresses will be considered internal.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
