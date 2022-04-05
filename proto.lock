@@ -42603,12 +42603,12 @@
               {
                 "id": 2,
                 "name": "value",
-                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+                "type": "IntOrString"
               },
               {
                 "id": 3,
                 "name": "averageValue",
-                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+                "type": "IntOrString"
               },
               {
                 "id": 4,
@@ -42623,12 +42623,12 @@
               {
                 "id": 1,
                 "name": "value",
-                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+                "type": "IntOrString"
               },
               {
                 "id": 2,
                 "name": "averageValue",
-                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+                "type": "IntOrString"
               },
               {
                 "id": 3,
