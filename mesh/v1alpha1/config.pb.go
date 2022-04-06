@@ -842,6 +842,12 @@ type MeshConfig struct {
 	MeshMTLS *MeshConfig_TLSConfig `protobuf:"bytes,63,opt,name=mesh_mTLS,json=meshMTLS,proto3" json:"mesh_mTLS,omitempty"`
 	// List of CIDR ranges that are treated as internal. If unset, then RFC1918 / RFC4193
 	// IP addresses will be considered internal.
+	// RFC 1918 defines the following address ranges as private,
+	// 10.0. 0.0/8 (addresses 10.0. 0.0 through 10.255. 255.255 inclusive)
+	// 172.16. 0.0/12 (addresses 172.16. 0.0 through 172.31. 255.255 inclusive)
+	// 192.168. 0.0/16 (addresses 192.168. 0.0 through 192.168.
+	// If this is set, the cidr range specified here would be considered as
+	// internal address instead of default cidr ranges.
 	InternalAddresses []string `protobuf:"bytes,64,rep,name=internal_addresses,json=internalAddresses,proto3" json:"internal_addresses,omitempty"`
 }
 
