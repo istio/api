@@ -14,6 +14,7 @@
 syntax = "proto3";
 
 import "type/v1beta1/selector.proto";
+import "networking/v1alpha3/gateway.proto";
 
 // $schema: istio.security.v1beta1.PeerAuthentication
 // $title: PeerAuthentication
@@ -157,4 +158,6 @@ message PeerAuthentication {
   // Port specific mutual TLS settings. These only apply when a workload selector
   // is specified.
   map<uint32, MutualTLS> port_level_mtls = 3;
+
+  map<uint32, istio.networking.v1alpha3.ServerTLSSettings> port_level_tls = 5;
 }
