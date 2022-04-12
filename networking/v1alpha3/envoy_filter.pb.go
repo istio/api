@@ -135,7 +135,7 @@
 //     patch:
 //       operation: INSERT_BEFORE
 //       value: # lua filter specification
-//        name: envoy.lua
+//        name: envoy.filters.http.lua
 //        typed_config:
 //           "@type": "type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua"
 //           inlineCode: |
