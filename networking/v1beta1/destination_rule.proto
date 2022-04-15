@@ -983,8 +983,10 @@ message ClientTLSSettings {
   // Only one of client certificates and CA certificate
   // or credentialName can be specified.
   //
-  // **NOTE:** This field is currently applicable only at gateways.
-  // Sidecars will continue to use the certificate paths.
+  // **NOTE:** This field is applicable at sidecars only if
+  // `DestinationRule` has a `workloadSelector` specified.
+  // Otherwise the field will be applicable only at gateways, and
+  // sidecars will continue to use the certificate paths.
   string credential_name = 7;
 
   // A list of alternate names to verify the subject identity in the
