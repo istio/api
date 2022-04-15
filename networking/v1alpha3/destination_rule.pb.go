@@ -173,10 +173,10 @@
 // kind: DestinationRule
 // metadata:
 //   name: configure-client-mtls-dr-with-workloadselector
-//   workloadSelector:
-//     labels:
-//       app: ratings
 //   spec:
+//     workloadSelector:
+//       matchLabels:
+//         app: ratings
 //     trafficPolicy:
 //       loadBalancer:
 //         simple: ROUND_ROBIN
@@ -194,10 +194,10 @@
 // kind: DestinationRule
 // metadata:
 //   name: configure-client-mtls-dr-with-workloadselector
-//   workloadSelector:
-//     labels:
-//       app: ratings
 //   spec:
+//     workloadSelector:
+//       matchLabels:
+//         app: ratings
 //     trafficPolicy:
 //       loadBalancer:
 //         simple: ROUND_ROBIN
