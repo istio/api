@@ -656,11 +656,11 @@ var (
 
 	TrafficNodeSelector = Instance {
 		Name:          "traffic.istio.io/nodeSelector",
-		Description:   "the value for this annotation is a set of key value pairs "+
-                        "(node labels) that can be used to select a subset of "+
-                        "nodes from the pool of k8s nodes It is used for "+
-                        "multi-cluster scenario, and with nodePort type gateway "+
-                        "service.",
+		Description:   "This annotation is a set of node-labels "+
+                        "(key1=value,key2=value). If the annotated Service is of "+
+                        "type NodePort and is a multi-network gateway (see "+
+                        "topology.istio.io/network), the addresses for selected "+
+                        "nodes will be used for cross-network communication.",
 		FeatureStatus: Stable,
 		Hidden:        false,
 		Deprecated:    false,
