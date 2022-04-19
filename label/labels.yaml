@@ -33,6 +33,14 @@ labels:
     resources:
       - Pod
 
+  - name: networking.istio.io/gatewayPort
+    featureStatus: Alpha
+    description: IstioGatewayPortLabel overrides the default 15443 value to use for a multi-network gateway's port
+    deprecated: false
+    hidden: false
+    resources:
+      - Service
+
   - name: service.istio.io/canonical-revision
     featureStatus: Alpha
     description: The name of a revision within a canonical service that the workload belongs to

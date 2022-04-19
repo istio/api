@@ -85,6 +85,18 @@ var (
 		},
 	}
 
+	NetworkingGatewayPort = Instance {
+		Name:          "networking.istio.io/gatewayPort",
+		Description:   "IstioGatewayPortLabel overrides the default 15443 value "+
+                        "to use for a multi-network gateway's port",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Service,
+		},
+	}
+
 	OperatorComponent = Instance {
 		Name:          "operator.istio.io/component",
 		Description:   "Istio operator component name of the resource, e.g. "+
@@ -246,6 +258,7 @@ resources to help automate Istio's multi-network configuration.
 func AllResourceLabels() []*Instance {
 	return []*Instance {
 		&IoIstioRev,
+		&NetworkingGatewayPort,
 		&OperatorComponent,
 		&OperatorManaged,
 		&OperatorVersion,
