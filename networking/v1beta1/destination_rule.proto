@@ -292,6 +292,27 @@ message TrafficPolicy {
   // overridden by port-level settings, i.e. default values will be applied
   // to fields omitted in port-level traffic policies.
   repeated PortTrafficPolicy port_level_settings = 5;
+
+  message TunnelSettings {
+    // Specifies which protocol to use for tunneling the downstream connection.
+    // Supported protocols are:
+    //   connect - uses HTTP CONNECT;
+    //   post - uses HTTP POST.
+    // HTTP version for upstream requests is determined by the service protocol defined for the proxy.
+    string protocol = 1 [(google.api.field_behavior) = REQUIRED];
+
+    // Specifies a host to which the downstream connection is tunneled.
+    // Target host must be an FQDN or IP address.
+    string target_host = 2 [(google.api.field_behavior) = REQUIRED];
+
+    // Specifies a port to which the downstream connection is tunneled.
+    uint32 target_port = 3 [(google.api.field_behavior) = REQUIRED];
+  }
+
+  // Configuration of tunneling TCP over other transport or application layers
+  // for the host configured in the DestinationRule.
+  // Tunnel settings can be applied to TCP or TLS routes and can't be applied to HTTP routes.
+  TunnelSettings tunnel = 6;
 }
 
 // A subset of endpoints of a service. Subsets can be used for scenarios

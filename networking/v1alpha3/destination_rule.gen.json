@@ -540,6 +540,9 @@
             "items": {
               "$ref": "#/components/schemas/istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy"
             }
+          },
+          "tunnel": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.TrafficPolicy.TunnelSettings"
           }
         }
       },
@@ -561,6 +564,23 @@
           },
           "tls": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.TrafficPolicy.TunnelSettings": {
+        "type": "object",
+        "properties": {
+          "protocol": {
+            "description": "Specifies which protocol to use for tunneling the downstream connection. Supported protocols are: connect - uses HTTP CONNECT; post - uses HTTP POST. HTTP version for upstream requests is determined by the service protocol defined for the proxy.",
+            "type": "string"
+          },
+          "targetHost": {
+            "description": "Specifies a host to which the downstream connection is tunneled. Target host must be an FQDN or IP address.",
+            "type": "string"
+          },
+          "targetPort": {
+            "description": "Specifies a port to which the downstream connection is tunneled.",
+            "type": "integer"
           }
         }
       },
