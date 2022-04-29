@@ -31,6 +31,7 @@ const (
     AuthorizationPolicy
     Ingress
     Pod
+    Secret
     Service
     WorkloadEntry
 )
@@ -46,8 +47,10 @@ func (r ResourceTypes) String() string {
 	case 4:
 		return "Pod"
 	case 5:
-		return "Service"
+		return "Secret"
 	case 6:
+		return "Service"
+	case 7:
 		return "WorkloadEntry"
 	}
 	return "Unknown"
@@ -249,6 +252,18 @@ var (
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Ingress,
+		},
+	}
+
+	NetworkingCluster = Instance {
+		Name:          "networking.istio.io/cluster",
+		Description:   "Specifies the cluster name to which this secret used to "+
+                        "connect.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Secret,
 		},
 	}
 
@@ -751,6 +766,7 @@ func AllResourceAnnotations() []*Instance {
 		&IoIstioDryRun,
 		&IoIstioWorkloadController,
 		&IoKubernetesIngressClass,
+		&NetworkingCluster,
 		&NetworkingExportTo,
 		&PrometheusMergeMetrics,
 		&ProxyConfig,
@@ -799,6 +815,7 @@ func AllResourceTypes() []string {
 		"AuthorizationPolicy",
 		"Ingress",
 		"Pod",
+		"Secret",
 		"Service",
 		"WorkloadEntry",
 	}

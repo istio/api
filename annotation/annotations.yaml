@@ -60,6 +60,14 @@ annotations:
     hidden: false
     resources:
       - Service
+  
+  - name: networking.istio.io/cluster
+    featureStatus: Alpha
+    description: Specifies the cluster name to which this secret used to connect.
+    deprecated: false
+    hidden: false
+    resources:
+      - Secret
 
   - name: sidecar.istio.io/inject
     featureStatus: Beta
