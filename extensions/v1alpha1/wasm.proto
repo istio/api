@@ -69,7 +69,7 @@ import "type/v1beta1/selector.proto";
 //     labels:
 //       istio: ingressgateway
 //   url: oci://private-registry:5000/openid-connect/openid:latest
-//   imagePullPolicy: IfNotPresent
+//   policy: IfNotPresent
 //   imagePullSecret: private-registry-pull-secret
 //   phase: AUTHN
 //   pluginConfig:
@@ -90,8 +90,33 @@ import "type/v1beta1/selector.proto";
 //     labels:
 //       istio: ingressgateway
 //   url: oci://private-registry:5000/openid-connect/openid:latest
-//   imagePullPolicy: IfNotPresent
+//   pullPolicy: IfNotPresent
 //   imagePullSecret: private-registry-pull-secret
+//   phase: AUTHN
+//   pluginConfig:
+//     openid_server: authn
+//     openid_realm: ingress
+//   vmConfig:
+//     env:
+//     - name: POD_NAME
+//       valueFrom: HOST
+//     - name: TRUST_DOMAIN
+//       value: "cluster.local"
+// ```
+//
+// This is also the same as the last example, but the Wasm module is pulled via https and updated for each time when this plugin resource is changed.
+// ```yaml
+// apiVersion: extensions.istio.io/v1alpha1
+// kind: WasmPlugin
+// metadata:
+//   name: openid-connect
+//   namespace: istio-ingress
+// spec:
+//   selector:
+//     matchLabels:
+//       istio: ingressgateway
+//   url: https://private-bucket/filters/openid.wasm
+//   pullPolicy: Always
 //   phase: AUTHN
 //   pluginConfig:
 //     openid_server: authn
@@ -130,7 +155,7 @@ import "type/v1beta1/selector.proto";
 //     matchLabels:
 //       istio: ingressgateway
 //   url: oci://private-registry:5000/openid-connect/openid:latest
-//   imagePullPolicy: IfNotPresent
+//   pullPolicy: IfNotPresent
 //   imagePullSecret: private-registry-pull-secret
 //   phase: AUTHN
 //   pluginConfig:
@@ -149,7 +174,7 @@ import "type/v1beta1/selector.proto";
 //     matchLabels:
 //       istio: ingressgateway
 //   url: oci://private-registry:5000/acl-check/acl:latest
-//   imagePullPolicy: Always
+//   pullPolicy: Always
 //   imagePullSecret: private-registry-pull-secret
 //   phase: AUTHZ
 //   priority: 1000
@@ -169,7 +194,7 @@ import "type/v1beta1/selector.proto";
 //     matchLabels:
 //       istio: ingressgateway
 //   url: oci://private-registry:5000/check-header:latest
-//   imagePullPolicy: IfNotPresent
+//   pullPolicy: IfNotPresent
 //   imagePullSecret: private-registry-pull-secret
 //   phase: AUTHZ
 //   priority: 10
@@ -231,6 +256,8 @@ message WasmPlugin {
   // against the contents of this field after pulling.
   string sha256 = 3;
 
+  // Deprecated. Please use `pull_policy` which is generalized for dealing
+  // with `http[s]://` or `file://` as well.
   // The pull behaviour to be applied when fetching an OCI image. Only
   // relevant when images are referenced by tag instead of SHA. Defaults
   // to IfNotPresent, except when an OCI image is referenced in the `url`
@@ -238,7 +265,7 @@ message WasmPlugin {
   // mirroring K8s behaviour.
   // Setting is ignored if `url` field is referencing a Wasm module directly
   // using `file://` or `http[s]://`
-  PullPolicy image_pull_policy = 4;
+  PullPolicy image_pull_policy = 4 [deprecated=true];
 
   // Credentials to use for OCI image pulling.
   // Name of a K8s Secret in the same namespace as the `WasmPlugin` that
@@ -290,6 +317,14 @@ message WasmPlugin {
   // Configuration for a Wasm VM.
   // more details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).
   VmConfig vm_config = 11;
+
+  // The pull behaviour to be applied when fetching Wasm module. 
+  // Only relevant when referencing Wasm module without any digest, 
+  // including the digest in OCI image URL or sha256 field in `vm_config`.
+  // Defaults to IfNotPresent, except when an OCI image is referenced in the `url`
+  // and the `latest` tag is used, in which case `Always` is the default,
+  // mirroring K8s behaviour.
+  PullPolicy pull_policy = 12;
 }
 
 // The phase in the filter chain where the plugin will be injected.
@@ -309,7 +344,7 @@ enum PluginPhase {
   STATS = 3;
 }
 
-// The pull behaviour to be applied when fetching an OCI image,
+// The pull behaviour to be applied when fetching a Wam module,
 // mirroring K8s behaviour.
 //
 // <!--
@@ -325,8 +360,8 @@ enum PullPolicy {
   // will pull the latest version.
   IfNotPresent = 1;
 
-  // We will always pull the latest version of an image when applying
-  // this plugin.
+  // We will always pull the latest version of an image when changing
+  // this plugin. Note that this chance includes `annotations` field as well.
   Always = 2;
 }
 

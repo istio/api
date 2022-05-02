@@ -40,7 +40,7 @@
         ]
       },
       "istio.extensions.v1alpha1.PullPolicy": {
-        "description": "The pull behaviour to be applied when fetching an OCI image, mirroring K8s behaviour.",
+        "description": "The pull behaviour to be applied when fetching a Wam module, mirroring K8s behaviour.",
         "type": "string",
         "enum": [
           "UNSPECIFIED_POLICY",
@@ -77,7 +77,8 @@
             "type": "string"
           },
           "imagePullPolicy": {
-            "$ref": "#/components/schemas/istio.extensions.v1alpha1.PullPolicy"
+            "$ref": "#/components/schemas/istio.extensions.v1alpha1.PullPolicy",
+            "deprecated": true
           },
           "imagePullSecret": {
             "description": "Credentials to use for OCI image pulling. Name of a K8s Secret in the same namespace as the `WasmPlugin` that contains a docker pull secret which is to be used to authenticate against the registry when pulling the image.",
@@ -105,6 +106,9 @@
           },
           "vmConfig": {
             "$ref": "#/components/schemas/istio.extensions.v1alpha1.VmConfig"
+          },
+          "pullPolicy": {
+            "$ref": "#/components/schemas/istio.extensions.v1alpha1.PullPolicy"
           }
         }
       },

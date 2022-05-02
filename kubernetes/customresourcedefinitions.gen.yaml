@@ -40,8 +40,7 @@ spec:
               WebAssembly filters. See more details at: https://istio.io/docs/reference/config/proxy_extensions/wasm-plugin.html'
             properties:
               imagePullPolicy:
-                description: The pull behaviour to be applied when fetching an OCI
-                  image.
+                description: Deprecated.
                 enum:
                 - UNSPECIFIED_POLICY
                 - IfNotPresent
@@ -69,6 +68,13 @@ spec:
                 description: Determines ordering of `WasmPlugins` in the same `phase`.
                 nullable: true
                 type: integer
+              pullPolicy:
+                description: The pull behaviour to be applied when fetching Wasm module.
+                enum:
+                - UNSPECIFIED_POLICY
+                - IfNotPresent
+                - Always
+                type: string
               selector:
                 properties:
                   matchLabels:
