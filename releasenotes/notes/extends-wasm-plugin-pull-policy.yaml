@@ -1,0 +1,10 @@
+apiVersion: release-notes/v2
+
+kind: feature
+area: extensibility
+issue: []
+
+releaseNotes:
+- |
+  **Added** Add `pull_policy` field in WasmPlugin resource, which specifies "Pull Policy" not only for OCI images, but also direct fetching of Wasm module based on http[s]? or file.
+  **Deprecated** Deprecate the existing `image_pull_policy` as we introduce `pull_policy`.
