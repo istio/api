@@ -1442,6 +1442,9 @@ type ClientTLSSettings struct {
 	// from the ServiceEntry.
 	SubjectAltNames []string `protobuf:"bytes,5,rep,name=subject_alt_names,json=subjectAltNames,proto3" json:"subject_alt_names,omitempty"`
 	// SNI string to present to the server during TLS handshake.
+	// If unspecified, SNI will be automatically set based on downstream HTTP
+	// host/authority header for SIMPLE and MUTUAL TLS modes, provided `ENABLE_AUTO_SNI`
+	// environmental variable is set to `true`.
 	Sni string `protobuf:"bytes,6,opt,name=sni,proto3" json:"sni,omitempty"`
 	// InsecureSkipVerify specifies whether the proxy should skip verifying the
 	// CA signature and SAN for the server certificate corresponding to the host.

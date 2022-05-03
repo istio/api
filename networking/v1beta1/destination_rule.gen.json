@@ -37,7 +37,7 @@
             }
           },
           "sni": {
-            "description": "SNI string to present to the server during TLS handshake.",
+            "description": "SNI string to present to the server during TLS handshake. If unspecified, SNI will be automatically set based on downstream HTTP host/authority header for SIMPLE and MUTUAL TLS modes, provided `ENABLE_AUTO_SNI` environmental variable is set to `true`.",
             "type": "string"
           },
           "insecureSkipVerify": {
