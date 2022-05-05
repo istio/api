@@ -1018,6 +1018,9 @@ message ClientTLSSettings {
   repeated string subject_alt_names = 5;
 
   // SNI string to present to the server during TLS handshake.
+  // If unspecified, SNI will be automatically set based on downstream HTTP
+  // host/authority header for SIMPLE and MUTUAL TLS modes, provided `ENABLE_AUTO_SNI`
+  // environmental variable is set to `true`.
   string sni = 6;
 
   // InsecureSkipVerify specifies whether the proxy should skip verifying the
