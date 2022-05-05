@@ -1,0 +1,10 @@
+apiVersion: release-notes/v2
+kind: feature
+area: installation
+issue:
+- 32005
+
+releaseNotes:
+- |
+  **Deprecated** Kubernetes Autoscaling v2beta1 API mirrored in IstioOperator API
+  **Added** Kubernetes Autoscaling v2beta2/v2 API mirrored in IstioOperator API
