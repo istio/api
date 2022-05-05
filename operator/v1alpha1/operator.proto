@@ -349,6 +349,20 @@ message ConfigMapKeySelector {
     bool optional = 3;
 }
 
+// See k8s.io.api.autoscaling.v2beta2.ContainerResourceMetricSource.
+message ContainerResourceMetricSource {
+    string name = 1;
+    MetricTarget target = 2;
+    string container = 3;
+}
+
+// See k8s.io.api.autoscaling.v2beta2.ContainerResourceMetricStatus.
+message ContainerResourceMetricStatus {
+    string name = 1;
+    MetricValueStatus current = 2;
+    string container = 3;
+}
+
 // See k8s.io.api.core.v1.ClientIPConfig.
 message ClientIPConfig {
     int32 timeoutSeconds = 1;
@@ -387,12 +401,20 @@ message ExecAction {
     repeated string command = 1;
 }
 
-// See k8s.io.api.autoscaling.v2beta2.CrossVersionObjectReference.
+// See k8s.io.api.autoscaling.v2beta2.ExternalMetricSource.
 message ExternalMetricSource {
-    string metricName = 1;
-    k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector metricSelector = 2;
-    IntOrString targetValue = 3;
-    IntOrString targetAverageValue = 4;
+    string metricName = 1 [deprecated = true];
+    k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector metricSelector = 2 [deprecated = true];
+    IntOrString targetValue = 3 [deprecated = true];
+    IntOrString targetAverageValue = 4 [deprecated = true];
+    MetricIdentifier metric = 5;
+    MetricTarget target = 6;
+}
+
+// See k8s.io.autoscaling.v2beta2.ExternalMetricStatus.
+message ExternalMetricStatus {
+    MetricIdentifier metric = 1;
+    MetricValueStatus current = 2;
 }
 
 // See k8s.io.api.core.v1.HTTPGetAction.
@@ -416,6 +438,27 @@ message HorizontalPodAutoscalerSpec {
     int32 minReplicas = 2;
     int32 maxReplicas = 3;
     repeated MetricSpec metrics = 4;
+    HorizontalPodAutoScalerBehavior behavior = 5;
+}
+
+// See k8s.io.autoscaling.v2beta2.HorizontalPodAutoScalerBehavior.
+message HorizontalPodAutoScalerBehavior {
+    HPAScalingRules scaleUp = 1;
+    HPAScalingRules scaleDown = 2;
+}
+
+// See k8s.io.autoscaling.v2beta2.HPAScalingRules.
+message HPAScalingRules {
+    int32 stabilizationWindowSeconds = 3;
+    string selectPolicy = 1;
+    HPAScalingPolicy policies = 2;
+}
+
+// See k8s.io.autoscaling.v2beta2.HPAScalingPolicy.
+message HPAScalingPolicy {
+    string type = 1;
+    int32 value = 2;
+    int32 periodSeconds = 3;
 }
 
 // See k8s.io.api.core.v1.LocalObjectReference.
@@ -423,13 +466,45 @@ message LocalObjectReference {
     string name = 1;
 }
 
-// See k8s.io.autoscaling.v2beta1.MetricSpec.
+// See k8s.io.autoscaling.v2beta2.MetricIdentifier.
+message MetricIdentifier {
+    optional string name = 1;
+    k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 2;
+}
+
+// See k8s.io.autoscaling.v2beta2.MetricSpec.
 message MetricSpec {
     string type = 1;
     ObjectMetricSource object = 2;
     PodsMetricSource pods = 3;
     ResourceMetricSource resource = 4;
+    ContainerResourceMetricSource containerResource = 7;
     ExternalMetricSource external = 5;
+}
+
+// See k8s.io.autoscaling.v2beta2.MetricStatus.
+message MetricStatus {
+    string type = 1;
+    ObjectMetricStatus object = 2;
+    PodsMetricStatus pods = 3;
+    ResourceMetricStatus resource = 4;
+    ContainerResourceMetricStatus containerResource = 7;
+    ExternalMetricStatus external = 5;
+}
+
+// See k8s.io.autoscaling.v2beta2.MetricTarget.
+message MetricTarget {
+    string type = 1;
+    IntOrString value = 2;
+    IntOrString averageValue = 3;
+    int32 averageUtilization = 4;
+}
+
+// See k8s.io.autoscaling.v2beta2.MetricValueStatus.
+message MetricValueStatus {
+    IntOrString value = 1;
+    IntOrString averageValue = 2;
+    int32 averageUtilization = 3;
 }
 
 // See k8s.io.api.core.v1.NodeAffinity.
@@ -468,13 +543,24 @@ message ObjectMeta {
     string namespace = 6;
 }
 
-// See k8s.io.autoscaling.v2beta1.ObjectMetricSource.
+// See k8s.io.autoscaling.v2beta2.ObjectMetricSource.
 message ObjectMetricSource {
-    CrossVersionObjectReference target = 1;
-    string metricName = 2;
-    IntOrString targetValue = 3;
-    k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 4;
-    IntOrString averageValue = 5;
+    string metricName = 2 [deprecated = true];
+    IntOrString targetValue = 3 [deprecated = true];
+    k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 4 [deprecated = true];
+    IntOrString averageValue = 5 [deprecated = true];
+    // Type changes from CrossVersionObjectReference to ResourceMetricTarget in autoscaling v2beta2/v2 compared with v2beta1
+    // Change it to dynamic type to keep backward compatible
+    google.protobuf.Value target = 1;
+    CrossVersionObjectReference describedObject = 6;
+    MetricIdentifier metric = 8;
+}
+
+// See k8s.io.autoscaling.v2beta2.ObjectMetricStatus.
+message ObjectMetricStatus {
+    MetricIdentifier metric = 1;
+    MetricValueStatus current = 2;
+    CrossVersionObjectReference describedObject = 3;
 }
 
 // See k8s.io.api.core.v1.PodAffinity.
@@ -503,11 +589,20 @@ message PodDisruptionBudgetSpec {
     IntOrString maxUnavailable = 3;
 }
 
-// See k8s.io.api.core.v1.PodsMetricSource.
+// See k8s.io.autoscaling.v2beta2.PodsMetricSource.
 message PodsMetricSource {
-    string metricName = 1;
-    IntOrString targetAverageValue = 2;
-    k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 3;
+    string metricName = 1 [deprecated = true];
+    IntOrString targetAverageValue = 2 [deprecated = true];
+    k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 3 [deprecated = true];
+    // v2beta2/v2 fields
+    MetricIdentifier metric = 4;
+    MetricTarget target = 5;
+}
+
+// See k8s.io.autoscaling.v2beta2.PodsMetricStatus.
+message PodsMetricStatus {
+    MetricIdentifier metric = 1;
+    MetricValueStatus current = 2;
 }
 
 // See k8s.io.api.core.v1.PreferredSchedulingTerm.
@@ -535,11 +630,18 @@ message ResourceFieldSelector {
     IntOrString divisor = 3;
 }
 
-// See k8s.io.api.core.v1.ResourceMetricSource.
+// See k8s.io.autoscaling.v2beta2.ResourceMetricSource.
 message ResourceMetricSource {
     string name = 1;
-    int32 targetAverageUtilization = 2;
-    IntOrString targetAverageValue = 3;
+    int32 targetAverageUtilization = 2 [deprecated = true];
+    IntOrString targetAverageValue = 3 [deprecated = true];
+    MetricTarget target = 4;
+}
+
+// See k8s.io.autoscaling.v2beta2.ResourceMetricStatus.
+message ResourceMetricStatus {
+    string name = 1;
+    MetricValueStatus current = 2;
 }
 
 // See k8s.io.api.core.v1.ResourceRequirements.
