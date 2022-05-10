@@ -430,8 +430,26 @@ type WasmPlugin struct {
 	// contains a docker pull secret which is to be used to authenticate
 	// against the registry when pulling the image.
 	ImagePullSecret string `protobuf:"bytes,5,opt,name=image_pull_secret,json=imagePullSecret,proto3" json:"image_pull_secret,omitempty"`
+	// $hide_from_docs
 	// Public key that will be used to verify signatures of signed OCI images
-	// or Wasm modules. Must be supplied in PEM format.
+	// or Wasm modules.
+	//
+	// At this moment, various ways for signing/verifying are emerging and being proposed.
+	// We can observe two major streams for signing OCI images: Cosign from Sigstore and Notary,
+	// which is used in Docker Content Trust.
+	// In case of Wasm module, multiple approaches are still in discussion.
+	//  * https://github.com/WebAssembly/design/issues/1413
+	//  * https://github.com/wasm-signatures/design (various signing tools are enumerated)
+	//
+	// In addition, for each method for signing&verifying, we may need to consider to provide
+	// additional data or configuration (e.g., key rolling, KMS, root certs, ...) as well.
+	//
+	// To deal with this situation, we need to elaborate more generic way to describe
+	// how to sign and verify the image or wasm binary, and how to specify relevant data,
+	// including this `verification_key`.
+	//
+	// Therefore, this field will not be implemented until the detailed design is established.
+	// For the future use, just keep this field in proto and hide from documentation.
 	VerificationKey string `protobuf:"bytes,6,opt,name=verification_key,json=verificationKey,proto3" json:"verification_key,omitempty"`
 	// The configuration that will be passed on to the plugin.
 	PluginConfig *_struct.Struct `protobuf:"bytes,7,opt,name=plugin_config,json=pluginConfig,proto3" json:"plugin_config,omitempty"`

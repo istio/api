@@ -246,8 +246,26 @@ message WasmPlugin {
   // against the registry when pulling the image.
   string image_pull_secret = 5;
 
+  // $hide_from_docs
   // Public key that will be used to verify signatures of signed OCI images
-  // or Wasm modules. Must be supplied in PEM format.
+  // or Wasm modules.
+  //
+  // At this moment, various ways for signing/verifying are emerging and being proposed. 
+  // We can observe two major streams for signing OCI images: Cosign from Sigstore and Notary, 
+  // which is used in Docker Content Trust.
+  // In case of Wasm module, multiple approaches are still in discussion.
+  //  * https://github.com/WebAssembly/design/issues/1413
+  //  * https://github.com/wasm-signatures/design (various signing tools are enumerated)
+  //
+  // In addition, for each method for signing&verifying, we may need to consider to provide
+  // additional data or configuration (e.g., key rolling, KMS, root certs, ...) as well.
+  // 
+  // To deal with this situation, we need to elaborate more generic way to describe 
+  // how to sign and verify the image or wasm binary, and how to specify relevant data,
+  // including this `verification_key`.
+  //
+  // Therefore, this field will not be implemented until the detailed design is established.
+  // For the future use, just keep this field in proto and hide from documentation.
   string verification_key = 6;
 
   // The configuration that will be passed on to the plugin.
