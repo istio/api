@@ -84,7 +84,7 @@
             "type": "string"
           },
           "verificationKey": {
-            "description": "Public key that will be used to verify signatures of signed OCI images or Wasm modules. Must be supplied in PEM format.",
+            "description": "Public key that will be used to verify signatures of signed OCI images or Wasm modules.",
             "type": "string"
           },
           "pluginConfig": {
