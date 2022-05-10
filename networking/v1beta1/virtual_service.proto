@@ -574,22 +574,29 @@ message HTTPRoute {
   // is matched if any one of the match blocks succeed.
   repeated HTTPMatchRequest match = 1;
 
-  // A HTTP rule can either redirect or forward (default) traffic. The
-  // forwarding target can be one of several versions of a service (see
+  // A HTTP rule can either return a direct_response, redirect or forward (default) traffic.
+  // The forwarding target can be one of several versions of a service (see
   // glossary in beginning of document). Weights associated with the
   // service version determine the proportion of traffic it receives.
   repeated HTTPRouteDestination route = 2;
 
-  // A HTTP rule can either redirect or forward (default) traffic. If
-  // traffic passthrough option is specified in the rule,
+  // A HTTP rule can either return a direct_response, redirect or forward (default) traffic.
+  // If traffic passthrough option is specified in the rule,
   // route/redirect will be ignored. The redirect primitive can be used to
   // send a HTTP 301 redirect to a different URI or Authority.
   HTTPRedirect redirect = 3;
 
+  // A HTTP rule can either return a direct_response, redirect or forward (default) traffic.
+  // Direct Response is used to specify a fixed response that should
+  // be sent to clients.
+  //
+  // It can be set only when `Route` and `Redirect` are empty.
+  HTTPDirectResponse direct_response = 21;
+
   // Delegate is used to specify the particular VirtualService which
   // can be used to define delegate HTTPRoute.
   //
-  // It can be set only when `Route` and `Redirect` are empty, and the route
+  // It can be set only when `Route`, `Redirect` and `Direct Response` are empty, and the route
   // rules of the delegate VirtualService will be merged with that in the
   // current one.
   //
@@ -649,7 +656,7 @@ message HTTPRoute {
   Headers headers = 16;
 
   // $hide_from_docs
-  // Next available field number: 21
+  // Next available field number: 22
 }
 
 
@@ -1434,6 +1441,73 @@ message HTTPRedirect {
   // On a redirect, Specifies the HTTP status code to use in the redirect
   // response. The default response code is MOVED_PERMANENTLY (301).
   uint32 redirect_code = 3;
+}
+
+// HTTPDirectResponse can be used to send a fixed response to clients.
+// For example, the following rule returns a fixed 503 status with a body
+// to requests for /v1/getProductRatings API.
+//
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: VirtualService
+// metadata:
+//   name: ratings-route
+// spec:
+//   hosts:
+//   - ratings.prod.svc.cluster.local
+//   http:
+//   - match:
+//     - uri:
+//         exact: /v1/getProductRatings
+//     directResponse:
+//       status: 503
+//       body:
+//         string: "unknown error"
+//   ...
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: VirtualService
+// metadata:
+//   name: ratings-route
+// spec:
+//   hosts:
+//   - ratings.prod.svc.cluster.local
+//   http:
+//   - match:
+//     - uri:
+//         exact: /v1/getProductRatings
+//     directResponse:
+//       status: 503
+//       body:
+//         string: "unknown error"
+//   ...
+// ```
+// {{</tab>}}
+// {{</tabset>}}
+//
+message HTTPDirectResponse {
+  // Specifies the HTTP response status to be returned.
+  uint32 status = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Specifies the content of the response body. If this setting is omitted,
+  // no body is included in the generated response.
+  HTTPBody body = 2;
+}
+
+message HTTPBody {
+  oneof specifier {
+    // response body as a string
+    string string = 1;
+
+    // response body as base64 encoded bytes.
+    bytes bytes = 2;
+  }
 }
 
 // HTTPRewrite can be used to rewrite specific parts of a HTTP request
