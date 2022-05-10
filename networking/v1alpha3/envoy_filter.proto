@@ -488,6 +488,10 @@ message EnvoyFilter {
 
     // Gateway listener/route/cluster.
     GATEWAY = 3;
+
+    // HTTP Proxy listener/route.
+    SIDECAR_HTTP_PROXY = 4;
+
   };
 
   // One or more properties of the proxy to match on.

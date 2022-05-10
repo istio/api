@@ -2687,6 +2687,7 @@ spec:
                           - SIDECAR_INBOUND
                           - SIDECAR_OUTBOUND
                           - GATEWAY
+                          - SIDECAR_HTTP_PROXY
                           type: string
                         listener:
                           description: Match on envoy listener attributes.

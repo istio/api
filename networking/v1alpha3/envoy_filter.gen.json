@@ -281,7 +281,8 @@
           "ANY",
           "SIDECAR_INBOUND",
           "SIDECAR_OUTBOUND",
-          "GATEWAY"
+          "GATEWAY",
+          "SIDECAR_HTTP_PROXY"
         ]
       },
       "istio.networking.v1alpha3.EnvoyFilter.ProxyMatch": {
