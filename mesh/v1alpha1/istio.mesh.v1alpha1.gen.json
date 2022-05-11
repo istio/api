@@ -250,6 +250,10 @@
           },
           "meshMTLS": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig"
+          },
+          "enableSidecarless": {
+            "description": "Enable Sidecarless Mode",
+            "type": "boolean"
           }
         }
       },

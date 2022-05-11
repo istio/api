@@ -1088,8 +1088,12 @@ message MeshConfig {
   // Configuration of mTLS for traffic between workloads within the mesh.
   TLSConfig mesh_mTLS = 63;
 
+  // Enable Sidecarless Mode
+  // @TODO This will need to be renamed when production name chosen
+  bool enable_sidecarless = 64;
+
   // $hide_from_docs
-  // Next available field number: 64
+  // Next available field number: 65
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
