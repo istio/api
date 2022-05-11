@@ -1088,9 +1088,9 @@ message MeshConfig {
   // Configuration of mTLS for traffic between workloads within the mesh.
   TLSConfig mesh_mTLS = 63;
 
-  // Enable Sidecarless Mode
+  // Enable Ambient Mesh (sidecarless) mode.
   // @TODO This will need to be renamed when production name chosen
-  bool enable_sidecarless = 64;
+  bool enable_ambient_mesh = 64;
 
   // $hide_from_docs
   // Next available field number: 65
