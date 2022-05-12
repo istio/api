@@ -251,9 +251,9 @@
           "meshMTLS": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig"
           },
-          "enableSidecarless": {
-            "description": "Enable Sidecarless Mode",
-            "type": "boolean"
+          "ambientMeshMode": {
+            "description": "Set Ambient Mesh Mode @TODO May need renaming",
+            "type": "string"
           }
         }
       },
