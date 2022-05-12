@@ -1088,9 +1088,22 @@ message MeshConfig {
   // Configuration of mTLS for traffic between workloads within the mesh.
   TLSConfig mesh_mTLS = 63;
 
+  message AmbientMeshConfig {
+    enum AmbientMeshMode {
+      // Sets AmbientMesh to a namespaced configuration. This requires the addition of the
+      // dataplaneMode=ambient label to be applied to the desired namespaces.
+      DEFAULT = 0;
+
+      // Sets AmbientMesh to be applied to all namespaces.
+      ON = 1;
+
+      // Disables AmbientMesh for the traditional sidecar approach.
+      OFF = 2;
+    }
+    AmbientMeshMode mode = 1;
+  }
   // Set Ambient Mesh Mode
-  // @TODO May need renaming
-  string ambient_mesh_mode = 64;
+  AmbientMeshConfig ambient_mesh = 64;
 
   // $hide_from_docs
   // Next available field number: 65
