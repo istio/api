@@ -1286,6 +1286,8 @@ No
 <td><code>mode</code></td>
 <td><code><a href="#MeshConfig-AmbientMeshConfig-AmbientMeshMode">AmbientMeshMode</a></code></td>
 <td>
+<p>Sets the Ambient Mesh mode. The default is namespaced.</p>
+
 </td>
 <td>
 No
@@ -3805,19 +3807,26 @@ For example, <code>/a%2f/b</code> normalizes to <code>a/b</code>.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-AmbientMeshConfig-AmbientMeshMode-NAMESPACE">
-<td><code>NAMESPACE</code></td>
+<tr id="MeshConfig-AmbientMeshConfig-AmbientMeshMode-DEFAULT">
+<td><code>DEFAULT</code></td>
 <td>
+<p>Sets AmbientMesh to a namespaced configuration. This requires the addition of the
+istio.io/dataplane-mode=ambient label to be applied to the desired namespaces.</p>
+
 </td>
 </tr>
 <tr id="MeshConfig-AmbientMeshConfig-AmbientMeshMode-ON">
 <td><code>ON</code></td>
 <td>
+<p>Sets AmbientMesh to be applied to all namespaces.</p>
+
 </td>
 </tr>
 <tr id="MeshConfig-AmbientMeshConfig-AmbientMeshMode-OFF">
 <td><code>OFF</code></td>
 <td>
+<p>Disables AmbientMesh for the traditional sidecar approach.</p>
+
 </td>
 </tr>
 </tbody>

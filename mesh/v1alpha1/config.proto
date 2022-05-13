@@ -1091,7 +1091,7 @@ message MeshConfig {
   message AmbientMeshConfig {
     enum AmbientMeshMode {
       // Sets AmbientMesh to a namespaced configuration. This requires the addition of the
-      // dataplaneMode=ambient label to be applied to the desired namespaces.
+      // istio.io/dataplane-mode=ambient label to be applied to the desired namespaces.
       DEFAULT = 0;
 
       // Sets AmbientMesh to be applied to all namespaces.
@@ -1100,6 +1100,8 @@ message MeshConfig {
       // Disables AmbientMesh for the traditional sidecar approach.
       OFF = 2;
     }
+
+    // Sets the Ambient Mesh mode. The default is namespaced.
     AmbientMeshMode mode = 1;
   }
   // Set Ambient Mesh Mode

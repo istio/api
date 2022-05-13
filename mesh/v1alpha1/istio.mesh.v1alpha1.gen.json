@@ -274,7 +274,7 @@
       "istio.mesh.v1alpha1.MeshConfig.AmbientMeshConfig.AmbientMeshMode": {
         "type": "string",
         "enum": [
-          "NAMESPACE",
+          "DEFAULT",
           "ON",
           "OFF"
         ]
