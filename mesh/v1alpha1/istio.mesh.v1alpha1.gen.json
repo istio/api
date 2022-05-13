@@ -250,6 +250,9 @@
           },
           "meshMTLS": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig"
+          },
+          "ambientMesh": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.AmbientMeshConfig"
           }
         }
       },
@@ -258,6 +261,22 @@
         "enum": [
           "TEXT",
           "JSON"
+        ]
+      },
+      "istio.mesh.v1alpha1.MeshConfig.AmbientMeshConfig": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.AmbientMeshConfig.AmbientMeshMode"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.AmbientMeshConfig.AmbientMeshMode": {
+        "type": "string",
+        "enum": [
+          "DEFAULT",
+          "ON",
+          "OFF"
         ]
       },
       "istio.mesh.v1alpha1.MeshConfig.AuthPolicy": {

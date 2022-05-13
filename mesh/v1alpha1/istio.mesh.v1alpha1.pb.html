@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 57
+number_of_entries: 59
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -657,6 +657,17 @@ No
 No
 </td>
 </tr>
+<tr id="MeshConfig-ambient_mesh">
+<td><code>ambientMesh</code></td>
+<td><code><a href="#MeshConfig-AmbientMeshConfig">AmbientMeshConfig</a></code></td>
+<td>
+<p>Set Ambient Mesh Mode</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1250,6 +1261,32 @@ set to TLS 1.2 (e.g., workloads using mTLS without sidecars), the
 minimum TLS version for clients may also be TLS 1.2.
 In the current Istio implementation, the maximum TLS protocol version
 is TLS 1.3.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-AmbientMeshConfig">MeshConfig.AmbientMeshConfig</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-AmbientMeshConfig-mode">
+<td><code>mode</code></td>
+<td><code><a href="#MeshConfig-AmbientMeshConfig-AmbientMeshMode">AmbientMeshMode</a></code></td>
+<td>
+<p>Sets the Ambient Mesh mode. The default is namespaced.</p>
 
 </td>
 <td>
@@ -3754,6 +3791,41 @@ For example, <code>/a%2f/b</code> normalizes to <code>a/b</code>.</p>
 <td><code>TLSV1_3</code></td>
 <td>
 <p>TLS version 1.3</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-AmbientMeshConfig-AmbientMeshMode">MeshConfig.AmbientMeshConfig.AmbientMeshMode</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-AmbientMeshConfig-AmbientMeshMode-DEFAULT">
+<td><code>DEFAULT</code></td>
+<td>
+<p>Sets AmbientMesh to a namespaced configuration. This requires the addition of the
+istio.io/dataplane-mode=ambient label to be applied to the desired namespaces.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-AmbientMeshConfig-AmbientMeshMode-ON">
+<td><code>ON</code></td>
+<td>
+<p>Sets AmbientMesh to be applied to all namespaces.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-AmbientMeshConfig-AmbientMeshMode-OFF">
+<td><code>OFF</code></td>
+<td>
+<p>Disables AmbientMesh for the traditional sidecar approach.</p>
 
 </td>
 </tr>

@@ -411,9 +411,10 @@ type IstioComponentSetSpec struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Base  *BaseComponentSpec `protobuf:"bytes,29,opt,name=base,proto3" json:"base,omitempty"`
-	Pilot *ComponentSpec     `protobuf:"bytes,30,opt,name=pilot,proto3" json:"pilot,omitempty"`
-	Cni   *ComponentSpec     `protobuf:"bytes,38,opt,name=cni,proto3" json:"cni,omitempty"`
+	Base   *BaseComponentSpec `protobuf:"bytes,29,opt,name=base,proto3" json:"base,omitempty"`
+	Pilot  *ComponentSpec     `protobuf:"bytes,30,opt,name=pilot,proto3" json:"pilot,omitempty"`
+	Cni    *ComponentSpec     `protobuf:"bytes,38,opt,name=cni,proto3" json:"cni,omitempty"`
+	Uproxy *ComponentSpec     `protobuf:"bytes,42,opt,name=uproxy,proto3" json:"uproxy,omitempty"`
 	// Remote cluster using an external control plane.
 	IstiodRemote    *ComponentSpec `protobuf:"bytes,39,opt,name=istiodRemote,proto3" json:"istiodRemote,omitempty"`
 	IngressGateways []*GatewaySpec `protobuf:"bytes,40,rep,name=ingressGateways,proto3" json:"ingressGateways,omitempty"`
@@ -469,6 +470,13 @@ func (x *IstioComponentSetSpec) GetPilot() *ComponentSpec {
 func (x *IstioComponentSetSpec) GetCni() *ComponentSpec {
 	if x != nil {
 		return x.Cni
+	}
+	return nil
+}
+
+func (x *IstioComponentSetSpec) GetUproxy() *ComponentSpec {
+	if x != nil {
+		return x.Uproxy
 	}
 	return nil
 }
@@ -5277,7 +5285,7 @@ var file_operator_v1alpha1_operator_proto_rawDesc = []byte{
 	0x0b, 0x52, 0x45, 0x43, 0x4f, 0x4e, 0x43, 0x49, 0x4c, 0x49, 0x4e, 0x47, 0x10, 0x02, 0x12, 0x0b,
 	0x0a, 0x07, 0x48, 0x45, 0x41, 0x4c, 0x54, 0x48, 0x59, 0x10, 0x03, 0x12, 0x09, 0x0a, 0x05, 0x45,
 	0x52, 0x52, 0x4f, 0x52, 0x10, 0x04, 0x12, 0x13, 0x0a, 0x0f, 0x41, 0x43, 0x54, 0x49, 0x4f, 0x4e,
-	0x5f, 0x52, 0x45, 0x51, 0x55, 0x49, 0x52, 0x45, 0x44, 0x10, 0x05, 0x22, 0xac, 0x04, 0x0a, 0x15,
+	0x5f, 0x52, 0x45, 0x51, 0x55, 0x49, 0x52, 0x45, 0x44, 0x10, 0x05, 0x22, 0xec, 0x04, 0x0a, 0x15,
 	0x49, 0x73, 0x74, 0x69, 0x6f, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x6e, 0x65, 0x6e, 0x74, 0x53, 0x65,
 	0x74, 0x53, 0x70, 0x65, 0x63, 0x12, 0x3e, 0x0a, 0x04, 0x62, 0x61, 0x73, 0x65, 0x18, 0x1d, 0x20,
 	0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x6f, 0x70, 0x65, 0x72,
@@ -5290,7 +5298,11 @@ var file_operator_v1alpha1_operator_proto_rawDesc = []byte{
 	0x6c, 0x6f, 0x74, 0x12, 0x38, 0x0a, 0x03, 0x63, 0x6e, 0x69, 0x18, 0x26, 0x20, 0x01, 0x28, 0x0b,
 	0x32, 0x26, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
 	0x72, 0x2e, 0x76, 0x31, 0x61, 0x6c, 0x70, 0x68, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x6d, 0x70, 0x6f,
-	0x6e, 0x65, 0x6e, 0x74, 0x53, 0x70, 0x65, 0x63, 0x52, 0x03, 0x63, 0x6e, 0x69, 0x12, 0x4a, 0x0a,
+	0x6e, 0x65, 0x6e, 0x74, 0x53, 0x70, 0x65, 0x63, 0x52, 0x03, 0x63, 0x6e, 0x69, 0x12, 0x3e, 0x0a,
+	0x06, 0x75, 0x70, 0x72, 0x6f, 0x78, 0x79, 0x18, 0x2a, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e,
+	0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x2e, 0x76,
+	0x31, 0x61, 0x6c, 0x70, 0x68, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x6e, 0x65, 0x6e,
+	0x74, 0x53, 0x70, 0x65, 0x63, 0x52, 0x06, 0x75, 0x70, 0x72, 0x6f, 0x78, 0x79, 0x12, 0x4a, 0x0a,
 	0x0c, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x64, 0x52, 0x65, 0x6d, 0x6f, 0x74, 0x65, 0x18, 0x27, 0x20,
 	0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x6f, 0x70, 0x65, 0x72,
 	0x61, 0x74, 0x6f, 0x72, 0x2e, 0x76, 0x31, 0x61, 0x6c, 0x70, 0x68, 0x61, 0x31, 0x2e, 0x43, 0x6f,
@@ -6377,145 +6389,146 @@ var file_operator_v1alpha1_operator_proto_depIdxs = []int32{
 	4,   // 8: istio.operator.v1alpha1.IstioComponentSetSpec.base:type_name -> istio.operator.v1alpha1.BaseComponentSpec
 	5,   // 9: istio.operator.v1alpha1.IstioComponentSetSpec.pilot:type_name -> istio.operator.v1alpha1.ComponentSpec
 	5,   // 10: istio.operator.v1alpha1.IstioComponentSetSpec.cni:type_name -> istio.operator.v1alpha1.ComponentSpec
-	5,   // 11: istio.operator.v1alpha1.IstioComponentSetSpec.istiodRemote:type_name -> istio.operator.v1alpha1.ComponentSpec
-	7,   // 12: istio.operator.v1alpha1.IstioComponentSetSpec.ingressGateways:type_name -> istio.operator.v1alpha1.GatewaySpec
-	7,   // 13: istio.operator.v1alpha1.IstioComponentSetSpec.egressGateways:type_name -> istio.operator.v1alpha1.GatewaySpec
-	81,  // 14: istio.operator.v1alpha1.BaseComponentSpec.enabled:type_name -> google.protobuf.BoolValue
-	8,   // 15: istio.operator.v1alpha1.BaseComponentSpec.k8s:type_name -> istio.operator.v1alpha1.KubernetesResourcesSpec
-	81,  // 16: istio.operator.v1alpha1.ComponentSpec.enabled:type_name -> google.protobuf.BoolValue
-	79,  // 17: istio.operator.v1alpha1.ComponentSpec.tag:type_name -> google.protobuf.Value
-	80,  // 18: istio.operator.v1alpha1.ComponentSpec.spec:type_name -> google.protobuf.Struct
-	8,   // 19: istio.operator.v1alpha1.ComponentSpec.k8s:type_name -> istio.operator.v1alpha1.KubernetesResourcesSpec
-	81,  // 20: istio.operator.v1alpha1.ExternalComponentSpec.enabled:type_name -> google.protobuf.BoolValue
-	80,  // 21: istio.operator.v1alpha1.ExternalComponentSpec.spec:type_name -> google.protobuf.Struct
-	82,  // 22: istio.operator.v1alpha1.ExternalComponentSpec.schema:type_name -> google.protobuf.Any
-	8,   // 23: istio.operator.v1alpha1.ExternalComponentSpec.k8s:type_name -> istio.operator.v1alpha1.KubernetesResourcesSpec
-	81,  // 24: istio.operator.v1alpha1.GatewaySpec.enabled:type_name -> google.protobuf.BoolValue
-	71,  // 25: istio.operator.v1alpha1.GatewaySpec.label:type_name -> istio.operator.v1alpha1.GatewaySpec.LabelEntry
-	79,  // 26: istio.operator.v1alpha1.GatewaySpec.tag:type_name -> google.protobuf.Value
-	8,   // 27: istio.operator.v1alpha1.GatewaySpec.k8s:type_name -> istio.operator.v1alpha1.KubernetesResourcesSpec
-	10,  // 28: istio.operator.v1alpha1.KubernetesResourcesSpec.affinity:type_name -> istio.operator.v1alpha1.Affinity
-	17,  // 29: istio.operator.v1alpha1.KubernetesResourcesSpec.env:type_name -> istio.operator.v1alpha1.EnvVar
-	24,  // 30: istio.operator.v1alpha1.KubernetesResourcesSpec.hpaSpec:type_name -> istio.operator.v1alpha1.HorizontalPodAutoscalerSpec
-	72,  // 31: istio.operator.v1alpha1.KubernetesResourcesSpec.nodeSelector:type_name -> istio.operator.v1alpha1.KubernetesResourcesSpec.NodeSelectorEntry
-	45,  // 32: istio.operator.v1alpha1.KubernetesResourcesSpec.podDisruptionBudget:type_name -> istio.operator.v1alpha1.PodDisruptionBudgetSpec
-	73,  // 33: istio.operator.v1alpha1.KubernetesResourcesSpec.podAnnotations:type_name -> istio.operator.v1alpha1.KubernetesResourcesSpec.PodAnnotationsEntry
-	49,  // 34: istio.operator.v1alpha1.KubernetesResourcesSpec.readinessProbe:type_name -> istio.operator.v1alpha1.ReadinessProbe
-	53,  // 35: istio.operator.v1alpha1.KubernetesResourcesSpec.resources:type_name -> istio.operator.v1alpha1.Resources
-	56,  // 36: istio.operator.v1alpha1.KubernetesResourcesSpec.service:type_name -> istio.operator.v1alpha1.ServiceSpec
-	16,  // 37: istio.operator.v1alpha1.KubernetesResourcesSpec.strategy:type_name -> istio.operator.v1alpha1.DeploymentStrategy
-	60,  // 38: istio.operator.v1alpha1.KubernetesResourcesSpec.tolerations:type_name -> istio.operator.v1alpha1.Toleration
-	74,  // 39: istio.operator.v1alpha1.KubernetesResourcesSpec.serviceAnnotations:type_name -> istio.operator.v1alpha1.KubernetesResourcesSpec.ServiceAnnotationsEntry
-	62,  // 40: istio.operator.v1alpha1.KubernetesResourcesSpec.securityContext:type_name -> istio.operator.v1alpha1.PodSecurityContext
-	83,  // 41: istio.operator.v1alpha1.KubernetesResourcesSpec.volumes:type_name -> k8s.io.api.core.v1.Volume
-	84,  // 42: istio.operator.v1alpha1.KubernetesResourcesSpec.volumeMounts:type_name -> k8s.io.api.core.v1.VolumeMount
-	9,   // 43: istio.operator.v1alpha1.KubernetesResourcesSpec.overlays:type_name -> istio.operator.v1alpha1.K8sObjectOverlay
-	75,  // 44: istio.operator.v1alpha1.K8sObjectOverlay.patches:type_name -> istio.operator.v1alpha1.K8sObjectOverlay.PathValue
-	34,  // 45: istio.operator.v1alpha1.Affinity.nodeAffinity:type_name -> istio.operator.v1alpha1.NodeAffinity
-	42,  // 46: istio.operator.v1alpha1.Affinity.podAffinity:type_name -> istio.operator.v1alpha1.PodAffinity
-	43,  // 47: istio.operator.v1alpha1.Affinity.podAntiAffinity:type_name -> istio.operator.v1alpha1.PodAntiAffinity
-	28,  // 48: istio.operator.v1alpha1.ConfigMapKeySelector.localObjectReference:type_name -> istio.operator.v1alpha1.LocalObjectReference
-	32,  // 49: istio.operator.v1alpha1.ContainerResourceMetricSource.target:type_name -> istio.operator.v1alpha1.MetricTarget
-	33,  // 50: istio.operator.v1alpha1.ContainerResourceMetricStatus.current:type_name -> istio.operator.v1alpha1.MetricValueStatus
-	54,  // 51: istio.operator.v1alpha1.DeploymentStrategy.rollingUpdate:type_name -> istio.operator.v1alpha1.RollingUpdateDeployment
-	18,  // 52: istio.operator.v1alpha1.EnvVar.valueFrom:type_name -> istio.operator.v1alpha1.EnvVarSource
-	38,  // 53: istio.operator.v1alpha1.EnvVarSource.fieldRef:type_name -> istio.operator.v1alpha1.ObjectFieldSelector
-	50,  // 54: istio.operator.v1alpha1.EnvVarSource.resourceFieldRef:type_name -> istio.operator.v1alpha1.ResourceFieldSelector
-	11,  // 55: istio.operator.v1alpha1.EnvVarSource.configMapKeyRef:type_name -> istio.operator.v1alpha1.ConfigMapKeySelector
-	55,  // 56: istio.operator.v1alpha1.EnvVarSource.secretKeyRef:type_name -> istio.operator.v1alpha1.SecretKeySelector
-	85,  // 57: istio.operator.v1alpha1.ExternalMetricSource.metricSelector:type_name -> k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector
-	67,  // 58: istio.operator.v1alpha1.ExternalMetricSource.targetValue:type_name -> istio.operator.v1alpha1.IntOrString
-	67,  // 59: istio.operator.v1alpha1.ExternalMetricSource.targetAverageValue:type_name -> istio.operator.v1alpha1.IntOrString
-	29,  // 60: istio.operator.v1alpha1.ExternalMetricSource.metric:type_name -> istio.operator.v1alpha1.MetricIdentifier
-	32,  // 61: istio.operator.v1alpha1.ExternalMetricSource.target:type_name -> istio.operator.v1alpha1.MetricTarget
-	29,  // 62: istio.operator.v1alpha1.ExternalMetricStatus.metric:type_name -> istio.operator.v1alpha1.MetricIdentifier
-	33,  // 63: istio.operator.v1alpha1.ExternalMetricStatus.current:type_name -> istio.operator.v1alpha1.MetricValueStatus
-	67,  // 64: istio.operator.v1alpha1.HTTPGetAction.port:type_name -> istio.operator.v1alpha1.IntOrString
-	23,  // 65: istio.operator.v1alpha1.HTTPGetAction.httpHeaders:type_name -> istio.operator.v1alpha1.HTTPHeader
-	15,  // 66: istio.operator.v1alpha1.HorizontalPodAutoscalerSpec.scaleTargetRef:type_name -> istio.operator.v1alpha1.CrossVersionObjectReference
-	30,  // 67: istio.operator.v1alpha1.HorizontalPodAutoscalerSpec.metrics:type_name -> istio.operator.v1alpha1.MetricSpec
-	25,  // 68: istio.operator.v1alpha1.HorizontalPodAutoscalerSpec.behavior:type_name -> istio.operator.v1alpha1.HorizontalPodAutoScalerBehavior
-	26,  // 69: istio.operator.v1alpha1.HorizontalPodAutoScalerBehavior.scaleUp:type_name -> istio.operator.v1alpha1.HPAScalingRules
-	26,  // 70: istio.operator.v1alpha1.HorizontalPodAutoScalerBehavior.scaleDown:type_name -> istio.operator.v1alpha1.HPAScalingRules
-	27,  // 71: istio.operator.v1alpha1.HPAScalingRules.policies:type_name -> istio.operator.v1alpha1.HPAScalingPolicy
-	85,  // 72: istio.operator.v1alpha1.MetricIdentifier.selector:type_name -> k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector
-	40,  // 73: istio.operator.v1alpha1.MetricSpec.object:type_name -> istio.operator.v1alpha1.ObjectMetricSource
-	46,  // 74: istio.operator.v1alpha1.MetricSpec.pods:type_name -> istio.operator.v1alpha1.PodsMetricSource
-	51,  // 75: istio.operator.v1alpha1.MetricSpec.resource:type_name -> istio.operator.v1alpha1.ResourceMetricSource
-	12,  // 76: istio.operator.v1alpha1.MetricSpec.containerResource:type_name -> istio.operator.v1alpha1.ContainerResourceMetricSource
-	20,  // 77: istio.operator.v1alpha1.MetricSpec.external:type_name -> istio.operator.v1alpha1.ExternalMetricSource
-	41,  // 78: istio.operator.v1alpha1.MetricStatus.object:type_name -> istio.operator.v1alpha1.ObjectMetricStatus
-	47,  // 79: istio.operator.v1alpha1.MetricStatus.pods:type_name -> istio.operator.v1alpha1.PodsMetricStatus
-	52,  // 80: istio.operator.v1alpha1.MetricStatus.resource:type_name -> istio.operator.v1alpha1.ResourceMetricStatus
-	13,  // 81: istio.operator.v1alpha1.MetricStatus.containerResource:type_name -> istio.operator.v1alpha1.ContainerResourceMetricStatus
-	21,  // 82: istio.operator.v1alpha1.MetricStatus.external:type_name -> istio.operator.v1alpha1.ExternalMetricStatus
-	67,  // 83: istio.operator.v1alpha1.MetricTarget.value:type_name -> istio.operator.v1alpha1.IntOrString
-	67,  // 84: istio.operator.v1alpha1.MetricTarget.averageValue:type_name -> istio.operator.v1alpha1.IntOrString
-	67,  // 85: istio.operator.v1alpha1.MetricValueStatus.value:type_name -> istio.operator.v1alpha1.IntOrString
-	67,  // 86: istio.operator.v1alpha1.MetricValueStatus.averageValue:type_name -> istio.operator.v1alpha1.IntOrString
-	35,  // 87: istio.operator.v1alpha1.NodeAffinity.requiredDuringSchedulingIgnoredDuringExecution:type_name -> istio.operator.v1alpha1.NodeSelector
-	48,  // 88: istio.operator.v1alpha1.NodeAffinity.preferredDuringSchedulingIgnoredDuringExecution:type_name -> istio.operator.v1alpha1.PreferredSchedulingTerm
-	36,  // 89: istio.operator.v1alpha1.NodeSelector.nodeSelectorTerms:type_name -> istio.operator.v1alpha1.NodeSelectorTerm
-	37,  // 90: istio.operator.v1alpha1.NodeSelectorTerm.matchExpressions:type_name -> istio.operator.v1alpha1.NodeSelectorRequirement
-	37,  // 91: istio.operator.v1alpha1.NodeSelectorTerm.matchFields:type_name -> istio.operator.v1alpha1.NodeSelectorRequirement
-	67,  // 92: istio.operator.v1alpha1.ObjectMetricSource.targetValue:type_name -> istio.operator.v1alpha1.IntOrString
-	85,  // 93: istio.operator.v1alpha1.ObjectMetricSource.selector:type_name -> k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector
-	67,  // 94: istio.operator.v1alpha1.ObjectMetricSource.averageValue:type_name -> istio.operator.v1alpha1.IntOrString
-	79,  // 95: istio.operator.v1alpha1.ObjectMetricSource.target:type_name -> google.protobuf.Value
-	15,  // 96: istio.operator.v1alpha1.ObjectMetricSource.describedObject:type_name -> istio.operator.v1alpha1.CrossVersionObjectReference
-	29,  // 97: istio.operator.v1alpha1.ObjectMetricSource.metric:type_name -> istio.operator.v1alpha1.MetricIdentifier
-	29,  // 98: istio.operator.v1alpha1.ObjectMetricStatus.metric:type_name -> istio.operator.v1alpha1.MetricIdentifier
-	33,  // 99: istio.operator.v1alpha1.ObjectMetricStatus.current:type_name -> istio.operator.v1alpha1.MetricValueStatus
-	15,  // 100: istio.operator.v1alpha1.ObjectMetricStatus.describedObject:type_name -> istio.operator.v1alpha1.CrossVersionObjectReference
-	44,  // 101: istio.operator.v1alpha1.PodAffinity.requiredDuringSchedulingIgnoredDuringExecution:type_name -> istio.operator.v1alpha1.PodAffinityTerm
-	61,  // 102: istio.operator.v1alpha1.PodAffinity.preferredDuringSchedulingIgnoredDuringExecution:type_name -> istio.operator.v1alpha1.WeightedPodAffinityTerm
-	44,  // 103: istio.operator.v1alpha1.PodAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution:type_name -> istio.operator.v1alpha1.PodAffinityTerm
-	61,  // 104: istio.operator.v1alpha1.PodAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution:type_name -> istio.operator.v1alpha1.WeightedPodAffinityTerm
-	85,  // 105: istio.operator.v1alpha1.PodAffinityTerm.labelSelector:type_name -> k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector
-	67,  // 106: istio.operator.v1alpha1.PodDisruptionBudgetSpec.minAvailable:type_name -> istio.operator.v1alpha1.IntOrString
-	85,  // 107: istio.operator.v1alpha1.PodDisruptionBudgetSpec.selector:type_name -> k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector
-	67,  // 108: istio.operator.v1alpha1.PodDisruptionBudgetSpec.maxUnavailable:type_name -> istio.operator.v1alpha1.IntOrString
-	67,  // 109: istio.operator.v1alpha1.PodsMetricSource.targetAverageValue:type_name -> istio.operator.v1alpha1.IntOrString
-	85,  // 110: istio.operator.v1alpha1.PodsMetricSource.selector:type_name -> k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector
-	29,  // 111: istio.operator.v1alpha1.PodsMetricSource.metric:type_name -> istio.operator.v1alpha1.MetricIdentifier
-	32,  // 112: istio.operator.v1alpha1.PodsMetricSource.target:type_name -> istio.operator.v1alpha1.MetricTarget
-	29,  // 113: istio.operator.v1alpha1.PodsMetricStatus.metric:type_name -> istio.operator.v1alpha1.MetricIdentifier
-	33,  // 114: istio.operator.v1alpha1.PodsMetricStatus.current:type_name -> istio.operator.v1alpha1.MetricValueStatus
-	36,  // 115: istio.operator.v1alpha1.PreferredSchedulingTerm.preference:type_name -> istio.operator.v1alpha1.NodeSelectorTerm
-	19,  // 116: istio.operator.v1alpha1.ReadinessProbe.exec:type_name -> istio.operator.v1alpha1.ExecAction
-	22,  // 117: istio.operator.v1alpha1.ReadinessProbe.httpGet:type_name -> istio.operator.v1alpha1.HTTPGetAction
-	59,  // 118: istio.operator.v1alpha1.ReadinessProbe.tcpSocket:type_name -> istio.operator.v1alpha1.TCPSocketAction
-	67,  // 119: istio.operator.v1alpha1.ResourceFieldSelector.divisor:type_name -> istio.operator.v1alpha1.IntOrString
-	67,  // 120: istio.operator.v1alpha1.ResourceMetricSource.targetAverageValue:type_name -> istio.operator.v1alpha1.IntOrString
-	32,  // 121: istio.operator.v1alpha1.ResourceMetricSource.target:type_name -> istio.operator.v1alpha1.MetricTarget
-	33,  // 122: istio.operator.v1alpha1.ResourceMetricStatus.current:type_name -> istio.operator.v1alpha1.MetricValueStatus
-	76,  // 123: istio.operator.v1alpha1.Resources.limits:type_name -> istio.operator.v1alpha1.Resources.LimitsEntry
-	77,  // 124: istio.operator.v1alpha1.Resources.requests:type_name -> istio.operator.v1alpha1.Resources.RequestsEntry
-	67,  // 125: istio.operator.v1alpha1.RollingUpdateDeployment.maxUnavailable:type_name -> istio.operator.v1alpha1.IntOrString
-	67,  // 126: istio.operator.v1alpha1.RollingUpdateDeployment.maxSurge:type_name -> istio.operator.v1alpha1.IntOrString
-	28,  // 127: istio.operator.v1alpha1.SecretKeySelector.localObjectReference:type_name -> istio.operator.v1alpha1.LocalObjectReference
-	57,  // 128: istio.operator.v1alpha1.ServiceSpec.ports:type_name -> istio.operator.v1alpha1.ServicePort
-	78,  // 129: istio.operator.v1alpha1.ServiceSpec.selector:type_name -> istio.operator.v1alpha1.ServiceSpec.SelectorEntry
-	58,  // 130: istio.operator.v1alpha1.ServiceSpec.sessionAffinityConfig:type_name -> istio.operator.v1alpha1.SessionAffinityConfig
-	67,  // 131: istio.operator.v1alpha1.ServicePort.targetPort:type_name -> istio.operator.v1alpha1.IntOrString
-	14,  // 132: istio.operator.v1alpha1.SessionAffinityConfig.clientIP:type_name -> istio.operator.v1alpha1.ClientIPConfig
-	67,  // 133: istio.operator.v1alpha1.TCPSocketAction.port:type_name -> istio.operator.v1alpha1.IntOrString
-	44,  // 134: istio.operator.v1alpha1.WeightedPodAffinityTerm.podAffinityTerm:type_name -> istio.operator.v1alpha1.PodAffinityTerm
-	63,  // 135: istio.operator.v1alpha1.PodSecurityContext.seLinuxOptions:type_name -> istio.operator.v1alpha1.SELinuxOptions
-	64,  // 136: istio.operator.v1alpha1.PodSecurityContext.sysctls:type_name -> istio.operator.v1alpha1.Sysctl
-	65,  // 137: istio.operator.v1alpha1.PodSecurityContext.windowsOptions:type_name -> istio.operator.v1alpha1.WindowsSecurityContextOptions
-	66,  // 138: istio.operator.v1alpha1.PodSecurityContext.seccompProfile:type_name -> istio.operator.v1alpha1.SeccompProfile
-	86,  // 139: istio.operator.v1alpha1.IntOrString.intVal:type_name -> google.protobuf.Int32Value
-	87,  // 140: istio.operator.v1alpha1.IntOrString.strVal:type_name -> google.protobuf.StringValue
-	6,   // 141: istio.operator.v1alpha1.IstioOperatorSpec.AddonComponentsEntry.value:type_name -> istio.operator.v1alpha1.ExternalComponentSpec
-	0,   // 142: istio.operator.v1alpha1.InstallStatus.VersionStatus.status:type_name -> istio.operator.v1alpha1.InstallStatus.Status
-	69,  // 143: istio.operator.v1alpha1.InstallStatus.ComponentStatusEntry.value:type_name -> istio.operator.v1alpha1.InstallStatus.VersionStatus
-	79,  // 144: istio.operator.v1alpha1.K8sObjectOverlay.PathValue.value:type_name -> google.protobuf.Value
-	145, // [145:145] is the sub-list for method output_type
-	145, // [145:145] is the sub-list for method input_type
-	145, // [145:145] is the sub-list for extension type_name
-	145, // [145:145] is the sub-list for extension extendee
-	0,   // [0:145] is the sub-list for field type_name
+	5,   // 11: istio.operator.v1alpha1.IstioComponentSetSpec.uproxy:type_name -> istio.operator.v1alpha1.ComponentSpec
+	5,   // 12: istio.operator.v1alpha1.IstioComponentSetSpec.istiodRemote:type_name -> istio.operator.v1alpha1.ComponentSpec
+	7,   // 13: istio.operator.v1alpha1.IstioComponentSetSpec.ingressGateways:type_name -> istio.operator.v1alpha1.GatewaySpec
+	7,   // 14: istio.operator.v1alpha1.IstioComponentSetSpec.egressGateways:type_name -> istio.operator.v1alpha1.GatewaySpec
+	81,  // 15: istio.operator.v1alpha1.BaseComponentSpec.enabled:type_name -> google.protobuf.BoolValue
+	8,   // 16: istio.operator.v1alpha1.BaseComponentSpec.k8s:type_name -> istio.operator.v1alpha1.KubernetesResourcesSpec
+	81,  // 17: istio.operator.v1alpha1.ComponentSpec.enabled:type_name -> google.protobuf.BoolValue
+	79,  // 18: istio.operator.v1alpha1.ComponentSpec.tag:type_name -> google.protobuf.Value
+	80,  // 19: istio.operator.v1alpha1.ComponentSpec.spec:type_name -> google.protobuf.Struct
+	8,   // 20: istio.operator.v1alpha1.ComponentSpec.k8s:type_name -> istio.operator.v1alpha1.KubernetesResourcesSpec
+	81,  // 21: istio.operator.v1alpha1.ExternalComponentSpec.enabled:type_name -> google.protobuf.BoolValue
+	80,  // 22: istio.operator.v1alpha1.ExternalComponentSpec.spec:type_name -> google.protobuf.Struct
+	82,  // 23: istio.operator.v1alpha1.ExternalComponentSpec.schema:type_name -> google.protobuf.Any
+	8,   // 24: istio.operator.v1alpha1.ExternalComponentSpec.k8s:type_name -> istio.operator.v1alpha1.KubernetesResourcesSpec
+	81,  // 25: istio.operator.v1alpha1.GatewaySpec.enabled:type_name -> google.protobuf.BoolValue
+	71,  // 26: istio.operator.v1alpha1.GatewaySpec.label:type_name -> istio.operator.v1alpha1.GatewaySpec.LabelEntry
+	79,  // 27: istio.operator.v1alpha1.GatewaySpec.tag:type_name -> google.protobuf.Value
+	8,   // 28: istio.operator.v1alpha1.GatewaySpec.k8s:type_name -> istio.operator.v1alpha1.KubernetesResourcesSpec
+	10,  // 29: istio.operator.v1alpha1.KubernetesResourcesSpec.affinity:type_name -> istio.operator.v1alpha1.Affinity
+	17,  // 30: istio.operator.v1alpha1.KubernetesResourcesSpec.env:type_name -> istio.operator.v1alpha1.EnvVar
+	24,  // 31: istio.operator.v1alpha1.KubernetesResourcesSpec.hpaSpec:type_name -> istio.operator.v1alpha1.HorizontalPodAutoscalerSpec
+	72,  // 32: istio.operator.v1alpha1.KubernetesResourcesSpec.nodeSelector:type_name -> istio.operator.v1alpha1.KubernetesResourcesSpec.NodeSelectorEntry
+	45,  // 33: istio.operator.v1alpha1.KubernetesResourcesSpec.podDisruptionBudget:type_name -> istio.operator.v1alpha1.PodDisruptionBudgetSpec
+	73,  // 34: istio.operator.v1alpha1.KubernetesResourcesSpec.podAnnotations:type_name -> istio.operator.v1alpha1.KubernetesResourcesSpec.PodAnnotationsEntry
+	49,  // 35: istio.operator.v1alpha1.KubernetesResourcesSpec.readinessProbe:type_name -> istio.operator.v1alpha1.ReadinessProbe
+	53,  // 36: istio.operator.v1alpha1.KubernetesResourcesSpec.resources:type_name -> istio.operator.v1alpha1.Resources
+	56,  // 37: istio.operator.v1alpha1.KubernetesResourcesSpec.service:type_name -> istio.operator.v1alpha1.ServiceSpec
+	16,  // 38: istio.operator.v1alpha1.KubernetesResourcesSpec.strategy:type_name -> istio.operator.v1alpha1.DeploymentStrategy
+	60,  // 39: istio.operator.v1alpha1.KubernetesResourcesSpec.tolerations:type_name -> istio.operator.v1alpha1.Toleration
+	74,  // 40: istio.operator.v1alpha1.KubernetesResourcesSpec.serviceAnnotations:type_name -> istio.operator.v1alpha1.KubernetesResourcesSpec.ServiceAnnotationsEntry
+	62,  // 41: istio.operator.v1alpha1.KubernetesResourcesSpec.securityContext:type_name -> istio.operator.v1alpha1.PodSecurityContext
+	83,  // 42: istio.operator.v1alpha1.KubernetesResourcesSpec.volumes:type_name -> k8s.io.api.core.v1.Volume
+	84,  // 43: istio.operator.v1alpha1.KubernetesResourcesSpec.volumeMounts:type_name -> k8s.io.api.core.v1.VolumeMount
+	9,   // 44: istio.operator.v1alpha1.KubernetesResourcesSpec.overlays:type_name -> istio.operator.v1alpha1.K8sObjectOverlay
+	75,  // 45: istio.operator.v1alpha1.K8sObjectOverlay.patches:type_name -> istio.operator.v1alpha1.K8sObjectOverlay.PathValue
+	34,  // 46: istio.operator.v1alpha1.Affinity.nodeAffinity:type_name -> istio.operator.v1alpha1.NodeAffinity
+	42,  // 47: istio.operator.v1alpha1.Affinity.podAffinity:type_name -> istio.operator.v1alpha1.PodAffinity
+	43,  // 48: istio.operator.v1alpha1.Affinity.podAntiAffinity:type_name -> istio.operator.v1alpha1.PodAntiAffinity
+	28,  // 49: istio.operator.v1alpha1.ConfigMapKeySelector.localObjectReference:type_name -> istio.operator.v1alpha1.LocalObjectReference
+	32,  // 50: istio.operator.v1alpha1.ContainerResourceMetricSource.target:type_name -> istio.operator.v1alpha1.MetricTarget
+	33,  // 51: istio.operator.v1alpha1.ContainerResourceMetricStatus.current:type_name -> istio.operator.v1alpha1.MetricValueStatus
+	54,  // 52: istio.operator.v1alpha1.DeploymentStrategy.rollingUpdate:type_name -> istio.operator.v1alpha1.RollingUpdateDeployment
+	18,  // 53: istio.operator.v1alpha1.EnvVar.valueFrom:type_name -> istio.operator.v1alpha1.EnvVarSource
+	38,  // 54: istio.operator.v1alpha1.EnvVarSource.fieldRef:type_name -> istio.operator.v1alpha1.ObjectFieldSelector
+	50,  // 55: istio.operator.v1alpha1.EnvVarSource.resourceFieldRef:type_name -> istio.operator.v1alpha1.ResourceFieldSelector
+	11,  // 56: istio.operator.v1alpha1.EnvVarSource.configMapKeyRef:type_name -> istio.operator.v1alpha1.ConfigMapKeySelector
+	55,  // 57: istio.operator.v1alpha1.EnvVarSource.secretKeyRef:type_name -> istio.operator.v1alpha1.SecretKeySelector
+	85,  // 58: istio.operator.v1alpha1.ExternalMetricSource.metricSelector:type_name -> k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector
+	67,  // 59: istio.operator.v1alpha1.ExternalMetricSource.targetValue:type_name -> istio.operator.v1alpha1.IntOrString
+	67,  // 60: istio.operator.v1alpha1.ExternalMetricSource.targetAverageValue:type_name -> istio.operator.v1alpha1.IntOrString
+	29,  // 61: istio.operator.v1alpha1.ExternalMetricSource.metric:type_name -> istio.operator.v1alpha1.MetricIdentifier
+	32,  // 62: istio.operator.v1alpha1.ExternalMetricSource.target:type_name -> istio.operator.v1alpha1.MetricTarget
+	29,  // 63: istio.operator.v1alpha1.ExternalMetricStatus.metric:type_name -> istio.operator.v1alpha1.MetricIdentifier
+	33,  // 64: istio.operator.v1alpha1.ExternalMetricStatus.current:type_name -> istio.operator.v1alpha1.MetricValueStatus
+	67,  // 65: istio.operator.v1alpha1.HTTPGetAction.port:type_name -> istio.operator.v1alpha1.IntOrString
+	23,  // 66: istio.operator.v1alpha1.HTTPGetAction.httpHeaders:type_name -> istio.operator.v1alpha1.HTTPHeader
+	15,  // 67: istio.operator.v1alpha1.HorizontalPodAutoscalerSpec.scaleTargetRef:type_name -> istio.operator.v1alpha1.CrossVersionObjectReference
+	30,  // 68: istio.operator.v1alpha1.HorizontalPodAutoscalerSpec.metrics:type_name -> istio.operator.v1alpha1.MetricSpec
+	25,  // 69: istio.operator.v1alpha1.HorizontalPodAutoscalerSpec.behavior:type_name -> istio.operator.v1alpha1.HorizontalPodAutoScalerBehavior
+	26,  // 70: istio.operator.v1alpha1.HorizontalPodAutoScalerBehavior.scaleUp:type_name -> istio.operator.v1alpha1.HPAScalingRules
+	26,  // 71: istio.operator.v1alpha1.HorizontalPodAutoScalerBehavior.scaleDown:type_name -> istio.operator.v1alpha1.HPAScalingRules
+	27,  // 72: istio.operator.v1alpha1.HPAScalingRules.policies:type_name -> istio.operator.v1alpha1.HPAScalingPolicy
+	85,  // 73: istio.operator.v1alpha1.MetricIdentifier.selector:type_name -> k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector
+	40,  // 74: istio.operator.v1alpha1.MetricSpec.object:type_name -> istio.operator.v1alpha1.ObjectMetricSource
+	46,  // 75: istio.operator.v1alpha1.MetricSpec.pods:type_name -> istio.operator.v1alpha1.PodsMetricSource
+	51,  // 76: istio.operator.v1alpha1.MetricSpec.resource:type_name -> istio.operator.v1alpha1.ResourceMetricSource
+	12,  // 77: istio.operator.v1alpha1.MetricSpec.containerResource:type_name -> istio.operator.v1alpha1.ContainerResourceMetricSource
+	20,  // 78: istio.operator.v1alpha1.MetricSpec.external:type_name -> istio.operator.v1alpha1.ExternalMetricSource
+	41,  // 79: istio.operator.v1alpha1.MetricStatus.object:type_name -> istio.operator.v1alpha1.ObjectMetricStatus
+	47,  // 80: istio.operator.v1alpha1.MetricStatus.pods:type_name -> istio.operator.v1alpha1.PodsMetricStatus
+	52,  // 81: istio.operator.v1alpha1.MetricStatus.resource:type_name -> istio.operator.v1alpha1.ResourceMetricStatus
+	13,  // 82: istio.operator.v1alpha1.MetricStatus.containerResource:type_name -> istio.operator.v1alpha1.ContainerResourceMetricStatus
+	21,  // 83: istio.operator.v1alpha1.MetricStatus.external:type_name -> istio.operator.v1alpha1.ExternalMetricStatus
+	67,  // 84: istio.operator.v1alpha1.MetricTarget.value:type_name -> istio.operator.v1alpha1.IntOrString
+	67,  // 85: istio.operator.v1alpha1.MetricTarget.averageValue:type_name -> istio.operator.v1alpha1.IntOrString
+	67,  // 86: istio.operator.v1alpha1.MetricValueStatus.value:type_name -> istio.operator.v1alpha1.IntOrString
+	67,  // 87: istio.operator.v1alpha1.MetricValueStatus.averageValue:type_name -> istio.operator.v1alpha1.IntOrString
+	35,  // 88: istio.operator.v1alpha1.NodeAffinity.requiredDuringSchedulingIgnoredDuringExecution:type_name -> istio.operator.v1alpha1.NodeSelector
+	48,  // 89: istio.operator.v1alpha1.NodeAffinity.preferredDuringSchedulingIgnoredDuringExecution:type_name -> istio.operator.v1alpha1.PreferredSchedulingTerm
+	36,  // 90: istio.operator.v1alpha1.NodeSelector.nodeSelectorTerms:type_name -> istio.operator.v1alpha1.NodeSelectorTerm
+	37,  // 91: istio.operator.v1alpha1.NodeSelectorTerm.matchExpressions:type_name -> istio.operator.v1alpha1.NodeSelectorRequirement
+	37,  // 92: istio.operator.v1alpha1.NodeSelectorTerm.matchFields:type_name -> istio.operator.v1alpha1.NodeSelectorRequirement
+	67,  // 93: istio.operator.v1alpha1.ObjectMetricSource.targetValue:type_name -> istio.operator.v1alpha1.IntOrString
+	85,  // 94: istio.operator.v1alpha1.ObjectMetricSource.selector:type_name -> k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector
+	67,  // 95: istio.operator.v1alpha1.ObjectMetricSource.averageValue:type_name -> istio.operator.v1alpha1.IntOrString
+	79,  // 96: istio.operator.v1alpha1.ObjectMetricSource.target:type_name -> google.protobuf.Value
+	15,  // 97: istio.operator.v1alpha1.ObjectMetricSource.describedObject:type_name -> istio.operator.v1alpha1.CrossVersionObjectReference
+	29,  // 98: istio.operator.v1alpha1.ObjectMetricSource.metric:type_name -> istio.operator.v1alpha1.MetricIdentifier
+	29,  // 99: istio.operator.v1alpha1.ObjectMetricStatus.metric:type_name -> istio.operator.v1alpha1.MetricIdentifier
+	33,  // 100: istio.operator.v1alpha1.ObjectMetricStatus.current:type_name -> istio.operator.v1alpha1.MetricValueStatus
+	15,  // 101: istio.operator.v1alpha1.ObjectMetricStatus.describedObject:type_name -> istio.operator.v1alpha1.CrossVersionObjectReference
+	44,  // 102: istio.operator.v1alpha1.PodAffinity.requiredDuringSchedulingIgnoredDuringExecution:type_name -> istio.operator.v1alpha1.PodAffinityTerm
+	61,  // 103: istio.operator.v1alpha1.PodAffinity.preferredDuringSchedulingIgnoredDuringExecution:type_name -> istio.operator.v1alpha1.WeightedPodAffinityTerm
+	44,  // 104: istio.operator.v1alpha1.PodAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution:type_name -> istio.operator.v1alpha1.PodAffinityTerm
+	61,  // 105: istio.operator.v1alpha1.PodAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution:type_name -> istio.operator.v1alpha1.WeightedPodAffinityTerm
+	85,  // 106: istio.operator.v1alpha1.PodAffinityTerm.labelSelector:type_name -> k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector
+	67,  // 107: istio.operator.v1alpha1.PodDisruptionBudgetSpec.minAvailable:type_name -> istio.operator.v1alpha1.IntOrString
+	85,  // 108: istio.operator.v1alpha1.PodDisruptionBudgetSpec.selector:type_name -> k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector
+	67,  // 109: istio.operator.v1alpha1.PodDisruptionBudgetSpec.maxUnavailable:type_name -> istio.operator.v1alpha1.IntOrString
+	67,  // 110: istio.operator.v1alpha1.PodsMetricSource.targetAverageValue:type_name -> istio.operator.v1alpha1.IntOrString
+	85,  // 111: istio.operator.v1alpha1.PodsMetricSource.selector:type_name -> k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector
+	29,  // 112: istio.operator.v1alpha1.PodsMetricSource.metric:type_name -> istio.operator.v1alpha1.MetricIdentifier
+	32,  // 113: istio.operator.v1alpha1.PodsMetricSource.target:type_name -> istio.operator.v1alpha1.MetricTarget
+	29,  // 114: istio.operator.v1alpha1.PodsMetricStatus.metric:type_name -> istio.operator.v1alpha1.MetricIdentifier
+	33,  // 115: istio.operator.v1alpha1.PodsMetricStatus.current:type_name -> istio.operator.v1alpha1.MetricValueStatus
+	36,  // 116: istio.operator.v1alpha1.PreferredSchedulingTerm.preference:type_name -> istio.operator.v1alpha1.NodeSelectorTerm
+	19,  // 117: istio.operator.v1alpha1.ReadinessProbe.exec:type_name -> istio.operator.v1alpha1.ExecAction
+	22,  // 118: istio.operator.v1alpha1.ReadinessProbe.httpGet:type_name -> istio.operator.v1alpha1.HTTPGetAction
+	59,  // 119: istio.operator.v1alpha1.ReadinessProbe.tcpSocket:type_name -> istio.operator.v1alpha1.TCPSocketAction
+	67,  // 120: istio.operator.v1alpha1.ResourceFieldSelector.divisor:type_name -> istio.operator.v1alpha1.IntOrString
+	67,  // 121: istio.operator.v1alpha1.ResourceMetricSource.targetAverageValue:type_name -> istio.operator.v1alpha1.IntOrString
+	32,  // 122: istio.operator.v1alpha1.ResourceMetricSource.target:type_name -> istio.operator.v1alpha1.MetricTarget
+	33,  // 123: istio.operator.v1alpha1.ResourceMetricStatus.current:type_name -> istio.operator.v1alpha1.MetricValueStatus
+	76,  // 124: istio.operator.v1alpha1.Resources.limits:type_name -> istio.operator.v1alpha1.Resources.LimitsEntry
+	77,  // 125: istio.operator.v1alpha1.Resources.requests:type_name -> istio.operator.v1alpha1.Resources.RequestsEntry
+	67,  // 126: istio.operator.v1alpha1.RollingUpdateDeployment.maxUnavailable:type_name -> istio.operator.v1alpha1.IntOrString
+	67,  // 127: istio.operator.v1alpha1.RollingUpdateDeployment.maxSurge:type_name -> istio.operator.v1alpha1.IntOrString
+	28,  // 128: istio.operator.v1alpha1.SecretKeySelector.localObjectReference:type_name -> istio.operator.v1alpha1.LocalObjectReference
+	57,  // 129: istio.operator.v1alpha1.ServiceSpec.ports:type_name -> istio.operator.v1alpha1.ServicePort
+	78,  // 130: istio.operator.v1alpha1.ServiceSpec.selector:type_name -> istio.operator.v1alpha1.ServiceSpec.SelectorEntry
+	58,  // 131: istio.operator.v1alpha1.ServiceSpec.sessionAffinityConfig:type_name -> istio.operator.v1alpha1.SessionAffinityConfig
+	67,  // 132: istio.operator.v1alpha1.ServicePort.targetPort:type_name -> istio.operator.v1alpha1.IntOrString
+	14,  // 133: istio.operator.v1alpha1.SessionAffinityConfig.clientIP:type_name -> istio.operator.v1alpha1.ClientIPConfig
+	67,  // 134: istio.operator.v1alpha1.TCPSocketAction.port:type_name -> istio.operator.v1alpha1.IntOrString
+	44,  // 135: istio.operator.v1alpha1.WeightedPodAffinityTerm.podAffinityTerm:type_name -> istio.operator.v1alpha1.PodAffinityTerm
+	63,  // 136: istio.operator.v1alpha1.PodSecurityContext.seLinuxOptions:type_name -> istio.operator.v1alpha1.SELinuxOptions
+	64,  // 137: istio.operator.v1alpha1.PodSecurityContext.sysctls:type_name -> istio.operator.v1alpha1.Sysctl
+	65,  // 138: istio.operator.v1alpha1.PodSecurityContext.windowsOptions:type_name -> istio.operator.v1alpha1.WindowsSecurityContextOptions
+	66,  // 139: istio.operator.v1alpha1.PodSecurityContext.seccompProfile:type_name -> istio.operator.v1alpha1.SeccompProfile
+	86,  // 140: istio.operator.v1alpha1.IntOrString.intVal:type_name -> google.protobuf.Int32Value
+	87,  // 141: istio.operator.v1alpha1.IntOrString.strVal:type_name -> google.protobuf.StringValue
+	6,   // 142: istio.operator.v1alpha1.IstioOperatorSpec.AddonComponentsEntry.value:type_name -> istio.operator.v1alpha1.ExternalComponentSpec
+	0,   // 143: istio.operator.v1alpha1.InstallStatus.VersionStatus.status:type_name -> istio.operator.v1alpha1.InstallStatus.Status
+	69,  // 144: istio.operator.v1alpha1.InstallStatus.ComponentStatusEntry.value:type_name -> istio.operator.v1alpha1.InstallStatus.VersionStatus
+	79,  // 145: istio.operator.v1alpha1.K8sObjectOverlay.PathValue.value:type_name -> google.protobuf.Value
+	146, // [146:146] is the sub-list for method output_type
+	146, // [146:146] is the sub-list for method input_type
+	146, // [146:146] is the sub-list for extension type_name
+	146, // [146:146] is the sub-list for extension extendee
+	0,   // [0:146] is the sub-list for field type_name
 }
 
 func init() { file_operator_v1alpha1_operator_proto_init() }

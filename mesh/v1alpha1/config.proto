@@ -1088,8 +1088,27 @@ message MeshConfig {
   // Configuration of mTLS for traffic between workloads within the mesh.
   TLSConfig mesh_mTLS = 63;
 
+  message AmbientMeshConfig {
+    enum AmbientMeshMode {
+      // Sets AmbientMesh to a namespaced configuration. This requires the addition of the
+      // istio.io/dataplane-mode=ambient label to be applied to the desired namespaces.
+      DEFAULT = 0;
+
+      // Sets AmbientMesh to be applied to all namespaces.
+      ON = 1;
+
+      // Disables AmbientMesh for the traditional sidecar approach.
+      OFF = 2;
+    }
+
+    // Sets the Ambient Mesh mode. The default is namespaced.
+    AmbientMeshMode mode = 1;
+  }
+  // Set Ambient Mesh Mode
+  AmbientMeshConfig ambient_mesh = 64;
+
   // $hide_from_docs
-  // Next available field number: 64
+  // Next available field number: 65
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
