@@ -49,7 +49,7 @@
 // spec:
 //   concurrency: 0
 //   image:
-//     type: distroless
+//     imageType: distroless
 // ```
 //
 // For namespace level configuration, put the resource in the desired namespace without a workload selector:
@@ -78,7 +78,7 @@
 //       app: ratings
 //   concurrency: 0
 //   image:
-//     type: debug
+//     imageType: debug
 // ```
 //
 // If a `ProxyConfig` CR is defined that matches a workload it will merge with its `proxy.istio.io/config` annotation if present,
