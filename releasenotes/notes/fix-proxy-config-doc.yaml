@@ -1,0 +1,8 @@
+apiVersion: release-notes/v2
+kind: bug-fix
+area: documentation
+issue: []
+
+releaseNotes:
+- |
+    **Fixed** fix istio proxy-config reference yaml error and formatting the description of `imageType`.
