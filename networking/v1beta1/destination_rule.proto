@@ -296,8 +296,8 @@ message TrafficPolicy {
   message TunnelSettings {
     // Specifies which protocol to use for tunneling the downstream connection.
     // Supported protocols are:
-    //   connect - uses HTTP CONNECT;
-    //   post - uses HTTP POST.
+    //   CONNECT - uses HTTP CONNECT;
+    //   POST - uses HTTP POST.
     // HTTP version for upstream requests is determined by the service protocol defined for the proxy.
     string protocol = 1 [(google.api.field_behavior) = REQUIRED];
 

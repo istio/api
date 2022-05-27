@@ -1809,8 +1809,8 @@ type TrafficPolicy_TunnelSettings struct {
 
 	// Specifies which protocol to use for tunneling the downstream connection.
 	// Supported protocols are:
-	//   connect - uses HTTP CONNECT;
-	//   post - uses HTTP POST.
+	//   CONNECT - uses HTTP CONNECT;
+	//   POST - uses HTTP POST.
 	// HTTP version for upstream requests is determined by the service protocol defined for the proxy.
 	Protocol string `protobuf:"bytes,1,opt,name=protocol,proto3" json:"protocol,omitempty"`
 	// Specifies a host to which the downstream connection is tunneled.
