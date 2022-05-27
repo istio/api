@@ -250,6 +250,13 @@
           },
           "meshMTLS": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig"
+          },
+          "partitionPolicy": {
+            "description": "Policy for generating partitions of workloads within the mesh. If no policy is provided for a given workload, ingress and egress traffic from anywhere in the mesh is allowed.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.PartitionPolicy"
+            }
           }
         }
       },
@@ -1144,6 +1151,33 @@
           "REGISTRY_ONLY",
           "ALLOW_ANY"
         ]
+      },
+      "istio.mesh.v1alpha1.MeshConfig.PartitionPolicy": {
+        "description": "Policy for creating partitions within the mesh by controlling ingress and egress traffic between selected workloads.",
+        "type": "object",
+        "properties": {
+          "select": {
+            "description": "The labels for selecting the subject workloads for this isolation policy.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "allowIngressFrom": {
+            "description": "The labels for selecting which workloads are allowed to send traffic to the subject workloads. If empty, ingress is allowed from anywhere in the mesh.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "allowEgressTo": {
+            "description": "The labels for selecting which workloads are allowed to receive traffic from the subject workloads. If empty, egress is allowed to anywwhere in the mesh.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
       },
       "istio.mesh.v1alpha1.MeshConfig.ProxyPathNormalization": {
         "type": "object",

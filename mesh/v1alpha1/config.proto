@@ -1089,6 +1089,45 @@ message MeshConfig {
   TLSConfig mesh_mTLS = 63;
 
   // $hide_from_docs
+  // Policy for creating partitions within the mesh by controlling ingress and egress traffic
+  // between selected workloads.
+  //
+  // For example, the following configures cluster "cluster1" to be completely isolated from
+  // the mesh, allowing only traffic between workloads in the same cluster:
+  //
+  // ```yaml
+  // partitionPolicy:
+  //   - select:
+  //       "topology.istio.io/cluster": "cluster1"
+  //     allowIngressFrom:
+  //       "topology.istio.io/cluster": "cluster1"
+  //     allowEgressTo:
+  //       "topology.istio.io/cluster": "cluster1"
+  // ```
+  //
+  // If there are policies for workloads in both "cluster1" and "cluster2", communication
+  // between the two clusters will be determined based on the most restrictive policy for
+  // ingress and egress.
+  message PartitionPolicy {
+    // The labels for selecting the subject workloads for this isolation policy.
+    map<string, string> select = 1;
+
+    // The labels for selecting which workloads are allowed to send traffic to
+    // the subject workloads. If empty, ingress is allowed from anywhere in the mesh.
+    map<string, string> allow_ingress_from = 2;
+
+    // The labels for selecting which workloads are allowed to receive traffic from
+    // the subject workloads. If empty, egress is allowed to anywwhere in the mesh.
+    map<string, string> allow_egress_to = 3;
+  }
+
+  // $hide_from_docs
+  // Policy for generating partitions of workloads within the mesh. If no policy is
+  // provided for a given workload, ingress and egress traffic from anywhere in the mesh
+  // is allowed.
+  repeated PartitionPolicy partition_policy = 64;
+
+  // $hide_from_docs
   // Next available field number: 64
   reserved 1;
   reserved "mixer_check_server";
