@@ -350,7 +350,7 @@ enum PullPolicy {
   IfNotPresent = 1;
 
   // We will always pull the latest version of an image when changing
-  // this plugin. Note that the change includes `annotations` field as well.
+  // this plugin. Note that the change includes `metadata` field as well.
   Always = 2;
 }
 
