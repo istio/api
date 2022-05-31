@@ -300,7 +300,7 @@ const (
 	// will pull the latest version.
 	PullPolicy_IfNotPresent PullPolicy = 1
 	// We will always pull the latest version of an image when changing
-	// this plugin. Note that the change includes `annotations` field as well.
+	// this plugin. Note that the change includes `metadata` field as well.
 	PullPolicy_Always PullPolicy = 2
 )
 
