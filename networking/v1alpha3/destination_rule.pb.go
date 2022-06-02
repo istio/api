@@ -161,6 +161,7 @@
 //         simple: ROUND_ROBIN
 // ```
 // {{</tab>}}
+// {{</tabset>}}
 //
 // Destination Rules can be customized to specific workloads as well.
 // The following example shows how a destination rule can be applied to a
