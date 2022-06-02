@@ -748,6 +748,7 @@ type MeshConfig struct {
 	// - `%SERVICE_FQDN%_%SERVICE_PORT%` will use `reviews.prod.svc.cluster.local_7443` as the stats name.
 	// - `%SERVICE%` will use reviews.prod as the stats name.
 	OutboundClusterStatName string `protobuf:"bytes,45,opt,name=outbound_cluster_stat_name,json=outboundClusterStatName,proto3" json:"outbound_cluster_stat_name,omitempty"`
+	// $hide_from_docs
 	// Configure the provision of certificates.
 	//
 	// Note: Deprecated, please refer to Cert-Manager or other cert provisioning solutions to sign DNS certificates.

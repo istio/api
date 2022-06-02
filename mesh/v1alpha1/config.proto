@@ -355,6 +355,7 @@ message MeshConfig {
   // - `%SERVICE%` will use reviews.prod as the stats name.
   string outbound_cluster_stat_name = 45;
 
+  // $hide_from_docs
   // Configure the provision of certificates.
   //
   // Note: Deprecated, please refer to Cert-Manager or other cert provisioning solutions to sign DNS certificates. 
