@@ -670,6 +670,17 @@ var (
 		},
 	}
 
+        SidecarTrafficExcludeInterfaces = Instance {
+                Name:          "traffic.sidecar.istio.io/excludeInterfaces",
+                Description:   "A comma separated list of interfaces to be excluded from Istio traffic capture",
+                FeatureStatus: Alpha,
+                Hidden:        false,
+                Deprecated:    false,
+                Resources: []ResourceTypes{
+                        Pod,
+                },
+        }
+
 	SidecarTrafficExcludeOutboundIPRanges = Instance {
 		Name:          "traffic.sidecar.istio.io/excludeOutboundIPRanges",
 		Description:   "A comma separated list of IP ranges in CIDR form to be "+
@@ -800,6 +811,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarStatusPort,
 		&TrafficNodeSelector,
 		&SidecarTrafficExcludeInboundPorts,
+                &SidecarTrafficExcludeInterfaces,
 		&SidecarTrafficExcludeOutboundIPRanges,
 		&SidecarTrafficExcludeOutboundPorts,
 		&SidecarTrafficIncludeInboundPorts,
