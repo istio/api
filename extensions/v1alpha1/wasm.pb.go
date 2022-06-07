@@ -104,6 +104,31 @@
 //       value: "cluster.local"
 // ```
 //
+// This is also the same as the last example, but the Wasm module is pulled via https and updated for each time when this plugin resource is changed.
+// ```yaml
+// apiVersion: extensions.istio.io/v1alpha1
+// kind: WasmPlugin
+// metadata:
+//   name: openid-connect
+//   namespace: istio-ingress
+// spec:
+//   selector:
+//     matchLabels:
+//       istio: ingressgateway
+//   url: https://private-bucket/filters/openid.wasm
+//   imagePullPolicy: Always
+//   phase: AUTHN
+//   pluginConfig:
+//     openid_server: authn
+//     openid_realm: ingress
+//   vmConfig:
+//     env:
+//     - name: POD_NAME
+//       valueFrom: HOST
+//     - name: TRUST_DOMAIN
+//       value: "cluster.local"
+// ```
+//
 // And a more complex example that deploys three WasmPlugins and orders them
 // using `phase` and `priority`. The (hypothetical) setup is that the
 // `openid-connect` filter performs an OpenID Connect flow to authenticate the
@@ -258,7 +283,7 @@ func (PluginPhase) EnumDescriptor() ([]byte, []int) {
 	return file_extensions_v1alpha1_wasm_proto_rawDescGZIP(), []int{0}
 }
 
-// The pull behaviour to be applied when fetching an OCI image,
+// The pull behaviour to be applied when fetching a Wam module,
 // mirroring K8s behaviour.
 //
 // <!--
@@ -274,8 +299,8 @@ const (
 	// will be used. If no version of the image is present locally, we
 	// will pull the latest version.
 	PullPolicy_IfNotPresent PullPolicy = 1
-	// We will always pull the latest version of an image when applying
-	// this plugin.
+	// We will always pull the latest version of an image when changing
+	// this plugin. Note that the change includes `metadata` field as well.
 	PullPolicy_Always PullPolicy = 2
 )
 
@@ -417,13 +442,12 @@ type WasmPlugin struct {
 	// referenced by tag and this field is set, its checksum will be verified
 	// against the contents of this field after pulling.
 	Sha256 string `protobuf:"bytes,3,opt,name=sha256,proto3" json:"sha256,omitempty"`
-	// The pull behaviour to be applied when fetching an OCI image. Only
-	// relevant when images are referenced by tag instead of SHA. Defaults
-	// to IfNotPresent, except when an OCI image is referenced in the `url`
+	// The pull behaviour to be applied when fetching Wasm module by either
+	// OCI image or http/https. Only relevant when referencing Wasm module without
+	// any digest, including the digest in OCI image URL or sha256 field in `vm_config`.
+	// Defaults to IfNotPresent, except when an OCI image is referenced in the `url`
 	// and the `latest` tag is used, in which case `Always` is the default,
 	// mirroring K8s behaviour.
-	// Setting is ignored if `url` field is referencing a Wasm module directly
-	// using `file://` or `http[s]://`
 	ImagePullPolicy PullPolicy `protobuf:"varint,4,opt,name=image_pull_policy,json=imagePullPolicy,proto3,enum=istio.extensions.v1alpha1.PullPolicy" json:"image_pull_policy,omitempty"`
 	// Credentials to use for OCI image pulling.
 	// Name of a K8s Secret in the same namespace as the `WasmPlugin` that
