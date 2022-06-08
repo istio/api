@@ -75,7 +75,10 @@ var (
 
 	IoIstioDataplaneMode = Instance {
 		Name:          "istio.io/dataplane-mode",
-		Description:   "Set the mode for the dataplane, e.g. `ambient`",
+		Description:   "Set the mode for the dataplane, e.g. `ambient`. If this "+
+                        "label contradicts with the istio-injection label, the "+
+                        "latter will take precedence and override the value of "+
+                        "this label.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
