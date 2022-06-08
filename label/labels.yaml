@@ -57,6 +57,14 @@ labels:
     resources:
       - Namespace
 
+  - name: istio.io/dataplane-mode
+    featureStatus: Alpha
+    description: Set the mode for the dataplane, e.g. "ambient"
+    hidden: false
+    deprecated: false
+    resources:
+      - Namespace
+
   - name: operator.istio.io/component
     featureStatus: Alpha
     description: Istio operator component name of the resource, e.g. `Pilot`
