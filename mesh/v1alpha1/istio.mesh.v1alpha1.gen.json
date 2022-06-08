@@ -268,6 +268,13 @@
         "properties": {
           "mode": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.AmbientMeshConfig.AmbientMeshMode"
+          },
+          "excludedNamespaces": {
+            "description": "Configures a list of namespaces that will be excluded from the ambient mesh. These namespaces will always be excluded. In terms of conflicts, for example when the mode is DEFAULT (namespaced), the namespace in this list, and the namespace receiving the dataplane-mode label, the namespace will be excluded. @TODO Fix label name when decided in the above comment.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
