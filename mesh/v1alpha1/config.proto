@@ -1090,8 +1090,8 @@ message MeshConfig {
 
   message AmbientMeshConfig {
     enum AmbientMeshMode {
-      // Sets AmbientMesh to a namespaced configuration. This requires the addition of the
-      // istio.io/dataplane-mode=ambient label to be applied to the desired namespaces.
+      // Sets AmbientMesh to a namespaced configuration. This is the default.
+      // Namespaces that match the enabled selector will be added to the ambient mesh.
       DEFAULT = 0;
 
       // Sets AmbientMesh to be applied to all namespaces.
@@ -1104,12 +1104,48 @@ message MeshConfig {
     // Sets the Ambient Mesh mode. The default is namespaced.
     AmbientMeshMode mode = 1;
 
-    // Configures a list of namespaces that will be excluded from the ambient mesh.
-    // These namespaces will always be excluded. In terms of conflicts, for example
-    // when the mode is DEFAULT (namespaced), the namespace in this list, and the
-    // namespace receiving the dataplane-mode label, the namespace will be excluded.
-    // @TODO Fix label name when decided in the above comment.
-    repeated string excludedNamespaces = 2;
+    // A list of Kubernetes selectors that specify the set of namespaces that
+    // should be included in the ambient mesh when mode is set to namespaced.
+    // If omitted, the ambient mesh will be applied to all namespaces with the
+    // istio.io/dataplane-mode=ambient label.
+    // Elements in the list are disjunctive (OR semantics), i.e. a namespace
+    // will be included if it matches any selector.
+    // Example:
+    // ```yaml
+    // ambientMesh:
+    //   mode: DEFAULT
+    //   enabledSelectors:
+    //   - matchLabels:
+    //       env: prod
+    //   - matchExpressions:
+    //     - key: app
+    //       operator: In
+    //       values:
+    //         - cassandra
+    //         - spark
+    // ```
+    repeated k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector enabled_selectors = 2;
+
+    // A list of Kubernetes selectors that specify the set of namespaces that
+    // should be excluded from the ambient mesh when mode is set to on (global).
+    // If omitted, the ambient mesh will be applied to all namespaces.
+    // Elements in the list are disjunctive (OR semantics), i.e. a namespace
+    // will be excluded if it matches any selector.
+    // Example:
+    // ```yaml
+    // ambientMesh:
+    //   mode: ON
+    //   disabledSelectors:
+    //   - matchLabels:
+    //       env: dev
+    //   - matchExpressions:
+    //     - key: app
+    //       operator: In
+    //       values:
+    //         - cassandra
+    //         - spark
+    // ```
+    repeated k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector disabled_selectors = 3;
   }
   // Set Ambient Mesh Mode
   AmbientMeshConfig ambient_mesh = 64;
