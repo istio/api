@@ -134,7 +134,7 @@ message MeshConfig {
   AccessLogEncoding access_log_encoding = 27;
 
   // This flag enables Envoy's gRPC Access Log Service.
-  // See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto)
+  // See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/grpc/v3/als.proto)
   // for details about Envoy's gRPC Access Log Service API.
   // Default value is `false`.
   bool enable_envoy_access_log_service = 40;
