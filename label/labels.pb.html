@@ -24,6 +24,19 @@ Istio supports to control its behavior.
 				
 					<tr>
 				
+					<td><code>istio.io/dataplane-mode</code></td>
+				
+					<td>Alpha</td>
+				
+					<td>[Namespace]</td>
+					<td>Set the mode for the dataplane, e.g. "ambient", "none". If this label contradicts with the istio-injection label, the latter will take precedence and override the value of this label. Values other than "ambient" are treated as "none".</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
 					<td><code>istio.io/rev</code></td>
 				
 					<td>Alpha</td>

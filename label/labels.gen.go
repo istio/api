@@ -73,6 +73,21 @@ type Instance struct {
 
 var (
 
+	IoIstioDataplaneMode = Instance {
+		Name:          "istio.io/dataplane-mode",
+		Description:   "Set the mode for the dataplane, e.g. `ambient`, `none`. "+
+                        "If this label contradicts with the istio-injection label, "+
+                        "the latter will take precedence and override the value of "+
+                        "this label. Values other than `ambient` are treated as "+
+                        "`none`.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Namespace,
+		},
+	}
+
 	IoIstioRev = Instance {
 		Name:          "istio.io/rev",
 		Description:   "Istio control plane revision associated with the "+
@@ -257,6 +272,7 @@ resources to help automate Istio's multi-network configuration.
 
 func AllResourceLabels() []*Instance {
 	return []*Instance {
+		&IoIstioDataplaneMode,
 		&IoIstioRev,
 		&NetworkingGatewayPort,
 		&OperatorComponent,
