@@ -1091,7 +1091,7 @@ message MeshConfig {
   message AmbientMeshConfig {
     enum AmbientMeshMode {
       // Sets AmbientMesh to a namespaced configuration. This is the default.
-      // Namespaces that match the enabled selector will be added to the ambient mesh.
+      // Namespaces that have the label `istio.io/dataplane-mode=ambient` set.
       DEFAULT = 0;
 
       // Sets AmbientMesh to be applied to all namespaces.
@@ -1103,28 +1103,6 @@ message MeshConfig {
 
     // Sets the Ambient Mesh mode. The default is namespaced.
     AmbientMeshMode mode = 1;
-
-    // A list of Kubernetes selectors that specify the set of namespaces that
-    // should be included in the ambient mesh when mode is set to namespaced.
-    // If omitted, the ambient mesh will be applied to all namespaces with the
-    // istio.io/dataplane-mode=ambient label.
-    // Elements in the list are disjunctive (OR semantics), i.e. a namespace
-    // will be included if it matches any selector.
-    // Example:
-    // ```yaml
-    // ambientMesh:
-    //   mode: DEFAULT
-    //   enabledSelectors:
-    //   - matchLabels:
-    //       env: prod
-    //   - matchExpressions:
-    //     - key: app
-    //       operator: In
-    //       values:
-    //         - cassandra
-    //         - spark
-    // ```
-    repeated k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector enabled_selectors = 2;
 
     // A list of Kubernetes selectors that specify the set of namespaces that
     // should be excluded from the ambient mesh when mode is set to on (global).
