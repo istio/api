@@ -910,7 +910,7 @@ type LoadBalancerSettings struct {
 	// remains in warmup mode starting from its creation time for the duration of this window and
 	// Istio progressively increases amount of traffic for that endpoint instead of sending proportional amount of traffic.
 	// This should be enabled for services that require warm up time to serve full production load with reasonable latency.
-	// Currently this is only supported for ROUND_ROBIN and LEAST_CONN load balancers.
+	// Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancers.
 	WarmupDurationSecs *duration.Duration `protobuf:"bytes,4,opt,name=warmup_duration_secs,json=warmupDurationSecs,proto3" json:"warmup_duration_secs,omitempty"`
 }
 
