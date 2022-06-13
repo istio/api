@@ -3449,7 +3449,10 @@ type HTTPFaultInjection_Abort_HttpStatus struct {
 }
 
 type HTTPFaultInjection_Abort_GrpcStatus struct {
-	// $hide_from_docs
+	// GRPC status code to use to abort the request. The supported
+	// codes are documented in https://github.com/grpc/grpc/blob/master/doc/statuscodes.md
+	// Note: If you want to return the status "Unavailable", then you should
+	// specify the code as `UNAVAILABLE`(all caps), but not `14`.
 	GrpcStatus string `protobuf:"bytes,3,opt,name=grpc_status,json=grpcStatus,proto3,oneof"`
 }
 
