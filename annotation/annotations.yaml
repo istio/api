@@ -340,6 +340,14 @@ annotations:
     resources:
       - Pod
 
+  - name: traffic.sidecar.istio.io/excludeInterfaces
+    featureStatus: Alpha
+    description: A comma separated list of interfaces to be excluded from Istio traffic capture
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+  
   - name: traffic.sidecar.istio.io/includeOutboundPorts
     featureStatus: Alpha
     description: A comma separated list of outbound ports for which traffic is to be
