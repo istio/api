@@ -1293,6 +1293,35 @@ No
 No
 </td>
 </tr>
+<tr id="MeshConfig-AmbientMeshConfig-disabled_selectors">
+<td><code>disabledSelectors</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-apis-meta-v1-LabelSelector">LabelSelector[]</a></code></td>
+<td>
+<p>A list of Kubernetes selectors that specify the set of namespaces that
+should be excluded from the ambient mesh when mode is set to on (global).
+If omitted, the ambient mesh will be applied to all namespaces.
+Elements in the list are disjunctive (OR semantics), i.e. a namespace
+will be excluded if it matches any selector.
+Example:</p>
+
+<pre><code class="language-yaml">ambientMesh:
+  mode: ON
+  disabledSelectors:
+  - matchLabels:
+      env: dev
+  - matchExpressions:
+    - key: app
+      operator: In
+      values:
+        - cassandra
+        - spark
+</code></pre>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -3810,8 +3839,8 @@ For example, <code>/a%2f/b</code> normalizes to <code>a/b</code>.</p>
 <tr id="MeshConfig-AmbientMeshConfig-AmbientMeshMode-DEFAULT">
 <td><code>DEFAULT</code></td>
 <td>
-<p>Sets AmbientMesh to a namespaced configuration. This requires the addition of the
-istio.io/dataplane-mode=ambient label to be applied to the desired namespaces.</p>
+<p>Sets AmbientMesh to a namespaced configuration. This is the default.
+Namespaces that have the label <code>istio.io/dataplane-mode=ambient</code> set.</p>
 
 </td>
 </tr>
