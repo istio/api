@@ -1,8 +1,8 @@
 apiVersion: release-notes/v2
-kind: bug-fix
+kind: feature
 area: documentation
 issue:
-  - https://github.com/istio/api/pull/2374
+  - https://github.com/istio/istio/pull/34832
 releaseNotes:
   - |
     **Added** sidecar `traffic.sidecar.istio.io/excludeInterfaces` annotation documentation.
