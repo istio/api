@@ -347,8 +347,9 @@ message TrafficPolicy {
     // Supported protocols are:
     //   CONNECT - uses HTTP CONNECT;
     //   POST - uses HTTP POST.
+    // CONNECT is used by default if not specified.
     // HTTP version for upstream requests is determined by the service protocol defined for the proxy.
-    string protocol = 1 [(google.api.field_behavior) = REQUIRED];
+    string protocol = 1;
 
     // Specifies a host to which the downstream connection is tunneled.
     // Target host must be an FQDN or IP address.
