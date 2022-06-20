@@ -647,9 +647,11 @@ var (
 
 	TopologyIstiodClusters = Instance {
 		Name:          "topology.istio.io/istiodClusters",
-		Description:   "Comma-separated list of clusters (or * for any) with an "+
+		Description:   "A comma-separated list of clusters (or * for any) running "+
                         "istiod that should attempt leader election for a remote "+
-                        "cluster.",
+                        "cluster whose system namepace includes this annotation. "+
+                        "Istiod will not attempt to lead other remote clusters by "+
+                        "default.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
