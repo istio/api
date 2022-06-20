@@ -649,7 +649,7 @@ var (
 		Name:          "topology.istio.io/istiodClusters",
 		Description:   "A comma-separated list of clusters (or * for any) running "+
                         "istiod that should attempt leader election for a remote "+
-                        "cluster whose system namepace includes this annotation. "+
+                        "cluster whose system namespace includes this annotation. "+
                         "Istiod will not attempt to lead other remote clusters by "+
                         "default.",
 		FeatureStatus: Alpha,
