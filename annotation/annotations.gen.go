@@ -645,8 +645,8 @@ var (
 		},
 	}
 
-	TopologyIstiodClusters = Instance {
-		Name:          "topology.istio.io/istiodClusters",
+	TopologyControlPlaneClusters = Instance {
+		Name:          "topology.istio.io/controlPlaneClusters",
 		Description:   "A comma-separated list of clusters (or * for any) running "+
                         "istiod that should attempt leader election for a remote "+
                         "cluster thats system namespace includes this annotation. "+
@@ -828,7 +828,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarUserVolume,
 		&SidecarUserVolumeMount,
 		&SidecarStatusPort,
-		&TopologyIstiodClusters,
+		&TopologyControlPlaneClusters,
 		&TrafficNodeSelector,
 		&SidecarTrafficExcludeInboundPorts,
 		&SidecarTrafficExcludeInterfaces,
