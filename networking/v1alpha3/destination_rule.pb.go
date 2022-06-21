@@ -174,19 +174,19 @@
 // kind: DestinationRule
 // metadata:
 //   name: configure-client-mtls-dr-with-workloadselector
-//   spec:
-//     workloadSelector:
-//       matchLabels:
-//         app: ratings
-//     trafficPolicy:
-//       loadBalancer:
-//         simple: ROUND_ROBIN
-//       portLevelSettings:
-//         - port:
-//             number: 31443
-//           tls:
-//             credentialName: client-credential
-//             mode: MUTUAL
+// spec:
+//   workloadSelector:
+//     matchLabels:
+//       app: ratings
+//   trafficPolicy:
+//     loadBalancer:
+//       simple: ROUND_ROBIN
+//     portLevelSettings:
+//     - port:
+//         number: 31443
+//       tls:
+//         credentialName: client-credential
+//         mode: MUTUAL
 // ```
 // {{</tab>}}
 // {{<tab name="v1beta1" category-value="v1beta1">}}
@@ -195,19 +195,19 @@
 // kind: DestinationRule
 // metadata:
 //   name: configure-client-mtls-dr-with-workloadselector
-//   spec:
-//     workloadSelector:
-//       matchLabels:
-//         app: ratings
-//     trafficPolicy:
-//       loadBalancer:
-//         simple: ROUND_ROBIN
-//       portLevelSettings:
-//         - port:
-//             number: 31443
-//           tls:
-//             credentialName: client-credential
-//             mode: MUTUAL
+// spec:
+//   workloadSelector:
+//     matchLabels:
+//       app: ratings
+//   trafficPolicy:
+//     loadBalancer:
+//       simple: ROUND_ROBIN
+//     portLevelSettings:
+//     - port:
+//         number: 31443
+//       tls:
+//         credentialName: client-credential
+//         mode: MUTUAL
 // ```
 // {{</tab>}}
 // {{</tabset>}}
