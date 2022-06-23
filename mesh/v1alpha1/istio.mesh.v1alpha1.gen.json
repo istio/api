@@ -931,6 +931,10 @@
           },
           "logFormat": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.LogFormat"
+          },
+          "Resources": {
+            "description": "Optional. Additional attributes that describe the node. Alias to `resource_attributes` filed in [Open Telemetry](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/open_telemetry/v3/logs_service.proto)",
+            "type": "object"
           }
         }
       },

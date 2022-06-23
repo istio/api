@@ -2295,6 +2295,25 @@ Empty value results in proxy&rsquo;s default access log format, following Envoy 
 No
 </td>
 </tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider-Resources">
+<td><code>Resources</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">Struct</a></code></td>
+<td>
+<p>Optional. Additional attributes that describe the node.
+Alias to <code>resource_attributes</code> filed in <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/open_telemetry/v3/logs_service.proto">Open Telemetry</a></p>
+
+<p>Example:</p>
+
+<pre><code>resources:
+  pod_name: &quot;fortio-deploy-5f75cc56b5-d5pc4&quot;
+  pod_namespace: &quot;default&quot;
+</code></pre>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
