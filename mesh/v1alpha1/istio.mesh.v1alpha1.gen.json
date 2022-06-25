@@ -199,8 +199,7 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.Certificate"
-            },
-            "deprecated": true
+            }
           },
           "thriftConfig": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ThriftConfig"

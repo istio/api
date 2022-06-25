@@ -355,9 +355,13 @@ message MeshConfig {
   // - `%SERVICE%` will use reviews.prod as the stats name.
   string outbound_cluster_stat_name = 45;
 
-  // $hide_from_docs
   // Configure the provision of certificates.
-  repeated Certificate certificates = 47 [deprecated=true];
+  //
+  // Note: Deprecated, please refer to cert-manager to sign certificates.
+  // Please note the secrets generated are of different keys.
+  // Istio generated secret has keys: `key.pem`, `icert-chain.pem`, `root-cert.pem`,
+  // while cert-manager generated has: `tls.key`, `tls.crt`, `ca.crt`.
+  repeated Certificate certificates = 47;
 
   message ThriftConfig {
     // Specify thrift rate limit service URL. If pilot has thrift protocol support enabled,
