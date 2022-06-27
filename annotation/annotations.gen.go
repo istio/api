@@ -650,8 +650,8 @@ var (
 		Description:   "A comma-separated list of clusters (or * for any) running "+
                         "istiod that should attempt leader election for a remote "+
                         "cluster thats system namespace includes this annotation. "+
-                        "Istiod will attempt to lead unannotated remote clusters "+
-                        "by default.",
+                        "Istiod will not attempt to lead unannotated remote "+
+                        "clusters.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
