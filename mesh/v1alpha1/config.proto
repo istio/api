@@ -357,10 +357,7 @@ message MeshConfig {
 
   // Configure the provision of certificates.
   //
-  // Note: Deprecated, please refer to cert-manager to sign certificates.
-  // Please note the secrets generated are of different keys.
-  // Istio generated secret has keys: `key.pem`, `icert-chain.pem`, `root-cert.pem`,
-  // while cert-manager generated has: `tls.key`, `tls.crt`, `ca.crt`.
+  // Note: Deprecated, please refer to Cert-Manager or other cert provisioning solutions to sign DNS certificates. 
   repeated Certificate certificates = 47;
 
   message ThriftConfig {
