@@ -750,10 +750,7 @@ type MeshConfig struct {
 	OutboundClusterStatName string `protobuf:"bytes,45,opt,name=outbound_cluster_stat_name,json=outboundClusterStatName,proto3" json:"outbound_cluster_stat_name,omitempty"`
 	// Configure the provision of certificates.
 	//
-	// Note: Deprecated, please refer to cert-manager to sign certificates.
-	// Please note the secrets generated are of different keys.
-	// Istio generated secret has keys: `key.pem`, `icert-chain.pem`, `root-cert.pem`,
-	// while cert-manager generated has: `tls.key`, `tls.crt`, `ca.crt`.
+	// Note: Deprecated, please refer to Cert-Manager or other cert provisioning solutions to sign DNS certificates.
 	Certificates []*Certificate `protobuf:"bytes,47,rep,name=certificates,proto3" json:"certificates,omitempty"`
 	// Set configuration for Thrift protocol
 	ThriftConfig *MeshConfig_ThriftConfig `protobuf:"bytes,49,opt,name=thrift_config,json=thriftConfig,proto3" json:"thrift_config,omitempty"`
