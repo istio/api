@@ -35335,6 +35335,11 @@
                         "id": 2,
                         "name": "log_format",
                         "type": "LogFormat"
+                      },
+                      {
+                        "id": 3,
+                        "name": "omit_empty_values",
+                        "type": "bool"
                       }
                     ],
                     "messages": [
