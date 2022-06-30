@@ -3596,7 +3596,7 @@ type MeshConfig_ExtensionProvider_EnvoyFileAccessLogProvider_LogFormat_Labels st
 	// can be used as values for fields within the Struct. Values are rendered
 	// as strings, numbers, or boolean values, as appropriate
 	// (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)). Nested JSON is
-	// supported for some command operators (e.g. FILTER_STATE or DYNAMIC_METADATA).
+	// supported for some command operators (e.g. `FILTER_STATE` or `DYNAMIC_METADATA`).
 	// Use `labels: {}` for default envoy JSON log format.
 	//
 	// Example:
