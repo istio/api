@@ -193,7 +193,7 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.LocalityLoadBalancerSetting"
           },
           "warmupDurationSecs": {
-            "description": "Represents the warmup duration of Service. If set, the newly created endpoint of service remains in warmup mode starting from its creation time for the duration of this window and Istio progressively increases amount of traffic for that endpoint instead of sending proportional amount of traffic. This should be enabled for services that require warm up time to serve full production load with reasonable latency. Currently this is only supported for ROUND_ROBIN and LEAST_CONN load balancers.",
+            "description": "Represents the warmup duration of Service. If set, the newly created endpoint of service remains in warmup mode starting from its creation time for the duration of this window and Istio progressively increases amount of traffic for that endpoint instead of sending proportional amount of traffic. This should be enabled for services that require warm up time to serve full production load with reasonable latency. Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancers.",
             "type": "string"
           }
         },
@@ -575,7 +575,7 @@
         "type": "object",
         "properties": {
           "protocol": {
-            "description": "Specifies which protocol to use for tunneling the downstream connection. Supported protocols are: connect - uses HTTP CONNECT; post - uses HTTP POST. HTTP version for upstream requests is determined by the service protocol defined for the proxy.",
+            "description": "Specifies which protocol to use for tunneling the downstream connection. Supported protocols are: CONNECT - uses HTTP CONNECT; POST - uses HTTP POST. CONNECT is used by default if not specified. HTTP version for upstream requests is determined by the service protocol defined for the proxy.",
             "type": "string"
           },
           "targetHost": {

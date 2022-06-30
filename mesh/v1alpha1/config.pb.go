@@ -596,7 +596,7 @@ type MeshConfig struct {
 	// Default value is `TEXT`.
 	AccessLogEncoding MeshConfig_AccessLogEncoding `protobuf:"varint,27,opt,name=access_log_encoding,json=accessLogEncoding,proto3,enum=istio.mesh.v1alpha1.MeshConfig_AccessLogEncoding" json:"access_log_encoding,omitempty"`
 	// This flag enables Envoy's gRPC Access Log Service.
-	// See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto)
+	// See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/grpc/v3/als.proto)
 	// for details about Envoy's gRPC Access Log Service API.
 	// Default value is `false`.
 	EnableEnvoyAccessLogService bool `protobuf:"varint,40,opt,name=enable_envoy_access_log_service,json=enableEnvoyAccessLogService,proto3" json:"enable_envoy_access_log_service,omitempty"`

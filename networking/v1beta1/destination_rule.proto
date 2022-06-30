@@ -296,10 +296,11 @@ message TrafficPolicy {
   message TunnelSettings {
     // Specifies which protocol to use for tunneling the downstream connection.
     // Supported protocols are:
-    //   connect - uses HTTP CONNECT;
-    //   post - uses HTTP POST.
+    //   CONNECT - uses HTTP CONNECT;
+    //   POST - uses HTTP POST.
+    // CONNECT is used by default if not specified.
     // HTTP version for upstream requests is determined by the service protocol defined for the proxy.
-    string protocol = 1 [(google.api.field_behavior) = REQUIRED];
+    string protocol = 1;
 
     // Specifies a host to which the downstream connection is tunneled.
     // Target host must be an FQDN or IP address.
@@ -565,7 +566,7 @@ message LoadBalancerSettings {
   // remains in warmup mode starting from its creation time for the duration of this window and
   // Istio progressively increases amount of traffic for that endpoint instead of sending proportional amount of traffic.
   // This should be enabled for services that require warm up time to serve full production load with reasonable latency.
-  // Currently this is only supported for ROUND_ROBIN and LEAST_CONN load balancers.
+  // Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancers.
   google.protobuf.Duration warmup_duration_secs = 4;
 }
 

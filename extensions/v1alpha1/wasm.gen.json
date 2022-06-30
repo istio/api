@@ -40,7 +40,7 @@
         ]
       },
       "istio.extensions.v1alpha1.PullPolicy": {
-        "description": "The pull behaviour to be applied when fetching an OCI image, mirroring K8s behaviour.",
+        "description": "The pull behaviour to be applied when fetching a Wam module, mirroring K8s behaviour.",
         "type": "string",
         "enum": [
           "UNSPECIFIED_POLICY",
@@ -84,7 +84,7 @@
             "type": "string"
           },
           "verificationKey": {
-            "description": "Public key that will be used to verify signatures of signed OCI images or Wasm modules. Must be supplied in PEM format.",
+            "description": "Public key that will be used to verify signatures of signed OCI images or Wasm modules.",
             "type": "string"
           },
           "pluginConfig": {

@@ -162,6 +162,7 @@ import "type/v1beta1/selector.proto";
 //         simple: ROUND_ROBIN
 // ```
 // {{</tab>}}
+// {{</tabset>}}
 //
 // Destination Rules can be customized to specific workloads as well.
 // The following example shows how a destination rule can be applied to a
@@ -174,19 +175,19 @@ import "type/v1beta1/selector.proto";
 // kind: DestinationRule
 // metadata:
 //   name: configure-client-mtls-dr-with-workloadselector
-//   spec:
-//     workloadSelector:
-//       matchLabels:
-//         app: ratings
-//     trafficPolicy:
-//       loadBalancer:
-//         simple: ROUND_ROBIN
-//       portLevelSettings:
-//         - port:
-//             number: 31443
-//           tls:
-//             credentialName: client-credential
-//             mode: MUTUAL
+// spec:
+//   workloadSelector:
+//     matchLabels:
+//       app: ratings
+//   trafficPolicy:
+//     loadBalancer:
+//       simple: ROUND_ROBIN
+//     portLevelSettings:
+//     - port:
+//         number: 31443
+//       tls:
+//         credentialName: client-credential
+//         mode: MUTUAL
 // ```
 // {{</tab>}}
 // {{<tab name="v1beta1" category-value="v1beta1">}}
@@ -195,19 +196,19 @@ import "type/v1beta1/selector.proto";
 // kind: DestinationRule
 // metadata:
 //   name: configure-client-mtls-dr-with-workloadselector
-//   spec:
-//     workloadSelector:
-//       matchLabels:
-//         app: ratings
-//     trafficPolicy:
-//       loadBalancer:
-//         simple: ROUND_ROBIN
-//       portLevelSettings:
-//         - port:
-//             number: 31443
-//           tls:
-//             credentialName: client-credential
-//             mode: MUTUAL
+// spec:
+//   workloadSelector:
+//     matchLabels:
+//       app: ratings
+//   trafficPolicy:
+//     loadBalancer:
+//       simple: ROUND_ROBIN
+//     portLevelSettings:
+//     - port:
+//         number: 31443
+//       tls:
+//         credentialName: client-credential
+//         mode: MUTUAL
 // ```
 // {{</tab>}}
 // {{</tabset>}}
@@ -344,10 +345,11 @@ message TrafficPolicy {
   message TunnelSettings {
     // Specifies which protocol to use for tunneling the downstream connection.
     // Supported protocols are:
-    //   connect - uses HTTP CONNECT;
-    //   post - uses HTTP POST.
+    //   CONNECT - uses HTTP CONNECT;
+    //   POST - uses HTTP POST.
+    // CONNECT is used by default if not specified.
     // HTTP version for upstream requests is determined by the service protocol defined for the proxy.
-    string protocol = 1 [(google.api.field_behavior) = REQUIRED];
+    string protocol = 1;
 
     // Specifies a host to which the downstream connection is tunneled.
     // Target host must be an FQDN or IP address.
@@ -613,7 +615,7 @@ message LoadBalancerSettings {
   // remains in warmup mode starting from its creation time for the duration of this window and
   // Istio progressively increases amount of traffic for that endpoint instead of sending proportional amount of traffic.
   // This should be enabled for services that require warm up time to serve full production load with reasonable latency.
-  // Currently this is only supported for ROUND_ROBIN and LEAST_CONN load balancers.
+  // Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancers.
   google.protobuf.Duration warmup_duration_secs = 4;
 }
 

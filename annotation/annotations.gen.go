@@ -642,11 +642,38 @@ var (
 		},
 	}
 
+	TrafficNodeSelector = Instance {
+		Name:          "traffic.istio.io/nodeSelector",
+		Description:   "This annotation is a set of node-labels "+
+                        "(key1=value,key2=value). If the annotated Service is of "+
+                        "type NodePort and is a multi-network gateway (see "+
+                        "topology.istio.io/network), the addresses for selected "+
+                        "nodes will be used for cross-network communication.",
+		FeatureStatus: Stable,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Service,
+		},
+	}
+
 	SidecarTrafficExcludeInboundPorts = Instance {
 		Name:          "traffic.sidecar.istio.io/excludeInboundPorts",
 		Description:   "A comma separated list of inbound ports to be excluded "+
                         "from redirection to Envoy. Only applies when all inbound "+
                         "traffic (i.e. '*') is being redirected.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
+	SidecarTrafficExcludeInterfaces = Instance {
+		Name:          "traffic.sidecar.istio.io/excludeInterfaces",
+		Description:   "A comma separated list of interfaces to be excluded from "+
+                        "Istio traffic capture",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -783,7 +810,9 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarUserVolume,
 		&SidecarUserVolumeMount,
 		&SidecarStatusPort,
+		&TrafficNodeSelector,
 		&SidecarTrafficExcludeInboundPorts,
+		&SidecarTrafficExcludeInterfaces,
 		&SidecarTrafficExcludeOutboundIPRanges,
 		&SidecarTrafficExcludeOutboundPorts,
 		&SidecarTrafficIncludeInboundPorts,

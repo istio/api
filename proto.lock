@@ -36582,6 +36582,11 @@
                 "name": "port_level_settings",
                 "type": "PortTrafficPolicy",
                 "is_repeated": true
+              },
+              {
+                "id": 6,
+                "name": "tunnel",
+                "type": "TunnelSettings"
               }
             ],
             "messages": [
@@ -36612,6 +36617,44 @@
                     "id": 5,
                     "name": "tls",
                     "type": "ClientTLSSettings"
+                  }
+                ]
+              },
+              {
+                "name": "TunnelSettings",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "protocol",
+                    "type": "string",
+                    "options": [
+                      {
+                        "name": "(google.api.field_behavior)",
+                        "value": "REQUIRED"
+                      }
+                    ]
+                  },
+                  {
+                    "id": 2,
+                    "name": "target_host",
+                    "type": "string",
+                    "options": [
+                      {
+                        "name": "(google.api.field_behavior)",
+                        "value": "REQUIRED"
+                      }
+                    ]
+                  },
+                  {
+                    "id": 3,
+                    "name": "target_port",
+                    "type": "uint32",
+                    "options": [
+                      {
+                        "name": "(google.api.field_behavior)",
+                        "value": "REQUIRED"
+                      }
+                    ]
                   }
                 ]
               }
@@ -39366,6 +39409,11 @@
                 "name": "port_level_settings",
                 "type": "PortTrafficPolicy",
                 "is_repeated": true
+              },
+              {
+                "id": 6,
+                "name": "tunnel",
+                "type": "TunnelSettings"
               }
             ],
             "messages": [
@@ -39396,6 +39444,44 @@
                     "id": 5,
                     "name": "tls",
                     "type": "ClientTLSSettings"
+                  }
+                ]
+              },
+              {
+                "name": "TunnelSettings",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "protocol",
+                    "type": "string",
+                    "options": [
+                      {
+                        "name": "(google.api.field_behavior)",
+                        "value": "REQUIRED"
+                      }
+                    ]
+                  },
+                  {
+                    "id": 2,
+                    "name": "target_host",
+                    "type": "string",
+                    "options": [
+                      {
+                        "name": "(google.api.field_behavior)",
+                        "value": "REQUIRED"
+                      }
+                    ]
+                  },
+                  {
+                    "id": 3,
+                    "name": "target_port",
+                    "type": "uint32",
+                    "options": [
+                      {
+                        "name": "(google.api.field_behavior)",
+                        "value": "REQUIRED"
+                      }
+                    ]
                   }
                 ]
               }
@@ -43488,9 +43574,6 @@
           },
           {
             "path": "k8s.io/api/core/v1/generated.proto"
-          },
-          {
-            "path": "k8s.io/apimachinery/pkg/api/resource/generated.proto"
           }
         ],
         "package": {
