@@ -30,6 +30,7 @@ const (
     Any
     AuthorizationPolicy
     Ingress
+    Namespace
     Pod
     Service
     WorkloadEntry
@@ -44,10 +45,12 @@ func (r ResourceTypes) String() string {
 	case 3:
 		return "Ingress"
 	case 4:
-		return "Pod"
+		return "Namespace"
 	case 5:
-		return "Service"
+		return "Pod"
 	case 6:
+		return "Service"
+	case 7:
 		return "WorkloadEntry"
 	}
 	return "Unknown"
@@ -642,6 +645,21 @@ var (
 		},
 	}
 
+	TopologyControlPlaneClusters = Instance {
+		Name:          "topology.istio.io/controlPlaneClusters",
+		Description:   "A comma-separated list of clusters (or * for any) running "+
+                        "istiod that should attempt leader election for a remote "+
+                        "cluster thats system namespace includes this annotation. "+
+                        "Istiod will not attempt to lead unannotated remote "+
+                        "clusters.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Namespace,
+		},
+	}
+
 	TrafficNodeSelector = Instance {
 		Name:          "traffic.istio.io/nodeSelector",
 		Description:   "This annotation is a set of node-labels "+
@@ -810,6 +828,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarUserVolume,
 		&SidecarUserVolumeMount,
 		&SidecarStatusPort,
+		&TopologyControlPlaneClusters,
 		&TrafficNodeSelector,
 		&SidecarTrafficExcludeInboundPorts,
 		&SidecarTrafficExcludeInterfaces,
@@ -827,6 +846,7 @@ func AllResourceTypes() []string {
 		"Any",
 		"AuthorizationPolicy",
 		"Ingress",
+		"Namespace",
 		"Pod",
 		"Service",
 		"WorkloadEntry",

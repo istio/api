@@ -494,3 +494,13 @@ annotations:
     hidden: true
     resources:
       - WorkloadEntry
+
+  - name: topology.istio.io/controlPlaneClusters
+    featureStatus: Alpha
+    description: A comma-separated list of clusters (or * for any) running istiod that should attempt leader election
+      for a remote cluster thats system namespace includes this annotation. Istiod will not attempt to lead unannotated
+      remote clusters.
+    deprecated: false
+    hidden: false
+    resources:
+      - Namespace
