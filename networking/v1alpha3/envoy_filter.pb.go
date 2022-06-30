@@ -211,7 +211,7 @@
 //
 // The following example inserts an attributegen filter
 // that produces `istio_operationId` attribute which is consumed
-// by the istio.stats fiter. `filterClass: STATS` encodes this dependency.
+// by the istio.stats filter. `filterClass: STATS` encodes this dependency.
 //
 //
 // ```yaml
