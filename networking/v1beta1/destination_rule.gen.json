@@ -130,6 +130,10 @@
           },
           "tcpKeepalive": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.ConnectionPoolSettings.TCPSettings.TcpKeepalive"
+          },
+          "maxConnectionDuration": {
+            "description": "The maximum duration of a connection. The duration is defined as the period since a connection was established. If not set, there is no max duration. When max_connection_duration is reached the connection will be closed. Duration must be at least 1ms.",
+            "type": "string"
           }
         }
       },

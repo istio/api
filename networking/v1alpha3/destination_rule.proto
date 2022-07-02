@@ -698,6 +698,11 @@ message ConnectionPoolSettings {
 
     // If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
     TcpKeepalive tcp_keepalive = 3;
+
+    // The maximum duration of a connection. The duration is defined as the period since a connection
+    // was established. If not set, there is no max duration. When max_connection_duration
+    // is reached the connection will be closed. Duration must be at least 1ms.
+    google.protobuf.Duration max_connection_duration = 4;
   };
 
   // Settings applicable to HTTP1.1/HTTP2/GRPC connections.
