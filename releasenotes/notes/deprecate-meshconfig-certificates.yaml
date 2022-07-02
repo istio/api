@@ -5,5 +5,5 @@ issue:
   - 36231
 releaseNotes:
   - |
-    **Deprecated** Certificates is now deprecated in meshConfig. This feature will be removed in a future release.
+    **Deprecated** certificates in MeshConfig. This field will be removed in a future release.
 
