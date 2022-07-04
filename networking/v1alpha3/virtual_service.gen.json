@@ -88,6 +88,76 @@
           }
         }
       },
+      "istio.networking.v1alpha3.HTTPBody": {
+        "type": "object",
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "string"
+                  ],
+                  "properties": {
+                    "string": {
+                      "description": "response body as a string",
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "bytes"
+                  ],
+                  "properties": {
+                    "bytes": {
+                      "description": "response body as base64 encoded bytes.",
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "string"
+            ],
+            "properties": {
+              "string": {
+                "description": "response body as a string",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "bytes"
+            ],
+            "properties": {
+              "bytes": {
+                "description": "response body as base64 encoded bytes.",
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        ]
+      },
+      "istio.networking.v1alpha3.HTTPDirectResponse": {
+        "description": "HTTPDirectResponse can be used to send a fixed response to clients. For example, the following rule returns a fixed 503 status with a body to requests for /v1/getProductRatings API.",
+        "type": "object",
+        "properties": {
+          "status": {
+            "description": "Specifies the HTTP response status to be returned.",
+            "type": "integer"
+          },
+          "body": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPBody"
+          }
+        }
+      },
       "istio.networking.v1alpha3.HTTPFaultInjection": {
         "description": "HTTPFaultInjection can be used to specify one or more faults to inject while forwarding HTTP requests to the destination specified in a route. Fault specification is part of a VirtualService rule. Faults include aborting the Http request from downstream service, and/or delaying proxying of requests. A fault rule MUST HAVE delay or abort or both.",
         "type": "object",
@@ -450,7 +520,7 @@
             }
           },
           "route": {
-            "description": "A HTTP rule can either redirect or forward (default) traffic. The forwarding target can be one of several versions of a service (see glossary in beginning of document). Weights associated with the service version determine the proportion of traffic it receives.",
+            "description": "A HTTP rule can either return a direct_response, redirect or forward (default) traffic. The forwarding target can be one of several versions of a service (see glossary in beginning of document). Weights associated with the service version determine the proportion of traffic it receives.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPRouteDestination"
@@ -458,6 +528,9 @@
           },
           "redirect": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPRedirect"
+          },
+          "directResponse": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPDirectResponse"
           },
           "delegate": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.Delegate"

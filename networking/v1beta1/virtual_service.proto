@@ -596,7 +596,7 @@ message HTTPRoute {
   // Delegate is used to specify the particular VirtualService which
   // can be used to define delegate HTTPRoute.
   //
-  // It can be set only when `Route`, `Redirect` and `Direct Response` are empty, and the route
+  // It can be set only when `Route` and `Redirect` are empty, and the route
   // rules of the delegate VirtualService will be merged with that in the
   // current one.
   //
