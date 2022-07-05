@@ -749,6 +749,8 @@ type MeshConfig struct {
 	// - `%SERVICE%` will use reviews.prod as the stats name.
 	OutboundClusterStatName string `protobuf:"bytes,45,opt,name=outbound_cluster_stat_name,json=outboundClusterStatName,proto3" json:"outbound_cluster_stat_name,omitempty"`
 	// Configure the provision of certificates.
+	//
+	// Note: Deprecated, please refer to Cert-Manager or other cert provisioning solutions to sign DNS certificates.
 	Certificates []*Certificate `protobuf:"bytes,47,rep,name=certificates,proto3" json:"certificates,omitempty"`
 	// Set configuration for Thrift protocol
 	ThriftConfig *MeshConfig_ThriftConfig `protobuf:"bytes,49,opt,name=thrift_config,json=thriftConfig,proto3" json:"thrift_config,omitempty"`
@@ -1249,6 +1251,7 @@ func (x *ConfigSource) GetSubscribedResources() []Resource {
 	return nil
 }
 
+// $hide_from_docs
 // Certificate configures the provision of a certificate and its key.
 // Example 1: key and cert stored in a secret
 // ```

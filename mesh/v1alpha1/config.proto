@@ -356,6 +356,8 @@ message MeshConfig {
   string outbound_cluster_stat_name = 45;
 
   // Configure the provision of certificates.
+  //
+  // Note: Deprecated, please refer to Cert-Manager or other cert provisioning solutions to sign DNS certificates. 
   repeated Certificate certificates = 47;
 
   message ThriftConfig {
@@ -1157,6 +1159,7 @@ message ConfigSource {
 
 
 
+// $hide_from_docs
 // Certificate configures the provision of a certificate and its key.
 // Example 1: key and cert stored in a secret
 // ```
