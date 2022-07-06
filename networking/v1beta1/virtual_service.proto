@@ -1491,6 +1491,53 @@ message HTTPRedirect {
 // {{</tab>}}
 // {{</tabset>}}
 //
+// It is also possible to specify a binary response body.
+// This is mostly useful for non text-based protocols such as gRPC.
+//
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: VirtualService
+// metadata:
+//   name: ratings-route
+// spec:
+//   hosts:
+//   - ratings.prod.svc.cluster.local
+//   http:
+//   - match:
+//     - uri:
+//         exact: /v1/getProductRatings
+//     directResponse:
+//       status: 503
+//       body:
+//         bytes: "dW5rbm93biBlcnJvcg==" # "unknown error" in base64
+//   ...
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: VirtualService
+// metadata:
+//   name: ratings-route
+// spec:
+//   hosts:
+//   - ratings.prod.svc.cluster.local
+//   http:
+//   - match:
+//     - uri:
+//         exact: /v1/getProductRatings
+//     directResponse:
+//       status: 503
+//       body:
+//         bytes: "dW5rbm93biBlcnJvcg==" # "unknown error" in base64
+//   ...
+// ```
+// {{</tab>}}
+// {{</tabset>}}
+//
 message HTTPDirectResponse {
   // Specifies the HTTP response status to be returned.
   uint32 status = 1 [(google.api.field_behavior) = REQUIRED];
