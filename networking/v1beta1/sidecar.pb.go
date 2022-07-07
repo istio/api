@@ -672,7 +672,6 @@ type IstioIngressListener struct {
 	// Set of TLS related options that will enable TLS termination on the
 	// sidecar for requests originating from outside the mesh.
 	// Currently supports only SIMPLE and MUTUAL TLS modes.
-	// $hide_from_docs
 	Tls *ServerTLSSettings `protobuf:"bytes,7,opt,name=tls,proto3" json:"tls,omitempty"`
 }
 
