@@ -38509,6 +38509,11 @@
                 "id": 13,
                 "name": "source_namespace",
                 "type": "string"
+              },
+              {
+                "id": 14,
+                "name": "stat_prefix",
+                "type": "string"
               }
             ],
             "maps": [
@@ -40965,6 +40970,11 @@
               {
                 "id": 13,
                 "name": "source_namespace",
+                "type": "string"
+              },
+              {
+                "id": 14,
+                "name": "stat_prefix",
                 "type": "string"
               }
             ],

@@ -1119,6 +1119,11 @@ message HTTPMatchRequest {
   // If the VirtualService has a list of gateways specified in the top-level `gateways` field,
   // it must include the reserved gateway `mesh` for this field to be applicable.
   string source_namespace = 13;
+
+  // The human readable prefix to use when emitting statistics for this route.
+  // The statistics are generated with prefix route.<stat_prefix>.
+  // This should be set for highly critical routes that one wishes to get “per-route” statistics on.
+  string stat_prefix = 14;
 }
 
 // Each routing rule is associated with one or more service versions (see

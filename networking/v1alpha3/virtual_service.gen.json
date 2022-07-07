@@ -384,6 +384,10 @@
           "sourceNamespace": {
             "description": "Source namespace constraining the applicability of a rule to workloads in that namespace. If the VirtualService has a list of gateways specified in the top-level `gateways` field, it must include the reserved gateway `mesh` for this field to be applicable.",
             "type": "string"
+          },
+          "statPrefix": {
+            "description": "The human readable prefix to use when emitting statistics for this route. The statistics are generated with prefix route.\u003cstat_prefix\u003e. This should be set for highly critical routes that one wishes to get “per-route” statistics on.",
+            "type": "string"
           }
         }
       },
