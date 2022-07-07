@@ -2497,7 +2497,7 @@ func (*HTTPRedirect_DerivePort) isHTTPRedirect_RedirectPort() {}
 // {{</tab>}}
 // {{</tabset>}}
 //
-// It is possible, and probably recommended, to add headers
+// It is possible, and probably recommended, to
 // specify response headers rules in the HTTPRoute
 // as well as the direct_response, for example to specify
 // the returned Content-Type.
