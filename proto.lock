@@ -36626,13 +36626,7 @@
                   {
                     "id": 1,
                     "name": "protocol",
-                    "type": "string",
-                    "options": [
-                      {
-                        "name": "(google.api.field_behavior)",
-                        "value": "REQUIRED"
-                      }
-                    ]
+                    "type": "string"
                   },
                   {
                     "id": 2,
@@ -36814,6 +36808,11 @@
                     "id": 3,
                     "name": "tcp_keepalive",
                     "type": "TcpKeepalive"
+                  },
+                  {
+                    "id": 4,
+                    "name": "max_connection_duration",
+                    "type": "google.protobuf.Duration"
                   }
                 ],
                 "messages": [
@@ -38283,6 +38282,11 @@
                 "type": "HTTPRedirect"
               },
               {
+                "id": 21,
+                "name": "direct_response",
+                "type": "HTTPDirectResponse"
+              },
+              {
                 "id": 20,
                 "name": "delegate",
                 "type": "Delegate"
@@ -38504,6 +38508,11 @@
               {
                 "id": 13,
                 "name": "source_namespace",
+                "type": "string"
+              },
+              {
+                "id": 14,
+                "name": "stat_prefix",
                 "type": "string"
               }
             ],
@@ -38730,6 +38739,42 @@
                 "id": 3,
                 "name": "redirect_code",
                 "type": "uint32"
+              }
+            ]
+          },
+          {
+            "name": "HTTPDirectResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "status",
+                "type": "uint32",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "body",
+                "type": "HTTPBody"
+              }
+            ]
+          },
+          {
+            "name": "HTTPBody",
+            "fields": [
+              {
+                "id": 1,
+                "name": "string",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "bytes",
+                "type": "bytes"
               }
             ]
           },
@@ -39453,13 +39498,7 @@
                   {
                     "id": 1,
                     "name": "protocol",
-                    "type": "string",
-                    "options": [
-                      {
-                        "name": "(google.api.field_behavior)",
-                        "value": "REQUIRED"
-                      }
-                    ]
+                    "type": "string"
                   },
                   {
                     "id": 2,
@@ -39641,6 +39680,11 @@
                     "id": 3,
                     "name": "tcp_keepalive",
                     "type": "TcpKeepalive"
+                  },
+                  {
+                    "id": 4,
+                    "name": "max_connection_duration",
+                    "type": "google.protobuf.Duration"
                   }
                 ],
                 "messages": [
@@ -40700,6 +40744,11 @@
                 "type": "HTTPRedirect"
               },
               {
+                "id": 21,
+                "name": "direct_response",
+                "type": "HTTPDirectResponse"
+              },
+              {
                 "id": 20,
                 "name": "delegate",
                 "type": "Delegate"
@@ -40921,6 +40970,11 @@
               {
                 "id": 13,
                 "name": "source_namespace",
+                "type": "string"
+              },
+              {
+                "id": 14,
+                "name": "stat_prefix",
                 "type": "string"
               }
             ],
@@ -41147,6 +41201,42 @@
                 "id": 3,
                 "name": "redirect_code",
                 "type": "uint32"
+              }
+            ]
+          },
+          {
+            "name": "HTTPDirectResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "status",
+                "type": "uint32",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "body",
+                "type": "HTTPBody"
+              }
+            ]
+          },
+          {
+            "name": "HTTPBody",
+            "fields": [
+              {
+                "id": 1,
+                "name": "string",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "bytes",
+                "type": "bytes"
               }
             ]
           },
