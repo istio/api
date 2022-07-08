@@ -1609,7 +1609,10 @@ type HTTPMatchRequest struct {
 	SourceNamespace string `protobuf:"bytes,13,opt,name=source_namespace,json=sourceNamespace,proto3" json:"source_namespace,omitempty"`
 	// The human readable prefix to use when emitting statistics for this route.
 	// The statistics are generated with prefix route.<stat_prefix>.
-	// This should be set for highly critical routes that one wishes to get “per-route” statistics on.
+	// This should be set for highly critical routes that one wishes to get "per-route" statistics on.
+	// This prefix is only for proxy-level statistics (envoy_*) and not service-level (istio_*) statistics.
+	// Refer https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto#envoy-v3-api-field-config-route-v3-route-stat-prefix
+	// for statistics that are generated when this is configured.
 	StatPrefix string `protobuf:"bytes,14,opt,name=stat_prefix,json=statPrefix,proto3" json:"stat_prefix,omitempty"`
 }
 
