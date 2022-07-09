@@ -17,6 +17,7 @@ syntax = "proto3";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/struct.proto";
 import "type/v1beta1/selector.proto";
+import "telemetry/v1alpha1/telemetry.proto";
 
 // $schema: istio.extensions.v1alpha1.WasmPlugin
 // $title: Wasm Plugin
@@ -332,7 +333,7 @@ message WasmPlugin {
     // If not specified, this condition is evaluated to true for any traffic
     // direction.
     istio.telemetry.v1alpha1.WorkloadMode mode = 1;
-
+  
     // $hide_from_docs 
     // Hide this from the doc until implementing this.
     //

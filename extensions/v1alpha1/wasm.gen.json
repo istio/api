@@ -39,6 +39,62 @@
           "STATS"
         ]
       },
+      "istio.extensions.v1alpha1.PortSelector": {
+        "description": "PortSelector specifies the criteria used to determine if a policy can be applied to a listener having a specific port.",
+        "type": "object",
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "number"
+                  ],
+                  "properties": {
+                    "number": {
+                      "description": "Valid port number",
+                      "type": "integer"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "name"
+                  ],
+                  "properties": {
+                    "name": {
+                      "description": "Port name",
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "number"
+            ],
+            "properties": {
+              "number": {
+                "description": "Valid port number",
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
+                "description": "Port name",
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
       "istio.extensions.v1alpha1.PullPolicy": {
         "description": "The pull behaviour to be applied when fetching a Wam module, mirroring K8s behaviour.",
         "type": "string",
@@ -105,8 +161,40 @@
           },
           "vmConfig": {
             "$ref": "#/components/schemas/istio.extensions.v1alpha1.VmConfig"
+          },
+          "match": {
+            "description": "Hide this from doc until implementing this.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.extensions.v1alpha1.WasmPlugin.TrafficSelector"
+            }
           }
         }
+      },
+      "istio.extensions.v1alpha1.WasmPlugin.TrafficSelector": {
+        "description": "Hide this from doc until implementing this.",
+        "type": "object",
+        "properties": {
+          "mode": {
+            "$ref": "#/components/schemas/istio.telemetry.v1alpha1.WorkloadMode"
+          },
+          "ports": {
+            "description": "Hide this from the doc until implementing this.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.extensions.v1alpha1.PortSelector"
+            }
+          }
+        }
+      },
+      "istio.telemetry.v1alpha1.WorkloadMode": {
+        "description": "WorkloadMode allows selection of the role of the underlying workload in network traffic. A workload is considered as acting as a SERVER if it is the destination of the traffic (that is, traffic direction, from the perspective of the workload is *inbound*). If the workload is the source of the network traffic, it is considered to be in CLIENT mode (traffic is *outbound* from the workload).",
+        "type": "string",
+        "enum": [
+          "CLIENT_AND_SERVER",
+          "CLIENT",
+          "SERVER"
+        ]
       },
       "istio.type.v1beta1.WorkloadSelector": {
         "description": "WorkloadSelector specifies the criteria used to determine if a policy can be applied to a proxy. The matching criteria includes the metadata associated with a proxy, workload instance info such as labels attached to the pod/VM, or any other info that the proxy provides to Istio during the initial handshake. If multiple conditions are specified, all conditions need to match in order for the workload instance to be selected. Currently, only label based selection mechanism is supported.",

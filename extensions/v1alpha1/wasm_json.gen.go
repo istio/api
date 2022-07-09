@@ -17,6 +17,17 @@ func (this *WasmPlugin) UnmarshalJSON(b []byte) error {
 	return WasmUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for WasmPlugin_TrafficSelector
+func (this *WasmPlugin_TrafficSelector) MarshalJSON() ([]byte, error) {
+	str, err := WasmMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for WasmPlugin_TrafficSelector
+func (this *WasmPlugin_TrafficSelector) UnmarshalJSON(b []byte) error {
+	return WasmUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 // MarshalJSON is a custom marshaler for VmConfig
 func (this *VmConfig) MarshalJSON() ([]byte, error) {
 	str, err := WasmMarshaler.MarshalToString(this)
@@ -36,6 +47,17 @@ func (this *EnvVar) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for EnvVar
 func (this *EnvVar) UnmarshalJSON(b []byte) error {
+	return WasmUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for PortSelector
+func (this *PortSelector) MarshalJSON() ([]byte, error) {
+	str, err := WasmMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for PortSelector
+func (this *PortSelector) UnmarshalJSON(b []byte) error {
 	return WasmUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
