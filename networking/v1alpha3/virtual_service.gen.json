@@ -386,7 +386,7 @@
             "type": "string"
           },
           "statPrefix": {
-            "description": "The human readable prefix to use when emitting statistics for this route. The statistics are generated with prefix route.\u003cstat_prefix\u003e. This should be set for highly critical routes that one wishes to get “per-route” statistics on.",
+            "description": "The human readable prefix to use when emitting statistics for this route. The statistics are generated with prefix route.\u003cstat_prefix\u003e. This should be set for highly critical routes that one wishes to get \"per-route\" statistics on. This prefix is only for proxy-level statistics (envoy_*) and not service-level (istio_*) statistics. Refer to https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto#envoy-v3-api-field-config-route-v3-route-stat-prefix for statistics that are generated when this is configured.",
             "type": "string"
           }
         }
