@@ -409,16 +409,18 @@ data:
       addresses: '"$RANGE" | kubectl apply --kubeconfig="$KUBECONFIG" -f -
 }
 
+
 function cidr_to_ips() {
     CIDR="$1"
-    # cidr_to_ips returns a list of single IPs from a CIDR. We skip 1000 (since they are likely to be allocated
-    # already to other services), then pick the next 100.
+    # cidr_to_ips returns a of single IPs from a CIDR. It only gives the last 1/4th to avoid
+    # giving IPs that are already used.
     python3 - <<EOF
 from ipaddress import ip_network;
-from itertools import islice;
-[print(str(ip) + "/" + str(ip.max_prefixlen)) for ip in islice(ip_network('$CIDR').hosts(), 1000, 1100)]
+ips = [str(ip) + "/" + str(ip.max_prefixlen) for ip in ip_network('$CIDR').hosts()]
+[print(ip) for ip in ips[int(-len(ips)/4):]]
 EOF
 }
+
 
 function ips_to_cidrs() {
   IP_RANGE_START="$1"
