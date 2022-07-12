@@ -244,19 +244,19 @@ const (
 	// apiVersion: security.istio.io/v1beta1
 	// kind: AuthorizationPolicy
 	// metadata:
-	//  name: ext-authz
-	//  namespace: istio-system
+	//   name: ext-authz
+	//   namespace: istio-system
 	// spec:
-	//  selector:
-	//    matchLabels:
-	//      app: istio-ingressgateway
-	//  action: CUSTOM
-	//  provider:
-	//    name: "my-custom-authz"
-	//  rules:
-	//  - to:
-	//    - operation:
-	//        paths: ["/admin/*"]
+	//   selector:
+	//     matchLabels:
+	//       app: istio-ingressgateway
+	//   action: CUSTOM
+	//   provider:
+	//     name: "my-custom-authz"
+	//   rules:
+	//   - to:
+	//     - operation:
+	//         paths: ["/admin/*"]
 	// ```
 	AuthorizationPolicy_CUSTOM AuthorizationPolicy_Action = 3
 )
