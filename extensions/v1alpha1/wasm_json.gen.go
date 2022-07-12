@@ -50,17 +50,6 @@ func (this *EnvVar) UnmarshalJSON(b []byte) error {
 	return WasmUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for PortSelector
-func (this *PortSelector) MarshalJSON() ([]byte, error) {
-	str, err := WasmMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for PortSelector
-func (this *PortSelector) UnmarshalJSON(b []byte) error {
-	return WasmUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
 var (
 	WasmMarshaler   = &jsonpb.Marshaler{}
 	WasmUnmarshaler = &jsonpb.Unmarshaler{AllowUnknownFields: true}

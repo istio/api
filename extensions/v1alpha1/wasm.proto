@@ -17,7 +17,6 @@ syntax = "proto3";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/struct.proto";
 import "type/v1beta1/selector.proto";
-import "telemetry/v1alpha1/telemetry.proto";
 
 // $schema: istio.extensions.v1alpha1.WasmPlugin
 // $title: Wasm Plugin
@@ -332,7 +331,7 @@ message WasmPlugin {
     // respectively. If the selected workload is a gateway, the field is ignored.
     // If not specified, this condition is evaluated to true for any traffic
     // direction.
-    istio.telemetry.v1alpha1.WorkloadMode mode = 1;
+    istio.type.v1beta1.WorkloadMode mode = 1;
   
     // $hide_from_docs 
     // Hide this from the doc until implementing this.
@@ -341,7 +340,7 @@ message WasmPlugin {
     // If one of the given ports is matched, this condition is evaluated to true.
     //
     // If not specified, this condition is evaluated to true for any port.
-    repeated PortSelector ports = 2;
+    repeated istio.type.v1beta1.PortSelector ports = 2;
   }    
 
   // $hide_from_docs
@@ -420,22 +419,4 @@ enum EnvValueSource {
 
   // *Istio-proxy's* environment variables exposed to this VM.
   HOST = 1;
-}
-
-// $hide_from_docs
-// PortSelector specifies the criteria used to determine if a policy can be 
-// applied to a listener having a specific port.
-//
-// This is copied from authentication/v1alpha1/policy.proto since it is
-// deprecated now. 
-// networking/v1beta1/gateway.proto also define "Port", but there are too
-// many inadequate fields (e.g., target_port or protocol) and no notion 
-// of "oneof".
-message PortSelector {
-  oneof port {
-    // Valid port number
-    uint32 number = 1;
-    // Port name
-    string name = 2;
-  }
 }
