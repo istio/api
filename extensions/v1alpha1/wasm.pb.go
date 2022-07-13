@@ -66,7 +66,7 @@
 //   namespace: istio-ingress
 // spec:
 //   selector:
-//     labels:
+//     matchLabels:
 //       istio: ingressgateway
 //   url: oci://private-registry:5000/openid-connect/openid:latest
 //   imagePullPolicy: IfNotPresent
@@ -87,7 +87,7 @@
 //   namespace: istio-ingress
 // spec:
 //   selector:
-//     labels:
+//     matchLabels:
 //       istio: ingressgateway
 //   url: oci://private-registry:5000/openid-connect/openid:latest
 //   imagePullPolicy: IfNotPresent

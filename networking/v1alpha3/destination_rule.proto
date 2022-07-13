@@ -176,6 +176,7 @@ import "type/v1beta1/selector.proto";
 // metadata:
 //   name: configure-client-mtls-dr-with-workloadselector
 // spec:
+//   host: example.com
 //   workloadSelector:
 //     matchLabels:
 //       app: ratings
@@ -197,6 +198,7 @@ import "type/v1beta1/selector.proto";
 // metadata:
 //   name: configure-client-mtls-dr-with-workloadselector
 // spec:
+//   host: example.com
 //   workloadSelector:
 //     matchLabels:
 //       app: ratings

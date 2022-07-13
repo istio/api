@@ -175,6 +175,7 @@
 // metadata:
 //   name: configure-client-mtls-dr-with-workloadselector
 // spec:
+//   host: example.com
 //   workloadSelector:
 //     matchLabels:
 //       app: ratings
@@ -196,6 +197,7 @@
 // metadata:
 //   name: configure-client-mtls-dr-with-workloadselector
 // spec:
+//   host: example.com
 //   workloadSelector:
 //     matchLabels:
 //       app: ratings

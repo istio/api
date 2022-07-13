@@ -165,6 +165,7 @@ kind: DestinationRule
 metadata:
   name: configure-client-mtls-dr-with-workloadselector
 spec:
+  host: example.com
   workloadSelector:
     matchLabels:
       app: ratings
@@ -187,6 +188,7 @@ kind: DestinationRule
 metadata:
   name: configure-client-mtls-dr-with-workloadselector
 spec:
+  host: example.com
   workloadSelector:
     matchLabels:
       app: ratings
