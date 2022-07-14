@@ -764,8 +764,11 @@ type WasmPlugin_TrafficSelector struct {
 	// Hide this from the doc until implementing this.
 	//
 	// Criteria for selecting traffic by their destination port.
-	// If one of the given ports is matched, this condition is evaluated to true.
+	// More specifically, for the outbound traffic, the destination port would be
+	// the port of the target service. On the other hand, for the inbound traffic,
+	// the destiation port is the port bound by the server process in the same Pod.
 	//
+	// If one of the given `ports` is matched, this condition is evaluated to true.
 	// If not specified, this condition is evaluated to true for any port.
 	Ports []*v1beta1.PortSelector `protobuf:"bytes,2,rep,name=ports,proto3" json:"ports,omitempty"`
 }
