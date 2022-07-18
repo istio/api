@@ -742,10 +742,10 @@ func (x *EnvVar) GetValue() string {
 // $hide_from_docs
 // Hide this from doc until implementing this.
 //
-// TrafficSelector provides a method to select a specific traffic which will be
-// passed to the Wasm plugin.
-// When all the sub conditions in the TrafficSelector are satisfied,
-// the traffic will be selected.
+// TrafficSelector provides a mechanism to select a specific traffic flow
+// for which this Wasm Plugin will be enabled.
+// When all the sub conditions in the TrafficSelector are satisfied, the
+// traffic will be selected.
 type WasmPlugin_TrafficSelector struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
