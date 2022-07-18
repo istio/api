@@ -65,7 +65,7 @@ annotations:
     featureStatus: Beta
     description: Specifies whether or not an Envoy sidecar should be automatically
       injected into the workload.
-    deprecated: false
+    deprecated: true
     hidden: false
     resources:
       - Pod
