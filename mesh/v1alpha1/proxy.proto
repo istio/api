@@ -48,6 +48,7 @@ message Tracing {
     string address = 1;
   }
 
+  // $hide_from_docs
   // Defines configuration for a Lightstep tracer.
   message Lightstep {
     // Address of the Lightstep Satellite pool.
@@ -133,7 +134,9 @@ message Tracing {
     // Use a Zipkin tracer.
     Zipkin zipkin = 1;
     // Use a Lightstep tracer.
-    Lightstep lightstep = 2;
+    // Deprecated: Please transition to OpenTelemetryTracingProvider and
+    // use of the Telemetry API.
+    Lightstep lightstep = 2 [deprecated=true];
     // Use a Datadog tracer.
     Datadog datadog = 3;
     // Use a Stackdriver tracer.

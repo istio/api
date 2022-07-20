@@ -433,7 +433,8 @@
                   ],
                   "properties": {
                     "lightstep": {
-                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider"
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider",
+                      "deprecated": true
                     }
                   }
                 },
@@ -474,6 +475,16 @@
                   "properties": {
                     "skywalking": {
                       "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SkyWalkingTracingProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "opentelemetry"
+                  ],
+                  "properties": {
+                    "opentelemetry": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider"
                     }
                   }
                 },
@@ -566,7 +577,8 @@
             ],
             "properties": {
               "lightstep": {
-                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider"
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider",
+                "deprecated": true
               }
             }
           },
@@ -607,6 +619,16 @@
             "properties": {
               "skywalking": {
                 "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SkyWalkingTracingProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "opentelemetry"
+            ],
+            "properties": {
+              "opentelemetry": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider"
               }
             }
           },
@@ -973,7 +995,7 @@
         }
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider": {
-        "description": "Defines configuration for a Lightstep tracer.",
+        "description": "Defines configuration for a Lightstep tracer. Deprecated: Lightstep has moved to OpenTelemetry-based integrations. Please use the OpenTelemetryTracingProvider.",
         "type": "object",
         "properties": {
           "service": {
@@ -986,7 +1008,8 @@
           },
           "accessToken": {
             "description": "The Lightstep access token.",
-            "type": "string"
+            "type": "string",
+            "deprecated": true
           },
           "maxTagLength": {
             "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
@@ -1029,6 +1052,24 @@
           "CLOUD_TRACE_CONTEXT",
           "B3"
         ]
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider": {
+        "description": "Defines configuration for an OpenTelemetry tracing backend.",
+        "type": "object",
+        "properties": {
+          "service": {
+            "description": "REQUIRED. Specifies the OpenTelemetry endpoint that will receive OTLP traces. The format is `[\u003cNamespace\u003e/]\u003cHostname\u003e`. The specification of `\u003cNamespace\u003e` is required only when it is insufficient to unambiguously resolve a service in the service registry. The `\u003cHostname\u003e` is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
+            "type": "string"
+          },
+          "port": {
+            "description": "REQUIRED. Specifies the port of the service.",
+            "type": "integer"
+          },
+          "maxTagLength": {
+            "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
+            "type": "integer"
+          }
+        }
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.PrometheusMetricsProvider": {
         "type": "object"
@@ -1766,7 +1807,8 @@
                   ],
                   "properties": {
                     "lightstep": {
-                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Lightstep"
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Lightstep",
+                      "deprecated": true
                     }
                   }
                 },
@@ -1819,7 +1861,8 @@
             ],
             "properties": {
               "lightstep": {
-                "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Lightstep"
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Lightstep",
+                "deprecated": true
               }
             }
           },

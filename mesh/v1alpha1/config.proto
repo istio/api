@@ -496,7 +496,8 @@ message MeshConfig {
       // Configures a tracing provider that uses the Zipkin API.
       ZipkinTracingProvider zipkin = 4;
       // Configures a Lightstep tracing provider.
-      LightstepTracingProvider lightstep = 5;
+      // Deprecated: Users should switch to OpenTelemetryTracingProvider.
+      LightstepTracingProvider lightstep = 5 [deprecated=true];
       // Configures a Datadog tracing provider.
       DatadogTracingProvider datadog = 6;
       // Configures a Stackdriver provider.
@@ -505,6 +506,8 @@ message MeshConfig {
       OpenCensusAgentTracingProvider opencensus = 8;
       // Configures a Apache SkyWalking provider.
       SkyWalkingTracingProvider skywalking = 9;
+      // Configures an OpenTelemetry tracing provider.
+      OpenTelemetryTracingProvider opentelemetry = 15;
       // Configures a Prometheus metrics provider.
       PrometheusMetricsProvider prometheus = 10;
       // Configures an Envoy File Access Log provider.
@@ -515,6 +518,9 @@ message MeshConfig {
       EnvoyTcpGrpcV3LogProvider envoy_tcp_als = 13;
       // Configures an Envoy Open Telemetry Access Logging Service provider.
       EnvoyOpenTelemetryLogProvider envoy_otel_als = 14;
+
+      // $hide_from_docs
+      // next id: 16
     }
 
     message EnvoyExternalAuthorizationRequestBody {
@@ -689,6 +695,7 @@ message MeshConfig {
     }
 
     // Defines configuration for a Lightstep tracer.
+    // Deprecated: Lightstep has moved to OpenTelemetry-based integrations. Please use the OpenTelemetryTracingProvider.
     message LightstepTracingProvider {
       // REQUIRED. Specifies the service for the Lightstep collector.
       // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
@@ -702,7 +709,7 @@ message MeshConfig {
       uint32 port = 2;
 
       // The Lightstep access token.
-      string access_token = 3;
+      string access_token = 3 [deprecated=true];
 
       // Optional. Controls the overall path length allowed in a reported span.
       // NOTE: currently only controls max length of the path tag.
@@ -974,6 +981,25 @@ message MeshConfig {
           // ```
           google.protobuf.Struct labels = 2;   
       }
+    }
+
+    // $hide_from_docs
+    // Defines configuration for an OpenTelemetry tracing backend.
+    message OpenTelemetryTracingProvider {
+      // REQUIRED. Specifies the OpenTelemetry endpoint that will receive OTLP traces.
+      // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
+      // to unambiguously resolve a service in the service registry. The `<Hostname>` is a fully qualified host name of a
+      // service defined by the Kubernetes service or ServiceEntry.
+      //
+      // Example: "otlp.default.svc.cluster.local" or "bar/otlp.example.com".
+      string service = 1;
+
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 2;
+
+      // Optional. Controls the overall path length allowed in a reported span.
+      // NOTE: currently only controls max length of the path tag.
+      uint32 max_tag_length = 3;
     }
   }
 

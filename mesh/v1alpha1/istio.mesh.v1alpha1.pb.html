@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 56
+number_of_entries: 55
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -979,17 +979,6 @@ No
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-lightstep" class="oneof">
-<td><code>lightstep</code></td>
-<td><code><a href="#MeshConfig-ExtensionProvider-LightstepTracingProvider">LightstepTracingProvider (oneof)</a></code></td>
-<td>
-<p>Configures a Lightstep tracing provider.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="MeshConfig-ExtensionProvider-datadog" class="oneof">
 <td><code>datadog</code></td>
 <td><code><a href="#MeshConfig-ExtensionProvider-DatadogTracingProvider">DatadogTracingProvider (oneof)</a></code></td>
@@ -1028,6 +1017,17 @@ No
 <td><code><a href="#MeshConfig-ExtensionProvider-SkyWalkingTracingProvider">SkyWalkingTracingProvider (oneof)</a></code></td>
 <td>
 <p>Configures a Apache SkyWalking provider.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-opentelemetry" class="oneof">
+<td><code>opentelemetry</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider">OpenTelemetryTracingProvider (oneof)</a></code></td>
+<td>
+<p>Configures an OpenTelemetry tracing provider.</p>
 
 </td>
 <td>
@@ -1083,6 +1083,18 @@ No
 <td><code><a href="#MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider">EnvoyOpenTelemetryLogProvider (oneof)</a></code></td>
 <td>
 <p>Configures an Envoy Open Telemetry Access Logging Service provider.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-lightstep" class="deprecated oneof oneof-start">
+<td><code>lightstep</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-LightstepTracingProvider">LightstepTracingProvider (oneof)</a></code></td>
+<td>
+<p>Configures a Lightstep tracing provider.
+Deprecated: Users should switch to OpenTelemetryTracingProvider.</p>
 
 </td>
 <td>
@@ -1667,7 +1679,8 @@ No
 </section>
 <h2 id="MeshConfig-ExtensionProvider-LightstepTracingProvider">MeshConfig.ExtensionProvider.LightstepTracingProvider</h2>
 <section>
-<p>Defines configuration for a Lightstep tracer.</p>
+<p>Defines configuration for a Lightstep tracer.
+Deprecated: Lightstep has moved to OpenTelemetry-based integrations. Please use the OpenTelemetryTracingProvider.</p>
 
 <table class="message-fields">
 <thead>
@@ -1706,23 +1719,23 @@ No
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-LightstepTracingProvider-access_token">
-<td><code>accessToken</code></td>
-<td><code>string</code></td>
-<td>
-<p>The Lightstep access token.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="MeshConfig-ExtensionProvider-LightstepTracingProvider-max_tag_length">
 <td><code>maxTagLength</code></td>
 <td><code>uint32</code></td>
 <td>
 <p>Optional. Controls the overall path length allowed in a reported span.
 NOTE: currently only controls max length of the path tag.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-LightstepTracingProvider-access_token" class="deprecated ">
+<td><code>accessToken</code></td>
+<td><code>string</code></td>
+<td>
+<p>The Lightstep access token.</p>
 
 </td>
 <td>
@@ -2453,17 +2466,6 @@ No
 No
 </td>
 </tr>
-<tr id="Tracing-lightstep" class="oneof">
-<td><code>lightstep</code></td>
-<td><code><a href="#Tracing-Lightstep">Lightstep (oneof)</a></code></td>
-<td>
-<p>Use a Lightstep tracer.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="Tracing-datadog" class="oneof">
 <td><code>datadog</code></td>
 <td><code><a href="#Tracing-Datadog">Datadog (oneof)</a></code></td>
@@ -2516,6 +2518,19 @@ No
 <p>Use the tls_settings to specify the tls mode to use. If the remote tracing service
 uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
 mode as <code>ISTIO_MUTUAL</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Tracing-lightstep" class="deprecated oneof oneof-start">
+<td><code>lightstep</code></td>
+<td><code><a href="#Tracing-Lightstep">Lightstep (oneof)</a></code></td>
+<td>
+<p>Use a Lightstep tracer.
+Deprecated: Please transition to OpenTelemetryTracingProvider and
+use of the Telemetry API.</p>
 
 </td>
 <td>
@@ -3080,45 +3095,6 @@ No
 <td><code>string</code></td>
 <td>
 <p>Address of the Zipkin service (e.g. <em>zipkin:9411</em>).</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="Tracing-Lightstep">Tracing.Lightstep</h2>
-<section>
-<p>Defines configuration for a Lightstep tracer.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Tracing-Lightstep-address">
-<td><code>address</code></td>
-<td><code>string</code></td>
-<td>
-<p>Address of the Lightstep Satellite pool.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="Tracing-Lightstep-access_token">
-<td><code>accessToken</code></td>
-<td><code>string</code></td>
-<td>
-<p>The Lightstep access token.</p>
 
 </td>
 <td>
