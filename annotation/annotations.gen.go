@@ -30,6 +30,7 @@ const (
     Any
     AuthorizationPolicy
     Ingress
+    Namespace
     Pod
     Service
     WorkloadEntry
@@ -44,10 +45,12 @@ func (r ResourceTypes) String() string {
 	case 3:
 		return "Ingress"
 	case 4:
-		return "Pod"
+		return "Namespace"
 	case 5:
-		return "Service"
+		return "Pod"
 	case 6:
+		return "Service"
+	case 7:
 		return "WorkloadEntry"
 	}
 	return "Unknown"
@@ -444,7 +447,7 @@ var (
                         "automatically injected into the workload.",
 		FeatureStatus: Beta,
 		Hidden:        false,
-		Deprecated:    false,
+		Deprecated:    true,
 		Resources: []ResourceTypes{
 			Pod,
 		},
@@ -642,11 +645,53 @@ var (
 		},
 	}
 
+	TopologyControlPlaneClusters = Instance {
+		Name:          "topology.istio.io/controlPlaneClusters",
+		Description:   "A comma-separated list of clusters (or * for any) running "+
+                        "istiod that should attempt leader election for a remote "+
+                        "cluster thats system namespace includes this annotation. "+
+                        "Istiod will not attempt to lead unannotated remote "+
+                        "clusters.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Namespace,
+		},
+	}
+
+	TrafficNodeSelector = Instance {
+		Name:          "traffic.istio.io/nodeSelector",
+		Description:   "This annotation is a set of node-labels "+
+                        "(key1=value,key2=value). If the annotated Service is of "+
+                        "type NodePort and is a multi-network gateway (see "+
+                        "topology.istio.io/network), the addresses for selected "+
+                        "nodes will be used for cross-network communication.",
+		FeatureStatus: Stable,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Service,
+		},
+	}
+
 	SidecarTrafficExcludeInboundPorts = Instance {
 		Name:          "traffic.sidecar.istio.io/excludeInboundPorts",
 		Description:   "A comma separated list of inbound ports to be excluded "+
                         "from redirection to Envoy. Only applies when all inbound "+
                         "traffic (i.e. '*') is being redirected.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
+	SidecarTrafficExcludeInterfaces = Instance {
+		Name:          "traffic.sidecar.istio.io/excludeInterfaces",
+		Description:   "A comma separated list of interfaces to be excluded from "+
+                        "Istio traffic capture",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -783,7 +828,10 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarUserVolume,
 		&SidecarUserVolumeMount,
 		&SidecarStatusPort,
+		&TopologyControlPlaneClusters,
+		&TrafficNodeSelector,
 		&SidecarTrafficExcludeInboundPorts,
+		&SidecarTrafficExcludeInterfaces,
 		&SidecarTrafficExcludeOutboundIPRanges,
 		&SidecarTrafficExcludeOutboundPorts,
 		&SidecarTrafficIncludeInboundPorts,
@@ -798,6 +846,7 @@ func AllResourceTypes() []string {
 		"Any",
 		"AuthorizationPolicy",
 		"Ingress",
+		"Namespace",
 		"Pod",
 		"Service",
 		"WorkloadEntry",
