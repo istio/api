@@ -2169,8 +2169,10 @@ type ConnectionPoolSettings_HTTPSettings struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Maximum number of pending HTTP requests to a destination. Default 2^32-1.
+	// Please note that this is applicable to both HTTP1.1/ and HTTP2.
 	Http1MaxPendingRequests int32 `protobuf:"varint,1,opt,name=http1_max_pending_requests,json=http1MaxPendingRequests,proto3" json:"http1_max_pending_requests,omitempty"`
 	// Maximum number of requests to a backend. Default 2^32-1.
+	// Please note that this is applicable to both HTTP1.1/ and HTTP2.
 	Http2MaxRequests int32 `protobuf:"varint,2,opt,name=http2_max_requests,json=http2MaxRequests,proto3" json:"http2_max_requests,omitempty"`
 	// Maximum number of requests per connection to a backend. Setting this
 	// parameter to 1 disables keep alive. Default 0, meaning "unlimited",

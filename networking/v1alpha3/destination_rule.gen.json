@@ -74,12 +74,12 @@
         "type": "object",
         "properties": {
           "http1MaxPendingRequests": {
-            "description": "Maximum number of pending HTTP requests to a destination. Default 2^32-1.",
+            "description": "Maximum number of pending HTTP requests to a destination. Default 2^32-1. Please note that this is applicable to both HTTP1.1/ and HTTP2.",
             "type": "integer",
             "format": "int32"
           },
           "http2MaxRequests": {
-            "description": "Maximum number of requests to a backend. Default 2^32-1.",
+            "description": "Maximum number of requests to a backend. Default 2^32-1. Please note that this is applicable to both HTTP1.1/ and HTTP2.",
             "type": "integer",
             "format": "int32"
           },
