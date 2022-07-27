@@ -709,11 +709,14 @@ message ConnectionPoolSettings {
 
   // Settings applicable to HTTP1.1/HTTP2/GRPC connections.
   message HTTPSettings {
-    // Maximum number of pending HTTP requests to a destination. Default 2^32-1.
+    // Maximum number of requests that will be queued while waiting for
+    // a ready connection pool connection. Default 1024.
+    // Refer to https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/circuit_breaking
+    // under which conditions a new connection is created for HTTP2.
     // Please note that this is applicable to both HTTP/1.1 and HTTP2.
     int32 http1_max_pending_requests = 1;
 
-    // Maximum number of requests to a backend. Default 2^32-1.
+    // Maximum number of active requests to a destination. Default 1024.
     // Please note that this is applicable to both HTTP/1.1 and HTTP2.
     int32 http2_max_requests = 2;
 

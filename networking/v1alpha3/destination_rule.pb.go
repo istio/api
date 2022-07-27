@@ -2219,10 +2219,13 @@ type ConnectionPoolSettings_HTTPSettings struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Maximum number of pending HTTP requests to a destination. Default 2^32-1.
+	// Maximum number of requests that will be queued while waiting for
+	// a ready connection pool connection. Default 1024.
+	// Refer to https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/circuit_breaking
+	// under which conditions a new connection is created for HTTP2.
 	// Please note that this is applicable to both HTTP/1.1 and HTTP2.
 	Http1MaxPendingRequests int32 `protobuf:"varint,1,opt,name=http1_max_pending_requests,json=http1MaxPendingRequests,proto3" json:"http1_max_pending_requests,omitempty"`
-	// Maximum number of requests to a backend. Default 2^32-1.
+	// Maximum number of active requests to a destination. Default 1024.
 	// Please note that this is applicable to both HTTP/1.1 and HTTP2.
 	Http2MaxRequests int32 `protobuf:"varint,2,opt,name=http2_max_requests,json=http2MaxRequests,proto3" json:"http2_max_requests,omitempty"`
 	// Maximum number of requests per connection to a backend. Setting this
