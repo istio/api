@@ -247,7 +247,7 @@
         ]
       },
       "istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB": {
-        "description": "Consistent Hash-based load balancing can be used to provide soft session affinity based on HTTP headers, cookies or other properties. The affinity to a particular destination host will be lost when one or more hosts are added/removed from the destination service.",
+        "description": "Consistent Hash-based load balancing can be used to provide soft session affinity based on HTTP headers, cookies or other properties. The affinity to a particular destination host may be lost when one or more hosts are added/removed from the destination service.",
         "type": "object",
         "properties": {
           "minimumRingSize": {
@@ -255,98 +255,152 @@
             "type": "integer"
           }
         },
-        "oneOf": [
+        "allOf": [
           {
-            "not": {
-              "anyOf": [
-                {
-                  "required": [
-                    "httpHeaderName"
-                  ],
-                  "properties": {
-                    "httpHeaderName": {
-                      "description": "Hash based on a specific HTTP header.",
-                      "type": "string"
+            "oneOf": [
+              {
+                "not": {
+                  "anyOf": [
+                    {
+                      "required": [
+                        "httpHeaderName"
+                      ],
+                      "properties": {
+                        "httpHeaderName": {
+                          "description": "Hash based on a specific HTTP header.",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    {
+                      "required": [
+                        "httpCookie"
+                      ],
+                      "properties": {
+                        "httpCookie": {
+                          "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie"
+                        }
+                      }
+                    },
+                    {
+                      "required": [
+                        "useSourceIp"
+                      ],
+                      "properties": {
+                        "useSourceIp": {
+                          "description": "Hash based on the source IP address. This is applicable for both TCP and HTTP connections.",
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    {
+                      "required": [
+                        "httpQueryParameterName"
+                      ],
+                      "properties": {
+                        "httpQueryParameterName": {
+                          "description": "Hash based on a specific HTTP query parameter.",
+                          "type": "string"
+                        }
+                      }
                     }
-                  }
-                },
-                {
-                  "required": [
-                    "httpCookie"
-                  ],
-                  "properties": {
-                    "httpCookie": {
-                      "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie"
-                    }
-                  }
-                },
-                {
-                  "required": [
-                    "useSourceIp"
-                  ],
-                  "properties": {
-                    "useSourceIp": {
-                      "description": "Hash based on the source IP address. This is applicable for both TCP and HTTP connections.",
-                      "type": "boolean"
-                    }
-                  }
-                },
-                {
-                  "required": [
-                    "httpQueryParameterName"
-                  ],
-                  "properties": {
-                    "httpQueryParameterName": {
-                      "description": "Hash based on a specific HTTP query parameter.",
-                      "type": "string"
-                    }
+                  ]
+                }
+              },
+              {
+                "required": [
+                  "httpHeaderName"
+                ],
+                "properties": {
+                  "httpHeaderName": {
+                    "description": "Hash based on a specific HTTP header.",
+                    "type": "string"
                   }
                 }
-              ]
-            }
+              },
+              {
+                "required": [
+                  "httpCookie"
+                ],
+                "properties": {
+                  "httpCookie": {
+                    "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie"
+                  }
+                }
+              },
+              {
+                "required": [
+                  "useSourceIp"
+                ],
+                "properties": {
+                  "useSourceIp": {
+                    "description": "Hash based on the source IP address. This is applicable for both TCP and HTTP connections.",
+                    "type": "boolean"
+                  }
+                }
+              },
+              {
+                "required": [
+                  "httpQueryParameterName"
+                ],
+                "properties": {
+                  "httpQueryParameterName": {
+                    "description": "Hash based on a specific HTTP query parameter.",
+                    "type": "string"
+                  }
+                }
+              }
+            ]
           },
           {
-            "required": [
-              "httpHeaderName"
-            ],
-            "properties": {
-              "httpHeaderName": {
-                "description": "Hash based on a specific HTTP header.",
-                "type": "string"
+            "oneOf": [
+              {
+                "not": {
+                  "anyOf": [
+                    {
+                      "required": [
+                        "ringHash"
+                      ],
+                      "properties": {
+                        "ringHash": {
+                          "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.RingHashConfig"
+                        }
+                      }
+                    },
+                    {
+                      "required": [
+                        "maglev"
+                      ],
+                      "properties": {
+                        "maglev": {
+                          "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.MagLevConfig"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "required": [
+                  "ringHash"
+                ],
+                "properties": {
+                  "ringHash": {
+                    "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.RingHashConfig"
+                  }
+                }
+              },
+              {
+                "required": [
+                  "maglev"
+                ],
+                "properties": {
+                  "maglev": {
+                    "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.MagLevConfig"
+                  }
+                }
               }
-            }
-          },
-          {
-            "required": [
-              "httpCookie"
-            ],
-            "properties": {
-              "httpCookie": {
-                "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie"
-              }
-            }
-          },
-          {
-            "required": [
-              "useSourceIp"
-            ],
-            "properties": {
-              "useSourceIp": {
-                "description": "Hash based on the source IP address. This is applicable for both TCP and HTTP connections.",
-                "type": "boolean"
-              }
-            }
-          },
-          {
-            "required": [
-              "httpQueryParameterName"
-            ],
-            "properties": {
-              "httpQueryParameterName": {
-                "description": "Hash based on a specific HTTP query parameter.",
-                "type": "string"
-              }
-            }
+            ]
           }
         ]
       },
@@ -365,6 +419,24 @@
           "ttl": {
             "description": "Lifetime of the cookie.",
             "type": "string"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.MagLevConfig": {
+        "type": "object",
+        "properties": {
+          "tableSize": {
+            "description": "The table size for Maglev hashing. This helps in controlling the disruption when the backend hosts change. Increasing the table size reduces the amount of disruption.",
+            "type": "integer"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.RingHashConfig": {
+        "type": "object",
+        "properties": {
+          "minimumRingSize": {
+            "description": "The minimum number of virtual nodes to use for the hash ring. Defaults to 1024. Larger ring sizes result in more granular load distributions. If the number of hosts in the load balancing pool is larger than the ring size, each host will be assigned a single virtual node.",
+            "type": "integer"
           }
         }
       },
