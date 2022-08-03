@@ -1950,9 +1950,10 @@ type LoadBalancerSettings_ConsistentHashLB struct {
 	// Please refer to https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#ring-hash
 	// and https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#maglev for
 	// considerations on choosing an algorithm.
+	// Defaults to RingHash if not specified.
 	//
 	// Types that are assignable to HashAlgorithm:
-	//	*LoadBalancerSettings_ConsistentHashLB_RingHash
+	//	*LoadBalancerSettings_ConsistentHashLB_RingHash_
 	//	*LoadBalancerSettings_ConsistentHashLB_Maglev
 	HashAlgorithm isLoadBalancerSettings_ConsistentHashLB_HashAlgorithm `protobuf_oneof:"hash_algorithm"`
 	// The minimum number of virtual nodes to use for the hash
@@ -1960,6 +1961,8 @@ type LoadBalancerSettings_ConsistentHashLB struct {
 	// load distributions. If the number of hosts in the load balancing
 	// pool is larger than the ring size, each host will be assigned a
 	// single virtual node.
+	//
+	// Deprecated: Do not use.
 	MinimumRingSize uint64 `protobuf:"varint,4,opt,name=minimum_ring_size,json=minimumRingSize,proto3" json:"minimum_ring_size,omitempty"`
 }
 
@@ -2037,20 +2040,21 @@ func (m *LoadBalancerSettings_ConsistentHashLB) GetHashAlgorithm() isLoadBalance
 	return nil
 }
 
-func (x *LoadBalancerSettings_ConsistentHashLB) GetRingHash() *LoadBalancerSettings_ConsistentHashLB_RingHashConfig {
-	if x, ok := x.GetHashAlgorithm().(*LoadBalancerSettings_ConsistentHashLB_RingHash); ok {
+func (x *LoadBalancerSettings_ConsistentHashLB) GetRingHash() *LoadBalancerSettings_ConsistentHashLB_RingHash {
+	if x, ok := x.GetHashAlgorithm().(*LoadBalancerSettings_ConsistentHashLB_RingHash_); ok {
 		return x.RingHash
 	}
 	return nil
 }
 
-func (x *LoadBalancerSettings_ConsistentHashLB) GetMaglev() *LoadBalancerSettings_ConsistentHashLB_MagLevConfig {
+func (x *LoadBalancerSettings_ConsistentHashLB) GetMaglev() *LoadBalancerSettings_ConsistentHashLB_MagLev {
 	if x, ok := x.GetHashAlgorithm().(*LoadBalancerSettings_ConsistentHashLB_Maglev); ok {
 		return x.Maglev
 	}
 	return nil
 }
 
+// Deprecated: Do not use.
 func (x *LoadBalancerSettings_ConsistentHashLB) GetMinimumRingSize() uint64 {
 	if x != nil {
 		return x.MinimumRingSize
@@ -2099,23 +2103,23 @@ type isLoadBalancerSettings_ConsistentHashLB_HashAlgorithm interface {
 	isLoadBalancerSettings_ConsistentHashLB_HashAlgorithm()
 }
 
-type LoadBalancerSettings_ConsistentHashLB_RingHash struct {
+type LoadBalancerSettings_ConsistentHashLB_RingHash_ struct {
 	// The ring/modulo hash load balancer implements consistent hashing to backend hosts.
-	RingHash *LoadBalancerSettings_ConsistentHashLB_RingHashConfig `protobuf:"bytes,6,opt,name=ring_hash,json=ringHash,proto3,oneof"`
+	RingHash *LoadBalancerSettings_ConsistentHashLB_RingHash `protobuf:"bytes,6,opt,name=ring_hash,json=ringHash,proto3,oneof"`
 }
 
 type LoadBalancerSettings_ConsistentHashLB_Maglev struct {
 	// The Maglev load balancer implements consistent hashing to backend hosts.
-	Maglev *LoadBalancerSettings_ConsistentHashLB_MagLevConfig `protobuf:"bytes,7,opt,name=maglev,proto3,oneof"`
+	Maglev *LoadBalancerSettings_ConsistentHashLB_MagLev `protobuf:"bytes,7,opt,name=maglev,proto3,oneof"`
 }
 
-func (*LoadBalancerSettings_ConsistentHashLB_RingHash) isLoadBalancerSettings_ConsistentHashLB_HashAlgorithm() {
+func (*LoadBalancerSettings_ConsistentHashLB_RingHash_) isLoadBalancerSettings_ConsistentHashLB_HashAlgorithm() {
 }
 
 func (*LoadBalancerSettings_ConsistentHashLB_Maglev) isLoadBalancerSettings_ConsistentHashLB_HashAlgorithm() {
 }
 
-type LoadBalancerSettings_ConsistentHashLB_RingHashConfig struct {
+type LoadBalancerSettings_ConsistentHashLB_RingHash struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -2125,11 +2129,13 @@ type LoadBalancerSettings_ConsistentHashLB_RingHashConfig struct {
 	// load distributions. If the number of hosts in the load balancing
 	// pool is larger than the ring size, each host will be assigned a
 	// single virtual node.
+	//
+	// Deprecated: Do not use.
 	MinimumRingSize uint64 `protobuf:"varint,8,opt,name=minimum_ring_size,json=minimumRingSize,proto3" json:"minimum_ring_size,omitempty"`
 }
 
-func (x *LoadBalancerSettings_ConsistentHashLB_RingHashConfig) Reset() {
-	*x = LoadBalancerSettings_ConsistentHashLB_RingHashConfig{}
+func (x *LoadBalancerSettings_ConsistentHashLB_RingHash) Reset() {
+	*x = LoadBalancerSettings_ConsistentHashLB_RingHash{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2137,13 +2143,13 @@ func (x *LoadBalancerSettings_ConsistentHashLB_RingHashConfig) Reset() {
 	}
 }
 
-func (x *LoadBalancerSettings_ConsistentHashLB_RingHashConfig) String() string {
+func (x *LoadBalancerSettings_ConsistentHashLB_RingHash) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*LoadBalancerSettings_ConsistentHashLB_RingHashConfig) ProtoMessage() {}
+func (*LoadBalancerSettings_ConsistentHashLB_RingHash) ProtoMessage() {}
 
-func (x *LoadBalancerSettings_ConsistentHashLB_RingHashConfig) ProtoReflect() protoreflect.Message {
+func (x *LoadBalancerSettings_ConsistentHashLB_RingHash) ProtoReflect() protoreflect.Message {
 	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2155,19 +2161,20 @@ func (x *LoadBalancerSettings_ConsistentHashLB_RingHashConfig) ProtoReflect() pr
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use LoadBalancerSettings_ConsistentHashLB_RingHashConfig.ProtoReflect.Descriptor instead.
-func (*LoadBalancerSettings_ConsistentHashLB_RingHashConfig) Descriptor() ([]byte, []int) {
+// Deprecated: Use LoadBalancerSettings_ConsistentHashLB_RingHash.ProtoReflect.Descriptor instead.
+func (*LoadBalancerSettings_ConsistentHashLB_RingHash) Descriptor() ([]byte, []int) {
 	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{3, 0, 0}
 }
 
-func (x *LoadBalancerSettings_ConsistentHashLB_RingHashConfig) GetMinimumRingSize() uint64 {
+// Deprecated: Do not use.
+func (x *LoadBalancerSettings_ConsistentHashLB_RingHash) GetMinimumRingSize() uint64 {
 	if x != nil {
 		return x.MinimumRingSize
 	}
 	return 0
 }
 
-type LoadBalancerSettings_ConsistentHashLB_MagLevConfig struct {
+type LoadBalancerSettings_ConsistentHashLB_MagLev struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -2178,8 +2185,8 @@ type LoadBalancerSettings_ConsistentHashLB_MagLevConfig struct {
 	TableSize uint64 `protobuf:"varint,9,opt,name=table_size,json=tableSize,proto3" json:"table_size,omitempty"`
 }
 
-func (x *LoadBalancerSettings_ConsistentHashLB_MagLevConfig) Reset() {
-	*x = LoadBalancerSettings_ConsistentHashLB_MagLevConfig{}
+func (x *LoadBalancerSettings_ConsistentHashLB_MagLev) Reset() {
+	*x = LoadBalancerSettings_ConsistentHashLB_MagLev{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2187,13 +2194,13 @@ func (x *LoadBalancerSettings_ConsistentHashLB_MagLevConfig) Reset() {
 	}
 }
 
-func (x *LoadBalancerSettings_ConsistentHashLB_MagLevConfig) String() string {
+func (x *LoadBalancerSettings_ConsistentHashLB_MagLev) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*LoadBalancerSettings_ConsistentHashLB_MagLevConfig) ProtoMessage() {}
+func (*LoadBalancerSettings_ConsistentHashLB_MagLev) ProtoMessage() {}
 
-func (x *LoadBalancerSettings_ConsistentHashLB_MagLevConfig) ProtoReflect() protoreflect.Message {
+func (x *LoadBalancerSettings_ConsistentHashLB_MagLev) ProtoReflect() protoreflect.Message {
 	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2205,12 +2212,12 @@ func (x *LoadBalancerSettings_ConsistentHashLB_MagLevConfig) ProtoReflect() prot
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use LoadBalancerSettings_ConsistentHashLB_MagLevConfig.ProtoReflect.Descriptor instead.
-func (*LoadBalancerSettings_ConsistentHashLB_MagLevConfig) Descriptor() ([]byte, []int) {
+// Deprecated: Use LoadBalancerSettings_ConsistentHashLB_MagLev.ProtoReflect.Descriptor instead.
+func (*LoadBalancerSettings_ConsistentHashLB_MagLev) Descriptor() ([]byte, []int) {
 	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{3, 0, 1}
 }
 
-func (x *LoadBalancerSettings_ConsistentHashLB_MagLevConfig) GetTableSize() uint64 {
+func (x *LoadBalancerSettings_ConsistentHashLB_MagLev) GetTableSize() uint64 {
 	if x != nil {
 		return x.TableSize
 	}
@@ -2810,7 +2817,7 @@ var file_networking_v1alpha3_destination_rule_proto_rawDesc = []byte{
 	0x39, 0x0a, 0x0b, 0x4c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10,
 	0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79,
 	0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0x9e, 0x0a, 0x0a, 0x14, 0x4c,
+	0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0x8e, 0x0a, 0x0a, 0x14, 0x4c,
 	0x6f, 0x61, 0x64, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x72, 0x53, 0x65, 0x74, 0x74, 0x69,
 	0x6e, 0x67, 0x73, 0x12, 0x52, 0x0a, 0x06, 0x73, 0x69, 0x6d, 0x70, 0x6c, 0x65, 0x18, 0x01, 0x20,
 	0x01, 0x28, 0x0e, 0x32, 0x38, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x6e, 0x65, 0x74, 0x77,
@@ -2835,7 +2842,7 @@ var file_networking_v1alpha3_destination_rule_proto_rawDesc = []byte{
 	0x73, 0x65, 0x63, 0x73, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f,
 	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72,
 	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x12, 0x77, 0x61, 0x72, 0x6d, 0x75, 0x70, 0x44, 0x75, 0x72,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x53, 0x65, 0x63, 0x73, 0x1a, 0x90, 0x06, 0x0a, 0x10, 0x43, 0x6f,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x53, 0x65, 0x63, 0x73, 0x1a, 0x80, 0x06, 0x0a, 0x10, 0x43, 0x6f,
 	0x6e, 0x73, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x74, 0x48, 0x61, 0x73, 0x68, 0x4c, 0x42, 0x12, 0x2a,
 	0x0a, 0x10, 0x68, 0x74, 0x74, 0x70, 0x5f, 0x68, 0x65, 0x61, 0x64, 0x65, 0x72, 0x5f, 0x6e, 0x61,
 	0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x0e, 0x68, 0x74, 0x74, 0x70,
@@ -2852,28 +2859,27 @@ var file_networking_v1alpha3_destination_rule_proto_rawDesc = []byte{
 	0x12, 0x3b, 0x0a, 0x19, 0x68, 0x74, 0x74, 0x70, 0x5f, 0x71, 0x75, 0x65, 0x72, 0x79, 0x5f, 0x70,
 	0x61, 0x72, 0x61, 0x6d, 0x65, 0x74, 0x65, 0x72, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x05, 0x20,
 	0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x16, 0x68, 0x74, 0x74, 0x70, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x50, 0x61, 0x72, 0x61, 0x6d, 0x65, 0x74, 0x65, 0x72, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x6e, 0x0a,
+	0x50, 0x61, 0x72, 0x61, 0x6d, 0x65, 0x74, 0x65, 0x72, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x68, 0x0a,
 	0x09, 0x72, 0x69, 0x6e, 0x67, 0x5f, 0x68, 0x61, 0x73, 0x68, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x4f, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b,
+	0x32, 0x49, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b,
 	0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x61, 0x6c, 0x70, 0x68, 0x61, 0x33, 0x2e, 0x4c, 0x6f, 0x61,
 	0x64, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x72, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67,
 	0x73, 0x2e, 0x43, 0x6f, 0x6e, 0x73, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x74, 0x48, 0x61, 0x73, 0x68,
-	0x4c, 0x42, 0x2e, 0x52, 0x69, 0x6e, 0x67, 0x48, 0x61, 0x73, 0x68, 0x43, 0x6f, 0x6e, 0x66, 0x69,
-	0x67, 0x48, 0x01, 0x52, 0x08, 0x72, 0x69, 0x6e, 0x67, 0x48, 0x61, 0x73, 0x68, 0x12, 0x67, 0x0a,
-	0x06, 0x6d, 0x61, 0x67, 0x6c, 0x65, 0x76, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x4d, 0x2e,
-	0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x69, 0x6e, 0x67,
-	0x2e, 0x76, 0x31, 0x61, 0x6c, 0x70, 0x68, 0x61, 0x33, 0x2e, 0x4c, 0x6f, 0x61, 0x64, 0x42, 0x61,
-	0x6c, 0x61, 0x6e, 0x63, 0x65, 0x72, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x2e, 0x43,
-	0x6f, 0x6e, 0x73, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x74, 0x48, 0x61, 0x73, 0x68, 0x4c, 0x42, 0x2e,
-	0x4d, 0x61, 0x67, 0x4c, 0x65, 0x76, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x48, 0x01, 0x52, 0x06,
-	0x6d, 0x61, 0x67, 0x6c, 0x65, 0x76, 0x12, 0x2a, 0x0a, 0x11, 0x6d, 0x69, 0x6e, 0x69, 0x6d, 0x75,
-	0x6d, 0x5f, 0x72, 0x69, 0x6e, 0x67, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28,
-	0x04, 0x52, 0x0f, 0x6d, 0x69, 0x6e, 0x69, 0x6d, 0x75, 0x6d, 0x52, 0x69, 0x6e, 0x67, 0x53, 0x69,
-	0x7a, 0x65, 0x1a, 0x3c, 0x0a, 0x0e, 0x52, 0x69, 0x6e, 0x67, 0x48, 0x61, 0x73, 0x68, 0x43, 0x6f,
-	0x6e, 0x66, 0x69, 0x67, 0x12, 0x2a, 0x0a, 0x11, 0x6d, 0x69, 0x6e, 0x69, 0x6d, 0x75, 0x6d, 0x5f,
-	0x72, 0x69, 0x6e, 0x67, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x18, 0x08, 0x20, 0x01, 0x28, 0x04, 0x52,
-	0x0f, 0x6d, 0x69, 0x6e, 0x69, 0x6d, 0x75, 0x6d, 0x52, 0x69, 0x6e, 0x67, 0x53, 0x69, 0x7a, 0x65,
-	0x1a, 0x2d, 0x0a, 0x0c, 0x4d, 0x61, 0x67, 0x4c, 0x65, 0x76, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67,
+	0x4c, 0x42, 0x2e, 0x52, 0x69, 0x6e, 0x67, 0x48, 0x61, 0x73, 0x68, 0x48, 0x01, 0x52, 0x08, 0x72,
+	0x69, 0x6e, 0x67, 0x48, 0x61, 0x73, 0x68, 0x12, 0x61, 0x0a, 0x06, 0x6d, 0x61, 0x67, 0x6c, 0x65,
+	0x76, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x47, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e,
+	0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x61, 0x6c, 0x70,
+	0x68, 0x61, 0x33, 0x2e, 0x4c, 0x6f, 0x61, 0x64, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x72,
+	0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x2e, 0x43, 0x6f, 0x6e, 0x73, 0x69, 0x73, 0x74,
+	0x65, 0x6e, 0x74, 0x48, 0x61, 0x73, 0x68, 0x4c, 0x42, 0x2e, 0x4d, 0x61, 0x67, 0x4c, 0x65, 0x76,
+	0x48, 0x01, 0x52, 0x06, 0x6d, 0x61, 0x67, 0x6c, 0x65, 0x76, 0x12, 0x2e, 0x0a, 0x11, 0x6d, 0x69,
+	0x6e, 0x69, 0x6d, 0x75, 0x6d, 0x5f, 0x72, 0x69, 0x6e, 0x67, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x04, 0x42, 0x02, 0x18, 0x01, 0x52, 0x0f, 0x6d, 0x69, 0x6e, 0x69, 0x6d,
+	0x75, 0x6d, 0x52, 0x69, 0x6e, 0x67, 0x53, 0x69, 0x7a, 0x65, 0x1a, 0x3a, 0x0a, 0x08, 0x52, 0x69,
+	0x6e, 0x67, 0x48, 0x61, 0x73, 0x68, 0x12, 0x2e, 0x0a, 0x11, 0x6d, 0x69, 0x6e, 0x69, 0x6d, 0x75,
+	0x6d, 0x5f, 0x72, 0x69, 0x6e, 0x67, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x18, 0x08, 0x20, 0x01, 0x28,
+	0x04, 0x42, 0x02, 0x18, 0x01, 0x52, 0x0f, 0x6d, 0x69, 0x6e, 0x69, 0x6d, 0x75, 0x6d, 0x52, 0x69,
+	0x6e, 0x67, 0x53, 0x69, 0x7a, 0x65, 0x1a, 0x27, 0x0a, 0x06, 0x4d, 0x61, 0x67, 0x4c, 0x65, 0x76,
 	0x12, 0x1d, 0x0a, 0x0a, 0x74, 0x61, 0x62, 0x6c, 0x65, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x18, 0x09,
 	0x20, 0x01, 0x28, 0x04, 0x52, 0x09, 0x74, 0x61, 0x62, 0x6c, 0x65, 0x53, 0x69, 0x7a, 0x65, 0x1a,
 	0x6d, 0x0a, 0x0a, 0x48, 0x54, 0x54, 0x50, 0x43, 0x6f, 0x6f, 0x6b, 0x69, 0x65, 0x12, 0x18, 0x0a,
@@ -3091,29 +3097,29 @@ func file_networking_v1alpha3_destination_rule_proto_rawDescGZIP() []byte {
 var file_networking_v1alpha3_destination_rule_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
 var file_networking_v1alpha3_destination_rule_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_networking_v1alpha3_destination_rule_proto_goTypes = []interface{}{
-	(LoadBalancerSettings_SimpleLB)(0),                           // 0: istio.networking.v1alpha3.LoadBalancerSettings.SimpleLB
-	(ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy)(0),     // 1: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicy
-	(ClientTLSSettings_TLSmode)(0),                               // 2: istio.networking.v1alpha3.ClientTLSSettings.TLSmode
-	(*DestinationRule)(nil),                                      // 3: istio.networking.v1alpha3.DestinationRule
-	(*TrafficPolicy)(nil),                                        // 4: istio.networking.v1alpha3.TrafficPolicy
-	(*Subset)(nil),                                               // 5: istio.networking.v1alpha3.Subset
-	(*LoadBalancerSettings)(nil),                                 // 6: istio.networking.v1alpha3.LoadBalancerSettings
-	(*ConnectionPoolSettings)(nil),                               // 7: istio.networking.v1alpha3.ConnectionPoolSettings
-	(*OutlierDetection)(nil),                                     // 8: istio.networking.v1alpha3.OutlierDetection
-	(*ClientTLSSettings)(nil),                                    // 9: istio.networking.v1alpha3.ClientTLSSettings
-	(*LocalityLoadBalancerSetting)(nil),                          // 10: istio.networking.v1alpha3.LocalityLoadBalancerSetting
-	(*TrafficPolicy_PortTrafficPolicy)(nil),                      // 11: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy
-	(*TrafficPolicy_TunnelSettings)(nil),                         // 12: istio.networking.v1alpha3.TrafficPolicy.TunnelSettings
-	nil,                                                          // 13: istio.networking.v1alpha3.Subset.LabelsEntry
-	(*LoadBalancerSettings_ConsistentHashLB)(nil),                // 14: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB
-	(*LoadBalancerSettings_ConsistentHashLB_RingHashConfig)(nil), // 15: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.RingHashConfig
-	(*LoadBalancerSettings_ConsistentHashLB_MagLevConfig)(nil),   // 16: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.MagLevConfig
-	(*LoadBalancerSettings_ConsistentHashLB_HTTPCookie)(nil),     // 17: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie
-	(*ConnectionPoolSettings_TCPSettings)(nil),                   // 18: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings
-	(*ConnectionPoolSettings_HTTPSettings)(nil),                  // 19: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings
-	(*ConnectionPoolSettings_TCPSettings_TcpKeepalive)(nil),      // 20: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive
-	(*LocalityLoadBalancerSetting_Distribute)(nil),               // 21: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute
-	(*LocalityLoadBalancerSetting_Failover)(nil),                 // 22: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Failover
+	(LoadBalancerSettings_SimpleLB)(0),                       // 0: istio.networking.v1alpha3.LoadBalancerSettings.SimpleLB
+	(ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy)(0), // 1: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicy
+	(ClientTLSSettings_TLSmode)(0),                           // 2: istio.networking.v1alpha3.ClientTLSSettings.TLSmode
+	(*DestinationRule)(nil),                                  // 3: istio.networking.v1alpha3.DestinationRule
+	(*TrafficPolicy)(nil),                                    // 4: istio.networking.v1alpha3.TrafficPolicy
+	(*Subset)(nil),                                           // 5: istio.networking.v1alpha3.Subset
+	(*LoadBalancerSettings)(nil),                             // 6: istio.networking.v1alpha3.LoadBalancerSettings
+	(*ConnectionPoolSettings)(nil),                           // 7: istio.networking.v1alpha3.ConnectionPoolSettings
+	(*OutlierDetection)(nil),                                 // 8: istio.networking.v1alpha3.OutlierDetection
+	(*ClientTLSSettings)(nil),                                // 9: istio.networking.v1alpha3.ClientTLSSettings
+	(*LocalityLoadBalancerSetting)(nil),                      // 10: istio.networking.v1alpha3.LocalityLoadBalancerSetting
+	(*TrafficPolicy_PortTrafficPolicy)(nil),                  // 11: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy
+	(*TrafficPolicy_TunnelSettings)(nil),                     // 12: istio.networking.v1alpha3.TrafficPolicy.TunnelSettings
+	nil,                                                      // 13: istio.networking.v1alpha3.Subset.LabelsEntry
+	(*LoadBalancerSettings_ConsistentHashLB)(nil),            // 14: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB
+	(*LoadBalancerSettings_ConsistentHashLB_RingHash)(nil),   // 15: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.RingHash
+	(*LoadBalancerSettings_ConsistentHashLB_MagLev)(nil),     // 16: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.MagLev
+	(*LoadBalancerSettings_ConsistentHashLB_HTTPCookie)(nil), // 17: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie
+	(*ConnectionPoolSettings_TCPSettings)(nil),               // 18: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings
+	(*ConnectionPoolSettings_HTTPSettings)(nil),              // 19: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings
+	(*ConnectionPoolSettings_TCPSettings_TcpKeepalive)(nil),  // 20: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive
+	(*LocalityLoadBalancerSetting_Distribute)(nil),           // 21: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute
+	(*LocalityLoadBalancerSetting_Failover)(nil),             // 22: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Failover
 	nil,                              // 23: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.ToEntry
 	(*v1beta1.WorkloadSelector)(nil), // 24: istio.type.v1beta1.WorkloadSelector
 	(*duration.Duration)(nil),        // 25: google.protobuf.Duration
@@ -3155,8 +3161,8 @@ var file_networking_v1alpha3_destination_rule_proto_depIdxs = []int32{
 	8,  // 30: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.outlier_detection:type_name -> istio.networking.v1alpha3.OutlierDetection
 	9,  // 31: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.tls:type_name -> istio.networking.v1alpha3.ClientTLSSettings
 	17, // 32: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.http_cookie:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie
-	15, // 33: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.ring_hash:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.RingHashConfig
-	16, // 34: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.maglev:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.MagLevConfig
+	15, // 33: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.ring_hash:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.RingHash
+	16, // 34: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.maglev:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.MagLev
 	25, // 35: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.ttl:type_name -> google.protobuf.Duration
 	25, // 36: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.connect_timeout:type_name -> google.protobuf.Duration
 	20, // 37: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.tcp_keepalive:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive
@@ -3313,7 +3319,7 @@ func file_networking_v1alpha3_destination_rule_proto_init() {
 			}
 		}
 		file_networking_v1alpha3_destination_rule_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LoadBalancerSettings_ConsistentHashLB_RingHashConfig); i {
+			switch v := v.(*LoadBalancerSettings_ConsistentHashLB_RingHash); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3325,7 +3331,7 @@ func file_networking_v1alpha3_destination_rule_proto_init() {
 			}
 		}
 		file_networking_v1alpha3_destination_rule_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LoadBalancerSettings_ConsistentHashLB_MagLevConfig); i {
+			switch v := v.(*LoadBalancerSettings_ConsistentHashLB_MagLev); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3418,7 +3424,7 @@ func file_networking_v1alpha3_destination_rule_proto_init() {
 		(*LoadBalancerSettings_ConsistentHashLB_HttpCookie)(nil),
 		(*LoadBalancerSettings_ConsistentHashLB_UseSourceIp)(nil),
 		(*LoadBalancerSettings_ConsistentHashLB_HttpQueryParameterName)(nil),
-		(*LoadBalancerSettings_ConsistentHashLB_RingHash)(nil),
+		(*LoadBalancerSettings_ConsistentHashLB_RingHash_)(nil),
 		(*LoadBalancerSettings_ConsistentHashLB_Maglev)(nil),
 	}
 	type x struct{}

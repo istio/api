@@ -252,7 +252,8 @@
         "properties": {
           "minimumRingSize": {
             "description": "The minimum number of virtual nodes to use for the hash ring. Defaults to 1024. Larger ring sizes result in more granular load distributions. If the number of hosts in the load balancing pool is larger than the ring size, each host will be assigned a single virtual node.",
-            "type": "integer"
+            "type": "integer",
+            "deprecated": true
           }
         },
         "allOf": [
@@ -363,7 +364,7 @@
                       ],
                       "properties": {
                         "ringHash": {
-                          "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.ConsistentHashLB.RingHashConfig"
+                          "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.ConsistentHashLB.RingHash"
                         }
                       }
                     },
@@ -373,7 +374,7 @@
                       ],
                       "properties": {
                         "maglev": {
-                          "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.ConsistentHashLB.MagLevConfig"
+                          "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.ConsistentHashLB.MagLev"
                         }
                       }
                     }
@@ -386,7 +387,7 @@
                 ],
                 "properties": {
                   "ringHash": {
-                    "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.ConsistentHashLB.RingHashConfig"
+                    "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.ConsistentHashLB.RingHash"
                   }
                 }
               },
@@ -396,7 +397,7 @@
                 ],
                 "properties": {
                   "maglev": {
-                    "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.ConsistentHashLB.MagLevConfig"
+                    "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.ConsistentHashLB.MagLev"
                   }
                 }
               }
@@ -422,7 +423,7 @@
           }
         }
       },
-      "istio.networking.v1beta1.LoadBalancerSettings.ConsistentHashLB.MagLevConfig": {
+      "istio.networking.v1beta1.LoadBalancerSettings.ConsistentHashLB.MagLev": {
         "type": "object",
         "properties": {
           "tableSize": {
@@ -431,12 +432,13 @@
           }
         }
       },
-      "istio.networking.v1beta1.LoadBalancerSettings.ConsistentHashLB.RingHashConfig": {
+      "istio.networking.v1beta1.LoadBalancerSettings.ConsistentHashLB.RingHash": {
         "type": "object",
         "properties": {
           "minimumRingSize": {
             "description": "The minimum number of virtual nodes to use for the hash ring. Defaults to 1024. Larger ring sizes result in more granular load distributions. If the number of hosts in the load balancing pool is larger than the ring size, each host will be assigned a single virtual node.",
-            "type": "integer"
+            "type": "integer",
+            "deprecated": true
           }
         }
       },

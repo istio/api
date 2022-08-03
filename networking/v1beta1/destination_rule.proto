@@ -513,16 +513,16 @@ message LoadBalancerSettings {
   // service.
   message ConsistentHashLB {
 
-    message RingHashConfig {
+    message RingHash {
       // The minimum number of virtual nodes to use for the hash
       // ring. Defaults to 1024. Larger ring sizes result in more granular
       // load distributions. If the number of hosts in the load balancing
       // pool is larger than the ring size, each host will be assigned a
       // single virtual node.
-      uint64 minimum_ring_size = 8;
+      uint64 minimum_ring_size = 8 [deprecated=true];
     };
   
-    message MagLevConfig {
+    message MagLev {
       // The table size for Maglev hashing. This helps in controlling the 
       // disruption when the backend hosts change.
       // Increasing the table size reduces the amount of disruption. 
@@ -560,11 +560,12 @@ message LoadBalancerSettings {
         // Please refer to https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#ring-hash
         // and https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#maglev for
         // considerations on choosing an algorithm.
+        // Defaults to RingHash if not specified.
         oneof hash_algorithm {
           // The ring/modulo hash load balancer implements consistent hashing to backend hosts.
-          RingHashConfig ring_hash = 6;
+          RingHash ring_hash = 6;
           // The Maglev load balancer implements consistent hashing to backend hosts. 
-          MagLevConfig maglev = 7;
+          MagLev maglev = 7;
         };
 
     // The minimum number of virtual nodes to use for the hash
@@ -572,7 +573,7 @@ message LoadBalancerSettings {
     // load distributions. If the number of hosts in the load balancing
     // pool is larger than the ring size, each host will be assigned a
     // single virtual node.
-    uint64 minimum_ring_size = 4;
+    uint64 minimum_ring_size = 4 [deprecated=true];
   };
 
   // (-- TODO: Enable Subset load balancing after moving to v2 API Also

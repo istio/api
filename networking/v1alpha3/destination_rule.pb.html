@@ -1573,7 +1573,7 @@ No
 </tr>
 <tr id="LoadBalancerSettings-ConsistentHashLB-ring_hash" class="oneof oneof-start">
 <td><code>ringHash</code></td>
-<td><code><a href="#LoadBalancerSettings-ConsistentHashLB-RingHashConfig">RingHashConfig (oneof)</a></code></td>
+<td><code><a href="#LoadBalancerSettings-ConsistentHashLB-RingHash">RingHash (oneof)</a></code></td>
 <td>
 <p>The ring/modulo hash load balancer implements consistent hashing to backend hosts.</p>
 
@@ -1584,7 +1584,7 @@ No
 </tr>
 <tr id="LoadBalancerSettings-ConsistentHashLB-maglev" class="oneof">
 <td><code>maglev</code></td>
-<td><code><a href="#LoadBalancerSettings-ConsistentHashLB-MagLevConfig">MagLevConfig (oneof)</a></code></td>
+<td><code><a href="#LoadBalancerSettings-ConsistentHashLB-MagLev">MagLev (oneof)</a></code></td>
 <td>
 <p>The Maglev load balancer implements consistent hashing to backend hosts.</p>
 
@@ -1593,7 +1593,7 @@ No
 No
 </td>
 </tr>
-<tr id="LoadBalancerSettings-ConsistentHashLB-minimum_ring_size">
+<tr id="LoadBalancerSettings-ConsistentHashLB-minimum_ring_size" class="deprecated ">
 <td><code>minimumRingSize</code></td>
 <td><code>uint64</code></td>
 <td>
@@ -1611,7 +1611,7 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="LoadBalancerSettings-ConsistentHashLB-RingHashConfig">LoadBalancerSettings.ConsistentHashLB.RingHashConfig</h2>
+<h2 id="LoadBalancerSettings-ConsistentHashLB-RingHash">LoadBalancerSettings.ConsistentHashLB.RingHash</h2>
 <section>
 <table class="message-fields">
 <thead>
@@ -1623,7 +1623,7 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="LoadBalancerSettings-ConsistentHashLB-RingHashConfig-minimum_ring_size">
+<tr id="LoadBalancerSettings-ConsistentHashLB-RingHash-minimum_ring_size" class="deprecated ">
 <td><code>minimumRingSize</code></td>
 <td><code>uint64</code></td>
 <td>
@@ -1641,7 +1641,7 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="LoadBalancerSettings-ConsistentHashLB-MagLevConfig">LoadBalancerSettings.ConsistentHashLB.MagLevConfig</h2>
+<h2 id="LoadBalancerSettings-ConsistentHashLB-MagLev">LoadBalancerSettings.ConsistentHashLB.MagLev</h2>
 <section>
 <table class="message-fields">
 <thead>
@@ -1653,7 +1653,7 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="LoadBalancerSettings-ConsistentHashLB-MagLevConfig-table_size">
+<tr id="LoadBalancerSettings-ConsistentHashLB-MagLev-table_size">
 <td><code>tableSize</code></td>
 <td><code>uint64</code></td>
 <td>

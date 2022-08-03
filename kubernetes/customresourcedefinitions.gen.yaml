@@ -291,6 +291,8 @@ spec:
                                         - ringHash
                                       - required:
                                         - maglev
+                                    properties:
+                                      minimumRingSize: {}
                                 required:
                                 - consistentHash
                           - required:
@@ -328,6 +330,8 @@ spec:
                                     - ringHash
                                   - required:
                                     - maglev
+                                properties:
+                                  minimumRingSize: {}
                             required:
                             - consistentHash
                           properties:
@@ -582,6 +586,8 @@ spec:
                                               - ringHash
                                             - required:
                                               - maglev
+                                          properties:
+                                            minimumRingSize: {}
                                       required:
                                       - consistentHash
                                 - required:
@@ -619,6 +625,8 @@ spec:
                                           - ringHash
                                         - required:
                                           - maglev
+                                      properties:
+                                        minimumRingSize: {}
                                   required:
                                   - consistentHash
                                 properties:
@@ -963,6 +971,8 @@ spec:
                                   - ringHash
                                 - required:
                                   - maglev
+                              properties:
+                                minimumRingSize: {}
                           required:
                           - consistentHash
                     - required:
@@ -1000,6 +1010,8 @@ spec:
                               - ringHash
                             - required:
                               - maglev
+                          properties:
+                            minimumRingSize: {}
                       required:
                       - consistentHash
                     properties:
@@ -1248,6 +1260,8 @@ spec:
                                         - ringHash
                                       - required:
                                         - maglev
+                                    properties:
+                                      minimumRingSize: {}
                                 required:
                                 - consistentHash
                           - required:
@@ -1285,6 +1299,8 @@ spec:
                                     - ringHash
                                   - required:
                                     - maglev
+                                properties:
+                                  minimumRingSize: {}
                             required:
                             - consistentHash
                           properties:
@@ -1680,6 +1696,8 @@ spec:
                                         - ringHash
                                       - required:
                                         - maglev
+                                    properties:
+                                      minimumRingSize: {}
                                 required:
                                 - consistentHash
                           - required:
@@ -1717,6 +1735,8 @@ spec:
                                     - ringHash
                                   - required:
                                     - maglev
+                                properties:
+                                  minimumRingSize: {}
                             required:
                             - consistentHash
                           properties:
@@ -1971,6 +1991,8 @@ spec:
                                               - ringHash
                                             - required:
                                               - maglev
+                                          properties:
+                                            minimumRingSize: {}
                                       required:
                                       - consistentHash
                                 - required:
@@ -2008,6 +2030,8 @@ spec:
                                           - ringHash
                                         - required:
                                           - maglev
+                                      properties:
+                                        minimumRingSize: {}
                                   required:
                                   - consistentHash
                                 properties:
@@ -2352,6 +2376,8 @@ spec:
                                   - ringHash
                                 - required:
                                   - maglev
+                              properties:
+                                minimumRingSize: {}
                           required:
                           - consistentHash
                     - required:
@@ -2389,6 +2415,8 @@ spec:
                               - ringHash
                             - required:
                               - maglev
+                          properties:
+                            minimumRingSize: {}
                       required:
                       - consistentHash
                     properties:
@@ -2637,6 +2665,8 @@ spec:
                                         - ringHash
                                       - required:
                                         - maglev
+                                    properties:
+                                      minimumRingSize: {}
                                 required:
                                 - consistentHash
                           - required:
@@ -2674,6 +2704,8 @@ spec:
                                     - ringHash
                                   - required:
                                     - maglev
+                                properties:
+                                  minimumRingSize: {}
                             required:
                             - consistentHash
                           properties:
