@@ -56,23 +56,23 @@ type Metadata struct {
 	// represent higher positions in the resource hierarchy, similar to reverse
 	// DNS notation. e.g.
 	//
-	//    /<org>/<team>/<subteam>/<resource basename>
+	//	/<org>/<team>/<subteam>/<resource basename>
 	//
 	// An empty directory indicates a resource that is located at the root of the
 	// hierarchy, e.g.
 	//
-	//    /<globally scoped resource>
+	//	/<globally scoped resource>
 	//
 	// On Kubernetes the resource hierarchy is two-levels: namespaces and
 	// cluster-scoped (i.e. global).
 	//
 	// Namespace resources fully qualified name is of the form:
 	//
-	//    "<k8s namespace>/<k8s resource name>"
+	//	"<k8s namespace>/<k8s resource name>"
 	//
 	// Cluster scoped resources are located at the root of the hierarchy and are of the form:
 	//
-	//    "/<k8s resource name>"
+	//	"/<k8s resource name>"
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// The creation timestamp of the resource.
 	CreateTime *timestamp.Timestamp `protobuf:"bytes,2,opt,name=create_time,json=createTime,proto3" json:"create_time,omitempty"`

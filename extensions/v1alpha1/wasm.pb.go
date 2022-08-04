@@ -462,8 +462,8 @@ type WasmPlugin struct {
 	// We can observe two major streams for signing OCI images: Cosign from Sigstore and Notary,
 	// which is used in Docker Content Trust.
 	// In case of Wasm module, multiple approaches are still in discussion.
-	//  * https://github.com/WebAssembly/design/issues/1413
-	//  * https://github.com/wasm-signatures/design (various signing tools are enumerated)
+	//   - https://github.com/WebAssembly/design/issues/1413
+	//   - https://github.com/wasm-signatures/design (various signing tools are enumerated)
 	//
 	// In addition, for each method for signing&verifying, we may need to consider to provide
 	// additional data or configuration (e.g., key rolling, KMS, root certs, ...) as well.
