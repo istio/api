@@ -218,6 +218,7 @@ type ReadinessProbe struct {
 	// hold true for any of the healthcheck methods.
 	//
 	// Types that are assignable to HealthCheckMethod:
+	//
 	//	*ReadinessProbe_HttpGet
 	//	*ReadinessProbe_TcpSocket
 	//	*ReadinessProbe_Exec

@@ -1341,6 +1341,7 @@ type EnvoyFilter_EnvoyConfigObjectMatch struct {
 	// Match on properties associated with a proxy.
 	Proxy *EnvoyFilter_ProxyMatch `protobuf:"bytes,2,opt,name=proxy,proto3" json:"proxy,omitempty"`
 	// Types that are assignable to ObjectTypes:
+	//
 	//	*EnvoyFilter_EnvoyConfigObjectMatch_Listener
 	//	*EnvoyFilter_EnvoyConfigObjectMatch_RouteConfiguration
 	//	*EnvoyFilter_EnvoyConfigObjectMatch_Cluster
