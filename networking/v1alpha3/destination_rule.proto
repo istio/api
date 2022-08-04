@@ -570,14 +570,14 @@ message LoadBalancerSettings {
       // load distributions. If the number of hosts in the load balancing
       // pool is larger than the ring size, each host will be assigned a
       // single virtual node.
-      uint64 minimum_ring_size = 8 [deprecated=true];
+      uint64 minimum_ring_size = 1;
     };
   
     message MagLev {
       // The table size for Maglev hashing. This helps in controlling the 
       // disruption when the backend hosts change.
       // Increasing the table size reduces the amount of disruption. 
-      uint64 table_size = 9;
+      uint64 table_size = 1;
     };
     // Describes a HTTP cookie that will be used as the hash key for the
     // Consistent Hash load balancer. If the cookie is not present, it will
