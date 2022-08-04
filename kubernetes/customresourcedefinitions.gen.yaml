@@ -366,6 +366,7 @@ spec:
                                       type: integer
                                   type: object
                                 minimumRingSize:
+                                  description: Deprecated.
                                   type: integer
                                 ringHash:
                                   description: The ring/modulo hash load balancer
@@ -663,6 +664,7 @@ spec:
                                             type: integer
                                         type: object
                                       minimumRingSize:
+                                        description: Deprecated.
                                         type: integer
                                       ringHash:
                                         description: The ring/modulo hash load balancer
@@ -1045,6 +1047,7 @@ spec:
                                 type: integer
                             type: object
                           minimumRingSize:
+                            description: Deprecated.
                             type: integer
                           ringHash:
                             description: The ring/modulo hash load balancer implements
@@ -1335,6 +1338,7 @@ spec:
                                       type: integer
                                   type: object
                                 minimumRingSize:
+                                  description: Deprecated.
                                   type: integer
                                 ringHash:
                                   description: The ring/modulo hash load balancer
@@ -1771,6 +1775,7 @@ spec:
                                       type: integer
                                   type: object
                                 minimumRingSize:
+                                  description: Deprecated.
                                   type: integer
                                 ringHash:
                                   description: The ring/modulo hash load balancer
@@ -2068,6 +2073,7 @@ spec:
                                             type: integer
                                         type: object
                                       minimumRingSize:
+                                        description: Deprecated.
                                         type: integer
                                       ringHash:
                                         description: The ring/modulo hash load balancer
@@ -2450,6 +2456,7 @@ spec:
                                 type: integer
                             type: object
                           minimumRingSize:
+                            description: Deprecated.
                             type: integer
                           ringHash:
                             description: The ring/modulo hash load balancer implements
@@ -2740,6 +2747,7 @@ spec:
                                       type: integer
                                   type: object
                                 minimumRingSize:
+                                  description: Deprecated.
                                   type: integer
                                 ringHash:
                                   description: The ring/modulo hash load balancer

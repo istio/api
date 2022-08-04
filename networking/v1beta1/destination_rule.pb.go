@@ -1972,11 +1972,7 @@ type LoadBalancerSettings_ConsistentHashLB struct {
 	//	*LoadBalancerSettings_ConsistentHashLB_RingHash_
 	//	*LoadBalancerSettings_ConsistentHashLB_Maglev
 	HashAlgorithm isLoadBalancerSettings_ConsistentHashLB_HashAlgorithm `protobuf_oneof:"hash_algorithm"`
-	// The minimum number of virtual nodes to use for the hash
-	// ring. Defaults to 1024. Larger ring sizes result in more granular
-	// load distributions. If the number of hosts in the load balancing
-	// pool is larger than the ring size, each host will be assigned a
-	// single virtual node.
+	// Deprecated. Use RingHash instead.
 	//
 	// Deprecated: Do not use.
 	MinimumRingSize uint64 `protobuf:"varint,4,opt,name=minimum_ring_size,json=minimumRingSize,proto3" json:"minimum_ring_size,omitempty"`
