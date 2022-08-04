@@ -2224,16 +2224,18 @@ type MeshConfig_AmbientMeshConfig struct {
 	// Example:
 	// ```yaml
 	// ambientMesh:
-	//   mode: ON
-	//   disabledSelectors:
-	//   - matchLabels:
-	//       env: dev
-	//   - matchExpressions:
-	//     - key: app
-	//       operator: In
-	//       values:
-	//         - cassandra
-	//         - spark
+	//
+	//	mode: ON
+	//	disabledSelectors:
+	//	- matchLabels:
+	//	    env: dev
+	//	- matchExpressions:
+	//	  - key: app
+	//	    operator: In
+	//	    values:
+	//	      - cassandra
+	//	      - spark
+	//
 	// ```
 	DisabledSelectors []*v1.LabelSelector `protobuf:"bytes,3,rep,name=disabled_selectors,json=disabledSelectors,proto3" json:"disabled_selectors,omitempty"`
 }
