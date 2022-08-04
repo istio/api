@@ -30,7 +30,10 @@ for proto in $(find . -name "*.proto" | grep -v ^./common-protos | grep -v ^./en
       sed 's/^\/\/ //g' | sed 's/^\/\///g' \
     | sed -n '/^```yaml/,/^```/ p' | sed 's/^```yaml/\-\-\-/g' \
     | grep -v '```' | grep -v '\.\.\.' \
-    | istioctl validate -f -
+    | sh -c '
+    cfg="$(cat < /dev/stdin)"
+    echo "${cfg}" | istioctl validate -f - || { echo -e "${cfg}\n\n"  && exit 1; }
+    ' || exit 1
 done
 
 # Check if schemas are identical
@@ -38,5 +41,8 @@ done
 # Note: this misses package wide documentation
 for file in $(ls networking/v1beta1/*.gen.json); do
     echo "Comparing $(basename "${file}")"
+    if [[ ! -f "networking/v1alpha3/$(basename "${file}")" ]]; then
+      continue
+    fi
     diff <(< "${file}" jq --sort-keys) <(< "networking/v1alpha3/$(basename "${file}")" sed 's/v1alpha3/v1beta1/g' | jq --sort-keys)
 done

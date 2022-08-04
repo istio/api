@@ -108,7 +108,7 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.AccessLogEncoding"
           },
           "enableEnvoyAccessLogService": {
-            "description": "This flag enables Envoy's gRPC Access Log Service. See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto) for details about Envoy's gRPC Access Log Service API. Default value is `false`.",
+            "description": "This flag enables Envoy's gRPC Access Log Service. See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/grpc/v3/als.proto) for details about Envoy's gRPC Access Log Service API. Default value is `false`.",
             "type": "boolean"
           },
           "disableEnvoyListenerLog": {
@@ -861,7 +861,7 @@
                   ],
                   "properties": {
                     "labels": {
-                      "description": "Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) can be used as values for fields within the Struct. Values are rendered as strings, numbers, or boolean values, as appropriate (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)). Nested JSON is supported for some command operators (e.g. FILTER_STATE or DYNAMIC_METADATA).",
+                      "description": "JSON structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) can be used as values for fields within the Struct. Values are rendered as strings, numbers, or boolean values, as appropriate (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)). Nested JSON is supported for some command operators (e.g. `FILTER_STATE` or `DYNAMIC_METADATA`). Use `labels: {}` for default envoy JSON log format.",
                       "type": "object"
                     }
                   }
@@ -886,7 +886,7 @@
             ],
             "properties": {
               "labels": {
-                "description": "Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) can be used as values for fields within the Struct. Values are rendered as strings, numbers, or boolean values, as appropriate (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)). Nested JSON is supported for some command operators (e.g. FILTER_STATE or DYNAMIC_METADATA).",
+                "description": "JSON structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) can be used as values for fields within the Struct. Values are rendered as strings, numbers, or boolean values, as appropriate (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)). Nested JSON is supported for some command operators (e.g. `FILTER_STATE` or `DYNAMIC_METADATA`). Use `labels: {}` for default envoy JSON log format.",
                 "type": "object"
               }
             }
@@ -2102,7 +2102,7 @@
             "type": "string"
           },
           "subjectAltNames": {
-            "description": "A list of alternate names to verify the subject identity in the certificate. If specified, the proxy will verify that the server certificate's subject alt name matches one of the specified values. If specified, this list overrides the value of subject_alt_names from the ServiceEntry.",
+            "description": "A list of alternate names to verify the subject identity in the certificate. If specified, the proxy will verify that the server certificate's subject alt name matches one of the specified values. If specified, this list overrides the value of subject_alt_names from the ServiceEntry. If unspecified, automatic validation of upstream presented certificate for new upstream connections will be done based on the downstream HTTP host/authority header, provided `VERIFY_CERT_AT_CLIENT` and `ENABLE_AUTO_SNI` environmental variables are set to `true`.",
             "type": "array",
             "items": {
               "type": "string"
@@ -2399,7 +2399,7 @@
         }
       },
       "istio.networking.v1beta1.ProxyImage": {
-        "description": "The following values are used to construct proxy image url. $hub/$image_name/$tag-$image_type example: docker.io/istio/proxyv2:1.11.1 or docker.io/istio/proxyv2:1.11.1-distroless This information was previously part of the Values API.",
+        "description": "The following values are used to construct proxy image url. format: `${hub}/${image_name}/${tag}-${image_type}`, example: `docker.io/istio/proxyv2:1.11.1` or `docker.io/istio/proxyv2:1.11.1-distroless`. This information was previously part of the Values API.",
         "type": "object",
         "properties": {
           "imageType": {
