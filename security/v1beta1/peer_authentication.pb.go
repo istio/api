@@ -106,11 +106,15 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 // apiVersion: security.istio.io/v1beta1
 // kind: PeerAuthentication
 // metadata:
-//   name: default
-//   namespace: foo
+//
+//	name: default
+//	namespace: foo
+//
 // spec:
-//   mtls:
-//     mode: STRICT
+//
+//	mtls:
+//	  mode: STRICT
+//
 // ```
 // For mesh level, put the policy in root-namespace according to your Istio installation.
 //
@@ -120,23 +124,31 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 // apiVersion: security.istio.io/v1beta1
 // kind: PeerAuthentication
 // metadata:
-//   name: default
-//   namespace: foo
+//
+//	name: default
+//	namespace: foo
+//
 // spec:
-//   mtls:
-//     mode: PERMISSIVE
+//
+//	mtls:
+//	  mode: PERMISSIVE
+//
 // ---
 // apiVersion: security.istio.io/v1beta1
 // kind: PeerAuthentication
 // metadata:
-//   name: default
-//   namespace: foo
+//
+//	name: default
+//	namespace: foo
+//
 // spec:
-//   selector:
-//     matchLabels:
-//       app: finance
-//   mtls:
-//     mode: STRICT
+//
+//	selector:
+//	  matchLabels:
+//	    app: finance
+//	mtls:
+//	  mode: STRICT
+//
 // ```
 // Policy to allow mTLS strict for all workloads, but leave port 8080 to
 // plaintext:
@@ -144,17 +156,21 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 // apiVersion: security.istio.io/v1beta1
 // kind: PeerAuthentication
 // metadata:
-//   name: default
-//   namespace: foo
+//
+//	name: default
+//	namespace: foo
+//
 // spec:
-//   selector:
-//     matchLabels:
-//       app: finance
-//   mtls:
-//     mode: STRICT
-//   portLevelMtls:
-//     8080:
-//       mode: DISABLE
+//
+//	selector:
+//	  matchLabels:
+//	    app: finance
+//	mtls:
+//	  mode: STRICT
+//	portLevelMtls:
+//	  8080:
+//	    mode: DISABLE
+//
 // ```
 // Policy to inherit mTLS mode from namespace (or mesh) settings, and overwrite
 // settings for port 8080
@@ -162,17 +178,21 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 // apiVersion: security.istio.io/v1beta1
 // kind: PeerAuthentication
 // metadata:
-//   name: default
-//   namespace: foo
+//
+//	name: default
+//	namespace: foo
+//
 // spec:
-//   selector:
-//     matchLabels:
-//       app: finance
-//   mtls:
-//     mode: UNSET
-//   portLevelMtls:
-//     8080:
-//       mode: DISABLE
+//
+//	selector:
+//	  matchLabels:
+//	    app: finance
+//	mtls:
+//	  mode: UNSET
+//	portLevelMtls:
+//	  8080:
+//	    mode: DISABLE
+//
 // ```
 //
 // <!-- crd generation tags

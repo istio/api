@@ -504,7 +504,6 @@ type DestinationRule struct {
 	// the destination rule is declared in. Similarly, the value "*" is reserved and
 	// defines an export to all namespaces.
 	ExportTo []string `protobuf:"bytes,4,rep,name=export_to,json=exportTo,proto3" json:"export_to,omitempty"`
-	//
 	// Criteria used to select the specific set of pods/VMs on which this
 	// `DestinationRule` configuration should be applied. If specified, the `DestinationRule`
 	// configuration will be applied only to the workload instances matching the workload selector
@@ -699,19 +698,23 @@ func (x *TrafficPolicy) GetTunnel() *TrafficPolicy_TunnelSettings {
 // apiVersion: networking.istio.io/v1alpha3
 // kind: DestinationRule
 // metadata:
-//   name: bookinfo-ratings
+//
+//	name: bookinfo-ratings
+//
 // spec:
-//   host: ratings.prod.svc.cluster.local
-//   trafficPolicy:
-//     loadBalancer:
-//       simple: LEAST_REQUEST
-//   subsets:
-//   - name: testversion
-//     labels:
-//       version: v3
-//     trafficPolicy:
-//       loadBalancer:
-//         simple: ROUND_ROBIN
+//
+//	host: ratings.prod.svc.cluster.local
+//	trafficPolicy:
+//	  loadBalancer:
+//	    simple: LEAST_REQUEST
+//	subsets:
+//	- name: testversion
+//	  labels:
+//	    version: v3
+//	  trafficPolicy:
+//	    loadBalancer:
+//	      simple: ROUND_ROBIN
+//
 // ```
 // {{</tab>}}
 //
@@ -720,19 +723,23 @@ func (x *TrafficPolicy) GetTunnel() *TrafficPolicy_TunnelSettings {
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
 // metadata:
-//   name: bookinfo-ratings
+//
+//	name: bookinfo-ratings
+//
 // spec:
-//   host: ratings.prod.svc.cluster.local
-//   trafficPolicy:
-//     loadBalancer:
-//       simple: LEAST_REQUEST
-//   subsets:
-//   - name: testversion
-//     labels:
-//       version: v3
-//     trafficPolicy:
-//       loadBalancer:
-//         simple: ROUND_ROBIN
+//
+//	host: ratings.prod.svc.cluster.local
+//	trafficPolicy:
+//	  loadBalancer:
+//	    simple: LEAST_REQUEST
+//	subsets:
+//	- name: testversion
+//	  labels:
+//	    version: v3
+//	  trafficPolicy:
+//	    loadBalancer:
+//	      simple: ROUND_ROBIN
+//
 // ```
 // {{</tab>}}
 // {{</tabset>}}
@@ -830,12 +837,16 @@ func (x *Subset) GetTrafficPolicy() *TrafficPolicy {
 // apiVersion: networking.istio.io/v1alpha3
 // kind: DestinationRule
 // metadata:
-//   name: bookinfo-ratings
+//
+//	name: bookinfo-ratings
+//
 // spec:
-//   host: ratings.prod.svc.cluster.local
-//   trafficPolicy:
-//     loadBalancer:
-//       simple: ROUND_ROBIN
+//
+//	host: ratings.prod.svc.cluster.local
+//	trafficPolicy:
+//	  loadBalancer:
+//	    simple: ROUND_ROBIN
+//
 // ```
 // {{</tab>}}
 //
@@ -844,12 +855,16 @@ func (x *Subset) GetTrafficPolicy() *TrafficPolicy {
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
 // metadata:
-//   name: bookinfo-ratings
+//
+//	name: bookinfo-ratings
+//
 // spec:
-//   host: ratings.prod.svc.cluster.local
-//   trafficPolicy:
-//     loadBalancer:
-//       simple: ROUND_ROBIN
+//
+//	host: ratings.prod.svc.cluster.local
+//	trafficPolicy:
+//	  loadBalancer:
+//	    simple: ROUND_ROBIN
+//
 // ```
 // {{</tab>}}
 // {{</tabset>}}
@@ -864,15 +879,19 @@ func (x *Subset) GetTrafficPolicy() *TrafficPolicy {
 // apiVersion: networking.istio.io/v1alpha3
 // kind: DestinationRule
 // metadata:
-//   name: bookinfo-ratings
+//
+//	name: bookinfo-ratings
+//
 // spec:
-//   host: ratings.prod.svc.cluster.local
-//   trafficPolicy:
-//     loadBalancer:
-//       consistentHash:
-//         httpCookie:
-//           name: user
-//           ttl: 0s
+//
+//	host: ratings.prod.svc.cluster.local
+//	trafficPolicy:
+//	  loadBalancer:
+//	    consistentHash:
+//	      httpCookie:
+//	        name: user
+//	        ttl: 0s
+//
 // ```
 // {{</tab>}}
 //
@@ -881,19 +900,22 @@ func (x *Subset) GetTrafficPolicy() *TrafficPolicy {
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
 // metadata:
-//   name: bookinfo-ratings
+//
+//	name: bookinfo-ratings
+//
 // spec:
-//   host: ratings.prod.svc.cluster.local
-//   trafficPolicy:
-//     loadBalancer:
-//       consistentHash:
-//         httpCookie:
-//           name: user
-//           ttl: 0s
+//
+//	host: ratings.prod.svc.cluster.local
+//	trafficPolicy:
+//	  loadBalancer:
+//	    consistentHash:
+//	      httpCookie:
+//	        name: user
+//	        ttl: 0s
+//
 // ```
 // {{</tab>}}
 // {{</tabset>}}
-//
 type LoadBalancerSettings struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -902,6 +924,7 @@ type LoadBalancerSettings struct {
 	// Upstream load balancing policy.
 	//
 	// Types that are assignable to LbPolicy:
+	//
 	//	*LoadBalancerSettings_Simple
 	//	*LoadBalancerSettings_ConsistentHash
 	LbPolicy isLoadBalancerSettings_LbPolicy `protobuf_oneof:"lb_policy"`
@@ -1014,17 +1037,21 @@ func (*LoadBalancerSettings_ConsistentHash) isLoadBalancerSettings_LbPolicy() {}
 // apiVersion: networking.istio.io/v1alpha3
 // kind: DestinationRule
 // metadata:
-//   name: bookinfo-redis
+//
+//	name: bookinfo-redis
+//
 // spec:
-//   host: myredissrv.prod.svc.cluster.local
-//   trafficPolicy:
-//     connectionPool:
-//       tcp:
-//         maxConnections: 100
-//         connectTimeout: 30ms
-//         tcpKeepalive:
-//           time: 7200s
-//           interval: 75s
+//
+//	host: myredissrv.prod.svc.cluster.local
+//	trafficPolicy:
+//	  connectionPool:
+//	    tcp:
+//	      maxConnections: 100
+//	      connectTimeout: 30ms
+//	      tcpKeepalive:
+//	        time: 7200s
+//	        interval: 75s
+//
 // ```
 // {{</tab>}}
 //
@@ -1033,21 +1060,24 @@ func (*LoadBalancerSettings_ConsistentHash) isLoadBalancerSettings_LbPolicy() {}
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
 // metadata:
-//   name: bookinfo-redis
+//
+//	name: bookinfo-redis
+//
 // spec:
-//   host: myredissrv.prod.svc.cluster.local
-//   trafficPolicy:
-//     connectionPool:
-//       tcp:
-//         maxConnections: 100
-//         connectTimeout: 30ms
-//         tcpKeepalive:
-//           time: 7200s
-//           interval: 75s
+//
+//	host: myredissrv.prod.svc.cluster.local
+//	trafficPolicy:
+//	  connectionPool:
+//	    tcp:
+//	      maxConnections: 100
+//	      connectTimeout: 30ms
+//	      tcpKeepalive:
+//	        time: 7200s
+//	        interval: 75s
+//
 // ```
 // {{</tab>}}
 // {{</tabset>}}
-//
 type ConnectionPoolSettings struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -1127,20 +1157,24 @@ func (x *ConnectionPoolSettings) GetHttp() *ConnectionPoolSettings_HTTPSettings 
 // apiVersion: networking.istio.io/v1alpha3
 // kind: DestinationRule
 // metadata:
-//   name: reviews-cb-policy
+//
+//	name: reviews-cb-policy
+//
 // spec:
-//   host: reviews.prod.svc.cluster.local
-//   trafficPolicy:
-//     connectionPool:
-//       tcp:
-//         maxConnections: 100
-//       http:
-//         http2MaxRequests: 1000
-//         maxRequestsPerConnection: 10
-//     outlierDetection:
-//       consecutive5xxErrors: 7
-//       interval: 5m
-//       baseEjectionTime: 15m
+//
+//	host: reviews.prod.svc.cluster.local
+//	trafficPolicy:
+//	  connectionPool:
+//	    tcp:
+//	      maxConnections: 100
+//	    http:
+//	      http2MaxRequests: 1000
+//	      maxRequestsPerConnection: 10
+//	  outlierDetection:
+//	    consecutive5xxErrors: 7
+//	    interval: 5m
+//	    baseEjectionTime: 15m
+//
 // ```
 // {{</tab>}}
 //
@@ -1149,24 +1183,27 @@ func (x *ConnectionPoolSettings) GetHttp() *ConnectionPoolSettings_HTTPSettings 
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
 // metadata:
-//   name: reviews-cb-policy
+//
+//	name: reviews-cb-policy
+//
 // spec:
-//   host: reviews.prod.svc.cluster.local
-//   trafficPolicy:
-//     connectionPool:
-//       tcp:
-//         maxConnections: 100
-//       http:
-//         http2MaxRequests: 1000
-//         maxRequestsPerConnection: 10
-//     outlierDetection:
-//       consecutive5xxErrors: 7
-//       interval: 5m
-//       baseEjectionTime: 15m
+//
+//	host: reviews.prod.svc.cluster.local
+//	trafficPolicy:
+//	  connectionPool:
+//	    tcp:
+//	      maxConnections: 100
+//	    http:
+//	      http2MaxRequests: 1000
+//	      maxRequestsPerConnection: 10
+//	  outlierDetection:
+//	    consecutive5xxErrors: 7
+//	    interval: 5m
+//	    baseEjectionTime: 15m
+//
 // ```
 // {{</tab>}}
 // {{</tabset>}}
-//
 type OutlierDetection struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -1352,15 +1389,19 @@ func (x *OutlierDetection) GetMinHealthPercent() int32 {
 // apiVersion: networking.istio.io/v1alpha3
 // kind: DestinationRule
 // metadata:
-//   name: db-mtls
+//
+//	name: db-mtls
+//
 // spec:
-//   host: mydbserver.prod.svc.cluster.local
-//   trafficPolicy:
-//     tls:
-//       mode: MUTUAL
-//       clientCertificate: /etc/certs/myclientcert.pem
-//       privateKey: /etc/certs/client_private_key.pem
-//       caCertificates: /etc/certs/rootcacerts.pem
+//
+//	host: mydbserver.prod.svc.cluster.local
+//	trafficPolicy:
+//	  tls:
+//	    mode: MUTUAL
+//	    clientCertificate: /etc/certs/myclientcert.pem
+//	    privateKey: /etc/certs/client_private_key.pem
+//	    caCertificates: /etc/certs/rootcacerts.pem
+//
 // ```
 // {{</tab>}}
 //
@@ -1369,15 +1410,19 @@ func (x *OutlierDetection) GetMinHealthPercent() int32 {
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
 // metadata:
-//   name: db-mtls
+//
+//	name: db-mtls
+//
 // spec:
-//   host: mydbserver.prod.svc.cluster.local
-//   trafficPolicy:
-//     tls:
-//       mode: MUTUAL
-//       clientCertificate: /etc/certs/myclientcert.pem
-//       privateKey: /etc/certs/client_private_key.pem
-//       caCertificates: /etc/certs/rootcacerts.pem
+//
+//	host: mydbserver.prod.svc.cluster.local
+//	trafficPolicy:
+//	  tls:
+//	    mode: MUTUAL
+//	    clientCertificate: /etc/certs/myclientcert.pem
+//	    privateKey: /etc/certs/client_private_key.pem
+//	    caCertificates: /etc/certs/rootcacerts.pem
+//
 // ```
 // {{</tab>}}
 // {{</tabset>}}
@@ -1391,12 +1436,16 @@ func (x *OutlierDetection) GetMinHealthPercent() int32 {
 // apiVersion: networking.istio.io/v1alpha3
 // kind: DestinationRule
 // metadata:
-//   name: tls-foo
+//
+//	name: tls-foo
+//
 // spec:
-//   host: "*.foo.com"
-//   trafficPolicy:
-//     tls:
-//       mode: SIMPLE
+//
+//	host: "*.foo.com"
+//	trafficPolicy:
+//	  tls:
+//	    mode: SIMPLE
+//
 // ```
 // {{</tab>}}
 //
@@ -1405,12 +1454,16 @@ func (x *OutlierDetection) GetMinHealthPercent() int32 {
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
 // metadata:
-//   name: tls-foo
+//
+//	name: tls-foo
+//
 // spec:
-//   host: "*.foo.com"
-//   trafficPolicy:
-//     tls:
-//       mode: SIMPLE
+//
+//	host: "*.foo.com"
+//	trafficPolicy:
+//	  tls:
+//	    mode: SIMPLE
+//
 // ```
 // {{</tab>}}
 // {{</tabset>}}
@@ -1424,12 +1477,16 @@ func (x *OutlierDetection) GetMinHealthPercent() int32 {
 // apiVersion: networking.istio.io/v1alpha3
 // kind: DestinationRule
 // metadata:
-//   name: ratings-istio-mtls
+//
+//	name: ratings-istio-mtls
+//
 // spec:
-//   host: ratings.prod.svc.cluster.local
-//   trafficPolicy:
-//     tls:
-//       mode: ISTIO_MUTUAL
+//
+//	host: ratings.prod.svc.cluster.local
+//	trafficPolicy:
+//	  tls:
+//	    mode: ISTIO_MUTUAL
+//
 // ```
 // {{</tab>}}
 //
@@ -1438,16 +1495,19 @@ func (x *OutlierDetection) GetMinHealthPercent() int32 {
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
 // metadata:
-//   name: ratings-istio-mtls
+//
+//	name: ratings-istio-mtls
+//
 // spec:
-//   host: ratings.prod.svc.cluster.local
-//   trafficPolicy:
-//     tls:
-//       mode: ISTIO_MUTUAL
+//
+//	host: ratings.prod.svc.cluster.local
+//	trafficPolicy:
+//	  tls:
+//	    mode: ISTIO_MUTUAL
+//
 // ```
 // {{</tab>}}
 // {{</tabset>}}
-//
 type ClientTLSSettings struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -1620,15 +1680,17 @@ func (x *ClientTLSSettings) GetInsecureSkipVerify() *wrappers.BoolValue {
 // A similar setting is specified for traffic originating in "us-west/zone2/*".
 //
 // ```yaml
-//   distribute:
-//     - from: us-west/zone1/*
-//       to:
-//         "us-west/zone1/*": 80
-//         "us-west/zone2/*": 20
-//     - from: us-west/zone2/*
-//       to:
-//         "us-west/zone1/*": 20
-//         "us-west/zone2/*": 80
+//
+//	distribute:
+//	  - from: us-west/zone1/*
+//	    to:
+//	      "us-west/zone1/*": 80
+//	      "us-west/zone2/*": 20
+//	  - from: us-west/zone2/*
+//	    to:
+//	      "us-west/zone1/*": 20
+//	      "us-west/zone2/*": 80
+//
 // ```
 //
 // If the goal of the operator is not to distribute load across zones and
@@ -1643,11 +1705,13 @@ func (x *ClientTLSSettings) GetInsecureSkipVerify() *wrappers.BoolValue {
 // and similarly us-west should failover to us-east.
 //
 // ```yaml
-//  failover:
-//    - from: us-east
-//      to: eu-west
-//    - from: us-west
-//      to: us-east
+//
+//	failover:
+//	  - from: us-east
+//	    to: eu-west
+//	  - from: us-west
+//	    to: us-east
+//
 // ```
 // Locality load balancing settings.
 type LocalityLoadBalancerSetting struct {
@@ -1777,7 +1841,6 @@ type TrafficPolicy_PortTrafficPolicy struct {
 
 	// Specifies the number of a port on the destination service
 	// on which this policy is being applied.
-	//
 	Port *PortSelector `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
 	// Settings controlling the load balancer algorithms.
 	LoadBalancer *LoadBalancerSettings `protobuf:"bytes,2,opt,name=load_balancer,json=loadBalancer,proto3" json:"load_balancer,omitempty"`
@@ -1863,8 +1926,10 @@ type TrafficPolicy_TunnelSettings struct {
 
 	// Specifies which protocol to use for tunneling the downstream connection.
 	// Supported protocols are:
-	//   CONNECT - uses HTTP CONNECT;
-	//   POST - uses HTTP POST.
+	//
+	//	CONNECT - uses HTTP CONNECT;
+	//	POST - uses HTTP POST.
+	//
 	// CONNECT is used by default if not specified.
 	// HTTP version for upstream requests is determined by the service protocol defined for the proxy.
 	Protocol string `protobuf:"bytes,1,opt,name=protocol,proto3" json:"protocol,omitempty"`
@@ -1941,6 +2006,7 @@ type LoadBalancerSettings_ConsistentHashLB struct {
 	// The hash key to use.
 	//
 	// Types that are assignable to HashKey:
+	//
 	//	*LoadBalancerSettings_ConsistentHashLB_HttpHeaderName
 	//	*LoadBalancerSettings_ConsistentHashLB_HttpCookie
 	//	*LoadBalancerSettings_ConsistentHashLB_UseSourceIp

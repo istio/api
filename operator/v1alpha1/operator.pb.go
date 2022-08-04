@@ -133,19 +133,20 @@ func (InstallStatus_Status) EnumDescriptor() ([]byte, []int) {
 // apiVersion: install.istio.io/v1alpha1
 // kind: IstioOperator
 // spec:
-//   profile: default
-//   hub: gcr.io/istio-testing
-//   tag: latest
-//   revision: 1-8-0
-//   meshConfig:
-//     accessLogFile: /dev/stdout
-//     enableTracing: true
-//   components:
-//     egressGateways:
-//     - name: istio-egressgateway
-//       enabled: true
-// ```
 //
+//	profile: default
+//	hub: gcr.io/istio-testing
+//	tag: latest
+//	revision: 1-8-0
+//	meshConfig:
+//	  accessLogFile: /dev/stdout
+//	  enableTracing: true
+//	components:
+//	  egressGateways:
+//	  - name: istio-egressgateway
+//	    enabled: true
+//
+// ```
 type IstioOperatorSpec struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -161,7 +162,6 @@ type IstioOperatorSpec struct {
 	// Path for the install package. e.g.
 	//
 	// * /tmp/istio-installer/nightly (local file path)
-	//
 	InstallPackagePath string `protobuf:"bytes,11,opt,name=installPackagePath,proto3" json:"installPackagePath,omitempty"`
 	// Root for docker image paths e.g. `docker.io/istio`
 	Hub string `protobuf:"bytes,12,opt,name=hub,proto3" json:"hub,omitempty"`
@@ -344,7 +344,6 @@ type InstallStatus struct {
 	// * If components are a mix of `RECONCILING`, `UPDATING` and `HEALTHY`, overall status is `UPDATING`.
 	// * If any component is in `ERROR` state, overall status is `ERROR`.
 	// * If further action is needed for reconciliation to proceed, overall status is `ACTION_REQUIRED`.
-	//
 	Status InstallStatus_Status `protobuf:"varint,1,opt,name=status,proto3,enum=istio.operator.v1alpha1.InstallStatus_Status" json:"status,omitempty"`
 	// Optional message providing additional information about the existing overall status.
 	Message string `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`
