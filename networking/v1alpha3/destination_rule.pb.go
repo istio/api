@@ -2019,6 +2019,7 @@ type LoadBalancerSettings_ConsistentHashLB struct {
 	// Defaults to RingHash if not specified.
 	//
 	// Types that are assignable to HashAlgorithm:
+	//
 	//	*LoadBalancerSettings_ConsistentHashLB_RingHash_
 	//	*LoadBalancerSettings_ConsistentHashLB_Maglev
 	HashAlgorithm isLoadBalancerSettings_ConsistentHashLB_HashAlgorithm `protobuf_oneof:"hash_algorithm"`
