@@ -869,6 +869,7 @@ type MetricSelector struct {
 	// Controls which metric(s) are selected by the selector.
 	//
 	// Types that are assignable to MetricMatch:
+	//
 	//	*MetricSelector_Metric
 	//	*MetricSelector_CustomMetric
 	MetricMatch isMetricSelector_MetricMatch `protobuf_oneof:"metric_match"`
@@ -1186,6 +1187,7 @@ type Tracing_CustomTag struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to Type:
+	//
 	//	*Tracing_CustomTag_Literal
 	//	*Tracing_CustomTag_Environment
 	//	*Tracing_CustomTag_Header
