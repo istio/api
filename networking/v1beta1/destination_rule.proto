@@ -508,10 +508,26 @@ message LoadBalancerSettings {
 
   // Consistent Hash-based load balancing can be used to provide soft
   // session affinity based on HTTP headers, cookies or other
-  // properties. The affinity to a particular destination host will be
+  // properties. The affinity to a particular destination host may be
   // lost when one or more hosts are added/removed from the destination
   // service.
   message ConsistentHashLB {
+
+    message RingHash {
+      // The minimum number of virtual nodes to use for the hash
+      // ring. Defaults to 1024. Larger ring sizes result in more granular
+      // load distributions. If the number of hosts in the load balancing
+      // pool is larger than the ring size, each host will be assigned a
+      // single virtual node.
+      uint64 minimum_ring_size = 1;
+    };
+  
+    message MagLev {
+      // The table size for Maglev hashing. This helps in controlling the 
+      // disruption when the backend hosts change.
+      // Increasing the table size reduces the amount of disruption. 
+      uint64 table_size = 1;
+    };
     // Describes a HTTP cookie that will be used as the hash key for the
     // Consistent Hash load balancer. If the cookie is not present, it will
     // be generated.
@@ -540,12 +556,20 @@ message LoadBalancerSettings {
       string http_query_parameter_name = 5;
     };
 
-    // The minimum number of virtual nodes to use for the hash
-    // ring. Defaults to 1024. Larger ring sizes result in more granular
-    // load distributions. If the number of hosts in the load balancing
-    // pool is larger than the ring size, each host will be assigned a
-    // single virtual node.
-    uint64 minimum_ring_size = 4;
+        // The hash algorithm to use. 
+        // Please refer to https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#ring-hash
+        // and https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#maglev for
+        // considerations on choosing an algorithm.
+        // Defaults to RingHash if not specified.
+        oneof hash_algorithm {
+          // The ring/modulo hash load balancer implements consistent hashing to backend hosts.
+          RingHash ring_hash = 6;
+          // The Maglev load balancer implements consistent hashing to backend hosts. 
+          MagLev maglev = 7;
+        };
+
+    // Deprecated. Use RingHash instead.
+    uint64 minimum_ring_size = 4 [deprecated=true];
   };
 
   // (-- TODO: Enable Subset load balancing after moving to v2 API Also
