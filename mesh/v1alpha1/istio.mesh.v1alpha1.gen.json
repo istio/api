@@ -433,8 +433,7 @@
                   ],
                   "properties": {
                     "lightstep": {
-                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider",
-                      "deprecated": true
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider"
                     }
                   }
                 },
@@ -577,8 +576,7 @@
             ],
             "properties": {
               "lightstep": {
-                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider",
-                "deprecated": true
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider"
               }
             }
           },
@@ -995,7 +993,7 @@
         }
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider": {
-        "description": "Defines configuration for a Lightstep tracer. Deprecated: Lightstep has moved to OpenTelemetry-based integrations. Please use the OpenTelemetryTracingProvider.",
+        "description": "Defines configuration for a Lightstep tracer. Note: Lightstep has moved to OpenTelemetry-based integrations. Istio 1.15+ will generate OpenTelemetry-compatible configuration when using this option.",
         "type": "object",
         "properties": {
           "service": {
@@ -1008,8 +1006,7 @@
           },
           "accessToken": {
             "description": "The Lightstep access token.",
-            "type": "string",
-            "deprecated": true
+            "type": "string"
           },
           "maxTagLength": {
             "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
@@ -1807,8 +1804,7 @@
                   ],
                   "properties": {
                     "lightstep": {
-                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Lightstep",
-                      "deprecated": true
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Lightstep"
                     }
                   }
                 },
@@ -1861,8 +1857,7 @@
             ],
             "properties": {
               "lightstep": {
-                "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Lightstep",
-                "deprecated": true
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Lightstep"
               }
             }
           },

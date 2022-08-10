@@ -496,8 +496,10 @@ message MeshConfig {
       // Configures a tracing provider that uses the Zipkin API.
       ZipkinTracingProvider zipkin = 4;
       // Configures a Lightstep tracing provider.
-      // Deprecated: Users should switch to OpenTelemetryTracingProvider.
-      LightstepTracingProvider lightstep = 5 [deprecated=true];
+      // Note: For Istio 1.15+, configuring this provider will result in
+      // using an OpenTelemetryTracingProvider configured specially for 
+      // Lightstep. This is part of the Lightstep transition to OpenTelemetry.
+      LightstepTracingProvider lightstep = 5;
       // Configures a Datadog tracing provider.
       DatadogTracingProvider datadog = 6;
       // Configures a Stackdriver provider.
@@ -695,7 +697,8 @@ message MeshConfig {
     }
 
     // Defines configuration for a Lightstep tracer.
-    // Deprecated: Lightstep has moved to OpenTelemetry-based integrations. Please use the OpenTelemetryTracingProvider.
+    // Note: Lightstep has moved to OpenTelemetry-based integrations. Istio 1.15+
+    // will generate OpenTelemetry-compatible configuration when using this option.
     message LightstepTracingProvider {
       // REQUIRED. Specifies the service for the Lightstep collector.
       // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
@@ -709,7 +712,7 @@ message MeshConfig {
       uint32 port = 2;
 
       // The Lightstep access token.
-      string access_token = 3 [deprecated=true];
+      string access_token = 3;
 
       // Optional. Controls the overall path length allowed in a reported span.
       // NOTE: currently only controls max length of the path tag.

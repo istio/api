@@ -134,9 +134,9 @@ message Tracing {
     // Use a Zipkin tracer.
     Zipkin zipkin = 1;
     // Use a Lightstep tracer.
-    // Deprecated: Please transition to OpenTelemetryTracingProvider and
-    // use of the Telemetry API.
-    Lightstep lightstep = 2 [deprecated=true];
+    // NOTE: For Istio 1.15+, this configuration option will result
+    // in using OpenTelemetry-based Lightstep integration.
+    Lightstep lightstep = 2;
     // Use a Datadog tracer.
     Datadog datadog = 3;
     // Use a Stackdriver tracer.
