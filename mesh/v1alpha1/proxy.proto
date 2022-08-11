@@ -48,6 +48,7 @@ message Tracing {
     string address = 1;
   }
 
+  // $hide_from_docs
   // Defines configuration for a Lightstep tracer.
   message Lightstep {
     // Address of the Lightstep Satellite pool.
@@ -133,6 +134,8 @@ message Tracing {
     // Use a Zipkin tracer.
     Zipkin zipkin = 1;
     // Use a Lightstep tracer.
+    // NOTE: For Istio 1.15+, this configuration option will result
+    // in using OpenTelemetry-based Lightstep integration.
     Lightstep lightstep = 2;
     // Use a Datadog tracer.
     Datadog datadog = 3;

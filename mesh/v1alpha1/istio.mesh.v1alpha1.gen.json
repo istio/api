@@ -479,6 +479,16 @@
                 },
                 {
                   "required": [
+                    "opentelemetry"
+                  ],
+                  "properties": {
+                    "opentelemetry": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider"
+                    }
+                  }
+                },
+                {
+                  "required": [
                     "prometheus"
                   ],
                   "properties": {
@@ -607,6 +617,16 @@
             "properties": {
               "skywalking": {
                 "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SkyWalkingTracingProvider"
+              }
+            }
+          },
+          {
+            "required": [
+              "opentelemetry"
+            ],
+            "properties": {
+              "opentelemetry": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider"
               }
             }
           },
@@ -973,7 +993,7 @@
         }
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider": {
-        "description": "Defines configuration for a Lightstep tracer.",
+        "description": "Defines configuration for a Lightstep tracer. Note: Lightstep has moved to OpenTelemetry-based integrations. Istio 1.15+ will generate OpenTelemetry-compatible configuration when using this option.",
         "type": "object",
         "properties": {
           "service": {
@@ -1029,6 +1049,24 @@
           "CLOUD_TRACE_CONTEXT",
           "B3"
         ]
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider": {
+        "description": "Defines configuration for an OpenTelemetry tracing backend.",
+        "type": "object",
+        "properties": {
+          "service": {
+            "description": "REQUIRED. Specifies the OpenTelemetry endpoint that will receive OTLP traces. The format is `[\u003cNamespace\u003e/]\u003cHostname\u003e`. The specification of `\u003cNamespace\u003e` is required only when it is insufficient to unambiguously resolve a service in the service registry. The `\u003cHostname\u003e` is a fully qualified host name of a service defined by the Kubernetes service or ServiceEntry.",
+            "type": "string"
+          },
+          "port": {
+            "description": "REQUIRED. Specifies the port of the service.",
+            "type": "integer"
+          },
+          "maxTagLength": {
+            "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
+            "type": "integer"
+          }
+        }
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.PrometheusMetricsProvider": {
         "type": "object"
