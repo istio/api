@@ -809,6 +809,10 @@
           },
           "logFormat": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider.LogFormat"
+          },
+          "omitEmptyValues": {
+            "description": "Optional. If set to true, when command operators are evaluated to null, for text, the output of the empty operator is changed from - to an empty string, so that empty values are omitted entirely. for labels, the keys with null values are omitted in the output structure. See [Substitution format string](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/substitution_format_string.proto#config-core-v3-substitutionformatstring) for more information.",
+            "type": "boolean"
           }
         }
       },
