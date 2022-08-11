@@ -564,7 +564,7 @@ message IstioIngressListener {
   // connections. Arbitrary IPs are not supported. Format should be one of
   // `127.0.0.1:PORT`, `[::1]:PORT` (forward to localhost),
   // `0.0.0.0:PORT`, `[::]:PORT` (forward to the instance IP),
-  // or `unix:///path/to/socket` (forward to Unix domain socket)
+  // or `unix:///path/to/socket` (forward to Unix domain socket).
   string default_endpoint = 4 [(google.api.field_behavior) = REQUIRED];
 
   reserved "localhost_client_tls";

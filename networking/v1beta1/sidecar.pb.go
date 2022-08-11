@@ -669,7 +669,7 @@ type IstioIngressListener struct {
 	// connections. Arbitrary IPs are not supported. Format should be one of
 	// `127.0.0.1:PORT`, `[::1]:PORT` (forward to localhost),
 	// `0.0.0.0:PORT`, `[::]:PORT` (forward to the instance IP),
-	// or `unix:///path/to/socket` (forward to Unix domain socket)
+	// or `unix:///path/to/socket` (forward to Unix domain socket).
 	DefaultEndpoint string `protobuf:"bytes,4,opt,name=default_endpoint,json=defaultEndpoint,proto3" json:"default_endpoint,omitempty"`
 	// Set of TLS related options that will enable TLS termination on the
 	// sidecar for requests originating from outside the mesh.
