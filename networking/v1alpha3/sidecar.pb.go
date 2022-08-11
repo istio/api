@@ -728,8 +728,8 @@ type IstioIngressListener struct {
 
 	// The port associated with the listener.
 	Port *Port `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
-	// The IP to which the listener should be bound. Must be in the
-	// format `x.x.x.x`. Unix domain socket addresses are not allowed in
+	// The IP(IPv4 or IPv6) to which the listener should be bound.
+	// Unix domain socket addresses are not allowed in
 	// the bind field for ingress listeners. If omitted, Istio will
 	// automatically configure the defaults based on imported services
 	// and the workload instances to which this configuration is applied
@@ -837,8 +837,8 @@ type IstioEgressListener struct {
 	// listener port will be based on the listener with the most specific
 	// port.
 	Port *Port `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
-	// The IP or the Unix domain socket to which the listener should be bound
-	// to. Port MUST be specified if bind is not empty. Format: `x.x.x.x` or
+	// The IP(IPv4 or IPv6) or the Unix domain socket to which the listener should be bound
+	// to. Port MUST be specified if bind is not empty. Format: IPv4 or IPv6 address formats or
 	// `unix:///path/to/uds` or `unix://@foobar` (Linux abstract namespace). If
 	// omitted, Istio will automatically configure the defaults based on imported
 	// services, the workload instances to which this configuration is applied to and
