@@ -365,6 +365,9 @@ message TrafficPolicy {
   // for the host configured in the DestinationRule.
   // Tunnel settings can be applied to TCP or TLS routes and can't be applied to HTTP routes.
   TunnelSettings tunnel = 6;
+
+  // Settings controlling healthy check hosts from the load balancing pool
+  HealthCheck health_check = 7;
 }
 
 // A subset of endpoints of a service. Subsets can be used for scenarios
@@ -572,11 +575,11 @@ message LoadBalancerSettings {
       // single virtual node.
       uint64 minimum_ring_size = 1;
     };
-  
+
     message MagLev {
-      // The table size for Maglev hashing. This helps in controlling the 
+      // The table size for Maglev hashing. This helps in controlling the
       // disruption when the backend hosts change.
-      // Increasing the table size reduces the amount of disruption. 
+      // Increasing the table size reduces the amount of disruption.
       uint64 table_size = 1;
     };
     // Describes a HTTP cookie that will be used as the hash key for the
@@ -607,7 +610,7 @@ message LoadBalancerSettings {
       string http_query_parameter_name = 5;
     };
 
-        // The hash algorithm to use. 
+        // The hash algorithm to use.
         // Please refer to https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#ring-hash
         // and https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#maglev for
         // considerations on choosing an algorithm.
@@ -615,7 +618,7 @@ message LoadBalancerSettings {
         oneof hash_algorithm {
           // The ring/modulo hash load balancer implements consistent hashing to backend hosts.
           RingHash ring_hash = 6;
-          // The Maglev load balancer implements consistent hashing to backend hosts. 
+          // The Maglev load balancer implements consistent hashing to backend hosts.
           MagLev maglev = 7;
         };
 
@@ -1125,6 +1128,32 @@ message ClientTLSSettings {
   // be `true` by default in a later version where, going forward, it will be
   // enabled by default.
   google.protobuf.BoolValue insecure_skip_verify = 8;
+}
+
+message HealthCheck {
+  // The interval between health checks.
+  google.protobuf.Duration interval = 1;
+
+  // The time to wait for a health check response.
+  // If the timeout is reached the health check attempt will be considered a failure.
+  google.protobuf.Duration timeout = 2;
+
+  //  number of healthy health checks required before a host is marked healthy.
+  // Note that during startup, only a single successful health check is required to mark a host healthy.
+  int32  healthy_threshold = 3;
+
+  // The number of unhealthy health checks required before a host is marked unhealthy.
+  // Note that for http health checking if a host responds with a code not in expected_statuses or retriable_statuses,
+  // this threshold is ignored and the host is considered immediately unhealthy.
+  int32  unhealthy_threshold = 4;
+
+  message http_health_check {
+    // Specifies the HTTP path that will be requested during health checking. For example /healthcheck.
+    string path = 1;
+  }
+
+  // HTTP health check.
+  http_health_check HttpHealthCheck = 5;
 }
 
 // Locality-weighted load balancing allows administrators to control the

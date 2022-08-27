@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.DestinationRule
 aliases: [/docs/reference/config/networking/v1alpha3/destination-rule]
-number_of_entries: 23
+number_of_entries: 25
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -397,6 +397,17 @@ No
 <p>Configuration of tunneling TCP over other transport or application layers
 for the host configured in the DestinationRule.
 Tunnel settings can be applied to TCP or TLS routes and can&rsquo;t be applied to HTTP routes.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="TrafficPolicy-health_check">
+<td><code>healthCheck</code></td>
+<td><code><a href="#HealthCheck">HealthCheck</a></code></td>
+<td>
+<p>Settings controlling healthy check hosts from the load balancing pool</p>
 
 </td>
 <td>
@@ -1226,6 +1237,80 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="HealthCheck">HealthCheck</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HealthCheck-interval">
+<td><code>interval</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>The interval between health checks.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HealthCheck-timeout">
+<td><code>timeout</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>The time to wait for a health check response.
+If the timeout is reached the health check attempt will be considered a failure.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HealthCheck-healthy_threshold">
+<td><code>healthyThreshold</code></td>
+<td><code>int32</code></td>
+<td>
+<p>number of healthy health checks required before a host is marked healthy.
+Note that during startup, only a single successful health check is required to mark a host healthy.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HealthCheck-unhealthy_threshold">
+<td><code>unhealthyThreshold</code></td>
+<td><code>int32</code></td>
+<td>
+<p>The number of unhealthy health checks required before a host is marked unhealthy.
+Note that for http health checking if a host responds with a code not in expected_statuses or retriable_statuses,
+this threshold is ignored and the host is considered immediately unhealthy.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HealthCheck-HttpHealthCheck">
+<td><code>HttpHealthCheck</code></td>
+<td><code><a href="#HealthCheck-http_health_check">http_health_check</a></code></td>
+<td>
+<p>HTTP health check.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="LocalityLoadBalancerSetting">LocalityLoadBalancerSetting</h2>
 <section>
 <p>Locality-weighted load balancing allows administrators to control the
@@ -1938,6 +2023,32 @@ No
 <p>The time duration between keep-alive probes.
 Default is to use the OS level configuration
 (unless overridden, Linux defaults to 75s.)</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HealthCheck-http_health_check">HealthCheck.http_health_check</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HealthCheck-http_health_check-path">
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>
+<p>Specifies the HTTP path that will be requested during health checking. For example /healthcheck.</p>
 
 </td>
 <td>

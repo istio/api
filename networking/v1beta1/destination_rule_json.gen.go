@@ -182,6 +182,28 @@ func (this *ClientTLSSettings) UnmarshalJSON(b []byte) error {
 	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for HealthCheck
+func (this *HealthCheck) MarshalJSON() ([]byte, error) {
+	str, err := DestinationRuleMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for HealthCheck
+func (this *HealthCheck) UnmarshalJSON(b []byte) error {
+	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for HealthCheckHttpHealthCheck
+func (this *HealthCheckHttpHealthCheck) MarshalJSON() ([]byte, error) {
+	str, err := DestinationRuleMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for HealthCheckHttpHealthCheck
+func (this *HealthCheckHttpHealthCheck) UnmarshalJSON(b []byte) error {
+	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 // MarshalJSON is a custom marshaler for LocalityLoadBalancerSetting
 func (this *LocalityLoadBalancerSetting) MarshalJSON() ([]byte, error) {
 	str, err := DestinationRuleMarshaler.MarshalToString(this)

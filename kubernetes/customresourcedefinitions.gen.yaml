@@ -251,6 +251,33 @@ spec:
                                   type: object
                               type: object
                           type: object
+                        healthCheck:
+                          properties:
+                            HttpHealthCheck:
+                              description: HTTP health check.
+                              properties:
+                                path:
+                                  description: Specifies the HTTP path that will be
+                                    requested during health checking.
+                                  type: string
+                              type: object
+                            healthyThreshold:
+                              description: number of healthy health checks required
+                                before a host is marked healthy.
+                              format: int32
+                              type: integer
+                            interval:
+                              description: The interval between health checks.
+                              type: string
+                            timeout:
+                              description: The time to wait for a health check response.
+                              type: string
+                            unhealthyThreshold:
+                              description: The number of unhealthy health checks required
+                                before a host is marked unhealthy.
+                              format: int32
+                              type: integer
+                          type: object
                         loadBalancer:
                           description: Settings controlling the load balancer algorithms.
                           oneOf:
@@ -932,6 +959,33 @@ spec:
                                 type: string
                             type: object
                         type: object
+                    type: object
+                  healthCheck:
+                    properties:
+                      HttpHealthCheck:
+                        description: HTTP health check.
+                        properties:
+                          path:
+                            description: Specifies the HTTP path that will be requested
+                              during health checking.
+                            type: string
+                        type: object
+                      healthyThreshold:
+                        description: number of healthy health checks required before
+                          a host is marked healthy.
+                        format: int32
+                        type: integer
+                      interval:
+                        description: The interval between health checks.
+                        type: string
+                      timeout:
+                        description: The time to wait for a health check response.
+                        type: string
+                      unhealthyThreshold:
+                        description: The number of unhealthy health checks required
+                          before a host is marked unhealthy.
+                        format: int32
+                        type: integer
                     type: object
                   loadBalancer:
                     description: Settings controlling the load balancer algorithms.
@@ -1660,6 +1714,33 @@ spec:
                                   type: object
                               type: object
                           type: object
+                        healthCheck:
+                          properties:
+                            HttpHealthCheck:
+                              description: HTTP health check.
+                              properties:
+                                path:
+                                  description: Specifies the HTTP path that will be
+                                    requested during health checking.
+                                  type: string
+                              type: object
+                            healthyThreshold:
+                              description: number of healthy health checks required
+                                before a host is marked healthy.
+                              format: int32
+                              type: integer
+                            interval:
+                              description: The interval between health checks.
+                              type: string
+                            timeout:
+                              description: The time to wait for a health check response.
+                              type: string
+                            unhealthyThreshold:
+                              description: The number of unhealthy health checks required
+                                before a host is marked unhealthy.
+                              format: int32
+                              type: integer
+                          type: object
                         loadBalancer:
                           description: Settings controlling the load balancer algorithms.
                           oneOf:
@@ -2341,6 +2422,33 @@ spec:
                                 type: string
                             type: object
                         type: object
+                    type: object
+                  healthCheck:
+                    properties:
+                      HttpHealthCheck:
+                        description: HTTP health check.
+                        properties:
+                          path:
+                            description: Specifies the HTTP path that will be requested
+                              during health checking.
+                            type: string
+                        type: object
+                      healthyThreshold:
+                        description: number of healthy health checks required before
+                          a host is marked healthy.
+                        format: int32
+                        type: integer
+                      interval:
+                        description: The interval between health checks.
+                        type: string
+                      timeout:
+                        description: The time to wait for a health check response.
+                        type: string
+                      unhealthyThreshold:
+                        description: The number of unhealthy health checks required
+                          before a host is marked unhealthy.
+                        format: int32
+                        type: integer
                     type: object
                   loadBalancer:
                     description: Settings controlling the load balancer algorithms.

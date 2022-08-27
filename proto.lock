@@ -34998,6 +34998,11 @@
                     "type": "SkyWalkingTracingProvider"
                   },
                   {
+                    "id": 15,
+                    "name": "opentelemetry",
+                    "type": "OpenTelemetryTracingProvider"
+                  },
+                  {
                     "id": 10,
                     "name": "prometheus",
                     "type": "PrometheusMetricsProvider"
@@ -35464,6 +35469,26 @@
                             "type": "google.protobuf.Struct"
                           }
                         ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "OpenTelemetryTracingProvider",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "service",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "port",
+                        "type": "uint32"
+                      },
+                      {
+                        "id": 3,
+                        "name": "max_tag_length",
+                        "type": "uint32"
                       }
                     ]
                   }
@@ -36587,6 +36612,11 @@
                 "id": 6,
                 "name": "tunnel",
                 "type": "TunnelSettings"
+              },
+              {
+                "id": 7,
+                "name": "health_check",
+                "type": "HealthCheck"
               }
             ],
             "messages": [
@@ -36734,12 +36764,48 @@
                     "type": "string"
                   },
                   {
+                    "id": 6,
+                    "name": "ring_hash",
+                    "type": "RingHash"
+                  },
+                  {
+                    "id": 7,
+                    "name": "maglev",
+                    "type": "MagLev"
+                  },
+                  {
                     "id": 4,
                     "name": "minimum_ring_size",
-                    "type": "uint64"
+                    "type": "uint64",
+                    "options": [
+                      {
+                        "name": "deprecated",
+                        "value": "true"
+                      }
+                    ]
                   }
                 ],
                 "messages": [
+                  {
+                    "name": "RingHash",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "minimum_ring_size",
+                        "type": "uint64"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "MagLev",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "table_size",
+                        "type": "uint64"
+                      }
+                    ]
+                  },
                   {
                     "name": "HTTPCookie",
                     "fields": [
@@ -36985,6 +37051,48 @@
                 "id": 8,
                 "name": "insecure_skip_verify",
                 "type": "google.protobuf.BoolValue"
+              }
+            ]
+          },
+          {
+            "name": "HealthCheck",
+            "fields": [
+              {
+                "id": 1,
+                "name": "interval",
+                "type": "google.protobuf.Duration"
+              },
+              {
+                "id": 2,
+                "name": "timeout",
+                "type": "google.protobuf.Duration"
+              },
+              {
+                "id": 3,
+                "name": "healthy_threshold",
+                "type": "int32"
+              },
+              {
+                "id": 4,
+                "name": "unhealthy_threshold",
+                "type": "int32"
+              },
+              {
+                "id": 5,
+                "name": "HttpHealthCheck",
+                "type": "http_health_check"
+              }
+            ],
+            "messages": [
+              {
+                "name": "http_health_check",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "path",
+                    "type": "string"
+                  }
+                ]
               }
             ]
           },
@@ -39459,6 +39567,11 @@
                 "id": 6,
                 "name": "tunnel",
                 "type": "TunnelSettings"
+              },
+              {
+                "id": 7,
+                "name": "health_check",
+                "type": "HealthCheck"
               }
             ],
             "messages": [
@@ -39606,12 +39719,48 @@
                     "type": "string"
                   },
                   {
+                    "id": 6,
+                    "name": "ring_hash",
+                    "type": "RingHash"
+                  },
+                  {
+                    "id": 7,
+                    "name": "maglev",
+                    "type": "MagLev"
+                  },
+                  {
                     "id": 4,
                     "name": "minimum_ring_size",
-                    "type": "uint64"
+                    "type": "uint64",
+                    "options": [
+                      {
+                        "name": "deprecated",
+                        "value": "true"
+                      }
+                    ]
                   }
                 ],
                 "messages": [
+                  {
+                    "name": "RingHash",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "minimum_ring_size",
+                        "type": "uint64"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "MagLev",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "table_size",
+                        "type": "uint64"
+                      }
+                    ]
+                  },
                   {
                     "name": "HTTPCookie",
                     "fields": [
@@ -39857,6 +40006,48 @@
                 "id": 8,
                 "name": "insecure_skip_verify",
                 "type": "google.protobuf.BoolValue"
+              }
+            ]
+          },
+          {
+            "name": "HealthCheck",
+            "fields": [
+              {
+                "id": 1,
+                "name": "interval",
+                "type": "google.protobuf.Duration"
+              },
+              {
+                "id": 2,
+                "name": "timeout",
+                "type": "google.protobuf.Duration"
+              },
+              {
+                "id": 3,
+                "name": "healthy_threshold",
+                "type": "int32"
+              },
+              {
+                "id": 4,
+                "name": "unhealthy_threshold",
+                "type": "int32"
+              },
+              {
+                "id": 5,
+                "name": "HttpHealthCheck",
+                "type": "http_health_check"
+              }
+            ],
+            "messages": [
+              {
+                "name": "http_health_check",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "path",
+                    "type": "string"
+                  }
+                ]
               }
             ]
           },
