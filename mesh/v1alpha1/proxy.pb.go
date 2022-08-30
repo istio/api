@@ -511,6 +511,8 @@ type Tracing_Zipkin_ struct {
 
 type Tracing_Lightstep_ struct {
 	// Use a Lightstep tracer.
+	// NOTE: For Istio 1.15+, this configuration option will result
+	// in using OpenTelemetry-based Lightstep integration.
 	Lightstep *Tracing_Lightstep `protobuf:"bytes,2,opt,name=lightstep,proto3,oneof"`
 }
 
@@ -1385,6 +1387,7 @@ func (x *Tracing_Zipkin) GetAddress() string {
 	return ""
 }
 
+// $hide_from_docs
 // Defines configuration for a Lightstep tracer.
 type Tracing_Lightstep struct {
 	state         protoimpl.MessageState

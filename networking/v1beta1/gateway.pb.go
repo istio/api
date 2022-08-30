@@ -1009,7 +1009,7 @@ type ServerTLSSettings struct {
 	// A list of alternate names to verify the subject identity in the
 	// certificate presented by the client.
 	SubjectAltNames []string `protobuf:"bytes,6,rep,name=subject_alt_names,json=subjectAltNames,proto3" json:"subject_alt_names,omitempty"`
-	// An optional list of base64-encoded SHA-256 hashes of the SKPIs of
+	// An optional list of base64-encoded SHA-256 hashes of the SPKIs of
 	// authorized client certificates.
 	// Note: When both verify_certificate_hash and verify_certificate_spki
 	// are specified, a hash matching either value will result in the
