@@ -295,6 +295,17 @@ spec:
                                       minimumRingSize: {}
                                 required:
                                 - consistentHash
+                              - properties:
+                                  statefulSession:
+                                    oneOf:
+                                    - not:
+                                        anyOf:
+                                        - required:
+                                          - httpCookie
+                                    - required:
+                                      - httpCookie
+                                required:
+                                - statefulSession
                           - required:
                             - simple
                           - properties:
@@ -334,6 +345,17 @@ spec:
                                   minimumRingSize: {}
                             required:
                             - consistentHash
+                          - properties:
+                              statefulSession:
+                                oneOf:
+                                - not:
+                                    anyOf:
+                                    - required:
+                                      - httpCookie
+                                - required:
+                                  - httpCookie
+                            required:
+                            - statefulSession
                           properties:
                             consistentHash:
                               properties:
@@ -433,6 +455,33 @@ spec:
                               - ROUND_ROBIN
                               - LEAST_REQUEST
                               type: string
+                            statefulSession:
+                              properties:
+                                httpCookie:
+                                  description: State based on HTTP cookie.
+                                  properties:
+                                    name:
+                                      description: Name of the cookie.
+                                      type: string
+                                    path:
+                                      description: Path to set for the cookie.
+                                      type: string
+                                    ttl:
+                                      description: Lifetime of the cookie.
+                                      type: string
+                                  type: object
+                                loadBalancer:
+                                  description: Load balancer to use for the initial
+                                    request, before a session is established.
+                                  enum:
+                                  - UNSPECIFIED
+                                  - LEAST_CONN
+                                  - RANDOM
+                                  - PASSTHROUGH
+                                  - ROUND_ROBIN
+                                  - LEAST_REQUEST
+                                  type: string
+                              type: object
                             warmupDurationSecs:
                               description: Represents the warmup duration of Service.
                               type: string
@@ -591,6 +640,17 @@ spec:
                                             minimumRingSize: {}
                                       required:
                                       - consistentHash
+                                    - properties:
+                                        statefulSession:
+                                          oneOf:
+                                          - not:
+                                              anyOf:
+                                              - required:
+                                                - httpCookie
+                                          - required:
+                                            - httpCookie
+                                      required:
+                                      - statefulSession
                                 - required:
                                   - simple
                                 - properties:
@@ -630,6 +690,17 @@ spec:
                                         minimumRingSize: {}
                                   required:
                                   - consistentHash
+                                - properties:
+                                    statefulSession:
+                                      oneOf:
+                                      - not:
+                                          anyOf:
+                                          - required:
+                                            - httpCookie
+                                      - required:
+                                        - httpCookie
+                                  required:
+                                  - statefulSession
                                 properties:
                                   consistentHash:
                                     properties:
@@ -732,6 +803,33 @@ spec:
                                     - ROUND_ROBIN
                                     - LEAST_REQUEST
                                     type: string
+                                  statefulSession:
+                                    properties:
+                                      httpCookie:
+                                        description: State based on HTTP cookie.
+                                        properties:
+                                          name:
+                                            description: Name of the cookie.
+                                            type: string
+                                          path:
+                                            description: Path to set for the cookie.
+                                            type: string
+                                          ttl:
+                                            description: Lifetime of the cookie.
+                                            type: string
+                                        type: object
+                                      loadBalancer:
+                                        description: Load balancer to use for the
+                                          initial request, before a session is established.
+                                        enum:
+                                        - UNSPECIFIED
+                                        - LEAST_CONN
+                                        - RANDOM
+                                        - PASSTHROUGH
+                                        - ROUND_ROBIN
+                                        - LEAST_REQUEST
+                                        type: string
+                                    type: object
                                   warmupDurationSecs:
                                     description: Represents the warmup duration of
                                       Service.
@@ -977,6 +1075,17 @@ spec:
                                 minimumRingSize: {}
                           required:
                           - consistentHash
+                        - properties:
+                            statefulSession:
+                              oneOf:
+                              - not:
+                                  anyOf:
+                                  - required:
+                                    - httpCookie
+                              - required:
+                                - httpCookie
+                          required:
+                          - statefulSession
                     - required:
                       - simple
                     - properties:
@@ -1016,6 +1125,17 @@ spec:
                             minimumRingSize: {}
                       required:
                       - consistentHash
+                    - properties:
+                        statefulSession:
+                          oneOf:
+                          - not:
+                              anyOf:
+                              - required:
+                                - httpCookie
+                          - required:
+                            - httpCookie
+                      required:
+                      - statefulSession
                     properties:
                       consistentHash:
                         properties:
@@ -1112,6 +1232,33 @@ spec:
                         - ROUND_ROBIN
                         - LEAST_REQUEST
                         type: string
+                      statefulSession:
+                        properties:
+                          httpCookie:
+                            description: State based on HTTP cookie.
+                            properties:
+                              name:
+                                description: Name of the cookie.
+                                type: string
+                              path:
+                                description: Path to set for the cookie.
+                                type: string
+                              ttl:
+                                description: Lifetime of the cookie.
+                                type: string
+                            type: object
+                          loadBalancer:
+                            description: Load balancer to use for the initial request,
+                              before a session is established.
+                            enum:
+                            - UNSPECIFIED
+                            - LEAST_CONN
+                            - RANDOM
+                            - PASSTHROUGH
+                            - ROUND_ROBIN
+                            - LEAST_REQUEST
+                            type: string
+                        type: object
                       warmupDurationSecs:
                         description: Represents the warmup duration of Service.
                         type: string
@@ -1267,6 +1414,17 @@ spec:
                                       minimumRingSize: {}
                                 required:
                                 - consistentHash
+                              - properties:
+                                  statefulSession:
+                                    oneOf:
+                                    - not:
+                                        anyOf:
+                                        - required:
+                                          - httpCookie
+                                    - required:
+                                      - httpCookie
+                                required:
+                                - statefulSession
                           - required:
                             - simple
                           - properties:
@@ -1306,6 +1464,17 @@ spec:
                                   minimumRingSize: {}
                             required:
                             - consistentHash
+                          - properties:
+                              statefulSession:
+                                oneOf:
+                                - not:
+                                    anyOf:
+                                    - required:
+                                      - httpCookie
+                                - required:
+                                  - httpCookie
+                            required:
+                            - statefulSession
                           properties:
                             consistentHash:
                               properties:
@@ -1405,6 +1574,33 @@ spec:
                               - ROUND_ROBIN
                               - LEAST_REQUEST
                               type: string
+                            statefulSession:
+                              properties:
+                                httpCookie:
+                                  description: State based on HTTP cookie.
+                                  properties:
+                                    name:
+                                      description: Name of the cookie.
+                                      type: string
+                                    path:
+                                      description: Path to set for the cookie.
+                                      type: string
+                                    ttl:
+                                      description: Lifetime of the cookie.
+                                      type: string
+                                  type: object
+                                loadBalancer:
+                                  description: Load balancer to use for the initial
+                                    request, before a session is established.
+                                  enum:
+                                  - UNSPECIFIED
+                                  - LEAST_CONN
+                                  - RANDOM
+                                  - PASSTHROUGH
+                                  - ROUND_ROBIN
+                                  - LEAST_REQUEST
+                                  type: string
+                              type: object
                             warmupDurationSecs:
                               description: Represents the warmup duration of Service.
                               type: string
@@ -1704,6 +1900,17 @@ spec:
                                       minimumRingSize: {}
                                 required:
                                 - consistentHash
+                              - properties:
+                                  statefulSession:
+                                    oneOf:
+                                    - not:
+                                        anyOf:
+                                        - required:
+                                          - httpCookie
+                                    - required:
+                                      - httpCookie
+                                required:
+                                - statefulSession
                           - required:
                             - simple
                           - properties:
@@ -1743,6 +1950,17 @@ spec:
                                   minimumRingSize: {}
                             required:
                             - consistentHash
+                          - properties:
+                              statefulSession:
+                                oneOf:
+                                - not:
+                                    anyOf:
+                                    - required:
+                                      - httpCookie
+                                - required:
+                                  - httpCookie
+                            required:
+                            - statefulSession
                           properties:
                             consistentHash:
                               properties:
@@ -1842,6 +2060,33 @@ spec:
                               - ROUND_ROBIN
                               - LEAST_REQUEST
                               type: string
+                            statefulSession:
+                              properties:
+                                httpCookie:
+                                  description: State based on HTTP cookie.
+                                  properties:
+                                    name:
+                                      description: Name of the cookie.
+                                      type: string
+                                    path:
+                                      description: Path to set for the cookie.
+                                      type: string
+                                    ttl:
+                                      description: Lifetime of the cookie.
+                                      type: string
+                                  type: object
+                                loadBalancer:
+                                  description: Load balancer to use for the initial
+                                    request, before a session is established.
+                                  enum:
+                                  - UNSPECIFIED
+                                  - LEAST_CONN
+                                  - RANDOM
+                                  - PASSTHROUGH
+                                  - ROUND_ROBIN
+                                  - LEAST_REQUEST
+                                  type: string
+                              type: object
                             warmupDurationSecs:
                               description: Represents the warmup duration of Service.
                               type: string
@@ -2000,6 +2245,17 @@ spec:
                                             minimumRingSize: {}
                                       required:
                                       - consistentHash
+                                    - properties:
+                                        statefulSession:
+                                          oneOf:
+                                          - not:
+                                              anyOf:
+                                              - required:
+                                                - httpCookie
+                                          - required:
+                                            - httpCookie
+                                      required:
+                                      - statefulSession
                                 - required:
                                   - simple
                                 - properties:
@@ -2039,6 +2295,17 @@ spec:
                                         minimumRingSize: {}
                                   required:
                                   - consistentHash
+                                - properties:
+                                    statefulSession:
+                                      oneOf:
+                                      - not:
+                                          anyOf:
+                                          - required:
+                                            - httpCookie
+                                      - required:
+                                        - httpCookie
+                                  required:
+                                  - statefulSession
                                 properties:
                                   consistentHash:
                                     properties:
@@ -2141,6 +2408,33 @@ spec:
                                     - ROUND_ROBIN
                                     - LEAST_REQUEST
                                     type: string
+                                  statefulSession:
+                                    properties:
+                                      httpCookie:
+                                        description: State based on HTTP cookie.
+                                        properties:
+                                          name:
+                                            description: Name of the cookie.
+                                            type: string
+                                          path:
+                                            description: Path to set for the cookie.
+                                            type: string
+                                          ttl:
+                                            description: Lifetime of the cookie.
+                                            type: string
+                                        type: object
+                                      loadBalancer:
+                                        description: Load balancer to use for the
+                                          initial request, before a session is established.
+                                        enum:
+                                        - UNSPECIFIED
+                                        - LEAST_CONN
+                                        - RANDOM
+                                        - PASSTHROUGH
+                                        - ROUND_ROBIN
+                                        - LEAST_REQUEST
+                                        type: string
+                                    type: object
                                   warmupDurationSecs:
                                     description: Represents the warmup duration of
                                       Service.
@@ -2386,6 +2680,17 @@ spec:
                                 minimumRingSize: {}
                           required:
                           - consistentHash
+                        - properties:
+                            statefulSession:
+                              oneOf:
+                              - not:
+                                  anyOf:
+                                  - required:
+                                    - httpCookie
+                              - required:
+                                - httpCookie
+                          required:
+                          - statefulSession
                     - required:
                       - simple
                     - properties:
@@ -2425,6 +2730,17 @@ spec:
                             minimumRingSize: {}
                       required:
                       - consistentHash
+                    - properties:
+                        statefulSession:
+                          oneOf:
+                          - not:
+                              anyOf:
+                              - required:
+                                - httpCookie
+                          - required:
+                            - httpCookie
+                      required:
+                      - statefulSession
                     properties:
                       consistentHash:
                         properties:
@@ -2521,6 +2837,33 @@ spec:
                         - ROUND_ROBIN
                         - LEAST_REQUEST
                         type: string
+                      statefulSession:
+                        properties:
+                          httpCookie:
+                            description: State based on HTTP cookie.
+                            properties:
+                              name:
+                                description: Name of the cookie.
+                                type: string
+                              path:
+                                description: Path to set for the cookie.
+                                type: string
+                              ttl:
+                                description: Lifetime of the cookie.
+                                type: string
+                            type: object
+                          loadBalancer:
+                            description: Load balancer to use for the initial request,
+                              before a session is established.
+                            enum:
+                            - UNSPECIFIED
+                            - LEAST_CONN
+                            - RANDOM
+                            - PASSTHROUGH
+                            - ROUND_ROBIN
+                            - LEAST_REQUEST
+                            type: string
+                        type: object
                       warmupDurationSecs:
                         description: Represents the warmup duration of Service.
                         type: string
@@ -2676,6 +3019,17 @@ spec:
                                       minimumRingSize: {}
                                 required:
                                 - consistentHash
+                              - properties:
+                                  statefulSession:
+                                    oneOf:
+                                    - not:
+                                        anyOf:
+                                        - required:
+                                          - httpCookie
+                                    - required:
+                                      - httpCookie
+                                required:
+                                - statefulSession
                           - required:
                             - simple
                           - properties:
@@ -2715,6 +3069,17 @@ spec:
                                   minimumRingSize: {}
                             required:
                             - consistentHash
+                          - properties:
+                              statefulSession:
+                                oneOf:
+                                - not:
+                                    anyOf:
+                                    - required:
+                                      - httpCookie
+                                - required:
+                                  - httpCookie
+                            required:
+                            - statefulSession
                           properties:
                             consistentHash:
                               properties:
@@ -2814,6 +3179,33 @@ spec:
                               - ROUND_ROBIN
                               - LEAST_REQUEST
                               type: string
+                            statefulSession:
+                              properties:
+                                httpCookie:
+                                  description: State based on HTTP cookie.
+                                  properties:
+                                    name:
+                                      description: Name of the cookie.
+                                      type: string
+                                    path:
+                                      description: Path to set for the cookie.
+                                      type: string
+                                    ttl:
+                                      description: Lifetime of the cookie.
+                                      type: string
+                                  type: object
+                                loadBalancer:
+                                  description: Load balancer to use for the initial
+                                    request, before a session is established.
+                                  enum:
+                                  - UNSPECIFIED
+                                  - LEAST_CONN
+                                  - RANDOM
+                                  - PASSTHROUGH
+                                  - ROUND_ROBIN
+                                  - LEAST_REQUEST
+                                  type: string
+                              type: object
                             warmupDurationSecs:
                               description: Represents the warmup duration of Service.
                               type: string

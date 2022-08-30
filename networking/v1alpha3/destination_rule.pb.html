@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.DestinationRule
 aliases: [/docs/reference/config/networking/v1alpha3/destination-rule]
-number_of_entries: 23
+number_of_entries: 24
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -523,6 +523,57 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="HTTPCookie">HTTPCookie</h2>
+<section>
+<p>Describes a HTTP cookie that will be used for session stickiness.
+If the cookie is not present, it will be generated.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HTTPCookie-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>Name of the cookie.</p>
+
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr id="HTTPCookie-path">
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>
+<p>Path to set for the cookie.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPCookie-ttl">
+<td><code>ttl</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>Lifetime of the cookie.</p>
+
+</td>
+<td>
+Yes
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="LoadBalancerSettings">LoadBalancerSettings</h2>
 <section>
 <p>Load balancing policies to apply for a specific destination. See Envoy&rsquo;s
@@ -619,7 +670,7 @@ spec:
 <tbody>
 <tr id="LoadBalancerSettings-simple" class="oneof oneof-start">
 <td><code>simple</code></td>
-<td><code><a href="#LoadBalancerSettings-SimpleLB">SimpleLB (oneof)</a></code></td>
+<td><code><a href="#SimpleLB">SimpleLB (oneof)</a></code></td>
 <td>
 </td>
 <td>
@@ -629,6 +680,15 @@ No
 <tr id="LoadBalancerSettings-consistent_hash" class="oneof">
 <td><code>consistentHash</code></td>
 <td><code><a href="#LoadBalancerSettings-ConsistentHashLB">ConsistentHashLB (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LoadBalancerSettings-stateful_session" class="oneof">
+<td><code>statefulSession</code></td>
+<td><code><a href="#LoadBalancerSettings-StatefulSession">StatefulSession (oneof)</a></code></td>
 <td>
 </td>
 <td>
@@ -1539,7 +1599,7 @@ No
 </tr>
 <tr id="LoadBalancerSettings-ConsistentHashLB-http_cookie" class="oneof">
 <td><code>httpCookie</code></td>
-<td><code><a href="#LoadBalancerSettings-ConsistentHashLB-HTTPCookie">HTTPCookie (oneof)</a></code></td>
+<td><code><a href="#HTTPCookie">HTTPCookie (oneof)</a></code></td>
 <td>
 <p>Hash based on HTTP cookie.</p>
 
@@ -1607,6 +1667,47 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="LoadBalancerSettings-StatefulSession">LoadBalancerSettings.StatefulSession</h2>
+<section>
+<p>StatefulSession load balancer load balances across backend hosts using &lsquo;strong&rsquo; stickiness.
+This load balancer enforces stable session stickiness by routing requests to the same backend
+consistently till the backend host on which the session lives goes down.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LoadBalancerSettings-StatefulSession-load_balancer">
+<td><code>loadBalancer</code></td>
+<td><code><a href="#SimpleLB">SimpleLB</a></code></td>
+<td>
+<p>Load balancer to use for the initial request, before a session is established.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LoadBalancerSettings-StatefulSession-http_cookie" class="oneof oneof-start">
+<td><code>httpCookie</code></td>
+<td><code><a href="#HTTPCookie">HTTPCookie (oneof)</a></code></td>
+<td>
+<p>State based on HTTP cookie.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="LoadBalancerSettings-ConsistentHashLB-RingHash">LoadBalancerSettings.ConsistentHashLB.RingHash</h2>
 <section>
 <table class="message-fields">
@@ -1660,58 +1761,6 @@ Increasing the table size reduces the amount of disruption.</p>
 </td>
 <td>
 No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="LoadBalancerSettings-ConsistentHashLB-HTTPCookie">LoadBalancerSettings.ConsistentHashLB.HTTPCookie</h2>
-<section>
-<p>Describes a HTTP cookie that will be used as the hash key for the
-Consistent Hash load balancer. If the cookie is not present, it will
-be generated.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="LoadBalancerSettings-ConsistentHashLB-HTTPCookie-name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>Name of the cookie.</p>
-
-</td>
-<td>
-Yes
-</td>
-</tr>
-<tr id="LoadBalancerSettings-ConsistentHashLB-HTTPCookie-path">
-<td><code>path</code></td>
-<td><code>string</code></td>
-<td>
-<p>Path to set for the cookie.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="LoadBalancerSettings-ConsistentHashLB-HTTPCookie-ttl">
-<td><code>ttl</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
-<td>
-<p>Lifetime of the cookie.</p>
-
-</td>
-<td>
-Yes
 </td>
 </tr>
 </tbody>
@@ -2073,76 +2122,6 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="LoadBalancerSettings-SimpleLB">LoadBalancerSettings.SimpleLB</h2>
-<section>
-<p>Standard load balancing algorithms that require no tuning.</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="LoadBalancerSettings-SimpleLB-UNSPECIFIED">
-<td><code>UNSPECIFIED</code></td>
-<td>
-<p>No load balancing algorithm has been specified by the user. Istio
-will select an appropriate default.</p>
-
-</td>
-</tr>
-<tr id="LoadBalancerSettings-SimpleLB-RANDOM">
-<td><code>RANDOM</code></td>
-<td>
-<p>The random load balancer selects a random healthy host. The random
-load balancer generally performs better than round robin if no health
-checking policy is configured.</p>
-
-</td>
-</tr>
-<tr id="LoadBalancerSettings-SimpleLB-PASSTHROUGH">
-<td><code>PASSTHROUGH</code></td>
-<td>
-<p>This option will forward the connection to the original IP address
-requested by the caller without doing any form of load
-balancing. This option must be used with care. It is meant for
-advanced use cases. Refer to Original Destination load balancer in
-Envoy for further details.</p>
-
-</td>
-</tr>
-<tr id="LoadBalancerSettings-SimpleLB-ROUND_ROBIN">
-<td><code>ROUND_ROBIN</code></td>
-<td>
-<p>A basic round robin load balancing policy. This is generally unsafe
-for many scenarios (e.g. when enpoint weighting is used) as it can
-overburden endpoints. In general, prefer to use LEAST_REQUEST as a
-drop-in replacement for ROUND_ROBIN.</p>
-
-</td>
-</tr>
-<tr id="LoadBalancerSettings-SimpleLB-LEAST_REQUEST">
-<td><code>LEAST_REQUEST</code></td>
-<td>
-<p>The least request load balancer spreads load across endpoints, favoring
-endpoints with the least outstanding requests. This is generally safer
-and outperforms ROUND_ROBIN in nearly all cases. Prefer to use
-LEAST_REQUEST as a drop-in replacement for ROUND_ROBIN.</p>
-
-</td>
-</tr>
-<tr id="LoadBalancerSettings-SimpleLB-LEAST_CONN" class="deprecated ">
-<td><code>LEAST_CONN</code></td>
-<td>
-<p>Deprecated. Use LEAST_REQUEST instead.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="ConnectionPoolSettings-HTTPSettings-H2UpgradePolicy">ConnectionPoolSettings.HTTPSettings.H2UpgradePolicy</h2>
 <section>
 <p>Policy for upgrading http1.1 connections to http2.</p>
@@ -2223,6 +2202,76 @@ client certificates for authentication.
 Compared to Mutual mode, this mode uses certificates generated
 automatically by Istio for mTLS authentication. When this mode is
 used, all other fields in <code>ClientTLSSettings</code> should be empty.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="SimpleLB">SimpleLB</h2>
+<section>
+<p>Standard load balancing algorithms that require no tuning.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="SimpleLB-UNSPECIFIED">
+<td><code>UNSPECIFIED</code></td>
+<td>
+<p>No load balancing algorithm has been specified by the user. Istio
+will select an appropriate default.</p>
+
+</td>
+</tr>
+<tr id="SimpleLB-RANDOM">
+<td><code>RANDOM</code></td>
+<td>
+<p>The random load balancer selects a random healthy host. The random
+load balancer generally performs better than round robin if no health
+checking policy is configured.</p>
+
+</td>
+</tr>
+<tr id="SimpleLB-PASSTHROUGH">
+<td><code>PASSTHROUGH</code></td>
+<td>
+<p>This option will forward the connection to the original IP address
+requested by the caller without doing any form of load
+balancing. This option must be used with care. It is meant for
+advanced use cases. Refer to Original Destination load balancer in
+Envoy for further details.</p>
+
+</td>
+</tr>
+<tr id="SimpleLB-ROUND_ROBIN">
+<td><code>ROUND_ROBIN</code></td>
+<td>
+<p>A basic round robin load balancing policy. This is generally unsafe
+for many scenarios (e.g. when enpoint weighting is used) as it can
+overburden endpoints. In general, prefer to use LEAST_REQUEST as a
+drop-in replacement for ROUND_ROBIN.</p>
+
+</td>
+</tr>
+<tr id="SimpleLB-LEAST_REQUEST">
+<td><code>LEAST_REQUEST</code></td>
+<td>
+<p>The least request load balancer spreads load across endpoints, favoring
+endpoints with the least outstanding requests. This is generally safer
+and outperforms ROUND_ROBIN in nearly all cases. Prefer to use
+LEAST_REQUEST as a drop-in replacement for ROUND_ROBIN.</p>
+
+</td>
+</tr>
+<tr id="SimpleLB-LEAST_CONN" class="deprecated ">
+<td><code>LEAST_CONN</code></td>
+<td>
+<p>Deprecated. Use LEAST_REQUEST instead.</p>
 
 </td>
 </tr>
