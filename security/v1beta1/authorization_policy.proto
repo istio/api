@@ -464,4 +464,7 @@ message Condition {
   // Optional. A list of negative match of values for the attribute.
   // Note: at least one of values or not_values must be set.
   repeated string not_values = 3;
+
+  // Optional. A list of regex strings to match for the attribute.
+  repeated string regex = 4;
 }

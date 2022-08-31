@@ -93,6 +93,13 @@
             "items": {
               "type": "string"
             }
+          },
+          "regex": {
+            "description": "Optional. A list of regex strings to match for the attribute.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },

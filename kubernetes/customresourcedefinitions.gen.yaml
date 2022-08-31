@@ -6399,6 +6399,11 @@ spec:
                             items:
                               type: string
                             type: array
+                          regex:
+                            description: Optional.
+                            items:
+                              type: string
+                            type: array
                           values:
                             description: Optional.
                             items:
