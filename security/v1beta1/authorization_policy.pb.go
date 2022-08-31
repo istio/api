@@ -824,6 +824,7 @@ type Condition struct {
 	// Note: at least one of values or not_values must be set.
 	NotValues []string `protobuf:"bytes,3,rep,name=not_values,json=notValues,proto3" json:"not_values,omitempty"`
 	// Optional. A list of regex strings to match for the attribute.
+	// Note: please use with caution at your own discretion, use could cause security and performance issues.
 	Regex []string `protobuf:"bytes,4,rep,name=regex,proto3" json:"regex,omitempty"`
 }
 

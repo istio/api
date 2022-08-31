@@ -466,5 +466,6 @@ message Condition {
   repeated string not_values = 3;
 
   // Optional. A list of regex strings to match for the attribute.
+  // Note: please use with caution at your own discretion, use could cause security and performance issues.
   repeated string regex = 4;
 }
