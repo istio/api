@@ -6391,15 +6391,15 @@ spec:
                       description: Optional.
                       items:
                         properties:
-                          key:
-                            description: The name of an Istio attribute.
-                            type: string
-                          notValues:
+                          contains:
                             description: Optional.
                             items:
                               type: string
                             type: array
-                          regex:
+                          key:
+                            description: The name of an Istio attribute.
+                            type: string
+                          notValues:
                             description: Optional.
                             items:
                               type: string
