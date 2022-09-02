@@ -185,24 +185,6 @@
           }
         }
       },
-      "istio.networking.v1beta1.HTTPCookie": {
-        "description": "Describes a HTTP cookie that will be used for session stickiness. If the cookie is not present, it will be generated.",
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "Name of the cookie.",
-            "type": "string"
-          },
-          "path": {
-            "description": "Path to set for the cookie.",
-            "type": "string"
-          },
-          "ttl": {
-            "description": "Lifetime of the cookie.",
-            "type": "string"
-          }
-        }
-      },
       "istio.networking.v1beta1.LoadBalancerSettings": {
         "description": "Load balancing policies to apply for a specific destination. See Envoy's load balancing [documentation](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancing) for more details.",
         "type": "object",
@@ -213,6 +195,9 @@
           "warmupDurationSecs": {
             "description": "Represents the warmup duration of Service. If set, the newly created endpoint of service remains in warmup mode starting from its creation time for the duration of this window and Istio progressively increases amount of traffic for that endpoint instead of sending proportional amount of traffic. This should be enabled for services that require warm up time to serve full production load with reasonable latency. Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancers.",
             "type": "string"
+          },
+          "statefulSessionConfig": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.StatefulSession"
           }
         },
         "oneOf": [
@@ -225,7 +210,7 @@
                   ],
                   "properties": {
                     "simple": {
-                      "$ref": "#/components/schemas/istio.networking.v1beta1.SimpleLB"
+                      "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.SimpleLB"
                     }
                   }
                 },
@@ -238,16 +223,6 @@
                       "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.ConsistentHashLB"
                     }
                   }
-                },
-                {
-                  "required": [
-                    "statefulSession"
-                  ],
-                  "properties": {
-                    "statefulSession": {
-                      "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.StatefulSession"
-                    }
-                  }
                 }
               ]
             }
@@ -258,7 +233,7 @@
             ],
             "properties": {
               "simple": {
-                "$ref": "#/components/schemas/istio.networking.v1beta1.SimpleLB"
+                "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.SimpleLB"
               }
             }
           },
@@ -269,16 +244,6 @@
             "properties": {
               "consistentHash": {
                 "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.ConsistentHashLB"
-              }
-            }
-          },
-          {
-            "required": [
-              "statefulSession"
-            ],
-            "properties": {
-              "statefulSession": {
-                "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.StatefulSession"
               }
             }
           }
@@ -317,7 +282,7 @@
                       ],
                       "properties": {
                         "httpCookie": {
-                          "$ref": "#/components/schemas/istio.networking.v1beta1.HTTPCookie"
+                          "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.ConsistentHashLB.HTTPCookie"
                         }
                       }
                     },
@@ -363,7 +328,7 @@
                 ],
                 "properties": {
                   "httpCookie": {
-                    "$ref": "#/components/schemas/istio.networking.v1beta1.HTTPCookie"
+                    "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.ConsistentHashLB.HTTPCookie"
                   }
                 }
               },
@@ -443,6 +408,24 @@
           }
         ]
       },
+      "istio.networking.v1beta1.LoadBalancerSettings.ConsistentHashLB.HTTPCookie": {
+        "description": "Describes a HTTP cookie that will be used as the hash key for the Consistent Hash load balancer. If the cookie is not present, it will be generated.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the cookie.",
+            "type": "string"
+          },
+          "path": {
+            "description": "Path to set for the cookie.",
+            "type": "string"
+          },
+          "ttl": {
+            "description": "Lifetime of the cookie.",
+            "type": "string"
+          }
+        }
+      },
       "istio.networking.v1beta1.LoadBalancerSettings.ConsistentHashLB.MagLev": {
         "type": "object",
         "properties": {
@@ -461,25 +444,32 @@
           }
         }
       },
+      "istio.networking.v1beta1.LoadBalancerSettings.SimpleLB": {
+        "description": "Standard load balancing algorithms that require no tuning.",
+        "type": "string",
+        "enum": [
+          "UNSPECIFIED",
+          "LEAST_CONN",
+          "RANDOM",
+          "PASSTHROUGH",
+          "ROUND_ROBIN",
+          "LEAST_REQUEST"
+        ]
+      },
       "istio.networking.v1beta1.LoadBalancerSettings.StatefulSession": {
-        "description": "StatefulSession load balancer load balances across backend hosts using 'strong' stickiness. This load balancer enforces stable session stickiness by routing requests to the same backend consistently till the backend host on which the session lives goes down.",
+        "description": "Stateful Session configuration.",
         "type": "object",
-        "properties": {
-          "loadBalancer": {
-            "$ref": "#/components/schemas/istio.networking.v1beta1.SimpleLB"
-          }
-        },
         "oneOf": [
           {
             "not": {
               "anyOf": [
                 {
                   "required": [
-                    "httpCookie"
+                    "sessionCookie"
                   ],
                   "properties": {
-                    "httpCookie": {
-                      "$ref": "#/components/schemas/istio.networking.v1beta1.HTTPCookie"
+                    "sessionCookie": {
+                      "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.StatefulSession.SessionCookie"
                     }
                   }
                 }
@@ -488,15 +478,29 @@
           },
           {
             "required": [
-              "httpCookie"
+              "sessionCookie"
             ],
             "properties": {
-              "httpCookie": {
-                "$ref": "#/components/schemas/istio.networking.v1beta1.HTTPCookie"
+              "sessionCookie": {
+                "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.StatefulSession.SessionCookie"
               }
             }
           }
         ]
+      },
+      "istio.networking.v1beta1.LoadBalancerSettings.StatefulSession.SessionCookie": {
+        "description": "SessionCookie is used to maintain the session state across client and server.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the cookie to be used. If not specified, environment specific configuration is used.",
+            "type": "string"
+          },
+          "duration": {
+            "description": "Session duration. If not specified, a duration of 1 hour is used.",
+            "type": "string"
+          }
+        }
       },
       "istio.networking.v1beta1.LocalityLoadBalancerSetting": {
         "description": "Locality-weighted load balancing allows administrators to control the distribution of traffic to endpoints based on the localities of where the traffic originates and where it will terminate. These localities are specified using arbitrary labels that designate a hierarchy of localities in {region}/{zone}/{sub-zone} form. For additional detail refer to [Locality Weight](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight) The following example shows how to setup locality weights mesh-wide.",
@@ -619,18 +623,6 @@
             "type": "integer"
           }
         }
-      },
-      "istio.networking.v1beta1.SimpleLB": {
-        "description": "Standard load balancing algorithms that require no tuning.",
-        "type": "string",
-        "enum": [
-          "UNSPECIFIED",
-          "LEAST_CONN",
-          "RANDOM",
-          "PASSTHROUGH",
-          "ROUND_ROBIN",
-          "LEAST_REQUEST"
-        ]
       },
       "istio.networking.v1beta1.Subset": {
         "description": "A subset of endpoints of a service. Subsets can be used for scenarios like A/B testing, or routing to a specific version of a service. Refer to [VirtualService](https://istio.io/docs/reference/config/networking/virtual-service/#VirtualService) documentation for examples of using subsets in these scenarios. In addition, traffic policies defined at the service-level can be overridden at a subset-level. The following rule uses a round robin load balancing policy for all traffic going to a subset named testversion that is composed of endpoints (e.g., pods) with labels (version:v3).",

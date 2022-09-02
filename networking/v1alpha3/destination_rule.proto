@@ -444,51 +444,6 @@ message Subset {
   TrafficPolicy traffic_policy = 3;
 }
 
-// Describes a HTTP cookie that will be used for session stickiness.
-// If the cookie is not present, it will be generated.
-message HTTPCookie {
-  // Name of the cookie.
-  string name = 1 [(google.api.field_behavior) = REQUIRED];
-  // Path to set for the cookie.
-  string path = 2;
-  // Lifetime of the cookie.
-  google.protobuf.Duration ttl = 3 [(google.api.field_behavior) = REQUIRED];
-};
-
-// Standard load balancing algorithms that require no tuning.
-enum SimpleLB {
-  // No load balancing algorithm has been specified by the user. Istio
-  // will select an appropriate default.
-  UNSPECIFIED = 0;
-
-  // Deprecated. Use LEAST_REQUEST instead.
-  LEAST_CONN = 1 [deprecated=true];
-
-  // The random load balancer selects a random healthy host. The random
-  // load balancer generally performs better than round robin if no health
-  // checking policy is configured.
-  RANDOM = 2;
-
-  // This option will forward the connection to the original IP address
-  // requested by the caller without doing any form of load
-  // balancing. This option must be used with care. It is meant for
-  // advanced use cases. Refer to Original Destination load balancer in
-  // Envoy for further details.
-  PASSTHROUGH = 3;
-
-  // A basic round robin load balancing policy. This is generally unsafe
-  // for many scenarios (e.g. when enpoint weighting is used) as it can
-  // overburden endpoints. In general, prefer to use LEAST_REQUEST as a
-  // drop-in replacement for ROUND_ROBIN.
-  ROUND_ROBIN = 4;
-
-  // The least request load balancer spreads load across endpoints, favoring
-  // endpoints with the least outstanding requests. This is generally safer
-  // and outperforms ROUND_ROBIN in nearly all cases. Prefer to use
-  // LEAST_REQUEST as a drop-in replacement for ROUND_ROBIN.
-  LEAST_REQUEST = 5;
-};
-
 // Load balancing policies to apply for a specific destination. See Envoy's
 // load balancing
 // [documentation](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancing)
@@ -568,6 +523,39 @@ enum SimpleLB {
 // {{</tabset>}}
 //
 message LoadBalancerSettings {
+  // Standard load balancing algorithms that require no tuning.
+  enum SimpleLB {
+    // No load balancing algorithm has been specified by the user. Istio
+    // will select an appropriate default.
+    UNSPECIFIED = 0;
+
+    // Deprecated. Use LEAST_REQUEST instead.
+    LEAST_CONN = 1 [deprecated=true];
+
+    // The random load balancer selects a random healthy host. The random
+    // load balancer generally performs better than round robin if no health
+    // checking policy is configured.
+    RANDOM = 2;
+
+    // This option will forward the connection to the original IP address
+    // requested by the caller without doing any form of load
+    // balancing. This option must be used with care. It is meant for
+    // advanced use cases. Refer to Original Destination load balancer in
+    // Envoy for further details.
+    PASSTHROUGH = 3;
+
+    // A basic round robin load balancing policy. This is generally unsafe
+    // for many scenarios (e.g. when enpoint weighting is used) as it can
+    // overburden endpoints. In general, prefer to use LEAST_REQUEST as a
+    // drop-in replacement for ROUND_ROBIN.
+    ROUND_ROBIN = 4;
+
+    // The least request load balancer spreads load across endpoints, favoring
+    // endpoints with the least outstanding requests. This is generally safer
+    // and outperforms ROUND_ROBIN in nearly all cases. Prefer to use
+    // LEAST_REQUEST as a drop-in replacement for ROUND_ROBIN.
+    LEAST_REQUEST = 5;
+  };
 
   // Consistent Hash-based load balancing can be used to provide soft
   // session affinity based on HTTP headers, cookies or other
@@ -590,6 +578,17 @@ message LoadBalancerSettings {
       // disruption when the backend hosts change.
       // Increasing the table size reduces the amount of disruption. 
       uint64 table_size = 1;
+    };
+    // Describes a HTTP cookie that will be used as the hash key for the
+    // Consistent Hash load balancer. If the cookie is not present, it will
+    // be generated.
+    message HTTPCookie {
+      // Name of the cookie.
+      string name = 1 [(google.api.field_behavior) = REQUIRED];
+      // Path to set for the cookie.
+      string path = 2;
+      // Lifetime of the cookie.
+      google.protobuf.Duration ttl = 3 [(google.api.field_behavior) = REQUIRED];
     };
 
     // The hash key to use.
@@ -624,16 +623,20 @@ message LoadBalancerSettings {
     uint64 minimum_ring_size = 4 [deprecated=true];
   };
 
-  // StatefulSession load balancer load balances across backend hosts using 'strong' stickiness. 
-  // This load balancer enforces stable session stickiness by routing requests to the same backend
-  // consistently till the backend host on which the session lives goes down.
+  // Stateful Session configuration.
   message StatefulSession {
-    // Load balancer to use for the initial request, before a session is established.
-    SimpleLB load_balancer = 1;
+    // SessionCookie is used to maintain the session state across client and server. 
+    message SessionCookie {
+       // Name of the cookie to be used. If not specified, environment specific 
+       // configuration is used.
+       string name = 1; 
+       // Session duration. If not specified, a duration of 1 hour is used.
+       google.protobuf.Duration duration = 2;
+    }
     // The session state to use.
     oneof session_state {
       // State based on HTTP cookie.
-      HTTPCookie http_cookie = 2;
+      SessionCookie session_cookie = 1;
     };
   };
 
@@ -645,10 +648,7 @@ message LoadBalancerSettings {
   oneof lb_policy {
     SimpleLB simple = 1;
     ConsistentHashLB consistent_hash = 2;
-    StatefulSession stateful_session = 5;
   }
-
-  
 
   // Locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
   // between this object and the object one in MeshConfig
@@ -660,6 +660,19 @@ message LoadBalancerSettings {
   // This should be enabled for services that require warm up time to serve full production load with reasonable latency.
   // Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancers.
   google.protobuf.Duration warmup_duration_secs = 4;
+
+  // StatefulSession enforces stable session stickiness. 
+  // ConsistentHash LB policy does not enforce stable sessions because any time
+  // a backend host is removed or added, the hash mapping of 1/N client sessions
+  // gets affected (where N is the total number of backends) which would lead to 
+  // dropped requests in some cases which is unacceptable.
+  // StatefulSession enforces session stickiness by routing requests to the same 
+  // backend till the backend host on which the session lives goes down or is not available
+  // in the load balaner pool.
+  // When the backend host that hosts the session goes down, sesion is recreated
+  // on another backend host. A new backend host is selected based on the the configured
+  // load balancer policy.
+  StatefulSession stateful_session_config = 5;
 }
 
 // Connection pool settings for an upstream host. The settings apply to
