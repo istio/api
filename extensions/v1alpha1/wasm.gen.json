@@ -134,66 +134,21 @@
       "istio.type.v1beta1.PortSelector": {
         "description": "PortSelector is the criteria for specifying if a policy can be applied to a listener having a specific port.",
         "type": "object",
-        "oneOf": [
-          {
-            "not": {
-              "anyOf": [
-                {
-                  "required": [
-                    "number"
-                  ],
-                  "properties": {
-                    "number": {
-                      "description": "Valid port number",
-                      "type": "integer"
-                    }
-                  }
-                },
-                {
-                  "required": [
-                    "name"
-                  ],
-                  "properties": {
-                    "name": {
-                      "description": "Port name",
-                      "type": "string"
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "required": [
-              "number"
-            ],
-            "properties": {
-              "number": {
-                "description": "Valid port number",
-                "type": "integer"
-              }
-            }
-          },
-          {
-            "required": [
-              "name"
-            ],
-            "properties": {
-              "name": {
-                "description": "Port name",
-                "type": "string"
-              }
-            }
+        "properties": {
+          "number": {
+            "description": "Port number",
+            "type": "integer"
           }
-        ]
+        }
       },
       "istio.type.v1beta1.WorkloadMode": {
-        "description": "WorkloadMode allows selection of the role of the underlying workload in network traffic. A workload is considered as acting as a SERVER if it is the destination of the traffic (that is, traffic direction, from the perspective of the workload is *inbound*). If the workload is the source of the network traffic, it is considered to be in CLIENT mode (traffic is *outbound* from the workload).",
+        "description": "WorkloadMode allows selection of the role of the underlying workload in network traffic. A workload is considered as acting as a SERVER if it is the destination of the traffic (that is, traffic direction, from the perspective of the workload is *inbound*). If the workload is the source of the network traffic, it is considered to be in CLIENT mode (traffic is *outbound* from the workload). When the workload is a gateway, WorkloadMode will be ignored.",
         "type": "string",
         "enum": [
-          "CLIENT_AND_SERVER",
+          "UNDEFINED",
           "CLIENT",
-          "SERVER"
+          "SERVER",
+          "CLIENT_AND_SERVER"
         ]
       },
       "istio.type.v1beta1.WorkloadSelector": {

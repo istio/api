@@ -39,12 +39,8 @@ message WorkloadSelector {
 // PortSelector is the criteria for specifying if a policy can be applied to 
 // a listener having a specific port.
 message PortSelector {
-  oneof port {
-    // Valid port number
-    uint32 number = 1;
-    // Port name
-    string name = 2;
-  }
+  // Port number
+  uint32 number = 1;
 }
 
 // WorkloadMode allows selection of the role of the underlying workload in
@@ -53,10 +49,10 @@ message PortSelector {
 // perspective of the workload is *inbound*). If the workload is the source of
 // the network traffic, it is considered to be in CLIENT mode (traffic is
 // *outbound* from the workload).
+// When the workload is a gateway, WorkloadMode will be ignored.
 enum WorkloadMode {
-  // Selects for scenarios when the workload is either the
-  // source or destination of the network traffic.
-  CLIENT_AND_SERVER = 0;
+  // Default value, which will be interpreted by its own usage.
+  UNDEFINED = 0;
 
   // Selects for scenarios when the workload is the
   // source of the network traffic.
@@ -65,4 +61,8 @@ enum WorkloadMode {
   // Selects for scenarios when the workload is the
   // destination of the network traffic.
   SERVER = 2;
+
+  // Selects for scenarios when the workload is either the
+  // source or destination of the network traffic.
+  CLIENT_AND_SERVER = 3;
 }

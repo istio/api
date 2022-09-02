@@ -56,22 +56,11 @@ a listener having a specific port.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="PortSelector-number" class="oneof oneof-start">
+<tr id="PortSelector-number">
 <td><code>number</code></td>
-<td><code>uint32 (oneof)</code></td>
+<td><code>uint32</code></td>
 <td>
-<p>Valid port number</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="PortSelector-name" class="oneof">
-<td><code>name</code></td>
-<td><code>string (oneof)</code></td>
-<td>
-<p>Port name</p>
+<p>Port number</p>
 
 </td>
 <td>
@@ -88,7 +77,8 @@ network traffic. A workload is considered as acting as a SERVER if it is
 the destination of the traffic (that is, traffic direction, from the
 perspective of the workload is <em>inbound</em>). If the workload is the source of
 the network traffic, it is considered to be in CLIENT mode (traffic is
-<em>outbound</em> from the workload).</p>
+<em>outbound</em> from the workload).
+When the workload is a gateway, WorkloadMode will be ignored.</p>
 
 <table class="enum-values">
 <thead>
@@ -98,11 +88,10 @@ the network traffic, it is considered to be in CLIENT mode (traffic is
 </tr>
 </thead>
 <tbody>
-<tr id="WorkloadMode-CLIENT_AND_SERVER">
-<td><code>CLIENT_AND_SERVER</code></td>
+<tr id="WorkloadMode-UNDEFINED">
+<td><code>UNDEFINED</code></td>
 <td>
-<p>Selects for scenarios when the workload is either the
-source or destination of the network traffic.</p>
+<p>Default value, which will be interpreted by its own usage.</p>
 
 </td>
 </tr>
@@ -119,6 +108,14 @@ source of the network traffic.</p>
 <td>
 <p>Selects for scenarios when the workload is the
 destination of the network traffic.</p>
+
+</td>
+</tr>
+<tr id="WorkloadMode-CLIENT_AND_SERVER">
+<td><code>CLIENT_AND_SERVER</code></td>
+<td>
+<p>Selects for scenarios when the workload is either the
+source or destination of the network traffic.</p>
 
 </td>
 </tr>

@@ -53,26 +53,14 @@ spec:
                   properties:
                     mode:
                       enum:
-                      - CLIENT_AND_SERVER
+                      - UNDEFINED
                       - CLIENT
                       - SERVER
+                      - CLIENT_AND_SERVER
                       type: string
                     ports:
                       items:
-                        oneOf:
-                        - not:
-                            anyOf:
-                            - required:
-                              - number
-                            - required:
-                              - name
-                        - required:
-                          - number
-                        - required:
-                          - name
                         properties:
-                          name:
-                            type: string
                           number:
                             type: integer
                         type: object
