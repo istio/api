@@ -6,4 +6,5 @@ issue:
 
 releaseNotes:
   - |
-    **Added** Regex field to Authorization Policy conditions.
+    **Added** Contains field to Authorization Policy conditions.
+    
