@@ -196,7 +196,7 @@
             "description": "Represents the warmup duration of Service. If set, the newly created endpoint of service remains in warmup mode starting from its creation time for the duration of this window and Istio progressively increases amount of traffic for that endpoint instead of sending proportional amount of traffic. This should be enabled for services that require warm up time to serve full production load with reasonable latency. Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancers.",
             "type": "string"
           },
-          "statefulSessionConfig": {
+          "statefulSession": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.LoadBalancerSettings.StatefulSession"
           }
         },
@@ -457,7 +457,7 @@
         ]
       },
       "istio.networking.v1beta1.LoadBalancerSettings.StatefulSession": {
-        "description": "Stateful Session configuration.",
+        "description": "Stateful Session configuration. For service to service communication, where there is no browser invovled, clients should use cookie managers like cookiejar.",
         "type": "object",
         "oneOf": [
           {
@@ -497,7 +497,7 @@
             "type": "string"
           },
           "duration": {
-            "description": "Session duration. If not specified, a duration of 1 hour is used.",
+            "description": "Duration of cookie. If not specified, a duration of 1 hour is used.",
             "type": "string"
           }
         }

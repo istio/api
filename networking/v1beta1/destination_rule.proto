@@ -572,14 +572,16 @@ message LoadBalancerSettings {
     uint64 minimum_ring_size = 4 [deprecated=true];
   };
 
-  // Stateful Session configuration.
+  // Stateful Session configuration. 
+  // For service to service communication, where there is no browser invovled,
+  // clients should use cookie managers like  cookiejar.
   message StatefulSession {
     // SessionCookie is used to maintain the session state across client and server. 
     message SessionCookie {
        // Name of the cookie to be used. If not specified, environment specific 
        // configuration is used.
        string name = 1; 
-       // Session duration. If not specified, a duration of 1 hour is used.
+       // Duration of cookie. If not specified, a duration of 1 hour is used.
        google.protobuf.Duration duration = 2;
     }
     // The session state to use.
@@ -621,7 +623,7 @@ message LoadBalancerSettings {
   // When the backend host that hosts the session goes down, sesion is recreated
   // on another backend host. A new backend host is selected based on the the configured
   // load balancer policy.
-  StatefulSession stateful_session_config = 5;
+  StatefulSession stateful_session = 5;
 }
 
 // Connection pool settings for an upstream host. The settings apply to

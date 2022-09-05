@@ -433,7 +433,7 @@ spec:
                               - ROUND_ROBIN
                               - LEAST_REQUEST
                               type: string
-                            statefulSessionConfig:
+                            statefulSession:
                               description: StatefulSession enforces stable session
                                 stickiness.
                               oneOf:
@@ -448,7 +448,7 @@ spec:
                                   description: State based on HTTP cookie.
                                   properties:
                                     duration:
-                                      description: Session duration.
+                                      description: Duration of cookie.
                                       type: string
                                     name:
                                       description: Name of the cookie to be used.
@@ -754,7 +754,7 @@ spec:
                                     - ROUND_ROBIN
                                     - LEAST_REQUEST
                                     type: string
-                                  statefulSessionConfig:
+                                  statefulSession:
                                     description: StatefulSession enforces stable session
                                       stickiness.
                                     oneOf:
@@ -769,7 +769,7 @@ spec:
                                         description: State based on HTTP cookie.
                                         properties:
                                           duration:
-                                            description: Session duration.
+                                            description: Duration of cookie.
                                             type: string
                                           name:
                                             description: Name of the cookie to be
@@ -1157,7 +1157,7 @@ spec:
                         - ROUND_ROBIN
                         - LEAST_REQUEST
                         type: string
-                      statefulSessionConfig:
+                      statefulSession:
                         description: StatefulSession enforces stable session stickiness.
                         oneOf:
                         - not:
@@ -1171,7 +1171,7 @@ spec:
                             description: State based on HTTP cookie.
                             properties:
                               duration:
-                                description: Session duration.
+                                description: Duration of cookie.
                                 type: string
                               name:
                                 description: Name of the cookie to be used.
@@ -1471,7 +1471,7 @@ spec:
                               - ROUND_ROBIN
                               - LEAST_REQUEST
                               type: string
-                            statefulSessionConfig:
+                            statefulSession:
                               description: StatefulSession enforces stable session
                                 stickiness.
                               oneOf:
@@ -1486,7 +1486,7 @@ spec:
                                   description: State based on HTTP cookie.
                                   properties:
                                     duration:
-                                      description: Session duration.
+                                      description: Duration of cookie.
                                       type: string
                                     name:
                                       description: Name of the cookie to be used.
@@ -1930,7 +1930,7 @@ spec:
                               - ROUND_ROBIN
                               - LEAST_REQUEST
                               type: string
-                            statefulSessionConfig:
+                            statefulSession:
                               description: StatefulSession enforces stable session
                                 stickiness.
                               oneOf:
@@ -1945,7 +1945,7 @@ spec:
                                   description: State based on HTTP cookie.
                                   properties:
                                     duration:
-                                      description: Session duration.
+                                      description: Duration of cookie.
                                       type: string
                                     name:
                                       description: Name of the cookie to be used.
@@ -2251,7 +2251,7 @@ spec:
                                     - ROUND_ROBIN
                                     - LEAST_REQUEST
                                     type: string
-                                  statefulSessionConfig:
+                                  statefulSession:
                                     description: StatefulSession enforces stable session
                                       stickiness.
                                     oneOf:
@@ -2266,7 +2266,7 @@ spec:
                                         description: State based on HTTP cookie.
                                         properties:
                                           duration:
-                                            description: Session duration.
+                                            description: Duration of cookie.
                                             type: string
                                           name:
                                             description: Name of the cookie to be
@@ -2654,7 +2654,7 @@ spec:
                         - ROUND_ROBIN
                         - LEAST_REQUEST
                         type: string
-                      statefulSessionConfig:
+                      statefulSession:
                         description: StatefulSession enforces stable session stickiness.
                         oneOf:
                         - not:
@@ -2668,7 +2668,7 @@ spec:
                             description: State based on HTTP cookie.
                             properties:
                               duration:
-                                description: Session duration.
+                                description: Duration of cookie.
                                 type: string
                               name:
                                 description: Name of the cookie to be used.
@@ -2968,7 +2968,7 @@ spec:
                               - ROUND_ROBIN
                               - LEAST_REQUEST
                               type: string
-                            statefulSessionConfig:
+                            statefulSession:
                               description: StatefulSession enforces stable session
                                 stickiness.
                               oneOf:
@@ -2983,7 +2983,7 @@ spec:
                                   description: State based on HTTP cookie.
                                   properties:
                                     duration:
-                                      description: Session duration.
+                                      description: Duration of cookie.
                                       type: string
                                     name:
                                       description: Name of the cookie to be used.

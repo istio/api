@@ -662,8 +662,8 @@ Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancer
 No
 </td>
 </tr>
-<tr id="LoadBalancerSettings-stateful_session_config">
-<td><code>statefulSessionConfig</code></td>
+<tr id="LoadBalancerSettings-stateful_session">
+<td><code>statefulSession</code></td>
 <td><code><a href="#LoadBalancerSettings-StatefulSession">StatefulSession</a></code></td>
 <td>
 <p>StatefulSession enforces stable session stickiness.
@@ -1630,7 +1630,9 @@ No
 </section>
 <h2 id="LoadBalancerSettings-StatefulSession">LoadBalancerSettings.StatefulSession</h2>
 <section>
-<p>Stateful Session configuration.</p>
+<p>Stateful Session configuration.
+For service to service communication, where there is no browser invovled,
+clients should use cookie managers like  cookiejar.</p>
 
 <table class="message-fields">
 <thead>
@@ -1796,7 +1798,7 @@ No
 <td><code>duration</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
-<p>Session duration. If not specified, a duration of 1 hour is used.</p>
+<p>Duration of cookie. If not specified, a duration of 1 hour is used.</p>
 
 </td>
 <td>
