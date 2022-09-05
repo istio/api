@@ -45,14 +45,14 @@ const (
 // perspective of the workload is *inbound*). If the workload is the source of
 // the network traffic, it is considered to be in CLIENT mode (traffic is
 // *outbound* from the workload).
-// When the workload is a gateway, WorkloadMode will be ignored.
 type WorkloadMode int32
 
 const (
 	// Default value, which will be interpreted by its own usage.
 	WorkloadMode_UNDEFINED WorkloadMode = 0
 	// Selects for scenarios when the workload is the
-	// source of the network traffic.
+	// source of the network traffic. In addition,
+	// if the workload is a gateway, selects this.
 	WorkloadMode_CLIENT WorkloadMode = 1
 	// Selects for scenarios when the workload is the
 	// destination of the network traffic.

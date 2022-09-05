@@ -77,8 +77,7 @@ network traffic. A workload is considered as acting as a SERVER if it is
 the destination of the traffic (that is, traffic direction, from the
 perspective of the workload is <em>inbound</em>). If the workload is the source of
 the network traffic, it is considered to be in CLIENT mode (traffic is
-<em>outbound</em> from the workload).
-When the workload is a gateway, WorkloadMode will be ignored.</p>
+<em>outbound</em> from the workload).</p>
 
 <table class="enum-values">
 <thead>
@@ -99,7 +98,8 @@ When the workload is a gateway, WorkloadMode will be ignored.</p>
 <td><code>CLIENT</code></td>
 <td>
 <p>Selects for scenarios when the workload is the
-source of the network traffic.</p>
+source of the network traffic. In addition,
+if the workload is a gateway, selects this.</p>
 
 </td>
 </tr>

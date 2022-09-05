@@ -142,7 +142,7 @@
         }
       },
       "istio.type.v1beta1.WorkloadMode": {
-        "description": "WorkloadMode allows selection of the role of the underlying workload in network traffic. A workload is considered as acting as a SERVER if it is the destination of the traffic (that is, traffic direction, from the perspective of the workload is *inbound*). If the workload is the source of the network traffic, it is considered to be in CLIENT mode (traffic is *outbound* from the workload). When the workload is a gateway, WorkloadMode will be ignored.",
+        "description": "WorkloadMode allows selection of the role of the underlying workload in network traffic. A workload is considered as acting as a SERVER if it is the destination of the traffic (that is, traffic direction, from the perspective of the workload is *inbound*). If the workload is the source of the network traffic, it is considered to be in CLIENT mode (traffic is *outbound* from the workload).",
         "type": "string",
         "enum": [
           "UNDEFINED",
