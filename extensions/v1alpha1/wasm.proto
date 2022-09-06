@@ -314,6 +314,45 @@ message WasmPlugin {
   // Configuration for a Wasm VM.
   // more details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).
   VmConfig vm_config = 11;
+
+  // $hide_from_docs
+  // Hide this from doc until implementing this.
+  //
+  // TrafficSelector provides a mechanism to select a specific traffic flow
+  // for which this Wasm Plugin will be enabled.
+  // When all the sub conditions in the TrafficSelector are satisfied, the
+  // traffic will be selected.
+  message TrafficSelector {
+    // $hide_from_docs 
+    // Hide this from the doc until implementing this.
+    //
+    // Criteria for selecting traffic by their direction.
+    // Note that CLIENT and SERVER are analogous to INBOUND and OUTBOUND,
+    // respectively. If the selected workload is a gateway, the field is ignored.
+    // If not specified, this condition is evaluated to true for any traffic
+    // direction.
+    istio.type.v1beta1.WorkloadMode mode = 1;
+  
+    // $hide_from_docs 
+    // Hide this from the doc until implementing this.
+    //
+    // Criteria for selecting traffic by their destination port.
+    // More specifically, for the outbound traffic, the destination port would be 
+    // the port of the target service. On the other hand, for the inbound traffic,
+    // the destiation port is the port bound by the server process in the same Pod.
+    //
+    // If one of the given `ports` is matched, this condition is evaluated to true.
+    // If not specified, this condition is evaluated to true for any port.
+    repeated istio.type.v1beta1.PortSelector ports = 2;
+  }    
+
+  // $hide_from_docs
+  // Hide this from doc until implementing this.
+  //
+  // Specifies the criteria to determine which traffic is passed to WasmPlugin.
+  // If a traffic satisfies any of TrafficSelectors, 
+  // the traffic passes the WasmPlugin.
+  repeated TrafficSelector match = 12;
 }
 
 // The phase in the filter chain where the plugin will be injected.
