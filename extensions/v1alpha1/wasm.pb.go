@@ -756,9 +756,9 @@ type WasmPlugin_TrafficSelector struct {
 	//
 	// Criteria for selecting traffic by their direction.
 	// Note that CLIENT and SERVER are analogous to INBOUND and OUTBOUND,
-	// respectively. If the selected workload is a gateway, the field is ignored.
-	// If not specified, this condition is evaluated to true for any traffic
-	// direction.
+	// respectively.
+	// For the gateway, the field should be CLIENT or CLIENT_AND_SERVER.
+	// If not specified, the default value is CLIENT_AND_SERVER.
 	Mode v1beta1.WorkloadMode `protobuf:"varint,1,opt,name=mode,proto3,enum=istio.type.v1beta1.WorkloadMode" json:"mode,omitempty"`
 	// $hide_from_docs
 	// Hide this from the doc until implementing this.
