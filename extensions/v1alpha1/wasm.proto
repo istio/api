@@ -330,7 +330,7 @@ message WasmPlugin {
     // Note that CLIENT and SERVER are analogous to INBOUND and OUTBOUND,
     // respectively.
     // For the gateway, the field should be CLIENT or CLIENT_AND_SERVER.
-    // If not specified, CLIENT_AND_SERVER will be the default value.
+    // If not specified, the default value is CLIENT_AND_SERVER.
     istio.type.v1beta1.WorkloadMode mode = 1;
   
     // $hide_from_docs 
