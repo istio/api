@@ -728,4 +728,10 @@ message ServerTLSSettings {
   // Optional: If specified, only support the specified cipher list.
   // Otherwise default to the default cipher list supported by Envoy.
   repeated string cipher_suites = 9;
+
+  // An optional list of server names (e.g. SNI for TLS protocol) to consider when determining
+  // a filter chain match. Those values will be compared against the server names of a new
+  // connection, when detected by one of the listener filters.
+  // Default to `Server.Hosts` when unset.
+  repeated string snis = 13;
 }
