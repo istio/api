@@ -3335,6 +3335,11 @@ spec:
                         serverCertificate:
                           description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
                           type: string
+                        snis:
+                          description: An optional list of server names (e.g.
+                          items:
+                            type: string
+                          type: array
                         subjectAltNames:
                           items:
                             type: string
@@ -3451,6 +3456,11 @@ spec:
                         serverCertificate:
                           description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
                           type: string
+                        snis:
+                          description: An optional list of server names (e.g.
+                          items:
+                            type: string
+                          type: array
                         subjectAltNames:
                           items:
                             type: string
@@ -3958,6 +3968,11 @@ spec:
                         serverCertificate:
                           description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
                           type: string
+                        snis:
+                          description: An optional list of server names (e.g.
+                          items:
+                            type: string
+                          type: array
                         subjectAltNames:
                           items:
                             type: string
@@ -4131,6 +4146,11 @@ spec:
                         serverCertificate:
                           description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
                           type: string
+                        snis:
+                          description: An optional list of server names (e.g.
+                          items:
+                            type: string
+                          type: array
                         subjectAltNames:
                           items:
                             type: string

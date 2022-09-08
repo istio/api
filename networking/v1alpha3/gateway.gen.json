@@ -138,6 +138,13 @@
             "items": {
               "type": "string"
             }
+          },
+          "snis": {
+            "description": "An optional list of server names (e.g. SNI for TLS protocol) to consider when determining a filter chain match. Those values will be compared against the server names of a new connection, when detected by one of the listener filters. Default to `Server.Hosts` when unset.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
