@@ -424,6 +424,21 @@ spec:
                                     type: string
                                   type: array
                               type: object
+                            persistentSession:
+                              description: PersistentSession enforces stable session
+                                stickiness.
+                              properties:
+                                cookie:
+                                  description: State based on HTTP cookie.
+                                  properties:
+                                    maxAge:
+                                      description: MaxAge of cookie.
+                                      type: string
+                                    name:
+                                      description: Name of the cookie to be used.
+                                      type: string
+                                  type: object
+                              type: object
                             simple:
                               enum:
                               - UNSPECIFIED
@@ -433,28 +448,6 @@ spec:
                               - ROUND_ROBIN
                               - LEAST_REQUEST
                               type: string
-                            statefulSession:
-                              description: StatefulSession enforces stable session
-                                stickiness.
-                              oneOf:
-                              - not:
-                                  anyOf:
-                                  - required:
-                                    - sessionCookie
-                              - required:
-                                - sessionCookie
-                              properties:
-                                sessionCookie:
-                                  description: State based on HTTP cookie.
-                                  properties:
-                                    duration:
-                                      description: Duration of cookie.
-                                      type: string
-                                    name:
-                                      description: Name of the cookie to be used.
-                                      type: string
-                                  type: object
-                              type: object
                             warmupDurationSecs:
                               description: Represents the warmup duration of Service.
                               type: string
@@ -745,6 +738,22 @@ spec:
                                           type: string
                                         type: array
                                     type: object
+                                  persistentSession:
+                                    description: PersistentSession enforces stable
+                                      session stickiness.
+                                    properties:
+                                      cookie:
+                                        description: State based on HTTP cookie.
+                                        properties:
+                                          maxAge:
+                                            description: MaxAge of cookie.
+                                            type: string
+                                          name:
+                                            description: Name of the cookie to be
+                                              used.
+                                            type: string
+                                        type: object
+                                    type: object
                                   simple:
                                     enum:
                                     - UNSPECIFIED
@@ -754,29 +763,6 @@ spec:
                                     - ROUND_ROBIN
                                     - LEAST_REQUEST
                                     type: string
-                                  statefulSession:
-                                    description: StatefulSession enforces stable session
-                                      stickiness.
-                                    oneOf:
-                                    - not:
-                                        anyOf:
-                                        - required:
-                                          - sessionCookie
-                                    - required:
-                                      - sessionCookie
-                                    properties:
-                                      sessionCookie:
-                                        description: State based on HTTP cookie.
-                                        properties:
-                                          duration:
-                                            description: Duration of cookie.
-                                            type: string
-                                          name:
-                                            description: Name of the cookie to be
-                                              used.
-                                            type: string
-                                        type: object
-                                    type: object
                                   warmupDurationSecs:
                                     description: Represents the warmup duration of
                                       Service.
@@ -1148,6 +1134,20 @@ spec:
                               type: string
                             type: array
                         type: object
+                      persistentSession:
+                        description: PersistentSession enforces stable session stickiness.
+                        properties:
+                          cookie:
+                            description: State based on HTTP cookie.
+                            properties:
+                              maxAge:
+                                description: MaxAge of cookie.
+                                type: string
+                              name:
+                                description: Name of the cookie to be used.
+                                type: string
+                            type: object
+                        type: object
                       simple:
                         enum:
                         - UNSPECIFIED
@@ -1157,27 +1157,6 @@ spec:
                         - ROUND_ROBIN
                         - LEAST_REQUEST
                         type: string
-                      statefulSession:
-                        description: StatefulSession enforces stable session stickiness.
-                        oneOf:
-                        - not:
-                            anyOf:
-                            - required:
-                              - sessionCookie
-                        - required:
-                          - sessionCookie
-                        properties:
-                          sessionCookie:
-                            description: State based on HTTP cookie.
-                            properties:
-                              duration:
-                                description: Duration of cookie.
-                                type: string
-                              name:
-                                description: Name of the cookie to be used.
-                                type: string
-                            type: object
-                        type: object
                       warmupDurationSecs:
                         description: Represents the warmup duration of Service.
                         type: string
@@ -1462,6 +1441,21 @@ spec:
                                     type: string
                                   type: array
                               type: object
+                            persistentSession:
+                              description: PersistentSession enforces stable session
+                                stickiness.
+                              properties:
+                                cookie:
+                                  description: State based on HTTP cookie.
+                                  properties:
+                                    maxAge:
+                                      description: MaxAge of cookie.
+                                      type: string
+                                    name:
+                                      description: Name of the cookie to be used.
+                                      type: string
+                                  type: object
+                              type: object
                             simple:
                               enum:
                               - UNSPECIFIED
@@ -1471,28 +1465,6 @@ spec:
                               - ROUND_ROBIN
                               - LEAST_REQUEST
                               type: string
-                            statefulSession:
-                              description: StatefulSession enforces stable session
-                                stickiness.
-                              oneOf:
-                              - not:
-                                  anyOf:
-                                  - required:
-                                    - sessionCookie
-                              - required:
-                                - sessionCookie
-                              properties:
-                                sessionCookie:
-                                  description: State based on HTTP cookie.
-                                  properties:
-                                    duration:
-                                      description: Duration of cookie.
-                                      type: string
-                                    name:
-                                      description: Name of the cookie to be used.
-                                      type: string
-                                  type: object
-                              type: object
                             warmupDurationSecs:
                               description: Represents the warmup duration of Service.
                               type: string
@@ -1921,6 +1893,21 @@ spec:
                                     type: string
                                   type: array
                               type: object
+                            persistentSession:
+                              description: PersistentSession enforces stable session
+                                stickiness.
+                              properties:
+                                cookie:
+                                  description: State based on HTTP cookie.
+                                  properties:
+                                    maxAge:
+                                      description: MaxAge of cookie.
+                                      type: string
+                                    name:
+                                      description: Name of the cookie to be used.
+                                      type: string
+                                  type: object
+                              type: object
                             simple:
                               enum:
                               - UNSPECIFIED
@@ -1930,28 +1917,6 @@ spec:
                               - ROUND_ROBIN
                               - LEAST_REQUEST
                               type: string
-                            statefulSession:
-                              description: StatefulSession enforces stable session
-                                stickiness.
-                              oneOf:
-                              - not:
-                                  anyOf:
-                                  - required:
-                                    - sessionCookie
-                              - required:
-                                - sessionCookie
-                              properties:
-                                sessionCookie:
-                                  description: State based on HTTP cookie.
-                                  properties:
-                                    duration:
-                                      description: Duration of cookie.
-                                      type: string
-                                    name:
-                                      description: Name of the cookie to be used.
-                                      type: string
-                                  type: object
-                              type: object
                             warmupDurationSecs:
                               description: Represents the warmup duration of Service.
                               type: string
@@ -2242,6 +2207,22 @@ spec:
                                           type: string
                                         type: array
                                     type: object
+                                  persistentSession:
+                                    description: PersistentSession enforces stable
+                                      session stickiness.
+                                    properties:
+                                      cookie:
+                                        description: State based on HTTP cookie.
+                                        properties:
+                                          maxAge:
+                                            description: MaxAge of cookie.
+                                            type: string
+                                          name:
+                                            description: Name of the cookie to be
+                                              used.
+                                            type: string
+                                        type: object
+                                    type: object
                                   simple:
                                     enum:
                                     - UNSPECIFIED
@@ -2251,29 +2232,6 @@ spec:
                                     - ROUND_ROBIN
                                     - LEAST_REQUEST
                                     type: string
-                                  statefulSession:
-                                    description: StatefulSession enforces stable session
-                                      stickiness.
-                                    oneOf:
-                                    - not:
-                                        anyOf:
-                                        - required:
-                                          - sessionCookie
-                                    - required:
-                                      - sessionCookie
-                                    properties:
-                                      sessionCookie:
-                                        description: State based on HTTP cookie.
-                                        properties:
-                                          duration:
-                                            description: Duration of cookie.
-                                            type: string
-                                          name:
-                                            description: Name of the cookie to be
-                                              used.
-                                            type: string
-                                        type: object
-                                    type: object
                                   warmupDurationSecs:
                                     description: Represents the warmup duration of
                                       Service.
@@ -2645,6 +2603,20 @@ spec:
                               type: string
                             type: array
                         type: object
+                      persistentSession:
+                        description: PersistentSession enforces stable session stickiness.
+                        properties:
+                          cookie:
+                            description: State based on HTTP cookie.
+                            properties:
+                              maxAge:
+                                description: MaxAge of cookie.
+                                type: string
+                              name:
+                                description: Name of the cookie to be used.
+                                type: string
+                            type: object
+                        type: object
                       simple:
                         enum:
                         - UNSPECIFIED
@@ -2654,27 +2626,6 @@ spec:
                         - ROUND_ROBIN
                         - LEAST_REQUEST
                         type: string
-                      statefulSession:
-                        description: StatefulSession enforces stable session stickiness.
-                        oneOf:
-                        - not:
-                            anyOf:
-                            - required:
-                              - sessionCookie
-                        - required:
-                          - sessionCookie
-                        properties:
-                          sessionCookie:
-                            description: State based on HTTP cookie.
-                            properties:
-                              duration:
-                                description: Duration of cookie.
-                                type: string
-                              name:
-                                description: Name of the cookie to be used.
-                                type: string
-                            type: object
-                        type: object
                       warmupDurationSecs:
                         description: Represents the warmup duration of Service.
                         type: string
@@ -2959,6 +2910,21 @@ spec:
                                     type: string
                                   type: array
                               type: object
+                            persistentSession:
+                              description: PersistentSession enforces stable session
+                                stickiness.
+                              properties:
+                                cookie:
+                                  description: State based on HTTP cookie.
+                                  properties:
+                                    maxAge:
+                                      description: MaxAge of cookie.
+                                      type: string
+                                    name:
+                                      description: Name of the cookie to be used.
+                                      type: string
+                                  type: object
+                              type: object
                             simple:
                               enum:
                               - UNSPECIFIED
@@ -2968,28 +2934,6 @@ spec:
                               - ROUND_ROBIN
                               - LEAST_REQUEST
                               type: string
-                            statefulSession:
-                              description: StatefulSession enforces stable session
-                                stickiness.
-                              oneOf:
-                              - not:
-                                  anyOf:
-                                  - required:
-                                    - sessionCookie
-                              - required:
-                                - sessionCookie
-                              properties:
-                                sessionCookie:
-                                  description: State based on HTTP cookie.
-                                  properties:
-                                    duration:
-                                      description: Duration of cookie.
-                                      type: string
-                                    name:
-                                      description: Name of the cookie to be used.
-                                      type: string
-                                  type: object
-                              type: object
                             warmupDurationSecs:
                               description: Represents the warmup duration of Service.
                               type: string

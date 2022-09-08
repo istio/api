@@ -196,8 +196,8 @@
             "description": "Represents the warmup duration of Service. If set, the newly created endpoint of service remains in warmup mode starting from its creation time for the duration of this window and Istio progressively increases amount of traffic for that endpoint instead of sending proportional amount of traffic. This should be enabled for services that require warm up time to serve full production load with reasonable latency. Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancers.",
             "type": "string"
           },
-          "statefulSession": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.StatefulSession"
+          "persistentSession": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.PersistentSession"
           }
         },
         "oneOf": [
@@ -444,6 +444,15 @@
           }
         }
       },
+      "istio.networking.v1alpha3.LoadBalancerSettings.PersistentSession": {
+        "description": "PersistentSession Session configuration. For service to service communication, where there is no browser invovled, clients should use cookie managers like cookiejar.",
+        "type": "object",
+        "properties": {
+          "cookie": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.PersistentCookie"
+          }
+        }
+      },
       "istio.networking.v1alpha3.LoadBalancerSettings.SimpleLB": {
         "description": "Standard load balancing algorithms that require no tuning.",
         "type": "string",
@@ -455,52 +464,6 @@
           "ROUND_ROBIN",
           "LEAST_REQUEST"
         ]
-      },
-      "istio.networking.v1alpha3.LoadBalancerSettings.StatefulSession": {
-        "description": "Stateful Session configuration. For service to service communication, where there is no browser invovled, clients should use cookie managers like cookiejar.",
-        "type": "object",
-        "oneOf": [
-          {
-            "not": {
-              "anyOf": [
-                {
-                  "required": [
-                    "sessionCookie"
-                  ],
-                  "properties": {
-                    "sessionCookie": {
-                      "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.StatefulSession.SessionCookie"
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "required": [
-              "sessionCookie"
-            ],
-            "properties": {
-              "sessionCookie": {
-                "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.StatefulSession.SessionCookie"
-              }
-            }
-          }
-        ]
-      },
-      "istio.networking.v1alpha3.LoadBalancerSettings.StatefulSession.SessionCookie": {
-        "description": "SessionCookie is used to maintain the session state across client and server.",
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "Name of the cookie to be used. If not specified, environment specific configuration is used.",
-            "type": "string"
-          },
-          "duration": {
-            "description": "Duration of cookie. If not specified, a duration of 1 hour is used.",
-            "type": "string"
-          }
-        }
       },
       "istio.networking.v1alpha3.LocalityLoadBalancerSetting": {
         "description": "Locality-weighted load balancing allows administrators to control the distribution of traffic to endpoints based on the localities of where the traffic originates and where it will terminate. These localities are specified using arbitrary labels that designate a hierarchy of localities in {region}/{zone}/{sub-zone} form. For additional detail refer to [Locality Weight](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight) The following example shows how to setup locality weights mesh-wide.",
@@ -611,6 +574,20 @@
             "description": "Outlier detection will be enabled as long as the associated load balancing pool has at least min_health_percent hosts in healthy mode. When the percentage of healthy hosts in the load balancing pool drops below this threshold, outlier detection will be disabled and the proxy will load balance across all hosts in the pool (healthy and unhealthy). The threshold can be disabled by setting it to 0%. The default is 0% as it's not typically applicable in k8s environments with few pods per service.",
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.PersistentCookie": {
+        "description": "PersistentCookie is used to maintain the session state across client and server.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the cookie to be used. If not specified, environment specific configuration is used.",
+            "type": "string"
+          },
+          "maxAge": {
+            "description": "MaxAge of cookie. If not specified, a duration of 1 hour is used.",
+            "type": "string"
           }
         }
       },

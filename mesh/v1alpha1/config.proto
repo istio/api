@@ -1121,8 +1121,11 @@ message MeshConfig {
   // Configuration of mTLS for traffic between workloads within the mesh.
   TLSConfig mesh_mTLS = 63;
 
+  // Default persistent cookie to be used for configuring persistent sessions.
+  istio.networking.v1alpha3.PersistentCookie default_persistent_cookie = 64;
+
   // $hide_from_docs
-  // Next available field number: 64
+  // Next available field number: 65
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
