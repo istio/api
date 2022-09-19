@@ -1098,21 +1098,25 @@
         "properties": {
           "debug": {
             "description": "debug enables trace output to stdout. $hide_from_docs",
-            "type": "boolean"
+            "type": "boolean",
+            "deprecated": true
           },
           "maxNumberOfAttributes": {
             "description": "The global default max number of attributes per span. default is 200. $hide_from_docs",
             "type": "integer",
+            "deprecated": true,
             "nullable": true
           },
           "maxNumberOfAnnotations": {
             "description": "The global default max number of annotation events per span. default is 200. $hide_from_docs",
             "type": "integer",
+            "deprecated": true,
             "nullable": true
           },
           "maxNumberOfMessageEvents": {
             "description": "The global default max number of message events per span. default is 200. $hide_from_docs",
             "type": "integer",
+            "deprecated": true,
             "nullable": true
           },
           "maxTagLength": {
