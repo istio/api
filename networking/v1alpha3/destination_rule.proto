@@ -626,6 +626,9 @@ message LoadBalancerSettings {
   // PersistentSession Session configuration. 
   // For service to service communication, where there is no browser invovled,
   // clients should use cookie managers like  cookiejar.
+  // Please note that persistent sessions  will not work if the routing config is changed
+  // in the middle of a session or when advanced traffic routing policies 
+  // like weighted clusters are involved.
   message PersistentSession {
     // State based on HTTP cookie.
     PersistentCookie cookie = 1;
@@ -1150,8 +1153,7 @@ message ClientTLSSettings {
 
 // PersistentCookie is used to maintain the session state across client and server. 
 message PersistentCookie {
-  // Name of the cookie to be used. If not specified, environment specific 
-  // configuration is used.
+  // Name of the cookie to be used. If not specified, the default cookie set in mesh config is used, if provided.
   string name = 1; 
   // MaxAge of cookie. If not specified, a duration of 1 hour is used.
   google.protobuf.Duration max_age = 2;

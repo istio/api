@@ -1688,8 +1688,7 @@ type PersistentCookie struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Name of the cookie to be used. If not specified, environment specific
-	// configuration is used.
+	// Name of the cookie to be used. If not specified, the default cookie set in mesh config is used, if provided.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// MaxAge of cookie. If not specified, a duration of 1 hour is used.
 	MaxAge *duration.Duration `protobuf:"bytes,2,opt,name=max_age,json=maxAge,proto3" json:"max_age,omitempty"`
@@ -2263,6 +2262,9 @@ func (*LoadBalancerSettings_ConsistentHashLB_Maglev) isLoadBalancerSettings_Cons
 // PersistentSession Session configuration.
 // For service to service communication, where there is no browser invovled,
 // clients should use cookie managers like  cookiejar.
+// Please note that persistent sessions  will not work if the routing config is changed
+// in the middle of a session or when advanced traffic routing policies
+// like weighted clusters are involved.
 type LoadBalancerSettings_PersistentSession struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

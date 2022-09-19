@@ -1265,8 +1265,7 @@ No
 <td><code>name</code></td>
 <td><code>string</code></td>
 <td>
-<p>Name of the cookie to be used. If not specified, environment specific
-configuration is used.</p>
+<p>Name of the cookie to be used. If not specified, the default cookie set in mesh config is used, if provided.</p>
 
 </td>
 <td>
@@ -1672,7 +1671,10 @@ No
 <section>
 <p>PersistentSession Session configuration.
 For service to service communication, where there is no browser invovled,
-clients should use cookie managers like  cookiejar.</p>
+clients should use cookie managers like  cookiejar.
+Please note that persistent sessions  will not work if the routing config is changed
+in the middle of a session or when advanced traffic routing policies
+like weighted clusters are involved.</p>
 
 <table class="message-fields">
 <thead>

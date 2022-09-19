@@ -2311,7 +2311,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "Name of the cookie to be used. If not specified, environment specific configuration is used.",
+            "description": "Name of the cookie to be used. If not specified, the default cookie set in mesh config is used, if provided.",
             "type": "string"
           },
           "maxAge": {
