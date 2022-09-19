@@ -1192,7 +1192,8 @@ type ConfigSource struct {
 
 	// Address of the server implementing the Istio Mesh Configuration
 	// protocol (MCP). Can be IP address or a fully qualified DNS name.
-	// Use fs:/// to specify a file-based backend with absolute path to the directory.
+	// Use xds:// to specify a grpc-based xds backend, k8s:// to specify a k8s controller or
+	// fs:/// to specify a file-based backend with absolute path to the directory.
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	// Use the tls_settings to specify the tls mode to use. If the MCP server
 	// uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
