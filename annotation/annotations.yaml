@@ -64,7 +64,7 @@ annotations:
   - name: sidecar.istio.io/inject
     featureStatus: Beta
     description: Specifies whether or not an Envoy sidecar should be automatically
-      injected into the workload.
+      injected into the workload. Deprecated in favor of `sidecar.istio.io/inject` label.
     deprecated: true
     hidden: false
     resources:

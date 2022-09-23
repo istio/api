@@ -142,3 +142,12 @@ labels:
     deprecated: false
     resources:
       - Pod
+
+  - name: sidecar.istio.io/inject
+    featureStatus: Beta
+    description: Specifies whether or not an Envoy sidecar should be automatically
+      injected into the workload.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
