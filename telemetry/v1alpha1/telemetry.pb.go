@@ -626,7 +626,7 @@ type Tracing struct {
 	Match *Tracing_TracingSelector `protobuf:"bytes,7,opt,name=match,proto3" json:"match,omitempty"`
 	// Optional. Name of provider(s) to use for span reporting. If a provider is
 	// not specified, the [default tracing
-	// provider][istio.mesh.v1alpha1.MeshConfig.default_providers.tracing] will be
+	// provider](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig-DefaultProviders) will be
 	// used. NOTE: At the moment, only a single provider can be specified in a
 	// given Tracing rule.
 	Providers []*ProviderRef `protobuf:"bytes,2,rep,name=providers,proto3" json:"providers,omitempty"`
@@ -794,7 +794,7 @@ type Metrics struct {
 
 	// Optional. Name of providers to which this configuration should apply.
 	// If a provider is not specified, the [default metrics
-	// provider][istio.mesh.v1alpha1.MeshConfig.default_providers.metrics] will be
+	// provider](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig-DefaultProviders) will be
 	// used.
 	Providers []*ProviderRef `protobuf:"bytes,1,rep,name=providers,proto3" json:"providers,omitempty"`
 	// Optional. Ordered list of overrides to metrics generation behavior.
@@ -1050,7 +1050,7 @@ type AccessLogging struct {
 	Match *AccessLogging_LogSelector `protobuf:"bytes,4,opt,name=match,proto3" json:"match,omitempty"`
 	// Optional. Name of providers to which this configuration should apply.
 	// If a provider is not specified, the [default logging
-	// provider][istio.mesh.v1alpha1.MeshConfig.default_providers.] will be used.
+	// provider](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig-DefaultProviders) will be used.
 	Providers []*ProviderRef `protobuf:"bytes,1,rep,name=providers,proto3" json:"providers,omitempty"`
 	// Controls logging. If set to true, no access logs will be generated for
 	// impacted workloads (for the specified providers).
