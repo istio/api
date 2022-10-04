@@ -33975,6 +33975,30 @@
                 "id": 11,
                 "name": "vm_config",
                 "type": "VmConfig"
+              },
+              {
+                "id": 12,
+                "name": "match",
+                "type": "TrafficSelector",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "TrafficSelector",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "mode",
+                    "type": "istio.type.v1beta1.WorkloadMode"
+                  },
+                  {
+                    "id": 2,
+                    "name": "ports",
+                    "type": "istio.type.v1beta1.PortSelector",
+                    "is_repeated": true
+                  }
+                ]
               }
             ]
           },
@@ -34998,6 +35022,11 @@
                     "type": "SkyWalkingTracingProvider"
                   },
                   {
+                    "id": 15,
+                    "name": "opentelemetry",
+                    "type": "OpenTelemetryTracingProvider"
+                  },
+                  {
                     "id": 10,
                     "name": "prometheus",
                     "type": "PrometheusMetricsProvider"
@@ -35250,22 +35279,46 @@
                       {
                         "id": 1,
                         "name": "debug",
-                        "type": "bool"
+                        "type": "bool",
+                        "options": [
+                          {
+                            "name": "deprecated",
+                            "value": "true"
+                          }
+                        ]
                       },
                       {
                         "id": 2,
                         "name": "max_number_of_attributes",
-                        "type": "google.protobuf.Int64Value"
+                        "type": "google.protobuf.Int64Value",
+                        "options": [
+                          {
+                            "name": "deprecated",
+                            "value": "true"
+                          }
+                        ]
                       },
                       {
                         "id": 3,
                         "name": "max_number_of_annotations",
-                        "type": "google.protobuf.Int64Value"
+                        "type": "google.protobuf.Int64Value",
+                        "options": [
+                          {
+                            "name": "deprecated",
+                            "value": "true"
+                          }
+                        ]
                       },
                       {
                         "id": 4,
                         "name": "max_number_of_message_events",
-                        "type": "google.protobuf.Int64Value"
+                        "type": "google.protobuf.Int64Value",
+                        "options": [
+                          {
+                            "name": "deprecated",
+                            "value": "true"
+                          }
+                        ]
                       },
                       {
                         "id": 5,
@@ -35464,6 +35517,26 @@
                             "type": "google.protobuf.Struct"
                           }
                         ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "OpenTelemetryTracingProvider",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "service",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "port",
+                        "type": "uint32"
+                      },
+                      {
+                        "id": 3,
+                        "name": "max_tag_length",
+                        "type": "uint32"
                       }
                     ]
                   }
@@ -36734,12 +36807,48 @@
                     "type": "string"
                   },
                   {
+                    "id": 6,
+                    "name": "ring_hash",
+                    "type": "RingHash"
+                  },
+                  {
+                    "id": 7,
+                    "name": "maglev",
+                    "type": "MagLev"
+                  },
+                  {
                     "id": 4,
                     "name": "minimum_ring_size",
-                    "type": "uint64"
+                    "type": "uint64",
+                    "options": [
+                      {
+                        "name": "deprecated",
+                        "value": "true"
+                      }
+                    ]
                   }
                 ],
                 "messages": [
+                  {
+                    "name": "RingHash",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "minimum_ring_size",
+                        "type": "uint64"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "MagLev",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "table_size",
+                        "type": "uint64"
+                      }
+                    ]
+                  },
                   {
                     "name": "HTTPCookie",
                     "fields": [
@@ -39606,12 +39715,48 @@
                     "type": "string"
                   },
                   {
+                    "id": 6,
+                    "name": "ring_hash",
+                    "type": "RingHash"
+                  },
+                  {
+                    "id": 7,
+                    "name": "maglev",
+                    "type": "MagLev"
+                  },
+                  {
                     "id": 4,
                     "name": "minimum_ring_size",
-                    "type": "uint64"
+                    "type": "uint64",
+                    "options": [
+                      {
+                        "name": "deprecated",
+                        "value": "true"
+                      }
+                    ]
                   }
                 ],
                 "messages": [
+                  {
+                    "name": "RingHash",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "minimum_ring_size",
+                        "type": "uint64"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "MagLev",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "table_size",
+                        "type": "uint64"
+                      }
+                    ]
+                  },
                   {
                     "name": "HTTPCookie",
                     "fields": [
@@ -43965,6 +44110,11 @@
                 "name": "not_paths",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 9,
+                "name": "ignore_path_case",
+                "type": "bool"
               }
             ]
           },
@@ -44651,6 +44801,28 @@
     {
       "protopath": "type:/:v1beta1:/:selector.proto",
       "def": {
+        "enums": [
+          {
+            "name": "WorkloadMode",
+            "enum_fields": [
+              {
+                "name": "UNDEFINED"
+              },
+              {
+                "name": "CLIENT",
+                "integer": 1
+              },
+              {
+                "name": "SERVER",
+                "integer": 2
+              },
+              {
+                "name": "CLIENT_AND_SERVER",
+                "integer": 3
+              }
+            ]
+          }
+        ],
         "messages": [
           {
             "name": "WorkloadSelector",
@@ -44668,6 +44840,16 @@
                     }
                   ]
                 }
+              }
+            ]
+          },
+          {
+            "name": "PortSelector",
+            "fields": [
+              {
+                "id": 1,
+                "name": "number",
+                "type": "uint32"
               }
             ]
           }

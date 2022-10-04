@@ -155,6 +155,10 @@
             "items": {
               "type": "string"
             }
+          },
+          "ignorePathCase": {
+            "description": "If set, paths and not_paths will be matched case-insensitively",
+            "type": "boolean"
           }
         }
       },

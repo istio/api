@@ -449,6 +449,10 @@ message Operation {
 
   // Optional. A list of negative match of paths.
   repeated string not_paths = 8;
+
+  // If set, paths and not_paths will be matched case-insensitively
+  optional bool ignore_path_case = 9;
+
 }
 
 // Condition specifies additional required attributes.
