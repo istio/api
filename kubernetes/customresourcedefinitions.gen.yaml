@@ -6713,7 +6713,7 @@ spec:
                       items:
                         properties:
                           name:
-                            description: Required.
+                            description: Name of Telemetry provider in MeshConfig.
                             type: string
                         type: object
                       type: array
@@ -6795,7 +6795,7 @@ spec:
                       items:
                         properties:
                           name:
-                            description: Required.
+                            description: Name of Telemetry provider in MeshConfig.
                             type: string
                         type: object
                       type: array
@@ -6883,7 +6883,7 @@ spec:
                       items:
                         properties:
                           name:
-                            description: Required.
+                            description: Name of Telemetry provider in MeshConfig.
                             type: string
                         type: object
                       type: array

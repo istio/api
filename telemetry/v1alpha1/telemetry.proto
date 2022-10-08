@@ -367,7 +367,7 @@ message Tracing {
 // Used to bind Telemetry configuration to specific providers for
 // targeted customization.
 message ProviderRef {
-  // Required. Name of Telemetry provider in MeshConfig.
+  // Name of Telemetry provider in MeshConfig.
   string name = 1;
 }
 

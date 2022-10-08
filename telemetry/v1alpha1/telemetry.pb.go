@@ -741,7 +741,7 @@ type ProviderRef struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Required. Name of Telemetry provider in MeshConfig.
+	// Name of Telemetry provider in MeshConfig.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 }
 
