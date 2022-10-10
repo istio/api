@@ -161,6 +161,25 @@ such requests is undefined.</p>
 No
 </td>
 </tr>
+<tr id="JWTRule-from_cookies">
+<td><code>fromCookies</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>List of Cookie names from which JWT is expected. For example, if JWT is provided via Cookie header value
+(e.g <code>Cookie: auth-token=&lt;JWT&gt;;</code>)</p>
+
+<pre><code class="language-yaml">  fromCookies:
+  - &quot;auth-token&quot;
+</code></pre>
+
+<p>Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
+such requests is undefined.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="JWTRule-output_payload_to_header">
 <td><code>outputPayloadToHeader</code></td>
 <td><code>string</code></td>
