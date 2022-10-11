@@ -719,7 +719,11 @@ message ServerTLSSettings {
     TLSV1_3 = 4;
   }
 
-  // Optional: Minimum TLS protocol version.
+  // Optional: Minimum TLS protocol version. By default, it is `TLSV1_2`.
+  // TLS protocol versions below TLSV1_2 require setting compatible ciphers with the
+  // `cipherSuites` setting as the default ciphers no longer include compatible ciphers.
+  //
+  // Note: Using TLS protocol versions below TLSV1_2 has serious security considerations and risks.
   TLSProtocol min_protocol_version = 7;
 
   // Optional: Maximum TLS protocol version.
