@@ -15,6 +15,7 @@
 syntax = "proto3";
 
 import "type/v1beta1/selector.proto";
+import "google/api/field_behavior.proto";
 import "google/protobuf/wrappers.proto";
 
 // $schema: istio.telemetry.v1alpha1.Telemetry
@@ -368,7 +369,7 @@ message Tracing {
 // targeted customization.
 message ProviderRef {
   // Required. Name of Telemetry provider in MeshConfig.
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 // Metrics defines the workload-level overrides for metrics generation behavior
