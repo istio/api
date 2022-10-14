@@ -1024,7 +1024,7 @@ type ServerTLSSettings struct {
 	VerifyCertificateHash []string `protobuf:"bytes,12,rep,name=verify_certificate_hash,json=verifyCertificateHash,proto3" json:"verify_certificate_hash,omitempty"`
 	// Optional: Minimum TLS protocol version. By default, it is `TLSV1_2`.
 	// TLS protocol versions below TLSV1_2 require setting compatible ciphers with the
-	// `cipherSuites` setting as the default ciphers no longer include compatible ciphers.
+	// `cipherSuites` setting as they no longer include compatible ciphers.
 	//
 	// Note: Using TLS protocol versions below TLSV1_2 has serious security considerations and risks.
 	MinProtocolVersion ServerTLSSettings_TLSProtocol `protobuf:"varint,7,opt,name=min_protocol_version,json=minProtocolVersion,proto3,enum=istio.networking.v1alpha3.ServerTLSSettings_TLSProtocol" json:"min_protocol_version,omitempty"`
