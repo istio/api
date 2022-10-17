@@ -36582,6 +36582,11 @@
                 "name": "port_level_settings",
                 "type": "PortTrafficPolicy",
                 "is_repeated": true
+              },
+              {
+                "id": 6,
+                "name": "tunnel",
+                "type": "TunnelSettings"
               }
             ],
             "messages": [
@@ -36612,6 +36617,44 @@
                     "id": 5,
                     "name": "tls",
                     "type": "ClientTLSSettings"
+                  }
+                ]
+              },
+              {
+                "name": "TunnelSettings",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "protocol",
+                    "type": "string",
+                    "options": [
+                      {
+                        "name": "(google.api.field_behavior)",
+                        "value": "REQUIRED"
+                      }
+                    ]
+                  },
+                  {
+                    "id": 2,
+                    "name": "target_host",
+                    "type": "string",
+                    "options": [
+                      {
+                        "name": "(google.api.field_behavior)",
+                        "value": "REQUIRED"
+                      }
+                    ]
+                  },
+                  {
+                    "id": 3,
+                    "name": "target_port",
+                    "type": "uint32",
+                    "options": [
+                      {
+                        "name": "(google.api.field_behavior)",
+                        "value": "REQUIRED"
+                      }
+                    ]
                   }
                 ]
               }
@@ -37903,6 +37946,38 @@
           },
           {
             "path": "networking/v1alpha3/workload_entry.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.networking.v1alpha3"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/networking/v1alpha3"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "networking:/:v1alpha3:/:service_name_mapping.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "ServiceNameMapping",
+            "fields": [
+              {
+                "id": 1,
+                "name": "interfaceName",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "applicationNames",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
           }
         ],
         "package": {
@@ -39366,6 +39441,11 @@
                 "name": "port_level_settings",
                 "type": "PortTrafficPolicy",
                 "is_repeated": true
+              },
+              {
+                "id": 6,
+                "name": "tunnel",
+                "type": "TunnelSettings"
               }
             ],
             "messages": [
@@ -39396,6 +39476,44 @@
                     "id": 5,
                     "name": "tls",
                     "type": "ClientTLSSettings"
+                  }
+                ]
+              },
+              {
+                "name": "TunnelSettings",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "protocol",
+                    "type": "string",
+                    "options": [
+                      {
+                        "name": "(google.api.field_behavior)",
+                        "value": "REQUIRED"
+                      }
+                    ]
+                  },
+                  {
+                    "id": 2,
+                    "name": "target_host",
+                    "type": "string",
+                    "options": [
+                      {
+                        "name": "(google.api.field_behavior)",
+                        "value": "REQUIRED"
+                      }
+                    ]
+                  },
+                  {
+                    "id": 3,
+                    "name": "target_port",
+                    "type": "uint32",
+                    "options": [
+                      {
+                        "name": "(google.api.field_behavior)",
+                        "value": "REQUIRED"
+                      }
+                    ]
                   }
                 ]
               }
@@ -40277,6 +40395,38 @@
           },
           {
             "path": "networking/v1beta1/workload_entry.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.networking.v1beta1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/networking/v1beta1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "networking:/:v1beta1:/:service_name_mapping.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "ServiceNameMapping",
+            "fields": [
+              {
+                "id": 1,
+                "name": "interfaceName",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "applicationNames",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
           }
         ],
         "package": {
@@ -43488,9 +43638,6 @@
           },
           {
             "path": "k8s.io/api/core/v1/generated.proto"
-          },
-          {
-            "path": "k8s.io/apimachinery/pkg/api/resource/generated.proto"
           }
         ],
         "package": {
