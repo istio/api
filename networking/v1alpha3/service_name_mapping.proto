@@ -1,0 +1,59 @@
+// Copyright 2020 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+// $schema: istio.networking.v1alpha3.ServiceNameMapping
+// $title: Service Name Mapping
+// $description: it's the spec of Service Name Mapping, which is used to map the interface name
+// to the application name in application discovery.
+
+// `Service Name Mapping` which is used to map the interface name
+// to the application name in application discovery.
+
+package istio.networking.v1alpha3;
+
+option go_package = "istio.io/api/networking/v1alpha3";
+
+//
+// <!-- crd generation tags
+// +cue-gen:ServiceNameMapping:groupName:networking.istio.io
+// +cue-gen:ServiceNameMapping:version:v1alpha3
+// +cue-gen:ServiceNameMapping:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
+// +cue-gen:ServiceNameMapping:subresource:status
+// +cue-gen:ServiceNameMapping:scope:Namespaced
+// +cue-gen:ServiceNameMapping:resource:categories=istio-io,networking-istio-io,shortNames=snp,plural=servicenamemappings
+// +cue-gen:ServiceNameMapping:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
+// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
+// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// +cue-gen:ServiceNameMapping:preserveUnknownFields:false
+// -->
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
+// <!-- istio code generation tags
+// +istio.io/sync-start
+// -->
+message ServiceNameMapping{
+    // InterfaceName.
+    string interfaceName = 1;
+    // ApplicationNames。
+    repeated string applicationNames = 2;
+}
+

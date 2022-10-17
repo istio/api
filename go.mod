@@ -1,12 +1,15 @@
-module istio.io/api
+module github.com/mark4z/operator-api
 
 go 1.18
+
+replace istio.io/api => ./
 
 require (
 	github.com/golang/protobuf v1.5.2
 	google.golang.org/genproto v0.0.0-20201019141844-1ed22bb0c154
 	google.golang.org/grpc v1.42.0
 	google.golang.org/protobuf v1.27.1
+	istio.io/api v0.0.0-00010101000000-000000000000
 	k8s.io/api v0.23.0
 	k8s.io/apimachinery v0.23.0
 )
