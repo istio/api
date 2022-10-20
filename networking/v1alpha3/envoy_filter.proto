@@ -499,7 +499,7 @@ message EnvoyFilter {
     BOOTSTRAP = 10;
 
     // Applies the patch to the listener filter.
-    LISTENER = 11;
+    LISTENER_FILTER = 11;
   };
 
   // PatchContext selects a class of configurations based on the
@@ -722,7 +722,7 @@ message EnvoyFilter {
 
     // Match a specific listener filter. If specified, the
     // patch will be applied to the listener filter.
-    string listener_filter = 4;
+    string listener_filter = 5;
 
     // Match a specific listener by its name. The listeners generated
     // by Pilot are typically named as IP:Port.
