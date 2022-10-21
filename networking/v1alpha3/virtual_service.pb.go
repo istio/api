@@ -3680,7 +3680,7 @@ func (x *Headers_HeaderOperations) GetRemove() []string {
 //
 // The _fixedDelay_ field is used to indicate the amount of delay in seconds.
 // The optional _percentage_ field can be used to only delay a certain
-// percentage of requests. If left unspecified, all request will be delayed.
+// percentage of requests. If left unspecified, no request will be delayed.
 type HTTPFaultInjection_Delay struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -3848,7 +3848,7 @@ func (*HTTPFaultInjection_Delay_ExponentialDelay) isHTTPFaultInjection_Delay_Htt
 //
 // The _httpStatus_ field is used to indicate the HTTP status code to
 // return to the caller. The optional _percentage_ field can be used to only
-// abort a certain percentage of requests. If not specified, all requests are
+// abort a certain percentage of requests. If not specified, no request will be
 // aborted.
 type HTTPFaultInjection_Abort struct {
 	state         protoimpl.MessageState
