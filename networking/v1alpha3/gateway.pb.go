@@ -1026,7 +1026,7 @@ type ServerTLSSettings struct {
 	// TLS protocol versions below TLSV1_2 require setting compatible ciphers with the
 	// `cipherSuites` setting as they no longer include compatible ciphers.
 	//
-	// Note: Using TLS protocol versions below TLSV1_2 has serious security considerations and risks.
+	// Note: Using TLS protocol versions below TLSV1_2 has serious security risks.
 	MinProtocolVersion ServerTLSSettings_TLSProtocol `protobuf:"varint,7,opt,name=min_protocol_version,json=minProtocolVersion,proto3,enum=istio.networking.v1alpha3.ServerTLSSettings_TLSProtocol" json:"min_protocol_version,omitempty"`
 	// Optional: Maximum TLS protocol version.
 	MaxProtocolVersion ServerTLSSettings_TLSProtocol `protobuf:"varint,8,opt,name=max_protocol_version,json=maxProtocolVersion,proto3,enum=istio.networking.v1alpha3.ServerTLSSettings_TLSProtocol" json:"max_protocol_version,omitempty"`
