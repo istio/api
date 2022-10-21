@@ -3698,6 +3698,7 @@ type HTTPFaultInjection_Delay struct {
 	//	*HTTPFaultInjection_Delay_ExponentialDelay
 	HttpDelayType isHTTPFaultInjection_Delay_HttpDelayType `protobuf_oneof:"http_delay_type"`
 	// Percentage of requests on which the delay will be injected.
+	// If left unspecified, no request will be delayed.
 	Percentage *Percent `protobuf:"bytes,5,opt,name=percentage,proto3" json:"percentage,omitempty"`
 }
 
@@ -3862,6 +3863,7 @@ type HTTPFaultInjection_Abort struct {
 	//	*HTTPFaultInjection_Abort_Http2Error
 	ErrorType isHTTPFaultInjection_Abort_ErrorType `protobuf_oneof:"error_type"`
 	// Percentage of requests to be aborted with the error code provided.
+	// If not specified, no request will be aborted.
 	Percentage *Percent `protobuf:"bytes,5,opt,name=percentage,proto3" json:"percentage,omitempty"`
 }
 

@@ -1966,6 +1966,7 @@ message HTTPFaultInjection {
     }
 
     // Percentage of requests on which the delay will be injected.
+    // If left unspecified, no request will be delayed.
     Percent percentage = 5;
   }
 
@@ -2042,6 +2043,7 @@ message HTTPFaultInjection {
     }
 
     // Percentage of requests to be aborted with the error code provided.
+    // If not specified, no request will be aborted.
     Percent percentage = 5;
   }
 }
