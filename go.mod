@@ -9,7 +9,7 @@ require (
 	google.golang.org/genproto v0.0.0-20201019141844-1ed22bb0c154
 	google.golang.org/grpc v1.42.0
 	google.golang.org/protobuf v1.27.1
-	istio.io/api v0.0.0-00010101000000-000000000000
+	istio.io/api v0.0.0-20220728184806-7837c4e62d82
 	k8s.io/api v0.23.0
 	k8s.io/apimachinery v0.23.0
 )
