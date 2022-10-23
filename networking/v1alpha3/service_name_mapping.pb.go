@@ -45,7 +45,9 @@ const (
 //
 // <!-- crd generation tags
 // +cue-gen:ServiceNameMapping:groupName:networking.istio.io
+// +cue-gen:ServiceNameMapping:storageVersion
 // +cue-gen:ServiceNameMapping:version:v1alpha3
+// +cue-gen:ServiceNameMapping:annotations:helm.sh/resource-policy=keep
 // +cue-gen:ServiceNameMapping:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:ServiceNameMapping:subresource:status
 // +cue-gen:ServiceNameMapping:scope:Namespaced
