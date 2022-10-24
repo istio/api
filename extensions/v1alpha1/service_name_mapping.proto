@@ -17,28 +17,28 @@
 
 syntax = "proto3";
 
-// $schema: istio.networking.v1beta1.ServiceNameMapping
+// $schema: istio.extensions.v1alpha1.ServiceNameMapping
 // $title: Service Name Mapping
 // $description: it's the spec of Service Name Mapping, which is used to map the interface name
 // to the application name in application discovery.
-// $mode: none
 
 // `Service Name Mapping` which is used to map the interface name
 // to the application name in application discovery.
 
-package istio.networking.v1beta1;
+package istio.extensions.v1alpha1;
 
-option go_package = "istio.io/api/networking/v1beta1";
+option go_package="istio.io/api/extensions/v1alpha1";
 
 //
 // <!-- crd generation tags
-// +cue-gen:ServiceNameMapping:groupName:networking.istio.io
-// +cue-gen:ServiceNameMapping:version:v1beta1
+// +cue-gen:ServiceNameMapping:groupName:extensions.istio.io
+// +cue-gen:ServiceNameMapping:version:v1alpha1
+// +cue-gen:ServiceNameMapping:storageVersion
 // +cue-gen:ServiceNameMapping:annotations:helm.sh/resource-policy=keep
 // +cue-gen:ServiceNameMapping:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:ServiceNameMapping:subresource:status
 // +cue-gen:ServiceNameMapping:scope:Namespaced
-// +cue-gen:ServiceNameMapping:resource:categories=istio-io,networking-istio-io,shortNames=snp,plural=servicenamemappings
+// +cue-gen:ServiceNameMapping:resource:categories=istio-io,extensions-istio-io,shortNames=snp,plural=servicenamemappings
 // +cue-gen:ServiceNameMapping:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
 // representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
 // Clients may not set this value. It is represented in RFC3339 form and is in UTC.
@@ -48,12 +48,9 @@ option go_package = "istio.io/api/networking/v1beta1";
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=networking.istio.io/v1beta1
+// +kubetype-gen:groupVersion=extensions.istio.io/v1alpha1
 // +genclient
 // +k8s:deepcopy-gen=true
-// -->
-// <!-- istio code generation tags
-// +istio.io/sync-from:networking/v1alpha3/service_name_mapping.proto
 // -->
 message ServiceNameMapping{
     // InterfaceName.
@@ -61,3 +58,4 @@ message ServiceNameMapping{
     // ApplicationNames。
     repeated string applicationNames = 2;
 }
+
