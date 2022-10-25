@@ -723,7 +723,7 @@ message ServerTLSSettings {
   // TLS protocol versions below TLSV1_2 require setting compatible ciphers with the
   // `cipherSuites` setting as they no longer include compatible ciphers.
   //
-  // Note: Using TLS protocol versions below TLSV1_2 has serious security considerations and risks.
+  // Note: Using TLS protocol versions below TLSV1_2 has serious security risks.
   TLSProtocol min_protocol_version = 7;
 
   // Optional: Maximum TLS protocol version.
