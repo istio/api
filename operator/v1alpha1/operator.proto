@@ -438,7 +438,7 @@ message HorizontalPodAutoscalerSpec {
     int32 minReplicas = 2;
     int32 maxReplicas = 3;
     repeated MetricSpec metrics = 4;
-    HorizontalPodAutoScalerBehavior behavior = 5;
+    repeated HorizontalPodAutoScalerBehavior behavior = 5;
 }
 
 // See k8s.io.autoscaling.v2beta2.HorizontalPodAutoScalerBehavior.

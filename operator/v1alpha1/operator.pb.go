@@ -2052,11 +2052,11 @@ type HorizontalPodAutoscalerSpec struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ScaleTargetRef *CrossVersionObjectReference     `protobuf:"bytes,1,opt,name=scaleTargetRef,proto3" json:"scaleTargetRef,omitempty"`
-	MinReplicas    int32                            `protobuf:"varint,2,opt,name=minReplicas,proto3" json:"minReplicas,omitempty"`
-	MaxReplicas    int32                            `protobuf:"varint,3,opt,name=maxReplicas,proto3" json:"maxReplicas,omitempty"`
-	Metrics        []*MetricSpec                    `protobuf:"bytes,4,rep,name=metrics,proto3" json:"metrics,omitempty"`
-	Behavior       *HorizontalPodAutoScalerBehavior `protobuf:"bytes,5,opt,name=behavior,proto3" json:"behavior,omitempty"`
+	ScaleTargetRef *CrossVersionObjectReference       `protobuf:"bytes,1,opt,name=scaleTargetRef,proto3" json:"scaleTargetRef,omitempty"`
+	MinReplicas    int32                              `protobuf:"varint,2,opt,name=minReplicas,proto3" json:"minReplicas,omitempty"`
+	MaxReplicas    int32                              `protobuf:"varint,3,opt,name=maxReplicas,proto3" json:"maxReplicas,omitempty"`
+	Metrics        []*MetricSpec                      `protobuf:"bytes,4,rep,name=metrics,proto3" json:"metrics,omitempty"`
+	Behavior       []*HorizontalPodAutoScalerBehavior `protobuf:"bytes,5,rep,name=behavior,proto3" json:"behavior,omitempty"`
 }
 
 func (x *HorizontalPodAutoscalerSpec) Reset() {
@@ -2119,7 +2119,7 @@ func (x *HorizontalPodAutoscalerSpec) GetMetrics() []*MetricSpec {
 	return nil
 }
 
-func (x *HorizontalPodAutoscalerSpec) GetBehavior() *HorizontalPodAutoScalerBehavior {
+func (x *HorizontalPodAutoscalerSpec) GetBehavior() []*HorizontalPodAutoScalerBehavior {
 	if x != nil {
 		return x.Behavior
 	}
@@ -5664,7 +5664,7 @@ var file_operator_v1alpha1_operator_proto_rawDesc = []byte{
 	0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x2e, 0x76, 0x31, 0x61, 0x6c, 0x70, 0x68, 0x61,
 	0x31, 0x2e, 0x4d, 0x65, 0x74, 0x72, 0x69, 0x63, 0x53, 0x70, 0x65, 0x63, 0x52, 0x07, 0x6d, 0x65,
 	0x74, 0x72, 0x69, 0x63, 0x73, 0x12, 0x54, 0x0a, 0x08, 0x62, 0x65, 0x68, 0x61, 0x76, 0x69, 0x6f,
-	0x72, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x38, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e,
+	0x72, 0x18, 0x05, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x38, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e,
 	0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x2e, 0x76, 0x31, 0x61, 0x6c, 0x70, 0x68, 0x61,
 	0x31, 0x2e, 0x48, 0x6f, 0x72, 0x69, 0x7a, 0x6f, 0x6e, 0x74, 0x61, 0x6c, 0x50, 0x6f, 0x64, 0x41,
 	0x75, 0x74, 0x6f, 0x53, 0x63, 0x61, 0x6c, 0x65, 0x72, 0x42, 0x65, 0x68, 0x61, 0x76, 0x69, 0x6f,
