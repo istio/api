@@ -438,7 +438,7 @@ message HorizontalPodAutoscalerSpec {
     int32 minReplicas = 2;
     int32 maxReplicas = 3;
     repeated MetricSpec metrics = 4;
-    repeated HorizontalPodAutoScalerBehavior behavior = 5;
+    HorizontalPodAutoScalerBehavior behavior = 5;
 }
 
 // See k8s.io.autoscaling.v2beta2.HorizontalPodAutoScalerBehavior.
@@ -451,7 +451,7 @@ message HorizontalPodAutoScalerBehavior {
 message HPAScalingRules {
     int32 stabilizationWindowSeconds = 3;
     string selectPolicy = 1;
-    HPAScalingPolicy policies = 2;
+    repeated HPAScalingPolicy policies = 2;
 }
 
 // See k8s.io.autoscaling.v2beta2.HPAScalingPolicy.

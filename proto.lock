@@ -45317,8 +45317,7 @@
               {
                 "id": 5,
                 "name": "behavior",
-                "type": "HorizontalPodAutoScalerBehavior",
-                "is_repeated": true
+                "type": "HorizontalPodAutoScalerBehavior"
               }
             ]
           },
@@ -45353,7 +45352,8 @@
               {
                 "id": 2,
                 "name": "policies",
-                "type": "HPAScalingPolicy"
+                "type": "HPAScalingPolicy",
+                "is_repeated": true
               }
             ]
           },
