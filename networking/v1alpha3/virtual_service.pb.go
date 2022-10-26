@@ -1583,7 +1583,9 @@ func (x *TCPRoute) GetRoute() []*RouteDestination {
 // {{</tabset>}}
 //
 // HTTPMatchRequest CANNOT be empty.
-// **Note:** No regex string match can be set when delegate VirtualService is specified.
+// **Note:**
+// 1. If root VirtualService specifies regex, the delegate VirtualService should not have any other matches.
+// 2. If delegate VirtualService specifies regex, the root VirtualService should not have any other matches.
 type HTTPMatchRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

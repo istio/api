@@ -1205,7 +1205,11 @@ spec:
 <p>{{</tab>}}
 {{</tabset>}}</p>
 <p>HTTPMatchRequest CANNOT be empty.
-<strong>Note:</strong> No regex string match can be set when delegate VirtualService is specified.</p>
+<strong>Note:</strong></p>
+<ol>
+<li>If root VirtualService specifies regex, the delegate VirtualService should not have any other matches.</li>
+<li>If delegate VirtualService specifies regex, the root VirtualService should not have any other matches.</li>
+</ol>
 
 <table class="message-fields">
 <thead>

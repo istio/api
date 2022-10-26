@@ -1004,7 +1004,9 @@ message TCPRoute {
 // {{</tabset>}}
 //
 // HTTPMatchRequest CANNOT be empty.
-// **Note:** No regex string match can be set when delegate VirtualService is specified.
+// **Note:**
+// 1. If root VirtualService specifies regex, the delegate VirtualService should not have any other matches.
+// 2. If delegate VirtualService specifies regex, the root VirtualService should not have any other matches.
 message HTTPMatchRequest {
   // The name assigned to a match. The match's name will be
   // concatenated with the parent route's name and will be logged in
