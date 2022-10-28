@@ -406,7 +406,7 @@ import "networking/v1alpha3/sidecar.proto";
 //                     filename: "/etc/envoy_filter_http_wasm_example.wasm"
 // ```
 //
-// The following example insert a `envoy.filters.listener.proxy_protocol` listener filter before tls inspector.
+// The following example inserts an `envoy.filters.listener.proxy_protocol` listener filter before the `envoy.filters.listener.tls_inspector`.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
