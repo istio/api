@@ -250,6 +250,9 @@
           },
           "meshMTLS": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig"
+          },
+          "defaultPersistentCookie": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.PersistentCookie"
           }
         }
       },
@@ -2299,6 +2302,20 @@
           },
           "to": {
             "description": "Destination region the traffic will fail over to when endpoints in the 'from' region becomes unhealthy.",
+            "type": "string"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.PersistentCookie": {
+        "description": "PersistentCookie is used to maintain the session state across client and server.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the cookie to be used. If not specified, the default cookie set in mesh config is used, if provided.",
+            "type": "string"
+          },
+          "maxAge": {
+            "description": "MaxAge of cookie. If not specified, a duration of 1 hour is used.",
             "type": "string"
           }
         }

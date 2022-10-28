@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.DestinationRule
 aliases: [/docs/reference/config/networking/v1alpha3/destination-rule]
-number_of_entries: 23
+number_of_entries: 25
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -609,6 +609,27 @@ Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancer
 No
 </td>
 </tr>
+<tr id="LoadBalancerSettings-persistent_session">
+<td><code>persistentSession</code></td>
+<td><code><a href="#LoadBalancerSettings-PersistentSession">PersistentSession</a></code></td>
+<td>
+<p>PersistentSession enforces stable session stickiness.
+ConsistentHash LB policy does not enforce stable sessions because any time
+a backend host is removed or added, the hash mapping of 1/N client sessions
+gets affected (where N is the total number of backends) which would lead to
+dropped requests in some cases which is unacceptable.
+PersistentSession enforces session stickiness by routing requests to the same
+backend till the backend host on which the session lives goes down or is not available
+in the load balaner pool.
+When the backend host that hosts the session goes down, sesion is recreated
+on another backend host. A new backend host is selected based on the the configured
+load balancer policy.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1134,6 +1155,45 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="PersistentCookie">PersistentCookie</h2>
+<section>
+<p>PersistentCookie is used to maintain the session state across client and server.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="PersistentCookie-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>Name of the cookie to be used. If not specified, the default cookie set in mesh config is used, if provided.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="PersistentCookie-max_age">
+<td><code>maxAge</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>MaxAge of cookie. If not specified, a duration of 1 hour is used.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="LocalityLoadBalancerSetting">LocalityLoadBalancerSetting</h2>
 <section>
 <p>Locality-weighted load balancing allows administrators to control the
@@ -1492,6 +1552,39 @@ No
 <td><code>uint64</code></td>
 <td>
 <p>Deprecated. Use RingHash instead.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="LoadBalancerSettings-PersistentSession">LoadBalancerSettings.PersistentSession</h2>
+<section>
+<p>PersistentSession Session configuration.
+For service to service communication, where there is no browser invovled,
+clients should use cookie managers like  cookiejar.
+Please note that persistent sessions  will not work if the routing config is changed
+in the middle of a session or when advanced traffic routing policies
+like weighted clusters are involved.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LoadBalancerSettings-PersistentSession-cookie">
+<td><code>cookie</code></td>
+<td><code><a href="#PersistentCookie">PersistentCookie</a></code></td>
+<td>
+<p>State based on HTTP cookie.</p>
 
 </td>
 <td>

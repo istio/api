@@ -623,6 +623,17 @@ message LoadBalancerSettings {
     uint64 minimum_ring_size = 4 [deprecated=true];
   };
 
+  // PersistentSession Session configuration. 
+  // For service to service communication, where there is no browser invovled,
+  // clients should use cookie managers like  cookiejar.
+  // Please note that persistent sessions  will not work if the routing config is changed
+  // in the middle of a session or when advanced traffic routing policies 
+  // like weighted clusters are involved.
+  message PersistentSession {
+    // State based on HTTP cookie.
+    PersistentCookie cookie = 1;
+  };
+
   // (-- TODO: Enable Subset load balancing after moving to v2 API Also
   // look into enabling Priotity based load balancing for spilling over
   // from one priority pool to another. --)
@@ -643,6 +654,19 @@ message LoadBalancerSettings {
   // This should be enabled for services that require warm up time to serve full production load with reasonable latency.
   // Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancers.
   google.protobuf.Duration warmup_duration_secs = 4;
+
+  // PersistentSession enforces stable session stickiness. 
+  // ConsistentHash LB policy does not enforce stable sessions because any time
+  // a backend host is removed or added, the hash mapping of 1/N client sessions
+  // gets affected (where N is the total number of backends) which would lead to 
+  // dropped requests in some cases which is unacceptable.
+  // PersistentSession enforces session stickiness by routing requests to the same 
+  // backend till the backend host on which the session lives goes down or is not available
+  // in the load balaner pool.
+  // When the backend host that hosts the session goes down, sesion is recreated
+  // on another backend host. A new backend host is selected based on the the configured
+  // load balancer policy.
+  PersistentSession persistent_session = 5;
 }
 
 // Connection pool settings for an upstream host. The settings apply to
@@ -1125,6 +1149,14 @@ message ClientTLSSettings {
   // be `true` by default in a later version where, going forward, it will be
   // enabled by default.
   google.protobuf.BoolValue insecure_skip_verify = 8;
+}
+
+// PersistentCookie is used to maintain the session state across client and server. 
+message PersistentCookie {
+  // Name of the cookie to be used. If not specified, the default cookie set in mesh config is used, if provided.
+  string name = 1; 
+  // MaxAge of cookie. If not specified, a duration of 1 hour is used.
+  google.protobuf.Duration max_age = 2;
 }
 
 // Locality-weighted load balancing allows administrators to control the

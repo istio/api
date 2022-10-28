@@ -443,6 +443,21 @@ spec:
                                     type: string
                                   type: array
                               type: object
+                            persistentSession:
+                              description: PersistentSession enforces stable session
+                                stickiness.
+                              properties:
+                                cookie:
+                                  description: State based on HTTP cookie.
+                                  properties:
+                                    maxAge:
+                                      description: MaxAge of cookie.
+                                      type: string
+                                    name:
+                                      description: Name of the cookie to be used.
+                                      type: string
+                                  type: object
+                              type: object
                             simple:
                               enum:
                               - UNSPECIFIED
@@ -741,6 +756,22 @@ spec:
                                         items:
                                           type: string
                                         type: array
+                                    type: object
+                                  persistentSession:
+                                    description: PersistentSession enforces stable
+                                      session stickiness.
+                                    properties:
+                                      cookie:
+                                        description: State based on HTTP cookie.
+                                        properties:
+                                          maxAge:
+                                            description: MaxAge of cookie.
+                                            type: string
+                                          name:
+                                            description: Name of the cookie to be
+                                              used.
+                                            type: string
+                                        type: object
                                     type: object
                                   simple:
                                     enum:
@@ -1122,6 +1153,20 @@ spec:
                               type: string
                             type: array
                         type: object
+                      persistentSession:
+                        description: PersistentSession enforces stable session stickiness.
+                        properties:
+                          cookie:
+                            description: State based on HTTP cookie.
+                            properties:
+                              maxAge:
+                                description: MaxAge of cookie.
+                                type: string
+                              name:
+                                description: Name of the cookie to be used.
+                                type: string
+                            type: object
+                        type: object
                       simple:
                         enum:
                         - UNSPECIFIED
@@ -1414,6 +1459,21 @@ spec:
                                   items:
                                     type: string
                                   type: array
+                              type: object
+                            persistentSession:
+                              description: PersistentSession enforces stable session
+                                stickiness.
+                              properties:
+                                cookie:
+                                  description: State based on HTTP cookie.
+                                  properties:
+                                    maxAge:
+                                      description: MaxAge of cookie.
+                                      type: string
+                                    name:
+                                      description: Name of the cookie to be used.
+                                      type: string
+                                  type: object
                               type: object
                             simple:
                               enum:
@@ -1852,6 +1912,21 @@ spec:
                                     type: string
                                   type: array
                               type: object
+                            persistentSession:
+                              description: PersistentSession enforces stable session
+                                stickiness.
+                              properties:
+                                cookie:
+                                  description: State based on HTTP cookie.
+                                  properties:
+                                    maxAge:
+                                      description: MaxAge of cookie.
+                                      type: string
+                                    name:
+                                      description: Name of the cookie to be used.
+                                      type: string
+                                  type: object
+                              type: object
                             simple:
                               enum:
                               - UNSPECIFIED
@@ -2150,6 +2225,22 @@ spec:
                                         items:
                                           type: string
                                         type: array
+                                    type: object
+                                  persistentSession:
+                                    description: PersistentSession enforces stable
+                                      session stickiness.
+                                    properties:
+                                      cookie:
+                                        description: State based on HTTP cookie.
+                                        properties:
+                                          maxAge:
+                                            description: MaxAge of cookie.
+                                            type: string
+                                          name:
+                                            description: Name of the cookie to be
+                                              used.
+                                            type: string
+                                        type: object
                                     type: object
                                   simple:
                                     enum:
@@ -2531,6 +2622,20 @@ spec:
                               type: string
                             type: array
                         type: object
+                      persistentSession:
+                        description: PersistentSession enforces stable session stickiness.
+                        properties:
+                          cookie:
+                            description: State based on HTTP cookie.
+                            properties:
+                              maxAge:
+                                description: MaxAge of cookie.
+                                type: string
+                              name:
+                                description: Name of the cookie to be used.
+                                type: string
+                            type: object
+                        type: object
                       simple:
                         enum:
                         - UNSPECIFIED
@@ -2823,6 +2928,21 @@ spec:
                                   items:
                                     type: string
                                   type: array
+                              type: object
+                            persistentSession:
+                              description: PersistentSession enforces stable session
+                                stickiness.
+                              properties:
+                                cookie:
+                                  description: State based on HTTP cookie.
+                                  properties:
+                                    maxAge:
+                                      description: MaxAge of cookie.
+                                      type: string
+                                    name:
+                                      description: Name of the cookie to be used.
+                                      type: string
+                                  type: object
                               type: object
                             simple:
                               enum:
