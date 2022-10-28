@@ -361,7 +361,7 @@ spec:
                   local:
                     filename: &quot;/etc/envoy_filter_http_wasm_example.wasm&quot;
 </code></pre>
-<p>The following example insert a <code>envoy.filters.listener.proxy_protocol</code> listener filter before tls inspector.</p>
+<p>The following example inserts an <code>envoy.filters.listener.proxy_protocol</code> listener filter before the <code>envoy.filters.listener.tls_inspector</code>.</p>
 <pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
