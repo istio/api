@@ -201,9 +201,6 @@
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.Certificate"
             }
           },
-          "thriftConfig": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ThriftConfig"
-          },
           "serviceSettings": {
             "description": "Settings to be applied to select services.",
             "type": "array",
@@ -1247,19 +1244,6 @@
           "TLSV1_2",
           "TLSV1_3"
         ]
-      },
-      "istio.mesh.v1alpha1.MeshConfig.ThriftConfig": {
-        "type": "object",
-        "properties": {
-          "rateLimitUrl": {
-            "description": "Specify thrift rate limit service URL. If pilot has thrift protocol support enabled, this will enable the rate limit service for destinations that have matching rate limit configurations.",
-            "type": "string"
-          },
-          "rateLimitTimeout": {
-            "description": "Specify thrift rate limit service timeout, in milliseconds. Default is `50ms`",
-            "type": "string"
-          }
-        }
       },
       "istio.mesh.v1alpha1.MeshNetworks": {
         "description": "MeshNetworks (config map) provides information about the set of networks inside a mesh and how to route to endpoints in each network. For example",
