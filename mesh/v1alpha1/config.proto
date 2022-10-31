@@ -361,18 +361,8 @@ message MeshConfig {
   // Note: Deprecated, please refer to Cert-Manager or other cert provisioning solutions to sign DNS certificates. 
   repeated Certificate certificates = 47;
 
-  message ThriftConfig {
-    // Specify thrift rate limit service URL. If pilot has thrift protocol support enabled,
-    // this will enable the rate limit service for destinations that have matching rate
-    // limit configurations.
-    string rate_limit_url = 1;
-
-    // Specify thrift rate limit service timeout, in milliseconds. Default is `50ms`
-    google.protobuf.Duration rate_limit_timeout = 2;
-  }
-
-  // Set configuration for Thrift protocol
-  ThriftConfig thrift_config = 49;
+  reserved 49;
+  reserved "thrift_config";
 
   // $hide_from_docs
   // Settings to be applied to select services.
