@@ -451,7 +451,7 @@ message HorizontalPodAutoScalerBehavior {
 message HPAScalingRules {
     int32 stabilizationWindowSeconds = 3;
     string selectPolicy = 1;
-    HPAScalingPolicy policies = 2;
+    repeated HPAScalingPolicy policies = 2;
 }
 
 // See k8s.io.autoscaling.v2beta2.HPAScalingPolicy.
