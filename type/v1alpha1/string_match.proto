@@ -13,8 +13,6 @@
 // limitations under the License.
 syntax = "proto3";
 
-import "google/api/field_behavior.proto";
-
 // $title: String Match
 // $description: Definition how to match a given string.
 // $location: https://istio.io/docs/reference/config/type/string-match.html
