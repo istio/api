@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 55
+number_of_entries: 56
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -2941,6 +2941,18 @@ No
 No
 </td>
 </tr>
+<tr id="ProxyConfig-proxy_stats_histogram_bucket_settings">
+<td><code>proxyStatsHistogramBucketSettings</code></td>
+<td><code><a href="#ProxyConfig-ProxyStatsHistogramBucketSetting">ProxyStatsHistogramBucketSetting[]</a></code></td>
+<td>
+<p>Defines rules for setting the histogram buckets. Rules are evaluated in order, and the first
+match is applied. If no match is found (or if no rules are set), the default buckets are used.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="ProxyConfig-zipkin_address" class="deprecated ">
 <td><code>zipkinAddress</code></td>
 <td><code>string</code></td>
@@ -3240,6 +3252,48 @@ No
 <td><code>string[]</code></td>
 <td>
 <p>Proxy stats name regexps matcher for inclusion.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ProxyConfig-ProxyStatsHistogramBucketSetting">ProxyConfig.ProxyStatsHistogramBucketSetting</h2>
+<section>
+<p>Defines rules for setting the histogram buckets.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProxyConfig-ProxyStatsHistogramBucketSetting-match">
+<td><code>match</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/string-match.html#StringMatch">StringMatch</a></code></td>
+<td>
+<p>Specifies a matcher for stats and the buckets that matching stats should use.
+The match is applied to the original stat name before tag-extraction,
+for example <code>cluster.exampleclustername.upstream_cx_length_ms</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-ProxyStatsHistogramBucketSetting-buckets">
+<td><code>buckets</code></td>
+<td><code>double[]</code></td>
+<td>
+<p>Each value is the upper bound of a bucket. Each bucket must be greater than 0 and unique.
+The order of the buckets does not matter.</p>
 
 </td>
 <td>

@@ -19,6 +19,7 @@ import "google/protobuf/wrappers.proto";
 import "networking/v1alpha3/destination_rule.proto";
 import "networking/v1alpha3/workload_group.proto";
 import "networking/v1beta1/proxy_config.proto";
+import "type/v1alpha1/string_match.proto";
 
 package istio.mesh.v1alpha1;
 
@@ -591,6 +592,22 @@ message ProxyConfig {
 
   // Specifies the details of the Private Key Provider configuration for gateway and sidecar proxies.
   PrivateKeyProvider private_key_provider = 38;
+
+  // Defines rules for setting the histogram buckets.
+  message ProxyStatsHistogramBucketSetting {
+    // Specifies a matcher for stats and the buckets that matching stats should use.
+    // The match is applied to the original stat name before tag-extraction,
+    // for example `cluster.exampleclustername.upstream_cx_length_ms`.
+    istio.type.v1alpha1.StringMatch match = 1;
+
+    // Each value is the upper bound of a bucket. Each bucket must be greater than 0 and unique.
+    // The order of the buckets does not matter.
+    repeated double buckets = 2;
+  }
+
+  // Defines rules for setting the histogram buckets. Rules are evaluated in order, and the first
+  // match is applied. If no match is found (or if no rules are set), the default buckets are used.
+  repeated ProxyStatsHistogramBucketSetting proxy_stats_histogram_bucket_settings = 39;
 }
 
 message RemoteService {

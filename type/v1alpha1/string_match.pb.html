@@ -1,0 +1,58 @@
+---
+title: String Match
+description: Definition how to match a given string.
+location: https://istio.io/docs/reference/config/type/string-match.html
+layout: protoc-gen-docs
+generator: protoc-gen-docs
+number_of_entries: 1
+---
+<h2 id="StringMatch">StringMatch</h2>
+<section>
+<p>Describes how to match a given string. Match is case-sensitive.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="StringMatch-exact" class="oneof oneof-start">
+<td><code>exact</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>exact string match</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="StringMatch-prefix" class="oneof">
+<td><code>prefix</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>prefix-based match</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="StringMatch-regex" class="oneof">
+<td><code>regex</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>RE2 style regex-based match (<a href="https://github.com/google/re2/wiki/Syntax)">https://github.com/google/re2/wiki/Syntax)</a>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>

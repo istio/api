@@ -1619,6 +1619,13 @@
           },
           "privateKeyProvider": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.PrivateKeyProvider"
+          },
+          "proxyStatsHistogramBucketSettings": {
+            "description": "Defines rules for setting the histogram buckets. Rules are evaluated in order, and the first match is applied. If no match is found (or if no rules are set), the default buckets are used.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig.ProxyStatsHistogramBucketSetting"
+            }
           }
         },
         "oneOf": [
@@ -1680,6 +1687,23 @@
           "TPROXY",
           "NONE"
         ]
+      },
+      "istio.mesh.v1alpha1.ProxyConfig.ProxyStatsHistogramBucketSetting": {
+        "description": "Defines rules for setting the histogram buckets.",
+        "type": "object",
+        "properties": {
+          "match": {
+            "$ref": "#/components/schemas/istio.type.v1alpha1.StringMatch"
+          },
+          "buckets": {
+            "description": "Each value is the upper bound of a bucket. Each bucket must be greater than 0 and unique. The order of the buckets does not matter.",
+            "type": "array",
+            "items": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        }
       },
       "istio.mesh.v1alpha1.ProxyConfig.ProxyStatsMatcher": {
         "description": "Proxy stats name matchers for stats creation. Note this is in addition to the minimum Envoy stats that Istio generates by default.",
@@ -2437,6 +2461,84 @@
             "type": "string"
           }
         }
+      },
+      "istio.type.v1alpha1.StringMatch": {
+        "description": "Describes how to match a given string. Match is case-sensitive.",
+        "type": "object",
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "exact"
+                  ],
+                  "properties": {
+                    "exact": {
+                      "description": "exact string match",
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "prefix"
+                  ],
+                  "properties": {
+                    "prefix": {
+                      "description": "prefix-based match",
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "regex"
+                  ],
+                  "properties": {
+                    "regex": {
+                      "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "exact"
+            ],
+            "properties": {
+              "exact": {
+                "description": "exact string match",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "prefix"
+            ],
+            "properties": {
+              "prefix": {
+                "description": "prefix-based match",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "regex"
+            ],
+            "properties": {
+              "regex": {
+                "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
+                "type": "string"
+              }
+            }
+          }
+        ]
       },
       "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector": {
         "description": "A label selector is a label query over a set of resources. The result of matchLabels and matchExpressions are ANDed. An empty label selector matches all objects. A null label selector matches no objects. +structType=atomic",

@@ -36328,6 +36328,12 @@
                 "id": 38,
                 "name": "private_key_provider",
                 "type": "PrivateKeyProvider"
+              },
+              {
+                "id": 39,
+                "name": "proxy_stats_histogram_bucket_settings",
+                "type": "ProxyStatsHistogramBucketSetting",
+                "is_repeated": true
               }
             ],
             "maps": [
@@ -36377,6 +36383,22 @@
                     "is_repeated": true
                   }
                 ]
+              },
+              {
+                "name": "ProxyStatsHistogramBucketSetting",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "match",
+                    "type": "istio.type.v1alpha1.StringMatch"
+                  },
+                  {
+                    "id": 2,
+                    "name": "buckets",
+                    "type": "double",
+                    "is_repeated": true
+                  }
+                ]
               }
             ]
           },
@@ -36416,6 +36438,9 @@
           },
           {
             "path": "networking/v1beta1/proxy_config.proto"
+          },
+          {
+            "path": "type/v1alpha1/string_match.proto"
           }
         ],
         "package": {
@@ -45266,6 +45291,47 @@
           {
             "name": "go_package",
             "value": "istio.io/api/telemetry/v1alpha1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "type:/:v1alpha1:/:string_match.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "StringMatch",
+            "fields": [
+              {
+                "id": 1,
+                "name": "exact",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "prefix",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "regex",
+                "type": "string"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/api/field_behavior.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.type.v1alpha1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/type/v1alpha1"
           }
         ]
       }
