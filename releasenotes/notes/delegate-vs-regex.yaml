@@ -11,4 +11,4 @@ docs:
 
 releaseNotes:
   - |
-    **Fixed** remove comment about not support regex for delegete VirtualService
+    **Removed** comment about not supporting regex for delegate VirtualService

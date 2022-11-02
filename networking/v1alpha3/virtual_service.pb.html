@@ -1207,8 +1207,8 @@ spec:
 <p>HTTPMatchRequest CANNOT be empty.
 <strong>Note:</strong></p>
 <ol>
-<li>If root VirtualService specifies regex, the delegate VirtualService should not have any other matches.</li>
-<li>If delegate VirtualService specifies regex, the root VirtualService should not have any other matches.</li>
+<li>If a root VirtualService have matched any property (path, header etc.) by regex, delegate VirtualServices should not have any other matches on the same property.</li>
+<li>If a delegate VirtualService have matched any property (path, header etc.) by regex, root VirtualServices should not have any other matches on the same property.</li>
 </ol>
 
 <table class="message-fields">
