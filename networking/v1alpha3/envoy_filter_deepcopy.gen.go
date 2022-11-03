@@ -2,7 +2,7 @@
 package v1alpha3
 
 import (
-	proto "google.golang.org/protobuf/proto"
+	proto "github.com/golang/protobuf/proto"
 )
 
 // DeepCopyInto supports using EnvoyFilter within kubernetes types, where deepcopy-gen is used.

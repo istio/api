@@ -2,7 +2,7 @@
 package v1alpha1
 
 import (
-	proto "google.golang.org/protobuf/proto"
+	proto "github.com/golang/protobuf/proto"
 )
 
 // DeepCopyInto supports using WasmPlugin within kubernetes types, where deepcopy-gen is used.
