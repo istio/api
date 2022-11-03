@@ -2129,6 +2129,35 @@ func (x *ProxyConfig_ProxyStatsMatcher) GetInclusionRegexps() []string {
 }
 
 // Defines rules for setting the histogram buckets.
+// For example, you can specify bucket setting for
+// istio metrics as follow:
+// ```yaml
+// proxyStatsHistogramBucketSettings:
+//   - match:
+//     prefix: istio
+//     buckets:
+//   - 0.5
+//   - 1
+//   - 5
+//   - 10
+//   - 25
+//   - 50
+//   - 100
+//   - 250
+//   - 500
+//   - 1000
+//   - 2500
+//   - 5000
+//   - 10000
+//   - 30000
+//   - 60000
+//   - 300000
+//   - 600000
+//   - 1800000
+//   - 3600000
+//   - 7200000
+//
+// ```
 type ProxyConfig_ProxyStatsHistogramBucketSetting struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
