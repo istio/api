@@ -34761,11 +34761,6 @@
                 "is_repeated": true
               },
               {
-                "id": 49,
-                "name": "thrift_config",
-                "type": "ThriftConfig"
-              },
-              {
                 "id": 50,
                 "name": "service_settings",
                 "type": "ServiceSettings",
@@ -34826,6 +34821,7 @@
               }
             ],
             "reserved_ids": [
+              49,
               1,
               2,
               3,
@@ -34848,6 +34844,7 @@
               39
             ],
             "reserved_names": [
+              "thrift_config",
               "mixer_check_server",
               "mixer_report_server",
               "disable_policy_checks",
@@ -34902,21 +34899,6 @@
                     "name": "trust_domains",
                     "type": "string",
                     "is_repeated": true
-                  }
-                ]
-              },
-              {
-                "name": "ThriftConfig",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "rate_limit_url",
-                    "type": "string"
-                  },
-                  {
-                    "id": 2,
-                    "name": "rate_limit_timeout",
-                    "type": "google.protobuf.Duration"
                   }
                 ]
               },
@@ -37240,6 +37222,10 @@
               {
                 "name": "BOOTSTRAP",
                 "integer": 10
+              },
+              {
+                "name": "LISTENER_FILTER",
+                "integer": 11
               }
             ]
           },
@@ -37500,6 +37486,11 @@
                     "id": 3,
                     "name": "filter_chain",
                     "type": "FilterChainMatch"
+                  },
+                  {
+                    "id": 5,
+                    "name": "listener_filter",
+                    "type": "string"
                   },
                   {
                     "id": 4,
