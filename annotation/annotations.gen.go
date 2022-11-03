@@ -444,7 +444,8 @@ var (
 	SidecarInject = Instance {
 		Name:          "sidecar.istio.io/inject",
 		Description:   "Specifies whether or not an Envoy sidecar should be "+
-                        "automatically injected into the workload.",
+                        "automatically injected into the workload. Deprecated in "+
+                        "favor of `sidecar.istio.io/inject` label.",
 		FeatureStatus: Beta,
 		Hidden:        false,
 		Deprecated:    true,

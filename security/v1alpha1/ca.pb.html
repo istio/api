@@ -17,12 +17,14 @@ number_of_entries: 3
 <h2 id="Types">Types</h2>
 <h3 id="IstioCertificateRequest">IstioCertificateRequest</h3>
 <section>
-<p>Certificate request message. The authentication should be based on:
-1. Bearer tokens carried in the side channel;
-2. Client-side certificate via Mutual TLS handshake.
+<p>Certificate request message. The authentication should be based on:</p>
+<ol>
+<li>Bearer tokens carried in the side channel;</li>
+<li>Client-side certificate via Mutual TLS handshake.
 Note: the service implementation is REQUIRED to verify the authenticated caller is authorize to
 all SANs in the CSR. The server side may overwrite any requested certificate field based on its
-policies.</p>
+policies.</li>
+</ol>
 
 <table class="message-fields">
 <thead>

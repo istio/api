@@ -361,18 +361,8 @@ message MeshConfig {
   // Note: Deprecated, please refer to Cert-Manager or other cert provisioning solutions to sign DNS certificates. 
   repeated Certificate certificates = 47;
 
-  message ThriftConfig {
-    // Specify thrift rate limit service URL. If pilot has thrift protocol support enabled,
-    // this will enable the rate limit service for destinations that have matching rate
-    // limit configurations.
-    string rate_limit_url = 1;
-
-    // Specify thrift rate limit service timeout, in milliseconds. Default is `50ms`
-    google.protobuf.Duration rate_limit_timeout = 2;
-  }
-
-  // Set configuration for Thrift protocol
-  ThriftConfig thrift_config = 49;
+  reserved 49;
+  reserved "thrift_config";
 
   // $hide_from_docs
   // Settings to be applied to select services.
@@ -756,22 +746,26 @@ message MeshConfig {
     }
 
     // Defines configuration for Stackdriver.
+    //
+    // WARNING: Stackdriver tracing uses OpenCensus configuration under the hood and, as a result, cannot be used
+    // alongside any OpenCensus provider configuration. This is due to a limitation in the implementation of OpenCensus
+    // driver in Envoy.
     message StackdriverProvider {
       // debug enables trace output to stdout.
       // $hide_from_docs
-      bool debug = 1;
+      bool debug = 1 [deprecated=true];
       // The global default max number of attributes per span.
       // default is 200.
       // $hide_from_docs
-      google.protobuf.Int64Value max_number_of_attributes = 2;
+      google.protobuf.Int64Value max_number_of_attributes = 2 [deprecated=true];
       // The global default max number of annotation events per span.
       // default is 200.
       // $hide_from_docs
-      google.protobuf.Int64Value max_number_of_annotations = 3;
+      google.protobuf.Int64Value max_number_of_annotations = 3 [deprecated=true];
       // The global default max number of message events per span.
       // default is 200.
       // $hide_from_docs
-      google.protobuf.Int64Value max_number_of_message_events = 4;
+      google.protobuf.Int64Value max_number_of_message_events = 4 [deprecated=true];
 
       // Optional. Controls the overall path length allowed in a reported span.
       // NOTE: currently only controls max length of the path tag.
@@ -794,6 +788,15 @@ message MeshConfig {
     }
 
     // Defines configuration for an OpenCensus tracer writing to an OpenCensus backend.
+    //
+    // WARNING: OpenCensusAgentTracingProviders should be used with extreme care. Configuration of
+    // OpenCensus providers CANNOT be changed during the course of proxy's lifetime due to a limitation
+    // in the implementation of OpenCensus driver in Envoy. This means only a single provider configuration 
+    // may be used for OpenCensus at any given time for a proxy or group of proxies AND that any change to the provider
+    // configuration MUST be accompanied by a restart of all proxies that will use that configuration.
+    //
+    // NOTE: Stackdriver tracing uses OpenCensus configuraiton under the hood and, as a result, cannot be used
+    // alongside OpenCensus provider configuration.
     message OpenCensusAgentTracingProvider {
       // REQUIRED. Specifies the service for the OpenCensusAgent.
       // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
@@ -1217,7 +1220,8 @@ message MeshConfig {
 message ConfigSource {
  // Address of the server implementing the Istio Mesh Configuration
  // protocol (MCP). Can be IP address or a fully qualified DNS name.
- // Use fs:/// to specify a file-based backend with absolute path to the directory.
+ // Use xds:// to specify a grpc-based xds backend, k8s:// to specify a k8s controller or
+ // fs:/// to specify a file-based backend with absolute path to the directory.
  string address = 1;
  // Use the tls_settings to specify the tls mode to use. If the MCP server
  // uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
