@@ -189,6 +189,18 @@ var (
 		},
 	}
 
+	SidecarInject = Instance {
+		Name:          "sidecar.istio.io/inject",
+		Description:   "Specifies whether or not an Envoy sidecar should be "+
+                        "automatically injected into the workload.",
+		FeatureStatus: Beta,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	TopologyCluster = Instance {
 		Name:          "topology.istio.io/cluster",
 		Description:   "This label is applied to a workload internally that "+
@@ -281,6 +293,7 @@ func AllResourceLabels() []*Instance {
 		&SecurityTlsMode,
 		&ServiceCanonicalName,
 		&ServiceCanonicalRevision,
+		&SidecarInject,
 		&TopologyCluster,
 		&TopologyNetwork,
 		&TopologySubzone,

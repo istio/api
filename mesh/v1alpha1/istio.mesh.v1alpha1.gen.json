@@ -37,7 +37,7 @@
         "type": "object",
         "properties": {
           "address": {
-            "description": "Address of the server implementing the Istio Mesh Configuration protocol (MCP). Can be IP address or a fully qualified DNS name. Use fs:/// to specify a file-based backend with absolute path to the directory.",
+            "description": "Address of the server implementing the Istio Mesh Configuration protocol (MCP). Can be IP address or a fully qualified DNS name. Use xds:// to specify a grpc-based xds backend, k8s:// to specify a k8s controller or fs:/// to specify a file-based backend with absolute path to the directory.",
             "type": "string"
           },
           "tlsSettings": {
@@ -200,9 +200,6 @@
             "items": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.Certificate"
             }
-          },
-          "thriftConfig": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ThriftConfig"
           },
           "serviceSettings": {
             "description": "Settings to be applied to select services.",
@@ -1121,21 +1118,25 @@
         "properties": {
           "debug": {
             "description": "debug enables trace output to stdout. $hide_from_docs",
-            "type": "boolean"
+            "type": "boolean",
+            "deprecated": true
           },
           "maxNumberOfAttributes": {
             "description": "The global default max number of attributes per span. default is 200. $hide_from_docs",
             "type": "integer",
+            "deprecated": true,
             "nullable": true
           },
           "maxNumberOfAnnotations": {
             "description": "The global default max number of annotation events per span. default is 200. $hide_from_docs",
             "type": "integer",
+            "deprecated": true,
             "nullable": true
           },
           "maxNumberOfMessageEvents": {
             "description": "The global default max number of message events per span. default is 200. $hide_from_docs",
             "type": "integer",
+            "deprecated": true,
             "nullable": true
           },
           "maxTagLength": {
@@ -1269,19 +1270,6 @@
           "TLSV1_2",
           "TLSV1_3"
         ]
-      },
-      "istio.mesh.v1alpha1.MeshConfig.ThriftConfig": {
-        "type": "object",
-        "properties": {
-          "rateLimitUrl": {
-            "description": "Specify thrift rate limit service URL. If pilot has thrift protocol support enabled, this will enable the rate limit service for destinations that have matching rate limit configurations.",
-            "type": "string"
-          },
-          "rateLimitTimeout": {
-            "description": "Specify thrift rate limit service timeout, in milliseconds. Default is `50ms`",
-            "type": "string"
-          }
-        }
       },
       "istio.mesh.v1alpha1.MeshNetworks": {
         "description": "MeshNetworks (config map) provides information about the set of networks inside a mesh and how to route to endpoints in each network. For example",
