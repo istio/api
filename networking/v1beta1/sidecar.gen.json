@@ -189,6 +189,13 @@
             "items": {
               "type": "string"
             }
+          },
+          "ecdhCurves": {
+            "description": "Optional: If specified, the TLS connection will only support the specified ECDH curves. If not specified, the default curves will be used.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },

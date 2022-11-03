@@ -733,4 +733,8 @@ message ServerTLSSettings {
   // Optional: If specified, only support the specified cipher list.
   // Otherwise default to the default cipher list supported by Envoy.
   repeated string cipher_suites = 9;
+
+  // Optional: If specified, the TLS connection will only support the specified ECDH curves.
+  // If not specified, the default curves will be used.
+  repeated string ecdh_curves = 13;
 }
