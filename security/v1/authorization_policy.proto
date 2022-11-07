@@ -16,7 +16,7 @@ syntax = "proto3";
 import "google/api/field_behavior.proto";
 import "type/v1beta1/selector.proto";
 
-// $schema: istio.security.v1beta1.AuthorizationPolicy
+// $schema: istio.security.v1.AuthorizationPolicy
 // $title: Authorization Policy
 // $description: Configuration for access control on workloads.
 // $location: https://istio.io/docs/reference/config/security/authorization-policy.html
@@ -64,7 +64,7 @@ import "type/v1beta1/selector.proto";
 // Any other requests will be denied.
 //
 // ```yaml
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
 // metadata:
 //   name: httpbin
@@ -94,7 +94,7 @@ import "type/v1beta1/selector.proto";
 // in the "foo" namespace.
 //
 // ```yaml
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
 // metadata:
 //   name: httpbin
@@ -110,34 +110,11 @@ import "type/v1beta1/selector.proto";
 //         methods: ["POST"]
 // ```
 //
-// The following is another example that sets `action` to `DENY` to create a deny policy.
-// It denies all the requests with "POST" method on port "8080" on all workloads
-// in the `foo` namespace.
-//
-// ```yaml
-// apiVersion: security.istio.io/v1beta1
-// kind: AuthorizaionPolicy
-// metadata:
-//   name: httpbin
-//   namespace: foo
-// spec:
-//   action: DENY
-//   rules:
-//   - to:
-//     - operation:
-//         methods: ["POST"]
-//         ports: ["8080"]
-//
-// When this rule is applied to TCP traffic, the `method` field (as will all HTTP based attributes) cannot be processed. 
-// For a `DENY` rule, missing attributes are treated as matches. This means all TCP traffic on port 8080 would be denied in the example above.
-// If we were to remove the `ports` match, all TCP traffic would be denied. As a result, it is recommended to always scope `DENY` policies to a specific port, 
-// especially when using HTTP attributes [Authorization Policy for TCP Ports] (https://istio.io/latest/docs/tasks/security/authorization/authz-tcp/).
-//
 // The following authorization policy sets the `action` to "AUDIT". It will audit any GET requests to the path with the
 // prefix "/user/profile".
 //
 // ```yaml
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
 // metadata:
 //   namespace: ns1
@@ -167,7 +144,7 @@ import "type/v1beta1/selector.proto";
 // all requests to workloads in namespace foo.
 //
 // ```yaml
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
 // metadata:
 //  name: allow-nothing
@@ -179,7 +156,7 @@ import "type/v1beta1/selector.proto";
 // The following authorization policy allows all requests to workloads in namespace foo.
 //
 // ```yaml
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
 // metadata:
 //  name: allow-all
@@ -193,7 +170,7 @@ import "type/v1beta1/selector.proto";
 // nothing and effectively denies all requests to the selected workloads.
 //
 // ```yaml
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
 // metadata:
 //   name: allow-nothing
@@ -208,7 +185,7 @@ import "type/v1beta1/selector.proto";
 // (Assuming the root namespace is configured to "istio-system").
 //
 // ```yaml
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
 // metadata:
 //  name: allow-nothing
@@ -218,16 +195,15 @@ import "type/v1beta1/selector.proto";
 //    matchLabels:
 //      version: v1
 // ```
-package istio.security.v1beta1;
+package istio.security.v1;
 
-option go_package="istio.io/api/security/v1beta1";
+option go_package="istio.io/api/security/v1";
 
 // AuthorizationPolicy enables access control on workloads.
 //
 // <!-- crd generation tags
 // +cue-gen:AuthorizationPolicy:groupName:security.istio.io
-// +cue-gen:AuthorizationPolicy:version:v1beta1
-// +cue-gen:AuthorizationPolicy:storageVersion
+// +cue-gen:AuthorizationPolicy:version:v1
 // +cue-gen:AuthorizationPolicy:annotations:helm.sh/resource-policy=keep
 // +cue-gen:AuthorizationPolicy:labels:app=istio-pilot,chart=istio,istio=security,heritage=Tiller,release=istio
 // +cue-gen:AuthorizationPolicy:subresource:status
@@ -238,12 +214,12 @@ option go_package="istio.io/api/security/v1beta1";
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=security.istio.io/v1beta1
+// +kubetype-gen:groupVersion=security.istio.io/v1
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
 // <!-- istio code generation tags
-// +istio.io/sync-start
+// +istio.io/sync-from:security/v1beta1/authorization_policy.proto
 // -->
 message AuthorizationPolicy {
   // Optional. The selector decides where to apply the authorization policy. The selector will match with workloads

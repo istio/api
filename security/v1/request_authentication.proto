@@ -13,18 +13,18 @@
 // limitations under the License.
 syntax = "proto3";
 
+import "security/v1/jwt.proto";
 import "type/v1beta1/selector.proto";
-import "security/v1beta1/jwt.proto";
 
-// $schema: istio.security.v1beta1.RequestAuthentication
+// $schema: istio.security.v1.RequestAuthentication
 // $title: RequestAuthentication
 // $description: Request authentication configuration for workloads.
 // $location: https://istio.io/docs/reference/config/security/request_authentication.html
-// $aliases: [/docs/reference/config/security/v1beta1/request_authentication]
+// $aliases: [/docs/reference/config/security/v1/request_authentication]
 
-package istio.security.v1beta1;
+package istio.security.v1;
 
-option go_package="istio.io/api/security/v1beta1";
+option go_package="istio.io/api/security/v1";
 
 // RequestAuthentication defines what request authentication methods are supported by a workload.
 // It will reject a request if the request contains invalid authentication information, based on the
@@ -36,7 +36,7 @@ option go_package="istio.io/api/security/v1beta1";
 // - Require JWT for all request for workloads that have label `app:httpbin`
 //
 // ```yaml
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: RequestAuthentication
 // metadata:
 //   name: httpbin
@@ -49,7 +49,7 @@ option go_package="istio.io/api/security/v1beta1";
 //   - issuer: "issuer-foo"
 //     jwksUri: https://example.com/.well-known/jwks.json
 // ---
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
 // metadata:
 //   name: httpbin
@@ -69,7 +69,7 @@ option go_package="istio.io/api/security/v1beta1";
 // valid JWT token.
 //
 // ```yaml
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: RequestAuthentication
 // metadata:
 //   name: req-authn-for-all
@@ -79,7 +79,7 @@ option go_package="istio.io/api/security/v1beta1";
 //   - issuer: "issuer-foo"
 //     jwksUri: https://example.com/.well-known/jwks.json
 // ---
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
 // metadata:
 //   name: require-jwt-for-all
@@ -96,7 +96,7 @@ option go_package="istio.io/api/security/v1beta1";
 // set from the OpenID Connect spec).
 //
 // ```yaml
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: RequestAuthentication
 // metadata:
 //   name: httpbin
@@ -109,7 +109,7 @@ option go_package="istio.io/api/security/v1beta1";
 //   - issuer: "issuer-foo"
 //   - issuer: "issuer-bar"
 // ---
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
 // metadata:
 //   name: httpbin
@@ -138,7 +138,7 @@ option go_package="istio.io/api/security/v1beta1";
 // authorization policy could be:
 //
 // ```yaml
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
 // metadata:
 //   name: httpbin
@@ -170,7 +170,7 @@ option go_package="istio.io/api/security/v1beta1";
 // - VirtualService to route the request based on the "sub" claim.
 //
 // ```yaml
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: RequestAuthentication
 // metadata:
 //   name: jwt-on-ingress
@@ -183,7 +183,7 @@ option go_package="istio.io/api/security/v1beta1";
 //   - issuer: "example.com"
 //     jwksUri: https://example.com/.well-known/jwks.json
 // ---
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
 // metadata:
 //   name: require-jwt
@@ -225,8 +225,7 @@ option go_package="istio.io/api/security/v1beta1";
 //
 // <!-- crd generation tags
 // +cue-gen:RequestAuthentication:groupName:security.istio.io
-// +cue-gen:RequestAuthentication:version:v1beta1
-// +cue-gen:RequestAuthentication:storageVersion
+// +cue-gen:RequestAuthentication:version:v1
 // +cue-gen:RequestAuthentication:annotations:helm.sh/resource-policy=keep
 // +cue-gen:RequestAuthentication:labels:app=istio-pilot,chart=istio,istio=security,heritage=Tiller,release=istio
 // +cue-gen:RequestAuthentication:subresource:status
@@ -237,12 +236,12 @@ option go_package="istio.io/api/security/v1beta1";
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=security.istio.io/v1beta1
+// +kubetype-gen:groupVersion=security.istio.io/v1
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
 // <!-- istio code generation tags
-// +istio.io/sync-start
+// +istio.io/sync-from:security/v1beta1/request_authentication.proto
 // -->
 message RequestAuthentication {
   // Optional. The selector decides where to apply the request authentication policy. The selector will match with workloads
