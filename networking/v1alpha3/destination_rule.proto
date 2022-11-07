@@ -1139,6 +1139,11 @@ message ClientTLSSettings {
   // be `true` by default in a later version where, going forward, it will be
   // enabled by default.
   google.protobuf.BoolValue insecure_skip_verify = 8;
+  //
+  // Optional: If specified, the TLS connection will only support the specified ECDH curves.
+  // If not specified, the default curves will be used. For additional details, refer to
+  // [Ecdh Curves](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto)
+  repeated string ecdh_curves = 9;
 }
 
 // Locality-weighted load balancing allows administrators to control the

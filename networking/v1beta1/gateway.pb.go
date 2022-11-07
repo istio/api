@@ -1038,7 +1038,8 @@ type ServerTLSSettings struct {
 	// Otherwise default to the default cipher list supported by Envoy.
 	CipherSuites []string `protobuf:"bytes,9,rep,name=cipher_suites,json=cipherSuites,proto3" json:"cipher_suites,omitempty"`
 	// Optional: If specified, the TLS connection will only support the specified ECDH curves.
-	// If not specified, the default curves will be used.
+	// If not specified, the default curves will be used. For additional details, refer to
+	// [Ecdh Curves](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto)
 	EcdhCurves []string `protobuf:"bytes,13,rep,name=ecdh_curves,json=ecdhCurves,proto3" json:"ecdh_curves,omitempty"`
 }
 

@@ -37099,6 +37099,12 @@
                 "id": 8,
                 "name": "insecure_skip_verify",
                 "type": "google.protobuf.BoolValue"
+              },
+              {
+                "id": 9,
+                "name": "ecdh_curves",
+                "type": "string",
+                "is_repeated": true
               }
             ]
           },
@@ -40068,6 +40074,12 @@
                 "id": 8,
                 "name": "insecure_skip_verify",
                 "type": "google.protobuf.BoolValue"
+              },
+              {
+                "id": 9,
+                "name": "ecdh_curves",
+                "type": "string",
+                "is_repeated": true
               }
             ]
           },

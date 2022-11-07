@@ -1134,6 +1134,19 @@ enabled by default.</p>
 No
 </td>
 </tr>
+<tr id="ClientTLSSettings-ecdh_curves">
+<td><code>ecdhCurves</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Optional: If specified, the TLS connection will only support the specified ECDH curves.
+If not specified, the default curves will be used. For additional details, refer to
+<a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto">Ecdh Curves</a></p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
