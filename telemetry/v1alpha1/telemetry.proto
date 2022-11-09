@@ -16,6 +16,7 @@ syntax = "proto3";
 
 import "type/v1beta1/selector.proto";
 import "google/api/field_behavior.proto";
+import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 
 // $schema: istio.telemetry.v1alpha1.Telemetry
@@ -396,6 +397,10 @@ message Metrics {
   // a best practice to list any universal overrides first, with tailored
   // overrides following them.
   repeated MetricsOverrides overrides = 2;
+
+  // Optional. Allows configuration of the time between calls out to for TCP
+  // metrics reporting. The default duration is `5s`.
+  google.protobuf.Duration tcp_reporting_duration = 3;
 }
 
 // WorkloadMode allows selection of the role of the underlying workload in

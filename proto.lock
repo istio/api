@@ -44658,6 +44658,11 @@
                 "name": "overrides",
                 "type": "MetricsOverrides",
                 "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "tcp_reporting_duration",
+                "type": "google.protobuf.Duration"
               }
             ]
           },
@@ -44778,6 +44783,9 @@
           },
           {
             "path": "google/api/field_behavior.proto"
+          },
+          {
+            "path": "google/protobuf/duration.proto"
           },
           {
             "path": "google/protobuf/wrappers.proto"
