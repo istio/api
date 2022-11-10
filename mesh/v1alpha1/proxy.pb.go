@@ -2149,6 +2149,7 @@ func (x *ProxyConfig_ProxyStatsMatcher) GetInclusionRegexps() []string {
 //   - 30000
 //
 // ```
+// Note: as part of bootstrap configuration, your may need restart the proxy to make this effective
 type ProxyConfig_ProxyStatsHistogramBucketSetting struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

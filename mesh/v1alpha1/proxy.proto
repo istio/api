@@ -613,6 +613,7 @@ message ProxyConfig {
   //   - 10000
   //   - 30000
   // ```
+  // Note: as part of bootstrap configuration, your may need restart the proxy to make this effective
   message ProxyStatsHistogramBucketSetting {
     // Specifies a matcher for stats and the buckets that matching stats should use.
     // The match is applied to the original stat name before tag-extraction,

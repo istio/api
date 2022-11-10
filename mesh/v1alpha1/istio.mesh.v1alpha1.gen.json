@@ -1689,7 +1689,7 @@
         ]
       },
       "istio.mesh.v1alpha1.ProxyConfig.ProxyStatsHistogramBucketSetting": {
-        "description": "Defines rules for setting the histogram buckets. For example, you can specify bucket setting for istio metrics as follow: ```yaml proxyStatsHistogramBucketSettings: - match: prefix: istio buckets: - 0.5 - 1 - 5 - 10 - 50 - 100 - 500 - 1000 - 5000 - 10000 - 30000 ```",
+        "description": "Defines rules for setting the histogram buckets. For example, you can specify bucket setting for istio metrics as follow: ```yaml proxyStatsHistogramBucketSettings: - match: prefix: istio buckets: - 0.5 - 1 - 5 - 10 - 50 - 100 - 500 - 1000 - 5000 - 10000 - 30000 ``` Note: as part of bootstrap configuration, your may need restart the proxy to make this effective",
         "type": "object",
         "properties": {
           "match": {
