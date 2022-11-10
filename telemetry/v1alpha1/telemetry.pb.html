@@ -416,12 +416,13 @@ overrides following them.</p>
 No
 </td>
 </tr>
-<tr id="Metrics-tcp_reporting_duration">
-<td><code>tcpReportingDuration</code></td>
+<tr id="Metrics-reporting_interval">
+<td><code>reportingInterval</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
-<p>Optional. Allows configuration of the time between calls out to for TCP
-metrics reporting. The default duration is <code>5s</code>.</p>
+<p>Optional. Allows configuration of the time between calls out to for metrics reporting.
+This only work for TCP metrics, we may use this for long duration HTTP streams in the future.
+The default duration is <code>5s</code>.</p>
 
 </td>
 <td>

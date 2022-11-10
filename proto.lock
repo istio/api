@@ -44661,7 +44661,7 @@
               },
               {
                 "id": 3,
-                "name": "tcp_reporting_duration",
+                "name": "reporting_interval",
                 "type": "google.protobuf.Duration"
               }
             ]

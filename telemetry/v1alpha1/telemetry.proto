@@ -397,10 +397,11 @@ message Metrics {
   // a best practice to list any universal overrides first, with tailored
   // overrides following them.
   repeated MetricsOverrides overrides = 2;
-
-  // Optional. Allows configuration of the time between calls out to for TCP
-  // metrics reporting. The default duration is `5s`.
-  google.protobuf.Duration tcp_reporting_duration = 3;
+  
+  // Optional. Allows configuration of the time between calls out to for metrics reporting.
+  // This only work for TCP metrics, we may use this for long duration HTTP streams in the future.
+  // The default duration is `5s`.
+  google.protobuf.Duration reporting_interval = 3;
 }
 
 // WorkloadMode allows selection of the role of the underlying workload in
