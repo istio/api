@@ -398,8 +398,8 @@ message Metrics {
   // overrides following them.
   repeated MetricsOverrides overrides = 2;
   
-  // Optional. Allows configuration of the time between calls out to for metrics reporting.
-  // This only work for TCP metrics, we may use this for long duration HTTP streams in the future.
+  // Optional. Reporting interval allows configuration of the time between calls out to for metrics reporting.
+  // This currently only supports TCP metrics but we may use this for long duration HTTP streams in the future.
   // The default duration is `5s`.
   google.protobuf.Duration reporting_interval = 3;
 }

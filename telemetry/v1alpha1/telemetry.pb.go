@@ -813,8 +813,8 @@ type Metrics struct {
 	// a best practice to list any universal overrides first, with tailored
 	// overrides following them.
 	Overrides []*MetricsOverrides `protobuf:"bytes,2,rep,name=overrides,proto3" json:"overrides,omitempty"`
-	// Optional. Allows configuration of the time between calls out to for metrics reporting.
-	// This only work for TCP metrics, we may use this for long duration HTTP streams in the future.
+	// Optional. Reporting interval allows configuration of the time between calls out to for metrics reporting.
+	// This currently only supports TCP metrics but we may use this for long duration HTTP streams in the future.
 	// The default duration is `5s`.
 	ReportingInterval *duration.Duration `protobuf:"bytes,3,opt,name=reporting_interval,json=reportingInterval,proto3" json:"reporting_interval,omitempty"`
 }
