@@ -28,14 +28,16 @@ buf generate \
   --path authentication \
   --path meta \
   --path telemetry \
-  --path extensions
+  --path extensions \
+  --path dubbo
 
 # These folders do not have the full plugins used, as they are not full CRDs.
 # We pass them a custom configuration to exclude the non-required files
 buf generate --template buf.gen-noncrd.yaml \
   --path operator \
   --path mcp \
-  --path mesh
+  --path mesh \
+  --path dubbo
 
 # These plugins are sent to Envoy, which uses golang/protobuf, so do not use gogo
 buf generate --template buf.gen-golang.yaml \

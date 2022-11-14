@@ -1,0 +1,51 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "",
+    "version": "v1alpha1"
+  },
+  "components": {
+    "schemas": {
+      "dubbo.networking.v1alpha1.ServiceMappingRequest": {
+        "description": "When dubbo provider start up, it reports its applicationName and its interfaceName, and Dubbo consumer will get the service name mapping info by xDS.",
+        "type": "object",
+        "properties": {
+          "namespace": {
+            "description": "This is namespace of proxyless dubbo server",
+            "type": "string"
+          },
+          "applicationName": {
+            "type": "string"
+          },
+          "interfaceNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "dubbo.networking.v1alpha1.ServiceMappingResponse": {
+        "type": "object"
+      },
+      "dubbo.networking.v1alpha1.ServiceMappingXdsResponse": {
+        "type": "object",
+        "properties": {
+          "namespace": {
+            "description": "This is namespace of proxyless dubbo server",
+            "type": "string"
+          },
+          "interfaceName": {
+            "type": "string"
+          },
+          "applicationNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}
