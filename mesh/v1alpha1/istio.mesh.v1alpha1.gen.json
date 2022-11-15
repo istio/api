@@ -1416,6 +1416,16 @@
                       "$ref": "#/components/schemas/istio.mesh.v1alpha1.PrivateKeyProvider.CryptoMb"
                     }
                   }
+                },
+                {
+                  "required": [
+                    "qat"
+                  ],
+                  "properties": {
+                    "qat": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.PrivateKeyProvider.QAT"
+                    }
+                  }
                 }
               ]
             }
@@ -1429,6 +1439,16 @@
                 "$ref": "#/components/schemas/istio.mesh.v1alpha1.PrivateKeyProvider.CryptoMb"
               }
             }
+          },
+          {
+            "required": [
+              "qat"
+            ],
+            "properties": {
+              "qat": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.PrivateKeyProvider.QAT"
+              }
+            }
           }
         ]
       },
@@ -1437,7 +1457,17 @@
         "type": "object",
         "properties": {
           "pollDelay": {
-            "description": "How long to wait until the per-thread processing queue should be processed. If the processing queue gets full (eight sign or decrypt requests are received) it is processed immediately. However, if the queue is not filled before the delay has expired, the requests already in the queue are processed, even if the queue is not full. In effect, this value controls the balance between latency and throughput. The duration needs to be set to a non-zero value.",
+            "description": "How long to wait until the per-thread processing queue should be processed. If the processing queue gets full (eight sign or decrypt requests are received) it is processed immediately. However, if the queue is not filled before the delay has expired, the requests already in the queue are processed, even if the queue is not full. In effect, this value controls the balance between latency and throughput. The duration needs to be set to a value greater than or equal to 1 millisecond.",
+            "type": "string"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.PrivateKeyProvider.QAT": {
+        "description": "QAT PrivateKeyProvider configuration",
+        "type": "object",
+        "properties": {
+          "pollDelay": {
+            "description": "How long to wait before polling the hardware accelerator after a request has been submitted there. Having a small value leads to quicker answers from the hardware but causes more polling loop spins, leading to potentially larger CPU usage. The duration needs to be set to a value greater than or equal to 1 millisecond.",
             "type": "string"
           }
         }
