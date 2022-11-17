@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: security
+issue:
+  - 39724
+
+releaseNotes:
+  - |
+    **Added** Copy JWT claims to HTTP request headers

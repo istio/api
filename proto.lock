@@ -44208,6 +44208,12 @@
                 "id": 9,
                 "name": "forward_original_token",
                 "type": "bool"
+              },
+              {
+                "id": 11,
+                "name": "output_claim_to_headers",
+                "type": "ClaimToHeader",
+                "is_repeated": true
               }
             ]
           },
@@ -44228,6 +44234,21 @@
               {
                 "id": 2,
                 "name": "prefix",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "ClaimToHeader",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "claim",
                 "type": "string"
               }
             ]
