@@ -1,0 +1,10 @@
+apiVersion: release-notes/v2
+kind: feature
+area: network
+issue:
+  - 2571
+
+releaseNotes:
+  - |
+    **Added** `sidecar.istio.io/proxyEphemeralStorage` and `sidecar.istio.io/proxyEphemeralStorageLimit`
+    annotations to support ephemeral-storage request/limits for the Envoy sidecar.

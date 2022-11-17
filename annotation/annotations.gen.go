@@ -500,6 +500,30 @@ var (
 		},
 	}
 
+	SidecarProxyEphemeralStorage = Instance {
+		Name:          "sidecar.istio.io/proxyEphemeralStorage",
+		Description:   "Specifies the requested ephemeral storage setting for the "+
+                        "Envoy sidecar.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
+	SidecarProxyEphemeralStorageLimit = Instance {
+		Name:          "sidecar.istio.io/proxyEphemeralStorageLimit",
+		Description:   "Specifies the ephemeral storage limit for the Envoy "+
+                        "sidecar.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	SidecarProxyImage = Instance {
 		Name:          "sidecar.istio.io/proxyImage",
 		Description:   "Specifies the Docker image to be used by the Envoy "+
@@ -817,6 +841,8 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarLogLevel,
 		&SidecarProxyCPU,
 		&SidecarProxyCPULimit,
+		&SidecarProxyEphemeralStorage,
+		&SidecarProxyEphemeralStorageLimit,
 		&SidecarProxyImage,
 		&SidecarProxyImageType,
 		&SidecarProxyMemory,

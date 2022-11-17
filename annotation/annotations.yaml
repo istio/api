@@ -504,3 +504,19 @@ annotations:
     hidden: false
     resources:
       - Namespace
+
+  - name: sidecar.istio.io/proxyEphemeralStorage
+    featureStatus: Alpha
+    description: Specifies the requested ephemeral storage setting for the Envoy sidecar.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+
+  - name: sidecar.istio.io/proxyEphemeralStorageLimit
+    featureStatus: Alpha
+    description: Specifies the ephemeral storage limit for the Envoy sidecar.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
