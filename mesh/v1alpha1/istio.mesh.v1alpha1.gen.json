@@ -247,6 +247,12 @@
           },
           "meshMTLS": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig"
+          },
+          "ingress": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig"
+          },
+          "egress": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig"
           }
         }
       },
@@ -1239,6 +1245,13 @@
         "properties": {
           "minProtocolVersion": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig.TLSProtocol"
+          },
+          "ecdhCurves": {
+            "description": "Optional: If specified, the TLS connection will only support the specified ECDH curves. If not specified, the default curves will be used. For additional details, refer to [Ecdh Curves](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto)",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
@@ -2148,13 +2161,6 @@
             "description": "InsecureSkipVerify specifies whether the proxy should skip verifying the CA signature and SAN for the server certificate corresponding to the host. This flag should only be set if global CA signature verifcation is enabled, `VerifyCertAtClient` environmental variable is set to `true`, but no verification is desired for a specific host. If enabled with or without `VerifyCertAtClient` enabled, verification of the CA signature and SAN will be skipped.",
             "type": "boolean",
             "nullable": true
-          },
-          "ecdhCurves": {
-            "description": "Optional: If specified, the TLS connection will only support the specified ECDH curves. If not specified, the default curves will be used. For additional details, refer to [Ecdh Curves](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto)",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
           }
         }
       },

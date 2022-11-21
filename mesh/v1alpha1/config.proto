@@ -1121,13 +1121,33 @@ message MeshConfig {
     // In the current Istio implementation, the maximum TLS protocol version
     // is TLS 1.3.
     TLSProtocol min_protocol_version = 1;
+    //
+    // Optional: If specified, the TLS connection will only support the specified ECDH curves.
+    // If not specified, the default curves will be used. For additional details, refer to
+    // [Ecdh Curves](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto)
+    repeated string ecdh_curves = 2;
   }
 
+  // The below configuration parameters can be used to specify TLSConfig for in-mesh, ingress and egress TLS traffic.
+  // For example, a user could enable min TLS version for mesh traffic and specify a curve for all egress gateways like below:
+  // meshConfig:
+  //   meshMTLS:
+  //     minProtocolVersion: 1.3
+  //   egress:
+  //     ecdhCurves:
+  //       - P-256
+  //       - P-512
   // Configuration of mTLS for traffic between workloads within the mesh.
+  // Mesh mTLS does not respect ECDH curves
   TLSConfig mesh_mTLS = 63;
+  // Ingress gateways do not respect min TLS version configured here currently.
+  // Please see [ServerTLSSettings] (https://istio.io/latest/docs/reference/config/networking/gateway/#ServerTLSSettings)
+  TLSConfig ingress = 64;
+  // Egress gateways do not respect min TLS version configured here currently.
+  TLSConfig egress = 65;
 
   // $hide_from_docs
-  // Next available field number: 64
+  // Next available field number: 66
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;

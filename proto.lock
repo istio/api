@@ -34818,6 +34818,16 @@
                 "id": 63,
                 "name": "mesh_mTLS",
                 "type": "TLSConfig"
+              },
+              {
+                "id": 64,
+                "name": "ingress",
+                "type": "TLSConfig"
+              },
+              {
+                "id": 65,
+                "name": "egress",
+                "type": "TLSConfig"
               }
             ],
             "reserved_ids": [
@@ -35575,6 +35585,12 @@
                     "id": 1,
                     "name": "min_protocol_version",
                     "type": "TLSProtocol"
+                  },
+                  {
+                    "id": 2,
+                    "name": "ecdh_curves",
+                    "type": "string",
+                    "is_repeated": true
                   }
                 ]
               }
@@ -37099,12 +37115,6 @@
                 "id": 8,
                 "name": "insecure_skip_verify",
                 "type": "google.protobuf.BoolValue"
-              },
-              {
-                "id": 9,
-                "name": "ecdh_curves",
-                "type": "string",
-                "is_repeated": true
               }
             ]
           },
@@ -40074,12 +40084,6 @@
                 "id": 8,
                 "name": "insecure_skip_verify",
                 "type": "google.protobuf.BoolValue"
-              },
-              {
-                "id": 9,
-                "name": "ecdh_curves",
-                "type": "string",
-                "is_repeated": true
               }
             ]
           },
