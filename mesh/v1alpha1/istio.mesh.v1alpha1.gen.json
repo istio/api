@@ -1463,7 +1463,7 @@
         }
       },
       "istio.mesh.v1alpha1.PrivateKeyProvider.QAT": {
-        "description": "QAT PrivateKeyProvider configuration",
+        "description": "QAT (QuickAssist Technology) PrivateKeyProvider configuration",
         "type": "object",
         "properties": {
           "pollDelay": {

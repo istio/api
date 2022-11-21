@@ -1997,7 +1997,7 @@ func (x *PrivateKeyProvider_CryptoMb) GetPollDelay() *duration.Duration {
 	return nil
 }
 
-// QAT PrivateKeyProvider configuration
+// QAT (QuickAssist Technology) PrivateKeyProvider configuration
 type PrivateKeyProvider_QAT struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
