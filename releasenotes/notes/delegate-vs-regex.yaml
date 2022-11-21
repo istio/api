@@ -1,0 +1,14 @@
+apiVersion: release-notes/v2
+kind: bug-fix
+area: documentation
+
+# issue is a list of GitHub issues resolved in this note.
+issue:
+  - 2527
+
+docs:
+ - '[usage] https://istio.io/latest/docs/reference/config/networking/virtual-service/'
+
+releaseNotes:
+  - |
+    **Removed** comment about not supporting regex for delegate VirtualService
