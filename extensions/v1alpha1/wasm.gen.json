@@ -107,7 +107,7 @@
             "$ref": "#/components/schemas/istio.extensions.v1alpha1.VmConfig"
           },
           "match": {
-            "description": "Hide this from doc until implementing this.",
+            "description": "Specifies the criteria to determine which traffic is passed to WasmPlugin. If a traffic satisfies any of TrafficSelectors, the traffic passes the WasmPlugin.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.extensions.v1alpha1.WasmPlugin.TrafficSelector"
@@ -116,14 +116,14 @@
         }
       },
       "istio.extensions.v1alpha1.WasmPlugin.TrafficSelector": {
-        "description": "Hide this from doc until implementing this.",
+        "description": "TrafficSelector provides a mechanism to select a specific traffic flow for which this Wasm Plugin will be enabled. When all the sub conditions in the TrafficSelector are satisfied, the traffic will be selected.",
         "type": "object",
         "properties": {
           "mode": {
             "$ref": "#/components/schemas/istio.type.v1beta1.WorkloadMode"
           },
           "ports": {
-            "description": "Hide this from the doc until implementing this.",
+            "description": "Criteria for selecting traffic by their destination port. More specifically, for the outbound traffic, the destination port would be the port of the target service. On the other hand, for the inbound traffic, the destiation port is the port bound by the server process in the same Pod.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.type.v1beta1.PortSelector"
