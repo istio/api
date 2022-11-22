@@ -36094,11 +36094,26 @@
                 "id": 2,
                 "name": "cryptomb",
                 "type": "CryptoMb"
+              },
+              {
+                "id": 3,
+                "name": "qat",
+                "type": "QAT"
               }
             ],
             "messages": [
               {
                 "name": "CryptoMb",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "poll_delay",
+                    "type": "google.protobuf.Duration"
+                  }
+                ]
+              },
+              {
+                "name": "QAT",
                 "fields": [
                   {
                     "id": 1,

@@ -306,13 +306,25 @@ message PrivateKeyProvider {
     // However, if the queue is not filled before the delay has expired, the requests already in the queue
     // are processed, even if the queue is not full.
     // In effect, this value controls the balance between latency and throughput.
-    // The duration needs to be set to a non-zero value.
+    // The duration needs to be set to a value greater than or equal to 1 millisecond.
+    google.protobuf.Duration poll_delay = 1;
+  }
+
+  // QAT (QuickAssist Technology) PrivateKeyProvider configuration
+  message QAT {
+    // How long to wait before polling the hardware accelerator after a request has been submitted there.
+    // Having a small value leads to quicker answers from the hardware but causes more polling loop spins,
+    // leading to potentially larger CPU usage.
+    // The duration needs to be set to a value greater than or equal to 1 millisecond.
     google.protobuf.Duration poll_delay = 1;
   }
 
   // REQUIRED. Specifies detailed configuration for the Private key provider.
   oneof provider {
+    // Use CryptoMb private key provider
     CryptoMb cryptomb = 2;
+    // Use QAT private key provider
+    QAT qat = 3;
   }
 }
 
