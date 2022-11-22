@@ -34821,12 +34821,12 @@
               },
               {
                 "id": 64,
-                "name": "ingress",
+                "name": "external_ingress",
                 "type": "TLSConfig"
               },
               {
                 "id": 65,
-                "name": "egress",
+                "name": "external_egress",
                 "type": "TLSConfig"
               }
             ],

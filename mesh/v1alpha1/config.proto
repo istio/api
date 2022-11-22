@@ -1133,7 +1133,7 @@ message MeshConfig {
   // meshConfig:
   //   meshMTLS:
   //     minProtocolVersion: 1.3
-  //   egress:
+  //   external_egress:
   //     ecdhCurves:
   //       - P-256
   //       - P-512
@@ -1142,9 +1142,10 @@ message MeshConfig {
   TLSConfig mesh_mTLS = 63;
   // Ingress gateways do not respect min TLS version configured here currently.
   // Please see [ServerTLSSettings] (https://istio.io/latest/docs/reference/config/networking/gateway/#ServerTLSSettings)
-  TLSConfig ingress = 64;
+  // to override the global configuration specified here.
+  TLSConfig external_ingress = 64;
   // Egress gateways do not respect min TLS version configured here currently.
-  TLSConfig egress = 65;
+  TLSConfig external_egress = 65;
 
   // $hide_from_docs
   // Next available field number: 66
