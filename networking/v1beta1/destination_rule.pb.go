@@ -1947,6 +1947,17 @@ func (x *TrafficPolicy_TunnelSettings) GetTargetPort() uint32 {
 // properties. The affinity to a particular destination host may be
 // lost when one or more hosts are added/removed from the destination
 // service.
+//
+// Note: consistent hashing is less reliable at maintaining affinity than common
+// "sticky sessions" implementations, which often encode a specific destination in
+// a cookie, ensuring affinity is maintained as long as the backend remains.
+// With consistent hash, the guarantees are weaker; any host addition or removal can
+// break affinity for `1/backends` requests.
+//
+// Warning: consistent hashing depends on each proxy having a consistent view of endpoints.
+// This is not the case when locality load balancing is enabled. Locality load balancing
+// and consistent hash will only work together when all proxies are in the same locality,
+// or a high level load balancer handles locality affinity.
 type LoadBalancerSettings_ConsistentHashLB struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
