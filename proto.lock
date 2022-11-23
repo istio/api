@@ -45320,14 +45320,6 @@
             ]
           }
         ],
-<<<<<<< HEAD
-        "imports": [
-          {
-            "path": "google/api/field_behavior.proto"
-          }
-        ],
-=======
->>>>>>> update example
         "package": {
           "name": "istio.type.v1alpha1"
         },
