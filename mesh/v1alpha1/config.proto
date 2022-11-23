@@ -1128,27 +1128,27 @@ message MeshConfig {
     repeated string ecdh_curves = 2;
   }
 
-  // The below configuration parameters can be used to specify TLSConfig for in-mesh, ingress and egress TLS traffic.
-  // For example, a user could enable min TLS version for mesh traffic and specify a curve for all egress gateways like below:
+  // The below configuration parameters can be used to specify TLSConfig for in-mesh and mesh-external TLS traffic.
+  // For example, a user could enable min TLS version for in-mesh traffic and specify a curve for mesh external traffic like below:
   // meshConfig:
   //   meshMTLS:
   //     minProtocolVersion: 1.3
-  //   external_egress:
+  //   meshExternalTLS:
   //     ecdhCurves:
   //       - P-256
   //       - P-512
   // Configuration of mTLS for traffic between workloads within the mesh.
   // Mesh mTLS does not respect ECDH curves
   TLSConfig mesh_mTLS = 63;
-  // Ingress gateways do not respect min TLS version configured here currently.
-  // Please see [ServerTLSSettings] (https://istio.io/latest/docs/reference/config/networking/gateway/#ServerTLSSettings)
-  // to override the global configuration specified here.
-  TLSConfig external_ingress = 64;
-  // Egress gateways do not respect min TLS version configured here currently.
-  TLSConfig external_egress = 65;
+  //
+  // Configuration of TLS for mesh external traffic.
+  // Mesh external does not respect min TLS version configured here currently.
+  // This global configuration can be overridden per Gateway by configuring
+  // [ServerTLSSettings](https://istio.io/latest/docs/reference/config/networking/gateway/#ServerTLSSettings)
+  TLSConfig mesh_external_TLS = 64;
 
   // $hide_from_docs
-  // Next available field number: 66
+  // Next available field number: 65
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;

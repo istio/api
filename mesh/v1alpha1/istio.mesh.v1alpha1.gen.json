@@ -248,10 +248,7 @@
           "meshMTLS": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig"
           },
-          "externalIngress": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig"
-          },
-          "externalEgress": {
+          "meshExternalTLS": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig"
           }
         }

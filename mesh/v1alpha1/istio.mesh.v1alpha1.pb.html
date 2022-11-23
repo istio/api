@@ -611,12 +611,12 @@ No
 <td><code>meshMTLS</code></td>
 <td><code><a href="#MeshConfig-TLSConfig">TLSConfig</a></code></td>
 <td>
-<p>The below configuration parameters can be used to specify TLSConfig for in-mesh, ingress and egress TLS traffic.
-For example, a user could enable min TLS version for mesh traffic and specify a curve for all egress gateways like below:
+<p>The below configuration parameters can be used to specify TLSConfig for in-mesh and mesh-external TLS traffic.
+For example, a user could enable min TLS version for in-mesh traffic and specify a curve for mesh external traffic like below:
 meshConfig:
 meshMTLS:
 minProtocolVersion: 1.3
-external_egress:
+meshExternalTLS:
 ecdhCurves:
 - P-256
 - P-512
@@ -628,24 +628,14 @@ Mesh mTLS does not respect ECDH curves</p>
 No
 </td>
 </tr>
-<tr id="MeshConfig-external_ingress">
-<td><code>externalIngress</code></td>
+<tr id="MeshConfig-mesh_external_TLS">
+<td><code>meshExternalTLS</code></td>
 <td><code><a href="#MeshConfig-TLSConfig">TLSConfig</a></code></td>
 <td>
-<p>Ingress gateways do not respect min TLS version configured here currently.
-Please see [ServerTLSSettings] (<a href="https://istio.io/latest/docs/reference/config/networking/gateway/#ServerTLSSettings">https://istio.io/latest/docs/reference/config/networking/gateway/#ServerTLSSettings</a>)
-to override the global configuration specified here.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-external_egress">
-<td><code>externalEgress</code></td>
-<td><code><a href="#MeshConfig-TLSConfig">TLSConfig</a></code></td>
-<td>
-<p>Egress gateways do not respect min TLS version configured here currently.</p>
+<p>Configuration of TLS for mesh external traffic.
+Mesh external does not respect min TLS version configured here currently.
+This global configuration can be overridden per Gateway by configuring
+<a href="https://istio.io/latest/docs/reference/config/networking/gateway/#ServerTLSSettings">ServerTLSSettings</a></p>
 
 </td>
 <td>

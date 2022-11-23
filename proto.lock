@@ -34821,12 +34821,7 @@
               },
               {
                 "id": 64,
-                "name": "external_ingress",
-                "type": "TLSConfig"
-              },
-              {
-                "id": 65,
-                "name": "external_egress",
+                "name": "mesh_external_TLS",
                 "type": "TLSConfig"
               }
             ],
