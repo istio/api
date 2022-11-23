@@ -309,7 +309,7 @@ message WasmPlugin {
   // If `priority` is not set, or two `WasmPlugins` exist with the same
   // value, the ordering will be deterministically derived from name and
   // namespace of the `WasmPlugins`. Defaults to `0`.
-  google.protobuf.Int64Value priority = 10;
+  google.protobuf.Int32Value priority = 10;
 
   // Configuration for a Wasm VM.
   // more details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).
