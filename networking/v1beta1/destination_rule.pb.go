@@ -307,7 +307,7 @@ func (x *ConnectionPoolSettings_HTTPSettings_RetryBudget) ProtoReflect() protore
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ConnectionPoolSettings_HTTPSettings.ProtoReflect.Descriptor instead.
+// Deprecated: Use ConnectionPoolSettings_HTTPSettings_RetryBudget.ProtoReflect.Descriptor instead.
 func (*ConnectionPoolSettings_HTTPSettings_RetryBudget) Descriptor() ([]byte, []int) {
 	return file_networking_v1beta1_destination_rule_proto_rawDescGZIP(), []int{4, 1}
 }
