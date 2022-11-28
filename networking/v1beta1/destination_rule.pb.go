@@ -265,67 +265,6 @@ func (LoadBalancerSettings_SimpleLB) EnumDescriptor() ([]byte, []int) {
 	return file_networking_v1beta1_destination_rule_proto_rawDescGZIP(), []int{3, 0}
 }
 
-// Setting retry budget.
-type ConnectionPoolSettings_HTTPSettings_RetryBudget struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// Specifies the limit on concurrent retries as a percentage of the sum of active requests and active pending requests.
-	// For example, if there are 100 active requests and the budget_percent is set to 25, there may be 25 active retries.
-	// This parameter is optional. Defaults to 20%.
-	BudgetPercent *Percent `protobuf:"bytes,1,opt,name=budget_percent,json=budgetPercent,proto3" json:"budget_percent,omitempty"`
-	// Minimum number of active retries may never go below this number.
-	// This parameter is optional. Defaults to 3.
-	MinRetryConcurrency *wrappers.UInt32Value `protobuf:"bytes,2,opt,name=min_retry_concurrency,json=minRetryConcurrency,proto3" json:"min_retry_concurrency,omitempty"`
-}
-
-func (x *ConnectionPoolSettings_HTTPSettings_RetryBudget) Reset() {
-	*x = ConnectionPoolSettings_HTTPSettings_RetryBudget{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_networking_v1beta1_destination_rule_proto_msgTypes[16]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ConnectionPoolSettings_HTTPSettings_RetryBudget) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ConnectionPoolSettings_HTTPSettings_RetryBudget) ProtoMessage() {}
-
-func (x *ConnectionPoolSettings_HTTPSettings_RetryBudget) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1beta1_destination_rule_proto_msgTypes[16]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ConnectionPoolSettings_HTTPSettings_RetryBudget.ProtoReflect.Descriptor instead.
-func (*ConnectionPoolSettings_HTTPSettings_RetryBudget) Descriptor() ([]byte, []int) {
-	return file_networking_v1beta1_destination_rule_proto_rawDescGZIP(), []int{4, 1}
-}
-
-func (x *ConnectionPoolSettings_HTTPSettings_RetryBudget) GetMinRetryConcurrency() *wrappers.UInt32Value {
-	if x != nil {
-		return x.MinRetryConcurrency
-	}
-	return nil
-}
-
-func (x *ConnectionPoolSettings_HTTPSettings_RetryBudget) GetBudgetPercent() *Percent {
-	if x != nil {
-		return x.BudgetPercent
-	}
-	return nil
-}
-
 // Policy for upgrading http1.1 connections to http2.
 type ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy int32
 
@@ -2489,8 +2428,6 @@ type ConnectionPoolSettings_HTTPSettings struct {
 	// Note that when this is set to true, h2_upgrade_policy will be ineffective i.e. the client
 	// connections will not be upgraded to http2.
 	UseClientProtocol bool `protobuf:"varint,7,opt,name=use_client_protocol,json=useClientProtocol,proto3" json:"use_client_protocol,omitempty"`
-	// Specifies a limit on concurrent retries in relation to the number of active requests. This parameter is optional.
-	RetryBudget *ConnectionPoolSettings_HTTPSettings_RetryBudget `protobuf:"bytes,8,opt,name=retry_budget,json=retryBudget,proto3" json:"retry_budget,omitempty"`
 }
 
 func (x *ConnectionPoolSettings_HTTPSettings) Reset() {
@@ -2572,13 +2509,6 @@ func (x *ConnectionPoolSettings_HTTPSettings) GetUseClientProtocol() bool {
 		return x.UseClientProtocol
 	}
 	return false
-}
-
-func (x *ConnectionPoolSettings_HTTPSettings) GetRetryBudget() *ConnectionPoolSettings_HTTPSettings_RetryBudget {
-	if x != nil {
-		return x.RetryBudget
-	}
-	return nil
 }
 
 // TCP keepalive.
