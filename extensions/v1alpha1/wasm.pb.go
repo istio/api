@@ -493,9 +493,6 @@ type WasmPlugin struct {
 	// Configuration for a Wasm VM.
 	// more details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).
 	VmConfig *VmConfig `protobuf:"bytes,11,opt,name=vm_config,json=vmConfig,proto3" json:"vm_config,omitempty"`
-	// $hide_from_docs
-	// Hide this from doc until implementing this.
-	//
 	// Specifies the criteria to determine which traffic is passed to WasmPlugin.
 	// If a traffic satisfies any of TrafficSelectors,
 	// the traffic passes the WasmPlugin.
@@ -739,9 +736,6 @@ func (x *EnvVar) GetValue() string {
 	return ""
 }
 
-// $hide_from_docs
-// Hide this from doc until implementing this.
-//
 // TrafficSelector provides a mechanism to select a specific traffic flow
 // for which this Wasm Plugin will be enabled.
 // When all the sub conditions in the TrafficSelector are satisfied, the
@@ -751,18 +745,12 @@ type WasmPlugin_TrafficSelector struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// $hide_from_docs
-	// Hide this from the doc until implementing this.
-	//
 	// Criteria for selecting traffic by their direction.
 	// Note that CLIENT and SERVER are analogous to INBOUND and OUTBOUND,
 	// respectively.
 	// For the gateway, the field should be CLIENT or CLIENT_AND_SERVER.
 	// If not specified, the default value is CLIENT_AND_SERVER.
 	Mode v1beta1.WorkloadMode `protobuf:"varint,1,opt,name=mode,proto3,enum=istio.type.v1beta1.WorkloadMode" json:"mode,omitempty"`
-	// $hide_from_docs
-	// Hide this from the doc until implementing this.
-	//
 	// Criteria for selecting traffic by their destination port.
 	// More specifically, for the outbound traffic, the destination port would be
 	// the port of the target service. On the other hand, for the inbound traffic,
