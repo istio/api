@@ -6,7 +6,4 @@ issue: []
 
 releaseNotes:
 - |
-    **Added** settings for tunneling to DestinationRule API.
-
-docs:
-- https://docs.google.com/document/d/1QbjsBwM0QyQxJIs2LJBUvITap2QeqOKmsHQrGFK9lWQ
+    **Added** settings for retry budget to DestinationRule API.
