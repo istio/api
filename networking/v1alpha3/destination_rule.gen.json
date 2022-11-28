@@ -103,6 +103,9 @@
           "useClientProtocol": {
             "description": "If set to true, client protocol will be preserved while initiating connection to backend. Note that when this is set to true, h2_upgrade_policy will be ineffective i.e. the client connections will not be upgraded to http2.",
             "type": "boolean"
+          },
+          "retryBudget": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.RetryBudget"
           }
         }
       },
@@ -565,12 +568,35 @@
           }
         }
       },
+      "istio.networking.v1alpha3.Percent": {
+        "description": "Percent specifies a percentage in the range of [0.0, 100.0].",
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
       "istio.networking.v1alpha3.PortSelector": {
         "description": "PortSelector specifies the number of a port to be used for matching or selection for final routing.",
         "type": "object",
         "properties": {
           "number": {
             "description": "Valid port number",
+            "type": "integer"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.RetryBudget": {
+        "description": "Setting retry budget.",
+        "type": "object",
+        "properties": {
+          "budgetPercent": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.Percent"
+          },
+          "minRetryConcurrency": {
+            "description": "Minimum number of active retries may never go below this number. This parameter is optional. Defaults to 3.",
             "type": "integer"
           }
         }
