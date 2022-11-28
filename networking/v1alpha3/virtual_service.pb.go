@@ -1645,7 +1645,7 @@ type HTTPMatchRequest struct {
 	//
 	// - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
 	//
-	// If the value is empty and only the name of header is specfied, presence of the header is checked.
+	// If the value is empty and only the name of header is specified, presence of the header is checked.
 	// **Note:** The keys `uri`, `scheme`, `method`, and `authority` will be ignored.
 	Headers map[string]*StringMatch `protobuf:"bytes,5,rep,name=headers,proto3" json:"headers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Specifies the ports on the host that is being addressed. Many services
