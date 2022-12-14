@@ -1501,7 +1501,7 @@ type ClientTLSSettings struct {
 	// If specified, this list overrides the value of subject_alt_names
 	// from the ServiceEntry. If unspecified, automatic validation of upstream
 	// presented certificate for new upstream connections will be done based on the
-	// downstream HTTP host/authority header, provided `VERIFY_CERT_AT_CLIENT`
+	// downstream HTTP host/authority header, provided `VERIFY_CERTIFICATE_AT_CLIENT`
 	// and `ENABLE_AUTO_SNI` environmental variables are set to `true`.
 	SubjectAltNames []string `protobuf:"bytes,5,rep,name=subject_alt_names,json=subjectAltNames,proto3" json:"subject_alt_names,omitempty"`
 	// SNI string to present to the server during TLS handshake.
