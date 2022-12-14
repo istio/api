@@ -5,4 +5,4 @@ issue: []
 
 releaseNotes:
 - |
-    **Fixed** Incorrect pilot-discovery environment variable name.
+    **Fixed** incorrect pilot-discovery environment variable name.
