@@ -925,8 +925,8 @@ type ProxyConfig struct {
 	// (`sidecar.istio.io/statsInclusionPrefixes`,
 	// `sidecar.istio.io/statsInclusionRegexps`, and
 	// `sidecar.istio.io/statsInclusionSuffixes`). For example, to enable stats
-	// for circuit breaker, retry, upstream connections and request timeout,
-	// you can specify stats matcher as follow:
+	// for circuit breakers, request retries, upstream connections, and request timeouts,
+	// you can specify stats matcher as follows:
 	// ```yaml
 	// proxyStatsMatcher:
 	//
