@@ -335,7 +335,7 @@ message AuthorizationPolicy {
 // - Suffix match: "*abc" will match on value "abc" and "xabc".
 // - Presence match: "*" will match when value is not empty.
 message Rule {
-  // From includes a list or sources.
+  // From includes a list of sources.
   message From {
     // Source specifies the source of a request.
     Source source = 1;
@@ -346,7 +346,7 @@ message Rule {
   // If not set, any source is allowed.
   repeated From from = 1;
 
-  // To includes a list or operations.
+  // To includes a list of operations.
   message To {
     // Operation specifies the operation of a request.
     Operation operation = 1;
