@@ -186,7 +186,7 @@
         }
       },
       "istio.security.v1beta1.Rule.From": {
-        "description": "From includes a list or sources.",
+        "description": "From includes a list of sources.",
         "type": "object",
         "properties": {
           "source": {
@@ -195,7 +195,7 @@
         }
       },
       "istio.security.v1beta1.Rule.To": {
-        "description": "To includes a list or operations.",
+        "description": "To includes a list of operations.",
         "type": "object",
         "properties": {
           "operation": {

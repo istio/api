@@ -953,7 +953,7 @@ func (x *AuthorizationPolicy_ExtensionProvider) GetName() string {
 	return ""
 }
 
-// From includes a list or sources.
+// From includes a list of sources.
 type Rule_From struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -1002,7 +1002,7 @@ func (x *Rule_From) GetSource() *Source {
 	return nil
 }
 
-// To includes a list or operations.
+// To includes a list of operations.
 type Rule_To struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
