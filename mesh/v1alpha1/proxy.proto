@@ -399,11 +399,8 @@ message ProxyConfig {
   // Default drain duration is `45s`.
   google.protobuf.Duration drain_duration = 4;
 
-  // The time in seconds that Envoy will wait before shutting down the
-  // parent process during a hot restart. MUST be >=1s (e.g., `1s/1m/1h`).
-  // MUST BE greater than `drain_duration` parameter.
-  // Default shutdown duration is `60s`.
-  google.protobuf.Duration parent_shutdown_duration = 5;
+  reserved "parent_shutdown_duration";
+  reserved 5;
 
   // Address of the discovery service exposing xDS with mTLS connection.
   // The inject configuration may override this value.
