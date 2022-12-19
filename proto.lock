@@ -36153,11 +36153,6 @@
                 "type": "google.protobuf.Duration"
               },
               {
-                "id": 5,
-                "name": "parent_shutdown_duration",
-                "type": "google.protobuf.Duration"
-              },
-              {
                 "id": 6,
                 "name": "discovery_address",
                 "type": "string"
@@ -36349,9 +36344,11 @@
               }
             ],
             "reserved_ids": [
+              5,
               9
             ],
             "reserved_names": [
+              "parent_shutdown_duration",
               "connect_timeout"
             ],
             "messages": [
