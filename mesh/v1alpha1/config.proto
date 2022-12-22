@@ -1000,7 +1000,6 @@ message MeshConfig {
       }
     }
 
-    // $hide_from_docs
     // Defines configuration for an OpenTelemetry tracing backend.
     message OpenTelemetryTracingProvider {
       // REQUIRED. Specifies the OpenTelemetry endpoint that will receive OTLP traces.
