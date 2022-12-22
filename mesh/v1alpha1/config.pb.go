@@ -3516,8 +3516,7 @@ func (x *MeshConfig_ExtensionProvider_EnvoyOpenTelemetryLogProvider) GetLogForma
 	return nil
 }
 
-// $hide_from_docs
-// Defines configuration for an OpenTelemetry tracing backend.
+// Defines configuration for an OpenTelemetry tracing backend. Istio 1.16.1 or higher is needed.
 type MeshConfig_ExtensionProvider_OpenTelemetryTracingProvider struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
