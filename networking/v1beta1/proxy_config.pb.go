@@ -133,8 +133,9 @@ type ProxyConfig struct {
 	// If not set, the `ProxyConfig` resource will be applied to all workloads in the namespace where this resource is defined.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
 	// The number of worker threads to run.
-	// If unset, defaults to 2. If set to 0, this will be configured to use all cores on the machine using
-	// CPU requests and limits to choose a value, with limits taking precedence over requests.
+	// For sidecar, defaults to 2.
+	// If set to 0, this will be computed from sidecar's CPU requests and limits, with limits taking precedence over requests.
+	// For gateway, defaults to the number of hardware threads on the machine.
 	Concurrency *wrappers.Int32Value `protobuf:"bytes,2,opt,name=concurrency,proto3" json:"concurrency,omitempty"`
 	// Additional environment variables for the proxy.
 	// Names starting with `ISTIO_META_` will be included in the generated bootstrap configuration and sent to the XDS server.
