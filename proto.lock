@@ -43572,6 +43572,11 @@
                 "id": 5,
                 "name": "nodePort",
                 "type": "int32"
+              },
+              {
+                "id": 6,
+                "name": "appProtocol",
+                "type": "string"
               }
             ]
           },

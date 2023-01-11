@@ -687,6 +687,7 @@ message ServicePort {
     int32 port = 3;
     IntOrString targetPort = 4;
     int32 nodePort = 5;
+    string appProtocol = 6;
 }
 
 // See k8s.io.api.core.v1.SessionAffinityConfig.
