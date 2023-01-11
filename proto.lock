@@ -37838,12 +37838,13 @@
                     "value": "REQUIRED"
                   }
                 ]
-              },
-              {
-                "id": 4,
-                "name": "target_port",
-                "type": "uint32"
               }
+            ],
+            "reserved_ids": [
+              4
+            ],
+            "reserved_names": [
+              "target_port"
             ]
           },
           {
@@ -40315,12 +40316,13 @@
                     "value": "REQUIRED"
                   }
                 ]
-              },
-              {
-                "id": 4,
-                "name": "target_port",
-                "type": "uint32"
               }
+            ],
+            "reserved_ids": [
+              4
+            ],
+            "reserved_names": [
+              "target_port"
             ]
           },
           {
