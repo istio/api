@@ -15,7 +15,6 @@
 syntax = "proto3";
 
 import "google/api/field_behavior.proto";
-import "networking/v1alpha3/gateway.proto";
 import "networking/v1alpha3/sidecar.proto";
 import "networking/v1alpha3/workload_entry.proto";
 

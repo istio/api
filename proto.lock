@@ -38094,9 +38094,6 @@
             "path": "google/api/field_behavior.proto"
           },
           {
-            "path": "networking/v1alpha3/gateway.proto"
-          },
-          {
             "path": "networking/v1alpha3/sidecar.proto"
           },
           {
