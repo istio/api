@@ -40633,9 +40633,6 @@
             "path": "google/api/field_behavior.proto"
           },
           {
-            "path": "networking/v1beta1/gateway.proto"
-          },
-          {
             "path": "networking/v1beta1/sidecar.proto"
           },
           {
