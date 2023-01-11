@@ -37994,7 +37994,7 @@
               {
                 "id": 3,
                 "name": "ports",
-                "type": "Port",
+                "type": "ServicePort",
                 "is_repeated": true,
                 "options": [
                   {
@@ -38041,6 +38041,49 @@
                 "name": "subject_alt_names",
                 "type": "string",
                 "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "ServicePort",
+            "fields": [
+              {
+                "id": 1,
+                "name": "number",
+                "type": "uint32",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "protocol",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "name": "name",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "name": "target_port",
+                "type": "uint32"
               }
             ]
           }
@@ -40492,7 +40535,7 @@
               {
                 "id": 3,
                 "name": "ports",
-                "type": "Port",
+                "type": "ServicePort",
                 "is_repeated": true,
                 "options": [
                   {
@@ -40539,6 +40582,49 @@
                 "name": "subject_alt_names",
                 "type": "string",
                 "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "ServicePort",
+            "fields": [
+              {
+                "id": 1,
+                "name": "number",
+                "type": "uint32",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "protocol",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "name": "name",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "name": "target_port",
+                "type": "uint32"
               }
             ]
           }
