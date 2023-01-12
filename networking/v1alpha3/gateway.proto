@@ -605,9 +605,8 @@ message Port {
   // Label assigned to the port.
   string name = 3 [(google.api.field_behavior) = REQUIRED];
 
-  // The port number on the endpoint where the traffic will be
-  // received. Applicable only when used with ServiceEntries.
-  uint32 target_port = 4;
+  reserved 4;
+  reserved "target_port";
 }
 
 message ServerTLSSettings {

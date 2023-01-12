@@ -37838,12 +37838,13 @@
                     "value": "REQUIRED"
                   }
                 ]
-              },
-              {
-                "id": 4,
-                "name": "target_port",
-                "type": "uint32"
               }
+            ],
+            "reserved_ids": [
+              4
+            ],
+            "reserved_names": [
+              "target_port"
             ]
           },
           {
@@ -37994,7 +37995,7 @@
               {
                 "id": 3,
                 "name": "ports",
-                "type": "Port",
+                "type": "ServicePort",
                 "is_repeated": true,
                 "options": [
                   {
@@ -38043,14 +38044,54 @@
                 "is_repeated": true
               }
             ]
+          },
+          {
+            "name": "ServicePort",
+            "fields": [
+              {
+                "id": 1,
+                "name": "number",
+                "type": "uint32",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "protocol",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "name": "name",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "name": "target_port",
+                "type": "uint32"
+              }
+            ]
           }
         ],
         "imports": [
           {
             "path": "google/api/field_behavior.proto"
-          },
-          {
-            "path": "networking/v1alpha3/gateway.proto"
           },
           {
             "path": "networking/v1alpha3/sidecar.proto"
@@ -40272,12 +40313,13 @@
                     "value": "REQUIRED"
                   }
                 ]
-              },
-              {
-                "id": 4,
-                "name": "target_port",
-                "type": "uint32"
               }
+            ],
+            "reserved_ids": [
+              4
+            ],
+            "reserved_names": [
+              "target_port"
             ]
           },
           {
@@ -40492,7 +40534,7 @@
               {
                 "id": 3,
                 "name": "ports",
-                "type": "Port",
+                "type": "ServicePort",
                 "is_repeated": true,
                 "options": [
                   {
@@ -40541,14 +40583,54 @@
                 "is_repeated": true
               }
             ]
+          },
+          {
+            "name": "ServicePort",
+            "fields": [
+              {
+                "id": 1,
+                "name": "number",
+                "type": "uint32",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "protocol",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "name": "name",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "name": "target_port",
+                "type": "uint32"
+              }
+            ]
           }
         ],
         "imports": [
           {
             "path": "google/api/field_behavior.proto"
-          },
-          {
-            "path": "networking/v1beta1/gateway.proto"
           },
           {
             "path": "networking/v1beta1/sidecar.proto"

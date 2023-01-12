@@ -112,10 +112,6 @@
           "name": {
             "description": "Label assigned to the port.",
             "type": "string"
-          },
-          "targetPort": {
-            "description": "The port number on the endpoint where the traffic will be received. Applicable only when used with ServiceEntries.",
-            "type": "integer"
           }
         }
       },
