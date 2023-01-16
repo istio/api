@@ -605,8 +605,10 @@ message Port {
   // Label assigned to the port.
   string name = 3 [(google.api.field_behavior) = REQUIRED];
 
-  reserved 4;
-  reserved "target_port";
+  // The port number on the endpoint where the traffic will be
+  // received. Applicable only when used with ServiceEntries.
+  // $hide_from_docs
+  uint32 target_port = 4 [deprecated=true];
 }
 
 message ServerTLSSettings {
