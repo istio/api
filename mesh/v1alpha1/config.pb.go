@@ -1844,6 +1844,7 @@ type MeshConfig_ExtensionProvider_Zipkin struct {
 }
 
 type MeshConfig_ExtensionProvider_Lightstep struct {
+	// $hide_from_docs
 	// Configures a Lightstep tracing provider.
 	// Deprecated: For Istio 1.15+, please use an OpenTelemetryTracingProvider instead, more details can be found at https://github.com/istio/istio/issues/40027
 	//

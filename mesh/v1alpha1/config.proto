@@ -486,6 +486,7 @@ message MeshConfig {
       EnvoyExternalAuthorizationGrpcProvider envoy_ext_authz_grpc = 3;
       // Configures a tracing provider that uses the Zipkin API.
       ZipkinTracingProvider zipkin = 4;
+      // $hide_from_docs
       // Configures a Lightstep tracing provider.
       // Deprecated: For Istio 1.15+, please use an OpenTelemetryTracingProvider instead, more details can be found at https://github.com/istio/istio/issues/40027
       LightstepTracingProvider lightstep = 5 [deprecated=true];
