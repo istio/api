@@ -103,6 +103,6 @@ func (in *IntOrString) ToKubernetes() intstr.IntOrString {
 }
 
 var (
-	OperatorMarshaler   = &github_com_golang_protobuf_jsonpb.Marshaler{}
-	OperatorUnmarshaler = &github_com_golang_protobuf_jsonpb.Unmarshaler{}
+	OperatorMarshaler   = &jsonpb.Marshaler{}
+	OperatorUnmarshaler = &jsonpb.Unmarshaler{}
 )
