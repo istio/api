@@ -902,20 +902,6 @@ No
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-lightstep" class="oneof">
-<td><code>lightstep</code></td>
-<td><code><a href="#MeshConfig-ExtensionProvider-LightstepTracingProvider">LightstepTracingProvider (oneof)</a></code></td>
-<td>
-<p>Configures a Lightstep tracing provider.
-Note: For Istio 1.15+, configuring this provider will result in
-using an OpenTelemetryTracingProvider configured specially for
-Lightstep. This is part of the Lightstep transition to OpenTelemetry.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="MeshConfig-ExtensionProvider-datadog" class="oneof">
 <td><code>datadog</code></td>
 <td><code><a href="#MeshConfig-ExtensionProvider-DatadogTracingProvider">DatadogTracingProvider (oneof)</a></code></td>
@@ -1020,6 +1006,18 @@ No
 <td><code><a href="#MeshConfig-ExtensionProvider-EnvoyOpenTelemetryLogProvider">EnvoyOpenTelemetryLogProvider (oneof)</a></code></td>
 <td>
 <p>Configures an Envoy Open Telemetry Access Logging Service provider.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-lightstep" class="deprecated oneof oneof-start">
+<td><code>lightstep</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-LightstepTracingProvider">LightstepTracingProvider (oneof)</a></code></td>
+<td>
+<p>Configures a Lightstep tracing provider.
+Deprecated: For Istio 1.15+, please use an OpenTelemetryTracingProvider instead, more details can be found at <a href="https://github.com/istio/istio/issues/40027">https://github.com/istio/istio/issues/40027</a></p>
 
 </td>
 <td>
