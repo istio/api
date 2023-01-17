@@ -487,10 +487,8 @@ message MeshConfig {
       // Configures a tracing provider that uses the Zipkin API.
       ZipkinTracingProvider zipkin = 4;
       // Configures a Lightstep tracing provider.
-      // Note: For Istio 1.15+, configuring this provider will result in
-      // using an OpenTelemetryTracingProvider configured specially for 
-      // Lightstep. This is part of the Lightstep transition to OpenTelemetry.
-      LightstepTracingProvider lightstep = 5;
+      // Deprecated: For Istio 1.15+, please use an OpenTelemetryTracingProvider instead, more details can be found at https://github.com/istio/istio/issues/40027
+      LightstepTracingProvider lightstep = 5 [deprecated=true];
       // Configures a Datadog tracing provider.
       DatadogTracingProvider datadog = 6;
       // Configures a Stackdriver provider.

@@ -430,7 +430,8 @@
                   ],
                   "properties": {
                     "lightstep": {
-                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider"
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider",
+                      "deprecated": true
                     }
                   }
                 },
@@ -573,7 +574,8 @@
             ],
             "properties": {
               "lightstep": {
-                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider"
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider",
+                "deprecated": true
               }
             }
           },
