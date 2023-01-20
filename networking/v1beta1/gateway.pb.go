@@ -904,8 +904,6 @@ type Port struct {
 	// MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS.
 	// TLS can be either used to terminate non-HTTP based connections on a specific port
 	// or to route traffic based on SNI header to the destination without terminating the TLS connection.
-	// Note: When using TLS to terminate the connection,
-	// [TCPRoute](https://istio.io/latest/docs/reference/config/networking/virtual-service/#TCPRoute) needs to be used.
 	Protocol string `protobuf:"bytes,2,opt,name=protocol,proto3" json:"protocol,omitempty"`
 	// Label assigned to the port.
 	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`

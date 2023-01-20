@@ -106,7 +106,7 @@
             "type": "integer"
           },
           "protocol": {
-            "description": "The protocol exposed on the port. MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS. TLS can be either used to terminate non-HTTP based connections on a specific port or to route traffic based on SNI header to the destination without terminating the TLS connection. Note: When using TLS to terminate the connection, [TCPRoute](https://istio.io/latest/docs/reference/config/networking/virtual-service/#TCPRoute) needs to be used.",
+            "description": "The protocol exposed on the port. MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS. TLS can be either used to terminate non-HTTP based connections on a specific port or to route traffic based on SNI header to the destination without terminating the TLS connection.",
             "type": "string"
           },
           "name": {
