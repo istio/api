@@ -21,6 +21,7 @@ import "mesh/v1alpha1/proxy.proto";
 import "networking/v1alpha3/destination_rule.proto";
 import "networking/v1alpha3/virtual_service.proto";
 import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
+import "envoy/config/core/v3/protocol.proto";
 
 // $title: Global Mesh Options
 // $description: Configuration affecting the service mesh as a whole.
@@ -1123,8 +1124,13 @@ message MeshConfig {
   // Configuration of mTLS for traffic between workloads within the mesh.
   TLSConfig mesh_mTLS = 63;
 
+  // Default Configuration of HTTP2 protocol. Apply to both listener and cluster.
+  // All options in the [Http2ProtocolOptions](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-msg-config-core-v3-http2protocoloptions) except `connection_keepalive` can currently be
+  // configured globally via this field.
+  envoy.config.core.v3.Http2ProtocolOptions default_http2_protocol_options = 64;
+
   // $hide_from_docs
-  // Next available field number: 64
+  // Next available field number: 65
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
