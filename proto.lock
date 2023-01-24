@@ -37940,12 +37940,6 @@
                 "name": "cipher_suites",
                 "type": "string",
                 "is_repeated": true
-              },
-              {
-                "id": 13,
-                "name": "ecdh_curves",
-                "type": "string",
-                "is_repeated": true
               }
             ]
           }
@@ -40424,12 +40418,6 @@
               {
                 "id": 9,
                 "name": "cipher_suites",
-                "type": "string",
-                "is_repeated": true
-              },
-              {
-                "id": 13,
-                "name": "ecdh_curves",
                 "type": "string",
                 "is_repeated": true
               }

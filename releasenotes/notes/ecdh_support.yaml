@@ -5,4 +5,4 @@ issue:
   - https://github.com/istio/istio/issues/41645
 releaseNotes:
   - |
-    **Added** ecdh_curves support to ServerTLSSettings in the Gateway API and ClientTLSSettings in the DestinationRule API.
+    **Added** ecdh_curves support for mesh-external traffic through MeshConfig API.
