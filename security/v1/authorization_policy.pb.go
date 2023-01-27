@@ -129,6 +129,7 @@
 //     - operation:
 //         methods: ["POST"]
 //         ports: ["8080"]
+// ```
 //
 // When this rule is applied to TCP traffic, the `method` field (as will all HTTP based attributes) cannot be processed.
 // For a `DENY` rule, missing attributes are treated as matches. This means all TCP traffic on port 8080 would be denied in the example above.
