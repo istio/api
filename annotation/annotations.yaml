@@ -64,8 +64,8 @@ annotations:
   - name: sidecar.istio.io/inject
     featureStatus: Beta
     description: Specifies whether or not an Envoy sidecar should be automatically
-      injected into the workload.
-    deprecated: false
+      injected into the workload. Deprecated in favor of `sidecar.istio.io/inject` label.
+    deprecated: true
     hidden: false
     resources:
       - Pod
@@ -110,6 +110,15 @@ annotations:
   - name: sidecar.istio.io/proxyImage
     featureStatus: Alpha
     description: Specifies the Docker image to be used by the Envoy sidecar.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+
+  - name: sidecar.istio.io/proxyImageType
+    featureStatus: Alpha
+    description: Specifies the Docker image type to be used by the Envoy sidecar. Istio publishes debug
+      and distroless image types for every release tag.
     deprecated: false
     hidden: false
     resources:
@@ -240,6 +249,14 @@ annotations:
     resources:
       - Pod
 
+  - name: sidecar.istio.io/agentLogLevel
+    featureStatus: Alpha
+    description: Specifies the log output level for pilot-agent.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+
   - name: readiness.status.sidecar.istio.io/initialDelaySeconds
     featureStatus: Alpha
     description: Specifies the initial delay (in seconds) for the Envoy sidecar readiness
@@ -274,6 +291,17 @@ annotations:
     hidden: false
     resources:
       - Pod
+
+  - name: traffic.istio.io/nodeSelector
+    featureStatus: Stable
+    description: This annotation is a set of node-labels (key1=value,key2=value). If the
+      annotated Service is of type NodePort and is a multi-network gateway (see
+      topology.istio.io/network), the addresses for selected nodes will be used for
+      cross-network communication.
+    deprecated: false
+    hidden: false
+    resources:
+      - Service
 
   - name: traffic.sidecar.istio.io/includeOutboundIPRanges
     featureStatus: Alpha
@@ -312,6 +340,14 @@ annotations:
     resources:
       - Pod
 
+  - name: traffic.sidecar.istio.io/excludeInterfaces
+    featureStatus: Alpha
+    description: A comma separated list of interfaces to be excluded from Istio traffic capture
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+  
   - name: traffic.sidecar.istio.io/includeOutboundPorts
     featureStatus: Alpha
     description: A comma separated list of outbound ports for which traffic is to be
@@ -392,3 +428,79 @@ annotations:
     hidden: false
     resources:
       - Pod
+
+  - name: istio.io/dry-run
+    featureStatus: Alpha
+    description: Specifies whether or not the given resource is in dry-run mode. See
+      https://istio.io/latest/docs/tasks/security/authorization/authz-dry-run/ for more information.
+    deprecated: false
+    hidden: false
+    resources:
+      - AuthorizationPolicy
+
+  - name: proxy.istio.io/overrides
+    featureStatus: Alpha
+    description: Used internally to indicate user-specified overrides in the proxy container of the pod during injection.
+    deprecated: false
+    hidden: true
+    resources:
+      - Pod
+
+  - name: inject.istio.io/templates
+    featureStatus: Alpha
+    description: The name of the inject template(s) to use, as a comma separate list. See
+      https://istio.io/latest/docs/setup/additional-setup/sidecar-injection/#custom-templates-experimental for more information.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+
+  - name: sidecar.istio.io/extraStatTags
+    featureStatus: Alpha
+    description: An additional list of tags to extract from the in-proxy Istio telemetry. each additional tag needs to be present in this list.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+
+  - name: istio.io/autoRegistrationGroup
+    featureStatus: Alpha
+    description: On a WorkloadEntry stores the associated WorkloadGroup.
+    deprecated: false
+    hidden: true
+    resources:
+      - WorkloadEntry
+
+  - name: istio.io/workloadController
+    featureStatus: Alpha
+    description: On a WorkloadEntry should store the current/last pilot instance connected to the workload for XDS.
+    deprecated: false
+    hidden: true
+    resources:
+      - WorkloadEntry
+
+  - name: istio.io/connectedAt
+    featureStatus: Alpha
+    description: On a WorkloadEntry stores the time in nanoseconds when the associated workload connected to a Pilot instance.
+    deprecated: false
+    hidden: true
+    resources:
+      - WorkloadEntry
+
+  - name: istio.io/disconnectedAt
+    featureStatus: Alpha
+    description: On a WorkloadEntry stores the time in nanoseconds when the associated workload disconnected from a Pilot instance.
+    deprecated: false
+    hidden: true
+    resources:
+      - WorkloadEntry
+
+  - name: topology.istio.io/controlPlaneClusters
+    featureStatus: Alpha
+    description: A comma-separated list of clusters (or * for any) running istiod that should attempt leader election
+      for a remote cluster thats system namespace includes this annotation. Istiod will not attempt to lead unannotated
+      remote clusters.
+    deprecated: false
+    hidden: false
+    resources:
+      - Namespace

@@ -37,7 +37,7 @@ import "networking/v1alpha3/sidecar.proto";
 // namespace](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig),
 // followed by all matching EnvoyFilters in the workload's namespace.
 //
-// **NOTE 1**: Some aspects of this API is deeply tied to the internal
+// **NOTE 1**: Some aspects of this API are deeply tied to the internal
 // implementation in Istio networking subsystem as well as Envoy's XDS
 // API. While the EnvoyFilter API by itself will maintain backward
 // compatibility, any envoy configuration provided through this
@@ -83,9 +83,10 @@ import "networking/v1alpha3/sidecar.proto";
 //       operation: INSERT_BEFORE
 //       value:
 //         # This is the full filter config including the name and typed_config section.
-//         name: "envoy.config.filter.network.custom_protocol"
+//         name: "envoy.extensions.filters.network.mongo_proxy"
 //         typed_config:
-//          ...
+//           "@type": "type.googleapis.com/envoy.extensions.filters.network.mongo_proxy.v3.MongoProxy"
+//           ...
 //   - applyTo: NETWORK_FILTER # http connection manager is a filter in Envoy
 //     match:
 //       # context omitted so that this applies to both sidecars and gateways
@@ -135,7 +136,7 @@ import "networking/v1alpha3/sidecar.proto";
 //     patch:
 //       operation: INSERT_BEFORE
 //       value: # lua filter specification
-//        name: envoy.lua
+//        name: envoy.filters.http.lua
 //        typed_config:
 //           "@type": "type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua"
 //           inlineCode: |
@@ -211,7 +212,7 @@ import "networking/v1alpha3/sidecar.proto";
 //
 // The following example inserts an attributegen filter
 // that produces `istio_operationId` attribute which is consumed
-// by the istio.stats fiter. `filterClass: STATS` encodes this dependency.
+// by the istio.stats filter. `filterClass: STATS` encodes this dependency.
 //
 //
 // ```yaml
@@ -354,22 +355,80 @@ import "networking/v1alpha3/sidecar.proto";
 //   # The second patch instructs to apply the above Wasm filter to the listener/http connection manager.
 //   - applyTo: HTTP_FILTER
 //     match:
-//       context: SIDECAR_INBOUND
+//       listener:
+//         filterChain:
+//           filter:
+//             name: envoy.filters.network.http_connection_manager
+//             subFilter:
+//               name: envoy.filters.http.router
 //     patch:
-//       operation: ADD
-//       filterClass: AUTHZ # This filter will run *after* the Istio authz filter.
+//       operation: INSERT_BEFORE
 //       value:
 //         name: my-wasm-extension # This must match the name above
 //         config_discovery:
 //           config_source:
-//             api_config_source:
-//               api_type: GRPC
-//               transport_api_version: V3
-//               grpc_services:
-//               - envoy_grpc:
-//                   cluster_name: xds-grpc
-//           type_urls: ["envoy.extensions.filters.http.wasm.v3.Wasm"]
+//             ads: {}
+//           type_urls: ["type.googleapis.com/envoy.extensions.filters.http.wasm.v3.Wasm"]
 // ```
+//
+// The following example adds a Wasm service extension for all proxies using a locally available Wasm file.
+// The singleton Wasm extension is used to maintain a shared state between workers executing Wasm filters.
+// For example, a local rate limit extension would rely on a singleton to limit requests across all workers.
+// As another example, an authorization Wasm extension can use a singleton to maintain a database of accounts.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: EnvoyFilter
+// metadata:
+//   name: listener-filter-example
+//   namespace: myns
+// spec:
+//   configPatches:
+//   - applyTo: LISTENER_FILTER
+//     patch:
+//       operation: MERGE
+//       value:
+//         bootstrap_extensions:
+//         - name: envoy.bootstrap.wasm
+//           typed_config:
+//             "@type": type.googleapis.com/envoy.extensions.wasm.v3.WasmService
+//             singleton: true
+//             config:
+//               name: my_plugin
+//               configuration:
+//                 "@type": type.googleapis.com/google.protobuf.StringValue
+//                 value: |
+//                   {}
+//               vm_config:
+//                 runtime: "envoy.wasm.runtime.v8"
+//                 code:
+//                   local:
+//                     filename: "/etc/envoy_filter_http_wasm_example.wasm"
+// ```
+//
+// The following example inserts an `envoy.filters.listener.proxy_protocol` listener filter before the `envoy.filters.listener.tls_inspector`.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: EnvoyFilter
+// metadata:
+//   name: wasm-service
+//   namespace: myns
+// spec:
+//   configPatches:
+//   - applyTo: LISTENER_FILTER
+//     match:
+//       context: SIDECAR_INBOUND # will match outbound listeners in all sidecars
+//       listener:
+//         portNumber: 15006
+//         listenerFilter: "envoy.filters.listener.tls_inspector"
+//     patch:
+//       operation: INSERT_BEFORE
+//       value:
+//         # This is the full filter config including the name and typed_config section.
+//         name: "envoy.filters.listener.proxy_protocol"
+//         typed_config:
+//           "@type": "type.googleapis.com/envoy.extensions.filters.listener.proxy_protocol.v3.ProxyProtocol"
 package istio.networking.v1alpha3;
 
 option go_package = "istio.io/api/networking/v1alpha3";
@@ -386,7 +445,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // +cue-gen:EnvoyFilter:subresource:status
 // +cue-gen:EnvoyFilter:scope:Namespaced
 // +cue-gen:EnvoyFilter:resource:categories=istio-io,networking-istio-io
-// +cue-gen:EnvoyFilter:preserveUnknownFields:true
+// +cue-gen:EnvoyFilter:preserveUnknownFields:configPatches.[].patch.value
 // -->
 //
 // <!-- go code generation tags
@@ -435,6 +494,12 @@ message EnvoyFilter {
     // Applies the patch to or adds an extension config in ECDS output. Note that ECDS
     // is only supported by HTTP filters.
     EXTENSION_CONFIG = 9;
+
+    // Applies the patch to bootstrap configuration.
+    BOOTSTRAP = 10;
+
+    // Applies the patch to the listener filter.
+    LISTENER_FILTER = 11;
   };
 
   // PatchContext selects a class of configurations based on the
@@ -479,12 +544,14 @@ message EnvoyFilter {
   message ClusterMatch {
     // The service port for which this cluster was generated.  If
     // omitted, applies to clusters for any port.
+    // **Note:** for inbound cluster, it is the service target port.
     uint32 port_number = 1;
 
     // The fully qualified service name for this cluster. If omitted,
     // applies to clusters for any service. For services defined
     // through service entries, the service name is same as the hosts
     // defined in the service entry.
+    // **Note:** for inbound cluster, this is ignored.
     string service = 2;
 
     // The subset associated with the service. If omitted, applies to
@@ -653,6 +720,10 @@ message EnvoyFilter {
     // listener.
     FilterChainMatch filter_chain = 3;
 
+    // Match a specific listener filter. If specified, the
+    // patch will be applied to the listener filter.
+    string listener_filter = 5;
+
     // Match a specific listener by its name. The listeners generated
     // by Pilot are typically named as IP:Port.
     string name = 4;
@@ -815,4 +886,22 @@ message EnvoyFilter {
 
   // One or more patches with match conditions.
   repeated EnvoyConfigObjectPatch config_patches = 4 [(google.api.field_behavior) = REQUIRED];
+ 
+  // Priority defines the order in which patch sets are applied within a context.
+  // When one patch depends on another patch, the order of patch application
+  // is significant. The API provides two primary ways to order patches.
+  // Patch sets in the root namespace are applied before the patch sets in the
+  // workload namespace. Patches within a patch set are processed in the order
+  // that they appear in the `configPatches` list.
+  //
+  // The default value for priority is 0 and the range is [ min-int32, max-int32 ].
+  // A patch set with a negative priority is processed before the default. A patch
+  // set with a positive priority is processed after the default.
+  // 
+  // It is recommended to start with priority values that are multiples of 10
+  // to leave room for further insertion.
+  //
+  // Patch sets are sorted in the following ascending key order:
+  // priority, creation time, fully qualified resource name.
+  int32 priority = 5;
 }

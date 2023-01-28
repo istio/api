@@ -85,6 +85,18 @@ var (
 		},
 	}
 
+	NetworkingGatewayPort = Instance {
+		Name:          "networking.istio.io/gatewayPort",
+		Description:   "IstioGatewayPortLabel overrides the default 15443 value "+
+                        "to use for a multi-network gateway's port",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Service,
+		},
+	}
+
 	OperatorComponent = Instance {
 		Name:          "operator.istio.io/component",
 		Description:   "Istio operator component name of the resource, e.g. "+
@@ -162,16 +174,35 @@ var (
 		},
 	}
 
+	SidecarInject = Instance {
+		Name:          "sidecar.istio.io/inject",
+		Description:   "Specifies whether or not an Envoy sidecar should be "+
+                        "automatically injected into the workload.",
+		FeatureStatus: Beta,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	TopologyCluster = Instance {
 		Name:          "topology.istio.io/cluster",
-		Description:   "A workload label that indicates the name of the cluster "+
-                        "that contains the workload. This is typically configured "+
-                        "during control plane installation, using either an "+
-                        "auto-generated or admin-specified value. Setting this "+
-                        "allows workload selection by cluster. For example, a "+
-                        "service owner could create a DestinationRule containing a "+
-                        "subset per cluster and then use these subsets to control "+
-                        "traffic flow to each cluster independently.",
+		Description:   "This label is applied to a workload internally that "+
+                        "identifies the Kubernetes cluster containing the "+
+                        "workload. The cluster ID is specified during Istio "+
+                        "installation for each cluster via "+
+                        "`values.global.multiCluster.clusterName`. It should be "+
+                        "noted that this is only used internally within Istio and "+
+                        "is not an actual label on workload pods. If a pod "+
+                        "contains this label, it will be overridden by Istio "+
+                        "internally with the cluster ID specified during Istio "+
+                        "installation. This label provides a way to select "+
+                        "workloads by cluster when using DestinationRules. For "+
+                        "example, a service owner could create a DestinationRule "+
+                        "containing a subset per cluster and then use these "+
+                        "subsets to control traffic flow to each cluster "+
+                        "independently.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -239,12 +270,14 @@ resources to help automate Istio's multi-network configuration.
 func AllResourceLabels() []*Instance {
 	return []*Instance {
 		&IoIstioRev,
+		&NetworkingGatewayPort,
 		&OperatorComponent,
 		&OperatorManaged,
 		&OperatorVersion,
 		&SecurityTlsMode,
 		&ServiceCanonicalName,
 		&ServiceCanonicalRevision,
+		&SidecarInject,
 		&TopologyCluster,
 		&TopologyNetwork,
 		&TopologySubzone,

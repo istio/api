@@ -43,6 +43,19 @@ Istio supports to control its behavior.
 				
 					<tr>
 				
+					<td><code>inject.istio.io/templates</code></td>
+				
+					<td>Alpha</td>
+				
+					<td>[Pod]</td>
+					<td>The name of the inject template(s) to use, as a comma separate list. See https://istio.io/latest/docs/setup/additional-setup/sidecar-injection/#custom-templates-experimental for more information.</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
 					<td><code>install.operator.istio.io/chart-owner</code></td>
 				
 					<td>Alpha</td>
@@ -76,6 +89,27 @@ Istio supports to control its behavior.
 					<td>[Any]</td>
 					<td>Represents the Istio version associated with the resource</td>
 				</tr>
+			
+		
+			
+		
+			
+		
+			
+		
+			
+				
+					<tr>
+				
+					<td><code>istio.io/dry-run</code></td>
+				
+					<td>Alpha</td>
+				
+					<td>[AuthorizationPolicy]</td>
+					<td>Specifies whether or not the given resource is in dry-run mode. See https://istio.io/latest/docs/tasks/security/authorization/authz-dry-run/ for more information.</td>
+				</tr>
+			
+		
 			
 		
 			
@@ -131,6 +165,8 @@ Istio supports to control its behavior.
 			
 		
 			
+		
+			
 				
 					<tr>
 				
@@ -179,6 +215,19 @@ Istio supports to control its behavior.
 				
 					<td>[Pod]</td>
 					<td>Specifies the period (in seconds) for the Envoy sidecar readiness probe.</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
+					<td><code>sidecar.istio.io/agentLogLevel</code></td>
+				
+					<td>Alpha</td>
+				
+					<td>[Pod]</td>
+					<td>Specifies the log output level for pilot-agent.</td>
 				</tr>
 			
 		
@@ -251,12 +300,25 @@ Istio supports to control its behavior.
 				
 					<tr>
 				
-					<td><code>sidecar.istio.io/inject</code></td>
+					<td><code>sidecar.istio.io/extraStatTags</code></td>
 				
-					<td>Beta</td>
+					<td>Alpha</td>
 				
 					<td>[Pod]</td>
-					<td>Specifies whether or not an Envoy sidecar should be automatically injected into the workload.</td>
+					<td>An additional list of tags to extract from the in-proxy Istio telemetry. each additional tag needs to be present in this list.</td>
+				</tr>
+			
+		
+			
+				
+					<tr class="deprecated">
+				
+					<td><code>sidecar.istio.io/inject</code></td>
+				
+					<td>Deprecated</td>
+				
+					<td>[Pod]</td>
+					<td>Specifies whether or not an Envoy sidecar should be automatically injected into the workload. Deprecated in favor of `sidecar.istio.io/inject` label.</td>
 				</tr>
 			
 		
@@ -322,6 +384,19 @@ Istio supports to control its behavior.
 				
 					<td>[Pod]</td>
 					<td>Specifies the Docker image to be used by the Envoy sidecar.</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
+					<td><code>sidecar.istio.io/proxyImageType</code></td>
+				
+					<td>Alpha</td>
+				
+					<td>[Pod]</td>
+					<td>Specifies the Docker image type to be used by the Envoy sidecar. Istio publishes debug and distroless image types for every release tag.</td>
 				</tr>
 			
 		
@@ -459,12 +534,51 @@ Istio supports to control its behavior.
 				
 					<tr>
 				
+					<td><code>topology.istio.io/controlPlaneClusters</code></td>
+				
+					<td>Alpha</td>
+				
+					<td>[Namespace]</td>
+					<td>A comma-separated list of clusters (or * for any) running istiod that should attempt leader election for a remote cluster thats system namespace includes this annotation. Istiod will not attempt to lead unannotated remote clusters.</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
+					<td><code>traffic.istio.io/nodeSelector</code></td>
+				
+					<td>Stable</td>
+				
+					<td>[Service]</td>
+					<td>This annotation is a set of node-labels (key1=value,key2=value). If the annotated Service is of type NodePort and is a multi-network gateway (see topology.istio.io/network), the addresses for selected nodes will be used for cross-network communication.</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
 					<td><code>traffic.sidecar.istio.io/excludeInboundPorts</code></td>
 				
 					<td>Alpha</td>
 				
 					<td>[Pod]</td>
 					<td>A comma separated list of inbound ports to be excluded from redirection to Envoy. Only applies when all inbound traffic (i.e. '*') is being redirected.</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
+					<td><code>traffic.sidecar.istio.io/excludeInterfaces</code></td>
+				
+					<td>Alpha</td>
+				
+					<td>[Pod]</td>
+					<td>A comma separated list of interfaces to be excluded from Istio traffic capture</td>
 				</tr>
 			
 		

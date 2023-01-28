@@ -18,6 +18,7 @@ import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 import "networking/v1alpha3/destination_rule.proto";
 import "networking/v1alpha3/workload_group.proto";
+import "networking/v1beta1/proxy_config.proto";
 
 package istio.mesh.v1alpha1;
 
@@ -47,6 +48,7 @@ message Tracing {
     string address = 1;
   }
 
+  // $hide_from_docs
   // Defines configuration for a Lightstep tracer.
   message Lightstep {
     // Address of the Lightstep Satellite pool.
@@ -132,6 +134,8 @@ message Tracing {
     // Use a Zipkin tracer.
     Zipkin zipkin = 1;
     // Use a Lightstep tracer.
+    // NOTE: For Istio 1.15+, this configuration option will result
+    // in using OpenTelemetry-based Lightstep integration.
     Lightstep lightstep = 2;
     // Use a Datadog tracer.
     Datadog datadog = 3;
@@ -225,6 +229,7 @@ message Tracing {
 // SDS defines secret discovery service(SDS) configuration to be used by the proxy.
 // For workload, its values are set in sidecar injector(passed as arguments to istio-proxy container).
 // For pilot/mixer, it's passed as arguments to istio-proxy container in pilot/mixer deployment yaml files directly.
+// $hide_from_docs
 message SDS {
   // True if SDS is enabled.
   bool enabled = 1;
@@ -291,7 +296,62 @@ message Topology {
   ForwardClientCertDetails forward_client_cert_details = 2;
 }
 
-// ProxyConfig defines variables for individual Envoy instances.
+// PrivateKeyProvider defines private key configuration for gateways and sidecars. This can be configured
+// mesh wide or individual per-workload basis.
+message PrivateKeyProvider {
+  // CryptoMb PrivateKeyProvider configuration
+  message CryptoMb {
+    // How long to wait until the per-thread processing queue should be processed. If the processing queue
+    // gets full (eight sign or decrypt requests are received) it is processed immediately.
+    // However, if the queue is not filled before the delay has expired, the requests already in the queue
+    // are processed, even if the queue is not full.
+    // In effect, this value controls the balance between latency and throughput.
+    // The duration needs to be set to a value greater than or equal to 1 millisecond.
+    google.protobuf.Duration poll_delay = 1;
+  }
+
+  // QAT (QuickAssist Technology) PrivateKeyProvider configuration
+  message QAT {
+    // How long to wait before polling the hardware accelerator after a request has been submitted there.
+    // Having a small value leads to quicker answers from the hardware but causes more polling loop spins,
+    // leading to potentially larger CPU usage.
+    // The duration needs to be set to a value greater than or equal to 1 millisecond.
+    google.protobuf.Duration poll_delay = 1;
+  }
+
+  // REQUIRED. Specifies detailed configuration for the Private key provider.
+  oneof provider {
+    // Use CryptoMb private key provider
+    CryptoMb cryptomb = 2;
+    // Use QAT private key provider
+    QAT qat = 3;
+  }
+}
+
+// ProxyConfig defines variables for individual Envoy instances. This can be configured on a per-workload basis
+// as well as by the mesh-wide defaults.
+// To set the mesh wide defaults, configure the `defaultConfig` section of `meshConfig`. For example:
+//
+// ```
+// meshConfig:
+//   defaultConfig:
+//     discoveryAddress: istiod:15012
+// ```
+//
+// This can also be configured on a per-workload basis by configuring the `proxy.istio.io/config` annotation on the pod. For example:
+//
+// ```
+// annotations:
+//   proxy.istio.io/config: |
+//     discoveryAddress: istiod:15012
+// ```
+//
+// If both are configured, the two are merged with per field semantics; the field set in annotation will fully replace the field from mesh config defaults.
+// This is different than a deep merge provided by protobuf.
+// For example, `"tracing": { "sampling": 5 }` would completely override a setting configuring a tracing provider
+// such as `"tracing": { "zipkin": { "address": "..." } }`.
+//
+// Note: fields in ProxyConfig are not dynamically configured; changes will require restart of workloads to take effect.
 message ProxyConfig {
   // Path to the generated configuration file directory.
   // Proxy agent generates the actual configuration and stores it in this directory.
@@ -300,31 +360,47 @@ message ProxyConfig {
   // Path to the proxy binary
   string binary_path = 2;
 
-  // Service cluster defines the name for the `service_cluster` that is
-  // shared by all Envoy instances. This setting corresponds to
-  // `--service-cluster` flag in Envoy.  In a typical Envoy deployment, the
-  // `service-cluster` flag is used to identify the caller, for
-  // source-based routing scenarios.
-  //
-  // Since Istio does not assign a local `service/service` version to each
-  // Envoy instance, the name is same for all of them.  However, the
-  // source/caller's identity (e.g., IP address) is encoded in the
-  // `--service-node` flag when launching Envoy.  When the RDS service
-  // receives API calls from Envoy, it uses the value of the `service-node`
-  // flag to compute routes that are relative to the service instances
-  // located at that IP address.
-  string service_cluster = 3;
+  // Allows specification of various Istio-supported naming schemes for the
+  // Envoy `service_cluster` value. The `servce_cluster` value is primarily used
+  // by Envoys to provide service names for tracing spans.
+  enum TracingServiceName {
+    // Default scheme. Uses the `app` label and workload namespace to construct
+    // a cluster name. If the `app` label does not exist `istio-proxy` is used.
+    APP_LABEL_AND_NAMESPACE = 0;
+    // Uses the canonical name for a workload (*excluding namespace*).
+    CANONICAL_NAME_ONLY = 1;
+    // Uses the canonical name and namespace for a workload.
+    CANONICAL_NAME_AND_NAMESPACE = 2;
+  }
+  
+  oneof cluster_name {
+    // Service cluster defines the name for the `service_cluster` that is
+    // shared by all Envoy instances. This setting corresponds to
+    // `--service-cluster` flag in Envoy.  In a typical Envoy deployment, the
+    // `service-cluster` flag is used to identify the caller, for
+    // source-based routing scenarios.
+    //
+    // Since Istio does not assign a local `service/service` version to each
+    // Envoy instance, the name is same for all of them.  However, the
+    // source/caller's identity (e.g., IP address) is encoded in the
+    // `--service-node` flag when launching Envoy.  When the RDS service
+    // receives API calls from Envoy, it uses the value of the `service-node`
+    // flag to compute routes that are relative to the service instances
+    // located at that IP address.
+    string service_cluster = 3;
+    
+    // Used by Envoy proxies to assign the values for the service names in trace
+    // spans.
+    TracingServiceName tracing_service_name = 36;
+  }
 
   // The time in seconds that Envoy will drain connections during a hot
   // restart. MUST be >=1s (e.g., _1s/1m/1h_)
   // Default drain duration is `45s`.
   google.protobuf.Duration drain_duration = 4;
 
-  // The time in seconds that Envoy will wait before shutting down the
-  // parent process during a hot restart. MUST be >=1s (e.g., `1s/1m/1h`).
-  // MUST BE greater than `drain_duration` parameter.
-  // Default shutdown duration is `60s`.
-  google.protobuf.Duration parent_shutdown_duration = 5;
+  reserved "parent_shutdown_duration";
+  reserved 5;
 
   // Address of the discovery service exposing xDS with mTLS connection.
   // The inject configuration may override this value.
@@ -388,6 +464,9 @@ message ProxyConfig {
     // filtering and manipulation. This mode also configures the sidecar to run with the
     // `CAP_NET_ADMIN` capability, which is required to use `TPROXY`.
     TPROXY = 1;
+    // The `NONE` mode does not configure redirect to Envoy at all. This is an advanced
+    // configuration that typically requires changes to user applications.
+    NONE = 2;
   }
 
   // The mode used to redirect inbound traffic to Envoy.
@@ -397,7 +476,8 @@ message ProxyConfig {
   Tracing tracing = 19;
 
   // Secret Discovery Service(SDS) configuration to be used by the proxy.
-  SDS sds = 21;
+  // $hide_from_docs
+  SDS sds = 21 [deprecated=true];
 
   // Address of the service to which access logs from Envoys should be
   // sent. (e.g. `accesslog-service:15000`). See [Access Log
@@ -413,6 +493,10 @@ message ProxyConfig {
   // Additional environment variables for the proxy.
   // Names starting with `ISTIO_META_` will be included in the generated bootstrap and sent to the XDS server.
   map<string,string> proxy_metadata = 24;
+
+  // Envoy [runtime configuration](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/operations/runtime) to set during bootstrapping.
+  // This enables setting experimental, unsafe, unsupported, and deprecated features that should be used with extreme caution.
+  map<string,string>  runtime_values = 37;
 
   // Port on which the agent should listen for administrative commands such as readiness probe.
   // Default is set to port `15020`.
@@ -471,15 +555,16 @@ message ProxyConfig {
   // (`sidecar.istio.io/statsInclusionPrefixes`,
   // `sidecar.istio.io/statsInclusionRegexps`, and
   // `sidecar.istio.io/statsInclusionSuffixes`). For example, to enable stats
-  // for circuit breaker, retry, and upstream connections, you can specify stats
-  // matcher as follow:
+  // for circuit breakers, request retries, upstream connections, and request timeouts,
+  // you can specify stats matcher as follows:
   // ```yaml
   // proxyStatsMatcher:
   //   inclusionRegexps:
-  //     - .*circuit_breakers.*
-  //   inclusionPrefixes:
-  //     - upstream_rq_retry
-  //     - upstream_cx
+  //     - .*outlier_detection.*
+  //     - .*upstream_rq_retry.*
+  //     - .*upstream_cx_.*
+  //   inclusionSuffixes:
+  //     - upstream_rq_timeout
   // ```
   // Note including more Envoy stats might increase number of time series
   // collected by prometheus significantly. Care needs to be taken on Prometheus
@@ -498,6 +583,12 @@ message ProxyConfig {
   // The plugin certificates (the 'cacerts' secret), self-signed certificates (the 'istio-ca-secret' secret)
   // are added automatically by Istiod.
   repeated string ca_certificates_pem = 34;
+
+  // Specifies the details of the proxy image.
+  istio.networking.v1beta1.ProxyImage image = 35;
+
+  // Specifies the details of the Private Key Provider configuration for gateway and sidecar proxies.
+  PrivateKeyProvider private_key_provider = 38;
 }
 
 message RemoteService {

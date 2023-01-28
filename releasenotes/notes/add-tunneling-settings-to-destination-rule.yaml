@@ -1,0 +1,12 @@
+apiVersion: release-notes/v2
+
+kind: feature
+area: traffic-management
+issue: []
+
+releaseNotes:
+- |
+    **Added** settings for tunneling to DestinationRule API.
+
+docs:
+- https://docs.google.com/document/d/1QbjsBwM0QyQxJIs2LJBUvITap2QeqOKmsHQrGFK9lWQ

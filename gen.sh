@@ -16,6 +16,9 @@
 
 set -eu
 
+# Sync API versions
+scripts/sync.sh
+
 # Generate all protos
 buf generate \
   --path networking \
@@ -23,7 +26,9 @@ buf generate \
   --path type \
   --path analysis \
   --path authentication \
-  --path meta
+  --path meta \
+  --path telemetry \
+  --path extensions
 
 # These folders do not have the full plugins used, as they are not full CRDs.
 # We pass them a custom configuration to exclude the non-required files
@@ -32,11 +37,9 @@ buf generate --template buf.gen-noncrd.yaml \
   --path mcp \
   --path mesh
 
-# Custom hacks to post-process some outputs
-go run ./operator/fixup_structs/main.go -f operator/v1alpha1/operator.pb.go
-go run ./operator/fixup_structs/main.go -f mesh/v1alpha1/config.pb.go
-go run ./operator/fixup_structs/main.go -f mesh/v1alpha1/network.pb.go
-go run ./operator/fixup_structs/main.go -f mesh/v1alpha1/proxy.pb.go
+# These plugins are sent to Envoy, which uses golang/protobuf, so do not use gogo
+buf generate --template buf.gen-golang.yaml \
+  --path envoy
 
 # Generate CRDs and open-api schema
 cue-gen -paths=common-protos -f=./cue.yaml

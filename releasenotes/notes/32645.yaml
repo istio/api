@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - 32645
+
+releaseNotes:
+  - |
+    **Added** support for splitting local origin errors in outlier detection of Destination Rule API.

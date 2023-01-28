@@ -60,6 +60,8 @@ import "networking/v1alpha3/virtual_service.proto";
 // configuration_*. This global default `Sidecar` configuration should not have
 // any `workloadSelector`.
 //
+// **NOTE 3**: *_A `Sidecar` is not applicable to gateways, even though gateways are istio-proxies_*.
+//
 // The example below declares a global default `Sidecar` configuration
 // in the root namespace called `istio-config`, that configures
 // sidecars in all namespaces to allow egress traffic only to other
@@ -401,6 +403,82 @@ import "networking/v1alpha3/virtual_service.proto";
 // {{</tab>}}
 // {{</tabset>}}
 //
+// The following example declares a `Sidecar` configuration in the
+// `prod-us1` namespace for all pods with labels `app: ratings`
+// belonging to the `ratings.prod-us1` service.  The service accepts
+// inbound HTTPS traffic on port 8443 and the sidecar proxy terminates
+// one way TLS using the given server certificates.
+// The traffic is then forwarded to the attached workload instance
+// listening on a Unix domain socket.
+// It is expected that PeerAuthentication policy would be configured
+// in order to set mTLS mode to "DISABLE" on specific
+// ports.
+// In this example, the mTLS mode is disabled on PORT 80.
+// This feature is currently experimental.
+//
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: Sidecar
+// metadata:
+//   name: ratings
+//   namespace: prod-us1
+// spec:
+//   workloadSelector:
+//     labels:
+//       app: ratings
+//   ingress:
+//   - port:
+//       number: 80
+//       protocol: HTTPS
+//       name: somename
+//     defaultEndpoint: unix:///var/run/someuds.sock
+//     tls:
+//       mode: SIMPLE
+//       privateKey: "/etc/certs/privatekey.pem"
+//       serverCertificate: "/etc/certs/servercert.pem"
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1" category-value="v1">}}
+// ```yaml
+// apiVersion: v1
+// kind: Service
+// metadata:
+//   name: ratings
+//   labels:
+//     app: ratings
+//     service: ratings
+// spec:
+//   ports:
+//   - port: 8443
+//     name: https
+//     targetPort: 80
+//   selector:
+//     app: ratings
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: PeerAuthentication
+// metadata:
+//   name: ratings-peer-auth
+//   namespace: prod-us1
+// spec:
+//   selector:
+//     matchLabels:
+//       app: ratings
+//   mtls:
+//     mode: STRICT
+//   portLevelMtls:
+//     80:
+//       mode: DISABLE
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 package istio.networking.v1alpha3;
 
 option go_package = "istio.io/api/networking/v1alpha3";
@@ -426,6 +504,9 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
 // +genclient
 // +k8s:deepcopy-gen=true
+// -->
+// <!-- istio code generation tags
+// +istio.io/sync-start
 // -->
 message Sidecar {
   // Criteria used to select the specific set of pods/VMs on which this
@@ -466,8 +547,8 @@ message IstioIngressListener {
   // The port associated with the listener.
   Port port = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // The IP to which the listener should be bound. Must be in the
-  // format `x.x.x.x`. Unix domain socket addresses are not allowed in
+  // The IP(IPv4 or IPv6) to which the listener should be bound.
+  // Unix domain socket addresses are not allowed in
   // the bind field for ingress listeners. If omitted, Istio will
   // automatically configure the defaults based on imported services
   // and the workload instances to which this configuration is applied
@@ -482,12 +563,19 @@ message IstioIngressListener {
   // traffic should be forwarded to. This configuration can be used to
   // redirect traffic arriving at the bind `IP:Port` on the sidecar to a `localhost:port`
   // or Unix domain socket where the application workload instance is listening for
-  // connections. Arbitrary IPs are not supported. Format should be one of `127.0.0.1:PORT`, `0.0.0.0:PORT`
-  // (which will forward to the instance IP), or `unix:///path/to/socket`
+  // connections. Arbitrary IPs are not supported. Format should be one of
+  // `127.0.0.1:PORT`, `[::1]:PORT` (forward to localhost),
+  // `0.0.0.0:PORT`, `[::]:PORT` (forward to the instance IP),
+  // or `unix:///path/to/socket` (forward to Unix domain socket).
   string default_endpoint = 4 [(google.api.field_behavior) = REQUIRED];
 
   reserved "localhost_client_tls";
   reserved 5, 6;
+
+  // Set of TLS related options that will enable TLS termination on the
+  // sidecar for requests originating from outside the mesh.
+  // Currently supports only SIMPLE and MUTUAL TLS modes.
+  ServerTLSSettings tls = 7;
 }
 
 // `IstioEgressListener` specifies the properties of an outbound traffic
@@ -504,8 +592,8 @@ message IstioEgressListener {
   // port.
   Port port = 1;
 
-  // The IP or the Unix domain socket to which the listener should be bound
-  // to. Port MUST be specified if bind is not empty. Format: `x.x.x.x` or
+  // The IP(IPv4 or IPv6) or the Unix domain socket to which the listener should be bound
+  // to. Port MUST be specified if bind is not empty. Format: IPv4 or IPv6 address formats or
   // `unix:///path/to/uds` or `unix://@foobar` (Linux abstract namespace). If
   // omitted, Istio will automatically configure the defaults based on imported
   // services, the workload instances to which this configuration is applied to and
@@ -545,15 +633,6 @@ message IstioEgressListener {
   // Private configurations (e.g., `exportTo` set to `.`) will
   // not be available. Refer to the `exportTo` setting in `VirtualService`,
   // `DestinationRule`, and `ServiceEntry` configurations for details.
-  //
-  // **WARNING:** The list of egress hosts in a `Sidecar` must also include
-  // the Mixer control plane services if they are enabled. Envoy will not
-  // be able to reach them otherwise. For example, add host
-  // `istio-system/istio-telemetry.istio-system.svc.cluster.local` if telemetry
-  // is enabled, `istio-system/istio-policy.istio-system.svc.cluster.local` if
-  // policy is enabled, or add `istio-system/*` to allow all services in the
-  // `istio-system` namespace. This requirement is temporary and will be removed
-  // in a future Istio release.
   repeated string hosts = 4 [(google.api.field_behavior) = REQUIRED];
 
   reserved "localhost_server_tls";
@@ -561,7 +640,7 @@ message IstioEgressListener {
 }
 
 // `WorkloadSelector` specifies the criteria used to determine if the
-// `Gateway`, `Sidecar`, `EnvoyFilter`, or `ServiceEntry`
+// `Gateway`, `Sidecar`, `EnvoyFilter`, `ServiceEntry`, or `DestinationRule`
 // configuration can be applied to a proxy. The matching criteria
 // includes the metadata associated with a proxy, workload instance
 // info such as labels attached to the pod/VM, or any other info that
@@ -616,7 +695,7 @@ message OutboundTrafficPolicy {
   // Envoy's dynamic forward proxy can handle only HTTP and TLS
   // connections.
   // $hide_from_docs
-  istio.networking.v1alpha3.Destination egress_proxy = 2;
+  Destination egress_proxy = 2;
 }
 
 

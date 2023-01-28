@@ -23,7 +23,6 @@ all: gen
 repo_dir := .
 
 protolock = protolock
-protolock_release = /bin/bash scripts/check-release-locks.sh
 annotations_prep = annotations_prep
 htmlproofer = htmlproofer
 cue = cue-gen -paths=common-protos
@@ -47,7 +46,8 @@ gen: \
 	generate-annotations \
 	generate-labels \
 	mirror-licenses \
-	tidy-go
+	tidy-go \
+	proto-commit
 
 gen-check: gen check-clean-repo
 
@@ -98,9 +98,6 @@ proto-commit-force:
 proto-status:
 	@$(protolock) status
 
-release-lock-status:
-	@$(protolock_release)
-
 #####################
 # Misc
 #####################
@@ -108,6 +105,7 @@ release-lock-status:
 # lint-protos is different for istio/api. List all other lint-all targets and add local-lint-protos
 local-lint-protos:
 	@buf lint
+	@./scripts/check-operator-proto.sh
 
 lint: lint-dockerfiles lint-scripts lint-yaml lint-helm lint-copyright-banner lint-go lint-python lint-markdown lint-sass lint-typescript lint-licenses local-lint-protos
  	@$(htmlproofer) . --url-swap "istio.io:preliminary.istio.io" --assume-extension --check-html --check-external-hash --check-opengraph --timeframe 2d --storage-dir $(repo_dir)/.htmlproofer --url-ignore "/localhost/"
@@ -118,7 +116,7 @@ fmt: format-python
 # CI System
 #####################
 
-presubmit: proto-commit lint release-lock-status
+presubmit: proto-commit lint
 postsubmit: presubmit
 
 #####################

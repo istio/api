@@ -1,0 +1,8 @@
+apiVersion: release-notes/v2
+kind: bug-fix
+area: documentation
+issue: []
+
+releaseNotes:
+- |
+    **Fixed** formatting of the telemetry configuration reference page.

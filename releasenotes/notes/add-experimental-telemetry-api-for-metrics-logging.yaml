@@ -1,0 +1,18 @@
+apiVersion: release-notes/v2
+
+kind: feature
+area: telemetry
+issue:
+- 24284
+
+releaseNotes:
+- |
+    **Added** experimental Telemetry API for workload-level specification of metrics generation
+    and access logging behavior. The new metrics functionality allows customization of metrics behavior,
+    including adding and removing metrics tags. The access logging behavior is restricted to enablement
+    in this release.
+
+# docs is a list of related docs to the change.
+docs:
+- https://docs.google.com/document/d/1pTFVzGii7sB4uALMsrUN4ALFc0J7vI2UyBnJpP_bsgU/edit
+- https://docs.google.com/document/d/1ICP1yt2JKVpISdaaFXJp1YokSu2YbV4FIU3RxXt86Ps/edit 

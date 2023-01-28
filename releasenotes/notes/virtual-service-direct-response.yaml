@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - https://github.com/istio/istio/issues/29264
+
+releaseNotes:
+  - |
+    **Added** Direct Response support for VirtualServices.
