@@ -37719,6 +37719,22 @@
                 "integer": 4
               }
             ]
+          },
+          {
+            "name": "Stapling.StaplingMode",
+            "enum_fields": [
+              {
+                "name": "OPTIONAL"
+              },
+              {
+                "name": "PREFERRED",
+                "integer": 1
+              },
+              {
+                "name": "MANDATORY",
+                "integer": 2
+              }
+            ]
           }
         ],
         "messages": [
@@ -37918,6 +37934,31 @@
                 "name": "cipher_suites",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 13,
+                "name": "ocsp",
+                "type": "OCSP"
+              }
+            ]
+          },
+          {
+            "name": "OCSP",
+            "messages": [
+              {
+                "name": "Stapling",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "mode",
+                    "type": "StaplingMode"
+                  },
+                  {
+                    "id": 2,
+                    "name": "path",
+                    "type": "string"
+                  }
+                ]
               }
             ]
           }
@@ -40199,6 +40240,22 @@
                 "integer": 4
               }
             ]
+          },
+          {
+            "name": "Stapling.StaplingMode",
+            "enum_fields": [
+              {
+                "name": "OPTIONAL"
+              },
+              {
+                "name": "PREFERRED",
+                "integer": 1
+              },
+              {
+                "name": "MANDATORY",
+                "integer": 2
+              }
+            ]
           }
         ],
         "messages": [
@@ -40398,6 +40455,31 @@
                 "name": "cipher_suites",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 13,
+                "name": "ocsp",
+                "type": "OCSP"
+              }
+            ]
+          },
+          {
+            "name": "OCSP",
+            "messages": [
+              {
+                "name": "Stapling",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "mode",
+                    "type": "StaplingMode"
+                  },
+                  {
+                    "id": 2,
+                    "name": "path",
+                    "type": "string"
+                  }
+                ]
               }
             ]
           }

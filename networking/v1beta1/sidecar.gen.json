@@ -78,6 +78,10 @@
           }
         }
       },
+      "istio.networking.v1beta1.OCSP": {
+        "description": "OCSP Settings",
+        "type": "object"
+      },
       "istio.networking.v1beta1.OutboundTrafficPolicy": {
         "description": "`OutboundTrafficPolicy` sets the default behavior of the sidecar for handling outbound traffic from the application. If your application uses one or more external services that are not known apriori, setting the policy to `ALLOW_ANY` will cause the sidecars to route any unknown traffic originating from the application to its requested destination. Users are strongly encouraged to use `ServiceEntry` configurations to explicitly declare any external dependencies, instead of using `ALLOW_ANY`, so that traffic to these services can be monitored.",
         "type": "object",
@@ -189,6 +193,9 @@
             "items": {
               "type": "string"
             }
+          },
+          "ocsp": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.OCSP"
           }
         }
       },

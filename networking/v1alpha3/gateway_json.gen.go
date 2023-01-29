@@ -50,6 +50,28 @@ func (this *ServerTLSSettings) UnmarshalJSON(b []byte) error {
 	return GatewayUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for OCSP
+func (this *OCSP) MarshalJSON() ([]byte, error) {
+	str, err := GatewayMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for OCSP
+func (this *OCSP) UnmarshalJSON(b []byte) error {
+	return GatewayUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for OCSP_Stapling
+func (this *OCSP_Stapling) MarshalJSON() ([]byte, error) {
+	str, err := GatewayMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for OCSP_Stapling
+func (this *OCSP_Stapling) UnmarshalJSON(b []byte) error {
+	return GatewayUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 var (
 	GatewayMarshaler   = &jsonpb.Marshaler{}
 	GatewayUnmarshaler = &jsonpb.Unmarshaler{AllowUnknownFields: true}
