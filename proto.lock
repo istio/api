@@ -33172,6 +33172,120 @@
       }
     },
     {
+      "protopath": "envoy:/:config:/:core:/:v3:/:protocol.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "Http2ProtocolOptions",
+            "fields": [
+              {
+                "id": 1,
+                "name": "hpack_table_size",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 2,
+                "name": "max_concurrent_streams",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 3,
+                "name": "initial_stream_window_size",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 4,
+                "name": "initial_connection_window_size",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 5,
+                "name": "allow_connect",
+                "type": "bool"
+              },
+              {
+                "id": 6,
+                "name": "allow_metadata",
+                "type": "bool"
+              },
+              {
+                "id": 7,
+                "name": "max_outbound_frames",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 8,
+                "name": "max_outbound_control_frames",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 9,
+                "name": "max_consecutive_inbound_frames_with_empty_payload",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 10,
+                "name": "max_inbound_priority_frames_per_stream",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 11,
+                "name": "max_inbound_window_update_frames_per_data_frame_sent",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 12,
+                "name": "stream_error_on_invalid_http_messaging",
+                "type": "bool"
+              },
+              {
+                "id": 14,
+                "name": "override_stream_error_on_invalid_http_message",
+                "type": "google.protobuf.BoolValue"
+              },
+              {
+                "id": 13,
+                "name": "custom_settings_parameters",
+                "type": "SettingsParameter",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "SettingsParameter",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "identifier",
+                    "type": "google.protobuf.UInt32Value"
+                  },
+                  {
+                    "id": 2,
+                    "name": "value",
+                    "type": "google.protobuf.UInt32Value"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/wrappers.proto"
+          }
+        ],
+        "package": {
+          "name": "envoy.config.core.v3"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "github.com/envoyproxy/go-control-plane/envoy/config/core/v3;corev3"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "envoy:/:config:/:filter:/:http:/:alpn:/:v2alpha1:/:config.proto",
       "def": {
         "enums": [
@@ -34818,6 +34932,11 @@
                 "id": 63,
                 "name": "mesh_mTLS",
                 "type": "TLSConfig"
+              },
+              {
+                "id": 64,
+                "name": "default_http2_protocol_options",
+                "type": "envoy.config.core.v3.Http2ProtocolOptions"
               }
             ],
             "reserved_ids": [
@@ -35628,6 +35747,9 @@
           },
           {
             "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
+          },
+          {
+            "path": "envoy/config/core/v3/protocol.proto"
           }
         ],
         "package": {
