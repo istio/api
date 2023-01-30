@@ -7011,6 +7011,25 @@ spec:
                 description: Optional.
                 items:
                   properties:
+                    definitions:
+                      description: Optional.
+                      items:
+                        properties:
+                          name:
+                            description: Name of the metric.
+                            type: string
+                          type:
+                            description: Type of the metric.
+                            enum:
+                            - COUNTER
+                            - GAUGE
+                            - HISTOGRAM
+                            type: string
+                          value:
+                            description: Metric value expresion.
+                            type: string
+                        type: object
+                      type: array
                     overrides:
                       description: Optional.
                       items:

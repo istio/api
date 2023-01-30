@@ -171,6 +171,17 @@ func (this *AccessLogging_Filter) UnmarshalJSON(b []byte) error {
 	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for MetricDefinition
+func (this *MetricDefinition) MarshalJSON() ([]byte, error) {
+	str, err := TelemetryMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for MetricDefinition
+func (this *MetricDefinition) UnmarshalJSON(b []byte) error {
+	return TelemetryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 var (
 	TelemetryMarshaler   = &jsonpb.Marshaler{}
 	TelemetryUnmarshaler = &jsonpb.Unmarshaler{AllowUnknownFields: true}

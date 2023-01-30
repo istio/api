@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.telemetry.v1alpha1.Telemetry
 aliases: [/docs/reference/config/telemetry/v1alpha1/telemetry]
-number_of_entries: 18
+number_of_entries: 20
 ---
 <p>Telemetry defines how the telemetry is generated for workloads within a mesh.</p>
 <p>For mesh level configuration, put the resource in root configuration
@@ -618,6 +618,54 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="MetricDefinition">MetricDefinition</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MetricDefinition-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>Name of the metric.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MetricDefinition-value">
+<td><code>value</code></td>
+<td><code>string</code></td>
+<td>
+<p>Metric value expresion.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MetricDefinition-type">
+<td><code>type</code></td>
+<td><code><a href="#MetricType">MetricType</a></code></td>
+<td>
+<p>Type of the metric.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="Tracing-TracingSelector">Tracing.TracingSelector</h2>
 <section>
 <p>TracingSelector provides a coarse-grained ability to configure tracing
@@ -1144,6 +1192,40 @@ source of the network traffic.</p>
 <td>
 <p>Selects for scenarios when the workload is the
 destination of the network traffic.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MetricType">MetricType</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MetricType-COUNTER">
+<td><code>COUNTER</code></td>
+<td>
+<p>Counter metric type.</p>
+
+</td>
+</tr>
+<tr id="MetricType-GAUGE">
+<td><code>GAUGE</code></td>
+<td>
+<p>Gauge metric type.</p>
+
+</td>
+</tr>
+<tr id="MetricType-HISTOGRAM">
+<td><code>HISTOGRAM</code></td>
+<td>
+<p>Histogram metric type.</p>
 
 </td>
 </tr>

@@ -45046,6 +45046,22 @@
                 "integer": 1
               }
             ]
+          },
+          {
+            "name": "MetricType",
+            "enum_fields": [
+              {
+                "name": "COUNTER"
+              },
+              {
+                "name": "GAUGE",
+                "integer": 1
+              },
+              {
+                "name": "HISTOGRAM",
+                "integer": 2
+              }
+            ]
           }
         ],
         "messages": [
@@ -45225,6 +45241,12 @@
                 "id": 3,
                 "name": "reporting_interval",
                 "type": "google.protobuf.Duration"
+              },
+              {
+                "id": 4,
+                "name": "definitions",
+                "type": "MetricDefinition",
+                "is_repeated": true
               }
             ]
           },
@@ -45335,6 +45357,26 @@
                     "type": "string"
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "name": "MetricDefinition",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "value",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "type",
+                "type": "MetricType"
               }
             ]
           }

@@ -402,6 +402,10 @@ message Metrics {
   // This currently only supports TCP metrics but we may use this for long duration HTTP streams in the future.
   // The default duration is `5s`.
   google.protobuf.Duration reporting_interval = 3;
+
+  // Optional. List of definitions of metrics to be generated.
+  // $hide_from_docs
+  repeated MetricDefinition definitions = 4;
 }
 
 // WorkloadMode allows selection of the role of the underlying workload in
@@ -653,4 +657,26 @@ message AccessLogging {
   // Optional. If specified, this filter will be used to select specific
   // requests/connections for logging.
   Filter filter = 3;
+}
+
+enum MetricType {
+  // Counter metric type.
+  COUNTER = 0;
+
+  // Gauge metric type.
+  GAUGE = 1;
+
+  // Histogram metric type.
+  HISTOGRAM = 2;
+}
+
+message MetricDefinition {
+  // Name of the metric.
+  string name = 1;
+
+  // Metric value expresion.
+  string value = 2;
+
+  // Type of the metric.
+  MetricType type = 4;
 }
