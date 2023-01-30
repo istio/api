@@ -26,10 +26,6 @@
           }
         }
       },
-      "istio.networking.v1alpha3.OCSP": {
-        "description": "OCSP Settings",
-        "type": "object"
-      },
       "istio.networking.v1alpha3.Port": {
         "description": "Port describes the properties of a specific port of a service.",
         "type": "object",
@@ -145,9 +141,13 @@
             }
           },
           "ocsp": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.OCSP"
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ServerTLSSettings.OCSP"
           }
         }
+      },
+      "istio.networking.v1alpha3.ServerTLSSettings.OCSP": {
+        "description": "OCSP Settings",
+        "type": "object"
       },
       "istio.networking.v1alpha3.ServerTLSSettings.TLSProtocol": {
         "description": "TLS protocol versions.",

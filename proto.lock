@@ -37940,23 +37940,25 @@
                 "name": "ocsp",
                 "type": "OCSP"
               }
-            ]
-          },
-          {
-            "name": "OCSP",
+            ],
             "messages": [
               {
-                "name": "Stapling",
-                "fields": [
+                "name": "OCSP",
+                "messages": [
                   {
-                    "id": 1,
-                    "name": "mode",
-                    "type": "StaplingMode"
-                  },
-                  {
-                    "id": 2,
-                    "name": "path",
-                    "type": "string"
+                    "name": "Stapling",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "mode",
+                        "type": "StaplingMode"
+                      },
+                      {
+                        "id": 2,
+                        "name": "path",
+                        "type": "string"
+                      }
+                    ]
                   }
                 ]
               }
@@ -40461,23 +40463,25 @@
                 "name": "ocsp",
                 "type": "OCSP"
               }
-            ]
-          },
-          {
-            "name": "OCSP",
+            ],
             "messages": [
               {
-                "name": "Stapling",
-                "fields": [
+                "name": "OCSP",
+                "messages": [
                   {
-                    "id": 1,
-                    "name": "mode",
-                    "type": "StaplingMode"
-                  },
-                  {
-                    "id": 2,
-                    "name": "path",
-                    "type": "string"
+                    "name": "Stapling",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "mode",
+                        "type": "StaplingMode"
+                      },
+                      {
+                        "id": 2,
+                        "name": "path",
+                        "type": "string"
+                      }
+                    ]
                   }
                 ]
               }

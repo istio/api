@@ -50,25 +50,25 @@ func (this *ServerTLSSettings) UnmarshalJSON(b []byte) error {
 	return GatewayUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for OCSP
-func (this *OCSP) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for ServerTLSSettings_OCSP
+func (this *ServerTLSSettings_OCSP) MarshalJSON() ([]byte, error) {
 	str, err := GatewayMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for OCSP
-func (this *OCSP) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for ServerTLSSettings_OCSP
+func (this *ServerTLSSettings_OCSP) UnmarshalJSON(b []byte) error {
 	return GatewayUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for OCSP_Stapling
-func (this *OCSP_Stapling) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for ServerTLSSettings_OCSP_Stapling
+func (this *ServerTLSSettings_OCSP_Stapling) MarshalJSON() ([]byte, error) {
 	str, err := GatewayMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for OCSP_Stapling
-func (this *OCSP_Stapling) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for ServerTLSSettings_OCSP_Stapling
+func (this *ServerTLSSettings_OCSP_Stapling) UnmarshalJSON(b []byte) error {
 	return GatewayUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

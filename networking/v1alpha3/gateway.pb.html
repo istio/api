@@ -817,7 +817,7 @@ No
 </tr>
 <tr id="ServerTLSSettings-ocsp">
 <td><code>ocsp</code></td>
-<td><code><a href="#OCSP">OCSP</a></code></td>
+<td><code><a href="#ServerTLSSettings-OCSP">OCSP</a></code></td>
 <td>
 <p>Optional: settings for OCSP and OCSP Stapling</p>
 
@@ -829,12 +829,12 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="OCSP">OCSP</h2>
+<h2 id="ServerTLSSettings-OCSP">ServerTLSSettings.OCSP</h2>
 <section>
 <p>OCSP Settings</p>
 
 </section>
-<h2 id="OCSP-Stapling">OCSP.Stapling</h2>
+<h2 id="ServerTLSSettings-OCSP-Stapling">ServerTLSSettings.OCSP.Stapling</h2>
 <section>
 <p>Settings for OCSP Stapling</p>
 
@@ -848,9 +848,9 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="OCSP-Stapling-mode">
+<tr id="ServerTLSSettings-OCSP-Stapling-mode">
 <td><code>mode</code></td>
-<td><code><a href="#OCSP-Stapling-StaplingMode">StaplingMode</a></code></td>
+<td><code><a href="#ServerTLSSettings-OCSP-Stapling-StaplingMode">StaplingMode</a></code></td>
 <td>
 <p>OCSP Stapling mode for Envoy</p>
 
@@ -859,7 +859,7 @@ No
 No
 </td>
 </tr>
-<tr id="OCSP-Stapling-path">
+<tr id="ServerTLSSettings-OCSP-Stapling-path">
 <td><code>path</code></td>
 <td><code>string</code></td>
 <td>
@@ -868,6 +868,40 @@ No
 </td>
 <td>
 No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ServerTLSSettings-OCSP-Stapling-StaplingMode">ServerTLSSettings.OCSP.Stapling.StaplingMode</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ServerTLSSettings-OCSP-Stapling-StaplingMode-OPTIONAL">
+<td><code>OPTIONAL</code></td>
+<td>
+<p>Matches the LENIENT_STAPLING mode of Envoy</p>
+
+</td>
+</tr>
+<tr id="ServerTLSSettings-OCSP-Stapling-StaplingMode-PREFERRED">
+<td><code>PREFERRED</code></td>
+<td>
+<p>Matches the STRICT_STAPLING mode of Envoy</p>
+
+</td>
+</tr>
+<tr id="ServerTLSSettings-OCSP-Stapling-StaplingMode-MANDATORY">
+<td><code>MANDATORY</code></td>
+<td>
+<p>Matches the MUST_STAPLE mode of Envoy</p>
+
 </td>
 </tr>
 </tbody>
@@ -985,40 +1019,6 @@ fields in <code>TLSOptions</code> should be empty.</p>
 <td><code>TLSV1_3</code></td>
 <td>
 <p>TLS version 1.3</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="OCSP-Stapling-StaplingMode">OCSP.Stapling.StaplingMode</h2>
-<section>
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="OCSP-Stapling-StaplingMode-OPTIONAL">
-<td><code>OPTIONAL</code></td>
-<td>
-<p>Matches the LENIENT_STAPLING mode of Envoy</p>
-
-</td>
-</tr>
-<tr id="OCSP-Stapling-StaplingMode-PREFERRED">
-<td><code>PREFERRED</code></td>
-<td>
-<p>Matches the STRICT_STAPLING mode of Envoy</p>
-
-</td>
-</tr>
-<tr id="OCSP-Stapling-StaplingMode-MANDATORY">
-<td><code>MANDATORY</code></td>
-<td>
-<p>Matches the MUST_STAPLE mode of Envoy</p>
 
 </td>
 </tr>

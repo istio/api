@@ -734,31 +734,31 @@ message ServerTLSSettings {
   // Otherwise default to the default cipher list supported by Envoy.
   repeated string cipher_suites = 9;
 
+  // OCSP Settings
+  message OCSP {
+    
+    // Settings for OCSP Stapling
+    message Stapling {
+
+      enum StaplingMode {
+        // Matches the LENIENT_STAPLING mode of Envoy
+        OPTIONAL = 0;
+
+        // Matches the STRICT_STAPLING mode of Envoy
+        PREFERRED = 1;
+
+        // Matches the MUST_STAPLE mode of Envoy
+        MANDATORY = 2;
+      }
+
+      // OCSP Stapling mode for Envoy
+      StaplingMode mode = 1;
+
+      // Path at which the staple bytes will be stored in the Secret
+      string path = 2;
+    }
+  }
+
   // Optional: settings for OCSP and OCSP Stapling
   OCSP ocsp = 13;
-}
-
-// OCSP Settings
-message OCSP {
-  
-  // Settings for OCSP Stapling
-  message Stapling {
-
-    enum StaplingMode {
-      // Matches the LENIENT_STAPLING mode of Envoy
-      OPTIONAL = 0;
-
-      // Matches the STRICT_STAPLING mode of Envoy
-      PREFERRED = 1;
-
-      // Matches the MUST_STAPLE mode of Envoy
-      MANDATORY = 2;
-    }
-
-    // OCSP Stapling mode for Envoy
-    StaplingMode mode = 1;
-
-    // Path at which the staple bytes will be stored in the Secret
-    string path = 2;
-  }
 }
