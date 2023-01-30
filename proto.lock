@@ -37944,6 +37944,13 @@
             "messages": [
               {
                 "name": "OCSP",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "stapling",
+                    "type": "Stapling"
+                  }
+                ],
                 "messages": [
                   {
                     "name": "Stapling",
@@ -40467,6 +40474,13 @@
             "messages": [
               {
                 "name": "OCSP",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "stapling",
+                    "type": "Stapling"
+                  }
+                ],
                 "messages": [
                   {
                     "name": "Stapling",

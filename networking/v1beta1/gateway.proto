@@ -736,6 +736,8 @@ message ServerTLSSettings {
 
   // OCSP Settings
   message OCSP {
+
+    Stapling stapling = 1;
     
     // Settings for OCSP Stapling
     message Stapling {
