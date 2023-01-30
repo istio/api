@@ -34981,7 +34981,13 @@
                   {
                     "id": 5,
                     "name": "lightstep",
-                    "type": "LightstepTracingProvider"
+                    "type": "LightstepTracingProvider",
+                    "options": [
+                      {
+                        "name": "deprecated",
+                        "value": "true"
+                      }
+                    ]
                   },
                   {
                     "id": 6,
