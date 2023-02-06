@@ -456,7 +456,8 @@
                   ],
                   "properties": {
                     "lightstep": {
-                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider"
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider",
+                      "deprecated": true
                     }
                   }
                 },
@@ -599,7 +600,8 @@
             ],
             "properties": {
               "lightstep": {
-                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider"
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider",
+                "deprecated": true
               }
             }
           },
@@ -1074,7 +1076,7 @@
         ]
       },
       "istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider": {
-        "description": "Defines configuration for an OpenTelemetry tracing backend.",
+        "description": "Defines configuration for an OpenTelemetry tracing backend. Istio 1.16.1 or higher is needed.",
         "type": "object",
         "properties": {
           "service": {
@@ -1442,6 +1444,16 @@
                       "$ref": "#/components/schemas/istio.mesh.v1alpha1.PrivateKeyProvider.CryptoMb"
                     }
                   }
+                },
+                {
+                  "required": [
+                    "qat"
+                  ],
+                  "properties": {
+                    "qat": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.PrivateKeyProvider.QAT"
+                    }
+                  }
                 }
               ]
             }
@@ -1455,6 +1467,16 @@
                 "$ref": "#/components/schemas/istio.mesh.v1alpha1.PrivateKeyProvider.CryptoMb"
               }
             }
+          },
+          {
+            "required": [
+              "qat"
+            ],
+            "properties": {
+              "qat": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.PrivateKeyProvider.QAT"
+              }
+            }
           }
         ]
       },
@@ -1463,7 +1485,17 @@
         "type": "object",
         "properties": {
           "pollDelay": {
-            "description": "How long to wait until the per-thread processing queue should be processed. If the processing queue gets full (eight sign or decrypt requests are received) it is processed immediately. However, if the queue is not filled before the delay has expired, the requests already in the queue are processed, even if the queue is not full. In effect, this value controls the balance between latency and throughput. The duration needs to be set to a non-zero value.",
+            "description": "How long to wait until the per-thread processing queue should be processed. If the processing queue gets full (eight sign or decrypt requests are received) it is processed immediately. However, if the queue is not filled before the delay has expired, the requests already in the queue are processed, even if the queue is not full. In effect, this value controls the balance between latency and throughput. The duration needs to be set to a value greater than or equal to 1 millisecond.",
+            "type": "string"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.PrivateKeyProvider.QAT": {
+        "description": "QAT (QuickAssist Technology) PrivateKeyProvider configuration",
+        "type": "object",
+        "properties": {
+          "pollDelay": {
+            "description": "How long to wait before polling the hardware accelerator after a request has been submitted there. Having a small value leads to quicker answers from the hardware but causes more polling loop spins, leading to potentially larger CPU usage. The duration needs to be set to a value greater than or equal to 1 millisecond.",
             "type": "string"
           }
         }
@@ -1482,10 +1514,6 @@
           },
           "drainDuration": {
             "description": "The time in seconds that Envoy will drain connections during a hot restart. MUST be \u003e=1s (e.g., _1s/1m/1h_) Default drain duration is `45s`.",
-            "type": "string"
-          },
-          "parentShutdownDuration": {
-            "description": "The time in seconds that Envoy will wait before shutting down the parent process during a hot restart. MUST be \u003e=1s (e.g., `1s/1m/1h`). MUST BE greater than `drain_duration` parameter. Default shutdown duration is `60s`.",
             "type": "string"
           },
           "discoveryAddress": {
@@ -2128,7 +2156,7 @@
             "type": "string"
           },
           "subjectAltNames": {
-            "description": "A list of alternate names to verify the subject identity in the certificate. If specified, the proxy will verify that the server certificate's subject alt name matches one of the specified values. If specified, this list overrides the value of subject_alt_names from the ServiceEntry. If unspecified, automatic validation of upstream presented certificate for new upstream connections will be done based on the downstream HTTP host/authority header, provided `VERIFY_CERT_AT_CLIENT` and `ENABLE_AUTO_SNI` environmental variables are set to `true`.",
+            "description": "A list of alternate names to verify the subject identity in the certificate. If specified, the proxy will verify that the server certificate's subject alt name matches one of the specified values. If specified, this list overrides the value of subject_alt_names from the ServiceEntry. If unspecified, automatic validation of upstream presented certificate for new upstream connections will be done based on the downstream HTTP host/authority header, provided `VERIFY_CERTIFICATE_AT_CLIENT` and `ENABLE_AUTO_SNI` environmental variables are set to `true`.",
             "type": "array",
             "items": {
               "type": "string"

@@ -306,13 +306,25 @@ message PrivateKeyProvider {
     // However, if the queue is not filled before the delay has expired, the requests already in the queue
     // are processed, even if the queue is not full.
     // In effect, this value controls the balance between latency and throughput.
-    // The duration needs to be set to a non-zero value.
+    // The duration needs to be set to a value greater than or equal to 1 millisecond.
+    google.protobuf.Duration poll_delay = 1;
+  }
+
+  // QAT (QuickAssist Technology) PrivateKeyProvider configuration
+  message QAT {
+    // How long to wait before polling the hardware accelerator after a request has been submitted there.
+    // Having a small value leads to quicker answers from the hardware but causes more polling loop spins,
+    // leading to potentially larger CPU usage.
+    // The duration needs to be set to a value greater than or equal to 1 millisecond.
     google.protobuf.Duration poll_delay = 1;
   }
 
   // REQUIRED. Specifies detailed configuration for the Private key provider.
   oneof provider {
+    // Use CryptoMb private key provider
     CryptoMb cryptomb = 2;
+    // Use QAT private key provider
+    QAT qat = 3;
   }
 }
 
@@ -387,11 +399,8 @@ message ProxyConfig {
   // Default drain duration is `45s`.
   google.protobuf.Duration drain_duration = 4;
 
-  // The time in seconds that Envoy will wait before shutting down the
-  // parent process during a hot restart. MUST be >=1s (e.g., `1s/1m/1h`).
-  // MUST BE greater than `drain_duration` parameter.
-  // Default shutdown duration is `60s`.
-  google.protobuf.Duration parent_shutdown_duration = 5;
+  reserved "parent_shutdown_duration";
+  reserved 5;
 
   // Address of the discovery service exposing xDS with mTLS connection.
   // The inject configuration may override this value.
@@ -546,15 +555,16 @@ message ProxyConfig {
   // (`sidecar.istio.io/statsInclusionPrefixes`,
   // `sidecar.istio.io/statsInclusionRegexps`, and
   // `sidecar.istio.io/statsInclusionSuffixes`). For example, to enable stats
-  // for circuit breaker, retry, and upstream connections, you can specify stats
-  // matcher as follow:
+  // for circuit breakers, request retries, upstream connections, and request timeouts,
+  // you can specify stats matcher as follows:
   // ```yaml
   // proxyStatsMatcher:
   //   inclusionRegexps:
-  //     - .*circuit_breakers.*
-  //   inclusionPrefixes:
-  //     - upstream_rq_retry
-  //     - upstream_cx
+  //     - .*outlier_detection.*
+  //     - .*upstream_rq_retry.*
+  //     - .*upstream_cx_.*
+  //   inclusionSuffixes:
+  //     - upstream_rq_timeout
   // ```
   // Note including more Envoy stats might increase number of time series
   // collected by prometheus significantly. Care needs to be taken on Prometheus

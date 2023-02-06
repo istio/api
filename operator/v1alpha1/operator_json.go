@@ -20,7 +20,7 @@ import (
 	bytes "bytes"
 	"encoding/json"
 
-	github_com_golang_protobuf_jsonpb "github.com/golang/protobuf/jsonpb"
+	"github.com/golang/protobuf/jsonpb" // nolint: depguard
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"k8s.io/apimachinery/pkg/util/intstr"
 )
@@ -80,7 +80,7 @@ func (in *IntOrString) UnmarshalJSON(value []byte) error {
 	return nil
 }
 
-func (in *IntOrString) MarshalJSONPB(_ *github_com_golang_protobuf_jsonpb.Marshaler) ([]byte, error) {
+func (in *IntOrString) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
 	return in.MarshalJSON()
 }
 
@@ -91,7 +91,7 @@ func (in *IntOrString) MarshalJSON() ([]byte, error) {
 	return json.Marshal(in.StrVal.GetValue())
 }
 
-func (in *IntOrString) UnmarshalJSONPB(_ *github_com_golang_protobuf_jsonpb.Unmarshaler, value []byte) error {
+func (in *IntOrString) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, value []byte) error {
 	return in.UnmarshalJSON(value)
 }
 
@@ -103,6 +103,6 @@ func (in *IntOrString) ToKubernetes() intstr.IntOrString {
 }
 
 var (
-	OperatorMarshaler   = &github_com_golang_protobuf_jsonpb.Marshaler{}
-	OperatorUnmarshaler = &github_com_golang_protobuf_jsonpb.Unmarshaler{}
+	OperatorMarshaler   = &jsonpb.Marshaler{}
+	OperatorUnmarshaler = &jsonpb.Unmarshaler{}
 )

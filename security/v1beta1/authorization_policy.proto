@@ -110,6 +110,30 @@ import "type/v1beta1/selector.proto";
 //         methods: ["POST"]
 // ```
 //
+// The following is another example that sets `action` to `DENY` to create a deny policy.
+// It denies all the requests with "POST" method on port "8080" on all workloads
+// in the `foo` namespace.
+//
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizaionPolicy
+// metadata:
+//   name: httpbin
+//   namespace: foo
+// spec:
+//   action: DENY
+//   rules:
+//   - to:
+//     - operation:
+//         methods: ["POST"]
+//         ports: ["8080"]
+// ```
+//
+// When this rule is applied to TCP traffic, the `method` field (as will all HTTP based attributes) cannot be processed. 
+// For a `DENY` rule, missing attributes are treated as matches. This means all TCP traffic on port 8080 would be denied in the example above.
+// If we were to remove the `ports` match, all TCP traffic would be denied. As a result, it is recommended to always scope `DENY` policies to a specific port, 
+// especially when using HTTP attributes [Authorization Policy for TCP Ports] (https://istio.io/latest/docs/tasks/security/authorization/authz-tcp/).
+//
 // The following authorization policy sets the `action` to "AUDIT". It will audit any GET requests to the path with the
 // prefix "/user/profile".
 //
@@ -219,6 +243,9 @@ option go_package="istio.io/api/security/v1beta1";
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
+// <!-- istio code generation tags
+// +istio.io/sync-start
+// -->
 message AuthorizationPolicy {
   // Optional. The selector decides where to apply the authorization policy. The selector will match with workloads
   // in the same namespace as the authorization policy. If the authorization policy is in the root namespace, the selector
@@ -309,7 +336,7 @@ message AuthorizationPolicy {
 // - Suffix match: "*abc" will match on value "abc" and "xabc".
 // - Presence match: "*" will match when value is not empty.
 message Rule {
-  // From includes a list or sources.
+  // From includes a list of sources.
   message From {
     // Source specifies the source of a request.
     Source source = 1;
@@ -320,7 +347,7 @@ message Rule {
   // If not set, any source is allowed.
   repeated From from = 1;
 
-  // To includes a list or operations.
+  // To includes a list of operations.
   message To {
     // Operation specifies the operation of a request.
     Operation operation = 1;

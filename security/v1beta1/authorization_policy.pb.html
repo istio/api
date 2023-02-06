@@ -84,6 +84,26 @@ spec:
     - operation:
         methods: [&quot;POST&quot;]
 </code></pre>
+<p>The following is another example that sets <code>action</code> to <code>DENY</code> to create a deny policy.
+It denies all the requests with &ldquo;POST&rdquo; method on port &ldquo;8080&rdquo; on all workloads
+in the <code>foo</code> namespace.</p>
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: AuthorizaionPolicy
+metadata:
+  name: httpbin
+  namespace: foo
+spec:
+  action: DENY
+  rules:
+  - to:
+    - operation:
+        methods: [&quot;POST&quot;]
+        ports: [&quot;8080&quot;]
+</code></pre>
+<p>When this rule is applied to TCP traffic, the <code>method</code> field (as will all HTTP based attributes) cannot be processed.
+For a <code>DENY</code> rule, missing attributes are treated as matches. This means all TCP traffic on port 8080 would be denied in the example above.
+If we were to remove the <code>ports</code> match, all TCP traffic would be denied. As a result, it is recommended to always scope <code>DENY</code> policies to a specific port,
+especially when using HTTP attributes [Authorization Policy for TCP Ports] (<a href="https://istio.io/latest/docs/tasks/security/authorization/authz-tcp/)">https://istio.io/latest/docs/tasks/security/authorization/authz-tcp/)</a>.</p>
 <p>The following authorization policy sets the <code>action</code> to &ldquo;AUDIT&rdquo;. It will audit any GET requests to the path with the
 prefix &ldquo;/user/profile&rdquo;.</p>
 <pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
@@ -636,7 +656,7 @@ No
 </section>
 <h2 id="Rule-From">Rule.From</h2>
 <section>
-<p>From includes a list or sources.</p>
+<p>From includes a list of sources.</p>
 
 <table class="message-fields">
 <thead>
@@ -664,7 +684,7 @@ No
 </section>
 <h2 id="Rule-To">Rule.To</h2>
 <section>
-<p>To includes a list or operations.</p>
+<p>To includes a list of operations.</p>
 
 <table class="message-fields">
 <thead>

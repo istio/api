@@ -486,11 +486,10 @@ message MeshConfig {
       EnvoyExternalAuthorizationGrpcProvider envoy_ext_authz_grpc = 3;
       // Configures a tracing provider that uses the Zipkin API.
       ZipkinTracingProvider zipkin = 4;
+      // $hide_from_docs
       // Configures a Lightstep tracing provider.
-      // Note: For Istio 1.15+, configuring this provider will result in
-      // using an OpenTelemetryTracingProvider configured specially for 
-      // Lightstep. This is part of the Lightstep transition to OpenTelemetry.
-      LightstepTracingProvider lightstep = 5;
+      // Deprecated: For Istio 1.15+, please use an OpenTelemetryTracingProvider instead, more details can be found at https://github.com/istio/istio/issues/40027
+      LightstepTracingProvider lightstep = 5 [deprecated=true];
       // Configures a Datadog tracing provider.
       DatadogTracingProvider datadog = 6;
       // Configures a Stackdriver provider.
@@ -990,8 +989,7 @@ message MeshConfig {
       }
     }
 
-    // $hide_from_docs
-    // Defines configuration for an OpenTelemetry tracing backend.
+    // Defines configuration for an OpenTelemetry tracing backend. Istio 1.16.1 or higher is needed.
     message OpenTelemetryTracingProvider {
       // REQUIRED. Specifies the OpenTelemetry endpoint that will receive OTLP traces.
       // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
