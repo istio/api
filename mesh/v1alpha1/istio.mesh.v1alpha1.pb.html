@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 56
+number_of_entries: 58
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -907,20 +907,6 @@ No
 <td><code><a href="#MeshConfig-ExtensionProvider-ZipkinTracingProvider">ZipkinTracingProvider (oneof)</a></code></td>
 <td>
 <p>Configures a tracing provider that uses the Zipkin API.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-ExtensionProvider-lightstep" class="oneof">
-<td><code>lightstep</code></td>
-<td><code><a href="#MeshConfig-ExtensionProvider-LightstepTracingProvider">LightstepTracingProvider (oneof)</a></code></td>
-<td>
-<p>Configures a Lightstep tracing provider.
-Note: For Istio 1.15+, configuring this provider will result in
-using an OpenTelemetryTracingProvider configured specially for
-Lightstep. This is part of the Lightstep transition to OpenTelemetry.</p>
 
 </td>
 <td>
@@ -2252,6 +2238,61 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider">MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider</h2>
+<section>
+<p>Defines configuration for an OpenTelemetry tracing backend. Istio 1.16.1 or higher is needed.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-service">
+<td><code>service</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED. Specifies the OpenTelemetry endpoint that will receive OTLP traces.
+The format is <code>[&lt;Namespace&gt;/]&lt;Hostname&gt;</code>. The specification of <code>&lt;Namespace&gt;</code> is required only when it is insufficient
+to unambiguously resolve a service in the service registry. The <code>&lt;Hostname&gt;</code> is a fully qualified host name of a
+service defined by the Kubernetes service or ServiceEntry.</p>
+<p>Example: &ldquo;otlp.default.svc.cluster.local&rdquo; or &ldquo;bar/otlp.example.com&rdquo;.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-port">
+<td><code>port</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>REQUIRED. Specifies the port of the service.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-max_tag_length">
+<td><code>maxTagLength</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Optional. Controls the overall path length allowed in a reported span.
+NOTE: currently only controls max length of the path tag.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="MeshConfig-ExtensionProvider-StackdriverProvider-Logging">MeshConfig.ExtensionProvider.StackdriverProvider.Logging</h2>
 <section>
 <table class="message-fields">
@@ -2551,6 +2592,19 @@ mesh wide or individual per-workload basis.</p>
 <td><code>cryptomb</code></td>
 <td><code><a href="#PrivateKeyProvider-CryptoMb">CryptoMb (oneof)</a></code></td>
 <td>
+<p>Use CryptoMb private key provider</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="PrivateKeyProvider-qat" class="oneof">
+<td><code>qat</code></td>
+<td><code><a href="#PrivateKeyProvider-QAT">QAT (oneof)</a></code></td>
+<td>
+<p>Use QAT private key provider</p>
+
 </td>
 <td>
 No
@@ -2653,20 +2707,6 @@ No
 <p>The time in seconds that Envoy will drain connections during a hot
 restart. MUST be &gt;=1s (e.g., <em>1s/1m/1h</em>)
 Default drain duration is <code>45s</code>.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="ProxyConfig-parent_shutdown_duration">
-<td><code>parentShutdownDuration</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
-<td>
-<p>The time in seconds that Envoy will wait before shutting down the
-parent process during a hot restart. MUST be &gt;=1s (e.g., <code>1s/1m/1h</code>).
-MUST BE greater than <code>drain_duration</code> parameter.
-Default shutdown duration is <code>60s</code>.</p>
 
 </td>
 <td>
@@ -2925,14 +2965,15 @@ inclusion annotations
 (<code>sidecar.istio.io/statsInclusionPrefixes</code>,
 <code>sidecar.istio.io/statsInclusionRegexps</code>, and
 <code>sidecar.istio.io/statsInclusionSuffixes</code>). For example, to enable stats
-for circuit breaker, retry, and upstream connections, you can specify stats
-matcher as follow:</p>
+for circuit breakers, request retries, upstream connections, and request timeouts,
+you can specify stats matcher as follows:</p>
 <pre><code class="language-yaml">proxyStatsMatcher:
   inclusionRegexps:
-    - .*circuit_breakers.*
-  inclusionPrefixes:
-    - upstream_rq_retry
-    - upstream_cx
+    - .*outlier_detection.*
+    - .*upstream_rq_retry.*
+    - .*upstream_cx_.*
+  inclusionSuffixes:
+    - upstream_rq_timeout
 </code></pre>
 <p>Note including more Envoy stats might increase number of time series
 collected by prometheus significantly. Care needs to be taken on Prometheus
@@ -3209,7 +3250,38 @@ gets full (eight sign or decrypt requests are received) it is processed immediat
 However, if the queue is not filled before the delay has expired, the requests already in the queue
 are processed, even if the queue is not full.
 In effect, this value controls the balance between latency and throughput.
-The duration needs to be set to a non-zero value.</p>
+The duration needs to be set to a value greater than or equal to 1 millisecond.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="PrivateKeyProvider-QAT">PrivateKeyProvider.QAT</h2>
+<section>
+<p>QAT (QuickAssist Technology) PrivateKeyProvider configuration</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="PrivateKeyProvider-QAT-poll_delay">
+<td><code>pollDelay</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>How long to wait before polling the hardware accelerator after a request has been submitted there.
+Having a small value leads to quicker answers from the hardware but causes more polling loop spins,
+leading to potentially larger CPU usage.
+The duration needs to be set to a value greater than or equal to 1 millisecond.</p>
 
 </td>
 <td>

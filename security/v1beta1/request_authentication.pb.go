@@ -296,6 +296,9 @@ const (
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
+// <!-- istio code generation tags
+// +istio.io/sync-start
+// -->
 type RequestAuthentication struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

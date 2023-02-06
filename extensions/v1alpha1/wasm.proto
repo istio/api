@@ -315,17 +315,11 @@ message WasmPlugin {
   // more details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).
   VmConfig vm_config = 11;
 
-  // $hide_from_docs
-  // Hide this from doc until implementing this.
-  //
   // TrafficSelector provides a mechanism to select a specific traffic flow
   // for which this Wasm Plugin will be enabled.
   // When all the sub conditions in the TrafficSelector are satisfied, the
   // traffic will be selected.
   message TrafficSelector {
-    // $hide_from_docs 
-    // Hide this from the doc until implementing this.
-    //
     // Criteria for selecting traffic by their direction.
     // Note that CLIENT and SERVER are analogous to INBOUND and OUTBOUND,
     // respectively.
@@ -333,9 +327,6 @@ message WasmPlugin {
     // If not specified, the default value is CLIENT_AND_SERVER.
     istio.type.v1beta1.WorkloadMode mode = 1;
   
-    // $hide_from_docs 
-    // Hide this from the doc until implementing this.
-    //
     // Criteria for selecting traffic by their destination port.
     // More specifically, for the outbound traffic, the destination port would be 
     // the port of the target service. On the other hand, for the inbound traffic,
@@ -346,9 +337,6 @@ message WasmPlugin {
     repeated istio.type.v1beta1.PortSelector ports = 2;
   }    
 
-  // $hide_from_docs
-  // Hide this from doc until implementing this.
-  //
   // Specifies the criteria to determine which traffic is passed to WasmPlugin.
   // If a traffic satisfies any of TrafficSelectors, 
   // the traffic passes the WasmPlugin.

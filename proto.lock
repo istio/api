@@ -35023,7 +35023,13 @@
                   {
                     "id": 5,
                     "name": "lightstep",
-                    "type": "LightstepTracingProvider"
+                    "type": "LightstepTracingProvider",
+                    "options": [
+                      {
+                        "name": "deprecated",
+                        "value": "true"
+                      }
+                    ]
                   },
                   {
                     "id": 6,
@@ -36152,11 +36158,26 @@
                 "id": 2,
                 "name": "cryptomb",
                 "type": "CryptoMb"
+              },
+              {
+                "id": 3,
+                "name": "qat",
+                "type": "QAT"
               }
             ],
             "messages": [
               {
                 "name": "CryptoMb",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "poll_delay",
+                    "type": "google.protobuf.Duration"
+                  }
+                ]
+              },
+              {
+                "name": "QAT",
                 "fields": [
                   {
                     "id": 1,
@@ -36193,11 +36214,6 @@
               {
                 "id": 4,
                 "name": "drain_duration",
-                "type": "google.protobuf.Duration"
-              },
-              {
-                "id": 5,
-                "name": "parent_shutdown_duration",
                 "type": "google.protobuf.Duration"
               },
               {
@@ -36392,9 +36408,11 @@
               }
             ],
             "reserved_ids": [
+              5,
               9
             ],
             "reserved_names": [
+              "parent_shutdown_duration",
               "connect_timeout"
             ],
             "messages": [
@@ -37888,7 +37906,13 @@
               {
                 "id": 4,
                 "name": "target_port",
-                "type": "uint32"
+                "type": "uint32",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               }
             ]
           },
@@ -38040,7 +38064,7 @@
               {
                 "id": 3,
                 "name": "ports",
-                "type": "Port",
+                "type": "ServicePort",
                 "is_repeated": true,
                 "options": [
                   {
@@ -38089,14 +38113,54 @@
                 "is_repeated": true
               }
             ]
+          },
+          {
+            "name": "ServicePort",
+            "fields": [
+              {
+                "id": 1,
+                "name": "number",
+                "type": "uint32",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "protocol",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "name": "name",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "name": "target_port",
+                "type": "uint32"
+              }
+            ]
           }
         ],
         "imports": [
           {
             "path": "google/api/field_behavior.proto"
-          },
-          {
-            "path": "networking/v1alpha3/gateway.proto"
           },
           {
             "path": "networking/v1alpha3/sidecar.proto"
@@ -40322,7 +40386,13 @@
               {
                 "id": 4,
                 "name": "target_port",
-                "type": "uint32"
+                "type": "uint32",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               }
             ]
           },
@@ -40538,7 +40608,7 @@
               {
                 "id": 3,
                 "name": "ports",
-                "type": "Port",
+                "type": "ServicePort",
                 "is_repeated": true,
                 "options": [
                   {
@@ -40587,14 +40657,54 @@
                 "is_repeated": true
               }
             ]
+          },
+          {
+            "name": "ServicePort",
+            "fields": [
+              {
+                "id": 1,
+                "name": "number",
+                "type": "uint32",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "protocol",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "name": "name",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "name": "target_port",
+                "type": "uint32"
+              }
+            ]
           }
         ],
         "imports": [
           {
             "path": "google/api/field_behavior.proto"
-          },
-          {
-            "path": "networking/v1beta1/gateway.proto"
           },
           {
             "path": "networking/v1beta1/sidecar.proto"
@@ -43623,6 +43733,11 @@
                 "id": 5,
                 "name": "nodePort",
                 "type": "int32"
+              },
+              {
+                "id": 6,
+                "name": "appProtocol",
+                "type": "string"
               }
             ]
           },
@@ -43873,6 +43988,438 @@
           {
             "name": "go_package",
             "value": "istio.io/api/operator/v1alpha1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "security:/:v1:/:authorization_policy.proto",
+      "def": {
+        "enums": [
+          {
+            "name": "AuthorizationPolicy.Action",
+            "enum_fields": [
+              {
+                "name": "ALLOW"
+              },
+              {
+                "name": "DENY",
+                "integer": 1
+              },
+              {
+                "name": "AUDIT",
+                "integer": 2
+              },
+              {
+                "name": "CUSTOM",
+                "integer": 3
+              }
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "name": "AuthorizationPolicy",
+            "fields": [
+              {
+                "id": 1,
+                "name": "selector",
+                "type": "istio.type.v1beta1.WorkloadSelector"
+              },
+              {
+                "id": 2,
+                "name": "rules",
+                "type": "Rule",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "action",
+                "type": "Action"
+              },
+              {
+                "id": 4,
+                "name": "provider",
+                "type": "ExtensionProvider"
+              }
+            ],
+            "messages": [
+              {
+                "name": "ExtensionProvider",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "name",
+                    "type": "string"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Rule",
+            "fields": [
+              {
+                "id": 1,
+                "name": "from",
+                "type": "From",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "to",
+                "type": "To",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "when",
+                "type": "Condition",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "From",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "source",
+                    "type": "Source"
+                  }
+                ]
+              },
+              {
+                "name": "To",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "operation",
+                    "type": "Operation"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Source",
+            "fields": [
+              {
+                "id": 1,
+                "name": "principals",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 5,
+                "name": "not_principals",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "request_principals",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 6,
+                "name": "not_request_principals",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "namespaces",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 7,
+                "name": "not_namespaces",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "ip_blocks",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 8,
+                "name": "not_ip_blocks",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 9,
+                "name": "remote_ip_blocks",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 10,
+                "name": "not_remote_ip_blocks",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "Operation",
+            "fields": [
+              {
+                "id": 1,
+                "name": "hosts",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 5,
+                "name": "not_hosts",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "ports",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 6,
+                "name": "not_ports",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "methods",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 7,
+                "name": "not_methods",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "paths",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 8,
+                "name": "not_paths",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "Condition",
+            "fields": [
+              {
+                "id": 1,
+                "name": "key",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "values",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "not_values",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/api/field_behavior.proto"
+          },
+          {
+            "path": "type/v1beta1/selector.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.security.v1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/security/v1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "security:/:v1:/:jwt.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "JWTRule",
+            "fields": [
+              {
+                "id": 1,
+                "name": "issuer",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "audiences",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "jwks_uri",
+                "type": "string"
+              },
+              {
+                "id": 10,
+                "name": "jwks",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "from_headers",
+                "type": "JWTHeader",
+                "is_repeated": true
+              },
+              {
+                "id": 7,
+                "name": "from_params",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 8,
+                "name": "output_payload_to_header",
+                "type": "string"
+              },
+              {
+                "id": 9,
+                "name": "forward_original_token",
+                "type": "bool"
+              },
+              {
+                "id": 11,
+                "name": "output_claim_to_headers",
+                "type": "ClaimToHeader",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "JWTHeader",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "prefix",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "ClaimToHeader",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "claim",
+                "type": "string"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/api/field_behavior.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.security.v1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/security/v1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "security:/:v1:/:request_authentication.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "RequestAuthentication",
+            "fields": [
+              {
+                "id": 1,
+                "name": "selector",
+                "type": "istio.type.v1beta1.WorkloadSelector"
+              },
+              {
+                "id": 2,
+                "name": "jwt_rules",
+                "type": "JWTRule",
+                "is_repeated": true
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "security/v1/jwt.proto"
+          },
+          {
+            "path": "type/v1beta1/selector.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.security.v1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/security/v1"
           }
         ]
       }
@@ -44271,6 +44818,12 @@
                 "id": 9,
                 "name": "forward_original_token",
                 "type": "bool"
+              },
+              {
+                "id": 11,
+                "name": "output_claim_to_headers",
+                "type": "ClaimToHeader",
+                "is_repeated": true
               }
             ]
           },
@@ -44291,6 +44844,21 @@
               {
                 "id": 2,
                 "name": "prefix",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "ClaimToHeader",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "claim",
                 "type": "string"
               }
             ]
@@ -44721,6 +45289,11 @@
                 "name": "overrides",
                 "type": "MetricsOverrides",
                 "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "reporting_interval",
+                "type": "google.protobuf.Duration"
               }
             ]
           },
@@ -44841,6 +45414,9 @@
           },
           {
             "path": "google/api/field_behavior.proto"
+          },
+          {
+            "path": "google/protobuf/duration.proto"
           },
           {
             "path": "google/protobuf/wrappers.proto"
