@@ -4793,6 +4793,14 @@ spec:
                           type: string
                         uri:
                           type: string
+                        uriRegex:
+                          properties:
+                            pattern:
+                              description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                              type: string
+                            substitution:
+                              type: string
+                          type: object
                       type: object
                     route:
                       description: A HTTP rule can either return a direct_response,
@@ -5576,6 +5584,14 @@ spec:
                           type: string
                         uri:
                           type: string
+                        uriRegex:
+                          properties:
+                            pattern:
+                              description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                              type: string
+                            substitution:
+                              type: string
+                          type: object
                       type: object
                     route:
                       description: A HTTP rule can either return a direct_response,

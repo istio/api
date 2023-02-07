@@ -1687,9 +1687,6 @@ message HTTPRewrite {
   // uri_regex can be used for rewriting portions of path that match the
   // pattern during forwarding the request
   // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
-  // uri_regex can be used for rewriting portions of path that match the
-  // pattern during forwarding the request
-  // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
   RegexMatchAndSubstitute uri_regex = 3;
 }
 

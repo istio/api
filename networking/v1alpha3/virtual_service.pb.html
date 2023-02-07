@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.VirtualService
 aliases: [/docs/reference/config/networking/v1alpha3/virtual-service]
-number_of_entries: 27
+number_of_entries: 28
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -2303,6 +2303,60 @@ No
 <td><code>string</code></td>
 <td>
 <p>rewrite the Authority/Host header with this value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPRewrite-uri_regex">
+<td><code>uriRegex</code></td>
+<td><code><a href="#RegexMatchAndSubstitute">RegexMatchAndSubstitute</a></code></td>
+<td>
+<p>uri_regex can be used for rewriting portions of path that match the
+pattern during forwarding the request
+RE2 style regex-based match (<a href="https://github.com/google/re2/wiki/Syntax)">https://github.com/google/re2/wiki/Syntax)</a>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RegexMatchAndSubstitute">RegexMatchAndSubstitute</h2>
+<section>
+<p>Describes how to match a string and then produce a new string using a regular
+expression and a substitution string.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RegexMatchAndSubstitute-pattern">
+<td><code>pattern</code></td>
+<td><code>string</code></td>
+<td>
+<p>RE2 style regex-based match (<a href="https://github.com/google/re2/wiki/Syntax)">https://github.com/google/re2/wiki/Syntax)</a>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RegexMatchAndSubstitute-substitution">
+<td><code>substitution</code></td>
+<td><code>string</code></td>
+<td>
+<p>The string that should be substituted into matching portions of the
+subject string during a substitution operation to produce a new string.</p>
 
 </td>
 <td>
