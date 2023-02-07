@@ -6,5 +6,4 @@ issue:
 
 releaseNotes:
   - |
-    **Fixed** Add regex rewrite in HTTPRoute.
-
+    **Fixed** Add regex rewrite in HTTPRoute..
