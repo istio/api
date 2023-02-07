@@ -1,6 +1,10 @@
 apiVersion: release-notes/v2
- kind: bug-fix
- area: installation
- releaseNotes:
-   - |
-     **Fixed** Add regex rewrite in HTTPRoute.
+kind: bug-fix
+area: documentation
+issue:
+  - 1854
+
+releaseNotes:
+  - |
+    **Fixed** Add regex rewrite in HTTPRoute.
+
