@@ -3,4 +3,4 @@ apiVersion: release-notes/v2
  area: installation
  releaseNotes:
    - |
-     **Fixed** Add regex rewrite.
+     **Fixed** Add regex rewrite in HTTPRoute.
