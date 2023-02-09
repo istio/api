@@ -847,14 +847,14 @@ type MeshConfig struct {
 	// meshConfig:
 	//
 	//	meshMTLS:
-	//	  minProtocolVersion: 1.3
+	//	  minProtocolVersion: TLSV1_3
 	//	meshExternalTLS:
 	//	  ecdhCurves:
 	//	    - P-256
 	//	    - P-512
 	//
 	// Configuration of mTLS for traffic between workloads within the mesh.
-	// Mesh mTLS does not respect ECDH curves
+	// Mesh mTLS does not respect ECDH curves.
 	MeshMTLS *MeshConfig_TLSConfig `protobuf:"bytes,63,opt,name=mesh_mTLS,json=meshMTLS,proto3" json:"mesh_mTLS,omitempty"`
 	// Configuration of TLS for mesh external traffic.
 	// Mesh external does not respect min TLS version configured here currently.

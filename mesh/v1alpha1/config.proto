@@ -1132,13 +1132,13 @@ message MeshConfig {
   // For example, a user could enable min TLS version for in-mesh traffic and specify a curve for mesh external traffic like below:
   // meshConfig:
   //   meshMTLS:
-  //     minProtocolVersion: 1.3
+  //     minProtocolVersion: TLSV1_3
   //   meshExternalTLS:
   //     ecdhCurves:
   //       - P-256
   //       - P-512
   // Configuration of mTLS for traffic between workloads within the mesh.
-  // Mesh mTLS does not respect ECDH curves
+  // Mesh mTLS does not respect ECDH curves.
   TLSConfig mesh_mTLS = 63;
   //
   // Configuration of TLS for mesh external traffic.
