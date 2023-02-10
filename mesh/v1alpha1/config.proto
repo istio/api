@@ -1123,7 +1123,50 @@ message MeshConfig {
   TLSConfig mesh_mTLS = 63;
 
   // $hide_from_docs
-  // Next available field number: 64
+  message AmbientMeshConfig {
+    // $hide_from_docs
+    enum AmbientMeshMode {
+      // Sets AmbientMesh to a namespaced configuration. This is the default.
+      // Namespaces that have the label `istio.io/dataplane-mode=ambient` set.
+      DEFAULT = 0;
+
+      // Sets AmbientMesh to be applied to all namespaces.
+      ON = 1;
+
+      // Disables AmbientMesh for the traditional sidecar approach.
+      OFF = 2;
+    }
+
+    // Sets the Ambient Mesh mode. The default is namespaced.
+    AmbientMeshMode mode = 1;
+
+    // A list of Kubernetes selectors that specify the set of namespaces that
+    // should be excluded from the ambient mesh when mode is set to on (global).
+    // If omitted, the ambient mesh will be applied to all namespaces.
+    // Elements in the list are disjunctive (OR semantics), i.e. a namespace
+    // will be excluded if it matches any selector.
+    // Example:
+    // ```yaml
+    // ambientMesh:
+    //   mode: ON
+    //   disabledSelectors:
+    //   - matchLabels:
+    //       env: dev
+    //   - matchExpressions:
+    //     - key: app
+    //       operator: In
+    //       values:
+    //         - cassandra
+    //         - spark
+    // ```
+    repeated k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector disabled_selectors = 3;
+  }
+  // Set Ambient Mesh Mode
+  // $hide_from_docs
+  AmbientMeshConfig ambient_mesh = 64;
+
+  // $hide_from_docs
+  // Next available field number: 65
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;

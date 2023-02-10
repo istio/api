@@ -34581,6 +34581,22 @@
             ]
           },
           {
+            "name": "AmbientMeshConfig.AmbientMeshMode",
+            "enum_fields": [
+              {
+                "name": "DEFAULT"
+              },
+              {
+                "name": "ON",
+                "integer": 1
+              },
+              {
+                "name": "OFF",
+                "integer": 2
+              }
+            ]
+          },
+          {
             "name": "Resource",
             "enum_fields": [
               {
@@ -34818,6 +34834,11 @@
                 "id": 63,
                 "name": "mesh_mTLS",
                 "type": "TLSConfig"
+              },
+              {
+                "id": 64,
+                "name": "ambient_mesh",
+                "type": "AmbientMeshConfig"
               }
             ],
             "reserved_ids": [
@@ -35570,6 +35591,22 @@
                     "id": 1,
                     "name": "min_protocol_version",
                     "type": "TLSProtocol"
+                  }
+                ]
+              },
+              {
+                "name": "AmbientMeshConfig",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "mode",
+                    "type": "AmbientMeshMode"
+                  },
+                  {
+                    "id": 3,
+                    "name": "disabled_selectors",
+                    "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector",
+                    "is_repeated": true
                   }
                 ]
               }
