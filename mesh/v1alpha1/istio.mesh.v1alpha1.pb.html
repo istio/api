@@ -619,8 +619,8 @@ minProtocolVersion: TLSV1_3
 meshExternalTLS:
 ecdhCurves:
 - P-256
-- P-512
-Configuration of mTLS for traffic between workloads within the mesh.
+- P-512</p>
+<p>Configuration of mTLS for traffic between workloads within the mesh.
 Mesh mTLS does not respect ECDH curves.</p>
 
 </td>
@@ -632,10 +632,9 @@ No
 <td><code>meshExternalTLS</code></td>
 <td><code><a href="#MeshConfig-TLSConfig">TLSConfig</a></code></td>
 <td>
-<p>Configuration of TLS for mesh external traffic.
-Mesh external does not respect min TLS version configured here currently.
-This global configuration can be overridden per Gateway by configuring
-<a href="https://istio.io/latest/docs/reference/config/networking/gateway/#ServerTLSSettings">ServerTLSSettings</a></p>
+<p>Configuration of TLS for mesh external traffic(i.e. the traffic entering or leaving the mesh).
+This includes any TLS mode except ISTIO_MUTUAL mTLS. For ISTIO_MUTUAL settings, meshMTLS configuration should be used.
+Note: Mesh external does not respect min TLS version configured here currently.</p>
 
 </td>
 <td>
