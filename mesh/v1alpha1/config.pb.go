@@ -2083,8 +2083,8 @@ type MeshConfig_TLSConfig struct {
 	// In the current Istio implementation, the maximum TLS protocol version
 	// is TLS 1.3.
 	MinProtocolVersion MeshConfig_TLSConfig_TLSProtocol `protobuf:"varint,1,opt,name=min_protocol_version,json=minProtocolVersion,proto3,enum=istio.mesh.v1alpha1.MeshConfig_TLSConfig_TLSProtocol" json:"min_protocol_version,omitempty"`
-	// Optional: If specified, the TLS connection will only support the specified ECDH curves.
-	// If not specified, the default curves will be used. For additional details, refer to
+	// Optional: If specified, the TLS connection will only support the specified ECDH curves for the DH key exchange.
+	// If not specified, the default curves enforced by envoy will be used. For details about the default curves, refer to
 	// [Ecdh Curves](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto)
 	EcdhCurves []string `protobuf:"bytes,2,rep,name=ecdh_curves,json=ecdhCurves,proto3" json:"ecdh_curves,omitempty"`
 }
