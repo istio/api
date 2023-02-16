@@ -167,6 +167,7 @@ message IstioComponentSetSpec {
     BaseComponentSpec base = 29;
     ComponentSpec pilot = 30;
     ComponentSpec cni = 38;
+    ComponentSpec ztunnel = 42;
 
     // Remote cluster using an external control plane.
     ComponentSpec istiodRemote = 39;
