@@ -687,7 +687,7 @@ message MeshConfig {
 
       // Optional. A 128 bit trace id will be used in Istio.
       // If true, will result in a 64 bit trace id being used.
-      bool Disable128BitTraceId = 4;
+      bool Enable64BitTraceId = 4;
     }
 
     // Defines configuration for a Lightstep tracer.

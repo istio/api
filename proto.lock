@@ -35196,7 +35196,7 @@
                       },
                       {
                         "id": 4,
-                        "name": "Disable128BitTraceId",
+                        "name": "Enable64BitTraceId",
                         "type": "bool"
                       }
                     ]
