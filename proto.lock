@@ -35193,6 +35193,11 @@
                         "id": 3,
                         "name": "max_tag_length",
                         "type": "uint32"
+                      },
+                      {
+                        "id": 4,
+                        "name": "Disable128BitTraceId",
+                        "type": "bool"
                       }
                     ]
                   },
