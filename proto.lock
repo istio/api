@@ -42207,6 +42207,11 @@
                 "type": "ComponentSpec"
               },
               {
+                "id": 42,
+                "name": "ztunnel",
+                "type": "ComponentSpec"
+              },
+              {
                 "id": 39,
                 "name": "istiodRemote",
                 "type": "ComponentSpec"
