@@ -668,7 +668,7 @@ message MeshConfig {
       // Next available field number: 7
     }
 
-    // Defines configuration for a Zipkin tracer.
+    // Defines configuration for a Zipkin tracer. 
     message ZipkinTracingProvider {
       // REQUIRED. Specifies the service that the Zipkin API.
       // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
@@ -684,6 +684,10 @@ message MeshConfig {
       // Optional. Controls the overall path length allowed in a reported span.
       // NOTE: currently only controls max length of the path tag.
       uint32 max_tag_length = 3;
+
+      // Optional. A 128 bit trace id will be used in Istio.
+      // If true, will result in a 64 bit trace id being used.
+      bool enable_64bit_trace_id = 4;
     }
 
     // Defines configuration for a Lightstep tracer.

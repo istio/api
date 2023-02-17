@@ -35193,6 +35193,11 @@
                         "id": 3,
                         "name": "max_tag_length",
                         "type": "uint32"
+                      },
+                      {
+                        "id": 4,
+                        "name": "enable_64bit_trace_id",
+                        "type": "bool"
                       }
                     ]
                   },
