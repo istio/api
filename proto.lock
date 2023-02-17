@@ -35196,7 +35196,7 @@
                       },
                       {
                         "id": 4,
-                        "name": "Enable64BitTraceId",
+                        "name": "enable_64bit_trace_id",
                         "type": "bool"
                       }
                     ]

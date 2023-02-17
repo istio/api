@@ -1152,7 +1152,7 @@
             "description": "Optional. Controls the overall path length allowed in a reported span. NOTE: currently only controls max length of the path tag.",
             "type": "integer"
           },
-          "Enable64BitTraceId": {
+          "enable64bitTraceId": {
             "description": "Optional. A 128 bit trace id will be used in Istio. If true, will result in a 64 bit trace id being used.",
             "type": "boolean"
           }
