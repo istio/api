@@ -34818,6 +34818,11 @@
                 "id": 63,
                 "name": "mesh_mTLS",
                 "type": "TLSConfig"
+              },
+              {
+                "id": 64,
+                "name": "mesh_external_TLS",
+                "type": "TLSConfig"
               }
             ],
             "reserved_ids": [
@@ -35575,6 +35580,12 @@
                     "id": 1,
                     "name": "min_protocol_version",
                     "type": "TLSProtocol"
+                  },
+                  {
+                    "id": 2,
+                    "name": "ecdh_curves",
+                    "type": "string",
+                    "is_repeated": true
                   }
                 ]
               }

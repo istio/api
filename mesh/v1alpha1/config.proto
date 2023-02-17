@@ -1121,13 +1121,34 @@ message MeshConfig {
     // In the current Istio implementation, the maximum TLS protocol version
     // is TLS 1.3.
     TLSProtocol min_protocol_version = 1;
+    //
+    // Optional: If specified, the TLS connection will only support the specified ECDH curves for the DH key exchange.
+    // If not specified, the default curves enforced by envoy will be used. For details about the default curves, refer to
+    // [Ecdh Curves](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto)
+    repeated string ecdh_curves = 2;
   }
 
+  // The below configuration parameters can be used to specify TLSConfig for in-mesh and mesh-external TLS traffic.
+  // For example, a user could enable min TLS version for in-mesh traffic and specify a curve for mesh external traffic like below:
+  // meshConfig:
+  //   meshMTLS:
+  //     minProtocolVersion: TLSV1_3
+  //   meshExternalTLS:
+  //     ecdhCurves:
+  //       - P-256
+  //       - P-512
+  //
   // Configuration of mTLS for traffic between workloads within the mesh.
+  // Mesh mTLS does not respect ECDH curves.
   TLSConfig mesh_mTLS = 63;
+  //
+  // Configuration of TLS for mesh external traffic(i.e. the traffic entering or leaving the mesh).
+  // This includes any TLS mode except ISTIO_MUTUAL mTLS. For ISTIO_MUTUAL settings, meshMTLS configuration should be used.
+  // Note: Mesh external does not respect min TLS version configured here currently.
+  TLSConfig mesh_external_TLS = 64;
 
   // $hide_from_docs
-  // Next available field number: 64
+  // Next available field number: 65
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;

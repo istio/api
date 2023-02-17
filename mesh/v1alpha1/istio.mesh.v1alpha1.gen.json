@@ -247,6 +247,9 @@
           },
           "meshMTLS": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig"
+          },
+          "meshExternalTLS": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig"
           }
         }
       },
@@ -1239,6 +1242,13 @@
         "properties": {
           "minProtocolVersion": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig.TLSProtocol"
+          },
+          "ecdhCurves": {
+            "description": "Optional: If specified, the TLS connection will only support the specified ECDH curves for the DH key exchange. If not specified, the default curves enforced by envoy will be used. For details about the default curves, refer to [Ecdh Curves](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto)",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
