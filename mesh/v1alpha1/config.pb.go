@@ -856,8 +856,9 @@ type MeshConfig struct {
 	// Configuration of mTLS for traffic between workloads within the mesh.
 	// Mesh mTLS does not respect ECDH curves.
 	MeshMTLS *MeshConfig_TLSConfig `protobuf:"bytes,63,opt,name=mesh_mTLS,json=meshMTLS,proto3" json:"mesh_mTLS,omitempty"`
-	// Configuration of TLS for mesh external traffic(i.e. the traffic entering or leaving the mesh).
-	// This includes any TLS mode except ISTIO_MUTUAL mTLS. For ISTIO_MUTUAL settings, meshMTLS configuration should be used.
+	// Configuration of TLS for mesh external traffic.
+	// This includes any TLS traffic mode except ISTIO_MUTUAL mTLS. For ISTIO_MUTUAL traffic settings,
+	// meshMTLS configuration should be used.
 	// Note: Mesh external does not respect min TLS version configured here currently.
 	MeshExternal_TLS *MeshConfig_TLSConfig `protobuf:"bytes,64,opt,name=mesh_external_TLS,json=meshExternalTLS,proto3" json:"mesh_external_TLS,omitempty"`
 }

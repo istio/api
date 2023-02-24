@@ -632,8 +632,9 @@ No
 <td><code>meshExternalTLS</code></td>
 <td><code><a href="#MeshConfig-TLSConfig">TLSConfig</a></code></td>
 <td>
-<p>Configuration of TLS for mesh external traffic(i.e. the traffic entering or leaving the mesh).
-This includes any TLS mode except ISTIO_MUTUAL mTLS. For ISTIO_MUTUAL settings, meshMTLS configuration should be used.
+<p>Configuration of TLS for mesh external traffic.
+This includes any TLS traffic mode except ISTIO_MUTUAL mTLS. For ISTIO_MUTUAL traffic settings,
+meshMTLS configuration should be used.
 Note: Mesh external does not respect min TLS version configured here currently.</p>
 
 </td>
