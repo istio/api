@@ -1099,6 +1099,8 @@ message ClientTLSSettings {
   // following keys and values: `key: <privateKey>`,
   // `cert: <clientCert>`, `cacert: <CACertificate>`.
   // Here CACertificate is used to verify the server certificate.
+  // For mutual TLS, `cacert: <CACertificate>` can be provided in the
+  // same secret or a separate secret named `<secret>-cacert`.
   // Secret of type tls for client certificates along with
   // ca.crt key for CA certificates is also supported.
   // Only one of client certificates and CA certificate
