@@ -317,8 +317,8 @@ type VirtualService struct {
 	// gateways and sidecars, specify `mesh` as one of the gateway names.
 	Gateways []string `protobuf:"bytes,2,rep,name=gateways,proto3" json:"gateways,omitempty"`
 	// An ordered list of route rules for HTTP traffic. HTTP routes will be
-	// applied to platform service ports named 'http-*'/'http2-*'/'grpc-*', gateway
-	// ports with protocol HTTP/HTTP2/GRPC/ TLS-terminated-HTTPS and service
+	// applied to platform service ports using HTTP/HTTP2/GRPC protocols, gateway
+	// ports with protocol HTTP/HTTP2/GRPC/TLS-terminated-HTTPS and service
 	// entry ports using HTTP/HTTP2/GRPC protocols.  The first rule matching
 	// an incoming request is used.
 	Http []*HTTPRoute `protobuf:"bytes,3,rep,name=http,proto3" json:"http,omitempty"`
