@@ -24,6 +24,58 @@ Istio supports to control its behavior.
 				
 					<tr>
 				
+					<td><code>ambient.istio.io/redirection</code></td>
+				
+					<td>Alpha</td>
+				
+					<td>[Pod]</td>
+					<td>Specifies whether a pod has ambient redirection (to ztunnel) configured.</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
+					<td><code>gateway.istio.io/managed</code></td>
+				
+					<td>Alpha</td>
+				
+					<td>[Deployment Service]</td>
+					<td>Specifies whether a resource is managed by Istio via Kubernetes Gateway API</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
+					<td><code>istio.io/dataplane-mode</code></td>
+				
+					<td>Alpha</td>
+				
+					<td>[Namespace]</td>
+					<td>Specifies whether or not a workload is managed by Istio ambient mesh.</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
+					<td><code>istio.io/gateway-name</code></td>
+				
+					<td>Alpha</td>
+				
+					<td>[Pod]</td>
+					<td>Applied to pods which are managed by Istio via Kubernetes Gateway API. Contains the name of the corresponding Gateway object.</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
 					<td><code>istio.io/rev</code></td>
 				
 					<td>Alpha</td>

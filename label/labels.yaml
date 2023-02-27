@@ -151,3 +151,37 @@ labels:
     hidden: false
     resources:
       - Pod
+
+  - name: gateway.istio.io/managed
+    featureStatus: Alpha
+    description: Specifies whether a resource is managed by Istio via Kubernetes Gateway API
+    deprecated: false
+    hidden: false
+    resources:
+      - Deployment
+      - Service
+
+  - name: istio.io/dataplane-mode
+    featureStatus: Alpha
+    description: Specifies whether or not a workload is managed by Istio ambient mesh.
+    deprecated: false
+    hidden: false
+    resources:
+      - Namespace
+
+  - name: ambient.istio.io/redirection
+    featureStatus: Alpha
+    description: Specifies whether a pod has ambient redirection (to ztunnel) configured.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+
+  - name: istio.io/gateway-name
+    featureStatus: Alpha
+    description: Applied to pods which are managed by Istio via Kubernetes Gateway API.
+      Contains the name of the corresponding Gateway object.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
