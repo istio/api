@@ -114,6 +114,18 @@ var (
 		},
 	}
 
+	AmbientRedirection = Instance {
+		Name:          "ambient.istio.io/redirection",
+		Description:   "Specifies whether a pod has ambient redirection (to "+
+                        "ztunnel) configured",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	GalleyAnalyzeSuppress = Instance {
 		Name:          "galley.istio.io/analyze-suppress",
 		Description:   "A comma separated list of configuration analysis message "+
@@ -786,6 +798,7 @@ func AllResourceAnnotations() []*Instance {
 		&AlphaCanonicalServiceAccounts,
 		&AlphaIdentity,
 		&AlphaKubernetesServiceAccounts,
+		&AmbientRedirection,
 		&GalleyAnalyzeSuppress,
 		&InjectTemplates,
 		&OperatorInstallChartOwner,

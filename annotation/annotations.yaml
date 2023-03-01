@@ -504,3 +504,11 @@ annotations:
     hidden: false
     resources:
       - Namespace
+
+  - name: ambient.istio.io/redirection
+    featureStatus: Alpha
+    description: Specifies whether a pod has ambient redirection (to ztunnel) configured
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
