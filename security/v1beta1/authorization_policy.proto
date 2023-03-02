@@ -46,20 +46,20 @@ import "type/v1beta1/selector.proto";
 //
 // Here is an example of Istio Authorization Policy:
 //
-// It sets the `action` to "ALLOW" to create an allow policy. The default action is "ALLOW"
+// It sets the `action` to `ALLOW` to create an allow policy. The default action is `ALLOW`
 // but it is useful to be explicit in the policy.
 //
 // It allows requests from:
 //
-// - service account "cluster.local/ns/default/sa/sleep" or
-// - namespace "test"
+// - service account `cluster.local/ns/default/sa/sleep` or
+// - namespace `test`
 //
 // to access the workload with:
 //
-// - "GET" method at paths of prefix "/info" or,
-// - "POST" method at path "/data".
+// - `GET` method at paths of prefix `/info` or,
+// - `POST` method at path `/data`.
 //
-// when the request has a valid JWT token issued by "https://accounts.google.com".
+// when the request has a valid JWT token issued by `https://accounts.google.com`.
 //
 // Any other requests will be denied.
 //
@@ -89,9 +89,9 @@ import "type/v1beta1/selector.proto";
 //       values: ["https://accounts.google.com"]
 // ```
 //
-// The following is another example that sets `action` to "DENY" to create a deny policy.
-// It denies requests from the "dev" namespace to the "POST" method on all workloads
-// in the "foo" namespace.
+// The following is another example that sets `action` to `DENY` to create a deny policy.
+// It denies requests from the `dev` namespace to the `POST` method on all workloads
+// in the `foo` namespace.
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -111,7 +111,7 @@ import "type/v1beta1/selector.proto";
 // ```
 //
 // The following is another example that sets `action` to `DENY` to create a deny policy.
-// It denies all the requests with "POST" method on port "8080" on all workloads
+// It denies all the requests with `POST` method on port `8080` on all workloads
 // in the `foo` namespace.
 //
 // ```yaml
@@ -130,12 +130,12 @@ import "type/v1beta1/selector.proto";
 // ```
 //
 // When this rule is applied to TCP traffic, the `method` field (as will all HTTP based attributes) cannot be processed.
-// For a `DENY` rule, missing attributes are treated as matches. This means all TCP traffic on port 8080 would be denied in the example above.
+// For a `DENY` rule, missing attributes are treated as matches. This means all TCP traffic on port `8080` would be denied in the example above.
 // If we were to remove the `ports` match, all TCP traffic would be denied. As a result, it is recommended to always scope `DENY` policies to a specific port,
 // especially when using HTTP attributes [Authorization Policy for TCP Ports](https://istio.io/latest/docs/tasks/security/authorization/authz-tcp/).
 //
-// The following authorization policy sets the `action` to "AUDIT". It will audit any GET requests to the path with the
-// prefix "/user/profile".
+// The following authorization policy sets the `action` to `AUDIT`. It will audit any `GET` requests to the path with the
+// prefix `/user/profile`.
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -156,16 +156,14 @@ import "type/v1beta1/selector.proto";
 // ```
 //
 // Authorization Policy scope (target) is determined by "metadata/namespace" and
-// an optional "selector".
+// an optional `selector`.
 //
 // - "metadata/namespace" tells which namespace the policy applies. If set to root
 // namespace, the policy applies to all namespaces in a mesh.
-// - workload "selector" can be used to further restrict where a policy applies.
+// - workload `selector` can be used to further restrict where a policy applies.
 //
-// For example,
-//
-// The following authorization policy applies to all workloads in namespace foo. It allows nothing and effectively denies
-// all requests to workloads in namespace foo.
+// For example, the following authorization policy applies to all workloads in namespace `foo`. It allows nothing and effectively denies
+// all requests to workloads in namespace `foo`.
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -177,7 +175,7 @@ import "type/v1beta1/selector.proto";
 //   {}
 // ```
 //
-// The following authorization policy allows all requests to workloads in namespace foo.
+// The following authorization policy allows all requests to workloads in namespace `foo`.
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -190,7 +188,7 @@ import "type/v1beta1/selector.proto";
 //  - {}
 // ```
 //
-// The following authorization policy applies to workloads containing label "app: httpbin" in namespace bar. It allows
+// The following authorization policy applies to workloads containing label `app: httpbin` in namespace `bar`. It allows
 // nothing and effectively denies all requests to the selected workloads.
 //
 // ```yaml
@@ -205,8 +203,8 @@ import "type/v1beta1/selector.proto";
 //       app: httpbin
 // ```
 //
-// The following authorization policy applies to workloads containing label "version: v1" in all namespaces in the mesh.
-// (Assuming the root namespace is configured to "istio-system").
+// The following authorization policy applies to workloads containing label `version: v1` in all namespaces in the mesh.
+// (Assuming the root namespace is configured to `istio-system`).
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
