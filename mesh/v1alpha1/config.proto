@@ -1128,24 +1128,25 @@ message MeshConfig {
     repeated string ecdh_curves = 2;
   }
 
-  // The below configuration parameters can be used to specify TLSConfig for in-mesh and mesh-external TLS traffic.
-  // For example, a user could enable min TLS version for in-mesh traffic and specify a curve for mesh external traffic like below:
+  // The below configuration parameters can be used to specify TLSConfig for mesh traffic.
+  // For example, a user could enable min TLS version for ISTIO_MUTUAL traffic and specify a curve for non ISTIO_MUTUAL traffic like below:
   // meshConfig:
   //   meshMTLS:
   //     minProtocolVersion: TLSV1_3
-  //   meshExternalTLS:
+  //   tlsDefaults:
+  //     Note: applicable only for non ISTIO_MUTUAL scenarios
   //     ecdhCurves:
   //       - P-256
   //       - P-512
   //
-  // Configuration of mTLS for traffic between workloads within the mesh.
-  // Mesh mTLS does not respect ECDH curves.
+  // Configuration of mTLS for traffic between workloads with ISTIO_MUTUAL TLS traffic.
+  // Note: Mesh mTLS does not respect ECDH curves.
   TLSConfig mesh_mTLS = 63;
   //
-  // Configuration of TLS for mesh external traffic(i.e. the traffic entering or leaving the mesh).
-  // This includes any TLS mode except ISTIO_MUTUAL mTLS. For ISTIO_MUTUAL settings, meshMTLS configuration should be used.
-  // Note: Mesh external does not respect min TLS version configured here currently.
-  TLSConfig mesh_external_TLS = 64;
+  // Configuration of TLS for all traffic except for ISTIO_MUTUAL mode.
+  // Currently, this supports configuration of ecdh_curves only.
+  // For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.
+  TLSConfig tls_defaults = 64;
 
   // $hide_from_docs
   // Next available field number: 65
