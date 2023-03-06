@@ -1671,11 +1671,12 @@ type HTTPMatchRequest struct {
 	//   - For a query parameter like "?key", the map key would be "key" and the
 	//     string match could be defined as `exact: ""`.
 	//
+	//   - For a query parameter like "?key=abc" or "?key=abx", the map key would be "key" and the
+	//     string match could be defined as `prefix: "ab"`.
+	//
 	//   - For a query parameter like "?key=123", the map key would be "key" and the
 	//     string match could be defined as `regex: "\d+$"`. Note that this
 	//     configuration will only match values like "123" but not "a123" or "123a".
-	//
-	// **Note:** `prefix` matching is currently not supported.
 	QueryParams map[string]*StringMatch `protobuf:"bytes,9,rep,name=query_params,json=queryParams,proto3" json:"query_params,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Flag to specify whether the URI matching should be case-insensitive.
 	//
