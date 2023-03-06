@@ -34821,7 +34821,7 @@
               },
               {
                 "id": 64,
-                "name": "mesh_external_TLS",
+                "name": "tls_defaults",
                 "type": "TLSConfig"
               }
             ],
