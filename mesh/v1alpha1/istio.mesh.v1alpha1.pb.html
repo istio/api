@@ -621,7 +621,8 @@ Note: applicable only for non ISTIO_MUTUAL scenarios
 ecdhCurves:
 - P-256
 - P-512</p>
-<p>Configuration of mTLS for traffic between workloads with ISTIO_MUTUAL TLS traffic.</p>
+<p>Configuration of mTLS for traffic between workloads with ISTIO_MUTUAL TLS traffic.
+Note: Mesh mTLS does not respect ECDH curves.</p>
 
 </td>
 <td>
@@ -633,6 +634,7 @@ No
 <td><code><a href="#MeshConfig-TLSConfig">TLSConfig</a></code></td>
 <td>
 <p>Configuration of TLS for all traffic except for ISTIO_MUTUAL mode.
+Currently, this supports configuration of ecdh_curves only.
 For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.</p>
 
 </td>

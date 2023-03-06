@@ -1140,9 +1140,11 @@ message MeshConfig {
   //       - P-512
   //
   // Configuration of mTLS for traffic between workloads with ISTIO_MUTUAL TLS traffic.
+  // Note: Mesh mTLS does not respect ECDH curves.
   TLSConfig mesh_mTLS = 63;
   //
   // Configuration of TLS for all traffic except for ISTIO_MUTUAL mode.
+  // Currently, this supports configuration of ecdh_curves only.
   // For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.
   TLSConfig tls_defaults = 64;
 
