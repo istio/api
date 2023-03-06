@@ -301,7 +301,7 @@ message MeshConfig {
   istio.networking.v1alpha3.LocalityLoadBalancerSetting locality_lb_setting = 35;
 
   // Configures DNS refresh rate for Envoy clusters of type `STRICT_DNS`
-  // Default refresh rate is `5s`.
+  // Default refresh rate is `60s`.
   google.protobuf.Duration dns_refresh_rate = 36;
 
   // Default Policy for upgrading http1.1 connections to http2.
