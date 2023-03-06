@@ -706,7 +706,7 @@ type MeshConfig struct {
 	// Locality based load balancing distribution or failover settings.
 	LocalityLbSetting *v1alpha3.LocalityLoadBalancerSetting `protobuf:"bytes,35,opt,name=locality_lb_setting,json=localityLbSetting,proto3" json:"locality_lb_setting,omitempty"`
 	// Configures DNS refresh rate for Envoy clusters of type `STRICT_DNS`
-	// Default refresh rate is `5s`.
+	// Default refresh rate is `60s`.
 	DnsRefreshRate *duration.Duration `protobuf:"bytes,36,opt,name=dns_refresh_rate,json=dnsRefreshRate,proto3" json:"dns_refresh_rate,omitempty"`
 	// Specify if http1.1 connections should be upgraded to http2 by default.
 	// if sidecar is installed on all pods in the mesh, then this should be set to `UPGRADE`.

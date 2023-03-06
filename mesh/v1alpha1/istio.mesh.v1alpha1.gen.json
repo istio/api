@@ -180,7 +180,7 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.LocalityLoadBalancerSetting"
           },
           "dnsRefreshRate": {
-            "description": "Configures DNS refresh rate for Envoy clusters of type `STRICT_DNS` Default refresh rate is `5s`.",
+            "description": "Configures DNS refresh rate for Envoy clusters of type `STRICT_DNS` Default refresh rate is `60s`.",
             "type": "string"
           },
           "h2UpgradePolicy": {
