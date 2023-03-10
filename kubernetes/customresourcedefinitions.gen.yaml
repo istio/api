@@ -7092,6 +7092,15 @@ spec:
                       type: string
                   type: object
                 type: array
+              reportingInterval:
+                properties:
+                  http:
+                    description: Optional.
+                    type: string
+                  tcp:
+                    description: Optional.
+                    type: string
+                type: object
               selector:
                 description: Optional.
                 properties:
