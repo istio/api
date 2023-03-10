@@ -80,7 +80,7 @@
             "type": "boolean"
           },
           "outputClaimToHeaders": {
-            "description": "This field specifies a list of operations to copy the claim to HTTP headers on a successfully verified token. This differs from the `output_payload_to_header` by allowing outputting individual claims instead of the whole payload. The header specified in each operation in the list must be unique. Nested claims of type string/int/bool is supported as well. ``` outputClaimToHeaders: - header: x-my-company-jwt-group claim: my-group - header: x-test-environment-flag claim: test-flag - header: x-jwt-claim-group claim: nested.key.group ``` [Experimental] This feature is a experimental feature. [#comment: TODO: Update the status whenever this feature is promoted.]",
+            "description": "This field specifies a list of operations to copy the claim to HTTP headers on a successfully verified token. This differs from the `output_payload_to_header` by allowing outputting individual claims instead of the whole payload. The header specified in each operation in the list must be unique. Nested claims of type string/int/bool is supported as well. ``` outputClaimToHeaders: - header: x-my-company-jwt-group claim: my-group - header: x-test-environment-flag claim: test-flag - header: x-jwt-claim-group claim: nested.key.group ``` [Experimental] This feature is a experimental feature.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.security.v1beta1.ClaimToHeader"

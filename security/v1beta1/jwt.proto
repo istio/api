@@ -161,8 +161,7 @@ message JWTRule {
   //     claim: nested.key.group
   // ```
   // [Experimental] This feature is a experimental feature.
-  // [#comment: TODO: Update the status whenever this feature is promoted.]
-  repeated ClaimToHeader output_claim_to_headers = 11;
+  repeated ClaimToHeader output_claim_to_headers = 11; // [TODO:Update the status whenever this feature is promoted.]
 }
 
 // This message specifies a header location to extract JWT token.

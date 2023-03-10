@@ -167,8 +167,7 @@ type JWTRule struct {
 	//
 	// ```
 	// [Experimental] This feature is a experimental feature.
-	// [#comment: TODO: Update the status whenever this feature is promoted.]
-	OutputClaimToHeaders []*ClaimToHeader `protobuf:"bytes,11,rep,name=output_claim_to_headers,json=outputClaimToHeaders,proto3" json:"output_claim_to_headers,omitempty"`
+	OutputClaimToHeaders []*ClaimToHeader `protobuf:"bytes,11,rep,name=output_claim_to_headers,json=outputClaimToHeaders,proto3" json:"output_claim_to_headers,omitempty"` // [TODO:Update the status whenever this feature is promoted.]
 }
 
 func (x *JWTRule) Reset() {
