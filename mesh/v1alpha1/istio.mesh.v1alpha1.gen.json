@@ -57,7 +57,12 @@
         "type": "object",
         "properties": {
           "proxyListenPort": {
-            "description": "Port on which Envoy should listen for incoming connections from other services. Default port is 15001.",
+            "description": "Port on which Envoy should listen for all outbound traffic to other services. Default port is 15001.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "proxyInboundListenPort": {
+            "description": "Port on which Envoy should listen for all inbound traffic to the pod/vm will be captured to. Default port is 15006. $hide_from_docs",
             "type": "integer",
             "format": "int32"
           },
