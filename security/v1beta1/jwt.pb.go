@@ -82,11 +82,11 @@ type JWTRule struct {
 	// [issuer](https://tools.ietf.org/html/rfc7519#section-4.1.1)
 	// A JWT with different `iss` claim will be rejected.
 	//
-	// Example: https://foobar.auth0.com
-	// Example: 1234567-compute@developer.gserviceaccount.com
+	// Example: `https://foobar.auth0.com`
+	// Example: `1234567-compute@developer.gserviceaccount.com`
 	Issuer string `protobuf:"bytes,1,opt,name=issuer,proto3" json:"issuer,omitempty"`
 	// The list of JWT
-	// [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3).
+	// [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3)
 	// that are allowed to access. A JWT containing any of these
 	// audiences will be accepted.
 	//
@@ -120,7 +120,7 @@ type JWTRule struct {
 	// Note: Only one of `jwksUri` and `jwks` should be used.
 	Jwks string `protobuf:"bytes,10,opt,name=jwks,proto3" json:"jwks,omitempty"`
 	// List of header locations from which JWT is expected. For example, below is the location spec
-	// if JWT is expected to be found in `x-jwt-assertion` header, and have "Bearer " prefix:
+	// if JWT is expected to be found in `x-jwt-assertion` header, and have `Bearer` prefix:
 	//
 	// ```yaml
 	//
@@ -134,7 +134,7 @@ type JWTRule struct {
 	// such requests is undefined.
 	FromHeaders []*JWTHeader `protobuf:"bytes,6,rep,name=from_headers,json=fromHeaders,proto3" json:"from_headers,omitempty"`
 	// List of query parameters from which JWT is expected. For example, if JWT is provided via query
-	// parameter `my_token` (e.g /path?my_token=<JWT>), the config is:
+	// parameter `my_token` (e.g `/path?my_token=<JWT>`), the config is:
 	//
 	// ```yaml
 	//
@@ -167,7 +167,7 @@ type JWTRule struct {
 	//
 	// ```
 	// [Experimental] This feature is a experimental feature.
-	// TODO: Update the status whenever this feature is promoted
+	// [#comment: TODO: Update the status whenever this feature is promoted.]
 	OutputClaimToHeaders []*ClaimToHeader `protobuf:"bytes,11,rep,name=output_claim_to_headers,json=outputClaimToHeaders,proto3" json:"output_claim_to_headers,omitempty"`
 }
 
@@ -275,7 +275,7 @@ type JWTHeader struct {
 	// The HTTP header name.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// The prefix that should be stripped before decoding the token.
-	// For example, for "Authorization: Bearer <token>", prefix="Bearer " with a space at the end.
+	// For example, for `Authorization: Bearer <token>`, prefix=`Bearer` with a space at the end.
 	// If the header doesn't have this exact prefix, it is considered invalid.
 	Prefix string `protobuf:"bytes,2,opt,name=prefix,proto3" json:"prefix,omitempty"`
 }
