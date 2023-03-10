@@ -808,7 +808,26 @@ No
 <td><code>string[]</code></td>
 <td>
 <p>Optional: If specified, only support the specified cipher list.
-Otherwise default to the default cipher list supported by Envoy.</p>
+Otherwise default to the default cipher list supported by Envoy
+as specified <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto">here</a>.
+The supported list of ciphers are:</p>
+<ul>
+<li><code>ECDHE-ECDSA-AES128-GCM-SHA256</code></li>
+<li><code>ECDHE-RSA-AES128-GCM-SHA256</code></li>
+<li><code>ECDHE-ECDSA-AES256-GCM-SHA384</code></li>
+<li><code>ECDHE-RSA-AES256-GCM-SHA384</code></li>
+<li><code>ECDHE-ECDSA-CHACHA20-POLY1305</code></li>
+<li><code>ECDHE-RSA-CHACHA20-POLY1305</code></li>
+<li><code>ECDHE-ECDSA-AES128-SHA</code></li>
+<li><code>ECDHE-RSA-AES128-SHA</code></li>
+<li><code>ECDHE-ECDSA-AES256-SHA</code></li>
+<li><code>ECDHE-RSA-AES256-SHA</code></li>
+<li><code>AES128-GCM-SHA256</code></li>
+<li><code>AES256-GCM-SHA384</code></li>
+<li><code>AES128-SHA</code></li>
+<li><code>AES256-SHA</code></li>
+<li><code>DES-CBC3-SHA</code></li>
+</ul>
 
 </td>
 <td>
