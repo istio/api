@@ -1093,16 +1093,15 @@ message ClientTLSSettings {
   string ca_certificates = 4;
 
   // The name of the secret that holds the TLS certs for the
-  // client including the CA certificates. Secret must exist in the
-  // same namespace with the proxy using the certificates.
-  // The secret (of type `generic`)should contain the
-  // following keys and values: `key: <privateKey>`,
-  // `cert: <clientCert>`, `cacert: <CACertificate>`.
+  // client including the CA certificates. This secret must exist in
+  // the namespace of the proxy using the certificates.
+  // An Opaque secret should contain the following keys and values:
+  // `key: <privateKey>`, `cert: <clientCert>`, `cacert: <CACertificate>`.
   // Here CACertificate is used to verify the server certificate.
   // For mutual TLS, `cacert: <CACertificate>` can be provided in the
   // same secret or a separate secret named `<secret>-cacert`.
-  // Secret of type tls for client certificates along with
-  // ca.crt key for CA certificates is also supported.
+  // A TLS secret for client certificates with an additional
+  // `ca.crt` key for CA certificates is also supported.
   // Only one of client certificates and CA certificate
   // or credentialName can be specified.
   //
