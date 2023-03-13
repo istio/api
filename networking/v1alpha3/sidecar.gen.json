@@ -189,8 +189,41 @@
             "items": {
               "type": "string"
             }
+          },
+          "ocsp": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ServerTLSSettings.OCSP"
           }
         }
+      },
+      "istio.networking.v1alpha3.ServerTLSSettings.OCSP": {
+        "description": "OCSP Settings",
+        "type": "object",
+        "properties": {
+          "stapling": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ServerTLSSettings.OCSP.Stapling"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.ServerTLSSettings.OCSP.Stapling": {
+        "description": "Settings for OCSP Stapling",
+        "type": "object",
+        "properties": {
+          "mode": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ServerTLSSettings.OCSP.Stapling.StaplingMode"
+          },
+          "path": {
+            "description": "Path at which the staple bytes will be stored in the Secret",
+            "type": "string"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.ServerTLSSettings.OCSP.Stapling.StaplingMode": {
+        "type": "string",
+        "enum": [
+          "OPTIONAL",
+          "PREFERRED",
+          "MANDATORY"
+        ]
       },
       "istio.networking.v1alpha3.ServerTLSSettings.TLSProtocol": {
         "description": "TLS protocol versions.",

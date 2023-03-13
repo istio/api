@@ -3338,6 +3338,20 @@ spec:
                           - AUTO_PASSTHROUGH
                           - ISTIO_MUTUAL
                           type: string
+                        ocsp:
+                          properties:
+                            stapling:
+                              properties:
+                                mode:
+                                  enum:
+                                  - OPTIONAL
+                                  - PREFERRED
+                                  - MANDATORY
+                                  type: string
+                                path:
+                                  type: string
+                              type: object
+                          type: object
                         privateKey:
                           description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
                           type: string
@@ -3454,6 +3468,20 @@ spec:
                           - AUTO_PASSTHROUGH
                           - ISTIO_MUTUAL
                           type: string
+                        ocsp:
+                          properties:
+                            stapling:
+                              properties:
+                                mode:
+                                  enum:
+                                  - OPTIONAL
+                                  - PREFERRED
+                                  - MANDATORY
+                                  type: string
+                                path:
+                                  type: string
+                              type: object
+                          type: object
                         privateKey:
                           description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
                           type: string
@@ -3961,6 +3989,20 @@ spec:
                           - AUTO_PASSTHROUGH
                           - ISTIO_MUTUAL
                           type: string
+                        ocsp:
+                          properties:
+                            stapling:
+                              properties:
+                                mode:
+                                  enum:
+                                  - OPTIONAL
+                                  - PREFERRED
+                                  - MANDATORY
+                                  type: string
+                                path:
+                                  type: string
+                              type: object
+                          type: object
                         privateKey:
                           description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
                           type: string
@@ -4134,6 +4176,20 @@ spec:
                           - AUTO_PASSTHROUGH
                           - ISTIO_MUTUAL
                           type: string
+                        ocsp:
+                          properties:
+                            stapling:
+                              properties:
+                                mode:
+                                  enum:
+                                  - OPTIONAL
+                                  - PREFERRED
+                                  - MANDATORY
+                                  type: string
+                                path:
+                                  type: string
+                              type: object
+                          type: object
                         privateKey:
                           description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
                           type: string

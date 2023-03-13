@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.Gateway
 aliases: [/docs/reference/config/networking/v1alpha3/gateway]
-number_of_entries: 6
+number_of_entries: 9
 ---
 <p><code>Gateway</code> describes a load balancer operating at the edge of the mesh
 receiving incoming or outgoing HTTP/TCP connections. The specification
@@ -832,6 +832,116 @@ The supported list of ciphers are:</p>
 </td>
 <td>
 No
+</td>
+</tr>
+<tr id="ServerTLSSettings-ocsp">
+<td><code>ocsp</code></td>
+<td><code><a href="#ServerTLSSettings-OCSP">OCSP</a></code></td>
+<td>
+<p>Optional: settings for OCSP and OCSP Stapling</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ServerTLSSettings-OCSP">ServerTLSSettings.OCSP</h2>
+<section>
+<p>OCSP Settings</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ServerTLSSettings-OCSP-stapling">
+<td><code>stapling</code></td>
+<td><code><a href="#ServerTLSSettings-OCSP-Stapling">Stapling</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ServerTLSSettings-OCSP-Stapling">ServerTLSSettings.OCSP.Stapling</h2>
+<section>
+<p>Settings for OCSP Stapling</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ServerTLSSettings-OCSP-Stapling-mode">
+<td><code>mode</code></td>
+<td><code><a href="#ServerTLSSettings-OCSP-Stapling-StaplingMode">StaplingMode</a></code></td>
+<td>
+<p>OCSP Stapling mode for Envoy</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ServerTLSSettings-OCSP-Stapling-path">
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>
+<p>Path at which the staple bytes will be stored in the Secret</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ServerTLSSettings-OCSP-Stapling-StaplingMode">ServerTLSSettings.OCSP.Stapling.StaplingMode</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ServerTLSSettings-OCSP-Stapling-StaplingMode-OPTIONAL">
+<td><code>OPTIONAL</code></td>
+<td>
+<p>Matches the LENIENT_STAPLING mode of Envoy</p>
+
+</td>
+</tr>
+<tr id="ServerTLSSettings-OCSP-Stapling-StaplingMode-PREFERRED">
+<td><code>PREFERRED</code></td>
+<td>
+<p>Matches the STRICT_STAPLING mode of Envoy</p>
+
+</td>
+</tr>
+<tr id="ServerTLSSettings-OCSP-Stapling-StaplingMode-MANDATORY">
+<td><code>MANDATORY</code></td>
+<td>
+<p>Matches the MUST_STAPLE mode of Envoy</p>
+
 </td>
 </tr>
 </tbody>
