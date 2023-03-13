@@ -44675,6 +44675,11 @@
                 "name": "not_paths",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 9,
+                "name": "ignore_path_case",
+                "type": "bool"
               }
             ]
           },
