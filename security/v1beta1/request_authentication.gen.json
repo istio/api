@@ -29,7 +29,7 @@
             "type": "string"
           },
           "prefix": {
-            "description": "The prefix that should be stripped before decoding the token. For example, for \"Authorization: Bearer \u003ctoken\u003e\", prefix=\"Bearer \" with a space at the end. If the header doesn't have this exact prefix, it is considered invalid.",
+            "description": "The prefix that should be stripped before decoding the token. For example, for `Authorization: Bearer \u003ctoken\u003e`, prefix=`Bearer` with a space at the end. If the header doesn't have this exact prefix, it is considered invalid.",
             "type": "string"
           }
         }
@@ -43,7 +43,7 @@
             "type": "string"
           },
           "audiences": {
-            "description": "The list of JWT [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3). that are allowed to access. A JWT containing any of these audiences will be accepted.",
+            "description": "The list of JWT [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3) that are allowed to access. A JWT containing any of these audiences will be accepted.",
             "type": "array",
             "items": {
               "type": "string"
@@ -58,14 +58,14 @@
             "type": "string"
           },
           "fromHeaders": {
-            "description": "List of header locations from which JWT is expected. For example, below is the location spec if JWT is expected to be found in `x-jwt-assertion` header, and have \"Bearer \" prefix: ```yaml fromHeaders: - name: x-jwt-assertion prefix: \"Bearer \" ```",
+            "description": "List of header locations from which JWT is expected. For example, below is the location spec if JWT is expected to be found in `x-jwt-assertion` header, and have `Bearer` prefix: ```yaml fromHeaders: - name: x-jwt-assertion prefix: \"Bearer \" ```",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.security.v1beta1.JWTHeader"
             }
           },
           "fromParams": {
-            "description": "List of query parameters from which JWT is expected. For example, if JWT is provided via query parameter `my_token` (e.g /path?my_token=\u003cJWT\u003e), the config is: ```yaml fromParams: - \"my_token\" ```",
+            "description": "List of query parameters from which JWT is expected. For example, if JWT is provided via query parameter `my_token` (e.g `/path?my_token=\u003cJWT\u003e`), the config is: ```yaml fromParams: - \"my_token\" ```",
             "type": "array",
             "items": {
               "type": "string"
@@ -80,7 +80,7 @@
             "type": "boolean"
           },
           "outputClaimToHeaders": {
-            "description": "This field specifies a list of operations to copy the claim to HTTP headers on a successfully verified token. This differs from the `output_payload_to_header` by allowing outputting individual claims instead of the whole payload. The header specified in each operation in the list must be unique. Nested claims of type string/int/bool is supported as well. ``` outputClaimToHeaders: - header: x-my-company-jwt-group claim: my-group - header: x-test-environment-flag claim: test-flag - header: x-jwt-claim-group claim: nested.key.group ``` [Experimental] This feature is a experimental feature. TODO: Update the status whenever this feature is promoted",
+            "description": "This field specifies a list of operations to copy the claim to HTTP headers on a successfully verified token. This differs from the `output_payload_to_header` by allowing outputting individual claims instead of the whole payload. The header specified in each operation in the list must be unique. Nested claims of type string/int/bool is supported as well. ``` outputClaimToHeaders: - header: x-my-company-jwt-group claim: my-group - header: x-test-environment-flag claim: test-flag - header: x-jwt-claim-group claim: nested.key.group ``` [Experimental] This feature is a experimental feature.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.security.v1beta1.ClaimToHeader"

@@ -61,12 +61,12 @@ message JWTRule {
   // [issuer](https://tools.ietf.org/html/rfc7519#section-4.1.1)
   // A JWT with different `iss` claim will be rejected.
   //
-  // Example: https://foobar.auth0.com
-  // Example: 1234567-compute@developer.gserviceaccount.com
+  // Example: `https://foobar.auth0.com`
+  // Example: `1234567-compute@developer.gserviceaccount.com`
   string issuer = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The list of JWT
-  // [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3).
+  // [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3)
   // that are allowed to access. A JWT containing any of these
   // audiences will be accepted.
   //
@@ -115,7 +115,7 @@ message JWTRule {
   //     [URI Query Parameter](https://tools.ietf.org/html/rfc6750#section-2.3))
 
   // List of header locations from which JWT is expected. For example, below is the location spec
-  // if JWT is expected to be found in `x-jwt-assertion` header, and have "Bearer " prefix:
+  // if JWT is expected to be found in `x-jwt-assertion` header, and have `Bearer` prefix:
   //
   // ```yaml
   //   fromHeaders:
@@ -128,7 +128,7 @@ message JWTRule {
   repeated JWTHeader from_headers = 6;
 
   // List of query parameters from which JWT is expected. For example, if JWT is provided via query
-  // parameter `my_token` (e.g /path?my_token=<JWT>), the config is:
+  // parameter `my_token` (e.g `/path?my_token=<JWT>`), the config is:
   //
   // ```yaml
   //   fromParams:
@@ -161,8 +161,7 @@ message JWTRule {
   //     claim: nested.key.group
   // ```
   // [Experimental] This feature is a experimental feature.
-  // TODO: Update the status whenever this feature is promoted
-  repeated ClaimToHeader output_claim_to_headers = 11;
+  repeated ClaimToHeader output_claim_to_headers = 11; // [TODO:Update the status whenever this feature is promoted.]
 }
 
 // This message specifies a header location to extract JWT token.
@@ -171,7 +170,7 @@ message JWTHeader {
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The prefix that should be stripped before decoding the token.
-  // For example, for "Authorization: Bearer <token>", prefix="Bearer " with a space at the end.
+  // For example, for `Authorization: Bearer <token>`, prefix=`Bearer` with a space at the end.
   // If the header doesn't have this exact prefix, it is considered invalid.
   string prefix = 2;
 }
