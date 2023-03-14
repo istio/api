@@ -1735,12 +1735,23 @@ type LocalityLoadBalancerSetting struct {
 	Failover []*LocalityLoadBalancerSetting_Failover `protobuf:"bytes,2,rep,name=failover,proto3" json:"failover,omitempty"`
 	// failoverPriority is an ordered list of labels used to sort endpoints to do priority based load balancing.
 	// This is to support traffic failover across different groups of endpoints.
-	// Suppose there are total N labels specified:
+	// Two kinds of labels can be specified:
 	//
-	// 1. Endpoints matching all N labels with the client proxy have priority P(0) i.e. the highest priority.
-	// 2. Endpoints matching the first N-1 labels with the client proxy have priority P(1) i.e. second highest priority.
-	// 3. By extension of this logic, endpoints matching only the first label with the client proxy has priority P(N-1) i.e. second lowest priority.
-	// 4. All the other endpoints have priority P(N) i.e. lowest priority.
+	//   - Specify only label keys `[key1, key2, key3]`, istio would compare the label values of client with endpoints.
+	//     Suppose there are total N label keys `[key1, key2, key3, ...keyN]` specified:
+	//
+	//     1. Endpoints matching all N labels with the client proxy have priority P(0) i.e. the highest priority.
+	//     2. Endpoints matching the first N-1 labels with the client proxy have priority P(1) i.e. second highest priority.
+	//     3. By extension of this logic, endpoints matching only the first label with the client proxy has priority P(N-1) i.e. second lowest priority.
+	//     4. All the other endpoints have priority P(N) i.e. lowest priority.
+	//
+	//   - Specify labels with key and value `[key1=value1, key2=value2, key3=value3]`, istio would compare the labels with endpoints.
+	//     Suppose there are total N labels `[key1=value1, key2=value2, key3=value3, ...keyN=valueN]` specified:
+	//
+	//     1. Endpoints matching all N labels have priority P(0) i.e. the highest priority.
+	//     2. Endpoints matching the first N-1 labels have priority P(1) i.e. second highest priority.
+	//     3. By extension of this logic, endpoints matching only the first label has priority P(N-1) i.e. second lowest priority.
+	//     4. All the other endpoints have priority P(N) i.e. lowest priority.
 	//
 	// Note: For a label to be considered for match, the previous labels must match, i.e. nth label would be considered matched only if first n-1 labels match.
 	//
