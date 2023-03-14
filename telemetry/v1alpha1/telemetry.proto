@@ -274,7 +274,9 @@ message Telemetry {
   }
 
   // Configuration for the interval reporting for the access logging and
-  // metrics.
+  // metrics. Telemetry is reported independently per each data stream, at
+  // the specified rate. This setting is independent of the flush rate of the
+  // telemetry sinks.
   ReportingInterval reporting_interval = 5;
 }
 

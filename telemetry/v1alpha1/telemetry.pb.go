@@ -549,7 +549,9 @@ type Telemetry struct {
 	// selected workloads.
 	AccessLogging []*AccessLogging `protobuf:"bytes,4,rep,name=access_logging,json=accessLogging,proto3" json:"access_logging,omitempty"`
 	// Configuration for the interval reporting for the access logging and
-	// metrics.
+	// metrics. Telemetry is reported independently per each data stream, at
+	// the specified rate. This setting is independent of the flush rate of the
+	// telemetry sinks.
 	ReportingInterval *Telemetry_ReportingInterval `protobuf:"bytes,5,opt,name=reporting_interval,json=reportingInterval,proto3" json:"reporting_interval,omitempty"`
 }
 
