@@ -37,13 +37,12 @@
 // my-gateway-controller`. While Istio will configure the proxy to listen
 // on these ports, it is the responsibility of the user to ensure that
 // external traffic to these ports are allowed into the mesh.
-// Ports 9443 and 2379 must exist on the ingress-controller. By default only ports 80 and 443 (http) are configured.
-// The available ports are shown in the Service for the ingress-controller, in the istio-system namespace.
-// If a port requested by a Gateway resource does not exist on the ingress-controller, 
- {{< text plain >}}
-istioctl analyze
-{{< /text >}}
- will report "The gateway refers to a port that is not exposed on the workload".
+//
+// Ports 9443 and 2379 must exist on the ingress-gateway, `my-gateway-controller` in the example below.
+// By default only ports 80 and 443 (http) are configured.
+// The available ports are shown in the Service for the ingress-gateway, in the istio-system namespace.
+// If a port requested by a `Gateway` resource does not exist on the ingress-gateway,
+// `istioctl analyze` will report "The gateway refers to a port that is not exposed on the workload".
 //
 // {{<tabset category-name="example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}
@@ -157,14 +156,14 @@ istioctl analyze
 // {{</tab>}}
 // {{</tabset>}}
 //
-// The Gateway specification above describes the L4-L6 properties of a load
-// balancer. A `VirtualService` can then be bound to a gateway to control
+// The `Gateway` specification above describes the L4-L6 properties of a load
+// balancer. A `VirtualService` can then be bound to a `Gateway` to control
 // the forwarding of traffic arriving at a particular host or gateway port.
 //
-// For a non-http gateway port, you must create the `VirtualService` resource first, then the `Gateway`.
-// If you attempt to bind the Gateway first, it will fail. istiod will log "must have more than 0 chains in listener".
+// For a non-http `Gateway` port, you must create the `VirtualService` resource first, then the `Gateway`.
+// If you attempt to create the `Gateway` first, it will fail. istiod will log "must have more than 0 chains in listener".
 //
-// For example, the following VirtualService splits traffic for
+// The following VirtualService splits traffic for
 // `https://uk.bookinfo.com/reviews`, `https://eu.bookinfo.com/reviews`,
 // `http://uk.bookinfo.com:9080/reviews`,
 // `http://eu.bookinfo.com:9080/reviews` into two versions (prod and qa) of
