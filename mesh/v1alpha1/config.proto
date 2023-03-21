@@ -41,7 +41,6 @@ message MeshConfig {
 
   // Port on which Envoy should listen for all inbound traffic to the pod/vm will be captured to. 
   // Default port is 15006.
-  // $hide_from_docs
   int32 proxy_inbound_listen_port = 65;
 
   // Port on which Envoy should listen for HTTP PROXY requests if set.
