@@ -551,7 +551,6 @@ type MeshConfig struct {
 	ProxyListenPort int32 `protobuf:"varint,4,opt,name=proxy_listen_port,json=proxyListenPort,proto3" json:"proxy_listen_port,omitempty"`
 	// Port on which Envoy should listen for all inbound traffic to the pod/vm will be captured to.
 	// Default port is 15006.
-	// $hide_from_docs
 	ProxyInboundListenPort int32 `protobuf:"varint,65,opt,name=proxy_inbound_listen_port,json=proxyInboundListenPort,proto3" json:"proxy_inbound_listen_port,omitempty"`
 	// Port on which Envoy should listen for HTTP PROXY requests if set.
 	ProxyHttpPort int32 `protobuf:"varint,5,opt,name=proxy_http_port,json=proxyHttpPort,proto3" json:"proxy_http_port,omitempty"`
