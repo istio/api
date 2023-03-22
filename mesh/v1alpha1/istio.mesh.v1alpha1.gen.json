@@ -62,7 +62,7 @@
             "format": "int32"
           },
           "proxyInboundListenPort": {
-            "description": "Port on which Envoy should listen for all inbound traffic to the pod/vm will be captured to. Default port is 15006. $hide_from_docs",
+            "description": "Port on which Envoy should listen for all inbound traffic to the pod/vm will be captured to. Default port is 15006.",
             "type": "integer",
             "format": "int32"
           },
