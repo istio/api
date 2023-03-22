@@ -302,6 +302,7 @@ message MeshConfig {
   string root_namespace = 34;
 
   // Locality based load balancing distribution or failover settings.
+  // If unspecified, locality based load balancing will be enabled by default.
   istio.networking.v1alpha3.LocalityLoadBalancerSetting locality_lb_setting = 35;
 
   // Configures DNS refresh rate for Envoy clusters of type `STRICT_DNS`
