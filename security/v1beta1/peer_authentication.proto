@@ -57,7 +57,7 @@ option go_package="istio.io/api/security/v1beta1";
 // apiVersion: security.istio.io/v1beta1
 // kind: PeerAuthentication
 // metadata:
-//   name: default
+//   name: finance
 //   namespace: foo
 // spec:
 //   selector:
