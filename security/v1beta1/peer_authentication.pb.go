@@ -138,7 +138,7 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 // kind: PeerAuthentication
 // metadata:
 //
-//	name: finance-peer-auth
+//	name: finance
 //	namespace: foo
 //
 // spec:
