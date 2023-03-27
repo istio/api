@@ -29,6 +29,7 @@ const (
 	Unknown ResourceTypes = iota
     Any
     AuthorizationPolicy
+    Gateway
     Ingress
     Namespace
     Pod
@@ -43,14 +44,16 @@ func (r ResourceTypes) String() string {
 	case 2:
 		return "AuthorizationPolicy"
 	case 3:
-		return "Ingress"
+		return "Gateway"
 	case 4:
-		return "Namespace"
+		return "Ingress"
 	case 5:
-		return "Pod"
+		return "Namespace"
 	case 6:
-		return "Service"
+		return "Pod"
 	case 7:
+		return "Service"
+	case 8:
 		return "WorkloadEntry"
 	}
 	return "Unknown"
@@ -228,6 +231,22 @@ var (
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			AuthorizationPolicy,
+		},
+	}
+
+	IoIstioForServiceAccount = Instance {
+		Name:          "istio.io/for-service-account",
+		Description:   "The name of an existing service account added to "+
+                        "Kubernetes Gateway resources and propagated to to the "+
+                        "corresponding waypoint proxy pod.  Any traffic going to "+
+                        "services using this service account will be mediated, "+
+                        "enforced and observed by the waypoint proxy.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+			Gateway,
 		},
 	}
 
@@ -795,6 +814,7 @@ func AllResourceAnnotations() []*Instance {
 		&IoIstioConnectedAt,
 		&IoIstioDisconnectedAt,
 		&IoIstioDryRun,
+		&IoIstioForServiceAccount,
 		&IoIstioWorkloadController,
 		&IoKubernetesIngressClass,
 		&NetworkingExportTo,
@@ -846,6 +866,7 @@ func AllResourceTypes() []string {
 	return []string {
 		"Any",
 		"AuthorizationPolicy",
+		"Gateway",
 		"Ingress",
 		"Namespace",
 		"Pod",

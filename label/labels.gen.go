@@ -28,6 +28,7 @@ type ResourceTypes int
 const (
 	Unknown ResourceTypes = iota
     Any
+    Deployment
     Namespace
     Node
     Pod
@@ -39,12 +40,14 @@ func (r ResourceTypes) String() string {
 	case 1:
 		return "Any"
 	case 2:
-		return "Namespace"
+		return "Deployment"
 	case 3:
-		return "Node"
+		return "Namespace"
 	case 4:
-		return "Pod"
+		return "Node"
 	case 5:
+		return "Pod"
+	case 6:
 		return "Service"
 	}
 	return "Unknown"
@@ -72,6 +75,56 @@ type Instance struct {
 }
 
 var (
+
+	AmbientRedirection = Instance {
+		Name:          "ambient.istio.io/redirection",
+		Description:   "Specifies whether a pod has ambient redirection (to "+
+                        "ztunnel) configured.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
+	GatewayManaged = Instance {
+		Name:          "gateway.istio.io/managed",
+		Description:   "Specifies whether a resource is managed by Istio via "+
+                        "Kubernetes Gateway API",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Deployment,
+			Service,
+		},
+	}
+
+	IoIstioDataplaneMode = Instance {
+		Name:          "istio.io/dataplane-mode",
+		Description:   "Specifies whether or not a workload is managed by Istio "+
+                        "ambient mesh.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Namespace,
+		},
+	}
+
+	IoIstioGatewayName = Instance {
+		Name:          "istio.io/gateway-name",
+		Description:   "Applied to pods which are managed by Istio via Kubernetes "+
+                        "Gateway API. Contains the name of the corresponding "+
+                        "Gateway object.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
 
 	IoIstioRev = Instance {
 		Name:          "istio.io/rev",
@@ -269,6 +322,10 @@ resources to help automate Istio's multi-network configuration.
 
 func AllResourceLabels() []*Instance {
 	return []*Instance {
+		&AmbientRedirection,
+		&GatewayManaged,
+		&IoIstioDataplaneMode,
+		&IoIstioGatewayName,
 		&IoIstioRev,
 		&NetworkingGatewayPort,
 		&OperatorComponent,
@@ -287,6 +344,7 @@ func AllResourceLabels() []*Instance {
 func AllResourceTypes() []string {
 	return []string {
 		"Any",
+		"Deployment",
 		"Namespace",
 		"Node",
 		"Pod",
