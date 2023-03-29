@@ -438,6 +438,14 @@ annotations:
     resources:
       - AuthorizationPolicy
 
+  - name: istio.io/rev
+    featureStatus: Alpha
+    description: Specifies a control plane revision to which a given proxy is connected.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+
   - name: proxy.istio.io/overrides
     featureStatus: Alpha
     description: Used internally to indicate user-specified overrides in the proxy container of the pod during injection.

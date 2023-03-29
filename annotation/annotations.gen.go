@@ -231,6 +231,18 @@ var (
 		},
 	}
 
+	IoIstioRev = Instance {
+		Name:          "istio.io/rev",
+		Description:   "Specifies a control plane revision to which a given proxy "+
+                        "is connected.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	IoIstioWorkloadController = Instance {
 		Name:          "istio.io/workloadController",
 		Description:   "On a WorkloadEntry should store the current/last pilot "+
@@ -795,6 +807,7 @@ func AllResourceAnnotations() []*Instance {
 		&IoIstioConnectedAt,
 		&IoIstioDisconnectedAt,
 		&IoIstioDryRun,
+		&IoIstioRev,
 		&IoIstioWorkloadController,
 		&IoKubernetesIngressClass,
 		&NetworkingExportTo,
