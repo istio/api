@@ -347,7 +347,7 @@ annotations:
     hidden: false
     resources:
       - Pod
-  
+
   - name: traffic.sidecar.istio.io/includeOutboundPorts
     featureStatus: Alpha
     description: A comma separated list of outbound ports for which traffic is to be
@@ -504,3 +504,11 @@ annotations:
     hidden: false
     resources:
       - Namespace
+
+  - name: gateway.istio.io/controller-version
+    featureStatus: Alpha
+    description:  A version added to the Gateway by the controller specifying the "controller version".
+    deprecated: false
+    hidden: true
+    resources:
+      - Any
