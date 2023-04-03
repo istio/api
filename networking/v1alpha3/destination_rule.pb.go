@@ -1780,6 +1780,17 @@ type LocalityLoadBalancerSetting struct {
 	// 4. endpoints have same [network] but different [region] labels with the client proxy have the fourth highest priority.
 	// 5. all the other endpoints have the same lowest priority.
 	//
+	// Suppose a service associated endpoints reside in multi clusters, the below example represents:
+	// 1. endpoints in `clusterA` and has `version=v1` label have P(0) priority.
+	// 2. endpoints not in `clusterA` but has `version=v1` label have P(1) priority.
+	// 2. all the other endpoints have P(2) priority.
+	//
+	// ```yaml
+	// failoverPriority:
+	// - "version=v1"
+	// - "topology.istio.io/cluster=clusterA"
+	// ```
+	//
 	// Optional: only one of distribute, failover or failoverPriority can be set.
 	// And it should be used together with `OutlierDetection` to detect unhealthy endpoints, otherwise has no effect.
 	FailoverPriority []string `protobuf:"bytes,4,rep,name=failover_priority,json=failoverPriority,proto3" json:"failover_priority,omitempty"`

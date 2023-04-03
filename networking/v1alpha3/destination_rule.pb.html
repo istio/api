@@ -1272,6 +1272,16 @@ The following labels which have special semantic meaning are also supported:</p>
 <li>endpoints have same [network] but different [region] labels with the client proxy have the fourth highest priority.</li>
 <li>all the other endpoints have the same lowest priority.</li>
 </ol>
+<p>Suppose a service associated endpoints reside in multi clusters, the below example represents:</p>
+<ol>
+<li>endpoints in <code>clusterA</code> and has <code>version=v1</code> label have P(0) priority.</li>
+<li>endpoints not in <code>clusterA</code> but has <code>version=v1</code> label have P(1) priority.</li>
+<li>all the other endpoints have P(2) priority.</li>
+</ol>
+<pre><code class="language-yaml">failoverPriority:
+- &quot;version=v1&quot;
+- &quot;topology.istio.io/cluster=clusterA&quot;
+</code></pre>
 <p>Optional: only one of distribute, failover or failoverPriority can be set.
 And it should be used together with <code>OutlierDetection</code> to detect unhealthy endpoints, otherwise has no effect.</p>
 
