@@ -507,7 +507,7 @@ annotations:
 
   - name: gateway.istio.io/controller-version
     featureStatus: Alpha
-    description:  A version added to the Gateway by the controller specifying the "controller version".
+    description: A version added to the Gateway by the controller specifying the "controller version".
     deprecated: false
     hidden: true
     resources:
