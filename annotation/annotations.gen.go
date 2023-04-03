@@ -667,8 +667,8 @@ var (
                         "(key1=value,key2=value, as JSON dict). If the annotated "+
                         "Service is of type NodePort and is a multi-network "+
                         "gateway (see topology.istio.io/network), the addresses "+
-                        "for selected nodes will be used for cross-network "+
-                        "communication.",
+                        "(ExternalIP) for selected nodes will be used for "+
+                        "cross-network communication.",
 		FeatureStatus: Stable,
 		Hidden:        false,
 		Deprecated:    false,
