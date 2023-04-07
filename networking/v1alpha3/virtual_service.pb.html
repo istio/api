@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.VirtualService
 aliases: [/docs/reference/config/networking/v1alpha3/virtual-service]
-number_of_entries: 27
+number_of_entries: 28
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -2306,6 +2306,55 @@ No
 <td><code>string</code></td>
 <td>
 <p>rewrite the Authority/Host header with this value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPRewrite-uri_regex_rewrite">
+<td><code>uriRegexRewrite</code></td>
+<td><code><a href="#RegexMatch">RegexMatch</a></code></td>
+<td>
+<p>rewrite the path portion of the URI with the specified regex.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RegexMatch">RegexMatch</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RegexMatch-match">
+<td><code>match</code></td>
+<td><code>string</code></td>
+<td>
+<p>RE2 style regex-based match (<a href="https://github.com/google/re2/wiki/Syntax)">https://github.com/google/re2/wiki/Syntax)</a>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RegexMatch-uri">
+<td><code>uri</code></td>
+<td><code>string</code></td>
+<td>
+<p>The string that should replace into matching portions of original URI.
+Capture groups in the pattern can be referenced in the new URI.</p>
 
 </td>
 <td>

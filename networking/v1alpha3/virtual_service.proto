@@ -1684,6 +1684,18 @@ message HTTPRewrite {
 
   // rewrite the Authority/Host header with this value.
   string authority = 2;
+
+  // rewrite the path portion of the URI with the specified regex.
+  RegexMatch uri_regex_rewrite = 3;
+}
+
+message RegexMatch {
+  // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+  string match = 1;
+
+  // The string that should replace into matching portions of original URI. 
+  // Capture groups in the pattern can be referenced in the new URI.
+  string uri = 2;
 }
 
 // Describes how to match a given string in HTTP headers. Match is

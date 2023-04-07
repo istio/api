@@ -38975,6 +38975,26 @@
                 "id": 2,
                 "name": "authority",
                 "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "uri_regex_rewrite",
+                "type": "RegexMatch"
+              }
+            ]
+          },
+          {
+            "name": "RegexMatch",
+            "fields": [
+              {
+                "id": 1,
+                "name": "match",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "uri",
+                "type": "string"
               }
             ]
           },
@@ -41518,6 +41538,26 @@
               {
                 "id": 2,
                 "name": "authority",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "uri_regex_rewrite",
+                "type": "RegexMatch"
+              }
+            ]
+          },
+          {
+            "name": "RegexMatch",
+            "fields": [
+              {
+                "id": 1,
+                "name": "match",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "uri",
                 "type": "string"
               }
             ]
