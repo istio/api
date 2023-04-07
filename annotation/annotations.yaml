@@ -441,6 +441,8 @@ annotations:
   - name: istio.io/rev
     featureStatus: Alpha
     description: Specifies a control plane revision to which a given proxy is connected.
+      This annotation is added automatically, not set by a user. In contrary to the label istio.io/rev,
+      it represents the actual revision, not the requested revision.
     deprecated: false
     hidden: false
     resources:
