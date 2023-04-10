@@ -243,6 +243,21 @@ var (
 		},
 	}
 
+	IoIstioRev = Instance {
+		Name:          "istio.io/rev",
+		Description:   "Specifies a control plane revision to which a given proxy "+
+                        "is connected. This annotation is added automatically, not "+
+                        "set by a user. In contrary to the label istio.io/rev, it "+
+                        "represents the actual revision, not the requested "+
+                        "revision.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	IoIstioWorkloadController = Instance {
 		Name:          "istio.io/workloadController",
 		Description:   "On a WorkloadEntry should store the current/last pilot "+
@@ -808,6 +823,7 @@ func AllResourceAnnotations() []*Instance {
 		&IoIstioConnectedAt,
 		&IoIstioDisconnectedAt,
 		&IoIstioDryRun,
+		&IoIstioRev,
 		&IoIstioWorkloadController,
 		&IoKubernetesIngressClass,
 		&NetworkingExportTo,
