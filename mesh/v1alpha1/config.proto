@@ -1133,6 +1133,16 @@ message MeshConfig {
     // If not specified, the default curves enforced by envoy will be used. For details about the default curves, refer to
     // [Ecdh Curves](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto)
     repeated string ecdh_curves = 2;
+    //
+    // Optional: If specified, the TLS connection will only support the specified cipher list when negotiating TLS 1.0-1.2.
+    // If not specified, the following cipher suites will be used:
+    // 	ECDHE-ECDSA-AES256-GCM-SHA384
+    //  ECDHE-RSA-AES256-GCM-SHA384
+    //  ECDHE-ECDSA-AES128-GCM-SHA256
+    //  ECDHE-RSA-AES128-GCM-SHA256
+    //  AES256-GCM-SHA384
+    //  AES128-GCM-SHA256
+    repeated string cipher_suites = 3;
   }
 
   // The below configuration parameters can be used to specify TLSConfig for mesh traffic.
