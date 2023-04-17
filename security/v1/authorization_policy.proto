@@ -217,6 +217,30 @@ import "type/v1beta1/selector.proto";
 //    matchLabels:
 //      version: v1
 // ```
+//
+// The following example set up an authorization policy using annotation `istio.io/dry-run` to dry-run the policy without actually enforcing it.
+//
+// The dry-run annotation allows you to better understand the effect of an authorization policy before applying it to the production traffic.
+// This helps to reduce the risk of breaking the production traffic caused by an incorrect authorization policy.
+// For more information, see [dry-run tasks](https://istio.io/latest/docs/tasks/security/authorization/authz-dry-run/).
+//
+// ```yaml
+// apiVersion: security.istio.io/v1
+// kind: AuthorizationPolicy
+// metadata:
+//   name: deny-path-headers
+//   annotations:
+//     "istio.io/dry-run": "true"
+// spec:
+//   selector:
+//     matchLabels:
+//       app: httpbin
+//   action: DENY
+//   rules:
+//   - to:
+//     - operation:
+//         paths: ["/headers"]
+// ```
 package istio.security.v1;
 
 option go_package="istio.io/api/security/v1";
