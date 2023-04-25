@@ -132,6 +132,18 @@ var (
 		},
 	}
 
+	GatewayControllerVersion = Instance {
+		Name:          "gateway.istio.io/controller-version",
+		Description:   "A version added to the Gateway by the controller "+
+                        "specifying the `controller version`.",
+		FeatureStatus: Alpha,
+		Hidden:        true,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Any,
+		},
+	}
+
 	InjectTemplates = Instance {
 		Name:          "inject.istio.io/templates",
 		Description:   "The name of the inject template(s) to use, as a comma "+
@@ -787,6 +799,7 @@ func AllResourceAnnotations() []*Instance {
 		&AlphaIdentity,
 		&AlphaKubernetesServiceAccounts,
 		&GalleyAnalyzeSuppress,
+		&GatewayControllerVersion,
 		&InjectTemplates,
 		&OperatorInstallChartOwner,
 		&OperatorInstallOwnerGeneration,
