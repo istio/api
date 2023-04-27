@@ -59,6 +59,16 @@ enum MetricType {
   HISTOGRAM = 2;
 }
 
+// Specifies the proxy deployment type.
+enum Reporter {
+  // Default value is inferred from the listener direction, as either client or
+  // server sidecar.
+  UNSPECIFIED = 0;
+
+  // Shared server gateway, e.g. "waypoint".
+  SERVER_GATEWAY = 1;
+}
+
 message MetricDefinition {
   // Metric name.
   string name = 1;
@@ -108,4 +118,18 @@ message PluginConfig {
 
   // Metric definitions.
   repeated MetricDefinition definitions = 9;
+
+  // Proxy deployment type.
+  // $hide_from_docs
+  Reporter reporter = 10;
+
+  // Metric scope rotation interval. Set to 0 to disable the metric scope rotation.
+  // Defaults to 0.
+  // $hide_from_docs
+  google.protobuf.Duration rotation_interval = 11;
+
+  // Metric expiry graceful deletion interval. No-op if the metric rotation is disabled.
+  // Defaults to 5m. Must be >=1s.
+  // $hide_from_docs
+  google.protobuf.Duration graceful_deletion_interval = 12;
 }
