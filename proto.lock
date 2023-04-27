@@ -33736,6 +33736,18 @@
                 "integer": 2
               }
             ]
+          },
+          {
+            "name": "Reporter",
+            "enum_fields": [
+              {
+                "name": "UNSPECIFIED"
+              },
+              {
+                "name": "SERVER_GATEWAY",
+                "integer": 1
+              }
+            ]
           }
         ],
         "messages": [
@@ -33844,6 +33856,21 @@
                 "name": "definitions",
                 "type": "MetricDefinition",
                 "is_repeated": true
+              },
+              {
+                "id": 10,
+                "name": "reporter",
+                "type": "Reporter"
+              },
+              {
+                "id": 11,
+                "name": "rotation_interval",
+                "type": "google.protobuf.Duration"
+              },
+              {
+                "id": 12,
+                "name": "graceful_deletion_interval",
+                "type": "google.protobuf.Duration"
               }
             ]
           }
