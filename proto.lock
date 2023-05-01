@@ -34084,6 +34084,50 @@
       }
     },
     {
+      "protopath": "gateway:/:v1alpha1:/:route_filter.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "RouteFilter",
+            "fields": [
+              {
+                "id": 1,
+                "name": "timeout",
+                "type": "google.protobuf.Duration"
+              },
+              {
+                "id": 2,
+                "name": "retries",
+                "type": "istio.networking.v1beta1.HTTPRetry"
+              },
+              {
+                "id": 3,
+                "name": "fault",
+                "type": "istio.networking.v1beta1.HTTPFaultInjection"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/duration.proto"
+          },
+          {
+            "path": "networking/v1beta1/virtual_service.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.gateway.v1alpha1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/gateway/v1alpha1"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "mcp:/:v1alpha1:/:mcp.proto",
       "def": {
         "messages": [

@@ -1,0 +1,13 @@
+apiVersion: release-notes/v2
+
+kind: feature
+area: gateway-api
+issue: []
+
+releaseNotes:
+- |
+    **Added** experimental API for Istio extensions to Gateway API route configuration.
+
+# docs is a list of related docs to the change.
+docs:
+- https://gateway-api.sigs.k8s.io/references/spec/#gateway.networking.k8s.io%2fv1beta1.HTTPRouteFilter

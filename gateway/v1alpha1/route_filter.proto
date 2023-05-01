@@ -1,0 +1,108 @@
+// Copyright Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "google/protobuf/duration.proto";
+import "networking/v1beta1/virtual_service.proto";
+
+// $schema: istio.gateway.v1alpha1.RouteFilter
+// $title: RouteFilter
+// $description: Provides Istio route filter extensions for Gateway API.
+// $location: https://istio.io/docs/reference/config/gateway/route-filter.html
+// $aliases: [/docs/reference/config/gateway/v1alpha1/route-filter]
+// $mode: none
+
+// `RouteFilter` is an experimental API used to configure Istio extensions to the
+// Kubernetes [Gateway API](https://gateway-api.sigs.k8s.io/).
+// It can be referenced using the `extensionRef` field of an
+// [HTTPRouteFilter](https://gateway-api.sigs.k8s.io/references/spec/#gateway.networking.k8s.io%2fv1beta1.HTTPRouteFilter)
+// to configure Istio features that are not currently supported in the Gateway API
+// itself.
+//
+// ```yaml
+// apiVersion: gateway.networking.k8s.io/v1beta1
+// kind: HTTPRoute
+// metadata:
+//   name: reviews
+// spec:
+//   parentRefs:
+//   - kind: Service
+//     name: reviews
+//     port: 9080
+//   rules:
+//   - filters:
+//     - type: ExtensionRef
+//       extensionRef:
+//         group: gateway.istio.io/v1alpha1
+//         kind: RouteFilter
+//         name: reviews
+//     backendRefs:
+//     - name: reviews-v1
+//       port: 9080
+// ---
+// apiVersion: gateway.istio.io/v1alpha1
+// kind: RouteFilter
+// metadata:
+//   name: reviews
+// spec:
+//   timeout: 10s
+//   retries:
+//     attempts: 3
+//     perTryTimeout: 2s
+//     retryOn: connect-failure,refused-stream,503
+// ```
+//
+// Fields in the `RouteFilter` type should be considered both experimental and
+// potentially temporary. New fields will be added as needed and others will likely
+// be removed in the future if Gateway API adds support for their corresponding
+// features.
+//
+package istio.gateway.v1alpha1;
+
+option go_package = "istio.io/api/gateway/v1alpha1";
+
+// `RouteFilter` is an experimental API used to configure Istio extensions to the
+// Kubernetes [Gateway API](https://gateway-api.sigs.k8s.io/).
+//
+// <!-- crd generation tags
+// +cue-gen:RouteFilter:groupName:gateway.istio.io
+// +cue-gen:RouteFilter:version:v1alpha1
+// +cue-gen:RouteFilter:storageVersion
+// +cue-gen:RouteFilter:annotations:helm.sh/resource-policy=keep
+// +cue-gen:RouteFilter:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
+// +cue-gen:RouteFilter:subresource:status
+// +cue-gen:RouteFilter:scope:Namespaced
+// +cue-gen:RouteFilter:resource:categories=istio-io,gateway-istio-io,plural=RouteFilters
+// +cue-gen:RouteFilter:preserveUnknownFields:false
+// -->
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=gateway.istio.io/v1alpha1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
+message RouteFilter {
+  // Timeout for HTTP requests, default is disabled.
+  google.protobuf.Duration timeout = 1;
+
+  // Retry policy for HTTP requests.
+  istio.networking.v1beta1.HTTPRetry retries = 2;
+
+  // Fault injection policy to apply on HTTP traffic at the client side.
+  // Note that timeouts or retries will not be enabled when faults are
+  // enabled on the client side.
+  istio.networking.v1beta1.HTTPFaultInjection fault = 3;
+}

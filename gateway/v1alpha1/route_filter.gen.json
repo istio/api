@@ -1,0 +1,221 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Provides Istio route filter extensions for Gateway API.",
+    "version": "v1alpha1"
+  },
+  "components": {
+    "schemas": {
+      "istio.gateway.v1alpha1.RouteFilter": {
+        "description": "`RouteFilter` is an experimental API used to configure Istio extensions to the Kubernetes [Gateway API](https://gateway-api.sigs.k8s.io/).",
+        "type": "object",
+        "properties": {
+          "timeout": {
+            "description": "Timeout for HTTP requests, default is disabled.",
+            "type": "string"
+          },
+          "retries": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.HTTPRetry"
+          },
+          "fault": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.HTTPFaultInjection"
+          }
+        }
+      },
+      "istio.networking.v1beta1.HTTPFaultInjection": {
+        "description": "HTTPFaultInjection can be used to specify one or more faults to inject while forwarding HTTP requests to the destination specified in a route. Fault specification is part of a VirtualService rule. Faults include aborting the Http request from downstream service, and/or delaying proxying of requests. A fault rule MUST HAVE delay or abort or both.",
+        "type": "object",
+        "properties": {
+          "delay": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.HTTPFaultInjection.Delay"
+          },
+          "abort": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.HTTPFaultInjection.Abort"
+          }
+        }
+      },
+      "istio.networking.v1beta1.HTTPFaultInjection.Abort": {
+        "description": "Abort specification is used to prematurely abort a request with a pre-specified error code. The following example will return an HTTP 400 error code for 1 out of every 1000 requests to the \"ratings\" service \"v1\".",
+        "type": "object",
+        "properties": {
+          "percentage": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.Percent"
+          }
+        },
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "httpStatus"
+                  ],
+                  "properties": {
+                    "httpStatus": {
+                      "description": "HTTP status code to use to abort the Http request.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "grpcStatus"
+                  ],
+                  "properties": {
+                    "grpcStatus": {
+                      "description": "GRPC status code to use to abort the request. The supported codes are documented in https://github.com/grpc/grpc/blob/master/doc/statuscodes.md Note: If you want to return the status \"Unavailable\", then you should specify the code as `UNAVAILABLE`(all caps), but not `14`.",
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "http2Error"
+                  ],
+                  "properties": {
+                    "http2Error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "httpStatus"
+            ],
+            "properties": {
+              "httpStatus": {
+                "description": "HTTP status code to use to abort the Http request.",
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          {
+            "required": [
+              "grpcStatus"
+            ],
+            "properties": {
+              "grpcStatus": {
+                "description": "GRPC status code to use to abort the request. The supported codes are documented in https://github.com/grpc/grpc/blob/master/doc/statuscodes.md Note: If you want to return the status \"Unavailable\", then you should specify the code as `UNAVAILABLE`(all caps), but not `14`.",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "http2Error"
+            ],
+            "properties": {
+              "http2Error": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "istio.networking.v1beta1.HTTPFaultInjection.Delay": {
+        "description": "Delay specification is used to inject latency into the request forwarding path. The following example will introduce a 5 second delay in 1 out of every 1000 requests to the \"v1\" version of the \"reviews\" service from all pods with label env: prod",
+        "type": "object",
+        "properties": {
+          "percent": {
+            "description": "Percentage of requests on which the delay will be injected (0-100). Use of integer `percent` value is deprecated. Use the double `percentage` field instead.",
+            "type": "integer",
+            "format": "int32",
+            "deprecated": true
+          },
+          "percentage": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.Percent"
+          }
+        },
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "fixedDelay"
+                  ],
+                  "properties": {
+                    "fixedDelay": {
+                      "description": "Add a fixed delay before forwarding the request. Format: 1h/1m/1s/1ms. MUST be \u003e=1ms.",
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "exponentialDelay"
+                  ],
+                  "properties": {
+                    "exponentialDelay": {
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "fixedDelay"
+            ],
+            "properties": {
+              "fixedDelay": {
+                "description": "Add a fixed delay before forwarding the request. Format: 1h/1m/1s/1ms. MUST be \u003e=1ms.",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "exponentialDelay"
+            ],
+            "properties": {
+              "exponentialDelay": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "istio.networking.v1beta1.HTTPRetry": {
+        "description": "Describes the retry policy to use when a HTTP request fails. For example, the following rule sets the maximum number of retries to 3 when calling ratings:v1 service, with a 2s timeout per retry attempt. A retry will be attempted if there is a connect-failure, refused_stream or when the upstream server responds with Service Unavailable(503).",
+        "type": "object",
+        "properties": {
+          "attempts": {
+            "description": "Number of retries to be allowed for a given request. The interval between retries will be determined automatically (25ms+). When request `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute) or `per_try_timeout` is configured, the actual number of retries attempted also depends on the specified request `timeout` and `per_try_timeout` values.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "perTryTimeout": {
+            "description": "Timeout per attempt for a given request, including the initial call and any retries. Format: 1h/1m/1s/1ms. MUST BE \u003e=1ms. Default is same value as request `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute), which means no timeout.",
+            "type": "string"
+          },
+          "retryOn": {
+            "description": "Specifies the conditions under which retry takes place. One or more policies can be specified using a ‘,’ delimited list. If `retry_on` specifies a valid HTTP status, it will be added to retriable_status_codes retry policy. See the [retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on) and [gRPC retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on) for more details.",
+            "type": "string"
+          },
+          "retryRemoteLocalities": {
+            "description": "Flag to specify whether the retries should retry to other localities. See the [retry plugin configuration](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_connection_management#retry-plugin-configuration) for more details.",
+            "type": "boolean",
+            "nullable": true
+          }
+        }
+      },
+      "istio.networking.v1beta1.Percent": {
+        "description": "Percent specifies a percentage in the range of [0.0, 100.0].",
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      }
+    }
+  }
+}

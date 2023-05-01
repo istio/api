@@ -30,7 +30,8 @@ directories:
     - mode: perFile
   extensions/v1alpha1:
     - mode: perFile
-
+  gateway/v1alpha1:
+    - mode: perFile
 
 # All is used when generating all types referenced in the above directories to
 # one file.
