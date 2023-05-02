@@ -250,7 +250,7 @@
             }
           },
           "ipBlocks": {
-            "description": "Optional. A list of IP blocks, populated from the source address of the IP packet. Single IP (e.g. \"1.2.3.4\") and CIDR (e.g. \"1.2.3.0/24\") are supported. This is the same as the `source.ip` attribute.",
+            "description": "Optional. A list of IP blocks, populated from the source address of the IP packet. Single IP (e.g. \"203.0.113.4\") and CIDR (e.g. \"203.0.113.0/24\") are supported. This is the same as the `source.ip` attribute.",
             "type": "array",
             "items": {
               "type": "string"
@@ -264,7 +264,7 @@
             }
           },
           "remoteIpBlocks": {
-            "description": "Optional. A list of IP blocks, populated from X-Forwarded-For header or proxy protocol. To make use of this field, you must configure the numTrustedProxies field of the gatewayTopology under the meshConfig when you install Istio or using an annotation on the ingress gateway. See the documentation here: [Configuring Gateway Network Topology](https://istio.io/latest/docs/ops/configuration/traffic-management/network-topologies/). Single IP (e.g. \"1.2.3.4\") and CIDR (e.g. \"1.2.3.0/24\") are supported. This is the same as the `remote.ip` attribute.",
+            "description": "Optional. A list of IP blocks, populated from X-Forwarded-For header or proxy protocol. To make use of this field, you must configure the numTrustedProxies field of the gatewayTopology under the meshConfig when you install Istio or using an annotation on the ingress gateway. See the documentation here: [Configuring Gateway Network Topology](https://istio.io/latest/docs/ops/configuration/traffic-management/network-topologies/). Single IP (e.g. \"203.0.113.4\") and CIDR (e.g. \"203.0.113.0/24\") are supported. This is the same as the `remote.ip` attribute.",
             "type": "array",
             "items": {
               "type": "string"
