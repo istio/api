@@ -541,12 +541,12 @@ func (x *Rule) GetWhen() []*Condition {
 // ANDed together.
 //
 // For example, the following source matches if the principal is "admin" or "dev"
-// and the namespace is "prod" or "test" and the ip is not "1.2.3.4".
+// and the namespace is "prod" or "test" and the ip is not "203.0.113.4".
 //
 // ```yaml
 // principals: ["admin", "dev"]
 // namespaces: ["prod", "test"]
-// notIpBlocks: ["1.2.3.4"]
+// notIpBlocks: ["203.0.113.4"]
 // ```
 type Source struct {
 	state         protoimpl.MessageState
@@ -576,8 +576,8 @@ type Source struct {
 	Namespaces []string `protobuf:"bytes,3,rep,name=namespaces,proto3" json:"namespaces,omitempty"`
 	// Optional. A list of negative match of namespaces.
 	NotNamespaces []string `protobuf:"bytes,7,rep,name=not_namespaces,json=notNamespaces,proto3" json:"not_namespaces,omitempty"`
-	// Optional. A list of IP blocks, populated from the source address of the IP packet. Single IP (e.g. "1.2.3.4") and
-	// CIDR (e.g. "1.2.3.0/24") are supported. This is the same as the `source.ip` attribute.
+	// Optional. A list of IP blocks, populated from the source address of the IP packet. Single IP (e.g. "203.0.113.4") and
+	// CIDR (e.g. "203.0.113.0/24") are supported. This is the same as the `source.ip` attribute.
 	//
 	// If not set, any IP is allowed.
 	IpBlocks []string `protobuf:"bytes,4,rep,name=ip_blocks,json=ipBlocks,proto3" json:"ip_blocks,omitempty"`
@@ -587,7 +587,7 @@ type Source struct {
 	// To make use of this field, you must configure the numTrustedProxies field of the gatewayTopology under the meshConfig
 	// when you install Istio or using an annotation on the ingress gateway.  See the documentation here:
 	// [Configuring Gateway Network Topology](https://istio.io/latest/docs/ops/configuration/traffic-management/network-topologies/).
-	// Single IP (e.g. "1.2.3.4") and CIDR (e.g. "1.2.3.0/24") are supported.
+	// Single IP (e.g. "203.0.113.4") and CIDR (e.g. "203.0.113.0/24") are supported.
 	// This is the same as the `remote.ip` attribute.
 	//
 	// If not set, any IP is allowed.
