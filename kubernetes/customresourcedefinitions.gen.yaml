@@ -4800,7 +4800,7 @@ spec:
                             match:
                               description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
                               type: string
-                            uri:
+                            rewrite:
                               description: The string that should replace into matching
                                 portions of original URI.
                               type: string
@@ -5595,7 +5595,7 @@ spec:
                             match:
                               description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
                               type: string
-                            uri:
+                            rewrite:
                               description: The string that should replace into matching
                                 portions of original URI.
                               type: string

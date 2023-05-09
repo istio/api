@@ -41564,12 +41564,12 @@
               {
                 "id": 3,
                 "name": "uri_regex_rewrite",
-                "type": "RegexMatch"
+                "type": "RegexRewrite"
               }
             ]
           },
           {
-            "name": "RegexMatch",
+            "name": "RegexRewrite",
             "fields": [
               {
                 "id": 1,
@@ -41578,7 +41578,7 @@
               },
               {
                 "id": 2,
-                "name": "uri",
+                "name": "rewrite",
                 "type": "string"
               }
             ]
@@ -44128,12 +44128,12 @@
               {
                 "id": 3,
                 "name": "uri_regex_rewrite",
-                "type": "RegexMatch"
+                "type": "RegexRewrite"
               }
             ]
           },
           {
-            "name": "RegexMatch",
+            "name": "RegexRewrite",
             "fields": [
               {
                 "id": 1,
@@ -44142,7 +44142,7 @@
               },
               {
                 "id": 2,
-                "name": "uri",
+                "name": "rewrite",
                 "type": "string"
               }
             ]

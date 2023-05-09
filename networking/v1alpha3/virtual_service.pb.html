@@ -2319,7 +2319,7 @@ No
 </tr>
 <tr id="HTTPRewrite-uri_regex_rewrite">
 <td><code>uriRegexRewrite</code></td>
-<td><code><a href="#RegexMatch">RegexMatch</a></code></td>
+<td><code><a href="#RegexRewrite">RegexRewrite</a></code></td>
 <td>
 <p>rewrite the path portion of the URI with the specified regex.</p>
 
@@ -2331,7 +2331,7 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="RegexMatch">RegexMatch</h2>
+<h2 id="RegexRewrite">RegexRewrite</h2>
 <section>
 <table class="message-fields">
 <thead>
@@ -2343,7 +2343,7 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="RegexMatch-match">
+<tr id="RegexRewrite-match">
 <td><code>match</code></td>
 <td><code>string</code></td>
 <td>
@@ -2354,8 +2354,8 @@ No
 No
 </td>
 </tr>
-<tr id="RegexMatch-uri">
-<td><code>uri</code></td>
+<tr id="RegexRewrite-rewrite">
+<td><code>rewrite</code></td>
 <td><code>string</code></td>
 <td>
 <p>The string that should replace into matching portions of original URI.

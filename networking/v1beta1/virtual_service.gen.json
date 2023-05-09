@@ -507,7 +507,7 @@
             "type": "string"
           },
           "uriRegexRewrite": {
-            "$ref": "#/components/schemas/istio.networking.v1beta1.RegexMatch"
+            "$ref": "#/components/schemas/istio.networking.v1beta1.RegexRewrite"
           }
         }
       },
@@ -690,14 +690,14 @@
           }
         }
       },
-      "istio.networking.v1beta1.RegexMatch": {
+      "istio.networking.v1beta1.RegexRewrite": {
         "type": "object",
         "properties": {
           "match": {
             "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
             "type": "string"
           },
-          "uri": {
+          "rewrite": {
             "description": "The string that should replace into matching portions of original URI. Capture groups in the pattern can be referenced in the new URI.",
             "type": "string"
           }
