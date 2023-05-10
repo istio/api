@@ -218,7 +218,8 @@ import "type/v1beta1/selector.proto";
 //      version: v1
 // ```
 //
-// The following example set up an authorization policy using annotation `istio.io/dry-run` to dry-run the policy without actually enforcing it.
+// The following example shows you how to set up an authorization policy using an [experimental annotation](https://istio.io/latest/docs/reference/config/annotations/)
+// `istio.io/dry-run` to dry-run the policy without actually enforcing it.
 //
 // The dry-run annotation allows you to better understand the effect of an authorization policy before applying it to the production traffic.
 // This helps to reduce the risk of breaking the production traffic caused by an incorrect authorization policy.
@@ -228,7 +229,7 @@ import "type/v1beta1/selector.proto";
 // apiVersion: security.istio.io/v1beta1
 // kind: AuthorizationPolicy
 // metadata:
-//   name: deny-path-headers
+//   name: dry-run-example
 //   annotations:
 //     "istio.io/dry-run": "true"
 // spec:
