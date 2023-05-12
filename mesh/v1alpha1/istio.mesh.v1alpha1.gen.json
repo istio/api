@@ -1254,6 +1254,13 @@
             "items": {
               "type": "string"
             }
+          },
+          "cipherSuites": {
+            "description": "Optional: If specified, the TLS connection will only support the specified cipher list when negotiating TLS 1.0-1.2. If not specified, the following cipher suites will be used: ECDHE-ECDSA-AES256-GCM-SHA384 ECDHE-RSA-AES256-GCM-SHA384 ECDHE-ECDSA-AES128-GCM-SHA256 ECDHE-RSA-AES128-GCM-SHA256 AES256-GCM-SHA384 AES128-GCM-SHA256",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },

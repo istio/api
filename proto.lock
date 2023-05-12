@@ -38176,6 +38176,12 @@
                     "name": "ecdh_curves",
                     "type": "string",
                     "is_repeated": true
+                  },
+                  {
+                    "id": 3,
+                    "name": "cipher_suites",
+                    "type": "string",
+                    "is_repeated": true
                   }
                 ]
               }
