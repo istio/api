@@ -1711,7 +1711,6 @@ message RegexRewrite {
   // Example 2: case insensitive rewrite
   // Path pattern "/aaa/XxX/bbb" with match "(?i)/xxx/" and a rewrite string of /yyy/ would do a 
   // case-insensitive match and transform the path to "/aaa/yyy/bbb".
-The pattern ^(.*?)one(.*)$ paired with a substitution string of \1two\2 would replace only the first occurrence of one, transforming path /xxx/one/yyy/one/zzz into /xxx/two/yyy/one/zzz.
   string rewrite = 2;
 }
 
