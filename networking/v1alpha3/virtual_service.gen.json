@@ -505,6 +505,9 @@
           "authority": {
             "description": "rewrite the Authority/Host header with this value.",
             "type": "string"
+          },
+          "uriRegexRewrite": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.RegexRewrite"
           }
         }
       },
@@ -684,6 +687,19 @@
           "number": {
             "description": "Valid port number",
             "type": "integer"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.RegexRewrite": {
+        "type": "object",
+        "properties": {
+          "match": {
+            "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
+            "type": "string"
+          },
+          "rewrite": {
+            "description": "The string that should replace into matching portions of original URI. Capture groups in the pattern can be referenced in the new URI. Examples: Example 1: rewrite with capture groups Path pattern \"/service/update/v1/api\" with match \"^/service/([^/]+)(/.*)$\" and rewrite string of \"/customprefix/\\2/\\1\" would transform into \"/customprefix/v1/api/update\".",
+            "type": "string"
           }
         }
       },

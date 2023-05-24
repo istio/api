@@ -1691,6 +1691,27 @@ message HTTPRewrite {
 
   // rewrite the Authority/Host header with this value.
   string authority = 2;
+
+  // rewrite the path portion of the URI with the specified regex.
+  RegexRewrite uri_regex_rewrite = 3;
+}
+
+message RegexRewrite {
+  // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+  string match = 1;
+
+  // The string that should replace into matching portions of original URI. 
+  // Capture groups in the pattern can be referenced in the new URI.
+  // Examples:
+  //
+  // Example 1: rewrite with capture groups
+  // Path pattern "/service/update/v1/api" with match "^/service/([^/]+)(/.*)$" and
+  // rewrite string of "/customprefix/\2/\1" would transform into "/customprefix/v1/api/update".
+  // 
+  // Example 2: case insensitive rewrite
+  // Path pattern "/aaa/XxX/bbb" with match "(?i)/xxx/" and a rewrite string of /yyy/ would do a 
+  // case-insensitive match and transform the path to "/aaa/yyy/bbb".
+  string rewrite = 2;
 }
 
 // Describes how to match a given string in HTTP headers. Match is
