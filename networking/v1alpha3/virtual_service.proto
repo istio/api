@@ -1702,6 +1702,16 @@ message RegexRewrite {
 
   // The string that should replace into matching portions of original URI. 
   // Capture groups in the pattern can be referenced in the new URI.
+  // Examples:
+  //
+  // Example 1: rewrite with capture groups
+  // Path pattern "/service/update/v1/api" with match "^/service/([^/]+)(/.*)$" and
+  // rewrite string of "/customprefix/\2/\1" would transform into "/customprefix/v1/api/update".
+  // 
+  // Example 2: case insensitive rewrite
+  // Path pattern "/aaa/XxX/bbb" with match "(?i)/xxx/" and a rewrite string of /yyy/ would do a 
+  // case-insensitive match and transform the path to "/aaa/yyy/bbb".
+The pattern ^(.*?)one(.*)$ paired with a substitution string of \1two\2 would replace only the first occurrence of one, transforming path /xxx/one/yyy/one/zzz into /xxx/two/yyy/one/zzz.
   string rewrite = 2;
 }
 
