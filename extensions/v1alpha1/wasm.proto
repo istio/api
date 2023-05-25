@@ -341,6 +341,53 @@ message WasmPlugin {
   // If a traffic satisfies any of TrafficSelectors, 
   // the traffic passes the WasmPlugin.
   repeated TrafficSelector match = 12;
+
+  // Specifies the restrictions on the execution of the module via limiting access
+  // to the host ABI calls. If not set, uses the default capability set.
+  CapabilityRestriction capabilities = 13;
+
+  // Specifies the restrictions on the callbacks from the host to the module.
+  // If not set, places no restrictions.
+  EventRestriction events = 14;
+}
+
+// Capability restriction enforces limits on the Wasm ABI calls.
+message CapabilityRestriction {
+  // The capability group to limit the ABI calls.
+  CapabilitySet set = 1;
+}
+
+// Event restrictions enforces limits on the callback to the Wasm module.
+message EventRestriction {
+  // Trigger Wasm execution on receiving the request headers.
+  bool OnRequestHeaders = 1;
+  // Trigger Wasm execution on receiving the request body.
+  bool OnRequestBody = 2;
+  // Trigger Wasm execution on receiving the response headers.
+  bool OnResponseHeaders = 3;
+  // Trigger Wasm execution on receiving the response body.
+  bool OnResponseBody = 4;
+}
+
+// A set of capabilities in the increasing order.
+enum CapabilitySet {
+  // The default set is the safe and the recommended setting.
+  // The following ABI calls are permitted:
+  // * logging;
+  // * property read.
+  DEFAULT = 0;
+
+  // The basic set is the superset of the default set with extra capabilities that can cause
+  // stability or performance problems.
+  // The following additional ABI calls are permitted:
+  // * metrics;
+  // * timers;
+  // * side requests (HTTP and gRPC).
+  BASIC = 1;
+
+  // The advanced set has no restrictions on the ABI calls. This is not
+  // recommended for use with untrusted modules.
+  ADVANCED = 2;
 }
 
 // The phase in the filter chain where the plugin will be injected.

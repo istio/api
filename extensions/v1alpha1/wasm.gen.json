@@ -6,6 +6,24 @@
   },
   "components": {
     "schemas": {
+      "istio.extensions.v1alpha1.CapabilityRestriction": {
+        "description": "Capability restriction enforces limits on the Wasm ABI calls.",
+        "type": "object",
+        "properties": {
+          "set": {
+            "$ref": "#/components/schemas/istio.extensions.v1alpha1.CapabilitySet"
+          }
+        }
+      },
+      "istio.extensions.v1alpha1.CapabilitySet": {
+        "description": "A set of capabilities in the increasing order.",
+        "type": "string",
+        "enum": [
+          "DEFAULT",
+          "BASIC",
+          "ADVANCED"
+        ]
+      },
       "istio.extensions.v1alpha1.EnvValueSource": {
         "type": "string",
         "enum": [
@@ -26,6 +44,28 @@
           "value": {
             "description": "Value for the environment variable. Note that if `value_from` is `HOST`, it will be ignored. Defaults to \"\".",
             "type": "string"
+          }
+        }
+      },
+      "istio.extensions.v1alpha1.EventRestriction": {
+        "description": "Event restrictions enforces limits on the callback to the Wasm module.",
+        "type": "object",
+        "properties": {
+          "OnRequestHeaders": {
+            "description": "Trigger Wasm execution on receiving the request headers.",
+            "type": "boolean"
+          },
+          "OnRequestBody": {
+            "description": "Trigger Wasm execution on receiving the request body.",
+            "type": "boolean"
+          },
+          "OnResponseHeaders": {
+            "description": "Trigger Wasm execution on receiving the response headers.",
+            "type": "boolean"
+          },
+          "OnResponseBody": {
+            "description": "Trigger Wasm execution on receiving the response body.",
+            "type": "boolean"
           }
         }
       },
@@ -112,6 +152,12 @@
             "items": {
               "$ref": "#/components/schemas/istio.extensions.v1alpha1.WasmPlugin.TrafficSelector"
             }
+          },
+          "capabilities": {
+            "$ref": "#/components/schemas/istio.extensions.v1alpha1.CapabilityRestriction"
+          },
+          "events": {
+            "$ref": "#/components/schemas/istio.extensions.v1alpha1.EventRestriction"
           }
         }
       },
