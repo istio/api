@@ -39,6 +39,35 @@ spec:
             description: 'Extend the functionality provided by the Istio proxy through
               WebAssembly filters. See more details at: https://istio.io/docs/reference/config/proxy_extensions/wasm-plugin.html'
             properties:
+              capabilities:
+                properties:
+                  set:
+                    description: The capability group to limit the ABI calls.
+                    enum:
+                    - DEFAULT
+                    - BASIC
+                    - ADVANCED
+                    type: string
+                type: object
+              events:
+                description: Specifies the restrictions on the callbacks from the
+                  host to the module.
+                properties:
+                  OnRequestBody:
+                    description: Trigger Wasm execution on receiving the request body.
+                    type: boolean
+                  OnRequestHeaders:
+                    description: Trigger Wasm execution on receiving the request headers.
+                    type: boolean
+                  OnResponseBody:
+                    description: Trigger Wasm execution on receiving the response
+                      body.
+                    type: boolean
+                  OnResponseHeaders:
+                    description: Trigger Wasm execution on receiving the response
+                      headers.
+                    type: boolean
+                type: object
               imagePullPolicy:
                 enum:
                 - UNSPECIFIED_POLICY

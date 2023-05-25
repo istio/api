@@ -36454,6 +36454,22 @@
       "def": {
         "enums": [
           {
+            "name": "CapabilitySet",
+            "enum_fields": [
+              {
+                "name": "DEFAULT"
+              },
+              {
+                "name": "BASIC",
+                "integer": 1
+              },
+              {
+                "name": "ADVANCED",
+                "integer": 2
+              }
+            ]
+          },
+          {
             "name": "PluginPhase",
             "enum_fields": [
               {
@@ -36566,6 +36582,16 @@
                 "name": "match",
                 "type": "TrafficSelector",
                 "is_repeated": true
+              },
+              {
+                "id": 13,
+                "name": "capabilities",
+                "type": "CapabilityRestriction"
+              },
+              {
+                "id": 14,
+                "name": "events",
+                "type": "EventRestriction"
               }
             ],
             "messages": [
@@ -36584,6 +36610,41 @@
                     "is_repeated": true
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "name": "CapabilityRestriction",
+            "fields": [
+              {
+                "id": 1,
+                "name": "set",
+                "type": "CapabilitySet"
+              }
+            ]
+          },
+          {
+            "name": "EventRestriction",
+            "fields": [
+              {
+                "id": 1,
+                "name": "OnRequestHeaders",
+                "type": "bool"
+              },
+              {
+                "id": 2,
+                "name": "OnRequestBody",
+                "type": "bool"
+              },
+              {
+                "id": 3,
+                "name": "OnResponseHeaders",
+                "type": "bool"
+              },
+              {
+                "id": 4,
+                "name": "OnResponseBody",
+                "type": "bool"
               }
             ]
           },

@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.extensions.v1alpha1.WasmPlugin
 aliases: [/docs/reference/config/extensions/v1alpha1/wasm-plugin]
-number_of_entries: 7
+number_of_entries: 10
 ---
 <p>WasmPlugins provides a mechanism to extend the functionality provided by
 the Istio proxy through WebAssembly filters.</p>
@@ -334,6 +334,119 @@ the traffic passes the WasmPlugin.</p>
 No
 </td>
 </tr>
+<tr id="WasmPlugin-capabilities">
+<td><code>capabilities</code></td>
+<td><code><a href="#CapabilityRestriction">CapabilityRestriction</a></code></td>
+<td>
+<p>Specifies the restrictions on the execution of the module via limiting access
+to the host ABI calls. Must be set.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WasmPlugin-events">
+<td><code>events</code></td>
+<td><code><a href="#EventRestriction">EventRestriction</a></code></td>
+<td>
+<p>Specifies the restrictions on the callbacks from the host to the module.
+If not set, places no restrictions.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="CapabilityRestriction">CapabilityRestriction</h2>
+<section>
+<p>Capability restriction enforces limits on the Wasm ABI calls.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="CapabilityRestriction-set">
+<td><code>set</code></td>
+<td><code><a href="#CapabilitySet">CapabilitySet</a></code></td>
+<td>
+<p>The capability group to limit the ABI calls.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="EventRestriction">EventRestriction</h2>
+<section>
+<p>Event restrictions enforces limits on the callback to the Wasm module.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="EventRestriction-OnRequestHeaders">
+<td><code>OnRequestHeaders</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Trigger Wasm execution on receiving the request headers.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="EventRestriction-OnRequestBody">
+<td><code>OnRequestBody</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Trigger Wasm execution on receiving the request body.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="EventRestriction-OnResponseHeaders">
+<td><code>OnResponseHeaders</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Trigger Wasm execution on receiving the response headers.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="EventRestriction-OnResponseBody">
+<td><code>OnResponseBody</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Trigger Wasm execution on receiving the response body.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -465,6 +578,55 @@ If not specified, this condition is evaluated to true for any port.</p>
 </td>
 <td>
 No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="CapabilitySet">CapabilitySet</h2>
+<section>
+<p>A set of capabilities in the increasing order.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="CapabilitySet-DEFAULT">
+<td><code>DEFAULT</code></td>
+<td>
+<p>The default set is the safe and the recommended setting.
+The following ABI calls are permitted:</p>
+<ul>
+<li>logging;</li>
+<li>property read.</li>
+</ul>
+
+</td>
+</tr>
+<tr id="CapabilitySet-BASIC">
+<td><code>BASIC</code></td>
+<td>
+<p>The basic set is the superset of the default set with extra capabilities that can cause
+stability or performance problems.
+The following additional ABI calls are permitted:</p>
+<ul>
+<li>metrics;</li>
+<li>timers;</li>
+<li>side requests (HTTP and gRPC).</li>
+</ul>
+
+</td>
+</tr>
+<tr id="CapabilitySet-ADVANCED">
+<td><code>ADVANCED</code></td>
+<td>
+<p>The advanced set has no restrictions on the ABI calls. This is not
+recommended for use with untrusted modules.</p>
+
 </td>
 </tr>
 </tbody>
