@@ -1002,10 +1002,11 @@ type ServerTLSSettings struct {
 	// holds the TLS certs including the CA certificates. Applicable
 	// only on Kubernetes. An Opaque secret should contain the following
 	// keys and values: `key: <privateKey>` and `cert: <serverCert>`.
-	// For mutual TLS, `cacert: <CACertificate>` can be provided in the
-	// same secret or a separate secret named `<secret>-cacert`.
+	// For mutual TLS, `cacert: <CACertificate>` and `crl: <CertificateRevocationList>`
+	// can be provided in the same secret or a separate secret named `<secret>-cacert`.
 	// A TLS secret for server certificates with an additional `ca.crt`
-	// key for CA certificates is also supported.
+	// key for CA certificates and `ca.crl` for certificate revocation list
+	// is also supported.
 	// Only one of server certificates and CA certificate
 	// or credentialName can be specified.
 	CredentialName string `protobuf:"bytes,10,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
