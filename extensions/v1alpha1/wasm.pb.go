@@ -560,7 +560,7 @@ type WasmPlugin struct {
 	// the traffic passes the WasmPlugin.
 	Match []*WasmPlugin_TrafficSelector `protobuf:"bytes,12,rep,name=match,proto3" json:"match,omitempty"`
 	// Specifies the restrictions on the execution of the module via limiting access
-	// to the host ABI calls. Must be set.
+	// to the host ABI calls. If not set, uses the default capability set.
 	Capabilities *CapabilityRestriction `protobuf:"bytes,13,opt,name=capabilities,proto3" json:"capabilities,omitempty"`
 	// Specifies the restrictions on the callbacks from the host to the module.
 	// If not set, places no restrictions.

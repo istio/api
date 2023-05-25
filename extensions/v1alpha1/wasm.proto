@@ -343,7 +343,7 @@ message WasmPlugin {
   repeated TrafficSelector match = 12;
 
   // Specifies the restrictions on the execution of the module via limiting access
-  // to the host ABI calls. Must be set.
+  // to the host ABI calls. If not set, uses the default capability set.
   CapabilityRestriction capabilities = 13;
 
   // Specifies the restrictions on the callbacks from the host to the module.
