@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.extensions.v1alpha1.WasmPlugin
 aliases: [/docs/reference/config/extensions/v1alpha1/wasm-plugin]
-number_of_entries: 7
+number_of_entries: 8
 ---
 <p>WasmPlugins provides a mechanism to extend the functionality provided by
 the Istio proxy through WebAssembly filters.</p>
@@ -309,14 +309,11 @@ namespace of the <code>WasmPlugins</code>. Defaults to <code>0</code>.</p>
 No
 </td>
 </tr>
-<tr id="WasmPlugin-fail_open">
-<td><code>failOpen</code></td>
-<td><code>bool</code></td>
+<tr id="WasmPlugin-fail_strategy">
+<td><code>failStrategy</code></td>
+<td><code><a href="#FailStrategy">FailStrategy</a></code></td>
 <td>
-<p>Enables the fail open behavior for the Wasm plugin fatal errors to bypass
-the plugin execution. A fatal error can be a failure to fetch the remote
-binary, an exception, or abort() on the VM. This flag is not recommended
-for the authentication or the authorization plugins.</p>
+<p>Specifies the failure behavior for the plugin due to fatal errors.</p>
 
 </td>
 <td>
@@ -591,6 +588,37 @@ this plugin. Note that the change includes <code>metadata</code> field as well.<
 <td><code>HOST</code></td>
 <td>
 <p><em>Istio-proxy&rsquo;s</em> environment variables exposed to this VM.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="FailStrategy">FailStrategy</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="FailStrategy-FAIL_CLOSE">
+<td><code>FAIL_CLOSE</code></td>
+<td>
+<p>A fatal error in the binary fetching or during the plugin execution causes
+all subsequent requests to fail with 5xx.</p>
+
+</td>
+</tr>
+<tr id="FailStrategy-FAIL_OPEN">
+<td><code>FAIL_OPEN</code></td>
+<td>
+<p>Enables the fail open behavior for the Wasm plugin fatal errors to bypass
+the plugin execution. A fatal error can be a failure to fetch the remote
+binary, an exception, or abort() on the VM. This flag is not recommended
+for the authentication or the authorization plugins.</p>
 
 </td>
 </tr>

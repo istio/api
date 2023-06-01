@@ -29,6 +29,13 @@
           }
         }
       },
+      "istio.extensions.v1alpha1.FailStrategy": {
+        "type": "string",
+        "enum": [
+          "FAIL_CLOSE",
+          "FAIL_OPEN"
+        ]
+      },
       "istio.extensions.v1alpha1.PluginPhase": {
         "description": "The phase in the filter chain where the plugin will be injected.",
         "type": "string",
@@ -103,9 +110,8 @@
             "type": "integer",
             "nullable": true
           },
-          "failOpen": {
-            "description": "Enables the fail open behavior for the Wasm plugin fatal errors to bypass the plugin execution. A fatal error can be a failure to fetch the remote binary, an exception, or abort() on the VM. This flag is not recommended for the authentication or the authorization plugins.",
-            "type": "boolean"
+          "failStrategy": {
+            "$ref": "#/components/schemas/istio.extensions.v1alpha1.FailStrategy"
           },
           "vmConfig": {
             "$ref": "#/components/schemas/istio.extensions.v1alpha1.VmConfig"

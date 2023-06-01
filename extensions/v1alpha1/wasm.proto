@@ -311,11 +311,8 @@ message WasmPlugin {
   // namespace of the `WasmPlugins`. Defaults to `0`.
   google.protobuf.Int32Value priority = 10;
 
-  // Enables the fail open behavior for the Wasm plugin fatal errors to bypass
-  // the plugin execution. A fatal error can be a failure to fetch the remote
-  // binary, an exception, or abort() on the VM. This flag is not recommended
-  // for the authentication or the authorization plugins.
-  bool fail_open = 13;
+  // Specifies the failure behavior for the plugin due to fatal errors.
+  FailStrategy fail_strategy = 13;
 
   // Configuration for a Wasm VM.
   // more details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).
@@ -416,4 +413,16 @@ enum EnvValueSource {
 
   // *Istio-proxy's* environment variables exposed to this VM.
   HOST = 1;
+}
+
+enum FailStrategy {
+  // A fatal error in the binary fetching or during the plugin execution causes
+  // all subsequent requests to fail with 5xx.
+  FAIL_CLOSE = 0;
+
+  // Enables the fail open behavior for the Wasm plugin fatal errors to bypass
+  // the plugin execution. A fatal error can be a failure to fetch the remote
+  // binary, an exception, or abort() on the VM. This flag is not recommended
+  // for the authentication or the authorization plugins.
+  FAIL_OPEN = 1;
 }

@@ -36500,6 +36500,18 @@
                 "integer": 1
               }
             ]
+          },
+          {
+            "name": "FailStrategy",
+            "enum_fields": [
+              {
+                "name": "FAIL_CLOSE"
+              },
+              {
+                "name": "FAIL_OPEN",
+                "integer": 1
+              }
+            ]
           }
         ],
         "messages": [
@@ -36558,8 +36570,8 @@
               },
               {
                 "id": 13,
-                "name": "fail_open",
-                "type": "bool"
+                "name": "fail_strategy",
+                "type": "FailStrategy"
               },
               {
                 "id": 11,
