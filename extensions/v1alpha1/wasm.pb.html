@@ -309,6 +309,20 @@ namespace of the <code>WasmPlugins</code>. Defaults to <code>0</code>.</p>
 No
 </td>
 </tr>
+<tr id="WasmPlugin-fail_open">
+<td><code>failOpen</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Enables the fail open behavior for the Wasm plugin fatal error to bypass
+the plugin execution. A fatal error can be a failure to fetch the remote
+binary, an exception, or abort() on the VM. This flag is not recommended
+for the authentication or the authorization plugins.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="WasmPlugin-vm_config">
 <td><code>vmConfig</code></td>
 <td><code><a href="#VmConfig">VmConfig</a></code></td>

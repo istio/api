@@ -311,6 +311,12 @@ message WasmPlugin {
   // namespace of the `WasmPlugins`. Defaults to `0`.
   google.protobuf.Int32Value priority = 10;
 
+  // Enables the fail open behavior for the Wasm plugin fatal error to bypass
+  // the plugin execution. A fatal error can be a failure to fetch the remote
+  // binary, an exception, or abort() on the VM. This flag is not recommended
+  // for the authentication or the authorization plugins.
+  bool fail_open = 13;
+
   // Configuration for a Wasm VM.
   // more details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).
   VmConfig vm_config = 11;
@@ -335,7 +341,7 @@ message WasmPlugin {
     // If one of the given `ports` is matched, this condition is evaluated to true.
     // If not specified, this condition is evaluated to true for any port.
     repeated istio.type.v1beta1.PortSelector ports = 2;
-  }    
+  }
 
   // Specifies the criteria to determine which traffic is passed to WasmPlugin.
   // If a traffic satisfies any of TrafficSelectors, 

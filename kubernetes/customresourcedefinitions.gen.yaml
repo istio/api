@@ -39,6 +39,8 @@ spec:
             description: 'Extend the functionality provided by the Istio proxy through
               WebAssembly filters. See more details at: https://istio.io/docs/reference/config/proxy_extensions/wasm-plugin.html'
             properties:
+              failOpen:
+                type: boolean
               imagePullPolicy:
                 enum:
                 - UNSPECIFIED_POLICY

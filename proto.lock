@@ -36557,6 +36557,11 @@
                 "type": "google.protobuf.Int32Value"
               },
               {
+                "id": 13,
+                "name": "fail_open",
+                "type": "bool"
+              },
+              {
                 "id": 11,
                 "name": "vm_config",
                 "type": "VmConfig"
