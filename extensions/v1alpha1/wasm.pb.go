@@ -490,7 +490,7 @@ type WasmPlugin struct {
 	// value, the ordering will be deterministically derived from name and
 	// namespace of the `WasmPlugins`. Defaults to `0`.
 	Priority *wrappers.Int32Value `protobuf:"bytes,10,opt,name=priority,proto3" json:"priority,omitempty"`
-	// Enables the fail open behavior for the Wasm plugin fatal error to bypass
+	// Enables the fail open behavior for the Wasm plugin fatal errors to bypass
 	// the plugin execution. A fatal error can be a failure to fetch the remote
 	// binary, an exception, or abort() on the VM. This flag is not recommended
 	// for the authentication or the authorization plugins.
