@@ -33942,6 +33942,18 @@
                 "integer": 1
               }
             ]
+          },
+          {
+            "name": "FailStrategy",
+            "enum_fields": [
+              {
+                "name": "FAIL_CLOSE"
+              },
+              {
+                "name": "FAIL_OPEN",
+                "integer": 1
+              }
+            ]
           }
         ],
         "messages": [
@@ -33997,6 +34009,11 @@
                 "id": 10,
                 "name": "priority",
                 "type": "google.protobuf.Int64Value"
+              },
+              {
+                "id": 13,
+                "name": "fail_strategy",
+                "type": "FailStrategy"
               },
               {
                 "id": 11,

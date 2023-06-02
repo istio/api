@@ -29,6 +29,13 @@
           }
         }
       },
+      "istio.extensions.v1alpha1.FailStrategy": {
+        "type": "string",
+        "enum": [
+          "FAIL_CLOSE",
+          "FAIL_OPEN"
+        ]
+      },
       "istio.extensions.v1alpha1.PluginPhase": {
         "description": "The phase in the filter chain where the plugin will be injected.",
         "type": "string",
@@ -102,6 +109,9 @@
             "description": "Determines ordering of `WasmPlugins` in the same `phase`. When multiple `WasmPlugins` are applied to the same workload in the same `phase`, they will be applied by priority, in descending order. If `priority` is not set, or two `WasmPlugins` exist with the same value, the ordering will be deterministically derived from name and namespace of the `WasmPlugins`. Defaults to `0`.",
             "type": "integer",
             "nullable": true
+          },
+          "failStrategy": {
+            "$ref": "#/components/schemas/istio.extensions.v1alpha1.FailStrategy"
           },
           "vmConfig": {
             "$ref": "#/components/schemas/istio.extensions.v1alpha1.VmConfig"
