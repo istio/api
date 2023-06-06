@@ -462,7 +462,7 @@ var (
                         "present in this list.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
-		Deprecated:    true,
+		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Pod,
 		},
@@ -589,8 +589,12 @@ var (
 
 	SidecarStatsHistogramBuckets = Instance {
 		Name:          "sidecar.istio.io/statsHistogramBuckets",
-		Description:   `Specifies the semicolon separated custom histogram buckets with a prefix matcher. Example: "istio:1,5,10,50,100,500,1000,5000,10000;envoy:1,5,10,25,50,100,250,500,1000,2500,5000,10000".
-`,
+		Description:   "Specifies the custom histogram buckets with a prefix "+
+                        "matcher to separate the Istio mesh metrics from the Envoy "+
+                        "stats, e.g. "+
+                        "`{`istio`:{1,5,10,50,100,500,1000,5000,10000},`envoy`:{1,5,10,25,50,100,250,500,1000,2500,5000,10000}}`. "+
+                        "Default buckets are "+
+                        "`{0.5,1,5,10,25,50,100,250,500,1000,2500,5000,10000,30000,60000,300000,600000,1800000,3600000}`.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
