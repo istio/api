@@ -458,8 +458,8 @@ var (
 	SidecarExtraStatTags = Instance {
 		Name:          "sidecar.istio.io/extraStatTags",
 		Description:   "An additional list of tags to extract from the in-proxy "+
-                        "Istio telemetry. each additional tag needs to be present "+
-                        "in this list.",
+                        "Istio Wasm telemetry. Each additional tag needs to be "+
+                        "present in this list.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -579,6 +579,22 @@ var (
 		Name:          "sidecar.istio.io/rewriteAppHTTPProbers",
 		Description:   "Rewrite HTTP readiness and liveness probes to be "+
                         "redirected to the Envoy sidecar.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
+	SidecarStatsHistogramBuckets = Instance {
+		Name:          "sidecar.istio.io/statsHistogramBuckets",
+		Description:   "Specifies the custom histogram buckets with a prefix "+
+                        "matcher to separate the Istio mesh metrics from the Envoy "+
+                        "stats, e.g. "+
+                        "`{`istio`:[1,5,10,50,100,500,1000,5000,10000],`envoy`:[1,5,10,25,50,100,250,500,1000,2500,5000,10000]}`. "+
+                        "Default buckets are "+
+                        "`[0.5,1,5,10,25,50,100,250,500,1000,2500,5000,10000,30000,60000,300000,600000,1800000,3600000]`.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -851,6 +867,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarProxyMemory,
 		&SidecarProxyMemoryLimit,
 		&SidecarRewriteAppHTTPProbers,
+		&SidecarStatsHistogramBuckets,
 		&SidecarStatsInclusionPrefixes,
 		&SidecarStatsInclusionRegexps,
 		&SidecarStatsInclusionSuffixes,
