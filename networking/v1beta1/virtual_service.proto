@@ -633,6 +633,17 @@ message HTTPRoute {
   // destination.
   Destination mirror = 9;
 
+  // $hide_from_docs
+  // Hide this from doc until implemented.
+  //
+  // Specifies the destinations to mirror HTTP traffic in addition
+  // to the original destination. Mirrored traffic is on a
+  // best effort basis where the sidecar/gateway will not wait for the
+  // mirrored destinations to respond before returning the response from the
+  // original destination. Statistics will be generated for the mirrored
+  // destination.
+  repeated HTTPMirrorPolicy mirrors = 22;
+
   // Percentage of the traffic to be mirrored by the `mirror` field.
   // Use of integer `mirror_percent` value is deprecated. Use the
   // double `mirror_percentage` field instead
@@ -656,7 +667,7 @@ message HTTPRoute {
   Headers headers = 16;
 
   // $hide_from_docs
-  // Next available field number: 22
+  // Next available field number: 23
 }
 
 
@@ -2077,6 +2088,31 @@ message HTTPFaultInjection {
     // If not specified, no request will be aborted.
     Percent percentage = 5;
   }
+}
+
+// $hide_from_docs
+// Hide this from doc until implemented.
+//
+// HTTPMirrorPolicy can be used to specify the destinations to mirror HTTP traffic in addition
+// to the original destination. Mirrored traffic is on a
+// best effort basis where the sidecar/gateway will not wait for the
+// mirrored destinations to respond before returning the response from the
+// original destination. Statistics will be generated for the mirrored
+// destination.
+message HTTPMirrorPolicy {
+  // $hide_from_docs
+  // Hide this from doc until implemented.
+  //
+  // Destination specifies the target of the mirror operation.
+  Destination destination = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // $hide_from_docs
+  // Hide this from doc until implemented.
+  //
+  // Percentage of the traffic to be mirrored by the `destination` field.
+  // If this field is absent, all the traffic (100%) will be mirrored.
+  // Max value is 100.
+  Percent percentage = 2;
 }
 
 // PortSelector specifies the number of a port to be used for

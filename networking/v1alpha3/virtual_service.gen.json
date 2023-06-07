@@ -391,6 +391,18 @@
           }
         }
       },
+      "istio.networking.v1alpha3.HTTPMirrorPolicy": {
+        "description": "Hide this from doc until implemented.",
+        "type": "object",
+        "properties": {
+          "destination": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.Destination"
+          },
+          "percentage": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.Percent"
+          }
+        }
+      },
       "istio.networking.v1alpha3.HTTPRedirect": {
         "description": "HTTPRedirect can be used to send a 301 redirect response to the caller, where the Authority/Host and the URI in the response can be swapped with the specified values. For example, the following rule redirects requests for /v1/getProductRatings API on the ratings service to /v1/bookRatings provided by the bookratings service.",
         "type": "object",
@@ -557,6 +569,13 @@
           },
           "mirror": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.Destination"
+          },
+          "mirrors": {
+            "description": "Hide this from doc until implemented.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPMirrorPolicy"
+            }
           },
           "mirrorPercent": {
             "description": "Percentage of the traffic to be mirrored by the `mirror` field. Use of integer `mirror_percent` value is deprecated. Use the double `mirror_percentage` field instead $hide_from_docs",

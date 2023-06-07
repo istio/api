@@ -41124,6 +41124,12 @@
                 "type": "Destination"
               },
               {
+                "id": 22,
+                "name": "mirrors",
+                "type": "HTTPMirrorPolicy",
+                "is_repeated": true
+              },
+              {
                 "id": 18,
                 "name": "mirror_percent",
                 "type": "google.protobuf.UInt32Value",
@@ -41810,6 +41816,27 @@
                 "reserved_names": [
                   "percent"
                 ]
+              }
+            ]
+          },
+          {
+            "name": "HTTPMirrorPolicy",
+            "fields": [
+              {
+                "id": 1,
+                "name": "destination",
+                "type": "Destination",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "percentage",
+                "type": "Percent"
               }
             ]
           },
@@ -43692,6 +43719,12 @@
                 "type": "Destination"
               },
               {
+                "id": 22,
+                "name": "mirrors",
+                "type": "HTTPMirrorPolicy",
+                "is_repeated": true
+              },
+              {
                 "id": 18,
                 "name": "mirror_percent",
                 "type": "google.protobuf.UInt32Value",
@@ -44378,6 +44411,27 @@
                 "reserved_names": [
                   "percent"
                 ]
+              }
+            ]
+          },
+          {
+            "name": "HTTPMirrorPolicy",
+            "fields": [
+              {
+                "id": 1,
+                "name": "destination",
+                "type": "Destination",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "percentage",
+                "type": "Percent"
               }
             ]
           },
