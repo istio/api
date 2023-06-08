@@ -24,6 +24,7 @@
 // $location: https://istio.io/docs/reference/config/security/authorization-policy.html
 // $weight: 20
 // $aliases: [/docs/reference/config/authorization/authorization-policy]
+// $mode: none
 
 // Istio Authorization Policy enables access control on workloads in the mesh.
 //
@@ -65,6 +66,37 @@
 //
 // Any other requests will be denied.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//   name: httpbin
+//   namespace: foo
+// spec:
+//   action: ALLOW
+//   rules:
+//   - from:
+//     - source:
+//         principals: ["cluster.local/ns/default/sa/sleep"]
+//     - source:
+//         namespaces: ["test"]
+//     to:
+//     - operation:
+//         methods: ["GET"]
+//         paths: ["/info*"]
+//     - operation:
+//         methods: ["POST"]
+//         paths: ["/data"]
+//     when:
+//     - key: request.auth.claims[iss]
+//       values: ["https://accounts.google.com"]
+// ```
+//
+// {{</tab>}}
+//
+// {{<tab name="v1" category-value="v1">}}
 // ```yaml
 // apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
@@ -90,11 +122,34 @@
 //     - key: request.auth.claims[iss]
 //       values: ["https://accounts.google.com"]
 // ```
-//
+// {{</tab>}}
+// {{</tabset>}}
+
 // The following is another example that sets `action` to `DENY` to create a deny policy.
 // It denies requests from the `dev` namespace to the `POST` method on all workloads
 // in the `foo` namespace.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//   name: httpbin
+//   namespace: foo
+// spec:
+//   action: DENY
+//   rules:
+//   - from:
+//     - source:
+//         namespaces: ["dev"]
+//     to:
+//     - operation:
+//         methods: ["POST"]
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1" category-value="v1">}}
 // ```yaml
 // apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
@@ -111,11 +166,32 @@
 //     - operation:
 //         methods: ["POST"]
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // The following is another example that sets `action` to `DENY` to create a deny policy.
 // It denies all the requests with `POST` method on port `8080` on all workloads
 // in the `foo` namespace.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizaionPolicy
+// metadata:
+//   name: httpbin
+//   namespace: foo
+// spec:
+//   action: DENY
+//   rules:
+//   - to:
+//     - operation:
+//         methods: ["POST"]
+//         ports: ["8080"]
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1" category-value="v1">}}
 // ```yaml
 // apiVersion: security.istio.io/v1
 // kind: AuthorizaionPolicy
@@ -130,6 +206,8 @@
 //         methods: ["POST"]
 //         ports: ["8080"]
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // When this rule is applied to TCP traffic, the `method` field (as will all HTTP based attributes) cannot be processed.
 // For a `DENY` rule, missing attributes are treated as matches. This means all TCP traffic on port `8080` would be denied in the example above.
@@ -139,6 +217,28 @@
 // The following authorization policy sets the `action` to `AUDIT`. It will audit any GET requests to the path with the
 // prefix `/user/profile`.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//   namespace: ns1
+//   name: anyname
+// spec:
+//   selector:
+//     matchLabels:
+//       app: myapi
+//   action: AUDIT
+//   rules:
+//   - to:
+//     - operation:
+//         methods: ["GET"]
+//         paths: ["/user/profile/*"]
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1" category-value="v1">}}
 // ```yaml
 // apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
@@ -156,6 +256,8 @@
 //         methods: ["GET"]
 //         paths: ["/user/profile/*"]
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // Authorization Policy scope (target) is determined by "metadata/namespace" and
 // an optional `selector`.
@@ -167,6 +269,20 @@
 // For example, the following authorization policy applies to all workloads in namespace `foo`. It allows nothing and effectively denies
 // all requests to workloads in namespace `foo`.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//  name: allow-nothing
+//  namespace: foo
+// spec:
+//   {}
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1" category-value="v1">}}
 // ```yaml
 // apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
@@ -176,9 +292,26 @@
 // spec:
 //   {}
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // The following authorization policy allows all requests to workloads in namespace `foo`.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//  name: allow-all
+//  namespace: foo
+// spec:
+//  rules:
+//  - {}
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1" category-value="v1">}}
 // ```yaml
 // apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
@@ -189,10 +322,28 @@
 //  rules:
 //  - {}
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // The following authorization policy applies to workloads containing label `app: httpbin` in namespace `bar`. It allows
 // nothing and effectively denies all requests to the selected workloads.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//   name: allow-nothing
+//   namespace: bar
+// spec:
+//   selector:
+//     matchLabels:
+//       app: httpbin
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1" category-value="v1">}}
 // ```yaml
 // apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
@@ -204,10 +355,28 @@
 //     matchLabels:
 //       app: httpbin
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // The following authorization policy applies to workloads containing label `version: v1` in all namespaces in the mesh.
 // (Assuming the root namespace is configured to `istio-system`).
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//  name: allow-nothing
+//  namespace: istio-system
+// spec:
+//  selector:
+//    matchLabels:
+//      version: v1
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1" category-value="v1">}}
 // ```yaml
 // apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
@@ -219,6 +388,8 @@
 //    matchLabels:
 //      version: v1
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // The following example shows you how to set up an authorization policy using an [experimental annotation](https://istio.io/latest/docs/reference/config/annotations/)
 // `istio.io/dry-run` to dry-run the policy without actually enforcing it.
@@ -227,6 +398,28 @@
 // This helps to reduce the risk of breaking the production traffic caused by an incorrect authorization policy.
 // For more information, see [dry-run tasks](https://istio.io/latest/docs/tasks/security/authorization/authz-dry-run/).
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//   name: dry-run-example
+//   annotations:
+//     "istio.io/dry-run": "true"
+// spec:
+//   selector:
+//     matchLabels:
+//       app: httpbin
+//   action: DENY
+//   rules:
+//   - to:
+//     - operation:
+//         paths: ["/headers"]
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1" category-value="v1">}}
 // ```yaml
 // apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
@@ -244,6 +437,8 @@
 //     - operation:
 //         paths: ["/headers"]
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 
 package v1
 
