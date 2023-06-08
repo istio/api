@@ -418,7 +418,7 @@
 //
 // {{<tab name="v1" category-value="v1">}}
 // ```yaml
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
 // metadata:
 //   name: dry-run-example

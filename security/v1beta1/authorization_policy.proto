@@ -384,6 +384,7 @@ import "type/v1beta1/selector.proto";
 //      version: v1
 // ```
 // {{</tab>}}
+<<<<<<< HEAD
 // {{</tabset}}
 //
 // The following example shows you how to set up an authorization policy using an [experimental annotation](https://istio.io/latest/docs/reference/config/annotations/)
@@ -416,7 +417,7 @@ import "type/v1beta1/selector.proto";
 //
 // {{<tab name="v1" category-value="v1">}}
 // ```yaml
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
 // metadata:
 //   name: dry-run-example
@@ -434,6 +435,9 @@ import "type/v1beta1/selector.proto";
 // ```
 // {{</tab>}}
 // {{</tabset}}
+=======
+// {{</tabset>}}
+>>>>>>> d376dd4a (fix tabset error)
 
 package istio.security.v1beta1;
 
