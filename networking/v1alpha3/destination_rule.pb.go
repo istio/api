@@ -1536,12 +1536,14 @@ type ClientTLSSettings struct {
 	// client including the CA certificates. This secret must exist in
 	// the namespace of the proxy using the certificates.
 	// An Opaque secret should contain the following keys and values:
-	// `key: <privateKey>`, `cert: <clientCert>`, `cacert: <CACertificate>`.
+	// `key: <privateKey>`, `cert: <clientCert>`, `cacert: <CACertificate>`,
+	// `crl: <certificateRevocationList>`
 	// Here CACertificate is used to verify the server certificate.
 	// For mutual TLS, `cacert: <CACertificate>` can be provided in the
 	// same secret or a separate secret named `<secret>-cacert`.
 	// A TLS secret for client certificates with an additional
-	// `ca.crt` key for CA certificates is also supported.
+	// `ca.crt` key for CA certificates and `ca.crl` key for
+	// certificate revocation list(CRL) is also supported.
 	// Only one of client certificates and CA certificate
 	// or credentialName can be specified.
 	//
