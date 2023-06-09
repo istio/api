@@ -196,7 +196,7 @@ type IstioOperatorSpec struct {
 	// Deprecated: Marked as deprecated in operator/v1alpha1/operator.proto.
 	AddonComponents map[string]*ExternalComponentSpec `protobuf:"bytes,51,rep,name=addonComponents,proto3" json:"addonComponents,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Overrides for default `values.yaml`. This is a validated pass-through to Helm templates.
-	// See the [Helm installation options](https://istio.io/v1.5/docs/reference/config/installation-options/) for schema details.
+	// See the [Helm installation options](https://istio.io/docs/reference/config/installation-options/) for schema details.
 	// Anything that is available in `IstioOperatorSpec` should be set above rather than using the passthrough. This
 	// includes Kubernetes resource settings for components in `KubernetesResourcesSpec`.
 	Values *_struct.Struct `protobuf:"bytes,100,opt,name=values,proto3" json:"values,omitempty"`

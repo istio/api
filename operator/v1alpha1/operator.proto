@@ -112,7 +112,7 @@ message IstioOperatorSpec {
     map<string, ExternalComponentSpec> addonComponents = 51 [deprecated = true];
 
     // Overrides for default `values.yaml`. This is a validated pass-through to Helm templates.
-    // See the [Helm installation options](https://istio.io/v1.5/docs/reference/config/installation-options/) for schema details.
+    // See the [Helm installation options](https://istio.io/docs/reference/config/installation-options/) for schema details.
     // Anything that is available in `IstioOperatorSpec` should be set above rather than using the passthrough. This
     // includes Kubernetes resource settings for components in `KubernetesResourcesSpec`.
     google.protobuf.Struct values = 100;
