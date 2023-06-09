@@ -9,6 +9,324 @@ weight: 20
 aliases: [/docs/reference/config/authorization/authorization-policy]
 number_of_entries: 9
 ---
+<p>Istio Authorization Policy enables access control on workloads in the mesh.</p>
+<p>Authorization policy supports CUSTOM, DENY and ALLOW actions for access control. When CUSTOM, DENY and ALLOW actions
+are used for a workload at the same time, the CUSTOM action is evaluated first, then the DENY action, and finally the ALLOW action.
+The evaluation is determined by the following rules:</p>
+<ol>
+<li>If there are any CUSTOM policies that match the request, evaluate and deny the request if the evaluation result is deny.</li>
+<li>If there are any DENY policies that match the request, deny the request.</li>
+<li>If there are no ALLOW policies for the workload, allow the request.</li>
+<li>If any of the ALLOW policies match the request, allow the request.</li>
+<li>Deny the request.</li>
+</ol>
+<p>Istio Authorization Policy also supports the AUDIT action to decide whether to log requests.
+AUDIT policies do not affect whether requests are allowed or denied to the workload.
+Requests will be allowed or denied based solely on CUSTOM, DENY and ALLOW actions.</p>
+<p>A request will be internally marked that it should be audited if there is an AUDIT policy on the workload that matches the request.
+A separate plugin must be configured and enabled to actually fulfill the audit decision and complete the audit behavior.
+The request will not be audited if there are no such supporting plugins enabled.
+Currently, the only supported plugin is the <a href="https://istio.io/latest/docs/reference/config/proxy_extensions/stackdriver/">Stackdriver</a> plugin.</p>
+<p>Here is an example of Istio Authorization Policy:</p>
+<p>It sets the <code>action</code> to <code>ALLOW</code> to create an allow policy. The default action is <code>ALLOW</code>
+but it is useful to be explicit in the policy.</p>
+<p>It allows requests from:</p>
+<ul>
+<li>service account <code>cluster.local/ns/default/sa/sleep</code> or</li>
+<li>namespace <code>test</code></li>
+</ul>
+<p>to access the workload with:</p>
+<ul>
+<li><code>GET</code> method at paths of prefix <code>/info</code> or,</li>
+<li><code>POST</code> method at path <code>/data</code>.</li>
+</ul>
+<p>when the request has a valid JWT token issued by <code>https://accounts.google.com</code>.</p>
+<p>Any other requests will be denied.</p>
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1beta1" category-value="v1beta1">}}</p>
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: httpbin
+  namespace: foo
+spec:
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: [&quot;cluster.local/ns/default/sa/sleep&quot;]
+    - source:
+        namespaces: [&quot;test&quot;]
+    to:
+    - operation:
+        methods: [&quot;GET&quot;]
+        paths: [&quot;/info*&quot;]
+    - operation:
+        methods: [&quot;POST&quot;]
+        paths: [&quot;/data&quot;]
+    when:
+    - key: request.auth.claims[iss]
+      values: [&quot;https://accounts.google.com&quot;]
+</code></pre>
+<p>{{</tab>}}</p>
+<p>{{<tab name="v1" category-value="v1">}}</p>
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: httpbin
+  namespace: foo
+spec:
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: [&quot;cluster.local/ns/default/sa/sleep&quot;]
+    - source:
+        namespaces: [&quot;test&quot;]
+    to:
+    - operation:
+        methods: [&quot;GET&quot;]
+        paths: [&quot;/info*&quot;]
+    - operation:
+        methods: [&quot;POST&quot;]
+        paths: [&quot;/data&quot;]
+    when:
+    - key: request.auth.claims[iss]
+      values: [&quot;https://accounts.google.com&quot;]
+</code></pre>
+<p>{{</tab>}}
+{{</tabset>}}</p>
+<p>The following is another example that sets <code>action</code> to <code>DENY</code> to create a deny policy.
+It denies requests from the <code>dev</code> namespace to the <code>POST</code> method on all workloads
+in the <code>foo</code> namespace.</p>
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1beta1" category-value="v1beta1">}}</p>
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: httpbin
+  namespace: foo
+spec:
+  action: DENY
+  rules:
+  - from:
+    - source:
+        namespaces: [&quot;dev&quot;]
+    to:
+    - operation:
+        methods: [&quot;POST&quot;]
+</code></pre>
+<p>{{</tab>}}</p>
+<p>{{<tab name="v1" category-value="v1">}}</p>
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: httpbin
+  namespace: foo
+spec:
+  action: DENY
+  rules:
+  - from:
+    - source:
+        namespaces: [&quot;dev&quot;]
+    to:
+    - operation:
+        methods: [&quot;POST&quot;]
+</code></pre>
+<p>{{</tab>}}
+{{</tabset>}}</p>
+<p>The following is another example that sets <code>action</code> to <code>DENY</code> to create a deny policy.
+It denies all the requests with <code>POST</code> method on port <code>8080</code> on all workloads
+in the <code>foo</code> namespace.</p>
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1beta1" category-value="v1beta1">}}</p>
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: AuthorizaionPolicy
+metadata:
+  name: httpbin
+  namespace: foo
+spec:
+  action: DENY
+  rules:
+  - to:
+    - operation:
+        methods: [&quot;POST&quot;]
+        ports: [&quot;8080&quot;]
+</code></pre>
+<p>{{</tab>}}</p>
+<p>{{<tab name="v1" category-value="v1">}}</p>
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1
+kind: AuthorizaionPolicy
+metadata:
+  name: httpbin
+  namespace: foo
+spec:
+  action: DENY
+  rules:
+  - to:
+    - operation:
+        methods: [&quot;POST&quot;]
+        ports: [&quot;8080&quot;]
+</code></pre>
+<p>{{</tab>}}
+{{</tabset>}}</p>
+<p>When this rule is applied to TCP traffic, the <code>method</code> field (as will all HTTP based attributes) cannot be processed.
+For a <code>DENY</code> rule, missing attributes are treated as matches. This means all TCP traffic on port <code>8080</code> would be denied in the example above.
+If we were to remove the <code>ports</code> match, all TCP traffic would be denied. As a result, it is recommended to always scope <code>DENY</code> policies to a specific port,
+especially when using HTTP attributes <a href="https://istio.io/latest/docs/tasks/security/authorization/authz-tcp/">Authorization Policy for TCP Ports</a>.</p>
+<p>The following authorization policy sets the <code>action</code> to <code>AUDIT</code>. It will audit any <code>GET</code> requests to the path with the
+prefix <code>/user/profile</code>.</p>
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1beta1" category-value="v1beta1">}}</p>
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  namespace: ns1
+  name: anyname
+spec:
+  selector:
+    matchLabels:
+      app: myapi
+  action: AUDIT
+  rules:
+  - to:
+    - operation:
+        methods: [&quot;GET&quot;]
+        paths: [&quot;/user/profile/*&quot;]
+</code></pre>
+<p>{{</tab>}}</p>
+<p>{{<tab name="v1" category-value="v1">}}</p>
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  namespace: ns1
+  name: anyname
+spec:
+  selector:
+    matchLabels:
+      app: myapi
+  action: AUDIT
+  rules:
+  - to:
+    - operation:
+        methods: [&quot;GET&quot;]
+        paths: [&quot;/user/profile/*&quot;]
+</code></pre>
+<p>{{</tab>}}
+{{</tabset>}}</p>
+<p>Authorization Policy scope (target) is determined by &ldquo;metadata/namespace&rdquo; and
+an optional <code>selector</code>.</p>
+<ul>
+<li>&ldquo;metadata/namespace&rdquo; tells which namespace the policy applies. If set to root
+namespace, the policy applies to all namespaces in a mesh.</li>
+<li>workload <code>selector</code> can be used to further restrict where a policy applies.</li>
+</ul>
+<p>For example, the following authorization policy applies to all workloads in namespace <code>foo</code>. It allows nothing and effectively denies
+all requests to workloads in namespace <code>foo</code>.</p>
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1beta1" category-value="v1beta1">}}</p>
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+ name: allow-nothing
+ namespace: foo
+spec:
+  {}
+</code></pre>
+<p>{{</tab>}}</p>
+<p>{{<tab name="v1" category-value="v1">}}</p>
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+ name: allow-nothing
+ namespace: foo
+spec:
+  {}
+</code></pre>
+<p>{{</tab>}}
+{{</tabset>}}</p>
+<p>The following authorization policy allows all requests to workloads in namespace <code>foo</code>.</p>
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1beta1" category-value="v1beta1">}}</p>
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+ name: allow-all
+ namespace: foo
+spec:
+ rules:
+ - {}
+</code></pre>
+<p>{{</tab>}}</p>
+<p>{{<tab name="v1" category-value="v1">}}</p>
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+ name: allow-all
+ namespace: foo
+spec:
+ rules:
+ - {}
+</code></pre>
+<p>{{</tab>}}
+{{</tabset>}}</p>
+<p>The following authorization policy applies to workloads containing label <code>app: httpbin</code> in namespace <code>bar</code>. It allows
+nothing and effectively denies all requests to the selected workloads.</p>
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1beta1" category-value="v1beta1">}}</p>
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-nothing
+  namespace: bar
+spec:
+  selector:
+    matchLabels:
+      app: httpbin
+</code></pre>
+<p>{{</tab>}}</p>
+<p>{{<tab name="v1" category-value="v1">}}</p>
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-nothing
+  namespace: bar
+spec:
+  selector:
+    matchLabels:
+      app: httpbin
+</code></pre>
+<p>{{</tab>}}
+{{</tabset>}}</p>
+<p>The following authorization policy applies to workloads containing label <code>version: v1</code> in all namespaces in the mesh.
+(Assuming the root namespace is configured to <code>istio-system</code>).</p>
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1beta1" category-value="v1beta1">}}</p>
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+ name: allow-nothing
+ namespace: istio-system
+spec:
+ selector:
+   matchLabels:
+     version: v1
+</code></pre>
+<p>{{</tab>}}</p>
+<p>{{<tab name="v1" category-value="v1">}}</p>
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+ name: allow-nothing
+ namespace: istio-system
+spec:
+ selector:
+   matchLabels:
+     version: v1
+</code></pre>
+<p>{{</tab>}}
+{{</tabset>}}</p>
+
 <h2 id="AuthorizationPolicy">AuthorizationPolicy</h2>
 <section>
 <p>AuthorizationPolicy enables access control on workloads.</p>

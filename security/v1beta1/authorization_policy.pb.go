@@ -188,6 +188,7 @@
 //         ports: ["8080"]
 // ```
 // {{</tab>}}
+//
 // {{<tab name="v1" category-value="v1">}}
 // ```yaml
 // apiVersion: security.istio.io/v1

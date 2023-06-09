@@ -93,7 +93,6 @@
 //     - key: request.auth.claims[iss]
 //       values: ["https://accounts.google.com"]
 // ```
-//
 // {{</tab>}}
 //
 // {{<tab name="v1" category-value="v1">}}
@@ -124,7 +123,7 @@
 // ```
 // {{</tab>}}
 // {{</tabset>}}
-
+//
 // The following is another example that sets `action` to `DENY` to create a deny policy.
 // It denies requests from the `dev` namespace to the `POST` method on all workloads
 // in the `foo` namespace.
