@@ -142,6 +142,10 @@
             "description": "The trust domain corresponds to the trust root of a system. Refer to [SPIFFE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)",
             "type": "string"
           },
+          "identityPathPrefix": {
+            "description": "Spiffe identity path prefix that goes after the trust domain but before the service identity spiffe://\u003ctrust_domain\u003e/\u003cidentity_path_prefix\u003e/\u003cidentity\u003e Refer to [SPIFFE-ID](https://github.com/spiffe/spiffe/blob/main/standards/SPIFFE-ID.md#22-path)",
+            "type": "string"
+          },
           "trustDomainAliases": {
             "description": "The trust domain aliases represent the aliases of `trust_domain`. For example, if we have ```yaml trustDomain: td1 trustDomainAliases: [\"td2\", \"td3\"] ``` Any service with the identity `td1/ns/foo/sa/a-service-account`, `td2/ns/foo/sa/a-service-account`, or `td3/ns/foo/sa/a-service-account` will be treated the same in the Istio mesh.",
             "type": "array",

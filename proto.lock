@@ -37302,6 +37302,11 @@
                 "type": "string"
               },
               {
+                "id": 66,
+                "name": "identity_path_prefix",
+                "type": "string"
+              },
+              {
                 "id": 46,
                 "name": "trust_domain_aliases",
                 "type": "string",
