@@ -207,6 +207,14 @@ annotations:
     resources:
       - Pod
 
+  - name: sidecar.istio.io/preserveHeaderCase
+    featureStatus: Alpha
+    description: If set to "true", Envoy preserve the header case for proxied HTTP/1.1 requests.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+
   - name: sidecar.istio.io/userVolume
     featureStatus: Alpha
     description: Specifies one or more user volumes (as a JSON array) to be added to

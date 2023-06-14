@@ -504,6 +504,18 @@ var (
 		},
 	}
 
+	SidecarPreserveHeaderCase = Instance {
+		Name:          "sidecar.istio.io/preserveHeaderCase",
+		Description:   "If set to `true`, Envoy preserve the header case for "+
+                        "proxied HTTP/1.1 requests.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	SidecarProxyCPU = Instance {
 		Name:          "sidecar.istio.io/proxyCPU",
 		Description:   "Specifies the requested CPU setting for the Envoy "+
@@ -860,6 +872,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarInject,
 		&SidecarInterceptionMode,
 		&SidecarLogLevel,
+		&SidecarPreserveHeaderCase,
 		&SidecarProxyCPU,
 		&SidecarProxyCPULimit,
 		&SidecarProxyImage,
