@@ -209,7 +209,7 @@ annotations:
 
   - name: sidecar.istio.io/preserveHeaderCase
     featureStatus: Alpha
-    description: If set to "true", Envoy preserve the header case for proxied HTTP/1.1 requests.
+    description: If set to "true", Envoy preserves the header case for proxied HTTP/1.1 requests instead of normalizing them.
     deprecated: false
     hidden: false
     resources:

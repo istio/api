@@ -506,8 +506,8 @@ var (
 
 	SidecarPreserveHeaderCase = Instance {
 		Name:          "sidecar.istio.io/preserveHeaderCase",
-		Description:   "If set to `true`, Envoy preserve the header case for "+
-                        "proxied HTTP/1.1 requests.",
+		Description:   "If set to `true`, Envoy preserves the header case for "+
+                        "proxied HTTP/1.1 requests instead of normalizing them.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
