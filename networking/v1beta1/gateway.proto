@@ -628,6 +628,8 @@ message ServerTLSSettings {
 
     // Secure connections to the downstream using mutual TLS by
     // presenting server certificates for authentication.
+    // A client certificate will also be requested during the handshake and 
+    // at least one valid certificate is required to be sent by the client.
     MUTUAL = 2;
 
     // Similar to the passthrough mode, except servers with this TLS
@@ -650,6 +652,15 @@ message ServerTLSSettings {
     // for mTLS authentication. When this mode is used, all other
     // fields in `TLSOptions` should be empty.
     ISTIO_MUTUAL = 4;
+
+    // Similar to MUTUAL mode, except that the client certificate
+    // is optional. A client certificate will also be requested 
+    // during handshake, but does not require that the client sends a
+	  // certificate.  When a client certificate is presented, it will
+    // be validated. ca_certificates should be specified for validating
+    // client certificates. Otherwise, client certificate validation will 
+    // be skipped.
+    OPTIONAL_MUTUAL = 5;
   };
 
   // Optional: Indicates whether connections to this port should be
@@ -665,8 +676,8 @@ message ServerTLSSettings {
   // holding the server's private key.
   string private_key = 4;
 
-  // REQUIRED if mode is `MUTUAL`. The path to a file containing
-  // certificate authority certificates to use in verifying a presented
+  // REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`. The path to a file
+  // containing certificate authority certificates to use in verifying a presented
   // client side certificate.
   string ca_certificates = 5;
 
