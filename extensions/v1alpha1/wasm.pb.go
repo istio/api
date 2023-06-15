@@ -541,7 +541,7 @@ type WasmPlugin struct {
 	// If `priority` is not set, or two `WasmPlugins` exist with the same
 	// value, the ordering will be deterministically derived from name and
 	// namespace of the `WasmPlugins`. Defaults to `0`.
-	Priority *wrappers.Int32Value `protobuf:"bytes,10,opt,name=priority,proto3" json:"priority,omitempty"`
+	Priority *wrappers.Int64Value `protobuf:"bytes,10,opt,name=priority,proto3" json:"priority,omitempty"`
 	// Specifies the failure behavior for the plugin due to fatal errors.
 	FailStrategy FailStrategy `protobuf:"varint,13,opt,name=fail_strategy,json=failStrategy,proto3,enum=istio.extensions.v1alpha1.FailStrategy" json:"fail_strategy,omitempty"`
 	// Configuration for a Wasm VM.
@@ -911,7 +911,7 @@ var file_extensions_v1alpha1_wasm_proto_rawDesc = []byte{
 	0x65, 0x52, 0x05, 0x70, 0x68, 0x61, 0x73, 0x65, 0x12, 0x37, 0x0a, 0x08, 0x70, 0x72, 0x69, 0x6f,
 	0x72, 0x69, 0x74, 0x79, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x67, 0x6f, 0x6f,
 	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x49, 0x6e, 0x74,
-	0x33, 0x32, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x52, 0x08, 0x70, 0x72, 0x69, 0x6f, 0x72, 0x69, 0x74,
+	0x36, 0x34, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x52, 0x08, 0x70, 0x72, 0x69, 0x6f, 0x72, 0x69, 0x74,
 	0x79, 0x12, 0x4c, 0x0a, 0x0d, 0x66, 0x61, 0x69, 0x6c, 0x5f, 0x73, 0x74, 0x72, 0x61, 0x74, 0x65,
 	0x67, 0x79, 0x18, 0x0d, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x27, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f,
 	0x2e, 0x65, 0x78, 0x74, 0x65, 0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x2e, 0x76, 0x31, 0x61, 0x6c,
@@ -990,7 +990,7 @@ var file_extensions_v1alpha1_wasm_proto_goTypes = []interface{}{
 	(*WasmPlugin_TrafficSelector)(nil), // 7: istio.extensions.v1alpha1.WasmPlugin.TrafficSelector
 	(*v1beta1.WorkloadSelector)(nil),   // 8: istio.type.v1beta1.WorkloadSelector
 	(*_struct.Struct)(nil),             // 9: google.protobuf.Struct
-	(*wrappers.Int32Value)(nil),        // 10: google.protobuf.Int32Value
+	(*wrappers.Int64Value)(nil),        // 10: google.protobuf.Int64Value
 	(v1beta1.WorkloadMode)(0),          // 11: istio.type.v1beta1.WorkloadMode
 	(*v1beta1.PortSelector)(nil),       // 12: istio.type.v1beta1.PortSelector
 }
@@ -999,7 +999,7 @@ var file_extensions_v1alpha1_wasm_proto_depIdxs = []int32{
 	1,  // 1: istio.extensions.v1alpha1.WasmPlugin.image_pull_policy:type_name -> istio.extensions.v1alpha1.PullPolicy
 	9,  // 2: istio.extensions.v1alpha1.WasmPlugin.plugin_config:type_name -> google.protobuf.Struct
 	0,  // 3: istio.extensions.v1alpha1.WasmPlugin.phase:type_name -> istio.extensions.v1alpha1.PluginPhase
-	10, // 4: istio.extensions.v1alpha1.WasmPlugin.priority:type_name -> google.protobuf.Int32Value
+	10, // 4: istio.extensions.v1alpha1.WasmPlugin.priority:type_name -> google.protobuf.Int64Value
 	3,  // 5: istio.extensions.v1alpha1.WasmPlugin.fail_strategy:type_name -> istio.extensions.v1alpha1.FailStrategy
 	5,  // 6: istio.extensions.v1alpha1.WasmPlugin.vm_config:type_name -> istio.extensions.v1alpha1.VmConfig
 	7,  // 7: istio.extensions.v1alpha1.WasmPlugin.match:type_name -> istio.extensions.v1alpha1.WasmPlugin.TrafficSelector
