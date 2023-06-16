@@ -656,7 +656,7 @@ message ServerTLSSettings {
     // Similar to MUTUAL mode, except that the client certificate
     // is optional. A client certificate will also be requested 
     // during handshake, but does not require that the client sends a
-	  // certificate.  When a client certificate is presented, it will
+    // certificate.  When a client certificate is presented, it will
     // be validated. ca_certificates should be specified for validating
     // client certificates. Otherwise, client certificate validation will 
     // be skipped.
