@@ -403,7 +403,7 @@ const (
 	// fields in `TLSOptions` should be empty.
 	ServerTLSSettings_ISTIO_MUTUAL ServerTLSSettings_TLSmode = 4
 	// Similar to MUTUAL mode, except that the client certificate
-	// is optional. Unlike SIMPL mode, A client certificate will
+	// is optional. Unlike SIMPLE mode, A client certificate will
 	// be requested during handshake, but does not require that
 	// the client sends a certificate.  When a client certificate
 	// is presented, it will be validated. ca_certificates should
