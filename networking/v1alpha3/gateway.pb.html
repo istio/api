@@ -862,7 +862,8 @@ the destination service from the service registry.</p>
 <tr id="ServerTLSSettings-TLSmode-SIMPLE">
 <td><code>SIMPLE</code></td>
 <td>
-<p>Secure connections with standard TLS semantics.</p>
+<p>Secure connections with standard TLS semantics. In this mode
+client certificate is not requested during handshake.</p>
 
 </td>
 </tr>
@@ -909,11 +910,11 @@ fields in <code>TLSOptions</code> should be empty.</p>
 <td><code>OPTIONAL_MUTUAL</code></td>
 <td>
 <p>Similar to MUTUAL mode, except that the client certificate
-is optional. A client certificate will also be requested
-during handshake, but does not require that the client sends a
-certificate.  When a client certificate is presented, it will
-be validated. ca_certificates should be specified for validating
-client certificates.</p>
+is optional. Unlike SIMPL mode, A client certificate will
+be requested during handshake, but does not require that
+the client sends a certificate.  When a client certificate
+is presented, it will be validated. ca_certificates should
+be specified for validating client certificates.</p>
 
 </td>
 </tr>

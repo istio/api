@@ -376,7 +376,8 @@ const (
 	// match criterion in a VirtualService TLS route to determine
 	// the destination service from the service registry.
 	ServerTLSSettings_PASSTHROUGH ServerTLSSettings_TLSmode = 0
-	// Secure connections with standard TLS semantics.
+	// Secure connections with standard TLS semantics. In this mode
+	// client certificate is not requested during handshake.
 	ServerTLSSettings_SIMPLE ServerTLSSettings_TLSmode = 1
 	// Secure connections to the downstream using mutual TLS by
 	// presenting server certificates for authentication.
@@ -403,11 +404,11 @@ const (
 	// fields in `TLSOptions` should be empty.
 	ServerTLSSettings_ISTIO_MUTUAL ServerTLSSettings_TLSmode = 4
 	// Similar to MUTUAL mode, except that the client certificate
-	// is optional. A client certificate will also be requested
-	// during handshake, but does not require that the client sends a
-	// certificate.  When a client certificate is presented, it will
-	// be validated. ca_certificates should be specified for validating
-	// client certificates.
+	// is optional. Unlike SIMPL mode, A client certificate will
+	// be requested during handshake, but does not require that
+	// the client sends a certificate.  When a client certificate
+	// is presented, it will be validated. ca_certificates should
+	// be specified for validating client certificates.
 	ServerTLSSettings_OPTIONAL_MUTUAL ServerTLSSettings_TLSmode = 5
 )
 
