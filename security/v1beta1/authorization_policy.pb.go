@@ -436,7 +436,7 @@
 //         paths: ["/headers"]
 // ```
 // {{</tab>}}
-// {{</tabset}}
+// {{</tabset>}}
 
 package v1beta1
 
