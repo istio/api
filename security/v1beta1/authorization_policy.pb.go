@@ -387,7 +387,7 @@
 //      version: v1
 // ```
 // {{</tab>}}
-// {{</tabset}}
+// {{</tabset>}}
 //
 // The following example shows you how to set up an authorization policy using an [experimental annotation](https://istio.io/latest/docs/reference/config/annotations/)
 // `istio.io/dry-run` to dry-run the policy without actually enforcing it.
