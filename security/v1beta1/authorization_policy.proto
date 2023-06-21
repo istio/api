@@ -435,7 +435,6 @@ import "type/v1beta1/selector.proto";
 // ```
 // {{</tab>}}
 // {{</tabset}}
-
 package istio.security.v1beta1;
 
 option go_package="istio.io/api/security/v1beta1";
