@@ -589,6 +589,9 @@ message ProxyConfig {
 
   // Specifies the details of the Private Key Provider configuration for gateway and sidecar proxies.
   PrivateKeyProvider private_key_provider = 38;
+
+  // The log path for outlier detection
+  string outlier_log_path = 39;
 }
 
 message RemoteService {

@@ -38958,6 +38958,11 @@
                 "id": 38,
                 "name": "private_key_provider",
                 "type": "PrivateKeyProvider"
+              },
+              {
+                "id": 39,
+                "name": "outlier_log_path",
+                "type": "string"
               }
             ],
             "maps": [

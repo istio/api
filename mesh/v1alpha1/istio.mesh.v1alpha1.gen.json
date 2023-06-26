@@ -1643,6 +1643,10 @@
           },
           "privateKeyProvider": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.PrivateKeyProvider"
+          },
+          "outlierLogPath": {
+            "description": "The log path for outlier detection",
+            "type": "string"
           }
         },
         "oneOf": [
