@@ -380,11 +380,11 @@
 // apiVersion: networking.istio.io/v1alpha3
 // kind: EnvoyFilter
 // metadata:
-//   name: listener-filter-example
+//   name: wasm-service
 //   namespace: myns
 // spec:
 //   configPatches:
-//   - applyTo: LISTENER_FILTER
+//   - applyTo: BOOTSTRAP
 //     patch:
 //       operation: MERGE
 //       value:
@@ -412,7 +412,7 @@
 // apiVersion: networking.istio.io/v1alpha3
 // kind: EnvoyFilter
 // metadata:
-//   name: wasm-service
+//   name: listener-filter-example
 //   namespace: myns
 // spec:
 //   configPatches:
