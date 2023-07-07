@@ -149,7 +149,7 @@
             "type": "string"
           },
           "caCertificates": {
-            "description": "REQUIRED if mode is `MUTUAL`. The path to a file containing certificate authority certificates to use in verifying a presented client side certificate.",
+            "description": "REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`. The path to a file containing certificate authority certificates to use in verifying a presented client side certificate.",
             "type": "string"
           },
           "credentialName": {
@@ -211,7 +211,8 @@
           "SIMPLE",
           "MUTUAL",
           "AUTO_PASSTHROUGH",
-          "ISTIO_MUTUAL"
+          "ISTIO_MUTUAL",
+          "OPTIONAL_MUTUAL"
         ]
       },
       "istio.networking.v1beta1.Sidecar": {
