@@ -311,6 +311,18 @@ annotations:
     resources:
       - Service
 
+  - name: traffic.istio.io/lbExternalAddresses
+    featureStatus: Alpha
+    description: |
+      This annotation overrides (not appends) the external address value with a LoadBalancer type service.
+      This can be used when you want to resolve services using a customized address instead of the default address
+      set by the load balancer controller, etc. Multiple external addresses are supported, separated by commas.
+      e.g. traffic.istio.io/lbExternalAddresses: "google.com,127.68.16.1"
+    deprecated: false
+    hidden: false
+    resources:
+      - Service
+
   - name: traffic.sidecar.istio.io/includeOutboundIPRanges
     featureStatus: Alpha
     description: A comma separated list of IP ranges in CIDR form to redirect to Envoy

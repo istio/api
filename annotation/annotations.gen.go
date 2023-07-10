@@ -704,6 +704,21 @@ var (
 		},
 	}
 
+	TrafficLbExternalAddresses = Instance {
+		Name:          "traffic.istio.io/lbExternalAddresses",
+		Description:   `This annotation overrides (not appends) the external address value with a LoadBalancer type service.
+This can be used when you want to resolve services using a customized address instead of the default address
+set by the load balancer controller, etc. Multiple external addresses are supported, separated by commas.
+e.g. traffic.istio.io/lbExternalAddresses: "google.com,127.68.16.1"
+`,
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Service,
+		},
+	}
+
 	TrafficNodeSelector = Instance {
 		Name:          "traffic.istio.io/nodeSelector",
 		Description:   "This annotation is a set of node-labels "+
@@ -876,6 +891,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarUserVolumeMount,
 		&SidecarStatusPort,
 		&TopologyControlPlaneClusters,
+		&TrafficLbExternalAddresses,
 		&TrafficNodeSelector,
 		&SidecarTrafficExcludeInboundPorts,
 		&SidecarTrafficExcludeInterfaces,

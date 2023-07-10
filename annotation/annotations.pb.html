@@ -575,6 +575,19 @@ Istio supports to control its behavior.
 				
 					<tr>
 				
+					<td><code>traffic.istio.io/lbExternalAddresses</code></td>
+				
+					<td>Alpha</td>
+				
+					<td>[Service]</td>
+					<td>This annotation overrides (not appends) the external address value with a LoadBalancer type service.<br>This can be used when you want to resolve services using a customized address instead of the default address<br>set by the load balancer controller, etc. Multiple external addresses are supported, separated by commas.<br>e.g. traffic.istio.io/lbExternalAddresses: "google.com,127.68.16.1"<br></td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
 					<td><code>traffic.istio.io/nodeSelector</code></td>
 				
 					<td>Stable</td>
