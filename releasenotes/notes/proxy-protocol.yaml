@@ -1,0 +1,6 @@
+apiVersion: release-notes/v2
+kind: feature
+area: networking
+releaseNotes:
+  - |
+    **Added** a pod annotation for gateway to enable [PROXY protocol](http://www.haproxy.org/download/1.5/doc/proxy-protocol.txt) for downstream connections.
