@@ -144,6 +144,19 @@ var (
 		},
 	}
 
+	GatewayProxyProtocol = Instance {
+		Name:          "gateway.istio.io/proxy-protocol",
+		Description:   "Enable PROXY protocol support on the gateway listeners to "+
+                        "obtain the actual remote address from the downstream "+
+                        "connection. The value should be a JSON, e.g. `{}`.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	InjectTemplates = Instance {
 		Name:          "inject.istio.io/templates",
 		Description:   "The name of the inject template(s) to use, as a comma "+
@@ -831,6 +844,7 @@ func AllResourceAnnotations() []*Instance {
 		&AlphaKubernetesServiceAccounts,
 		&GalleyAnalyzeSuppress,
 		&GatewayControllerVersion,
+		&GatewayProxyProtocol,
 		&InjectTemplates,
 		&OperatorInstallChartOwner,
 		&OperatorInstallOwnerGeneration,
