@@ -1788,7 +1788,7 @@
           "forwardClientCertDetails": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.Topology.ForwardClientCertDetails"
           },
-          "enableProxyProtocol": {
+          "proxyProtocol": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.Topology.ProxyProtocolConfiguration"
           }
         }

@@ -38722,7 +38722,7 @@
               },
               {
                 "id": 3,
-                "name": "enable_proxy_protocol",
+                "name": "proxy_protocol",
                 "type": "ProxyProtocolConfiguration"
               }
             ],

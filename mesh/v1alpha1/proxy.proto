@@ -297,7 +297,7 @@ message Topology {
 
   // Enables [PROXY protocol](http://www.haproxy.org/download/1.5/doc/proxy-protocol.txt) for
   // downstream connections on a gateway.
-  ProxyProtocolConfiguration enable_proxy_protocol = 3;
+  ProxyProtocolConfiguration proxy_protocol = 3;
 }
 
 // PrivateKeyProvider defines private key configuration for gateways and sidecars. This can be configured
