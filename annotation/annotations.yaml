@@ -530,11 +530,3 @@ annotations:
     hidden: true
     resources:
       - Any
-
-  - name: gateway.istio.io/proxy-protocol
-    featureStatus: Alpha
-    description: Enable PROXY protocol support on the gateway listeners to obtain the actual remote address from the downstream connection. The value should be a JSON, e.g. `{}`.
-    deprecated: false
-    hidden: false
-    resources:
-      - Pod

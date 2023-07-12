@@ -38719,6 +38719,16 @@
                 "id": 2,
                 "name": "forward_client_cert_details",
                 "type": "ForwardClientCertDetails"
+              },
+              {
+                "id": 3,
+                "name": "enable_proxy_protocol",
+                "type": "ProxyProtocolConfiguration"
+              }
+            ],
+            "messages": [
+              {
+                "name": "ProxyProtocolConfiguration"
               }
             ]
           },
