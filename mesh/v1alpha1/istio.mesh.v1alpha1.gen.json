@@ -1787,6 +1787,9 @@
           },
           "forwardClientCertDetails": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.Topology.ForwardClientCertDetails"
+          },
+          "proxyProtocol": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.Topology.ProxyProtocolConfiguration"
           }
         }
       },
@@ -1801,6 +1804,10 @@
           "SANITIZE_SET",
           "ALWAYS_FORWARD_ONLY"
         ]
+      },
+      "istio.mesh.v1alpha1.Topology.ProxyProtocolConfiguration": {
+        "description": "PROXY protocol configuration.",
+        "type": "object"
       },
       "istio.mesh.v1alpha1.Tracing": {
         "description": "Tracing defines configuration for the tracing performed by Envoy instances.",

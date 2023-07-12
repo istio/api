@@ -238,13 +238,11 @@ message SDS {
   string k8s_sa_jwt_path = 2;
 }
 
-// $hide_from_docs
 // Topology describes the configuration for relative location of a proxy with
 // respect to intermediate trusted proxies and the client. These settings
 // control how the client attributes are retrieved from the incoming traffic by
 // the gateway proxy and propagated to the upstream services in the cluster.
 message Topology {
-  // $hide_from_docs
   // Number of trusted proxies deployed in front of the Istio gateway proxy.
   // When this option is set to value N greater than zero, the trusted client
   // address is assumed to be the Nth address from the right end of the
@@ -261,7 +259,6 @@ message Topology {
   // header handling for more details.
   uint32 num_trusted_proxies = 1;
 
-  // $hide_from_docs
   // ForwardClientCertDetails controls how the x-forwarded-client-cert (XFCC)
   // header is handled by the gateway proxy.
   // See [Envoy XFCC](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/filter/network/http_connection_manager/v2/http_connection_manager.proto#envoy-api-enum-config-filter-network-http-connection-manager-v2-httpconnectionmanager-forwardclientcertdetails)
@@ -290,10 +287,17 @@ message Topology {
     ALWAYS_FORWARD_ONLY = 5;
   }
 
-  // $hide_from_docs
   // Configures how the gateway proxy handles x-forwarded-client-cert (XFCC)
   // header in the incoming request.
   ForwardClientCertDetails forward_client_cert_details = 2;
+
+  // PROXY protocol configuration.
+  message ProxyProtocolConfiguration {
+  }
+
+  // Enables [PROXY protocol](http://www.haproxy.org/download/1.5/doc/proxy-protocol.txt) for
+  // downstream connections on a gateway.
+  ProxyProtocolConfiguration proxy_protocol = 3;
 }
 
 // PrivateKeyProvider defines private key configuration for gateways and sidecars. This can be configured
@@ -508,7 +512,6 @@ message ProxyConfig {
   // and exposed as Prometheus metrics.
   repeated string extra_stat_tags = 27;
 
-  // $hide_from_docs
   // Topology encapsulates the configuration which describes where the proxy is
   // located i.e. behind a (or N) trusted proxy (proxies) or directly exposed
   // to the internet. This configuration only effects gateways and is applied
