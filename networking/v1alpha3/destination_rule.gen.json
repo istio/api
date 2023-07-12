@@ -74,12 +74,12 @@
         "type": "object",
         "properties": {
           "http1MaxPendingRequests": {
-            "description": "Maximum number of requests that will be queued while waiting for a ready connection pool connection. Default 1024. Refer to https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/circuit_breaking under which conditions a new connection is created for HTTP2. Please note that this is applicable to both HTTP/1.1 and HTTP2.",
+            "description": "Maximum number of requests that will be queued while waiting for a ready connection pool connection. Default 2^32-1. Refer to https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/circuit_breaking under which conditions a new connection is created for HTTP2. Please note that this is applicable to both HTTP/1.1 and HTTP2.",
             "type": "integer",
             "format": "int32"
           },
           "http2MaxRequests": {
-            "description": "Maximum number of active requests to a destination. Default 1024. Please note that this is applicable to both HTTP/1.1 and HTTP2.",
+            "description": "Maximum number of active requests to a destination. Default 2^32-1. Please note that this is applicable to both HTTP/1.1 and HTTP2.",
             "type": "integer",
             "format": "int32"
           },

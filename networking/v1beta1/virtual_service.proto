@@ -1581,7 +1581,7 @@ message HTTPRedirect {
 //     headers:
 //       response:
 //         set:
-//           content-type: "appliation/json"
+//           content-type: "application/json"
 //   ...
 // ```
 // {{</tab>}}

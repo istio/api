@@ -40338,6 +40338,10 @@
               {
                 "name": "ISTIO_MUTUAL",
                 "integer": 4
+              },
+              {
+                "name": "OPTIONAL_MUTUAL",
+                "integer": 5
               }
             ]
           },
@@ -42838,6 +42842,10 @@
               {
                 "name": "ISTIO_MUTUAL",
                 "integer": 4
+              },
+              {
+                "name": "OPTIONAL_MUTUAL",
+                "integer": 5
               }
             ]
           },

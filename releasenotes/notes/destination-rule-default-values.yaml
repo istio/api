@@ -1,0 +1,10 @@
+apiVersion: release-notes/v2
+kind: bug-fix
+area: documentation
+issue:
+  - https://github.com/istio/istio.io/issues/13491
+
+releaseNotes:
+  - |
+    **Fixed** Fixed default values in description for connection pool settings in destination rule
+

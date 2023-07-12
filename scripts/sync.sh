@@ -24,6 +24,8 @@ set -eEou pipefail
 
 FROM_TAG="+istio.io/sync-from"
 START_TAG="+istio.io/sync-start"
+MODE="\$mode: none"
+ALIAS="\$aliases:"
 
 BIG_NUMBER=100000 # If our files are longer than this we have bigger issues..
 
@@ -40,5 +42,28 @@ find . -name '*.proto'  -not -path "./common-protos/*" -print0 | while read -r -
     echo "${header}" > "${file}"
     # We skip the first line of the replacement to avoid copying the start tag
     echo "${body}" | tail -n +2 >> "${file}"
+    # Check to make sure mode is set newer version file so there are not duplicate pb.html files in the different versions
+    mode="$(grep "${MODE}" "${file}" || true)"
+    if [[ "${mode}" == "" ]]; then # mode is not present we need to add it
+      echo "for ${file} the mode is empty ${mode}"
+      before="$(grep "${ALIAS}" "${file}" -B "${BIG_NUMBER}")"
+      after="$(grep "${ALIAS}" "${file}" -A "${BIG_NUMBER}")"
+    # And merge them into a single file
+      echo "${before}" > "${file}"
+    # Insert the mode line
+      echo "// ${MODE}" >> "${file}"
+    # Skip the first line of the after section to avoid copying the alias tag
+      echo "${after}" | tail -n +2 >> "${file}"
+    fi
+    # Check to make sure mode is NOT set older version file so there are not duplicate pb.html files in the different versions
+    mode_rep="$(grep "${MODE}" "${replacement}" || true)"
+    if [[ "${mode_rep}" != "" ]]; then # mode should not be in the replacement file
+      echo "for ${replacement} the mode is ${mode_rep}"
+      before="$(grep "${MODE}" "${replacement}" -B "${BIG_NUMBER}")"
+      after="$(grep "${MODE}" "${replacement}" -A "${BIG_NUMBER}")"
+      echo "${before}" | head -n -1 > "${replacement}"
+    # We skip the first line of the replacement to avoid copying the mode tag
+      echo "${after}" | tail -n +2 >> "${replacement}"
+    fi
   fi
 done
