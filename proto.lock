@@ -38105,6 +38105,11 @@
                         "id": 4,
                         "name": "log_format",
                         "type": "LogFormat"
+                      },
+                      {
+                        "id": 5,
+                        "name": "disable_builtin_labels",
+                        "type": "bool"
                       }
                     ],
                     "messages": [

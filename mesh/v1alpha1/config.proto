@@ -999,6 +999,10 @@ message MeshConfig {
           // ```
           google.protobuf.Struct labels = 2;   
       }
+
+      // If specified, Envoy will not generate built-in resource labels
+      // like ``log_name``, ``zone_name``, ``cluster_name``, ``node_name``.
+      bool disable_builtin_labels = 5;
     }
 
     // Defines configuration for an OpenTelemetry tracing backend. Istio 1.16.1 or higher is needed.
