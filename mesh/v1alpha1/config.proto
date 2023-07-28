@@ -502,7 +502,9 @@ message MeshConfig {
       DatadogTracingProvider datadog = 6;
       // Configures a Stackdriver provider.
       StackdriverProvider stackdriver = 7;
+      // $hide_from_docs
       // Configures an OpenCensusAgent tracing provider.
+      // Deprecated: OpenCensus is deprecated, more details can be found at https://opentelemetry.io/blog/2023/sunsetting-opencensus/
       OpenCensusAgentTracingProvider opencensus = 8;
       // Configures a Apache SkyWalking provider.
       SkyWalkingTracingProvider skywalking = 9;

@@ -1902,6 +1902,7 @@ type MeshConfig_ExtensionProvider_Stackdriver struct {
 
 type MeshConfig_ExtensionProvider_Opencensus struct {
 	// Configures an OpenCensusAgent tracing provider.
+	// Deprecated: OpenCensus is deprecated, more details can be found at https://opentelemetry.io/blog/2023/sunsetting-opencensus/
 	Opencensus *MeshConfig_ExtensionProvider_OpenCensusAgentTracingProvider `protobuf:"bytes,8,opt,name=opencensus,proto3,oneof"`
 }
 
