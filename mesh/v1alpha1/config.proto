@@ -1000,6 +1000,7 @@ message MeshConfig {
           google.protobuf.Struct labels = 2;   
       }
 
+      // $hide_from_docs
       // If specified, Envoy will not generate built-in resource labels
       // like ``log_name``, ``zone_name``, ``cluster_name``, ``node_name``.
       bool disable_builtin_labels = 5;

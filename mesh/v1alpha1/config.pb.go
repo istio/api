@@ -3464,6 +3464,7 @@ type MeshConfig_ExtensionProvider_EnvoyOpenTelemetryLogProvider struct {
 	// Optional. Format for the proxy access log
 	// Empty value results in proxy's default access log format, following Envoy access logging formatting.
 	LogFormat *MeshConfig_ExtensionProvider_EnvoyOpenTelemetryLogProvider_LogFormat `protobuf:"bytes,4,opt,name=log_format,json=logFormat,proto3" json:"log_format,omitempty"`
+	// $hide_from_docs
 	// If specified, Envoy will not generate built-in resource labels
 	// like “log_name“, “zone_name“, “cluster_name“, “node_name“.
 	DisableBuiltinLabels bool `protobuf:"varint,5,opt,name=disable_builtin_labels,json=disableBuiltinLabels,proto3" json:"disable_builtin_labels,omitempty"`
