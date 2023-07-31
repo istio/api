@@ -1,0 +1,10 @@
+apiVersion: release-notes/v2
+
+kind: feature
+area: telemetry
+issue: []
+
+releaseNotes:
+  - |
+    **Deprecated** more details can be found at https://opentelemetry.io/blog/2023/sunsetting-opencensus/, 
+    users should forward to OpenTelemetry provider.
