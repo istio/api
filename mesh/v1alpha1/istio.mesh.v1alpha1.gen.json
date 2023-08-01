@@ -959,8 +959,8 @@
           "logFormat": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.LogFormat"
           },
-          "disableBuiltinLabels": {
-            "description": "If specified, Envoy will not generate built-in resource labels like ``log_name``, ``zone_name``, ``cluster_name``, ``node_name``.",
+          "enableBuiltinLabels": {
+            "description": "If specified, Envoy will generate built-in resource labels like ``log_name``, ``zone_name``, ``cluster_name``, ``node_name``.",
             "type": "boolean"
           }
         }

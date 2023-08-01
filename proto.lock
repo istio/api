@@ -38108,7 +38108,7 @@
                       },
                       {
                         "id": 5,
-                        "name": "disable_builtin_labels",
+                        "name": "enable_builtin_labels",
                         "type": "bool"
                       }
                     ],
