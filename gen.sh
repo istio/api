@@ -41,6 +41,5 @@ buf generate --template buf.gen-noncrd.yaml \
 buf generate --template buf.gen-golang.yaml \
   --path envoy
 
-# Generate CRDs and open-api schema
-cue-gen -paths=common-protos -f=./cue.yaml
+# Generate CRDs
 cue-gen -paths=common-protos -f=./cue.yaml --crd=true -snake=jwksUri,apiKeys,apiSpecs,includedPaths,jwtHeaders,triggerRules,excludedPaths,mirrorPercent
