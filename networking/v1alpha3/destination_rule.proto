@@ -545,7 +545,7 @@ message LoadBalancerSettings {
     PASSTHROUGH = 3;
 
     // A basic round robin load balancing policy. This is generally unsafe
-    // for many scenarios (e.g. when enpoint weighting is used) as it can
+    // for many scenarios (e.g. when endpoint weighting is used) as it can
     // overburden endpoints. In general, prefer to use LEAST_REQUEST as a
     // drop-in replacement for ROUND_ROBIN.
     ROUND_ROBIN = 4;
@@ -583,11 +583,11 @@ message LoadBalancerSettings {
       // single virtual node.
       uint64 minimum_ring_size = 1;
     };
-  
+
     message MagLev {
-      // The table size for Maglev hashing. This helps in controlling the 
+      // The table size for Maglev hashing. This helps in controlling the
       // disruption when the backend hosts change.
-      // Increasing the table size reduces the amount of disruption. 
+      // Increasing the table size reduces the amount of disruption.
       uint64 table_size = 1;
     };
     // Describes a HTTP cookie that will be used as the hash key for the
@@ -618,7 +618,7 @@ message LoadBalancerSettings {
       string http_query_parameter_name = 5;
     };
 
-        // The hash algorithm to use. 
+        // The hash algorithm to use.
         // Please refer to https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#ring-hash
         // and https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#maglev for
         // considerations on choosing an algorithm.
@@ -626,7 +626,7 @@ message LoadBalancerSettings {
         oneof hash_algorithm {
           // The ring/modulo hash load balancer implements consistent hashing to backend hosts.
           RingHash ring_hash = 6;
-          // The Maglev load balancer implements consistent hashing to backend hosts. 
+          // The Maglev load balancer implements consistent hashing to backend hosts.
           MagLev maglev = 7;
         };
 
@@ -652,8 +652,8 @@ message LoadBalancerSettings {
   // remains in warmup mode starting from its creation time for the duration of this window and
   // Istio progressively increases amount of traffic for that endpoint instead of sending proportional amount of traffic.
   // This should be enabled for services that require warm up time to serve full production load with reasonable latency.
-  // Please note that this is most effective when few new endpoints come up like scale event in Kubernetes. When all the 
-  // endpoints are relatively new like new deployment, this is not very effective as all endpoints end up getting same 
+  // Please note that this is most effective when few new endpoints come up like scale event in Kubernetes. When all the
+  // endpoints are relatively new like new deployment, this is not very effective as all endpoints end up getting same
   // amount of requests.
   // Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancers.
   google.protobuf.Duration warmup_duration_secs = 4;
@@ -877,7 +877,7 @@ message OutlierDetection {
   // consecutive_local_origin_failure is taken into account for outlier detection calculations.
   // This should be used when you want to derive the outlier detection status based on the errors
   // seen locally such as failure to connect, timeout while connecting etc. rather than the status code
-  // retuned by upstream service. This is especially useful when the upstream service explicitly returns
+  // returned by upstream service. This is especially useful when the upstream service explicitly returns
   // a 5xx for some requests and you want to ignore those responses from upstream service while determining
   // the outlier detection status of a host.
   // Defaults to false.
@@ -1131,7 +1131,7 @@ message ClientTLSSettings {
 
   // InsecureSkipVerify specifies whether the proxy should skip verifying the
   // CA signature and SAN for the server certificate corresponding to the host.
-  // This flag should only be set if global CA signature verifcation is
+  // This flag should only be set if global CA signature verification is
   // enabled, `VerifyCertAtClient` environmental variable is set to `true`,
   // but no verification is desired for a specific host. If enabled with or
   // without `VerifyCertAtClient` enabled, verification of the CA signature and

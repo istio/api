@@ -850,7 +850,7 @@ type MeshConfig struct {
 	//	"connect-failure,refused-stream,unavailable,cancelled,retriable-status-codes".
 	//
 	// Setting the number of attempts to 0 disables retry policy globally.
-	// This setting can be overriden on a per-host basis using the Virtual Service
+	// This setting can be overridden on a per-host basis using the Virtual Service
 	// API.
 	// All settings in the retry policy except `perTryTimeout` can currently be
 	// configured globally via this field.
@@ -3068,7 +3068,7 @@ func (x *MeshConfig_ExtensionProvider_StackdriverProvider) GetLogging() *MeshCon
 // may be used for OpenCensus at any given time for a proxy or group of proxies AND that any change to the provider
 // configuration MUST be accompanied by a restart of all proxies that will use that configuration.
 //
-// NOTE: Stackdriver tracing uses OpenCensus configuraiton under the hood and, as a result, cannot be used
+// NOTE: Stackdriver tracing uses OpenCensus configuration under the hood and, as a result, cannot be used
 // alongside OpenCensus provider configuration.
 type MeshConfig_ExtensionProvider_OpenCensusAgentTracingProvider struct {
 	state         protoimpl.MessageState

@@ -257,7 +257,7 @@ const (
 	// Envoy for further details.
 	LoadBalancerSettings_PASSTHROUGH LoadBalancerSettings_SimpleLB = 3
 	// A basic round robin load balancing policy. This is generally unsafe
-	// for many scenarios (e.g. when enpoint weighting is used) as it can
+	// for many scenarios (e.g. when endpoint weighting is used) as it can
 	// overburden endpoints. In general, prefer to use LEAST_REQUEST as a
 	// drop-in replacement for ROUND_ROBIN.
 	LoadBalancerSettings_ROUND_ROBIN LoadBalancerSettings_SimpleLB = 4
@@ -1225,7 +1225,7 @@ type OutlierDetection struct {
 	// consecutive_local_origin_failure is taken into account for outlier detection calculations.
 	// This should be used when you want to derive the outlier detection status based on the errors
 	// seen locally such as failure to connect, timeout while connecting etc. rather than the status code
-	// retuned by upstream service. This is especially useful when the upstream service explicitly returns
+	// returned by upstream service. This is especially useful when the upstream service explicitly returns
 	// a 5xx for some requests and you want to ignore those responses from upstream service while determining
 	// the outlier detection status of a host.
 	// Defaults to false.
@@ -1568,7 +1568,7 @@ type ClientTLSSettings struct {
 	Sni string `protobuf:"bytes,6,opt,name=sni,proto3" json:"sni,omitempty"`
 	// InsecureSkipVerify specifies whether the proxy should skip verifying the
 	// CA signature and SAN for the server certificate corresponding to the host.
-	// This flag should only be set if global CA signature verifcation is
+	// This flag should only be set if global CA signature verification is
 	// enabled, `VerifyCertAtClient` environmental variable is set to `true`,
 	// but no verification is desired for a specific host. If enabled with or
 	// without `VerifyCertAtClient` enabled, verification of the CA signature and
