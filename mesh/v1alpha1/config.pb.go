@@ -557,6 +557,7 @@ type MeshConfig struct {
 	// Connection timeout used by Envoy. (MUST BE >=1ms)
 	// Default timeout is 10s.
 	ConnectTimeout *duration.Duration `protobuf:"bytes,6,opt,name=connect_timeout,json=connectTimeout,proto3" json:"connect_timeout,omitempty"`
+	// $hide_from_docs
 	// Automatic protocol detection uses a set of heuristics to
 	// determine whether the connection is using TLS or not (on the
 	// server side), as well as the application protocol being used
@@ -567,6 +568,11 @@ type MeshConfig struct {
 	// traffic. Set this field to tweak the period that Envoy will wait
 	// for the client to send the first bits of data. (MUST BE >=1ms or
 	// 0s to disable). Default detection timeout is 0s (no timeout).
+	//
+	// Setting a timeout is not recommended nor safe. Even high timeouts (>5s) will be hit
+	// occasionally, and when they occur the result is typically broken traffic that may not
+	// recover on its own. Exceptionally high values might solve this, but injecting 60s delays
+	// onto new connections is generally not tenable anyways.
 	ProtocolDetectionTimeout *duration.Duration `protobuf:"bytes,42,opt,name=protocol_detection_timeout,json=protocolDetectionTimeout,proto3" json:"protocol_detection_timeout,omitempty"`
 	// If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalives.
 	TcpKeepalive *v1alpha3.ConnectionPoolSettings_TCPSettings_TcpKeepalive `protobuf:"bytes,28,opt,name=tcp_keepalive,json=tcpKeepalive,proto3" json:"tcp_keepalive,omitempty"`
