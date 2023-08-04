@@ -50,6 +50,7 @@ message MeshConfig {
   // Default timeout is 10s.
   google.protobuf.Duration connect_timeout = 6;
 
+  // $hide_from_docs
   // Automatic protocol detection uses a set of heuristics to
   // determine whether the connection is using TLS or not (on the
   // server side), as well as the application protocol being used
@@ -60,6 +61,11 @@ message MeshConfig {
   // traffic. Set this field to tweak the period that Envoy will wait
   // for the client to send the first bits of data. (MUST BE >=1ms or
   // 0s to disable). Default detection timeout is 0s (no timeout).
+  //
+  // Setting a timeout is not recommended nor safe. Even high timeouts (>5s) will be hit
+  // occasionally, and when they occur the result is typically broken traffic that may not
+  // recover on its own. Exceptionally high values might solve this, but injecting 60s delays
+  // onto new connections is generally not tenable anyways.
   google.protobuf.Duration protocol_detection_timeout = 42;
 
   // If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalives.
