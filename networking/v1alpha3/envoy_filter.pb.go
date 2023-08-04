@@ -330,7 +330,7 @@
 //   # and the binary configuration. It should come before the next patch that applies it.
 //   # This resource is visible to all proxies in the namespace "myns". It is possible to provide
 //   # multiple definitions for the same name "my-wasm-extension" in multiple namespaces. We recommend that:
-//   # - if overriding is desired, then the root level definition can be overriden per namespace with REPLACE.
+//   # - if overriding is desired, then the root level definition can be overridden per namespace with REPLACE.
 //   # - if overriding is not desired, then the name should be qualified with the namespace "myns/my-wasm-extension",
 //   #   to avoid accidental name collisions.
 //   - applyTo: EXTENSION_CONFIG
@@ -771,7 +771,7 @@ func (EnvoyFilter_Patch_Operation) EnumDescriptor() ([]byte, []int) {
 
 // FilterClass determines the filter insertion point in the filter chain
 // relative to the filters implicitly inserted by the control plane.
-// It is used in conjuction with the `ADD` operation.
+// It is used in conjunction with the `ADD` operation.
 // This is the preferred insertion mechanism for adding filters over
 // the `INSERT_*` operations since those operations rely on potentially unstable
 // filter names.
