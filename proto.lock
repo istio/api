@@ -48296,6 +48296,48 @@
           }
         ]
       }
+    },
+    {
+      "protopath": "type:/:v1beta1:/:target_ref.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "PolicyTargetReference",
+            "fields": [
+              {
+                "id": 1,
+                "name": "group",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "kind",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "namespace",
+                "type": "string",
+                "optional": true
+              }
+            ]
+          }
+        ],
+        "package": {
+          "name": "istio.type.v1beta1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/type/v1beta1"
+          }
+        ]
+      }
     }
   ]
 }
