@@ -1,4 +1,4 @@
-// Copyright 2019 Istio Authors
+// Copyright 2023 Istio Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@
 // 	protoc        (unknown)
 // source: type/target_ref.proto
 
-// $title: TargetRef
-// $description: Definition of a targetRef.
+// $title: PolicyTargetRef
+// $description: Definition of a policy target reference.
 // $location: https://istio.io/docs/reference/config/type/target-ref.html
 
 package _type

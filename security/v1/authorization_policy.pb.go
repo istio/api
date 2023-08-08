@@ -457,14 +457,15 @@
 //   annotations:
 //     "istio.io/dry-run": "true"
 // spec:
-//   selector:
-//     matchLabels:
-//       app: httpbin
 //   action: DENY
 //   rules:
 //   - to:
 //     - operation:
 //         paths: ["/headers"]
+//   targetRef:
+//   - kind: Gateway
+//     name: waypoint
+//     group: gateway.networking.k8s.io
 // ```
 // {{</tab>}}
 //

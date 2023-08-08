@@ -99,6 +99,30 @@ spec:
     - name: TRUST_DOMAIN
       value: &quot;cluster.local&quot;
 </code></pre>
+<p>This is also the same as the last example, but ingress gateway is targeted using the targetRef field instead of a selector.</p>
+<pre><code class="language-yaml">apiVersion: extensions.istio.io/v1alpha1
+kind: WasmPlugin
+metadata:
+  name: openid-connect
+  namespace: istio-ingress
+spec:
+  url: https://private-bucket/filters/openid.wasm
+  imagePullPolicy: Always
+  phase: AUTHN
+  pluginConfig:
+    openid_server: authn
+    openid_realm: ingress
+  vmConfig:
+    env:
+    - name: POD_NAME
+      valueFrom: HOST
+    - name: TRUST_DOMAIN
+      value: &quot;cluster.local&quot;
+  targetRef:
+  - kind: Gateway
+    name: waypoint
+    group: gateway.networking.k8s.io
+</code></pre>
 <p>And a more complex example that deploys three WasmPlugins and orders them
 using <code>phase</code> and <code>priority</code>. The (hypothetical) setup is that the
 <code>openid-connect</code> filter performs an OpenID Connect flow to authenticate the
