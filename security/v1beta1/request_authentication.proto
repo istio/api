@@ -13,6 +13,7 @@
 // limitations under the License.
 syntax = "proto3";
 
+import "type/target_ref.proto";
 import "type/v1beta1/selector.proto";
 import "security/v1beta1/jwt.proto";
 
@@ -455,4 +456,13 @@ message RequestAuthentication {
   // Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
   // such requests is undefined.
   repeated JWTRule jwt_rules = 2;
+
+  // Optional. The targetRef specifies the resource the policy should be 
+  // applied to. The targeted resource specified will determine which 
+  // workloads the authorization policy applies to. If the authorization policy
+  // is in the root namespace and the target ref is set, the namespace must be
+  // set on the targetRef.
+  //
+  // If not set, the policy is applied as defined by the selector.
+  istio.type.PolicyTargetReference targetRef = 3;
 }

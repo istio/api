@@ -17,6 +17,7 @@ syntax = "proto3";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/struct.proto";
 import "type/v1beta1/selector.proto";
+import "type/target_ref.proto";
 
 // $schema: istio.extensions.v1alpha1.WasmPlugin
 // $title: Wasm Plugin
@@ -347,6 +348,15 @@ message WasmPlugin {
 
   // Specifies the type of Wasm Extension to be used.
   PluginType type = 14;
+
+  // Optional. The targetRef specifies the resource the policy should be 
+  // applied to. The targeted resource specified will determine which 
+  // workloads the authorization policy applies to. If the authorization policy
+  // is in the root namespace and the target ref is set, the namespace must be
+  // set on the targetRef.
+  //
+  // If not set, the policy is applied as defined by the selector.
+  istio.type.PolicyTargetReference targetRef = 15;
 }
 
 

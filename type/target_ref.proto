@@ -17,9 +17,9 @@ syntax = "proto3";
 // $description: Definition of a targetRef.
 // $location: https://istio.io/docs/reference/config/type/target-ref.html
 
-package istio.type.v1beta1;
+package istio.type;
 
-option go_package="istio.io/api/type/v1beta1";
+option go_package="istio.io/api/type";
 
 // PolicyTargetReference format as defined by [GEP-713](https://gateway-api.sigs.k8s.io/geps/gep-713/#policy-targetref-api).
 

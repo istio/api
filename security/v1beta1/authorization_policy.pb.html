@@ -433,6 +433,22 @@ No
 No
 </td>
 </tr>
+<tr id="AuthorizationPolicy-targetRef">
+<td><code>targetRef</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/target-ref.html#PolicyTargetReference">PolicyTargetReference</a></code></td>
+<td>
+<p>Optional. The targetRef specifies the resource the policy should be
+applied to. The targeted resource specified will determine which
+workloads the authorization policy applies to. If the authorization policy
+is in the root namespace and the target ref is set, the namespace must be
+set on the targetRef.</p>
+<p>If not set, the policy is applied as defined by the selector.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>

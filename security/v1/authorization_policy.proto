@@ -14,6 +14,7 @@
 syntax = "proto3";
 
 import "google/api/field_behavior.proto";
+import "type/target_ref.proto";
 import "type/v1beta1/selector.proto";
 
 // $schema: istio.security.v1.AuthorizationPolicy
@@ -436,6 +437,56 @@ import "type/v1beta1/selector.proto";
 // ```
 // {{</tab>}}
 // {{</tabset>}}
+// ```
+// {{</tab>}}
+// {{</tabset>}}
+//
+// The following example shows you how to bind a policy to a specific (kubernetes) Gateway using a [PolicyTargetReference](https://gateway-api.sigs.k8s.io/geps/gep-713/#policy-targetref-api).
+//
+// For an ambient mesh, the Gateway can be a waypoint proxy. In this example the waypoint proxy is named `waypoint`. Currently, Gateway is the only supported `kind`.
+// For more information, see [targetRef](https://istio.io/docs/reference/config/type/target-ref.html).
+//
+// {{<tabset category-name="example">}}
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//   name: dry-run-example
+//   annotations:
+//     "istio.io/dry-run": "true"
+// spec:
+//   selector:
+//     matchLabels:
+//       app: httpbin
+//   action: DENY
+//   rules:
+//   - to:
+//     - operation:
+//         paths: ["/headers"]
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1" category-value="v1">}}
+// ```yaml
+// apiVersion: security.istio.io/v1
+// kind: AuthorizationPolicy
+// metadata:
+//   name: target-ref-example
+//   namespace: default
+// spec:
+//   action: DENY
+//   rules:
+//   - to:
+//     - operation:
+//         paths: ["/headers"]
+//   targetRef:
+//   - kind: Gateway
+//     name: waypoint
+//     group: gateway.networking.k8s.io
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 package istio.security.v1;
 
 option go_package="istio.io/api/security/v1";
@@ -539,6 +590,16 @@ message AuthorizationPolicy {
     // Specifies detailed configuration of the CUSTOM action. Must be used only with CUSTOM action.
     ExtensionProvider provider = 4;
   }
+
+  
+  // Optional. The targetRef specifies the resource the policy should be 
+  // applied to. The targeted resource specified will determine which 
+  // workloads the authorization policy applies to. If the authorization policy
+  // is in the root namespace and the target ref is set, the namespace must be
+  // set on the targetRef.
+  //
+  // If not set, the policy is applied as defined by the selector.
+  istio.type.PolicyTargetReference targetRef = 5;
 }
 
 // Rule matches requests from a list of sources that perform a list of operations subject to a

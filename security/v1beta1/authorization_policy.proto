@@ -14,6 +14,7 @@
 syntax = "proto3";
 
 import "google/api/field_behavior.proto";
+import "type/target_ref.proto";
 import "type/v1beta1/selector.proto";
 
 // $schema: istio.security.v1beta1.AuthorizationPolicy
@@ -539,6 +540,16 @@ message AuthorizationPolicy {
     // Specifies detailed configuration of the CUSTOM action. Must be used only with CUSTOM action.
     ExtensionProvider provider = 4;
   }
+
+  
+  // Optional. The targetRef specifies the resource the policy should be 
+  // applied to. The targeted resource specified will determine which 
+  // workloads the authorization policy applies to. If the authorization policy
+  // is in the root namespace and the target ref is set, the namespace must be
+  // set on the targetRef.
+  //
+  // If not set, the policy is applied as defined by the selector.
+  istio.type.PolicyTargetReference targetRef = 5;
 }
 
 // Rule matches requests from a list of sources that perform a list of operations subject to a

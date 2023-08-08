@@ -36604,6 +36604,11 @@
                 "id": 14,
                 "name": "type",
                 "type": "PluginType"
+              },
+              {
+                "id": 15,
+                "name": "targetRef",
+                "type": "istio.type.PolicyTargetReference"
               }
             ],
             "messages": [
@@ -36666,6 +36671,9 @@
           },
           {
             "path": "type/v1beta1/selector.proto"
+          },
+          {
+            "path": "type/target_ref.proto"
           }
         ],
         "package": {
@@ -43258,6 +43266,11 @@
                 "id": 4,
                 "name": "image",
                 "type": "ProxyImage"
+              },
+              {
+                "id": 5,
+                "name": "targetRef",
+                "type": "istio.type.PolicyTargetReference"
               }
             ],
             "maps": [
@@ -43288,6 +43301,9 @@
           },
           {
             "path": "type/v1beta1/selector.proto"
+          },
+          {
+            "path": "type/target_ref.proto"
           }
         ],
         "package": {
@@ -46833,6 +46849,11 @@
                 "id": 4,
                 "name": "provider",
                 "type": "ExtensionProvider"
+              },
+              {
+                "id": 5,
+                "name": "targetRef",
+                "type": "istio.type.PolicyTargetReference"
               }
             ],
             "messages": [
@@ -47043,6 +47064,9 @@
         "imports": [
           {
             "path": "google/api/field_behavior.proto"
+          },
+          {
+            "path": "type/target_ref.proto"
           },
           {
             "path": "type/v1beta1/selector.proto"
@@ -47193,6 +47217,11 @@
                 "name": "jwt_rules",
                 "type": "JWTRule",
                 "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "targetRef",
+                "type": "istio.type.PolicyTargetReference"
               }
             ]
           }
@@ -47203,6 +47232,9 @@
           },
           {
             "path": "type/v1beta1/selector.proto"
+          },
+          {
+            "path": "type/target_ref.proto"
           }
         ],
         "package": {
@@ -47329,6 +47361,11 @@
                 "id": 4,
                 "name": "provider",
                 "type": "ExtensionProvider"
+              },
+              {
+                "id": 5,
+                "name": "targetRef",
+                "type": "istio.type.PolicyTargetReference"
               }
             ],
             "messages": [
@@ -47539,6 +47576,9 @@
         "imports": [
           {
             "path": "google/api/field_behavior.proto"
+          },
+          {
+            "path": "type/target_ref.proto"
           },
           {
             "path": "type/v1beta1/selector.proto"
@@ -47769,11 +47809,19 @@
                 "name": "jwt_rules",
                 "type": "JWTRule",
                 "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "targetRef",
+                "type": "istio.type.PolicyTargetReference"
               }
             ]
           }
         ],
         "imports": [
+          {
+            "path": "type/target_ref.proto"
+          },
           {
             "path": "type/v1beta1/selector.proto"
           },
@@ -47935,6 +47983,11 @@
                 "name": "access_logging",
                 "type": "AccessLogging",
                 "is_repeated": true
+              },
+              {
+                "id": 5,
+                "name": "targetRef",
+                "type": "istio.type.PolicyTargetReference"
               }
             ]
           },
@@ -48205,6 +48258,9 @@
             "path": "type/v1beta1/selector.proto"
           },
           {
+            "path": "type/target_ref.proto"
+          },
+          {
             "path": "google/api/field_behavior.proto"
           },
           {
@@ -48221,6 +48277,48 @@
           {
             "name": "go_package",
             "value": "istio.io/api/telemetry/v1alpha1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "type:/:target_ref.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "PolicyTargetReference",
+            "fields": [
+              {
+                "id": 1,
+                "name": "group",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "kind",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "namespace",
+                "type": "string",
+                "optional": true
+              }
+            ]
+          }
+        ],
+        "package": {
+          "name": "istio.type"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/type"
           }
         ]
       }
@@ -48284,48 +48382,6 @@
         "imports": [
           {
             "path": "google/api/field_behavior.proto"
-          }
-        ],
-        "package": {
-          "name": "istio.type.v1beta1"
-        },
-        "options": [
-          {
-            "name": "go_package",
-            "value": "istio.io/api/type/v1beta1"
-          }
-        ]
-      }
-    },
-    {
-      "protopath": "type:/:v1beta1:/:target_ref.proto",
-      "def": {
-        "messages": [
-          {
-            "name": "PolicyTargetReference",
-            "fields": [
-              {
-                "id": 1,
-                "name": "group",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "kind",
-                "type": "string"
-              },
-              {
-                "id": 3,
-                "name": "name",
-                "type": "string"
-              },
-              {
-                "id": 4,
-                "name": "namespace",
-                "type": "string",
-                "optional": true
-              }
-            ]
           }
         ],
         "package": {
