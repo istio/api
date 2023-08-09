@@ -39050,8 +39050,8 @@
                   },
                   {
                     "id": 5,
-                    "name": "envoy_headers",
-                    "type": "EnvoyHeaders"
+                    "name": "envoy_debug_headers",
+                    "type": "EnvoyDebugHeaders"
                   }
                 ],
                 "messages": [
@@ -39072,6 +39072,11 @@
                         "id": 1,
                         "name": "disabled",
                         "type": "google.protobuf.BoolValue"
+                      },
+                      {
+                        "id": 2,
+                        "name": "value",
+                        "type": "string"
                       }
                     ]
                   },
@@ -39096,7 +39101,7 @@
                     ]
                   },
                   {
-                    "name": "EnvoyHeaders",
+                    "name": "EnvoyDebugHeaders",
                     "fields": [
                       {
                         "id": 1,
