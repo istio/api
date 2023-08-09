@@ -625,6 +625,8 @@ message ProxyConfig {
     }
     message Server {
       google.protobuf.BoolValue disabled = 1;
+      // If set, and the server header is enabled, this value will be set as the server header. By default, `istio-envoy` will be used.
+      string value = 2;
     }
     message RequestId {
       google.protobuf.BoolValue disabled = 1;
@@ -632,7 +634,7 @@ message ProxyConfig {
     message AttemptCount {
       google.protobuf.BoolValue disabled = 1;
     }
-    message EnvoyHeaders {
+    message EnvoyDebugHeaders {
       google.protobuf.BoolValue disabled = 1;
     }
     // Controls the `X-Forwarded-Client-Cert` header. If enabled, the client certificate properties will be inserted for
@@ -641,18 +643,19 @@ message ProxyConfig {
     ForwardedClientCert forwarded_client_cert = 1;
     // Controls the `X-Request-Id` header. If enabled, a request ID is generated for each request if one is not already set.
     // If disabled, no request ID will be generate for the request. If it is already present, it will be preserved.
+    // Warning: request IDs are a critical component to mesh tracing and logging, so disabling this is not recommended.
     RequestId request_id = 3;
-    // Controls the `server` header. If enabled, the `Server: istio-envoy` header is set.
+    // Controls the `server` header. If enabled, the `Server: istio-envoy` header is set in response headers for inbound traffic (including gateways).
     // If disabled, the `Server` header is not modified. If it is already present, it will be preserved.
     Server server = 2;
-    // Controls the `X-Envoy-Attempt-Count` header. If enabled, this header will be added on requests that have retries configured.
+    // Controls the `X-Envoy-Attempt-Count` header. If enabled, this header will be added on outbound request headers (including gateways) that have retries configured.
     // If disabled, this header will not be set. If it is already present, it will be preserved.
     AttemptCount attempt_count = 4;
     // Controls various `X-Envoy-*` headers, such as `X-Envoy-Overloaded` and `X-Envoy-Upstream-Service-Time. If enabled,
     // these headers will be included.
     // If disabled, they header will not be set. If it is already present, it will be preserved.
     // See the [Envoy documentation](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/router/v3/router.proto#envoy-v3-api-field-extensions-filters-http-router-v3-router-suppress-envoy-headers) for more details.
-    EnvoyHeaders envoy_headers = 5;
+    EnvoyDebugHeaders envoy_debug_headers = 5;
   }
 }
 

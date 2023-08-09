@@ -3495,7 +3495,8 @@ No
 <td><code><a href="#ProxyConfig-ProxyHeaders-RequestId">RequestId</a></code></td>
 <td>
 <p>Controls the <code>X-Request-Id</code> header. If enabled, a request ID is generated for each request if one is not already set.
-If disabled, no request ID will be generate for the request. If it is already present, it will be preserved.</p>
+If disabled, no request ID will be generate for the request. If it is already present, it will be preserved.
+Warning: request IDs are a critical component to mesh tracing and logging, so disabling this is not recommended.</p>
 
 </td>
 <td>
@@ -3506,7 +3507,7 @@ No
 <td><code>server</code></td>
 <td><code><a href="#ProxyConfig-ProxyHeaders-Server">Server</a></code></td>
 <td>
-<p>Controls the <code>server</code> header. If enabled, the <code>Server: istio-envoy</code> header is set.
+<p>Controls the <code>server</code> header. If enabled, the <code>Server: istio-envoy</code> header is set in response headers for inbound traffic (including gateways).
 If disabled, the <code>Server</code> header is not modified. If it is already present, it will be preserved.</p>
 
 </td>
@@ -3518,7 +3519,7 @@ No
 <td><code>attemptCount</code></td>
 <td><code><a href="#ProxyConfig-ProxyHeaders-AttemptCount">AttemptCount</a></code></td>
 <td>
-<p>Controls the <code>X-Envoy-Attempt-Count</code> header. If enabled, this header will be added on requests that have retries configured.
+<p>Controls the <code>X-Envoy-Attempt-Count</code> header. If enabled, this header will be added on outbound request headers (including gateways) that have retries configured.
 If disabled, this header will not be set. If it is already present, it will be preserved.</p>
 
 </td>
@@ -3526,9 +3527,9 @@ If disabled, this header will not be set. If it is already present, it will be p
 No
 </td>
 </tr>
-<tr id="ProxyConfig-ProxyHeaders-envoy_headers">
-<td><code>envoyHeaders</code></td>
-<td><code><a href="#ProxyConfig-ProxyHeaders-EnvoyHeaders">EnvoyHeaders</a></code></td>
+<tr id="ProxyConfig-ProxyHeaders-envoy_debug_headers">
+<td><code>envoyDebugHeaders</code></td>
+<td><code><a href="#ProxyConfig-ProxyHeaders-EnvoyDebugHeaders">EnvoyDebugHeaders</a></code></td>
 <td>
 <p>Controls various <code>X-Envoy-*</code> headers, such as <code>X-Envoy-Overloaded</code> and `X-Envoy-Upstream-Service-Time. If enabled,
 these headers will be included.
@@ -3559,6 +3560,17 @@ No
 <td><code>disabled</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-ProxyHeaders-Server-value">
+<td><code>value</code></td>
+<td><code>string</code></td>
+<td>
+<p>If set, and the server header is enabled, this value will be set as the server header. By default, <code>istio-envoy</code> will be used.</p>
+
 </td>
 <td>
 No
@@ -3639,7 +3651,7 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="ProxyConfig-ProxyHeaders-EnvoyHeaders">ProxyConfig.ProxyHeaders.EnvoyHeaders</h2>
+<h2 id="ProxyConfig-ProxyHeaders-EnvoyDebugHeaders">ProxyConfig.ProxyHeaders.EnvoyDebugHeaders</h2>
 <section>
 <table class="message-fields">
 <thead>
@@ -3651,7 +3663,7 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="ProxyConfig-ProxyHeaders-EnvoyHeaders-disabled">
+<tr id="ProxyConfig-ProxyHeaders-EnvoyDebugHeaders-disabled">
 <td><code>disabled</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
