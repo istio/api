@@ -15,7 +15,6 @@
 syntax = "proto3";
 
 import "type/v1beta1/selector.proto";
-import "type/target_ref.proto";
 import "google/api/field_behavior.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
@@ -287,7 +286,7 @@ message Telemetry {
   // set on the targetRef.
   //
   // If not set, the policy is applied as defined by the selector.
-  istio.type.PolicyTargetReference targetRef = 5;
+  istio.type.v1beta1.PolicyTargetReference targetRef = 5;
 }
 
 // Tracing configures tracing behavior for workloads within a mesh.

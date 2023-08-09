@@ -15,7 +15,6 @@ syntax = "proto3";
 
 import "security/v1/jwt.proto";
 import "type/v1beta1/selector.proto";
-import "type/target_ref.proto";
 
 // $schema: istio.security.v1.RequestAuthentication
 // $title: RequestAuthentication
@@ -465,5 +464,5 @@ message RequestAuthentication {
   // set on the targetRef.
   //
   // If not set, the policy is applied as defined by the selector.
-  istio.type.PolicyTargetReference targetRef = 3;
+  istio.type.v1beta1.PolicyTargetReference targetRef = 3;
 }

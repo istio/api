@@ -14,7 +14,6 @@
 syntax = "proto3";
 
 import "google/api/field_behavior.proto";
-import "type/target_ref.proto";
 import "type/v1beta1/selector.proto";
 
 // $schema: istio.security.v1.AuthorizationPolicy
@@ -600,7 +599,7 @@ message AuthorizationPolicy {
   // set on the targetRef.
   //
   // If not set, the policy is applied as defined by the selector.
-  istio.type.PolicyTargetReference targetRef = 5;
+  istio.type.v1beta1.PolicyTargetReference targetRef = 5;
 }
 
 // Rule matches requests from a list of sources that perform a list of operations subject to a

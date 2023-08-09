@@ -16,7 +16,6 @@ syntax = "proto3";
 
 import "google/protobuf/wrappers.proto";
 import "type/v1beta1/selector.proto";
-import "type/target_ref.proto";
 
 // $schema: istio.networking.v1beta1.ProxyConfig
 // $title: ProxyConfig
@@ -149,7 +148,7 @@ message ProxyConfig {
   // set on the targetRef.
   //
   // If not set, the policy is applied as defined by the selector.
-  istio.type.PolicyTargetReference targetRef = 5;
+  istio.type.v1beta1.PolicyTargetReference targetRef = 5;
 }
 
 // The following values are used to construct proxy image url.

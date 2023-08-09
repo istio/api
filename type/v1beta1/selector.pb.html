@@ -4,7 +4,7 @@ description: Definition of a workload selector.
 location: https://istio.io/docs/reference/config/type/workload-selector.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 3
+number_of_entries: 4
 ---
 <h2 id="WorkloadSelector">WorkloadSelector</h2>
 <section>
@@ -61,6 +61,74 @@ a listener having a specific port.</p>
 <td><code>uint32</code></td>
 <td>
 <p>Port number</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="PolicyTargetReference">PolicyTargetReference</h2>
+<section>
+<p>PolicyTargetReferences specifies the targeted resource which the policy
+can be applied to. It must only target a single resource at a time, but it
+can be used to target larger resources such as Gateways that may apply to
+multiple child resources. The PolicyTargetReference will replace the
+WorkloadSelector for AuthorizationPolicies applied to ambient workloads.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="PolicyTargetReference-group">
+<td><code>group</code></td>
+<td><code>string</code></td>
+<td>
+<p>group is the group of the target resource.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="PolicyTargetReference-kind">
+<td><code>kind</code></td>
+<td><code>string</code></td>
+<td>
+<p>kind is kind of the target resource.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="PolicyTargetReference-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>name is the name of the target resource.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="PolicyTargetReference-namespace" class="oneof oneof-start">
+<td><code>namespace</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>namespace is the namespace of the referent. When unspecified, the local
+namespace is inferred. Even when policy targets a resource in a different
+namespace, it may only apply to traffic originating from the same
+namespace as the policy.</p>
 
 </td>
 <td>

@@ -36608,7 +36608,7 @@
               {
                 "id": 15,
                 "name": "targetRef",
-                "type": "istio.type.PolicyTargetReference"
+                "type": "istio.type.v1beta1.PolicyTargetReference"
               }
             ],
             "messages": [
@@ -36671,9 +36671,6 @@
           },
           {
             "path": "type/v1beta1/selector.proto"
-          },
-          {
-            "path": "type/target_ref.proto"
           }
         ],
         "package": {
@@ -43270,7 +43267,7 @@
               {
                 "id": 5,
                 "name": "targetRef",
-                "type": "istio.type.PolicyTargetReference"
+                "type": "istio.type.v1beta1.PolicyTargetReference"
               }
             ],
             "maps": [
@@ -43301,9 +43298,6 @@
           },
           {
             "path": "type/v1beta1/selector.proto"
-          },
-          {
-            "path": "type/target_ref.proto"
           }
         ],
         "package": {
@@ -46853,7 +46847,7 @@
               {
                 "id": 5,
                 "name": "targetRef",
-                "type": "istio.type.PolicyTargetReference"
+                "type": "istio.type.v1beta1.PolicyTargetReference"
               }
             ],
             "messages": [
@@ -47064,9 +47058,6 @@
         "imports": [
           {
             "path": "google/api/field_behavior.proto"
-          },
-          {
-            "path": "type/target_ref.proto"
           },
           {
             "path": "type/v1beta1/selector.proto"
@@ -47221,7 +47212,7 @@
               {
                 "id": 3,
                 "name": "targetRef",
-                "type": "istio.type.PolicyTargetReference"
+                "type": "istio.type.v1beta1.PolicyTargetReference"
               }
             ]
           }
@@ -47232,9 +47223,6 @@
           },
           {
             "path": "type/v1beta1/selector.proto"
-          },
-          {
-            "path": "type/target_ref.proto"
           }
         ],
         "package": {
@@ -47365,7 +47353,7 @@
               {
                 "id": 5,
                 "name": "targetRef",
-                "type": "istio.type.PolicyTargetReference"
+                "type": "istio.type.v1beta1.PolicyTargetReference"
               }
             ],
             "messages": [
@@ -47576,9 +47564,6 @@
         "imports": [
           {
             "path": "google/api/field_behavior.proto"
-          },
-          {
-            "path": "type/target_ref.proto"
           },
           {
             "path": "type/v1beta1/selector.proto"
@@ -47813,15 +47798,12 @@
               {
                 "id": 3,
                 "name": "targetRef",
-                "type": "istio.type.PolicyTargetReference"
+                "type": "istio.type.v1beta1.PolicyTargetReference"
               }
             ]
           }
         ],
         "imports": [
-          {
-            "path": "type/target_ref.proto"
-          },
           {
             "path": "type/v1beta1/selector.proto"
           },
@@ -47987,7 +47969,7 @@
               {
                 "id": 5,
                 "name": "targetRef",
-                "type": "istio.type.PolicyTargetReference"
+                "type": "istio.type.v1beta1.PolicyTargetReference"
               }
             ]
           },
@@ -48258,9 +48240,6 @@
             "path": "type/v1beta1/selector.proto"
           },
           {
-            "path": "type/target_ref.proto"
-          },
-          {
             "path": "google/api/field_behavior.proto"
           },
           {
@@ -48277,48 +48256,6 @@
           {
             "name": "go_package",
             "value": "istio.io/api/telemetry/v1alpha1"
-          }
-        ]
-      }
-    },
-    {
-      "protopath": "type:/:target_ref.proto",
-      "def": {
-        "messages": [
-          {
-            "name": "PolicyTargetReference",
-            "fields": [
-              {
-                "id": 1,
-                "name": "group",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "kind",
-                "type": "string"
-              },
-              {
-                "id": 3,
-                "name": "name",
-                "type": "string"
-              },
-              {
-                "id": 4,
-                "name": "namespace",
-                "type": "string",
-                "optional": true
-              }
-            ]
-          }
-        ],
-        "package": {
-          "name": "istio.type"
-        },
-        "options": [
-          {
-            "name": "go_package",
-            "value": "istio.io/api/type"
           }
         ]
       }
@@ -48375,6 +48312,32 @@
                 "id": 1,
                 "name": "number",
                 "type": "uint32"
+              }
+            ]
+          },
+          {
+            "name": "PolicyTargetReference",
+            "fields": [
+              {
+                "id": 1,
+                "name": "group",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "kind",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "namespace",
+                "type": "string",
+                "optional": true
               }
             ]
           }
