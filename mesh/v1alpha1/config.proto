@@ -39,7 +39,7 @@ message MeshConfig {
   // Default port is 15001.
   int32 proxy_listen_port = 4;
 
-  // Port on which Envoy should listen for all inbound traffic to the pod/vm will be captured to. 
+  // Port on which Envoy should listen for all inbound traffic to the pod/vm will be captured to.
   // Default port is 15006.
   int32 proxy_inbound_listen_port = 65;
 
@@ -372,7 +372,7 @@ message MeshConfig {
   // $hide_from_docs
   // Configure the provision of certificates.
   //
-  // Note: Deprecated, please refer to Cert-Manager or other cert provisioning solutions to sign DNS certificates. 
+  // Note: Deprecated, please refer to Cert-Manager or other cert provisioning solutions to sign DNS certificates.
   repeated Certificate certificates = 47;
 
   reserved 49;
@@ -684,7 +684,7 @@ message MeshConfig {
       // Next available field number: 7
     }
 
-    // Defines configuration for a Zipkin tracer. 
+    // Defines configuration for a Zipkin tracer.
     message ZipkinTracingProvider {
       // REQUIRED. Specifies the service that the Zipkin API.
       // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
@@ -810,11 +810,11 @@ message MeshConfig {
     //
     // WARNING: OpenCensusAgentTracingProviders should be used with extreme care. Configuration of
     // OpenCensus providers CANNOT be changed during the course of proxy's lifetime due to a limitation
-    // in the implementation of OpenCensus driver in Envoy. This means only a single provider configuration 
+    // in the implementation of OpenCensus driver in Envoy. This means only a single provider configuration
     // may be used for OpenCensus at any given time for a proxy or group of proxies AND that any change to the provider
     // configuration MUST be accompanied by a restart of all proxies that will use that configuration.
     //
-    // NOTE: Stackdriver tracing uses OpenCensus configuraiton under the hood and, as a result, cannot be used
+    // NOTE: Stackdriver tracing uses OpenCensus configuration under the hood and, as a result, cannot be used
     // alongside OpenCensus provider configuration.
     message OpenCensusAgentTracingProvider {
       // REQUIRED. Specifies the service for the OpenCensusAgent.
@@ -1005,7 +1005,7 @@ message MeshConfig {
           //   status: "%RESPONSE_CODE%"
           //   message: "%LOCAL_REPLY_BODY%"
           // ```
-          google.protobuf.Struct labels = 2;   
+          google.protobuf.Struct labels = 2;
       }
     }
 
@@ -1111,7 +1111,7 @@ message MeshConfig {
   // The default number of retry attempts is set at 2 for these errors:
   //   "connect-failure,refused-stream,unavailable,cancelled,retriable-status-codes".
   // Setting the number of attempts to 0 disables retry policy globally.
-  // This setting can be overriden on a per-host basis using the Virtual Service
+  // This setting can be overridden on a per-host basis using the Virtual Service
   // API.
   // All settings in the retry policy except `perTryTimeout` can currently be
   // configured globally via this field.
