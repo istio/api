@@ -839,7 +839,7 @@
         "type": "object",
         "properties": {
           "sniHosts": {
-            "description": "SNI (server name indicator) to match on. Wildcard prefixes can be used in the SNI value, e.g., *.com will match foo.example.com as well as example.com. An SNI value must be a subset (i.e., fall within the domain) of the corresponding virtual serivce's hosts.",
+            "description": "SNI (server name indicator) to match on. Wildcard prefixes can be used in the SNI value, e.g., *.com will match foo.example.com as well as example.com. An SNI value must be a subset (i.e., fall within the domain) of the corresponding virtual service's hosts.",
             "type": "array",
             "items": {
               "type": "string"
