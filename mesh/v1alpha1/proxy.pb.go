@@ -899,7 +899,7 @@ type ProxyConfig struct {
 	// Topology encapsulates the configuration which describes where the proxy is
 	// located i.e. behind a (or N) trusted proxy (proxies) or directly exposed
 	// to the internet. This configuration only effects gateways and is applied
-	// to all the gateways in the cluster unless overriden via annotations of the
+	// to all the gateways in the cluster unless overridden via annotations of the
 	// gateway workloads.
 	GatewayTopology *Topology `protobuf:"bytes,28,opt,name=gateway_topology,json=gatewayTopology,proto3" json:"gateway_topology,omitempty"`
 	// The amount of time allowed for connections to complete on proxy shutdown.

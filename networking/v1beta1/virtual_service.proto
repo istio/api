@@ -186,11 +186,11 @@ option go_package = "istio.io/api/networking/v1beta1";
 // +cue-gen:VirtualService:subresource:status
 // +cue-gen:VirtualService:scope:Namespaced
 // +cue-gen:VirtualService:resource:categories=istio-io,networking-istio-io,shortNames=vs
-// +cue-gen:VirtualService:printerColumn:name=Gateways,type=string,JSONPath=.spec.gateways,description="The names of gateways and sidecars 
+// +cue-gen:VirtualService:printerColumn:name=Gateways,type=string,JSONPath=.spec.gateways,description="The names of gateways and sidecars
 // that should apply these routes"
 // +cue-gen:VirtualService:printerColumn:name=Hosts,type=string,JSONPath=.spec.hosts,description="The destination hosts to which traffic is being sent"
-// +cue-gen:VirtualService:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp 
-// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. 
+// +cue-gen:VirtualService:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
+// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
 // Clients may not set this value. It is represented in RFC3339 form and is in UTC.
 // Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
 // +cue-gen:VirtualService:preserveUnknownFields:false
@@ -1145,7 +1145,7 @@ message HTTPMatchRequest {
   // The statistics are generated with prefix route.<stat_prefix>.
   // This should be set for highly critical routes that one wishes to get "per-route" statistics on.
   // This prefix is only for proxy-level statistics (envoy_*) and not service-level (istio_*) statistics.
-  // Refer to https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto#envoy-v3-api-field-config-route-v3-route-stat-prefix 
+  // Refer to https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto#envoy-v3-api-field-config-route-v3-route-stat-prefix
   // for statistics that are generated when this is configured.
   string stat_prefix = 14;
 }
@@ -1357,7 +1357,7 @@ message TLSMatchAttributes {
   // SNI (server name indicator) to match on. Wildcard prefixes
   // can be used in the SNI value, e.g., *.com will match foo.example.com
   // as well as example.com. An SNI value must be a subset (i.e., fall
-  // within the domain) of the corresponding virtual serivce's hosts.
+  // within the domain) of the corresponding virtual service's hosts.
   repeated string sni_hosts = 1 [(google.api.field_behavior) = REQUIRED];
 
   // IPv4 or IPv6 ip addresses of destination with optional subnet.  E.g.,
@@ -1711,16 +1711,16 @@ message RegexRewrite {
   // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
   string match = 1;
 
-  // The string that should replace into matching portions of original URI. 
+  // The string that should replace into matching portions of original URI.
   // Capture groups in the pattern can be referenced in the new URI.
   // Examples:
   //
   // Example 1: rewrite with capture groups
   // Path pattern "/service/update/v1/api" with match "^/service/([^/]+)(/.*)$" and
   // rewrite string of "/customprefix/\2/\1" would transform into "/customprefix/v1/api/update".
-  // 
+  //
   // Example 2: case insensitive rewrite
-  // Path pattern "/aaa/XxX/bbb" with match "(?i)/xxx/" and a rewrite string of /yyy/ would do a 
+  // Path pattern "/aaa/XxX/bbb" with match "(?i)/xxx/" and a rewrite string of /yyy/ would do a
   // case-insensitive match and transform the path to "/aaa/yyy/bbb".
   string rewrite = 2;
 }
@@ -1793,15 +1793,15 @@ message StringMatch {
 //
 message HTTPRetry {
   // Number of retries to be allowed for a given request. The interval
-  // between retries will be determined automatically (25ms+). When request 
-  // `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute) 
+  // between retries will be determined automatically (25ms+). When request
+  // `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute)
   // or `per_try_timeout` is configured, the actual number of retries attempted also depends on
   // the specified request `timeout` and `per_try_timeout` values.
   int32 attempts = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Timeout per attempt for a given request, including the initial call and any retries. Format: 1h/1m/1s/1ms. MUST BE >=1ms.
-  // Default is same value as request 
-  // `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute), 
+  // Default is same value as request
+  // `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute),
   // which means no timeout.
   google.protobuf.Duration per_try_timeout = 2;
 

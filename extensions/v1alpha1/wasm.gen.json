@@ -133,7 +133,7 @@
             "$ref": "#/components/schemas/istio.type.v1beta1.WorkloadMode"
           },
           "ports": {
-            "description": "Criteria for selecting traffic by their destination port. More specifically, for the outbound traffic, the destination port would be the port of the target service. On the other hand, for the inbound traffic, the destiation port is the port bound by the server process in the same Pod.",
+            "description": "Criteria for selecting traffic by their destination port. More specifically, for the outbound traffic, the destination port would be the port of the target service. On the other hand, for the inbound traffic, the destination port is the port bound by the server process in the same Pod.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.type.v1beta1.PortSelector"

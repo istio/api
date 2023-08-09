@@ -815,7 +815,7 @@ type WasmPlugin_TrafficSelector struct {
 	// Criteria for selecting traffic by their destination port.
 	// More specifically, for the outbound traffic, the destination port would be
 	// the port of the target service. On the other hand, for the inbound traffic,
-	// the destiation port is the port bound by the server process in the same Pod.
+	// the destination port is the port bound by the server process in the same Pod.
 	//
 	// If one of the given `ports` is matched, this condition is evaluated to true.
 	// If not specified, this condition is evaluated to true for any port.
