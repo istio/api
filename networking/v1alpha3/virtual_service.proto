@@ -633,9 +633,6 @@ message HTTPRoute {
   // destination.
   Destination mirror = 9;
 
-  // $hide_from_docs
-  // Hide this from doc until implemented.
-  //
   // Specifies the destinations to mirror HTTP traffic in addition
   // to the original destination. Mirrored traffic is on a
   // best effort basis where the sidecar/gateway will not wait for the
@@ -2090,9 +2087,6 @@ message HTTPFaultInjection {
   }
 }
 
-// $hide_from_docs
-// Hide this from doc until implemented.
-//
 // HTTPMirrorPolicy can be used to specify the destinations to mirror HTTP traffic in addition
 // to the original destination. Mirrored traffic is on a
 // best effort basis where the sidecar/gateway will not wait for the
@@ -2100,15 +2094,9 @@ message HTTPFaultInjection {
 // original destination. Statistics will be generated for the mirrored
 // destination.
 message HTTPMirrorPolicy {
-  // $hide_from_docs
-  // Hide this from doc until implemented.
-  //
   // Destination specifies the target of the mirror operation.
   Destination destination = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // $hide_from_docs
-  // Hide this from doc until implemented.
-  //
   // Percentage of the traffic to be mirrored by the `destination` field.
   // If this field is absent, all the traffic (100%) will be mirrored.
   // Max value is 100.
