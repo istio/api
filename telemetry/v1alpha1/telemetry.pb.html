@@ -205,13 +205,29 @@ spec:
 </tr>
 </thead>
 <tbody>
-<tr id="Telemetry-selector">
+<tr id="Telemetry-selector" class="oneof oneof-start">
 <td><code>selector</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#WorkloadSelector">WorkloadSelector</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#WorkloadSelector">WorkloadSelector (oneof)</a></code></td>
 <td>
 <p>Optional. The selector decides where to apply the Telemetry policy.
 If not set, the Telemetry policy will be applied to all workloads in the
 same namespace as the Telemetry policy.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Telemetry-targetRef" class="oneof">
+<td><code>targetRef</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#PolicyTargetReference">PolicyTargetReference (oneof)</a></code></td>
+<td>
+<p>Optional. The targetRef specifies the resource the policy should be
+applied to. The targeted resource specified will determine which
+workloads the authorization policy applies to. If the authorization policy
+is in the root namespace and the target ref is set, the namespace must be
+set on the targetRef.</p>
+<p>If not set, the policy is applied as defined by the selector.</p>
 
 </td>
 <td>
@@ -248,22 +264,6 @@ No
 <td>
 <p>Optional. AccessLogging configures the access logging behavior for all
 selected workloads.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="Telemetry-targetRef">
-<td><code>targetRef</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#PolicyTargetReference">PolicyTargetReference</a></code></td>
-<td>
-<p>Optional. The targetRef specifies the resource the policy should be
-applied to. The targeted resource specified will determine which
-workloads the authorization policy applies to. If the authorization policy
-is in the root namespace and the target ref is set, the namespace must be
-set on the targetRef.</p>
-<p>If not set, the policy is applied as defined by the selector.</p>
 
 </td>
 <td>

@@ -396,14 +396,30 @@ spec:
 </tr>
 </thead>
 <tbody>
-<tr id="RequestAuthentication-selector">
+<tr id="RequestAuthentication-selector" class="oneof oneof-start">
 <td><code>selector</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#WorkloadSelector">WorkloadSelector</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#WorkloadSelector">WorkloadSelector (oneof)</a></code></td>
 <td>
 <p>Optional. The selector decides where to apply the request authentication policy. The selector will match with workloads
 in the same namespace as the request authentication policy. If the request authentication policy is in the root namespace,
 the selector will additionally match with workloads in all namespaces.</p>
 <p>If not set, the selector will match all workloads.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RequestAuthentication-targetRef" class="oneof">
+<td><code>targetRef</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#PolicyTargetReference">PolicyTargetReference (oneof)</a></code></td>
+<td>
+<p>Optional. The targetRef specifies the resource the policy should be
+applied to. The targeted resource specified will determine which
+workloads the authorization policy applies to. If the authorization policy
+is in the root namespace and the target ref is set, the namespace must be
+set on the targetRef.</p>
+<p>If not set, the policy is applied as defined by the selector.</p>
 
 </td>
 <td>
@@ -421,22 +437,6 @@ rule. The token will be validated based on the JWT rule config. If validation fa
 be rejected.
 Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
 such requests is undefined.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="RequestAuthentication-targetRef">
-<td><code>targetRef</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#PolicyTargetReference">PolicyTargetReference</a></code></td>
-<td>
-<p>Optional. The targetRef specifies the resource the policy should be
-applied to. The targeted resource specified will determine which
-workloads the authorization policy applies to. If the authorization policy
-is in the root namespace and the target ref is set, the namespace must be
-set on the targetRef.</p>
-<p>If not set, the policy is applied as defined by the selector.</p>
 
 </td>
 <td>

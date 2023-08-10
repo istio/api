@@ -262,10 +262,21 @@ option go_package = "istio.io/api/telemetry/v1alpha1";
 // +k8s:deepcopy-gen=true
 // -->
 message Telemetry {
-  // Optional. The selector decides where to apply the Telemetry policy.
-  // If not set, the Telemetry policy will be applied to all workloads in the
-  // same namespace as the Telemetry policy.
-  istio.type.v1beta1.WorkloadSelector selector = 1;
+  oneof type_selector {
+    // Optional. The selector decides where to apply the Telemetry policy.
+    // If not set, the Telemetry policy will be applied to all workloads in the
+    // same namespace as the Telemetry policy.
+    istio.type.v1beta1.WorkloadSelector selector = 1;
+
+    // Optional. The targetRef specifies the resource the policy should be 
+    // applied to. The targeted resource specified will determine which 
+    // workloads the authorization policy applies to. If the authorization policy
+    // is in the root namespace and the target ref is set, the namespace must be
+    // set on the targetRef.
+    //
+    // If not set, the policy is applied as defined by the selector.
+    istio.type.v1beta1.PolicyTargetReference targetRef = 5;
+  }
 
   // Optional. Tracing configures the tracing behavior for all
   // selected workloads.
@@ -278,15 +289,6 @@ message Telemetry {
   // Optional. AccessLogging configures the access logging behavior for all
   // selected workloads.
   repeated AccessLogging access_logging = 4;
-
-  // Optional. The targetRef specifies the resource the policy should be 
-  // applied to. The targeted resource specified will determine which 
-  // workloads the authorization policy applies to. If the authorization policy
-  // is in the root namespace and the target ref is set, the namespace must be
-  // set on the targetRef.
-  //
-  // If not set, the policy is applied as defined by the selector.
-  istio.type.v1beta1.PolicyTargetReference targetRef = 5;
 }
 
 // Tracing configures tracing behavior for workloads within a mesh.

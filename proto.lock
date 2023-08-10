@@ -43255,6 +43255,11 @@
                 "type": "istio.type.v1beta1.WorkloadSelector"
               },
               {
+                "id": 5,
+                "name": "targetRef",
+                "type": "istio.type.v1beta1.PolicyTargetReference"
+              },
+              {
                 "id": 2,
                 "name": "concurrency",
                 "type": "google.protobuf.Int32Value"
@@ -43263,11 +43268,6 @@
                 "id": 4,
                 "name": "image",
                 "type": "ProxyImage"
-              },
-              {
-                "id": 5,
-                "name": "targetRef",
-                "type": "istio.type.v1beta1.PolicyTargetReference"
               }
             ],
             "maps": [
@@ -46829,6 +46829,11 @@
                 "type": "istio.type.v1beta1.WorkloadSelector"
               },
               {
+                "id": 5,
+                "name": "targetRef",
+                "type": "istio.type.v1beta1.PolicyTargetReference"
+              },
+              {
                 "id": 2,
                 "name": "rules",
                 "type": "Rule",
@@ -46843,11 +46848,6 @@
                 "id": 4,
                 "name": "provider",
                 "type": "ExtensionProvider"
-              },
-              {
-                "id": 5,
-                "name": "targetRef",
-                "type": "istio.type.v1beta1.PolicyTargetReference"
               }
             ],
             "messages": [
@@ -47204,15 +47204,15 @@
                 "type": "istio.type.v1beta1.WorkloadSelector"
               },
               {
+                "id": 3,
+                "name": "targetRef",
+                "type": "istio.type.v1beta1.PolicyTargetReference"
+              },
+              {
                 "id": 2,
                 "name": "jwt_rules",
                 "type": "JWTRule",
                 "is_repeated": true
-              },
-              {
-                "id": 3,
-                "name": "targetRef",
-                "type": "istio.type.v1beta1.PolicyTargetReference"
               }
             ]
           }
@@ -47335,6 +47335,11 @@
                 "type": "istio.type.v1beta1.WorkloadSelector"
               },
               {
+                "id": 5,
+                "name": "targetRef",
+                "type": "istio.type.v1beta1.PolicyTargetReference"
+              },
+              {
                 "id": 2,
                 "name": "rules",
                 "type": "Rule",
@@ -47349,11 +47354,6 @@
                 "id": 4,
                 "name": "provider",
                 "type": "ExtensionProvider"
-              },
-              {
-                "id": 5,
-                "name": "targetRef",
-                "type": "istio.type.v1beta1.PolicyTargetReference"
               }
             ],
             "messages": [
@@ -47790,15 +47790,15 @@
                 "type": "istio.type.v1beta1.WorkloadSelector"
               },
               {
+                "id": 3,
+                "name": "targetRef",
+                "type": "istio.type.v1beta1.PolicyTargetReference"
+              },
+              {
                 "id": 2,
                 "name": "jwt_rules",
                 "type": "JWTRule",
                 "is_repeated": true
-              },
-              {
-                "id": 3,
-                "name": "targetRef",
-                "type": "istio.type.v1beta1.PolicyTargetReference"
               }
             ]
           }
@@ -47949,6 +47949,11 @@
                 "type": "istio.type.v1beta1.WorkloadSelector"
               },
               {
+                "id": 5,
+                "name": "targetRef",
+                "type": "istio.type.v1beta1.PolicyTargetReference"
+              },
+              {
                 "id": 2,
                 "name": "tracing",
                 "type": "Tracing",
@@ -47965,11 +47970,6 @@
                 "name": "access_logging",
                 "type": "AccessLogging",
                 "is_repeated": true
-              },
-              {
-                "id": 5,
-                "name": "targetRef",
-                "type": "istio.type.v1beta1.PolicyTargetReference"
               }
             ]
           },

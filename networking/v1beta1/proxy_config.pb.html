@@ -51,7 +51,8 @@ spec:
   image:
     imageType: debug
 </code></pre>
-<p>For waypoint proxy configuration, set the <code>targetRef</code> field on the <code>ProxyConfig</code> resource:</p>
+<p>For waypoint proxy configuration, set the <code>targetRef</code> field on the <code>ProxyConfig</code> resource.
+If the <code>targetRef</code> field in the <code>ProxyConfig</code> is set, the resource will be ignored by sidecars.</p>
 <pre><code class="language-yaml">apiVersion: networking.istio.io/v1beta1
 kind: ProxyConfig
 metadata:
@@ -82,12 +83,28 @@ with the CR taking precedence over the annotation for overlapping fields. Simila
 </tr>
 </thead>
 <tbody>
-<tr id="ProxyConfig-selector">
+<tr id="ProxyConfig-selector" class="oneof oneof-start">
 <td><code>selector</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#WorkloadSelector">WorkloadSelector</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#WorkloadSelector">WorkloadSelector (oneof)</a></code></td>
 <td>
 <p>Optional. Selectors specify the set of pods/VMs on which this <code>ProxyConfig</code> resource should be applied.
 If not set, the <code>ProxyConfig</code> resource will be applied to all workloads in the namespace where this resource is defined.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-targetRef" class="oneof">
+<td><code>targetRef</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#PolicyTargetReference">PolicyTargetReference (oneof)</a></code></td>
+<td>
+<p>Optional. The targetRef specifies the resource the policy should be
+applied to. The targeted resource specified will determine which
+workloads the authorization policy applies to. If the authorization policy
+is in the root namespace and the target ref is set, the namespace must be
+set on the targetRef.</p>
+<p>If not set, the policy is applied as defined by the selector.</p>
 
 </td>
 <td>
@@ -124,22 +141,6 @@ No
 <td><code><a href="#ProxyImage">ProxyImage</a></code></td>
 <td>
 <p>Specifies the details of the proxy image.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="ProxyConfig-targetRef">
-<td><code>targetRef</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#PolicyTargetReference">PolicyTargetReference</a></code></td>
-<td>
-<p>Optional. The targetRef specifies the resource the policy should be
-applied to. The targeted resource specified will determine which
-workloads the authorization policy applies to. If the authorization policy
-is in the root namespace and the target ref is set, the namespace must be
-set on the targetRef.</p>
-<p>If not set, the policy is applied as defined by the selector.</p>
 
 </td>
 <td>

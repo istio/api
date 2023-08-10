@@ -384,14 +384,30 @@ spec:
 </tr>
 </thead>
 <tbody>
-<tr id="AuthorizationPolicy-selector">
+<tr id="AuthorizationPolicy-selector" class="oneof oneof-start">
 <td><code>selector</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#WorkloadSelector">WorkloadSelector</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#WorkloadSelector">WorkloadSelector (oneof)</a></code></td>
 <td>
 <p>Optional. The selector decides where to apply the authorization policy. The selector will match with workloads
 in the same namespace as the authorization policy. If the authorization policy is in the root namespace, the selector
 will additionally match with workloads in all namespaces.</p>
 <p>If not set, the selector will match all workloads.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AuthorizationPolicy-targetRef" class="oneof">
+<td><code>targetRef</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#PolicyTargetReference">PolicyTargetReference (oneof)</a></code></td>
+<td>
+<p>Optional. The targetRef specifies the resource the policy should be
+applied to. The targeted resource specified will determine which
+workloads the authorization policy applies to. If the authorization policy
+is in the root namespace and the target ref is set, the namespace must be
+set on the targetRef.</p>
+<p>If not set, the policy is applied as defined by the selector.</p>
 
 </td>
 <td>
@@ -427,22 +443,6 @@ No
 <td><code><a href="#AuthorizationPolicy-ExtensionProvider">ExtensionProvider (oneof)</a></code></td>
 <td>
 <p>Specifies detailed configuration of the CUSTOM action. Must be used only with CUSTOM action.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="AuthorizationPolicy-targetRef">
-<td><code>targetRef</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#PolicyTargetReference">PolicyTargetReference</a></code></td>
-<td>
-<p>Optional. The targetRef specifies the resource the policy should be
-applied to. The targeted resource specified will determine which
-workloads the authorization policy applies to. If the authorization policy
-is in the root namespace and the target ref is set, the namespace must be
-set on the targetRef.</p>
-<p>If not set, the policy is applied as defined by the selector.</p>
 
 </td>
 <td>

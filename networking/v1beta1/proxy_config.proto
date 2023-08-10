@@ -80,7 +80,8 @@ import "type/v1beta1/selector.proto";
 //     imageType: debug
 // ```
 //
-// For waypoint proxy configuration, set the `targetRef` field on the `ProxyConfig` resource:
+// For waypoint proxy configuration, set the `targetRef` field on the `ProxyConfig` resource.
+// If the `targetRef` field in the `ProxyConfig` is set, the resource will be ignored by sidecars.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
@@ -125,9 +126,20 @@ option go_package= "istio.io/api/networking/v1beta1";
 // +k8s:deepcopy-gen=true
 // -->
 message ProxyConfig {
-  // Optional. Selectors specify the set of pods/VMs on which this `ProxyConfig` resource should be applied.
-  // If not set, the `ProxyConfig` resource will be applied to all workloads in the namespace where this resource is defined.
-  istio.type.v1beta1.WorkloadSelector selector = 1;
+  oneof type_selector {
+    // Optional. Selectors specify the set of pods/VMs on which this `ProxyConfig` resource should be applied.
+    // If not set, the `ProxyConfig` resource will be applied to all workloads in the namespace where this resource is defined.
+    istio.type.v1beta1.WorkloadSelector selector = 1;
+
+    // Optional. The targetRef specifies the resource the policy should be 
+    // applied to. The targeted resource specified will determine which 
+    // workloads the authorization policy applies to. If the authorization policy
+    // is in the root namespace and the target ref is set, the namespace must be
+    // set on the targetRef.
+    //
+    // If not set, the policy is applied as defined by the selector.
+    istio.type.v1beta1.PolicyTargetReference targetRef = 5;
+  }
 
   // The number of worker threads to run.
   // If unset, defaults to 2. If set to 0, this will be configured to use all cores on the machine using
@@ -140,15 +152,6 @@ message ProxyConfig {
 
   // Specifies the details of the proxy image.
   ProxyImage image = 4;
-
-  // Optional. The targetRef specifies the resource the policy should be 
-  // applied to. The targeted resource specified will determine which 
-  // workloads the authorization policy applies to. If the authorization policy
-  // is in the root namespace and the target ref is set, the namespace must be
-  // set on the targetRef.
-  //
-  // If not set, the policy is applied as defined by the selector.
-  istio.type.v1beta1.PolicyTargetReference targetRef = 5;
 }
 
 // The following values are used to construct proxy image url.
