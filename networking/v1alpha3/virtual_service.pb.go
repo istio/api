@@ -852,9 +852,6 @@ type HTTPRoute struct {
 	// original destination.  Statistics will be generated for the mirrored
 	// destination.
 	Mirror *Destination `protobuf:"bytes,9,opt,name=mirror,proto3" json:"mirror,omitempty"`
-	// $hide_from_docs
-	// Hide this from doc until implemented.
-	//
 	// Specifies the destinations to mirror HTTP traffic in addition
 	// to the original destination. Mirrored traffic is on a
 	// best effort basis where the sidecar/gateway will not wait for the
@@ -3551,9 +3548,6 @@ func (x *HTTPFaultInjection) GetAbort() *HTTPFaultInjection_Abort {
 	return nil
 }
 
-// $hide_from_docs
-// Hide this from doc until implemented.
-//
 // HTTPMirrorPolicy can be used to specify the destinations to mirror HTTP traffic in addition
 // to the original destination. Mirrored traffic is on a
 // best effort basis where the sidecar/gateway will not wait for the
@@ -3565,14 +3559,8 @@ type HTTPMirrorPolicy struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// $hide_from_docs
-	// Hide this from doc until implemented.
-	//
 	// Destination specifies the target of the mirror operation.
 	Destination *Destination `protobuf:"bytes,1,opt,name=destination,proto3" json:"destination,omitempty"`
-	// $hide_from_docs
-	// Hide this from doc until implemented.
-	//
 	// Percentage of the traffic to be mirrored by the `destination` field.
 	// If this field is absent, all the traffic (100%) will be mirrored.
 	// Max value is 100.
