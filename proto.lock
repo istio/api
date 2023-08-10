@@ -38438,7 +38438,7 @@
             ]
           },
           {
-            "name": "Topology.ForwardClientCertDetails",
+            "name": "ForwardClientCertDetails",
             "enum_fields": [
               {
                 "name": "UNDEFINED"
@@ -39031,7 +39031,7 @@
                   {
                     "id": 1,
                     "name": "forwarded_client_cert",
-                    "type": "ForwardedClientCert"
+                    "type": "ForwardClientCertDetails"
                   },
                   {
                     "id": 3,
@@ -39055,16 +39055,6 @@
                   }
                 ],
                 "messages": [
-                  {
-                    "name": "ForwardedClientCert",
-                    "fields": [
-                      {
-                        "id": 1,
-                        "name": "disabled",
-                        "type": "google.protobuf.BoolValue"
-                      }
-                    ]
-                  },
                   {
                     "name": "Server",
                     "fields": [
