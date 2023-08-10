@@ -1,4 +1,3 @@
-
 // GENERATED FILE -- DO NOT EDIT
 
 package annotation
@@ -27,13 +26,13 @@ type ResourceTypes int
 
 const (
 	Unknown ResourceTypes = iota
-    Any
-    AuthorizationPolicy
-    Ingress
-    Namespace
-    Pod
-    Service
-    WorkloadEntry
+	Any
+	AuthorizationPolicy
+	Ingress
+	Namespace
+	Pod
+	Service
+	WorkloadEntry
 )
 
 func (r ResourceTypes) String() string {
@@ -78,11 +77,10 @@ type Instance struct {
 }
 
 var (
-
-	AlphaCanonicalServiceAccounts = Instance {
-		Name:          "alpha.istio.io/canonical-serviceaccounts",
-		Description:   "Specifies the non-Kubernetes service accounts that are "+
-                        "allowed to run this service.",
+	AlphaCanonicalServiceAccounts = Instance{
+		Name: "alpha.istio.io/canonical-serviceaccounts",
+		Description: "Specifies the non-Kubernetes service accounts that are " +
+			"allowed to run this service.",
 		FeatureStatus: Alpha,
 		Hidden:        true,
 		Deprecated:    true,
@@ -91,7 +89,7 @@ var (
 		},
 	}
 
-	AlphaIdentity = Instance {
+	AlphaIdentity = Instance{
 		Name:          "alpha.istio.io/identity",
 		Description:   "Identity for the workload.",
 		FeatureStatus: Alpha,
@@ -102,10 +100,10 @@ var (
 		},
 	}
 
-	AlphaKubernetesServiceAccounts = Instance {
-		Name:          "alpha.istio.io/kubernetes-serviceaccounts",
-		Description:   "Specifies the Kubernetes service accounts that are "+
-                        "allowed to run this service on the VMs.",
+	AlphaKubernetesServiceAccounts = Instance{
+		Name: "alpha.istio.io/kubernetes-serviceaccounts",
+		Description: "Specifies the Kubernetes service accounts that are " +
+			"allowed to run this service on the VMs.",
 		FeatureStatus: Alpha,
 		Hidden:        true,
 		Deprecated:    true,
@@ -114,16 +112,16 @@ var (
 		},
 	}
 
-	GalleyAnalyzeSuppress = Instance {
-		Name:          "galley.istio.io/analyze-suppress",
-		Description:   "A comma separated list of configuration analysis message "+
-                        "codes to suppress when Istio analyzers are run. For "+
-                        "example, to suppress reporting of IST0103 "+
-                        "(PodMissingProxy) and IST0108 (UnknownAnnotation) on a "+
-                        "resource, apply the annotation "+
-                        "'galley.istio.io/analyze-suppress=IST0108,IST0103'. If "+
-                        "the value is '*', then all configuration analysis "+
-                        "messages are suppressed.",
+	GalleyAnalyzeSuppress = Instance{
+		Name: "galley.istio.io/analyze-suppress",
+		Description: "A comma separated list of configuration analysis message " +
+			"codes to suppress when Istio analyzers are run. For " +
+			"example, to suppress reporting of IST0103 " +
+			"(PodMissingProxy) and IST0108 (UnknownAnnotation) on a " +
+			"resource, apply the annotation " +
+			"'galley.istio.io/analyze-suppress=IST0108,IST0103'. If " +
+			"the value is '*', then all configuration analysis " +
+			"messages are suppressed.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -132,10 +130,10 @@ var (
 		},
 	}
 
-	GatewayControllerVersion = Instance {
-		Name:          "gateway.istio.io/controller-version",
-		Description:   "A version added to the Gateway by the controller "+
-                        "specifying the `controller version`.",
+	GatewayControllerVersion = Instance{
+		Name: "gateway.istio.io/controller-version",
+		Description: "A version added to the Gateway by the controller " +
+			"specifying the `controller version`.",
 		FeatureStatus: Alpha,
 		Hidden:        true,
 		Deprecated:    false,
@@ -144,12 +142,12 @@ var (
 		},
 	}
 
-	InjectTemplates = Instance {
-		Name:          "inject.istio.io/templates",
-		Description:   "The name of the inject template(s) to use, as a comma "+
-                        "separate list. See "+
-                        "https://istio.io/latest/docs/setup/additional-setup/sidecar-injection/#custom-templates-experimental "+
-                        "for more information.",
+	InjectTemplates = Instance{
+		Name: "inject.istio.io/templates",
+		Description: "The name of the inject template(s) to use, as a comma " +
+			"separate list. See " +
+			"https://istio.io/latest/docs/setup/additional-setup/sidecar-injection/#custom-templates-experimental " +
+			"for more information.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -158,10 +156,10 @@ var (
 		},
 	}
 
-	OperatorInstallChartOwner = Instance {
-		Name:          "install.operator.istio.io/chart-owner",
-		Description:   "Represents the name of the chart used to create this "+
-                        "resource.",
+	OperatorInstallChartOwner = Instance{
+		Name: "install.operator.istio.io/chart-owner",
+		Description: "Represents the name of the chart used to create this " +
+			"resource.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -170,10 +168,10 @@ var (
 		},
 	}
 
-	OperatorInstallOwnerGeneration = Instance {
-		Name:          "install.operator.istio.io/owner-generation",
-		Description:   "Represents the generation to which the resource was last "+
-                        "reconciled.",
+	OperatorInstallOwnerGeneration = Instance{
+		Name: "install.operator.istio.io/owner-generation",
+		Description: "Represents the generation to which the resource was last " +
+			"reconciled.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -182,7 +180,7 @@ var (
 		},
 	}
 
-	OperatorInstallVersion = Instance {
+	OperatorInstallVersion = Instance{
 		Name:          "install.operator.istio.io/version",
 		Description:   "Represents the Istio version associated with the resource",
 		FeatureStatus: Alpha,
@@ -193,7 +191,7 @@ var (
 		},
 	}
 
-	IoIstioAutoRegistrationGroup = Instance {
+	IoIstioAutoRegistrationGroup = Instance{
 		Name:          "istio.io/autoRegistrationGroup",
 		Description:   "On a WorkloadEntry stores the associated WorkloadGroup.",
 		FeatureStatus: Alpha,
@@ -204,10 +202,10 @@ var (
 		},
 	}
 
-	IoIstioConnectedAt = Instance {
-		Name:          "istio.io/connectedAt",
-		Description:   "On a WorkloadEntry stores the time in nanoseconds when "+
-                        "the associated workload connected to a Pilot instance.",
+	IoIstioConnectedAt = Instance{
+		Name: "istio.io/connectedAt",
+		Description: "On a WorkloadEntry stores the time in nanoseconds when " +
+			"the associated workload connected to a Pilot instance.",
 		FeatureStatus: Alpha,
 		Hidden:        true,
 		Deprecated:    false,
@@ -216,11 +214,11 @@ var (
 		},
 	}
 
-	IoIstioDisconnectedAt = Instance {
-		Name:          "istio.io/disconnectedAt",
-		Description:   "On a WorkloadEntry stores the time in nanoseconds when "+
-                        "the associated workload disconnected from a Pilot "+
-                        "instance.",
+	IoIstioDisconnectedAt = Instance{
+		Name: "istio.io/disconnectedAt",
+		Description: "On a WorkloadEntry stores the time in nanoseconds when " +
+			"the associated workload disconnected from a Pilot " +
+			"instance.",
 		FeatureStatus: Alpha,
 		Hidden:        true,
 		Deprecated:    false,
@@ -229,12 +227,12 @@ var (
 		},
 	}
 
-	IoIstioDryRun = Instance {
-		Name:          "istio.io/dry-run",
-		Description:   "Specifies whether or not the given resource is in dry-run "+
-                        "mode. See "+
-                        "https://istio.io/latest/docs/tasks/security/authorization/authz-dry-run/ "+
-                        "for more information.",
+	IoIstioDryRun = Instance{
+		Name: "istio.io/dry-run",
+		Description: "Specifies whether or not the given resource is in dry-run " +
+			"mode. See " +
+			"https://istio.io/latest/docs/tasks/security/authorization/authz-dry-run/ " +
+			"for more information.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -243,13 +241,13 @@ var (
 		},
 	}
 
-	IoIstioRev = Instance {
-		Name:          "istio.io/rev",
-		Description:   "Specifies a control plane revision to which a given proxy "+
-                        "is connected. This annotation is added automatically, not "+
-                        "set by a user. In contrary to the label istio.io/rev, it "+
-                        "represents the actual revision, not the requested "+
-                        "revision.",
+	IoIstioRev = Instance{
+		Name: "istio.io/rev",
+		Description: "Specifies a control plane revision to which a given proxy " +
+			"is connected. This annotation is added automatically, not " +
+			"set by a user. In contrary to the label istio.io/rev, it " +
+			"represents the actual revision, not the requested " +
+			"revision.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -258,10 +256,10 @@ var (
 		},
 	}
 
-	IoIstioWorkloadController = Instance {
-		Name:          "istio.io/workloadController",
-		Description:   "On a WorkloadEntry should store the current/last pilot "+
-                        "instance connected to the workload for XDS.",
+	IoIstioWorkloadController = Instance{
+		Name: "istio.io/workloadController",
+		Description: "On a WorkloadEntry should store the current/last pilot " +
+			"instance connected to the workload for XDS.",
 		FeatureStatus: Alpha,
 		Hidden:        true,
 		Deprecated:    false,
@@ -270,10 +268,10 @@ var (
 		},
 	}
 
-	IoKubernetesIngressClass = Instance {
-		Name:          "kubernetes.io/ingress.class",
-		Description:   "Annotation on an Ingress resources denoting the class of "+
-                        "controllers responsible for it.",
+	IoKubernetesIngressClass = Instance{
+		Name: "kubernetes.io/ingress.class",
+		Description: "Annotation on an Ingress resources denoting the class of " +
+			"controllers responsible for it.",
 		FeatureStatus: Stable,
 		Hidden:        false,
 		Deprecated:    false,
@@ -282,12 +280,12 @@ var (
 		},
 	}
 
-	NetworkingExportTo = Instance {
-		Name:          "networking.istio.io/exportTo",
-		Description:   "Specifies the namespaces to which this service should be "+
-                        "exported to. A value of '*' indicates it is reachable "+
-                        "within the mesh '.' indicates it is reachable within its "+
-                        "namespace.",
+	NetworkingExportTo = Instance{
+		Name: "networking.istio.io/exportTo",
+		Description: "Specifies the namespaces to which this service should be " +
+			"exported to. A value of '*' indicates it is reachable " +
+			"within the mesh '.' indicates it is reachable within its " +
+			"namespace.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -296,10 +294,10 @@ var (
 		},
 	}
 
-	PrometheusMergeMetrics = Instance {
-		Name:          "prometheus.istio.io/merge-metrics",
-		Description:   "Specifies if application Prometheus metric will be merged "+
-                        "with Envoy metrics for this workload.",
+	PrometheusMergeMetrics = Instance{
+		Name: "prometheus.istio.io/merge-metrics",
+		Description: "Specifies if application Prometheus metric will be merged " +
+			"with Envoy metrics for this workload.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -308,11 +306,11 @@ var (
 		},
 	}
 
-	ProxyConfig = Instance {
-		Name:          "proxy.istio.io/config",
-		Description:   "Overrides for the proxy configuration for this specific "+
-                        "proxy. Available options can be found at "+
-                        "https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#ProxyConfig.",
+	ProxyConfig = Instance{
+		Name: "proxy.istio.io/config",
+		Description: "Overrides for the proxy configuration for this specific " +
+			"proxy. Available options can be found at " +
+			"https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#ProxyConfig.",
 		FeatureStatus: Beta,
 		Hidden:        false,
 		Deprecated:    false,
@@ -321,10 +319,10 @@ var (
 		},
 	}
 
-	ProxyOverrides = Instance {
-		Name:          "proxy.istio.io/overrides",
-		Description:   "Used internally to indicate user-specified overrides in "+
-                        "the proxy container of the pod during injection.",
+	ProxyOverrides = Instance{
+		Name: "proxy.istio.io/overrides",
+		Description: "Used internally to indicate user-specified overrides in " +
+			"the proxy container of the pod during injection.",
 		FeatureStatus: Alpha,
 		Hidden:        true,
 		Deprecated:    false,
@@ -333,12 +331,12 @@ var (
 		},
 	}
 
-	SidecarStatusReadinessApplicationPorts = Instance {
-		Name:          "readiness.status.sidecar.istio.io/applicationPorts",
-		Description:   "Specifies the list of ports exposed by the application "+
-                        "container. Used by the Envoy sidecar readiness probe to "+
-                        "determine that Envoy is configured and ready to receive "+
-                        "traffic.",
+	SidecarStatusReadinessApplicationPorts = Instance{
+		Name: "readiness.status.sidecar.istio.io/applicationPorts",
+		Description: "Specifies the list of ports exposed by the application " +
+			"container. Used by the Envoy sidecar readiness probe to " +
+			"determine that Envoy is configured and ready to receive " +
+			"traffic.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -347,10 +345,10 @@ var (
 		},
 	}
 
-	SidecarStatusReadinessFailureThreshold = Instance {
-		Name:          "readiness.status.sidecar.istio.io/failureThreshold",
-		Description:   "Specifies the failure threshold for the Envoy sidecar "+
-                        "readiness probe.",
+	SidecarStatusReadinessFailureThreshold = Instance{
+		Name: "readiness.status.sidecar.istio.io/failureThreshold",
+		Description: "Specifies the failure threshold for the Envoy sidecar " +
+			"readiness probe.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -359,10 +357,10 @@ var (
 		},
 	}
 
-	SidecarStatusReadinessInitialDelaySeconds = Instance {
-		Name:          "readiness.status.sidecar.istio.io/initialDelaySeconds",
-		Description:   "Specifies the initial delay (in seconds) for the Envoy "+
-                        "sidecar readiness probe.",
+	SidecarStatusReadinessInitialDelaySeconds = Instance{
+		Name: "readiness.status.sidecar.istio.io/initialDelaySeconds",
+		Description: "Specifies the initial delay (in seconds) for the Envoy " +
+			"sidecar readiness probe.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -371,10 +369,10 @@ var (
 		},
 	}
 
-	SidecarStatusReadinessPeriodSeconds = Instance {
-		Name:          "readiness.status.sidecar.istio.io/periodSeconds",
-		Description:   "Specifies the period (in seconds) for the Envoy sidecar "+
-                        "readiness probe.",
+	SidecarStatusReadinessPeriodSeconds = Instance{
+		Name: "readiness.status.sidecar.istio.io/periodSeconds",
+		Description: "Specifies the period (in seconds) for the Envoy sidecar " +
+			"readiness probe.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -383,7 +381,7 @@ var (
 		},
 	}
 
-	SidecarAgentLogLevel = Instance {
+	SidecarAgentLogLevel = Instance{
 		Name:          "sidecar.istio.io/agentLogLevel",
 		Description:   "Specifies the log output level for pilot-agent.",
 		FeatureStatus: Alpha,
@@ -394,10 +392,10 @@ var (
 		},
 	}
 
-	SidecarBootstrapOverride = Instance {
-		Name:          "sidecar.istio.io/bootstrapOverride",
-		Description:   "Specifies an alternative Envoy bootstrap configuration "+
-                        "file.",
+	SidecarBootstrapOverride = Instance{
+		Name: "sidecar.istio.io/bootstrapOverride",
+		Description: "Specifies an alternative Envoy bootstrap configuration " +
+			"file.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -406,7 +404,7 @@ var (
 		},
 	}
 
-	SidecarComponentLogLevel = Instance {
+	SidecarComponentLogLevel = Instance{
 		Name:          "sidecar.istio.io/componentLogLevel",
 		Description:   "Specifies the component log level for Envoy.",
 		FeatureStatus: Alpha,
@@ -417,12 +415,12 @@ var (
 		},
 	}
 
-	SidecarControlPlaneAuthPolicy = Instance {
-		Name:          "sidecar.istio.io/controlPlaneAuthPolicy",
-		Description:   "Specifies the auth policy used by the Istio control "+
-                        "plane. If NONE, traffic will not be encrypted. If "+
-                        "MUTUAL_TLS, traffic between Envoy sidecar will be wrapped "+
-                        "into mutual TLS connections.",
+	SidecarControlPlaneAuthPolicy = Instance{
+		Name: "sidecar.istio.io/controlPlaneAuthPolicy",
+		Description: "Specifies the auth policy used by the Istio control " +
+			"plane. If NONE, traffic will not be encrypted. If " +
+			"MUTUAL_TLS, traffic between Envoy sidecar will be wrapped " +
+			"into mutual TLS connections.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    true,
@@ -431,10 +429,25 @@ var (
 		},
 	}
 
-	SidecarDiscoveryAddress = Instance {
-		Name:          "sidecar.istio.io/discoveryAddress",
-		Description:   "Specifies the XDS discovery address to be used by the "+
-                        "Envoy sidecar.",
+	SidecarDisableIPEarlyDemux = Instance{
+		Name: "sidecar.istio.io/disableIPEarlyDemux",
+		Description: "Specifies whether the Kernel option " +
+			"net.ipv4.ip_early_demux should be set to 0 in order to " +
+			"prevent TCP connection issues when a pod exposes multiple " +
+			"ports and receives multiple concurrent connections from " +
+			"the same client IP and port.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
+	SidecarDiscoveryAddress = Instance{
+		Name: "sidecar.istio.io/discoveryAddress",
+		Description: "Specifies the XDS discovery address to be used by the " +
+			"Envoy sidecar.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    true,
@@ -443,10 +456,10 @@ var (
 		},
 	}
 
-	SidecarEnableCoreDump = Instance {
-		Name:          "sidecar.istio.io/enableCoreDump",
-		Description:   "Specifies whether or not an Envoy sidecar should enable "+
-                        "core dump.",
+	SidecarEnableCoreDump = Instance{
+		Name: "sidecar.istio.io/enableCoreDump",
+		Description: "Specifies whether or not an Envoy sidecar should enable " +
+			"core dump.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -455,11 +468,11 @@ var (
 		},
 	}
 
-	SidecarExtraStatTags = Instance {
-		Name:          "sidecar.istio.io/extraStatTags",
-		Description:   "An additional list of tags to extract from the in-proxy "+
-                        "Istio Wasm telemetry. Each additional tag needs to be "+
-                        "present in this list.",
+	SidecarExtraStatTags = Instance{
+		Name: "sidecar.istio.io/extraStatTags",
+		Description: "An additional list of tags to extract from the in-proxy " +
+			"Istio Wasm telemetry. Each additional tag needs to be " +
+			"present in this list.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -468,11 +481,11 @@ var (
 		},
 	}
 
-	SidecarInject = Instance {
-		Name:          "sidecar.istio.io/inject",
-		Description:   "Specifies whether or not an Envoy sidecar should be "+
-                        "automatically injected into the workload. Deprecated in "+
-                        "favor of `sidecar.istio.io/inject` label.",
+	SidecarInject = Instance{
+		Name: "sidecar.istio.io/inject",
+		Description: "Specifies whether or not an Envoy sidecar should be " +
+			"automatically injected into the workload. Deprecated in " +
+			"favor of `sidecar.istio.io/inject` label.",
 		FeatureStatus: Beta,
 		Hidden:        false,
 		Deprecated:    true,
@@ -481,10 +494,10 @@ var (
 		},
 	}
 
-	SidecarInterceptionMode = Instance {
-		Name:          "sidecar.istio.io/interceptionMode",
-		Description:   "Specifies the mode used to redirect inbound connections "+
-                        "to Envoy (REDIRECT or TPROXY).",
+	SidecarInterceptionMode = Instance{
+		Name: "sidecar.istio.io/interceptionMode",
+		Description: "Specifies the mode used to redirect inbound connections " +
+			"to Envoy (REDIRECT or TPROXY).",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -493,7 +506,7 @@ var (
 		},
 	}
 
-	SidecarLogLevel = Instance {
+	SidecarLogLevel = Instance{
 		Name:          "sidecar.istio.io/logLevel",
 		Description:   "Specifies the log level for Envoy.",
 		FeatureStatus: Alpha,
@@ -504,10 +517,10 @@ var (
 		},
 	}
 
-	SidecarProxyCPU = Instance {
-		Name:          "sidecar.istio.io/proxyCPU",
-		Description:   "Specifies the requested CPU setting for the Envoy "+
-                        "sidecar.",
+	SidecarProxyCPU = Instance{
+		Name: "sidecar.istio.io/proxyCPU",
+		Description: "Specifies the requested CPU setting for the Envoy " +
+			"sidecar.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -516,7 +529,7 @@ var (
 		},
 	}
 
-	SidecarProxyCPULimit = Instance {
+	SidecarProxyCPULimit = Instance{
 		Name:          "sidecar.istio.io/proxyCPULimit",
 		Description:   "Specifies the CPU limit for the Envoy sidecar.",
 		FeatureStatus: Alpha,
@@ -527,10 +540,10 @@ var (
 		},
 	}
 
-	SidecarProxyImage = Instance {
-		Name:          "sidecar.istio.io/proxyImage",
-		Description:   "Specifies the Docker image to be used by the Envoy "+
-                        "sidecar.",
+	SidecarProxyImage = Instance{
+		Name: "sidecar.istio.io/proxyImage",
+		Description: "Specifies the Docker image to be used by the Envoy " +
+			"sidecar.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -539,11 +552,11 @@ var (
 		},
 	}
 
-	SidecarProxyImageType = Instance {
-		Name:          "sidecar.istio.io/proxyImageType",
-		Description:   "Specifies the Docker image type to be used by the Envoy "+
-                        "sidecar. Istio publishes debug and distroless image types "+
-                        "for every release tag.",
+	SidecarProxyImageType = Instance{
+		Name: "sidecar.istio.io/proxyImageType",
+		Description: "Specifies the Docker image type to be used by the Envoy " +
+			"sidecar. Istio publishes debug and distroless image types " +
+			"for every release tag.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -552,10 +565,10 @@ var (
 		},
 	}
 
-	SidecarProxyMemory = Instance {
-		Name:          "sidecar.istio.io/proxyMemory",
-		Description:   "Specifies the requested memory setting for the Envoy "+
-                        "sidecar.",
+	SidecarProxyMemory = Instance{
+		Name: "sidecar.istio.io/proxyMemory",
+		Description: "Specifies the requested memory setting for the Envoy " +
+			"sidecar.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -564,7 +577,7 @@ var (
 		},
 	}
 
-	SidecarProxyMemoryLimit = Instance {
+	SidecarProxyMemoryLimit = Instance{
 		Name:          "sidecar.istio.io/proxyMemoryLimit",
 		Description:   "Specifies the memory limit for the Envoy sidecar.",
 		FeatureStatus: Alpha,
@@ -575,10 +588,10 @@ var (
 		},
 	}
 
-	SidecarRewriteAppHTTPProbers = Instance {
-		Name:          "sidecar.istio.io/rewriteAppHTTPProbers",
-		Description:   "Rewrite HTTP readiness and liveness probes to be "+
-                        "redirected to the Envoy sidecar.",
+	SidecarRewriteAppHTTPProbers = Instance{
+		Name: "sidecar.istio.io/rewriteAppHTTPProbers",
+		Description: "Rewrite HTTP readiness and liveness probes to be " +
+			"redirected to the Envoy sidecar.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -587,14 +600,14 @@ var (
 		},
 	}
 
-	SidecarStatsHistogramBuckets = Instance {
-		Name:          "sidecar.istio.io/statsHistogramBuckets",
-		Description:   "Specifies the custom histogram buckets with a prefix "+
-                        "matcher to separate the Istio mesh metrics from the Envoy "+
-                        "stats, e.g. "+
-                        "`{`istiocustom`:[1,5,10,50,100,500,1000,5000,10000],`cluster.xds-grpc`:[1,5,10,25,50,100,250,500,1000,2500,5000,10000]}`. "+
-                        "Default buckets are "+
-                        "`[0.5,1,5,10,25,50,100,250,500,1000,2500,5000,10000,30000,60000,300000,600000,1800000,3600000]`.",
+	SidecarStatsHistogramBuckets = Instance{
+		Name: "sidecar.istio.io/statsHistogramBuckets",
+		Description: "Specifies the custom histogram buckets with a prefix " +
+			"matcher to separate the Istio mesh metrics from the Envoy " +
+			"stats, e.g. " +
+			"`{`istiocustom`:[1,5,10,50,100,500,1000,5000,10000],`cluster.xds-grpc`:[1,5,10,25,50,100,250,500,1000,2500,5000,10000]}`. " +
+			"Default buckets are " +
+			"`[0.5,1,5,10,25,50,100,250,500,1000,2500,5000,10000,30000,60000,300000,600000,1800000,3600000]`.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -603,10 +616,10 @@ var (
 		},
 	}
 
-	SidecarStatsInclusionPrefixes = Instance {
-		Name:          "sidecar.istio.io/statsInclusionPrefixes",
-		Description:   "Specifies the comma separated list of prefixes of the "+
-                        "stats to be emitted by Envoy.",
+	SidecarStatsInclusionPrefixes = Instance{
+		Name: "sidecar.istio.io/statsInclusionPrefixes",
+		Description: "Specifies the comma separated list of prefixes of the " +
+			"stats to be emitted by Envoy.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    true,
@@ -615,10 +628,10 @@ var (
 		},
 	}
 
-	SidecarStatsInclusionRegexps = Instance {
-		Name:          "sidecar.istio.io/statsInclusionRegexps",
-		Description:   "Specifies the comma separated list of regexes the stats "+
-                        "should match to be emitted by Envoy.",
+	SidecarStatsInclusionRegexps = Instance{
+		Name: "sidecar.istio.io/statsInclusionRegexps",
+		Description: "Specifies the comma separated list of regexes the stats " +
+			"should match to be emitted by Envoy.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    true,
@@ -627,10 +640,10 @@ var (
 		},
 	}
 
-	SidecarStatsInclusionSuffixes = Instance {
-		Name:          "sidecar.istio.io/statsInclusionSuffixes",
-		Description:   "Specifies the comma separated list of suffixes of the "+
-                        "stats to be emitted by Envoy.",
+	SidecarStatsInclusionSuffixes = Instance{
+		Name: "sidecar.istio.io/statsInclusionSuffixes",
+		Description: "Specifies the comma separated list of suffixes of the " +
+			"stats to be emitted by Envoy.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    true,
@@ -639,12 +652,12 @@ var (
 		},
 	}
 
-	SidecarStatus = Instance {
-		Name:          "sidecar.istio.io/status",
-		Description:   "Generated by Envoy sidecar injection that indicates the "+
-                        "status of the operation. Includes a version hash of the "+
-                        "executed template, as well as names of injected "+
-                        "resources.",
+	SidecarStatus = Instance{
+		Name: "sidecar.istio.io/status",
+		Description: "Generated by Envoy sidecar injection that indicates the " +
+			"status of the operation. Includes a version hash of the " +
+			"executed template, as well as names of injected " +
+			"resources.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -653,10 +666,10 @@ var (
 		},
 	}
 
-	SidecarUserVolume = Instance {
-		Name:          "sidecar.istio.io/userVolume",
-		Description:   "Specifies one or more user volumes (as a JSON array) to "+
-                        "be added to the Envoy sidecar.",
+	SidecarUserVolume = Instance{
+		Name: "sidecar.istio.io/userVolume",
+		Description: "Specifies one or more user volumes (as a JSON array) to " +
+			"be added to the Envoy sidecar.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -665,10 +678,10 @@ var (
 		},
 	}
 
-	SidecarUserVolumeMount = Instance {
-		Name:          "sidecar.istio.io/userVolumeMount",
-		Description:   "Specifies one or more user volume mounts (as a JSON "+
-                        "array) to be added to the Envoy sidecar.",
+	SidecarUserVolumeMount = Instance{
+		Name: "sidecar.istio.io/userVolumeMount",
+		Description: "Specifies one or more user volume mounts (as a JSON " +
+			"array) to be added to the Envoy sidecar.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -677,10 +690,10 @@ var (
 		},
 	}
 
-	SidecarStatusPort = Instance {
-		Name:          "status.sidecar.istio.io/port",
-		Description:   "Specifies the HTTP status Port for the Envoy sidecar. If "+
-                        "zero, the sidecar will not provide status.",
+	SidecarStatusPort = Instance{
+		Name: "status.sidecar.istio.io/port",
+		Description: "Specifies the HTTP status Port for the Envoy sidecar. If " +
+			"zero, the sidecar will not provide status.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -689,13 +702,13 @@ var (
 		},
 	}
 
-	TopologyControlPlaneClusters = Instance {
-		Name:          "topology.istio.io/controlPlaneClusters",
-		Description:   "A comma-separated list of clusters (or * for any) running "+
-                        "istiod that should attempt leader election for a remote "+
-                        "cluster thats system namespace includes this annotation. "+
-                        "Istiod will not attempt to lead unannotated remote "+
-                        "clusters.",
+	TopologyControlPlaneClusters = Instance{
+		Name: "topology.istio.io/controlPlaneClusters",
+		Description: "A comma-separated list of clusters (or * for any) running " +
+			"istiod that should attempt leader election for a remote " +
+			"cluster thats system namespace includes this annotation. " +
+			"Istiod will not attempt to lead unannotated remote " +
+			"clusters.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -704,13 +717,13 @@ var (
 		},
 	}
 
-	TrafficNodeSelector = Instance {
-		Name:          "traffic.istio.io/nodeSelector",
-		Description:   "This annotation is a set of node-labels "+
-                        "(key1=value,key2=value). If the annotated Service is of "+
-                        "type NodePort and is a multi-network gateway (see "+
-                        "topology.istio.io/network), the addresses for selected "+
-                        "nodes will be used for cross-network communication.",
+	TrafficNodeSelector = Instance{
+		Name: "traffic.istio.io/nodeSelector",
+		Description: "This annotation is a set of node-labels " +
+			"(key1=value,key2=value). If the annotated Service is of " +
+			"type NodePort and is a multi-network gateway (see " +
+			"topology.istio.io/network), the addresses for selected " +
+			"nodes will be used for cross-network communication.",
 		FeatureStatus: Stable,
 		Hidden:        false,
 		Deprecated:    false,
@@ -719,11 +732,11 @@ var (
 		},
 	}
 
-	SidecarTrafficExcludeInboundPorts = Instance {
-		Name:          "traffic.sidecar.istio.io/excludeInboundPorts",
-		Description:   "A comma separated list of inbound ports to be excluded "+
-                        "from redirection to Envoy. Only applies when all inbound "+
-                        "traffic (i.e. '*') is being redirected.",
+	SidecarTrafficExcludeInboundPorts = Instance{
+		Name: "traffic.sidecar.istio.io/excludeInboundPorts",
+		Description: "A comma separated list of inbound ports to be excluded " +
+			"from redirection to Envoy. Only applies when all inbound " +
+			"traffic (i.e. '*') is being redirected.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -732,10 +745,10 @@ var (
 		},
 	}
 
-	SidecarTrafficExcludeInterfaces = Instance {
-		Name:          "traffic.sidecar.istio.io/excludeInterfaces",
-		Description:   "A comma separated list of interfaces to be excluded from "+
-                        "Istio traffic capture",
+	SidecarTrafficExcludeInterfaces = Instance{
+		Name: "traffic.sidecar.istio.io/excludeInterfaces",
+		Description: "A comma separated list of interfaces to be excluded from " +
+			"Istio traffic capture",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -744,11 +757,11 @@ var (
 		},
 	}
 
-	SidecarTrafficExcludeOutboundIPRanges = Instance {
-		Name:          "traffic.sidecar.istio.io/excludeOutboundIPRanges",
-		Description:   "A comma separated list of IP ranges in CIDR form to be "+
-                        "excluded from redirection. Only applies when all outbound "+
-                        "traffic (i.e. '*') is being redirected.",
+	SidecarTrafficExcludeOutboundIPRanges = Instance{
+		Name: "traffic.sidecar.istio.io/excludeOutboundIPRanges",
+		Description: "A comma separated list of IP ranges in CIDR form to be " +
+			"excluded from redirection. Only applies when all outbound " +
+			"traffic (i.e. '*') is being redirected.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -757,10 +770,10 @@ var (
 		},
 	}
 
-	SidecarTrafficExcludeOutboundPorts = Instance {
-		Name:          "traffic.sidecar.istio.io/excludeOutboundPorts",
-		Description:   "A comma separated list of outbound ports to be excluded "+
-                        "from redirection to Envoy.",
+	SidecarTrafficExcludeOutboundPorts = Instance{
+		Name: "traffic.sidecar.istio.io/excludeOutboundPorts",
+		Description: "A comma separated list of outbound ports to be excluded " +
+			"from redirection to Envoy.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -769,12 +782,12 @@ var (
 		},
 	}
 
-	SidecarTrafficIncludeInboundPorts = Instance {
-		Name:          "traffic.sidecar.istio.io/includeInboundPorts",
-		Description:   "A comma separated list of inbound ports for which traffic "+
-                        "is to be redirected to Envoy. The wildcard character '*' "+
-                        "can be used to configure redirection for all ports. An "+
-                        "empty list will disable all inbound redirection.",
+	SidecarTrafficIncludeInboundPorts = Instance{
+		Name: "traffic.sidecar.istio.io/includeInboundPorts",
+		Description: "A comma separated list of inbound ports for which traffic " +
+			"is to be redirected to Envoy. The wildcard character '*' " +
+			"can be used to configure redirection for all ports. An " +
+			"empty list will disable all inbound redirection.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -783,12 +796,12 @@ var (
 		},
 	}
 
-	SidecarTrafficIncludeOutboundIPRanges = Instance {
-		Name:          "traffic.sidecar.istio.io/includeOutboundIPRanges",
-		Description:   "A comma separated list of IP ranges in CIDR form to "+
-                        "redirect to Envoy (optional). The wildcard character '*' "+
-                        "can be used to redirect all outbound traffic. An empty "+
-                        "list will disable all outbound redirection.",
+	SidecarTrafficIncludeOutboundIPRanges = Instance{
+		Name: "traffic.sidecar.istio.io/includeOutboundIPRanges",
+		Description: "A comma separated list of IP ranges in CIDR form to " +
+			"redirect to Envoy (optional). The wildcard character '*' " +
+			"can be used to redirect all outbound traffic. An empty " +
+			"list will disable all outbound redirection.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -797,11 +810,11 @@ var (
 		},
 	}
 
-	SidecarTrafficIncludeOutboundPorts = Instance {
-		Name:          "traffic.sidecar.istio.io/includeOutboundPorts",
-		Description:   "A comma separated list of outbound ports for which "+
-                        "traffic is to be redirected to Envoy, regardless of the "+
-                        "destination IP.",
+	SidecarTrafficIncludeOutboundPorts = Instance{
+		Name: "traffic.sidecar.istio.io/includeOutboundPorts",
+		Description: "A comma separated list of outbound ports for which " +
+			"traffic is to be redirected to Envoy, regardless of the " +
+			"destination IP.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -810,10 +823,10 @@ var (
 		},
 	}
 
-	SidecarTrafficKubevirtInterfaces = Instance {
-		Name:          "traffic.sidecar.istio.io/kubevirtInterfaces",
-		Description:   "A comma separated list of virtual interfaces whose "+
-                        "inbound traffic (from VM) will be treated as outbound.",
+	SidecarTrafficKubevirtInterfaces = Instance{
+		Name: "traffic.sidecar.istio.io/kubevirtInterfaces",
+		Description: "A comma separated list of virtual interfaces whose " +
+			"inbound traffic (from VM) will be treated as outbound.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
@@ -821,11 +834,10 @@ var (
 			Pod,
 		},
 	}
-
 )
 
 func AllResourceAnnotations() []*Instance {
-	return []*Instance {
+	return []*Instance{
 		&AlphaCanonicalServiceAccounts,
 		&AlphaIdentity,
 		&AlphaKubernetesServiceAccounts,
@@ -854,6 +866,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarBootstrapOverride,
 		&SidecarComponentLogLevel,
 		&SidecarControlPlaneAuthPolicy,
+		&SidecarDisableIPEarlyDemux,
 		&SidecarDiscoveryAddress,
 		&SidecarEnableCoreDump,
 		&SidecarExtraStatTags,
@@ -889,7 +902,7 @@ func AllResourceAnnotations() []*Instance {
 }
 
 func AllResourceTypes() []string {
-	return []string {
+	return []string{
 		"Any",
 		"AuthorizationPolicy",
 		"Ingress",

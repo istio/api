@@ -134,6 +134,12 @@ Istio supports to control its behavior.
       <td>[Pod]</td>
       <td>Specifies the auth policy used by the Istio control plane. If NONE, traffic will not be encrypted. If MUTUAL_TLS, traffic between Envoy sidecar will be wrapped into mutual TLS connections.</td>
     </tr>
+    <tr>
+      <td><code>sidecar.istio.io/disableIPEarlyDemux</code></td>
+      <td>Alpha</td>
+      <td>[Pod]</td>
+      <td>Specifies whether the Kernel option net.ipv4.ip_early_demux should be set to 0 in order to prevent TCP connection issues when a pod exposes multiple ports and receives multiple concurrent connections from the same client IP and port.</td>
+    </tr>
     <tr class="deprecated">
       <td><code>sidecar.istio.io/discoveryAddress</code></td>
       <td>Deprecated</td>
