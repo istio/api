@@ -259,34 +259,6 @@ message Topology {
   // header handling for more details.
   uint32 num_trusted_proxies = 1;
 
-  // ForwardClientCertDetails controls how the x-forwarded-client-cert (XFCC)
-  // header is handled by the gateway proxy.
-  // See [Envoy XFCC](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/filter/network/http_connection_manager/v2/http_connection_manager.proto#envoy-api-enum-config-filter-network-http-connection-manager-v2-httpconnectionmanager-forwardclientcertdetails)
-  // header handling for more details.
-  enum ForwardClientCertDetails {
-    // Field is not set
-    UNDEFINED = 0;
-
-    // Do not send the XFCC header to the next hop. This is the default value.
-    SANITIZE = 1;
-
-    // When the client connection is mTLS (Mutual TLS), forward the XFCC header
-    // in the request.
-    FORWARD_ONLY = 2;
-
-    // When the client connection is mTLS, append the client certificate
-    // information to the request’s XFCC header and forward it.
-    APPEND_FORWARD = 3;
-
-    // When the client connection is mTLS, reset the XFCC header with the client
-    // certificate information and send it to the next hop.
-    SANITIZE_SET = 4;
-
-    // Always forward the XFCC header in the request, regardless of whether the
-    // client connection is mTLS.
-    ALWAYS_FORWARD_ONLY = 5;
-  }
-
   // Configures how the gateway proxy handles x-forwarded-client-cert (XFCC)
   // header in the incoming request.
   ForwardClientCertDetails forward_client_cert_details = 2;
@@ -298,6 +270,34 @@ message Topology {
   // Enables [PROXY protocol](http://www.haproxy.org/download/1.5/doc/proxy-protocol.txt) for
   // downstream connections on a gateway.
   ProxyProtocolConfiguration proxy_protocol = 3;
+}
+
+// ForwardClientCertDetails controls how the x-forwarded-client-cert (XFCC)
+// header is handled by the gateway proxy.
+// See [Envoy XFCC](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/filter/network/http_connection_manager/v2/http_connection_manager.proto#envoy-api-enum-config-filter-network-http-connection-manager-v2-httpconnectionmanager-forwardclientcertdetails)
+// header handling for more details.
+enum ForwardClientCertDetails {
+  // Field is not set
+  UNDEFINED = 0;
+
+  // Do not send the XFCC header to the next hop. This is the default value.
+  SANITIZE = 1;
+
+  // When the client connection is mTLS (Mutual TLS), forward the XFCC header
+  // in the request.
+  FORWARD_ONLY = 2;
+
+  // When the client connection is mTLS, append the client certificate
+  // information to the request’s XFCC header and forward it.
+  APPEND_FORWARD = 3;
+
+  // When the client connection is mTLS, reset the XFCC header with the client
+  // certificate information and send it to the next hop.
+  SANITIZE_SET = 4;
+
+  // Always forward the XFCC header in the request, regardless of whether the
+  // client connection is mTLS.
+  ALWAYS_FORWARD_ONLY = 5;
 }
 
 // PrivateKeyProvider defines private key configuration for gateways and sidecars. This can be configured
@@ -592,6 +592,79 @@ message ProxyConfig {
 
   // Specifies the details of the Private Key Provider configuration for gateway and sidecar proxies.
   PrivateKeyProvider private_key_provider = 38;
+
+  // Define the set of headers to add/modify for HTTP request/responses.
+  //
+  // To enable an optional header, simply set the field. If no specific configuration is required, an empty object (`{}`) will enable it.
+  // Note: currently all headers are enabled by default.
+  //
+  // Below shows an example of customizing the `server` header and disabling the `X-Envoy-Attempt-Count` header:
+  //
+  // ```yaml
+  // proxyHeaders:
+  //   server:
+  //     value: "my-custom-server"
+  //   requestId: {} // Explicitly enable Request IDs. As this is the default, this has no effect.
+  //   attemptCount:
+  //     disabled: true
+  // ```
+  //
+  // Some headers are enabled by default, and require explicitly disabling. See below for an example of disabling all default-enabled headers:
+  //
+  // ```yaml
+  // proxyHeaders:
+  //   forwardedClientCert: SANITIZE
+  //   server:
+  //     disabled: true
+  //   requestId:
+  //     disabled: true
+  //   attemptCount:
+  //     disabled: true
+  //   envoyDebugHeaders:
+  //     disabled: true
+  // ```
+  ProxyHeaders proxy_headers = 39;
+
+  message ProxyHeaders {
+    message Server {
+      google.protobuf.BoolValue disabled = 1;
+      // If set, and the server header is enabled, this value will be set as the server header. By default, `istio-envoy` will be used.
+      string value = 2;
+    }
+    message RequestId {
+      google.protobuf.BoolValue disabled = 1;
+    }
+    message AttemptCount {
+      google.protobuf.BoolValue disabled = 1;
+    }
+    message EnvoyDebugHeaders {
+      google.protobuf.BoolValue disabled = 1;
+    }
+    // Controls the `X-Forwarded-Client-Cert` header for inbound sidecar requests. To set this on gateways, use the `Topology` setting.
+    // To disable the header, configure either `SANITIZE` (to always remove the header, if present) or `FORWARD_ONLY` (to leave the header as-is).
+    // By default, `APPEND_FORWARD` will be used.
+    ForwardClientCertDetails forwarded_client_cert = 1;
+    // Controls the `X-Request-Id` header. If enabled, a request ID is generated for each request if one is not already set.
+    // This applies to all types of traffic (inbound, outbound, and gateways).
+    // If disabled, no request ID will be generate for the request. If it is already present, it will be preserved.
+    // Warning: request IDs are a critical component to mesh tracing and logging, so disabling this is not recommended.
+    // This header is enabled by default if not configured.
+    RequestId request_id = 3;
+    // Controls the `server` header. If enabled, the `Server: istio-envoy` header is set in response headers for inbound traffic (including gateways).
+    // If disabled, the `Server` header is not modified. If it is already present, it will be preserved.
+    Server server = 2;
+    // Controls the `X-Envoy-Attempt-Count` header.
+    // If enabled, this header will be added on outbound request headers (including gateways) that have retries configured.
+    // If disabled, this header will not be set. If it is already present, it will be preserved.
+    // This header is enabled by default if not configured.
+    AttemptCount attempt_count = 4;
+    // Controls various `X-Envoy-*` headers, such as `X-Envoy-Overloaded` and `X-Envoy-Upstream-Service-Time. If enabled,
+    // these headers will be included.
+    // If disabled, these headers will not be set. If they are already present, they will be preserved.
+    // See the [Envoy documentation](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/router/v3/router.proto#envoy-v3-api-field-extensions-filters-http-router-v3-router-suppress-envoy-headers) for more details.
+    // These headers are enabled by default if not configured.
+    EnvoyDebugHeaders envoy_debug_headers = 5;
+  }
 }
 
 message RemoteService {
