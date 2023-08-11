@@ -3548,17 +3548,6 @@ spec:
           spec:
             description: 'Provides configuration for individual workloads. See more
               details at: https://istio.io/docs/reference/config/networking/proxy-config.html'
-            oneOf:
-            - not:
-                anyOf:
-                - required:
-                  - selector
-                - required:
-                  - targetRef
-            - required:
-              - selector
-            - required:
-              - targetRef
             properties:
               concurrency:
                 description: The number of worker threads to run.
@@ -3583,22 +3572,6 @@ spec:
                     additionalProperties:
                       type: string
                     type: object
-                type: object
-              targetRef:
-                description: Optional.
-                properties:
-                  group:
-                    description: group is the group of the target resource.
-                    type: string
-                  kind:
-                    description: kind is kind of the target resource.
-                    type: string
-                  name:
-                    description: name is the name of the target resource.
-                    type: string
-                  namespace:
-                    description: namespace is the namespace of the referent.
-                    type: string
                 type: object
             type: object
           status:

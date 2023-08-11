@@ -6,7 +6,7 @@ issue:
 
 releaseNotes:
   - |
-    **Added** PolicyTargetReference definition to be used in the RequestAuthentication, AuthorizationPolicy, Telemetry, WasmPlugin, and ProxyConfig CRDs to target k8s Gateway.
+    **Added** PolicyTargetReference definition to be used in the RequestAuthentication, AuthorizationPolicy, Telemetry, and WasmPlugin CRDs to target k8s Gateway.
 
 docs:
   - https://docs.google.com/document/d/1MaMdyIQdOwq7mGCVMYW56FED9HrkJa93Nd0S0zBwws4/edit?usp=sharing

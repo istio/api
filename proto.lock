@@ -43255,11 +43255,6 @@
                 "type": "istio.type.v1beta1.WorkloadSelector"
               },
               {
-                "id": 5,
-                "name": "targetRef",
-                "type": "istio.type.v1beta1.PolicyTargetReference"
-              },
-              {
                 "id": 2,
                 "name": "concurrency",
                 "type": "google.protobuf.Int32Value"
