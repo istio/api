@@ -616,11 +616,11 @@ type WasmPlugin struct {
 	Type PluginType `protobuf:"varint,14,opt,name=type,proto3,enum=istio.extensions.v1alpha1.PluginType" json:"type,omitempty"`
 	// Optional. The targetRef specifies the resource the policy should be
 	// applied to. The targeted resource specified will determine which
-	// workloads the authorization policy applies to. If the authorization policy
-	// is in the root namespace and the target ref is set, the namespace must be
-	// set on the targetRef.
+	// workloads the WasmPlugin applies to. If the namespace field
+	// for the targetRef is not set, it is assumed to be the same namespace as
+	// the policy.
 	//
-	// If not set, the policy is applied as defined by the selector.
+	// If the targetRef is not set, the policy is applied as defined by the selector.
 	TargetRef *v1beta1.PolicyTargetReference `protobuf:"bytes,15,opt,name=targetRef,proto3" json:"targetRef,omitempty"`
 }
 

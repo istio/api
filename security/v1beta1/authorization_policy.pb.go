@@ -691,9 +691,9 @@ type AuthorizationPolicy_Selector struct {
 type AuthorizationPolicy_TargetRef struct {
 	// Optional. The targetRef specifies the resource the policy should be
 	// applied to. The targeted resource specified will determine which
-	// workloads the authorization policy applies to. If the authorization policy
-	// is in the root namespace and the target ref is set, the namespace must be
-	// set on the targetRef.
+	// workloads the authorization policy applies to. If the namespace field
+	// for the targetRef is not set, it is assumed to be the same namespace as
+	// the policy.
 	//
 	// If not set, the policy is applied as defined by the selector.
 	TargetRef *v1beta1.PolicyTargetReference `protobuf:"bytes,5,opt,name=targetRef,proto3,oneof"`

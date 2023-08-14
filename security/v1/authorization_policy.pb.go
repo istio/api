@@ -438,13 +438,10 @@
 // ```
 // {{</tab>}}
 // {{</tabset>}}
-// ```
-// {{</tab>}}
-// {{</tabset>}}
 //
 // The following example shows you how to bind a policy to a specific (kubernetes) Gateway using a [PolicyTargetReference](https://gateway-api.sigs.k8s.io/geps/gep-713/#policy-targetref-api).
 //
-// For an ambient mesh, the Gateway can be a waypoint proxy. In this example the waypoint proxy is named `waypoint`. Currently, Gateway is the only supported `kind`.
+// For an ambient mesh, the Gateway can be a waypoint proxy. In this example the waypoint proxy is named `waypoint`. Currently, k8s Gateway is the only supported `kind`.
 // For more information, see [targetRef](https://istio.io/docs/reference/config/type/target-ref.html).
 //
 // {{<tabset category-name="example">}}
@@ -453,15 +450,15 @@
 // apiVersion: security.istio.io/v1beta1
 // kind: AuthorizationPolicy
 // metadata:
-//   name: dry-run-example
-//   annotations:
-//     "istio.io/dry-run": "true"
+//   name: target-ref-example
+//   namespace: foo
 // spec:
 //   action: DENY
 //   rules:
 //   - to:
 //     - operation:
-//         paths: ["/headers"]
+//         methods: ["POST"]
+//         ports: ["8080"]
 //   targetRef:
 //   - kind: Gateway
 //     name: waypoint
@@ -475,13 +472,14 @@
 // kind: AuthorizationPolicy
 // metadata:
 //   name: target-ref-example
-//   namespace: default
+//   namespace: foo
 // spec:
 //   action: DENY
 //   rules:
 //   - to:
 //     - operation:
-//         paths: ["/headers"]
+//         methods: ["POST"]
+//         ports: ["8080"]
 //   targetRef:
 //   - kind: Gateway
 //     name: waypoint
@@ -742,9 +740,9 @@ type AuthorizationPolicy_Selector struct {
 type AuthorizationPolicy_TargetRef struct {
 	// Optional. The targetRef specifies the resource the policy should be
 	// applied to. The targeted resource specified will determine which
-	// workloads the authorization policy applies to. If the authorization policy
-	// is in the root namespace and the target ref is set, the namespace must be
-	// set on the targetRef.
+	// workloads the authorization policy applies to. If the namespace field
+	// for the targetRef is not set, it is assumed to be the same namespace as
+	// the policy.
 	//
 	// If not set, the policy is applied as defined by the selector.
 	TargetRef *v1beta1.PolicyTargetReference `protobuf:"bytes,5,opt,name=targetRef,proto3,oneof"`

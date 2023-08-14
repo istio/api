@@ -214,8 +214,9 @@ func (x *PortSelector) GetNumber() uint32 {
 // PolicyTargetReferences specifies the targeted resource which the policy
 // can be applied to. It must only target a single resource at a time, but it
 // can be used to target larger resources such as Gateways that may apply to
-// multiple child resources. The PolicyTargetReference will replace the
-// WorkloadSelector for AuthorizationPolicies applied to ambient workloads.
+// multiple child resources. The PolicyTargetReference will be used instead of
+// a WorkloadSelector in the RequestAuthentication, AuthorizationPolicy,
+// Telemetry, and WasmPlugin CRDs to target k8s Gateway.
 type PolicyTargetReference struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
