@@ -214,6 +214,8 @@ import "google/protobuf/wrappers.proto";
 //   # no selector specified, applies to all workloads in the namespace
 //   accessLogging:
 //   - disabled: true
+//     providers:
+//     - name: envoy
 // ```
 //
 package istio.telemetry.v1alpha1;

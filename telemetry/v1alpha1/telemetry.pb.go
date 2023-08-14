@@ -213,6 +213,8 @@
 //   # no selector specified, applies to all workloads in the namespace
 //   accessLogging:
 //   - disabled: true
+//     providers:
+//     - name: envoy
 // ```
 //
 
