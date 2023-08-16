@@ -73,10 +73,15 @@ enum WorkloadMode {
 // ProtocolSelector is the criteria for specifying if a policy can be applied to
 // traffic of a specific protocol.
 enum ProtocolSelector {
+  // Default value, which will be interpreted by its own usage.
+  P_UNDEFINED = 0;
+
   // Applies Policy to HTTP traffic only.
-  HTTP = 0;
+  HTTP = 1;
+  
   // Applies Policy to TCP traffic only.
-  TCP = 1;
+  TCP = 2;
+
   // Applies Policy to all traffic.
-  ANY = 2;
+  ANY = 3;
 }

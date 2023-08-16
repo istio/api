@@ -48227,15 +48227,19 @@
             "name": "ProtocolSelector",
             "enum_fields": [
               {
-                "name": "HTTP"
+                "name": "P_UNDEFINED"
               },
               {
-                "name": "TCP",
+                "name": "HTTP",
                 "integer": 1
               },
               {
-                "name": "ANY",
+                "name": "TCP",
                 "integer": 2
+              },
+              {
+                "name": "ANY",
+                "integer": 3
               }
             ]
           }

@@ -77,6 +77,7 @@ spec:
                             type: integer
                           protocol:
                             enum:
+                            - P_UNDEFINED
                             - HTTP
                             - TCP
                             - ANY
