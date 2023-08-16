@@ -75,6 +75,12 @@ spec:
                         properties:
                           number:
                             type: integer
+                          protocol:
+                            enum:
+                            - HTTP
+                            - TCP
+                            - ANY
+                            type: string
                         type: object
                       type: array
                   type: object

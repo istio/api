@@ -41,6 +41,9 @@ message WorkloadSelector {
 message PortSelector {
   // Port number
   uint32 number = 1;
+
+  // Protocol used by the port
+  ProtocolSelector protocol = 2;
 }
 
 // WorkloadMode allows selection of the role of the underlying workload in
@@ -65,4 +68,15 @@ enum WorkloadMode {
   // Selects for scenarios when the workload is either the
   // source or destination of the network traffic.
   CLIENT_AND_SERVER = 3;
+}
+
+// ProtocolSelector is the criteria for specifying if a policy can be applied to
+// traffic of a specific protocol.
+enum ProtocolSelector {
+  // Applies Policy to HTTP traffic only.
+  HTTP = 0;
+  // Applies Policy to TCP traffic only.
+  TCP = 1;
+  // Applies Policy to all traffic.
+  ANY = 2;
 }

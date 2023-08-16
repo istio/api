@@ -48222,6 +48222,22 @@
                 "integer": 3
               }
             ]
+          },
+          {
+            "name": "ProtocolSelector",
+            "enum_fields": [
+              {
+                "name": "HTTP"
+              },
+              {
+                "name": "TCP",
+                "integer": 1
+              },
+              {
+                "name": "ANY",
+                "integer": 2
+              }
+            ]
           }
         ],
         "messages": [
@@ -48251,6 +48267,11 @@
                 "id": 1,
                 "name": "number",
                 "type": "uint32"
+              },
+              {
+                "id": 2,
+                "name": "protocol",
+                "type": "ProtocolSelector"
               }
             ]
           }
