@@ -4,7 +4,7 @@ description: Definition of a workload selector.
 location: https://istio.io/docs/reference/config/type/workload-selector.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 4
+number_of_entries: 3
 ---
 <h2 id="WorkloadSelector">WorkloadSelector</h2>
 <section>
@@ -67,17 +67,6 @@ a listener having a specific port.</p>
 No
 </td>
 </tr>
-<tr id="PortSelector-protocol">
-<td><code>protocol</code></td>
-<td><code><a href="#ProtocolSelector">ProtocolSelector</a></code></td>
-<td>
-<p>Protocol used by the port</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 </tbody>
 </table>
 </section>
@@ -127,50 +116,6 @@ destination of the network traffic.</p>
 <td>
 <p>Selects for scenarios when the workload is either the
 source or destination of the network traffic.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="ProtocolSelector">ProtocolSelector</h2>
-<section>
-<p>ProtocolSelector is the criteria for specifying if a policy can be applied to
-traffic of a specific protocol.</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="ProtocolSelector-P_UNDEFINED">
-<td><code>P_UNDEFINED</code></td>
-<td>
-<p>Default value, which will be interpreted by its own usage.</p>
-
-</td>
-</tr>
-<tr id="ProtocolSelector-HTTP">
-<td><code>HTTP</code></td>
-<td>
-<p>Applies Policy to HTTP traffic only.</p>
-
-</td>
-</tr>
-<tr id="ProtocolSelector-TCP">
-<td><code>TCP</code></td>
-<td>
-<p>Applies Policy to TCP traffic only.</p>
-
-</td>
-</tr>
-<tr id="ProtocolSelector-ANY">
-<td><code>ANY</code></td>
-<td>
-<p>Applies Policy to all traffic.</p>
 
 </td>
 </tr>

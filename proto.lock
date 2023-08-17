@@ -36454,6 +36454,18 @@
       "def": {
         "enums": [
           {
+            "name": "PluginType",
+            "enum_fields": [
+              {
+                "name": "HTTP"
+              },
+              {
+                "name": "Network",
+                "integer": 1
+              }
+            ]
+          },
+          {
             "name": "PluginPhase",
             "enum_fields": [
               {
@@ -36583,6 +36595,11 @@
                 "name": "match",
                 "type": "TrafficSelector",
                 "is_repeated": true
+              },
+              {
+                "id": 14,
+                "name": "type",
+                "type": "PluginType"
               }
             ],
             "messages": [
@@ -48222,26 +48239,6 @@
                 "integer": 3
               }
             ]
-          },
-          {
-            "name": "ProtocolSelector",
-            "enum_fields": [
-              {
-                "name": "P_UNDEFINED"
-              },
-              {
-                "name": "HTTP",
-                "integer": 1
-              },
-              {
-                "name": "TCP",
-                "integer": 2
-              },
-              {
-                "name": "ANY",
-                "integer": 3
-              }
-            ]
           }
         ],
         "messages": [
@@ -48271,11 +48268,6 @@
                 "id": 1,
                 "name": "number",
                 "type": "uint32"
-              },
-              {
-                "id": 2,
-                "name": "protocol",
-                "type": "ProtocolSelector"
               }
             ]
           }

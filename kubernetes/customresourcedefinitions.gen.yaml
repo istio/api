@@ -75,13 +75,6 @@ spec:
                         properties:
                           number:
                             type: integer
-                          protocol:
-                            enum:
-                            - P_UNDEFINED
-                            - HTTP
-                            - TCP
-                            - ANY
-                            type: string
                         type: object
                       type: array
                   type: object
@@ -115,6 +108,12 @@ spec:
               sha256:
                 description: SHA256 checksum that will be used to verify Wasm module
                   or OCI container.
+                type: string
+              type:
+                description: Specifies the type of Wasm Extension to be used.
+                enum:
+                - HTTP
+                - Network
                 type: string
               url:
                 description: URL of a Wasm module or OCI container.

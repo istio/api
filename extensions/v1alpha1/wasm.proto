@@ -344,6 +344,19 @@ message WasmPlugin {
   // If a traffic satisfies any of TrafficSelectors,
   // the traffic passes the WasmPlugin.
   repeated TrafficSelector match = 12;
+
+  // Specifies the type of Wasm Extension to be used.
+  PluginType type = 14;
+}
+
+
+// PluginType indicates the type of Wasm Extension to be used.
+enum PluginType {
+  // Use HTTP Wasm Extension.
+  HTTP = 0;
+  
+  // Use Network Wasm Extension.
+  Network = 1;
 }
 
 // The phase in the filter chain where the plugin will be injected.
