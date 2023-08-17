@@ -628,6 +628,7 @@ type RequestAuthentication_Selector struct {
 }
 
 type RequestAuthentication_TargetRef struct {
+	// $hide_from_docs
 	// Optional. The targetRef specifies the resource the policy should be
 	// applied to. The targeted resource specified will determine which
 	// workloads the request authentication policy to. If the namespace field

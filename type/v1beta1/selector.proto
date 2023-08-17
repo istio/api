@@ -67,6 +67,7 @@ enum WorkloadMode {
   CLIENT_AND_SERVER = 3;
 }
 
+// $hide_from_docs
 // PolicyTargetReference format as defined by [GEP-713](https://gateway-api.sigs.k8s.io/geps/gep-713/#policy-targetref-api).
 
 // PolicyTargetReferences specifies the targeted resource which the policy
@@ -77,18 +78,22 @@ enum WorkloadMode {
 // Telemetry, and WasmPlugin CRDs to target k8s Gateway.
 message PolicyTargetReference {
   // group is the group of the target resource.
+  // $hide_from_docs
   string group = 1;
 
   // kind is kind of the target resource.
+  // $hide_from_docs
   string kind = 2;
 
   // name is the name of the target resource.
+  // $hide_from_docs
   string name = 3;
 
   // namespace is the namespace of the referent. When unspecified, the local
   // namespace is inferred. Even when policy targets a resource in a different
   // namespace, it may only apply to traffic originating from the same
   // namespace as the policy.
+  // $hide_from_docs
   optional string namespace = 4;
 }
 

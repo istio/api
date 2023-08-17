@@ -471,6 +471,7 @@ message AuthorizationPolicy {
     // If not set, the selector will match all workloads.
     istio.type.v1beta1.WorkloadSelector selector = 1;
 
+    // $hide_from_docs
     // Optional. The targetRef specifies the resource the policy should be 
     // applied to. The targeted resource specified will determine which 
     // workloads the authorization policy applies to. If the namespace field

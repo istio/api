@@ -654,6 +654,7 @@ type Telemetry_Selector struct {
 }
 
 type Telemetry_TargetRef struct {
+	// $hide_from_docs
 	// Optional. The targetRef specifies the resource the policy should be
 	// applied to. The targeted resource specified will determine which
 	// workloads the telemetry policy applies to. If the namespace field

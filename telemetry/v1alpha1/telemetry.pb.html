@@ -218,22 +218,6 @@ same namespace as the Telemetry policy.</p>
 No
 </td>
 </tr>
-<tr id="Telemetry-targetRef" class="oneof">
-<td><code>targetRef</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#PolicyTargetReference">PolicyTargetReference (oneof)</a></code></td>
-<td>
-<p>Optional. The targetRef specifies the resource the policy should be
-applied to. The targeted resource specified will determine which
-workloads the telemetry policy applies to. If the namespace field
-for the targetRef is not set, it is assumed to be the same namespace as
-the Telemetry policy.</p>
-<p>If not set, the policy is applied as defined by the selector.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="Telemetry-tracing">
 <td><code>tracing</code></td>
 <td><code><a href="#Tracing">Tracing[]</a></code></td>

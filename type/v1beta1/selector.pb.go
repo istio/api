@@ -223,15 +223,19 @@ type PolicyTargetReference struct {
 	unknownFields protoimpl.UnknownFields
 
 	// group is the group of the target resource.
+	// $hide_from_docs
 	Group string `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
 	// kind is kind of the target resource.
+	// $hide_from_docs
 	Kind string `protobuf:"bytes,2,opt,name=kind,proto3" json:"kind,omitempty"`
 	// name is the name of the target resource.
+	// $hide_from_docs
 	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 	// namespace is the namespace of the referent. When unspecified, the local
 	// namespace is inferred. Even when policy targets a resource in a different
 	// namespace, it may only apply to traffic originating from the same
 	// namespace as the policy.
+	// $hide_from_docs
 	Namespace *string `protobuf:"bytes,4,opt,name=namespace,proto3,oneof" json:"namespace,omitempty"`
 }
 

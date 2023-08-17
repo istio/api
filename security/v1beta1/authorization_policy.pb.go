@@ -689,6 +689,7 @@ type AuthorizationPolicy_Selector struct {
 }
 
 type AuthorizationPolicy_TargetRef struct {
+	// $hide_from_docs
 	// Optional. The targetRef specifies the resource the policy should be
 	// applied to. The targeted resource specified will determine which
 	// workloads the authorization policy applies to. If the namespace field

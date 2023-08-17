@@ -348,6 +348,7 @@ message WasmPlugin {
   // Specifies the type of Wasm Extension to be used.
   PluginType type = 14;
 
+  // $hide_from_docs
   // Optional. The targetRef specifies the resource the policy should be 
   // applied to. The targeted resource specified will determine which 
   // workloads the WasmPlugin applies to. If the namespace field

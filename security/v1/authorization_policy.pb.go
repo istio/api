@@ -438,55 +438,6 @@
 // ```
 // {{</tab>}}
 // {{</tabset>}}
-//
-// The following example shows you how to bind a policy to a specific (kubernetes) Gateway using a [PolicyTargetReference](https://gateway-api.sigs.k8s.io/geps/gep-713/#policy-targetref-api).
-//
-// For an ambient mesh, the Gateway can be a waypoint proxy. In this example the waypoint proxy is named `waypoint`. Currently, k8s Gateway is the only supported `kind`.
-// For more information, see [targetRef](https://istio.io/docs/reference/config/type/target-ref.html).
-//
-// {{<tabset category-name="example">}}
-// {{<tab name="v1beta1" category-value="v1beta1">}}
-// ```yaml
-// apiVersion: security.istio.io/v1beta1
-// kind: AuthorizationPolicy
-// metadata:
-//   name: target-ref-example
-//   namespace: foo
-// spec:
-//   action: DENY
-//   rules:
-//   - to:
-//     - operation:
-//         methods: ["POST"]
-//         ports: ["8080"]
-//   targetRef:
-//   - kind: Gateway
-//     name: waypoint
-//     group: gateway.networking.k8s.io
-// ```
-// {{</tab>}}
-//
-// {{<tab name="v1" category-value="v1">}}
-// ```yaml
-// apiVersion: security.istio.io/v1
-// kind: AuthorizationPolicy
-// metadata:
-//   name: target-ref-example
-//   namespace: foo
-// spec:
-//   action: DENY
-//   rules:
-//   - to:
-//     - operation:
-//         methods: ["POST"]
-//         ports: ["8080"]
-//   targetRef:
-//   - kind: Gateway
-//     name: waypoint
-//     group: gateway.networking.k8s.io
-// ```
-// {{</tab>}}
-// {{</tabset>}}
 
 package v1
 
@@ -738,6 +689,7 @@ type AuthorizationPolicy_Selector struct {
 }
 
 type AuthorizationPolicy_TargetRef struct {
+	// $hide_from_docs
 	// Optional. The targetRef specifies the resource the policy should be
 	// applied to. The targeted resource specified will determine which
 	// workloads the authorization policy applies to. If the namespace field

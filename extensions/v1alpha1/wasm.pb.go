@@ -614,6 +614,7 @@ type WasmPlugin struct {
 	Match []*WasmPlugin_TrafficSelector `protobuf:"bytes,12,rep,name=match,proto3" json:"match,omitempty"`
 	// Specifies the type of Wasm Extension to be used.
 	Type PluginType `protobuf:"varint,14,opt,name=type,proto3,enum=istio.extensions.v1alpha1.PluginType" json:"type,omitempty"`
+	// $hide_from_docs
 	// Optional. The targetRef specifies the resource the policy should be
 	// applied to. The targeted resource specified will determine which
 	// workloads the WasmPlugin applies to. If the namespace field
