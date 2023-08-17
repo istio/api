@@ -215,23 +215,6 @@
 //   - disabled: true
 // ```
 //
-// Policy to disable trace reporting for workloads corresponding to a specific
-// waypoint proxy (note: tracing context will still be propagated):
-// ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
-// kind: Telemetry
-// metadata:
-//   name: foo-tracing
-//   namespace: bar
-// spec:
-//   tracing:
-//   - disableSpanReporting: true
-//   targetRef:
-//   - kind: Gateway
-//     name: waypoint
-//     group: gateway.networking.k8s.io
-// ```
-//
 
 package v1alpha1
 
