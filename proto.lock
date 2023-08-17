@@ -36460,7 +36460,7 @@
                 "name": "HTTP"
               },
               {
-                "name": "Network",
+                "name": "NETWORK",
                 "integer": 1
               }
             ]

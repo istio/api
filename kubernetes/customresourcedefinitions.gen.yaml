@@ -113,7 +113,7 @@ spec:
                 description: Specifies the type of Wasm Extension to be used.
                 enum:
                 - HTTP
-                - Network
+                - NETWORK
                 type: string
               url:
                 description: URL of a Wasm module or OCI container.
