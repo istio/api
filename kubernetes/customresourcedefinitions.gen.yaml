@@ -38,6 +38,17 @@ spec:
           spec:
             description: 'Extend the functionality provided by the Istio proxy through
               WebAssembly filters. See more details at: https://istio.io/docs/reference/config/proxy_extensions/wasm-plugin.html'
+            oneOf:
+            - not:
+                anyOf:
+                - required:
+                  - selector
+                - required:
+                  - targetRef
+            - required:
+              - selector
+            - required:
+              - targetRef
             properties:
               failStrategy:
                 description: Specifies the failure behavior for the plugin due to

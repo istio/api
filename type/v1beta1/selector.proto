@@ -90,9 +90,7 @@ message PolicyTargetReference {
   string name = 3;
 
   // namespace is the namespace of the referent. When unspecified, the local
-  // namespace is inferred. Even when policy targets a resource in a different
-  // namespace, it may only apply to traffic originating from the same
-  // namespace as the policy.
+  // namespace is inferred.
   // $hide_from_docs
   optional string namespace = 4;
 }

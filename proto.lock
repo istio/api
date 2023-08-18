@@ -36540,6 +36540,11 @@
                 "type": "istio.type.v1beta1.WorkloadSelector"
               },
               {
+                "id": 15,
+                "name": "targetRef",
+                "type": "istio.type.v1beta1.PolicyTargetReference"
+              },
+              {
                 "id": 2,
                 "name": "url",
                 "type": "string"
@@ -36604,11 +36609,6 @@
                 "id": 14,
                 "name": "type",
                 "type": "PluginType"
-              },
-              {
-                "id": 15,
-                "name": "targetRef",
-                "type": "istio.type.v1beta1.PolicyTargetReference"
               }
             ],
             "messages": [
