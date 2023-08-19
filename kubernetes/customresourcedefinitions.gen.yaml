@@ -112,6 +112,7 @@ spec:
               type:
                 description: Specifies the type of Wasm Extension to be used.
                 enum:
+                - UNSPECIFIED_PLUGIN_TYPE
                 - HTTP
                 - NETWORK
                 type: string

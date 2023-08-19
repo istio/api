@@ -36457,11 +36457,15 @@
             "name": "PluginType",
             "enum_fields": [
               {
-                "name": "HTTP"
+                "name": "UNSPECIFIED_PLUGIN_TYPE"
+              },
+              {
+                "name": "HTTP",
+                "integer": 1
               },
               {
                 "name": "NETWORK",
-                "integer": 1
+                "integer": 2
               }
             ]
           },
