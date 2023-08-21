@@ -440,23 +440,22 @@ option go_package="istio.io/api/security/v1beta1";
 // +istio.io/sync-start
 // -->
 message RequestAuthentication {
-  oneof type_selector {
-    // Optional. The selector decides where to apply the request authentication policy. The selector will match with workloads
-    // in the same namespace as the request authentication policy. If the request authentication policy is in the root namespace,
-    // the selector will additionally match with workloads in all namespaces.
-    //
-    // If not set, the selector will match all workloads.
-    istio.type.v1beta1.WorkloadSelector selector = 1;
+  // Optional. The selector decides where to apply the request authentication policy. The selector will match with workloads
+  // in the same namespace as the request authentication policy. If the request authentication policy is in the root namespace,
+  // the selector will additionally match with workloads in all namespaces.
+  //
+  // If not set, the selector will match all workloads. At most one of the selector and targetRef can be set.
+  istio.type.v1beta1.WorkloadSelector selector = 1;
 
-    // $hide_from_docs
-    // Optional. The targetRef specifies the resource the policy should be 
-    // applied to. The targeted resource specified will determine which 
-    // workloads the request authentication policy to. The resource must
-    // be in the same namespace as the request authentication policy.
-    //
-    // If not set, the policy is applied as defined by the selector.
-    istio.type.v1beta1.PolicyTargetReference targetRef = 3;
-  }
+  // $hide_from_docs
+  // Optional. The targetRef specifies the resource the policy should be 
+  // applied to. The targeted resource specified will determine which 
+  // workloads the request authentication policy to. The resource must
+  // be in the same namespace as the request authentication policy.
+  //
+  // If not set, the policy is applied as defined by the selector.
+  // At most one of the selector and targetRef can be set.
+  istio.type.v1beta1.PolicyTargetReference targetRef = 3;
 
   // Define the list of JWTs that can be validated at the selected workloads' proxy. A valid token
   // will be used to extract the authenticated identity.

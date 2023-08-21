@@ -38,17 +38,6 @@ spec:
           spec:
             description: 'Extend the functionality provided by the Istio proxy through
               WebAssembly filters. See more details at: https://istio.io/docs/reference/config/proxy_extensions/wasm-plugin.html'
-            oneOf:
-            - not:
-                anyOf:
-                - required:
-                  - selector
-                - required:
-                  - targetRef
-            - required:
-              - selector
-            - required:
-              - targetRef
             properties:
               failStrategy:
                 description: Specifies the failure behavior for the plugin due to
@@ -6408,27 +6397,15 @@ spec:
       openAPIV3Schema:
         properties:
           spec:
-            allOf:
-            - oneOf:
-              - not:
-                  anyOf:
-                  - required:
-                    - selector
-                  - required:
-                    - targetRef
-              - required:
-                - selector
-              - required:
-                - targetRef
-            - oneOf:
-              - not:
-                  anyOf:
-                  - required:
-                    - provider
-              - required:
-                - provider
             description: 'Configuration for access control on workloads. See more
               details at: https://istio.io/docs/reference/config/security/authorization-policy.html'
+            oneOf:
+            - not:
+                anyOf:
+                - required:
+                  - provider
+            - required:
+              - provider
             properties:
               action:
                 description: Optional.
@@ -6617,27 +6594,15 @@ spec:
       openAPIV3Schema:
         properties:
           spec:
-            allOf:
-            - oneOf:
-              - not:
-                  anyOf:
-                  - required:
-                    - selector
-                  - required:
-                    - targetRef
-              - required:
-                - selector
-              - required:
-                - targetRef
-            - oneOf:
-              - not:
-                  anyOf:
-                  - required:
-                    - provider
-              - required:
-                - provider
             description: 'Configuration for access control on workloads. See more
               details at: https://istio.io/docs/reference/config/security/authorization-policy.html'
+            oneOf:
+            - not:
+                anyOf:
+                - required:
+                  - provider
+            - required:
+              - provider
             properties:
               action:
                 description: Optional.
@@ -6949,17 +6914,6 @@ spec:
           spec:
             description: RequestAuthentication defines what request authentication
               methods are supported by a workload.
-            oneOf:
-            - not:
-                anyOf:
-                - required:
-                  - selector
-                - required:
-                  - targetRef
-            - required:
-              - selector
-            - required:
-              - targetRef
             properties:
               jwtRules:
                 description: Define the list of JWTs that can be validated at the
@@ -7059,17 +7013,6 @@ spec:
           spec:
             description: RequestAuthentication defines what request authentication
               methods are supported by a workload.
-            oneOf:
-            - not:
-                anyOf:
-                - required:
-                  - selector
-                - required:
-                  - targetRef
-            - required:
-              - selector
-            - required:
-              - targetRef
             properties:
               jwtRules:
                 description: Define the list of JWTs that can be validated at the
@@ -7206,17 +7149,6 @@ spec:
           spec:
             description: 'Telemetry configuration for workloads. See more details
               at: https://istio.io/docs/reference/config/telemetry.html'
-            oneOf:
-            - not:
-                anyOf:
-                - required:
-                  - selector
-                - required:
-                  - targetRef
-            - required:
-              - selector
-            - required:
-              - targetRef
             properties:
               accessLogging:
                 description: Optional.

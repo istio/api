@@ -234,24 +234,25 @@ option go_package="istio.io/api/extensions/v1alpha1";
 // +k8s:deepcopy-gen=true
 // -->
 message WasmPlugin {
-  oneof type_selector {
-    // Criteria used to select the specific set of pods/VMs on which
-    // this plugin configuration should be applied. If omitted, this
-    // configuration will be applied to all workload instances in the same
-    // namespace. If the `WasmPlugin` is present in the config root
-    // namespace, it will be applied to all applicable workloads in any
-    // namespace.
-    istio.type.v1beta1.WorkloadSelector selector = 1;
+  // Criteria used to select the specific set of pods/VMs on which
+  // this plugin configuration should be applied. If omitted, this
+  // configuration will be applied to all workload instances in the same
+  // namespace. If the `WasmPlugin` is present in the config root
+  // namespace, it will be applied to all applicable workloads in any
+  // namespace.
+  //
+  // At most one of the selector and targetRef can be set.
+  istio.type.v1beta1.WorkloadSelector selector = 1;
 
-    // $hide_from_docs
-    // Optional. The targetRef specifies the resource the policy should be 
-    // applied to. The targeted resource specified will determine which 
-    // workloads the WasmPlugin applies to. The resource must be in the
-    // same namespace as the policy.
-    //
-    // If the targetRef is not set, the policy is applied as defined by the selector.
-    istio.type.v1beta1.PolicyTargetReference targetRef = 15;
-  }
+  // $hide_from_docs
+  // Optional. The targetRef specifies the resource the policy should be 
+  // applied to. The targeted resource specified will determine which 
+  // workloads the WasmPlugin applies to. The resource must be in the
+  // same namespace as the policy.
+  //
+  // If the targetRef is not set, the policy is applied as defined by the selector.
+  // At most one of the selector and targetRef can be set.
+  istio.type.v1beta1.PolicyTargetReference targetRef = 15;
 
   // URL of a Wasm module or OCI container. If no scheme is present,
   // defaults to `oci://`, referencing an OCI image. Other valid schemes
