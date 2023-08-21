@@ -38438,7 +38438,7 @@
             ]
           },
           {
-            "name": "Topology.ForwardClientCertDetails",
+            "name": "ForwardClientCertDetails",
             "enum_fields": [
               {
                 "name": "UNDEFINED"
@@ -38968,6 +38968,11 @@
                 "id": 38,
                 "name": "private_key_provider",
                 "type": "PrivateKeyProvider"
+              },
+              {
+                "id": 39,
+                "name": "proxy_headers",
+                "type": "ProxyHeaders"
               }
             ],
             "maps": [
@@ -39017,6 +39022,83 @@
                     "name": "inclusion_regexps",
                     "type": "string",
                     "is_repeated": true
+                  }
+                ]
+              },
+              {
+                "name": "ProxyHeaders",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "forwarded_client_cert",
+                    "type": "ForwardClientCertDetails"
+                  },
+                  {
+                    "id": 3,
+                    "name": "request_id",
+                    "type": "RequestId"
+                  },
+                  {
+                    "id": 2,
+                    "name": "server",
+                    "type": "Server"
+                  },
+                  {
+                    "id": 4,
+                    "name": "attempt_count",
+                    "type": "AttemptCount"
+                  },
+                  {
+                    "id": 5,
+                    "name": "envoy_debug_headers",
+                    "type": "EnvoyDebugHeaders"
+                  }
+                ],
+                "messages": [
+                  {
+                    "name": "Server",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "disabled",
+                        "type": "google.protobuf.BoolValue"
+                      },
+                      {
+                        "id": 2,
+                        "name": "value",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "RequestId",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "disabled",
+                        "type": "google.protobuf.BoolValue"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "AttemptCount",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "disabled",
+                        "type": "google.protobuf.BoolValue"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "EnvoyDebugHeaders",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "disabled",
+                        "type": "google.protobuf.BoolValue"
+                      }
+                    ]
                   }
                 ]
               }

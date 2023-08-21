@@ -52,6 +52,18 @@
           }
         }
       },
+      "istio.mesh.v1alpha1.ForwardClientCertDetails": {
+        "description": "ForwardClientCertDetails controls how the x-forwarded-client-cert (XFCC) header is handled by the gateway proxy. See [Envoy XFCC](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/filter/network/http_connection_manager/v2/http_connection_manager.proto#envoy-api-enum-config-filter-network-http-connection-manager-v2-httpconnectionmanager-forwardclientcertdetails) header handling for more details.",
+        "type": "string",
+        "enum": [
+          "UNDEFINED",
+          "SANITIZE",
+          "FORWARD_ONLY",
+          "APPEND_FORWARD",
+          "SANITIZE_SET",
+          "ALWAYS_FORWARD_ONLY"
+        ]
+      },
       "istio.mesh.v1alpha1.MeshConfig": {
         "description": "MeshConfig defines mesh-wide settings for the Istio service mesh.",
         "type": "object",
@@ -1643,6 +1655,9 @@
           },
           "privateKeyProvider": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.PrivateKeyProvider"
+          },
+          "proxyHeaders": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders"
           }
         },
         "oneOf": [
@@ -1704,6 +1719,66 @@
           "TPROXY",
           "NONE"
         ]
+      },
+      "istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders": {
+        "type": "object",
+        "properties": {
+          "forwardedClientCert": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ForwardClientCertDetails"
+          },
+          "requestId": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.RequestId"
+          },
+          "server": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.Server"
+          },
+          "attemptCount": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.AttemptCount"
+          },
+          "envoyDebugHeaders": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.EnvoyDebugHeaders"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.AttemptCount": {
+        "type": "object",
+        "properties": {
+          "disabled": {
+            "type": "boolean",
+            "nullable": true
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.EnvoyDebugHeaders": {
+        "type": "object",
+        "properties": {
+          "disabled": {
+            "type": "boolean",
+            "nullable": true
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.RequestId": {
+        "type": "object",
+        "properties": {
+          "disabled": {
+            "type": "boolean",
+            "nullable": true
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.Server": {
+        "type": "object",
+        "properties": {
+          "disabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "value": {
+            "description": "If set, and the server header is enabled, this value will be set as the server header. By default, `istio-envoy` will be used.",
+            "type": "string"
+          }
+        }
       },
       "istio.mesh.v1alpha1.ProxyConfig.ProxyStatsMatcher": {
         "description": "Proxy stats name matchers for stats creation. Note this is in addition to the minimum Envoy stats that Istio generates by default.",
@@ -1786,24 +1861,12 @@
             "type": "integer"
           },
           "forwardClientCertDetails": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.Topology.ForwardClientCertDetails"
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ForwardClientCertDetails"
           },
           "proxyProtocol": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.Topology.ProxyProtocolConfiguration"
           }
         }
-      },
-      "istio.mesh.v1alpha1.Topology.ForwardClientCertDetails": {
-        "description": "ForwardClientCertDetails controls how the x-forwarded-client-cert (XFCC) header is handled by the gateway proxy. See [Envoy XFCC](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/filter/network/http_connection_manager/v2/http_connection_manager.proto#envoy-api-enum-config-filter-network-http-connection-manager-v2-httpconnectionmanager-forwardclientcertdetails) header handling for more details.",
-        "type": "string",
-        "enum": [
-          "UNDEFINED",
-          "SANITIZE",
-          "FORWARD_ONLY",
-          "APPEND_FORWARD",
-          "SANITIZE_SET",
-          "ALWAYS_FORWARD_ONLY"
-        ]
       },
       "istio.mesh.v1alpha1.Topology.ProxyProtocolConfiguration": {
         "description": "PROXY protocol configuration.",
