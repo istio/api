@@ -36454,6 +36454,22 @@
       "def": {
         "enums": [
           {
+            "name": "PluginType",
+            "enum_fields": [
+              {
+                "name": "UNSPECIFIED_PLUGIN_TYPE"
+              },
+              {
+                "name": "HTTP",
+                "integer": 1
+              },
+              {
+                "name": "NETWORK",
+                "integer": 2
+              }
+            ]
+          },
+          {
             "name": "PluginPhase",
             "enum_fields": [
               {
@@ -36583,6 +36599,11 @@
                 "name": "match",
                 "type": "TrafficSelector",
                 "is_repeated": true
+              },
+              {
+                "id": 14,
+                "name": "type",
+                "type": "PluginType"
               }
             ],
             "messages": [
