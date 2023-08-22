@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 64
+number_of_entries: 66
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -3531,6 +3531,20 @@ These headers are enabled by default if not configured.</p>
 No
 </td>
 </tr>
+<tr id="ProxyConfig-ProxyHeaders-metadata_exchange_headers">
+<td><code>metadataExchangeHeaders</code></td>
+<td><code><a href="#ProxyConfig-ProxyHeaders-MetadataExchangeHeaders">MetadataExchangeHeaders</a></code></td>
+<td>
+<p>Controls Istio metadata exchange headers <code>X-Envoy-Peer-Metadata</code> and <code>X-Envoy-Peer-Metadata-Id</code>.
+If enabled, these headers will be added on outbound request headers from sidecars.
+If disabled, these headers will not be set.
+These headers are enabled by default if not configured. These headers are not present in ambient enabled pods.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -3633,6 +3647,41 @@ No
 <td><code>disabled</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ProxyConfig-ProxyHeaders-MetadataExchangeHeaders">ProxyConfig.ProxyHeaders.MetadataExchangeHeaders</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProxyConfig-ProxyHeaders-MetadataExchangeHeaders-mode">
+<td><code>mode</code></td>
+<td><code><a href="#ProxyConfig-ProxyHeaders-MetadataExchangeMode">MetadataExchangeMode</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-ProxyHeaders-MetadataExchangeHeaders-includePassthrough">
+<td><code>includePassthrough</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+<p>If set, the metadata headers will also be removed for traffic directed through PassthroughCluster</p>
+
 </td>
 <td>
 No
@@ -4204,6 +4253,33 @@ See the
 <code>X-B3-SpanId</code>, and <code>X-B3-Sampled</code> HTTP headers. See
 <a href="https://github.com/openzipkin/b3-propagation">B3 header propagation README</a>
 for details.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ProxyConfig-ProxyHeaders-MetadataExchangeMode">ProxyConfig.ProxyHeaders.MetadataExchangeMode</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProxyConfig-ProxyHeaders-MetadataExchangeMode-ALWAYS">
+<td><code>ALWAYS</code></td>
+<td>
+<p>Default alwyas include istio metadata exchange headers in outbound requests from sidecars</p>
+
+</td>
+</tr>
+<tr id="ProxyConfig-ProxyHeaders-MetadataExchangeMode-IN_MESH">
+<td><code>IN_MESH</code></td>
+<td>
+<p>Only append the istio metadata exchange headers for services considered in mesh</p>
 
 </td>
 </tr>

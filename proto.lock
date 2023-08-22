@@ -38496,6 +38496,18 @@
                 "integer": 2
               }
             ]
+          },
+          {
+            "name": "ProxyHeaders.MetadataExchangeMode",
+            "enum_fields": [
+              {
+                "name": "ALWAYS"
+              },
+              {
+                "name": "IN_MESH",
+                "integer": 1
+              }
+            ]
           }
         ],
         "messages": [
@@ -39052,6 +39064,11 @@
                     "id": 5,
                     "name": "envoy_debug_headers",
                     "type": "EnvoyDebugHeaders"
+                  },
+                  {
+                    "id": 6,
+                    "name": "metadata_exchange_headers",
+                    "type": "MetadataExchangeHeaders"
                   }
                 ],
                 "messages": [
@@ -39096,6 +39113,21 @@
                       {
                         "id": 1,
                         "name": "disabled",
+                        "type": "google.protobuf.BoolValue"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "MetadataExchangeHeaders",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "mode",
+                        "type": "MetadataExchangeMode"
+                      },
+                      {
+                        "id": 2,
+                        "name": "includePassthrough",
                         "type": "google.protobuf.BoolValue"
                       }
                     ]

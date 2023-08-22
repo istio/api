@@ -640,6 +640,18 @@ message ProxyConfig {
     message EnvoyDebugHeaders {
       google.protobuf.BoolValue disabled = 1;
     }
+    enum MetadataExchangeMode {
+      // Default alwyas include istio metadata exchange headers in outbound requests from sidecars 
+      ALWAYS = 0;
+
+      // Only append the istio metadata exchange headers for services considered in mesh
+      IN_MESH = 1;
+    }
+    message MetadataExchangeHeaders {
+      MetadataExchangeMode mode = 1;
+      // If set, the metadata headers will also be removed for traffic directed through PassthroughCluster
+      google.protobuf.BoolValue includePassthrough = 2;
+    }
     // Controls the `X-Forwarded-Client-Cert` header for inbound sidecar requests. To set this on gateways, use the `Topology` setting.
     // To disable the header, configure either `SANITIZE` (to always remove the header, if present) or `FORWARD_ONLY` (to leave the header as-is).
     // By default, `APPEND_FORWARD` will be used.
@@ -664,6 +676,11 @@ message ProxyConfig {
     // See the [Envoy documentation](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/router/v3/router.proto#envoy-v3-api-field-extensions-filters-http-router-v3-router-suppress-envoy-headers) for more details.
     // These headers are enabled by default if not configured.
     EnvoyDebugHeaders envoy_debug_headers = 5;
+    // Controls Istio metadata exchange headers `X-Envoy-Peer-Metadata` and `X-Envoy-Peer-Metadata-Id`.
+    // If enabled, these headers will be added on outbound request headers from sidecars.
+    // If disabled, these headers will not be set.
+    // These headers are enabled by default if not configured. These headers are not present in ambient enabled pods.
+    MetadataExchangeHeaders metadata_exchange_headers = 6;
   }
 }
 
