@@ -649,8 +649,6 @@ message ProxyConfig {
     }
     message MetadataExchangeHeaders {
       MetadataExchangeMode mode = 1;
-      // If set, the metadata headers will also be removed for traffic directed through PassthroughCluster
-      google.protobuf.BoolValue includePassthrough = 2;
     }
     // Controls the `X-Forwarded-Client-Cert` header for inbound sidecar requests. To set this on gateways, use the `Topology` setting.
     // To disable the header, configure either `SANITIZE` (to always remove the header, if present) or `FORWARD_ONLY` (to leave the header as-is).

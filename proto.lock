@@ -39124,11 +39124,6 @@
                         "id": 1,
                         "name": "mode",
                         "type": "MetadataExchangeMode"
-                      },
-                      {
-                        "id": 2,
-                        "name": "includePassthrough",
-                        "type": "google.protobuf.BoolValue"
                       }
                     ]
                   }
