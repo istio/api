@@ -4268,7 +4268,8 @@ for details.</p>
 <tr id="ProxyConfig-ProxyHeaders-MetadataExchangeMode-IN_MESH">
 <td><code>IN_MESH</code></td>
 <td>
-<p>Only append the istio metadata exchange headers for services considered in mesh</p>
+<p>Only append the istio metadata exchange headers for services considered in mesh
+Out of mesh traffic includes requests to MESH_EXTERNAL ServiceEntries and traffic that does not match any listener in envoy</p>
 
 </td>
 </tr>

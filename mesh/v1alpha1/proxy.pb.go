@@ -358,6 +358,7 @@ const (
 	// Default always include istio metadata exchange headers in outbound requests from sidecars
 	ProxyConfig_ProxyHeaders_ALWAYS ProxyConfig_ProxyHeaders_MetadataExchangeMode = 0
 	// Only append the istio metadata exchange headers for services considered in mesh
+	// Out of mesh traffic includes requests to MESH_EXTERNAL ServiceEntries and traffic that does not match any listener in envoy
 	ProxyConfig_ProxyHeaders_IN_MESH ProxyConfig_ProxyHeaders_MetadataExchangeMode = 1
 )
 
