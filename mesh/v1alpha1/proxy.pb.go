@@ -355,7 +355,7 @@ func (ProxyConfig_InboundInterceptionMode) EnumDescriptor() ([]byte, []int) {
 type ProxyConfig_ProxyHeaders_MetadataExchangeMode int32
 
 const (
-	// Default alwyas include istio metadata exchange headers in outbound requests from sidecars
+	// Default always include istio metadata exchange headers in outbound requests from sidecars
 	ProxyConfig_ProxyHeaders_ALWAYS ProxyConfig_ProxyHeaders_MetadataExchangeMode = 0
 	// Only append the istio metadata exchange headers for services considered in mesh
 	ProxyConfig_ProxyHeaders_IN_MESH ProxyConfig_ProxyHeaders_MetadataExchangeMode = 1

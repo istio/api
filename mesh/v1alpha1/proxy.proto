@@ -641,7 +641,7 @@ message ProxyConfig {
       google.protobuf.BoolValue disabled = 1;
     }
     enum MetadataExchangeMode {
-      // Default alwyas include istio metadata exchange headers in outbound requests from sidecars 
+      // Default always include istio metadata exchange headers in outbound requests from sidecars 
       ALWAYS = 0;
 
       // Only append the istio metadata exchange headers for services considered in mesh
