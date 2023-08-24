@@ -38501,7 +38501,7 @@
             "name": "ProxyHeaders.MetadataExchangeMode",
             "enum_fields": [
               {
-                "name": "ALWAYS"
+                "name": "UNDEFINED"
               },
               {
                 "name": "IN_MESH",

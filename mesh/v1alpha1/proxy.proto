@@ -622,6 +622,8 @@ message ProxyConfig {
   //     disabled: true
   //   envoyDebugHeaders:
   //     disabled: true
+  //   metadataExchangeHeaders:
+  //     mode: IN_MESH
   // ```
   ProxyHeaders proxy_headers = 39;
 
@@ -641,10 +643,10 @@ message ProxyConfig {
       google.protobuf.BoolValue disabled = 1;
     }
     enum MetadataExchangeMode {
-      // Default always include istio metadata exchange headers in outbound requests from sidecars 
-      ALWAYS = 0;
+      // Existing Istio behavior for the metadata exchange headers is unchanged.
+      UNDEFINED = 0;
 
-      // Only append the istio metadata exchange headers for services considered in mesh.
+      // Only append the istio metadata exchange headers for services considered in-mesh.
       // Traffic is considered in-mesh if it is secured with Istio mutual TLS. This means that `MESH_EXTERNAL` services, unmatched passthrough traffic, and requests to workloads without Istio enabled will be considered out of mesh.
       IN_MESH = 1;
     }
@@ -676,9 +678,8 @@ message ProxyConfig {
     // These headers are enabled by default if not configured.
     EnvoyDebugHeaders envoy_debug_headers = 5;
     // Controls Istio metadata exchange headers `X-Envoy-Peer-Metadata` and `X-Envoy-Peer-Metadata-Id`.
-    // If enabled, these headers will be added on outbound request headers from sidecars.
-    // If disabled, these headers will not be set.
-    // These headers are enabled by default if not configured. These headers are not present in ambient enabled pods.
+    // By default, the behavior is unspecified.
+    // If IN_MESH, these headers will not be appended to outbound requests from sidecars to services not in-mesh.
     MetadataExchangeHeaders metadata_exchange_headers = 6;
   }
 }
