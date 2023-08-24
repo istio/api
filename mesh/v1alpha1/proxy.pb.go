@@ -299,7 +299,7 @@ type ProxyConfig_InboundInterceptionMode int32
 
 const (
 	// The `REDIRECT` mode uses iptables `REDIRECT` to `NAT` and redirect to Envoy. This mode loses
-	// source IP addresses during redirection.
+	// source IP addresses during redirection. This is the default redirection mode.
 	ProxyConfig_REDIRECT ProxyConfig_InboundInterceptionMode = 0
 	// The `TPROXY` mode uses iptables `TPROXY` to redirect to Envoy. This mode preserves both the
 	// source and destination IP addresses and ports, so that they can be used for advanced
