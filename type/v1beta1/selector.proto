@@ -94,4 +94,3 @@ message PolicyTargetReference {
   // $hide_from_docs
   optional string namespace = 4;
 }
-

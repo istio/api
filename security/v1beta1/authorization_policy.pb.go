@@ -580,7 +580,8 @@ type AuthorizationPolicy struct {
 	// in the same namespace as the authorization policy. If the authorization policy is in the root namespace, the selector
 	// will additionally match with workloads in all namespaces.
 	//
-	// If not set, the selector will match all workloads. At most one of the selector and targetRef can be set.
+	// If the selector and the targetRef are not set, the selector will match all workloads. At most one of the selector
+	// and targetRef can be set.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
 	// $hide_from_docs
 	// Optional. The targetRef specifies the resource the policy should be
