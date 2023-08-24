@@ -546,13 +546,14 @@ type WasmPlugin struct {
 	// At most one of the selector and targetRef can be set.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
 	// $hide_from_docs
-	// Optional. The targetRef specifies the resource the policy should be
+	// Optional. The targetRef specifies the waypoint the policy should be
 	// applied to. The targeted resource specified will determine which
-	// workloads the WasmPlugin applies to. The resource must be in the
-	// same namespace as the policy.
+	// workloads the WasmPlugin applies to. The targeted resource must be
+	// a waypoint. The waypoint must be in the same namespace as the policy.
 	//
 	// If the targetRef is not set, the policy is applied as defined by the selector.
 	// At most one of the selector and targetRef can be set.
+	// Waypoint proxies will not respect selectors even if they match.
 	TargetRef *v1beta1.PolicyTargetReference `protobuf:"bytes,15,opt,name=targetRef,proto3" json:"targetRef,omitempty"`
 	// URL of a Wasm module or OCI container. If no scheme is present,
 	// defaults to `oci://`, referencing an OCI image. Other valid schemes

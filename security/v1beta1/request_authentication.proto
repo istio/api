@@ -448,13 +448,15 @@ message RequestAuthentication {
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
   // $hide_from_docs
-  // Optional. The targetRef specifies the resource the policy should be 
+  // Optional. The targetRef specifies the waypoint the policy should be 
   // applied to. The targeted resource specified will determine which 
-  // workloads the request authentication policy to. The resource must
-  // be in the same namespace as the request authentication policy.
+  // workloads the request authentication policy to. The targeted resource
+  // must be a waypoint. The waypoint must be in the same namespace as the
+  // request authentication policy.
   //
   // If not set, the policy is applied as defined by the selector.
   // At most one of the selector and targetRef can be set.
+  // Waypoint proxies will not respect selectors even if they match.
   istio.type.v1beta1.PolicyTargetReference targetRef = 3;
 
   // Define the list of JWTs that can be validated at the selected workloads' proxy. A valid token

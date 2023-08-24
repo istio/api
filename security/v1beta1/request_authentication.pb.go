@@ -546,13 +546,15 @@ type RequestAuthentication struct {
 	// If not set, the selector will match all workloads. At most one of the selector and targetRef can be set.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
 	// $hide_from_docs
-	// Optional. The targetRef specifies the resource the policy should be
+	// Optional. The targetRef specifies the waypoint the policy should be
 	// applied to. The targeted resource specified will determine which
-	// workloads the request authentication policy to. The resource must
-	// be in the same namespace as the request authentication policy.
+	// workloads the request authentication policy to. The targeted resource
+	// must be a waypoint. The waypoint must be in the same namespace as the
+	// request authentication policy.
 	//
 	// If not set, the policy is applied as defined by the selector.
 	// At most one of the selector and targetRef can be set.
+	// Waypoint proxies will not respect selectors even if they match.
 	TargetRef *v1beta1.PolicyTargetReference `protobuf:"bytes,3,opt,name=targetRef,proto3" json:"targetRef,omitempty"`
 	// Define the list of JWTs that can be validated at the selected workloads' proxy. A valid token
 	// will be used to extract the authenticated identity.
