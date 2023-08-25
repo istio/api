@@ -14,8 +14,6 @@
 
 syntax = "proto3";
 
-import "google/api/field_behavior.proto";
-
 // $schema: istio.networking.v1beta1.WorkloadEntry
 // $title: Workload Entry
 // $description: Configuration affecting VMs onboarded into the mesh.

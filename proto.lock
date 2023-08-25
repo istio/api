@@ -42024,11 +42024,6 @@
             ]
           }
         ],
-        "imports": [
-          {
-            "path": "google/api/field_behavior.proto"
-          }
-        ],
         "package": {
           "name": "istio.networking.v1alpha3"
         },
@@ -44611,11 +44606,6 @@
                 }
               }
             ]
-          }
-        ],
-        "imports": [
-          {
-            "path": "google/api/field_behavior.proto"
           }
         ],
         "package": {
