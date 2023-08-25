@@ -41981,13 +41981,7 @@
               {
                 "id": 1,
                 "name": "address",
-                "type": "string",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "string"
               },
               {
                 "id": 4,
@@ -44576,13 +44570,7 @@
               {
                 "id": 1,
                 "name": "address",
-                "type": "string",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "string"
               },
               {
                 "id": 4,
