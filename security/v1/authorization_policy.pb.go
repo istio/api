@@ -176,7 +176,7 @@
 // {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
-// kind: AuthorizaionPolicy
+// kind: AuthorizationPolicy
 // metadata:
 //   name: httpbin
 //   namespace: foo
