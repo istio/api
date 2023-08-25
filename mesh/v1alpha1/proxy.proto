@@ -622,6 +622,8 @@ message ProxyConfig {
   //     disabled: true
   //   envoyDebugHeaders:
   //     disabled: true
+  //   metadataExchangeHeaders:
+  //     mode: IN_MESH
   // ```
   ProxyHeaders proxy_headers = 39;
 
@@ -639,6 +641,17 @@ message ProxyConfig {
     }
     message EnvoyDebugHeaders {
       google.protobuf.BoolValue disabled = 1;
+    }
+    enum MetadataExchangeMode {
+      // Existing Istio behavior for the metadata exchange headers is unchanged.
+      UNDEFINED = 0;
+
+      // Only append the istio metadata exchange headers for services considered in-mesh.
+      // Traffic is considered in-mesh if it is secured with Istio mutual TLS. This means that `MESH_EXTERNAL` services, unmatched passthrough traffic, and requests to workloads without Istio enabled will be considered out of mesh.
+      IN_MESH = 1;
+    }
+    message MetadataExchangeHeaders {
+      MetadataExchangeMode mode = 1;
     }
     // Controls the `X-Forwarded-Client-Cert` header for inbound sidecar requests. To set this on gateways, use the `Topology` setting.
     // To disable the header, configure either `SANITIZE` (to always remove the header, if present) or `FORWARD_ONLY` (to leave the header as-is).
@@ -664,6 +677,10 @@ message ProxyConfig {
     // See the [Envoy documentation](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/router/v3/router.proto#envoy-v3-api-field-extensions-filters-http-router-v3-router-suppress-envoy-headers) for more details.
     // These headers are enabled by default if not configured.
     EnvoyDebugHeaders envoy_debug_headers = 5;
+    // Controls Istio metadata exchange headers `X-Envoy-Peer-Metadata` and `X-Envoy-Peer-Metadata-Id`.
+    // By default, the behavior is unspecified.
+    // If IN_MESH, these headers will not be appended to outbound requests from sidecars to services not in-mesh.
+    MetadataExchangeHeaders metadata_exchange_headers = 6;
   }
 }
 
