@@ -366,8 +366,10 @@ const (
 // is now supported. A prefix '@' is used to denote a match against internal metadata instead of the headers in the request.
 // Currently this feature is only supported for the following metadata:
 //
-// - `request.auth.claims.{claim-name}[.{sub-claim}]*` which are extracted from validated JWT tokens. The claim name
-// currently does not support the `.` character. Examples: `request.auth.claims.sub` and `request.auth.claims.name.givenName`.
+// - `request.auth.claims.{claim-name}[.{nested-claim}]*` which are extracted from validated JWT tokens.
+// Use the `.` or `[]` as a separator for nested claim names.
+// Examples: `request.auth.claims.sub`, `request.auth.claims.name.givenName` and `request.auth.claims[foo.com/name]`.
+// For more information, see [JWT claim based routing](https://istio.io/latest/docs/tasks/security/authentication/jwt-route/).
 //
 // The use of matches against JWT claim metadata is only supported in Gateways. The following example shows:
 //
