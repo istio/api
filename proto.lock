@@ -41981,13 +41981,7 @@
               {
                 "id": 1,
                 "name": "address",
-                "type": "string",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "string"
               },
               {
                 "id": 4,
@@ -42028,11 +42022,6 @@
                 }
               }
             ]
-          }
-        ],
-        "imports": [
-          {
-            "path": "google/api/field_behavior.proto"
           }
         ],
         "package": {
@@ -44576,13 +44565,7 @@
               {
                 "id": 1,
                 "name": "address",
-                "type": "string",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "string"
               },
               {
                 "id": 4,
@@ -44623,11 +44606,6 @@
                 }
               }
             ]
-          }
-        ],
-        "imports": [
-          {
-            "path": "google/api/field_behavior.proto"
           }
         ],
         "package": {
