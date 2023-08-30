@@ -3216,7 +3216,8 @@ type HTTPRetry struct {
 	// between retries will be determined automatically (25ms+). When request
 	// `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute)
 	// or `per_try_timeout` is configured, the actual number of retries attempted also depends on
-	// the specified request `timeout` and `per_try_timeout` values.
+	// the specified request `timeout` and `per_try_timeout` values. MUST BE >= 0. If `0`, retries will be disabled.
+	// The maximum possible number of requests made will be 1 + `attempts`.
 	Attempts int32 `protobuf:"varint,1,opt,name=attempts,proto3" json:"attempts,omitempty"`
 	// Timeout per attempt for a given request, including the initial call and any retries. Format: 1h/1m/1s/1ms. MUST BE >=1ms.
 	// Default is same value as request
