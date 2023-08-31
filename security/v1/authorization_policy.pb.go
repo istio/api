@@ -584,10 +584,10 @@ type AuthorizationPolicy struct {
 	// and targetRef can be set.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
 	// $hide_from_docs
-	// Optional. The targetRef specifies the waypoint the policy should be
+	// Optional. The targetRef specifies the gateway the policy should be
 	// applied to. The targeted resource specified will determine which
 	// workloads the authorization policy applies to. The targeted resource
-	// must be a waypoint. The waypoint must be in the same namespace as
+	// must be a k8s gateway. The gateway must be in the same namespace as
 	// the authorization policy.
 	//
 	// If not set, the policy is applied as defined by the selector.
