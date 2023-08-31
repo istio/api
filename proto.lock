@@ -47935,6 +47935,28 @@
                 "name": "access_logging",
                 "type": "AccessLogging",
                 "is_repeated": true
+              },
+              {
+                "id": 5,
+                "name": "reporting_interval",
+                "type": "ReportingInterval"
+              }
+            ],
+            "messages": [
+              {
+                "name": "ReportingInterval",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "tcp",
+                    "type": "google.protobuf.Duration"
+                  },
+                  {
+                    "id": 2,
+                    "name": "http",
+                    "type": "google.protobuf.Duration"
+                  }
+                ]
               }
             ]
           },

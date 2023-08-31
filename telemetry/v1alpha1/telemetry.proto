@@ -261,6 +261,23 @@ message Telemetry {
   // Optional. AccessLogging configures the access logging behavior for all
   // selected workloads.
   repeated AccessLogging access_logging = 4;
+
+  // Reporting interval allows configuration of the time between the access log
+  // reports for the individual streams. Duration set to 0 disables the perodic
+  // reporting, and only the ends of the streams are reported.
+  message ReportingInterval {
+    // Optional. Reporting interval for TCP streams. The default value is 5s.
+    google.protobuf.Duration tcp = 1;
+
+    // Optional. Reporting interval for HTTP streams. Not enabled by default.
+    google.protobuf.Duration http = 2;
+  }
+
+  // Configuration for the interval reporting for the access logging and
+  // metrics. Telemetry is reported independently per each data stream, at
+  // the specified rate. This setting is independent of the flush rate of the
+  // telemetry sinks.
+  ReportingInterval reporting_interval = 5;
 }
 
 // Tracing configures tracing behavior for workloads within a mesh.
@@ -401,6 +418,7 @@ message Metrics {
   // Optional. Reporting interval allows configuration of the time between calls out to for metrics reporting.
   // This currently only supports TCP metrics but we may use this for long duration HTTP streams in the future.
   // The default duration is `5s`.
+  // DEPRECATED. Please use Telemetry.reporting_interval.tcp field instead.
   google.protobuf.Duration reporting_interval = 3;
 }
 

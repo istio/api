@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.telemetry.v1alpha1.Telemetry
 aliases: [/docs/reference/config/telemetry/v1alpha1/telemetry]
-number_of_entries: 18
+number_of_entries: 19
 ---
 <p>Telemetry defines how the telemetry is generated for workloads within a mesh.</p>
 <p>For mesh level configuration, put the resource in root configuration
@@ -239,6 +239,20 @@ selected workloads.</p>
 No
 </td>
 </tr>
+<tr id="Telemetry-reporting_interval">
+<td><code>reportingInterval</code></td>
+<td><code><a href="#Telemetry-ReportingInterval">ReportingInterval</a></code></td>
+<td>
+<p>Configuration for the interval reporting for the access logging and
+metrics. Telemetry is reported independently per each data stream, at
+the specified rate. This setting is independent of the flush rate of the
+telemetry sinks.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -422,7 +436,8 @@ No
 <td>
 <p>Optional. Reporting interval allows configuration of the time between calls out to for metrics reporting.
 This currently only supports TCP metrics but we may use this for long duration HTTP streams in the future.
-The default duration is <code>5s</code>.</p>
+The default duration is <code>5s</code>.
+DEPRECATED. Please use Telemetry.reporting_interval.tcp field instead.</p>
 
 </td>
 <td>
@@ -609,6 +624,47 @@ No
 <td>
 <p>Optional. If specified, this filter will be used to select specific
 requests/connections for logging.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Telemetry-ReportingInterval">Telemetry.ReportingInterval</h2>
+<section>
+<p>Reporting interval allows configuration of the time between the access log
+reports for the individual streams. Duration set to 0 disables the perodic
+reporting, and only the ends of the streams are reported.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Telemetry-ReportingInterval-tcp">
+<td><code>tcp</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>Optional. Reporting interval for TCP streams. The default value is 5s.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Telemetry-ReportingInterval-http">
+<td><code>http</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>Optional. Reporting interval for HTTP streams. Not enabled by default.</p>
 
 </td>
 <td>
