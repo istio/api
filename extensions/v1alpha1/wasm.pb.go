@@ -549,9 +549,10 @@ type WasmPlugin struct {
 	// Optional. The targetRef specifies the gateway the policy should be
 	// applied to. The targeted resource specified will determine which
 	// workloads the WasmPlugin applies to. The targeted resource must be
-	// a k8s gateway. The gateway must be in the same namespace as the policy.
+	// a `Gateway` in the group `gateway.networking.k8s.io`. The gateway
+	// must be in the same namespace as the policy.
 	//
-	// If the targetRef is not set, the policy is applied as defined by the selector.
+	// If the `targetRef` is not set, the policy is applied as defined by the selector.
 	// At most one of the selector and targetRef can be set.
 	// Waypoint proxies will not respect selectors even if they match.
 	TargetRef *v1beta1.PolicyTargetReference `protobuf:"bytes,15,opt,name=targetRef,proto3" json:"targetRef,omitempty"`

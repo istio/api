@@ -549,8 +549,9 @@ type RequestAuthentication struct {
 	// Optional. The targetRef specifies the gateway the policy should be
 	// applied to. The targeted resource specified will determine which
 	// workloads the request authentication policy to. The targeted resource
-	// must be a k8s gateway. The gateway must be in the same namespace as the
-	// request authentication policy.
+	// must be a `Gateway` in the group `gateway.networking.k8s.io`. The
+	// gateway must be in the same namespace as the request authentication
+	// policy.
 	//
 	// If not set, the policy is applied as defined by the selector.
 	// At most one of the selector and targetRef can be set.

@@ -69,13 +69,42 @@ enum WorkloadMode {
 
 // $hide_from_docs
 // PolicyTargetReference format as defined by [GEP-713](https://gateway-api.sigs.k8s.io/geps/gep-713/#policy-targetref-api).
-
+//
 // PolicyTargetReferences specifies the targeted resource which the policy
 // can be applied to. It must only target a single resource at a time, but it
 // can be used to target larger resources such as Gateways that may apply to
 // multiple child resources. The PolicyTargetReference will be used instead of
 // a WorkloadSelector in the RequestAuthentication, AuthorizationPolicy,
-// Telemetry, and WasmPlugin CRDs to target k8s Gateway.
+// Telemetry, and WasmPlugin CRDs to target a Kubernetes Gateway.
+//
+// The following is an example of an AuthorizationPolicy bound to a waypoint proxy using 
+// a PolicyTargetReference. The example sets `action` to `DENY` to create a deny policy.
+// It denies all the requests with `POST` method on port `8080` directed through the
+// `waypoint` Gateway in the `foo` namespace.
+//
+// {{<tabset category-name="example">}}
+// {{<tab name="v1" category-value="v1">}}
+// ```yaml
+// apiVersion: security.istio.io/v1
+// kind: AuthorizationPolicy
+// metadata:
+//   name: httpbin
+//   namespace: foo
+// spec:
+//   action: DENY
+//   rules:
+//   - to:
+//     - operation:
+//         methods: ["POST"]
+//         ports: ["8080"]
+//   targetRef:
+//     name: waypoint
+//     namespace: foo
+//     kind: Gateway
+//     group: gateway.networking.k8s.io
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 message PolicyTargetReference {
   // group is the group of the target resource.
   // $hide_from_docs
@@ -92,5 +121,5 @@ message PolicyTargetReference {
   // namespace is the namespace of the referent. When unspecified, the local
   // namespace is inferred.
   // $hide_from_docs
-  optional string namespace = 4;
+  string namespace = 4;
 }

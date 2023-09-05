@@ -48331,8 +48331,7 @@
               {
                 "id": 4,
                 "name": "namespace",
-                "type": "string",
-                "optional": true
+                "type": "string"
               }
             ]
           }
