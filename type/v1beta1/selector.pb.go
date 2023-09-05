@@ -238,17 +238,16 @@ func (x *PortSelector) GetNumber() uint32 {
 //
 // spec:
 //
+//	targetRef:
+//	  name: waypoint
+//	  kind: Gateway
+//	  group: gateway.networking.k8s.io
 //	action: DENY
 //	rules:
 //	- to:
 //	  - operation:
 //	      methods: ["POST"]
 //	      ports: ["8080"]
-//	targetRef:
-//	  name: waypoint
-//	  namespace: foo
-//	  kind: Gateway
-//	  group: gateway.networking.k8s.io
 //
 // ```
 // {{</tab>}}
