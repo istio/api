@@ -248,7 +248,21 @@ message Telemetry {
   // Optional. The selector decides where to apply the Telemetry policy.
   // If not set, the Telemetry policy will be applied to all workloads in the
   // same namespace as the Telemetry policy.
+  //
+  // At most one of the selector and targetRef can be set.
   istio.type.v1beta1.WorkloadSelector selector = 1;
+
+  // $hide_from_docs
+  // Optional. The targetRef specifies the gateway the policy should be 
+  // applied to. The targeted resource specified will determine which 
+  // workloads the telemetry policy applies to. The targeted resource
+  // must be a k8s gateway. The resource must be in the same namespace as
+  // the Telemetry policy.
+  //
+  // If not set, the policy is applied as defined by the selector.
+  // At most one of the selector and targetRef can be set.
+  // Waypoint proxies will not respect selectors even if they match.
+  istio.type.v1beta1.PolicyTargetReference targetRef = 5;
 
   // Optional. Tracing configures the tracing behavior for all
   // selected workloads.

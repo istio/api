@@ -36540,6 +36540,11 @@
                 "type": "istio.type.v1beta1.WorkloadSelector"
               },
               {
+                "id": 15,
+                "name": "targetRef",
+                "type": "istio.type.v1beta1.PolicyTargetReference"
+              },
+              {
                 "id": 2,
                 "name": "url",
                 "type": "string"
@@ -46819,6 +46824,11 @@
                 "type": "istio.type.v1beta1.WorkloadSelector"
               },
               {
+                "id": 5,
+                "name": "targetRef",
+                "type": "istio.type.v1beta1.PolicyTargetReference"
+              },
+              {
                 "id": 2,
                 "name": "rules",
                 "type": "Rule",
@@ -47189,6 +47199,11 @@
                 "type": "istio.type.v1beta1.WorkloadSelector"
               },
               {
+                "id": 3,
+                "name": "targetRef",
+                "type": "istio.type.v1beta1.PolicyTargetReference"
+              },
+              {
                 "id": 2,
                 "name": "jwt_rules",
                 "type": "JWTRule",
@@ -47313,6 +47328,11 @@
                 "id": 1,
                 "name": "selector",
                 "type": "istio.type.v1beta1.WorkloadSelector"
+              },
+              {
+                "id": 5,
+                "name": "targetRef",
+                "type": "istio.type.v1beta1.PolicyTargetReference"
               },
               {
                 "id": 2,
@@ -47765,6 +47785,11 @@
                 "type": "istio.type.v1beta1.WorkloadSelector"
               },
               {
+                "id": 3,
+                "name": "targetRef",
+                "type": "istio.type.v1beta1.PolicyTargetReference"
+              },
+              {
                 "id": 2,
                 "name": "jwt_rules",
                 "type": "JWTRule",
@@ -47917,6 +47942,11 @@
                 "id": 1,
                 "name": "selector",
                 "type": "istio.type.v1beta1.WorkloadSelector"
+              },
+              {
+                "id": 5,
+                "name": "targetRef",
+                "type": "istio.type.v1beta1.PolicyTargetReference"
               },
               {
                 "id": 2,
@@ -48277,6 +48307,31 @@
                 "id": 1,
                 "name": "number",
                 "type": "uint32"
+              }
+            ]
+          },
+          {
+            "name": "PolicyTargetReference",
+            "fields": [
+              {
+                "id": 1,
+                "name": "group",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "kind",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "namespace",
+                "type": "string"
               }
             ]
           }

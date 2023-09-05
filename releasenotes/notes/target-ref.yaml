@@ -1,0 +1,12 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - https://github.com/istio/api/issues/2885
+
+releaseNotes:
+  - |
+    **Added** PolicyTargetReference definition to be used in the RequestAuthentication, AuthorizationPolicy, Telemetry, and WasmPlugin CRDs to target k8s gateways.
+
+docs:
+  - https://docs.google.com/document/d/1MaMdyIQdOwq7mGCVMYW56FED9HrkJa93Nd0S0zBwws4/edit?usp=sharing
