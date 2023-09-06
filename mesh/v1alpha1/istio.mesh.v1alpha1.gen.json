@@ -1737,6 +1737,9 @@
           },
           "envoyDebugHeaders": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.EnvoyDebugHeaders"
+          },
+          "metadataExchangeHeaders": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.MetadataExchangeHeaders"
           }
         }
       },
@@ -1757,6 +1760,21 @@
             "nullable": true
           }
         }
+      },
+      "istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.MetadataExchangeHeaders": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.MetadataExchangeMode"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.MetadataExchangeMode": {
+        "type": "string",
+        "enum": [
+          "UNDEFINED",
+          "IN_MESH"
+        ]
       },
       "istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.RequestId": {
         "type": "object",
