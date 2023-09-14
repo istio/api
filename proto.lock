@@ -38962,6 +38962,11 @@
                 "is_repeated": true
               },
               {
+                "id": 40,
+                "name": "proxy_stats_config",
+                "type": "ProxyStats"
+              },
+              {
                 "id": 28,
                 "name": "gateway_topology",
                 "type": "Topology"
@@ -39040,6 +39045,39 @@
               "connect_timeout"
             ],
             "messages": [
+              {
+                "name": "ProxyStats",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "enable_default_tags",
+                    "type": "bool"
+                  },
+                  {
+                    "id": 2,
+                    "name": "tags",
+                    "type": "Tag",
+                    "is_repeated": true
+                  }
+                ],
+                "messages": [
+                  {
+                    "name": "Tag",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "name",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "regex",
+                        "type": "string"
+                      }
+                    ]
+                  }
+                ]
+              },
               {
                 "name": "ProxyStatsMatcher",
                 "fields": [

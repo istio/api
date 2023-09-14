@@ -510,7 +510,34 @@ message ProxyConfig {
   // added by configuring the telemetry extension. Each additional tag needs to be present in this list.
   // Extra tags emitted by the telemetry extensions must be listed here so that they can be processed
   // and exposed as Prometheus metrics.
+  // deprecated: use proxy_stats_config instead.
   repeated string extra_stat_tags = 27;
+
+  // Proxy stats configuration.
+  message ProxyStats {
+    // Use all default tag regexes specified in . 
+    // These can be combined with custom tags specified 
+    bool enable_default_tags = 1;
+
+    // Designates a tag name and regex value pair.
+    message Tag {
+      // Attaches an identifier to the tag values to identify the tag being in the sink.
+      string name = 1;
+      // Designates a tag to strip from the tag extracted name and provide as a named
+      // tag value for all statistics. This will only occur if any part of the name
+      // matches the regex provided with one or more capture groups.
+      string regex = 2;
+    }
+
+    // Tags can be added by configuring the telemetry extension. Each additional tag needs to be present in this list.
+    // Extra tags emitted by the telemetry extensions must be listed here so that they can be processed
+    // and exposed as Prometheus metrics.
+    repeated Tag tags = 2;
+  }
+
+  // Configuration for processing of stats.
+  // $hide_from_docs
+  ProxyStats proxy_stats_config = 40;
 
   // Topology encapsulates the configuration which describes where the proxy is
   // located i.e. behind a (or N) trusted proxy (proxies) or directly exposed

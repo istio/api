@@ -398,7 +398,7 @@ func (x ProxyConfig_ProxyHeaders_MetadataExchangeMode) Number() protoreflect.Enu
 
 // Deprecated: Use ProxyConfig_ProxyHeaders_MetadataExchangeMode.Descriptor instead.
 func (ProxyConfig_ProxyHeaders_MetadataExchangeMode) EnumDescriptor() ([]byte, []int) {
-	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 3, 0}
+	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 4, 0}
 }
 
 // Tracing defines configuration for the tracing performed by Envoy instances.
@@ -944,7 +944,11 @@ type ProxyConfig struct {
 	// added by configuring the telemetry extension. Each additional tag needs to be present in this list.
 	// Extra tags emitted by the telemetry extensions must be listed here so that they can be processed
 	// and exposed as Prometheus metrics.
+	// deprecated: use proxy_stats_config instead.
 	ExtraStatTags []string `protobuf:"bytes,27,rep,name=extra_stat_tags,json=extraStatTags,proto3" json:"extra_stat_tags,omitempty"`
+	// Configuration for processing of stats.
+	// $hide_from_docs
+	ProxyStatsConfig *ProxyConfig_ProxyStats `protobuf:"bytes,40,opt,name=proxy_stats_config,json=proxyStatsConfig,proto3" json:"proxy_stats_config,omitempty"`
 	// Topology encapsulates the configuration which describes where the proxy is
 	// located i.e. behind a (or N) trusted proxy (proxies) or directly exposed
 	// to the internet. This configuration only effects gateways and is applied
@@ -1266,6 +1270,13 @@ func (x *ProxyConfig) GetStatusPort() int32 {
 func (x *ProxyConfig) GetExtraStatTags() []string {
 	if x != nil {
 		return x.ExtraStatTags
+	}
+	return nil
+}
+
+func (x *ProxyConfig) GetProxyStatsConfig() *ProxyConfig_ProxyStats {
+	if x != nil {
+		return x.ProxyStatsConfig
 	}
 	return nil
 }
@@ -2175,6 +2186,67 @@ func (x *PrivateKeyProvider_QAT) GetPollDelay() *duration.Duration {
 	return nil
 }
 
+// Proxy stats configuration.
+type ProxyConfig_ProxyStats struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Use all default tag regexes specified in .
+	// These can be combined with custom tags specified
+	EnableDefaultTags bool `protobuf:"varint,1,opt,name=enable_default_tags,json=enableDefaultTags,proto3" json:"enable_default_tags,omitempty"`
+	// Tags can be added by configuring the telemetry extension. Each additional tag needs to be present in this list.
+	// Extra tags emitted by the telemetry extensions must be listed here so that they can be processed
+	// and exposed as Prometheus metrics.
+	Tags []*ProxyConfig_ProxyStats_Tag `protobuf:"bytes,2,rep,name=tags,proto3" json:"tags,omitempty"`
+}
+
+func (x *ProxyConfig_ProxyStats) Reset() {
+	*x = ProxyConfig_ProxyStats{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[21]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ProxyConfig_ProxyStats) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProxyConfig_ProxyStats) ProtoMessage() {}
+
+func (x *ProxyConfig_ProxyStats) ProtoReflect() protoreflect.Message {
+	mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[21]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProxyConfig_ProxyStats.ProtoReflect.Descriptor instead.
+func (*ProxyConfig_ProxyStats) Descriptor() ([]byte, []int) {
+	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 2}
+}
+
+func (x *ProxyConfig_ProxyStats) GetEnableDefaultTags() bool {
+	if x != nil {
+		return x.EnableDefaultTags
+	}
+	return false
+}
+
+func (x *ProxyConfig_ProxyStats) GetTags() []*ProxyConfig_ProxyStats_Tag {
+	if x != nil {
+		return x.Tags
+	}
+	return nil
+}
+
 // Proxy stats name matchers for stats creation. Note this is in addition to
 // the minimum Envoy stats that Istio generates by default.
 type ProxyConfig_ProxyStatsMatcher struct {
@@ -2193,7 +2265,7 @@ type ProxyConfig_ProxyStatsMatcher struct {
 func (x *ProxyConfig_ProxyStatsMatcher) Reset() {
 	*x = ProxyConfig_ProxyStatsMatcher{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[21]
+		mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2206,7 +2278,7 @@ func (x *ProxyConfig_ProxyStatsMatcher) String() string {
 func (*ProxyConfig_ProxyStatsMatcher) ProtoMessage() {}
 
 func (x *ProxyConfig_ProxyStatsMatcher) ProtoReflect() protoreflect.Message {
-	mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[21]
+	mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2219,7 +2291,7 @@ func (x *ProxyConfig_ProxyStatsMatcher) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProxyConfig_ProxyStatsMatcher.ProtoReflect.Descriptor instead.
 func (*ProxyConfig_ProxyStatsMatcher) Descriptor() ([]byte, []int) {
-	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 2}
+	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 3}
 }
 
 func (x *ProxyConfig_ProxyStatsMatcher) GetInclusionPrefixes() []string {
@@ -2281,7 +2353,7 @@ type ProxyConfig_ProxyHeaders struct {
 func (x *ProxyConfig_ProxyHeaders) Reset() {
 	*x = ProxyConfig_ProxyHeaders{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[22]
+		mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2294,7 +2366,7 @@ func (x *ProxyConfig_ProxyHeaders) String() string {
 func (*ProxyConfig_ProxyHeaders) ProtoMessage() {}
 
 func (x *ProxyConfig_ProxyHeaders) ProtoReflect() protoreflect.Message {
-	mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[22]
+	mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2307,7 +2379,7 @@ func (x *ProxyConfig_ProxyHeaders) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProxyConfig_ProxyHeaders.ProtoReflect.Descriptor instead.
 func (*ProxyConfig_ProxyHeaders) Descriptor() ([]byte, []int) {
-	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 3}
+	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 4}
 }
 
 func (x *ProxyConfig_ProxyHeaders) GetForwardedClientCert() ForwardClientCertDetails {
@@ -2352,6 +2424,66 @@ func (x *ProxyConfig_ProxyHeaders) GetMetadataExchangeHeaders() *ProxyConfig_Pro
 	return nil
 }
 
+// Designates a tag name and regex value pair.
+type ProxyConfig_ProxyStats_Tag struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Attaches an identifier to the tag values to identify the tag being in the sink.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Designates a tag to strip from the tag extracted name and provide as a named
+	// tag value for all statistics. This will only occur if any part of the name
+	// matches the regex provided with one or more capture groups.
+	Regex string `protobuf:"bytes,2,opt,name=regex,proto3" json:"regex,omitempty"`
+}
+
+func (x *ProxyConfig_ProxyStats_Tag) Reset() {
+	*x = ProxyConfig_ProxyStats_Tag{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[24]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ProxyConfig_ProxyStats_Tag) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProxyConfig_ProxyStats_Tag) ProtoMessage() {}
+
+func (x *ProxyConfig_ProxyStats_Tag) ProtoReflect() protoreflect.Message {
+	mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[24]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProxyConfig_ProxyStats_Tag.ProtoReflect.Descriptor instead.
+func (*ProxyConfig_ProxyStats_Tag) Descriptor() ([]byte, []int) {
+	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 2, 0}
+}
+
+func (x *ProxyConfig_ProxyStats_Tag) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ProxyConfig_ProxyStats_Tag) GetRegex() string {
+	if x != nil {
+		return x.Regex
+	}
+	return ""
+}
+
 type ProxyConfig_ProxyHeaders_Server struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -2365,7 +2497,7 @@ type ProxyConfig_ProxyHeaders_Server struct {
 func (x *ProxyConfig_ProxyHeaders_Server) Reset() {
 	*x = ProxyConfig_ProxyHeaders_Server{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[23]
+		mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[25]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2378,7 +2510,7 @@ func (x *ProxyConfig_ProxyHeaders_Server) String() string {
 func (*ProxyConfig_ProxyHeaders_Server) ProtoMessage() {}
 
 func (x *ProxyConfig_ProxyHeaders_Server) ProtoReflect() protoreflect.Message {
-	mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[23]
+	mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[25]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2391,7 +2523,7 @@ func (x *ProxyConfig_ProxyHeaders_Server) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProxyConfig_ProxyHeaders_Server.ProtoReflect.Descriptor instead.
 func (*ProxyConfig_ProxyHeaders_Server) Descriptor() ([]byte, []int) {
-	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 3, 0}
+	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 4, 0}
 }
 
 func (x *ProxyConfig_ProxyHeaders_Server) GetDisabled() *wrappers.BoolValue {
@@ -2419,7 +2551,7 @@ type ProxyConfig_ProxyHeaders_RequestId struct {
 func (x *ProxyConfig_ProxyHeaders_RequestId) Reset() {
 	*x = ProxyConfig_ProxyHeaders_RequestId{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[24]
+		mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[26]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2432,7 +2564,7 @@ func (x *ProxyConfig_ProxyHeaders_RequestId) String() string {
 func (*ProxyConfig_ProxyHeaders_RequestId) ProtoMessage() {}
 
 func (x *ProxyConfig_ProxyHeaders_RequestId) ProtoReflect() protoreflect.Message {
-	mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[24]
+	mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[26]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2445,7 +2577,7 @@ func (x *ProxyConfig_ProxyHeaders_RequestId) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use ProxyConfig_ProxyHeaders_RequestId.ProtoReflect.Descriptor instead.
 func (*ProxyConfig_ProxyHeaders_RequestId) Descriptor() ([]byte, []int) {
-	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 3, 1}
+	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 4, 1}
 }
 
 func (x *ProxyConfig_ProxyHeaders_RequestId) GetDisabled() *wrappers.BoolValue {
@@ -2466,7 +2598,7 @@ type ProxyConfig_ProxyHeaders_AttemptCount struct {
 func (x *ProxyConfig_ProxyHeaders_AttemptCount) Reset() {
 	*x = ProxyConfig_ProxyHeaders_AttemptCount{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[25]
+		mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[27]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2479,7 +2611,7 @@ func (x *ProxyConfig_ProxyHeaders_AttemptCount) String() string {
 func (*ProxyConfig_ProxyHeaders_AttemptCount) ProtoMessage() {}
 
 func (x *ProxyConfig_ProxyHeaders_AttemptCount) ProtoReflect() protoreflect.Message {
-	mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[25]
+	mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[27]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2492,7 +2624,7 @@ func (x *ProxyConfig_ProxyHeaders_AttemptCount) ProtoReflect() protoreflect.Mess
 
 // Deprecated: Use ProxyConfig_ProxyHeaders_AttemptCount.ProtoReflect.Descriptor instead.
 func (*ProxyConfig_ProxyHeaders_AttemptCount) Descriptor() ([]byte, []int) {
-	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 3, 2}
+	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 4, 2}
 }
 
 func (x *ProxyConfig_ProxyHeaders_AttemptCount) GetDisabled() *wrappers.BoolValue {
@@ -2513,7 +2645,7 @@ type ProxyConfig_ProxyHeaders_EnvoyDebugHeaders struct {
 func (x *ProxyConfig_ProxyHeaders_EnvoyDebugHeaders) Reset() {
 	*x = ProxyConfig_ProxyHeaders_EnvoyDebugHeaders{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[26]
+		mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[28]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2526,7 +2658,7 @@ func (x *ProxyConfig_ProxyHeaders_EnvoyDebugHeaders) String() string {
 func (*ProxyConfig_ProxyHeaders_EnvoyDebugHeaders) ProtoMessage() {}
 
 func (x *ProxyConfig_ProxyHeaders_EnvoyDebugHeaders) ProtoReflect() protoreflect.Message {
-	mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[26]
+	mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[28]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2539,7 +2671,7 @@ func (x *ProxyConfig_ProxyHeaders_EnvoyDebugHeaders) ProtoReflect() protoreflect
 
 // Deprecated: Use ProxyConfig_ProxyHeaders_EnvoyDebugHeaders.ProtoReflect.Descriptor instead.
 func (*ProxyConfig_ProxyHeaders_EnvoyDebugHeaders) Descriptor() ([]byte, []int) {
-	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 3, 3}
+	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 4, 3}
 }
 
 func (x *ProxyConfig_ProxyHeaders_EnvoyDebugHeaders) GetDisabled() *wrappers.BoolValue {
@@ -2560,7 +2692,7 @@ type ProxyConfig_ProxyHeaders_MetadataExchangeHeaders struct {
 func (x *ProxyConfig_ProxyHeaders_MetadataExchangeHeaders) Reset() {
 	*x = ProxyConfig_ProxyHeaders_MetadataExchangeHeaders{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[27]
+		mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[29]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2573,7 +2705,7 @@ func (x *ProxyConfig_ProxyHeaders_MetadataExchangeHeaders) String() string {
 func (*ProxyConfig_ProxyHeaders_MetadataExchangeHeaders) ProtoMessage() {}
 
 func (x *ProxyConfig_ProxyHeaders_MetadataExchangeHeaders) ProtoReflect() protoreflect.Message {
-	mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[27]
+	mi := &file_mesh_v1alpha1_proxy_proto_msgTypes[29]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2586,7 +2718,7 @@ func (x *ProxyConfig_ProxyHeaders_MetadataExchangeHeaders) ProtoReflect() protor
 
 // Deprecated: Use ProxyConfig_ProxyHeaders_MetadataExchangeHeaders.ProtoReflect.Descriptor instead.
 func (*ProxyConfig_ProxyHeaders_MetadataExchangeHeaders) Descriptor() ([]byte, []int) {
-	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 3, 4}
+	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 4, 4}
 }
 
 func (x *ProxyConfig_ProxyHeaders_MetadataExchangeHeaders) GetMode() ProxyConfig_ProxyHeaders_MetadataExchangeMode {
@@ -2771,7 +2903,7 @@ var file_mesh_v1alpha1_proxy_proto_rawDesc = []byte{
 	0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
 	0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x09, 0x70, 0x6f, 0x6c,
 	0x6c, 0x44, 0x65, 0x6c, 0x61, 0x79, 0x42, 0x0a, 0x0a, 0x08, 0x70, 0x72, 0x6f, 0x76, 0x69, 0x64,
-	0x65, 0x72, 0x22, 0xc4, 0x1f, 0x0a, 0x0b, 0x50, 0x72, 0x6f, 0x78, 0x79, 0x43, 0x6f, 0x6e, 0x66,
+	0x65, 0x72, 0x22, 0xd4, 0x21, 0x0a, 0x0b, 0x50, 0x72, 0x6f, 0x78, 0x79, 0x43, 0x6f, 0x6e, 0x66,
 	0x69, 0x67, 0x12, 0x1f, 0x0a, 0x0b, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x5f, 0x70, 0x61, 0x74,
 	0x68, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x50,
 	0x61, 0x74, 0x68, 0x12, 0x1f, 0x0a, 0x0b, 0x62, 0x69, 0x6e, 0x61, 0x72, 0x79, 0x5f, 0x70, 0x61,
@@ -2873,63 +3005,80 @@ var file_mesh_v1alpha1_proxy_proto_rawDesc = []byte{
 	0x70, 0x6f, 0x72, 0x74, 0x18, 0x1a, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0a, 0x73, 0x74, 0x61, 0x74,
 	0x75, 0x73, 0x50, 0x6f, 0x72, 0x74, 0x12, 0x26, 0x0a, 0x0f, 0x65, 0x78, 0x74, 0x72, 0x61, 0x5f,
 	0x73, 0x74, 0x61, 0x74, 0x5f, 0x74, 0x61, 0x67, 0x73, 0x18, 0x1b, 0x20, 0x03, 0x28, 0x09, 0x52,
-	0x0d, 0x65, 0x78, 0x74, 0x72, 0x61, 0x53, 0x74, 0x61, 0x74, 0x54, 0x61, 0x67, 0x73, 0x12, 0x48,
-	0x0a, 0x10, 0x67, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x5f, 0x74, 0x6f, 0x70, 0x6f, 0x6c, 0x6f,
-	0x67, 0x79, 0x18, 0x1c, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f,
-	0x2e, 0x6d, 0x65, 0x73, 0x68, 0x2e, 0x76, 0x31, 0x61, 0x6c, 0x70, 0x68, 0x61, 0x31, 0x2e, 0x54,
-	0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x52, 0x0f, 0x67, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79,
-	0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x12, 0x57, 0x0a, 0x1a, 0x74, 0x65, 0x72, 0x6d,
-	0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x64, 0x72, 0x61, 0x69, 0x6e, 0x5f, 0x64, 0x75,
-	0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x1d, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67,
-	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44,
-	0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x18, 0x74, 0x65, 0x72, 0x6d, 0x69, 0x6e, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x44, 0x72, 0x61, 0x69, 0x6e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x12, 0x17, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x68, 0x5f, 0x69, 0x64, 0x18, 0x1e, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x06, 0x6d, 0x65, 0x73, 0x68, 0x49, 0x64, 0x12, 0x52, 0x0a, 0x0f, 0x72, 0x65,
-	0x61, 0x64, 0x69, 0x6e, 0x65, 0x73, 0x73, 0x5f, 0x70, 0x72, 0x6f, 0x62, 0x65, 0x18, 0x1f, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x6e, 0x65, 0x74, 0x77,
-	0x6f, 0x72, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x61, 0x6c, 0x70, 0x68, 0x61, 0x33, 0x2e,
-	0x52, 0x65, 0x61, 0x64, 0x69, 0x6e, 0x65, 0x73, 0x73, 0x50, 0x72, 0x6f, 0x62, 0x65, 0x52, 0x0e,
-	0x72, 0x65, 0x61, 0x64, 0x69, 0x6e, 0x65, 0x73, 0x73, 0x50, 0x72, 0x6f, 0x62, 0x65, 0x12, 0x62,
-	0x0a, 0x13, 0x70, 0x72, 0x6f, 0x78, 0x79, 0x5f, 0x73, 0x74, 0x61, 0x74, 0x73, 0x5f, 0x6d, 0x61,
-	0x74, 0x63, 0x68, 0x65, 0x72, 0x18, 0x20, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x32, 0x2e, 0x69, 0x73,
-	0x74, 0x69, 0x6f, 0x2e, 0x6d, 0x65, 0x73, 0x68, 0x2e, 0x76, 0x31, 0x61, 0x6c, 0x70, 0x68, 0x61,
-	0x31, 0x2e, 0x50, 0x72, 0x6f, 0x78, 0x79, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2e, 0x50, 0x72,
-	0x6f, 0x78, 0x79, 0x53, 0x74, 0x61, 0x74, 0x73, 0x4d, 0x61, 0x74, 0x63, 0x68, 0x65, 0x72, 0x52,
-	0x11, 0x70, 0x72, 0x6f, 0x78, 0x79, 0x53, 0x74, 0x61, 0x74, 0x73, 0x4d, 0x61, 0x74, 0x63, 0x68,
-	0x65, 0x72, 0x12, 0x68, 0x0a, 0x23, 0x68, 0x6f, 0x6c, 0x64, 0x5f, 0x61, 0x70, 0x70, 0x6c, 0x69,
-	0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x75, 0x6e, 0x74, 0x69, 0x6c, 0x5f, 0x70, 0x72, 0x6f,
-	0x78, 0x79, 0x5f, 0x73, 0x74, 0x61, 0x72, 0x74, 0x73, 0x18, 0x21, 0x20, 0x01, 0x28, 0x0b, 0x32,
-	0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x42, 0x6f, 0x6f, 0x6c, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x52, 0x1f, 0x68, 0x6f, 0x6c,
-	0x64, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x55, 0x6e, 0x74, 0x69,
-	0x6c, 0x50, 0x72, 0x6f, 0x78, 0x79, 0x53, 0x74, 0x61, 0x72, 0x74, 0x73, 0x12, 0x2e, 0x0a, 0x13,
-	0x63, 0x61, 0x5f, 0x63, 0x65, 0x72, 0x74, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x73, 0x5f,
-	0x70, 0x65, 0x6d, 0x18, 0x22, 0x20, 0x03, 0x28, 0x09, 0x52, 0x11, 0x63, 0x61, 0x43, 0x65, 0x72,
-	0x74, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x73, 0x50, 0x65, 0x6d, 0x12, 0x3a, 0x0a, 0x05,
-	0x69, 0x6d, 0x61, 0x67, 0x65, 0x18, 0x23, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x69, 0x73,
-	0x74, 0x69, 0x6f, 0x2e, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76,
-	0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x72, 0x6f, 0x78, 0x79, 0x49, 0x6d, 0x61, 0x67,
-	0x65, 0x52, 0x05, 0x69, 0x6d, 0x61, 0x67, 0x65, 0x12, 0x59, 0x0a, 0x14, 0x70, 0x72, 0x69, 0x76,
-	0x61, 0x74, 0x65, 0x5f, 0x6b, 0x65, 0x79, 0x5f, 0x70, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72,
-	0x18, 0x26, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x6d,
-	0x65, 0x73, 0x68, 0x2e, 0x76, 0x31, 0x61, 0x6c, 0x70, 0x68, 0x61, 0x31, 0x2e, 0x50, 0x72, 0x69,
-	0x76, 0x61, 0x74, 0x65, 0x4b, 0x65, 0x79, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x52,
-	0x12, 0x70, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65, 0x4b, 0x65, 0x79, 0x50, 0x72, 0x6f, 0x76, 0x69,
-	0x64, 0x65, 0x72, 0x12, 0x52, 0x0a, 0x0d, 0x70, 0x72, 0x6f, 0x78, 0x79, 0x5f, 0x68, 0x65, 0x61,
-	0x64, 0x65, 0x72, 0x73, 0x18, 0x27, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2d, 0x2e, 0x69, 0x73, 0x74,
+	0x0d, 0x65, 0x78, 0x74, 0x72, 0x61, 0x53, 0x74, 0x61, 0x74, 0x54, 0x61, 0x67, 0x73, 0x12, 0x59,
+	0x0a, 0x12, 0x70, 0x72, 0x6f, 0x78, 0x79, 0x5f, 0x73, 0x74, 0x61, 0x74, 0x73, 0x5f, 0x63, 0x6f,
+	0x6e, 0x66, 0x69, 0x67, 0x18, 0x28, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2b, 0x2e, 0x69, 0x73, 0x74,
 	0x69, 0x6f, 0x2e, 0x6d, 0x65, 0x73, 0x68, 0x2e, 0x76, 0x31, 0x61, 0x6c, 0x70, 0x68, 0x61, 0x31,
 	0x2e, 0x50, 0x72, 0x6f, 0x78, 0x79, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2e, 0x50, 0x72, 0x6f,
-	0x78, 0x79, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x73, 0x52, 0x0c, 0x70, 0x72, 0x6f, 0x78, 0x79,
-	0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x73, 0x1a, 0x40, 0x0a, 0x12, 0x50, 0x72, 0x6f, 0x78, 0x79,
-	0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a,
-	0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12,
-	0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05,
-	0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x1a, 0x40, 0x0a, 0x12, 0x52, 0x75, 0x6e,
-	0x74, 0x69, 0x6d, 0x65, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12,
-	0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65,
-	0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x1a, 0x9e, 0x01, 0x0a, 0x11,
+	0x78, 0x79, 0x53, 0x74, 0x61, 0x74, 0x73, 0x52, 0x10, 0x70, 0x72, 0x6f, 0x78, 0x79, 0x53, 0x74,
+	0x61, 0x74, 0x73, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12, 0x48, 0x0a, 0x10, 0x67, 0x61, 0x74,
+	0x65, 0x77, 0x61, 0x79, 0x5f, 0x74, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x18, 0x1c, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x6d, 0x65, 0x73, 0x68,
+	0x2e, 0x76, 0x31, 0x61, 0x6c, 0x70, 0x68, 0x61, 0x31, 0x2e, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f,
+	0x67, 0x79, 0x52, 0x0f, 0x67, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x54, 0x6f, 0x70, 0x6f, 0x6c,
+	0x6f, 0x67, 0x79, 0x12, 0x57, 0x0a, 0x1a, 0x74, 0x65, 0x72, 0x6d, 0x69, 0x6e, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x5f, 0x64, 0x72, 0x61, 0x69, 0x6e, 0x5f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x18, 0x1d, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x52, 0x18, 0x74, 0x65, 0x72, 0x6d, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x44,
+	0x72, 0x61, 0x69, 0x6e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x17, 0x0a, 0x07,
+	0x6d, 0x65, 0x73, 0x68, 0x5f, 0x69, 0x64, 0x18, 0x1e, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6d,
+	0x65, 0x73, 0x68, 0x49, 0x64, 0x12, 0x52, 0x0a, 0x0f, 0x72, 0x65, 0x61, 0x64, 0x69, 0x6e, 0x65,
+	0x73, 0x73, 0x5f, 0x70, 0x72, 0x6f, 0x62, 0x65, 0x18, 0x1f, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29,
+	0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x69, 0x6e,
+	0x67, 0x2e, 0x76, 0x31, 0x61, 0x6c, 0x70, 0x68, 0x61, 0x33, 0x2e, 0x52, 0x65, 0x61, 0x64, 0x69,
+	0x6e, 0x65, 0x73, 0x73, 0x50, 0x72, 0x6f, 0x62, 0x65, 0x52, 0x0e, 0x72, 0x65, 0x61, 0x64, 0x69,
+	0x6e, 0x65, 0x73, 0x73, 0x50, 0x72, 0x6f, 0x62, 0x65, 0x12, 0x62, 0x0a, 0x13, 0x70, 0x72, 0x6f,
+	0x78, 0x79, 0x5f, 0x73, 0x74, 0x61, 0x74, 0x73, 0x5f, 0x6d, 0x61, 0x74, 0x63, 0x68, 0x65, 0x72,
+	0x18, 0x20, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x32, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x6d,
+	0x65, 0x73, 0x68, 0x2e, 0x76, 0x31, 0x61, 0x6c, 0x70, 0x68, 0x61, 0x31, 0x2e, 0x50, 0x72, 0x6f,
+	0x78, 0x79, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2e, 0x50, 0x72, 0x6f, 0x78, 0x79, 0x53, 0x74,
+	0x61, 0x74, 0x73, 0x4d, 0x61, 0x74, 0x63, 0x68, 0x65, 0x72, 0x52, 0x11, 0x70, 0x72, 0x6f, 0x78,
+	0x79, 0x53, 0x74, 0x61, 0x74, 0x73, 0x4d, 0x61, 0x74, 0x63, 0x68, 0x65, 0x72, 0x12, 0x68, 0x0a,
+	0x23, 0x68, 0x6f, 0x6c, 0x64, 0x5f, 0x61, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x5f, 0x75, 0x6e, 0x74, 0x69, 0x6c, 0x5f, 0x70, 0x72, 0x6f, 0x78, 0x79, 0x5f, 0x73, 0x74,
+	0x61, 0x72, 0x74, 0x73, 0x18, 0x21, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f,
+	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42, 0x6f, 0x6f,
+	0x6c, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x52, 0x1f, 0x68, 0x6f, 0x6c, 0x64, 0x41, 0x70, 0x70, 0x6c,
+	0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x55, 0x6e, 0x74, 0x69, 0x6c, 0x50, 0x72, 0x6f, 0x78,
+	0x79, 0x53, 0x74, 0x61, 0x72, 0x74, 0x73, 0x12, 0x2e, 0x0a, 0x13, 0x63, 0x61, 0x5f, 0x63, 0x65,
+	0x72, 0x74, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x73, 0x5f, 0x70, 0x65, 0x6d, 0x18, 0x22,
+	0x20, 0x03, 0x28, 0x09, 0x52, 0x11, 0x63, 0x61, 0x43, 0x65, 0x72, 0x74, 0x69, 0x66, 0x69, 0x63,
+	0x61, 0x74, 0x65, 0x73, 0x50, 0x65, 0x6d, 0x12, 0x3a, 0x0a, 0x05, 0x69, 0x6d, 0x61, 0x67, 0x65,
+	0x18, 0x23, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x6e,
+	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61,
+	0x31, 0x2e, 0x50, 0x72, 0x6f, 0x78, 0x79, 0x49, 0x6d, 0x61, 0x67, 0x65, 0x52, 0x05, 0x69, 0x6d,
+	0x61, 0x67, 0x65, 0x12, 0x59, 0x0a, 0x14, 0x70, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65, 0x5f, 0x6b,
+	0x65, 0x79, 0x5f, 0x70, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x18, 0x26, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x27, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x6d, 0x65, 0x73, 0x68, 0x2e, 0x76,
+	0x31, 0x61, 0x6c, 0x70, 0x68, 0x61, 0x31, 0x2e, 0x50, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65, 0x4b,
+	0x65, 0x79, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x52, 0x12, 0x70, 0x72, 0x69, 0x76,
+	0x61, 0x74, 0x65, 0x4b, 0x65, 0x79, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x12, 0x52,
+	0x0a, 0x0d, 0x70, 0x72, 0x6f, 0x78, 0x79, 0x5f, 0x68, 0x65, 0x61, 0x64, 0x65, 0x72, 0x73, 0x18,
+	0x27, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2d, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x6d, 0x65,
+	0x73, 0x68, 0x2e, 0x76, 0x31, 0x61, 0x6c, 0x70, 0x68, 0x61, 0x31, 0x2e, 0x50, 0x72, 0x6f, 0x78,
+	0x79, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2e, 0x50, 0x72, 0x6f, 0x78, 0x79, 0x48, 0x65, 0x61,
+	0x64, 0x65, 0x72, 0x73, 0x52, 0x0c, 0x70, 0x72, 0x6f, 0x78, 0x79, 0x48, 0x65, 0x61, 0x64, 0x65,
+	0x72, 0x73, 0x1a, 0x40, 0x0a, 0x12, 0x50, 0x72, 0x6f, 0x78, 0x79, 0x4d, 0x65, 0x74, 0x61, 0x64,
+	0x61, 0x74, 0x61, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61,
+	0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65,
+	0x3a, 0x02, 0x38, 0x01, 0x1a, 0x40, 0x0a, 0x12, 0x52, 0x75, 0x6e, 0x74, 0x69, 0x6d, 0x65, 0x56,
+	0x61, 0x6c, 0x75, 0x65, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65,
+	0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05,
+	0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c,
+	0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x1a, 0xb2, 0x01, 0x0a, 0x0a, 0x50, 0x72, 0x6f, 0x78, 0x79,
+	0x53, 0x74, 0x61, 0x74, 0x73, 0x12, 0x2e, 0x0a, 0x13, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x5f,
+	0x64, 0x65, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x5f, 0x74, 0x61, 0x67, 0x73, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x08, 0x52, 0x11, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x44, 0x65, 0x66, 0x61, 0x75, 0x6c,
+	0x74, 0x54, 0x61, 0x67, 0x73, 0x12, 0x43, 0x0a, 0x04, 0x74, 0x61, 0x67, 0x73, 0x18, 0x02, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x2f, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x6d, 0x65, 0x73, 0x68,
+	0x2e, 0x76, 0x31, 0x61, 0x6c, 0x70, 0x68, 0x61, 0x31, 0x2e, 0x50, 0x72, 0x6f, 0x78, 0x79, 0x43,
+	0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2e, 0x50, 0x72, 0x6f, 0x78, 0x79, 0x53, 0x74, 0x61, 0x74, 0x73,
+	0x2e, 0x54, 0x61, 0x67, 0x52, 0x04, 0x74, 0x61, 0x67, 0x73, 0x1a, 0x2f, 0x0a, 0x03, 0x54, 0x61,
+	0x67, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x72, 0x65, 0x67, 0x65, 0x78, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x72, 0x65, 0x67, 0x65, 0x78, 0x1a, 0x9e, 0x01, 0x0a, 0x11,
 	0x50, 0x72, 0x6f, 0x78, 0x79, 0x53, 0x74, 0x61, 0x74, 0x73, 0x4d, 0x61, 0x74, 0x63, 0x68, 0x65,
 	0x72, 0x12, 0x2d, 0x0a, 0x12, 0x69, 0x6e, 0x63, 0x6c, 0x75, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x70,
 	0x72, 0x65, 0x66, 0x69, 0x78, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52, 0x11, 0x69,
@@ -3069,7 +3218,7 @@ func file_mesh_v1alpha1_proxy_proto_rawDescGZIP() []byte {
 }
 
 var file_mesh_v1alpha1_proxy_proto_enumTypes = make([]protoimpl.EnumInfo, 6)
-var file_mesh_v1alpha1_proxy_proto_msgTypes = make([]protoimpl.MessageInfo, 28)
+var file_mesh_v1alpha1_proxy_proto_msgTypes = make([]protoimpl.MessageInfo, 30)
 var file_mesh_v1alpha1_proxy_proto_goTypes = []interface{}{
 	(AuthenticationPolicy)(0),                                // 0: istio.mesh.v1alpha1.AuthenticationPolicy
 	(ForwardClientCertDetails)(0),                            // 1: istio.mesh.v1alpha1.ForwardClientCertDetails
@@ -3098,21 +3247,23 @@ var file_mesh_v1alpha1_proxy_proto_goTypes = []interface{}{
 	(*PrivateKeyProvider_QAT)(nil),                           // 24: istio.mesh.v1alpha1.PrivateKeyProvider.QAT
 	nil,                                                      // 25: istio.mesh.v1alpha1.ProxyConfig.ProxyMetadataEntry
 	nil,                                                      // 26: istio.mesh.v1alpha1.ProxyConfig.RuntimeValuesEntry
-	(*ProxyConfig_ProxyStatsMatcher)(nil),                    // 27: istio.mesh.v1alpha1.ProxyConfig.ProxyStatsMatcher
-	(*ProxyConfig_ProxyHeaders)(nil),                         // 28: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders
-	(*ProxyConfig_ProxyHeaders_Server)(nil),                  // 29: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.Server
-	(*ProxyConfig_ProxyHeaders_RequestId)(nil),               // 30: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.RequestId
-	(*ProxyConfig_ProxyHeaders_AttemptCount)(nil),            // 31: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.AttemptCount
-	(*ProxyConfig_ProxyHeaders_EnvoyDebugHeaders)(nil),       // 32: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.EnvoyDebugHeaders
-	(*ProxyConfig_ProxyHeaders_MetadataExchangeHeaders)(nil), // 33: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.MetadataExchangeHeaders
-	(*v1alpha3.ClientTLSSettings)(nil),                       // 34: istio.networking.v1alpha3.ClientTLSSettings
-	(*duration.Duration)(nil),                                // 35: google.protobuf.Duration
-	(*wrappers.Int32Value)(nil),                              // 36: google.protobuf.Int32Value
-	(*v1alpha3.ReadinessProbe)(nil),                          // 37: istio.networking.v1alpha3.ReadinessProbe
-	(*wrappers.BoolValue)(nil),                               // 38: google.protobuf.BoolValue
-	(*v1beta1.ProxyImage)(nil),                               // 39: istio.networking.v1beta1.ProxyImage
-	(*v1alpha3.ConnectionPoolSettings_TCPSettings_TcpKeepalive)(nil), // 40: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive
-	(*wrappers.Int64Value)(nil),                                      // 41: google.protobuf.Int64Value
+	(*ProxyConfig_ProxyStats)(nil),                           // 27: istio.mesh.v1alpha1.ProxyConfig.ProxyStats
+	(*ProxyConfig_ProxyStatsMatcher)(nil),                    // 28: istio.mesh.v1alpha1.ProxyConfig.ProxyStatsMatcher
+	(*ProxyConfig_ProxyHeaders)(nil),                         // 29: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders
+	(*ProxyConfig_ProxyStats_Tag)(nil),                       // 30: istio.mesh.v1alpha1.ProxyConfig.ProxyStats.Tag
+	(*ProxyConfig_ProxyHeaders_Server)(nil),                  // 31: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.Server
+	(*ProxyConfig_ProxyHeaders_RequestId)(nil),               // 32: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.RequestId
+	(*ProxyConfig_ProxyHeaders_AttemptCount)(nil),            // 33: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.AttemptCount
+	(*ProxyConfig_ProxyHeaders_EnvoyDebugHeaders)(nil),       // 34: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.EnvoyDebugHeaders
+	(*ProxyConfig_ProxyHeaders_MetadataExchangeHeaders)(nil), // 35: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.MetadataExchangeHeaders
+	(*v1alpha3.ClientTLSSettings)(nil),                       // 36: istio.networking.v1alpha3.ClientTLSSettings
+	(*duration.Duration)(nil),                                // 37: google.protobuf.Duration
+	(*wrappers.Int32Value)(nil),                              // 38: google.protobuf.Int32Value
+	(*v1alpha3.ReadinessProbe)(nil),                          // 39: istio.networking.v1alpha3.ReadinessProbe
+	(*wrappers.BoolValue)(nil),                               // 40: google.protobuf.BoolValue
+	(*v1beta1.ProxyImage)(nil),                               // 41: istio.networking.v1beta1.ProxyImage
+	(*v1alpha3.ConnectionPoolSettings_TCPSettings_TcpKeepalive)(nil), // 42: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive
+	(*wrappers.Int64Value)(nil),                                      // 43: google.protobuf.Int64Value
 }
 var file_mesh_v1alpha1_proxy_proto_depIdxs = []int32{
 	12, // 0: istio.mesh.v1alpha1.Tracing.zipkin:type_name -> istio.mesh.v1alpha1.Tracing.Zipkin
@@ -3121,16 +3272,16 @@ var file_mesh_v1alpha1_proxy_proto_depIdxs = []int32{
 	15, // 3: istio.mesh.v1alpha1.Tracing.stackdriver:type_name -> istio.mesh.v1alpha1.Tracing.Stackdriver
 	16, // 4: istio.mesh.v1alpha1.Tracing.open_census_agent:type_name -> istio.mesh.v1alpha1.Tracing.OpenCensusAgent
 	21, // 5: istio.mesh.v1alpha1.Tracing.custom_tags:type_name -> istio.mesh.v1alpha1.Tracing.CustomTagsEntry
-	34, // 6: istio.mesh.v1alpha1.Tracing.tls_settings:type_name -> istio.networking.v1alpha3.ClientTLSSettings
+	36, // 6: istio.mesh.v1alpha1.Tracing.tls_settings:type_name -> istio.networking.v1alpha3.ClientTLSSettings
 	1,  // 7: istio.mesh.v1alpha1.Topology.forward_client_cert_details:type_name -> istio.mesh.v1alpha1.ForwardClientCertDetails
 	22, // 8: istio.mesh.v1alpha1.Topology.proxy_protocol:type_name -> istio.mesh.v1alpha1.Topology.ProxyProtocolConfiguration
 	23, // 9: istio.mesh.v1alpha1.PrivateKeyProvider.cryptomb:type_name -> istio.mesh.v1alpha1.PrivateKeyProvider.CryptoMb
 	24, // 10: istio.mesh.v1alpha1.PrivateKeyProvider.qat:type_name -> istio.mesh.v1alpha1.PrivateKeyProvider.QAT
 	3,  // 11: istio.mesh.v1alpha1.ProxyConfig.tracing_service_name:type_name -> istio.mesh.v1alpha1.ProxyConfig.TracingServiceName
-	35, // 12: istio.mesh.v1alpha1.ProxyConfig.drain_duration:type_name -> google.protobuf.Duration
-	35, // 13: istio.mesh.v1alpha1.ProxyConfig.discovery_refresh_delay:type_name -> google.protobuf.Duration
+	37, // 12: istio.mesh.v1alpha1.ProxyConfig.drain_duration:type_name -> google.protobuf.Duration
+	37, // 13: istio.mesh.v1alpha1.ProxyConfig.discovery_refresh_delay:type_name -> google.protobuf.Duration
 	0,  // 14: istio.mesh.v1alpha1.ProxyConfig.control_plane_auth_policy:type_name -> istio.mesh.v1alpha1.AuthenticationPolicy
-	36, // 15: istio.mesh.v1alpha1.ProxyConfig.concurrency:type_name -> google.protobuf.Int32Value
+	38, // 15: istio.mesh.v1alpha1.ProxyConfig.concurrency:type_name -> google.protobuf.Int32Value
 	4,  // 16: istio.mesh.v1alpha1.ProxyConfig.interception_mode:type_name -> istio.mesh.v1alpha1.ProxyConfig.InboundInterceptionMode
 	6,  // 17: istio.mesh.v1alpha1.ProxyConfig.tracing:type_name -> istio.mesh.v1alpha1.Tracing
 	7,  // 18: istio.mesh.v1alpha1.ProxyConfig.sds:type_name -> istio.mesh.v1alpha1.SDS
@@ -3138,42 +3289,44 @@ var file_mesh_v1alpha1_proxy_proto_depIdxs = []int32{
 	11, // 20: istio.mesh.v1alpha1.ProxyConfig.envoy_metrics_service:type_name -> istio.mesh.v1alpha1.RemoteService
 	25, // 21: istio.mesh.v1alpha1.ProxyConfig.proxy_metadata:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyMetadataEntry
 	26, // 22: istio.mesh.v1alpha1.ProxyConfig.runtime_values:type_name -> istio.mesh.v1alpha1.ProxyConfig.RuntimeValuesEntry
-	8,  // 23: istio.mesh.v1alpha1.ProxyConfig.gateway_topology:type_name -> istio.mesh.v1alpha1.Topology
-	35, // 24: istio.mesh.v1alpha1.ProxyConfig.termination_drain_duration:type_name -> google.protobuf.Duration
-	37, // 25: istio.mesh.v1alpha1.ProxyConfig.readiness_probe:type_name -> istio.networking.v1alpha3.ReadinessProbe
-	27, // 26: istio.mesh.v1alpha1.ProxyConfig.proxy_stats_matcher:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyStatsMatcher
-	38, // 27: istio.mesh.v1alpha1.ProxyConfig.hold_application_until_proxy_starts:type_name -> google.protobuf.BoolValue
-	39, // 28: istio.mesh.v1alpha1.ProxyConfig.image:type_name -> istio.networking.v1beta1.ProxyImage
-	9,  // 29: istio.mesh.v1alpha1.ProxyConfig.private_key_provider:type_name -> istio.mesh.v1alpha1.PrivateKeyProvider
-	28, // 30: istio.mesh.v1alpha1.ProxyConfig.proxy_headers:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders
-	34, // 31: istio.mesh.v1alpha1.RemoteService.tls_settings:type_name -> istio.networking.v1alpha3.ClientTLSSettings
-	40, // 32: istio.mesh.v1alpha1.RemoteService.tcp_keepalive:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive
-	41, // 33: istio.mesh.v1alpha1.Tracing.Stackdriver.max_number_of_attributes:type_name -> google.protobuf.Int64Value
-	41, // 34: istio.mesh.v1alpha1.Tracing.Stackdriver.max_number_of_annotations:type_name -> google.protobuf.Int64Value
-	41, // 35: istio.mesh.v1alpha1.Tracing.Stackdriver.max_number_of_message_events:type_name -> google.protobuf.Int64Value
-	2,  // 36: istio.mesh.v1alpha1.Tracing.OpenCensusAgent.context:type_name -> istio.mesh.v1alpha1.Tracing.OpenCensusAgent.TraceContext
-	18, // 37: istio.mesh.v1alpha1.Tracing.CustomTag.literal:type_name -> istio.mesh.v1alpha1.Tracing.Literal
-	19, // 38: istio.mesh.v1alpha1.Tracing.CustomTag.environment:type_name -> istio.mesh.v1alpha1.Tracing.Environment
-	20, // 39: istio.mesh.v1alpha1.Tracing.CustomTag.header:type_name -> istio.mesh.v1alpha1.Tracing.RequestHeader
-	17, // 40: istio.mesh.v1alpha1.Tracing.CustomTagsEntry.value:type_name -> istio.mesh.v1alpha1.Tracing.CustomTag
-	35, // 41: istio.mesh.v1alpha1.PrivateKeyProvider.CryptoMb.poll_delay:type_name -> google.protobuf.Duration
-	35, // 42: istio.mesh.v1alpha1.PrivateKeyProvider.QAT.poll_delay:type_name -> google.protobuf.Duration
-	1,  // 43: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.forwarded_client_cert:type_name -> istio.mesh.v1alpha1.ForwardClientCertDetails
-	30, // 44: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.request_id:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.RequestId
-	29, // 45: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.server:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.Server
-	31, // 46: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.attempt_count:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.AttemptCount
-	32, // 47: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.envoy_debug_headers:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.EnvoyDebugHeaders
-	33, // 48: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.metadata_exchange_headers:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.MetadataExchangeHeaders
-	38, // 49: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.Server.disabled:type_name -> google.protobuf.BoolValue
-	38, // 50: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.RequestId.disabled:type_name -> google.protobuf.BoolValue
-	38, // 51: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.AttemptCount.disabled:type_name -> google.protobuf.BoolValue
-	38, // 52: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.EnvoyDebugHeaders.disabled:type_name -> google.protobuf.BoolValue
-	5,  // 53: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.MetadataExchangeHeaders.mode:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.MetadataExchangeMode
-	54, // [54:54] is the sub-list for method output_type
-	54, // [54:54] is the sub-list for method input_type
-	54, // [54:54] is the sub-list for extension type_name
-	54, // [54:54] is the sub-list for extension extendee
-	0,  // [0:54] is the sub-list for field type_name
+	27, // 23: istio.mesh.v1alpha1.ProxyConfig.proxy_stats_config:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyStats
+	8,  // 24: istio.mesh.v1alpha1.ProxyConfig.gateway_topology:type_name -> istio.mesh.v1alpha1.Topology
+	37, // 25: istio.mesh.v1alpha1.ProxyConfig.termination_drain_duration:type_name -> google.protobuf.Duration
+	39, // 26: istio.mesh.v1alpha1.ProxyConfig.readiness_probe:type_name -> istio.networking.v1alpha3.ReadinessProbe
+	28, // 27: istio.mesh.v1alpha1.ProxyConfig.proxy_stats_matcher:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyStatsMatcher
+	40, // 28: istio.mesh.v1alpha1.ProxyConfig.hold_application_until_proxy_starts:type_name -> google.protobuf.BoolValue
+	41, // 29: istio.mesh.v1alpha1.ProxyConfig.image:type_name -> istio.networking.v1beta1.ProxyImage
+	9,  // 30: istio.mesh.v1alpha1.ProxyConfig.private_key_provider:type_name -> istio.mesh.v1alpha1.PrivateKeyProvider
+	29, // 31: istio.mesh.v1alpha1.ProxyConfig.proxy_headers:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders
+	36, // 32: istio.mesh.v1alpha1.RemoteService.tls_settings:type_name -> istio.networking.v1alpha3.ClientTLSSettings
+	42, // 33: istio.mesh.v1alpha1.RemoteService.tcp_keepalive:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive
+	43, // 34: istio.mesh.v1alpha1.Tracing.Stackdriver.max_number_of_attributes:type_name -> google.protobuf.Int64Value
+	43, // 35: istio.mesh.v1alpha1.Tracing.Stackdriver.max_number_of_annotations:type_name -> google.protobuf.Int64Value
+	43, // 36: istio.mesh.v1alpha1.Tracing.Stackdriver.max_number_of_message_events:type_name -> google.protobuf.Int64Value
+	2,  // 37: istio.mesh.v1alpha1.Tracing.OpenCensusAgent.context:type_name -> istio.mesh.v1alpha1.Tracing.OpenCensusAgent.TraceContext
+	18, // 38: istio.mesh.v1alpha1.Tracing.CustomTag.literal:type_name -> istio.mesh.v1alpha1.Tracing.Literal
+	19, // 39: istio.mesh.v1alpha1.Tracing.CustomTag.environment:type_name -> istio.mesh.v1alpha1.Tracing.Environment
+	20, // 40: istio.mesh.v1alpha1.Tracing.CustomTag.header:type_name -> istio.mesh.v1alpha1.Tracing.RequestHeader
+	17, // 41: istio.mesh.v1alpha1.Tracing.CustomTagsEntry.value:type_name -> istio.mesh.v1alpha1.Tracing.CustomTag
+	37, // 42: istio.mesh.v1alpha1.PrivateKeyProvider.CryptoMb.poll_delay:type_name -> google.protobuf.Duration
+	37, // 43: istio.mesh.v1alpha1.PrivateKeyProvider.QAT.poll_delay:type_name -> google.protobuf.Duration
+	30, // 44: istio.mesh.v1alpha1.ProxyConfig.ProxyStats.tags:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyStats.Tag
+	1,  // 45: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.forwarded_client_cert:type_name -> istio.mesh.v1alpha1.ForwardClientCertDetails
+	32, // 46: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.request_id:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.RequestId
+	31, // 47: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.server:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.Server
+	33, // 48: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.attempt_count:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.AttemptCount
+	34, // 49: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.envoy_debug_headers:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.EnvoyDebugHeaders
+	35, // 50: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.metadata_exchange_headers:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.MetadataExchangeHeaders
+	40, // 51: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.Server.disabled:type_name -> google.protobuf.BoolValue
+	40, // 52: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.RequestId.disabled:type_name -> google.protobuf.BoolValue
+	40, // 53: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.AttemptCount.disabled:type_name -> google.protobuf.BoolValue
+	40, // 54: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.EnvoyDebugHeaders.disabled:type_name -> google.protobuf.BoolValue
+	5,  // 55: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.MetadataExchangeHeaders.mode:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.MetadataExchangeMode
+	56, // [56:56] is the sub-list for method output_type
+	56, // [56:56] is the sub-list for method input_type
+	56, // [56:56] is the sub-list for extension type_name
+	56, // [56:56] is the sub-list for extension extendee
+	0,  // [0:56] is the sub-list for field type_name
 }
 
 func init() { file_mesh_v1alpha1_proxy_proto_init() }
@@ -3399,7 +3552,7 @@ func file_mesh_v1alpha1_proxy_proto_init() {
 			}
 		}
 		file_mesh_v1alpha1_proxy_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ProxyConfig_ProxyStatsMatcher); i {
+			switch v := v.(*ProxyConfig_ProxyStats); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3411,7 +3564,7 @@ func file_mesh_v1alpha1_proxy_proto_init() {
 			}
 		}
 		file_mesh_v1alpha1_proxy_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ProxyConfig_ProxyHeaders); i {
+			switch v := v.(*ProxyConfig_ProxyStatsMatcher); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3423,7 +3576,7 @@ func file_mesh_v1alpha1_proxy_proto_init() {
 			}
 		}
 		file_mesh_v1alpha1_proxy_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ProxyConfig_ProxyHeaders_Server); i {
+			switch v := v.(*ProxyConfig_ProxyHeaders); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3435,7 +3588,7 @@ func file_mesh_v1alpha1_proxy_proto_init() {
 			}
 		}
 		file_mesh_v1alpha1_proxy_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ProxyConfig_ProxyHeaders_RequestId); i {
+			switch v := v.(*ProxyConfig_ProxyStats_Tag); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3447,7 +3600,7 @@ func file_mesh_v1alpha1_proxy_proto_init() {
 			}
 		}
 		file_mesh_v1alpha1_proxy_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ProxyConfig_ProxyHeaders_AttemptCount); i {
+			switch v := v.(*ProxyConfig_ProxyHeaders_Server); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3459,7 +3612,7 @@ func file_mesh_v1alpha1_proxy_proto_init() {
 			}
 		}
 		file_mesh_v1alpha1_proxy_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ProxyConfig_ProxyHeaders_EnvoyDebugHeaders); i {
+			switch v := v.(*ProxyConfig_ProxyHeaders_RequestId); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3471,6 +3624,30 @@ func file_mesh_v1alpha1_proxy_proto_init() {
 			}
 		}
 		file_mesh_v1alpha1_proxy_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ProxyConfig_ProxyHeaders_AttemptCount); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_mesh_v1alpha1_proxy_proto_msgTypes[28].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ProxyConfig_ProxyHeaders_EnvoyDebugHeaders); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_mesh_v1alpha1_proxy_proto_msgTypes[29].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ProxyConfig_ProxyHeaders_MetadataExchangeHeaders); i {
 			case 0:
 				return &v.state
@@ -3509,7 +3686,7 @@ func file_mesh_v1alpha1_proxy_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_mesh_v1alpha1_proxy_proto_rawDesc,
 			NumEnums:      6,
-			NumMessages:   28,
+			NumMessages:   30,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

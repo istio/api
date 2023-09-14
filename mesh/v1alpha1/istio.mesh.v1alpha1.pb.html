@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 66
+number_of_entries: 68
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -2959,7 +2959,8 @@ No
 <p>An additional list of tags to extract from the in-proxy Istio telemetry. These extra tags can be
 added by configuring the telemetry extension. Each additional tag needs to be present in this list.
 Extra tags emitted by the telemetry extensions must be listed here so that they can be processed
-and exposed as Prometheus metrics.</p>
+and exposed as Prometheus metrics.
+deprecated: use proxy_stats_config instead.</p>
 
 </td>
 <td>
@@ -3401,6 +3402,48 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="ProxyConfig-ProxyStats">ProxyConfig.ProxyStats</h2>
+<section>
+<p>Proxy stats configuration.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProxyConfig-ProxyStats-enable_default_tags">
+<td><code>enableDefaultTags</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Use all default tag regexes specified in .
+These can be combined with custom tags specified</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-ProxyStats-tags">
+<td><code>tags</code></td>
+<td><code><a href="#ProxyConfig-ProxyStats-Tag">Tag[]</a></code></td>
+<td>
+<p>Tags can be added by configuring the telemetry extension. Each additional tag needs to be present in this list.
+Extra tags emitted by the telemetry extensions must be listed here so that they can be processed
+and exposed as Prometheus metrics.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="ProxyConfig-ProxyStatsMatcher">ProxyConfig.ProxyStatsMatcher</h2>
 <section>
 <p>Proxy stats name matchers for stats creation. Note this is in addition to
@@ -3540,6 +3583,47 @@ No
 <p>Controls Istio metadata exchange headers <code>X-Envoy-Peer-Metadata</code> and <code>X-Envoy-Peer-Metadata-Id</code>.
 By default, the behavior is unspecified.
 If IN_MESH, these headers will not be appended to outbound requests from sidecars to services not in-mesh.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ProxyConfig-ProxyStats-Tag">ProxyConfig.ProxyStats.Tag</h2>
+<section>
+<p>Designates a tag name and regex value pair.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProxyConfig-ProxyStats-Tag-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>Attaches an identifier to the tag values to identify the tag being in the sink.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-ProxyStats-Tag-regex">
+<td><code>regex</code></td>
+<td><code>string</code></td>
+<td>
+<p>Designates a tag to strip from the tag extracted name and provide as a named
+tag value for all statistics. This will only occur if any part of the name
+matches the regex provided with one or more capture groups.</p>
 
 </td>
 <td>
