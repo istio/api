@@ -510,7 +510,6 @@ message ProxyConfig {
   // added by configuring the telemetry extension. Each additional tag needs to be present in this list.
   // Extra tags emitted by the telemetry extensions must be listed here so that they can be processed
   // and exposed as Prometheus metrics.
-  // deprecated: use proxy_stats_config instead.
   repeated string extra_stat_tags = 27;
 
   // Proxy stats configuration.
