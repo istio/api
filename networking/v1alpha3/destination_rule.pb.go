@@ -2324,8 +2324,7 @@ func (x *LoadBalancerSettings_ConsistentHashLB_MagLev) GetTableSize() uint64 {
 }
 
 // Describes a HTTP cookie that will be used as the hash key for the
-// Consistent Hash load balancer. If the cookie is not present, it will
-// be generated.
+// Consistent Hash load balancer.
 type LoadBalancerSettings_ConsistentHashLB_HTTPCookie struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -2335,7 +2334,9 @@ type LoadBalancerSettings_ConsistentHashLB_HTTPCookie struct {
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// Path to set for the cookie.
 	Path string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
-	// Lifetime of the cookie.
+	// Lifetime of the cookie. If specified, a cookie with the TTL will be
+	// generated if the cookie is not present. If the TTL is present and zero,
+	// the generated cookie will be a session cookie.
 	Ttl *duration.Duration `protobuf:"bytes,3,opt,name=ttl,proto3" json:"ttl,omitempty"`
 }
 
