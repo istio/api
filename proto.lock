@@ -39645,13 +39645,7 @@
                       {
                         "id": 3,
                         "name": "ttl",
-                        "type": "google.protobuf.Duration",
-                        "options": [
-                          {
-                            "name": "(google.api.field_behavior)",
-                            "value": "REQUIRED"
-                          }
-                        ]
+                        "type": "google.protobuf.Duration"
                       }
                     ]
                   }
@@ -42648,13 +42642,7 @@
                       {
                         "id": 3,
                         "name": "ttl",
-                        "type": "google.protobuf.Duration",
-                        "options": [
-                          {
-                            "name": "(google.api.field_behavior)",
-                            "value": "REQUIRED"
-                          }
-                        ]
+                        "type": "google.protobuf.Duration"
                       }
                     ]
                   }

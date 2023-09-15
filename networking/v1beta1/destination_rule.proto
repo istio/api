@@ -540,15 +540,16 @@ message LoadBalancerSettings {
       uint64 table_size = 1;
     };
     // Describes a HTTP cookie that will be used as the hash key for the
-    // Consistent Hash load balancer. If the cookie is not present, it will
-    // be generated.
+    // Consistent Hash load balancer.
     message HTTPCookie {
       // Name of the cookie.
       string name = 1 [(google.api.field_behavior) = REQUIRED];
       // Path to set for the cookie.
       string path = 2;
-      // Lifetime of the cookie.
-      google.protobuf.Duration ttl = 3 [(google.api.field_behavior) = REQUIRED];
+      // Lifetime of the cookie. If specified, a cookie with the TTL will be
+      // generated if the cookie is not present. If the TTL is present and zero, 
+      // the generated cookie will be a session cookie.
+      google.protobuf.Duration ttl = 3;
     };
 
     // The hash key to use.
