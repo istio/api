@@ -864,11 +864,9 @@ type EnvoyFilter struct {
 	// Criteria used to select the specific set of pods/VMs on which
 	// this patch configuration should be applied. If omitted, the set
 	// of patches in this configuration will be applied to all workload
-	// instances in the same namespace.  If omitted, the `EnvoyFilter`
-	// patches will be applied to all workloads in the same
-	// namespace. If the `EnvoyFilter` is present in the config root
-	// namespace, it will be applied to all applicable workloads in any
-	// namespace.
+	// instances in the same namespace. If the `EnvoyFilter` is present
+	// in the config root namespace, it will be applied to all applicable
+	// workloads in any namespace.
 	WorkloadSelector *WorkloadSelector `protobuf:"bytes,3,opt,name=workload_selector,json=workloadSelector,proto3" json:"workload_selector,omitempty"`
 	// One or more patches with match conditions.
 	ConfigPatches []*EnvoyFilter_EnvoyConfigObjectPatch `protobuf:"bytes,4,rep,name=config_patches,json=configPatches,proto3" json:"config_patches,omitempty"`
