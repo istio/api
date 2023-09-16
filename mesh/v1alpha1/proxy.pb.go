@@ -946,6 +946,32 @@ type ProxyConfig struct {
 	// and exposed as Prometheus metrics.
 	ExtraStatTags []string `protobuf:"bytes,27,rep,name=extra_stat_tags,json=extraStatTags,proto3" json:"extra_stat_tags,omitempty"`
 	// Configuration for processing of stats.
+	// To enable all Envoy default tag regexes, For example:
+	//
+	// ```
+	// meshConfig:
+	//
+	//	proxyStatsConfig:
+	//	  enableDefaultTags: true
+	//
+	// ```
+	//
+	// To extract grpc tag, For example:
+	//
+	// ```
+	// meshConfig:
+	//
+	//	proxyStatsConfig:
+	//	  tags:
+	//	  - name: "envoy.cluster_name"
+	//	    regex: "^cluster\\.((.+?)\\.).+"
+	//	  - tag_name: envoy.grpc_bridge_service
+	//	    regex: "grpc\\.((.+)\\.).+?\\..+$"
+	//	 - tag_name: envoy.grpc_bridge_method
+	//	   regex: "grpc\\..*\\.((.+?)\\.).+$"
+	//
+	// ```
+	//
 	// $hide_from_docs
 	ProxyStatsConfig *ProxyConfig_ProxyStats `protobuf:"bytes,40,opt,name=proxy_stats_config,json=proxyStatsConfig,proto3" json:"proxy_stats_config,omitempty"`
 	// Topology encapsulates the configuration which describes where the proxy is
@@ -2191,7 +2217,7 @@ type ProxyConfig_ProxyStats struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Use all default tag regexes specified in .
+	// Use all default tag regexes specified in Envoy.
 	// These can be combined with custom tags specified
 	EnableDefaultTags bool `protobuf:"varint,1,opt,name=enable_default_tags,json=enableDefaultTags,proto3" json:"enable_default_tags,omitempty"`
 	// Tags can be added by configuring the telemetry extension. Each additional tag needs to be present in this list.

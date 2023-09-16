@@ -514,7 +514,7 @@ message ProxyConfig {
 
   // Proxy stats configuration.
   message ProxyStats {
-    // Use all default tag regexes specified in . 
+    // Use all default tag regexes specified in Envoy.
     // These can be combined with custom tags specified 
     bool enable_default_tags = 1;
 
@@ -535,6 +535,28 @@ message ProxyConfig {
   }
 
   // Configuration for processing of stats.
+  // To enable all Envoy default tag regexes, For example:
+  //
+  // ```
+  // meshConfig:
+  //   proxyStatsConfig:
+  //     enableDefaultTags: true
+  // ```
+  //
+  // To extract grpc tag, For example:
+  //
+  // ```
+  // meshConfig:
+  //   proxyStatsConfig:
+  //     tags:
+  //     - name: "envoy.cluster_name"
+  //       regex: "^cluster\\.((.+?)\\.).+"
+  //     - tag_name: envoy.grpc_bridge_service
+  //       regex: "grpc\\.((.+)\\.).+?\\..+$"
+  //    - tag_name: envoy.grpc_bridge_method
+  //      regex: "grpc\\..*\\.((.+?)\\.).+$"
+  // ```
+  //
   // $hide_from_docs
   ProxyStats proxy_stats_config = 40;
 
