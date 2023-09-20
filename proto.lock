@@ -38579,6 +38579,11 @@
                 "id": 8,
                 "name": "tls_settings",
                 "type": "istio.networking.v1alpha3.ClientTLSSettings"
+              },
+              {
+                "id": 10,
+                "name": "dns_settings",
+                "type": "DNSSettings"
               }
             ],
             "maps": [
@@ -38725,6 +38730,21 @@
                     "id": 2,
                     "name": "default_value",
                     "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "DNSSettings",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "refresh_rate",
+                    "type": "google.protobuf.Duration"
+                  },
+                  {
+                    "id": 2,
+                    "name": "respect_ttl",
+                    "type": "bool"
                   }
                 ]
               }
