@@ -39752,8 +39752,28 @@
                     "id": 7,
                     "name": "use_client_protocol",
                     "type": "bool"
+                  },
+                  {
+                    "id": 8,
+                    "name": "retry_budget",
+                    "type": "RetryBudget"
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "name": "RetryBudget",
+            "fields": [
+              {
+                "id": 1,
+                "name": "budget_percent",
+                "type": "Percent"
+              },
+              {
+                "id": 2,
+                "name": "min_retry_concurrency",
+                "type": "google.protobuf.UInt32Value"
               }
             ]
           },
@@ -42749,8 +42769,28 @@
                     "id": 7,
                     "name": "use_client_protocol",
                     "type": "bool"
+                  },
+                  {
+                    "id": 8,
+                    "name": "retry_budget",
+                    "type": "RetryBudget"
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "name": "RetryBudget",
+            "fields": [
+              {
+                "id": 1,
+                "name": "budget_percent",
+                "type": "Percent"
+              },
+              {
+                "id": 2,
+                "name": "min_retry_concurrency",
+                "type": "google.protobuf.UInt32Value"
               }
             ]
           },

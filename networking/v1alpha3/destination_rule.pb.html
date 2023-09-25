@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.DestinationRule
 aliases: [/docs/reference/config/networking/v1alpha3/destination-rule]
-number_of_entries: 23
+number_of_entries: 24
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -687,6 +687,48 @@ No
 <td><code><a href="#ConnectionPoolSettings-HTTPSettings">HTTPSettings</a></code></td>
 <td>
 <p>HTTP connection pool settings.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RetryBudget">RetryBudget</h2>
+<section>
+<p>Setting retry budget.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RetryBudget-budget_percent">
+<td><code>budgetPercent</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/virtual-service.html#Percent">Percent</a></code></td>
+<td>
+<p>Specifies the limit on concurrent retries as a percentage of the sum of active requests and active pending requests.
+For example, if there are 100 active requests and the budget_percent is set to 25, there may be 25 active retries.
+This parameter is optional. Defaults to 20%.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RetryBudget-min_retry_concurrency">
+<td><code>minRetryConcurrency</code></td>
+<td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
+<td>
+<p>Minimum number of active retries may never go below this number.
+This parameter is optional. Defaults to 3.</p>
 
 </td>
 <td>
@@ -1818,6 +1860,22 @@ No
 <p>If set to true, client protocol will be preserved while initiating connection to backend.
 Note that when this is set to true, h2_upgrade_policy will be ineffective i.e. the client
 connections will not be upgraded to http2.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ConnectionPoolSettings-HTTPSettings-retry_budget">
+<td><code>retryBudget</code></td>
+<td><code><a href="#RetryBudget">RetryBudget</a></code></td>
+<td>
+<p>Specifies a limit on concurrent retries in relation to the number of active requests. This parameter is optional.</p>
+<p><strong>Note</strong>:</p>
+<ul>
+<li>Retry policy need to be configured via <a href="https://istio.io/latest/docs/reference/config/networking/virtual-service/#HTTPRetry">VirtualService</a> resource.
+If RetryBudget is configured without VirtualService, failed request will not be retried.</li>
+</ul>
 
 </td>
 <td>
