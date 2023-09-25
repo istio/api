@@ -638,6 +638,39 @@ For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.</p>
 No
 </td>
 </tr>
+<tr id="MeshConfig-service_resolution_order">
+<td><code>serviceResolutionOrder</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>An ordered namespace list for service resolution. Similar to DNS resolution
+and envoy filter chain matching, progress down the list until a match is
+found. If no match is found then the hostname does not resolve.</p>
+<p>It’s recommended that users set:
+meshConfig:
+serviceResolutionOrder:</p>
+<ul>
+<li>&lsquo;.&rsquo;</li>
+</ul>
+<p>If serviceResolutionOrder is omitted ambient workloads will see this
+behavior as the default. For backwards compatability, sidecar workloads
+will see the following default:
+meshConfig:
+serviceResolutionOrder:</p>
+<ul>
+<li>&lsquo;.&rsquo;</li>
+<li>&lsquo;*&rsquo;</li>
+</ul>
+<p>Users can also set this proactively for migrations from classic to ambient
+Istio to protect workloads that may depend on the original (but insecure)
+global-by-default nature of ServiceEntry in classic Istio.</p>
+<p>With support for &lsquo;*&rsquo; there can still be conflicting ServiceEntry hosts;
+The tiebreak uses the oldest creation timestamp.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>

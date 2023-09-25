@@ -1174,8 +1174,33 @@ message MeshConfig {
   // For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.
   TLSConfig tls_defaults = 64;
 
+  // An ordered namespace list for service resolution. Similar to DNS resolution
+  // and envoy filter chain matching, progress down the list until a match is
+  // found. If no match is found then the hostname does not resolve.
+  //
+  // It’s recommended that users set:
+  // meshConfig:
+  //   serviceResolutionOrder:
+  //    - '.'
+  //
+  // If serviceResolutionOrder is omitted ambient workloads will see this
+  // behavior as the default. For backwards compatability, sidecar workloads
+  // will see the following default:
+  // meshConfig:
+  //   serviceResolutionOrder:
+  //    - '.'
+  //    - '*'
+  //
+  // Users can also set this proactively for migrations from classic to ambient
+  // Istio to protect workloads that may depend on the original (but insecure)
+  // global-by-default nature of ServiceEntry in classic Istio.
+  //
+  // With support for '*' there can still be conflicting ServiceEntry hosts;
+  // The tiebreak uses the oldest creation timestamp.
+  repeated string service_resolution_order = 66;
+
   // $hide_from_docs
-  // Next available field number: 66
+  // Next available field number: 67
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
