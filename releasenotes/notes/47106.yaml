@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: security
+issue:
+  - https://github.com/istio/istio/issues/47106
+
+releaseNotes:
+  - |
+    **Added** `service_resolution_order` to `MeshConfig` to add more controls over Istio DNS hostname resolution.
