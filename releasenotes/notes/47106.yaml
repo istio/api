@@ -6,4 +6,4 @@ issue:
 
 releaseNotes:
   - |
-    **Added** `service_resolution_order` to `MeshConfig` to add more controls over Istio DNS hostname resolution.
+    **Added** `customServiceResolutionPaths` to `MeshConfig` to add more controls over Istio DNS hostname resolution.

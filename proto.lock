@@ -37459,7 +37459,7 @@
               },
               {
                 "id": 66,
-                "name": "service_resolution_order",
+                "name": "custom_service_resolution_paths",
                 "type": "string",
                 "is_repeated": true
               }
