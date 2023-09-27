@@ -37459,7 +37459,7 @@
               },
               {
                 "id": 66,
-                "name": "custom_service_resolution_paths",
+                "name": "ambient_custom_service_resolution_paths",
                 "type": "string",
                 "is_repeated": true
               }

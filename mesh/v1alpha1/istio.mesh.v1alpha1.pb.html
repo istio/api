@@ -638,36 +638,41 @@ For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.</p>
 No
 </td>
 </tr>
-<tr id="MeshConfig-custom_service_resolution_paths">
-<td><code>customServiceResolutionPaths</code></td>
+<tr id="MeshConfig-ambient_custom_service_resolution_paths">
+<td><code>ambientCustomServiceResolutionPaths</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>An ordered namespace list for custom service resolution. Similar to DNS,
+<p>An ordered namespace list for ambient custom service resolution. Similar to DNS,
 progress down the list until a match is found. If no match is found then the
-hostname does not resolve. This does not affect namespaced-scoped services that
-cannot conflict (e.g. $namespace.$name.svc.* or $namespace.$name.svcentry.*)
-with other hosts.</p>
-<p>It’s recommended that users set:
+hostname does not resolve.</p>
+<p>Namespace-scoped services (i.e. $name.$namespace.svc.* as a k8s service or a
+ServiceEntry decorator to a k8s service) cannot conflict with other hosts.
+These services are not &ldquo;custom&rdquo;, hence ambient_custom_service_resolution_paths
+does not apply.</p>
+<p>For users looking for the safest behavior that&rsquo;s most compatible with an
+external-DNS solution (no per-namespace DNS; global DNS only) they can set:
 meshConfig:
-customServiceResolutionPaths:</p>
+ambientCustomServiceResolutionPaths:</p>
+<ul>
+<li>&lsquo;istio-system&rsquo; # or some other mesh admin protected namespace</li>
+</ul>
+<p>If omitted, this is the default behavior.</p>
+<p>For safe multi-tenancy and per-namespace DNS flexibility users can set:
+meshConfig:
+ambientCustomServiceResolutionPaths:</p>
 <ul>
 <li>&lsquo;.&rsquo; # local namespace</li>
 </ul>
-<h1 id="users-may-also-consider-setting-istio-system">users may also consider setting istio-system</h1>
-<p>If customServiceResolutionPaths is omitted ambient workloads will see the
-above behavior as the default. For backwards compatability, sidecar workloads
-will see the following default:
+<p>Note: INSECURE &ndash; tenants can hijack traffic destined for hostnames across
+namespace boundaries.
+For backwards compatability or classic to ambient migrations users may set:
 meshConfig:
-customServiceResolutionPaths:</p>
+ambientCustomServiceResolutionPaths:</p>
 <ul>
 <li>&lsquo;.&rsquo; # local namespace</li>
 <li>&lsquo;*&rsquo; # wildcard; any namespace</li>
 </ul>
-<p>Users can also set this proactively for migrations from classic to ambient
-Istio to protect workloads that may depend on the original (but insecure)
-global-by-default nature of ServiceEntry in classic Istio.</p>
-<p>With support for &lsquo;*&rsquo; there can still be conflicting ServiceEntry hosts;
-The tiebreak uses the oldest creation timestamp.</p>
+<p>Conflicting ServiceEntry hosts tiebreak uses the oldest creation timestamp.</p>
 
 </td>
 <td>
