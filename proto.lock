@@ -39050,11 +39050,6 @@
                 "fields": [
                   {
                     "id": 1,
-                    "name": "enable_default_tags",
-                    "type": "bool"
-                  },
-                  {
-                    "id": 2,
                     "name": "tags",
                     "type": "Tag",
                     "is_repeated": true

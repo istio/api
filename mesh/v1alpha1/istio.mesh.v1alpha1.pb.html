@@ -2959,7 +2959,35 @@ No
 <p>An additional list of tags to extract from the in-proxy Istio telemetry. These extra tags can be
 added by configuring the telemetry extension. Each additional tag needs to be present in this list.
 Extra tags emitted by the telemetry extensions must be listed here so that they can be processed
-and exposed as Prometheus metrics.</p>
+and exposed as Prometheus metrics.
+deprecated: use proxy_stats_config instead.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-proxy_stats_config">
+<td><code>proxyStatsConfig</code></td>
+<td><code><a href="#ProxyConfig-ProxyStats">ProxyStats</a></code></td>
+<td>
+<p>Configuration for processing of stats.
+To enable all Envoy default tag regexes, For example:</p>
+<pre><code>meshConfig:
+  proxyStatsConfig:
+    enableDefaultTags: true
+</code></pre>
+<p>To extract grpc tag, For example:</p>
+<pre><code>meshConfig:
+  proxyStatsConfig:
+    tags:
+    - name: &quot;envoy.cluster_name&quot;
+      regex: &quot;^cluster\\.((.+?)\\.).+&quot;
+    - tag_name: envoy.grpc_bridge_service
+      regex: &quot;grpc\\.((.+)\\.).+?\\..+$&quot;
+   - tag_name: envoy.grpc_bridge_method
+     regex: &quot;grpc\\..*\\.((.+?)\\.).+$&quot;
+</code></pre>
 
 </td>
 <td>
@@ -3415,25 +3443,14 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="ProxyConfig-ProxyStats-enable_default_tags">
-<td><code>enableDefaultTags</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Use all default tag regexes specified in Envoy.
-These can be combined with custom tags specified</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="ProxyConfig-ProxyStats-tags">
 <td><code>tags</code></td>
 <td><code><a href="#ProxyConfig-ProxyStats-Tag">Tag[]</a></code></td>
 <td>
 <p>Tags can be added by configuring the telemetry extension. Each additional tag needs to be present in this list.
 Extra tags emitted by the telemetry extensions must be listed here so that they can be processed
-and exposed as Prometheus metrics.</p>
+and exposed as Prometheus metrics.
+More details can be found in the <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/metrics/v3/stats.proto#config-metrics-v3-tagspecifier">documentation</a>.</p>
 
 </td>
 <td>

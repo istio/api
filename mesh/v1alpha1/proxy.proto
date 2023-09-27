@@ -510,13 +510,11 @@ message ProxyConfig {
   // added by configuring the telemetry extension. Each additional tag needs to be present in this list.
   // Extra tags emitted by the telemetry extensions must be listed here so that they can be processed
   // and exposed as Prometheus metrics.
+  // deprecated: use proxy_stats_config instead.
   repeated string extra_stat_tags = 27;
 
   // Proxy stats configuration.
   message ProxyStats {
-    // Use all default tag regexes specified in Envoy.
-    // These can be combined with custom tags specified 
-    bool enable_default_tags = 1;
 
     // Designates a tag name and regex value pair.
     message Tag {
@@ -531,7 +529,8 @@ message ProxyConfig {
     // Tags can be added by configuring the telemetry extension. Each additional tag needs to be present in this list.
     // Extra tags emitted by the telemetry extensions must be listed here so that they can be processed
     // and exposed as Prometheus metrics.
-    repeated Tag tags = 2;
+    // More details can be found in the [documentation](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/metrics/v3/stats.proto#config-metrics-v3-tagspecifier).
+    repeated Tag tags = 1;
   }
 
   // Configuration for processing of stats.
@@ -557,7 +556,6 @@ message ProxyConfig {
   //      regex: "grpc\\..*\\.((.+?)\\.).+$"
   // ```
   //
-  // $hide_from_docs
   ProxyStats proxy_stats_config = 40;
 
   // Topology encapsulates the configuration which describes where the proxy is
