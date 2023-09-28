@@ -684,7 +684,7 @@ message ServerTLSSettings {
   // For gateways running on Kubernetes, the name of the secret that
   // holds the TLS certs including the CA certificates. Applicable
   // only on Kubernetes. An Opaque secret should contain the following
-  // keys and values: `key: <privateKey>` and `cert: <serverCert>`.
+  // keys and values: `tls.key: <privateKey>` and `tls.crt: <serverCert>`.
   // For mutual TLS, `cacert: <CACertificate>` and `crl: <CertificateRevocationList>`
   // can be provided in the same secret or a separate secret named `<secret>-cacert`.
   // A TLS secret for server certificates with an additional `tls.ocsp-staple` key
