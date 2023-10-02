@@ -36547,7 +36547,13 @@
               {
                 "id": 2,
                 "name": "url",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               },
               {
                 "id": 3,
@@ -36647,7 +36653,13 @@
               {
                 "id": 1,
                 "name": "name",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               },
               {
                 "id": 3,
@@ -36671,6 +36683,9 @@
           },
           {
             "path": "type/v1beta1/selector.proto"
+          },
+          {
+            "path": "google/api/field_behavior.proto"
           }
         ],
         "package": {
@@ -48221,7 +48236,13 @@
               {
                 "id": 1,
                 "name": "number",
-                "type": "uint32"
+                "type": "uint32",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               }
             ]
           },
@@ -48249,6 +48270,11 @@
                 "type": "string"
               }
             ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/api/field_behavior.proto"
           }
         ],
         "package": {

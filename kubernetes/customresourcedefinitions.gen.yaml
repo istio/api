@@ -56,6 +56,8 @@ spec:
                 type: string
               imagePullSecret:
                 description: Credentials to use for OCI image pulling.
+                maxLength: 253
+                minLength: 1
                 type: string
               match:
                 description: Specifies the criteria to determine which traffic is
@@ -76,9 +78,16 @@ spec:
                       items:
                         properties:
                           number:
+                            maximum: 65535
+                            minimum: 1
                             type: integer
+                        required:
+                        - number
                         type: object
                       type: array
+                      x-kubernetes-list-map-keys:
+                      - number
+                      x-kubernetes-list-type: map
                   type: object
                 type: array
               phase:
@@ -97,6 +106,8 @@ spec:
               pluginName:
                 description: The plugin name to be used in the Envoy configuration
                   (used to be called `rootID`).
+                maxLength: 256
+                minLength: 1
                 type: string
               priority:
                 description: Determines ordering of `WasmPlugins` in the same `phase`.
@@ -116,6 +127,7 @@ spec:
               sha256:
                 description: SHA256 checksum that will be used to verify Wasm module
                   or OCI container.
+                pattern: (^$|^[a-f0-9]{64}$)
                 type: string
               targetRef:
                 properties:
@@ -137,7 +149,14 @@ spec:
                 type: string
               url:
                 description: URL of a Wasm module or OCI container.
+                minLength: 1
                 type: string
+                x-kubernetes-validations:
+                - message: url must have schema one of [http, https, file, oci]
+                  rule: 'isURL(self) ? (url(self).getScheme() in ['''', ''http'',
+                    ''https'', ''oci'', ''file'']) : (isURL(''http://'' + self) &&
+                    url(''http://'' +self).getScheme() in ['''', ''http'', ''https'',
+                    ''oci'', ''file''])'
               verificationKey:
                 type: string
               vmConfig:
@@ -149,25 +168,41 @@ spec:
                     items:
                       properties:
                         name:
-                          description: Required Name of the environment variable.
+                          description: Name of the environment variable.
+                          maxLength: 256
+                          minLength: 1
                           type: string
                         value:
                           description: Value for the environment variable.
+                          maxLength: 2048
                           type: string
                         valueFrom:
-                          description: Required Source for the environment variable's
-                            value.
+                          description: Source for the environment variable's value.
                           enum:
                           - INLINE
                           - HOST
                           type: string
+                      required:
+                      - name
                       type: object
+                      x-kubernetes-validations:
+                      - message: value may only be set when valueFrom is INLINE
+                        rule: '(has(self.valueFrom) ? self.valueFrom : '''') != ''HOST''
+                          || !has(self.value)'
+                    maxItems: 256
                     type: array
+                    x-kubernetes-list-map-keys:
+                    - name
+                    x-kubernetes-list-type: map
                 type: object
+            required:
+            - url
             type: object
           status:
             type: object
             x-kubernetes-preserve-unknown-fields: true
+        required:
+        - spec
         type: object
     served: true
     storage: true
