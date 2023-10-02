@@ -257,18 +257,18 @@ type PolicyTargetReference struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// $hide_from_docs
 	// group is the group of the target resource.
-	// $hide_from_docs
 	Group string `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
+	// $hide_from_docs
 	// kind is kind of the target resource.
-	// $hide_from_docs
 	Kind string `protobuf:"bytes,2,opt,name=kind,proto3" json:"kind,omitempty"`
-	// name is the name of the target resource.
 	// $hide_from_docs
+	// name is the name of the target resource.
 	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	// $hide_from_docs
 	// namespace is the namespace of the referent. When unspecified, the local
 	// namespace is inferred.
-	// $hide_from_docs
 	Namespace string `protobuf:"bytes,4,opt,name=namespace,proto3" json:"namespace,omitempty"`
 }
 
