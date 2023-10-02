@@ -645,6 +645,7 @@ message HTTPRoute {
   // Use of integer `mirror_percent` value is deprecated. Use the
   // double `mirror_percentage` field instead
   // $hide_from_docs
+  // +kubebuilder:altName=mirror_percent
   google.protobuf.UInt32Value mirror_percent = 18 [deprecated=true];
 
   // Percentage of the traffic to be mirrored by the `mirror` field.

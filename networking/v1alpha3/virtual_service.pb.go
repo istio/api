@@ -863,6 +863,7 @@ type HTTPRoute struct {
 	// Use of integer `mirror_percent` value is deprecated. Use the
 	// double `mirror_percentage` field instead
 	// $hide_from_docs
+	// +kubebuilder:altName=mirror_percent
 	//
 	// Deprecated: Marked as deprecated in networking/v1alpha3/virtual_service.proto.
 	MirrorPercent *wrappers.UInt32Value `protobuf:"bytes,18,opt,name=mirror_percent,json=mirrorPercent,proto3" json:"mirror_percent,omitempty"`

@@ -25,7 +25,6 @@ repo_dir := .
 protolock = protolock
 annotations_prep = annotations_prep
 htmlproofer = htmlproofer
-cue = cue-gen -paths=common-protos
 
 #####################
 # Generation Rules

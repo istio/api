@@ -40,6 +40,3 @@ buf generate --template buf.gen-noncrd.yaml \
 # These plugins are sent to Envoy, which uses golang/protobuf, so do not use gogo
 buf generate --template buf.gen-golang.yaml \
   --path envoy
-
-# Generate CRDs
-cue-gen -paths=common-protos -f=./cue.yaml --crd=true -snake=jwksUri,apiKeys,apiSpecs,includedPaths,jwtHeaders,triggerRules,excludedPaths,mirrorPercent

@@ -113,6 +113,7 @@ type JWTRule struct {
 	// Example: `https://www.googleapis.com/oauth2/v1/certs`
 	//
 	// Note: Only one of `jwksUri` and `jwks` should be used.
+	// +kubebuilder:altName=jwks_uri
 	JwksUri string `protobuf:"bytes,3,opt,name=jwks_uri,json=jwksUri,proto3" json:"jwks_uri,omitempty"`
 	// JSON Web Key Set of public keys to validate signature of the JWT.
 	// See https://auth0.com/docs/jwks.

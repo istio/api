@@ -1,7 +1,0 @@
-# Cuelang configuration to generate OpenAPI schema for Istio configs.
-
-module: istio.io/api
-
-openapi:
-  selfContained: true
-  fieldFilter: "min.*|max.*"
