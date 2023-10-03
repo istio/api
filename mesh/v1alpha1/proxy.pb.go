@@ -949,14 +949,6 @@ type ProxyConfig struct {
 	// Configuration for processing of stats.
 	// To enable all Envoy default tag regexes, For example:
 	//
-	// ```
-	// meshConfig:
-	//
-	//	proxyStatsConfig:
-	//	  enableDefaultTags: true
-	//
-	// ```
-	//
 	// To extract grpc tag, For example:
 	//
 	// ```
