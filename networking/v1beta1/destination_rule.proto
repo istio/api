@@ -1024,7 +1024,7 @@ message ClientTLSSettings {
 
   // Indicates whether connections to this port should be secured
   // using TLS. The value of this field determines how TLS is enforced.
-  TLSmode mode = 1 [(google.api.field_behavior) = REQUIRED];
+  TLSmode mode = 1;
 
   // REQUIRED if mode is `MUTUAL`. The path to the file holding the
   // client-side TLS certificate to use.

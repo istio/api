@@ -545,7 +545,7 @@ message Sidecar {
 // traffic listener on the sidecar proxy attached to a workload instance.
 message IstioIngressListener {
   // The port associated with the listener.
-  Port port = 1 [(google.api.field_behavior) = REQUIRED];
+  SidecarPort port = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The IP(IPv4 or IPv6) to which the listener should be bound.
   // Unix domain socket addresses are not allowed in
@@ -567,7 +567,7 @@ message IstioIngressListener {
   // `127.0.0.1:PORT`, `[::1]:PORT` (forward to localhost),
   // `0.0.0.0:PORT`, `[::]:PORT` (forward to the instance IP),
   // or `unix:///path/to/socket` (forward to Unix domain socket).
-  string default_endpoint = 4 [(google.api.field_behavior) = REQUIRED];
+  string default_endpoint = 4;
 
   reserved "localhost_client_tls";
   reserved 5, 6;
@@ -590,7 +590,7 @@ message IstioEgressListener {
   // specific ports while others have no port, the hosts exposed on a
   // listener port will be based on the listener with the most specific
   // port.
-  Port port = 1;
+  SidecarPort port = 1;
 
   // The IP(IPv4 or IPv6) or the Unix domain socket to which the listener should be bound
   // to. Port MUST be specified if bind is not empty. Format: IPv4 or IPv6 address formats or
@@ -653,7 +653,7 @@ message WorkloadSelector {
   // on which the configuration should be applied. The scope of
   // label search is restricted to the configuration namespace in which the
   // the resource is present.
-  map<string, string> labels = 1 [(google.api.field_behavior) = REQUIRED];
+  map<string, string> labels = 1;
 
   // $hide_from_docs
   // other forms of identification supplied by the proxy
@@ -714,4 +714,24 @@ enum CaptureMode {
   // to ensure that the listener port is not in use by other processes on
   // the host.
   NONE = 2;
+}
+
+// Port describes the properties of a specific port of a service.
+message SidecarPort {
+  // A valid non-negative integer port number.
+  uint32 number = 1;
+
+  // The protocol exposed on the port.
+  // MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS.
+  // TLS can be either used to terminate non-HTTP based connections on a specific port
+  // or to route traffic based on SNI header to the destination without terminating the TLS connection.
+  string protocol = 2;
+
+  // Label assigned to the port.
+  string name = 3;
+
+  // Has no effect, only for backwards compatibility
+  // received. Applicable only when used with ServiceEntries.
+  // $hide_from_docs
+  uint32 target_port = 4 [deprecated=true];
 }

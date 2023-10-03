@@ -391,7 +391,7 @@ message Gateway {
   // resource must reside in the same namespace as the gateway workload
   // instance.
   // If selector is nil, the Gateway will be applied to all workloads.
-  map<string, string> selector = 2 [(google.api.field_behavior) = REQUIRED];
+  map<string, string> selector = 2;
 }
 
 // `Server` describes the properties of the proxy on a given load balancer
