@@ -12,6 +12,9 @@ plugins:
 - name: golang-deepcopy
   out: .
   opt: paths=source_relative
+- name: crd
+  out: .
+  strategy: all
 - name: golang-jsonshim
   out: .
   opt: paths=source_relative
