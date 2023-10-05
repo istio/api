@@ -516,6 +516,8 @@ message MeshConfig {
       SkyWalkingTracingProvider skywalking = 9;
       // Configures an OpenTelemetry tracing provider.
       OpenTelemetryTracingProvider opentelemetry = 15;
+      // Configures a Dynatrace-specific OpenTelemetry tracing provider.
+      DynatraceTracingProvider dynatrace = 16;
       // Configures a Prometheus metrics provider.
       PrometheusMetricsProvider prometheus = 10;
       // Configures an Envoy File Access Log provider.
@@ -528,7 +530,7 @@ message MeshConfig {
       EnvoyOpenTelemetryLogProvider envoy_otel_als = 14;
 
       // $hide_from_docs
-      // next id: 16
+      // next id: 17
     }
 
     message EnvoyExternalAuthorizationRequestBody {
@@ -860,6 +862,33 @@ message MeshConfig {
       // Optional. Controls the overall path length allowed in a reported span.
       // NOTE: currently only controls max length of the path tag.
       uint32 max_tag_length = 4;
+    }
+
+    // Defines configuration for a Dynatrace tracer.
+    message DynatraceTracingProvider {
+      // REQUIRED. Specifies the service for the Dynatrace API.
+      // The format is `<Hostname>`. The `<Hostname>` is a fully qualified host name of a
+      // service defined by a ServiceEntry.
+      //
+      // Example: "{your-environment-id}.live.dynatrace.com".
+      string service = 1;
+
+      // Optional. Specifies the port of the service.
+      uint32 port = 2;
+
+      // Optional. Controls the overall path length allowed in a reported span.
+      // NOTE: currently only controls max length of the path tag.
+      uint32 max_tag_length = 3;
+
+      // REQUIRED. Specifies the Dynatrace API access token.option
+      // NOTE: The token needs to have the scopes: `openTelemetryTrace.ingest` and `todo-scope`.
+      string api_token = 4;
+
+      // REQUIRED. Specifies the Dynatrace cluster identifier.
+      string cluster_id = 5;
+
+      // REQUIRED. Specifies the customer's tenant identifier.
+      string tenant_id = 6;
     }
 
     message PrometheusMetricsProvider {}

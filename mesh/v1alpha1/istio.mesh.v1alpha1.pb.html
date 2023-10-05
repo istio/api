@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 66
+number_of_entries: 67
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -960,6 +960,17 @@ No
 <td><code><a href="#MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider">OpenTelemetryTracingProvider (oneof)</a></code></td>
 <td>
 <p>Configures an OpenTelemetry tracing provider.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-dynatrace" class="oneof">
+<td><code>dynatrace</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-DynatraceTracingProvider">DynatraceTracingProvider (oneof)</a></code></td>
+<td>
+<p>Configures a Dynatrace-specific OpenTelemetry tracing provider.</p>
 
 </td>
 <td>
@@ -1926,6 +1937,94 @@ No
 <td>
 <p>Optional. Controls the overall path length allowed in a reported span.
 NOTE: currently only controls max length of the path tag.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-DynatraceTracingProvider">MeshConfig.ExtensionProvider.DynatraceTracingProvider</h2>
+<section>
+<p>Defines configuration for a Dynatrace tracer.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-DynatraceTracingProvider-service">
+<td><code>service</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED. Specifies the service for the Dynatrace API.
+The format is <code>&lt;Hostname&gt;</code>. The <code>&lt;Hostname&gt;</code> is a fully qualified host name of a
+service defined by a ServiceEntry.</p>
+<p>Example: &ldquo;{your-environment-id}.live.dynatrace.com&rdquo;.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-DynatraceTracingProvider-port">
+<td><code>port</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Optional. Specifies the port of the service.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-DynatraceTracingProvider-max_tag_length">
+<td><code>maxTagLength</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Optional. Controls the overall path length allowed in a reported span.
+NOTE: currently only controls max length of the path tag.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-DynatraceTracingProvider-api_token">
+<td><code>apiToken</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED. Specifies the Dynatrace API access token.option
+NOTE: The token needs to have the scopes: <code>openTelemetryTrace.ingest</code> and <code>todo-scope</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-DynatraceTracingProvider-cluster_id">
+<td><code>clusterId</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED. Specifies the Dynatrace cluster identifier.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-DynatraceTracingProvider-tenant_id">
+<td><code>tenantId</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED. Specifies the customer&rsquo;s tenant identifier.</p>
 
 </td>
 <td>
