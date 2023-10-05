@@ -14,7 +14,6 @@
 
 syntax = "proto3";
 
-import "google/api/field_behavior.proto";
 import "google/protobuf/struct.proto";
 import "networking/v1alpha3/sidecar.proto";
 
@@ -884,7 +883,7 @@ message EnvoyFilter {
   WorkloadSelector workload_selector = 3;
 
   // One or more patches with match conditions.
-  repeated EnvoyConfigObjectPatch config_patches = 4 [(google.api.field_behavior) = REQUIRED];
+  repeated EnvoyConfigObjectPatch config_patches = 4;
 
   // Priority defines the order in which patch sets are applied within a context.
   // When one patch depends on another patch, the order of patch application

@@ -13,8 +13,6 @@
 // limitations under the License.
 syntax = "proto3";
 
-import "google/api/field_behavior.proto";
-
 // $title: Workload Selector
 // $description: Definition of a workload selector.
 // $location: https://istio.io/docs/reference/config/type/workload-selector.html
@@ -33,7 +31,7 @@ message WorkloadSelector {
   // One or more labels that indicate a specific set of pods/VMs
   // on which a policy should be applied. The scope of label search is restricted to
   // the configuration namespace in which the resource is present.
-  map<string, string> match_labels = 1 [(google.api.field_behavior) = REQUIRED];
+  map<string, string> match_labels = 1;
 }
 
 // PortSelector is the criteria for specifying if a policy can be applied to 

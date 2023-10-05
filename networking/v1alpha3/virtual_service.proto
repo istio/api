@@ -1795,7 +1795,7 @@ message HTTPRetry {
   // or `per_try_timeout` is configured, the actual number of retries attempted also depends on
   // the specified request `timeout` and `per_try_timeout` values. MUST BE >= 0. If `0`, retries will be disabled.
   // The maximum possible number of requests made will be 1 + `attempts`.
-  int32 attempts = 1 [(google.api.field_behavior) = REQUIRED];
+  int32 attempts = 1;
 
   // Timeout per attempt for a given request, including the initial call and any retries. Format: 1h/1m/1s/1ms. MUST BE >=1ms.
   // Default is same value as request
@@ -1999,7 +1999,7 @@ message HTTPFaultInjection {
     oneof http_delay_type {
       // Add a fixed delay before forwarding the request. Format:
       // 1h/1m/1s/1ms. MUST be >=1ms.
-      google.protobuf.Duration fixed_delay = 2 [(google.api.field_behavior) = REQUIRED];
+      google.protobuf.Duration fixed_delay = 2;
 
       // $hide_from_docs
       google.protobuf.Duration exponential_delay = 3 ;
@@ -2070,7 +2070,7 @@ message HTTPFaultInjection {
 
     oneof error_type {
       // HTTP status code to use to abort the Http request.
-      int32 http_status = 2 [(google.api.field_behavior) = REQUIRED];
+      int32 http_status = 2;
 
       // GRPC status code to use to abort the request. The supported
       // codes are documented in https://github.com/grpc/grpc/blob/master/doc/statuscodes.md
