@@ -39690,6 +39690,11 @@
                     "id": 4,
                     "name": "max_connection_duration",
                     "type": "google.protobuf.Duration"
+                  },
+                  {
+                    "id": 5,
+                    "name": "max_concurrent_streams",
+                    "type": "int32"
                   }
                 ],
                 "messages": [
@@ -42662,6 +42667,11 @@
                     "id": 4,
                     "name": "max_connection_duration",
                     "type": "google.protobuf.Duration"
+                  },
+                  {
+                    "id": 5,
+                    "name": "max_concurrent_streams",
+                    "type": "int32"
                   }
                 ],
                 "messages": [

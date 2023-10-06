@@ -297,6 +297,11 @@ spec:
                                 connectTimeout:
                                   description: TCP connection timeout.
                                   type: string
+                                maxConcurrentStreams:
+                                  description: The maximum number of concurrent streams
+                                    allowed for a peer on one HTTP/2 connection.
+                                  format: int32
+                                  type: integer
                                 maxConnectionDuration:
                                   description: The maximum duration of a connection.
                                   type: string
@@ -579,6 +584,12 @@ spec:
                                       connectTimeout:
                                         description: TCP connection timeout.
                                         type: string
+                                      maxConcurrentStreams:
+                                        description: The maximum number of concurrent
+                                          streams allowed for a peer on one HTTP/2
+                                          connection.
+                                        format: int32
+                                        type: integer
                                       maxConnectionDuration:
                                         description: The maximum duration of a connection.
                                         type: string
@@ -990,6 +1001,11 @@ spec:
                           connectTimeout:
                             description: TCP connection timeout.
                             type: string
+                          maxConcurrentStreams:
+                            description: The maximum number of concurrent streams
+                              allowed for a peer on one HTTP/2 connection.
+                            format: int32
+                            type: integer
                           maxConnectionDuration:
                             description: The maximum duration of a connection.
                             type: string
@@ -1267,6 +1283,11 @@ spec:
                                 connectTimeout:
                                   description: TCP connection timeout.
                                   type: string
+                                maxConcurrentStreams:
+                                  description: The maximum number of concurrent streams
+                                    allowed for a peer on one HTTP/2 connection.
+                                  format: int32
+                                  type: integer
                                 maxConnectionDuration:
                                   description: The maximum duration of a connection.
                                   type: string
@@ -1732,6 +1753,11 @@ spec:
                                 connectTimeout:
                                   description: TCP connection timeout.
                                   type: string
+                                maxConcurrentStreams:
+                                  description: The maximum number of concurrent streams
+                                    allowed for a peer on one HTTP/2 connection.
+                                  format: int32
+                                  type: integer
                                 maxConnectionDuration:
                                   description: The maximum duration of a connection.
                                   type: string
@@ -2014,6 +2040,12 @@ spec:
                                       connectTimeout:
                                         description: TCP connection timeout.
                                         type: string
+                                      maxConcurrentStreams:
+                                        description: The maximum number of concurrent
+                                          streams allowed for a peer on one HTTP/2
+                                          connection.
+                                        format: int32
+                                        type: integer
                                       maxConnectionDuration:
                                         description: The maximum duration of a connection.
                                         type: string
@@ -2425,6 +2457,11 @@ spec:
                           connectTimeout:
                             description: TCP connection timeout.
                             type: string
+                          maxConcurrentStreams:
+                            description: The maximum number of concurrent streams
+                              allowed for a peer on one HTTP/2 connection.
+                            format: int32
+                            type: integer
                           maxConnectionDuration:
                             description: The maximum duration of a connection.
                             type: string
@@ -2702,6 +2739,11 @@ spec:
                                 connectTimeout:
                                   description: TCP connection timeout.
                                   type: string
+                                maxConcurrentStreams:
+                                  description: The maximum number of concurrent streams
+                                    allowed for a peer on one HTTP/2 connection.
+                                  format: int32
+                                  type: integer
                                 maxConnectionDuration:
                                   description: The maximum duration of a connection.
                                   type: string
