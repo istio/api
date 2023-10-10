@@ -481,6 +481,20 @@ detected defaults from the namespace-wide or the global default Sidecar.</p>
 No
 </td>
 </tr>
+<tr id="Sidecar-inbound_connection_pool">
+<td><code>inboundConnectionPool</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ConnectionPoolSettings">ConnectionPoolSettings</a></code></td>
+<td>
+<p>Settings controlling the volume of connections Envoy will accept from the network.
+This default will apply for all inbound listeners and can be overridden per-port
+in the <code>Ingress</code> field. This configuration mirrors the <code>DestinationRule</code>&rsquo;s
+<a href="https://istio.io/latest/docs/reference/config/networking/destination-rule/#ConnectionPoolSettings"><code>connectionPool</code></a> field.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="Sidecar-outbound_traffic_policy">
 <td><code>outboundTrafficPolicy</code></td>
 <td><code><a href="#OutboundTrafficPolicy">OutboundTrafficPolicy</a></code></td>
@@ -580,6 +594,20 @@ No
 <p>Set of TLS related options that will enable TLS termination on the
 sidecar for requests originating from outside the mesh.
 Currently supports only SIMPLE and MUTUAL TLS modes.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="IstioIngressListener-connection_pool">
+<td><code>connectionPool</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ConnectionPoolSettings">ConnectionPoolSettings</a></code></td>
+<td>
+<p>Settings controlling the volume of connections Envoy will accept from the network.
+This setting overrides the top-level default <code>inboundConnectionPool</code> to configure
+specific settings for this port. This configuration mirrors the <code>DestinationRule</code>&rsquo;s
+<a href="https://istio.io/latest/docs/reference/config/networking/destination-rule/#TrafficPolicy-PortTrafficPolicy"><code>PortTrafficPolicy.connectionPool</code></a> field.</p>
 
 </td>
 <td>

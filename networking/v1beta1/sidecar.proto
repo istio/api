@@ -15,6 +15,7 @@
 syntax = "proto3";
 
 import "google/api/field_behavior.proto";
+import "networking/v1beta1/destination_rule.proto";
 import "networking/v1beta1/gateway.proto";
 import "networking/v1beta1/virtual_service.proto";
 
@@ -452,6 +453,12 @@ message Sidecar {
   // detected defaults from the namespace-wide or the global default Sidecar.
   repeated IstioEgressListener egress = 3;
 
+  // Settings controlling the volume of connections Envoy will accept from the network.
+  // This default will apply for all inbound listeners and can be overridden per-port
+  // in the `Ingress` field. This configuration mirrors the `DestinationRule`'s
+  // [`connectionPool`](https://istio.io/latest/docs/reference/config/networking/destination-rule/#ConnectionPoolSettings) field.
+  ConnectionPoolSettings inbound_connection_pool = 7;
+
   // Configuration for the outbound traffic policy.  If your
   // application uses one or more external services that are not known
   // apriori, setting the policy to `ALLOW_ANY` will cause the
@@ -500,6 +507,12 @@ message IstioIngressListener {
   // sidecar for requests originating from outside the mesh.
   // Currently supports only SIMPLE and MUTUAL TLS modes.
   ServerTLSSettings tls = 7;
+
+  // Settings controlling the volume of connections Envoy will accept from the network.
+  // This setting overrides the top-level default `inboundConnectionPool` to configure
+  // specific settings for this port. This configuration mirrors the `DestinationRule`'s
+  // [`PortTrafficPolicy.connectionPool`](https://istio.io/latest/docs/reference/config/networking/destination-rule/#TrafficPolicy-PortTrafficPolicy) field.
+  ConnectionPoolSettings connection_pool = 8;
 }
 
 // `IstioEgressListener` specifies the properties of an outbound traffic
