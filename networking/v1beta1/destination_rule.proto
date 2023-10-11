@@ -694,6 +694,7 @@ message ConnectionPoolSettings {
     // is reached the connection will be closed. Duration must be at least 1ms.
     google.protobuf.Duration max_connection_duration = 4;
 
+    // $hide_from_docs
     // The maximum number of concurrent streams allowed for a peer on one HTTP/2 connection.
     // Defaults to 2^31-1. 
     int32 max_concurrent_streams = 5;

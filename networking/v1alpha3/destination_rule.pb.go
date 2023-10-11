@@ -2410,6 +2410,7 @@ type ConnectionPoolSettings_TCPSettings struct {
 	// was established. If not set, there is no max duration. When max_connection_duration
 	// is reached the connection will be closed. Duration must be at least 1ms.
 	MaxConnectionDuration *duration.Duration `protobuf:"bytes,4,opt,name=max_connection_duration,json=maxConnectionDuration,proto3" json:"max_connection_duration,omitempty"`
+	// $hide_from_docs
 	// The maximum number of concurrent streams allowed for a peer on one HTTP/2 connection.
 	// Defaults to 2^31-1.
 	MaxConcurrentStreams int32 `protobuf:"varint,5,opt,name=max_concurrent_streams,json=maxConcurrentStreams,proto3" json:"max_concurrent_streams,omitempty"`
