@@ -52,7 +52,6 @@ func TestCRDs(t *testing.T) {
 						t.Fatal(err)
 					}
 					res := v.ValidateCustomResource(obj)
-					t.Log(res)
 					if want.WantErr == "" {
 						// Want no error
 						if res != nil {
