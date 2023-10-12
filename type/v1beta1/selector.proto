@@ -103,20 +103,20 @@ enum WorkloadMode {
 // {{</tab>}}
 // {{</tabset>}}
 message PolicyTargetReference {
-  // group is the group of the target resource.
   // $hide_from_docs
+  // group is the group of the target resource.
   string group = 1;
 
-  // kind is kind of the target resource.
   // $hide_from_docs
+  // kind is kind of the target resource.
   string kind = 2;
 
-  // name is the name of the target resource.
   // $hide_from_docs
+  // name is the name of the target resource.
   string name = 3;
 
+  // $hide_from_docs
   // namespace is the namespace of the referent. When unspecified, the local
   // namespace is inferred.
-  // $hide_from_docs
   string namespace = 4;
 }
