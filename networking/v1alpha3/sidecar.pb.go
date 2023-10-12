@@ -655,6 +655,26 @@ type Sidecar struct {
 	// This default will apply for all inbound listeners and can be overridden per-port
 	// in the `Ingress` field. This configuration mirrors the `DestinationRule`'s
 	// [`connectionPool`](https://istio.io/latest/docs/reference/config/networking/destination-rule/#ConnectionPoolSettings) field.
+	//
+	// By default, Istio applies a service's `DestinationRule` to client sidecars
+	// for outbound traffic directed at the service -- the usual case folks think
+	// of when configuring a `DestinationRule` -- but also to the server's inbound
+	// sidecar. The `Sidecar`'s connection pool configures the server's inbound
+	// sidecar directly, so its settings can be different than clients'. This is
+	// valuable, for example, when you have many clients calling few servers: a
+	// `DestinationRule` can limit the concurrency of any single client, while
+	// the `Sidecar` allows you to configure much higher concurrency on the server
+	// side.
+	//
+	// Connection pool settings for a server's inbound sidecar are configured in the
+	// following precedence, highest to lowest:
+	// - per-port `ConnectionPool` from the `Sidecar`
+	// - top level `InboundConnectionPool` from the `Sidecar`
+	// - per-port `TrafficPolicy.ConnectionPool` from the `DestinationRule`
+	// - top level `TrafficPolicy.ConnectionPool` from the `DestinationRule`
+	// - default connection pool settings (essentially unlimited)
+	//
+	// In every case, the connection pool settings are overriden, not merged.
 	InboundConnectionPool *ConnectionPoolSettings `protobuf:"bytes,7,opt,name=inbound_connection_pool,json=inboundConnectionPool,proto3" json:"inbound_connection_pool,omitempty"`
 	// Configuration for the outbound traffic policy.  If your
 	// application uses one or more external services that are not known
@@ -769,6 +789,9 @@ type IstioIngressListener struct {
 	// This setting overrides the top-level default `inboundConnectionPool` to configure
 	// specific settings for this port. This configuration mirrors the `DestinationRule`'s
 	// [`PortTrafficPolicy.connectionPool`](https://istio.io/latest/docs/reference/config/networking/destination-rule/#TrafficPolicy-PortTrafficPolicy) field.
+	// This port level connection pool has the highest precedence in configuration,
+	// overriding both the `Sidecar`'s top level `InboundConnectionPool` as well as any
+	// connection pooling settings from the `DestinationRule`.
 	ConnectionPool *ConnectionPoolSettings `protobuf:"bytes,8,opt,name=connection_pool,json=connectionPool,proto3" json:"connection_pool,omitempty"`
 }
 
