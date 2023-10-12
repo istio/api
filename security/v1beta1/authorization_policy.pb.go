@@ -475,8 +475,6 @@ const (
 	// One example use case of the extension is to integrate with a custom external authorization system to delegate
 	// the authorization decision to it.
 	//
-	// Note: The CUSTOM action is currently an **alpha feature** and is subject to breaking changes in later versions.
-	//
 	// The following authorization policy applies to an ingress gateway and delegates the authorization check to a named extension
 	// "my-custom-authz" if the request path has prefix "/admin/".
 	//
