@@ -479,6 +479,82 @@
 // ```
 // {{</tab>}}
 // {{</tabset>}}
+//
+// In addition to configuring traffic capture and how traffic is forwarded to the app,
+// it's possible to control inbound connection pool settings. By default, Istio pushes
+// connection pool settings from `DestinationRules` to both clients (for outbound
+// connections to the service) as well as servers (for inbound connections to a service
+// instance). Using the `InboundConnectionPool` and per-port `ConnectionPool` settings
+// in a `Sidecar` allow you to control those connection pools for the server separately
+// from the settings pushed to all clients.
+//
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: Sidecar
+// metadata:
+//   name: connection-pool-settings
+//   namespace: prod-us1
+// spec:
+//   workloadSelector:
+//     labels:
+//       app: productpage
+//   inboundConnectionPool:
+//       http:
+//         http1MaxPendingRequests: 1024
+//         http2MaxRequests: 1024
+//         maxRequestsPerConnection: 1024
+//         maxRetries: 100
+//   ingress:
+//   - port:
+//       number: 80
+//       protocol: HTTP
+//       name: somename
+//     connectionPool:
+//       http:
+//         http1MaxPendingRequests: 1024
+//         http2MaxRequests: 1024
+//         maxRequestsPerConnection: 1024
+//         maxRetries: 100
+//       tcp:
+//         maxConnections: 100
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: Sidecar
+// metadata:
+//   name: connection-pool-settings
+//   namespace: prod-us1
+// spec:
+//   workloadSelector:
+//     labels:
+//       app: productpage
+//   inboundConnectionPool:
+//       http:
+//         http1MaxPendingRequests: 1024
+//         http2MaxRequests: 1024
+//         maxRequestsPerConnection: 1024
+//         maxRetries: 100
+//   ingress:
+//   - port:
+//       number: 80
+//       protocol: HTTP
+//       name: somename
+//     connectionPool:
+//       http:
+//         http1MaxPendingRequests: 1024
+//         http2MaxRequests: 1024
+//         maxRequestsPerConnection: 1024
+//         maxRetries: 100
+//       tcp:
+//         maxConnections: 100
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 
 package v1alpha3
 

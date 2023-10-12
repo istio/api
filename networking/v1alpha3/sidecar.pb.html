@@ -421,6 +421,77 @@ spec:
 </code></pre>
 <p>{{</tab>}}
 {{</tabset>}}</p>
+<p>In addition to configuring traffic capture and how traffic is forwarded to the app,
+it&rsquo;s possible to control inbound connection pool settings. By default, Istio pushes
+connection pool settings from <code>DestinationRules</code> to both clients (for outbound
+connections to the service) as well as servers (for inbound connections to a service
+instance). Using the <code>InboundConnectionPool</code> and per-port <code>ConnectionPool</code> settings
+in a <code>Sidecar</code> allow you to control those connection pools for the server separately
+from the settings pushed to all clients.</p>
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: Sidecar
+metadata:
+  name: connection-pool-settings
+  namespace: prod-us1
+spec:
+  workloadSelector:
+    labels:
+      app: productpage
+  inboundConnectionPool:
+      http:
+        http1MaxPendingRequests: 1024
+        http2MaxRequests: 1024
+        maxRequestsPerConnection: 1024
+        maxRetries: 100
+  ingress:
+  - port:
+      number: 80
+      protocol: HTTP
+      name: somename
+    connectionPool:
+      http:
+        http1MaxPendingRequests: 1024
+        http2MaxRequests: 1024
+        maxRequestsPerConnection: 1024
+        maxRetries: 100
+      tcp:
+        maxConnections: 100
+</code></pre>
+<p>{{</tab>}}</p>
+<p>{{<tab name="v1beta1" category-value="v1beta1">}}</p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1beta1
+kind: Sidecar
+metadata:
+  name: connection-pool-settings
+  namespace: prod-us1
+spec:
+  workloadSelector:
+    labels:
+      app: productpage
+  inboundConnectionPool:
+      http:
+        http1MaxPendingRequests: 1024
+        http2MaxRequests: 1024
+        maxRequestsPerConnection: 1024
+        maxRetries: 100
+  ingress:
+  - port:
+      number: 80
+      protocol: HTTP
+      name: somename
+    connectionPool:
+      http:
+        http1MaxPendingRequests: 1024
+        http2MaxRequests: 1024
+        maxRequestsPerConnection: 1024
+        maxRetries: 100
+      tcp:
+        maxConnections: 100
+</code></pre>
+<p>{{</tab>}}
+{{</tabset>}}</p>
 
 <h2 id="Sidecar">Sidecar</h2>
 <section>
