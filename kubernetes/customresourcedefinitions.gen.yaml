@@ -3536,8 +3536,6 @@ spec:
                   - hosts
                   type: object
                 type: array
-            required:
-            - servers
             type: object
           status:
             type: object
@@ -3682,8 +3680,6 @@ spec:
                   - hosts
                   type: object
                 type: array
-            required:
-            - servers
             type: object
           status:
             type: object
