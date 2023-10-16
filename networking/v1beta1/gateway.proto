@@ -377,7 +377,7 @@ option go_package = "istio.io/api/networking/v1beta1";
 // -->
 message Gateway {
   // A list of server specifications.
-  repeated Server servers = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated Server servers = 1;
 
   // One or more labels that indicate a specific set of pods/VMs
   // on which this gateway configuration should be applied.

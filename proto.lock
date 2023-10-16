@@ -40492,13 +40492,7 @@
                 "id": 1,
                 "name": "servers",
                 "type": "Server",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "is_repeated": true
               }
             ],
             "maps": [
@@ -42990,13 +42984,7 @@
                 "id": 1,
                 "name": "servers",
                 "type": "Server",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "is_repeated": true
               }
             ],
             "maps": [
