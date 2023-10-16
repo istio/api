@@ -40910,6 +40910,11 @@
                 "is_repeated": true
               },
               {
+                "id": 7,
+                "name": "inbound_connection_pool",
+                "type": "ConnectionPoolSettings"
+              },
+              {
                 "id": 4,
                 "name": "outbound_traffic_policy",
                 "type": "OutboundTrafficPolicy"
@@ -40956,6 +40961,11 @@
                 "id": 7,
                 "name": "tls",
                 "type": "ServerTLSSettings"
+              },
+              {
+                "id": 8,
+                "name": "connection_pool",
+                "type": "ConnectionPoolSettings"
               }
             ],
             "reserved_ids": [
@@ -41068,6 +41078,9 @@
         "imports": [
           {
             "path": "google/api/field_behavior.proto"
+          },
+          {
+            "path": "networking/v1alpha3/destination_rule.proto"
           },
           {
             "path": "networking/v1alpha3/gateway.proto"
@@ -43459,6 +43472,11 @@
                 "is_repeated": true
               },
               {
+                "id": 7,
+                "name": "inbound_connection_pool",
+                "type": "ConnectionPoolSettings"
+              },
+              {
                 "id": 4,
                 "name": "outbound_traffic_policy",
                 "type": "OutboundTrafficPolicy"
@@ -43505,6 +43523,11 @@
                 "id": 7,
                 "name": "tls",
                 "type": "ServerTLSSettings"
+              },
+              {
+                "id": 8,
+                "name": "connection_pool",
+                "type": "ConnectionPoolSettings"
               }
             ],
             "reserved_ids": [
@@ -43617,6 +43640,9 @@
         "imports": [
           {
             "path": "google/api/field_behavior.proto"
+          },
+          {
+            "path": "networking/v1beta1/destination_rule.proto"
           },
           {
             "path": "networking/v1beta1/gateway.proto"

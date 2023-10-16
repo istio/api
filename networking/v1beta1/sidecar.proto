@@ -15,6 +15,7 @@
 syntax = "proto3";
 
 import "google/api/field_behavior.proto";
+import "networking/v1beta1/destination_rule.proto";
 import "networking/v1beta1/gateway.proto";
 import "networking/v1beta1/virtual_service.proto";
 
@@ -404,6 +405,81 @@ import "networking/v1beta1/virtual_service.proto";
 // {{</tab>}}
 // {{</tabset>}}
 //
+// In addition to configuring traffic capture and how traffic is forwarded to the app,
+// it's possible to control inbound connection pool settings. By default, Istio pushes
+// connection pool settings from `DestinationRules` to both clients (for outbound
+// connections to the service) as well as servers (for inbound connections to a service
+// instance). Using the `InboundConnectionPool` and per-port `ConnectionPool` settings
+// in a `Sidecar` allow you to control those connection pools for the server separately
+// from the settings pushed to all clients.
+//
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: Sidecar
+// metadata:
+//   name: connection-pool-settings
+//   namespace: prod-us1
+// spec:
+//   workloadSelector:
+//     labels:
+//       app: productpage
+//   inboundConnectionPool:
+//       http:
+//         http1MaxPendingRequests: 1024
+//         http2MaxRequests: 1024
+//         maxRequestsPerConnection: 1024
+//         maxRetries: 100
+//   ingress:
+//   - port:
+//       number: 80
+//       protocol: HTTP
+//       name: somename
+//     connectionPool:
+//       http:
+//         http1MaxPendingRequests: 1024
+//         http2MaxRequests: 1024
+//         maxRequestsPerConnection: 1024
+//         maxRetries: 100
+//       tcp:
+//         maxConnections: 100
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: Sidecar
+// metadata:
+//   name: connection-pool-settings
+//   namespace: prod-us1
+// spec:
+//   workloadSelector:
+//     labels:
+//       app: productpage
+//   inboundConnectionPool:
+//       http:
+//         http1MaxPendingRequests: 1024
+//         http2MaxRequests: 1024
+//         maxRequestsPerConnection: 1024
+//         maxRetries: 100
+//   ingress:
+//   - port:
+//       number: 80
+//       protocol: HTTP
+//       name: somename
+//     connectionPool:
+//       http:
+//         http1MaxPendingRequests: 1024
+//         http2MaxRequests: 1024
+//         maxRequestsPerConnection: 1024
+//         maxRetries: 100
+//       tcp:
+//         maxConnections: 100
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 package istio.networking.v1beta1;
 
 option go_package = "istio.io/api/networking/v1beta1";
@@ -451,6 +527,32 @@ message Sidecar {
   // services in the mesh. If not specified, inherits the system
   // detected defaults from the namespace-wide or the global default Sidecar.
   repeated IstioEgressListener egress = 3;
+
+  // Settings controlling the volume of connections Envoy will accept from the network.
+  // This default will apply for all inbound listeners and can be overridden per-port
+  // in the `Ingress` field. This configuration mirrors the `DestinationRule`'s
+  // [`connectionPool`](https://istio.io/latest/docs/reference/config/networking/destination-rule/#ConnectionPoolSettings) field.
+  //
+  // By default, Istio applies a service's `DestinationRule` to client sidecars
+  // for outbound traffic directed at the service -- the usual case folks think
+  // of when configuring a `DestinationRule` -- but also to the server's inbound
+  // sidecar. The `Sidecar`'s connection pool configures the server's inbound
+  // sidecar directly, so its settings can be different than clients'. This is
+  // valuable, for example, when you have many clients calling few servers: a
+  // `DestinationRule` can limit the concurrency of any single client, while
+  // the `Sidecar` allows you to configure much higher concurrency on the server
+  // side.
+  //
+  // Connection pool settings for a server's inbound sidecar are configured in the
+  // following precedence, highest to lowest:
+  // - per-port `ConnectionPool` from the `Sidecar`
+  // - top level `InboundConnectionPool` from the `Sidecar`
+  // - per-port `TrafficPolicy.ConnectionPool` from the `DestinationRule`
+  // - top level `TrafficPolicy.ConnectionPool` from the `DestinationRule`
+  // - default connection pool settings (essentially unlimited)
+  //
+  // In every case, the connection pool settings are overriden, not merged.
+  ConnectionPoolSettings inbound_connection_pool = 7;
 
   // Configuration for the outbound traffic policy.  If your
   // application uses one or more external services that are not known
@@ -500,6 +602,15 @@ message IstioIngressListener {
   // sidecar for requests originating from outside the mesh.
   // Currently supports only SIMPLE and MUTUAL TLS modes.
   ServerTLSSettings tls = 7;
+
+  // Settings controlling the volume of connections Envoy will accept from the network.
+  // This setting overrides the top-level default `inboundConnectionPool` to configure
+  // specific settings for this port. This configuration mirrors the `DestinationRule`'s
+  // [`PortTrafficPolicy.connectionPool`](https://istio.io/latest/docs/reference/config/networking/destination-rule/#TrafficPolicy-PortTrafficPolicy) field.
+  // This port level connection pool has the highest precedence in configuration,
+  // overriding both the `Sidecar`'s top level `InboundConnectionPool` as well as any
+  // connection pooling settings from the `DestinationRule`.
+  ConnectionPoolSettings connection_pool = 8;
 }
 
 // `IstioEgressListener` specifies the properties of an outbound traffic
