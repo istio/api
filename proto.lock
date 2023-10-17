@@ -39767,6 +39767,11 @@
                     "id": 7,
                     "name": "use_client_protocol",
                     "type": "bool"
+                  },
+                  {
+                    "id": 8,
+                    "name": "max_concurrent_streams",
+                    "type": "int32"
                   }
                 ]
               }
@@ -42733,6 +42738,11 @@
                     "id": 7,
                     "name": "use_client_protocol",
                     "type": "bool"
+                  },
+                  {
+                    "id": 8,
+                    "name": "max_concurrent_streams",
+                    "type": "int32"
                   }
                 ]
               }
