@@ -947,7 +947,6 @@ type ProxyConfig struct {
 	// deprecated: use proxy_stats_config instead.
 	ExtraStatTags []string `protobuf:"bytes,27,rep,name=extra_stat_tags,json=extraStatTags,proto3" json:"extra_stat_tags,omitempty"`
 	// Configuration for processing of stats.
-	// To enable all Envoy default tag regexes, For example:
 	//
 	// To extract grpc tag, For example:
 	//
