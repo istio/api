@@ -48005,7 +48005,13 @@
                   {
                     "id": 1,
                     "name": "value",
-                    "type": "string"
+                    "type": "string",
+                    "options": [
+                      {
+                        "name": "(google.api.field_behavior)",
+                        "value": "REQUIRED"
+                      }
+                    ]
                   }
                 ]
               },
@@ -48015,7 +48021,13 @@
                   {
                     "id": 1,
                     "name": "name",
-                    "type": "string"
+                    "type": "string",
+                    "options": [
+                      {
+                        "name": "(google.api.field_behavior)",
+                        "value": "REQUIRED"
+                      }
+                    ]
                   },
                   {
                     "id": 2,
@@ -48030,7 +48042,13 @@
                   {
                     "id": 1,
                     "name": "name",
-                    "type": "string"
+                    "type": "string",
+                    "options": [
+                      {
+                        "name": "(google.api.field_behavior)",
+                        "value": "REQUIRED"
+                      }
+                    ]
                   },
                   {
                     "id": 2,
