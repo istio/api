@@ -25,7 +25,6 @@ repo_dir := .
 protolock = protolock
 annotations_prep = annotations_prep
 htmlproofer = htmlproofer
-cue = cue-gen -paths=common-protos
 
 #####################
 # Generation Rules
@@ -110,13 +109,16 @@ local-lint-protos:
 lint: lint-dockerfiles lint-scripts lint-yaml lint-helm lint-copyright-banner lint-go lint-python lint-markdown lint-sass lint-typescript lint-licenses local-lint-protos
  	@$(htmlproofer) . --url-swap "istio.io:preliminary.istio.io" --assume-extension --check-html --check-external-hash --check-opengraph --timeframe 2d --storage-dir $(repo_dir)/.htmlproofer --url-ignore "/localhost/"
 
+test:
+	(pushd tests && go test -v ./...)
+
 fmt: format-python
 
 #####################
 # CI System
 #####################
 
-presubmit: proto-commit lint
+presubmit: proto-commit lint test
 postsubmit: presubmit
 
 #####################

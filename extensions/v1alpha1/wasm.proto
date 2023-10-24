@@ -17,6 +17,7 @@ syntax = "proto3";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/struct.proto";
 import "type/v1beta1/selector.proto";
+import "google/api/field_behavior.proto";
 
 // $schema: istio.extensions.v1alpha1.WasmPlugin
 // $title: Wasm Plugin
@@ -218,6 +219,7 @@ option go_package="istio.io/api/extensions/v1alpha1";
 // +cue-gen:WasmPlugin:annotations:helm.sh/resource-policy=keep
 // +cue-gen:WasmPlugin:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:WasmPlugin:subresource:status
+// +cue-gen:WasmPlugin:spec:required
 // +cue-gen:WasmPlugin:scope:Namespaced
 // +cue-gen:WasmPlugin:resource:categories=istio-io,extensions-istio-io
 // +cue-gen:WasmPlugin:preserveUnknownFields:pluginConfig
@@ -261,13 +263,16 @@ message WasmPlugin {
   // are `file://` for referencing .wasm module files present locally
   // within the proxy container, and `http[s]://` for .wasm module files
   // hosted remotely.
-  string url = 2;
+  // +kubebuilder:validation:MinLength=1
+  // +kubebuilder:validation:XValidation:message="url must have schema one of [http, https, file, oci]",rule="isURL(self) ? (url(self).getScheme() in ['', 'http', 'https', 'oci', 'file']) : (isURL('http://' + self) && url('http://' +self).getScheme() in ['', 'http', 'https', 'oci', 'file'])"
+  string url = 2 [(google.api.field_behavior) = REQUIRED];
 
   // SHA256 checksum that will be used to verify Wasm module or OCI container.
   // If the `url` field already references a SHA256 (using the `@sha256:`
   // notation), it must match the value of this field. If an OCI image is
   // referenced by tag and this field is set, its checksum will be verified
   // against the contents of this field after pulling.
+  // +kubebuilder:validation:Pattern="(^$|^[a-f0-9]{64}$)"
   string sha256 = 3;
 
   // The pull behaviour to be applied when fetching Wasm module by either
@@ -282,6 +287,8 @@ message WasmPlugin {
   // Name of a K8s Secret in the same namespace as the `WasmPlugin` that
   // contains a docker pull secret which is to be used to authenticate
   // against the registry when pulling the image.
+  // +kubebuilder:validation:MinLength=1
+  // +kubebuilder:validation:MaxLength=253
   string image_pull_secret = 5;
 
   // $hide_from_docs
@@ -312,6 +319,8 @@ message WasmPlugin {
   // The plugin name to be used in the Envoy configuration (used to be called
   // `rootID`). Some .wasm modules might require this value to select the Wasm
   // plugin to execute.
+  // +kubebuilder:validation:MaxLength=256
+  // +kubebuilder:validation:MinLength=1
   string plugin_name = 8;
 
   // Determines where in the filter chain this `WasmPlugin` is to be injected.
@@ -351,6 +360,8 @@ message WasmPlugin {
     //
     // If one of the given `ports` is matched, this condition is evaluated to true.
     // If not specified, this condition is evaluated to true for any port.
+    // +listType=map
+    // +listMapKey=number
     repeated istio.type.v1beta1.PortSelector ports = 2;
   }
 
@@ -427,21 +438,27 @@ enum PullPolicy {
 message VmConfig {
   // Specifies environment variables to be injected to this VM.
   // Note that if a key does not exist, it will be ignored.
+  // +kubebuilder:validation:MaxItems=256
+  // +listType=map
+  // +listMapKey=name
   repeated EnvVar env = 1;
 }
 
+// +kubebuilder:validation:XValidation:message="value may only be set when valueFrom is INLINE",rule="(has(self.valueFrom) ? self.valueFrom : '') != 'HOST' || !has(self.value)"
 message EnvVar {
-  // Required
-  // Name of the environment variable. Must be a C_IDENTIFIER.
-  string name = 1;
+  // Name of the environment variable.
+  // Must be a C_IDENTIFIER.
+  // +kubebuilder:validation:MaxLength=256
+  // +kubebuilder:validation:MinLength=1
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // Required
   // Source for the environment variable's value.
   EnvValueSource value_from = 3;
 
   // Value for the environment variable.
-  // Note that if `value_from` is `HOST`, it will be ignored.
+  // Only applicable if `valueFrom` is `HOST`.
   // Defaults to "".
+  // +kubebuilder:validation:MaxLength=2048
   string value = 2;
 }
 

@@ -94,6 +94,7 @@ message JWTRule {
   // Example: `https://www.googleapis.com/oauth2/v1/certs`
   //
   // Note: Only one of `jwksUri` and `jwks` should be used.
+  // +kubebuilder:altName=jwks_uri
   string jwks_uri = 3;
 
   // JSON Web Key Set of public keys to validate signature of the JWT.

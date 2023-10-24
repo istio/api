@@ -315,6 +315,8 @@ message Tracing {
   //
   // Defaults to 0%. Valid values [0.00-100.00]. Can be specified in 0.01%
   // increments.
+  // +kubebuilder:validation:Minimum=0
+  // +kubebuilder:validation:Maximum=100
   google.protobuf.DoubleValue random_sampling_percentage = 3;
 
   // Controls span reporting. If set to true, no spans will be reported for
@@ -344,12 +346,14 @@ message Tracing {
 
   message Literal {
     // The tag value to use.
-    string value = 1;
+    // +kubebuilder:validation:MinLength=1
+    string value = 1 [(google.api.field_behavior) = REQUIRED];
   }
 
   message Environment {
     // Name of the environment variable from which to extract the tag value.
-    string name = 1;
+    // +kubebuilder:validation:MinLength=1
+    string name = 1 [(google.api.field_behavior) = REQUIRED];
     // Optional. If the environment variable is not found, this value will be
     // used instead.
     string default_value = 2;
@@ -357,7 +361,8 @@ message Tracing {
 
   message RequestHeader {
     // Name of the header from which to extract the tag value.
-    string name = 1;
+    // +kubebuilder:validation:MinLength=1
+    string name = 1 [(google.api.field_behavior) = REQUIRED];
     // Optional. If the header is not found, this value will be
     // used instead.
     string default_value = 2;
@@ -384,6 +389,7 @@ message Tracing {
 // targeted customization.
 message ProviderRef {
   // Required. Name of Telemetry provider in MeshConfig.
+  // +kubebuilder:validation:MinLength=1
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
@@ -558,6 +564,7 @@ message MetricSelector {
 
     // Allows free-form specification of a metric. No validation of custom
     // metrics is provided.
+    // +kubebuilder:validation:MinLength=1
     string custom_metric = 2;
   }
 
@@ -587,6 +594,8 @@ message MetricsOverrides {
   // TagOverride specifies an operation to perform on a metric dimension (also
   // known as a `label`). Tags may be added, removed, or have their default
   // values overridden.
+  // +kubebuilder:validation:XValidation:message="value must be set when operation is UPSERT",rule="((has(self.operation) ? self.operation : '') == 'UPSERT') ? self.value != '' : true"
+  // +kubebuilder:validation:XValidation:message="value must not be set when operation is REMOVE",rule="((has(self.operation) ? self.operation : '') == 'REMOVE') ? !has(self.value) : true"
   message TagOverride {
     enum Operation {
       // Insert or Update the tag with the provided value expression. The

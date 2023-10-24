@@ -36547,7 +36547,13 @@
               {
                 "id": 2,
                 "name": "url",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               },
               {
                 "id": 3,
@@ -36647,7 +36653,13 @@
               {
                 "id": 1,
                 "name": "name",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               },
               {
                 "id": 3,
@@ -36671,6 +36683,9 @@
           },
           {
             "path": "type/v1beta1/selector.proto"
+          },
+          {
+            "path": "google/api/field_behavior.proto"
           }
         ],
         "package": {
@@ -39755,6 +39770,11 @@
                   },
                   {
                     "id": 8,
+                    "name": "max_concurrent_streams",
+                    "type": "int32"
+                  },
+                  {
+                    "id": 9,
                     "name": "retry_budget",
                     "type": "RetryBudget"
                   }
@@ -39839,13 +39859,7 @@
               {
                 "id": 1,
                 "name": "mode",
-                "type": "TLSmode",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "TLSmode"
               },
               {
                 "id": 2,
@@ -40145,13 +40159,7 @@
                 "id": 4,
                 "name": "config_patches",
                 "type": "EnvoyConfigObjectPatch",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "is_repeated": true
               },
               {
                 "id": 5,
@@ -40442,9 +40450,6 @@
         ],
         "imports": [
           {
-            "path": "google/api/field_behavior.proto"
-          },
-          {
             "path": "google/protobuf/struct.proto"
           },
           {
@@ -40527,13 +40532,7 @@
                 "id": 1,
                 "name": "servers",
                 "type": "Server",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "is_repeated": true
               }
             ],
             "maps": [
@@ -40542,13 +40541,7 @@
                 "field": {
                   "id": 2,
                   "name": "selector",
-                  "type": "string",
-                  "options": [
-                    {
-                      "name": "(google.api.field_behavior)",
-                      "value": "REQUIRED"
-                    }
-                  ]
+                  "type": "string"
                 }
               }
             ]
@@ -40799,13 +40792,7 @@
                 "id": 3,
                 "name": "ports",
                 "type": "ServicePort",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "is_repeated": true
               },
               {
                 "id": 4,
@@ -40815,13 +40802,7 @@
               {
                 "id": 5,
                 "name": "resolution",
-                "type": "Resolution",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "Resolution"
               },
               {
                 "id": 6,
@@ -40865,13 +40846,7 @@
               {
                 "id": 2,
                 "name": "protocol",
-                "type": "string",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "string"
               },
               {
                 "id": 3,
@@ -40969,6 +40944,11 @@
                 "is_repeated": true
               },
               {
+                "id": 7,
+                "name": "inbound_connection_pool",
+                "type": "ConnectionPoolSettings"
+              },
+              {
                 "id": 4,
                 "name": "outbound_traffic_policy",
                 "type": "OutboundTrafficPolicy"
@@ -40988,7 +40968,7 @@
               {
                 "id": 1,
                 "name": "port",
-                "type": "Port",
+                "type": "SidecarPort",
                 "options": [
                   {
                     "name": "(google.api.field_behavior)",
@@ -41009,18 +40989,17 @@
               {
                 "id": 4,
                 "name": "default_endpoint",
-                "type": "string",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "string"
               },
               {
                 "id": 7,
                 "name": "tls",
                 "type": "ServerTLSSettings"
+              },
+              {
+                "id": 8,
+                "name": "connection_pool",
+                "type": "ConnectionPoolSettings"
               }
             ],
             "reserved_ids": [
@@ -41037,7 +41016,7 @@
               {
                 "id": 1,
                 "name": "port",
-                "type": "Port"
+                "type": "SidecarPort"
               },
               {
                 "id": 2,
@@ -41078,13 +41057,7 @@
                 "field": {
                   "id": 1,
                   "name": "labels",
-                  "type": "string",
-                  "options": [
-                    {
-                      "name": "(google.api.field_behavior)",
-                      "value": "REQUIRED"
-                    }
-                  ]
+                  "type": "string"
                 }
               }
             ]
@@ -41103,11 +41076,45 @@
                 "type": "Destination"
               }
             ]
+          },
+          {
+            "name": "SidecarPort",
+            "fields": [
+              {
+                "id": 1,
+                "name": "number",
+                "type": "uint32"
+              },
+              {
+                "id": 2,
+                "name": "protocol",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "target_port",
+                "type": "uint32",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
+              }
+            ]
           }
         ],
         "imports": [
           {
             "path": "google/api/field_behavior.proto"
+          },
+          {
+            "path": "networking/v1alpha3/destination_rule.proto"
           },
           {
             "path": "networking/v1alpha3/gateway.proto"
@@ -41801,13 +41808,7 @@
               {
                 "id": 1,
                 "name": "attempts",
-                "type": "int32",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "int32"
               },
               {
                 "id": 2,
@@ -41909,13 +41910,7 @@
                   {
                     "id": 2,
                     "name": "fixed_delay",
-                    "type": "google.protobuf.Duration",
-                    "options": [
-                      {
-                        "name": "(google.api.field_behavior)",
-                        "value": "REQUIRED"
-                      }
-                    ]
+                    "type": "google.protobuf.Duration"
                   },
                   {
                     "id": 3,
@@ -41935,13 +41930,7 @@
                   {
                     "id": 2,
                     "name": "http_status",
-                    "type": "int32",
-                    "options": [
-                      {
-                        "name": "(google.api.field_behavior)",
-                        "value": "REQUIRED"
-                      }
-                    ]
+                    "type": "int32"
                   },
                   {
                     "id": 3,
@@ -42772,6 +42761,11 @@
                   },
                   {
                     "id": 8,
+                    "name": "max_concurrent_streams",
+                    "type": "int32"
+                  },
+                  {
+                    "id": 9,
                     "name": "retry_budget",
                     "type": "RetryBudget"
                   }
@@ -42856,13 +42850,7 @@
               {
                 "id": 1,
                 "name": "mode",
-                "type": "TLSmode",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "TLSmode"
               },
               {
                 "id": 2,
@@ -43061,13 +43049,7 @@
                 "id": 1,
                 "name": "servers",
                 "type": "Server",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "is_repeated": true
               }
             ],
             "maps": [
@@ -43076,13 +43058,7 @@
                 "field": {
                   "id": 2,
                   "name": "selector",
-                  "type": "string",
-                  "options": [
-                    {
-                      "name": "(google.api.field_behavior)",
-                      "value": "REQUIRED"
-                    }
-                  ]
+                  "type": "string"
                 }
               }
             ]
@@ -43397,13 +43373,7 @@
                 "id": 3,
                 "name": "ports",
                 "type": "ServicePort",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "is_repeated": true
               },
               {
                 "id": 4,
@@ -43413,13 +43383,7 @@
               {
                 "id": 5,
                 "name": "resolution",
-                "type": "Resolution",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "Resolution"
               },
               {
                 "id": 6,
@@ -43463,13 +43427,7 @@
               {
                 "id": 2,
                 "name": "protocol",
-                "type": "string",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "string"
               },
               {
                 "id": 3,
@@ -43567,6 +43525,11 @@
                 "is_repeated": true
               },
               {
+                "id": 7,
+                "name": "inbound_connection_pool",
+                "type": "ConnectionPoolSettings"
+              },
+              {
                 "id": 4,
                 "name": "outbound_traffic_policy",
                 "type": "OutboundTrafficPolicy"
@@ -43586,7 +43549,7 @@
               {
                 "id": 1,
                 "name": "port",
-                "type": "Port",
+                "type": "SidecarPort",
                 "options": [
                   {
                     "name": "(google.api.field_behavior)",
@@ -43607,18 +43570,17 @@
               {
                 "id": 4,
                 "name": "default_endpoint",
-                "type": "string",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "string"
               },
               {
                 "id": 7,
                 "name": "tls",
                 "type": "ServerTLSSettings"
+              },
+              {
+                "id": 8,
+                "name": "connection_pool",
+                "type": "ConnectionPoolSettings"
               }
             ],
             "reserved_ids": [
@@ -43635,7 +43597,7 @@
               {
                 "id": 1,
                 "name": "port",
-                "type": "Port"
+                "type": "SidecarPort"
               },
               {
                 "id": 2,
@@ -43676,13 +43638,7 @@
                 "field": {
                   "id": 1,
                   "name": "labels",
-                  "type": "string",
-                  "options": [
-                    {
-                      "name": "(google.api.field_behavior)",
-                      "value": "REQUIRED"
-                    }
-                  ]
+                  "type": "string"
                 }
               }
             ]
@@ -43701,11 +43657,45 @@
                 "type": "Destination"
               }
             ]
+          },
+          {
+            "name": "SidecarPort",
+            "fields": [
+              {
+                "id": 1,
+                "name": "number",
+                "type": "uint32"
+              },
+              {
+                "id": 2,
+                "name": "protocol",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "target_port",
+                "type": "uint32",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
+              }
+            ]
           }
         ],
         "imports": [
           {
             "path": "google/api/field_behavior.proto"
+          },
+          {
+            "path": "networking/v1beta1/destination_rule.proto"
           },
           {
             "path": "networking/v1beta1/gateway.proto"
@@ -44399,13 +44389,7 @@
               {
                 "id": 1,
                 "name": "attempts",
-                "type": "int32",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "int32"
               },
               {
                 "id": 2,
@@ -44507,13 +44491,7 @@
                   {
                     "id": 2,
                     "name": "fixed_delay",
-                    "type": "google.protobuf.Duration",
-                    "options": [
-                      {
-                        "name": "(google.api.field_behavior)",
-                        "value": "REQUIRED"
-                      }
-                    ]
+                    "type": "google.protobuf.Duration"
                   },
                   {
                     "id": 3,
@@ -44533,13 +44511,7 @@
                   {
                     "id": 2,
                     "name": "http_status",
-                    "type": "int32",
-                    "options": [
-                      {
-                        "name": "(google.api.field_behavior)",
-                        "value": "REQUIRED"
-                      }
-                    ]
+                    "type": "int32"
                   },
                   {
                     "id": 3,
@@ -48073,7 +48045,13 @@
                   {
                     "id": 1,
                     "name": "value",
-                    "type": "string"
+                    "type": "string",
+                    "options": [
+                      {
+                        "name": "(google.api.field_behavior)",
+                        "value": "REQUIRED"
+                      }
+                    ]
                   }
                 ]
               },
@@ -48083,7 +48061,13 @@
                   {
                     "id": 1,
                     "name": "name",
-                    "type": "string"
+                    "type": "string",
+                    "options": [
+                      {
+                        "name": "(google.api.field_behavior)",
+                        "value": "REQUIRED"
+                      }
+                    ]
                   },
                   {
                     "id": 2,
@@ -48098,7 +48082,13 @@
                   {
                     "id": 1,
                     "name": "name",
-                    "type": "string"
+                    "type": "string",
+                    "options": [
+                      {
+                        "name": "(google.api.field_behavior)",
+                        "value": "REQUIRED"
+                      }
+                    ]
                   },
                   {
                     "id": 2,
@@ -48317,13 +48307,7 @@
                 "field": {
                   "id": 1,
                   "name": "match_labels",
-                  "type": "string",
-                  "options": [
-                    {
-                      "name": "(google.api.field_behavior)",
-                      "value": "REQUIRED"
-                    }
-                  ]
+                  "type": "string"
                 }
               }
             ]
@@ -48334,7 +48318,13 @@
               {
                 "id": 1,
                 "name": "number",
-                "type": "uint32"
+                "type": "uint32",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               }
             ]
           },

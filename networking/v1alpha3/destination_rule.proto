@@ -795,6 +795,11 @@ message ConnectionPoolSettings {
     // Note that when this is set to true, h2_upgrade_policy will be ineffective i.e. the client
     // connections will not be upgraded to http2.
     bool use_client_protocol = 7;
+    
+    // $hide_from_docs
+    // The maximum number of concurrent streams allowed for a peer on one HTTP/2 connection.
+    // Defaults to 2^31-1. 
+    int32 max_concurrent_streams = 8;
 
     // Specifies a limit on concurrent retries in relation to the number of active requests. This parameter is optional.
     //
@@ -802,7 +807,7 @@ message ConnectionPoolSettings {
     //
     //  - Retry policy need to be configured via [VirtualService](https://istio.io/latest/docs/reference/config/networking/virtual-service/#HTTPRetry) resource.
     //    If RetryBudget is configured without VirtualService, failed request will not be retried.
-    RetryBudget retry_budget = 8;
+    RetryBudget retry_budget = 9;
   };
 
   // Settings common to both HTTP and TCP upstream connections.
@@ -1095,7 +1100,7 @@ message ClientTLSSettings {
 
   // Indicates whether connections to this port should be secured
   // using TLS. The value of this field determines how TLS is enforced.
-  TLSmode mode = 1 [(google.api.field_behavior) = REQUIRED];
+  TLSmode mode = 1;
 
   // REQUIRED if mode is `MUTUAL`. The path to the file holding the
   // client-side TLS certificate to use.

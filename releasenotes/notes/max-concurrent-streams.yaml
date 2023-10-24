@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - https://github.com/istio/istio/issues/47166
+
+releaseNotes:
+  - |
+    **Added** max_concurrent_streams definition to DestinationRule for HTTP/2 connections.
