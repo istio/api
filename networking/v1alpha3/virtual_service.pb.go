@@ -1620,7 +1620,7 @@ type HTTPMatchRequest struct {
 	// - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
 	//
 	// **Note:** Case-insensitive matching could be enabled via the
-	// `ignore_uri_case` flag.
+	// `ignoreUriCase` flag.
 	Uri *StringMatch `protobuf:"bytes,1,opt,name=uri,proto3" json:"uri,omitempty"`
 	// URI Scheme
 	// values are case-sensitive and formatted as follows:
