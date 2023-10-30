@@ -1032,7 +1032,7 @@ message HTTPMatchRequest {
   // - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
   //
   // **Note:** Case-insensitive matching could be enabled via the
-  // `ignore_uri_case` flag.
+  // `ignoreUriCase` flag.
   StringMatch uri = 1;
 
   // URI Scheme
