@@ -419,7 +419,7 @@
 //   configPatches:
 //   - applyTo: LISTENER_FILTER
 //     match:
-//       context: SIDECAR_INBOUND # will match outbound listeners in all sidecars
+//       context: SIDECAR_INBOUND # will match inbound listeners in all sidecars
 //       listener:
 //         portNumber: 15006
 //         listenerFilter: "envoy.filters.listener.tls_inspector"
