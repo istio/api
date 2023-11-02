@@ -130,14 +130,19 @@ spec:
                 pattern: (^$|^[a-f0-9]{64}$)
                 type: string
               targetRef:
+                description: Optional.
                 properties:
                   group:
+                    description: group is the group of the target resource.
                     type: string
                   kind:
+                    description: kind is kind of the target resource.
                     type: string
                   name:
+                    description: name is the name of the target resource.
                     type: string
                   namespace:
+                    description: namespace is the namespace of the referent.
                     type: string
                 type: object
               type:
@@ -7433,12 +7438,16 @@ spec:
               targetRef:
                 properties:
                   group:
+                    description: group is the group of the target resource.
                     type: string
                   kind:
+                    description: kind is kind of the target resource.
                     type: string
                   name:
+                    description: name is the name of the target resource.
                     type: string
                   namespace:
+                    description: namespace is the namespace of the referent.
                     type: string
                 type: object
             type: object
@@ -7630,12 +7639,16 @@ spec:
               targetRef:
                 properties:
                   group:
+                    description: group is the group of the target resource.
                     type: string
                   kind:
+                    description: kind is kind of the target resource.
                     type: string
                   name:
+                    description: name is the name of the target resource.
                     type: string
                   namespace:
+                    description: namespace is the namespace of the referent.
                     type: string
                 type: object
             type: object
@@ -7860,12 +7873,16 @@ spec:
               targetRef:
                 properties:
                   group:
+                    description: group is the group of the target resource.
                     type: string
                   kind:
+                    description: kind is kind of the target resource.
                     type: string
                   name:
+                    description: name is the name of the target resource.
                     type: string
                   namespace:
+                    description: namespace is the namespace of the referent.
                     type: string
                 type: object
             type: object
@@ -7969,12 +7986,16 @@ spec:
               targetRef:
                 properties:
                   group:
+                    description: group is the group of the target resource.
                     type: string
                   kind:
+                    description: kind is kind of the target resource.
                     type: string
                   name:
+                    description: name is the name of the target resource.
                     type: string
                   namespace:
+                    description: namespace is the namespace of the referent.
                     type: string
                 type: object
             type: object
@@ -8183,14 +8204,19 @@ spec:
                     type: object
                 type: object
               targetRef:
+                description: Optional.
                 properties:
                   group:
+                    description: group is the group of the target resource.
                     type: string
                   kind:
+                    description: kind is kind of the target resource.
                     type: string
                   name:
+                    description: name is the name of the target resource.
                     type: string
                   namespace:
+                    description: namespace is the namespace of the referent.
                     type: string
                 type: object
               tracing:

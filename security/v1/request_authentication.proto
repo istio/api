@@ -445,10 +445,10 @@ message RequestAuthentication {
   // in the same namespace as the request authentication policy. If the request authentication policy is in the root namespace,
   // the selector will additionally match with workloads in all namespaces.
   //
-  // If not set, the selector will match all workloads. At most, only one of the selector or targetRef can be set for a given 
-  // policy.
+  // If not set, the selector will match all workloads. At most one of the selector and targetRef can be set.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
+  // $hide_from_docs
   // Optional. The targetRef specifies the gateway the policy should be 
   // applied to. The targeted resource specified will determine which 
   // workloads the request authentication policy to. The targeted resource
@@ -457,7 +457,7 @@ message RequestAuthentication {
   // policy.
   //
   // If not set, the policy is applied as defined by the selector.
-  // At most, only one of the selector or targetRef can be set for a given policy.
+  // At most one of the selector and targetRef can be set.
   // Waypoint proxies will not respect selectors even if they match.
   istio.type.v1beta1.PolicyTargetReference targetRef = 3;
 

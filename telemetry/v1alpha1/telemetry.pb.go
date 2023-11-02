@@ -539,9 +539,8 @@ type Telemetry struct {
 	// If not set, the Telemetry policy will be applied to all workloads in the
 	// same namespace as the Telemetry policy.
 	//
-	// At most one of the selector and targetRef can be set.
+	// At most, only one of the selector or targetRef can be set for a given policy.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
-	// $hide_from_docs
 	// Optional. The targetRef specifies the gateway the policy should be
 	// applied to. The targeted resource specified will determine which
 	// workloads the telemetry policy applies to. The targeted resource
@@ -549,7 +548,7 @@ type Telemetry struct {
 	// the Telemetry policy.
 	//
 	// If not set, the policy is applied as defined by the selector.
-	// At most one of the selector and targetRef can be set.
+	// At most, only one of the selector or targetRef can be set for a given policy.
 	// Waypoint proxies will not respect selectors even if they match.
 	TargetRef *v1beta1.PolicyTargetReference `protobuf:"bytes,5,opt,name=targetRef,proto3" json:"targetRef,omitempty"`
 	// Optional. Tracing configures the tracing behavior for all
