@@ -243,10 +243,9 @@ message WasmPlugin {
   // namespace, it will be applied to all applicable workloads in any
   // namespace.
   //
-  // At most one of the selector and targetRef can be set.
+  // At most, only one of the selector or targetRef can be set for a given policy.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
-  // $hide_from_docs
   // Optional. The targetRef specifies the gateway the policy should be 
   // applied to. The targeted resource specified will determine which 
   // workloads the WasmPlugin applies to. The targeted resource must be 
@@ -254,7 +253,7 @@ message WasmPlugin {
   // must be in the same namespace as the policy.
   //
   // If the `targetRef` is not set, the policy is applied as defined by the selector.
-  // At most one of the selector and targetRef can be set.
+  // At most, only one of the selector or targetRef can be set for a given policy.
   // Waypoint proxies will not respect selectors even if they match.
   istio.type.v1beta1.PolicyTargetReference targetRef = 15;
 
