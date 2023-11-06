@@ -1611,6 +1611,7 @@ type AccessLogging_Filter struct {
 	//
 	// - `response.code >= 400`
 	// - `connection.mtls && request.url_path.contains('v1beta3')`
+	// - `!has(request.useragent) || !(request.useragent.startsWith("Amazon-Route53-Health-Check-Service"))`
 	Expression string `protobuf:"bytes,1,opt,name=expression,proto3" json:"expression,omitempty"`
 }
 
