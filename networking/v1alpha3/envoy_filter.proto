@@ -598,7 +598,7 @@ message EnvoyFilter {
 
     // The exact name of the TransportSocketMatches to match.
     // Only used by `TRANSPORT_SOCKET_MATCH`.
-    string name = 5;
+    string transport_socket_match_name = 5;
   };
 
   // Conditions specified in RouteConfigurationMatch must be met for

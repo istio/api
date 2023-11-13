@@ -40026,6 +40026,10 @@
               {
                 "name": "LISTENER_FILTER",
                 "integer": 11
+              },
+              {
+                "name": "TRANSPORT_SOCKET_MATCH",
+                "integer": 12
               }
             ]
           },
@@ -40197,6 +40201,11 @@
                   {
                     "id": 4,
                     "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "id": 5,
+                    "name": "transport_socket_match_name",
                     "type": "string"
                   }
                 ]

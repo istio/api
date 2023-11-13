@@ -382,7 +382,36 @@ spec:
         # This is the full filter config including the name and typed_config section.
         name: &quot;envoy.filters.listener.proxy_protocol&quot;
         typed_config:
-          &quot;@type&quot;: &quot;type.googleapis.com/envoy.extensions.filters.listener.proxy_protocol.v3.ProxyProtocol&quot;</code></pre>
+          &quot;@type&quot;: &quot;type.googleapis.com/envoy.extensions.filters.listener.proxy_protocol.v3.ProxyProtocol&quot;
+
+The following example adds an `envoy.transport_sockets.upstream_proxy_protocol` transport socket match.
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: listener-filter-example
+  namespace: myns
+spec:
+  configPatches:
+  - applyTo: TRANSPORT_SOCKET_MATCH
+    match:
+      context: SIDECAR_OUTBOUND
+    patch:
+      operation: ADD
+      value:
+       name: envoy.transport_sockets.upstream_proxy_protocol
+       match: {}
+       transport_socket:
+         name: envoy.transport_sockets.upstream_proxy_protocol
+         typed_config:
+           '@type': type.googleapis.com/envoy.extensions.transport_sockets.proxy_protocol.v3.ProxyProtocolUpstreamTransport
+           config:
+             version: V2
+           transport_socket:
+             name: &quot;envoy.transport_sockets.raw_buffer&quot;
+             typed_config:
+               '@type': type.googleapis.com/envoy.extensions.transport_sockets.raw_buffer.v3.RawBuffer</code></pre>
 
 <h2 id="EnvoyFilter">EnvoyFilter</h2>
 <section>
@@ -566,6 +595,18 @@ No
 cluster by name, such as the internally generated <code>Passthrough</code>
 cluster, leave all fields in clusterMatch empty, except the
 name.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="EnvoyFilter-ClusterMatch-transport_socket_match_name">
+<td><code>transportSocketMatchName</code></td>
+<td><code>string</code></td>
+<td>
+<p>The exact name of the TransportSocketMatches to match.
+Only used by <code>TRANSPORT_SOCKET_MATCH</code>.</p>
 
 </td>
 <td>
@@ -1478,6 +1519,13 @@ is only supported by HTTP filters.</p>
 <td><code>LISTENER_FILTER</code></td>
 <td>
 <p>Applies the patch to the listener filter.</p>
+
+</td>
+</tr>
+<tr id="EnvoyFilter-ApplyTo-TRANSPORT_SOCKET_MATCH">
+<td><code>TRANSPORT_SOCKET_MATCH</code></td>
+<td>
+<p>Applies the patch to the cluster&rsquo;s transport socket match.</p>
 
 </td>
 </tr>

@@ -3180,6 +3180,7 @@ spec:
                       - EXTENSION_CONFIG
                       - BOOTSTRAP
                       - LISTENER_FILTER
+                      - TRANSPORT_SOCKET_MATCH
                       type: string
                     match:
                       description: Match on listener/route configuration/cluster.
@@ -3215,6 +3216,10 @@ spec:
                               type: string
                             subset:
                               description: The subset associated with the service.
+                              type: string
+                            transportSocketMatchName:
+                              description: The exact name of the TransportSocketMatches
+                                to match.
                               type: string
                           type: object
                         context:
