@@ -225,15 +225,20 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// PluginType indicates the type of Wasm Extension to be used.
-// There are two types of Extensions: `HTTP` and `NETWORK`.
-// HTTP Extension work at "Layer 7"(for example as an HTTP filters in Envoy).
-// The detailed HTTP interface for can be found at [C++] (https://github.com/proxy-wasm/proxy-wasm-cpp-host/blob/b7e690703c7f26707438a2f1ebd7c197bc8f0296/include/proxy-wasm/context_interface.h#L199)
-// and [Rust] (https://github.com/proxy-wasm/proxy-wasm-rust-sdk/blob/6b47aec926bc29971c727471d6f4c972ec407c7f/src/traits.rs#L309).
-// NETWORK Extension work at "Layer 4"(for example, as a network filter in Envoy).
-// The detailed NETWORK interface for can be found at [C++] (https://github.com/proxy-wasm/proxy-wasm-cpp-host/blob/b7e690703c7f26707438a2f1ebd7c197bc8f0296/include/proxy-wasm/context_interface.h#L257)
-// and [Rust] (https://github.com/proxy-wasm/proxy-wasm-rust-sdk/blob/6b47aec926bc29971c727471d6f4c972ec407c7f/src/traits.rs#L257).
-// The NETWORK Extension can be applied to HTTP traffic as well.
+// PluginType indicates the type of Wasm extension to be used.
+// There are two types of extensions: `HTTP` and `NETWORK`.
+//
+// The `HTTP` extension works at Layer 7 (for example, as an HTTP filter in Envoy).
+// The detailed HTTP interface can be found here:
+// - [C++](https://github.com/proxy-wasm/proxy-wasm-cpp-host/blob/b7e690703c7f26707438a2f1ebd7c197bc8f0296/include/proxy-wasm/context_interface.h#L199)
+// - [Rust](https://github.com/proxy-wasm/proxy-wasm-rust-sdk/blob/6b47aec926bc29971c727471d6f4c972ec407c7f/src/traits.rs#L309)
+//
+// The `NETWORK` extension works at Layer 4 (for example, as a network filter in Envoy).
+// The detailed `NETWORK` interface can be found here:
+// - [C++](https://github.com/proxy-wasm/proxy-wasm-cpp-host/blob/b7e690703c7f26707438a2f1ebd7c197bc8f0296/include/proxy-wasm/context_interface.h#L257)
+// - [Rust](https://github.com/proxy-wasm/proxy-wasm-rust-sdk/blob/6b47aec926bc29971c727471d6f4c972ec407c7f/src/traits.rs#L257)
+//
+// The `NETWORK` extension can be applied to HTTP traffic as well.
 type PluginType int32
 
 const (
@@ -628,7 +633,7 @@ type WasmPlugin struct {
 	// Specifies the failure behavior for the plugin due to fatal errors.
 	FailStrategy FailStrategy `protobuf:"varint,13,opt,name=fail_strategy,json=failStrategy,proto3,enum=istio.extensions.v1alpha1.FailStrategy" json:"fail_strategy,omitempty"`
 	// Configuration for a Wasm VM.
-	// more details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).
+	// More details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).
 	VmConfig *VmConfig `protobuf:"bytes,11,opt,name=vm_config,json=vmConfig,proto3" json:"vm_config,omitempty"`
 	// Specifies the criteria to determine which traffic is passed to WasmPlugin.
 	// If a traffic satisfies any of TrafficSelectors,
