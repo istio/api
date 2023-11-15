@@ -670,6 +670,7 @@ message AccessLogging {
     //
     // - `response.code >= 400`
     // - `connection.mtls && request.url_path.contains('v1beta3')`
+    // - `!has(request.useragent) || !(request.useragent.startsWith("Amazon-Route53-Health-Check-Service"))`
     string expression = 1;
   }
 
