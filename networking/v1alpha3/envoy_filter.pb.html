@@ -383,11 +383,9 @@ spec:
         name: &quot;envoy.filters.listener.proxy_protocol&quot;
         typed_config:
           &quot;@type&quot;: &quot;type.googleapis.com/envoy.extensions.filters.listener.proxy_protocol.v3.ProxyProtocol&quot;
-
-The following example adds an `envoy.transport_sockets.upstream_proxy_protocol` transport socket match.
-
-```yaml
-apiVersion: networking.istio.io/v1alpha3
+</code></pre>
+<p>The following example inserts an <code>envoy.transport_sockets.upstream_proxy_protocol</code> transport socket match in front.</p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
   name: listener-filter-example
@@ -398,7 +396,7 @@ spec:
     match:
       context: SIDECAR_OUTBOUND
     patch:
-      operation: ADD
+      operation: INSERT_FIRST
       value:
        name: envoy.transport_sockets.upstream_proxy_protocol
        match: {}
@@ -411,7 +409,8 @@ spec:
            transport_socket:
              name: &quot;envoy.transport_sockets.raw_buffer&quot;
              typed_config:
-               '@type': type.googleapis.com/envoy.extensions.transport_sockets.raw_buffer.v3.RawBuffer</code></pre>
+               '@type': type.googleapis.com/envoy.extensions.transport_sockets.raw_buffer.v3.RawBuffer
+</code></pre>
 
 <h2 id="EnvoyFilter">EnvoyFilter</h2>
 <section>
@@ -1525,7 +1524,8 @@ is only supported by HTTP filters.</p>
 <tr id="EnvoyFilter-ApplyTo-TRANSPORT_SOCKET_MATCH">
 <td><code>TRANSPORT_SOCKET_MATCH</code></td>
 <td>
-<p>Applies the patch to the cluster&rsquo;s transport socket match.</p>
+<p>Applies the patch to the cluster&rsquo;s transport socket match.
+In theory it can be applied to <code>ANY</code> patchContext.</p>
 
 </td>
 </tr>

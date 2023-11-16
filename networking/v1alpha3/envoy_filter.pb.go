@@ -430,8 +430,9 @@
 //         name: "envoy.filters.listener.proxy_protocol"
 //         typed_config:
 //           "@type": "type.googleapis.com/envoy.extensions.filters.listener.proxy_protocol.v3.ProxyProtocol"
+// ```
 //
-// The following example adds an `envoy.transport_sockets.upstream_proxy_protocol` transport socket match.
+// The following example inserts an `envoy.transport_sockets.upstream_proxy_protocol` transport socket match in front.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -445,7 +446,7 @@
 //     match:
 //       context: SIDECAR_OUTBOUND
 //     patch:
-//       operation: ADD
+//       operation: INSERT_FIRST
 //       value:
 //        name: envoy.transport_sockets.upstream_proxy_protocol
 //        match: {}
@@ -459,6 +460,7 @@
 //              name: "envoy.transport_sockets.raw_buffer"
 //              typed_config:
 //                '@type': type.googleapis.com/envoy.extensions.transport_sockets.raw_buffer.v3.RawBuffer
+// ```
 
 package v1alpha3
 
@@ -513,6 +515,7 @@ const (
 	// Applies the patch to the listener filter.
 	EnvoyFilter_LISTENER_FILTER EnvoyFilter_ApplyTo = 11
 	// Applies the patch to the cluster's transport socket match.
+	// In theory it can be applied to `ANY` patchContext.
 	EnvoyFilter_TRANSPORT_SOCKET_MATCH EnvoyFilter_ApplyTo = 12
 )
 
