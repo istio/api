@@ -127,7 +127,20 @@ message PluginConfig {
 
   // CEL expression for filtering access logging. If the expression evaluates
   // to true, an access log entry will be generated. Otherwise, no access log
-  // entry will be generated.
+  // entry will be generated. If there are any type errors, the CEL expression
+  // is evaluated as false. More details on type checking can be found 
+  // at https://kubernetes.io/docs/reference/using-api/cel/#type-checking.
+  // A common error is referring to a non-existent field in the log entry.
+  // It's crucial to note that in Envoy, the fields that appear in access log
+  // entries can vary. This variation is influenced by several factors,
+  // including the protocol in use (such as HTTP or TCP), the applied filters,
+  // and the specific configuration of the Envoy instance. Therefore, when 
+  // using CEL expressions for filtering access logs, it's essential to ensure
+  // that the expressions accurately refer to existing fields in the log entry.
+  // The has() macro in CEL may be used in CEL expressions to check if a field 
+  // is accessible before attempting to access the field's value. 
+  // You can also quickly test CEL expressions at the CEL Playground 
+  // at https://playcel.undistro.io/.
   // NOTE: Audit logs ignore configured filters.
   string access_logging_filter_expression = 17;
 
