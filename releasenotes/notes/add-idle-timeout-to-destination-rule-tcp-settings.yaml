@@ -1,0 +1,8 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue: []
+
+releaseNotes:
+  - |
+    **Added** idle_timeout to the TCP settings in the `DestinationRule` API to enable configuring idle timeout per TcpProxy filter.
