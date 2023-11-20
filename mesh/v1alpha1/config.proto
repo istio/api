@@ -17,6 +17,7 @@ syntax = "proto3";
 import "google/protobuf/duration.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/wrappers.proto";
+import "google/protobuf/any.proto";
 import "mesh/v1alpha1/proxy.proto";
 import "networking/v1alpha3/destination_rule.proto";
 import "networking/v1alpha3/virtual_service.proto";
@@ -1025,6 +1026,53 @@ message MeshConfig {
       // Optional. Controls the overall path length allowed in a reported span.
       // NOTE: currently only controls max length of the path tag.
       uint32 max_tag_length = 3;
+
+      // Optional. Specifies the configuration for exporting OTLP traces via HTTP.
+      // When empty, traces will be exported via gRPC.
+      HttpService otlp_http = 4;
+
+       // Optional. Specifies a list of resource detectors to be used by the OpenTelemetry Tracer.
+       repeated google.protobuf.Any resource_detectors = 5;
+
+      // Optional. Specifies the sampler to be used by the OpenTelemetry Tracer
+      // When specified, it overrides the sampler configuration from Envoy.
+      oneof sampler {
+        AlwaysOnSampler always_on = 6;
+        DynatraceSampler dynatrace = 7;
+      }
+
+      message EnvironmentResourceDetector { }
+
+      message DynatraceResourceDetector { }
+
+      message AlwaysOnSampler { }
+
+      message DynatraceSampler {
+        string cluster_id = 1;
+        string tenant_id = 2;
+      }
+    }
+
+    // Defines configuration for an HTTP service that can be used by an Extension Provider.
+    // that does communication via HTTP.
+    message HttpService {
+      // REQUIRED. Specifies the path on the service.
+      string path = 1;
+
+      // Optional. Specifies the timeout for the HTTP request.
+      // If not specified, the default is 3s.
+      google.protobuf.Duration timeout = 2;
+
+      // Optional. Allows specifying custom HTTP headers that will be added
+      // to each HTTP request sent.
+      repeated HttpHeader headers = 3;
+    }
+
+    message HttpHeader {
+      // REQUIRED. The HTTP header name.
+      string name = 1;
+      // REQUIRED. The HTTP header value.
+      string value = 2;
     }
   }
 

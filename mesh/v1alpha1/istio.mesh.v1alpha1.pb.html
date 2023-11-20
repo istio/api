@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 66
+number_of_entries: 72
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -2277,6 +2277,137 @@ NOTE: currently only controls max length of the path tag.</p>
 No
 </td>
 </tr>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-otlp_http">
+<td><code>otlpHttp</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-HttpService">HttpService</a></code></td>
+<td>
+<p>Optional. Specifies the configuration for exporting OTLP traces via HTTP.
+When empty, traces will be exported via gRPC.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-resource_detectors">
+<td><code>resourceDetectors</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#any">Any[]</a></code></td>
+<td>
+<p>Optional. Specifies a list of resource detectors to be used by the OpenTelemetry Tracer.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-always_on" class="oneof oneof-start">
+<td><code>alwaysOn</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-AlwaysOnSampler">AlwaysOnSampler (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-dynatrace" class="oneof">
+<td><code>dynatrace</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-DynatraceSampler">DynatraceSampler (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-HttpService">MeshConfig.ExtensionProvider.HttpService</h2>
+<section>
+<p>Defines configuration for an HTTP service that can be used by an Extension Provider.
+that does communication via HTTP.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-HttpService-path">
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED. Specifies the path on the service.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-HttpService-timeout">
+<td><code>timeout</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>Optional. Specifies the timeout for the HTTP request.
+If not specified, the default is 3s.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-HttpService-headers">
+<td><code>headers</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-HttpHeader">HttpHeader[]</a></code></td>
+<td>
+<p>Optional. Allows specifying custom HTTP headers that will be added
+to each HTTP request sent.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-HttpHeader">MeshConfig.ExtensionProvider.HttpHeader</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-HttpHeader-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED. The HTTP header name.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-HttpHeader-value">
+<td><code>value</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED. The HTTP header value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -2407,6 +2538,48 @@ Alias to <code>attributes</code> filed in <a href="https://www.envoyproxy.io/doc
   message: &quot;%LOCAL_REPLY_BODY%&quot;
 </code></pre>
 
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-EnvironmentResourceDetector">MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.EnvironmentResourceDetector</h2>
+<section>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-DynatraceResourceDetector">MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.DynatraceResourceDetector</h2>
+<section>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-AlwaysOnSampler">MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.AlwaysOnSampler</h2>
+<section>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-DynatraceSampler">MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.DynatraceSampler</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-DynatraceSampler-cluster_id">
+<td><code>clusterId</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-DynatraceSampler-tenant_id">
+<td><code>tenantId</code></td>
+<td><code>string</code></td>
+<td>
 </td>
 <td>
 No

@@ -1,0 +1,8 @@
+apiVersion: release-notes/v2
+kind: feature
+area: telemetry
+issue:
+  - https://github.com/istio/istio/issues/47835
+releaseNotes:
+  - |
+    **Added** new configuration options to `OpenTelemetryTracingProvider` in `MeshConfig` to allow exporting OpenTelemetry traces via HTTP.

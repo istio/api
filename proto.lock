@@ -38188,6 +38188,89 @@
                         "id": 3,
                         "name": "max_tag_length",
                         "type": "uint32"
+                      },
+                      {
+                        "id": 4,
+                        "name": "otlp_http",
+                        "type": "HttpService"
+                      },
+                      {
+                        "id": 5,
+                        "name": "resource_detectors",
+                        "type": "google.protobuf.Any",
+                        "is_repeated": true
+                      },
+                      {
+                        "id": 6,
+                        "name": "always_on",
+                        "type": "AlwaysOnSampler"
+                      },
+                      {
+                        "id": 7,
+                        "name": "dynatrace",
+                        "type": "DynatraceSampler"
+                      }
+                    ],
+                    "messages": [
+                      {
+                        "name": "EnvironmentResourceDetector"
+                      },
+                      {
+                        "name": "DynatraceResourceDetector"
+                      },
+                      {
+                        "name": "AlwaysOnSampler"
+                      },
+                      {
+                        "name": "DynatraceSampler",
+                        "fields": [
+                          {
+                            "id": 1,
+                            "name": "cluster_id",
+                            "type": "string"
+                          },
+                          {
+                            "id": 2,
+                            "name": "tenant_id",
+                            "type": "string"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "HttpService",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "path",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "timeout",
+                        "type": "google.protobuf.Duration"
+                      },
+                      {
+                        "id": 3,
+                        "name": "headers",
+                        "type": "HttpHeader",
+                        "is_repeated": true
+                      }
+                    ]
+                  },
+                  {
+                    "name": "HttpHeader",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "name",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "value",
+                        "type": "string"
                       }
                     ]
                   }
@@ -38297,6 +38380,9 @@
           },
           {
             "path": "google/protobuf/wrappers.proto"
+          },
+          {
+            "path": "google/protobuf/any.proto"
           },
           {
             "path": "mesh/v1alpha1/proxy.proto"
