@@ -47081,6 +47081,12 @@
                 "type": "string"
               },
               {
+                "id": 12,
+                "name": "from_cookies",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
                 "id": 9,
                 "name": "forward_original_token",
                 "type": "bool"
@@ -47585,6 +47591,12 @@
                 "id": 8,
                 "name": "output_payload_to_header",
                 "type": "string"
+              },
+              {
+                "id": 12,
+                "name": "from_cookies",
+                "type": "string",
+                "is_repeated": true
               },
               {
                 "id": 9,
