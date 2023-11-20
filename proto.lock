@@ -38183,6 +38183,49 @@
                         "id": 3,
                         "name": "max_tag_length",
                         "type": "uint32"
+                      },
+                      {
+                        "id": 4,
+                        "name": "otlp_http",
+                        "type": "OpenTelemetryTracingHttpService"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "OpenTelemetryTracingHttpService",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "traces_path",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "timeout",
+                        "type": "google.protobuf.Duration"
+                      },
+                      {
+                        "id": 3,
+                        "name": "headers",
+                        "type": "HttpHeader",
+                        "is_repeated": true
+                      }
+                    ]
+                  },
+                  {
+                    "name": "HttpHeader",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "name",
+                        "type": "string",
+                        "optional": true
+                      },
+                      {
+                        "id": 2,
+                        "name": "value",
+                        "type": "string",
+                        "optional": true
                       }
                     ]
                   }

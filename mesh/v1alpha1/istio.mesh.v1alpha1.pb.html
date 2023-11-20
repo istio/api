@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 66
+number_of_entries: 68
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -2272,6 +2272,103 @@ No
 <p>Optional. Controls the overall path length allowed in a reported span.
 NOTE: currently only controls max length of the path tag.</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-otlp_http">
+<td><code>otlpHttp</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-OpenTelemetryTracingHttpService">OpenTelemetryTracingHttpService</a></code></td>
+<td>
+<p>Optional. Specifies the configuration for exporting OTLP traces via HTTP.
+When empty, traces will be exported via gRPC.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-OpenTelemetryTracingHttpService">MeshConfig.ExtensionProvider.OpenTelemetryTracingHttpService</h2>
+<section>
+<p>Defines configuration for an OpenTelemetry tracing backend that accepts OTLP data via HTTP.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingHttpService-traces_path">
+<td><code>tracesPath</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED. Specifies the path on the receiver for OTLP traces.
+The path is appended to the <code>service</code></p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingHttpService-timeout">
+<td><code>timeout</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>REQUIRED. Specifies the timeout for the OTLP/HTTP export request.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingHttpService-headers">
+<td><code>headers</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-HttpHeader">HttpHeader[]</a></code></td>
+<td>
+<p>Optional. Allows specifying custom HTTP headers that will be added
+to each OTLP/HTTP export request.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-HttpHeader">MeshConfig.ExtensionProvider.HttpHeader</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-HttpHeader-name" class="oneof oneof-start">
+<td><code>name</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-HttpHeader-value" class="oneof oneof-start">
+<td><code>value</code></td>
+<td><code>string (oneof)</code></td>
+<td>
 </td>
 <td>
 No
