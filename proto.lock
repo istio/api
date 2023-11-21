@@ -38218,14 +38218,12 @@
                       {
                         "id": 1,
                         "name": "name",
-                        "type": "string",
-                        "optional": true
+                        "type": "string"
                       },
                       {
                         "id": 2,
                         "name": "value",
-                        "type": "string",
-                        "optional": true
+                        "type": "string"
                       }
                     ]
                   }

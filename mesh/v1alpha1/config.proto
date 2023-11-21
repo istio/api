@@ -1046,8 +1046,10 @@ message MeshConfig {
     }
 
     message HttpHeader {
-      optional string name = 1;
-      optional string value = 2;
+      // REQUIRED. The HTTP header name.
+      string name = 1;
+      // REQUIRED. The HTTP header value.
+      string value = 2;
     }
   }
 
