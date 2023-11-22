@@ -2469,8 +2469,10 @@ type ConnectionPoolSettings_TCPSettings struct {
 	// The idle timeout is defined as the period in which there are no bytes sent or received on either
 	// the upstream or downstream connection.
 	// If not set, the default idle timeout is 1 hour. If set to 0s, the timeout will be disabled.
-	// Idle timeout is not configured per each cluster when weighted destinations are used,
-	// but only for the original destination.
+	// Idle timeout is not configured per each cluster individually when weighted destinations are used,
+	// because idle_timeout is a property of a listener, not a cluster. In that case, idle_timeout
+	// specified in a destination rule for the first weighted route is configured in the listener,
+	// which means also for all weighted routes.
 	IdleTimeout *duration.Duration `protobuf:"bytes,5,opt,name=idle_timeout,json=idleTimeout,proto3" json:"idle_timeout,omitempty"`
 }
 
