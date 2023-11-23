@@ -3626,7 +3626,8 @@ type MeshConfig_ExtensionProvider_OpenTelemetryTracingHttpService struct {
 	// REQUIRED. Specifies the path on the receiver for OTLP traces.
 	// The path is appended to the `service`
 	TracesPath string `protobuf:"bytes,1,opt,name=traces_path,json=tracesPath,proto3" json:"traces_path,omitempty"`
-	// REQUIRED. Specifies the timeout for the OTLP/HTTP export request.
+	// Optional. Specifies the timeout for the OTLP/HTTP export request.
+	// If not specified, the default is 3s.
 	Timeout *duration.Duration `protobuf:"bytes,2,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	// Optional. Allows specifying custom HTTP headers that will be added
 	// to each OTLP/HTTP export request.

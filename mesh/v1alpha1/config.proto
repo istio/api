@@ -1037,7 +1037,8 @@ message MeshConfig {
       // The path is appended to the `service`
       string traces_path = 1;
 
-      // REQUIRED. Specifies the timeout for the OTLP/HTTP export request.
+      // Optional. Specifies the timeout for the OTLP/HTTP export request.
+      // If not specified, the default is 3s.
       google.protobuf.Duration timeout = 2;
 
       // Optional. Allows specifying custom HTTP headers that will be added
