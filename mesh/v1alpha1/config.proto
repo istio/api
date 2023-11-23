@@ -1028,21 +1028,21 @@ message MeshConfig {
 
       // Optional. Specifies the configuration for exporting OTLP traces via HTTP.
       // When empty, traces will be exported via gRPC.
-      OpenTelemetryTracingHttpService otlp_http = 4;
+      HttpService otlp_http = 4;
     }
 
-    // Defines configuration for an OpenTelemetry tracing backend that accepts OTLP data via HTTP.
-    message OpenTelemetryTracingHttpService {
-      // REQUIRED. Specifies the path on the receiver for OTLP traces.
-      // The path is appended to the `service`
-      string traces_path = 1;
+    // Defines configuration for an HTTP service that can be used by an Extension Provider.
+    // that does communication via HTTP.
+    message HttpService {
+      // REQUIRED. Specifies the path on the service.
+      string path = 1;
 
-      // Optional. Specifies the timeout for the OTLP/HTTP export request.
+      // Optional. Specifies the timeout for the HTTP request.
       // If not specified, the default is 3s.
       google.protobuf.Duration timeout = 2;
 
       // Optional. Allows specifying custom HTTP headers that will be added
-      // to each OTLP/HTTP export request.
+      // to each HTTP request sent.
       repeated HttpHeader headers = 3;
     }
 

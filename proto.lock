@@ -38187,16 +38187,16 @@
                       {
                         "id": 4,
                         "name": "otlp_http",
-                        "type": "OpenTelemetryTracingHttpService"
+                        "type": "HttpService"
                       }
                     ]
                   },
                   {
-                    "name": "OpenTelemetryTracingHttpService",
+                    "name": "HttpService",
                     "fields": [
                       {
                         "id": 1,
-                        "name": "traces_path",
+                        "name": "path",
                         "type": "string"
                       },
                       {

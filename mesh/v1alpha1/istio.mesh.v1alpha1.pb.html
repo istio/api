@@ -2279,7 +2279,7 @@ No
 </tr>
 <tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-otlp_http">
 <td><code>otlpHttp</code></td>
-<td><code><a href="#MeshConfig-ExtensionProvider-OpenTelemetryTracingHttpService">OpenTelemetryTracingHttpService</a></code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-HttpService">HttpService</a></code></td>
 <td>
 <p>Optional. Specifies the configuration for exporting OTLP traces via HTTP.
 When empty, traces will be exported via gRPC.</p>
@@ -2292,9 +2292,10 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="MeshConfig-ExtensionProvider-OpenTelemetryTracingHttpService">MeshConfig.ExtensionProvider.OpenTelemetryTracingHttpService</h2>
+<h2 id="MeshConfig-ExtensionProvider-HttpService">MeshConfig.ExtensionProvider.HttpService</h2>
 <section>
-<p>Defines configuration for an OpenTelemetry tracing backend that accepts OTLP data via HTTP.</p>
+<p>Defines configuration for an HTTP service that can be used by an Extension Provider.
+that does communication via HTTP.</p>
 
 <table class="message-fields">
 <thead>
@@ -2306,23 +2307,22 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingHttpService-traces_path">
-<td><code>tracesPath</code></td>
+<tr id="MeshConfig-ExtensionProvider-HttpService-path">
+<td><code>path</code></td>
 <td><code>string</code></td>
 <td>
-<p>REQUIRED. Specifies the path on the receiver for OTLP traces.
-The path is appended to the <code>service</code></p>
+<p>REQUIRED. Specifies the path on the service.</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingHttpService-timeout">
+<tr id="MeshConfig-ExtensionProvider-HttpService-timeout">
 <td><code>timeout</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
-<p>Optional. Specifies the timeout for the OTLP/HTTP export request.
+<p>Optional. Specifies the timeout for the HTTP request.
 If not specified, the default is 3s.</p>
 
 </td>
@@ -2330,12 +2330,12 @@ If not specified, the default is 3s.</p>
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingHttpService-headers">
+<tr id="MeshConfig-ExtensionProvider-HttpService-headers">
 <td><code>headers</code></td>
 <td><code><a href="#MeshConfig-ExtensionProvider-HttpHeader">HttpHeader[]</a></code></td>
 <td>
 <p>Optional. Allows specifying custom HTTP headers that will be added
-to each OTLP/HTTP export request.</p>
+to each HTTP request sent.</p>
 
 </td>
 <td>
