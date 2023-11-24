@@ -39830,6 +39830,66 @@
                 "id": 5,
                 "name": "min_health_percent",
                 "type": "int32"
+              },
+              {
+                "id": 10,
+                "name": "failure_percentage_ejection",
+                "type": "FailurePercentageEjection"
+              },
+              {
+                "id": 11,
+                "name": "success_rate_ejection",
+                "type": "SuccessRateEjection"
+              }
+            ]
+          },
+          {
+            "name": "FailurePercentageEjection",
+            "fields": [
+              {
+                "id": 1,
+                "name": "threshold",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 2,
+                "name": "enforcement_percentage",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 3,
+                "name": "minimum_hosts",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 4,
+                "name": "request_volume",
+                "type": "google.protobuf.UInt32Value"
+              }
+            ]
+          },
+          {
+            "name": "SuccessRateEjection",
+            "fields": [
+              {
+                "id": 1,
+                "name": "stdev_factor",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 2,
+                "name": "enforcement_percentage",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 3,
+                "name": "minimum_hosts",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 4,
+                "name": "request_volume",
+                "type": "google.protobuf.UInt32Value"
               }
             ]
           },
@@ -42801,6 +42861,66 @@
                 "id": 5,
                 "name": "min_health_percent",
                 "type": "int32"
+              },
+              {
+                "id": 10,
+                "name": "failure_percentage_ejection",
+                "type": "FailurePercentageEjection"
+              },
+              {
+                "id": 11,
+                "name": "success_rate_ejection",
+                "type": "SuccessRateEjection"
+              }
+            ]
+          },
+          {
+            "name": "FailurePercentageEjection",
+            "fields": [
+              {
+                "id": 1,
+                "name": "threshold",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 2,
+                "name": "enforcement_percentage",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 3,
+                "name": "minimum_hosts",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 4,
+                "name": "request_volume",
+                "type": "google.protobuf.UInt32Value"
+              }
+            ]
+          },
+          {
+            "name": "SuccessRateEjection",
+            "fields": [
+              {
+                "id": 1,
+                "name": "stdev_factor",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 2,
+                "name": "enforcement_percentage",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 3,
+                "name": "minimum_hosts",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 4,
+                "name": "request_volume",
+                "type": "google.protobuf.UInt32Value"
               }
             ]
           },
