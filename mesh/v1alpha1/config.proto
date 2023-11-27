@@ -1174,8 +1174,12 @@ message MeshConfig {
   // For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.
   TLSConfig tls_defaults = 64;
 
+  // Optional: A list of GatewayClass.gateway.networking.k8s.io names which implement the Istio waypoint proxy role in an ambient data plane.
+  // If no waypoint_class_names are provided only the istio-waypoint reference implementation will be used.
+  repeated string waypoint_class_names = 66;
+
   // $hide_from_docs
-  // Next available field number: 66
+  // Next available field number: 67
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;

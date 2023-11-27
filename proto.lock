@@ -37471,6 +37471,12 @@
                 "id": 64,
                 "name": "tls_defaults",
                 "type": "TLSConfig"
+              },
+              {
+                "id": 66,
+                "name": "waypoint_class_names",
+                "type": "string",
+                "is_repeated": true
               }
             ],
             "reserved_ids": [

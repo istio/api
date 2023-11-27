@@ -638,6 +638,18 @@ For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.</p>
 No
 </td>
 </tr>
+<tr id="MeshConfig-waypoint_class_names">
+<td><code>waypointClassNames</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Optional: A list of GatewayClass.gateway.networking.k8s.io names which implement the Istio waypoint proxy role in an ambient data plane.
+If no waypoint_class_names are provided only the istio-waypoint reference implementation will be used.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
