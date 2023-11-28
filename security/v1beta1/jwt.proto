@@ -145,6 +145,19 @@ message JWTRule {
   // the payload will not be emitted.
   string output_payload_to_header = 8;
 
+  // List of cookie names from which JWT is expected.	//
+  // For example, if config is:
+  //
+  // ``` yaml
+  //   from_cookies:
+  //   - auth-token
+  // ```
+  // Then JWT will be extracted from ``auth-token`` cookie in the request.
+  //
+  // Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
+  // such requests is undefined.
+  repeated string from_cookies = 12;
+
   // If set to true, the original token will be kept for the upstream request. Default is false.
   bool forward_original_token = 9;
 
@@ -163,6 +176,9 @@ message JWTRule {
   // ```
   // [Experimental] This feature is a experimental feature.
   repeated ClaimToHeader output_claim_to_headers = 11; // [TODO:Update the status whenever this feature is promoted.]
+
+  // $hide_from_docs
+  // Next available field number: 13
 }
 
 // This message specifies a header location to extract JWT token.
