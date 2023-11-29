@@ -39307,6 +39307,18 @@
       "def": {
         "enums": [
           {
+            "name": "ProxyProtocol.VERSION",
+            "enum_fields": [
+              {
+                "name": "V1"
+              },
+              {
+                "name": "V2",
+                "integer": 1
+              }
+            ]
+          },
+          {
             "name": "LoadBalancerSettings.SimpleLB",
             "enum_fields": [
               {
@@ -39449,6 +39461,11 @@
                 "id": 6,
                 "name": "tunnel",
                 "type": "TunnelSettings"
+              },
+              {
+                "id": 7,
+                "name": "proxy_protocol",
+                "type": "ProxyProtocol"
               }
             ],
             "messages": [
@@ -39511,6 +39528,16 @@
                         "value": "REQUIRED"
                       }
                     ]
+                  }
+                ]
+              },
+              {
+                "name": "ProxyProtocol",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "version",
+                    "type": "VERSION"
                   }
                 ]
               }
@@ -42278,6 +42305,18 @@
       "def": {
         "enums": [
           {
+            "name": "ProxyProtocol.VERSION",
+            "enum_fields": [
+              {
+                "name": "V1"
+              },
+              {
+                "name": "V2",
+                "integer": 1
+              }
+            ]
+          },
+          {
             "name": "LoadBalancerSettings.SimpleLB",
             "enum_fields": [
               {
@@ -42420,6 +42459,11 @@
                 "id": 6,
                 "name": "tunnel",
                 "type": "TunnelSettings"
+              },
+              {
+                "id": 7,
+                "name": "proxy_protocol",
+                "type": "ProxyProtocol"
               }
             ],
             "messages": [
@@ -42482,6 +42526,16 @@
                         "value": "REQUIRED"
                       }
                     ]
+                  }
+                ]
+              },
+              {
+                "name": "ProxyProtocol",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "version",
+                    "type": "VERSION"
                   }
                 ]
               }
