@@ -39314,13 +39314,7 @@
               },
               {
                 "name": "V2",
-                "integer": 1,
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
+                "integer": 1
               }
             ]
           },
@@ -42318,13 +42312,7 @@
               },
               {
                 "name": "V2",
-                "integer": 1,
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
+                "integer": 1
               }
             ]
           },
