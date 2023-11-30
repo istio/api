@@ -249,10 +249,9 @@ message Telemetry {
   // If not set, the Telemetry policy will be applied to all workloads in the
   // same namespace as the Telemetry policy.
   //
-  // At most one of the selector and targetRef can be set.
+  // At most, only one of the selector or targetRef can be set for a given policy.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
-  // $hide_from_docs
   // Optional. The targetRef specifies the gateway the policy should be 
   // applied to. The targeted resource specified will determine which 
   // workloads the telemetry policy applies to. The targeted resource
@@ -260,7 +259,7 @@ message Telemetry {
   // the Telemetry policy.
   //
   // If not set, the policy is applied as defined by the selector.
-  // At most one of the selector and targetRef can be set.
+  // At most, only one of the selector or targetRef can be set for a given policy.
   // Waypoint proxies will not respect selectors even if they match.
   istio.type.v1beta1.PolicyTargetReference targetRef = 5;
 
