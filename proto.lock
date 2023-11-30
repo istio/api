@@ -36015,6 +36015,11 @@
                 "id": 1,
                 "name": "protocol",
                 "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "enable_discovery",
+                "type": "bool"
               }
             ]
           }
