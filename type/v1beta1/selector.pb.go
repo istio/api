@@ -213,7 +213,6 @@ func (x *PortSelector) GetNumber() uint32 {
 	return 0
 }
 
-// $hide_from_docs
 // PolicyTargetReference format as defined by [GEP-713](https://gateway-api.sigs.k8s.io/geps/gep-713/#policy-targetref-api).
 //
 // PolicyTargetReferences specifies the targeted resource which the policy
@@ -259,16 +258,12 @@ type PolicyTargetReference struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// $hide_from_docs
 	// group is the group of the target resource.
 	Group string `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
-	// $hide_from_docs
 	// kind is kind of the target resource.
 	Kind string `protobuf:"bytes,2,opt,name=kind,proto3" json:"kind,omitempty"`
-	// $hide_from_docs
 	// name is the name of the target resource.
 	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
-	// $hide_from_docs
 	// namespace is the namespace of the referent. When unspecified, the local
 	// namespace is inferred.
 	Namespace string `protobuf:"bytes,4,opt,name=namespace,proto3" json:"namespace,omitempty"`
