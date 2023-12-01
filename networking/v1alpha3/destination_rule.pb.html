@@ -910,8 +910,7 @@ No
 <td><code>failurePercentageEjection</code></td>
 <td><code><a href="#FailurePercentageEjection">FailurePercentageEjection</a></code></td>
 <td>
-<p>FailurePercent Algorithm for Grpc-xds proxyless for deciding
-if the host is an outlier or not.</p>
+<p>FailurePercent Algorithm for deciding if the host is an outlier or not.</p>
 
 </td>
 <td>
@@ -922,8 +921,7 @@ No
 <td><code>successRateEjection</code></td>
 <td><code><a href="#SuccessRateEjection">SuccessRateEjection</a></code></td>
 <td>
-<p>SuccessRateEjection Algorithm for Grpc-xds proxyless for deciding
-if the host is an outlier or not.</p>
+<p>SuccessRateEjection Algorithm for deciding if the host is an outlier or not.</p>
 
 </td>
 <td>
@@ -993,8 +991,8 @@ No
 <td><code>requestVolume</code></td>
 <td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
 <td>
-<p>The minimum number of total requests that must be collected in one interval (as defined by the
-interval duration above) to perform failure percentage-based ejection for this address. If the
+<p>The minimum number of total requests that must be collected in one interval
+to perform failure percentage-based ejection for this address. If the
 volume is lower than this setting, failure percentage-based ejection will not be performed for
 this host.</p>
 
@@ -1072,10 +1070,9 @@ No
 <td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
 <td>
 <p>The minimum number of total requests that must be collected in one
-interval (as defined by the interval duration above) to include this address
-in success rate based outlier detection. If the volume is lower than this
-setting, outlier detection via success rate statistics is not performed
-for that address.</p>
+interval to include this address in success rate based outlier detection.
+If the volume is lower than this setting, outlier detection via success
+rate statistics is not performed for that address.</p>
 
 </td>
 <td>
@@ -1093,7 +1090,7 @@ for more details. These settings are common to both HTTP and TCP upstreams.</p>
 <p>For example, the following rule configures a client to use mutual TLS
 for connections to upstream database cluster.</p>
 <p>{{<tabset category-name="example">}}
-{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
+{{<tab name="v1alpha3" category-value="v1lpha3">}}</p>
 <pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:

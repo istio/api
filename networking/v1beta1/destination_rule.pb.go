@@ -1287,11 +1287,9 @@ type OutlierDetection struct {
 	// disabled by setting it to 0%. The default is 0% as it's not typically
 	// applicable in k8s environments with few pods per service.
 	MinHealthPercent int32 `protobuf:"varint,5,opt,name=min_health_percent,json=minHealthPercent,proto3" json:"min_health_percent,omitempty"`
-	// FailurePercent Algorithm for Grpc-xds proxyless for deciding
-	// if the host is an outlier or not.
+	// FailurePercent Algorithm for deciding if the host is an outlier or not.
 	FailurePercentageEjection *FailurePercentageEjection `protobuf:"bytes,10,opt,name=failure_percentage_ejection,json=failurePercentageEjection,proto3" json:"failure_percentage_ejection,omitempty"`
-	// SuccessRateEjection Algorithm for Grpc-xds proxyless for deciding
-	// if the host is an outlier or not.
+	// SuccessRateEjection Algorithm for deciding if the host is an outlier or not.
 	SuccessRateEjection *SuccessRateEjection `protobuf:"bytes,11,opt,name=success_rate_ejection,json=successRateEjection,proto3" json:"success_rate_ejection,omitempty"`
 }
 
@@ -1426,8 +1424,8 @@ type FailurePercentageEjection struct {
 	// If the total number of addresses is less than this value, failure percentage-based
 	// ejection will not be performed.
 	MinimumHosts *wrappers.UInt32Value `protobuf:"bytes,3,opt,name=minimum_hosts,json=minimumHosts,proto3" json:"minimum_hosts,omitempty"`
-	// The minimum number of total requests that must be collected in one interval (as defined by the
-	// interval duration above) to perform failure percentage-based ejection for this address. If the
+	// The minimum number of total requests that must be collected in one interval
+	// to perform failure percentage-based ejection for this address. If the
 	// volume is lower than this setting, failure percentage-based ejection will not be performed for
 	// this host.
 	RequestVolume *wrappers.UInt32Value `protobuf:"bytes,4,opt,name=request_volume,json=requestVolume,proto3" json:"request_volume,omitempty"`
@@ -1520,10 +1518,9 @@ type SuccessRateEjection struct {
 	// for any addresses.
 	MinimumHosts *wrappers.UInt32Value `protobuf:"bytes,3,opt,name=minimum_hosts,json=minimumHosts,proto3" json:"minimum_hosts,omitempty"`
 	// The minimum number of total requests that must be collected in one
-	// interval (as defined by the interval duration above) to include this address
-	// in success rate based outlier detection. If the volume is lower than this
-	// setting, outlier detection via success rate statistics is not performed
-	// for that address.
+	// interval to include this address in success rate based outlier detection.
+	// If the volume is lower than this setting, outlier detection via success
+	// rate statistics is not performed for that address.
 	RequestVolume *wrappers.UInt32Value `protobuf:"bytes,4,opt,name=request_volume,json=requestVolume,proto3" json:"request_volume,omitempty"`
 }
 
@@ -1595,7 +1592,7 @@ func (x *SuccessRateEjection) GetRequestVolume() *wrappers.UInt32Value {
 // for connections to upstream database cluster.
 //
 // {{<tabset category-name="example">}}
-// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// {{<tab name="v1alpha3" category-value="v1lpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: DestinationRule

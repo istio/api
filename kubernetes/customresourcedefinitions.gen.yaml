@@ -542,8 +542,8 @@ spec:
                               nullable: true
                               type: integer
                             failurePercentageEjection:
-                              description: FailurePercent Algorithm for Grpc-xds proxyless
-                                for deciding if the host is an outlier or not.
+                              description: FailurePercent Algorithm for deciding if
+                                the host is an outlier or not.
                               properties:
                                 enforcementPercentage:
                                   description: The % chance that an address will be
@@ -558,9 +558,8 @@ spec:
                                   type: integer
                                 requestVolume:
                                   description: The minimum number of total requests
-                                    that must be collected in one interval (as defined
-                                    by the interval duration above) to perform failure
-                                    percentage-based ejection for this address.
+                                    that must be collected in one interval to perform
+                                    failure percentage-based ejection for this address.
                                   nullable: true
                                   type: integer
                                 threshold:
@@ -588,9 +587,8 @@ spec:
                                 origin failures from external errors.
                               type: boolean
                             successRateEjection:
-                              description: SuccessRateEjection Algorithm for Grpc-xds
-                                proxyless for deciding if the host is an outlier or
-                                not.
+                              description: SuccessRateEjection Algorithm for deciding
+                                if the host is an outlier or not.
                               properties:
                                 enforcementPercentage:
                                   description: The % chance that an address will be
@@ -605,9 +603,8 @@ spec:
                                   type: integer
                                 requestVolume:
                                   description: The minimum number of total requests
-                                    that must be collected in one interval (as defined
-                                    by the interval duration above) to include this
-                                    address in success rate based outlier detection.
+                                    that must be collected in one interval to include
+                                    this address in success rate based outlier detection.
                                   nullable: true
                                   type: integer
                                 stdevFactor:
@@ -889,9 +886,8 @@ spec:
                                     nullable: true
                                     type: integer
                                   failurePercentageEjection:
-                                    description: FailurePercent Algorithm for Grpc-xds
-                                      proxyless for deciding if the host is an outlier
-                                      or not.
+                                    description: FailurePercent Algorithm for deciding
+                                      if the host is an outlier or not.
                                     properties:
                                       enforcementPercentage:
                                         description: The % chance that an address
@@ -908,9 +904,8 @@ spec:
                                         type: integer
                                       requestVolume:
                                         description: The minimum number of total requests
-                                          that must be collected in one interval (as
-                                          defined by the interval duration above)
-                                          to perform failure percentage-based ejection
+                                          that must be collected in one interval to
+                                          perform failure percentage-based ejection
                                           for this address.
                                         nullable: true
                                         type: integer
@@ -943,8 +938,7 @@ spec:
                                     type: boolean
                                   successRateEjection:
                                     description: SuccessRateEjection Algorithm for
-                                      Grpc-xds proxyless for deciding if the host
-                                      is an outlier or not.
+                                      deciding if the host is an outlier or not.
                                     properties:
                                       enforcementPercentage:
                                         description: The % chance that an address
@@ -961,10 +955,9 @@ spec:
                                         type: integer
                                       requestVolume:
                                         description: The minimum number of total requests
-                                          that must be collected in one interval (as
-                                          defined by the interval duration above)
-                                          to include this address in success rate
-                                          based outlier detection.
+                                          that must be collected in one interval to
+                                          include this address in success rate based
+                                          outlier detection.
                                         nullable: true
                                         type: integer
                                       stdevFactor:
@@ -1371,8 +1364,8 @@ spec:
                         nullable: true
                         type: integer
                       failurePercentageEjection:
-                        description: FailurePercent Algorithm for Grpc-xds proxyless
-                          for deciding if the host is an outlier or not.
+                        description: FailurePercent Algorithm for deciding if the
+                          host is an outlier or not.
                         properties:
                           enforcementPercentage:
                             description: The % chance that an address will be actually
@@ -1387,9 +1380,8 @@ spec:
                             type: integer
                           requestVolume:
                             description: The minimum number of total requests that
-                              must be collected in one interval (as defined by the
-                              interval duration above) to perform failure percentage-based
-                              ejection for this address.
+                              must be collected in one interval to perform failure
+                              percentage-based ejection for this address.
                             nullable: true
                             type: integer
                           threshold:
@@ -1417,8 +1409,8 @@ spec:
                           failures from external errors.
                         type: boolean
                       successRateEjection:
-                        description: SuccessRateEjection Algorithm for Grpc-xds proxyless
-                          for deciding if the host is an outlier or not.
+                        description: SuccessRateEjection Algorithm for deciding if
+                          the host is an outlier or not.
                         properties:
                           enforcementPercentage:
                             description: The % chance that an address will be actually
@@ -1433,9 +1425,8 @@ spec:
                             type: integer
                           requestVolume:
                             description: The minimum number of total requests that
-                              must be collected in one interval (as defined by the
-                              interval duration above) to include this address in
-                              success rate based outlier detection.
+                              must be collected in one interval to include this address
+                              in success rate based outlier detection.
                             nullable: true
                             type: integer
                           stdevFactor:
@@ -1710,8 +1701,8 @@ spec:
                               nullable: true
                               type: integer
                             failurePercentageEjection:
-                              description: FailurePercent Algorithm for Grpc-xds proxyless
-                                for deciding if the host is an outlier or not.
+                              description: FailurePercent Algorithm for deciding if
+                                the host is an outlier or not.
                               properties:
                                 enforcementPercentage:
                                   description: The % chance that an address will be
@@ -1726,9 +1717,8 @@ spec:
                                   type: integer
                                 requestVolume:
                                   description: The minimum number of total requests
-                                    that must be collected in one interval (as defined
-                                    by the interval duration above) to perform failure
-                                    percentage-based ejection for this address.
+                                    that must be collected in one interval to perform
+                                    failure percentage-based ejection for this address.
                                   nullable: true
                                   type: integer
                                 threshold:
@@ -1756,9 +1746,8 @@ spec:
                                 origin failures from external errors.
                               type: boolean
                             successRateEjection:
-                              description: SuccessRateEjection Algorithm for Grpc-xds
-                                proxyless for deciding if the host is an outlier or
-                                not.
+                              description: SuccessRateEjection Algorithm for deciding
+                                if the host is an outlier or not.
                               properties:
                                 enforcementPercentage:
                                   description: The % chance that an address will be
@@ -1773,9 +1762,8 @@ spec:
                                   type: integer
                                 requestVolume:
                                   description: The minimum number of total requests
-                                    that must be collected in one interval (as defined
-                                    by the interval duration above) to include this
-                                    address in success rate based outlier detection.
+                                    that must be collected in one interval to include
+                                    this address in success rate based outlier detection.
                                   nullable: true
                                   type: integer
                                 stdevFactor:
@@ -2245,8 +2233,8 @@ spec:
                               nullable: true
                               type: integer
                             failurePercentageEjection:
-                              description: FailurePercent Algorithm for Grpc-xds proxyless
-                                for deciding if the host is an outlier or not.
+                              description: FailurePercent Algorithm for deciding if
+                                the host is an outlier or not.
                               properties:
                                 enforcementPercentage:
                                   description: The % chance that an address will be
@@ -2261,9 +2249,8 @@ spec:
                                   type: integer
                                 requestVolume:
                                   description: The minimum number of total requests
-                                    that must be collected in one interval (as defined
-                                    by the interval duration above) to perform failure
-                                    percentage-based ejection for this address.
+                                    that must be collected in one interval to perform
+                                    failure percentage-based ejection for this address.
                                   nullable: true
                                   type: integer
                                 threshold:
@@ -2291,9 +2278,8 @@ spec:
                                 origin failures from external errors.
                               type: boolean
                             successRateEjection:
-                              description: SuccessRateEjection Algorithm for Grpc-xds
-                                proxyless for deciding if the host is an outlier or
-                                not.
+                              description: SuccessRateEjection Algorithm for deciding
+                                if the host is an outlier or not.
                               properties:
                                 enforcementPercentage:
                                   description: The % chance that an address will be
@@ -2308,9 +2294,8 @@ spec:
                                   type: integer
                                 requestVolume:
                                   description: The minimum number of total requests
-                                    that must be collected in one interval (as defined
-                                    by the interval duration above) to include this
-                                    address in success rate based outlier detection.
+                                    that must be collected in one interval to include
+                                    this address in success rate based outlier detection.
                                   nullable: true
                                   type: integer
                                 stdevFactor:
@@ -2592,9 +2577,8 @@ spec:
                                     nullable: true
                                     type: integer
                                   failurePercentageEjection:
-                                    description: FailurePercent Algorithm for Grpc-xds
-                                      proxyless for deciding if the host is an outlier
-                                      or not.
+                                    description: FailurePercent Algorithm for deciding
+                                      if the host is an outlier or not.
                                     properties:
                                       enforcementPercentage:
                                         description: The % chance that an address
@@ -2611,9 +2595,8 @@ spec:
                                         type: integer
                                       requestVolume:
                                         description: The minimum number of total requests
-                                          that must be collected in one interval (as
-                                          defined by the interval duration above)
-                                          to perform failure percentage-based ejection
+                                          that must be collected in one interval to
+                                          perform failure percentage-based ejection
                                           for this address.
                                         nullable: true
                                         type: integer
@@ -2646,8 +2629,7 @@ spec:
                                     type: boolean
                                   successRateEjection:
                                     description: SuccessRateEjection Algorithm for
-                                      Grpc-xds proxyless for deciding if the host
-                                      is an outlier or not.
+                                      deciding if the host is an outlier or not.
                                     properties:
                                       enforcementPercentage:
                                         description: The % chance that an address
@@ -2664,10 +2646,9 @@ spec:
                                         type: integer
                                       requestVolume:
                                         description: The minimum number of total requests
-                                          that must be collected in one interval (as
-                                          defined by the interval duration above)
-                                          to include this address in success rate
-                                          based outlier detection.
+                                          that must be collected in one interval to
+                                          include this address in success rate based
+                                          outlier detection.
                                         nullable: true
                                         type: integer
                                       stdevFactor:
@@ -3074,8 +3055,8 @@ spec:
                         nullable: true
                         type: integer
                       failurePercentageEjection:
-                        description: FailurePercent Algorithm for Grpc-xds proxyless
-                          for deciding if the host is an outlier or not.
+                        description: FailurePercent Algorithm for deciding if the
+                          host is an outlier or not.
                         properties:
                           enforcementPercentage:
                             description: The % chance that an address will be actually
@@ -3090,9 +3071,8 @@ spec:
                             type: integer
                           requestVolume:
                             description: The minimum number of total requests that
-                              must be collected in one interval (as defined by the
-                              interval duration above) to perform failure percentage-based
-                              ejection for this address.
+                              must be collected in one interval to perform failure
+                              percentage-based ejection for this address.
                             nullable: true
                             type: integer
                           threshold:
@@ -3120,8 +3100,8 @@ spec:
                           failures from external errors.
                         type: boolean
                       successRateEjection:
-                        description: SuccessRateEjection Algorithm for Grpc-xds proxyless
-                          for deciding if the host is an outlier or not.
+                        description: SuccessRateEjection Algorithm for deciding if
+                          the host is an outlier or not.
                         properties:
                           enforcementPercentage:
                             description: The % chance that an address will be actually
@@ -3136,9 +3116,8 @@ spec:
                             type: integer
                           requestVolume:
                             description: The minimum number of total requests that
-                              must be collected in one interval (as defined by the
-                              interval duration above) to include this address in
-                              success rate based outlier detection.
+                              must be collected in one interval to include this address
+                              in success rate based outlier detection.
                             nullable: true
                             type: integer
                           stdevFactor:
@@ -3413,8 +3392,8 @@ spec:
                               nullable: true
                               type: integer
                             failurePercentageEjection:
-                              description: FailurePercent Algorithm for Grpc-xds proxyless
-                                for deciding if the host is an outlier or not.
+                              description: FailurePercent Algorithm for deciding if
+                                the host is an outlier or not.
                               properties:
                                 enforcementPercentage:
                                   description: The % chance that an address will be
@@ -3429,9 +3408,8 @@ spec:
                                   type: integer
                                 requestVolume:
                                   description: The minimum number of total requests
-                                    that must be collected in one interval (as defined
-                                    by the interval duration above) to perform failure
-                                    percentage-based ejection for this address.
+                                    that must be collected in one interval to perform
+                                    failure percentage-based ejection for this address.
                                   nullable: true
                                   type: integer
                                 threshold:
@@ -3459,9 +3437,8 @@ spec:
                                 origin failures from external errors.
                               type: boolean
                             successRateEjection:
-                              description: SuccessRateEjection Algorithm for Grpc-xds
-                                proxyless for deciding if the host is an outlier or
-                                not.
+                              description: SuccessRateEjection Algorithm for deciding
+                                if the host is an outlier or not.
                               properties:
                                 enforcementPercentage:
                                   description: The % chance that an address will be
@@ -3476,9 +3453,8 @@ spec:
                                   type: integer
                                 requestVolume:
                                   description: The minimum number of total requests
-                                    that must be collected in one interval (as defined
-                                    by the interval duration above) to include this
-                                    address in success rate based outlier detection.
+                                    that must be collected in one interval to include
+                                    this address in success rate based outlier detection.
                                   nullable: true
                                   type: integer
                                 stdevFactor:

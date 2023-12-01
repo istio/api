@@ -963,12 +963,10 @@ message OutlierDetection {
   // applicable in k8s environments with few pods per service.
   int32 min_health_percent = 5;
 
-  // FailurePercent Algorithm for Grpc-xds proxyless for deciding
-  // if the host is an outlier or not.
+  // FailurePercent Algorithm for deciding if the host is an outlier or not.
   FailurePercentageEjection failure_percentage_ejection = 10;
 
-  // SuccessRateEjection Algorithm for Grpc-xds proxyless for deciding
-  // if the host is an outlier or not.
+  // SuccessRateEjection Algorithm for deciding if the host is an outlier or not.
   SuccessRateEjection success_rate_ejection = 11;
 }
 
@@ -992,8 +990,8 @@ message FailurePercentageEjection {
   // ejection will not be performed.
   google.protobuf.UInt32Value minimum_hosts = 3;
 
-  // The minimum number of total requests that must be collected in one interval (as defined by the
-  // interval duration above) to perform failure percentage-based ejection for this address. If the
+  // The minimum number of total requests that must be collected in one interval
+  // to perform failure percentage-based ejection for this address. If the
   // volume is lower than this setting, failure percentage-based ejection will not be performed for
   // this host.
   google.protobuf.UInt32Value request_volume = 4;
@@ -1025,10 +1023,9 @@ message SuccessRateEjection {
   google.protobuf.UInt32Value minimum_hosts = 3;
 
   // The minimum number of total requests that must be collected in one
-  // interval (as defined by the interval duration above) to include this address
-  // in success rate based outlier detection. If the volume is lower than this
-  // setting, outlier detection via success rate statistics is not performed
-  // for that address.
+  // interval to include this address in success rate based outlier detection.
+  // If the volume is lower than this setting, outlier detection via success
+  // rate statistics is not performed for that address.
   google.protobuf.UInt32Value request_volume = 4;
 }
 
@@ -1040,7 +1037,7 @@ message SuccessRateEjection {
 // for connections to upstream database cluster.
 //
 // {{<tabset category-name="example">}}
-// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// {{<tab name="v1alpha3" category-value="v1lpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: DestinationRule
