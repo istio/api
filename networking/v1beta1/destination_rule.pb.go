@@ -1572,16 +1572,16 @@ type ClientTLSSettings struct {
 	// host/authority header for SIMPLE and MUTUAL TLS modes, provided `ENABLE_AUTO_SNI`
 	// environmental variable is set to `true`.
 	Sni string `protobuf:"bytes,6,opt,name=sni,proto3" json:"sni,omitempty"`
-	// InsecureSkipVerify specifies whether the proxy should skip verifying the
+	// `insecureSkipVerify` specifies whether the proxy should skip verifying the
 	// CA signature and SAN for the server certificate corresponding to the host.
 	// This flag should only be set if global CA signature verification is
-	// enabled, `VerifyCertAtClient` environmental variable is set to `true`,
+	// enabled, `VERIFY_CERTIFICATE_AT_CLIENT` environmental variable is set to `true`,
 	// but no verification is desired for a specific host. If enabled with or
-	// without `VerifyCertAtClient` enabled, verification of the CA signature and
+	// without `VERIFY_CERTIFICATE_AT_CLIENT` enabled, verification of the CA signature and
 	// SAN will be skipped.
 	//
-	// `InsecureSkipVerify` is `false` by default.
-	// `VerifyCertAtClient` is `false` by default in Istio version 1.9 but will
+	// `insecureSkipVerify` is `false` by default.
+	// `VERIFY_CERTIFICATE_AT_CLIENT` is `false` by default in Istio version 1.9 but will
 	// be `true` by default in a later version where, going forward, it will be
 	// enabled by default.
 	InsecureSkipVerify *wrappers.BoolValue `protobuf:"bytes,8,opt,name=insecure_skip_verify,json=insecureSkipVerify,proto3" json:"insecure_skip_verify,omitempty"`
