@@ -7971,6 +7971,10 @@ spec:
                       description: This field specifies the header name to output
                         a successfully verified JWT payload to the backend.
                       type: string
+                    timeout:
+                      description: Sets the maximum duration that an OpenID request
+                        can take to arrive upon request.
+                      type: string
                   required:
                   - issuer
                   type: object
@@ -8089,6 +8093,10 @@ spec:
                     outputPayloadToHeader:
                       description: This field specifies the header name to output
                         a successfully verified JWT payload to the backend.
+                      type: string
+                    timeout:
+                      description: Sets the maximum duration that an OpenID request
+                        can take to arrive upon request.
                       type: string
                   required:
                   - issuer
