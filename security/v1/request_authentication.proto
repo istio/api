@@ -448,9 +448,8 @@ message RequestAuthentication {
   // If not set, the selector will match all workloads. At most one of the selector and targetRef can be set.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
-  // $hide_from_docs
-  // Optional. The targetRef specifies the gateway the policy should be 
-  // applied to. The targeted resource specified will determine which 
+  // Optional. The targetRef specifies the gateway the policy should be
+  // applied to. The targeted resource specified will determine which
   // workloads the request authentication policy to. The targeted resource
   // must be a `Gateway` in the group `gateway.networking.k8s.io`. The
   // gateway must be in the same namespace as the request authentication
