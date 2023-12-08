@@ -39299,9 +39299,6 @@
             "path": "analysis/v1alpha1/message.proto"
           },
           {
-            "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
-          },
-          {
             "path": "google/protobuf/timestamp.proto"
           },
           {
@@ -48413,9 +48410,6 @@
           }
         ],
         "imports": [
-          {
-            "path": "google/api/field_behavior.proto"
-          },
           {
             "path": "google/protobuf/timestamp.proto"
           }

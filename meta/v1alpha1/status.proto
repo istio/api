@@ -14,7 +14,6 @@
 syntax = "proto3";
 
 import "analysis/v1alpha1/message.proto";
-import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
 import "google/protobuf/timestamp.proto";
 
 import "type/v1beta1/policy-ancestor-status.proto";
