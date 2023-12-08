@@ -546,7 +546,6 @@ type RequestAuthentication struct {
 	//
 	// If not set, the selector will match all workloads. At most one of the selector and targetRef can be set.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
-	// $hide_from_docs
 	// Optional. The targetRef specifies the gateway the policy should be
 	// applied to. The targeted resource specified will determine which
 	// workloads the request authentication policy to. The targeted resource
