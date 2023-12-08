@@ -14,8 +14,10 @@
 syntax = "proto3";
 
 import "analysis/v1alpha1/message.proto";
-
+import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
 import "google/protobuf/timestamp.proto";
+
+import "type/v1beta1/policy-ancestor-status.proto";
 
 // $title: Istio Status
 // $description: Common status field for all istio collections.
@@ -44,6 +46,10 @@ message IstioStatus {
   // generation is still in progress.  See https://istio.io/latest/docs/reference/config/config-status/ for more info.
   // +optional
   int64 observed_generation = 3;
+
+  // Status from Ancestors
+  // +optional
+  repeated istio.type.v1beta1.PolicyAncestorStatus ancestors = 4;
 }
 
 message IstioCondition {
@@ -70,3 +76,4 @@ message IstioCondition {
   // +optional
   string message = 6;
 }
+

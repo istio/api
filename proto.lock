@@ -39249,6 +39249,12 @@
                 "id": 3,
                 "name": "observed_generation",
                 "type": "int64"
+              },
+              {
+                "id": 4,
+                "name": "ancestors",
+                "type": "istio.type.v1beta1.PolicyAncestorStatus",
+                "is_repeated": true
               }
             ]
           },
@@ -39293,7 +39299,13 @@
             "path": "analysis/v1alpha1/message.proto"
           },
           {
+            "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
+          },
+          {
             "path": "google/protobuf/timestamp.proto"
+          },
+          {
+            "path": "type/v1beta1/policy-ancestor-status.proto"
           }
         ],
         "package": {
@@ -48300,6 +48312,121 @@
           {
             "name": "go_package",
             "value": "istio.io/api/telemetry/v1alpha1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "type:/:v1beta1:/:policy-ancestor-status.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "ParentReference",
+            "fields": [
+              {
+                "id": 1,
+                "name": "group",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "kind",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "namespace",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "section_name",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "port",
+                "type": "int32"
+              }
+            ]
+          },
+          {
+            "name": "PolicyAncestorStatus",
+            "fields": [
+              {
+                "id": 1,
+                "name": "ancestor_ref",
+                "type": "ParentReference"
+              },
+              {
+                "id": 2,
+                "name": "controller_name",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "conditions",
+                "type": "Condition",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "Condition",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "status",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "observed_generation",
+                "type": "int64"
+              },
+              {
+                "id": 4,
+                "name": "last_transition_time",
+                "type": "google.protobuf.Timestamp"
+              },
+              {
+                "id": 5,
+                "name": "reason",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "message",
+                "type": "string"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/api/field_behavior.proto"
+          },
+          {
+            "path": "google/protobuf/timestamp.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.type.v1beta1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/type/v1beta1"
           }
         ]
       }
