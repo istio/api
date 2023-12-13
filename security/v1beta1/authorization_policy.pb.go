@@ -581,7 +581,6 @@ type AuthorizationPolicy struct {
 	// If the selector and the targetRef are not set, the selector will match all workloads. At most one of the selector
 	// and targetRef can be set.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
-	// $hide_from_docs
 	// Optional. The targetRef specifies the gateway the policy should be
 	// applied to. The targeted resource specified will determine which
 	// workloads the authorization policy applies to. The targeted resource
@@ -590,6 +589,11 @@ type AuthorizationPolicy struct {
 	//
 	// If not set, the policy is applied as defined by the selector.
 	// At most one of the selector and targetRef can be set.
+	//
+	// NOTE: If you are using the `targetRef` field in a multi-revision environment with Istio versions prior to 1.20,
+	// it is highly recommended that you pin the authorization policy to a revision running 1.20+ via the istio.io/rev label.
+	// This is to prevent proxies connected to older istiod control planes (that don't know about the targetRef field)
+	// from misinterpreting the policy as namespace-wide during the upgrade process.
 	TargetRef *v1beta1.PolicyTargetReference `protobuf:"bytes,5,opt,name=targetRef,proto3" json:"targetRef,omitempty"`
 	// Optional. A list of rules to match the request. A match occurs when at least one rule matches the request.
 	//
