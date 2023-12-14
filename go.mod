@@ -1,8 +1,6 @@
 module istio.io/api
 
-go 1.21
-
-toolchain go1.21.5
+go 1.18
 
 require (
 	github.com/golang/protobuf v1.5.3
