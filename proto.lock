@@ -46509,6 +46509,11 @@
                 "id": 14,
                 "name": "sessionAffinityConfig",
                 "type": "SessionAffinityConfig"
+              },
+              {
+                "id": 15,
+                "name": "loadBalancerClass",
+                "type": "string"
               }
             ],
             "maps": [
