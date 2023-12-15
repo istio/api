@@ -546,6 +546,33 @@ spec:
                                 failures before ejection occurs.
                               nullable: true
                               type: integer
+                            failurePercentageEjection:
+                              description: FailurePercent Algorithm for deciding if
+                                the host is an outlier or not.
+                              properties:
+                                enforcementPercentage:
+                                  description: The % chance that an address will be
+                                    actually ejected when an outlier status is detected
+                                    through failure percentage statistics.
+                                  nullable: true
+                                  type: integer
+                                minimumHosts:
+                                  description: The minimum number of addresses in
+                                    order to perform failure percentage-based ejection.
+                                  nullable: true
+                                  type: integer
+                                requestVolume:
+                                  description: The minimum number of total requests
+                                    that must be collected in one interval to perform
+                                    failure percentage-based ejection for this address.
+                                  nullable: true
+                                  type: integer
+                                threshold:
+                                  description: The failure percentage to use when
+                                    determining failure percentage-based outlier detection.
+                                  nullable: true
+                                  type: integer
+                              type: object
                             interval:
                               description: Time interval between ejection sweep analysis.
                               type: string
@@ -564,6 +591,33 @@ spec:
                               description: Determines whether to distinguish local
                                 origin failures from external errors.
                               type: boolean
+                            successRateEjection:
+                              description: SuccessRateEjection Algorithm for deciding
+                                if the host is an outlier or not.
+                              properties:
+                                enforcementPercentage:
+                                  description: The % chance that an address will be
+                                    actually ejected when an outlier status is detected
+                                    through success rate statistics.
+                                  nullable: true
+                                  type: integer
+                                minimumHosts:
+                                  description: The number of addresses that must have
+                                    enough request volume to detect success rate outliers.
+                                  nullable: true
+                                  type: integer
+                                requestVolume:
+                                  description: The minimum number of total requests
+                                    that must be collected in one interval to include
+                                    this address in success rate based outlier detection.
+                                  nullable: true
+                                  type: integer
+                                stdevFactor:
+                                  description: This factor is used to determine the
+                                    ejection threshold for success rate outlier ejection.
+                                  nullable: true
+                                  type: integer
+                              type: object
                           type: object
                         portLevelSettings:
                           description: Traffic policies specific to individual ports.
@@ -836,6 +890,37 @@ spec:
                                       originated failures before ejection occurs.
                                     nullable: true
                                     type: integer
+                                  failurePercentageEjection:
+                                    description: FailurePercent Algorithm for deciding
+                                      if the host is an outlier or not.
+                                    properties:
+                                      enforcementPercentage:
+                                        description: The % chance that an address
+                                          will be actually ejected when an outlier
+                                          status is detected through failure percentage
+                                          statistics.
+                                        nullable: true
+                                        type: integer
+                                      minimumHosts:
+                                        description: The minimum number of addresses
+                                          in order to perform failure percentage-based
+                                          ejection.
+                                        nullable: true
+                                        type: integer
+                                      requestVolume:
+                                        description: The minimum number of total requests
+                                          that must be collected in one interval to
+                                          perform failure percentage-based ejection
+                                          for this address.
+                                        nullable: true
+                                        type: integer
+                                      threshold:
+                                        description: The failure percentage to use
+                                          when determining failure percentage-based
+                                          outlier detection.
+                                        nullable: true
+                                        type: integer
+                                    type: object
                                   interval:
                                     description: Time interval between ejection sweep
                                       analysis.
@@ -856,6 +941,37 @@ spec:
                                     description: Determines whether to distinguish
                                       local origin failures from external errors.
                                     type: boolean
+                                  successRateEjection:
+                                    description: SuccessRateEjection Algorithm for
+                                      deciding if the host is an outlier or not.
+                                    properties:
+                                      enforcementPercentage:
+                                        description: The % chance that an address
+                                          will be actually ejected when an outlier
+                                          status is detected through success rate
+                                          statistics.
+                                        nullable: true
+                                        type: integer
+                                      minimumHosts:
+                                        description: The number of addresses that
+                                          must have enough request volume to detect
+                                          success rate outliers.
+                                        nullable: true
+                                        type: integer
+                                      requestVolume:
+                                        description: The minimum number of total requests
+                                          that must be collected in one interval to
+                                          include this address in success rate based
+                                          outlier detection.
+                                        nullable: true
+                                        type: integer
+                                      stdevFactor:
+                                        description: This factor is used to determine
+                                          the ejection threshold for success rate
+                                          outlier ejection.
+                                        nullable: true
+                                        type: integer
+                                    type: object
                                 type: object
                               port:
                                 description: Specifies the number of a port on the
@@ -1253,6 +1369,33 @@ spec:
                           failures before ejection occurs.
                         nullable: true
                         type: integer
+                      failurePercentageEjection:
+                        description: FailurePercent Algorithm for deciding if the
+                          host is an outlier or not.
+                        properties:
+                          enforcementPercentage:
+                            description: The % chance that an address will be actually
+                              ejected when an outlier status is detected through failure
+                              percentage statistics.
+                            nullable: true
+                            type: integer
+                          minimumHosts:
+                            description: The minimum number of addresses in order
+                              to perform failure percentage-based ejection.
+                            nullable: true
+                            type: integer
+                          requestVolume:
+                            description: The minimum number of total requests that
+                              must be collected in one interval to perform failure
+                              percentage-based ejection for this address.
+                            nullable: true
+                            type: integer
+                          threshold:
+                            description: The failure percentage to use when determining
+                              failure percentage-based outlier detection.
+                            nullable: true
+                            type: integer
+                        type: object
                       interval:
                         description: Time interval between ejection sweep analysis.
                         type: string
@@ -1271,6 +1414,33 @@ spec:
                         description: Determines whether to distinguish local origin
                           failures from external errors.
                         type: boolean
+                      successRateEjection:
+                        description: SuccessRateEjection Algorithm for deciding if
+                          the host is an outlier or not.
+                        properties:
+                          enforcementPercentage:
+                            description: The % chance that an address will be actually
+                              ejected when an outlier status is detected through success
+                              rate statistics.
+                            nullable: true
+                            type: integer
+                          minimumHosts:
+                            description: The number of addresses that must have enough
+                              request volume to detect success rate outliers.
+                            nullable: true
+                            type: integer
+                          requestVolume:
+                            description: The minimum number of total requests that
+                              must be collected in one interval to include this address
+                              in success rate based outlier detection.
+                            nullable: true
+                            type: integer
+                          stdevFactor:
+                            description: This factor is used to determine the ejection
+                              threshold for success rate outlier ejection.
+                            nullable: true
+                            type: integer
+                        type: object
                     type: object
                   portLevelSettings:
                     description: Traffic policies specific to individual ports.
@@ -1536,6 +1706,33 @@ spec:
                                 failures before ejection occurs.
                               nullable: true
                               type: integer
+                            failurePercentageEjection:
+                              description: FailurePercent Algorithm for deciding if
+                                the host is an outlier or not.
+                              properties:
+                                enforcementPercentage:
+                                  description: The % chance that an address will be
+                                    actually ejected when an outlier status is detected
+                                    through failure percentage statistics.
+                                  nullable: true
+                                  type: integer
+                                minimumHosts:
+                                  description: The minimum number of addresses in
+                                    order to perform failure percentage-based ejection.
+                                  nullable: true
+                                  type: integer
+                                requestVolume:
+                                  description: The minimum number of total requests
+                                    that must be collected in one interval to perform
+                                    failure percentage-based ejection for this address.
+                                  nullable: true
+                                  type: integer
+                                threshold:
+                                  description: The failure percentage to use when
+                                    determining failure percentage-based outlier detection.
+                                  nullable: true
+                                  type: integer
+                              type: object
                             interval:
                               description: Time interval between ejection sweep analysis.
                               type: string
@@ -1554,6 +1751,33 @@ spec:
                               description: Determines whether to distinguish local
                                 origin failures from external errors.
                               type: boolean
+                            successRateEjection:
+                              description: SuccessRateEjection Algorithm for deciding
+                                if the host is an outlier or not.
+                              properties:
+                                enforcementPercentage:
+                                  description: The % chance that an address will be
+                                    actually ejected when an outlier status is detected
+                                    through success rate statistics.
+                                  nullable: true
+                                  type: integer
+                                minimumHosts:
+                                  description: The number of addresses that must have
+                                    enough request volume to detect success rate outliers.
+                                  nullable: true
+                                  type: integer
+                                requestVolume:
+                                  description: The minimum number of total requests
+                                    that must be collected in one interval to include
+                                    this address in success rate based outlier detection.
+                                  nullable: true
+                                  type: integer
+                                stdevFactor:
+                                  description: This factor is used to determine the
+                                    ejection threshold for success rate outlier ejection.
+                                  nullable: true
+                                  type: integer
+                              type: object
                           type: object
                         port:
                           description: Specifies the number of a port on the destination
@@ -2015,6 +2239,33 @@ spec:
                                 failures before ejection occurs.
                               nullable: true
                               type: integer
+                            failurePercentageEjection:
+                              description: FailurePercent Algorithm for deciding if
+                                the host is an outlier or not.
+                              properties:
+                                enforcementPercentage:
+                                  description: The % chance that an address will be
+                                    actually ejected when an outlier status is detected
+                                    through failure percentage statistics.
+                                  nullable: true
+                                  type: integer
+                                minimumHosts:
+                                  description: The minimum number of addresses in
+                                    order to perform failure percentage-based ejection.
+                                  nullable: true
+                                  type: integer
+                                requestVolume:
+                                  description: The minimum number of total requests
+                                    that must be collected in one interval to perform
+                                    failure percentage-based ejection for this address.
+                                  nullable: true
+                                  type: integer
+                                threshold:
+                                  description: The failure percentage to use when
+                                    determining failure percentage-based outlier detection.
+                                  nullable: true
+                                  type: integer
+                              type: object
                             interval:
                               description: Time interval between ejection sweep analysis.
                               type: string
@@ -2033,6 +2284,33 @@ spec:
                               description: Determines whether to distinguish local
                                 origin failures from external errors.
                               type: boolean
+                            successRateEjection:
+                              description: SuccessRateEjection Algorithm for deciding
+                                if the host is an outlier or not.
+                              properties:
+                                enforcementPercentage:
+                                  description: The % chance that an address will be
+                                    actually ejected when an outlier status is detected
+                                    through success rate statistics.
+                                  nullable: true
+                                  type: integer
+                                minimumHosts:
+                                  description: The number of addresses that must have
+                                    enough request volume to detect success rate outliers.
+                                  nullable: true
+                                  type: integer
+                                requestVolume:
+                                  description: The minimum number of total requests
+                                    that must be collected in one interval to include
+                                    this address in success rate based outlier detection.
+                                  nullable: true
+                                  type: integer
+                                stdevFactor:
+                                  description: This factor is used to determine the
+                                    ejection threshold for success rate outlier ejection.
+                                  nullable: true
+                                  type: integer
+                              type: object
                           type: object
                         portLevelSettings:
                           description: Traffic policies specific to individual ports.
@@ -2305,6 +2583,37 @@ spec:
                                       originated failures before ejection occurs.
                                     nullable: true
                                     type: integer
+                                  failurePercentageEjection:
+                                    description: FailurePercent Algorithm for deciding
+                                      if the host is an outlier or not.
+                                    properties:
+                                      enforcementPercentage:
+                                        description: The % chance that an address
+                                          will be actually ejected when an outlier
+                                          status is detected through failure percentage
+                                          statistics.
+                                        nullable: true
+                                        type: integer
+                                      minimumHosts:
+                                        description: The minimum number of addresses
+                                          in order to perform failure percentage-based
+                                          ejection.
+                                        nullable: true
+                                        type: integer
+                                      requestVolume:
+                                        description: The minimum number of total requests
+                                          that must be collected in one interval to
+                                          perform failure percentage-based ejection
+                                          for this address.
+                                        nullable: true
+                                        type: integer
+                                      threshold:
+                                        description: The failure percentage to use
+                                          when determining failure percentage-based
+                                          outlier detection.
+                                        nullable: true
+                                        type: integer
+                                    type: object
                                   interval:
                                     description: Time interval between ejection sweep
                                       analysis.
@@ -2325,6 +2634,37 @@ spec:
                                     description: Determines whether to distinguish
                                       local origin failures from external errors.
                                     type: boolean
+                                  successRateEjection:
+                                    description: SuccessRateEjection Algorithm for
+                                      deciding if the host is an outlier or not.
+                                    properties:
+                                      enforcementPercentage:
+                                        description: The % chance that an address
+                                          will be actually ejected when an outlier
+                                          status is detected through success rate
+                                          statistics.
+                                        nullable: true
+                                        type: integer
+                                      minimumHosts:
+                                        description: The number of addresses that
+                                          must have enough request volume to detect
+                                          success rate outliers.
+                                        nullable: true
+                                        type: integer
+                                      requestVolume:
+                                        description: The minimum number of total requests
+                                          that must be collected in one interval to
+                                          include this address in success rate based
+                                          outlier detection.
+                                        nullable: true
+                                        type: integer
+                                      stdevFactor:
+                                        description: This factor is used to determine
+                                          the ejection threshold for success rate
+                                          outlier ejection.
+                                        nullable: true
+                                        type: integer
+                                    type: object
                                 type: object
                               port:
                                 description: Specifies the number of a port on the
@@ -2722,6 +3062,33 @@ spec:
                           failures before ejection occurs.
                         nullable: true
                         type: integer
+                      failurePercentageEjection:
+                        description: FailurePercent Algorithm for deciding if the
+                          host is an outlier or not.
+                        properties:
+                          enforcementPercentage:
+                            description: The % chance that an address will be actually
+                              ejected when an outlier status is detected through failure
+                              percentage statistics.
+                            nullable: true
+                            type: integer
+                          minimumHosts:
+                            description: The minimum number of addresses in order
+                              to perform failure percentage-based ejection.
+                            nullable: true
+                            type: integer
+                          requestVolume:
+                            description: The minimum number of total requests that
+                              must be collected in one interval to perform failure
+                              percentage-based ejection for this address.
+                            nullable: true
+                            type: integer
+                          threshold:
+                            description: The failure percentage to use when determining
+                              failure percentage-based outlier detection.
+                            nullable: true
+                            type: integer
+                        type: object
                       interval:
                         description: Time interval between ejection sweep analysis.
                         type: string
@@ -2740,6 +3107,33 @@ spec:
                         description: Determines whether to distinguish local origin
                           failures from external errors.
                         type: boolean
+                      successRateEjection:
+                        description: SuccessRateEjection Algorithm for deciding if
+                          the host is an outlier or not.
+                        properties:
+                          enforcementPercentage:
+                            description: The % chance that an address will be actually
+                              ejected when an outlier status is detected through success
+                              rate statistics.
+                            nullable: true
+                            type: integer
+                          minimumHosts:
+                            description: The number of addresses that must have enough
+                              request volume to detect success rate outliers.
+                            nullable: true
+                            type: integer
+                          requestVolume:
+                            description: The minimum number of total requests that
+                              must be collected in one interval to include this address
+                              in success rate based outlier detection.
+                            nullable: true
+                            type: integer
+                          stdevFactor:
+                            description: This factor is used to determine the ejection
+                              threshold for success rate outlier ejection.
+                            nullable: true
+                            type: integer
+                        type: object
                     type: object
                   portLevelSettings:
                     description: Traffic policies specific to individual ports.
@@ -3005,6 +3399,33 @@ spec:
                                 failures before ejection occurs.
                               nullable: true
                               type: integer
+                            failurePercentageEjection:
+                              description: FailurePercent Algorithm for deciding if
+                                the host is an outlier or not.
+                              properties:
+                                enforcementPercentage:
+                                  description: The % chance that an address will be
+                                    actually ejected when an outlier status is detected
+                                    through failure percentage statistics.
+                                  nullable: true
+                                  type: integer
+                                minimumHosts:
+                                  description: The minimum number of addresses in
+                                    order to perform failure percentage-based ejection.
+                                  nullable: true
+                                  type: integer
+                                requestVolume:
+                                  description: The minimum number of total requests
+                                    that must be collected in one interval to perform
+                                    failure percentage-based ejection for this address.
+                                  nullable: true
+                                  type: integer
+                                threshold:
+                                  description: The failure percentage to use when
+                                    determining failure percentage-based outlier detection.
+                                  nullable: true
+                                  type: integer
+                              type: object
                             interval:
                               description: Time interval between ejection sweep analysis.
                               type: string
@@ -3023,6 +3444,33 @@ spec:
                               description: Determines whether to distinguish local
                                 origin failures from external errors.
                               type: boolean
+                            successRateEjection:
+                              description: SuccessRateEjection Algorithm for deciding
+                                if the host is an outlier or not.
+                              properties:
+                                enforcementPercentage:
+                                  description: The % chance that an address will be
+                                    actually ejected when an outlier status is detected
+                                    through success rate statistics.
+                                  nullable: true
+                                  type: integer
+                                minimumHosts:
+                                  description: The number of addresses that must have
+                                    enough request volume to detect success rate outliers.
+                                  nullable: true
+                                  type: integer
+                                requestVolume:
+                                  description: The minimum number of total requests
+                                    that must be collected in one interval to include
+                                    this address in success rate based outlier detection.
+                                  nullable: true
+                                  type: integer
+                                stdevFactor:
+                                  description: This factor is used to determine the
+                                    ejection threshold for success rate outlier ejection.
+                                  nullable: true
+                                  type: integer
+                              type: object
                           type: object
                         port:
                           description: Specifies the number of a port on the destination

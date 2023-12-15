@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.DestinationRule
 aliases: [/docs/reference/config/networking/v1alpha3/destination-rule]
-number_of_entries: 25
+number_of_entries: 27
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -906,6 +906,179 @@ applicable in k8s environments with few pods per service.</p>
 No
 </td>
 </tr>
+<tr id="OutlierDetection-failure_percentage_ejection">
+<td><code>failurePercentageEjection</code></td>
+<td><code><a href="#FailurePercentageEjection">FailurePercentageEjection</a></code></td>
+<td>
+<p>FailurePercent Algorithm for deciding if the host is an outlier or not.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="OutlierDetection-success_rate_ejection">
+<td><code>successRateEjection</code></td>
+<td><code><a href="#SuccessRateEjection">SuccessRateEjection</a></code></td>
+<td>
+<p>SuccessRateEjection Algorithm for deciding if the host is an outlier or not.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="FailurePercentageEjection">FailurePercentageEjection</h2>
+<section>
+<p>Parameters for the failure percentage algorithm.
+This algorithm ejects individual endpoints whose failure rate is greater than
+some threshold, independently of any other endpoint
+Defaults to values declared in envoy.config.cluster.v3.OutlierDetection.SuccessRateEjection</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="FailurePercentageEjection-threshold">
+<td><code>threshold</code></td>
+<td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
+<td>
+<p>The failure percentage to use when determining failure percentage-based outlier detection. If
+the failure percentage of a given address is greater than or equal to this value, it will be
+ejected.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="FailurePercentageEjection-enforcement_percentage">
+<td><code>enforcementPercentage</code></td>
+<td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
+<td>
+<p>The % chance that an address will be actually ejected when an outlier status is detected through
+failure percentage statistics. This setting can be used to disable ejection or to ramp it up
+slowly.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="FailurePercentageEjection-minimum_hosts">
+<td><code>minimumHosts</code></td>
+<td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
+<td>
+<p>The minimum number of addresses in order to perform failure percentage-based ejection.
+If the total number of addresses is less than this value, failure percentage-based
+ejection will not be performed.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="FailurePercentageEjection-request_volume">
+<td><code>requestVolume</code></td>
+<td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
+<td>
+<p>The minimum number of total requests that must be collected in one interval
+to perform failure percentage-based ejection for this address. If the
+volume is lower than this setting, failure percentage-based ejection will not be performed for
+this host.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="SuccessRateEjection">SuccessRateEjection</h2>
+<section>
+<p>Parameters for the success rate ejection algorithm.
+This algorithm monitors the request success rate for all endpoints and
+ejects individual endpoints whose success rates are statistical outliers.
+Defaults to values declared in envoy.config.cluster.v3.OutlierDetection.SuccessRateEjection</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="SuccessRateEjection-stdev_factor">
+<td><code>stdevFactor</code></td>
+<td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
+<td>
+<p>This factor is used to determine the ejection threshold for success rate
+outlier ejection. The ejection threshold is the difference between the
+mean success rate, and the product of this factor and the standard
+deviation of the mean success rate: mean - (stdev *
+success_rate_stdev_factor). This factor is divided by a thousand to get a
+double. That is, if the desired factor is 1.9, the runtime value should
+be 1900.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="SuccessRateEjection-enforcement_percentage">
+<td><code>enforcementPercentage</code></td>
+<td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
+<td>
+<p>The % chance that an address will be actually ejected when an outlier status
+is detected through success rate statistics. This setting can be used to
+disable ejection or to ramp it up slowly.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="SuccessRateEjection-minimum_hosts">
+<td><code>minimumHosts</code></td>
+<td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
+<td>
+<p>The number of addresses that must have enough request volume to
+detect success rate outliers. If the number of addresses is less than this
+setting, outlier detection via success rate statistics is not performed
+for any addresses.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="SuccessRateEjection-request_volume">
+<td><code>requestVolume</code></td>
+<td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
+<td>
+<p>The minimum number of total requests that must be collected in one
+interval to include this address in success rate based outlier detection.
+If the volume is lower than this setting, outlier detection via success
+rate statistics is not performed for that address.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -917,7 +1090,7 @@ for more details. These settings are common to both HTTP and TCP upstreams.</p>
 <p>For example, the following rule configures a client to use mutual TLS
 for connections to upstream database cluster.</p>
 <p>{{<tabset category-name="example">}}
-{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
+{{<tab name="v1alpha3" category-value="v1lpha3">}}</p>
 <pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:

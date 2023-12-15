@@ -911,6 +911,71 @@ message OutlierDetection {
   // disabled by setting it to 0%. The default is 0% as it's not typically
   // applicable in k8s environments with few pods per service.
   int32 min_health_percent = 5;
+
+  // FailurePercent Algorithm for deciding if the host is an outlier or not.
+  FailurePercentageEjection failure_percentage_ejection = 10;
+
+  // SuccessRateEjection Algorithm for deciding if the host is an outlier or not.
+  SuccessRateEjection success_rate_ejection = 11;
+}
+
+// Parameters for the failure percentage algorithm.
+// This algorithm ejects individual endpoints whose failure rate is greater than
+// some threshold, independently of any other endpoint
+// Defaults to values declared in envoy.config.cluster.v3.OutlierDetection.SuccessRateEjection
+message FailurePercentageEjection {
+  // The failure percentage to use when determining failure percentage-based outlier detection. If
+  // the failure percentage of a given address is greater than or equal to this value, it will be
+  // ejected.
+  google.protobuf.UInt32Value threshold = 1;
+
+  // The % chance that an address will be actually ejected when an outlier status is detected through
+  // failure percentage statistics. This setting can be used to disable ejection or to ramp it up
+  // slowly.
+  google.protobuf.UInt32Value enforcement_percentage = 2;
+
+  // The minimum number of addresses in order to perform failure percentage-based ejection.
+  // If the total number of addresses is less than this value, failure percentage-based
+  // ejection will not be performed.
+  google.protobuf.UInt32Value minimum_hosts = 3;
+
+  // The minimum number of total requests that must be collected in one interval
+  // to perform failure percentage-based ejection for this address. If the
+  // volume is lower than this setting, failure percentage-based ejection will not be performed for
+  // this host.
+  google.protobuf.UInt32Value request_volume = 4;
+}
+
+// Parameters for the success rate ejection algorithm.
+// This algorithm monitors the request success rate for all endpoints and
+// ejects individual endpoints whose success rates are statistical outliers.
+// Defaults to values declared in envoy.config.cluster.v3.OutlierDetection.SuccessRateEjection
+message SuccessRateEjection {
+  // This factor is used to determine the ejection threshold for success rate
+  // outlier ejection. The ejection threshold is the difference between the
+  // mean success rate, and the product of this factor and the standard
+  // deviation of the mean success rate: mean - (stdev *
+  // success_rate_stdev_factor). This factor is divided by a thousand to get a
+  // double. That is, if the desired factor is 1.9, the runtime value should
+  // be 1900.
+  google.protobuf.UInt32Value stdev_factor = 1;
+
+  // The % chance that an address will be actually ejected when an outlier status
+  // is detected through success rate statistics. This setting can be used to
+  // disable ejection or to ramp it up slowly.
+  google.protobuf.UInt32Value enforcement_percentage = 2;
+
+  // The number of addresses that must have enough request volume to
+  // detect success rate outliers. If the number of addresses is less than this
+  // setting, outlier detection via success rate statistics is not performed
+  // for any addresses.
+  google.protobuf.UInt32Value minimum_hosts = 3;
+
+  // The minimum number of total requests that must be collected in one
+  // interval to include this address in success rate based outlier detection.
+  // If the volume is lower than this setting, outlier detection via success
+  // rate statistics is not performed for that address.
+  google.protobuf.UInt32Value request_volume = 4;
 }
 
 // SSL/TLS related settings for upstream connections. See Envoy's [TLS
@@ -921,7 +986,7 @@ message OutlierDetection {
 // for connections to upstream database cluster.
 //
 // {{<tabset category-name="example">}}
-// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// {{<tab name="v1alpha3" category-value="v1lpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: DestinationRule
