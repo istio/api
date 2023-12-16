@@ -760,6 +760,16 @@ message ConnectionPoolSettings {
     // was established. If not set, there is no max duration. When max_connection_duration
     // is reached the connection will be closed. Duration must be at least 1ms.
     google.protobuf.Duration max_connection_duration = 4;
+
+    // The idle timeout for TCP connections.
+    // The idle timeout is defined as the period in which there are no bytes sent or received on either
+    // the upstream or downstream connection.
+    // If not set, the default idle timeout is 1 hour. If set to 0s, the timeout will be disabled.
+    // Idle timeout is not configured per each cluster individually when weighted destinations are used,
+    // because idleTimeout is a property of a listener, not a cluster. In that case, idleTimeout
+    // specified in a destination rule for the first weighted route is configured in the listener,
+    // which means also for all weighted routes.
+    google.protobuf.Duration idle_timeout = 5;
   };
 
   // Settings applicable to HTTP1.1/HTTP2/GRPC connections.
