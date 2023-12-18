@@ -679,6 +679,7 @@ message ServiceSpec {
     int32 healthCheckNodePort = 12;
     bool publishNotReadyAddresses = 13;
     SessionAffinityConfig sessionAffinityConfig = 14;
+    string loadBalancerClass = 15;
 }
 
 // See k8s.io.api.core.v1..
