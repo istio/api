@@ -127,8 +127,11 @@ option go_package="istio.io/api/security/v1beta1";
 // +k8s:deepcopy-gen=true
 // -->
 message PeerAuthentication {
-  // The selector determines the workloads to apply the ChannelAuthentication on.
-  // If not set, the policy will be applied to all workloads in the same namespace as the policy.
+  // The selector determines the workloads to apply the ChannelAuthentication on. The selector will match with workloads in the
+  // same namespace as the policy. If the policy is in the root namespace, the selector will additionally match with workloads in all namespace.
+  //
+  // If not set, the policy will be applied to all workloads in the same namespace as the policy. If it is in the root namespace, it would be applied
+  // to all workloads in the mesh.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
   // Mutual TLS settings.
