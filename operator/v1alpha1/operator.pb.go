@@ -850,69 +850,69 @@ func (x *GatewaySpec) GetK8S() *KubernetesResourcesSpec {
 	return nil
 }
 
-// KubernetesResourcesConfig is a common set of k8s resource configs for components.
+// KubernetesResourcesConfig is a common set of Kubernetes resource configs for components.
 type KubernetesResourcesSpec struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// k8s affinity.
+	// Kubernetes affinity.
 	// [https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity)
 	Affinity *Affinity `protobuf:"bytes,1,opt,name=affinity,proto3" json:"affinity,omitempty"`
 	// Deployment environment variables.
 	// [https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
 	Env []*EnvVar `protobuf:"bytes,2,rep,name=env,proto3" json:"env,omitempty"`
-	// k8s HorizontalPodAutoscaler settings.
+	// Kubernetes HorizontalPodAutoscaler settings.
 	// [https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
 	HpaSpec *HorizontalPodAutoscalerSpec `protobuf:"bytes,3,opt,name=hpaSpec,proto3" json:"hpaSpec,omitempty"`
-	// k8s imagePullPolicy.
+	// Kubernetes imagePullPolicy.
 	// [https://kubernetes.io/docs/concepts/containers/images/](https://kubernetes.io/docs/concepts/containers/images/)
 	ImagePullPolicy string `protobuf:"bytes,4,opt,name=imagePullPolicy,proto3" json:"imagePullPolicy,omitempty"`
-	// k8s nodeSelector.
+	// Kubernetes nodeSelector.
 	// [https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector)
 	NodeSelector map[string]string `protobuf:"bytes,5,rep,name=nodeSelector,proto3" json:"nodeSelector,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// k8s PodDisruptionBudget settings.
+	// Kubernetes PodDisruptionBudget settings.
 	// [https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#how-disruption-budgets-work](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#how-disruption-budgets-work)
 	PodDisruptionBudget *PodDisruptionBudgetSpec `protobuf:"bytes,6,opt,name=podDisruptionBudget,proto3" json:"podDisruptionBudget,omitempty"`
-	// k8s pod annotations.
+	// Kubernetes pod annotations.
 	// [https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
 	PodAnnotations map[string]string `protobuf:"bytes,7,rep,name=podAnnotations,proto3" json:"podAnnotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// k8s priority_class_name. Default for all resources unless overridden.
+	// Kubernetes priorityClassName. Default for all resources unless overridden.
 	// [https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass](https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass)
 	PriorityClassName string `protobuf:"bytes,8,opt,name=priorityClassName,proto3" json:"priorityClassName,omitempty"`
-	// k8s readinessProbe settings.
+	// Kubernetes readinessProbe settings.
 	// [https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/)
 	// k8s.io.api.core.v1.Probe readiness_probe = 9;
 	ReadinessProbe *ReadinessProbe `protobuf:"bytes,9,opt,name=readinessProbe,proto3" json:"readinessProbe,omitempty"`
-	// k8s Deployment replicas setting.
+	// Kubernetes Deployment replicas setting.
 	// [https://kubernetes.io/docs/concepts/workloads/controllers/deployment/](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
 	ReplicaCount uint32 `protobuf:"varint,10,opt,name=replicaCount,proto3" json:"replicaCount,omitempty"`
-	// k8s resources settings.
+	// Kubernetes resources settings.
 	// [https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container)
 	Resources *Resources `protobuf:"bytes,11,opt,name=resources,proto3" json:"resources,omitempty"`
-	// k8s Service settings.
+	// Kubernetes Service settings.
 	// [https://kubernetes.io/docs/concepts/services-networking/service/](https://kubernetes.io/docs/concepts/services-networking/service/)
 	Service *ServiceSpec `protobuf:"bytes,12,opt,name=service,proto3" json:"service,omitempty"`
-	// k8s deployment strategy.
+	// Kubernetes deployment strategy.
 	// [https://kubernetes.io/docs/concepts/workloads/controllers/deployment/](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
 	Strategy *DeploymentStrategy `protobuf:"bytes,13,opt,name=strategy,proto3" json:"strategy,omitempty"`
-	// k8s toleration
+	// Kubernetes toleration
 	// [https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)
 	Tolerations []*Toleration `protobuf:"bytes,14,rep,name=tolerations,proto3" json:"tolerations,omitempty"`
-	// k8s service annotations.
+	// Kubernetes service annotations.
 	// [https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
 	ServiceAnnotations map[string]string `protobuf:"bytes,15,rep,name=serviceAnnotations,proto3" json:"serviceAnnotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// k8s pod security context
+	// Kubernetes pod security context
 	// [https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)
 	SecurityContext *PodSecurityContext `protobuf:"bytes,16,opt,name=securityContext,proto3" json:"securityContext,omitempty"`
-	// k8s volume
+	// Kubernetes volumes
 	// [https://kubernetes.io/docs/concepts/storage/volumes/](https://kubernetes.io/docs/concepts/storage/volumes/)
 	// Volumes defines the collection of Volume to inject into the pod.
 	Volumes []*v1.Volume `protobuf:"bytes,17,rep,name=volumes,proto3" json:"volumes,omitempty"`
-	// k8s volumeMounts
+	// Kubernetes volumeMounts
 	// VolumeMounts defines the collection of VolumeMount to inject into containers.
 	VolumeMounts []*v1.VolumeMount `protobuf:"bytes,18,rep,name=volumeMounts,proto3" json:"volumeMounts,omitempty"`
-	// Overlays for k8s resources in rendered manifests.
+	// Overlays for Kubernetes resources in rendered manifests.
 	Overlays []*K8SObjectOverlay `protobuf:"bytes,100,rep,name=overlays,proto3" json:"overlays,omitempty"`
 }
 
@@ -1081,7 +1081,7 @@ func (x *KubernetesResourcesSpec) GetOverlays() []*K8SObjectOverlay {
 	return nil
 }
 
-// Patch for an existing k8s resource.
+// Patch for an existing Kubernetes resource.
 type K8SObjectOverlay struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

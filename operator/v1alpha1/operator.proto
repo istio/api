@@ -245,70 +245,70 @@ message GatewaySpec {
     KubernetesResourcesSpec k8s = 50;
 }
 
-// KubernetesResourcesConfig is a common set of k8s resource configs for components.
+// KubernetesResourcesConfig is a common set of Kubernetes resource configs for components.
 message KubernetesResourcesSpec {
-    // k8s affinity.
+    // Kubernetes affinity.
     // [https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity)
     Affinity affinity = 1;
     // Deployment environment variables.
     // [https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
     repeated EnvVar env = 2;
-    // k8s HorizontalPodAutoscaler settings.
+    // Kubernetes HorizontalPodAutoscaler settings.
     // [https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
     HorizontalPodAutoscalerSpec hpaSpec = 3;
-    // k8s imagePullPolicy.
+    // Kubernetes imagePullPolicy.
     // [https://kubernetes.io/docs/concepts/containers/images/](https://kubernetes.io/docs/concepts/containers/images/)
     string imagePullPolicy = 4;
-    // k8s nodeSelector.
+    // Kubernetes nodeSelector.
     // [https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector)
     map<string, string> nodeSelector = 5;
-    // k8s PodDisruptionBudget settings.
+    // Kubernetes PodDisruptionBudget settings.
     // [https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#how-disruption-budgets-work](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#how-disruption-budgets-work)
     PodDisruptionBudgetSpec podDisruptionBudget = 6;
-    // k8s pod annotations.
+    // Kubernetes pod annotations.
     // [https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
     map<string, string> podAnnotations = 7;
-    // k8s priority_class_name. Default for all resources unless overridden.
+    // Kubernetes priorityClassName. Default for all resources unless overridden.
     // [https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass](https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass)
     string priorityClassName = 8;
-    // k8s readinessProbe settings.
+    // Kubernetes readinessProbe settings.
     // [https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/)
     // k8s.io.api.core.v1.Probe readiness_probe = 9;
     ReadinessProbe readinessProbe = 9;
-    // k8s Deployment replicas setting.
+    // Kubernetes Deployment replicas setting.
     // [https://kubernetes.io/docs/concepts/workloads/controllers/deployment/](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
     uint32 replicaCount = 10;
-    // k8s resources settings.
+    // Kubernetes resources settings.
     // [https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container)
     Resources resources = 11;
-    // k8s Service settings.
+    // Kubernetes Service settings.
     // [https://kubernetes.io/docs/concepts/services-networking/service/](https://kubernetes.io/docs/concepts/services-networking/service/)
     ServiceSpec service = 12;
-    // k8s deployment strategy.
+    // Kubernetes deployment strategy.
     // [https://kubernetes.io/docs/concepts/workloads/controllers/deployment/](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
     DeploymentStrategy strategy = 13;
-    // k8s toleration
+    // Kubernetes toleration
     // [https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)
     repeated Toleration tolerations = 14;
-    // k8s service annotations.
+    // Kubernetes service annotations.
     // [https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
     map<string, string> serviceAnnotations = 15;
-    // k8s pod security context
+    // Kubernetes pod security context
     // [https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)
     PodSecurityContext securityContext = 16;
-    // k8s volume
+    // Kubernetes volumes
     // [https://kubernetes.io/docs/concepts/storage/volumes/](https://kubernetes.io/docs/concepts/storage/volumes/)
     // Volumes defines the collection of Volume to inject into the pod.
     repeated k8s.io.api.core.v1.Volume volumes = 17;
-    // k8s volumeMounts
+    // Kubernetes volumeMounts
     // VolumeMounts defines the collection of VolumeMount to inject into containers.
     repeated k8s.io.api.core.v1.VolumeMount volumeMounts = 18;
 
-    // Overlays for k8s resources in rendered manifests.
+    // Overlays for Kubernetes resources in rendered manifests.
     repeated K8sObjectOverlay overlays = 100;
 }
 
-// Patch for an existing k8s resource.
+// Patch for an existing Kubernetes resource.
 message K8sObjectOverlay {
     message PathValue {
         // Path of the form a.[key1:value1].b.[:value2]
