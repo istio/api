@@ -833,7 +833,7 @@ type MeshConfig struct {
 	//   - spark
 	//
 	// ```
-	// Refer to the [kubernetes selector docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors)
+	// Refer to the [Kubernetes selector docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors)
 	// for additional detail on selector semantics.
 	DiscoverySelectors []*v1.LabelSelector `protobuf:"bytes,59,rep,name=discovery_selectors,json=discoverySelectors,proto3" json:"discovery_selectors,omitempty"`
 	// ProxyPathNormalization configures how URL paths in incoming and outgoing HTTP requests are
@@ -857,6 +857,7 @@ type MeshConfig struct {
 	DefaultHttpRetryPolicy *v1alpha3.HTTPRetry `protobuf:"bytes,62,opt,name=default_http_retry_policy,json=defaultHttpRetryPolicy,proto3" json:"default_http_retry_policy,omitempty"`
 	// The below configuration parameters can be used to specify TLSConfig for mesh traffic.
 	// For example, a user could enable min TLS version for ISTIO_MUTUAL traffic and specify a curve for non ISTIO_MUTUAL traffic like below:
+	// ```yaml
 	// meshConfig:
 	//
 	//	meshMTLS:
@@ -867,7 +868,9 @@ type MeshConfig struct {
 	//	    - P-256
 	//	    - P-512
 	//
+	// ```
 	// Configuration of mTLS for traffic between workloads with ISTIO_MUTUAL TLS traffic.
+	//
 	// Note: Mesh mTLS does not respect ECDH curves.
 	MeshMTLS *MeshConfig_TLSConfig `protobuf:"bytes,63,opt,name=mesh_mTLS,json=meshMTLS,proto3" json:"mesh_mTLS,omitempty"`
 	// Configuration of TLS for all traffic except for ISTIO_MUTUAL mode.
@@ -2107,18 +2110,19 @@ type MeshConfig_TLSConfig struct {
 	// is TLS 1.3.
 	MinProtocolVersion MeshConfig_TLSConfig_TLSProtocol `protobuf:"varint,1,opt,name=min_protocol_version,json=minProtocolVersion,proto3,enum=istio.mesh.v1alpha1.MeshConfig_TLSConfig_TLSProtocol" json:"min_protocol_version,omitempty"`
 	// Optional: If specified, the TLS connection will only support the specified ECDH curves for the DH key exchange.
-	// If not specified, the default curves enforced by envoy will be used. For details about the default curves, refer to
-	// [Ecdh Curves](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto)
+	// If not specified, the default curves enforced by Envoy will be used. For details about the default curves, refer to
+	// [Ecdh Curves](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto).
 	EcdhCurves []string `protobuf:"bytes,2,rep,name=ecdh_curves,json=ecdhCurves,proto3" json:"ecdh_curves,omitempty"`
 	// Optional: If specified, the TLS connection will only support the specified cipher list when negotiating TLS 1.0-1.2.
 	// If not specified, the following cipher suites will be used:
-	//
-	//		ECDHE-ECDSA-AES256-GCM-SHA384
-	//	 ECDHE-RSA-AES256-GCM-SHA384
-	//	 ECDHE-ECDSA-AES128-GCM-SHA256
-	//	 ECDHE-RSA-AES128-GCM-SHA256
-	//	 AES256-GCM-SHA384
-	//	 AES128-GCM-SHA256
+	// ```
+	// ECDHE-ECDSA-AES256-GCM-SHA384
+	// ECDHE-RSA-AES256-GCM-SHA384
+	// ECDHE-ECDSA-AES128-GCM-SHA256
+	// ECDHE-RSA-AES128-GCM-SHA256
+	// AES256-GCM-SHA384
+	// AES128-GCM-SHA256
+	// ```
 	CipherSuites []string `protobuf:"bytes,3,rep,name=cipher_suites,json=cipherSuites,proto3" json:"cipher_suites,omitempty"`
 }
 
@@ -2257,8 +2261,8 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationRequestBody struct {
 	// indicating if the body data is partial.
 	AllowPartialMessage bool `protobuf:"varint,2,opt,name=allow_partial_message,json=allowPartialMessage,proto3" json:"allow_partial_message,omitempty"`
 	// If true, the body sent to the external authorization service in the gRPC authorization request is set with raw bytes
-	// in the raw_body field (https://github.com/envoyproxy/envoy/blame/cffb095d59d7935abda12b9509bcd136808367bb/api/envoy/service/auth/v3/attribute_context.proto#L153).
-	// Otherwise, it will be filled with UTF-8 string in the body field (https://github.com/envoyproxy/envoy/blame/cffb095d59d7935abda12b9509bcd136808367bb/api/envoy/service/auth/v3/attribute_context.proto#L147).
+	// in the [raw_body field](https://github.com/envoyproxy/envoy/blame/cffb095d59d7935abda12b9509bcd136808367bb/api/envoy/service/auth/v3/attribute_context.proto#L153).
+	// Otherwise, it will be filled with UTF-8 string in the [body field](https://github.com/envoyproxy/envoy/blame/cffb095d59d7935abda12b9509bcd136808367bb/api/envoy/service/auth/v3/attribute_context.proto#L147).
 	// This field only works with the envoy_ext_authz_grpc provider and has no effect for the envoy_ext_authz_http provider.
 	PackAsBytes bool `protobuf:"varint,3,opt,name=pack_as_bytes,json=packAsBytes,proto3" json:"pack_as_bytes,omitempty"`
 }
@@ -2354,8 +2358,9 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider struct 
 	// request can include the buffered client request body (controlled by include_request_body_in_check setting),
 	// consequently the value of Content-Length of the authorization request reflects the size of its payload size.
 	//
-	// Exact, prefix and suffix matches are supported (similar to the authorization policy rule syntax except the presence match
-	// https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule):
+	// Exact, prefix and suffix matches are supported (similar to the
+	// [authorization policy rule syntax](https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule)
+	// except the presence match):
 	// - Exact match: "abc" will match on value "abc".
 	// - Prefix match: "abc*" will match on value "abc" and "abcd".
 	// - Suffix match: "*abc" will match on value "abc" and "xabc".
@@ -2371,8 +2376,9 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider struct 
 	// If not specified, the original request will not be modified and forwarded to backend as-is.
 	// Note, any existing headers will be overridden.
 	//
-	// Exact, prefix and suffix matches are supported (similar to the authorization policy rule syntax except the presence match
-	// https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule):
+	// Exact, prefix and suffix matches are supported (similar to the
+	// [authorization policy rule syntax](https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule)
+	// except the presence match):
 	// - Exact match: "abc" will match on value "abc".
 	// - Prefix match: "abc*" will match on value "abc" and "abcd".
 	// - Suffix match: "*abc" will match on value "abc" and "xabc".
@@ -2385,8 +2391,9 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider struct 
 	// automatically added.
 	// Note, the body from the authorization service is always included in the response to downstream.
 	//
-	// Exact, prefix and suffix matches are supported (similar to the authorization policy rule syntax except the presence match
-	// https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule):
+	// Exact, prefix and suffix matches are supported (similar to the
+	// [authorization policy rule syntax](https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule)
+	// except the presence match):
 	// - Exact match: "abc" will match on value "abc".
 	// - Prefix match: "abc*" will match on value "abc" and "abcd".
 	// - Suffix match: "*abc" will match on value "abc" and "xabc".
@@ -2396,8 +2403,9 @@ type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationHttpProvider struct 
 	// If not specified, the original response will not be modified and forwarded to downstream as-is.
 	// Note, any existing headers will be overridden.
 	//
-	// Exact, prefix and suffix matches are supported (similar to the authorization policy rule syntax except the presence match
-	// https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule):
+	// Exact, prefix and suffix matches are supported (similar to the
+	// [authorization policy rule syntax](https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule)
+	// except the presence match):
 	// - Exact match: "abc" will match on value "abc".
 	// - Prefix match: "abc*" will match on value "abc" and "abcd".
 	// - Suffix match: "*abc" will match on value "abc" and "xabc".

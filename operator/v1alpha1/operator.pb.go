@@ -850,7 +850,7 @@ func (x *GatewaySpec) GetK8S() *KubernetesResourcesSpec {
 	return nil
 }
 
-// KubernetesResourcesConfig is a common set of Kubernetes resource configs for components.
+// KubernetesResourcesSpec is a common set of Kubernetes resource configs for components.
 type KubernetesResourcesSpec struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
