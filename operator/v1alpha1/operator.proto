@@ -245,7 +245,7 @@ message GatewaySpec {
     KubernetesResourcesSpec k8s = 50;
 }
 
-// KubernetesResourcesConfig is a common set of Kubernetes resource configs for components.
+// KubernetesResourcesSpec is a common set of Kubernetes resource configs for components.
 message KubernetesResourcesSpec {
     // Kubernetes affinity.
     // [https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity)

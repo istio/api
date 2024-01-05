@@ -671,7 +671,7 @@ type Topology struct {
 	// X-Envoy-External-Address header to the trusted client address before
 	// forwarding it to the upstream services in the cluster.
 	// The default value of num_trusted_proxies is 0.
-	// See [Envoy XFF] (https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#config-http-conn-man-headers-x-forwarded-for)
+	// See [Envoy XFF](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#config-http-conn-man-headers-x-forwarded-for)
 	// header handling for more details.
 	NumTrustedProxies uint32 `protobuf:"varint,1,opt,name=num_trusted_proxies,json=numTrustedProxies,proto3" json:"num_trusted_proxies,omitempty"`
 	// Configures how the gateway proxy handles x-forwarded-client-cert (XFCC)
