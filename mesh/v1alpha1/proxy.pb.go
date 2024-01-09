@@ -944,6 +944,7 @@ type ProxyConfig struct {
 	// added by configuring the telemetry extension. Each additional tag needs to be present in this list.
 	// Extra tags emitted by the telemetry extensions must be listed here so that they can be processed
 	// and exposed as Prometheus metrics.
+	// Deprecated: `istio.stats` is a native filter now, this field is no longer needed.
 	ExtraStatTags []string `protobuf:"bytes,27,rep,name=extra_stat_tags,json=extraStatTags,proto3" json:"extra_stat_tags,omitempty"`
 	// Topology encapsulates the configuration which describes where the proxy is
 	// located i.e. behind a (or N) trusted proxy (proxies) or directly exposed
