@@ -207,6 +207,17 @@ annotations:
     resources:
       - Pod
 
+  - name: sidecar.istio.io/disableIPEarlyDemux
+    featureStatus: Alpha
+    description: Specifies whether the Kernel option net.ipv4.ip_early_demux 
+      should be set to 0 in order to prevent TCP connection issues when a pod 
+      exposes multiple ports and receives multiple concurrent connections from 
+      the same client IP and port.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+
   - name: sidecar.istio.io/userVolume
     featureStatus: Alpha
     description: Specifies one or more user volumes (as a JSON array) to be added to
