@@ -2085,6 +2085,7 @@ type PrivateKeyProvider_CryptoMb struct {
 	PollDelay *duration.Duration `protobuf:"bytes,1,opt,name=poll_delay,json=pollDelay,proto3" json:"poll_delay,omitempty"`
 	// If the private key provider isn’t available (eg. the required hardware capability doesn’t existed)
 	// Envoy will fallback to the BoringSSL default implementation when the fallback is true.
+	// The default value is false.
 	Fallback *wrappers.BoolValue `protobuf:"bytes,2,opt,name=fallback,proto3" json:"fallback,omitempty"`
 }
 
@@ -2147,6 +2148,7 @@ type PrivateKeyProvider_QAT struct {
 	PollDelay *duration.Duration `protobuf:"bytes,1,opt,name=poll_delay,json=pollDelay,proto3" json:"poll_delay,omitempty"`
 	// If the private key provider isn’t available (eg. the required hardware capability doesn’t existed)
 	// Envoy will fallback to the BoringSSL default implementation when the fallback is true.
+	// The default value is false.
 	Fallback *wrappers.BoolValue `protobuf:"bytes,2,opt,name=fallback,proto3" json:"fallback,omitempty"`
 }
 
