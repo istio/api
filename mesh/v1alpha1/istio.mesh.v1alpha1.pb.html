@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 66
+number_of_entries: 68
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -241,6 +241,15 @@ monitored. Can be overridden at a Sidecar level by setting the
 API</a>.
 Default mode is <code>ALLOW_ANY</code> which means outbound traffic to unknown destinations will be allowed.</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-inbound_traffic_policy">
+<td><code>inboundTrafficPolicy</code></td>
+<td><code><a href="#MeshConfig-InboundTrafficPolicy">InboundTrafficPolicy</a></code></td>
+<td>
 </td>
 <td>
 No
@@ -714,6 +723,34 @@ No
 <tr id="MeshConfig-OutboundTrafficPolicy-mode">
 <td><code>mode</code></td>
 <td><code><a href="#MeshConfig-OutboundTrafficPolicy-Mode">Mode</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-InboundTrafficPolicy">MeshConfig.InboundTrafficPolicy</h2>
+<section>
+<p>Set the default behavior of the sidecar for handling inbound
+traffic to the application.  If your application listens on
+localhost, you will need to set this to <code>LOCALHOST</code>.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-InboundTrafficPolicy-mode">
+<td><code>mode</code></td>
+<td><code><a href="#MeshConfig-InboundTrafficPolicy-Mode">Mode</a></code></td>
 <td>
 </td>
 <td>
@@ -3929,6 +3966,35 @@ service registry as well as those defined through ServiceEntries</p>
 <td>
 <p>outbound traffic to unknown destinations will be allowed, in case
 there are no services or ServiceEntries for the destination port</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-InboundTrafficPolicy-Mode">MeshConfig.InboundTrafficPolicy.Mode</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-InboundTrafficPolicy-Mode-PASSTHROUGH">
+<td><code>PASSTHROUGH</code></td>
+<td>
+<p>inbound traffic will be passed through to the destination listening
+on Pod IP. This matches the behavior without Istio enabled at all
+allowing proxy to be transparent.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-InboundTrafficPolicy-Mode-LOCALHOST">
+<td><code>LOCALHOST</code></td>
+<td>
+<p>inbound traffic will be sent to the destinations listening on localhost.</p>
 
 </td>
 </tr>

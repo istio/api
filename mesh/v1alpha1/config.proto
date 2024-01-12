@@ -191,6 +191,23 @@ message MeshConfig {
   // Default mode is `ALLOW_ANY` which means outbound traffic to unknown destinations will be allowed.
   OutboundTrafficPolicy outbound_traffic_policy = 17;
 
+  // Set the default behavior of the sidecar for handling inbound
+  // traffic to the application.  If your application listens on
+  // localhost, you will need to set this to `LOCALHOST`.
+  message InboundTrafficPolicy {
+    enum Mode {
+      // inbound traffic will be passed through to the destination listening 
+      // on Pod IP. This matches the behavior without Istio enabled at all 
+      // allowing proxy to be transparent.
+      PASSTHROUGH = 0;
+      // inbound traffic will be sent to the destinations listening on localhost.
+      LOCALHOST = 1;
+    }
+    Mode mode = 1;
+  }
+
+  InboundTrafficPolicy inbound_traffic_policy = 66;
+
   // ConfigSource describes a source of configuration data for networking
   // rules, and other Istio configuration artifacts. Multiple data sources
   // can be configured for a single control plane.
@@ -1183,7 +1200,7 @@ message MeshConfig {
   TLSConfig tls_defaults = 64;
 
   // $hide_from_docs
-  // Next available field number: 66
+  // Next available field number: 67
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
