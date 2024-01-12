@@ -312,6 +312,9 @@ message PrivateKeyProvider {
     // In effect, this value controls the balance between latency and throughput.
     // The duration needs to be set to a value greater than or equal to 1 millisecond.
     google.protobuf.Duration poll_delay = 1;
+    // If the private key provider isn’t available (eg. the required hardware capability doesn’t existed)
+    // Envoy will fallback to the BoringSSL default implementation when the fallback is true.
+    google.protobuf.BoolValue fallback = 2;
   }
 
   // QAT (QuickAssist Technology) PrivateKeyProvider configuration
@@ -321,6 +324,9 @@ message PrivateKeyProvider {
     // leading to potentially larger CPU usage.
     // The duration needs to be set to a value greater than or equal to 1 millisecond.
     google.protobuf.Duration poll_delay = 1;
+    // If the private key provider isn’t available (eg. the required hardware capability doesn’t existed)
+    // Envoy will fallback to the BoringSSL default implementation when the fallback is true.
+    google.protobuf.BoolValue fallback = 2;
   }
 
   // REQUIRED. Specifies detailed configuration for the Private key provider.
