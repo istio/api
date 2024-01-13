@@ -99,6 +99,11 @@ message IstioOperatorSpec {
     // This option is currently experimental.
     bool defaultRevision = 17;
 
+    // Compatibility version allows configuring Istio to behave like an older version by tuning various settings to align with a
+    // previous versions defaults. This accepts a `major.minor` format, such as `1.23`.
+    // This option is currently experimental.
+    string compatibilityVersion = 18;
+
     // Config used by control plane components internally.
     google.protobuf.Struct meshConfig = 40;
 

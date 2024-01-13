@@ -44987,6 +44987,11 @@
                 "type": "bool"
               },
               {
+                "id": 18,
+                "name": "compatibilityVersion",
+                "type": "string"
+              },
+              {
                 "id": 40,
                 "name": "meshConfig",
                 "type": "google.protobuf.Struct"
