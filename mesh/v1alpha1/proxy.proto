@@ -192,6 +192,17 @@ message Tracing {
     string default_value = 2;
   }
 
+  // Configures DNS settings for the tracing service.
+  message DNSSettings {
+    // The DNS refresh rate to fetch DNS records for the tracing service.
+    // Default is 30 seconds.
+    google.protobuf.Duration refresh_rate = 1;
+
+    // Whether to respect DNS TTL values for the tracing service.
+    // Default is true.
+    bool respect_ttl = 2;
+  }
+
   // Configures the custom tags to be added to active span by all proxies (i.e. sidecars
   // and gateways).
   // The key represents the name of the tag.
@@ -221,9 +232,17 @@ message Tracing {
   // mode as `ISTIO_MUTUAL`.
   istio.networking.v1alpha3.ClientTLSSettings tls_settings = 8;
 
-  // $hide_from_docs
-  // Next available field number: 10
+  // Configures DNS settings for the tracing service.
+  // Ex:
+  // ```yaml
+  // dns_settings:
+  //   refresh_rate: 30s
+  //   respect_ttl: true
+  // ```
+  DNSSettings dns_settings = 10;
 
+  // $hide_from_docs
+  // Next available field number: 11
 }
 
 // SDS defines secret discovery service(SDS) configuration to be used by the proxy.
