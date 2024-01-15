@@ -335,7 +335,7 @@
 //   #   to avoid accidental name collisions.
 //   - applyTo: EXTENSION_CONFIG
 //     patch:
-//       operation: ADD # REPLACE is also supported, and would override a cluster level resource with the same name.
+//       operation: ADD
 //       value:
 //         name: my-wasm-extension
 //         typed_config:
