@@ -7972,8 +7972,8 @@ spec:
                         a successfully verified JWT payload to the backend.
                       type: string
                     timeout:
-                      description: Sets the maximum duration that an OpenID request
-                        can take to arrive upon request.
+                      description: The maximum duration that the proxy will wait when
+                        fetching the jwks.
                       type: string
                   required:
                   - issuer
@@ -8095,8 +8095,8 @@ spec:
                         a successfully verified JWT payload to the backend.
                       type: string
                     timeout:
-                      description: Sets the maximum duration that an OpenID request
-                        can take to arrive upon request.
+                      description: The maximum duration that the proxy will wait when
+                        fetching the jwks.
                       type: string
                   required:
                   - issuer
