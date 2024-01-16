@@ -3,4 +3,4 @@ kind: feature
 area: security
 releaseNotes:
   - |
-    **Added** an `fallback` filed for PrivateKeyProvider to support fallback to the BoringSSL default implementation if the private key provider isn’t available.
+    **Added** an `fallback` field for PrivateKeyProvider to support fallback to the BoringSSL default implementation if the private key provider isn’t available.
