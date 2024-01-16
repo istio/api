@@ -179,7 +179,7 @@ message JWTRule {
   // [Experimental] This feature is a experimental feature.
   repeated ClaimToHeader output_claim_to_headers = 11; // [TODO:Update the status whenever this feature is promoted.]
 
-  // The maximum duration that the proxy will wait when fetching the jwks. Default is 5s.
+  // The maximum amount of time that will be spent waiting for the JWKS to be fetched. Default is 5s.
   google.protobuf.Duration timeout = 13;
 
   // $hide_from_docs

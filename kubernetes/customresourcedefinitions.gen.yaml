@@ -7972,8 +7972,8 @@ spec:
                         a successfully verified JWT payload to the backend.
                       type: string
                     timeout:
-                      description: The maximum duration that the proxy will wait when
-                        fetching the jwks.
+                      description: The maximum amount of time that will be spent waiting
+                        for the JWKS to be fetched.
                       type: string
                   required:
                   - issuer
@@ -8095,8 +8095,8 @@ spec:
                         a successfully verified JWT payload to the backend.
                       type: string
                     timeout:
-                      description: The maximum duration that the proxy will wait when
-                        fetching the jwks.
+                      description: The maximum amount of time that will be spent waiting
+                        for the JWKS to be fetched.
                       type: string
                   required:
                   - issuer

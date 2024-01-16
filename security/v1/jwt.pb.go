@@ -185,7 +185,7 @@ type JWTRule struct {
 	// ```
 	// [Experimental] This feature is a experimental feature.
 	OutputClaimToHeaders []*ClaimToHeader `protobuf:"bytes,11,rep,name=output_claim_to_headers,json=outputClaimToHeaders,proto3" json:"output_claim_to_headers,omitempty"` // [TODO:Update the status whenever this feature is promoted.]
-	// The maximum duration that the proxy will wait when fetching the jwks. Default is 5s.
+	// The maximum amount of time that will be spent waiting for the JWKS to be fetched. Default is 5s.
 	Timeout *duration.Duration `protobuf:"bytes,13,opt,name=timeout,proto3" json:"timeout,omitempty"`
 }
 
