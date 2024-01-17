@@ -681,6 +681,11 @@ message ServerTLSSettings {
   // client side certificate.
   string ca_certificates = 5;
 
+  // OPTIONAL: The path to the file containing certificate revocation list (CRL)
+  // to use in verifying a presented client side certificate. If
+  // omitted, the proxy will not verify the certificate against the `crl`.
+  string ca_crl = 13;
+
   // For gateways running on Kubernetes, the name of the secret that
   // holds the TLS certs including the CA certificates. Applicable
   // only on Kubernetes. An Opaque secret should contain the following

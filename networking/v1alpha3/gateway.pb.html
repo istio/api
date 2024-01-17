@@ -715,6 +715,19 @@ client side certificate.</p>
 No
 </td>
 </tr>
+<tr id="ServerTLSSettings-ca_crl">
+<td><code>caCrl</code></td>
+<td><code>string</code></td>
+<td>
+<p>OPTIONAL: The path to the file containing certificate revocation list (CRL)
+to use in verifying a presented client side certificate. If
+omitted, the proxy will not verify the certificate against the <code>crl</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="ServerTLSSettings-credential_name">
 <td><code>credentialName</code></td>
 <td><code>string</code></td>
