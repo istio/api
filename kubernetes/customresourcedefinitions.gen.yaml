@@ -887,8 +887,8 @@ spec:
                                     type: string
                                   caCrl:
                                     description: 'OPTIONAL: The path to the file containing
-                                      certificate revocation list (CRL) to use in
-                                      verifying a presented server certificate.'
+                                      the certificate revocation list (CRL) to use
+                                      in verifying a presented server certificate.'
                                     type: string
                                   clientCertificate:
                                     description: REQUIRED if mode is `MUTUAL`.
@@ -951,7 +951,7 @@ spec:
                               type: string
                             caCrl:
                               description: 'OPTIONAL: The path to the file containing
-                                certificate revocation list (CRL) to use in verifying
+                                the certificate revocation list (CRL) to use in verifying
                                 a presented server certificate.'
                               type: string
                             clientCertificate:
@@ -1604,7 +1604,7 @@ spec:
                               type: string
                             caCrl:
                               description: 'OPTIONAL: The path to the file containing
-                                certificate revocation list (CRL) to use in verifying
+                                the certificate revocation list (CRL) to use in verifying
                                 a presented server certificate.'
                               type: string
                             clientCertificate:
@@ -1666,9 +1666,9 @@ spec:
                           certificate.'
                         type: string
                       caCrl:
-                        description: 'OPTIONAL: The path to the file containing certificate
-                          revocation list (CRL) to use in verifying a presented server
-                          certificate.'
+                        description: 'OPTIONAL: The path to the file containing the
+                          certificate revocation list (CRL) to use in verifying a
+                          presented server certificate.'
                         type: string
                       clientCertificate:
                         description: REQUIRED if mode is `MUTUAL`.
@@ -2397,8 +2397,8 @@ spec:
                                     type: string
                                   caCrl:
                                     description: 'OPTIONAL: The path to the file containing
-                                      certificate revocation list (CRL) to use in
-                                      verifying a presented server certificate.'
+                                      the certificate revocation list (CRL) to use
+                                      in verifying a presented server certificate.'
                                     type: string
                                   clientCertificate:
                                     description: REQUIRED if mode is `MUTUAL`.
@@ -2461,7 +2461,7 @@ spec:
                               type: string
                             caCrl:
                               description: 'OPTIONAL: The path to the file containing
-                                certificate revocation list (CRL) to use in verifying
+                                the certificate revocation list (CRL) to use in verifying
                                 a presented server certificate.'
                               type: string
                             clientCertificate:
@@ -3114,7 +3114,7 @@ spec:
                               type: string
                             caCrl:
                               description: 'OPTIONAL: The path to the file containing
-                                certificate revocation list (CRL) to use in verifying
+                                the certificate revocation list (CRL) to use in verifying
                                 a presented server certificate.'
                               type: string
                             clientCertificate:
@@ -3176,9 +3176,9 @@ spec:
                           certificate.'
                         type: string
                       caCrl:
-                        description: 'OPTIONAL: The path to the file containing certificate
-                          revocation list (CRL) to use in verifying a presented server
-                          certificate.'
+                        description: 'OPTIONAL: The path to the file containing the
+                          certificate revocation list (CRL) to use in verifying a
+                          presented server certificate.'
                         type: string
                       clientCertificate:
                         description: REQUIRED if mode is `MUTUAL`.
@@ -3618,7 +3618,7 @@ spec:
                           type: string
                         caCrl:
                           description: 'OPTIONAL: The path to the file containing
-                            certificate revocation list (CRL) to use in verifying
+                            the certificate revocation list (CRL) to use in verifying
                             a presented client side certificate.'
                           type: string
                         cipherSuites:
@@ -3767,7 +3767,7 @@ spec:
                           type: string
                         caCrl:
                           description: 'OPTIONAL: The path to the file containing
-                            certificate revocation list (CRL) to use in verifying
+                            the certificate revocation list (CRL) to use in verifying
                             a presented client side certificate.'
                           type: string
                         cipherSuites:
@@ -4526,7 +4526,7 @@ spec:
                           type: string
                         caCrl:
                           description: 'OPTIONAL: The path to the file containing
-                            certificate revocation list (CRL) to use in verifying
+                            the certificate revocation list (CRL) to use in verifying
                             a presented client side certificate.'
                           type: string
                         cipherSuites:
@@ -4919,7 +4919,7 @@ spec:
                           type: string
                         caCrl:
                           description: 'OPTIONAL: The path to the file containing
-                            certificate revocation list (CRL) to use in verifying
+                            the certificate revocation list (CRL) to use in verifying
                             a presented client side certificate.'
                           type: string
                         cipherSuites:

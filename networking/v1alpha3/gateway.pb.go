@@ -1010,7 +1010,7 @@ type ServerTLSSettings struct {
 	// containing certificate authority certificates to use in verifying a presented
 	// client side certificate.
 	CaCertificates string `protobuf:"bytes,5,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
-	// OPTIONAL: The path to the file containing certificate revocation list (CRL)
+	// OPTIONAL: The path to the file containing the certificate revocation list (CRL)
 	// to use in verifying a presented client side certificate. If
 	// omitted, the proxy will not verify the certificate against the `crl`.
 	CaCrl string `protobuf:"bytes,13,opt,name=ca_crl,json=caCrl,proto3" json:"ca_crl,omitempty"`
