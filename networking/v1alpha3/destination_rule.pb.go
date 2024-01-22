@@ -2630,7 +2630,6 @@ type ConnectionPoolSettings_HTTPSettings struct {
 	// Note that when this is set to true, h2_upgrade_policy will be ineffective i.e. the client
 	// connections will not be upgraded to http2.
 	UseClientProtocol bool `protobuf:"varint,7,opt,name=use_client_protocol,json=useClientProtocol,proto3" json:"use_client_protocol,omitempty"`
-	// $hide_from_docs
 	// The maximum number of concurrent streams allowed for a peer on one HTTP/2 connection.
 	// Defaults to 2^31-1.
 	MaxConcurrentStreams int32 `protobuf:"varint,8,opt,name=max_concurrent_streams,json=maxConcurrentStreams,proto3" json:"max_concurrent_streams,omitempty"`
