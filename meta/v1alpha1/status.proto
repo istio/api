@@ -48,6 +48,7 @@ message IstioStatus {
 
   // Status from Ancestors
   // +optional
+  // $hide_from_docs
   repeated istio.type.v1beta1.PolicyAncestorStatus ancestors = 4;
 }
 
