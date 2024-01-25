@@ -37290,6 +37290,18 @@
             ]
           },
           {
+            "name": "InboundTrafficPolicy.Mode",
+            "enum_fields": [
+              {
+                "name": "PASSTHROUGH"
+              },
+              {
+                "name": "LOCALHOST",
+                "integer": 1
+              }
+            ]
+          },
+          {
             "name": "MeshConfig.H2UpgradePolicy",
             "enum_fields": [
               {
@@ -37467,6 +37479,11 @@
                 "id": 17,
                 "name": "outbound_traffic_policy",
                 "type": "OutboundTrafficPolicy"
+              },
+              {
+                "id": 66,
+                "name": "inbound_traffic_policy",
+                "type": "InboundTrafficPolicy"
               },
               {
                 "id": 22,
@@ -37662,6 +37679,16 @@
             "messages": [
               {
                 "name": "OutboundTrafficPolicy",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "mode",
+                    "type": "Mode"
+                  }
+                ]
+              },
+              {
+                "name": "InboundTrafficPolicy",
                 "fields": [
                   {
                     "id": 1,
