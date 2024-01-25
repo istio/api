@@ -45212,11 +45212,6 @@
                 "type": "string"
               },
               {
-                "id": 17,
-                "name": "defaultRevision",
-                "type": "bool"
-              },
-              {
                 "id": 18,
                 "name": "compatibilityVersion",
                 "type": "string"
@@ -45257,6 +45252,12 @@
                   ]
                 }
               }
+            ],
+            "reserved_ids": [
+              17
+            ],
+            "reserved_names": [
+              "defaultRevision"
             ]
           },
           {
