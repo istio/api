@@ -191,9 +191,6 @@ message MeshConfig {
   // Default mode is `ALLOW_ANY` which means outbound traffic to unknown destinations will be allowed.
   OutboundTrafficPolicy outbound_traffic_policy = 17;
 
-  // Set the default behavior of the sidecar for handling inbound
-  // traffic to the application.  If your application listens on
-  // localhost, you will need to set this to `LOCALHOST`.
   message InboundTrafficPolicy {
     enum Mode {
       // inbound traffic will be passed through to the destination listening 
@@ -206,6 +203,9 @@ message MeshConfig {
     Mode mode = 1;
   }
 
+  // Set the default behavior of the sidecar for handling inbound
+  // traffic to the application.  If your application listens on
+  // localhost, you will need to set this to `LOCALHOST`.
   InboundTrafficPolicy inbound_traffic_policy = 66;
 
   // ConfigSource describes a source of configuration data for networking

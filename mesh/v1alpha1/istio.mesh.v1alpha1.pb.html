@@ -250,6 +250,10 @@ No
 <td><code>inboundTrafficPolicy</code></td>
 <td><code><a href="#MeshConfig-InboundTrafficPolicy">InboundTrafficPolicy</a></code></td>
 <td>
+<p>Set the default behavior of the sidecar for handling inbound
+traffic to the application.  If your application listens on
+localhost, you will need to set this to <code>LOCALHOST</code>.</p>
+
 </td>
 <td>
 No
@@ -734,10 +738,6 @@ No
 </section>
 <h2 id="MeshConfig-InboundTrafficPolicy">MeshConfig.InboundTrafficPolicy</h2>
 <section>
-<p>Set the default behavior of the sidecar for handling inbound
-traffic to the application.  If your application listens on
-localhost, you will need to set this to <code>LOCALHOST</code>.</p>
-
 <table class="message-fields">
 <thead>
 <tr>

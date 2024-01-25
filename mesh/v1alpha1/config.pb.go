@@ -683,7 +683,10 @@ type MeshConfig struct {
 	// API](https://istio.io/docs/reference/config/networking/sidecar/#OutboundTrafficPolicy).
 	// Default mode is `ALLOW_ANY` which means outbound traffic to unknown destinations will be allowed.
 	OutboundTrafficPolicy *MeshConfig_OutboundTrafficPolicy `protobuf:"bytes,17,opt,name=outbound_traffic_policy,json=outboundTrafficPolicy,proto3" json:"outbound_traffic_policy,omitempty"`
-	InboundTrafficPolicy  *MeshConfig_InboundTrafficPolicy  `protobuf:"bytes,66,opt,name=inbound_traffic_policy,json=inboundTrafficPolicy,proto3" json:"inbound_traffic_policy,omitempty"`
+	// Set the default behavior of the sidecar for handling inbound
+	// traffic to the application.  If your application listens on
+	// localhost, you will need to set this to `LOCALHOST`.
+	InboundTrafficPolicy *MeshConfig_InboundTrafficPolicy `protobuf:"bytes,66,opt,name=inbound_traffic_policy,json=inboundTrafficPolicy,proto3" json:"inbound_traffic_policy,omitempty"`
 	// ConfigSource describes a source of configuration data for networking
 	// rules, and other Istio configuration artifacts. Multiple data sources
 	// can be configured for a single control plane.
@@ -1481,9 +1484,6 @@ func (x *MeshConfig_OutboundTrafficPolicy) GetMode() MeshConfig_OutboundTrafficP
 	return MeshConfig_OutboundTrafficPolicy_REGISTRY_ONLY
 }
 
-// Set the default behavior of the sidecar for handling inbound
-// traffic to the application.  If your application listens on
-// localhost, you will need to set this to `LOCALHOST`.
 type MeshConfig_InboundTrafficPolicy struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
