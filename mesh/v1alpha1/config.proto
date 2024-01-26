@@ -193,8 +193,8 @@ message MeshConfig {
 
   message InboundTrafficPolicy {
     enum Mode {
-      // inbound traffic will be passed through to the destination listening 
-      // on Pod IP. This matches the behavior without Istio enabled at all 
+      // inbound traffic will be passed through to the destination listening
+      // on Pod IP. This matches the behavior without Istio enabled at all
       // allowing proxy to be transparent.
       PASSTHROUGH = 0;
       // inbound traffic will be sent to the destinations listening on localhost.
@@ -1049,7 +1049,7 @@ message MeshConfig {
 
       // Optional. Specifies the configuration for exporting OTLP traces via HTTP.
       // When empty, traces will be exported via gRPC.
-      HttpService otlp_http = 4;
+      HttpService http = 4;
     }
 
     // Defines configuration for an HTTP service that can be used by an Extension Provider.

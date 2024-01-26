@@ -38373,7 +38373,7 @@
                       },
                       {
                         "id": 4,
-                        "name": "otlp_http",
+                        "name": "http",
                         "type": "HttpService"
                       }
                     ]
