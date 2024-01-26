@@ -38370,6 +38370,47 @@
                         "id": 3,
                         "name": "max_tag_length",
                         "type": "uint32"
+                      },
+                      {
+                        "id": 4,
+                        "name": "http",
+                        "type": "HttpService"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "HttpService",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "path",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "timeout",
+                        "type": "google.protobuf.Duration"
+                      },
+                      {
+                        "id": 3,
+                        "name": "headers",
+                        "type": "HttpHeader",
+                        "is_repeated": true
+                      }
+                    ]
+                  },
+                  {
+                    "name": "HttpHeader",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "name",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "value",
+                        "type": "string"
                       }
                     ]
                   }

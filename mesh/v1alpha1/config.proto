@@ -193,8 +193,8 @@ message MeshConfig {
 
   message InboundTrafficPolicy {
     enum Mode {
-      // inbound traffic will be passed through to the destination listening 
-      // on Pod IP. This matches the behavior without Istio enabled at all 
+      // inbound traffic will be passed through to the destination listening
+      // on Pod IP. This matches the behavior without Istio enabled at all
       // allowing proxy to be transparent.
       PASSTHROUGH = 0;
       // inbound traffic will be sent to the destinations listening on localhost.
@@ -1046,6 +1046,78 @@ message MeshConfig {
       // Optional. Controls the overall path length allowed in a reported span.
       // NOTE: currently only controls max length of the path tag.
       uint32 max_tag_length = 3;
+
+      // Optional. Specifies the configuration for exporting OTLP traces via HTTP.
+      // When empty, traces will be exported via gRPC.
+      //
+      // The following example shows how to configure the OpenTelemetry ExtensionProvider to export via HTTP:
+      //
+      // 1. Add/change the OpenTelemetry extension provider in `MeshConfig`
+      // ```yaml
+      // - name: otel-tracing
+      //   opentelemetry:
+      //     port: 443
+      //     service: my.olly-backend.com
+      //     http:
+      //       path: "/api/otlp/traces"
+      //       timeout: 10s
+      //       headers:
+      //       - name: "my-custom-header"
+      //         value: "some value"
+      // ```
+      //
+      // 2. Deploy a `ServiceEntry` for the observability back-end
+      // ```yaml
+      // apiVersion: networking.istio.io/v1alpha3
+      // kind: ServiceEntry
+      // metadata:
+      //   name: my-olly-backend
+      // spec:
+      //   hosts:
+      //   - my.olly-backend.com
+      //   ports:
+      //   - number: 443
+      //     name: https-port
+      //     protocol: HTTPS
+      //   resolution: DNS
+      //   location: MESH_EXTERNAL
+      // ---
+      // apiVersion: networking.istio.io/v1alpha3
+      // kind: DestinationRule
+      // metadata:
+      //   name: my-olly-backend
+      // spec:
+      //   host: my.olly-backend.com
+      //   trafficPolicy:
+      //     portLevelSettings:
+      //     - port:
+      //         number: 443
+      //       tls:
+      //         mode: SIMPLE
+      // ```
+      HttpService http = 4;
+    }
+
+    // Defines configuration for an HTTP service that can be used by an Extension Provider.
+    // that does communication via HTTP.
+    message HttpService {
+      // REQUIRED. Specifies the path on the service.
+      string path = 1;
+
+      // Optional. Specifies the timeout for the HTTP request.
+      // If not specified, the default is 3s.
+      google.protobuf.Duration timeout = 2;
+
+      // Optional. Allows specifying custom HTTP headers that will be added
+      // to each HTTP request sent.
+      repeated HttpHeader headers = 3;
+    }
+
+    message HttpHeader {
+      // REQUIRED. The HTTP header name.
+      string name = 1;
+      // REQUIRED. The HTTP header value.
+      string value = 2;
     }
   }
 
