@@ -462,7 +462,7 @@ var (
                         "present in this list.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
-		Deprecated:    false,
+		Deprecated:    true,
 		Resources: []ResourceTypes{
 			Pod,
 		},

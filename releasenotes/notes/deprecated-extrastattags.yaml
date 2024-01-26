@@ -1,0 +1,6 @@
+apiVersion: release-notes/v2
+kind: feature
+area: telemetry
+releaseNotes:
+  - |
+    **Deprecated** extraStatTags in MeshConfig and annotations. This field will be removed in a future release.

@@ -42,7 +42,7 @@ import "google/protobuf/wrappers.proto";
 // 2. Namespace-specific configuration
 // 3. Root namespace configuration
 //
-// Examples:
+// ## Examples
 //
 // Policy to enable random sampling for 10% of traffic:
 // ```yaml
@@ -57,7 +57,7 @@ import "google/protobuf/wrappers.proto";
 //   - randomSamplingPercentage: 10.00
 // ```
 //
-// Policy to disable trace reporting for the "foo" workload (note: tracing
+// Policy to disable trace reporting for the `foo` workload (note: tracing
 // context will still be propagated):
 // ```yaml
 // apiVersion: telemetry.istio.io/v1alpha1
@@ -147,7 +147,7 @@ import "google/protobuf/wrappers.proto";
 //           value: "request.host"
 // ```
 //
-// Policy to remove the response_code dimension on some Prometheus metrics for
+// Policy to remove the `response_code` dimension on some Prometheus metrics for
 // the `bar.foo` workload:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1alpha1
@@ -249,18 +249,17 @@ message Telemetry {
   // If not set, the Telemetry policy will be applied to all workloads in the
   // same namespace as the Telemetry policy.
   //
-  // At most one of the selector and targetRef can be set.
+  // At most, only one of the selector or targetRef can be set for a given policy.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
-  // $hide_from_docs
-  // Optional. The targetRef specifies the gateway the policy should be 
+  // Optional. The `targetRef` specifies the gateway the policy should be 
   // applied to. The targeted resource specified will determine which 
   // workloads the telemetry policy applies to. The targeted resource
-  // must be a k8s gateway. The resource must be in the same namespace as
+  // must be a Kubernetes gateway. The resource must be in the same namespace as
   // the Telemetry policy.
   //
   // If not set, the policy is applied as defined by the selector.
-  // At most one of the selector and targetRef can be set.
+  // At most, only one of the selector or `targetRef` can be set for a given policy.
   // Waypoint proxies will not respect selectors even if they match.
   istio.type.v1beta1.PolicyTargetReference targetRef = 5;
 
@@ -268,11 +267,11 @@ message Telemetry {
   // selected workloads.
   repeated Tracing tracing = 2;
 
-  // Optional. Metrics configure the metrics behavior for all
+  // Optional. Metrics configures the metrics behavior for all
   // selected workloads.
   repeated Metrics metrics = 3;
 
-  // Optional. AccessLogging configures the access logging behavior for all
+  // Optional. Access logging configures the access logging behavior for all
   // selected workloads.
   repeated AccessLogging access_logging = 4;
 }
@@ -388,7 +387,7 @@ message Tracing {
 // Used to bind Telemetry configuration to specific providers for
 // targeted customization.
 message ProviderRef {
-  // Required. Name of Telemetry provider in MeshConfig.
+  // Required. Name of Telemetry provider in [MeshConfig](https://istio.io/latest/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig-ExtensionProvider).
   // +kubebuilder:validation:MinLength=1
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
@@ -425,10 +424,10 @@ message Metrics {
 }
 
 // WorkloadMode allows selection of the role of the underlying workload in
-// network traffic. A workload is considered as acting as a SERVER if it is
+// network traffic. A workload is considered as acting as a `SERVER` if it is
 // the destination of the traffic (that is, traffic direction, from the
 // perspective of the workload is *inbound*). If the workload is the source of
-// the network traffic, it is considered to be in CLIENT mode (traffic is
+// the network traffic, it is considered to be in `CLIENT` mode (traffic is
 // *outbound* from the workload).
 enum WorkloadMode {
   // Selects for scenarios when the workload is either the
@@ -559,7 +558,7 @@ message MetricSelector {
 
   // Controls which metric(s) are selected by the selector.
   oneof metric_match {
-    // One of the well-known Istio Standard Metrics.
+    // One of the well-known [Istio Standard Metrics](https://istio.io/latest/docs/reference/config/metrics/).
     IstioMetric metric = 1;
 
     // Allows free-form specification of a metric. No validation of custom
@@ -568,8 +567,8 @@ message MetricSelector {
     string custom_metric = 2;
   }
 
-  // Controls which mode of metrics generation is selected: CLIENT and/or
-  // SERVER.
+  // Controls which mode of metrics generation is selected: `CLIENT`, `SERVER`,
+  // or `CLIENT_AND_SERVER`.
   WorkloadMode mode = 3;
 }
 
@@ -577,17 +576,17 @@ message MetricSelector {
 // metric or the set of all standard metrics.
 message MetricsOverrides {
 
-  // Match allows provides the scope of the override. It can be used to select
-  // individual metrics, as well as the workload modes (server and/or client)
+  // Match allows providing the scope of the override. It can be used to select
+  // individual metrics, as well as the workload modes (server, client, or both)
   // in which the metrics will be generated.
   //
   // If match is not specified, the overrides will apply to *all* metrics for
   // *both* modes of operation (client and server).
   MetricSelector match = 1;
 
-  // Optional. Must explicitly set this to "true" to turn off metrics reporting
-  // for the listed metrics. If disabled has been set to "true" in a parent
-  // configuration, it must explicitly be set to "false" to turn metrics
+  // Optional. Must explicitly set this to `true` to turn off metrics reporting
+  // for the listed metrics. If disabled has been set to `true` in a parent
+  // configuration, it must explicitly be set to `false` to turn metrics
   // reporting on in the workloads selected by the Telemetry resource.
   google.protobuf.BoolValue disabled = 2;
 
@@ -599,7 +598,7 @@ message MetricsOverrides {
   message TagOverride {
     enum Operation {
       // Insert or Update the tag with the provided value expression. The
-      // `value` field MUST be specified if UPSERT is used as the operation.
+      // `value` field MUST be specified if `UPSERT` is used as the operation.
       UPSERT = 0;
 
       // Specifies that the tag should not be included in the metric when
@@ -612,8 +611,8 @@ message MetricsOverrides {
 
     // Value is only considered if the operation is `UPSERT`.
     // Values are [CEL expressions](https://opensource.google/projects/cel) over
-    // attributes. Examples include: "string(destination.port)" and
-    // "request.host". Istio exposes all standard [Envoy
+    // attributes. Examples include: `string(destination.port)` and
+    // `request.host`. Istio exposes all standard [Envoy
     // attributes](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/advanced/attributes).
     // Additionally, Istio exposes node metadata as attributes.
     // More information is provided in the [customization
@@ -638,9 +637,9 @@ message AccessLogging {
   // LogSelector provides a coarse-grained ability to configure logging behavior
   // based on certain traffic metadata (such as traffic direction). LogSelector
   // applies to traffic metadata which is not represented in the attribute set
-  // currently supported by Filters. It allows control planes to limit the
-  // configuration sent to individual workloads. Finer-grained logging behavior
-  // can be further configured via `filter`.
+  // currently supported by [filters](https://istio.io/latest/docs/reference/config/telemetry/#AccessLogging-Filter).
+  // It allows control planes to limit the configuration sent to individual workloads.
+  // Finer-grained logging behavior can be further configured via `filter`.
   message LogSelector {
     // This determines whether or not to apply the access logging configuration
     // based on the direction of traffic relative to the proxied workload.
