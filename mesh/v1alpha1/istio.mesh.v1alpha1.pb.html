@@ -2326,6 +2326,51 @@ No
 <td>
 <p>Optional. Specifies the configuration for exporting OTLP traces via HTTP.
 When empty, traces will be exported via gRPC.</p>
+<p>The following example shows how to configure the OpenTelemetry ExtensionProvider to export via HTTP:</p>
+<ol>
+<li>Add/change the OpenTelemetry extension provider in <code>MeshConfig</code></li>
+</ol>
+<pre><code class="language-yaml">- name: otel-tracing
+  opentelemetry:
+    port: 443
+    service: my.olly-backend.com
+    http:
+      path: &quot;/api/otlp/traces&quot;
+      timeout: 10s
+      headers:
+      - name: &quot;my-custom-header&quot;
+        value: &quot;some value&quot;
+</code></pre>
+<ol start="2">
+<li>Deploy a <code>ServiceEntry</code> for the observability back-end</li>
+</ol>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: my-olly-backend
+spec:
+  hosts:
+  - my.olly-backend.com
+  ports:
+  - number: 443
+    name: https-port
+    protocol: HTTPS
+  resolution: DNS
+  location: MESH_EXTERNAL
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: my-olly-backend
+spec:
+  host: my.olly-backend.com
+  trafficPolicy:
+    portLevelSettings:
+    - port:
+        number: 443
+      tls:
+        mode: SIMPLE
+</code></pre>
 
 </td>
 <td>

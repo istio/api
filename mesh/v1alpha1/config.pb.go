@@ -3670,6 +3670,61 @@ type MeshConfig_ExtensionProvider_OpenTelemetryTracingProvider struct {
 	MaxTagLength uint32 `protobuf:"varint,3,opt,name=max_tag_length,json=maxTagLength,proto3" json:"max_tag_length,omitempty"`
 	// Optional. Specifies the configuration for exporting OTLP traces via HTTP.
 	// When empty, traces will be exported via gRPC.
+	//
+	// The following example shows how to configure the OpenTelemetry ExtensionProvider to export via HTTP:
+	//
+	// 1. Add/change the OpenTelemetry extension provider in `MeshConfig`
+	// ```yaml
+	//   - name: otel-tracing
+	//     opentelemetry:
+	//     port: 443
+	//     service: my.olly-backend.com
+	//     http:
+	//     path: "/api/otlp/traces"
+	//     timeout: 10s
+	//     headers:
+	//   - name: "my-custom-header"
+	//     value: "some value"
+	//
+	// ```
+	//
+	// 2. Deploy a `ServiceEntry` for the observability back-end
+	// ```yaml
+	// apiVersion: networking.istio.io/v1alpha3
+	// kind: ServiceEntry
+	// metadata:
+	//
+	//	name: my-olly-backend
+	//
+	// spec:
+	//
+	//	hosts:
+	//	- my.olly-backend.com
+	//	ports:
+	//	- number: 443
+	//	  name: https-port
+	//	  protocol: HTTPS
+	//	resolution: DNS
+	//	location: MESH_EXTERNAL
+	//
+	// ---
+	// apiVersion: networking.istio.io/v1alpha3
+	// kind: DestinationRule
+	// metadata:
+	//
+	//	name: my-olly-backend
+	//
+	// spec:
+	//
+	//	host: my.olly-backend.com
+	//	trafficPolicy:
+	//	  portLevelSettings:
+	//	  - port:
+	//	      number: 443
+	//	    tls:
+	//	      mode: SIMPLE
+	//
+	// ```
 	Http *MeshConfig_ExtensionProvider_HttpService `protobuf:"bytes,4,opt,name=http,proto3" json:"http,omitempty"`
 }
 
