@@ -7335,6 +7335,8 @@ spec:
     kind: AuthorizationPolicy
     listKind: AuthorizationPolicyList
     plural: authorizationpolicies
+    shortNames:
+    - authz
     singular: authorizationpolicy
   scope: Namespaced
   versions:
