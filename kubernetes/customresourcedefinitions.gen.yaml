@@ -7362,7 +7362,7 @@ spec:
     listKind: AuthorizationPolicyList
     plural: authorizationpolicies
     shortNames:
-    - authz
+    - ap
     singular: authorizationpolicy
   scope: Namespaced
   versions:
