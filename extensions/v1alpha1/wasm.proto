@@ -243,24 +243,24 @@ message WasmPlugin {
   // namespace, it will be applied to all applicable workloads in any
   // namespace.
   //
-  // At most, only one of the selector or targetRef can be set for a given policy.
+  // At most, only one of the selector or `targetRef` can be set for a given policy.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
-  // Optional. The targetRef specifies the gateway the policy should be 
+  // Optional. The `targetRef` specifies the gateway the policy should be 
   // applied to. The targeted resource specified will determine which 
   // workloads the WasmPlugin applies to. The targeted resource must be 
   // a `Gateway` in the group `gateway.networking.k8s.io`. The gateway
   // must be in the same namespace as the policy.
   //
   // If the `targetRef` is not set, the policy is applied as defined by the selector.
-  // At most, only one of the selector or targetRef can be set for a given policy.
+  // At most, only one of the selector or `targetRef` can be set for a given policy.
   // Waypoint proxies will not respect selectors even if they match.
   istio.type.v1beta1.PolicyTargetReference targetRef = 15;
 
   // URL of a Wasm module or OCI container. If no scheme is present,
   // defaults to `oci://`, referencing an OCI image. Other valid schemes
   // are `file://` for referencing .wasm module files present locally
-  // within the proxy container, and `http[s]://` for .wasm module files
+  // within the proxy container, and `http[s]://` for `.wasm` module files
   // hosted remotely.
   // +kubebuilder:validation:MinLength=1
   // +kubebuilder:validation:XValidation:message="url must have schema one of [http, https, file, oci]",rule="isURL(self) ? (url(self).getScheme() in ['', 'http', 'https', 'oci', 'file']) : (isURL('http://' + self) && url('http://' +self).getScheme() in ['', 'http', 'https', 'oci', 'file'])"
@@ -275,16 +275,16 @@ message WasmPlugin {
   string sha256 = 3;
 
   // The pull behaviour to be applied when fetching Wasm module by either
-  // OCI image or http/https. Only relevant when referencing Wasm module without
-  // any digest, including the digest in OCI image URL or sha256 field in `vm_config`.
-  // Defaults to IfNotPresent, except when an OCI image is referenced in the `url`
+  // OCI image or `http/https`. Only relevant when referencing Wasm module without
+  // any digest, including the digest in OCI image URL or `sha256` field in `vm_config`.
+  // Defaults to `IfNotPresent`, except when an OCI image is referenced in the `url`
   // and the `latest` tag is used, in which case `Always` is the default,
-  // mirroring K8s behaviour.
+  // mirroring Kubernetes behaviour.
   PullPolicy image_pull_policy = 4;
 
   // Credentials to use for OCI image pulling.
-  // Name of a K8s Secret in the same namespace as the `WasmPlugin` that
-  // contains a docker pull secret which is to be used to authenticate
+  // Name of a Kubernetes Secret in the same namespace as the `WasmPlugin` that
+  // contains a Docker pull secret which is to be used to authenticate
   // against the registry when pulling the image.
   // +kubebuilder:validation:MinLength=1
   // +kubebuilder:validation:MaxLength=253
@@ -346,10 +346,10 @@ message WasmPlugin {
   // traffic will be selected.
   message TrafficSelector {
     // Criteria for selecting traffic by their direction.
-    // Note that CLIENT and SERVER are analogous to OUTBOUND and INBOUND,
+    // Note that `CLIENT` and `SERVER` are analogous to OUTBOUND and INBOUND,
     // respectively.
-    // For the gateway, the field should be CLIENT or CLIENT_AND_SERVER.
-    // If not specified, the default value is CLIENT_AND_SERVER.
+    // For the gateway, the field should be `CLIENT` or `CLIENT_AND_SERVER`.
+    // If not specified, the default value is `CLIENT_AND_SERVER`.
     istio.type.v1beta1.WorkloadMode mode = 1;
 
     // Criteria for selecting traffic by their destination port.
@@ -423,8 +423,8 @@ enum PluginPhase {
 // buf:lint:ignore ENUM_VALUE_UPPER_SNAKE_CASE
 // -->
 enum PullPolicy {
-  // Defaults to IfNotPresent, except for OCI images with tag `latest`, for which
-  // the default will be Always.
+  // Defaults to `IfNotPresent`, except for OCI images with tag `latest`, for which
+  // the default will be `Always`.
   UNSPECIFIED_POLICY = 0;
 
   // If an existing version of the image has been pulled before, that
