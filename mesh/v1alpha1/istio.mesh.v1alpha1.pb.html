@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 66
+number_of_entries: 70
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -240,6 +240,19 @@ monitored. Can be overridden at a Sidecar level by setting the
 <code>OutboundTrafficPolicy</code> in the <a href="https://istio.io/docs/reference/config/networking/sidecar/#OutboundTrafficPolicy">Sidecar
 API</a>.
 Default mode is <code>ALLOW_ANY</code> which means outbound traffic to unknown destinations will be allowed.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-inbound_traffic_policy">
+<td><code>inboundTrafficPolicy</code></td>
+<td><code><a href="#MeshConfig-InboundTrafficPolicy">InboundTrafficPolicy</a></code></td>
+<td>
+<p>Set the default behavior of the sidecar for handling inbound
+traffic to the application.  If your application listens on
+localhost, you will need to set this to <code>LOCALHOST</code>.</p>
 
 </td>
 <td>
@@ -714,6 +727,30 @@ No
 <tr id="MeshConfig-OutboundTrafficPolicy-mode">
 <td><code>mode</code></td>
 <td><code><a href="#MeshConfig-OutboundTrafficPolicy-Mode">Mode</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-InboundTrafficPolicy">MeshConfig.InboundTrafficPolicy</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-InboundTrafficPolicy-mode">
+<td><code>mode</code></td>
+<td><code><a href="#MeshConfig-InboundTrafficPolicy-Mode">Mode</a></code></td>
 <td>
 </td>
 <td>
@@ -2283,6 +2320,153 @@ NOTE: currently only controls max length of the path tag.</p>
 No
 </td>
 </tr>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-http">
+<td><code>http</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-HttpService">HttpService</a></code></td>
+<td>
+<p>Optional. Specifies the configuration for exporting OTLP traces via HTTP.
+When empty, traces will be exported via gRPC.</p>
+<p>The following example shows how to configure the OpenTelemetry ExtensionProvider to export via HTTP:</p>
+<ol>
+<li>Add/change the OpenTelemetry extension provider in <code>MeshConfig</code></li>
+</ol>
+<pre><code class="language-yaml">- name: otel-tracing
+  opentelemetry:
+    port: 443
+    service: my.olly-backend.com
+    http:
+      path: &quot;/api/otlp/traces&quot;
+      timeout: 10s
+      headers:
+      - name: &quot;my-custom-header&quot;
+        value: &quot;some value&quot;
+</code></pre>
+<ol start="2">
+<li>Deploy a <code>ServiceEntry</code> for the observability back-end</li>
+</ol>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: my-olly-backend
+spec:
+  hosts:
+  - my.olly-backend.com
+  ports:
+  - number: 443
+    name: https-port
+    protocol: HTTPS
+  resolution: DNS
+  location: MESH_EXTERNAL
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: my-olly-backend
+spec:
+  host: my.olly-backend.com
+  trafficPolicy:
+    portLevelSettings:
+    - port:
+        number: 443
+      tls:
+        mode: SIMPLE
+</code></pre>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-HttpService">MeshConfig.ExtensionProvider.HttpService</h2>
+<section>
+<p>Defines configuration for an HTTP service that can be used by an Extension Provider.
+that does communication via HTTP.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-HttpService-path">
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED. Specifies the path on the service.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-HttpService-timeout">
+<td><code>timeout</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>Optional. Specifies the timeout for the HTTP request.
+If not specified, the default is 3s.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-HttpService-headers">
+<td><code>headers</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-HttpHeader">HttpHeader[]</a></code></td>
+<td>
+<p>Optional. Allows specifying custom HTTP headers that will be added
+to each HTTP request sent.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-HttpHeader">MeshConfig.ExtensionProvider.HttpHeader</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-HttpHeader-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED. The HTTP header name.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-HttpHeader-value">
+<td><code>value</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED. The HTTP header value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -3371,6 +3555,19 @@ The duration needs to be set to a value greater than or equal to 1 millisecond.<
 No
 </td>
 </tr>
+<tr id="PrivateKeyProvider-CryptoMb-fallback">
+<td><code>fallback</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+<p>If the private key provider isn’t available (eg. the required hardware capability doesn’t existed)
+Envoy will fallback to the BoringSSL default implementation when the fallback is true.
+The default value is false.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -3396,6 +3593,19 @@ No
 Having a small value leads to quicker answers from the hardware but causes more polling loop spins,
 leading to potentially larger CPU usage.
 The duration needs to be set to a value greater than or equal to 1 millisecond.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="PrivateKeyProvider-QAT-fallback">
+<td><code>fallback</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+<p>If the private key provider isn’t available (eg. the required hardware capability doesn’t existed)
+Envoy will fallback to the BoringSSL default implementation when the fallback is true.
+The default value is false.</p>
 
 </td>
 <td>
@@ -3929,6 +4139,35 @@ service registry as well as those defined through ServiceEntries</p>
 <td>
 <p>outbound traffic to unknown destinations will be allowed, in case
 there are no services or ServiceEntries for the destination port</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-InboundTrafficPolicy-Mode">MeshConfig.InboundTrafficPolicy.Mode</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-InboundTrafficPolicy-Mode-PASSTHROUGH">
+<td><code>PASSTHROUGH</code></td>
+<td>
+<p>inbound traffic will be passed through to the destination listening
+on Pod IP. This matches the behavior without Istio enabled at all
+allowing proxy to be transparent.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-InboundTrafficPolicy-Mode-LOCALHOST">
+<td><code>LOCALHOST</code></td>
+<td>
+<p>inbound traffic will be sent to the destinations listening on localhost.</p>
 
 </td>
 </tr>
