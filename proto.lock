@@ -37565,7 +37565,13 @@
                 "id": 47,
                 "name": "certificates",
                 "type": "Certificate",
-                "is_repeated": true
+                "is_repeated": true,
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 50,
@@ -37833,6 +37839,12 @@
                     "id": 8,
                     "name": "opencensus",
                     "type": "OpenCensusAgentTracingProvider",
+                    "options": [
+                      {
+                        "name": "deprecated",
+                        "value": "true"
+                      }
+                    ],
                     "oneof_parent": "provider"
                   },
                   {
@@ -37936,7 +37948,13 @@
                         "id": 6,
                         "name": "include_headers_in_check",
                         "type": "string",
-                        "is_repeated": true
+                        "is_repeated": true,
+                        "options": [
+                          {
+                            "name": "deprecated",
+                            "value": "true"
+                          }
+                        ]
                       },
                       {
                         "id": 10,
