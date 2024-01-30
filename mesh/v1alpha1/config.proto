@@ -390,7 +390,7 @@ message MeshConfig {
   // Configure the provision of certificates.
   //
   // Note: Deprecated, please refer to Cert-Manager or other cert provisioning solutions to sign DNS certificates.
-  repeated Certificate certificates = 47;
+  repeated Certificate certificates = 47 [deprecated=true];
 
   reserved 49;
   reserved "thrift_config";
@@ -528,7 +528,7 @@ message MeshConfig {
       // $hide_from_docs
       // Configures an OpenCensusAgent tracing provider.
       // Deprecated: OpenCensus is deprecated, more details can be found at https://opentelemetry.io/blog/2023/sunsetting-opencensus/
-      OpenCensusAgentTracingProvider opencensus = 8;
+      OpenCensusAgentTracingProvider opencensus = 8 [deprecated=true];
       // Configures a Apache SkyWalking provider.
       SkyWalkingTracingProvider skywalking = 9;
       // Configures an OpenTelemetry tracing provider.
@@ -601,7 +601,7 @@ message MeshConfig {
       string status_on_error = 5;
 
       // DEPRECATED. Use include_request_headers_in_check instead.
-      repeated string include_headers_in_check = 6;
+      repeated string include_headers_in_check = 6 [deprecated=true];
 
       // List of client request headers that should be included in the authorization request sent to the authorization service.
       // Note that in addition to the headers specified here following headers are included by default:
