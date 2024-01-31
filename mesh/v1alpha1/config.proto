@@ -1097,6 +1097,9 @@ message MeshConfig {
       //         mode: SIMPLE
       // ```
       HttpService http = 4;
+
+      // Optional. Specifies a list of resource detectors to be used by the OpenTelemetry Tracer.
+      repeated google.protobuf.Any resource_detectors = 5;
     }
 
     // Defines configuration for an HTTP service that can be used by an Extension Provider.
@@ -1120,6 +1123,10 @@ message MeshConfig {
       // REQUIRED. The HTTP header value.
       string value = 2;
     }
+
+    message EnvironmentResourceDetector { }
+
+    message DynatraceResourceDetector { }
   }
 
   // Defines a list of extension providers that extend Istio's functionality. For example, the AuthorizationPolicy

@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 70
+number_of_entries: 72
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -2377,6 +2377,17 @@ spec:
 No
 </td>
 </tr>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-resource_detectors">
+<td><code>resourceDetectors</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#any">Any[]</a></code></td>
+<td>
+<p>Optional. Specifies a list of resource detectors to be used by the OpenTelemetry Tracer.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -2469,6 +2480,12 @@ No
 </tr>
 </tbody>
 </table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-EnvironmentResourceDetector">MeshConfig.ExtensionProvider.EnvironmentResourceDetector</h2>
+<section>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-DynatraceResourceDetector">MeshConfig.ExtensionProvider.DynatraceResourceDetector</h2>
+<section>
 </section>
 <h2 id="MeshConfig-ExtensionProvider-StackdriverProvider-Logging">MeshConfig.ExtensionProvider.StackdriverProvider.Logging</h2>
 <section>
@@ -2597,48 +2614,6 @@ Alias to <code>attributes</code> filed in <a href="https://www.envoyproxy.io/doc
   message: &quot;%LOCAL_REPLY_BODY%&quot;
 </code></pre>
 
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-EnvironmentResourceDetector">MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.EnvironmentResourceDetector</h2>
-<section>
-</section>
-<h2 id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-DynatraceResourceDetector">MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.DynatraceResourceDetector</h2>
-<section>
-</section>
-<h2 id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-AlwaysOnSampler">MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.AlwaysOnSampler</h2>
-<section>
-</section>
-<h2 id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-DynatraceSampler">MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.DynatraceSampler</h2>
-<section>
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-DynatraceSampler-cluster_id">
-<td><code>clusterId</code></td>
-<td><code>string</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-DynatraceSampler-tenant_id">
-<td><code>tenantId</code></td>
-<td><code>string</code></td>
-<td>
 </td>
 <td>
 No

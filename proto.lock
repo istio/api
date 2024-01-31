@@ -38393,6 +38393,12 @@
                         "id": 4,
                         "name": "http",
                         "type": "HttpService"
+                      },
+                      {
+                        "id": 5,
+                        "name": "resource_detectors",
+                        "type": "google.protobuf.Any",
+                        "is_repeated": true
                       }
                     ]
                   },
@@ -38431,6 +38437,12 @@
                         "type": "string"
                       }
                     ]
+                  },
+                  {
+                    "name": "EnvironmentResourceDetector"
+                  },
+                  {
+                    "name": "DynatraceResourceDetector"
                   }
                 ]
               },
