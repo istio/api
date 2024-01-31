@@ -2381,7 +2381,18 @@ No
 <td><code>resourceDetectors</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#any">Any[]</a></code></td>
 <td>
-<p>Optional. Specifies a list of resource detectors to be used by the OpenTelemetry Tracer.</p>
+<p>Optional. Specifies a list of <a href="https://opentelemetry.io/docs/specs/otel/resource/sdk/">Resource Detectors</a>
+to be used by the OpenTelemetry Tracer. When multiple resources are provided, they are merged
+according to the OpenTelemetry <a href="https://opentelemetry.io/docs/specs/otel/resource/sdk/#merge">Resource specification</a>.</p>
+<p>The following example shows how to configure the Environment Resource Detector, that will
+read the attributes from the environment variable <code>OTEL_RESOURCE_ATTRIBUTES</code>:</p>
+<pre><code class="language-yaml">- name: otel-tracing
+  opentelemetry:
+    port: 443
+    service: my.olly-backend.com
+    resource_detectors:
+    - '@type': type.googleapis.com/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.EnvironmentResourceDetector
+</code></pre>
 
 </td>
 <td>
@@ -2483,9 +2494,19 @@ No
 </section>
 <h2 id="MeshConfig-ExtensionProvider-EnvironmentResourceDetector">MeshConfig.ExtensionProvider.EnvironmentResourceDetector</h2>
 <section>
+<p>OpenTelemetry Environment Resource Detector.
+The resource detector reads attributes from the environment variable <code>OTEL_RESOURCE_ATTRIBUTES</code>
+and adds them to the OpenTelemetry resource.</p>
+<p>See: <a href="https://opentelemetry.io/docs/specs/otel/resource/sdk/#specifying-resource-information-via-an-environment-variable">Resource specification</a></p>
+
 </section>
 <h2 id="MeshConfig-ExtensionProvider-DynatraceResourceDetector">MeshConfig.ExtensionProvider.DynatraceResourceDetector</h2>
 <section>
+<p>Dynatrace Resource Detector.
+The resource detector reads from the Dynatrace enrichment files
+and adds host/process related attributes to the OpenTelemetry resource.</p>
+<p>See: <a href="https://docs.dynatrace.com/docs/shortlink/enrichment-files%3E">Enrich ingested data with Dynatrace-specific dimensions</a></p>
+
 </section>
 <h2 id="MeshConfig-ExtensionProvider-StackdriverProvider-Logging">MeshConfig.ExtensionProvider.StackdriverProvider.Logging</h2>
 <section>

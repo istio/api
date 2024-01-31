@@ -3736,7 +3736,22 @@ type MeshConfig_ExtensionProvider_OpenTelemetryTracingProvider struct {
 	//
 	// ```
 	Http *MeshConfig_ExtensionProvider_HttpService `protobuf:"bytes,4,opt,name=http,proto3" json:"http,omitempty"`
-	// Optional. Specifies a list of resource detectors to be used by the OpenTelemetry Tracer.
+	// Optional. Specifies a list of [Resource Detectors](https://opentelemetry.io/docs/specs/otel/resource/sdk/)
+	// to be used by the OpenTelemetry Tracer. When multiple resources are provided, they are merged
+	// according to the OpenTelemetry [Resource specification](https://opentelemetry.io/docs/specs/otel/resource/sdk/#merge).
+	//
+	// The following example shows how to configure the Environment Resource Detector, that will
+	// read the attributes from the environment variable `OTEL_RESOURCE_ATTRIBUTES`:
+	//
+	// ```yaml
+	//   - name: otel-tracing
+	//     opentelemetry:
+	//     port: 443
+	//     service: my.olly-backend.com
+	//     resource_detectors:
+	//   - '@type': type.googleapis.com/istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.EnvironmentResourceDetector
+	//
+	// ```
 	ResourceDetectors []*any1.Any `protobuf:"bytes,5,rep,name=resource_detectors,json=resourceDetectors,proto3" json:"resource_detectors,omitempty"`
 }
 
@@ -3934,6 +3949,11 @@ func (x *MeshConfig_ExtensionProvider_HttpHeader) GetValue() string {
 	return ""
 }
 
+// OpenTelemetry Environment Resource Detector.
+// The resource detector reads attributes from the environment variable `OTEL_RESOURCE_ATTRIBUTES`
+// and adds them to the OpenTelemetry resource.
+//
+// See: [Resource specification](https://opentelemetry.io/docs/specs/otel/resource/sdk/#specifying-resource-information-via-an-environment-variable)
 type MeshConfig_ExtensionProvider_EnvironmentResourceDetector struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -3972,6 +3992,11 @@ func (*MeshConfig_ExtensionProvider_EnvironmentResourceDetector) Descriptor() ([
 	return file_mesh_v1alpha1_config_proto_rawDescGZIP(), []int{0, 5, 17}
 }
 
+// Dynatrace Resource Detector.
+// The resource detector reads from the Dynatrace enrichment files
+// and adds host/process related attributes to the OpenTelemetry resource.
+//
+// See: [Enrich ingested data with Dynatrace-specific dimensions](https://docs.dynatrace.com/docs/shortlink/enrichment-files>)
 type MeshConfig_ExtensionProvider_DynatraceResourceDetector struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
