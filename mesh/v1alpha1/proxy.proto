@@ -255,7 +255,7 @@ message Topology {
   // X-Envoy-External-Address header to the trusted client address before
   // forwarding it to the upstream services in the cluster.
   // The default value of num_trusted_proxies is 0.
-  // See [Envoy XFF] (https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#config-http-conn-man-headers-x-forwarded-for)
+  // See [Envoy XFF](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#config-http-conn-man-headers-x-forwarded-for)
   // header handling for more details.
   uint32 num_trusted_proxies = 1;
 
@@ -312,6 +312,10 @@ message PrivateKeyProvider {
     // In effect, this value controls the balance between latency and throughput.
     // The duration needs to be set to a value greater than or equal to 1 millisecond.
     google.protobuf.Duration poll_delay = 1;
+    // If the private key provider isn’t available (eg. the required hardware capability doesn’t existed)
+    // Envoy will fallback to the BoringSSL default implementation when the fallback is true.
+    // The default value is false.
+    google.protobuf.BoolValue fallback = 2;
   }
 
   // QAT (QuickAssist Technology) PrivateKeyProvider configuration
@@ -321,6 +325,10 @@ message PrivateKeyProvider {
     // leading to potentially larger CPU usage.
     // The duration needs to be set to a value greater than or equal to 1 millisecond.
     google.protobuf.Duration poll_delay = 1;
+    // If the private key provider isn’t available (eg. the required hardware capability doesn’t existed)
+    // Envoy will fallback to the BoringSSL default implementation when the fallback is true.
+    // The default value is false.
+    google.protobuf.BoolValue fallback = 2;
   }
 
   // REQUIRED. Specifies detailed configuration for the Private key provider.
@@ -510,6 +518,7 @@ message ProxyConfig {
   // added by configuring the telemetry extension. Each additional tag needs to be present in this list.
   // Extra tags emitted by the telemetry extensions must be listed here so that they can be processed
   // and exposed as Prometheus metrics.
+  // Deprecated: `istio.stats` is a native filter now, this field is no longer needed.
   repeated string extra_stat_tags = 27;
 
   // Topology encapsulates the configuration which describes where the proxy is

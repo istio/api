@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 72
+number_of_entries: 70
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -240,6 +240,19 @@ monitored. Can be overridden at a Sidecar level by setting the
 <code>OutboundTrafficPolicy</code> in the <a href="https://istio.io/docs/reference/config/networking/sidecar/#OutboundTrafficPolicy">Sidecar
 API</a>.
 Default mode is <code>ALLOW_ANY</code> which means outbound traffic to unknown destinations will be allowed.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-inbound_traffic_policy">
+<td><code>inboundTrafficPolicy</code></td>
+<td><code><a href="#MeshConfig-InboundTrafficPolicy">InboundTrafficPolicy</a></code></td>
+<td>
+<p>Set the default behavior of the sidecar for handling inbound
+traffic to the application.  If your application listens on
+localhost, you will need to set this to <code>LOCALHOST</code>.</p>
 
 </td>
 <td>
@@ -560,7 +573,7 @@ The following example selects any namespace that matches either below:</p>
         - cassandra
         - spark
 </code></pre>
-<p>Refer to the <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors">kubernetes selector docs</a>
+<p>Refer to the <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors">Kubernetes selector docs</a>
 for additional detail on selector semantics.</p>
 
 </td>
@@ -608,17 +621,18 @@ No
 <td><code><a href="#MeshConfig-TLSConfig">TLSConfig</a></code></td>
 <td>
 <p>The below configuration parameters can be used to specify TLSConfig for mesh traffic.
-For example, a user could enable min TLS version for ISTIO_MUTUAL traffic and specify a curve for non ISTIO_MUTUAL traffic like below:
-meshConfig:
-meshMTLS:
-minProtocolVersion: TLSV1_3
-tlsDefaults:
-Note: applicable only for non ISTIO_MUTUAL scenarios
-ecdhCurves:
-- P-256
-- P-512</p>
-<p>Configuration of mTLS for traffic between workloads with ISTIO_MUTUAL TLS traffic.
-Note: Mesh mTLS does not respect ECDH curves.</p>
+For example, a user could enable min TLS version for ISTIO_MUTUAL traffic and specify a curve for non ISTIO_MUTUAL traffic like below:</p>
+<pre><code class="language-yaml">meshConfig:
+  meshMTLS:
+    minProtocolVersion: TLSV1_3
+  tlsDefaults:
+    Note: applicable only for non ISTIO_MUTUAL scenarios
+    ecdhCurves:
+      - P-256
+      - P-512
+</code></pre>
+<p>Configuration of mTLS for traffic between workloads with ISTIO_MUTUAL TLS traffic.</p>
+<p>Note: Mesh mTLS does not respect ECDH curves.</p>
 
 </td>
 <td>
@@ -713,6 +727,30 @@ No
 <tr id="MeshConfig-OutboundTrafficPolicy-mode">
 <td><code>mode</code></td>
 <td><code><a href="#MeshConfig-OutboundTrafficPolicy-Mode">Mode</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-InboundTrafficPolicy">MeshConfig.InboundTrafficPolicy</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-InboundTrafficPolicy-mode">
+<td><code>mode</code></td>
+<td><code><a href="#MeshConfig-InboundTrafficPolicy-Mode">Mode</a></code></td>
 <td>
 </td>
 <td>
@@ -1134,8 +1172,8 @@ No
 <td><code>string[]</code></td>
 <td>
 <p>Optional: If specified, the TLS connection will only support the specified ECDH curves for the DH key exchange.
-If not specified, the default curves enforced by envoy will be used. For details about the default curves, refer to
-<a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto">Ecdh Curves</a></p>
+If not specified, the default curves enforced by Envoy will be used. For details about the default curves, refer to
+<a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto">Ecdh Curves</a>.</p>
 
 </td>
 <td>
@@ -1147,13 +1185,14 @@ No
 <td><code>string[]</code></td>
 <td>
 <p>Optional: If specified, the TLS connection will only support the specified cipher list when negotiating TLS 1.0-1.2.
-If not specified, the following cipher suites will be used:
-ECDHE-ECDSA-AES256-GCM-SHA384
+If not specified, the following cipher suites will be used:</p>
+<pre><code>ECDHE-ECDSA-AES256-GCM-SHA384
 ECDHE-RSA-AES256-GCM-SHA384
 ECDHE-ECDSA-AES128-GCM-SHA256
 ECDHE-RSA-AES128-GCM-SHA256
 AES256-GCM-SHA384
-AES128-GCM-SHA256</p>
+AES128-GCM-SHA256
+</code></pre>
 
 </td>
 <td>
@@ -1252,8 +1291,8 @@ No
 <td><code>bool</code></td>
 <td>
 <p>If true, the body sent to the external authorization service in the gRPC authorization request is set with raw bytes
-in the raw_body field (<a href="https://github.com/envoyproxy/envoy/blame/cffb095d59d7935abda12b9509bcd136808367bb/api/envoy/service/auth/v3/attribute_context.proto#L153)">https://github.com/envoyproxy/envoy/blame/cffb095d59d7935abda12b9509bcd136808367bb/api/envoy/service/auth/v3/attribute_context.proto#L153)</a>.
-Otherwise, it will be filled with UTF-8 string in the body field (<a href="https://github.com/envoyproxy/envoy/blame/cffb095d59d7935abda12b9509bcd136808367bb/api/envoy/service/auth/v3/attribute_context.proto#L147)">https://github.com/envoyproxy/envoy/blame/cffb095d59d7935abda12b9509bcd136808367bb/api/envoy/service/auth/v3/attribute_context.proto#L147)</a>.
+in the <a href="https://github.com/envoyproxy/envoy/blame/cffb095d59d7935abda12b9509bcd136808367bb/api/envoy/service/auth/v3/attribute_context.proto#L153">raw_body field</a>.
+Otherwise, it will be filled with UTF-8 string in the <a href="https://github.com/envoyproxy/envoy/blame/cffb095d59d7935abda12b9509bcd136808367bb/api/envoy/service/auth/v3/attribute_context.proto#L147">body field</a>.
 This field only works with the envoy_ext_authz_grpc provider and has no effect for the envoy_ext_authz_http provider.</p>
 
 </td>
@@ -1353,17 +1392,6 @@ The default status is &ldquo;403&rdquo; (HTTP Forbidden).</p>
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationHttpProvider-include_headers_in_check">
-<td><code>includeHeadersInCheck</code></td>
-<td><code>string[]</code></td>
-<td>
-<p>DEPRECATED. Use include_request_headers_in_check instead.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationHttpProvider-include_request_headers_in_check">
 <td><code>includeRequestHeadersInCheck</code></td>
 <td><code>string[]</code></td>
@@ -1376,8 +1404,9 @@ Note that in addition to the headers specified here following headers are includ
 request can include the buffered client request body (controlled by include_request_body_in_check setting),
 consequently the value of Content-Length of the authorization request reflects the size of its payload size.</li>
 </ol>
-<p>Exact, prefix and suffix matches are supported (similar to the authorization policy rule syntax except the presence match
-<a href="https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule)">https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule)</a>:</p>
+<p>Exact, prefix and suffix matches are supported (similar to the
+<a href="https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule">authorization policy rule syntax</a>
+except the presence match):</p>
 <ul>
 <li>Exact match: &ldquo;abc&rdquo; will match on value &ldquo;abc&rdquo;.</li>
 <li>Prefix match: &ldquo;abc*&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;abcd&rdquo;.</li>
@@ -1421,8 +1450,9 @@ No
 forwarded to the upstream when the authorization check result is allowed (HTTP code 200).
 If not specified, the original request will not be modified and forwarded to backend as-is.
 Note, any existing headers will be overridden.</p>
-<p>Exact, prefix and suffix matches are supported (similar to the authorization policy rule syntax except the presence match
-<a href="https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule)">https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule)</a>:</p>
+<p>Exact, prefix and suffix matches are supported (similar to the
+<a href="https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule">authorization policy rule syntax</a>
+except the presence match):</p>
 <ul>
 <li>Exact match: &ldquo;abc&rdquo; will match on value &ldquo;abc&rdquo;.</li>
 <li>Prefix match: &ldquo;abc*&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;abcd&rdquo;.</li>
@@ -1445,8 +1475,9 @@ the downstream.
 When a header is included in this list, <em>Path</em>, <em>Status</em>, <em>Content-Length</em>, <em>WWWAuthenticate</em> and <em>Location</em> are
 automatically added.
 Note, the body from the authorization service is always included in the response to downstream.</p>
-<p>Exact, prefix and suffix matches are supported (similar to the authorization policy rule syntax except the presence match
-<a href="https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule)">https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule)</a>:</p>
+<p>Exact, prefix and suffix matches are supported (similar to the
+<a href="https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule">authorization policy rule syntax</a>
+except the presence match):</p>
 <ul>
 <li>Exact match: &ldquo;abc&rdquo; will match on value &ldquo;abc&rdquo;.</li>
 <li>Prefix match: &ldquo;abc*&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;abcd&rdquo;.</li>
@@ -1466,13 +1497,25 @@ No
 check result is allowed (HTTP code 200).
 If not specified, the original response will not be modified and forwarded to downstream as-is.
 Note, any existing headers will be overridden.</p>
-<p>Exact, prefix and suffix matches are supported (similar to the authorization policy rule syntax except the presence match
-<a href="https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule)">https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule)</a>:</p>
+<p>Exact, prefix and suffix matches are supported (similar to the
+<a href="https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule">authorization policy rule syntax</a>
+except the presence match):</p>
 <ul>
 <li>Exact match: &ldquo;abc&rdquo; will match on value &ldquo;abc&rdquo;.</li>
 <li>Prefix match: &ldquo;abc*&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;abcd&rdquo;.</li>
 <li>Suffix match: &ldquo;*abc&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;xabc&rdquo;.</li>
 </ul>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationHttpProvider-include_headers_in_check" class="deprecated ">
+<td><code>includeHeadersInCheck</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>DEPRECATED. Use include_request_headers_in_check instead.</p>
 
 </td>
 <td>
@@ -2277,42 +2320,58 @@ NOTE: currently only controls max length of the path tag.</p>
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-otlp_http">
-<td><code>otlpHttp</code></td>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-http">
+<td><code>http</code></td>
 <td><code><a href="#MeshConfig-ExtensionProvider-HttpService">HttpService</a></code></td>
 <td>
 <p>Optional. Specifies the configuration for exporting OTLP traces via HTTP.
 When empty, traces will be exported via gRPC.</p>
+<p>The following example shows how to configure the OpenTelemetry ExtensionProvider to export via HTTP:</p>
+<ol>
+<li>Add/change the OpenTelemetry extension provider in <code>MeshConfig</code></li>
+</ol>
+<pre><code class="language-yaml">- name: otel-tracing
+  opentelemetry:
+    port: 443
+    service: my.olly-backend.com
+    http:
+      path: &quot;/api/otlp/traces&quot;
+      timeout: 10s
+      headers:
+      - name: &quot;my-custom-header&quot;
+        value: &quot;some value&quot;
+</code></pre>
+<ol start="2">
+<li>Deploy a <code>ServiceEntry</code> for the observability back-end</li>
+</ol>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: my-olly-backend
+spec:
+  hosts:
+  - my.olly-backend.com
+  ports:
+  - number: 443
+    name: https-port
+    protocol: HTTPS
+  resolution: DNS
+  location: MESH_EXTERNAL
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: my-olly-backend
+spec:
+  host: my.olly-backend.com
+  trafficPolicy:
+    portLevelSettings:
+    - port:
+        number: 443
+      tls:
+        mode: SIMPLE
+</code></pre>
 
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-resource_detectors">
-<td><code>resourceDetectors</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#any">Any[]</a></code></td>
-<td>
-<p>Optional. Specifies a list of resource detectors to be used by the OpenTelemetry Tracer.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-always_on" class="oneof oneof-start">
-<td><code>alwaysOn</code></td>
-<td><code><a href="#MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-AlwaysOnSampler">AlwaysOnSampler (oneof)</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-dynatrace" class="oneof">
-<td><code>dynatrace</code></td>
-<td><code><a href="#MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-DynatraceSampler">DynatraceSampler (oneof)</a></code></td>
-<td>
 </td>
 <td>
 No
@@ -2763,7 +2822,7 @@ address to the X-Forwarded-For (XFF) address and set the
 X-Envoy-External-Address header to the trusted client address before
 forwarding it to the upstream services in the cluster.
 The default value of num_trusted_proxies is 0.
-See [Envoy XFF] (<a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#config-http-conn-man-headers-x-forwarded-for">https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#config-http-conn-man-headers-x-forwarded-for</a>)
+See <a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#config-http-conn-man-headers-x-forwarded-for">Envoy XFF</a>
 header handling for more details.</p>
 
 </td>
@@ -3129,7 +3188,8 @@ No
 <p>An additional list of tags to extract from the in-proxy Istio telemetry. These extra tags can be
 added by configuring the telemetry extension. Each additional tag needs to be present in this list.
 Extra tags emitted by the telemetry extensions must be listed here so that they can be processed
-and exposed as Prometheus metrics.</p>
+and exposed as Prometheus metrics.
+Deprecated: <code>istio.stats</code> is a native filter now, this field is no longer needed.</p>
 
 </td>
 <td>
@@ -3537,6 +3597,19 @@ The duration needs to be set to a value greater than or equal to 1 millisecond.<
 No
 </td>
 </tr>
+<tr id="PrivateKeyProvider-CryptoMb-fallback">
+<td><code>fallback</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+<p>If the private key provider isn’t available (eg. the required hardware capability doesn’t existed)
+Envoy will fallback to the BoringSSL default implementation when the fallback is true.
+The default value is false.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -3562,6 +3635,19 @@ No
 Having a small value leads to quicker answers from the hardware but causes more polling loop spins,
 leading to potentially larger CPU usage.
 The duration needs to be set to a value greater than or equal to 1 millisecond.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="PrivateKeyProvider-QAT-fallback">
+<td><code>fallback</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+<p>If the private key provider isn’t available (eg. the required hardware capability doesn’t existed)
+Envoy will fallback to the BoringSSL default implementation when the fallback is true.
+The default value is false.</p>
 
 </td>
 <td>
@@ -4095,6 +4181,35 @@ service registry as well as those defined through ServiceEntries</p>
 <td>
 <p>outbound traffic to unknown destinations will be allowed, in case
 there are no services or ServiceEntries for the destination port</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-InboundTrafficPolicy-Mode">MeshConfig.InboundTrafficPolicy.Mode</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-InboundTrafficPolicy-Mode-PASSTHROUGH">
+<td><code>PASSTHROUGH</code></td>
+<td>
+<p>inbound traffic will be passed through to the destination listening
+on Pod IP. This matches the behavior without Istio enabled at all
+allowing proxy to be transparent.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-InboundTrafficPolicy-Mode-LOCALHOST">
+<td><code>LOCALHOST</code></td>
+<td>
+<p>inbound traffic will be sent to the destinations listening on localhost.</p>
 
 </td>
 </tr>

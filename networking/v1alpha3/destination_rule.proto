@@ -760,6 +760,16 @@ message ConnectionPoolSettings {
     // was established. If not set, there is no max duration. When max_connection_duration
     // is reached the connection will be closed. Duration must be at least 1ms.
     google.protobuf.Duration max_connection_duration = 4;
+
+    // The idle timeout for TCP connections.
+    // The idle timeout is defined as the period in which there are no bytes sent or received on either
+    // the upstream or downstream connection.
+    // If not set, the default idle timeout is 1 hour. If set to 0s, the timeout will be disabled.
+    // Idle timeout is not configured per each cluster individually when weighted destinations are used,
+    // because idleTimeout is a property of a listener, not a cluster. In that case, idleTimeout
+    // specified in a destination rule for the first weighted route is configured in the listener,
+    // which means also for all weighted routes.
+    google.protobuf.Duration idle_timeout = 5;
   };
 
   // Settings applicable to HTTP1.1/HTTP2/GRPC connections.
@@ -811,8 +821,7 @@ message ConnectionPoolSettings {
     // Note that when this is set to true, h2_upgrade_policy will be ineffective i.e. the client
     // connections will not be upgraded to http2.
     bool use_client_protocol = 7;
-    
-    // $hide_from_docs
+
     // The maximum number of concurrent streams allowed for a peer on one HTTP/2 connection.
     // Defaults to 2^31-1. 
     int32 max_concurrent_streams = 8;
@@ -1151,16 +1160,16 @@ message ClientTLSSettings {
   // environmental variable is set to `true`.
   string sni = 6;
 
-  // InsecureSkipVerify specifies whether the proxy should skip verifying the
+  // `insecureSkipVerify` specifies whether the proxy should skip verifying the
   // CA signature and SAN for the server certificate corresponding to the host.
   // This flag should only be set if global CA signature verification is
-  // enabled, `VerifyCertAtClient` environmental variable is set to `true`,
+  // enabled, `VERIFY_CERTIFICATE_AT_CLIENT` environmental variable is set to `true`,
   // but no verification is desired for a specific host. If enabled with or
-  // without `VerifyCertAtClient` enabled, verification of the CA signature and
+  // without `VERIFY_CERTIFICATE_AT_CLIENT` enabled, verification of the CA signature and
   // SAN will be skipped.
   //
-  // `InsecureSkipVerify` is `false` by default.
-  // `VerifyCertAtClient` is `false` by default in Istio version 1.9 but will
+  // `insecureSkipVerify` is `false` by default.
+  // `VERIFY_CERTIFICATE_AT_CLIENT` is `false` by default in Istio version 1.9 but will
   // be `true` by default in a later version where, going forward, it will be
   // enabled by default.
   google.protobuf.BoolValue insecure_skip_verify = 8;
