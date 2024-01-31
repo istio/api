@@ -4,7 +4,7 @@
 
 This folder contains the proto buffers for the Mesh Configuration
 Protocol (MCP). MCP is based on
-[XDS](https://github.com/envoyproxy/data-plane-api/blob/master/xds_protocol.rst#streaming-grpc-subscriptions)
+[XDS](https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol)
 and maintains conceptual alignment with it, despite the specific
 service and proto definitions being different.
 
@@ -43,7 +43,7 @@ initiates the connection and opens the grpc stream.
 MCP is the mechanism of transport whereby Pilot and Mixer can be
 configured by a manager component. MCP defines a common per-resource
 metadata format and resource specific contents is defined elsewhere
-(e.g. <https://github.com/istio/api/tree/master/networking/v1alpha3>).
+(e.g. <https://github.com/istio/api/tree/master/networking/v1beta1>).
 
 ### Collections
 
@@ -52,7 +52,7 @@ collections. Istio API collection names are of the form
 `istio/<area>/<version>/<api>` where `<area>`, `<version>`, and `<api>`
 are defined by the [API style guidelines](../GUIDELINES.md). For
 example, the collection name for VirtualService is
-`istio/networking/v1alpha3/virtualservices`.
+`istio/networking/v1beta1/virtualservices`.
 
 ### Metadata
 
@@ -124,7 +124,7 @@ The following example shows the same desired resource delivered with
 incremental updates. This example assumes incremental is supported by
 the source. When source does not support incremental updates, the
 pushed `Resources` will always have incremental set to false,
-regardles of whether the sink requested an incremental update. At any
+regardless of whether the sink requested an incremental update. At any
 time, the source can decide to push a full-state update, ignoring the
 sink's request. Both sides must negotiate (i.e. agree) to use
 incremental on a per request/response basis for an update to be sent
