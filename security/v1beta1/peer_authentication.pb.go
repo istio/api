@@ -44,7 +44,7 @@ const (
 type PeerAuthentication_MutualTLS_Mode int32
 
 const (
-	// Inherit from parent, if has one. Otherwise treated as PERMISSIVE.
+	// Inherit from parent, if has one. Otherwise treated as `PERMISSIVE`.
 	PeerAuthentication_MutualTLS_UNSET PeerAuthentication_MutualTLS_Mode = 0
 	// Connection is not tunneled.
 	PeerAuthentication_MutualTLS_DISABLE PeerAuthentication_MutualTLS_Mode = 1
@@ -118,7 +118,7 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 // ```
 // For mesh level, put the policy in root-namespace according to your Istio installation.
 //
-// Policies to allow both mTLS & plaintext traffic for all workloads under namespace `foo`, but
+// Policies to allow both mTLS and plaintext traffic for all workloads under namespace `foo`, but
 // require mTLS for workload `finance`.
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -150,8 +150,9 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 //	  mode: STRICT
 //
 // ```
-// Policy to allow mTLS strict for all workloads, but leave port 8080 to
-// plaintext:
+// Policy that enables strict mTLS for all workloads, but leaves the port `8080` to
+// plaintext. Note the port value in the `portLevelMtls` field refers to the port
+// of the workload, not the port of the Kubernetes service.
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
 // kind: PeerAuthentication
@@ -172,8 +173,8 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 //	    mode: DISABLE
 //
 // ```
-// Policy to inherit mTLS mode from namespace (or mesh) settings, and overwrite
-// settings for port 8080
+// Policy that inherits mTLS mode from namespace (or mesh) settings, and disables
+// mTLS for workload port `8080`.
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
 // kind: PeerAuthentication
@@ -232,7 +233,8 @@ type PeerAuthentication struct {
 	// Mutual TLS settings for workload. If not defined, inherit from parent.
 	Mtls *PeerAuthentication_MutualTLS `protobuf:"bytes,2,opt,name=mtls,proto3" json:"mtls,omitempty"`
 	// Port specific mutual TLS settings. These only apply when a workload selector
-	// is specified.
+	// is specified. The port refers to the port of the workload, not the port of the
+	// Kubernetes service.
 	PortLevelMtls map[uint32]*PeerAuthentication_MutualTLS `protobuf:"bytes,3,rep,name=port_level_mtls,json=portLevelMtls,proto3" json:"port_level_mtls,omitempty" protobuf_key:"varint,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
