@@ -17,7 +17,6 @@ syntax = "proto3";
 import "google/protobuf/duration.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/wrappers.proto";
-import "google/protobuf/any.proto";
 import "mesh/v1alpha1/proxy.proto";
 import "networking/v1alpha3/destination_rule.proto";
 import "networking/v1alpha3/virtual_service.proto";
