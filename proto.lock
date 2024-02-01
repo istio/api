@@ -38568,9 +38568,6 @@
             "path": "google/protobuf/wrappers.proto"
           },
           {
-            "path": "google/protobuf/any.proto"
-          },
-          {
             "path": "mesh/v1alpha1/proxy.proto"
           },
           {
