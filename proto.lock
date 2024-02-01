@@ -38397,8 +38397,7 @@
                       {
                         "id": 5,
                         "name": "resource_detectors",
-                        "type": "google.protobuf.Any",
-                        "is_repeated": true
+                        "type": "ResourceDetectors"
                       }
                     ]
                   },
@@ -38439,10 +38438,27 @@
                     ]
                   },
                   {
-                    "name": "EnvironmentResourceDetector"
-                  },
-                  {
-                    "name": "DynatraceResourceDetector"
+                    "name": "ResourceDetectors",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "environment",
+                        "type": "EnvironmentResourceDetector"
+                      },
+                      {
+                        "id": 2,
+                        "name": "dynatrace",
+                        "type": "DynatraceResourceDetector"
+                      }
+                    ],
+                    "messages": [
+                      {
+                        "name": "EnvironmentResourceDetector"
+                      },
+                      {
+                        "name": "DynatraceResourceDetector"
+                      }
+                    ]
                   }
                 ]
               },
