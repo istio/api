@@ -168,7 +168,8 @@ import "type/v1beta1/selector.proto";
 //
 // The following is another example that sets `action` to `DENY` to create a deny policy.
 // It denies all the requests with `POST` method on port `8080` on all workloads
-// in the `foo` namespace.
+// in the `foo` namespace. Note the ports in the `ports` field refer to container ports,
+// not the Kubernetes Service ports.
 //
 // {{<tabset category-name="example">}}
 // {{<tab name="v1beta1" category-value="v1beta1">}}
