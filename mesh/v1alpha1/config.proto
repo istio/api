@@ -1096,6 +1096,23 @@ message MeshConfig {
       //         mode: SIMPLE
       // ```
       HttpService http = 4;
+
+      // Optional. Specifies [Resource Detectors](https://opentelemetry.io/docs/specs/otel/resource/sdk/)
+      // to be used by the OpenTelemetry Tracer. When multiple resources are provided, they are merged
+      // according to the OpenTelemetry [Resource specification](https://opentelemetry.io/docs/specs/otel/resource/sdk/#merge).
+      //
+      // The following example shows how to configure the Environment Resource Detector, that will
+      // read the attributes from the environment variable `OTEL_RESOURCE_ATTRIBUTES`:
+      //
+      // ```yaml
+      // - name: otel-tracing
+      //   opentelemetry:
+      //     port: 443
+      //     service: my.olly-backend.com
+      //     resource_detectors:
+      //       environment: {}
+      // ```
+      ResourceDetectors resource_detectors = 5;
     }
 
     // Defines configuration for an HTTP service that can be used by an Extension Provider.
@@ -1118,6 +1135,26 @@ message MeshConfig {
       string name = 1;
       // REQUIRED. The HTTP header value.
       string value = 2;
+    }
+
+    message ResourceDetectors {
+      EnvironmentResourceDetector environment = 1;
+
+      DynatraceResourceDetector dynatrace = 2;
+
+      // OpenTelemetry Environment Resource Detector.
+      // The resource detector reads attributes from the environment variable `OTEL_RESOURCE_ATTRIBUTES`
+      // and adds them to the OpenTelemetry resource.
+      //
+      // See: [Resource specification](https://opentelemetry.io/docs/specs/otel/resource/sdk/#specifying-resource-information-via-an-environment-variable)
+      message EnvironmentResourceDetector { }
+
+      // Dynatrace Resource Detector.
+      // The resource detector reads from the Dynatrace enrichment files
+      // and adds host/process related attributes to the OpenTelemetry resource.
+      //
+      // See: [Enrich ingested data with Dynatrace-specific dimensions](https://docs.dynatrace.com/docs/shortlink/enrichment-files)
+      message DynatraceResourceDetector { }
     }
   }
 

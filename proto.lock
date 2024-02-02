@@ -38393,6 +38393,11 @@
                         "id": 4,
                         "name": "http",
                         "type": "HttpService"
+                      },
+                      {
+                        "id": 5,
+                        "name": "resource_detectors",
+                        "type": "ResourceDetectors"
                       }
                     ]
                   },
@@ -38429,6 +38434,29 @@
                         "id": 2,
                         "name": "value",
                         "type": "string"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "ResourceDetectors",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "environment",
+                        "type": "EnvironmentResourceDetector"
+                      },
+                      {
+                        "id": 2,
+                        "name": "dynatrace",
+                        "type": "DynatraceResourceDetector"
+                      }
+                    ],
+                    "messages": [
+                      {
+                        "name": "EnvironmentResourceDetector"
+                      },
+                      {
+                        "name": "DynatraceResourceDetector"
                       }
                     ]
                   }

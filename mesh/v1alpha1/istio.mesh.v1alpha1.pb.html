@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 70
+number_of_entries: 73
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -2377,6 +2377,28 @@ spec:
 No
 </td>
 </tr>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-resource_detectors">
+<td><code>resourceDetectors</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-ResourceDetectors">ResourceDetectors</a></code></td>
+<td>
+<p>Optional. Specifies <a href="https://opentelemetry.io/docs/specs/otel/resource/sdk/">Resource Detectors</a>
+to be used by the OpenTelemetry Tracer. When multiple resources are provided, they are merged
+according to the OpenTelemetry <a href="https://opentelemetry.io/docs/specs/otel/resource/sdk/#merge">Resource specification</a>.</p>
+<p>The following example shows how to configure the Environment Resource Detector, that will
+read the attributes from the environment variable <code>OTEL_RESOURCE_ATTRIBUTES</code>:</p>
+<pre><code class="language-yaml">- name: otel-tracing
+  opentelemetry:
+    port: 443
+    service: my.olly-backend.com
+    resource_detectors:
+      environment: {}
+</code></pre>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -2462,6 +2484,39 @@ No
 <td>
 <p>REQUIRED. The HTTP header value.</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-ResourceDetectors">MeshConfig.ExtensionProvider.ResourceDetectors</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-ResourceDetectors-environment">
+<td><code>environment</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-ResourceDetectors-EnvironmentResourceDetector">EnvironmentResourceDetector</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-ResourceDetectors-dynatrace">
+<td><code>dynatrace</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-ResourceDetectors-DynatraceResourceDetector">DynatraceResourceDetector</a></code></td>
+<td>
 </td>
 <td>
 No
@@ -2604,6 +2659,22 @@ No
 </tr>
 </tbody>
 </table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-ResourceDetectors-EnvironmentResourceDetector">MeshConfig.ExtensionProvider.ResourceDetectors.EnvironmentResourceDetector</h2>
+<section>
+<p>OpenTelemetry Environment Resource Detector.
+The resource detector reads attributes from the environment variable <code>OTEL_RESOURCE_ATTRIBUTES</code>
+and adds them to the OpenTelemetry resource.</p>
+<p>See: <a href="https://opentelemetry.io/docs/specs/otel/resource/sdk/#specifying-resource-information-via-an-environment-variable">Resource specification</a></p>
+
+</section>
+<h2 id="MeshConfig-ExtensionProvider-ResourceDetectors-DynatraceResourceDetector">MeshConfig.ExtensionProvider.ResourceDetectors.DynatraceResourceDetector</h2>
+<section>
+<p>Dynatrace Resource Detector.
+The resource detector reads from the Dynatrace enrichment files
+and adds host/process related attributes to the OpenTelemetry resource.</p>
+<p>See: <a href="https://docs.dynatrace.com/docs/shortlink/enrichment-files">Enrich ingested data with Dynatrace-specific dimensions</a></p>
+
 </section>
 <h2 id="k8s-io-apimachinery-pkg-apis-meta-v1-LabelSelector">k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector</h2>
 <section>
