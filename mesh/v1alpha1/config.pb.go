@@ -4287,7 +4287,7 @@ func (*MeshConfig_ExtensionProvider_ResourceDetectors_EnvironmentResourceDetecto
 // The resource detector reads from the Dynatrace enrichment files
 // and adds host/process related attributes to the OpenTelemetry resource.
 //
-// See: [Enrich ingested data with Dynatrace-specific dimensions](https://docs.dynatrace.com/docs/shortlink/enrichment-files>)
+// See: [Enrich ingested data with Dynatrace-specific dimensions](https://docs.dynatrace.com/docs/shortlink/enrichment-files)
 type MeshConfig_ExtensionProvider_ResourceDetectors_DynatraceResourceDetector struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
