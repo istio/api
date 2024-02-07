@@ -1586,8 +1586,10 @@ type ClientTLSSettings struct {
 	// enabled by default.
 	InsecureSkipVerify *wrappers.BoolValue `protobuf:"bytes,8,opt,name=insecure_skip_verify,json=insecureSkipVerify,proto3" json:"insecure_skip_verify,omitempty"`
 	// OPTIONAL: The path to the file containing the certificate revocation list (CRL)
-	// to use in verifying a presented server certificate. If
-	// omitted, the proxy will not verify the certificate against the `crl`.
+	// to use in verifying a presented server certificate. `CRL` is a list of certificates
+	// that have been revoked by the CA (Certificate Authority) before their scheduled expiration date.
+	// If specified, the proxy will verify if the presented certificate is part of the revoked list of certificates.
+	// If omitted, the proxy will not verify the certificate against the `crl`.
 	CaCrl string `protobuf:"bytes,9,opt,name=ca_crl,json=caCrl,proto3" json:"ca_crl,omitempty"`
 }
 

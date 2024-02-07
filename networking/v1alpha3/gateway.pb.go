@@ -1011,8 +1011,10 @@ type ServerTLSSettings struct {
 	// client side certificate.
 	CaCertificates string `protobuf:"bytes,5,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
 	// OPTIONAL: The path to the file containing the certificate revocation list (CRL)
-	// to use in verifying a presented client side certificate. If
-	// omitted, the proxy will not verify the certificate against the `crl`.
+	// to use in verifying a presented client side certificate. `CRL` is a list of certificates
+	// that have been revoked by the CA (Certificate Authority) before their scheduled expiration date.
+	// If specified, the proxy will verify if the presented certificate is part of the revoked list of certificates.
+	// If omitted, the proxy will not verify the certificate against the `crl`.
 	CaCrl string `protobuf:"bytes,13,opt,name=ca_crl,json=caCrl,proto3" json:"ca_crl,omitempty"`
 	// For gateways running on Kubernetes, the name of the secret that
 	// holds the TLS certs including the CA certificates. Applicable
