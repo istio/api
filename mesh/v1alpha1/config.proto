@@ -1308,8 +1308,12 @@ message MeshConfig {
   // For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.
   TLSConfig tls_defaults = 64;
 
+  // If set, applies policy-specific restrictions over all existing TLS settings, including in-mesh mTLS and external TLS.
+  // Valid values: "", "fips".
+  string compliance_policy = 67;
+
   // $hide_from_docs
-  // Next available field number: 67
+  // Next available field number: 68
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
