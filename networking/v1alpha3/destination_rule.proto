@@ -1173,6 +1173,13 @@ message ClientTLSSettings {
   // be `true` by default in a later version where, going forward, it will be
   // enabled by default.
   google.protobuf.BoolValue insecure_skip_verify = 8;
+
+  // OPTIONAL: The path to the file containing the certificate revocation list (CRL)
+  // to use in verifying a presented server certificate. `CRL` is a list of certificates
+  // that have been revoked by the CA (Certificate Authority) before their scheduled expiration date.
+  // If specified, the proxy will verify if the presented certificate is part of the revoked list of certificates.
+  // If omitted, the proxy will not verify the certificate against the `crl`.
+  string ca_crl = 9;
 }
 
 // Locality-weighted load balancing allows administrators to control the

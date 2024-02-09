@@ -40216,6 +40216,11 @@
                 "id": 8,
                 "name": "insecure_skip_verify",
                 "type": "google.protobuf.BoolValue"
+              },
+              {
+                "id": 9,
+                "name": "ca_crl",
+                "type": "string"
               }
             ]
           },
@@ -40992,6 +40997,11 @@
               {
                 "id": 5,
                 "name": "ca_certificates",
+                "type": "string"
+              },
+              {
+                "id": 13,
+                "name": "ca_crl",
                 "type": "string"
               },
               {
@@ -43245,6 +43255,11 @@
                 "id": 8,
                 "name": "insecure_skip_verify",
                 "type": "google.protobuf.BoolValue"
+              },
+              {
+                "id": 9,
+                "name": "ca_crl",
+                "type": "string"
               }
             ]
           },
@@ -43544,6 +43559,11 @@
               {
                 "id": 5,
                 "name": "ca_certificates",
+                "type": "string"
+              },
+              {
+                "id": 13,
+                "name": "ca_crl",
                 "type": "string"
               },
               {
