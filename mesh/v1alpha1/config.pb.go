@@ -934,7 +934,7 @@ type MeshConfig struct {
 	// For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.
 	TlsDefaults *MeshConfig_TLSConfig `protobuf:"bytes,64,opt,name=tls_defaults,json=tlsDefaults,proto3" json:"tls_defaults,omitempty"`
 	// If set, applies policy-specific restrictions over all existing TLS settings, including in-mesh mTLS and external TLS.
-	// Valid values: "", "fips".
+	// Valid values: "" or unset; "fips-140-2", achieved via https://csrc.nist.gov/projects/cryptographic-module-validation-program/certificate/4407
 	CompliancePolicy string `protobuf:"bytes,67,opt,name=compliance_policy,json=compliancePolicy,proto3" json:"compliance_policy,omitempty"`
 }
 

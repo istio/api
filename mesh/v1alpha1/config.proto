@@ -1309,7 +1309,7 @@ message MeshConfig {
   TLSConfig tls_defaults = 64;
 
   // If set, applies policy-specific restrictions over all existing TLS settings, including in-mesh mTLS and external TLS.
-  // Valid values: "", "fips".
+  // Valid values: "" or unset; "fips-140-2", achieved via https://csrc.nist.gov/projects/cryptographic-module-validation-program/certificate/4407
   string compliance_policy = 67;
 
   // $hide_from_docs
