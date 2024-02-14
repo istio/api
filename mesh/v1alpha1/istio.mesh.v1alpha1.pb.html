@@ -656,8 +656,19 @@ No
 <td><code>compliancePolicy</code></td>
 <td><code>string</code></td>
 <td>
-<p>If set, applies policy-specific restrictions over all existing TLS settings, including in-mesh mTLS and external TLS.
-Valid values: &quot;&quot; or unset; &ldquo;fips-140-2&rdquo;, achieved via <a href="https://csrc.nist.gov/projects/cryptographic-module-validation-program/certificate/4407">https://csrc.nist.gov/projects/cryptographic-module-validation-program/certificate/4407</a></p>
+<p>If set, applies policy-specific restrictions over all existing TLS
+settings, including in-mesh mTLS and external TLS. Valid values are:</p>
+<ul>
+<li>`` or unset places no additional restrictions.</li>
+<li><code>fips-140-2</code> which enforces a version of the TLS protocol and a subset
+of cipher suites overriding any user preferences or defaults for all runtime
+components, including Envoy, gRPC Go SDK, and gRPC C++ SDK.</li>
+</ul>
+<p>WARNING: Setting compliance policy in the control plane is a necessary but
+not a sufficient requirement to achieve compliance. There are additional
+steps necessary to claim compliance, including using the certified
+cryptograhic modules (please consult
+<a href="https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/security/ssl#fips-140-2)">https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/security/ssl#fips-140-2)</a>.</p>
 
 </td>
 <td>

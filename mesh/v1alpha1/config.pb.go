@@ -933,8 +933,19 @@ type MeshConfig struct {
 	// Currently, this supports configuration of ecdh_curves and cipher_suites only.
 	// For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.
 	TlsDefaults *MeshConfig_TLSConfig `protobuf:"bytes,64,opt,name=tls_defaults,json=tlsDefaults,proto3" json:"tls_defaults,omitempty"`
-	// If set, applies policy-specific restrictions over all existing TLS settings, including in-mesh mTLS and external TLS.
-	// Valid values: "" or unset; "fips-140-2", achieved via https://csrc.nist.gov/projects/cryptographic-module-validation-program/certificate/4407
+	// If set, applies policy-specific restrictions over all existing TLS
+	// settings, including in-mesh mTLS and external TLS. Valid values are:
+	//
+	// * “ or unset places no additional restrictions.
+	// * `fips-140-2` which enforces a version of the TLS protocol and a subset
+	// of cipher suites overriding any user preferences or defaults for all runtime
+	// components, including Envoy, gRPC Go SDK, and gRPC C++ SDK.
+	//
+	// WARNING: Setting compliance policy in the control plane is a necessary but
+	// not a sufficient requirement to achieve compliance. There are additional
+	// steps necessary to claim compliance, including using the certified
+	// cryptograhic modules (please consult
+	// https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/security/ssl#fips-140-2).
 	CompliancePolicy string `protobuf:"bytes,67,opt,name=compliance_policy,json=compliancePolicy,proto3" json:"compliance_policy,omitempty"`
 }
 
