@@ -167,6 +167,12 @@
 // The following example shows how a destination rule can be applied to a
 // specific workload using the workloadSelector configuration.
 //
+// **Note:** The workloadSelector configuration in
+// Destination Rules reveals which workloads the traffic emanating from
+// uses this Destination Rule, unlike the workloadSelector configuration
+// in [ServiceEntries](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry),
+// which is used to reveal which workloads the traffic is routed to.
+//
 // {{<tabset category-name="selector-example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
