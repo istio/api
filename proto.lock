@@ -37613,6 +37613,11 @@
                 "id": 64,
                 "name": "tls_defaults",
                 "type": "TLSConfig"
+              },
+              {
+                "id": 67,
+                "name": "compliance_policy",
+                "type": "string"
               }
             ],
             "reserved_ids": [
