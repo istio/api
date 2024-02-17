@@ -168,10 +168,10 @@
 // specific workload using the workloadSelector configuration.
 //
 // **Note:** The workloadSelector configuration in
-// Destination Rules reveals which workloads the traffic emanating from
-// uses this Destination Rule, unlike the workloadSelector configuration
-// in [ServiceEntries](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry),
-// which is used to reveal which workloads the traffic is routed to.
+// destination rule controls which client workloads
+// use this destination rule, rather than which server workloads do.
+// [Subsets](https://istio.io/latest/docs/reference/config/networking/destination-rule/#Subset)
+// can be used to select server workloads in fine granularity.
 //
 // {{<tabset category-name="selector-example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}

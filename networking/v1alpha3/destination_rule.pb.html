@@ -135,10 +135,10 @@ spec:
 The following example shows how a destination rule can be applied to a
 specific workload using the workloadSelector configuration.</p>
 <p><strong>Note:</strong> The workloadSelector configuration in
-Destination Rules reveals which workloads the traffic emanating from
-uses this Destination Rule, unlike the workloadSelector configuration
-in <a href="https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry">ServiceEntries</a>,
-which is used to reveal which workloads the traffic is routed to.</p>
+destination rule controls which client workloads
+use this destination rule, rather than which server workloads do.
+<a href="https://istio.io/latest/docs/reference/config/networking/destination-rule/#Subset">Subsets</a>
+can be used to select server workloads in fine granularity.</p>
 <p>{{<tabset category-name="selector-example">}}
 {{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
 <pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
