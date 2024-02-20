@@ -13,6 +13,7 @@
 // limitations under the License.
 syntax = "proto3";
 
+import "google/protobuf/duration.proto";
 import "google/api/field_behavior.proto";
 
 // $schema: istio.security.v1.JWTRule
@@ -178,8 +179,12 @@ message JWTRule {
   // [Experimental] This feature is a experimental feature.
   repeated ClaimToHeader output_claim_to_headers = 11; // [TODO:Update the status whenever this feature is promoted.]
 
+  // The maximum amount of time that the resolver, determined by the PILOT_JWT_ENABLE_REMOTE_JWKS environment variable,
+  // will spend waiting for the JWKS to be fetched. Default is 5s.
+  google.protobuf.Duration timeout = 13;
+
   // $hide_from_docs
-  // Next available field number: 13
+  // Next available field number: 14
 }
 
 // This message specifies a header location to extract JWT token.

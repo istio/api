@@ -47546,6 +47546,11 @@
                 "name": "output_claim_to_headers",
                 "type": "ClaimToHeader",
                 "is_repeated": true
+              },
+              {
+                "id": 13,
+                "name": "timeout",
+                "type": "google.protobuf.Duration"
               }
             ]
           },
@@ -47587,6 +47592,9 @@
           }
         ],
         "imports": [
+          {
+            "path": "google/protobuf/duration.proto"
+          },
           {
             "path": "google/api/field_behavior.proto"
           }
@@ -48059,6 +48067,11 @@
                 "name": "output_claim_to_headers",
                 "type": "ClaimToHeader",
                 "is_repeated": true
+              },
+              {
+                "id": 13,
+                "name": "timeout",
+                "type": "google.protobuf.Duration"
               }
             ]
           },
@@ -48100,6 +48113,9 @@
           }
         ],
         "imports": [
+          {
+            "path": "google/protobuf/duration.proto"
+          },
           {
             "path": "google/api/field_behavior.proto"
           }
