@@ -558,6 +558,11 @@ func (AuthorizationPolicy_Action) EnumDescriptor() ([]byte, []int) {
 // +cue-gen:AuthorizationPolicy:scope:Namespaced
 // +cue-gen:AuthorizationPolicy:resource:categories=istio-io,security-istio-io,shortNames=ap,plural=authorizationpolicies
 // +cue-gen:AuthorizationPolicy:preserveUnknownFields:false
+// +cue-gen:AuthorizationPolicy:printerColumn:name=Action,type=string,JSONPath=.spec.action,description="The operation to take."
+// +cue-gen:AuthorizationPolicy:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
+// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
+// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
 // -->
 //
 // <!-- go code generation tags
