@@ -22,7 +22,6 @@ all: gen
 
 repo_dir := .
 
-protolock = protolock
 annotations_prep = annotations_prep
 htmlproofer = htmlproofer
 
@@ -46,9 +45,12 @@ gen: \
 	generate-labels \
 	mirror-licenses \
 	tidy-go \
-	proto-commit
+	breaking
 
 gen-check: gen check-clean-repo
+
+breaking:
+	@./scripts/breaking.sh $(UPDATE_BRANCH)
 
 #####################
 # annotation/...
@@ -85,19 +87,6 @@ clean-labels:
 	@rm -fr $(labels_pb_go) $(labels_pb_doc)
 
 #####################
-# Protolock
-#####################
-
-proto-commit:
-	@$(protolock) commit
-
-proto-commit-force:
-	@$(protolock) commit --force
-
-proto-status:
-	@$(protolock) status
-
-#####################
 # Misc
 #####################
 
@@ -109,7 +98,7 @@ local-lint-protos:
 lint: lint-dockerfiles lint-scripts lint-yaml lint-helm lint-copyright-banner lint-go lint-python lint-markdown lint-sass lint-typescript lint-licenses local-lint-protos
  	@$(htmlproofer) . --url-swap "istio.io:preliminary.istio.io" --assume-extension --check-html --check-external-hash --check-opengraph --timeframe 2d --storage-dir $(repo_dir)/.htmlproofer --url-ignore "/localhost/"
 
-test:
+test: breaking
 	(pushd tests && go test -v ./...)
 
 fmt: format-python
@@ -118,7 +107,7 @@ fmt: format-python
 # CI System
 #####################
 
-presubmit: proto-commit lint test
+presubmit: lint test
 postsubmit: presubmit
 
 #####################
