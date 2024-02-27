@@ -939,6 +939,7 @@ func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 // +cue-gen:ServiceEntry:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:ServiceEntry:subresource:status
 // +cue-gen:ServiceEntry:scope:Namespaced
+// +cue-gen:ServiceEntry:deprecationReplacement:v1beta1
 // +cue-gen:ServiceEntry:resource:categories=istio-io,networking-istio-io,shortNames=se,plural=serviceentries
 // +cue-gen:ServiceEntry:printerColumn:name=Hosts,type=string,JSONPath=.spec.hosts,description="The hosts associated with the ServiceEntry"
 // +cue-gen:ServiceEntry:printerColumn:name=Location,type=string,JSONPath=.spec.location,description="Whether the service is external to the

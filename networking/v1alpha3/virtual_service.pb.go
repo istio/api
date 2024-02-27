@@ -247,6 +247,7 @@ func (HTTPRedirect_RedirectPortSelection) EnumDescriptor() ([]byte, []int) {
 // +cue-gen:VirtualService:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:VirtualService:subresource:status
 // +cue-gen:VirtualService:scope:Namespaced
+// +cue-gen:VirtualService:deprecationReplacement:v1beta1
 // +cue-gen:VirtualService:resource:categories=istio-io,networking-istio-io,shortNames=vs
 // +cue-gen:VirtualService:printerColumn:name=Gateways,type=string,JSONPath=.spec.gateways,description="The names of gateways and sidecars
 // that should apply these routes"

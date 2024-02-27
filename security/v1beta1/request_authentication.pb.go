@@ -521,6 +521,7 @@ const (
 // +cue-gen:RequestAuthentication:labels:app=istio-pilot,chart=istio,istio=security,heritage=Tiller,release=istio
 // +cue-gen:RequestAuthentication:subresource:status
 // +cue-gen:RequestAuthentication:scope:Namespaced
+// +cue-gen:RequestAuthentication:deprecationReplacement:v1
 // +cue-gen:RequestAuthentication:resource:categories=istio-io,security-istio-io,shortNames=ra
 // +cue-gen:RequestAuthentication:preserveUnknownFields:false
 // -->

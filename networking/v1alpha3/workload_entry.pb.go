@@ -295,6 +295,7 @@ const (
 // +cue-gen:WorkloadEntry:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:WorkloadEntry:subresource:status
 // +cue-gen:WorkloadEntry:scope:Namespaced
+// +cue-gen:WorkloadEntry:deprecationReplacement:v1beta1
 // +cue-gen:WorkloadEntry:resource:categories=istio-io,networking-istio-io,shortNames=we,plural=workloadentries
 // +cue-gen:WorkloadEntry:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
 // representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
