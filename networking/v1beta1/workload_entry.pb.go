@@ -48,27 +48,6 @@
 // TLS and sent to sidecars on VMs on target port 8080, that in turn
 // forward it to the application on localhost on the same port.
 //
-// {{<tabset category-name="example">}}
-// {{<tab name="v1alpha3" category-value="v1alpha3">}}
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: WorkloadEntry
-// metadata:
-//   name: details-svc
-// spec:
-//   # use of the service account indicates that the workload has a
-//   # sidecar proxy bootstrapped with this service account. Pods with
-//   # sidecars will automatically communicate with the workload using
-//   # istio mutual TLS.
-//   serviceAccount: details-legacy
-//   address: 2.2.2.2
-//   labels:
-//     app: details-legacy
-//     instance-id: vm1
-// ```
-// {{</tab>}}
-//
-// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: WorkloadEntry
@@ -85,35 +64,9 @@
 //     app: details-legacy
 //     instance-id: vm1
 // ```
-// {{</tab>}}
-// {{</tabset>}}
 //
 // and the associated service entry
 //
-// {{<tabset category-name="example">}}
-// {{<tab name="v1alpha3" category-value="v1alpha3">}}
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: ServiceEntry
-// metadata:
-//   name: details-svc
-// spec:
-//   hosts:
-//   - details.bookinfo.com
-//   location: MESH_INTERNAL
-//   ports:
-//   - number: 80
-//     name: http
-//     protocol: HTTP
-//     targetPort: 8080
-//   resolution: STATIC
-//   workloadSelector:
-//     labels:
-//       app: details-legacy
-// ```
-// {{</tab>}}
-//
-// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
@@ -133,8 +86,6 @@
 //     labels:
 //       app: details-legacy
 // ```
-// {{</tab>}}
-// {{</tabset>}}
 //
 //
 // The following example declares the same VM workload using
@@ -143,27 +94,6 @@
 // sidecars should dynamically resolve the DNS name at runtime before
 // forwarding the request.
 //
-// {{<tabset category-name="example">}}
-// {{<tab name="v1alpha3" category-value="v1alpha3">}}
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: WorkloadEntry
-// metadata:
-//   name: details-svc
-// spec:
-//   # use of the service account indicates that the workload has a
-//   # sidecar proxy bootstrapped with this service account. Pods with
-//   # sidecars will automatically communicate with the workload using
-//   # istio mutual TLS.
-//   serviceAccount: details-legacy
-//   address: vm1.vpc01.corp.net
-//   labels:
-//     app: details-legacy
-//     instance-id: vm1
-// ```
-// {{</tab>}}
-//
-// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: WorkloadEntry
@@ -180,35 +110,9 @@
 //     app: details-legacy
 //     instance-id: vm1
 // ```
-// {{</tab>}}
-// {{</tabset>}}
 //
 // and the associated service entry
 //
-// {{<tabset category-name="example">}}
-// {{<tab name="v1alpha3" category-value="v1alpha3">}}
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: ServiceEntry
-// metadata:
-//   name: details-svc
-// spec:
-//   hosts:
-//   - details.bookinfo.com
-//   location: MESH_INTERNAL
-//   ports:
-//   - number: 80
-//     name: http
-//     protocol: HTTP
-//     targetPort: 8080
-//   resolution: DNS
-//   workloadSelector:
-//     labels:
-//       app: details-legacy
-// ```
-// {{</tab>}}
-//
-// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
@@ -228,9 +132,6 @@
 //     labels:
 //       app: details-legacy
 // ```
-// {{</tab>}}
-// {{</tabset>}}
-//
 //
 // The following example declares a VM workload without an address.
 // An alternative to having istiod read from remote API servers is
@@ -239,22 +140,6 @@
 // single `WorkloadEntry` with weights represent the aggregate of all
 // the actual workloads in a given remote network.
 //
-// {{<tabset category-name="example">}}
-// {{<tab name="v1alpha3" category-value="v1alpha3">}}
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: WorkloadEntry
-// metadata:
-//   name: foo-workloads-cluster-2
-// spec:
-//   serviceAccount: foo
-//   network: cluster-2-network
-//   labels:
-//     app: foo
-// ```
-// {{</tab>}}
-//
-// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: WorkloadEntry
@@ -266,9 +151,6 @@
 //   labels:
 //     app: foo
 // ```
-// {{</tab>}}
-// {{</tabset>}}
-//
 
 package v1beta1
 

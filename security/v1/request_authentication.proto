@@ -36,39 +36,6 @@ option go_package="istio.io/api/security/v1";
 //
 // - Require JWT for all request for workloads that have label `app:httpbin`
 //
-// {{<tabset category-name="example">}}
-// {{<tab name="v1beta1" category-value="v1beta1">}}
-// ```yaml
-// apiVersion: security.istio.io/v1beta1
-// kind: RequestAuthentication
-// metadata:
-//   name: httpbin
-//   namespace: foo
-// spec:
-//   selector:
-//     matchLabels:
-//       app: httpbin
-//   jwtRules:
-//   - issuer: "issuer-foo"
-//     jwksUri: https://example.com/.well-known/jwks.json
-// ---
-// apiVersion: security.istio.io/v1beta1
-// kind: AuthorizationPolicy
-// metadata:
-//   name: httpbin
-//   namespace: foo
-// spec:
-//   selector:
-//     matchLabels:
-//       app: httpbin
-//   rules:
-//   - from:
-//     - source:
-//         requestPrincipals: ["*"]
-// ```
-// {{</tab>}}
-//
-// {{<tab name="v1" category-value="v1">}}
 // ```yaml
 // apiVersion: security.istio.io/v1
 // kind: RequestAuthentication
@@ -97,40 +64,11 @@ option go_package="istio.io/api/security/v1";
 //     - source:
 //         requestPrincipals: ["*"]
 // ```
-// {{</tab>}}
-// {{</tabset>}}
 //
 // - A policy in the root namespace ("istio-system" by default) applies to workloads in all namespaces
 // in a mesh. The following policy makes all workloads only accept requests that contain a
 // valid JWT token.
 //
-// {{<tabset category-name="example">}}
-// {{<tab name="v1beta1" category-value="v1beta1">}}
-// ```yaml
-// apiVersion: security.istio.io/v1beta1
-// kind: RequestAuthentication
-// metadata:
-//   name: req-authn-for-all
-//   namespace: istio-system
-// spec:
-//   jwtRules:
-//   - issuer: "issuer-foo"
-//     jwksUri: https://example.com/.well-known/jwks.json
-// ---
-// apiVersion: security.istio.io/v1beta1
-// kind: AuthorizationPolicy
-// metadata:
-//   name: require-jwt-for-all
-//   namespace: istio-system
-// spec:
-//   rules:
-//   - from:
-//     - source:
-//         requestPrincipals: ["*"]
-// ```
-// {{</tab>}}
-//
-// {{<tab name="v1" category-value="v1">}}
 // ```yaml
 // apiVersion: security.istio.io/v1
 // kind: RequestAuthentication
@@ -153,56 +91,11 @@ option go_package="istio.io/api/security/v1";
 //     - source:
 //         requestPrincipals: ["*"]
 // ```
-// {{</tab>}}
-// {{</tabset>}}
 //
 // - The next example shows how to set a different JWT requirement for a different `host`. The `RequestAuthentication`
 // declares it can accept JWTs issued by either `issuer-foo` or `issuer-bar` (the public key set is implicitly
 // set from the OpenID Connect spec).
 //
-// {{<tabset category-name="example">}}
-// {{<tab name="v1beta1" category-value="v1beta1">}}
-// ```yaml
-// apiVersion: security.istio.io/v1beta1
-// kind: RequestAuthentication
-// metadata:
-//   name: httpbin
-//   namespace: foo
-// spec:
-//   selector:
-//     matchLabels:
-//       app: httpbin
-//   jwtRules:
-//   - issuer: "issuer-foo"
-//   - issuer: "issuer-bar"
-// ---
-// apiVersion: security.istio.io/v1beta1
-// kind: AuthorizationPolicy
-// metadata:
-//   name: httpbin
-//   namespace: foo
-// spec:
-//   selector:
-//     matchLabels:
-//       app: httpbin
-//   rules:
-//   - from:
-//     - source:
-//         requestPrincipals: ["issuer-foo/*"]
-//     to:
-//     - operation:
-//         hosts: ["example.com"]
-//   - from:
-//     - source:
-//         requestPrincipals: ["issuer-bar/*"]
-//     to:
-//     - operation:
-//         hosts: ["another-host.com"]
-// ```
-//
-// {{</tab>}}
-//
-// {{<tab name="v1" category-value="v1">}}
 // ```yaml
 // apiVersion: security.istio.io/v1
 // kind: RequestAuthentication
@@ -240,36 +133,11 @@ option go_package="istio.io/api/security/v1";
 //     - operation:
 //         hosts: ["another-host.com"]
 // ```
-// {{</tab>}}
-// {{</tabset>}}
 //
 // - You can fine tune the authorization policy to set different requirement per path. For example,
 // to require JWT on all paths, except /healthz, the same `RequestAuthentication` can be used, but the
 // authorization policy could be:
 //
-// {{<tabset category-name="example">}}
-// {{<tab name="v1beta1" category-value="v1beta1">}}
-// ```yaml
-// apiVersion: security.istio.io/v1beta1
-// kind: AuthorizationPolicy
-// metadata:
-//   name: httpbin
-//   namespace: foo
-// spec:
-//   selector:
-//     matchLabels:
-//       app: httpbin
-//   rules:
-//   - from:
-//     - source:
-//         requestPrincipals: ["*"]
-//   - to:
-//     - operation:
-//         paths: ["/healthz"]
-// ```
-// {{</tab>}}
-//
-// {{<tab name="v1" category-value="v1">}}
 // ```yaml
 // apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
@@ -288,8 +156,6 @@ option go_package="istio.io/api/security/v1";
 //     - operation:
 //         paths: ["/healthz"]
 // ```
-// {{</tab>}}
-// {{</tabset>}}
 //
 // [Experimental] Routing based on derived [metadata](https://istio.io/latest/docs/reference/config/security/conditions/)
 // is now supported. A prefix '@' is used to denote a match against internal metadata instead of the headers in the request.
@@ -306,64 +172,6 @@ option go_package="istio.io/api/security/v1";
 // - AuthorizationPolicy to check for valid principals in the request. This makes the JWT required for the request.
 // - VirtualService to route the request based on the "sub" claim.
 //
-// {{<tabset category-name="example">}}
-// {{<tab name="v1beta1" category-value="v1beta1">}}
-// ```yaml
-// apiVersion: security.istio.io/v1beta1
-// kind: RequestAuthentication
-// metadata:
-//   name: jwt-on-ingress
-//   namespace: istio-system
-// spec:
-//   selector:
-//     matchLabels:
-//       app: istio-ingressgateway
-//   jwtRules:
-//   - issuer: "example.com"
-//     jwksUri: https://example.com/.well-known/jwks.json
-// ---
-// apiVersion: security.istio.io/v1beta1
-// kind: AuthorizationPolicy
-// metadata:
-//   name: require-jwt
-//   namespace: istio-system
-// spec:
-//   selector:
-//     matchLabels:
-//       app: istio-ingressgateway
-//   rules:
-//   - from:
-//     - source:
-//         requestPrincipals: ["*"]
-// ---
-// apiVersion: networking.istio.io/v1alpha3
-// kind: VirtualService
-// metadata:
-//   name: route-jwt
-// spec:
-//   hosts:
-//   - foo.prod.svc.cluster.local
-//   gateways:
-//   - istio-ingressgateway
-//   http:
-//   - name: "v2"
-//     match:
-//     - headers:
-//         "@request.auth.claims.sub":
-//           exact: "dev"
-//     route:
-//     - destination:
-//         host: foo.prod.svc.cluster.local
-//         subset: v2
-//   - name: "default"
-//     route:
-//     - destination:
-//         host: foo.prod.svc.cluster.local
-//         subset: v1
-// ```
-// {{</tab>}}
-//
-// {{<tab name="v1" category-value="v1">}
 // ```yaml
 // apiVersion: security.istio.io/v1
 // kind: RequestAuthentication
@@ -417,8 +225,6 @@ option go_package="istio.io/api/security/v1";
 //         host: foo.prod.svc.cluster.local
 //         subset: v1
 // ```
-// {{</tab>}}
-// {{</tabset>}}
 //
 // <!-- crd generation tags
 // +cue-gen:RequestAuthentication:groupName:security.istio.io

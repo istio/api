@@ -227,8 +227,6 @@ func (x *PortSelector) GetNumber() uint32 {
 // It denies all the requests with `POST` method on port `8080` directed through the
 // `waypoint` Gateway in the `foo` namespace.
 //
-// {{<tabset category-name="example">}}
-// {{<tab name="v1" category-value="v1">}}
 // ```yaml
 // apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
@@ -251,8 +249,6 @@ func (x *PortSelector) GetNumber() uint32 {
 //	      ports: ["8080"]
 //
 // ```
-// {{</tab>}}
-// {{</tabset>}}
 type PolicyTargetReference struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
