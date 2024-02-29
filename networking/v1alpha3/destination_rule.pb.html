@@ -1285,6 +1285,7 @@ The following labels which have special semantic meaning are also supported:</p>
 <li><code>topology.kubernetes.io/region</code> is used to match the region metadata of an endpoint, which maps to Kubernetes node label <code>topology.kubernetes.io/region</code> or the deprecated label <code>failure-domain.beta.kubernetes.io/region</code>.</li>
 <li><code>topology.kubernetes.io/zone</code> is used to match the zone metadata of an endpoint, which maps to Kubernetes node label <code>topology.kubernetes.io/zone</code> or the deprecated label <code>failure-domain.beta.kubernetes.io/zone</code>.</li>
 <li><code>topology.istio.io/subzone</code> is used to match the subzone metadata of an endpoint, which maps to Istio node label <code>topology.istio.io/subzone</code>.</li>
+<li><code>kubernetes.io/hostname</code> is used to match the current node of an endpoint, which maps to Kubernetes node label <code>kubernetes.io/hostname</code>.</li>
 </ul>
 <p>The below topology config indicates the following priority levels:</p>
 <pre><code class="language-yaml">failoverPriority:
