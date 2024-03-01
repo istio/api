@@ -18,6 +18,11 @@ as a load balancer exposing port 80 and 9080 (http), 443 (https),
 applied to the proxy running on a pod with labels <code>app: my-gateway-controller</code>. While Istio will configure the proxy to listen
 on these ports, it is the responsibility of the user to ensure that
 external traffic to these ports are allowed into the mesh.</p>
+<p>Ports 9443 and 2379 must exist on the ingress-gateway, <code>my-gateway-controller</code> in the example below.
+By default only ports 80 and 443 (http) are configured.
+The available ports are shown in the Service for the ingress-gateway, in the istio-system namespace.
+If a port requested by a <code>Gateway</code> resource does not exist on the ingress-gateway,
+<code>istioctl analyze</code> will report &ldquo;The gateway refers to a port that is not exposed on the workload&rdquo;.</p>
 <p>{{<tabset category-name="example">}}
 {{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
 <pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
@@ -126,10 +131,12 @@ spec:
 </code></pre>
 <p>{{</tab>}}
 {{</tabset>}}</p>
-<p>The Gateway specification above describes the L4-L6 properties of a load
-balancer. A <code>VirtualService</code> can then be bound to a gateway to control
+<p>The <code>Gateway</code> specification above describes the L4-L6 properties of a load
+balancer. A <code>VirtualService</code> can then be bound to a <code>Gateway</code> to control
 the forwarding of traffic arriving at a particular host or gateway port.</p>
-<p>For example, the following VirtualService splits traffic for
+<p>For a non-http <code>Gateway</code> port, you must create the <code>VirtualService</code> resource first, then the <code>Gateway</code>.
+If you attempt to create the <code>Gateway</code> first, it will fail. istiod will log &ldquo;must have more than 0 chains in listener&rdquo;.</p>
+<p>The following VirtualService splits traffic for
 <code>https://uk.bookinfo.com/reviews</code>, <code>https://eu.bookinfo.com/reviews</code>,
 <code>http://uk.bookinfo.com:9080/reviews</code>,
 <code>http://eu.bookinfo.com:9080/reviews</code> into two versions (prod and qa) of
