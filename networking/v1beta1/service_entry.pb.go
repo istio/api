@@ -568,6 +568,7 @@ func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 // <!-- crd generation tags
 // +cue-gen:ServiceEntry:groupName:networking.istio.io
 // +cue-gen:ServiceEntry:version:v1beta1
+// +cue-gen:ServiceEntry:storageVersion
 // +cue-gen:ServiceEntry:annotations:helm.sh/resource-policy=keep
 // +cue-gen:ServiceEntry:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:ServiceEntry:subresource:status
