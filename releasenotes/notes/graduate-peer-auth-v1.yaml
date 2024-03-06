@@ -1,0 +1,6 @@
+apiVersion: release-notes/v2
+kind: feature
+area: security
+releaseNotes:
+  - |
+    **Graduated** PeerAuthentication API is graduated to v1. API's storageVersion is v1beta1.
