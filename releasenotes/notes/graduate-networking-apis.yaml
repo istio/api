@@ -1,0 +1,6 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+releaseNotes:
+  - |
+    **Graduated** Networking APIs (DestinationRule, Gateway, ProxyConfig, ServiceEntry, Sidecar, VirtualService, WorkloadEntry, WorkloadGroup) are graduated to v1. API's storageVersion is v1beta1.
