@@ -2,6 +2,9 @@ version: v1
 build:
   excludes:
     - common-protos
+breaking:
+  use:
+  - WIRE_JSON
 lint:
   use:
     - BASIC

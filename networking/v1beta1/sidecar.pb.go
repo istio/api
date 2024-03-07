@@ -69,23 +69,6 @@
 // workloads in the same namespace as well as to services in the
 // `istio-system` namespace.
 //
-// {{<tabset category-name="example">}}
-// {{<tab name="v1alpha3" category-value="v1alpha3">}}
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: Sidecar
-// metadata:
-//   name: default
-//   namespace: istio-config
-// spec:
-//   egress:
-//   - hosts:
-//     - "./*"
-//     - "istio-system/*"
-// ```
-// {{</tab>}}
-//
-// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: Sidecar
@@ -98,8 +81,6 @@
 //     - "./*"
 //     - "istio-system/*"
 // ```
-// {{</tab>}}
-// {{</tabset>}}
 //
 // The example below declares a `Sidecar` configuration in the
 // `prod-us1` namespace that overrides the global default defined
@@ -107,24 +88,6 @@
 // traffic to public services in the `prod-us1`, `prod-apis`, and the
 // `istio-system` namespaces.
 //
-// {{<tabset category-name="example">}}
-// {{<tab name="v1alpha3" category-value="v1alpha3">}}
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: Sidecar
-// metadata:
-//   name: default
-//   namespace: prod-us1
-// spec:
-//   egress:
-//   - hosts:
-//     - "prod-us1/*"
-//     - "prod-apis/*"
-//     - "istio-system/*"
-// ```
-// {{</tab>}}
-//
-// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: Sidecar
@@ -138,8 +101,6 @@
 //     - "prod-apis/*"
 //     - "istio-system/*"
 // ```
-// {{</tab>}}
-// {{</tabset>}}
 //
 // The following example declares a `Sidecar` configuration in the
 // `prod-us1` namespace for all pods with labels `app: ratings`
@@ -150,37 +111,6 @@
 // namespace, the sidecar proxies only HTTP traffic bound for port
 // 9080 for services in the `prod-us1` namespace.
 //
-// {{<tabset category-name="example">}}
-// {{<tab name="v1alpha3" category-value="v1alpha3">}}
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: Sidecar
-// metadata:
-//   name: ratings
-//   namespace: prod-us1
-// spec:
-//   workloadSelector:
-//     labels:
-//       app: ratings
-//   ingress:
-//   - port:
-//       number: 9080
-//       protocol: HTTP
-//       name: somename
-//     defaultEndpoint: unix:///var/run/someuds.sock
-//   egress:
-//   - port:
-//       number: 9080
-//       protocol: HTTP
-//       name: egresshttp
-//     hosts:
-//     - "prod-us1/*"
-//   - hosts:
-//     - "istio-system/*"
-// ```
-// {{</tab>}}
-//
-// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: Sidecar
@@ -207,8 +137,6 @@
 //   - hosts:
 //     - "istio-system/*"
 // ```
-// {{</tab>}}
-// {{</tabset>}}
 //
 // If the workload is deployed without IPTables-based traffic capture,
 // the `Sidecar` configuration is the only way to configure the ports
@@ -225,38 +153,6 @@
 // `127.0.0.1:3306`, that then gets proxied to the externally hosted
 // MySQL service at `mysql.foo.com:3306`.
 //
-// {{<tabset category-name="example">}}
-// {{<tab name="v1alpha3" category-value="v1alpha3">}}
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: Sidecar
-// metadata:
-//   name: no-ip-tables
-//   namespace: prod-us1
-// spec:
-//   workloadSelector:
-//     labels:
-//       app: productpage
-//   ingress:
-//   - port:
-//       number: 9080 # binds to proxy_instance_ip:9080 (0.0.0.0:9080, if no unicast IP is available for the instance)
-//       protocol: HTTP
-//       name: somename
-//     defaultEndpoint: 127.0.0.1:8080
-//     captureMode: NONE # not needed if metadata is set for entire proxy
-//   egress:
-//   - port:
-//       number: 3306
-//       protocol: MYSQL
-//       name: egressmysql
-//     captureMode: NONE # not needed if metadata is set for entire proxy
-//     bind: 127.0.0.1
-//     hosts:
-//     - "*/mysql.foo.com"
-// ```
-// {{</tab>}}
-//
-// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: Sidecar
@@ -284,32 +180,9 @@
 //     hosts:
 //     - "*/mysql.foo.com"
 // ```
-// {{</tab>}}
-// {{</tabset>}}
 //
 // And the associated service entry for routing to `mysql.foo.com:3306`
 //
-// {{<tabset category-name="example">}}
-// {{<tab name="v1alpha3" category-value="v1alpha3">}}
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: ServiceEntry
-// metadata:
-//   name: external-svc-mysql
-//   namespace: ns1
-// spec:
-//   hosts:
-//   - mysql.foo.com
-//   ports:
-//   - number: 3306
-//     name: mysql
-//     protocol: MYSQL
-//   location: MESH_EXTERNAL
-//   resolution: DNS
-// ```
-// {{</tab>}}
-//
-// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
@@ -326,8 +199,6 @@
 //   location: MESH_EXTERNAL
 //   resolution: DNS
 // ```
-// {{</tab>}}
-// {{</tabset>}}
 //
 // It is also possible to mix and match traffic capture modes in a single
 // proxy. For example, consider a setup where internal services are on the
@@ -342,38 +213,6 @@
 // proxy in the VM should contain `REDIRECT` or `TPROXY` as its value,
 // implying that IP tables based traffic capture is active.
 //
-// {{<tabset category-name="example">}}
-// {{<tab name="v1alpha3" category-value="v1alpha3">}}
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: Sidecar
-// metadata:
-//   name: partial-ip-tables
-//   namespace: prod-us1
-// spec:
-//   workloadSelector:
-//     labels:
-//       app: productpage
-//   ingress:
-//   - bind: 172.16.1.32
-//     port:
-//       number: 80 # binds to 172.16.1.32:80
-//       protocol: HTTP
-//       name: somename
-//     defaultEndpoint: 127.0.0.1:8080
-//     captureMode: NONE
-//   egress:
-//     # use the system detected defaults
-//     # sets up configuration to handle outbound traffic to services
-//     # in 192.168.0.0/16 subnet, based on information provided by the
-//     # service registry
-//   - captureMode: IPTABLES
-//     hosts:
-//     - "*/*"
-// ```
-// {{</tab>}}
-//
-// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: Sidecar
@@ -401,8 +240,6 @@
 //     hosts:
 //     - "*/*"
 // ```
-// {{</tab>}}
-// {{</tabset>}}
 //
 // In addition to configuring traffic capture and how traffic is forwarded to the app,
 // it's possible to control inbound connection pool settings. By default, Istio pushes
@@ -412,41 +249,6 @@
 // in a `Sidecar` allow you to control those connection pools for the server separately
 // from the settings pushed to all clients.
 //
-// {{<tabset category-name="example">}}
-// {{<tab name="v1alpha3" category-value="v1alpha3">}}
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: Sidecar
-// metadata:
-//   name: connection-pool-settings
-//   namespace: prod-us1
-// spec:
-//   workloadSelector:
-//     labels:
-//       app: productpage
-//   inboundConnectionPool:
-//       http:
-//         http1MaxPendingRequests: 1024
-//         http2MaxRequests: 1024
-//         maxRequestsPerConnection: 1024
-//         maxRetries: 100
-//   ingress:
-//   - port:
-//       number: 80
-//       protocol: HTTP
-//       name: somename
-//     connectionPool:
-//       http:
-//         http1MaxPendingRequests: 1024
-//         http2MaxRequests: 1024
-//         maxRequestsPerConnection: 1024
-//         maxRetries: 100
-//       tcp:
-//         maxConnections: 100
-// ```
-// {{</tab>}}
-//
-// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: Sidecar
@@ -477,8 +279,6 @@
 //       tcp:
 //         maxConnections: 100
 // ```
-// {{</tab>}}
-// {{</tabset>}}
 
 package v1beta1
 

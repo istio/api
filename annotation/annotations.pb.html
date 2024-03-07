@@ -26,7 +26,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>A comma separated list of configuration analysis message codes to suppress when Istio analyzers are run. For example, to suppress reporting of IST0103 (PodMissingProxy) and IST0108 (UnknownAnnotation) on a resource, apply the annotation 'galley.istio.io/analyze-suppress=IST0108,IST0103'. If the value is '*', then all configuration analysis messages are suppressed.</td>
+      <td><p>A comma separated list of configuration analysis message codes to suppress when Istio analyzers are run. For example, to suppress reporting of IST0103 (PodMissingProxy) and IST0108 (UnknownAnnotation) on a resource, apply the annotation &lsquo;galley.istio.io/analyze-suppress=IST0108,IST0103&rsquo;. If the value is &lsquo;*&rsquo;, then all configuration analysis messages are suppressed.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -47,7 +48,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>The name of the inject template(s) to use, as a comma separate list. See https://istio.io/latest/docs/setup/additional-setup/sidecar-injection/#custom-templates-experimental for more information.</td>
+      <td><p>The name of the inject template(s) to use, as a comma separate list. See <a href="https://istio.io/latest/docs/setup/additional-setup/sidecar-injection/#custom-templates-experimental" target="_blank">https://istio.io/latest/docs/setup/additional-setup/sidecar-injection/#custom-templates-experimental</a> for more information.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -68,7 +70,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Represents the name of the chart used to create this resource.</td>
+      <td><p>Represents the name of the chart used to create this resource.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -89,7 +92,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Represents the generation to which the resource was last reconciled.</td>
+      <td><p>Represents the generation to which the resource was last reconciled.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -110,7 +114,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Represents the Istio version associated with the resource</td>
+      <td><p>Represents the Istio version associated with the resource</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -131,7 +136,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies whether or not the given resource is in dry-run mode. See https://istio.io/latest/docs/tasks/security/authorization/authz-dry-run/ for more information.</td>
+      <td><p>Specifies whether or not the given resource is in dry-run mode. See <a href="https://istio.io/latest/docs/tasks/security/authorization/authz-dry-run/" target="_blank">https://istio.io/latest/docs/tasks/security/authorization/authz-dry-run/</a> for more information.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -152,7 +158,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies a control plane revision to which a given proxy is connected. This annotation is added automatically, not set by a user. In contrary to the label istio.io/rev, it represents the actual revision, not the requested revision.</td>
+      <td><p>Specifies a control plane revision to which a given proxy is connected. This annotation is added automatically, not set by a user. In contrary to the label istio.io/rev, it represents the actual revision, not the requested revision.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -173,7 +180,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Annotation on an Ingress resources denoting the class of controllers responsible for it.</td>
+      <td><p>Annotation on an Ingress resources denoting the class of controllers responsible for it.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -194,7 +202,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the namespaces to which this service should be exported to. A value of '*' indicates it is reachable within the mesh '.' indicates it is reachable within its namespace.</td>
+      <td><p>Specifies the namespaces to which this service should be exported to. A value of &lsquo;*&rsquo; indicates it is reachable within the mesh &lsquo;.&rsquo; indicates it is reachable within its namespace.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -215,7 +224,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies if application Prometheus metric will be merged with Envoy metrics for this workload.</td>
+      <td><p>Specifies if application Prometheus metric will be merged with Envoy metrics for this workload.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -236,7 +246,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Overrides for the proxy configuration for this specific proxy. Available options can be found at https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#ProxyConfig.</td>
+      <td><p>Overrides for the proxy configuration for this specific proxy. Available options can be found at <a href="https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#ProxyConfig" target="_blank">https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#ProxyConfig</a>.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -257,7 +268,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the list of ports exposed by the application container. Used by the Envoy sidecar readiness probe to determine that Envoy is configured and ready to receive traffic.</td>
+      <td><p>Specifies the list of ports exposed by the application container. Used by the Envoy sidecar readiness probe to determine that Envoy is configured and ready to receive traffic.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -278,7 +290,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the failure threshold for the Envoy sidecar readiness probe.</td>
+      <td><p>Specifies the failure threshold for the Envoy sidecar readiness probe.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -299,7 +312,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the initial delay (in seconds) for the Envoy sidecar readiness probe.</td>
+      <td><p>Specifies the initial delay (in seconds) for the Envoy sidecar readiness probe.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -320,7 +334,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the period (in seconds) for the Envoy sidecar readiness probe.</td>
+      <td><p>Specifies the period (in seconds) for the Envoy sidecar readiness probe.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -341,7 +356,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the log output level for pilot-agent.</td>
+      <td><p>Specifies the log output level for pilot-agent.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -362,7 +378,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies an alternative Envoy bootstrap configuration file.</td>
+      <td><p>Specifies an alternative Envoy bootstrap configuration file.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -383,7 +400,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the component log level for Envoy.</td>
+      <td><p>Specifies the component log level for Envoy.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -404,7 +422,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the auth policy used by the Istio control plane. If NONE, traffic will not be encrypted. If MUTUAL_TLS, traffic between Envoy sidecar will be wrapped into mutual TLS connections.</td>
+      <td><p>Specifies the auth policy used by the Istio control plane. If NONE, traffic will not be encrypted. If MUTUAL_TLS, traffic between Envoy sidecar will be wrapped into mutual TLS connections.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -425,7 +444,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the XDS discovery address to be used by the Envoy sidecar.</td>
+      <td><p>Specifies the XDS discovery address to be used by the Envoy sidecar.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -446,7 +466,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies whether or not an Envoy sidecar should enable core dump.</td>
+      <td><p>Specifies whether or not an Envoy sidecar should enable core dump.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -467,7 +488,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>An additional list of tags to extract from the in-proxy Istio Wasm telemetry. Each additional tag needs to be present in this list.</td>
+      <td><p>An additional list of tags to extract from the in-proxy Istio Wasm telemetry. Each additional tag needs to be present in this list.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -488,7 +510,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies whether or not an Envoy sidecar should be automatically injected into the workload. Deprecated in favor of `sidecar.istio.io/inject` label.</td>
+      <td><p>Specifies whether or not an Envoy sidecar should be automatically injected into the workload. Deprecated in favor of <code>sidecar.istio.io/inject</code> label.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -509,7 +532,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the mode used to redirect inbound connections to Envoy (REDIRECT or TPROXY).</td>
+      <td><p>Specifies the mode used to redirect inbound connections to Envoy (REDIRECT or TPROXY).</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -530,7 +554,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the log level for Envoy.</td>
+      <td><p>Specifies the log level for Envoy.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -551,7 +576,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the requested CPU setting for the Envoy sidecar.</td>
+      <td><p>Specifies the requested CPU setting for the Envoy sidecar.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -572,7 +598,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the CPU limit for the Envoy sidecar.</td>
+      <td><p>Specifies the CPU limit for the Envoy sidecar.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -593,7 +620,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the Docker image to be used by the Envoy sidecar.</td>
+      <td><p>Specifies the Docker image to be used by the Envoy sidecar.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -614,7 +642,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the Docker image type to be used by the Envoy sidecar. Istio publishes debug and distroless image types for every release tag.</td>
+      <td><p>Specifies the Docker image type to be used by the Envoy sidecar. Istio publishes debug and distroless image types for every release tag.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -635,7 +664,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the requested memory setting for the Envoy sidecar.</td>
+      <td><p>Specifies the requested memory setting for the Envoy sidecar.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -656,7 +686,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the memory limit for the Envoy sidecar.</td>
+      <td><p>Specifies the memory limit for the Envoy sidecar.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -677,7 +708,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Rewrite HTTP readiness and liveness probes to be redirected to the Envoy sidecar.</td>
+      <td><p>Rewrite HTTP readiness and liveness probes to be redirected to the Envoy sidecar.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -698,7 +730,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the custom histogram buckets with a prefix matcher to separate the Istio mesh metrics from the Envoy stats, e.g. `{"istiocustom":[1,5,10,50,100,500,1000,5000,10000],"cluster.xds-grpc":[1,5,10,25,50,100,250,500,1000,2500,5000,10000]}`. Default buckets are `[0.5,1,5,10,25,50,100,250,500,1000,2500,5000,10000,30000,60000,300000,600000,1800000,3600000]`.</td>
+      <td><p>Specifies the custom histogram buckets with a prefix matcher to separate the Istio mesh metrics from the Envoy stats, e.g. <code>{&quot;istiocustom&quot;:[1,5,10,50,100,500,1000,5000,10000],&quot;cluster.xds-grpc&quot;:[1,5,10,25,50,100,250,500,1000,2500,5000,10000]}</code>. Default buckets are <code>[0.5,1,5,10,25,50,100,250,500,1000,2500,5000,10000,30000,60000,300000,600000,1800000,3600000]</code>.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -719,7 +752,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the comma separated list of prefixes of the stats to be emitted by Envoy.</td>
+      <td><p>Specifies the comma separated list of prefixes of the stats to be emitted by Envoy.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -740,7 +774,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the comma separated list of regexes the stats should match to be emitted by Envoy.</td>
+      <td><p>Specifies the comma separated list of regexes the stats should match to be emitted by Envoy.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -761,7 +796,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the comma separated list of suffixes of the stats to be emitted by Envoy.</td>
+      <td><p>Specifies the comma separated list of suffixes of the stats to be emitted by Envoy.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -782,7 +818,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Generated by Envoy sidecar injection that indicates the status of the operation. Includes a version hash of the executed template, as well as names of injected resources.</td>
+      <td><p>Generated by Envoy sidecar injection that indicates the status of the operation. Includes a version hash of the executed template, as well as names of injected resources.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -803,7 +840,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies one or more user volumes (as a JSON array) to be added to the Envoy sidecar.</td>
+      <td><p>Specifies one or more user volumes (as a JSON array) to be added to the Envoy sidecar.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -824,7 +862,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies one or more user volume mounts (as a JSON array) to be added to the Envoy sidecar.</td>
+      <td><p>Specifies one or more user volume mounts (as a JSON array) to be added to the Envoy sidecar.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -845,7 +884,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>Specifies the HTTP status Port for the Envoy sidecar. If zero, the sidecar will not provide status.</td>
+      <td><p>Specifies the HTTP status Port for the Envoy sidecar. If zero, the sidecar will not provide status.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -866,7 +906,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>A comma-separated list of clusters (or * for any) running istiod that should attempt leader election for a remote cluster thats system namespace includes this annotation. Istiod will not attempt to lead unannotated remote clusters.</td>
+      <td><p>A comma-separated list of clusters (or * for any) running istiod that should attempt leader election for a remote cluster thats system namespace includes this annotation. Istiod will not attempt to lead unannotated remote clusters.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -887,7 +928,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>This annotation is a set of node-labels (key1=value,key2=value). If the annotated Service is of type NodePort and is a multi-network gateway (see topology.istio.io/network), the addresses for selected nodes will be used for cross-network communication.</td>
+      <td><p>This annotation is a set of node-labels (key1=value,key2=value). If the annotated Service is of type NodePort and is a multi-network gateway (see topology.istio.io/network), the addresses for selected nodes will be used for cross-network communication.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -908,7 +950,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>A comma separated list of inbound ports to be excluded from redirection to Envoy. Only applies when all inbound traffic (i.e. '*') is being redirected.</td>
+      <td><p>A comma separated list of inbound ports to be excluded from redirection to Envoy. Only applies when all inbound traffic (i.e. &lsquo;*&rsquo;) is being redirected.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -929,7 +972,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>A comma separated list of interfaces to be excluded from Istio traffic capture</td>
+      <td><p>A comma separated list of interfaces to be excluded from Istio traffic capture</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -950,7 +994,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>A comma separated list of IP ranges in CIDR form to be excluded from redirection. Only applies when all outbound traffic (i.e. '*') is being redirected.</td>
+      <td><p>A comma separated list of IP ranges in CIDR form to be excluded from redirection. Only applies when all outbound traffic (i.e. &lsquo;*&rsquo;) is being redirected.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -971,7 +1016,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>A comma separated list of outbound ports to be excluded from redirection to Envoy.</td>
+      <td><p>A comma separated list of outbound ports to be excluded from redirection to Envoy.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -992,7 +1038,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>A comma separated list of inbound ports for which traffic is to be redirected to Envoy. The wildcard character '*' can be used to configure redirection for all ports. An empty list will disable all inbound redirection.</td>
+      <td><p>A comma separated list of inbound ports for which traffic is to be redirected to Envoy. The wildcard character &lsquo;*&rsquo; can be used to configure redirection for all ports. An empty list will disable all inbound redirection.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -1013,7 +1060,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>A comma separated list of IP ranges in CIDR form to redirect to Envoy (optional). The wildcard character '*' can be used to redirect all outbound traffic. An empty list will disable all outbound redirection.</td>
+      <td><p>A comma separated list of IP ranges in CIDR form to redirect to Envoy (optional). The wildcard character &lsquo;*&rsquo; can be used to redirect all outbound traffic. An empty list will disable all outbound redirection.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -1034,7 +1082,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>A comma separated list of outbound ports for which traffic is to be redirected to Envoy, regardless of the destination IP.</td>
+      <td><p>A comma separated list of outbound ports for which traffic is to be redirected to Envoy, regardless of the destination IP.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -1055,7 +1104,8 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Description</th>
-      <td>A comma separated list of virtual interfaces whose inbound traffic (from VM) will be treated as outbound.</td>
+      <td><p>A comma separated list of virtual interfaces whose inbound traffic (from VM) will be treated as outbound.</p>
+</td>
     </tr>
   </tbody>
 </table>

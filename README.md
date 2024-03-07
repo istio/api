@@ -22,10 +22,6 @@ gen` will update the proto.lock file with new changes.
 
 ## Backwards Incompatible Changes
 
-If a PR tries to make backwards incompatible changes, it will be
-blocked by protolock. To force these changes in, install
-[protolock](https://github.com/nilslice/protolock) and run
-`protolock commit --force`.
-
-You must include a note in your PR that you had to force the
-protolock and why.
+If a PR tries to make backwards incompatible changes, it will be blocked by `buf breaking`.
+If there are legitimate reasons to make these breaking changes forever, the configuration in [`buf.yaml`](buf.yaml) can be changed.
+If it is a one-off case, the PR can be force approved skipping the test.
