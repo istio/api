@@ -219,6 +219,9 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
+// <!-- istio code generation tags
+// +istio.io/sync-start
+// -->
 type PeerAuthentication struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

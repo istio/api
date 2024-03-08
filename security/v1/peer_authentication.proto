@@ -20,6 +20,7 @@ import "type/v1beta1/selector.proto";
 // $description: Peer authentication configuration for workloads.
 // $location: https://istio.io/docs/reference/config/security/peer_authentication.html
 // $aliases: [/docs/reference/config/security/v1/peer_authentication]
+// $mode: none
 
 package istio.security.v1;
 
