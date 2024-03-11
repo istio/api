@@ -25,7 +25,7 @@ rm -rf "${d}"
 
 cwd="${PWD}"
 pushd "${d}" > /dev/null || exit
-git clone "${cwd}" -q -b "${branch}" > /dev/null
+git clone "${cwd}" -q -b "${branch}" api > /dev/null
 cd api
 buf build -o proto.bin
 popd  > /dev/null|| exit
