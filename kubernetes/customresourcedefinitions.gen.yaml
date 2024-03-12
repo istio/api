@@ -307,8 +307,10 @@ spec:
                               description: HTTP connection pool settings.
                               properties:
                                 h2UpgradePolicy:
-                                  description: Specify if http1.1 connection should
-                                    be upgraded to http2 for the associated destination.
+                                  description: |-
+                                    Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+
+                                    Valid Options: DEFAULT, DO_NOT_UPGRADE, UPGRADE
                                   enum:
                                   - DEFAULT
                                   - DO_NOT_UPGRADE
@@ -531,6 +533,10 @@ spec:
                                   type: array
                               type: object
                             simple:
+                              description: |2-
+
+
+                                Valid Options: LEAST_CONN, RANDOM, PASSTHROUGH, ROUND_ROBIN, LEAST_REQUEST
                               enum:
                               - UNSPECIFIED
                               - LEAST_CONN
@@ -595,9 +601,10 @@ spec:
                                     description: HTTP connection pool settings.
                                     properties:
                                       h2UpgradePolicy:
-                                        description: Specify if http1.1 connection
-                                          should be upgraded to http2 for the associated
-                                          destination.
+                                        description: |-
+                                          Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+
+                                          Valid Options: DEFAULT, DO_NOT_UPGRADE, UPGRADE
                                         enum:
                                         - DEFAULT
                                         - DO_NOT_UPGRADE
@@ -826,6 +833,10 @@ spec:
                                         type: array
                                     type: object
                                   simple:
+                                    description: |2-
+
+
+                                      Valid Options: LEAST_CONN, RANDOM, PASSTHROUGH, ROUND_ROBIN, LEAST_REQUEST
                                     enum:
                                     - UNSPECIFIED
                                     - LEAST_CONN
@@ -921,8 +932,10 @@ spec:
                                     nullable: true
                                     type: boolean
                                   mode:
-                                    description: Indicates whether connections to
-                                      this port should be secured using TLS.
+                                    description: |-
+                                      Indicates whether connections to this port should be secured using TLS.
+
+                                      Valid Options: DISABLE, SIMPLE, MUTUAL, ISTIO_MUTUAL
                                     enum:
                                     - DISABLE
                                     - SIMPLE
@@ -949,7 +962,10 @@ spec:
                           description: The upstream PROXY protocol settings.
                           properties:
                             version:
-                              description: The PROXY protocol version to use.
+                              description: |-
+                                The PROXY protocol version to use.
+
+                                Valid Options: V1, V2
                               enum:
                               - V1
                               - V2
@@ -984,8 +1000,10 @@ spec:
                               nullable: true
                               type: boolean
                             mode:
-                              description: Indicates whether connections to this port
-                                should be secured using TLS.
+                              description: |-
+                                Indicates whether connections to this port should be secured using TLS.
+
+                                Valid Options: DISABLE, SIMPLE, MUTUAL, ISTIO_MUTUAL
                               enum:
                               - DISABLE
                               - SIMPLE
@@ -1041,8 +1059,10 @@ spec:
                         description: HTTP connection pool settings.
                         properties:
                           h2UpgradePolicy:
-                            description: Specify if http1.1 connection should be upgraded
-                              to http2 for the associated destination.
+                            description: |-
+                              Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+
+                              Valid Options: DEFAULT, DO_NOT_UPGRADE, UPGRADE
                             enum:
                             - DEFAULT
                             - DO_NOT_UPGRADE
@@ -1259,6 +1279,10 @@ spec:
                             type: array
                         type: object
                       simple:
+                        description: |2-
+
+
+                          Valid Options: LEAST_CONN, RANDOM, PASSTHROUGH, ROUND_ROBIN, LEAST_REQUEST
                         enum:
                         - UNSPECIFIED
                         - LEAST_CONN
@@ -1323,8 +1347,10 @@ spec:
                               description: HTTP connection pool settings.
                               properties:
                                 h2UpgradePolicy:
-                                  description: Specify if http1.1 connection should
-                                    be upgraded to http2 for the associated destination.
+                                  description: |-
+                                    Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+
+                                    Valid Options: DEFAULT, DO_NOT_UPGRADE, UPGRADE
                                   enum:
                                   - DEFAULT
                                   - DO_NOT_UPGRADE
@@ -1547,6 +1573,10 @@ spec:
                                   type: array
                               type: object
                             simple:
+                              description: |2-
+
+
+                                Valid Options: LEAST_CONN, RANDOM, PASSTHROUGH, ROUND_ROBIN, LEAST_REQUEST
                               enum:
                               - UNSPECIFIED
                               - LEAST_CONN
@@ -1637,8 +1667,10 @@ spec:
                               nullable: true
                               type: boolean
                             mode:
-                              description: Indicates whether connections to this port
-                                should be secured using TLS.
+                              description: |-
+                                Indicates whether connections to this port should be secured using TLS.
+
+                                Valid Options: DISABLE, SIMPLE, MUTUAL, ISTIO_MUTUAL
                               enum:
                               - DISABLE
                               - SIMPLE
@@ -1665,7 +1697,10 @@ spec:
                     description: The upstream PROXY protocol settings.
                     properties:
                       version:
-                        description: The PROXY protocol version to use.
+                        description: |-
+                          The PROXY protocol version to use.
+
+                          Valid Options: V1, V2
                         enum:
                         - V1
                         - V2
@@ -1699,8 +1734,10 @@ spec:
                         nullable: true
                         type: boolean
                       mode:
-                        description: Indicates whether connections to this port should
-                          be secured using TLS.
+                        description: |-
+                          Indicates whether connections to this port should be secured using TLS.
+
+                          Valid Options: DISABLE, SIMPLE, MUTUAL, ISTIO_MUTUAL
                         enum:
                         - DISABLE
                         - SIMPLE
@@ -5249,7 +5286,10 @@ spec:
                             to use HTTPS.
                           type: boolean
                         maxProtocolVersion:
-                          description: 'Optional: Maximum TLS protocol version.'
+                          description: |-
+                            Optional: Maximum TLS protocol version.
+
+                            Valid Options: TLS_AUTO, TLSV1_0, TLSV1_1, TLSV1_2, TLSV1_3
                           enum:
                           - TLS_AUTO
                           - TLSV1_0
@@ -5258,7 +5298,10 @@ spec:
                           - TLSV1_3
                           type: string
                         minProtocolVersion:
-                          description: 'Optional: Minimum TLS protocol version.'
+                          description: |-
+                            Optional: Minimum TLS protocol version.
+
+                            Valid Options: TLS_AUTO, TLSV1_0, TLSV1_1, TLSV1_2, TLSV1_3
                           enum:
                           - TLS_AUTO
                           - TLSV1_0
@@ -5267,8 +5310,10 @@ spec:
                           - TLSV1_3
                           type: string
                         mode:
-                          description: 'Optional: Indicates whether connections to
-                            this port should be secured using TLS.'
+                          description: |-
+                            Optional: Indicates whether connections to this port should be secured using TLS.
+
+                            Valid Options: PASSTHROUGH, SIMPLE, MUTUAL, AUTO_PASSTHROUGH, ISTIO_MUTUAL, OPTIONAL_MUTUAL
                           enum:
                           - PASSTHROUGH
                           - SIMPLE
@@ -5846,8 +5891,10 @@ spec:
                   type: string
                 type: array
               location:
-                description: Specify whether the service should be considered external
-                  to the mesh or part of the mesh.
+                description: |-
+                  Specify whether the service should be considered external to the mesh or part of the mesh.
+
+                  Valid Options: MESH_EXTERNAL, MESH_INTERNAL
                 enum:
                 - MESH_EXTERNAL
                 - MESH_INTERNAL
@@ -5875,7 +5922,10 @@ spec:
                   type: object
                 type: array
               resolution:
-                description: Service resolution mode for the hosts.
+                description: |-
+                  Service resolution mode for the hosts.
+
+                  Valid Options: NONE, STATIC, DNS, DNS_ROUND_ROBIN
                 enum:
                 - NONE
                 - STATIC
@@ -6248,9 +6298,10 @@ spec:
                         to which the listener should be bound to.
                       type: string
                     captureMode:
-                      description: When the bind address is an IP, the captureMode
-                        option dictates how traffic to the listener is expected to
-                        be captured (or not).
+                      description: |-
+                        When the bind address is an IP, the captureMode option dictates how traffic to the listener is expected to be captured (or not).
+
+                        Valid Options: DEFAULT, IPTABLES, NONE
                       enum:
                       - DEFAULT
                       - IPTABLES
@@ -6289,8 +6340,10 @@ spec:
                     description: HTTP connection pool settings.
                     properties:
                       h2UpgradePolicy:
-                        description: Specify if http1.1 connection should be upgraded
-                          to http2 for the associated destination.
+                        description: |-
+                          Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+
+                          Valid Options: DEFAULT, DO_NOT_UPGRADE, UPGRADE
                         enum:
                         - DEFAULT
                         - DO_NOT_UPGRADE
@@ -6374,8 +6427,10 @@ spec:
                         be bound.
                       type: string
                     captureMode:
-                      description: The captureMode option dictates how traffic to
-                        the listener is expected to be captured (or not).
+                      description: |-
+                        The captureMode option dictates how traffic to the listener is expected to be captured (or not).
+
+                        Valid Options: DEFAULT, IPTABLES, NONE
                       enum:
                       - DEFAULT
                       - IPTABLES
@@ -6389,8 +6444,10 @@ spec:
                           description: HTTP connection pool settings.
                           properties:
                             h2UpgradePolicy:
-                              description: Specify if http1.1 connection should be
-                                upgraded to http2 for the associated destination.
+                              description: |-
+                                Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+
+                                Valid Options: DEFAULT, DO_NOT_UPGRADE, UPGRADE
                               enum:
                               - DEFAULT
                               - DO_NOT_UPGRADE
@@ -6518,7 +6575,10 @@ spec:
                             to use HTTPS.
                           type: boolean
                         maxProtocolVersion:
-                          description: 'Optional: Maximum TLS protocol version.'
+                          description: |-
+                            Optional: Maximum TLS protocol version.
+
+                            Valid Options: TLS_AUTO, TLSV1_0, TLSV1_1, TLSV1_2, TLSV1_3
                           enum:
                           - TLS_AUTO
                           - TLSV1_0
@@ -6527,7 +6587,10 @@ spec:
                           - TLSV1_3
                           type: string
                         minProtocolVersion:
-                          description: 'Optional: Minimum TLS protocol version.'
+                          description: |-
+                            Optional: Minimum TLS protocol version.
+
+                            Valid Options: TLS_AUTO, TLSV1_0, TLSV1_1, TLSV1_2, TLSV1_3
                           enum:
                           - TLS_AUTO
                           - TLSV1_0
@@ -6536,8 +6599,10 @@ spec:
                           - TLSV1_3
                           type: string
                         mode:
-                          description: 'Optional: Indicates whether connections to
-                            this port should be secured using TLS.'
+                          description: |-
+                            Optional: Indicates whether connections to this port should be secured using TLS.
+
+                            Valid Options: PASSTHROUGH, SIMPLE, MUTUAL, AUTO_PASSTHROUGH, ISTIO_MUTUAL, OPTIONAL_MUTUAL
                           enum:
                           - PASSTHROUGH
                           - SIMPLE
@@ -6597,6 +6662,10 @@ spec:
                     - host
                     type: object
                   mode:
+                    description: |2-
+
+
+                      Valid Options: REGISTRY_ONLY, ALLOW_ANY
                     enum:
                     - REGISTRY_ONLY
                     - ALLOW_ANY
@@ -8073,9 +8142,10 @@ spec:
                             portion of the URL with this value.
                           type: string
                         derivePort:
-                          description: 'On a redirect, dynamically set the port: *
-                            FROM_PROTOCOL_DEFAULT: automatically set to 80 for HTTP
-                            and 443 for HTTPS.'
+                          description: |-
+                            On a redirect, dynamically set the port: * FROM_PROTOCOL_DEFAULT: automatically set to 80 for HTTP and 443 for HTTPS.
+
+                            Valid Options: FROM_PROTOCOL_DEFAULT, FROM_REQUEST_PORT
                           enum:
                           - FROM_PROTOCOL_DEFAULT
                           - FROM_REQUEST_PORT
