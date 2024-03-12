@@ -57,6 +57,15 @@ option go_package="istio.io/api/security/v1beta1";
 // fromHeaders:
 // - "x-goog-iap-jwt-assertion"
 // ```
+//
+// The following example specifies that the JWT must be presented and verification successful.
+//
+// ```yaml
+// - issuer: issuer-foo
+//   jwksUri: https://example.com/.well-known/jwks.json
+//   failureMode: STRICT
+// ```
+//
 message JWTRule {
   // Identifies the issuer that issued the JWT. See
   // [issuer](https://tools.ietf.org/html/rfc7519#section-4.1.1)
@@ -182,8 +191,24 @@ message JWTRule {
   // will spend waiting for the JWKS to be fetched. Default is 5s.
   google.protobuf.Duration timeout = 13;
 
+  // FailureMode specifies a Jwt requirement.
+  enum FailureMode {
+    // The requirement is satisfied if JWT is missing, but failed if JWT is presented but invalid.
+    // This is the default behavior.
+    PERMISSIVE = 0;
+
+    // The requirement is always satisfied even if JWT is missing or the JWT verification fails.
+    IGNORE = 1;
+
+    // The requirement is satisfied only if JWT is presented and verification successful.
+    STRICT = 2;
+  }
+
+  // This field specifies a Jwt requirement. This is optional, the default value is `PERMISSIVE`.
+  FailureMode failure_mode = 14;
+
   // $hide_from_docs
-  // Next available field number: 14
+  // Next available field number: 15
 }
 
 // This message specifies a header location to extract JWT token.
