@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 73
+number_of_entries: 74
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -1980,6 +1980,70 @@ No
 </section>
 <h2 id="MeshConfig-ExtensionProvider-PrometheusMetricsProvider">MeshConfig.ExtensionProvider.PrometheusMetricsProvider</h2>
 <section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-PrometheusMetricsProvider-rotation">
+<td><code>rotation</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-PrometheusMetricsRotation">PrometheusMetricsRotation</a></code></td>
+<td>
+<p>Specifies the rotation for metric scope.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ExtensionProvider-PrometheusMetricsRotation">MeshConfig.ExtensionProvider.PrometheusMetricsRotation</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-PrometheusMetricsRotation-rotation_interval">
+<td><code>rotationInterval</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>Metric scope rotation interval.
+Set to 0 to disable the metric scope rotation.
+Defaults to 0.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-PrometheusMetricsRotation-graceful_deletion_interval">
+<td><code>gracefulDeletionInterval</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>Metric expiry graceful deletion interval.
+No-op if rotation_interval is disabled
+Defaults to 5m.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
 </section>
 <h2 id="MeshConfig-ExtensionProvider-EnvoyFileAccessLogProvider">MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider</h2>
 <section>
