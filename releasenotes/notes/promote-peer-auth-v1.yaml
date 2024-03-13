@@ -3,4 +3,4 @@ kind: feature
 area: security
 releaseNotes:
   - |
-    **Promoted** PeerAuthentication API is graduated to v1. API's storageVersion is v1beta1.
+    **Promoted** PeerAuthentication API to v1.
