@@ -3,7 +3,7 @@ kind: feature
 area: traffic-management
 releaseNotes:
   - |
-    **Promoted** Networking APIs (DestinationRule, Gateway, ProxyConfig, ServiceEntry, Sidecar, VirtualService, WorkloadEntry, WorkloadGroup) to v1.
+    **Promoted** Networking APIs (DestinationRule, Gateway, ServiceEntry, Sidecar, VirtualService, WorkloadEntry, WorkloadGroup) to v1.
 upgradeNotes:
   - title: Upgrade existing v1alpha3 networking APIs
     content: |
