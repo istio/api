@@ -8081,7 +8081,10 @@ spec:
                 description: Mutual TLS settings for workload.
                 properties:
                   mode:
-                    description: Defines the mTLS mode used for peer authentication.
+                    description: |-
+                      Defines the mTLS mode used for peer authentication.
+
+                      Valid Options: DISABLE, PERMISSIVE, STRICT
                     enum:
                     - UNSET
                     - DISABLE
@@ -8093,7 +8096,10 @@ spec:
                 additionalProperties:
                   properties:
                     mode:
-                      description: Defines the mTLS mode used for peer authentication.
+                      description: |-
+                        Defines the mTLS mode used for peer authentication.
+
+                        Valid Options: DISABLE, PERMISSIVE, STRICT
                       enum:
                       - UNSET
                       - DISABLE
