@@ -3284,7 +3284,10 @@ type MeshConfig_ExtensionProvider_PrometheusMetricsProvider struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Specifies the rotation for metric scope.
+	// PrometheusMetricsRotation specifies the interval of metric scope,
+	// For example, if prometheus scrape interval is 15s,
+	// you should set rotationInterval to 15s,
+	// and gracefulDeletionInterval should be [1, 15)s.
 	Rotation *MeshConfig_ExtensionProvider_PrometheusMetricsRotation `protobuf:"bytes,1,opt,name=rotation,proto3" json:"rotation,omitempty"`
 }
 
@@ -3334,11 +3337,13 @@ type MeshConfig_ExtensionProvider_PrometheusMetricsRotation struct {
 
 	// Metric scope rotation interval.
 	// Set to 0 to disable the metric scope rotation.
+	// Must be greater than gracefulDeletionInterval.
 	// Defaults to 0.
 	RotationInterval *duration.Duration `protobuf:"bytes,1,opt,name=rotation_interval,json=rotationInterval,proto3" json:"rotation_interval,omitempty"`
 	// Metric expiry graceful deletion interval.
-	// No-op if rotation_interval is disabled
-	// Defaults to 5m.
+	// No-op if rotation_interval is disabled.
+	// Must be >=1s.
+	// Must be less than rotationInterval.
 	GracefulDeletionInterval *duration.Duration `protobuf:"bytes,2,opt,name=graceful_deletion_interval,json=gracefulDeletionInterval,proto3" json:"graceful_deletion_interval,omitempty"`
 }
 

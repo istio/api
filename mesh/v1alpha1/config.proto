@@ -884,18 +884,23 @@ message MeshConfig {
     }
 
     message PrometheusMetricsProvider {
-      // Specifies the rotation for metric scope.
+      // PrometheusMetricsRotation specifies the interval of metric scope,
+      // For example, if prometheus scrape interval is 15s,
+      // you should set rotationInterval to 15s,
+      // and gracefulDeletionInterval should be [1, 15)s.
       PrometheusMetricsRotation rotation = 1;
     }
 
     message PrometheusMetricsRotation {
       // Metric scope rotation interval.
       // Set to 0 to disable the metric scope rotation.
+      // Must be greater than gracefulDeletionInterval.
       // Defaults to 0.
       google.protobuf.Duration rotation_interval = 1;
       // Metric expiry graceful deletion interval.
-      // No-op if rotation_interval is disabled
-      // Defaults to 5m.
+      // No-op if rotation_interval is disabled.
+      // Must be >=1s.
+      // Must be less than rotationInterval.
       google.protobuf.Duration graceful_deletion_interval = 2;
     }
 
