@@ -888,6 +888,7 @@ message MeshConfig {
       // For example, if prometheus scrape interval is 15s,
       // you should set rotationInterval to 15s,
       // and gracefulDeletionInterval should be [1, 15)s.
+      // $hide_from_docs
       PrometheusMetricsRotation rotation = 1;
     }
 

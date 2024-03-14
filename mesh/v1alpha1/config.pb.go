@@ -3288,6 +3288,7 @@ type MeshConfig_ExtensionProvider_PrometheusMetricsProvider struct {
 	// For example, if prometheus scrape interval is 15s,
 	// you should set rotationInterval to 15s,
 	// and gracefulDeletionInterval should be [1, 15)s.
+	// $hide_from_docs
 	Rotation *MeshConfig_ExtensionProvider_PrometheusMetricsRotation `protobuf:"bytes,1,opt,name=rotation,proto3" json:"rotation,omitempty"`
 }
 
