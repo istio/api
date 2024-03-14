@@ -2005,34 +2005,6 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-ExtensionProvider-PrometheusMetricsRotation-rotation_interval">
-<td><code>rotationInterval</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
-<td>
-<p>Metric scope rotation interval.
-Set to 0 to disable the metric scope rotation.
-Must be greater than gracefulDeletionInterval.
-Defaults to 0.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-ExtensionProvider-PrometheusMetricsRotation-graceful_deletion_interval">
-<td><code>gracefulDeletionInterval</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
-<td>
-<p>Metric expiry graceful deletion interval.
-No-op if rotation_interval is disabled.
-Must be &gt;=1s.
-Must be less than rotationInterval.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 </tbody>
 </table>
 </section>

@@ -3340,11 +3340,13 @@ type MeshConfig_ExtensionProvider_PrometheusMetricsRotation struct {
 	// Set to 0 to disable the metric scope rotation.
 	// Must be greater than gracefulDeletionInterval.
 	// Defaults to 0.
+	// $hide_from_docs
 	RotationInterval *duration.Duration `protobuf:"bytes,1,opt,name=rotation_interval,json=rotationInterval,proto3" json:"rotation_interval,omitempty"`
 	// Metric expiry graceful deletion interval.
 	// No-op if rotation_interval is disabled.
 	// Must be >=1s.
 	// Must be less than rotationInterval.
+	// $hide_from_docs
 	GracefulDeletionInterval *duration.Duration `protobuf:"bytes,2,opt,name=graceful_deletion_interval,json=gracefulDeletionInterval,proto3" json:"graceful_deletion_interval,omitempty"`
 }
 

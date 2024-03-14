@@ -897,11 +897,13 @@ message MeshConfig {
       // Set to 0 to disable the metric scope rotation.
       // Must be greater than gracefulDeletionInterval.
       // Defaults to 0.
+      // $hide_from_docs
       google.protobuf.Duration rotation_interval = 1;
       // Metric expiry graceful deletion interval.
       // No-op if rotation_interval is disabled.
       // Must be >=1s.
       // Must be less than rotationInterval.
+      // $hide_from_docs
       google.protobuf.Duration graceful_deletion_interval = 2;
     }
 
