@@ -254,6 +254,26 @@
 // This feature is currently experimental.
 //
 // ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: Sidecar
+// metadata:
+//   name: ratings
+//   namespace: prod-us1
+// spec:
+//   workloadSelector:
+//     labels:
+//       app: ratings
+//   ingress:
+//   - port:
+//       number: 80
+//       protocol: HTTPS
+//       name: somename
+//     defaultEndpoint: unix:///var/run/someuds.sock
+//     tls:
+//       mode: SIMPLE
+//       privateKey: "/etc/certs/privatekey.pem"
+//       serverCertificate: "/etc/certs/servercert.pem"
+// ---
 // apiVersion: v1
 // kind: Service
 // metadata:
@@ -268,11 +288,7 @@
 //     targetPort: 80
 //   selector:
 //     app: ratings
-// ```
-// {{</tab>}}
-//
-// {{<tab name="v1beta1" category-value="v1beta1">}}
-// ```yaml
+// ---
 // apiVersion: security.istio.io/v1beta1
 // kind: PeerAuthentication
 // metadata:
