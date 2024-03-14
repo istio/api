@@ -15,15 +15,16 @@ syntax = "proto3";
 
 import "type/v1beta1/selector.proto";
 
-// $schema: istio.security.v1beta1.PeerAuthentication
+// $schema: istio.security.v1.PeerAuthentication
 // $title: PeerAuthentication
 // $description: Peer authentication configuration for workloads.
 // $location: https://istio.io/docs/reference/config/security/peer_authentication.html
-// $aliases: [/docs/reference/config/security/v1beta1/peer_authentication]
+// $aliases: [/docs/reference/config/security/v1/peer_authentication]
+// $mode: none
 
-package istio.security.v1beta1;
+package istio.security.v1;
 
-option go_package="istio.io/api/security/v1beta1";
+option go_package="istio.io/api/security/v1";
 
 // PeerAuthentication defines how traffic will be tunneled (or not) to the sidecar.
 //
@@ -31,7 +32,7 @@ option go_package="istio.io/api/security/v1beta1";
 //
 // Policy to allow mTLS traffic for all workloads under namespace `foo`:
 // ```yaml
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: PeerAuthentication
 // metadata:
 //   name: default
@@ -45,7 +46,7 @@ option go_package="istio.io/api/security/v1beta1";
 // Policies to allow both mTLS and plaintext traffic for all workloads under namespace `foo`, but
 // require mTLS for workload `finance`.
 // ```yaml
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: PeerAuthentication
 // metadata:
 //   name: default
@@ -54,7 +55,7 @@ option go_package="istio.io/api/security/v1beta1";
 //   mtls:
 //     mode: PERMISSIVE
 // ---
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: PeerAuthentication
 // metadata:
 //   name: finance
@@ -70,7 +71,7 @@ option go_package="istio.io/api/security/v1beta1";
 // plaintext. Note the port value in the `portLevelMtls` field refers to the port
 // of the workload, not the port of the Kubernetes service.
 // ```yaml
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: PeerAuthentication
 // metadata:
 //   name: default
@@ -88,7 +89,7 @@ option go_package="istio.io/api/security/v1beta1";
 // Policy that inherits mTLS mode from namespace (or mesh) settings, and disables
 // mTLS for workload port `8080`.
 // ```yaml
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: PeerAuthentication
 // metadata:
 //   name: default
@@ -106,8 +107,7 @@ option go_package="istio.io/api/security/v1beta1";
 //
 // <!-- crd generation tags
 // +cue-gen:PeerAuthentication:groupName:security.istio.io
-// +cue-gen:PeerAuthentication:version:v1beta1
-// +cue-gen:PeerAuthentication:storageVersion
+// +cue-gen:PeerAuthentication:version:v1
 // +cue-gen:PeerAuthentication:annotations:helm.sh/resource-policy=keep
 // +cue-gen:PeerAuthentication:labels:app=istio-pilot,chart=istio,istio=security,heritage=Tiller,release=istio
 // +cue-gen:PeerAuthentication:subresource:status
@@ -123,12 +123,12 @@ option go_package="istio.io/api/security/v1beta1";
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=security.istio.io/v1beta1
+// +kubetype-gen:groupVersion=security.istio.io/v1
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
 // <!-- istio code generation tags
-// +istio.io/sync-start
+// +istio.io/sync-from:security/v1beta1/peer_authentication.proto
 // -->
 message PeerAuthentication {
   // The selector determines the workloads to apply the PeerAuthentication on. The selector will match with workloads in the
