@@ -4,7 +4,3 @@ area: traffic-management
 releaseNotes:
   - |
     **Promoted** Networking APIs (DestinationRule, Gateway, ServiceEntry, Sidecar, VirtualService, WorkloadEntry, WorkloadGroup) to v1.
-upgradeNotes:
-  - title: Upgrade existing v1alpha3 networking APIs
-    content: |
-      If you are applying v1alpha3 networking APIs, update the storageVersion to v1beta1. There are two options to do this: https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definition-versioning/#upgrade-existing-objects-to-a-new-stored-version
