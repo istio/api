@@ -447,6 +447,18 @@ message LoadBalancerSettings {
       // Increasing the table size reduces the amount of disruption.
       uint64 table_size = 1;
     };
+
+    // CookieAttribute defines an API for adding additional attributes for a HTTP cookie.
+    message CookieAttribute {
+      // The name of the cookie attribute.
+      string name = 1
+          [(validate.rules).string =
+               {min_len: 1 max_bytes: 16384 well_known_regex: HTTP_HEADER_NAME strict: false}];
+      // The optional value of the cookie attribute.
+      string value = 2 [(validate.rules).string =
+                            {max_bytes: 16384 well_known_regex: HTTP_HEADER_VALUE strict: false}];
+    }
+
     // Describes a HTTP cookie that will be used as the hash key for the
     // Consistent Hash load balancer.
     message HTTPCookie {
@@ -458,6 +470,8 @@ message LoadBalancerSettings {
       // generated if the cookie is not present. If the TTL is present and zero, 
       // the generated cookie will be a session cookie.
       google.protobuf.Duration ttl = 3;
+      // Additional attributes for the cookie. They will be used when generating a new cookie.
+      repeated CookieAttribute attributes = 4;
     };
 
     // The hash key to use.
