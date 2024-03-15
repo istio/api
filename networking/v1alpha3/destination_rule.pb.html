@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.DestinationRule
 aliases: [/docs/reference/config/networking/v1alpha3/destination-rule]
-number_of_entries: 25
+number_of_entries: 26
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -1413,6 +1413,45 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="LoadBalancerSettings-ConsistentHashLB-CookieAttribute">LoadBalancerSettings.ConsistentHashLB.CookieAttribute</h2>
+<section>
+<p>CookieAttribute defines an API for adding additional attributes for a HTTP cookie.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LoadBalancerSettings-ConsistentHashLB-CookieAttribute-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>The name of the cookie attribute.</p>
+
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr id="LoadBalancerSettings-ConsistentHashLB-CookieAttribute-value">
+<td><code>value</code></td>
+<td><code>string</code></td>
+<td>
+<p>The optional value of the cookie attribute.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="LoadBalancerSettings-ConsistentHashLB-HTTPCookie">LoadBalancerSettings.ConsistentHashLB.HTTPCookie</h2>
 <section>
 <p>Describes a HTTP cookie that will be used as the hash key for the
@@ -1457,6 +1496,17 @@ No
 <p>Lifetime of the cookie. If specified, a cookie with the TTL will be
 generated if the cookie is not present. If the TTL is present and zero,
 the generated cookie will be a session cookie.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LoadBalancerSettings-ConsistentHashLB-HTTPCookie-attributes">
+<td><code>attributes</code></td>
+<td><code><a href="#LoadBalancerSettings-ConsistentHashLB-CookieAttribute">CookieAttribute[]</a></code></td>
+<td>
+<p>Additional attributes for the cookie. They will be used when generating a new cookie.</p>
 
 </td>
 <td>
