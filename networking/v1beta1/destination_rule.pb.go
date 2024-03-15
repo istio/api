@@ -1535,7 +1535,8 @@ type ClientTLSSettings struct {
 	PrivateKey string `protobuf:"bytes,3,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
 	// OPTIONAL: The path to the file containing certificate authority
 	// certificates to use in verifying a presented server certificate. If
-	// omitted, the proxy will not verify the server's certificate.
+	// omitted, the proxy will verify the server's certificate using
+	// the OS CA certificates.
 	// Should be empty if mode is `ISTIO_MUTUAL`.
 	CaCertificates string `protobuf:"bytes,4,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
 	// The name of the secret that holds the TLS certs for the
