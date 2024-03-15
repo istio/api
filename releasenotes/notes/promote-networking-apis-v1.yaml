@@ -1,0 +1,6 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+releaseNotes:
+  - |
+    **Promoted** Networking APIs (DestinationRule, Gateway, ServiceEntry, Sidecar, VirtualService, WorkloadEntry, WorkloadGroup) to v1.

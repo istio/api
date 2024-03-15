@@ -16,14 +16,14 @@ syntax = "proto3";
 import "google/api/field_behavior.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
-import "networking/v1beta1/virtual_service.proto";
+import "networking/v1/virtual_service.proto";
 import "type/v1beta1/selector.proto";
 
-// $schema: istio.networking.v1beta1.DestinationRule
+// $schema: istio.networking.v1.DestinationRule
 // $title: Destination Rule
 // $description: Configuration affecting load balancing, outlier detection, etc.
 // $location: https://istio.io/docs/reference/config/networking/destination-rule.html
-// $aliases: [/docs/reference/config/networking/v1beta1/destination-rule]
+// $aliases: [/docs/reference/config/networking/v1/destination-rule]
 // $mode: none
 
 // `DestinationRule` defines policies that apply to traffic intended for a
@@ -34,7 +34,7 @@ import "type/v1beta1/selector.proto";
 // ratings service would look as follows:
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: bookinfo-ratings
@@ -52,7 +52,7 @@ import "type/v1beta1/selector.proto";
 // pods) with labels (version:v3).
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: bookinfo-ratings
@@ -79,7 +79,7 @@ import "type/v1beta1/selector.proto";
 // traffic to the port 9080.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: bookinfo-ratings-port
@@ -96,17 +96,16 @@ import "type/v1beta1/selector.proto";
 //       loadBalancer:
 //         simple: ROUND_ROBIN
 // ```
-package istio.networking.v1beta1;
+package istio.networking.v1;
 
-option go_package = "istio.io/api/networking/v1beta1";
+option go_package = "istio.io/api/networking/v1";
 
 // DestinationRule defines policies that apply to traffic intended for a service
 // after routing has occurred.
 //
 // <!-- crd generation tags
 // +cue-gen:DestinationRule:groupName:networking.istio.io
-// +cue-gen:DestinationRule:version:v1beta1
-// +cue-gen:DestinationRule:storageVersion
+// +cue-gen:DestinationRule:version:v1
 // +cue-gen:DestinationRule:annotations:helm.sh/resource-policy=keep
 // +cue-gen:DestinationRule:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:DestinationRule:subresource:status
@@ -122,7 +121,7 @@ option go_package = "istio.io/api/networking/v1beta1";
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=networking.istio.io/v1beta1
+// +kubetype-gen:groupVersion=networking.istio.io/v1
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->

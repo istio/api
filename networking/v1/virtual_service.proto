@@ -1,4 +1,4 @@
-// Copyright 2017-2018 Istio Authors
+// Copyright 2020 Istio Authors
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -18,11 +18,12 @@ import "google/api/field_behavior.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 
-// $schema: istio.networking.v1alpha3.VirtualService
+// $schema: istio.networking.v1.VirtualService
 // $title: Virtual Service
 // $description: Configuration affecting label/content routing, sni routing, etc.
 // $location: https://istio.io/docs/reference/config/networking/virtual-service.html
-// $aliases: [/docs/reference/config/networking/v1alpha3/virtual-service]
+// $aliases: [/docs/reference/config/networking/v1/virtual-service]
+// $mode: none
 
 // Configuration affecting traffic routing. Here are a few terms useful to define
 // in the context of traffic routing.
@@ -66,9 +67,8 @@ import "google/protobuf/wrappers.proto";
 // HTTP requests with path starting with /wpcatalog/ or /consumercatalog/ will
 // be rewritten to /newcatalog and sent to pods with label "version: v2".
 //
-//
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: reviews-route
@@ -100,7 +100,7 @@ import "google/protobuf/wrappers.proto";
 // `DestinationRule`.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: reviews-destination
@@ -114,16 +114,15 @@ import "google/protobuf/wrappers.proto";
 //     labels:
 //       version: v2
 // ```
-//
-package istio.networking.v1alpha3;
+package istio.networking.v1;
 
-option go_package = "istio.io/api/networking/v1alpha3";
+option go_package = "istio.io/api/networking/v1";
 
 // Configuration affecting traffic routing.
 //
 // <!-- crd generation tags
 // +cue-gen:VirtualService:groupName:networking.istio.io
-// +cue-gen:VirtualService:version:v1alpha3
+// +cue-gen:VirtualService:version:v1
 // +cue-gen:VirtualService:annotations:helm.sh/resource-policy=keep
 // +cue-gen:VirtualService:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:VirtualService:subresource:status
@@ -141,12 +140,12 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +kubetype-gen:groupVersion=networking.istio.io/v1
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
 // <!-- istio code generation tags
-// +istio.io/sync-start
+// +istio.io/sync-from:networking/v1alpha3/virtual_service.proto
 // -->
 message VirtualService {
   // The destination hosts to which traffic is being sent. Could

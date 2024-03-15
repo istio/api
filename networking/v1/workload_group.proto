@@ -15,7 +15,7 @@
 syntax = "proto3";
 
 import "google/api/field_behavior.proto";
-import "networking/v1beta1/workload_entry.proto";
+import "networking/v1/workload_entry.proto";
 
 // $schema: istio.networking.v1alpha3.WorkloadGroup
 // $title: Workload Group
@@ -39,7 +39,7 @@ import "networking/v1beta1/workload_entry.proto";
 // `app.kubernetes.io/version` is just an arbitrary example of a label.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: WorkloadGroup
 // metadata:
 //   name: reviews
@@ -69,9 +69,9 @@ import "networking/v1beta1/workload_entry.proto";
 //      - name: Lit-Header
 //        value: Im-The-Best
 // ```
-package istio.networking.v1beta1;
+package istio.networking.v1;
 
-option go_package = "istio.io/api/networking/v1beta1";
+option go_package = "istio.io/api/networking/v1";
 
 // `WorkloadGroup` enables specifying the properties of a single workload for bootstrap and
 // provides a template for `WorkloadEntry`, similar to how `Deployment` specifies properties
@@ -81,8 +81,7 @@ option go_package = "istio.io/api/networking/v1beta1";
 //
 // <!-- crd generation tags
 // +cue-gen:WorkloadGroup:groupName:networking.istio.io
-// +cue-gen:WorkloadGroup:version:v1beta1
-// +cue-gen:WorkloadGroup:storageVersion
+// +cue-gen:WorkloadGroup:version:v1
 // +cue-gen:WorkloadGroup:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:WorkloadGroup:subresource:status
 // +cue-gen:WorkloadGroup:scope:Namespaced
@@ -96,7 +95,7 @@ option go_package = "istio.io/api/networking/v1beta1";
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=networking.istio.io/v1beta1
+// +kubetype-gen:groupVersion=networking.istio.io/v1
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
