@@ -101,6 +101,7 @@ const (
 // +cue-gen:WorkloadGroup:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:WorkloadGroup:subresource:status
 // +cue-gen:WorkloadGroup:scope:Namespaced
+// +cue-gen:WorkloadGroup:deprecationReplacement:v1beta1
 // +cue-gen:WorkloadGroup:resource:categories=istio-io,networking-istio-io,shortNames=wg,plural=workloadgroups
 // +cue-gen:WorkloadGroup:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
 // representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.

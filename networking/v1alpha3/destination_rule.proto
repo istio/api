@@ -135,6 +135,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // +cue-gen:DestinationRule:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:DestinationRule:subresource:status
 // +cue-gen:DestinationRule:scope:Namespaced
+// +cue-gen:DestinationRule:deprecationReplacement:v1beta1
 // +cue-gen:DestinationRule:resource:categories=istio-io,networking-istio-io,shortNames=dr
 // +cue-gen:DestinationRule:printerColumn:name=Host,type=string,JSONPath=.spec.host,description="The name of a service from the service registry"
 // +cue-gen:DestinationRule:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp

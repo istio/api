@@ -267,6 +267,9 @@ spec:
       jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
+    deprecated: true
+    deprecationWarning: destinationrules.networking.istio.io version "v1alpha3" is
+      deprecated, use "v1beta1"
     name: v1alpha3
     schema:
       openAPIV3Schema:
@@ -3657,7 +3660,10 @@ spec:
     singular: gateway
   scope: Namespaced
   versions:
-  - name: v1alpha3
+  - deprecated: true
+    deprecationWarning: gateways.networking.istio.io version "v1alpha3" is deprecated,
+      use "v1beta1"
+    name: v1alpha3
     schema:
       openAPIV3Schema:
         properties:
@@ -4086,6 +4092,9 @@ spec:
       jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
+    deprecated: true
+    deprecationWarning: serviceentries.networking.istio.io version "v1alpha3" is deprecated,
+      use "v1beta1"
     name: v1alpha3
     schema:
       openAPIV3Schema:
@@ -4384,7 +4393,10 @@ spec:
     singular: sidecar
   scope: Namespaced
   versions:
-  - name: v1alpha3
+  - deprecated: true
+    deprecationWarning: sidecars.networking.istio.io version "v1alpha3" is deprecated,
+      use "v1beta1"
+    name: v1alpha3
     schema:
       openAPIV3Schema:
         properties:
@@ -5251,6 +5263,9 @@ spec:
       jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
+    deprecated: true
+    deprecationWarning: virtualservices.networking.istio.io version "v1alpha3" is
+      deprecated, use "v1beta1"
     name: v1alpha3
     schema:
       openAPIV3Schema:
@@ -7107,6 +7122,9 @@ spec:
       jsonPath: .spec.address
       name: Address
       type: string
+    deprecated: true
+    deprecationWarning: workloadentries.networking.istio.io version "v1alpha3" is
+      deprecated, use "v1beta1"
     name: v1alpha3
     schema:
       openAPIV3Schema:
@@ -7243,6 +7261,9 @@ spec:
       jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
+    deprecated: true
+    deprecationWarning: workloadgroups.networking.istio.io version "v1alpha3" is deprecated,
+      use "v1beta1"
     name: v1alpha3
     schema:
       openAPIV3Schema:
@@ -7824,6 +7845,9 @@ spec:
       jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
+    deprecated: true
+    deprecationWarning: authorizationpolicies.security.istio.io version "v1beta1"
+      is deprecated, use "v1"
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -8353,7 +8377,10 @@ spec:
     storage: false
     subresources:
       status: {}
-  - name: v1beta1
+  - deprecated: true
+    deprecationWarning: requestauthentications.security.istio.io version "v1beta1"
+      is deprecated, use "v1"
+    name: v1beta1
     schema:
       openAPIV3Schema:
         properties:

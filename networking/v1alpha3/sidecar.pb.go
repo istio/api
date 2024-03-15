@@ -481,6 +481,7 @@ func (OutboundTrafficPolicy_Mode) EnumDescriptor() ([]byte, []int) {
 // +cue-gen:Sidecar:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:Sidecar:subresource:status
 // +cue-gen:Sidecar:scope:Namespaced
+// +cue-gen:Sidecar:deprecationReplacement:v1beta1
 // +cue-gen:Sidecar:resource:categories=istio-io,networking-istio-io
 // +cue-gen:Sidecar:preserveUnknownFields:false
 // -->
