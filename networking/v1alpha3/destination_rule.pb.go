@@ -1288,7 +1288,8 @@ type ClientTLSSettings struct {
 	PrivateKey string `protobuf:"bytes,3,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
 	// OPTIONAL: The path to the file containing certificate authority
 	// certificates to use in verifying a presented server certificate. If
-	// omitted, the proxy will not verify the server's certificate.
+	// omitted, the proxy will verify the server's certificate using
+	// the OS CA certificates.
 	// Should be empty if mode is `ISTIO_MUTUAL`.
 	CaCertificates string `protobuf:"bytes,4,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
 	// The name of the secret that holds the TLS certs for the
@@ -1317,26 +1318,15 @@ type ClientTLSSettings struct {
 	// If specified, this list overrides the value of subject_alt_names
 	// from the ServiceEntry. If unspecified, automatic validation of upstream
 	// presented certificate for new upstream connections will be done based on the
-	// downstream HTTP host/authority header, provided `VERIFY_CERTIFICATE_AT_CLIENT`
-	// and `ENABLE_AUTO_SNI` environmental variables are set to `true`.
+	// downstream HTTP host/authority header.
 	SubjectAltNames []string `protobuf:"bytes,5,rep,name=subject_alt_names,json=subjectAltNames,proto3" json:"subject_alt_names,omitempty"`
 	// SNI string to present to the server during TLS handshake.
 	// If unspecified, SNI will be automatically set based on downstream HTTP
-	// host/authority header for SIMPLE and MUTUAL TLS modes, provided `ENABLE_AUTO_SNI`
-	// environmental variable is set to `true`.
+	// host/authority header for SIMPLE and MUTUAL TLS modes.
 	Sni string `protobuf:"bytes,6,opt,name=sni,proto3" json:"sni,omitempty"`
 	// `insecureSkipVerify` specifies whether the proxy should skip verifying the
 	// CA signature and SAN for the server certificate corresponding to the host.
-	// This flag should only be set if global CA signature verification is
-	// enabled, `VERIFY_CERTIFICATE_AT_CLIENT` environmental variable is set to `true`,
-	// but no verification is desired for a specific host. If enabled with or
-	// without `VERIFY_CERTIFICATE_AT_CLIENT` enabled, verification of the CA signature and
-	// SAN will be skipped.
-	//
-	// `insecureSkipVerify` is `false` by default.
-	// `VERIFY_CERTIFICATE_AT_CLIENT` is `false` by default in Istio version 1.9 but will
-	// be `true` by default in a later version where, going forward, it will be
-	// enabled by default.
+	// The default value of this field is false.
 	InsecureSkipVerify *wrappers.BoolValue `protobuf:"bytes,8,opt,name=insecure_skip_verify,json=insecureSkipVerify,proto3" json:"insecure_skip_verify,omitempty"`
 	// OPTIONAL: The path to the file containing the certificate revocation list (CRL)
 	// to use in verifying a presented server certificate. `CRL` is a list of certificates
