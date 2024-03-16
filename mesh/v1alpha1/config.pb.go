@@ -3285,9 +3285,8 @@ type MeshConfig_ExtensionProvider_PrometheusMetricsProvider struct {
 	unknownFields protoimpl.UnknownFields
 
 	// PrometheusMetricsRotation specifies the interval of metric scope,
-	// For example, if prometheus scrape interval is 15s,
-	// you should set gracefulDeletionInterval at least to 15s,
-	// and rotationInterval should be larger than gracefulDeletionInterval.
+	// In most of the case, you should set gracefulDeletionInterval
+	// double of the scrape interval, and rotationInterval be triple of it.
 	// $hide_from_docs
 	Rotation *MeshConfig_ExtensionProvider_PrometheusMetricsRotation `protobuf:"bytes,1,opt,name=rotation,proto3" json:"rotation,omitempty"`
 }

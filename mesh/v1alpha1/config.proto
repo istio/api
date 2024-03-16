@@ -885,9 +885,8 @@ message MeshConfig {
 
     message PrometheusMetricsProvider {
       // PrometheusMetricsRotation specifies the interval of metric scope,
-      // For example, if prometheus scrape interval is 15s,
-      // you should set gracefulDeletionInterval at least to 15s,
-      // and rotationInterval should be larger than gracefulDeletionInterval.
+      // In most of the case, you should set gracefulDeletionInterval
+      // double of the scrape interval, and rotationInterval be triple of it.
       // $hide_from_docs
       PrometheusMetricsRotation rotation = 1;
     }
