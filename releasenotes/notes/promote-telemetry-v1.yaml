@@ -1,0 +1,6 @@
+apiVersion: release-notes/v2
+kind: feature
+area: telemetry
+releaseNotes:
+  - |
+    **Promoted** Telemetry API to v1. All Telemetry fields excepting `metrics.reportingInterval` and `accessLogging.filter` are now stable and will not change in a backwards-incompatible way. 
