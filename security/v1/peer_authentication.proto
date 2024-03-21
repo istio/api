@@ -26,6 +26,9 @@ package istio.security.v1;
 
 option go_package="istio.io/api/security/v1";
 
+// {{< warning >}}
+// Development of PeerAuthentication is currently frozen and likely to be replaced in Ambient.
+// {{< /warning >}}
 // PeerAuthentication defines how traffic will be tunneled (or not) to the sidecar.
 //
 // Examples:

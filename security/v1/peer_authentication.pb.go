@@ -98,6 +98,9 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 	return file_security_v1_peer_authentication_proto_rawDescGZIP(), []int{0, 0, 0}
 }
 
+// {{< warning >}}
+// Development of PeerAuthentication is currently frozen and likely to be replaced in Ambient.
+// {{< /warning >}}
 // PeerAuthentication defines how traffic will be tunneled (or not) to the sidecar.
 //
 // Examples:
