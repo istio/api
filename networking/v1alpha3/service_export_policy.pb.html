@@ -1,0 +1,244 @@
+---
+title: istio.networking.v1alpha3
+layout: protoc-gen-docs
+generator: protoc-gen-docs
+number_of_entries: 3
+---
+<h2 id="ServiceExportPolicy">ServiceExportPolicy</h2>
+<section>
+<p>ServiceExportPolicy configures the exporting of services across the mesh.</p>
+
+<p>We use the term &ldquo;exporting&rdquo; to refer to the process where a service&rsquo;s endpoints are
+made accessible to one or more workloads. If no endpoint for a service is exported
+to a workload, the service will be effectively unreachable from the workload.</p>
+
+<p>ServiceExportPolicy supports a variety of use cases that require partitioning the mesh
+and providing customized views of service endpoints to each workload. For example,
+it may be desirable that workloads in a given cluster use only the service endpoints
+residing within the same cluster.</p>
+
+<p>By default (if no ServiceExportPolicy is specified), all services are exported to all
+workloads in the mesh. This means that any workload can call any service endpoint.</p>
+
+<p>The mesh-wide default can be overridden by applying a ServiceExportPolicy to the
+Istio system namespace, using the service wildcard. For example, the following will
+disable export of all services across the mesh by default, requiring that services
+be explicitly exported:</p>
+
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: ServiceExportPolicy
+metadata:
+  name: auto-export-off
+  namespace: istio-system # Using the Istio system namespace applies mesh-wide
+spec:
+  from:
+    service: * # Using wildcard applies to all services.
+  # No &quot;to&quot; is specified, so services will not export by default.
+</code></pre>
+
+<p>{{</tab>}}
+{{</tabset>}}</p>
+
+<p>Similarly, a namespace-wide default can be specified by applying a ServiceExportPolicy
+to the namespace the service being exported.</p>
+
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: ServiceExportPolicy
+metadata:
+  name: auto-export-off
+  namespace: example-ns
+spec:
+  from:
+    service: * # Using wildcard applies to all services in the namespace.
+  to:
+    hosts:
+    - *.example.svc.cluster.local # Export to all workloads in the same namespace.
+</code></pre>
+
+<p>{{</tab>}}
+{{</tabset>}}</p>
+
+<p>The selection of service endpoints to be exported can be further refined by selecting
+specific workloads by label. For example, the following policy configures the service
+endpoints in cluster1 to be exported only to workloads running in the same cluster.</p>
+
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: ServiceExportPolicy
+metadata:
+  name: myservice-cluster1-to-cluster1-cluster2
+  namespace: example-ns
+spec:
+  from:
+    service: MyService
+    selector:
+      &quot;topology.istio.io/cluster&quot;: cluster1
+  to:
+    hosts:
+    - *
+    selector:
+      &quot;topology.istio.io/cluster&quot;: cluster1
+</code></pre>
+
+<p>{{</tab>}}
+{{</tabset>}}</p>
+
+<p>The workload selectors can also be used to match against a number of
+label values. The following expands the previous example to export
+the service to both cluster1 and cluster2.</p>
+
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: ServiceExportPolicy
+metadata:
+  name: myservice-cluster1-to-cluster1-cluster2
+  namespace: example-ns
+spec:
+  from:
+    service: MyService
+    selector:
+      &quot;topology.istio.io/cluster&quot;: cluster1
+  to:
+    hosts:
+    - *
+    selector:
+      &quot;topology.istio.io/cluster&quot;: cluster1,cluster2
+</code></pre>
+
+<p>{{</tab>}}
+{{</tabset>}}</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ServiceExportPolicy-from">
+<td><code>from</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/virtual-service.html#ServiceExportPolicy-From">From[]</a></code></td>
+<td>
+<p>Required. Selects the services to be exported.</p>
+
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr id="ServiceExportPolicy-to">
+<td><code>to</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/virtual-service.html#ServiceExportPolicy-To">To[]</a></code></td>
+<td>
+<p>Optional. Selects the workloads to which the services are to be exported.
+Only selected workloads will be able to reach the services. If not set,
+no workloads will be able to reach the selected services.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ServiceExportPolicy-From">ServiceExportPolicy.From</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ServiceExportPolicy-From-service">
+<td><code>service</code></td>
+<td><code>string</code></td>
+<td>
+<p>Required. Selects a specific service within the namespace to be included in the
+operation. If a wildcard (&lsquo;*&rsquo;), all services within the scope
+(namespace or mesh-wide) are selected</p>
+
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr id="ServiceExportPolicy-From-selector">
+<td><code>selector</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/sidecar.html#WorkloadSelector">WorkloadSelector</a></code></td>
+<td>
+<p>Optional. Further refines the selection of service endpoints that should be
+included in the operation.</p>
+
+<p>Allows multiple values to be specified for a given label, separated by commas. In
+which case, a workload will be selected if its value matches any of the values
+specified.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ServiceExportPolicy-To">ServiceExportPolicy.To</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ServiceExportPolicy-To-hosts">
+<td><code>hosts</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Required. The hosts to which the selected services should be exported.
+Could be a DNS name with wildcard prefix.</p>
+
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr id="ServiceExportPolicy-To-selector">
+<td><code>selector</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/sidecar.html#WorkloadSelector">WorkloadSelector</a></code></td>
+<td>
+<p>Optional. Selects workloads to have access to the exported services. If not
+set, all workloads in the selected namespaces will be selected.</p>
+
+<p>Allows multiple values to be specified for a given label, separated by commas. In
+which case, a workload will be selected if its value matches any of the values
+specified.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
