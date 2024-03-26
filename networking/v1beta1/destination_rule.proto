@@ -170,6 +170,8 @@ message DestinationRule {
   // The value "." is reserved and defines an export to the same namespace that
   // the destination rule is declared in. Similarly, the value "*" is reserved and
   // defines an export to all namespaces.
+  //
+  // Destination rules can only export services from the same namespace.
   repeated string export_to = 4;
   //
   // Criteria used to select the specific set of pods/VMs on which this
