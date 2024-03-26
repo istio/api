@@ -4308,7 +4308,7 @@ type MeshConfig_ExtensionProvider_OpenTelemetryTracingProvider_DynatraceSampler 
 	// Optional. Number of sampled spans per minute to be used
 	// when the adaptive value cannot be obtained from the Dynatrace API.
 	//
-	// A default value of “1000“ is used when:
+	// A default value of `1000` is used when:
 	//
 	// - `root_spans_per_minute` is unset
 	// - `root_spans_per_minute` is set to 0
