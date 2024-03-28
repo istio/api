@@ -1142,12 +1142,13 @@ message MeshConfig {
       }
 
       message DynatraceSampler {
-        // REQUIRED. The Dynatrace tenant.
+        // REQUIRED. The Dynatrace customer's tenant identifier.
         //
         // The value can be obtained from the Istio deployment page in Dynatrace.
         string tenant = 1;
 
-        // REQUIRED. The id of the Dynatrace cluster.
+        // REQUIRED. The identifier of the cluster in the Dynatrace platform.
+        // The cluster here is Dynatrace-specific concept and not related to the cluster concept in Istio/Envoy.
         //
         // The value can be obtained from the Istio deployment page in Dynatrace.
         int32 cluster_id = 2;
