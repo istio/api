@@ -4297,11 +4297,12 @@ type MeshConfig_ExtensionProvider_OpenTelemetryTracingProvider_DynatraceSampler 
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// REQUIRED. The Dynatrace tenant.
+	// REQUIRED. The Dynatrace customer's tenant identifier.
 	//
 	// The value can be obtained from the Istio deployment page in Dynatrace.
 	Tenant string `protobuf:"bytes,1,opt,name=tenant,proto3" json:"tenant,omitempty"`
-	// REQUIRED. The id of the Dynatrace cluster.
+	// REQUIRED. The identifier of the cluster in the Dynatrace platform.
+	// The cluster here is Dynatrace-specific concept and not related to the cluster concept in Istio/Envoy.
 	//
 	// The value can be obtained from the Istio deployment page in Dynatrace.
 	ClusterId int32 `protobuf:"varint,2,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
