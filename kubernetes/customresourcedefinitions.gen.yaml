@@ -11136,6 +11136,10 @@ spec:
                                 items:
                                   type: string
                                 type: array
+                              notPathTemplates:
+                                items:
+                                  type: string
+                                type: array
                               notPaths:
                                 description: Optional.
                                 items:
@@ -11143,6 +11147,10 @@ spec:
                                 type: array
                               notPorts:
                                 description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              pathTemplates:
                                 items:
                                   type: string
                                 type: array
@@ -11354,6 +11362,10 @@ spec:
                                 items:
                                   type: string
                                 type: array
+                              notPathTemplates:
+                                items:
+                                  type: string
+                                type: array
                               notPaths:
                                 description: Optional.
                                 items:
@@ -11361,6 +11373,10 @@ spec:
                                 type: array
                               notPorts:
                                 description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              pathTemplates:
                                 items:
                                   type: string
                                 type: array

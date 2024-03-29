@@ -518,6 +518,22 @@ message Operation {
 
   // Optional. A list of negative match of paths.
   repeated string not_paths = 8;
+
+  // $hide_from_docs
+  // Optional. A list of path templates as specified in the HTTP request.
+  //
+  // `*`: Matches a single path component, up to the next path separator: `/`.
+  // `**`: Matches zero or more path components. If present, it must be the last operator in the path template.
+  // 
+  // Either paths or path_templates can be set, but not both.
+  // If not set, any path is allowed. Must be used only with HTTP.
+  repeated string path_templates = 9;
+
+  // $hide_from_docs
+  // Optional. A list of negative match path templates.
+  // The same templating rules apply as for the `path_templates` field.
+  // Either not_paths or not_path_templates can be set, but not both.
+  repeated string not_path_templates = 10;
 }
 
 // Condition specifies additional required attributes.
