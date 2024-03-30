@@ -97,6 +97,9 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 	return file_security_v1beta1_peer_authentication_proto_rawDescGZIP(), []int{0, 0, 0}
 }
 
+// {{< warning >}}
+// Development of PeerAuthentication is currently frozen and likely to be replaced in Ambient.
+// {{< /warning >}}
 // PeerAuthentication defines how traffic will be tunneled (or not) to the sidecar.
 //
 // Examples:
@@ -150,7 +153,7 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 //	  mode: STRICT
 //
 // ```
-// Policy that enables strict mTLS for all workloads, but leaves the port `8080` to
+// Policy that enables strict mTLS for all `finance` workloads, but leaves the port `8080` to
 // plaintext. Note the port value in the `portLevelMtls` field refers to the port
 // of the workload, not the port of the Kubernetes service.
 // ```yaml
@@ -218,6 +221,9 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 // +kubetype-gen:groupVersion=security.istio.io/v1beta1
 // +genclient
 // +k8s:deepcopy-gen=true
+// -->
+// <!-- istio code generation tags
+// +istio.io/sync-start
 // -->
 type PeerAuthentication struct {
 	state         protoimpl.MessageState

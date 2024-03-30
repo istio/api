@@ -370,7 +370,6 @@ func (ServerTLSSettings_TLSProtocol) EnumDescriptor() ([]byte, []int) {
 // <!-- crd generation tags
 // +cue-gen:Gateway:groupName:networking.istio.io
 // +cue-gen:Gateway:version:v1alpha3
-// +cue-gen:Gateway:storageVersion
 // +cue-gen:Gateway:annotations:helm.sh/resource-policy=keep
 // +cue-gen:Gateway:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:Gateway:subresource:status

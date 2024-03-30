@@ -1,0 +1,8 @@
+apiVersion: release-notes/v2
+kind: feature
+area: telemetry
+issue:
+  - 50001
+releaseNotes:
+  - |
+    **Added** allow configuring Dynatrace Sampler in the OpenTelemetryTracingProvider

@@ -186,7 +186,6 @@ func (HTTPRedirect_RedirectPortSelection) EnumDescriptor() ([]byte, []int) {
 // <!-- crd generation tags
 // +cue-gen:VirtualService:groupName:networking.istio.io
 // +cue-gen:VirtualService:version:v1alpha3
-// +cue-gen:VirtualService:storageVersion
 // +cue-gen:VirtualService:annotations:helm.sh/resource-policy=keep
 // +cue-gen:VirtualService:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:VirtualService:subresource:status
