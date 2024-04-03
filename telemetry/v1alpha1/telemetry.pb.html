@@ -90,7 +90,7 @@ spec:
         literal:
           value: &quot;foo&quot;
 </code></pre>
-<p>Policy to disable server-side metrics for Stackdriver for an entire mesh:</p>
+<p>Policy to disable server-side metrics for Prometheus for an entire mesh:</p>
 <pre><code class="language-yaml">apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
 metadata:
@@ -100,7 +100,7 @@ spec:
   # no selector specified, applies to all workloads
   metrics:
   - providers:
-    - name: stackdriver
+    - name: prometheus
     overrides:
     - match:
         metric: ALL_METRICS
