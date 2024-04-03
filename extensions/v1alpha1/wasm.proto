@@ -414,6 +414,9 @@ enum PluginPhase {
 
   // Insert plugin before Istio stats filters and after Istio authorization filters.
   STATS = 3;
+
+  // Insert plugin before Istio metadata filters, This will generally be at the start of the filter chain.
+  MetadataExchange = 4;
 }
 
 // The pull behaviour to be applied when fetching a Wam module,
