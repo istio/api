@@ -90,6 +90,21 @@
 //     randomSamplingPercentage: 10.00
 // ```
 //
+// Policy to tailor the zipkin provider to sample traces from Client workloads only:
+// ```yaml
+// apiVersion: telemetry.istio.io/v1alpha1
+// kind: Telemetry
+// metadata:
+//   name: mesh-default
+//   namespace: istio-system
+// spec:
+//   # no selector specified, applies to all workloads
+//   tracing:
+//   - match: CLIENT
+//   - providers:
+//     - name: "zipkin"
+// ```
+//
 // Policy to add a custom tag from a literal value:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1
