@@ -101,13 +101,13 @@ spec:
                 description: |-
                   Determines where in the filter chain this `WasmPlugin` is to be injected.
 
-                  Valid Options: AUTHN, AUTHZ, STATS, MetadataExchange
+                  Valid Options: AUTHN, AUTHZ, STATS, METADATA_EXCHANGE
                 enum:
                 - UNSPECIFIED_PHASE
                 - AUTHN
                 - AUTHZ
                 - STATS
-                - MetadataExchange
+                - METADATA_EXCHANGE
                 type: string
               pluginConfig:
                 description: The configuration that will be passed on to the plugin.
