@@ -19,11 +19,12 @@ import "google/api/field_behavior.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 
-// $schema: istio.telemetry.v1alpha1.Telemetry
+// $schema: istio.telemetry.v1.Telemetry
 // $title: Telemetry
 // $description: Telemetry configuration for workloads.
 // $location: https://istio.io/docs/reference/config/telemetry.html
-// $aliases: [/docs/reference/config/telemetry/v1alpha1/telemetry]
+// $aliases: [/docs/reference/config/telemetry/v1/telemetry]
+// $mode: none
 
 // Telemetry defines how the telemetry is generated for workloads within a mesh.
 //
@@ -43,9 +44,10 @@ import "google/protobuf/wrappers.proto";
 // 3. Root namespace configuration
 //
 // ## Examples
+// 
 // Policy to enable random sampling for 10% of traffic:
 // ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
+// apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
 // metadata:
 //   name: mesh-default
@@ -59,7 +61,7 @@ import "google/protobuf/wrappers.proto";
 // Policy to disable trace reporting for the `foo` workload (note: tracing
 // context will still be propagated):
 // ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
+// apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
 // metadata:
 //   name: foo-tracing
@@ -74,7 +76,7 @@ import "google/protobuf/wrappers.proto";
 //
 // Policy to select the alternate zipkin provider for trace reporting:
 // ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
+// apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
 // metadata:
 //   name: foo-tracing-alternate
@@ -106,7 +108,7 @@ import "google/protobuf/wrappers.proto";
 //
 // Policy to add a custom tag from a literal value:
 // ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
+// apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
 // metadata:
 //   name: mesh-default
@@ -123,7 +125,7 @@ import "google/protobuf/wrappers.proto";
 //
 // Policy to disable server-side metrics for Prometheus for an entire mesh:
 // ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
+// apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
 // metadata:
 //   name: mesh-default
@@ -142,7 +144,7 @@ import "google/protobuf/wrappers.proto";
 //
 // Policy to add dimensions to all Prometheus metrics for the `foo` namespace:
 // ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
+// apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
 // metadata:
 //   name: namespace-metrics
@@ -164,7 +166,7 @@ import "google/protobuf/wrappers.proto";
 // Policy to remove the `response_code` dimension on some Prometheus metrics for
 // the `bar.foo` workload:
 // ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
+// apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
 // metadata:
 //   name: remove-response-code
@@ -201,7 +203,7 @@ import "google/protobuf/wrappers.proto";
 //
 // Policy to enable access logging for the entire mesh:
 // ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
+// apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
 // metadata:
 //   name: mesh-default
@@ -219,7 +221,7 @@ import "google/protobuf/wrappers.proto";
 //
 // Policy to disable access logging for the `foo` namespace:
 // ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
+// apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
 // metadata:
 //   name: namespace-no-log
@@ -230,14 +232,13 @@ import "google/protobuf/wrappers.proto";
 //   - disabled: true
 // ```
 //
-package istio.telemetry.v1alpha1;
+package istio.telemetry.v1;
 
-option go_package = "istio.io/api/telemetry/v1alpha1";
+option go_package = "istio.io/api/telemetry/v1";
 
 // <!-- crd generation tags
 // +cue-gen:Telemetry:groupName:telemetry.istio.io
-// +cue-gen:Telemetry:version:v1alpha1
-// +cue-gen:Telemetry:storageVersion
+// +cue-gen:Telemetry:version:v1
 // +cue-gen:Telemetry:annotations:helm.sh/resource-policy=keep
 // +cue-gen:Telemetry:labels:app=istio-pilot,chart=istio,istio=telemetry,heritage=Tiller,release=istio
 // +cue-gen:Telemetry:subresource:status
@@ -254,12 +255,13 @@ option go_package = "istio.io/api/telemetry/v1alpha1";
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=telemetry.istio.io/v1alpha1
+// +kubetype-gen:groupVersion=telemetry.istio.io/v1
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
+// -->
 // <!-- istio code generation tags
-// +istio.io/sync-start
+// +istio.io/sync-from:telemetry/v1alpha1/telemetry.proto
 // -->
 message Telemetry {
   // Optional. The selector decides where to apply the Telemetry policy.
