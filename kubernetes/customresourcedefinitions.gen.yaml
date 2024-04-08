@@ -12207,6 +12207,9 @@ spec:
                       nullable: true
                       type: number
                     useRequestIdForTraceSampling:
+                      description: This value is true by default; Envoy decides whether
+                        or not to sample based on the value of the Request ID generated
+                        by Ingress in distributed tracing.
                       nullable: true
                       type: boolean
                   type: object
@@ -12516,6 +12519,9 @@ spec:
                       nullable: true
                       type: number
                     useRequestIdForTraceSampling:
+                      description: This value is true by default; Envoy decides whether
+                        or not to sample based on the value of the Request ID generated
+                        by Ingress in distributed tracing.
                       nullable: true
                       type: boolean
                   type: object

@@ -698,7 +698,7 @@ type Tracing struct {
 	// the Request ID is not in the Envoy format. [Trace Context
 	// Propagation](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/observability/tracing#trace-context-propagation)
 	// provides more information on Request ID handling.
-	// $hide_from_docs
+	//
 	// +cue-gen:Telemetry:releaseChannel:extended
 	UseRequestIdForTraceSampling *wrappers.BoolValue `protobuf:"bytes,6,opt,name=use_request_id_for_trace_sampling,json=useRequestIdForTraceSampling,proto3" json:"use_request_id_for_trace_sampling,omitempty"`
 }
