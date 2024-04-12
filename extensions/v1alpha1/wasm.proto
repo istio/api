@@ -243,19 +243,29 @@ message WasmPlugin {
   // namespace, it will be applied to all applicable workloads in any
   // namespace.
   //
-  // At most, only one of the selector or `targetRef` can be set for a given policy.
+  // At most, only one of `selector` or `targetRefs` can be set for a given policy.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
-  // Optional. The `targetRef` specifies the gateway the policy should be 
-  // applied to. The targeted resource specified will determine which 
-  // workloads the WasmPlugin applies to. The targeted resource must be 
-  // a `Gateway` in the group `gateway.networking.k8s.io`. The gateway
-  // must be in the same namespace as the policy.
-  //
-  // If the `targetRef` is not set, the policy is applied as defined by the selector.
-  // At most, only one of the selector or `targetRef` can be set for a given policy.
-  // Waypoint proxies will not respect selectors even if they match.
+  // $hide_from_docs
   istio.type.v1beta1.PolicyTargetReference targetRef = 15;
+
+  // Optional. The targetRef specifies the gateway the policy should be
+  // applied to. The targeted resource specified will determine which
+  // workloads the policy applies to.
+  //
+  // Currently, the following resource attachment types are supported:
+  // * `kind: Gateway` with `group: gateway.networking.k8s.io` in the same namespace.
+  //
+  // If not set, the policy is applied as defined by the selector.
+  // At most one of the selector and targetRefs can be set.
+  //
+  // NOTE: If you are using the `targetRefs` field in a multi-revision environment with Istio versions prior to 1.22,
+  // it is highly recommended that you pin the policy to a revision running 1.22+ via the `istio.io/rev` label.
+  // This is to prevent proxies connected to older control planes (that don't know about the `targetRefs` field)
+  // from misinterpreting the policy as namespace-wide during the upgrade process.
+  //
+  // NOTE: Waypoint proxies are required to use this field for policies to apply; `selector` policies will be ignored.
+  repeated istio.type.v1beta1.PolicyTargetReference targetRefs = 16;
 
   // URL of a Wasm module or OCI container. If no scheme is present,
   // defaults to `oci://`, referencing an OCI image. Other valid schemes
