@@ -217,18 +217,21 @@ same namespace as the Telemetry policy.</p>
 No
 </td>
 </tr>
-<tr id="Telemetry-targetRef">
-<td><code>targetRef</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#PolicyTargetReference">PolicyTargetReference</a></code></td>
+<tr id="Telemetry-targetRefs">
+<td><code>targetRefs</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/workload-selector.html#PolicyTargetReference">PolicyTargetReference[]</a></code></td>
 <td>
-<p>Optional. The <code>targetRef</code> specifies the gateway the policy should be
+<p>Optional. The targetRef specifies the gateway the policy should be
 applied to. The targeted resource specified will determine which
 workloads the telemetry policy applies to. The targeted resource
-must be a Kubernetes gateway. The resource must be in the same namespace as
-the Telemetry policy.</p>
+must be a <code>Gateway</code> in the group <code>gateway.networking.k8s.io</code>. The
+gateway must be in the same namespace as the telemetry policy.</p>
 <p>If not set, the policy is applied as defined by the selector.
-At most, only one of the selector or <code>targetRef</code> can be set for a given policy.
-Waypoint proxies will not respect selectors even if they match.</p>
+At most one of the selector and targetRefs can be set.</p>
+<p>NOTE: If you are using the <code>targetRefs</code> field in a multi-revision environment with Istio versions prior to 1.20,
+it is highly recommended that you pin the authorization policy to a revision running 1.20+ via the istio.io/rev label.
+This is to prevent proxies connected to older istiod control planes (that don&rsquo;t know about the targetRef field)
+from misinterpreting the policy as namespace-wide during the upgrade process.</p>
 
 </td>
 <td>
