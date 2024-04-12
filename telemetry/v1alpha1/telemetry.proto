@@ -269,16 +269,23 @@ message Telemetry {
   // At most, only one of the selector or targetRef can be set for a given policy.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
-  // Optional. The `targetRef` specifies the gateway the policy should be 
-  // applied to. The targeted resource specified will determine which 
+  // $hide_from_docs
+  istio.type.v1beta1.PolicyTargetReference targetRef = 5;
+
+  // Optional. The targetRef specifies the gateway the policy should be
+  // applied to. The targeted resource specified will determine which
   // workloads the telemetry policy applies to. The targeted resource
-  // must be a Kubernetes gateway. The resource must be in the same namespace as
-  // the Telemetry policy.
+  // must be a `Gateway` in the group `gateway.networking.k8s.io`. The
+  // gateway must be in the same namespace as the telemetry policy.
   //
   // If not set, the policy is applied as defined by the selector.
-  // At most, only one of the selector or `targetRef` can be set for a given policy.
-  // Waypoint proxies will not respect selectors even if they match.
-  istio.type.v1beta1.PolicyTargetReference targetRef = 5;
+  // At most one of the selector and targetRefs can be set.
+  //
+  // NOTE: If you are using the `targetRefs` field in a multi-revision environment with Istio versions prior to 1.20,
+  // it is highly recommended that you pin the authorization policy to a revision running 1.20+ via the istio.io/rev label.
+  // This is to prevent proxies connected to older istiod control planes (that don't know about the targetRef field)
+  // from misinterpreting the policy as namespace-wide during the upgrade process.
+  repeated istio.type.v1beta1.PolicyTargetReference targetRefs = 6;
 
   // Optional. Tracing configures the tracing behavior for all
   // selected workloads.
