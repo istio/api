@@ -16,6 +16,7 @@ syntax = "proto3";
 
 import "google/protobuf/struct.proto";
 import "networking/v1alpha3/sidecar.proto";
+import "type/v1beta1/selector.proto";
 
 // $schema: istio.networking.v1alpha3.EnvoyFilter
 // $title: Envoy Filter
@@ -846,6 +847,24 @@ message EnvoyFilter {
   // in the config root namespace, it will be applied to all applicable
   // workloads in any namespace.
   WorkloadSelector workload_selector = 3;
+
+  // Optional. The targetRef specifies the gateway the policy should be
+  // applied to. The targeted resource specified will determine which
+  // workloads the policy applies to.
+  //
+  // Currently, the following resource attachment types are supported:
+  // * `kind: Gateway` with `group: gateway.networking.k8s.io` in the same namespace.
+  //
+  // If not set, the policy is applied as defined by the selector.
+  // At most one of the selector and targetRefs can be set.
+  //
+  // NOTE: If you are using the `targetRefs` field in a multi-revision environment with Istio versions prior to 1.22,
+  // it is highly recommended that you pin the policy to a revision running 1.22+ via the `istio.io/rev` label.
+  // This is to prevent proxies connected to older control planes (that don't know about the `targetRefs` field)
+  // from misinterpreting the policy as namespace-wide during the upgrade process.
+  //
+  // NOTE: Waypoint proxies are required to use this field for policies to apply; `selector` policies will be ignored.
+  repeated istio.type.v1beta1.PolicyTargetReference targetRefs = 6;
 
   // One or more patches with match conditions.
   repeated EnvoyConfigObjectPatch config_patches = 4;
