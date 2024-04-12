@@ -288,17 +288,20 @@ message AuthorizationPolicy {
 
   // Optional. The targetRef specifies the gateway the policy should be
   // applied to. The targeted resource specified will determine which
-  // workloads the authorization policy applies to. The targeted resource
-  // must be a `Gateway` in the group `gateway.networking.k8s.io`. The
-  // gateway must be in the same namespace as the authorization policy.
+  // workloads the policy applies to.
+  //
+  // Currently, the following resource attachment types are supported:
+  // * `kind: Gateway` with `group: gateway.networking.k8s.io` in the same namespace.
   //
   // If not set, the policy is applied as defined by the selector.
   // At most one of the selector and targetRefs can be set.
   //
-  // NOTE: If you are using the `targetRefs` field in a multi-revision environment with Istio versions prior to 1.20,
-  // it is highly recommended that you pin the authorization policy to a revision running 1.20+ via the istio.io/rev label.
-  // This is to prevent proxies connected to older istiod control planes (that don't know about the targetRef field)
+  // NOTE: If you are using the `targetRefs` field in a multi-revision environment with Istio versions prior to 1.22,
+  // it is highly recommended that you pin the policy to a revision running 1.22+ via the `istio.io/rev` label.
+  // This is to prevent proxies connected to older control planes (that don't know about the `targetRefs` field)
   // from misinterpreting the policy as namespace-wide during the upgrade process.
+  //
+  // NOTE: Waypoint proxies are required to use this field for policies to apply; `selector` policies will be ignored.
   repeated istio.type.v1beta1.PolicyTargetReference targetRefs = 6;
 
   // Optional. A list of rules to match the request. A match occurs when at least one rule matches the request.
