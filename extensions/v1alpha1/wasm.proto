@@ -243,7 +243,7 @@ message WasmPlugin {
   // namespace, it will be applied to all applicable workloads in any
   // namespace.
   //
-  // At most, only one of the selector or `targetRef` can be set for a given policy.
+  // At most, only one of `selector` or `targetRefs` can be set for a given policy.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
   // $hide_from_docs

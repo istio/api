@@ -550,7 +550,7 @@ type WasmPlugin struct {
 	// namespace, it will be applied to all applicable workloads in any
 	// namespace.
 	//
-	// At most, only one of the selector or `targetRef` can be set for a given policy.
+	// At most, only one of `selector` or `targetRefs` can be set for a given policy.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
 	// $hide_from_docs
 	TargetRef *v1beta1.PolicyTargetReference `protobuf:"bytes,15,opt,name=targetRef,proto3" json:"targetRef,omitempty"`

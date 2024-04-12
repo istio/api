@@ -310,7 +310,9 @@ type RequestAuthentication struct {
 	// in the same namespace as the request authentication policy. If the request authentication policy is in the root namespace,
 	// the selector will additionally match with workloads in all namespaces.
 	//
-	// If not set, the selector will match all workloads. At most one of the selector and targetRef can be set.
+	// If not set, the selector will match all workloads.
+	//
+	// At most one of `selector` or `targetRefs` can be set for a given policy.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
 	// $hide_from_docs
 	TargetRef *v1beta1.PolicyTargetReference `protobuf:"bytes,3,opt,name=targetRef,proto3" json:"targetRef,omitempty"`

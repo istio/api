@@ -251,7 +251,9 @@ message RequestAuthentication {
   // in the same namespace as the request authentication policy. If the request authentication policy is in the root namespace,
   // the selector will additionally match with workloads in all namespaces.
   //
-  // If not set, the selector will match all workloads. At most one of the selector and targetRef can be set.
+  // If not set, the selector will match all workloads.
+  //
+  // At most one of `selector` or `targetRefs` can be set for a given policy.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
   // $hide_from_docs

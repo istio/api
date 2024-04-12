@@ -558,7 +558,7 @@ type Telemetry struct {
 	// If not set, the policy will be applied to all workloads in the
 	// same namespace as the policy.
 	//
-	// At most, only one of `selector` or `targetRefs` can be set for a given policy.
+	// At most one of `selector` or `targetRefs` can be set for a given policy.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
 	// $hide_from_docs
 	TargetRef *v1beta1.PolicyTargetReference `protobuf:"bytes,5,opt,name=targetRef,proto3" json:"targetRef,omitempty"`

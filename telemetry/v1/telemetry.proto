@@ -268,7 +268,7 @@ message Telemetry {
   // If not set, the policy will be applied to all workloads in the
   // same namespace as the policy.
   //
-  // At most, only one of `selector` or `targetRefs` can be set for a given policy.
+  // At most one of `selector` or `targetRefs` can be set for a given policy.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
   // $hide_from_docs
