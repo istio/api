@@ -7,4 +7,4 @@ issue:
 
 releaseNotes:
   - |
-    **Enabled** the CRDs to be installed as part of the Standard and/or Stable release channel. 
+    **Added** the `releaseChannel:extended` flag to non-GA features and APIs. 

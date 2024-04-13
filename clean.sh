@@ -16,7 +16,7 @@
 
 set -eu
 
-PATTERNS="_deepcopy.gen.go .gen.json .pb.go .pb.html _json.gen.go customresourcedefinitions.gen.yaml extended.gen.yaml stable.gen.yaml"
+PATTERNS="_deepcopy.gen.go .gen.json .pb.go .pb.html _json.gen.go customresourcedefinitions.gen.yaml"
 shopt -s globstar
 
 for p in $PATTERNS; do

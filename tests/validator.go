@@ -213,7 +213,7 @@ func NewValidatorFromCRDs(crds ...apiextensions.CustomResourceDefinition) (*Vali
 }
 
 func NewIstioValidator(t *testing.T) *Validator {
-	v, err := NewValidatorFromFiles(filepath.Join("../kubernetes/extended.gen.yaml"), filepath.Join("../kubernetes/stable.gen.yaml"))
+	v, err := NewValidatorFromFiles(filepath.Join("../kubernetes/customresourcedefinitions.gen.yaml"))
 	if err != nil {
 		t.Fatal(err)
 	}

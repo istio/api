@@ -247,15 +247,7 @@ message WasmPlugin {
   // At most, only one of `selector` or `targetRefs` can be set for a given policy.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
-  // Optional. The `targetRef` specifies the gateway the policy should be
-  // applied to. The targeted resource specified will determine which
-  // workloads the WasmPlugin applies to. The targeted resource must be
-  // a `Gateway` in the group `gateway.networking.k8s.io`. The gateway
-  // must be in the same namespace as the policy.
-  //
-  // If the `targetRef` is not set, the policy is applied as defined by the selector.
-  // At most, only one of the selector or `targetRef` can be set for a given policy.
-  // Waypoint proxies will not respect selectors even if they match.
+  // $hide_from_docs
   istio.type.v1beta1.PolicyTargetReference targetRef = 15;
 
   // Optional. The targetRef specifies the gateway the policy should be

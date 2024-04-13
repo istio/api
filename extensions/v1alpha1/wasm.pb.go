@@ -524,7 +524,7 @@ func (FailStrategy) EnumDescriptor() ([]byte, []int) {
 // +cue-gen:WasmPlugin:subresource:status
 // +cue-gen:WasmPlugin:spec:required
 // +cue-gen:WasmPlugin:scope:Namespaced
-// +cue-gen:WasmPlugin:releaseChannel:standard
+// +cue-gen:WasmPlugin:releaseChannel:extended
 // +cue-gen:WasmPlugin:resource:categories=istio-io,extensions-istio-io
 // +cue-gen:WasmPlugin:preserveUnknownFields:pluginConfig
 // +cue-gen:WasmPlugin:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp

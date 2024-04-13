@@ -269,11 +269,15 @@ message Telemetry {
   // At most one of `selector` or `targetRefs` can be set for a given policy.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
-  // Optional. The `targetRef` specifies the gateway the policy should be
+  // $hide_from_docs
+  istio.type.v1beta1.PolicyTargetReference targetRef = 5;
+
+  // Optional. The targetRef specifies the gateway the policy should be
   // applied to. The targeted resource specified will determine which
-  // workloads the telemetry policy applies to. The targeted resource
-  // must be a Kubernetes gateway. The resource must be in the same namespace as
-  // the Telemetry policy.
+  // workloads the policy applies to.
+  //
+  // Currently, the following resource attachment types are supported:
+  // * `kind: Gateway` with `group: gateway.networking.k8s.io` in the same namespace.
   //
   // If not set, the policy is applied as defined by the selector.
   // At most one of the selector and targetRefs can be set.
