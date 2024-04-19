@@ -804,7 +804,6 @@ type Operation struct {
 	//
 	// If a path in the list contains the `{*}` or `{**}` path template operator, it will be interpreted as an [Envoy Uri Template](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/path/match/uri_template/v3/uri_template_match.proto).
 	// To be a valid path template, the path must not contain `*`, `{`, or `}` outside of a supported operator. No other characters are allowed in the path segment with the path template operator.
-	// If the path is not a valid path template, it will be interpreted as a string match.
 	// - `{*}` matches a single glob that cannot extend beyond a path segment.
 	// - `{**}` matches zero or more globs. If a path contains `{**}`, it must be the last operator.
 	//

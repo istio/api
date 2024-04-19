@@ -599,8 +599,7 @@ No
 for details of the path normalization.
 For gRPC service, this will be the fully-qualified name in the form of <code>/package.service/method</code>.</p>
 <p>If a path in the list contains the <code>{*}</code> or <code>{**}</code> path template operator, it will be interpreted as an <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/path/match/uri_template/v3/uri_template_match.proto">Envoy Uri Template</a>.
-To be a valid path template, the path must not contain <code>*</code>, <code>{</code>, or <code>}</code> outside of a supported operator. No other characters are allowed in the path segment with the path template operator.
-If the path is not a valid path template, it will be interpreted as a string match.</p>
+To be a valid path template, the path must not contain <code>*</code>, <code>{</code>, or <code>}</code> outside of a supported operator. No other characters are allowed in the path segment with the path template operator.</p>
 <ul>
 <li><code>{*}</code> matches a single glob that cannot extend beyond a path segment.</li>
 <li><code>{**}</code> matches zero or more globs. If a path contains <code>{**}</code>, it must be the last operator.</li>
