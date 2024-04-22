@@ -803,6 +803,20 @@ type Operation struct {
 	// for details of the path normalization.
 	// For gRPC service, this will be the fully-qualified name in the form of `/package.service/method`.
 	//
+	// If a path in the list contains the `{*}` or `{**}` path template operator, it will be interpreted as an [Envoy Uri Template](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/path/match/uri_template/v3/uri_template_match.proto).
+	// To be a valid path template, the path must not contain `*`, `{`, or `}` outside of a supported operator. No other characters are allowed in the path segment with the path template operator.
+	// - `{*}` matches a single glob that cannot extend beyond a path segment.
+	// - `{**}` matches zero or more globs. If a path contains `{**}`, it must be the last operator.
+	//
+	// Examples:
+	// - `/foo/{*}` matches `/foo/bar` but not `/foo/bar/baz`
+	// - `/foo/{**}/` matches `/foo/bar/`, `/foo/bar/baz.txt`, and `/foo//` but not `/foo/bar`
+	// - `/foo/{*}/bar/{**}` matches `/foo/buzz/bar/` and `/foo/buzz/bar/baz`
+	// - `/*/baz/{*}“ is not a valid path template since it includes `*` outside of a supported operator
+	// - `/**/baz/{*}“ is not a valid path template since it includes `**` outside of a supported operator
+	// - `/{**}/foo/{*}` is not a valid path template since `{**}` is not the last operator
+	// - `/foo/{*}.txt` is invalid since there are characters other than `{*}` in the path segment
+	//
 	// If not set, any path is allowed. Must be used only with HTTP.
 	Paths []string `protobuf:"bytes,4,rep,name=paths,proto3" json:"paths,omitempty"`
 	// Optional. A list of negative match of paths.
