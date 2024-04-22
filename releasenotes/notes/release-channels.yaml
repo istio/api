@@ -1,0 +1,10 @@
+apiVersion: release-notes/v2
+kind: feature
+area: installation
+
+issue: 
+  - https://github.com/istio/enhancements/issues/173 
+
+releaseNotes:
+  - |
+    **Added** the `releaseChannel:extended` flag to non-GA features and APIs. 
