@@ -7905,6 +7905,12 @@ spec:
                           items:
                             type: string
                           type: array
+                        forwardNotMatchingPreflights:
+                          description: Indicates whether preflight requests not matching
+                            the configured allowed origin should be forwarded to the
+                            upstream.
+                          nullable: true
+                          type: boolean
                         maxAge:
                           description: Specifies how long the results of a preflight
                             request can be cached.
@@ -8848,6 +8854,12 @@ spec:
                           items:
                             type: string
                           type: array
+                        forwardNotMatchingPreflights:
+                          description: Indicates whether preflight requests not matching
+                            the configured allowed origin should be forwarded to the
+                            upstream.
+                          nullable: true
+                          type: boolean
                         maxAge:
                           description: Specifies how long the results of a preflight
                             request can be cached.
@@ -9791,6 +9803,12 @@ spec:
                           items:
                             type: string
                           type: array
+                        forwardNotMatchingPreflights:
+                          description: Indicates whether preflight requests not matching
+                            the configured allowed origin should be forwarded to the
+                            upstream.
+                          nullable: true
+                          type: boolean
                         maxAge:
                           description: Specifies how long the results of a preflight
                             request can be cached.
