@@ -1369,9 +1369,9 @@ message CorsPolicy {
   google.protobuf.BoolValue allow_credentials = 6;
 
   // Indicates whether preflight requests not matching the configured 
-  // allowed origin should be forwarded to the upstream. 
-  // Default is true for compatibility.
-  google.protobuf.BoolValue forward_not_matching_preflights = 8;
+  // allowed origin shouldn't be forwarded to the upstream. 
+  // Default is false.
+  google.protobuf.BoolValue unforward_not_matching_preflights = 8;
 }
 
 // HTTPFaultInjection can be used to specify one or more faults to inject

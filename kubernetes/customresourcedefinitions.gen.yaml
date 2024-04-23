@@ -7905,16 +7905,16 @@ spec:
                           items:
                             type: string
                           type: array
-                        forwardNotMatchingPreflights:
-                          description: Indicates whether preflight requests not matching
-                            the configured allowed origin should be forwarded to the
-                            upstream.
-                          nullable: true
-                          type: boolean
                         maxAge:
                           description: Specifies how long the results of a preflight
                             request can be cached.
                           type: string
+                        unforwardNotMatchingPreflights:
+                          description: Indicates whether preflight requests not matching
+                            the configured allowed origin shouldn't be forwarded to
+                            the upstream.
+                          nullable: true
+                          type: boolean
                       type: object
                     delegate:
                       description: Delegate is used to specify the particular VirtualService
@@ -8854,16 +8854,16 @@ spec:
                           items:
                             type: string
                           type: array
-                        forwardNotMatchingPreflights:
-                          description: Indicates whether preflight requests not matching
-                            the configured allowed origin should be forwarded to the
-                            upstream.
-                          nullable: true
-                          type: boolean
                         maxAge:
                           description: Specifies how long the results of a preflight
                             request can be cached.
                           type: string
+                        unforwardNotMatchingPreflights:
+                          description: Indicates whether preflight requests not matching
+                            the configured allowed origin shouldn't be forwarded to
+                            the upstream.
+                          nullable: true
+                          type: boolean
                       type: object
                     delegate:
                       description: Delegate is used to specify the particular VirtualService
@@ -9803,16 +9803,16 @@ spec:
                           items:
                             type: string
                           type: array
-                        forwardNotMatchingPreflights:
-                          description: Indicates whether preflight requests not matching
-                            the configured allowed origin should be forwarded to the
-                            upstream.
-                          nullable: true
-                          type: boolean
                         maxAge:
                           description: Specifies how long the results of a preflight
                             request can be cached.
                           type: string
+                        unforwardNotMatchingPreflights:
+                          description: Indicates whether preflight requests not matching
+                            the configured allowed origin shouldn't be forwarded to
+                            the upstream.
+                          nullable: true
+                          type: boolean
                       type: object
                     delegate:
                       description: Delegate is used to specify the particular VirtualService
