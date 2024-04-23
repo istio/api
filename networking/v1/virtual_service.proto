@@ -1370,7 +1370,7 @@ message CorsPolicy {
   // Indicates whether preflight requests not matching the configured 
   // allowed origin shouldn't be forwarded to the upstream. 
   // Default is false.
-  google.protobuf.BoolValue unforward_not_matching_preflights = 8;
+  google.protobuf.BoolValue donot_forward_unmatched_preflights = 8;
 }
 
 // HTTPFaultInjection can be used to specify one or more faults to inject
