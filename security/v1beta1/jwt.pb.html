@@ -89,7 +89,7 @@ Discovery</a> of
 the issuer or (b) inferred from the email domain of the issuer (e.g. a
 Google service account).</p>
 <p>Example: <code>https://www.googleapis.com/oauth2/v1/certs</code></p>
-<p>Note: Only one of <code>jwksUri</code> and <code>jwks</code> should be used.</p>
+<p>Note: Only one of <code>jwksUri</code>, <code>jwks</code> and <code>jwksFile</code> should be used.</p>
 
 </td>
 <td>
@@ -102,7 +102,19 @@ No
 <td>
 <p>JSON Web Key Set of public keys to validate signature of the JWT.
 See <a href="https://auth0.com/docs/jwks">https://auth0.com/docs/jwks</a>.</p>
-<p>Note: Only one of <code>jwksUri</code> and <code>jwks</code> should be used.</p>
+<p>Note: Only one of <code>jwksUri</code>, <code>jwks</code> and <code>jwksFile</code> should be used.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="JWTRule-jwks_file">
+<td><code>jwksFile</code></td>
+<td><code>string</code></td>
+<td>
+<p>Local file of the provider&rsquo;s public key set to validate signature of the JWT.</p>
+<p>Note: Only one of <code>jwksUri</code>, <code>jwks</code> and <code>jwksFile</code> should be used.</p>
 
 </td>
 <td>

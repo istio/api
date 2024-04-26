@@ -1,0 +1,8 @@
+apiVersion: release-notes/v2
+kind: feature
+area: security
+issue:
+  - 50196
+releaseNotes:
+  - |
+    **Added** support for configuring JWKS using local file.

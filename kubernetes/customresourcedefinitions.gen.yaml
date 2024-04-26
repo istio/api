@@ -12145,6 +12145,10 @@ spec:
                       description: URL of the provider's public key set to validate
                         signature of the JWT.
                       type: string
+                    jwksFile:
+                      description: Local file of the provider's public key set to
+                        validate signature of the JWT.
+                      type: string
                     jwksUri:
                       description: URL of the provider's public key set to validate
                         signature of the JWT.
@@ -12285,6 +12289,10 @@ spec:
                     jwks_uri:
                       description: URL of the provider's public key set to validate
                         signature of the JWT.
+                      type: string
+                    jwksFile:
+                      description: Local file of the provider's public key set to
+                        validate signature of the JWT.
                       type: string
                     jwksUri:
                       description: URL of the provider's public key set to validate

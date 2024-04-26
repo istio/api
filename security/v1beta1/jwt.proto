@@ -93,15 +93,20 @@ message JWTRule {
   //
   // Example: `https://www.googleapis.com/oauth2/v1/certs`
   //
-  // Note: Only one of `jwksUri` and `jwks` should be used.
+  // Note: Only one of `jwksUri`, `jwks` and `jwksFile` should be used.
   // +kubebuilder:altName=jwks_uri
   string jwks_uri = 3;
 
   // JSON Web Key Set of public keys to validate signature of the JWT.
   // See https://auth0.com/docs/jwks.
   //
-  // Note: Only one of `jwksUri` and `jwks` should be used.
+  // Note: Only one of `jwksUri`, `jwks` and `jwksFile` should be used.
   string jwks = 10;
+
+  // Local file of the provider's public key set to validate signature of the JWT.
+  //
+  // Note: Only one of `jwksUri`, `jwks` and `jwksFile` should be used.
+  string jwks_file = 14;
 
   // The next two fields define how to extract the JWT from an HTTP request.
   //
@@ -183,7 +188,7 @@ message JWTRule {
   google.protobuf.Duration timeout = 13;
 
   // $hide_from_docs
-  // Next available field number: 14
+  // Next available field number: 15
 }
 
 // This message specifies a header location to extract JWT token.
