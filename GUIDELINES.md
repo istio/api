@@ -246,6 +246,14 @@ major versions and releases, such as `v1alpha`, `v2beta`, or
 a lack of a conversion webhook, the schema of all versions of an API
 must be strictly identical.
 
+New APIs progress through feature stages according to our [policy](https://istio.io/latest/docs/releases/feature-stages/) before achieving stability, `v1`. When adding a new API, follow these steps:
+- Add `// +cue-gen:<Replace with API Name>:releaseChannel:extended` tag to the proto message definition of the API.
+- Update the stable validation policy to exclude the new API in the [base chart](https://github.com/istio/istio/blob/199f76a601fc4520b675169d4b53503edfaa34e3/manifests/charts/base/templates/validatingadmissionpolicy.yaml#L31) and [istio-discovery chart](https://github.com/istio/istio/blob/199f76a601fc4520b675169d4b53503edfaa34e3/manifests/charts/istio-control/istio-discovery/templates/validatingadmissionpolicy.yaml#L37) manifests.
+
+Similarly, new API fields added to a stable `v1` API independently progress through feature stages based on our [policy](https://istio.io/latest/docs/releases/feature-stages/) before achieving stability. When adding a new API field to a stable `v1` API, follow these steps:
+- Add `// +cue-gen:<Replace with API Name>:releaseChannel:extended` tag to the proto field definition.
+- Update the stable validation policy to exclude the new field in the [base chart](https://github.com/istio/istio/blob/199f76a601fc4520b675169d4b53503edfaa34e3/manifests/charts/base/templates/validatingadmissionpolicy.yaml#L31) and [istio-discovery chart](https://github.com/istio/istio/blob/199f76a601fc4520b675169d4b53503edfaa34e3/manifests/charts/istio-control/istio-discovery/templates/validatingadmissionpolicy.yaml#L37) manifests.
+
 Deprecating a feature in an API release is allowed by following
 the applicable deprecation process. The reason to allow
 deprecation of individual features in a release is that it is
