@@ -476,6 +476,18 @@ spec:
                                 httpHeaderName:
                                   description: Hash based on a specific HTTP header.
                                   type: string
+                                httpHeaderRegexRewrite:
+                                  description: Only applicable if hash_key is set
+                                    to http_header_name.
+                                  properties:
+                                    match:
+                                      description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                      type: string
+                                    rewrite:
+                                      description: The string that should replace
+                                        into matching portions of original URI.
+                                      type: string
+                                  type: object
                                 httpQueryParameterName:
                                   description: Hash based on a specific HTTP query
                                     parameter.
@@ -787,6 +799,19 @@ spec:
                                         description: Hash based on a specific HTTP
                                           header.
                                         type: string
+                                      httpHeaderRegexRewrite:
+                                        description: Only applicable if hash_key is
+                                          set to http_header_name.
+                                        properties:
+                                          match:
+                                            description: RE2 style regex-based match
+                                              (https://github.com/google/re2/wiki/Syntax).
+                                            type: string
+                                          rewrite:
+                                            description: The string that should replace
+                                              into matching portions of original URI.
+                                            type: string
+                                        type: object
                                       httpQueryParameterName:
                                         description: Hash based on a specific HTTP
                                           query parameter.
@@ -1255,6 +1280,17 @@ spec:
                           httpHeaderName:
                             description: Hash based on a specific HTTP header.
                             type: string
+                          httpHeaderRegexRewrite:
+                            description: Only applicable if hash_key is set to http_header_name.
+                            properties:
+                              match:
+                                description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                type: string
+                              rewrite:
+                                description: The string that should replace into matching
+                                  portions of original URI.
+                                type: string
+                            type: object
                           httpQueryParameterName:
                             description: Hash based on a specific HTTP query parameter.
                             type: string
@@ -1559,6 +1595,18 @@ spec:
                                 httpHeaderName:
                                   description: Hash based on a specific HTTP header.
                                   type: string
+                                httpHeaderRegexRewrite:
+                                  description: Only applicable if hash_key is set
+                                    to http_header_name.
+                                  properties:
+                                    match:
+                                      description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                      type: string
+                                    rewrite:
+                                      description: The string that should replace
+                                        into matching portions of original URI.
+                                      type: string
+                                  type: object
                                 httpQueryParameterName:
                                   description: Hash based on a specific HTTP query
                                     parameter.
@@ -2083,6 +2131,18 @@ spec:
                                 httpHeaderName:
                                   description: Hash based on a specific HTTP header.
                                   type: string
+                                httpHeaderRegexRewrite:
+                                  description: Only applicable if hash_key is set
+                                    to http_header_name.
+                                  properties:
+                                    match:
+                                      description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                      type: string
+                                    rewrite:
+                                      description: The string that should replace
+                                        into matching portions of original URI.
+                                      type: string
+                                  type: object
                                 httpQueryParameterName:
                                   description: Hash based on a specific HTTP query
                                     parameter.
@@ -2394,6 +2454,19 @@ spec:
                                         description: Hash based on a specific HTTP
                                           header.
                                         type: string
+                                      httpHeaderRegexRewrite:
+                                        description: Only applicable if hash_key is
+                                          set to http_header_name.
+                                        properties:
+                                          match:
+                                            description: RE2 style regex-based match
+                                              (https://github.com/google/re2/wiki/Syntax).
+                                            type: string
+                                          rewrite:
+                                            description: The string that should replace
+                                              into matching portions of original URI.
+                                            type: string
+                                        type: object
                                       httpQueryParameterName:
                                         description: Hash based on a specific HTTP
                                           query parameter.
@@ -2862,6 +2935,17 @@ spec:
                           httpHeaderName:
                             description: Hash based on a specific HTTP header.
                             type: string
+                          httpHeaderRegexRewrite:
+                            description: Only applicable if hash_key is set to http_header_name.
+                            properties:
+                              match:
+                                description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                type: string
+                              rewrite:
+                                description: The string that should replace into matching
+                                  portions of original URI.
+                                type: string
+                            type: object
                           httpQueryParameterName:
                             description: Hash based on a specific HTTP query parameter.
                             type: string
@@ -3166,6 +3250,18 @@ spec:
                                 httpHeaderName:
                                   description: Hash based on a specific HTTP header.
                                   type: string
+                                httpHeaderRegexRewrite:
+                                  description: Only applicable if hash_key is set
+                                    to http_header_name.
+                                  properties:
+                                    match:
+                                      description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                      type: string
+                                    rewrite:
+                                      description: The string that should replace
+                                        into matching portions of original URI.
+                                      type: string
+                                  type: object
                                 httpQueryParameterName:
                                   description: Hash based on a specific HTTP query
                                     parameter.
@@ -3690,6 +3786,18 @@ spec:
                                 httpHeaderName:
                                   description: Hash based on a specific HTTP header.
                                   type: string
+                                httpHeaderRegexRewrite:
+                                  description: Only applicable if hash_key is set
+                                    to http_header_name.
+                                  properties:
+                                    match:
+                                      description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                      type: string
+                                    rewrite:
+                                      description: The string that should replace
+                                        into matching portions of original URI.
+                                      type: string
+                                  type: object
                                 httpQueryParameterName:
                                   description: Hash based on a specific HTTP query
                                     parameter.
@@ -4001,6 +4109,19 @@ spec:
                                         description: Hash based on a specific HTTP
                                           header.
                                         type: string
+                                      httpHeaderRegexRewrite:
+                                        description: Only applicable if hash_key is
+                                          set to http_header_name.
+                                        properties:
+                                          match:
+                                            description: RE2 style regex-based match
+                                              (https://github.com/google/re2/wiki/Syntax).
+                                            type: string
+                                          rewrite:
+                                            description: The string that should replace
+                                              into matching portions of original URI.
+                                            type: string
+                                        type: object
                                       httpQueryParameterName:
                                         description: Hash based on a specific HTTP
                                           query parameter.
@@ -4469,6 +4590,17 @@ spec:
                           httpHeaderName:
                             description: Hash based on a specific HTTP header.
                             type: string
+                          httpHeaderRegexRewrite:
+                            description: Only applicable if hash_key is set to http_header_name.
+                            properties:
+                              match:
+                                description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                type: string
+                              rewrite:
+                                description: The string that should replace into matching
+                                  portions of original URI.
+                                type: string
+                            type: object
                           httpQueryParameterName:
                             description: Hash based on a specific HTTP query parameter.
                             type: string
@@ -4773,6 +4905,18 @@ spec:
                                 httpHeaderName:
                                   description: Hash based on a specific HTTP header.
                                   type: string
+                                httpHeaderRegexRewrite:
+                                  description: Only applicable if hash_key is set
+                                    to http_header_name.
+                                  properties:
+                                    match:
+                                      description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                      type: string
+                                    rewrite:
+                                      description: The string that should replace
+                                        into matching portions of original URI.
+                                      type: string
+                                  type: object
                                 httpQueryParameterName:
                                   description: Hash based on a specific HTTP query
                                     parameter.

@@ -1332,6 +1332,19 @@ No
 No
 </td>
 </tr>
+<tr id="LoadBalancerSettings-ConsistentHashLB-http_header_regex_rewrite">
+<td><code>httpHeaderRegexRewrite</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/virtual-service.html#RegexRewrite">RegexRewrite</a></code></td>
+<td>
+<p>Only applicable if hash_key is set to http_header_name.
+If specified, the request header value from http_header_name
+will be rewritten and used to produce the hash key.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="LoadBalancerSettings-ConsistentHashLB-minimum_ring_size" class="deprecated ">
 <td><code>minimumRingSize</code></td>
 <td><code>uint64</code></td>

@@ -451,6 +451,7 @@ message LoadBalancerSettings {
 
       // Hash based on a specific HTTP query parameter.
       string http_query_parameter_name = 5;
+
     };
 
         // The hash algorithm to use.
@@ -467,6 +468,11 @@ message LoadBalancerSettings {
 
     // Deprecated. Use RingHash instead.
     uint64 minimum_ring_size = 4 [deprecated=true];
+
+    // Only applicable if hash_key is set to http_header_name. 
+    // If specified, the request header value from http_header_name
+    // will be rewritten and used to produce the hash key. 
+    RegexRewrite http_header_regex_rewrite = 8;
   };
 
   // (-- TODO: Enable Subset load balancing after moving to v2 API Also
