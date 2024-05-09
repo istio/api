@@ -97,14 +97,13 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 	return file_security_v1beta1_peer_authentication_proto_rawDescGZIP(), []int{0, 0, 0}
 }
 
-// {{< warning >}}
-// Development of PeerAuthentication is currently frozen and likely to be replaced in Ambient.
-// {{< /warning >}}
 // PeerAuthentication defines how traffic will be tunneled (or not) to the sidecar.
+//
+// Ambient mode implies mTLS, and so DISABLE mode is not supported.
 //
 // Examples:
 //
-// Policy to allow mTLS traffic for all workloads under namespace `foo`:
+// Policy to require mTLS traffic for all workloads under namespace `foo`:
 // ```yaml
 // apiVersion: security.istio.io/v1
 // kind: PeerAuthentication
