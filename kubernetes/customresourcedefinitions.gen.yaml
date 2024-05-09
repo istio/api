@@ -7899,12 +7899,6 @@ spec:
                                 type: string
                             type: object
                           type: array
-                        donotForwardUnmatchedPreflights:
-                          description: Indicates whether preflight requests not matching
-                            the configured allowed origin shouldn't be forwarded to
-                            the upstream.
-                          nullable: true
-                          type: boolean
                         exposeHeaders:
                           description: A list of HTTP headers that the browsers are
                             allowed to access.
@@ -7914,6 +7908,15 @@ spec:
                         maxAge:
                           description: Specifies how long the results of a preflight
                             request can be cached.
+                          type: string
+                        unmatchedPreflights:
+                          description: |-
+                            Indicates whether preflight requests not matching the configured allowed origin shouldn't be forwarded to the upstream.
+
+                            Valid Options: FORWARD, IGNORE
+                          enum:
+                          - FORWARD
+                          - IGNORE
                           type: string
                       type: object
                     delegate:
@@ -8848,12 +8851,6 @@ spec:
                                 type: string
                             type: object
                           type: array
-                        donotForwardUnmatchedPreflights:
-                          description: Indicates whether preflight requests not matching
-                            the configured allowed origin shouldn't be forwarded to
-                            the upstream.
-                          nullable: true
-                          type: boolean
                         exposeHeaders:
                           description: A list of HTTP headers that the browsers are
                             allowed to access.
@@ -8863,6 +8860,15 @@ spec:
                         maxAge:
                           description: Specifies how long the results of a preflight
                             request can be cached.
+                          type: string
+                        unmatchedPreflights:
+                          description: |-
+                            Indicates whether preflight requests not matching the configured allowed origin shouldn't be forwarded to the upstream.
+
+                            Valid Options: FORWARD, IGNORE
+                          enum:
+                          - FORWARD
+                          - IGNORE
                           type: string
                       type: object
                     delegate:
@@ -9797,12 +9803,6 @@ spec:
                                 type: string
                             type: object
                           type: array
-                        donotForwardUnmatchedPreflights:
-                          description: Indicates whether preflight requests not matching
-                            the configured allowed origin shouldn't be forwarded to
-                            the upstream.
-                          nullable: true
-                          type: boolean
                         exposeHeaders:
                           description: A list of HTTP headers that the browsers are
                             allowed to access.
@@ -9812,6 +9812,15 @@ spec:
                         maxAge:
                           description: Specifies how long the results of a preflight
                             request can be cached.
+                          type: string
+                        unmatchedPreflights:
+                          description: |-
+                            Indicates whether preflight requests not matching the configured allowed origin shouldn't be forwarded to the upstream.
+
+                            Valid Options: FORWARD, IGNORE
+                          enum:
+                          - FORWARD
+                          - IGNORE
                           type: string
                       type: object
                     delegate:
