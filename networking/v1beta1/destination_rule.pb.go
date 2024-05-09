@@ -364,23 +364,6 @@ func (ClientTLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) {
 // DestinationRule defines policies that apply to traffic intended for a service
 // after routing has occurred.
 //
-// <!-- crd generation tags
-// +cue-gen:DestinationRule:groupName:networking.istio.io
-// +cue-gen:DestinationRule:version:v1beta1
-// +cue-gen:DestinationRule:storageVersion
-// +cue-gen:DestinationRule:annotations:helm.sh/resource-policy=keep
-// +cue-gen:DestinationRule:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
-// +cue-gen:DestinationRule:subresource:status
-// +cue-gen:DestinationRule:scope:Namespaced
-// +cue-gen:DestinationRule:resource:categories=istio-io,networking-istio-io,shortNames=dr
-// +cue-gen:DestinationRule:printerColumn:name=Host,type=string,JSONPath=.spec.host,description="The name of a service from the service registry"
-// +cue-gen:DestinationRule:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
-// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
-// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
-// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
-// +cue-gen:DestinationRule:preserveUnknownFields:false
-// -->
-//
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=networking.istio.io/v1beta1
