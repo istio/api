@@ -108,22 +108,6 @@ option go_package="istio.io/api/security/v1";
 //       mode: DISABLE
 // ```
 //
-// <!-- crd generation tags
-// +cue-gen:PeerAuthentication:groupName:security.istio.io
-// +cue-gen:PeerAuthentication:version:v1
-// +cue-gen:PeerAuthentication:annotations:helm.sh/resource-policy=keep
-// +cue-gen:PeerAuthentication:labels:app=istio-pilot,chart=istio,istio=security,heritage=Tiller,release=istio
-// +cue-gen:PeerAuthentication:subresource:status
-// +cue-gen:PeerAuthentication:scope:Namespaced
-// +cue-gen:PeerAuthentication:resource:categories=istio-io,security-istio-io,shortNames=pa
-// +cue-gen:PeerAuthentication:preserveUnknownFields:false
-// +cue-gen:PeerAuthentication:printerColumn:name=Mode,type=string,JSONPath=.spec.mtls.mode,description="Defines the mTLS mode used for peer authentication."
-// +cue-gen:PeerAuthentication:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
-// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
-// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
-// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
-// -->
-//
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=security.istio.io/v1

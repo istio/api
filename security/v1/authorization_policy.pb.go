@@ -357,22 +357,6 @@ func (AuthorizationPolicy_Action) EnumDescriptor() ([]byte, []int) {
 
 // AuthorizationPolicy enables access control on workloads.
 //
-// <!-- crd generation tags
-// +cue-gen:AuthorizationPolicy:groupName:security.istio.io
-// +cue-gen:AuthorizationPolicy:version:v1
-// +cue-gen:AuthorizationPolicy:annotations:helm.sh/resource-policy=keep
-// +cue-gen:AuthorizationPolicy:labels:app=istio-pilot,chart=istio,istio=security,heritage=Tiller,release=istio
-// +cue-gen:AuthorizationPolicy:subresource:status
-// +cue-gen:AuthorizationPolicy:scope:Namespaced
-// +cue-gen:AuthorizationPolicy:resource:categories=istio-io,security-istio-io,shortNames=ap,plural=authorizationpolicies
-// +cue-gen:AuthorizationPolicy:preserveUnknownFields:false
-// +cue-gen:AuthorizationPolicy:printerColumn:name=Action,type=string,JSONPath=.spec.action,description="The operation to take."
-// +cue-gen:AuthorizationPolicy:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
-// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
-// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
-// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
-// -->
-//
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=security.istio.io/v1

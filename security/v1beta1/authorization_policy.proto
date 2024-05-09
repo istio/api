@@ -250,7 +250,7 @@ option go_package="istio.io/api/security/v1beta1";
 //
 // <!-- crd generation tags
 // +cue-gen:AuthorizationPolicy:groupName:security.istio.io
-// +cue-gen:AuthorizationPolicy:version:v1beta1
+// +cue-gen:AuthorizationPolicy:versions:v1beta1,v1
 // +cue-gen:AuthorizationPolicy:storageVersion
 // +cue-gen:AuthorizationPolicy:annotations:helm.sh/resource-policy=keep
 // +cue-gen:AuthorizationPolicy:labels:app=istio-pilot,chart=istio,istio=security,heritage=Tiller,release=istio

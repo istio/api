@@ -565,26 +565,6 @@ func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 // ServiceEntry enables adding additional entries into Istio's internal
 // service registry.
 //
-// <!-- crd generation tags
-// +cue-gen:ServiceEntry:groupName:networking.istio.io
-// +cue-gen:ServiceEntry:version:v1
-// +cue-gen:ServiceEntry:annotations:helm.sh/resource-policy=keep
-// +cue-gen:ServiceEntry:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
-// +cue-gen:ServiceEntry:subresource:status
-// +cue-gen:ServiceEntry:scope:Namespaced
-// +cue-gen:ServiceEntry:resource:categories=istio-io,networking-istio-io,shortNames=se,plural=serviceentries
-// +cue-gen:ServiceEntry:printerColumn:name=Hosts,type=string,JSONPath=.spec.hosts,description="The hosts associated with the ServiceEntry"
-// +cue-gen:ServiceEntry:printerColumn:name=Location,type=string,JSONPath=.spec.location,description="Whether the service is external to the
-// mesh or part of the mesh (MESH_EXTERNAL or MESH_INTERNAL)"
-// +cue-gen:ServiceEntry:printerColumn:name=Resolution,type=string,JSONPath=.spec.resolution,description="Service resolution mode for the hosts
-// (NONE, STATIC, or DNS)"
-// +cue-gen:ServiceEntry:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
-// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
-// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
-// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
-// +cue-gen:ServiceEntry:preserveUnknownFields:false
-// -->
-//
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=networking.istio.io/v1

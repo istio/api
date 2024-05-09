@@ -201,7 +201,7 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 //
 // <!-- crd generation tags
 // +cue-gen:PeerAuthentication:groupName:security.istio.io
-// +cue-gen:PeerAuthentication:version:v1beta1
+// +cue-gen:PeerAuthentication:versions:v1beta1,v1
 // +cue-gen:PeerAuthentication:storageVersion
 // +cue-gen:PeerAuthentication:annotations:helm.sh/resource-policy=keep
 // +cue-gen:PeerAuthentication:labels:app=istio-pilot,chart=istio,istio=security,heritage=Tiller,release=istio

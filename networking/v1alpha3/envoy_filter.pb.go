@@ -805,7 +805,7 @@ func (EnvoyFilter_Patch_FilterClass) EnumDescriptor() ([]byte, []int) {
 //
 // <!-- crd generation tags
 // +cue-gen:EnvoyFilter:groupName:networking.istio.io
-// +cue-gen:EnvoyFilter:version:v1alpha3
+// +cue-gen:EnvoyFilter:versions:v1alpha3
 // +cue-gen:EnvoyFilter:storageVersion
 // +cue-gen:EnvoyFilter:annotations:helm.sh/resource-policy=keep
 // +cue-gen:EnvoyFilter:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
