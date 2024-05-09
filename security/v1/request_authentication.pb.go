@@ -23,6 +23,7 @@
 // $description: Request authentication configuration for workloads.
 // $location: https://istio.io/docs/reference/config/security/request_authentication.html
 // $aliases: [/docs/reference/config/security/v1/request_authentication]
+// $weight: 50
 // $mode: none
 
 package v1
