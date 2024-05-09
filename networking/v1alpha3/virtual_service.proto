@@ -1367,6 +1367,22 @@ message CorsPolicy {
   // (not the preflight) using credentials. Translates to
   // `Access-Control-Allow-Credentials` header.
   google.protobuf.BoolValue allow_credentials = 6;
+
+  // Indicates whether preflight requests not matching the configured 
+  // allowed origin shouldn't be forwarded to the upstream. 
+  // Default is forward to upstream.
+  UnmatchedPreflights unmatched_preflights = 8;
+
+  enum UnmatchedPreflights {
+    // Default to FORWARD
+    UNSPECIFIED = 0;
+    // Preflight requests not matching the configured allowed origin
+    // will be forwarded to the upstream.
+    FORWARD = 1;
+    // Preflight requests not matching the configured allowed origin
+    // will not be forwarded to the upstream.
+    IGNORE = 2;
+  }
 }
 
 // HTTPFaultInjection can be used to specify one or more faults to inject

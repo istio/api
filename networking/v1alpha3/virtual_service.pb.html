@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.VirtualService
 aliases: [/docs/reference/config/networking/v1alpha3/virtual-service]
-number_of_entries: 29
+number_of_entries: 30
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -2203,6 +2203,19 @@ No
 No
 </td>
 </tr>
+<tr id="CorsPolicy-unmatched_preflights">
+<td><code>unmatchedPreflights</code></td>
+<td><code><a href="#CorsPolicy-UnmatchedPreflights">UnmatchedPreflights</a></code></td>
+<td>
+<p>Indicates whether preflight requests not matching the configured
+allowed origin shouldn&rsquo;t be forwarded to the upstream.
+Default is forward to upstream.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -2611,6 +2624,42 @@ No
 <tr id="HTTPRedirect-RedirectPortSelection-FROM_REQUEST_PORT">
 <td><code>FROM_REQUEST_PORT</code></td>
 <td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="CorsPolicy-UnmatchedPreflights">CorsPolicy.UnmatchedPreflights</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="CorsPolicy-UnmatchedPreflights-UNSPECIFIED">
+<td><code>UNSPECIFIED</code></td>
+<td>
+<p>Default to FORWARD</p>
+
+</td>
+</tr>
+<tr id="CorsPolicy-UnmatchedPreflights-FORWARD">
+<td><code>FORWARD</code></td>
+<td>
+<p>Preflight requests not matching the configured allowed origin
+will be forwarded to the upstream.</p>
+
+</td>
+</tr>
+<tr id="CorsPolicy-UnmatchedPreflights-IGNORE">
+<td><code>IGNORE</code></td>
+<td>
+<p>Preflight requests not matching the configured allowed origin
+will not be forwarded to the upstream.</p>
+
 </td>
 </tr>
 </tbody>
