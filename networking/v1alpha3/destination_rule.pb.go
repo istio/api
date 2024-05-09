@@ -2093,6 +2093,8 @@ type LoadBalancerSettings_ConsistentHashLB_MagLev struct {
 	// The table size for Maglev hashing. This helps in controlling the
 	// disruption when the backend hosts change.
 	// Increasing the table size reduces the amount of disruption.
+	// The table size must be prime number less than 5000011.
+	// If it is not specified, the default is 65537.
 	TableSize uint64 `protobuf:"varint,1,opt,name=table_size,json=tableSize,proto3" json:"table_size,omitempty"`
 }
 
