@@ -23,6 +23,7 @@
 // $description: Configuration to validate JWT.
 // $location: https://istio.io/docs/reference/config/security/jwt.html
 // $aliases: [/docs/reference/config/security/v1/jwt]
+// $weight: 60
 // $mode: none
 
 package v1
