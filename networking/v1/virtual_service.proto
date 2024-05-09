@@ -1373,12 +1373,14 @@ message CorsPolicy {
   UnmatchedPreflights unmatched_preflights = 8;
 
   enum UnmatchedPreflights {
+    // Default to FORWARD
+    UNSPECIFIED = 0;
     // Preflight requests not matching the configured allowed origin
     // will be forwarded to the upstream.
-    FORWARD = 0;
+    FORWARD = 1;
     // Preflight requests not matching the configured allowed origin
     // will not be forwarded to the upstream.
-    IGNORE = 1;
+    IGNORE = 2;
   }
 }
 

@@ -7915,6 +7915,7 @@ spec:
 
                             Valid Options: FORWARD, IGNORE
                           enum:
+                          - UNSPECIFIED
                           - FORWARD
                           - IGNORE
                           type: string
@@ -8867,6 +8868,7 @@ spec:
 
                             Valid Options: FORWARD, IGNORE
                           enum:
+                          - UNSPECIFIED
                           - FORWARD
                           - IGNORE
                           type: string
@@ -9819,6 +9821,7 @@ spec:
 
                             Valid Options: FORWARD, IGNORE
                           enum:
+                          - UNSPECIFIED
                           - FORWARD
                           - IGNORE
                           type: string
