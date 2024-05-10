@@ -130,9 +130,6 @@ option go_package="istio.io/api/security/v1beta1";
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-// <!-- istio code generation tags
-// +istio.io/sync-start
-// -->
 message PeerAuthentication {
   // The selector determines the workloads to apply the PeerAuthentication on. The selector will match with workloads in the
   // same namespace as the policy. If the policy is in the root namespace, the selector will additionally match with workloads in all namespace.

@@ -191,9 +191,6 @@ const (
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-// <!-- istio code generation tags
-// +istio.io/sync-start
-// -->
 type WorkloadEntry struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

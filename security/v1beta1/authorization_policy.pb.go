@@ -377,9 +377,6 @@ func (AuthorizationPolicy_Action) EnumDescriptor() ([]byte, []int) {
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-// <!-- istio code generation tags
-// +istio.io/sync-start
-// -->
 type AuthorizationPolicy struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

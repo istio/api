@@ -1,0 +1,32 @@
+apiVersion: release-notes/v2
+kind: feature
+area: extensibility
+
+# issue is a list of GitHub issues resolved in this note.
+issue:
+  - https://github.com/istio/api/issues/3127
+
+releaseNotes:
+  - |
+    **Removed** internal multi-version protobuf files from the API.
+    This is an internal change for most users.
+    If you directly consume Istio APIs as protobufs, read the upgrade notes.
+
+upgradeNotes:
+- title: Internal API protobuf changes
+  content: |
+    If you do not use Istio APIs from Go (via `istio.io/api` or `istio.io/client-go`) or Protobuf (from `istio.io/api`), this change does not impact you.
+
+    In prior versions, Istio APIs had identical contents replicated across multiple versions.
+    For example, the same `VirtualService` protobuf message is defined 3 times (`v1alpha3`, `v1beta1`, and `v1`).
+    These schemas are identical except in the package they reside in.
+
+    In this version of Istio, these have been consolidated down to a single version.
+    For resources that had multiple versions, the oldest version is retained.
+    
+    * If you use Istio APIs only via Kubernetes (YAML), there is no impact at all.
+    * If you use Istio APIs by Go types, there is essentially no impact.
+      Each removed version has been replaced with type aliases to the remaining version, ensuring backwards compatibility.
+      However, niche use cases (reflection, etc) may have some impact.
+    * If you use Istio APIs directly by Protobuf, and use newer versions, these will no longer be included as part of the API.
+      Please reach out to the team if you are impacted.

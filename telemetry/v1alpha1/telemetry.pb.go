@@ -544,9 +544,6 @@ func (MetricsOverrides_TagOverride_Operation) EnumDescriptor() ([]byte, []int) {
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-// <!-- istio code generation tags
-// +istio.io/sync-start
-// -->
 type Telemetry struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
