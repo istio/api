@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.security.v1beta1.JWTRule
 aliases: [/docs/reference/config/security/v1beta1/jwt]
-number_of_entries: 3
+number_of_entries: 4
 ---
 <h2 id="JWTRule">JWTRule</h2>
 <section>
@@ -30,6 +30,11 @@ defines the URI to fetch JWKS explicitly.</p>
 jwksUri: https://example.com/.secret/jwks.json
 fromHeaders:
 - &quot;x-goog-iap-jwt-assertion&quot;
+</code></pre>
+<p>The following example specifies that the JWT must be presented and verification successful.</p>
+<pre><code class="language-yaml">- issuer: issuer-foo
+  jwksUri: https://example.com/.well-known/jwks.json
+  failureMode: STRICT
 </code></pre>
 
 <table class="message-fields">
@@ -220,6 +225,17 @@ will spend waiting for the JWKS to be fetched. Default is 5s.</p>
 No
 </td>
 </tr>
+<tr id="JWTRule-failure_mode">
+<td><code>failureMode</code></td>
+<td><code><a href="#JWTRule-FailureMode">FailureMode</a></code></td>
+<td>
+<p>This field specifies a Jwt requirement. This is optional, the default value is <code>PERMISSIVE</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -299,6 +315,43 @@ The header will not be there if the claim does not exist or the type of the clai
 </td>
 <td>
 No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="JWTRule-FailureMode">JWTRule.FailureMode</h2>
+<section>
+<p>FailureMode specifies a Jwt requirement.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="JWTRule-FailureMode-PERMISSIVE">
+<td><code>PERMISSIVE</code></td>
+<td>
+<p>The requirement is satisfied if JWT is missing, but failed if JWT is presented but invalid.
+This is the default behavior.</p>
+
+</td>
+</tr>
+<tr id="JWTRule-FailureMode-IGNORE">
+<td><code>IGNORE</code></td>
+<td>
+<p>The requirement is always satisfied even if JWT is missing or the JWT verification fails.</p>
+
+</td>
+</tr>
+<tr id="JWTRule-FailureMode-STRICT">
+<td><code>STRICT</code></td>
+<td>
+<p>The requirement is satisfied only if JWT is presented and verification successful.</p>
+
 </td>
 </tr>
 </tbody>

@@ -12135,6 +12135,16 @@ spec:
                       items:
                         type: string
                       type: array
+                    failureMode:
+                      description: |-
+                        This field specifies a Jwt requirement.
+
+                        Valid Options: PERMISSIVE, IGNORE, STRICT
+                      enum:
+                      - PERMISSIVE
+                      - IGNORE
+                      - STRICT
+                      type: string
                     forwardOriginalToken:
                       description: If set to true, the original token will be kept
                         for the upstream request.
@@ -12276,6 +12286,16 @@ spec:
                       items:
                         type: string
                       type: array
+                    failureMode:
+                      description: |-
+                        This field specifies a Jwt requirement.
+
+                        Valid Options: PERMISSIVE, IGNORE, STRICT
+                      enum:
+                      - PERMISSIVE
+                      - IGNORE
+                      - STRICT
+                      type: string
                     forwardOriginalToken:
                       description: If set to true, the original token will be kept
                         for the upstream request.

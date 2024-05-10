@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: security
+issue:
+  - https://github.com/istio/istio/issues/43982
+
+releaseNotes:
+  - |
+    **Added** a `failure_mode` field to specify a Jwt requirement. This is optional, the default value is `PERMISSIVE`.
