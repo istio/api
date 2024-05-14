@@ -818,7 +818,7 @@ One example use case of the extension is to integrate with a custom external aut
 the authorization decision to it.</p>
 <p>The following authorization policy applies to an ingress gateway and delegates the authorization check to a named extension
 <code>my-custom-authz</code> if the request path has prefix <code>/admin/</code>.</p>
-<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
 metadata:
   name: ext-authz

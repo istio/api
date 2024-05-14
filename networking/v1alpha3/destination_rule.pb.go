@@ -32,7 +32,7 @@
 // ratings service would look as follows:
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: bookinfo-ratings
@@ -50,7 +50,7 @@
 // pods) with labels (version:v3).
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: bookinfo-ratings
@@ -77,7 +77,7 @@
 // traffic to the port 9080.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: bookinfo-ratings-port
@@ -100,7 +100,7 @@
 // specific workload using the workloadSelector configuration.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: configure-client-mtls-dr-with-workloadselector
@@ -654,7 +654,7 @@ func (x *TrafficPolicy) GetProxyProtocol() *TrafficPolicy_ProxyProtocol {
 // labels (version:v3).
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //
@@ -764,7 +764,7 @@ func (x *Subset) GetTrafficPolicy() *TrafficPolicy {
 // for all traffic going to the ratings service.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //
@@ -784,7 +784,7 @@ func (x *Subset) GetTrafficPolicy() *TrafficPolicy {
 // the User cookie as the hash key.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //
@@ -920,7 +920,7 @@ func (*LoadBalancerSettings_ConsistentHash) isLoadBalancerSettings_LbPolicy() {}
 // service called myredissrv with a connect timeout of 30ms
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //
@@ -1013,7 +1013,7 @@ func (x *ConnectionPoolSettings) GetHttp() *ConnectionPoolSettings_HTTPSettings 
 // times with a 502, 503, or 504 error code will be ejected for 15 minutes.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //
@@ -1215,7 +1215,7 @@ func (x *OutlierDetection) GetMinHealthPercent() int32 {
 // for connections to upstream database cluster.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //
@@ -1237,7 +1237,7 @@ func (x *OutlierDetection) GetMinHealthPercent() int32 {
 // foreign service whose domain matches *.foo.com.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //
@@ -1256,7 +1256,7 @@ func (x *OutlierDetection) GetMinHealthPercent() int32 {
 // to rating services.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //
