@@ -1456,7 +1456,7 @@ message LabelSelectorRequirement {
   // the values array must be empty. This array is replaced during a strategic
   // merge patch.
   // +optional
-  string values = 3;
+  repeated string values = 3;
 }
 
 // ConfigSource describes information about a configuration store inside a
