@@ -171,7 +171,7 @@ const (
 //
 // <!-- crd generation tags
 // +cue-gen:WorkloadEntry:groupName:networking.istio.io
-// +cue-gen:WorkloadEntry:version:v1alpha3
+// +cue-gen:WorkloadEntry:versions:v1beta1,v1alpha3,v1
 // +cue-gen:WorkloadEntry:annotations:helm.sh/resource-policy=keep
 // +cue-gen:WorkloadEntry:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:WorkloadEntry:subresource:status

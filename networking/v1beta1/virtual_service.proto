@@ -120,25 +120,6 @@ option go_package = "istio.io/api/networking/v1beta1";
 
 // Configuration affecting traffic routing.
 //
-// <!-- crd generation tags
-// +cue-gen:VirtualService:groupName:networking.istio.io
-// +cue-gen:VirtualService:version:v1beta1
-// +cue-gen:VirtualService:storageVersion
-// +cue-gen:VirtualService:annotations:helm.sh/resource-policy=keep
-// +cue-gen:VirtualService:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
-// +cue-gen:VirtualService:subresource:status
-// +cue-gen:VirtualService:scope:Namespaced
-// +cue-gen:VirtualService:resource:categories=istio-io,networking-istio-io,shortNames=vs
-// +cue-gen:VirtualService:printerColumn:name=Gateways,type=string,JSONPath=.spec.gateways,description="The names of gateways and sidecars
-// that should apply these routes"
-// +cue-gen:VirtualService:printerColumn:name=Hosts,type=string,JSONPath=.spec.hosts,description="The destination hosts to which traffic is being sent"
-// +cue-gen:VirtualService:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
-// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
-// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
-// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
-// +cue-gen:VirtualService:preserveUnknownFields:false
-// -->
-//
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=networking.istio.io/v1beta1

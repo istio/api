@@ -517,7 +517,7 @@ func (FailStrategy) EnumDescriptor() ([]byte, []int) {
 //
 // <!-- crd generation tags
 // +cue-gen:WasmPlugin:groupName:extensions.istio.io
-// +cue-gen:WasmPlugin:version:v1alpha1
+// +cue-gen:WasmPlugin:versions:v1alpha1
 // +cue-gen:WasmPlugin:storageVersion
 // +cue-gen:WasmPlugin:annotations:helm.sh/resource-policy=keep
 // +cue-gen:WasmPlugin:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio

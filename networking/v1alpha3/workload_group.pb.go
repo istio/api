@@ -96,7 +96,7 @@ const (
 //
 // <!-- crd generation tags
 // +cue-gen:WorkloadGroup:groupName:networking.istio.io
-// +cue-gen:WorkloadGroup:version:v1alpha3
+// +cue-gen:WorkloadGroup:versions:v1beta1,v1alpha3,v1
 // +cue-gen:WorkloadGroup:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:WorkloadGroup:subresource:status
 // +cue-gen:WorkloadGroup:scope:Namespaced
