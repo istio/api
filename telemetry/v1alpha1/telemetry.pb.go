@@ -44,7 +44,7 @@
 // ## Examples
 // Policy to enable random sampling for 10% of traffic:
 // ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
+// apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
 // metadata:
 //   name: mesh-default
@@ -58,7 +58,7 @@
 // Policy to disable trace reporting for the `foo` workload (note: tracing
 // context will still be propagated):
 // ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
+// apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
 // metadata:
 //   name: foo-tracing
@@ -73,7 +73,7 @@
 //
 // Policy to select the alternate zipkin provider for trace reporting:
 // ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
+// apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
 // metadata:
 //   name: foo-tracing-alternate
@@ -90,7 +90,7 @@
 //
 // Policy to tailor the zipkin provider to sample traces from Client workloads only:
 // ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
+// apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
 // metadata:
 //   name: mesh-default
@@ -105,7 +105,7 @@
 //
 // Policy to add a custom tag from a literal value:
 // ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
+// apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
 // metadata:
 //   name: mesh-default
@@ -122,7 +122,7 @@
 //
 // Policy to disable server-side metrics for Prometheus for an entire mesh:
 // ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
+// apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
 // metadata:
 //   name: mesh-default
@@ -141,7 +141,7 @@
 //
 // Policy to add dimensions to all Prometheus metrics for the `foo` namespace:
 // ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
+// apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
 // metadata:
 //   name: namespace-metrics
@@ -163,7 +163,7 @@
 // Policy to remove the `response_code` dimension on some Prometheus metrics for
 // the `bar.foo` workload:
 // ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
+// apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
 // metadata:
 //   name: remove-response-code
@@ -200,7 +200,7 @@
 //
 // Policy to enable access logging for the entire mesh:
 // ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
+// apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
 // metadata:
 //   name: mesh-default
@@ -218,7 +218,7 @@
 //
 // Policy to disable access logging for the `foo` namespace:
 // ```yaml
-// apiVersion: telemetry.istio.io/v1alpha1
+// apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
 // metadata:
 //   name: namespace-no-log

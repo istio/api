@@ -45,7 +45,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // ClientHello message to route to the appropriate external service.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: ServiceEntry
 // metadata:
 //   name: external-svc-https
@@ -68,7 +68,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // to initiate mTLS connections to the database instances.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: ServiceEntry
 // metadata:
 //   name: external-svc-mongocluster
@@ -91,7 +91,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // and the associated DestinationRule
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: mtls-mongocluster
@@ -110,7 +110,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // an internal egress firewall.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: ServiceEntry
 // metadata:
 //   name: external-svc-redirect
@@ -129,7 +129,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // And the associated VirtualService to route based on the SNI value.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: tls-routing
@@ -160,7 +160,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // namespaces.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: ServiceEntry
 // metadata:
 //   name: external-svc-httpbin
@@ -181,7 +181,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // Define a gateway to handle all egress traffic.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Gateway
 // metadata:
 //  name: istio-egressgateway
@@ -206,7 +206,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // a managed middle proxy like this is a common practice.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: gateway-routing
@@ -242,7 +242,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // to connect to a specific IP), the resolution mode must be set to `NONE`.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: ServiceEntry
 // metadata:
 //   name: external-svc-wildcard-example
@@ -262,7 +262,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // set to STATIC to use Unix address endpoints.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: ServiceEntry
 // metadata:
 //   name: unix-domain-socket-example
@@ -288,7 +288,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // uk.foo.bar.com:9080, and in.foo.bar.com:7080
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: ServiceEntry
 // metadata:
 //   name: external-svc-dns
@@ -323,7 +323,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // whose format conforms to the [SPIFFE standard](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md):
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: ServiceEntry
 // metadata:
 //   name: httpbin
@@ -353,7 +353,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // VMs and Kubernetes.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: WorkloadEntry
 // metadata:
 //   name: details-vm-1
@@ -364,7 +364,7 @@ import "networking/v1alpha3/workload_entry.proto";
 //     app: details
 //     instance-id: vm1
 // ---
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: WorkloadEntry
 // metadata:
 //   name: details-vm-2
@@ -382,7 +382,7 @@ import "networking/v1alpha3/workload_entry.proto";
 // Kubernetes:
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: ServiceEntry
 // metadata:
 //   name: details-svc

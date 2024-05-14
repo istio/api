@@ -252,7 +252,7 @@ const (
 //	      requestPrincipals: ["*"]
 //
 // ---
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
