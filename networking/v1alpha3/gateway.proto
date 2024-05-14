@@ -36,7 +36,7 @@ import "google/api/field_behavior.proto";
 // external traffic to these ports are allowed into the mesh.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Gateway
 // metadata:
 //   name: my-gateway
@@ -104,7 +104,7 @@ import "google/api/field_behavior.proto";
 // gets redirected to `https://uk.bookinfo.com` (i.e. 80 redirects to 443).
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: bookinfo-rule
@@ -147,7 +147,7 @@ import "google/api/field_behavior.proto";
 // reserved name `mesh`.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: bookinfo-mongo
@@ -174,7 +174,7 @@ import "google/api/field_behavior.proto";
 // foo.bar.com host in the ns2 namespace to bind to it.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Gateway
 // metadata:
 //   name: my-gateway
@@ -242,7 +242,7 @@ message Gateway {
 // port. For example,
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Gateway
 // metadata:
 //   name: my-ingress
@@ -261,7 +261,7 @@ message Gateway {
 // Another example
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Gateway
 // metadata:
 //   name: my-tcp-ingress
@@ -280,7 +280,7 @@ message Gateway {
 // The following is an example of TLS configuration for port 443
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Gateway
 // metadata:
 //   name: my-tls-ingress

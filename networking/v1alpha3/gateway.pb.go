@@ -38,7 +38,7 @@
 // external traffic to these ports are allowed into the mesh.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Gateway
 // metadata:
 //   name: my-gateway
@@ -106,7 +106,7 @@
 // gets redirected to `https://uk.bookinfo.com` (i.e. 80 redirects to 443).
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: bookinfo-rule
@@ -149,7 +149,7 @@
 // reserved name `mesh`.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: bookinfo-mongo
@@ -176,7 +176,7 @@
 // foo.bar.com host in the ns2 namespace to bind to it.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Gateway
 // metadata:
 //   name: my-gateway
@@ -459,7 +459,7 @@ func (x *Gateway) GetSelector() map[string]string {
 // port. For example,
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Gateway
 // metadata:
 //
@@ -482,7 +482,7 @@ func (x *Gateway) GetSelector() map[string]string {
 // # Another example
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Gateway
 // metadata:
 //
@@ -505,7 +505,7 @@ func (x *Gateway) GetSelector() map[string]string {
 // # The following is an example of TLS configuration for port 443
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Gateway
 // metadata:
 //

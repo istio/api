@@ -69,7 +69,7 @@
 // `istio-system` namespace.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Sidecar
 // metadata:
 //   name: default
@@ -88,7 +88,7 @@
 // `istio-system` namespaces.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Sidecar
 // metadata:
 //   name: default
@@ -111,7 +111,7 @@
 // 9080 for services in the `prod-us1` namespace.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Sidecar
 // metadata:
 //   name: ratings
@@ -153,7 +153,7 @@
 // MySQL service at `mysql.foo.com:3306`.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Sidecar
 // metadata:
 //   name: no-ip-tables
@@ -183,7 +183,7 @@
 // And the associated service entry for routing to `mysql.foo.com:3306`
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: ServiceEntry
 // metadata:
 //   name: external-svc-mysql
@@ -213,7 +213,7 @@
 // implying that IP tables based traffic capture is active.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Sidecar
 // metadata:
 //   name: partial-ip-tables
@@ -254,7 +254,7 @@
 // This feature is currently experimental.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Sidecar
 // metadata:
 //   name: ratings
@@ -289,7 +289,7 @@
 //   selector:
 //     app: ratings
 // ---
-// apiVersion: security.istio.io/v1beta1
+// apiVersion: security.istio.io/v1
 // kind: PeerAuthentication
 // metadata:
 //   name: ratings-peer-auth
@@ -314,7 +314,7 @@
 // from the settings pushed to all clients.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Sidecar
 // metadata:
 //   name: connection-pool-settings
