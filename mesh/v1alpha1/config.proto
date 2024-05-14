@@ -1445,18 +1445,18 @@ message LabelSelectorRequirement {
   // key is the label key that the selector applies to.
   // +patchMergeKey=key
   // +patchStrategy=merge
-  optional string key = 1;
+  string key = 1;
 
   // operator represents a key's relationship to a set of values.
   // Valid operators are In, NotIn, Exists and DoesNotExist.
-  optional string operator = 2;
+  string operator = 2;
 
   // values is an array of string values. If the operator is In or NotIn,
   // the values array must be non-empty. If the operator is Exists or DoesNotExist,
   // the values array must be empty. This array is replaced during a strategic
   // merge patch.
   // +optional
-  repeated string values = 3;
+  string values = 3;
 }
 
 // ConfigSource describes information about a configuration store inside a
