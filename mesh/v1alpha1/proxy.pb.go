@@ -907,9 +907,9 @@ type ProxyConfig struct {
 	// Increase the value of this field if you find that the metrics from Envoys are truncated.
 	StatNameLength int32 `protobuf:"varint,15,opt,name=stat_name_length,json=statNameLength,proto3" json:"stat_name_length,omitempty"`
 	// The number of worker threads to run.
-	// If unset, this will be automatically determined based on CPU requests/limits.
-	// If set to 0, all cores on the machine will be used.
-	// Default is 2 worker threads.
+	// If unset, which is recommended, this will be automatically determined based on CPU requests/limits.
+	// If set to 0, all cores on the machine will be used, ignoring CPU requests or limits. This can lead to major performance
+	// issues if CPU limits are also set.
 	Concurrency *wrappers.Int32Value `protobuf:"bytes,16,opt,name=concurrency,proto3" json:"concurrency,omitempty"`
 	// Path to the proxy bootstrap template file
 	ProxyBootstrapTemplatePath string `protobuf:"bytes,17,opt,name=proxy_bootstrap_template_path,json=proxyBootstrapTemplatePath,proto3" json:"proxy_bootstrap_template_path,omitempty"`
