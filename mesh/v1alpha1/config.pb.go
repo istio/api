@@ -1283,6 +1283,9 @@ func (x *MeshConfig) GetTlsDefaults() *MeshConfig_TLSConfig {
 	return nil
 }
 
+// A label selector requirement is a selector that contains values, a key, and an operator that
+// relates the key and values.
+// Copied from Kubernetes to avoid expensive dependency on Kubernetes libraries.
 type LabelSelector struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -1346,6 +1349,7 @@ func (x *LabelSelector) GetMatchExpressions() []*LabelSelectorRequirement {
 
 // A label selector requirement is a selector that contains values, a key, and an operator that
 // relates the key and values.
+// Copied from Kubernetes to avoid expensive dependency on Kubernetes libraries.
 type LabelSelectorRequirement struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
