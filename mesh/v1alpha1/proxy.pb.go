@@ -953,8 +953,8 @@ type ProxyConfig struct {
 	// gateway workloads.
 	GatewayTopology *Topology `protobuf:"bytes,28,opt,name=gateway_topology,json=gatewayTopology,proto3" json:"gateway_topology,omitempty"`
 	// The amount of time allowed for connections to complete on proxy shutdown.
-	// On receiving `SIGTERM` or `SIGINT`, `istio-agent` tells the active Envoy to start draining,
-	// preventing any new connections and allowing existing connections to complete. It then
+	// On receiving `SIGTERM` or `SIGINT`, `istio-agent` tells the active Envoy to start gracefully draining,
+	// discouraging any new connections and allowing existing connections to complete. It then
 	// sleeps for the `termination_drain_duration` and then kills any remaining active Envoy processes.
 	// If not set, a default of `5s` will be applied.
 	TerminationDrainDuration *duration.Duration `protobuf:"bytes,29,opt,name=termination_drain_duration,json=terminationDrainDuration,proto3" json:"termination_drain_duration,omitempty"`
