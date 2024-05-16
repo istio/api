@@ -397,12 +397,13 @@ type AuthorizationPolicy struct {
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
 	// $hide_from_docs
 	TargetRef *v1beta1.PolicyTargetReference `protobuf:"bytes,5,opt,name=targetRef,proto3" json:"targetRef,omitempty"`
-	// Optional. The targetRef specifies the gateway the policy should be
-	// applied to. The targeted resource specified will determine which
-	// workloads the policy applies to.
+	// Optional. The targetRefs specifies a list of resources the policy should be
+	// applied to. The targeted resources specified will determine which workloads
+	// the policy applies to.
 	//
 	// Currently, the following resource attachment types are supported:
 	// * `kind: Gateway` with `group: gateway.networking.k8s.io` in the same namespace.
+	// * `kind: Service` with `""` in the same namespace. This type is only supported for waypoints.
 	//
 	// If not set, the policy is applied as defined by the selector.
 	// At most one of the selector and targetRefs can be set.

@@ -213,10 +213,10 @@ func (x *PortSelector) GetNumber() uint32 {
 	return 0
 }
 
-// PolicyTargetReference format as defined by [GEP-713](https://gateway-api.sigs.k8s.io/geps/gep-713/#policy-targetref-api).
+// PolicyTargetReference format as defined by [GEP-2648](https://gateway-api.sigs.k8s.io/geps/gep-2648/#direct-policy-design-rules).
 //
-// PolicyTargetReferences specifies the targeted resource which the policy
-// can be applied to. It must only target a single resource at a time, but it
+// PolicyTargetReference specifies the targeted resource which the policy
+// should be applied to. It must only target a single resource at a time, but it
 // can be used to target larger resources such as Gateways that may apply to
 // multiple child resources. The PolicyTargetReference will be used instead of
 // a WorkloadSelector in the RequestAuthentication, AuthorizationPolicy,
@@ -237,8 +237,8 @@ func (x *PortSelector) GetNumber() uint32 {
 //
 // spec:
 //
-//	targetRef:
-//	  name: waypoint
+//	targetRefs:
+//	- name: waypoint
 //	  kind: Gateway
 //	  group: gateway.networking.k8s.io
 //	action: DENY
