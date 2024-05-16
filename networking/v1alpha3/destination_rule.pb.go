@@ -99,6 +99,14 @@
 // The following example shows how a destination rule can be applied to a
 // specific workload using the workloadSelector configuration.
 //
+// **Note:** The workloadSelector configuration in
+// destination rule controls which client workloads
+// use this destination rule, rather than controlling
+// which servers are selected as traffic endpoints.
+// Different from workloadSelectors,
+// [Subsets](https://istio.io/latest/docs/reference/config/networking/destination-rule/#Subset)
+// define fine-grained groups of endpoints for a service.
+//
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
