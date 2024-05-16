@@ -97,9 +97,11 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 	return file_security_v1beta1_peer_authentication_proto_rawDescGZIP(), []int{0, 0, 0}
 }
 
-// PeerAuthentication defines how traffic will be tunneled (or not) to the sidecar.
+// PeerAuthentication defines mutual TLS (mTLS) requirements for incoming connections.
 //
-// Ambient mode implies mTLS, and so DISABLE mode is not supported.
+// In sidecar mode, PeerAuthentication determines whether or not mTLS is enabled, or required, for connections to an Envoy proxy sidecar.
+//
+// In ambient mode, security is transparently enabled for a pod by the ztunnel node agent. (Traffic between proxies uses the HBONE protocol, which includes encryption with mTLS.) Because of this, DISABLE mode is not supported.
 //
 // Examples:
 //
