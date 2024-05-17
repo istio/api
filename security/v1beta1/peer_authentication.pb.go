@@ -99,9 +99,13 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 
 // PeerAuthentication defines mutual TLS (mTLS) requirements for incoming connections.
 //
-// In sidecar mode, PeerAuthentication determines whether or not mTLS is enabled, or required, for connections to an Envoy proxy sidecar.
+// In sidecar mode, PeerAuthentication determines whether or not mTLS is allowed or required
+// for connections to an Envoy proxy sidecar.
 //
-// In ambient mode, security is transparently enabled for a pod by the ztunnel node agent. (Traffic between proxies uses the HBONE protocol, which includes encryption with mTLS.) Because of this, DISABLE mode is not supported.
+// In ambient mode, security is transparently enabled for a pod by the ztunnel node agent.
+// (Traffic between proxies uses the HBONE protocol, which includes encryption with mTLS.)
+// Because of this, `DISABLE` mode is not supported.
+// `STRICT` mode is useful to ensure that connections that bypass the mesh are not possible.
 //
 // Examples:
 //
