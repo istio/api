@@ -1277,7 +1277,7 @@ func (x *TCPRoute) GetRoute() []*RouteDestination {
 	return nil
 }
 
-// HttpMatchRequest specifies a set of criterion to be met in order for the
+// HttpMatchRequest specifies a set of criteria to be met in order for the
 // rule to be applied to the HTTP request. For example, the following
 // restricts the rule to match only requests where the URL path
 // starts with /ratings/v2/ and the request contains a custom `end-user` header
