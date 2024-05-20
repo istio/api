@@ -149,9 +149,6 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-// <!-- istio code generation tags
-// +istio.io/sync-start
-// -->
 message DestinationRule {
   // The name of a service from the service registry. Service
   // names are looked up from the platform's service registry (e.g.,

@@ -410,9 +410,6 @@ func (ClientTLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) {
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-// <!-- istio code generation tags
-// +istio.io/sync-start
-// -->
 type DestinationRule struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
