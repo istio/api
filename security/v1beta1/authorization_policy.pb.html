@@ -25,8 +25,7 @@ AUDIT policies do not affect whether requests are allowed or denied to the workl
 Requests will be allowed or denied based solely on CUSTOM, DENY and ALLOW actions.</p>
 <p>A request will be internally marked that it should be audited if there is an AUDIT policy on the workload that matches the request.
 A separate plugin must be configured and enabled to actually fulfill the audit decision and complete the audit behavior.
-The request will not be audited if there are no such supporting plugins enabled.
-Currently, the only supported plugin is the <a href="https://istio.io/latest/docs/reference/config/proxy_extensions/stackdriver/">Stackdriver</a> plugin.</p>
+The request will not be audited if there are no such supporting plugins enabled.</p>
 <p>Here is an example of Istio Authorization Policy:</p>
 <p>It sets the <code>action</code> to <code>ALLOW</code> to create an allow policy. The default action is <code>ALLOW</code>
 but it is useful to be explicit in the policy.</p>

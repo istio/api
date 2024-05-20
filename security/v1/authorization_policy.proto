@@ -43,7 +43,6 @@ import "type/v1beta1/selector.proto";
 // A request will be internally marked that it should be audited if there is an AUDIT policy on the workload that matches the request.
 // A separate plugin must be configured and enabled to actually fulfill the audit decision and complete the audit behavior.
 // The request will not be audited if there are no such supporting plugins enabled.
-// Currently, the only supported plugin is the [Stackdriver](https://istio.io/latest/docs/reference/config/proxy_extensions/stackdriver/) plugin.
 //
 // Here is an example of Istio Authorization Policy:
 //
