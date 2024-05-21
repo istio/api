@@ -18,7 +18,7 @@ for connections to an Envoy proxy sidecar.</p>
 Because of this, <code>DISABLE</code> mode is not supported.
 <code>STRICT</code> mode is useful to ensure that connections that bypass the mesh are not possible.</p>
 <p>Examples:</p>
-<p>Policy to allow mTLS traffic for all workloads under namespace <code>foo</code>:</p>
+<p>Policy to require mTLS traffic for all workloads under namespace <code>foo</code>:</p>
 <pre><code class="language-yaml">apiVersion: security.istio.io/v1
 kind: PeerAuthentication
 metadata:
