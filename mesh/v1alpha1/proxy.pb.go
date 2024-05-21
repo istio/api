@@ -2289,7 +2289,7 @@ type ProxyConfig_ProxyHeaders struct {
 	// If disabled, this header will not be set. If it is already present, it will be preserved.
 	// This header is enabled by default if not configured.
 	AttemptCount *ProxyConfig_ProxyHeaders_AttemptCount `protobuf:"bytes,4,opt,name=attempt_count,json=attemptCount,proto3" json:"attempt_count,omitempty"`
-	// Controls various `X-Envoy-*` headers, such as `X-Envoy-Overloaded` and `X-Envoy-Upstream-Service-Time. If enabled,
+	// Controls various `X-Envoy-*` headers, such as `X-Envoy-Overloaded` and `X-Envoy-Upstream-Service-Time`. If enabled,
 	// these headers will be included.
 	// If disabled, these headers will not be set. If they are already present, they will be preserved.
 	// See the [Envoy documentation](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/router/v3/router.proto#envoy-v3-api-field-extensions-filters-http-router-v3-router-suppress-envoy-headers) for more details.
