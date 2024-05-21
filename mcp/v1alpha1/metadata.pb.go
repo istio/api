@@ -18,6 +18,8 @@
 // 	protoc        (unknown)
 // source: mcp/v1alpha1/metadata.proto
 
+// $mode: none
+
 package v1alpha1
 
 import (
