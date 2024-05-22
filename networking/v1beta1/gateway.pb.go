@@ -460,7 +460,7 @@ func (x *Gateway) GetSelector() map[string]string {
 // port. For example,
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Gateway
 // metadata:
 //
@@ -483,7 +483,7 @@ func (x *Gateway) GetSelector() map[string]string {
 // # Another example
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Gateway
 // metadata:
 //
@@ -506,7 +506,7 @@ func (x *Gateway) GetSelector() map[string]string {
 // # The following is an example of TLS configuration for port 443
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Gateway
 // metadata:
 //

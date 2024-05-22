@@ -254,7 +254,7 @@ message VirtualService {
 // some to subset v2, in a Kubernetes environment.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: reviews-route
@@ -283,7 +283,7 @@ message VirtualService {
 // And the associated DestinationRule
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: reviews-destination
@@ -310,7 +310,7 @@ message VirtualService {
 // not have an impact in resolving the name of the productpage service.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: my-productpage-rule
@@ -332,7 +332,7 @@ message VirtualService {
 // Service for wikipedia.org and set a timeout of 5s for HTTP requests.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: ServiceEntry
 // metadata:
 //   name: external-svc-wikipedia
@@ -346,7 +346,7 @@ message VirtualService {
 //     protocol: HTTP
 //   resolution: DNS
 // ---
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: my-wiki-rule
@@ -503,7 +503,7 @@ message HTTPRoute {
 // forward the traffic to `/reviews` by a delegate VirtualService named `reviews`.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: bookinfo
@@ -528,7 +528,7 @@ message HTTPRoute {
 // ```
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: productpage
@@ -547,7 +547,7 @@ message HTTPRoute {
 // ```
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: reviews
@@ -576,7 +576,7 @@ message Delegate {
 // coming from the `v1` subset (version) of the `reviews` service.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: reviews-route
@@ -628,7 +628,7 @@ message Headers {
 // services in the mesh based on the SNI value.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: bookinfo-sni
@@ -669,7 +669,7 @@ message TLSRoute {
 // mongo.prod.svc.cluster.local to another Mongo server on port 5555.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: bookinfo-mongo
@@ -703,7 +703,7 @@ message TCPRoute {
 // with value `jason`.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: ratings-route
@@ -867,7 +867,7 @@ message HTTPMatchRequest {
 // "v1".
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: reviews-route
@@ -889,7 +889,7 @@ message HTTPMatchRequest {
 // And the associated DestinationRule
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: reviews-destination
@@ -909,7 +909,7 @@ message HTTPMatchRequest {
 // traffic to reviews.com to dev.reviews.com
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: reviews-route-two-domains
@@ -1034,7 +1034,7 @@ message TLSMatchAttributes {
 // /v1/bookRatings provided by the bookratings service.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: ratings-route
@@ -1090,7 +1090,7 @@ message HTTPRedirect {
 // to requests for /v1/getProductRatings API.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: ratings-route
@@ -1112,7 +1112,7 @@ message HTTPRedirect {
 // This is mostly useful for non text-based protocols such as gRPC.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: ratings-route
@@ -1135,7 +1135,7 @@ message HTTPRedirect {
 // the returned Content-Type.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: ratings-route
@@ -1183,7 +1183,7 @@ message HTTPBody {
 // ratings service before making the actual API call.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: ratings-route
@@ -1256,7 +1256,7 @@ message StringMatch {
 // or when the upstream server responds with Service Unavailable(503).
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: ratings-route
@@ -1310,7 +1310,7 @@ message HTTPRetry {
 // exposes `X-Foo-bar` header and sets an expiry period of 1 day.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: ratings-route
@@ -1391,7 +1391,7 @@ message HTTPFaultInjection {
   // service from all pods with label env: prod
   //
   // ```yaml
-  // apiVersion: networking.istio.io/v1beta1
+  // apiVersion: networking.istio.io/v1
   // kind: VirtualService
   // metadata:
   //   name: reviews-route
@@ -1441,7 +1441,7 @@ message HTTPFaultInjection {
   // error code for 1 out of every 1000 requests to the "ratings" service "v1".
   //
   // ```yaml
-  // apiVersion: networking.istio.io/v1beta1
+  // apiVersion: networking.istio.io/v1
   // kind: VirtualService
   // metadata:
   //   name: ratings-route

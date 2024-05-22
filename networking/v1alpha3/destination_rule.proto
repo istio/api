@@ -33,7 +33,7 @@ import "type/v1beta1/selector.proto";
 // ratings service would look as follows:
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: bookinfo-ratings
@@ -51,7 +51,7 @@ import "type/v1beta1/selector.proto";
 // pods) with labels (version:v3).
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: bookinfo-ratings
@@ -78,7 +78,7 @@ import "type/v1beta1/selector.proto";
 // traffic to the port 9080.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: bookinfo-ratings-port
@@ -101,7 +101,7 @@ import "type/v1beta1/selector.proto";
 // specific workload using the workloadSelector configuration.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: configure-client-mtls-dr-with-workloadselector
@@ -297,7 +297,7 @@ message TrafficPolicy {
 // labels (version:v3).
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: bookinfo-ratings
@@ -348,7 +348,7 @@ message Subset {
 // for all traffic going to the ratings service.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: bookinfo-ratings
@@ -364,7 +364,7 @@ message Subset {
 // the User cookie as the hash key.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: bookinfo-ratings
@@ -526,7 +526,7 @@ message LoadBalancerSettings {
 // service called myredissrv with a connect timeout of 30ms
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: bookinfo-redis
@@ -667,7 +667,7 @@ message ConnectionPoolSettings {
 // times with a 502, 503, or 504 error code will be ejected for 15 minutes.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: reviews-cb-policy
@@ -772,7 +772,7 @@ message OutlierDetection {
 // for connections to upstream database cluster.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: db-mtls
@@ -790,7 +790,7 @@ message OutlierDetection {
 // foreign service whose domain matches *.foo.com.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: tls-foo
@@ -805,7 +805,7 @@ message OutlierDetection {
 // to rating services.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //   name: ratings-istio-mtls

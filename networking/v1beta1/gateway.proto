@@ -243,7 +243,7 @@ message Gateway {
 // port. For example,
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Gateway
 // metadata:
 //   name: my-ingress
@@ -262,7 +262,7 @@ message Gateway {
 // Another example
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Gateway
 // metadata:
 //   name: my-tcp-ingress
@@ -281,7 +281,7 @@ message Gateway {
 // The following is an example of TLS configuration for port 443
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: Gateway
 // metadata:
 //   name: my-tls-ingress

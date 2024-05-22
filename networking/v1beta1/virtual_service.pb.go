@@ -390,7 +390,7 @@ func (x *VirtualService) GetExportTo() []string {
 // some to subset v2, in a Kubernetes environment.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -423,7 +423,7 @@ func (x *VirtualService) GetExportTo() []string {
 // # And the associated DestinationRule
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //
@@ -454,7 +454,7 @@ func (x *VirtualService) GetExportTo() []string {
 // not have an impact in resolving the name of the productpage service.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -480,7 +480,7 @@ func (x *VirtualService) GetExportTo() []string {
 // Service for wikipedia.org and set a timeout of 5s for HTTP requests.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: ServiceEntry
 // metadata:
 //
@@ -498,7 +498,7 @@ func (x *VirtualService) GetExportTo() []string {
 //	resolution: DNS
 //
 // ---
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -839,7 +839,7 @@ func (x *HTTPRoute) GetHeaders() *Headers {
 // forward the traffic to `/reviews` by a delegate VirtualService named `reviews`.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -868,7 +868,7 @@ func (x *HTTPRoute) GetHeaders() *Headers {
 // ```
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -891,7 +891,7 @@ func (x *HTTPRoute) GetHeaders() *Headers {
 // ```
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -973,7 +973,7 @@ func (x *Delegate) GetNamespace() string {
 // coming from the `v1` subset (version) of the `reviews` service.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -1068,7 +1068,7 @@ func (x *Headers) GetResponse() *Headers_HeaderOperations {
 // services in the mesh based on the SNI value.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -1162,7 +1162,7 @@ func (x *TLSRoute) GetRoute() []*RouteDestination {
 // mongo.prod.svc.cluster.local to another Mongo server on port 5555.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -1249,7 +1249,7 @@ func (x *TCPRoute) GetRoute() []*RouteDestination {
 // with value `jason`.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -1536,7 +1536,7 @@ func (x *HTTPMatchRequest) GetStatPrefix() string {
 // "v1".
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -1562,7 +1562,7 @@ func (x *HTTPMatchRequest) GetStatPrefix() string {
 // # And the associated DestinationRule
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: DestinationRule
 // metadata:
 //
@@ -1586,7 +1586,7 @@ func (x *HTTPMatchRequest) GetStatPrefix() string {
 // traffic to reviews.com to dev.reviews.com
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -1958,7 +1958,7 @@ func (x *TLSMatchAttributes) GetSourceNamespace() string {
 // /v1/bookRatings provided by the bookratings service.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -2111,7 +2111,7 @@ func (*HTTPRedirect_DerivePort) isHTTPRedirect_RedirectPort() {}
 // to requests for /v1/getProductRatings API.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -2137,7 +2137,7 @@ func (*HTTPRedirect_DerivePort) isHTTPRedirect_RedirectPort() {}
 // This is mostly useful for non text-based protocols such as gRPC.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -2164,7 +2164,7 @@ func (*HTTPRedirect_DerivePort) isHTTPRedirect_RedirectPort() {}
 // the returned Content-Type.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -2337,7 +2337,7 @@ func (*HTTPBody_Bytes) isHTTPBody_Specifier() {}
 // ratings service before making the actual API call.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -2601,7 +2601,7 @@ func (*StringMatch_Regex) isStringMatch_MatchType() {}
 // or when the upstream server responds with Service Unavailable(503).
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -2719,7 +2719,7 @@ func (x *HTTPRetry) GetRetryRemoteLocalities() *wrappers.BoolValue {
 // exposes `X-Foo-bar` header and sets an expiry period of 1 day.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -3166,7 +3166,7 @@ func (x *Headers_HeaderOperations) GetRemove() []string {
 // service from all pods with label env: prod
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //
@@ -3308,7 +3308,7 @@ func (*HTTPFaultInjection_Delay_ExponentialDelay) isHTTPFaultInjection_Delay_Htt
 // error code for 1 out of every 1000 requests to the "ratings" service "v1".
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1beta1
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //

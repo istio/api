@@ -199,7 +199,7 @@ option go_package="istio.io/api/security/v1beta1";
 //     - source:
 //         requestPrincipals: ["*"]
 // ---
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
 //   name: route-jwt

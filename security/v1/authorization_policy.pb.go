@@ -288,7 +288,7 @@ const (
 	// `my-custom-authz` if the request path has prefix `/admin/`.
 	//
 	// ```yaml
-	// apiVersion: security.istio.io/v1beta1
+	// apiVersion: security.istio.io/v1
 	// kind: AuthorizationPolicy
 	// metadata:
 	//
