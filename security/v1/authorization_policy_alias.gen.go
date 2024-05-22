@@ -3,19 +3,128 @@ package v1
 
 import "istio.io/api/security/v1beta1"
 
+// AuthorizationPolicy enables access control on workloads.
+//
+// <!-- crd generation tags
+// +cue-gen:AuthorizationPolicy:groupName:security.istio.io
+// +cue-gen:AuthorizationPolicy:versions:v1beta1,v1
+// +cue-gen:AuthorizationPolicy:storageVersion
+// +cue-gen:AuthorizationPolicy:annotations:helm.sh/resource-policy=keep
+// +cue-gen:AuthorizationPolicy:labels:app=istio-pilot,chart=istio,istio=security,heritage=Tiller,release=istio
+// +cue-gen:AuthorizationPolicy:subresource:status
+// +cue-gen:AuthorizationPolicy:scope:Namespaced
+// +cue-gen:AuthorizationPolicy:resource:categories=istio-io,security-istio-io,shortNames=ap,plural=authorizationpolicies
+// +cue-gen:AuthorizationPolicy:preserveUnknownFields:false
+// +cue-gen:AuthorizationPolicy:printerColumn:name=Action,type=string,JSONPath=.spec.action,description="The operation to take."
+// +cue-gen:AuthorizationPolicy:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
+// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
+// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// -->
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=security.istio.io/v1beta1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type AuthorizationPolicy = v1beta1.AuthorizationPolicy
 type AuthorizationPolicy_ExtensionProvider = v1beta1.AuthorizationPolicy_ExtensionProvider
+
+// Action specifies the operation to take.
 type AuthorizationPolicy_Action = v1beta1.AuthorizationPolicy_Action
 
+// Allow a request only if it matches the rules. This is the default type.
 const AuthorizationPolicy_ALLOW AuthorizationPolicy_Action = v1beta1.AuthorizationPolicy_ALLOW
+
+// Deny a request if it matches any of the rules.
 const AuthorizationPolicy_DENY AuthorizationPolicy_Action = v1beta1.AuthorizationPolicy_DENY
+
+// Audit a request if it matches any of the rules.
 const AuthorizationPolicy_AUDIT AuthorizationPolicy_Action = v1beta1.AuthorizationPolicy_AUDIT
+
+// The CUSTOM action allows an extension to handle the user request if the matching rules evaluate to true.
+// The extension is evaluated independently and before the native ALLOW and DENY actions. When used together, A request
+// is allowed if and only if all the actions return allow, in other words, the extension cannot bypass the
+// authorization decision made by ALLOW and DENY action.
+// Extension behavior is defined by the named providers declared in MeshConfig. The authorization policy refers to
+// the extension by specifying the name of the provider.
+// One example use case of the extension is to integrate with a custom external authorization system to delegate
+// the authorization decision to it.
+//
+// The following authorization policy applies to an ingress gateway and delegates the authorization check to a named extension
+// `my-custom-authz` if the request path has prefix `/admin/`.
+//
+// ```yaml
+// apiVersion: security.istio.io/v1
+// kind: AuthorizationPolicy
+// metadata:
+//
+//	name: ext-authz
+//	namespace: istio-system
+//
+// spec:
+//
+//	selector:
+//	  matchLabels:
+//	    app: istio-ingressgateway
+//	action: CUSTOM
+//	provider:
+//	  name: "my-custom-authz"
+//	rules:
+//	- to:
+//	  - operation:
+//	      paths: ["/admin/*"]
+//
+// ```
 const AuthorizationPolicy_CUSTOM AuthorizationPolicy_Action = v1beta1.AuthorizationPolicy_CUSTOM
 
+// Specifies detailed configuration of the CUSTOM action. Must be used only with CUSTOM action.
 type AuthorizationPolicy_Provider = v1beta1.AuthorizationPolicy_Provider
+
+// Rule matches requests from a list of sources that perform a list of operations subject to a
+// list of conditions. A match occurs when at least one source, one operation and all conditions
+// matches the request. An empty rule is always matched.
+//
+// Any string field in the rule supports Exact, Prefix, Suffix and Presence match:
+//
+// - Exact match: `abc` will match on value `abc`.
+// - Prefix match: `abc*` will match on value `abc` and `abcd`.
+// - Suffix match: `*abc` will match on value `abc` and `xabc`.
+// - Presence match: `*` will match when value is not empty.
 type Rule = v1beta1.Rule
+
+// From includes a list of sources.
 type Rule_From = v1beta1.Rule_From
+
+// To includes a list of operations.
 type Rule_To = v1beta1.Rule_To
+
+// Source specifies the source identities of a request. Fields in the source are
+// ANDed together.
+//
+// For example, the following source matches if the principal is `admin` or `dev`
+// and the namespace is `prod` or `test` and the ip is not `203.0.113.4`.
+//
+// ```yaml
+// principals: ["admin", "dev"]
+// namespaces: ["prod", "test"]
+// notIpBlocks: ["203.0.113.4"]
+// ```
 type Source = v1beta1.Source
+
+// Operation specifies the operations of a request. Fields in the operation are
+// ANDed together.
+//
+// For example, the following operation matches if the host has suffix `.example.com`
+// and the method is `GET` or `HEAD` and the path doesn't have prefix `/admin`.
+//
+// ```yaml
+// hosts: ["*.example.com"]
+// methods: ["GET", "HEAD"]
+// notPaths: ["/admin*"]
+// ```
 type Operation = v1beta1.Operation
+
+// Condition specifies additional required attributes.
 type Condition = v1beta1.Condition
