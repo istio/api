@@ -3,11 +3,145 @@ package v1
 
 import "istio.io/api/security/v1beta1"
 
+// {{< warning >}}
+// Development of PeerAuthentication is currently frozen and likely to be replaced in Ambient.
+// {{< /warning >}}
+// PeerAuthentication defines how traffic will be tunneled (or not) to the sidecar.
+//
+// Examples:
+//
+// Policy to allow mTLS traffic for all workloads under namespace `foo`:
+// ```yaml
+// apiVersion: security.istio.io/v1
+// kind: PeerAuthentication
+// metadata:
+//
+//	name: default
+//	namespace: foo
+//
+// spec:
+//
+//	mtls:
+//	  mode: STRICT
+//
+// ```
+// For mesh level, put the policy in root-namespace according to your Istio installation.
+//
+// Policies to allow both mTLS and plaintext traffic for all workloads under namespace `foo`, but
+// require mTLS for workload `finance`.
+// ```yaml
+// apiVersion: security.istio.io/v1
+// kind: PeerAuthentication
+// metadata:
+//
+//	name: default
+//	namespace: foo
+//
+// spec:
+//
+//	mtls:
+//	  mode: PERMISSIVE
+//
+// ---
+// apiVersion: security.istio.io/v1
+// kind: PeerAuthentication
+// metadata:
+//
+//	name: finance
+//	namespace: foo
+//
+// spec:
+//
+//	selector:
+//	  matchLabels:
+//	    app: finance
+//	mtls:
+//	  mode: STRICT
+//
+// ```
+// Policy that enables strict mTLS for all `finance` workloads, but leaves the port `8080` to
+// plaintext. Note the port value in the `portLevelMtls` field refers to the port
+// of the workload, not the port of the Kubernetes service.
+// ```yaml
+// apiVersion: security.istio.io/v1
+// kind: PeerAuthentication
+// metadata:
+//
+//	name: default
+//	namespace: foo
+//
+// spec:
+//
+//	selector:
+//	  matchLabels:
+//	    app: finance
+//	mtls:
+//	  mode: STRICT
+//	portLevelMtls:
+//	  8080:
+//	    mode: DISABLE
+//
+// ```
+// Policy that inherits mTLS mode from namespace (or mesh) settings, and disables
+// mTLS for workload port `8080`.
+// ```yaml
+// apiVersion: security.istio.io/v1
+// kind: PeerAuthentication
+// metadata:
+//
+//	name: default
+//	namespace: foo
+//
+// spec:
+//
+//	selector:
+//	  matchLabels:
+//	    app: finance
+//	mtls:
+//	  mode: UNSET
+//	portLevelMtls:
+//	  8080:
+//	    mode: DISABLE
+//
+// ```
+//
+// <!-- crd generation tags
+// +cue-gen:PeerAuthentication:groupName:security.istio.io
+// +cue-gen:PeerAuthentication:versions:v1beta1,v1
+// +cue-gen:PeerAuthentication:storageVersion
+// +cue-gen:PeerAuthentication:annotations:helm.sh/resource-policy=keep
+// +cue-gen:PeerAuthentication:labels:app=istio-pilot,chart=istio,istio=security,heritage=Tiller,release=istio
+// +cue-gen:PeerAuthentication:subresource:status
+// +cue-gen:PeerAuthentication:scope:Namespaced
+// +cue-gen:PeerAuthentication:resource:categories=istio-io,security-istio-io,shortNames=pa
+// +cue-gen:PeerAuthentication:preserveUnknownFields:false
+// +cue-gen:PeerAuthentication:printerColumn:name=Mode,type=string,JSONPath=.spec.mtls.mode,description="Defines the mTLS mode used for peer authentication."
+// +cue-gen:PeerAuthentication:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
+// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
+// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// -->
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=security.istio.io/v1beta1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type PeerAuthentication = v1beta1.PeerAuthentication
+
+// Mutual TLS settings.
 type PeerAuthentication_MutualTLS = v1beta1.PeerAuthentication_MutualTLS
 type PeerAuthentication_MutualTLS_Mode = v1beta1.PeerAuthentication_MutualTLS_Mode
 
+// Inherit from parent, if has one. Otherwise treated as `PERMISSIVE`.
 const PeerAuthentication_MutualTLS_UNSET PeerAuthentication_MutualTLS_Mode = v1beta1.PeerAuthentication_MutualTLS_UNSET
+
+// Connection is not tunneled.
 const PeerAuthentication_MutualTLS_DISABLE PeerAuthentication_MutualTLS_Mode = v1beta1.PeerAuthentication_MutualTLS_DISABLE
+
+// Connection can be either plaintext or mTLS tunnel.
 const PeerAuthentication_MutualTLS_PERMISSIVE PeerAuthentication_MutualTLS_Mode = v1beta1.PeerAuthentication_MutualTLS_PERMISSIVE
+
+// Connection is an mTLS tunnel (TLS with client cert must be presented).
 const PeerAuthentication_MutualTLS_STRICT PeerAuthentication_MutualTLS_Mode = v1beta1.PeerAuthentication_MutualTLS_STRICT
