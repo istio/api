@@ -812,8 +812,8 @@ type Operation struct {
 	// - `/foo/{*}` matches `/foo/bar` but not `/foo/bar/baz`
 	// - `/foo/{**}/` matches `/foo/bar/`, `/foo/bar/baz.txt`, and `/foo//` but not `/foo/bar`
 	// - `/foo/{*}/bar/{**}` matches `/foo/buzz/bar/` and `/foo/buzz/bar/baz`
-	// - `/*/baz/{*}“ is not a valid path template since it includes `*` outside of a supported operator
-	// - `/**/baz/{*}“ is not a valid path template since it includes `**` outside of a supported operator
+	// - `/*/baz/{*}` is not a valid path template since it includes `*` outside of a supported operator
+	// - `/**/baz/{*}` is not a valid path template since it includes `**` outside of a supported operator
 	// - `/{**}/foo/{*}` is not a valid path template since `{**}` is not the last operator
 	// - `/foo/{*}.txt` is invalid since there are characters other than `{*}` in the path segment
 	//
