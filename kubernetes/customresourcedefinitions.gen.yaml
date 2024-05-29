@@ -132,7 +132,11 @@ spec:
                       type: string
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
+                    maxProperties: 4096
                     type: object
+                    x-kubernetes-validations:
+                    - message: wildcard not allowed in label value match
+                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
               sha256:
                 description: SHA256 checksum that will be used to verify Wasm module
@@ -1866,7 +1870,11 @@ spec:
                       type: string
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
+                    maxProperties: 4096
                     type: object
+                    x-kubernetes-validations:
+                    - message: wildcard not allowed in label value match
+                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
             required:
             - host
@@ -3473,7 +3481,11 @@ spec:
                       type: string
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
+                    maxProperties: 4096
                     type: object
+                    x-kubernetes-validations:
+                    - message: wildcard not allowed in label value match
+                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
             required:
             - host
@@ -5080,7 +5092,11 @@ spec:
                       type: string
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
+                    maxProperties: 4096
                     type: object
+                    x-kubernetes-validations:
+                    - message: wildcard not allowed in label value match
+                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
             required:
             - host
@@ -5968,7 +5984,11 @@ spec:
                       type: string
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
+                    maxProperties: 4096
                     type: object
+                    x-kubernetes-validations:
+                    - message: wildcard not allowed in label value match
+                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
             type: object
           status:
@@ -11633,7 +11653,11 @@ spec:
                       type: string
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
+                    maxProperties: 4096
                     type: object
+                    x-kubernetes-validations:
+                    - message: wildcard not allowed in label value match
+                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
               targetRef:
                 properties:
@@ -11868,7 +11892,11 @@ spec:
                       type: string
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
+                    maxProperties: 4096
                     type: object
+                    x-kubernetes-validations:
+                    - message: wildcard not allowed in label value match
+                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
               targetRef:
                 properties:
@@ -12001,7 +12029,11 @@ spec:
                       type: string
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
+                    maxProperties: 4096
                     type: object
+                    x-kubernetes-validations:
+                    - message: wildcard not allowed in label value match
+                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
             type: object
           status:
@@ -12074,7 +12106,11 @@ spec:
                       type: string
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
+                    maxProperties: 4096
                     type: object
+                    x-kubernetes-validations:
+                    - message: wildcard not allowed in label value match
+                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
             type: object
           status:
@@ -12209,7 +12245,11 @@ spec:
                       type: string
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
+                    maxProperties: 4096
                     type: object
+                    x-kubernetes-validations:
+                    - message: wildcard not allowed in label value match
+                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
               targetRef:
                 properties:
@@ -12350,7 +12390,11 @@ spec:
                       type: string
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
+                    maxProperties: 4096
                     type: object
+                    x-kubernetes-validations:
+                    - message: wildcard not allowed in label value match
+                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
               targetRef:
                 properties:
@@ -12595,7 +12639,11 @@ spec:
                       type: string
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
+                    maxProperties: 4096
                     type: object
+                    x-kubernetes-validations:
+                    - message: wildcard not allowed in label value match
+                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
               targetRef:
                 properties:
@@ -12922,7 +12970,11 @@ spec:
                       type: string
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
+                    maxProperties: 4096
                     type: object
+                    x-kubernetes-validations:
+                    - message: wildcard not allowed in label value match
+                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
               targetRef:
                 properties:
