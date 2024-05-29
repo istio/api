@@ -59,29 +59,18 @@ spec:
   url: "http://test"
   pluginName: ""
 ---
-# TODO: validator is currently not catching this
-#_err: 'spec.pluginName in body should be at least'
-#apiVersion: extensions.istio.io/v1alpha1
-#kind: WasmPlugin
-#metadata:
-#  name: duplicate-ports
-#spec:
-#  url: "http://test"
-#  ports:
-#    - number: 1
-#    - number: 1
-#---
-#_err: 'spec.pluginName in body should be at least'
-#apiVersion: extensions.istio.io/v1alpha1
-#kind: WasmPlugin
-#metadata:
-#  name: duplicate-env
-#spec:
-#  url: "http://test"
-#  vmConfig:
-#    env:
-#    - name: a
-#    - name: a
+_err: 'Duplicate value'
+apiVersion: extensions.istio.io/v1alpha1
+kind: WasmPlugin
+metadata:
+  name: duplicate-env
+spec:
+  url: "http://test"
+  vmConfig:
+    env:
+    - name: a
+    - name: a
+---
 _err: 'spec.vmConfig.env[0].name in body should be at least'
 apiVersion: extensions.istio.io/v1alpha1
 kind: WasmPlugin
@@ -144,3 +133,14 @@ spec:
   selector:
     matchLabels:
       istio: "bar*"
+---
+_err: 'wildcard not allowed in label key match'
+apiVersion: extensions.istio.io/v1alpha1
+kind: WasmPlugin
+metadata:
+  name: invalid-selector
+spec:
+  url: "http://test"
+  selector:
+    matchLabels:
+      "istio*": "bar"
