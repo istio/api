@@ -137,8 +137,6 @@ spec:
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
                       rule: self.all(key, !key.contains('*'))
-                    - message: wildcard not allowed in label value match
-                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
               sha256:
                 description: SHA256 checksum that will be used to verify Wasm module
@@ -1877,8 +1875,6 @@ spec:
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
                       rule: self.all(key, !key.contains('*'))
-                    - message: wildcard not allowed in label value match
-                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
             required:
             - host
@@ -3490,8 +3486,6 @@ spec:
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
                       rule: self.all(key, !key.contains('*'))
-                    - message: wildcard not allowed in label value match
-                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
             required:
             - host
@@ -5103,8 +5097,6 @@ spec:
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
                       rule: self.all(key, !key.contains('*'))
-                    - message: wildcard not allowed in label value match
-                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
             required:
             - host
@@ -5997,8 +5989,6 @@ spec:
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
                       rule: self.all(key, !key.contains('*'))
-                    - message: wildcard not allowed in label value match
-                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
             type: object
           status:
@@ -11668,8 +11658,6 @@ spec:
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
                       rule: self.all(key, !key.contains('*'))
-                    - message: wildcard not allowed in label value match
-                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
               targetRef:
                 properties:
@@ -11909,8 +11897,6 @@ spec:
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
                       rule: self.all(key, !key.contains('*'))
-                    - message: wildcard not allowed in label value match
-                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
               targetRef:
                 properties:
@@ -12048,8 +12034,6 @@ spec:
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
                       rule: self.all(key, !key.contains('*'))
-                    - message: wildcard not allowed in label value match
-                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
             type: object
           status:
@@ -12127,8 +12111,6 @@ spec:
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
                       rule: self.all(key, !key.contains('*'))
-                    - message: wildcard not allowed in label value match
-                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
             type: object
           status:
@@ -12268,8 +12250,6 @@ spec:
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
                       rule: self.all(key, !key.contains('*'))
-                    - message: wildcard not allowed in label value match
-                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
               targetRef:
                 properties:
@@ -12415,8 +12395,6 @@ spec:
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
                       rule: self.all(key, !key.contains('*'))
-                    - message: wildcard not allowed in label value match
-                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
               targetRef:
                 properties:
@@ -12666,8 +12644,6 @@ spec:
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
                       rule: self.all(key, !key.contains('*'))
-                    - message: wildcard not allowed in label value match
-                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
               targetRef:
                 properties:
@@ -12999,8 +12975,6 @@ spec:
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
                       rule: self.all(key, !key.contains('*'))
-                    - message: wildcard not allowed in label value match
-                      rule: self.map(key, self[key]).all(v, !v.contains('*'))
                 type: object
               targetRef:
                 properties:
