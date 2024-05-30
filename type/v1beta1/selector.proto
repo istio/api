@@ -33,6 +33,9 @@ message WorkloadSelector {
   // One or more labels that indicate a specific set of pods/VMs
   // on which a policy should be applied. The scope of label search is restricted to
   // the configuration namespace in which the resource is present.
+  // +kubebuilder:validation:XValidation:message="wildcard not allowed in label key match",rule="self.all(key, !key.contains('*'))"
+  // +kubebuilder:validation:XValidation:message="wildcard not allowed in label value match",rule="self.map(key, self[key]).all(v, !v.contains('*'))"
+  // +kubebuilder:validation:MaxProperties=4096
   map<string, string> match_labels = 1;
 }
 
