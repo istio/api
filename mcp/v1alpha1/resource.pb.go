@@ -18,6 +18,8 @@
 // 	protoc        (unknown)
 // source: mcp/v1alpha1/resource.proto
 
+// $mode: none
+
 // This package defines the common, core types used by the Mesh Configuration Protocol.
 
 package v1alpha1

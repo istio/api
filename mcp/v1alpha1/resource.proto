@@ -14,6 +14,8 @@
 
 syntax = "proto3";
 
+// $mode: none
+
 // This package defines the common, core types used by the Mesh Configuration Protocol.
 package istio.mcp.v1alpha1;
 
