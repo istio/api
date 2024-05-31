@@ -1,0 +1,31 @@
+_err: only one of targetRefs or workloadSelector can be set
+apiVersion: security.istio.io/v1
+kind: RequestAuthentication
+metadata:
+  name: multi-refs
+spec:
+  targetRefs:
+  - group: ""
+    kind: Service
+    name: foo
+    namespace: bar
+  targetRef:
+    group: ""
+    kind: Service
+    name: foo
+    namespace: bar
+---
+_err: only one of targetRefs or workloadSelector can be set
+apiVersion: security.istio.io/v1
+kind: RequestAuthentication
+metadata:
+  name: ref-and-selector
+spec:
+  selector:
+    matchLabels:
+      a: b
+  targetRef:
+    group: ""
+    kind: Service
+    name: foo
+    namespace: bar

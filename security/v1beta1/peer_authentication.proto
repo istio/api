@@ -130,6 +130,7 @@ option go_package="istio.io/api/security/v1beta1";
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
+// +kubebuilder:validation:XValidation:message="portLevelMtls requires selector",rule="(has(self.selector) && has(self.selector.matchLabels) && self.selector.matchLabels.size() > 0) || !has(self.portLevelMtls)"
 message PeerAuthentication {
   // The selector determines the workloads to apply the PeerAuthentication on. The selector will match with workloads in the
   // same namespace as the policy. If the policy is in the root namespace, the selector will additionally match with workloads in all namespace.
@@ -164,5 +165,7 @@ message PeerAuthentication {
   // Port specific mutual TLS settings. These only apply when a workload selector
   // is specified. The port refers to the port of the workload, not the port of the
   // Kubernetes service.
+  // +kubebuilder:validation:XValidation:message="port must be between 1-65535",rule="self.all(key, 0 < int(key) && int(key) <= 65535)"
+  // +kubebuilder:validation:MinProperties=1
   map<uint32, MutualTLS> port_level_mtls = 3;
 }

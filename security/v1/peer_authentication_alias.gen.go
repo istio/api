@@ -128,6 +128,7 @@ import "istio.io/api/security/v1beta1"
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
+// +kubebuilder:validation:XValidation:message="portLevelMtls requires selector",rule="(has(self.selector) && has(self.selector.matchLabels) && self.selector.matchLabels.size() > 0) || !has(self.portLevelMtls)"
 type PeerAuthentication = v1beta1.PeerAuthentication
 
 // Mutual TLS settings.

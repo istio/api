@@ -244,6 +244,7 @@ option go_package="istio.io/api/security/v1beta1";
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
+// +kubebuilder:validation:XValidation:message="only one of targetRefs or workloadSelector can be set",rule="(has(self.selector)?1:0)+(has(self.targetRef)?1:0)+(has(self.targetRefs)?1:0)<=1"
 message RequestAuthentication {
   // Optional. The selector decides where to apply the request authentication policy. The selector will match with workloads
   // in the same namespace as the request authentication policy. If the request authentication policy is in the root namespace,

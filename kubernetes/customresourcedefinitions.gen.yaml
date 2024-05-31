@@ -12071,7 +12071,11 @@ spec:
                       type: string
                   type: object
                 description: Port specific mutual TLS settings.
+                minProperties: 1
                 type: object
+                x-kubernetes-validations:
+                - message: port must be between 1-65535
+                  rule: self.all(key, 0 < int(key) && int(key) <= 65535)
               selector:
                 description: The selector determines the workloads to apply the PeerAuthentication
                   on.
@@ -12095,6 +12099,10 @@ spec:
                       rule: self.all(key, key.size() != 0)
                 type: object
             type: object
+            x-kubernetes-validations:
+            - message: portLevelMtls requires selector
+              rule: (has(self.selector) && has(self.selector.matchLabels) && self.selector.matchLabels.size()
+                > 0) || !has(self.portLevelMtls)
           status:
             type: object
             x-kubernetes-preserve-unknown-fields: true
@@ -12155,7 +12163,11 @@ spec:
                       type: string
                   type: object
                 description: Port specific mutual TLS settings.
+                minProperties: 1
                 type: object
+                x-kubernetes-validations:
+                - message: port must be between 1-65535
+                  rule: self.all(key, 0 < int(key) && int(key) <= 65535)
               selector:
                 description: The selector determines the workloads to apply the PeerAuthentication
                   on.
@@ -12179,6 +12191,10 @@ spec:
                       rule: self.all(key, key.size() != 0)
                 type: object
             type: object
+            x-kubernetes-validations:
+            - message: portLevelMtls requires selector
+              rule: (has(self.selector) && has(self.selector.matchLabels) && self.selector.matchLabels.size()
+                > 0) || !has(self.portLevelMtls)
           status:
             type: object
             x-kubernetes-preserve-unknown-fields: true
@@ -12358,6 +12374,9 @@ spec:
                   type: object
                 type: array
             type: object
+            x-kubernetes-validations:
+            - message: only one of targetRefs or workloadSelector can be set
+              rule: (has(self.selector)?1:0)+(has(self.targetRef)?1:0)+(has(self.targetRefs)?1:0)<=1
           status:
             type: object
             x-kubernetes-preserve-unknown-fields: true
@@ -12510,6 +12529,9 @@ spec:
                   type: object
                 type: array
             type: object
+            x-kubernetes-validations:
+            - message: only one of targetRefs or workloadSelector can be set
+              rule: (has(self.selector)?1:0)+(has(self.targetRef)?1:0)+(has(self.targetRefs)?1:0)<=1
           status:
             type: object
             x-kubernetes-preserve-unknown-fields: true
