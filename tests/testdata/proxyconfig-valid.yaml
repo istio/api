@@ -1,0 +1,13 @@
+apiVersion: networking.istio.io/v1beta1
+kind: ProxyConfig
+metadata:
+  name: full
+spec:
+  concurrency: 1
+  selector:
+    matchLabels:
+      foo: bar
+  image:
+    imageType: foo
+  environmentVariables:
+    foo: baz
