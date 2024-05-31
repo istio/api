@@ -341,6 +341,7 @@ type RequestAuthentication struct {
 	// be rejected.
 	// Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
 	// such requests is undefined.
+	// +kubebuilder:validation:MaxItems=4096
 	JwtRules []*JWTRule `protobuf:"bytes,2,rep,name=jwt_rules,json=jwtRules,proto3" json:"jwt_rules,omitempty"`
 }
 
@@ -433,6 +434,7 @@ func (x *RequestAuthentication) GetJwtRules() []*JWTRule {
 // fromHeaders:
 // - "x-goog-iap-jwt-assertion"
 // ```
+// +kubebuilder:validation:XValidation:message="only one of jwks or jwksUri can be set",rule="(has(self.jwksUri)?1:0)+(has(self.jwks_uri)?1:0)+(has(self.jwks)?1:0)<=1"
 type JWTRule struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -444,6 +446,7 @@ type JWTRule struct {
 	//
 	// Example: `https://foobar.auth0.com`
 	// Example: `1234567-compute@developer.gserviceaccount.com`
+	// +kubebuilder:validation:MinLength=1
 	Issuer string `protobuf:"bytes,1,opt,name=issuer,proto3" json:"issuer,omitempty"`
 	// The list of JWT
 	// [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3)
@@ -460,6 +463,7 @@ type JWTRule struct {
 	//     bookstore_web.apps.example.com
 	//
 	// ```
+	// +kubebuilder:list-value-validation:MinLength=1
 	Audiences []string `protobuf:"bytes,2,rep,name=audiences,proto3" json:"audiences,omitempty"`
 	// URL of the provider's public key set to validate signature of the
 	// JWT. See [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
@@ -474,6 +478,9 @@ type JWTRule struct {
 	//
 	// Note: Only one of `jwksUri` and `jwks` should be used.
 	// +kubebuilder:altName=jwks_uri
+	// +kubebuilder:validation:MinLength=1
+	// +kubebuilder:validation:MaxLength=2048
+	// +kubebuilder:validation:XValidation:message="url must have scheme http:// or https://",rule="url(self).getScheme() in ['http', 'https']"
 	JwksUri string `protobuf:"bytes,3,opt,name=jwks_uri,json=jwksUri,proto3" json:"jwks_uri,omitempty"`
 	// JSON Web Key Set of public keys to validate signature of the JWT.
 	// See https://auth0.com/docs/jwks.
@@ -506,6 +513,7 @@ type JWTRule struct {
 	//
 	// Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
 	// such requests is undefined.
+	// +kubebuilder:list-value-validation:MinLength=1
 	FromParams []string `protobuf:"bytes,7,rep,name=from_params,json=fromParams,proto3" json:"from_params,omitempty"`
 	// This field specifies the header name to output a successfully verified JWT payload to the
 	// backend. The forwarded data is `base64_encoded(jwt_payload_in_JSON)`. If it is not specified,
@@ -524,6 +532,7 @@ type JWTRule struct {
 	//
 	// Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
 	// such requests is undefined.
+	// +kubebuilder:list-value-validation:MinLength=1
 	FromCookies []string `protobuf:"bytes,12,rep,name=from_cookies,json=fromCookies,proto3" json:"from_cookies,omitempty"`
 	// If set to true, the original token will be kept for the upstream request. Default is false.
 	ForwardOriginalToken bool `protobuf:"varint,9,opt,name=forward_original_token,json=forwardOriginalToken,proto3" json:"forward_original_token,omitempty"`
@@ -664,6 +673,7 @@ type JWTHeader struct {
 	unknownFields protoimpl.UnknownFields
 
 	// The HTTP header name.
+	// +kubebuilder:validation:MinLength=1
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// The prefix that should be stripped before decoding the token.
 	// For example, for `Authorization: Bearer <token>`, prefix=`Bearer` with a space at the end.
@@ -724,9 +734,12 @@ type ClaimToHeader struct {
 	unknownFields protoimpl.UnknownFields
 
 	// The name of the header to be created. The header will be overridden if it already exists in the request.
+	// +kubebuilder:validation:MinLength=1
+	// +kubebuilder:validation:Pattern=^[-_A-Za-z0-9]+$
 	Header string `protobuf:"bytes,1,opt,name=header,proto3" json:"header,omitempty"`
 	// The name of the claim to be copied from. Only claim of type string/int/bool is supported.
 	// The header will not be there if the claim does not exist or the type of the claim is not supported.
+	// +kubebuilder:validation:MinLength=1
 	Claim string `protobuf:"bytes,2,opt,name=claim,proto3" json:"claim,omitempty"`
 }
 
@@ -844,13 +857,14 @@ var file_security_v1beta1_request_authentication_proto_rawDesc = []byte{
 	0x64, 0x65, 0x72, 0x12, 0x18, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28,
 	0x09, 0x42, 0x04, 0xe2, 0x41, 0x01, 0x02, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x16, 0x0a,
 	0x06, 0x70, 0x72, 0x65, 0x66, 0x69, 0x78, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x70,
-	0x72, 0x65, 0x66, 0x69, 0x78, 0x22, 0x3d, 0x0a, 0x0d, 0x43, 0x6c, 0x61, 0x69, 0x6d, 0x54, 0x6f,
-	0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x12, 0x16, 0x0a, 0x06, 0x68, 0x65, 0x61, 0x64, 0x65, 0x72,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x68, 0x65, 0x61, 0x64, 0x65, 0x72, 0x12, 0x14,
-	0x0a, 0x05, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x63,
-	0x6c, 0x61, 0x69, 0x6d, 0x42, 0x1f, 0x5a, 0x1d, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x69, 0x6f,
-	0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x2f, 0x76, 0x31,
-	0x62, 0x65, 0x74, 0x61, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x72, 0x65, 0x66, 0x69, 0x78, 0x22, 0x49, 0x0a, 0x0d, 0x43, 0x6c, 0x61, 0x69, 0x6d, 0x54, 0x6f,
+	0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x12, 0x1c, 0x0a, 0x06, 0x68, 0x65, 0x61, 0x64, 0x65, 0x72,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x04, 0xe2, 0x41, 0x01, 0x02, 0x52, 0x06, 0x68, 0x65,
+	0x61, 0x64, 0x65, 0x72, 0x12, 0x1a, 0x0a, 0x05, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x42, 0x04, 0xe2, 0x41, 0x01, 0x02, 0x52, 0x05, 0x63, 0x6c, 0x61, 0x69, 0x6d,
+	0x42, 0x1f, 0x5a, 0x1d, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69,
+	0x2f, 0x73, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x2f, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61,
+	0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (

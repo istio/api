@@ -284,6 +284,7 @@ message RequestAuthentication {
   // be rejected.
   // Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
   // such requests is undefined.
+  // +kubebuilder:validation:MaxItems=4096
   repeated JWTRule jwt_rules = 2;
 }
 // JSON Web Token (JWT) token format for authentication as defined by
@@ -314,6 +315,7 @@ message RequestAuthentication {
 // fromHeaders:
 // - "x-goog-iap-jwt-assertion"
 // ```
+// +kubebuilder:validation:XValidation:message="only one of jwks or jwksUri can be set",rule="(has(self.jwksUri)?1:0)+(has(self.jwks_uri)?1:0)+(has(self.jwks)?1:0)<=1"
 message JWTRule {
   // Identifies the issuer that issued the JWT. See
   // [issuer](https://tools.ietf.org/html/rfc7519#section-4.1.1)
@@ -321,6 +323,7 @@ message JWTRule {
   //
   // Example: `https://foobar.auth0.com`
   // Example: `1234567-compute@developer.gserviceaccount.com`
+  // +kubebuilder:validation:MinLength=1
   string issuer = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The list of JWT
@@ -337,6 +340,7 @@ message JWTRule {
   // - bookstore_android.apps.example.com
   //   bookstore_web.apps.example.com
   // ```
+  // +kubebuilder:list-value-validation:MinLength=1
   repeated string audiences = 2;
 
   // URL of the provider's public key set to validate signature of the
@@ -352,6 +356,9 @@ message JWTRule {
   //
   // Note: Only one of `jwksUri` and `jwks` should be used.
   // +kubebuilder:altName=jwks_uri
+  // +kubebuilder:validation:MinLength=1
+  // +kubebuilder:validation:MaxLength=2048
+  // +kubebuilder:validation:XValidation:message="url must have scheme http:// or https://",rule="url(self).getScheme() in ['http', 'https']"
   string jwks_uri = 3;
 
   // JSON Web Key Set of public keys to validate signature of the JWT.
@@ -396,6 +403,7 @@ message JWTRule {
   //
   // Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
   // such requests is undefined.
+  // +kubebuilder:list-value-validation:MinLength=1
   repeated string from_params = 7;
 
   // This field specifies the header name to output a successfully verified JWT payload to the
@@ -414,6 +422,7 @@ message JWTRule {
   //
   // Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
   // such requests is undefined.
+  // +kubebuilder:list-value-validation:MinLength=1
   repeated string from_cookies = 12;
 
   // If set to true, the original token will be kept for the upstream request. Default is false.
@@ -446,6 +455,7 @@ message JWTRule {
 // This message specifies a header location to extract JWT token.
 message JWTHeader {
   // The HTTP header name.
+  // +kubebuilder:validation:MinLength=1
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The prefix that should be stripped before decoding the token.
@@ -457,9 +467,12 @@ message JWTHeader {
 // This message specifies the detail for copying claim to header.
 message ClaimToHeader {
   // The name of the header to be created. The header will be overridden if it already exists in the request.
-  string header = 1;
+  // +kubebuilder:validation:MinLength=1
+  // +kubebuilder:validation:Pattern=^[-_A-Za-z0-9]+$
+  string header = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The name of the claim to be copied from. Only claim of type string/int/bool is supported.
   // The header will not be there if the claim does not exist or the type of the claim is not supported.
-  string claim = 2;
+  // +kubebuilder:validation:MinLength=1
+  string claim = 2 [(google.api.field_behavior) = REQUIRED];
 }

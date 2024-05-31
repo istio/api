@@ -292,6 +292,7 @@ type RequestAuthentication = v1beta1.RequestAuthentication
 // fromHeaders:
 // - "x-goog-iap-jwt-assertion"
 // ```
+// +kubebuilder:validation:XValidation:message="only one of jwks or jwksUri can be set",rule="(has(self.jwksUri)?1:0)+(has(self.jwks_uri)?1:0)+(has(self.jwks)?1:0)<=1"
 type JWTRule = v1beta1.JWTRule
 
 // This message specifies a header location to extract JWT token.

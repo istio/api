@@ -7,7 +7,6 @@ spec:
   - group: ""
     kind: Service
     name: foo
-    namespace: bar
   jwtRules:
   - issuer: "example.com"
     jwksUri: https://example.com/.well-known/jwks.json
