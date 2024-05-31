@@ -11,3 +11,12 @@ spec:
     imageType: foo
   environmentVariables:
     foo: baz
+---
+# Silly but valid
+apiVersion: networking.istio.io/v1beta1
+kind: ProxyConfig
+metadata:
+  name: empty-selector
+spec:
+  selector:
+    matchLabels: {}

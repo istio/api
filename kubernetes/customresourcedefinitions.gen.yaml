@@ -138,7 +138,6 @@ spec:
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
                     maxProperties: 4096
-                    minProperties: 1
                     type: object
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
@@ -2055,7 +2054,6 @@ spec:
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
                     maxProperties: 4096
-                    minProperties: 1
                     type: object
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
@@ -3819,7 +3817,6 @@ spec:
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
                     maxProperties: 4096
-                    minProperties: 1
                     type: object
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
@@ -5583,7 +5580,6 @@ spec:
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
                     maxProperties: 4096
-                    minProperties: 1
                     type: object
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
@@ -6497,7 +6493,6 @@ spec:
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
                     maxProperties: 4096
-                    minProperties: 1
                     type: object
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
@@ -12332,7 +12327,6 @@ spec:
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
                     maxProperties: 4096
-                    minProperties: 1
                     type: object
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
@@ -12604,7 +12598,6 @@ spec:
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
                     maxProperties: 4096
-                    minProperties: 1
                     type: object
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
@@ -12778,7 +12771,6 @@ spec:
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
                     maxProperties: 4096
-                    minProperties: 1
                     type: object
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
@@ -12870,7 +12862,6 @@ spec:
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
                     maxProperties: 4096
-                    minProperties: 1
                     type: object
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
@@ -13048,7 +13039,6 @@ spec:
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
                     maxProperties: 4096
-                    minProperties: 1
                     type: object
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
@@ -13257,7 +13247,6 @@ spec:
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
                     maxProperties: 4096
-                    minProperties: 1
                     type: object
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
@@ -13545,7 +13534,6 @@ spec:
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
                     maxProperties: 4096
-                    minProperties: 1
                     type: object
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match
@@ -13912,7 +13900,6 @@ spec:
                     description: One or more labels that indicate a specific set of
                       pods/VMs on which a policy should be applied.
                     maxProperties: 4096
-                    minProperties: 1
                     type: object
                     x-kubernetes-validations:
                     - message: wildcard not allowed in label key match

@@ -38,7 +38,6 @@ message WorkloadSelector {
   // +kubebuilder:map-value-validation:XValidation:message="wildcard not allowed in label value match",rule="!self.contains('*')"
   // +kubebuilder:map-value-validation:MaxLength=63
   // +kubebuilder:validation:MaxProperties=4096
-  // +kubebuilder:validation:MinProperties=1
   map<string, string> match_labels = 1;
 }
 

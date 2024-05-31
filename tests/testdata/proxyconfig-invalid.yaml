@@ -6,15 +6,6 @@ metadata:
 spec:
   concurrency: -1
 ---
-_err: spec.selector.matchLabels in body should have at least 1 properties
-apiVersion: networking.istio.io/v1beta1
-kind: ProxyConfig
-metadata:
-  name: bad-selector
-spec:
-  selector:
-    matchLabels: {}
----
 _err: key must not be empty
 apiVersion: networking.istio.io/v1beta1
 kind: ProxyConfig
