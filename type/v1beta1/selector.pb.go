@@ -254,6 +254,7 @@ func (x *PortSelector) GetNumber() uint32 {
 //	      ports: ["8080"]
 //
 // ```
+// +kubebuilder:validation:XValidation:message="Support kinds are core/Service and gateway.networking.k8s.io/Gateway",rule="[self.group, self.kind] in [['core','Service'], [”,'Service'], ['gateway.networking.k8s.io','Gateway']]"
 type PolicyTargetReference struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -274,7 +275,7 @@ type PolicyTargetReference struct {
 	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 	// namespace is the namespace of the referent. When unspecified, the local
 	// namespace is inferred.
-	// +kubebuilder:validation:XValidation:message=" cross namespace referencing is not currently supported",rule="self.size() == 0"
+	// +kubebuilder:validation:XValidation:message="cross namespace referencing is not currently supported",rule="self.size() == 0"
 	Namespace string `protobuf:"bytes,4,opt,name=namespace,proto3" json:"namespace,omitempty"`
 }
 

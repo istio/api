@@ -172,12 +172,16 @@ spec:
                     description: namespace is the namespace of the referent.
                     type: string
                     x-kubernetes-validations:
-                    - message: ' cross namespace referencing is not currently supported'
+                    - message: cross namespace referencing is not currently supported
                       rule: self.size() == 0
                 required:
                 - kind
                 - name
                 type: object
+                x-kubernetes-validations:
+                - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                  rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
+                    [''gateway.networking.k8s.io'',''Gateway'']]'
               targetRefs:
                 description: Optional.
                 items:
@@ -202,12 +206,16 @@ spec:
                       description: namespace is the namespace of the referent.
                       type: string
                       x-kubernetes-validations:
-                      - message: ' cross namespace referencing is not currently supported'
+                      - message: cross namespace referencing is not currently supported
                         rule: self.size() == 0
                   required:
                   - kind
                   - name
                   type: object
+                  x-kubernetes-validations:
+                  - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                    rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
+                      [''gateway.networking.k8s.io'',''Gateway'']]'
                 type: array
               type:
                 description: |-
@@ -5893,12 +5901,16 @@ spec:
                       description: namespace is the namespace of the referent.
                       type: string
                       x-kubernetes-validations:
-                      - message: ' cross namespace referencing is not currently supported'
+                      - message: cross namespace referencing is not currently supported
                         rule: self.size() == 0
                   required:
                   - kind
                   - name
                   type: object
+                  x-kubernetes-validations:
+                  - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                    rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
+                      [''gateway.networking.k8s.io'',''Gateway'']]'
                 type: array
               workloadSelector:
                 description: Criteria used to select the specific set of pods/VMs
@@ -12356,12 +12368,16 @@ spec:
                     description: namespace is the namespace of the referent.
                     type: string
                     x-kubernetes-validations:
-                    - message: ' cross namespace referencing is not currently supported'
+                    - message: cross namespace referencing is not currently supported
                       rule: self.size() == 0
                 required:
                 - kind
                 - name
                 type: object
+                x-kubernetes-validations:
+                - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                  rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
+                    [''gateway.networking.k8s.io'',''Gateway'']]'
               targetRefs:
                 description: Optional.
                 items:
@@ -12386,12 +12402,16 @@ spec:
                       description: namespace is the namespace of the referent.
                       type: string
                       x-kubernetes-validations:
-                      - message: ' cross namespace referencing is not currently supported'
+                      - message: cross namespace referencing is not currently supported
                         rule: self.size() == 0
                   required:
                   - kind
                   - name
                   type: object
+                  x-kubernetes-validations:
+                  - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                    rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
+                      [''gateway.networking.k8s.io'',''Gateway'']]'
                 type: array
             type: object
           status:
@@ -12627,12 +12647,16 @@ spec:
                     description: namespace is the namespace of the referent.
                     type: string
                     x-kubernetes-validations:
-                    - message: ' cross namespace referencing is not currently supported'
+                    - message: cross namespace referencing is not currently supported
                       rule: self.size() == 0
                 required:
                 - kind
                 - name
                 type: object
+                x-kubernetes-validations:
+                - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                  rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
+                    [''gateway.networking.k8s.io'',''Gateway'']]'
               targetRefs:
                 description: Optional.
                 items:
@@ -12657,12 +12681,16 @@ spec:
                       description: namespace is the namespace of the referent.
                       type: string
                       x-kubernetes-validations:
-                      - message: ' cross namespace referencing is not currently supported'
+                      - message: cross namespace referencing is not currently supported
                         rule: self.size() == 0
                   required:
                   - kind
                   - name
                   type: object
+                  x-kubernetes-validations:
+                  - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                    rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
+                      [''gateway.networking.k8s.io'',''Gateway'']]'
                 type: array
             type: object
           status:
@@ -13068,12 +13096,16 @@ spec:
                     description: namespace is the namespace of the referent.
                     type: string
                     x-kubernetes-validations:
-                    - message: ' cross namespace referencing is not currently supported'
+                    - message: cross namespace referencing is not currently supported
                       rule: self.size() == 0
                 required:
                 - kind
                 - name
                 type: object
+                x-kubernetes-validations:
+                - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                  rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
+                    [''gateway.networking.k8s.io'',''Gateway'']]'
               targetRefs:
                 description: Optional.
                 items:
@@ -13098,12 +13130,16 @@ spec:
                       description: namespace is the namespace of the referent.
                       type: string
                       x-kubernetes-validations:
-                      - message: ' cross namespace referencing is not currently supported'
+                      - message: cross namespace referencing is not currently supported
                         rule: self.size() == 0
                   required:
                   - kind
                   - name
                   type: object
+                  x-kubernetes-validations:
+                  - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                    rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
+                      [''gateway.networking.k8s.io'',''Gateway'']]'
                 type: array
             type: object
             x-kubernetes-validations:
@@ -13276,12 +13312,16 @@ spec:
                     description: namespace is the namespace of the referent.
                     type: string
                     x-kubernetes-validations:
-                    - message: ' cross namespace referencing is not currently supported'
+                    - message: cross namespace referencing is not currently supported
                       rule: self.size() == 0
                 required:
                 - kind
                 - name
                 type: object
+                x-kubernetes-validations:
+                - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                  rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
+                    [''gateway.networking.k8s.io'',''Gateway'']]'
               targetRefs:
                 description: Optional.
                 items:
@@ -13306,12 +13346,16 @@ spec:
                       description: namespace is the namespace of the referent.
                       type: string
                       x-kubernetes-validations:
-                      - message: ' cross namespace referencing is not currently supported'
+                      - message: cross namespace referencing is not currently supported
                         rule: self.size() == 0
                   required:
                   - kind
                   - name
                   type: object
+                  x-kubernetes-validations:
+                  - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                    rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
+                      [''gateway.networking.k8s.io'',''Gateway'']]'
                 type: array
             type: object
             x-kubernetes-validations:
@@ -13563,12 +13607,16 @@ spec:
                     description: namespace is the namespace of the referent.
                     type: string
                     x-kubernetes-validations:
-                    - message: ' cross namespace referencing is not currently supported'
+                    - message: cross namespace referencing is not currently supported
                       rule: self.size() == 0
                 required:
                 - kind
                 - name
                 type: object
+                x-kubernetes-validations:
+                - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                  rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
+                    [''gateway.networking.k8s.io'',''Gateway'']]'
               targetRefs:
                 description: Optional.
                 items:
@@ -13593,12 +13641,16 @@ spec:
                       description: namespace is the namespace of the referent.
                       type: string
                       x-kubernetes-validations:
-                      - message: ' cross namespace referencing is not currently supported'
+                      - message: cross namespace referencing is not currently supported
                         rule: self.size() == 0
                   required:
                   - kind
                   - name
                   type: object
+                  x-kubernetes-validations:
+                  - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                    rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
+                      [''gateway.networking.k8s.io'',''Gateway'']]'
                 type: array
               tracing:
                 description: Optional.
@@ -13929,12 +13981,16 @@ spec:
                     description: namespace is the namespace of the referent.
                     type: string
                     x-kubernetes-validations:
-                    - message: ' cross namespace referencing is not currently supported'
+                    - message: cross namespace referencing is not currently supported
                       rule: self.size() == 0
                 required:
                 - kind
                 - name
                 type: object
+                x-kubernetes-validations:
+                - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                  rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
+                    [''gateway.networking.k8s.io'',''Gateway'']]'
               targetRefs:
                 description: Optional.
                 items:
@@ -13959,12 +14015,16 @@ spec:
                       description: namespace is the namespace of the referent.
                       type: string
                       x-kubernetes-validations:
-                      - message: ' cross namespace referencing is not currently supported'
+                      - message: cross namespace referencing is not currently supported
                         rule: self.size() == 0
                   required:
                   - kind
                   - name
                   type: object
+                  x-kubernetes-validations:
+                  - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                    rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
+                      [''gateway.networking.k8s.io'',''Gateway'']]'
                 type: array
               tracing:
                 description: Optional.

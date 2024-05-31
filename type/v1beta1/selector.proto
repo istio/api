@@ -106,6 +106,7 @@ enum WorkloadMode {
 //         methods: ["POST"]
 //         ports: ["8080"]
 // ```
+// +kubebuilder:validation:XValidation:message="Support kinds are core/Service and gateway.networking.k8s.io/Gateway",rule="[self.group, self.kind] in [['core','Service'], ['','Service'], ['gateway.networking.k8s.io','Gateway']]"
 message PolicyTargetReference {
   // group is the group of the target resource.
   // +kubebuilder:validation:MaxLength=253
@@ -125,6 +126,6 @@ message PolicyTargetReference {
 
   // namespace is the namespace of the referent. When unspecified, the local
   // namespace is inferred.
-  // +kubebuilder:validation:XValidation:message=" cross namespace referencing is not currently supported",rule="self.size() == 0"
+  // +kubebuilder:validation:XValidation:message="cross namespace referencing is not currently supported",rule="self.size() == 0"
   string namespace = 4;
 }
