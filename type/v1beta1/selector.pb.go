@@ -120,7 +120,8 @@ type WorkloadSelector struct {
 	// on which a policy should be applied. The scope of label search is restricted to
 	// the configuration namespace in which the resource is present.
 	// +kubebuilder:validation:XValidation:message="wildcard not allowed in label key match",rule="self.all(key, !key.contains('*'))"
-	// +kubebuilder:validation:XValidation:message="wildcard not allowed in label value match",rule="self.map(key, self[key]).all(v, !v.contains('*'))"
+	// +kubebuilder:map-value-validation:XValidation:message="wildcard not allowed in label value match",rule="!self.contains('*')"
+	// +kubebuilder:map-value-validation:MaxLength=63
 	// +kubebuilder:validation:MaxProperties=4096
 	MatchLabels map[string]string `protobuf:"bytes,1,rep,name=match_labels,json=matchLabels,proto3" json:"match_labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
