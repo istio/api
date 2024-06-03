@@ -741,7 +741,7 @@ message HTTPMatchRequest {
   //
   // - `prefix: "value"` for prefix-based match
   //
-  // - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+  // - `regex: "value"` for RE2 style regex-based match https://github.com/google/re2/wiki/Syntax
   //
   // **Note:** Case-insensitive matching could be enabled via the
   // `ignoreUriCase` flag.
@@ -754,7 +754,7 @@ message HTTPMatchRequest {
   //
   // - `prefix: "value"` for prefix-based match
   //
-  // - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+  // - `regex: "value"` for RE2 style regex-based match https://github.com/google/re2/wiki/Syntax
   //
   StringMatch scheme = 2;
 
@@ -765,7 +765,7 @@ message HTTPMatchRequest {
   //
   // - `prefix: "value"` for prefix-based match
   //
-  // - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+  // - `regex: "value"` for RE2 style regex-based match https://github.com/google/re2/wiki/Syntax
   //
   StringMatch method = 3;
 
@@ -776,7 +776,7 @@ message HTTPMatchRequest {
   //
   // - `prefix: "value"` for prefix-based match
   //
-  // - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+  // - `regex: "value"` for RE2 style regex-based match https://github.com/google/re2/wiki/Syntax
   //
   StringMatch authority = 4;
 
@@ -789,7 +789,7 @@ message HTTPMatchRequest {
   //
   // - `prefix: "value"` for prefix-based match
   //
-  // - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+  // - `regex: "value"` for RE2 style regex-based match https://github.com/google/re2/wiki/Syntax
   //
   // If the value is empty and only the name of header is specified, presence of the header is checked.
   // To provide an empty value, use `{}`, for example:
@@ -1217,7 +1217,7 @@ message HTTPRewrite {
 }
 
 message RegexRewrite {
-  // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+  // RE2 style regex-based match https://github.com/google/re2/wiki/Syntax
   string match = 1;
 
   // The string that should replace into matching portions of original URI.
@@ -1245,7 +1245,7 @@ message StringMatch {
     // prefix-based match
     string prefix = 2;
 
-    // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+    // RE2 style regex-based match https://github.com/google/re2/wiki/Syntax
     string regex = 3;
   }
 }
