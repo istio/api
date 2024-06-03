@@ -668,7 +668,7 @@ type StringMatch_Exact = v1alpha3.StringMatch_Exact
 // prefix-based match
 type StringMatch_Prefix = v1alpha3.StringMatch_Prefix
 
-// RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+// RE2 style regex-based match https://github.com/google/re2/wiki/Syntax
 type StringMatch_Regex = v1alpha3.StringMatch_Regex
 
 // Describes the retry policy to use when a HTTP request fails. For
