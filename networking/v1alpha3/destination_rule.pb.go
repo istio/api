@@ -551,6 +551,7 @@ type TrafficPolicy struct {
 	// settings specified at the destination-level will not be inherited when
 	// overridden by port-level settings, i.e. default values will be applied
 	// to fields omitted in port-level traffic policies.
+	// +kubebuilder:validation:MaxItems=4096
 	PortLevelSettings []*TrafficPolicy_PortTrafficPolicy `protobuf:"bytes,5,rep,name=port_level_settings,json=portLevelSettings,proto3" json:"port_level_settings,omitempty"`
 	// Configuration of tunneling TCP over other transport or application layers
 	// for the host configured in the DestinationRule.

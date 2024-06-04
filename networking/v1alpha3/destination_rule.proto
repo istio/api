@@ -243,6 +243,7 @@ message TrafficPolicy {
   // settings specified at the destination-level will not be inherited when
   // overridden by port-level settings, i.e. default values will be applied
   // to fields omitted in port-level traffic policies.
+  // +kubebuilder:validation:MaxItems=4096
   repeated PortTrafficPolicy port_level_settings = 5;
 
   message TunnelSettings {

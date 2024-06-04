@@ -222,6 +222,7 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
+// +kubebuilder:validation:XValidation:message="portLevelMtls requires selector",rule="(has(self.selector) && has(self.selector.matchLabels) && self.selector.matchLabels.size() > 0) || !has(self.portLevelMtls)"
 type PeerAuthentication struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -238,6 +239,8 @@ type PeerAuthentication struct {
 	// Port specific mutual TLS settings. These only apply when a workload selector
 	// is specified. The port refers to the port of the workload, not the port of the
 	// Kubernetes service.
+	// +kubebuilder:validation:XValidation:message="port must be between 1-65535",rule="self.all(key, 0 < int(key) && int(key) <= 65535)"
+	// +kubebuilder:validation:MinProperties=1
 	PortLevelMtls map[uint32]*PeerAuthentication_MutualTLS `protobuf:"bytes,3,rep,name=port_level_mtls,json=portLevelMtls,proto3" json:"port_level_mtls,omitempty" protobuf_key:"varint,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 

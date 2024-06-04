@@ -34,6 +34,7 @@ message WorkloadSelector {
   // on which a policy should be applied. The scope of label search is restricted to
   // the configuration namespace in which the resource is present.
   // +kubebuilder:validation:XValidation:message="wildcard not allowed in label key match",rule="self.all(key, !key.contains('*'))"
+  // +kubebuilder:validation:XValidation:message="key must not be empty",rule="self.all(key, key.size() != 0)"
   // +kubebuilder:map-value-validation:XValidation:message="wildcard not allowed in label value match",rule="!self.contains('*')"
   // +kubebuilder:map-value-validation:MaxLength=63
   // +kubebuilder:validation:MaxProperties=4096
@@ -105,17 +106,26 @@ enum WorkloadMode {
 //         methods: ["POST"]
 //         ports: ["8080"]
 // ```
+// +kubebuilder:validation:XValidation:message="Support kinds are core/Service and gateway.networking.k8s.io/Gateway",rule="[self.group, self.kind] in [['core','Service'], ['','Service'], ['gateway.networking.k8s.io','Gateway']]"
 message PolicyTargetReference {
   // group is the group of the target resource.
+  // +kubebuilder:validation:MaxLength=253
+  // +kubebuilder:validation:Pattern=`^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`
   string group = 1;
 
   // kind is kind of the target resource.
-  string kind = 2;
+  // +kubebuilder:validation:MinLength=1
+  // +kubebuilder:validation:MaxLength=63
+  // +kubebuilder:validation:Pattern=`^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$`
+  string kind = 2 [(google.api.field_behavior) = REQUIRED];
 
   // name is the name of the target resource.
-  string name = 3;
+  // +kubebuilder:validation:MinLength=1
+  // +kubebuilder:validation:MaxLength=253
+  string name = 3 [(google.api.field_behavior) = REQUIRED];
 
   // namespace is the namespace of the referent. When unspecified, the local
   // namespace is inferred.
+  // +kubebuilder:validation:XValidation:message="cross namespace referencing is not currently supported",rule="self.size() == 0"
   string namespace = 4;
 }
