@@ -121,7 +121,6 @@ spec:
               priority:
                 description: Determines ordering of `WasmPlugins` in the same `phase`.
                 format: int32
-                minimum: 0
                 nullable: true
                 type: integer
               selector:
