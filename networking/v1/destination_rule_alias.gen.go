@@ -179,6 +179,10 @@ type LoadBalancerSettings_ConsistentHashLB_RingHash_ = v1alpha3.LoadBalancerSett
 // The Maglev load balancer implements consistent hashing to backend hosts.
 type LoadBalancerSettings_ConsistentHashLB_Maglev = v1alpha3.LoadBalancerSettings_ConsistentHashLB_Maglev
 
+// Aggression parameter non-linearly affects endpoint weight and represents the speed of ramp-up.
+// By tuning aggression parameter, one could achieve polynomial or exponential speed for traffic increase.
+type LoadBalancerSettingsAggression = v1alpha3.LoadBalancerSettingsAggression
+
 // Standard load balancing algorithms that require no tuning.
 type LoadBalancerSettings_SimpleLB = v1alpha3.LoadBalancerSettings_SimpleLB
 
