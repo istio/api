@@ -1344,7 +1344,7 @@ type HTTPMatchRequest struct {
 	//
 	// - `prefix: "value"` for prefix-based match
 	//
-	// - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+	// - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
 	//
 	// **Note:** Case-insensitive matching could be enabled via the
 	// `ignoreUriCase` flag.
@@ -1356,7 +1356,7 @@ type HTTPMatchRequest struct {
 	//
 	// - `prefix: "value"` for prefix-based match
 	//
-	// - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+	// - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
 	Scheme *StringMatch `protobuf:"bytes,2,opt,name=scheme,proto3" json:"scheme,omitempty"`
 	// HTTP Method
 	// values are case-sensitive and formatted as follows:
@@ -1365,7 +1365,7 @@ type HTTPMatchRequest struct {
 	//
 	// - `prefix: "value"` for prefix-based match
 	//
-	// - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+	// - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
 	Method *StringMatch `protobuf:"bytes,3,opt,name=method,proto3" json:"method,omitempty"`
 	// HTTP Authority
 	// values are case-sensitive and formatted as follows:
@@ -1374,7 +1374,7 @@ type HTTPMatchRequest struct {
 	//
 	// - `prefix: "value"` for prefix-based match
 	//
-	// - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+	// - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
 	Authority *StringMatch `protobuf:"bytes,4,opt,name=authority,proto3" json:"authority,omitempty"`
 	// The header keys must be lowercase and use hyphen as the separator,
 	// e.g. _x-request-id_.
@@ -1385,7 +1385,7 @@ type HTTPMatchRequest struct {
 	//
 	// - `prefix: "value"` for prefix-based match
 	//
-	// - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+	// - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
 	//
 	// If the value is empty and only the name of header is specified, presence of the header is checked.
 	// To provide an empty value, use `{}`, for example:
@@ -2483,7 +2483,7 @@ type RegexRewrite struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+	// [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
 	Match string `protobuf:"bytes,1,opt,name=match,proto3" json:"match,omitempty"`
 	// The string that should replace into matching portions of original URI.
 	// Capture groups in the pattern can be referenced in the new URI.
@@ -2635,7 +2635,7 @@ type StringMatch_Prefix struct {
 }
 
 type StringMatch_Regex struct {
-	// RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+	// [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
 	Regex string `protobuf:"bytes,3,opt,name=regex,proto3,oneof"`
 }
 
