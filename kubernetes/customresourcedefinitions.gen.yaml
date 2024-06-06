@@ -629,14 +629,6 @@ spec:
                                     type: string
                                   type: array
                               type: object
-                            minWeightPercent:
-                              description: MinWeightPercent parameter specifies the
-                                minimum percent of origin weight to make sure the
-                                EDF scheduler has a reasonable deadline, default is
-                                10%.
-                              maximum: 4294967295
-                              minimum: 0
-                              type: integer
                             simple:
                               description: |2-
 
@@ -987,14 +979,6 @@ spec:
                                           type: string
                                         type: array
                                     type: object
-                                  minWeightPercent:
-                                    description: MinWeightPercent parameter specifies
-                                      the minimum percent of origin weight to make
-                                      sure the EDF scheduler has a reasonable deadline,
-                                      default is 10%.
-                                    maximum: 4294967295
-                                    minimum: 0
-                                    type: integer
                                   simple:
                                     description: |2-
 
@@ -1492,13 +1476,6 @@ spec:
                               type: string
                             type: array
                         type: object
-                      minWeightPercent:
-                        description: MinWeightPercent parameter specifies the minimum
-                          percent of origin weight to make sure the EDF scheduler
-                          has a reasonable deadline, default is 10%.
-                        maximum: 4294967295
-                        minimum: 0
-                        type: integer
                       simple:
                         description: |2-
 
@@ -1843,14 +1820,6 @@ spec:
                                     type: string
                                   type: array
                               type: object
-                            minWeightPercent:
-                              description: MinWeightPercent parameter specifies the
-                                minimum percent of origin weight to make sure the
-                                EDF scheduler has a reasonable deadline, default is
-                                10%.
-                              maximum: 4294967295
-                              minimum: 0
-                              type: integer
                             simple:
                               description: |2-
 
@@ -2423,14 +2392,6 @@ spec:
                                     type: string
                                   type: array
                               type: object
-                            minWeightPercent:
-                              description: MinWeightPercent parameter specifies the
-                                minimum percent of origin weight to make sure the
-                                EDF scheduler has a reasonable deadline, default is
-                                10%.
-                              maximum: 4294967295
-                              minimum: 0
-                              type: integer
                             simple:
                               description: |2-
 
@@ -2781,14 +2742,6 @@ spec:
                                           type: string
                                         type: array
                                     type: object
-                                  minWeightPercent:
-                                    description: MinWeightPercent parameter specifies
-                                      the minimum percent of origin weight to make
-                                      sure the EDF scheduler has a reasonable deadline,
-                                      default is 10%.
-                                    maximum: 4294967295
-                                    minimum: 0
-                                    type: integer
                                   simple:
                                     description: |2-
 
@@ -3286,13 +3239,6 @@ spec:
                               type: string
                             type: array
                         type: object
-                      minWeightPercent:
-                        description: MinWeightPercent parameter specifies the minimum
-                          percent of origin weight to make sure the EDF scheduler
-                          has a reasonable deadline, default is 10%.
-                        maximum: 4294967295
-                        minimum: 0
-                        type: integer
                       simple:
                         description: |2-
 
@@ -3637,14 +3583,6 @@ spec:
                                     type: string
                                   type: array
                               type: object
-                            minWeightPercent:
-                              description: MinWeightPercent parameter specifies the
-                                minimum percent of origin weight to make sure the
-                                EDF scheduler has a reasonable deadline, default is
-                                10%.
-                              maximum: 4294967295
-                              minimum: 0
-                              type: integer
                             simple:
                               description: |2-
 
@@ -4217,14 +4155,6 @@ spec:
                                     type: string
                                   type: array
                               type: object
-                            minWeightPercent:
-                              description: MinWeightPercent parameter specifies the
-                                minimum percent of origin weight to make sure the
-                                EDF scheduler has a reasonable deadline, default is
-                                10%.
-                              maximum: 4294967295
-                              minimum: 0
-                              type: integer
                             simple:
                               description: |2-
 
@@ -4575,14 +4505,6 @@ spec:
                                           type: string
                                         type: array
                                     type: object
-                                  minWeightPercent:
-                                    description: MinWeightPercent parameter specifies
-                                      the minimum percent of origin weight to make
-                                      sure the EDF scheduler has a reasonable deadline,
-                                      default is 10%.
-                                    maximum: 4294967295
-                                    minimum: 0
-                                    type: integer
                                   simple:
                                     description: |2-
 
@@ -5080,13 +5002,6 @@ spec:
                               type: string
                             type: array
                         type: object
-                      minWeightPercent:
-                        description: MinWeightPercent parameter specifies the minimum
-                          percent of origin weight to make sure the EDF scheduler
-                          has a reasonable deadline, default is 10%.
-                        maximum: 4294967295
-                        minimum: 0
-                        type: integer
                       simple:
                         description: |2-
 
@@ -5431,14 +5346,6 @@ spec:
                                     type: string
                                   type: array
                               type: object
-                            minWeightPercent:
-                              description: MinWeightPercent parameter specifies the
-                                minimum percent of origin weight to make sure the
-                                EDF scheduler has a reasonable deadline, default is
-                                10%.
-                              maximum: 4294967295
-                              minimum: 0
-                              type: integer
                             simple:
                               description: |2-
 
