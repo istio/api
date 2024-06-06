@@ -516,15 +516,18 @@ message LoadBalancerSettings {
   // Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancers.
   google.protobuf.Duration warmup_duration_secs = 4;
   
-  // Aggression parameter non-linearly affects endpoint weight and represents the speed of ramp-up. 
+  message slowStart {
+      // Aggression parameter non-linearly affects endpoint weight and represents the speed of ramp-up. 
   // By tuning aggression parameter, one could achieve polynomial or exponential speed for traffic increase.
   message aggression {
-    uint32 default_value = 5;
-    string runtime_key = 6;
+    uint32 default_value = 1;
+    string runtime_key = 2;
   }
 
   // MinWeightPercent parameter specifies the minimum percent of origin weight to make sure the EDF scheduler has a reasonable deadline, default is 10%.
-  uint32 min_weight_percent = 7;
+  uint32 min_weight_percent = 3;
+  }
+
 }
 
 // Connection pool settings for an upstream host. The settings apply to

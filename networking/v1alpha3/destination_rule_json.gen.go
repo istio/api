@@ -127,14 +127,25 @@ func (this *LoadBalancerSettings_ConsistentHashLB_HTTPCookie) UnmarshalJSON(b []
 	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for LoadBalancerSettingsAggression
-func (this *LoadBalancerSettingsAggression) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for LoadBalancerSettingsSlowStart
+func (this *LoadBalancerSettingsSlowStart) MarshalJSON() ([]byte, error) {
 	str, err := DestinationRuleMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for LoadBalancerSettingsAggression
-func (this *LoadBalancerSettingsAggression) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for LoadBalancerSettingsSlowStart
+func (this *LoadBalancerSettingsSlowStart) UnmarshalJSON(b []byte) error {
+	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for LoadBalancerSettingsSlowStartAggression
+func (this *LoadBalancerSettingsSlowStartAggression) MarshalJSON() ([]byte, error) {
+	str, err := DestinationRuleMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for LoadBalancerSettingsSlowStartAggression
+func (this *LoadBalancerSettingsSlowStartAggression) UnmarshalJSON(b []byte) error {
 	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
