@@ -691,6 +691,26 @@ message ProxyConfig {
     // If IN_MESH, these headers will not be appended to outbound requests from sidecars to services not in-mesh.
     MetadataExchangeHeaders metadata_exchange_headers = 6;
   }
+
+  // dnsDomain is the DNS domain used by Kubernetes Services. Defaults to "cluster.local"
+  //
+  // Must match the 'dnsDomain' setting in kubeadm config and clusterDomain setting in kubelet.
+  // Must match the custom domain set in the external DNS server, if CoreDNS is not used.
+  //
+  // Do not set unless you are using a custom DNS domain for your K8S cluster and K8S
+  // is already set to use this value.
+  //
+  // The helm charts use "default.global.proxy.clusterDomain".
+  //
+  // Istiod uses this value to generate FQDNs for services. Agent uses this value
+  // in setting its node ID.
+  //
+  // See:
+  // https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/
+  // https://kubernetes.io/docs/reference/config-api/kubeadm-config.v1beta3/#kubeadm-k8s-io-v1beta3-DNS
+  //
+  //  $hide_from_docs
+  string DNSDomain = 40;
 }
 
 message RemoteService {
