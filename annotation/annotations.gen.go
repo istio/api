@@ -29,6 +29,7 @@ const (
 	Unknown ResourceTypes = iota
     Any
     AuthorizationPolicy
+    Gateway
     Ingress
     Namespace
     Pod
@@ -43,14 +44,16 @@ func (r ResourceTypes) String() string {
 	case 2:
 		return "AuthorizationPolicy"
 	case 3:
-		return "Ingress"
+		return "Gateway"
 	case 4:
-		return "Namespace"
+		return "Ingress"
 	case 5:
-		return "Pod"
+		return "Namespace"
 	case 6:
-		return "Service"
+		return "Pod"
 	case 7:
+		return "Service"
+	case 8:
 		return "WorkloadEntry"
 	}
 	return "Unknown"
@@ -132,6 +135,23 @@ var (
 		},
 	}
 
+	GatewayAliasFor = Instance {
+		Name:          "gateway.istio.io/alias-for",
+		Description:   "If `gateway.istio.io/alias-for` annotation is present, "+
+                        "any Route that binds to the gateway will bind to its "+
+                        "alias instead. The typical usage is when the original "+
+                        "gateway is not managed by the gateway controller but the "+
+                        "(generated) alias is. This allows people to build their "+
+                        "own gateway controllers on top of Istio Gateway "+
+                        "Controller.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Gateway,
+		},
+	}
+
 	GatewayControllerVersion = Instance {
 		Name:          "gateway.istio.io/controller-version",
 		Description:   "A version added to the Gateway by the controller "+
@@ -141,6 +161,36 @@ var (
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Any,
+		},
+	}
+
+	GatewayNameOverride = Instance {
+		Name:          "gateway.istio.io/name-override",
+		Description:   "If you are using the Kubernetes Gateway to manage your "+
+                        "istio gateways, the names of the Kubernetes Deployment "+
+                        "and Service has been modified. The "+
+                        "`gateway.istio.io/name-override` annotation can be used "+
+                        "to continue using the old convention during upgrades.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Gateway,
+		},
+	}
+
+	GatewayServiceAccount = Instance {
+		Name:          "gateway.istio.io/service-account",
+		Description:   "If you are using the Kubernetes Gateway to manage your "+
+                        "istio gateways, the default Service Account used has "+
+                        "switched to used its own token. The "+
+                        "`gateway.istio.io/service-account` annotation can be used "+
+                        "to continue using the old convention during upgrades.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Gateway,
 		},
 	}
 
@@ -282,6 +332,18 @@ var (
 		},
 	}
 
+	NetworkingAddressType = Instance {
+		Name:          "networking.istio.io/address-type",
+		Description:   "Specifies how a network address is represented as a text "+
+                        "string, Used to override the default.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Gateway,
+		},
+	}
+
 	NetworkingExportTo = Instance {
 		Name:          "networking.istio.io/exportTo",
 		Description:   "Specifies the namespaces to which this service should be "+
@@ -293,6 +355,19 @@ var (
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Service,
+		},
+	}
+
+	NetworkingServiceType = Instance {
+		Name:          "networking.istio.io/service-type",
+		Description:   "Specifies the ingress methods for a service. This "+
+                        "annotation is deprecated, please use "+
+                        "`Spec.Infrastructure.Routeability`.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    true,
+		Resources: []ResourceTypes{
+			Gateway,
 		},
 	}
 
@@ -921,7 +996,10 @@ func AllResourceAnnotations() []*Instance {
 		&AlphaIdentity,
 		&AlphaKubernetesServiceAccounts,
 		&GalleyAnalyzeSuppress,
+		&GatewayAliasFor,
 		&GatewayControllerVersion,
+		&GatewayNameOverride,
+		&GatewayServiceAccount,
 		&InjectTemplates,
 		&OperatorInstallChartOwner,
 		&OperatorInstallOwnerGeneration,
@@ -933,7 +1011,9 @@ func AllResourceAnnotations() []*Instance {
 		&IoIstioRev,
 		&IoIstioWorkloadController,
 		&IoKubernetesIngressClass,
+		&NetworkingAddressType,
 		&NetworkingExportTo,
+		&NetworkingServiceType,
 		&PrometheusMergeMetrics,
 		&ProxyConfig,
 		&ProxyOverrides,
@@ -990,6 +1070,7 @@ func AllResourceTypes() []string {
 	return []string {
 		"Any",
 		"AuthorizationPolicy",
+		"Gateway",
 		"Ingress",
 		"Namespace",
 		"Pod",

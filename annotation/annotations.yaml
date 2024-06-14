@@ -593,3 +593,52 @@ annotations:
     hidden: false
     resources:
       - Pod
+
+  - name: gateway.istio.io/alias-for
+    featureStatus: Alpha
+    description: If "gateway.istio.io/alias-for" annotation is present, any Route
+      that binds to the gateway will bind to its alias instead.
+      The typical usage is when the original gateway is not managed by the gateway controller
+      but the (generated) alias is. This allows people to build their own
+      gateway controllers on top of Istio Gateway Controller.
+    deprecated: false
+    hidden: false
+    resources:
+      - Gateway
+
+  - name: gateway.istio.io/name-override
+    featureStatus: Alpha
+    description: If you are using the Kubernetes Gateway to manage your istio gateways,
+      the names of the Kubernetes Deployment and Service has been modified. The `gateway.istio.io/name-override`
+      annotation can be used to continue using the old convention during upgrades.
+    deprecated: false
+    hidden: false
+    resources:
+      - Gateway
+
+  - name: gateway.istio.io/service-account
+    featureStatus: Alpha
+    description: If you are using the Kubernetes Gateway to manage your istio gateways,
+      the default Service Account used has switched to used its own token. The `gateway.istio.io/service-account`
+      annotation can be used to continue using the old convention during upgrades.
+    deprecated: false
+    hidden: false
+    resources:
+      - Gateway
+
+  - name: networking.istio.io/service-type
+    featureStatus: Alpha
+    description: Specifies the ingress methods for a service. This annotation is deprecated, 
+      please use `Spec.Infrastructure.Routeability`.
+    deprecated: true
+    hidden: false
+    resources:
+      - Gateway
+
+  - name: networking.istio.io/address-type
+    featureStatus: Alpha
+    description: Specifies how a network address is represented as a text string, Used to override the default.
+    deprecated: false
+    hidden: false
+    resources:
+      - Gateway

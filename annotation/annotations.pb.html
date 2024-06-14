@@ -31,6 +31,72 @@ Istio supports to control its behavior.
     </tr>
   </tbody>
 </table>
+<h2 id="GatewayAliasFor">gateway.istio.io/alias-for</h2>
+<table class="annotations">
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <td><code>gateway.istio.io/alias-for</code></td>
+    </tr>
+    <tr>
+      <th>Feature Status</th>
+      <td>Alpha</td>
+    </tr>
+    <tr>
+      <th>Resource Types</th>
+      <td>[Gateway]</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td><p>If &ldquo;gateway.istio.io/alias-for&rdquo; annotation is present, any Route that binds to the gateway will bind to its alias instead. The typical usage is when the original gateway is not managed by the gateway controller but the (generated) alias is. This allows people to build their own gateway controllers on top of Istio Gateway Controller.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
+<h2 id="GatewayNameOverride">gateway.istio.io/name-override</h2>
+<table class="annotations">
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <td><code>gateway.istio.io/name-override</code></td>
+    </tr>
+    <tr>
+      <th>Feature Status</th>
+      <td>Alpha</td>
+    </tr>
+    <tr>
+      <th>Resource Types</th>
+      <td>[Gateway]</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td><p>If you are using the Kubernetes Gateway to manage your istio gateways, the names of the Kubernetes Deployment and Service has been modified. The <code>gateway.istio.io/name-override</code> annotation can be used to continue using the old convention during upgrades.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
+<h2 id="GatewayServiceAccount">gateway.istio.io/service-account</h2>
+<table class="annotations">
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <td><code>gateway.istio.io/service-account</code></td>
+    </tr>
+    <tr>
+      <th>Feature Status</th>
+      <td>Alpha</td>
+    </tr>
+    <tr>
+      <th>Resource Types</th>
+      <td>[Gateway]</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td><p>If you are using the Kubernetes Gateway to manage your istio gateways, the default Service Account used has switched to used its own token. The <code>gateway.istio.io/service-account</code> annotation can be used to continue using the old convention during upgrades.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
 <h2 id="InjectTemplates">inject.istio.io/templates</h2>
 <table class="annotations">
   <tbody>
@@ -185,6 +251,28 @@ Istio supports to control its behavior.
     </tr>
   </tbody>
 </table>
+<h2 id="NetworkingAddressType">networking.istio.io/address-type</h2>
+<table class="annotations">
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <td><code>networking.istio.io/address-type</code></td>
+    </tr>
+    <tr>
+      <th>Feature Status</th>
+      <td>Alpha</td>
+    </tr>
+    <tr>
+      <th>Resource Types</th>
+      <td>[Gateway]</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td><p>Specifies how a network address is represented as a text string, Used to override the default.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
 <h2 id="NetworkingExportTo">networking.istio.io/exportTo</h2>
 <table class="annotations">
   <tbody>
@@ -203,6 +291,28 @@ Istio supports to control its behavior.
     <tr>
       <th>Description</th>
       <td><p>Specifies the namespaces to which this service should be exported to. A value of &lsquo;*&rsquo; indicates it is reachable within the mesh &lsquo;.&rsquo; indicates it is reachable within its namespace.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
+<h2 id="NetworkingServiceType">networking.istio.io/service-type</h2>
+<table class="annotations">
+  <tbody>
+    <tr class="deprecated">
+      <th>Name</th>
+      <td><code>networking.istio.io/service-type</code></td>
+    </tr>
+    <tr>
+      <th>Feature Status</th>
+      <td>Deprecated</td>
+    </tr>
+    <tr>
+      <th>Resource Types</th>
+      <td>[Gateway]</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td><p>Specifies the ingress methods for a service. This annotation is deprecated, please use <code>Spec.Infrastructure.Routeability</code>.</p>
 </td>
     </tr>
   </tbody>
