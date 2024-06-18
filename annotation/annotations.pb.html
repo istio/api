@@ -911,50 +911,6 @@ Istio supports to control its behavior.
     </tr>
   </tbody>
 </table>
-<h2 id="TrafficExcludeInboundPorts">traffic.istio.io/excludeInboundPorts</h2>
-<table class="annotations">
-  <tbody>
-    <tr>
-      <th>Name</th>
-      <td><code>traffic.istio.io/excludeInboundPorts</code></td>
-    </tr>
-    <tr>
-      <th>Feature Status</th>
-      <td>Alpha</td>
-    </tr>
-    <tr>
-      <th>Resource Types</th>
-      <td>[Pod]</td>
-    </tr>
-    <tr>
-      <th>Description</th>
-      <td><p>A comma separated list of inbound ports to be excluded from redirection to Envoy. Only applies when all inbound traffic (i.e. &lsquo;*&rsquo;) is being redirected.</p>
-</td>
-    </tr>
-  </tbody>
-</table>
-<h2 id="TrafficExcludeOutboundIPRanges">traffic.istio.io/excludeOutboundIPRanges</h2>
-<table class="annotations">
-  <tbody>
-    <tr>
-      <th>Name</th>
-      <td><code>traffic.istio.io/excludeOutboundIPRanges</code></td>
-    </tr>
-    <tr>
-      <th>Feature Status</th>
-      <td>Alpha</td>
-    </tr>
-    <tr>
-      <th>Resource Types</th>
-      <td>[Pod]</td>
-    </tr>
-    <tr>
-      <th>Description</th>
-      <td><p>A comma separated list of IP ranges in CIDR form to be excluded from redirection. Only applies when all outbound traffic (i.e. &lsquo;*&rsquo;) is being redirected.</p>
-</td>
-    </tr>
-  </tbody>
-</table>
 <h2 id="TrafficNodeSelector">traffic.istio.io/nodeSelector</h2>
 <table class="annotations">
   <tbody>
