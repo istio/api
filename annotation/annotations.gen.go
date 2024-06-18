@@ -722,7 +722,7 @@ var (
 		Description:   "A comma separated list of interfaces to be excluded from "+
                         "Istio traffic capture",
 		FeatureStatus: Alpha,
-		Hidden:        false,
+		Hidden:        true,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Pod,
@@ -747,7 +747,7 @@ var (
 		Description:   "A comma separated list of outbound ports to be excluded "+
                         "from redirection to Envoy.",
 		FeatureStatus: Alpha,
-		Hidden:        false,
+		Hidden:        true,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Pod,
@@ -761,7 +761,7 @@ var (
                         "can be used to configure redirection for all ports. An "+
                         "empty list will disable all inbound redirection.",
 		FeatureStatus: Alpha,
-		Hidden:        false,
+		Hidden:        true,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Pod,
@@ -775,7 +775,7 @@ var (
                         "can be used to redirect all outbound traffic. An empty "+
                         "list will disable all outbound redirection.",
 		FeatureStatus: Alpha,
-		Hidden:        false,
+		Hidden:        true,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Pod,
@@ -788,7 +788,7 @@ var (
                         "traffic is to be redirected to Envoy, regardless of the "+
                         "destination IP.",
 		FeatureStatus: Alpha,
-		Hidden:        false,
+		Hidden:        true,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Pod,
