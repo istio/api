@@ -537,7 +537,7 @@ annotations:
       (optional). The wildcard character '*' can be used to redirect all outbound traffic.
       An empty list will disable all outbound redirection.
     deprecated: false
-    hidden: false
+    hidden: true
     resources:
       - Pod
 
@@ -555,7 +555,7 @@ annotations:
       redirected to Envoy. The wildcard character '*' can be used to configure redirection
       for all ports. An empty list will disable all inbound redirection.
     deprecated: false
-    hidden: false
+    hidden: true
     resources:
       - Pod
 
@@ -572,7 +572,7 @@ annotations:
     featureStatus: Alpha
     description: A comma separated list of interfaces to be excluded from Istio traffic capture
     deprecated: false
-    hidden: false
+    hidden: true
     resources:
       - Pod
 
@@ -581,7 +581,7 @@ annotations:
     description: A comma separated list of outbound ports for which traffic is to be
       redirected to Envoy, regardless of the destination IP.
     deprecated: false
-    hidden: false
+    hidden: true
     resources:
       - Pod
 
@@ -590,6 +590,6 @@ annotations:
     description: A comma separated list of outbound ports to be excluded from redirection
       to Envoy.
     deprecated: false
-    hidden: false
+    hidden: true
     resources:
       - Pod
