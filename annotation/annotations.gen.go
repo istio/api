@@ -704,97 +704,6 @@ var (
 		},
 	}
 
-	TrafficExcludeInboundPorts = Instance {
-		Name:          "traffic.istio.io/excludeInboundPorts",
-		Description:   "A comma separated list of inbound ports to be excluded "+
-                        "from redirection to Envoy. Only applies when all inbound "+
-                        "traffic (i.e. '*') is being redirected.",
-		FeatureStatus: Alpha,
-		Hidden:        false,
-		Deprecated:    false,
-		Resources: []ResourceTypes{
-			Pod,
-		},
-	}
-
-	TrafficExcludeInterfaces = Instance {
-		Name:          "traffic.istio.io/excludeInterfaces",
-		Description:   "A comma separated list of interfaces to be excluded from "+
-                        "Istio traffic capture",
-		FeatureStatus: Alpha,
-		Hidden:        false,
-		Deprecated:    false,
-		Resources: []ResourceTypes{
-			Pod,
-		},
-	}
-
-	TrafficExcludeOutboundIPRanges = Instance {
-		Name:          "traffic.istio.io/excludeOutboundIPRanges",
-		Description:   "A comma separated list of IP ranges in CIDR form to be "+
-                        "excluded from redirection. Only applies when all outbound "+
-                        "traffic (i.e. '*') is being redirected.",
-		FeatureStatus: Alpha,
-		Hidden:        false,
-		Deprecated:    false,
-		Resources: []ResourceTypes{
-			Pod,
-		},
-	}
-
-	TrafficExcludeOutboundPorts = Instance {
-		Name:          "traffic.istio.io/excludeOutboundPorts",
-		Description:   "A comma separated list of outbound ports to be excluded "+
-                        "from redirection to Envoy.",
-		FeatureStatus: Alpha,
-		Hidden:        false,
-		Deprecated:    false,
-		Resources: []ResourceTypes{
-			Pod,
-		},
-	}
-
-	TrafficIncludeInboundPorts = Instance {
-		Name:          "traffic.istio.io/includeInboundPorts",
-		Description:   "A comma separated list of inbound ports for which traffic "+
-                        "is to be redirected to Envoy. The wildcard character '*' "+
-                        "can be used to configure redirection for all ports. An "+
-                        "empty list will disable all inbound redirection.",
-		FeatureStatus: Alpha,
-		Hidden:        false,
-		Deprecated:    false,
-		Resources: []ResourceTypes{
-			Pod,
-		},
-	}
-
-	TrafficIncludeOutboundIPRanges = Instance {
-		Name:          "traffic.istio.io/includeOutboundIPRanges",
-		Description:   "A comma separated list of IP ranges in CIDR form to "+
-                        "redirect to Envoy (optional). The wildcard character '*' "+
-                        "can be used to redirect all outbound traffic. An empty "+
-                        "list will disable all outbound redirection.",
-		FeatureStatus: Alpha,
-		Hidden:        false,
-		Deprecated:    false,
-		Resources: []ResourceTypes{
-			Pod,
-		},
-	}
-
-	TrafficIncludeOutboundPorts = Instance {
-		Name:          "traffic.istio.io/includeOutboundPorts",
-		Description:   "A comma separated list of outbound ports for which "+
-                        "traffic is to be redirected to Envoy, regardless of the "+
-                        "destination IP.",
-		FeatureStatus: Alpha,
-		Hidden:        false,
-		Deprecated:    false,
-		Resources: []ResourceTypes{
-			Pod,
-		},
-	}
-
 	TrafficNodeSelector = Instance {
 		Name:          "traffic.istio.io/nodeSelector",
 		Description:   "This annotation is a set of node-labels "+
@@ -967,13 +876,6 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarUserVolumeMount,
 		&SidecarStatusPort,
 		&TopologyControlPlaneClusters,
-		&TrafficExcludeInboundPorts,
-		&TrafficExcludeInterfaces,
-		&TrafficExcludeOutboundIPRanges,
-		&TrafficExcludeOutboundPorts,
-		&TrafficIncludeInboundPorts,
-		&TrafficIncludeOutboundIPRanges,
-		&TrafficIncludeOutboundPorts,
 		&TrafficNodeSelector,
 		&SidecarTrafficExcludeInboundPorts,
 		&SidecarTrafficExcludeInterfaces,
