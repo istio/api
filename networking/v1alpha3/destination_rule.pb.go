@@ -2412,6 +2412,10 @@ type ConnectionPoolSettings_HTTPSettings struct {
 	MaxConcurrentStreams int32 `protobuf:"varint,8,opt,name=max_concurrent_streams,json=maxConcurrentStreams,proto3" json:"max_concurrent_streams,omitempty"`
 	// The amount of concurrent retries allowed in the case of failure, a
 	// percentage of the active requests.
+	//
+	// NOTE: Including a retry budget requires a retry policy to exist within
+	// the [VirtualService](https://istio.io/latest/docs/reference/config/networking/virtual-service/#HTTPRetry) resource
+	// routing to this destination, in order for failed requests to be retried.
 	RetryBudget *RetryBudget `protobuf:"bytes,9,opt,name=retry_budget,json=retryBudget,proto3" json:"retry_budget,omitempty"`
 }
 
