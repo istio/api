@@ -134,7 +134,7 @@ type ProxyConfig struct {
 	// If not set, the `ProxyConfig` resource will be applied to all workloads in the namespace where this resource is defined.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
 	// The number of worker threads to run.
-	// If unset, this will be automatically determined based on CPU requests/limits.
+	// If unset, this will be automatically determined based on CPU limits.
 	// If set to 0, all cores on the machine will be used.
 	// +kubebuilder:validation:Minimum=0
 	Concurrency *wrappers.Int32Value `protobuf:"bytes,2,opt,name=concurrency,proto3" json:"concurrency,omitempty"`
