@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.DestinationRule
 aliases: [/docs/reference/config/networking/v1alpha3/destination-rule]
-number_of_entries: 25
+number_of_entries: 26
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -478,6 +478,15 @@ Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancer
 No
 </td>
 </tr>
+<tr id="LoadBalancerSettings-retry_budget">
+<td><code>retryBudget</code></td>
+<td><code><a href="#RetryBudget">RetryBudget</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -532,6 +541,49 @@ No
 <td><code><a href="#ConnectionPoolSettings-HTTPSettings">HTTPSettings</a></code></td>
 <td>
 <p>HTTP connection pool settings.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RetryBudget">RetryBudget</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RetryBudget-budget_percent">
+<td><code>budgetPercent</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/virtual-service.html#Percent">Percent</a></code></td>
+<td>
+<p>The limit on concurrent retries as a percentage of active requests and
+active pending requests.
+ex. if there are 100 active requests and the budget_percent is set
+to 25, there may be 25 active retries.
+This parameter is optional. Defaults to 20%.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RetryBudget-min_retry_concurrency">
+<td><code>minRetryConcurrency</code></td>
+<td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
+<td>
+<p>The minimum number of concurrent retries allowed for the retry budget.
+The limit on the number of active retries may never go below this number.
+This parameter is optional. Defaults to 3.</p>
 
 </td>
 <td>
@@ -1654,6 +1706,18 @@ No
 <td>
 <p>The maximum number of concurrent streams allowed for a peer on one HTTP/2 connection.
 Defaults to 2^31-1.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ConnectionPoolSettings-HTTPSettings-retry_budget">
+<td><code>retryBudget</code></td>
+<td><code><a href="#RetryBudget">RetryBudget</a></code></td>
+<td>
+<p>The amount of concurrent retries allowed in the case of failure, a
+percentage of the active requests.</p>
 
 </td>
 <td>

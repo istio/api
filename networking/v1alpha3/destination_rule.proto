@@ -514,6 +514,8 @@ message LoadBalancerSettings {
   // amount of requests.
   // Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancers.
   google.protobuf.Duration warmup_duration_secs = 4;
+
+  RetryBudget retry_budget = 5;
 }
 
 // Connection pool settings for an upstream host. The settings apply to
@@ -642,12 +644,30 @@ message ConnectionPoolSettings {
     // The maximum number of concurrent streams allowed for a peer on one HTTP/2 connection.
     // Defaults to 2^31-1. 
     int32 max_concurrent_streams = 8;
+
+    // The amount of concurrent retries allowed in the case of failure, a
+    // percentage of the active requests.
+    RetryBudget retry_budget = 9;
   };
 
   // Settings common to both HTTP and TCP upstream connections.
   TCPSettings tcp = 1;
   // HTTP connection pool settings.
   HTTPSettings http = 2;
+}
+
+message RetryBudget {
+  // The limit on concurrent retries as a percentage of active requests and
+  // active pending requests.
+  // ex. if there are 100 active requests and the budget_percent is set
+  // to 25, there may be 25 active retries. 
+  // This parameter is optional. Defaults to 20%.
+  Percent budget_percent = 1;
+
+  // The minimum number of concurrent retries allowed for the retry budget.
+  // The limit on the number of active retries may never go below this number.
+  // This parameter is optional. Defaults to 3.
+  google.protobuf.UInt32Value min_retry_concurrency = 2;
 }
 
 // A Circuit breaker implementation that tracks the status of each
