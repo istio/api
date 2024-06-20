@@ -115,7 +115,7 @@ message ProxyConfig {
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
   // The number of worker threads to run.
-  // If unset, this will be automatically determined based on CPU requests/limits.
+  // If unset, this will be automatically determined based on CPU limits.
   // If set to 0, all cores on the machine will be used.
   // +kubebuilder:validation:Minimum=0
   google.protobuf.Int32Value concurrency = 2;
