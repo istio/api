@@ -18,6 +18,10 @@
 // 	protoc        (unknown)
 // source: meta/v1alpha1/serviceentry-status.proto
 
+// IMPORTANT!!
+// IstioServiceEntryStatus IS LARGELY A COPY OF IstioStatus AND SHOULD BE KEPT IN SYNC
+// IMPORTANT!!
+
 // $title: Istio ServiceEntry Status
 // $description: Status field for Istio ServiceEntry.
 // $location: https://istio.io/docs/reference/config/meta/v1beta1/istio-serviceentry-status.html
