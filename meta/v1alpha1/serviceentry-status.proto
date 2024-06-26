@@ -19,6 +19,11 @@ import "google/protobuf/timestamp.proto";
 
 import "meta/v1alpha1/status.proto";
 
+
+// IMPORTANT!!
+// IstioServiceEntryStatus IS LARGELY A COPY OF IstioStatus AND SHOULD BE KEPT IN SYNC
+// IMPORTANT!!
+
 // $title: Istio ServiceEntry Status
 // $description: Status field for Istio ServiceEntry.
 // $location: https://istio.io/docs/reference/config/meta/v1beta1/istio-serviceentry-status.html
