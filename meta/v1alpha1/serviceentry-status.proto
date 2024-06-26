@@ -15,8 +15,6 @@ syntax = "proto3";
 
 import "analysis/v1alpha1/message.proto";
 
-import "google/protobuf/timestamp.proto";
-
 import "meta/v1alpha1/status.proto";
 
 
