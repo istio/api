@@ -17,6 +17,8 @@ import "analysis/v1alpha1/message.proto";
 
 import "google/protobuf/timestamp.proto";
 
+import "meta/v1alpha1/status.proto";
+
 // $title: Istio ServiceEntry Status
 // $description: Status field for Istio ServiceEntry.
 // $location: https://istio.io/docs/reference/config/meta/v1beta1/istio-serviceentry-status.html
@@ -49,7 +51,7 @@ message IstioServiceEntryStatus {
 
   // List of addresses which were automatically allocated by istiod
   // +optional
-  repeated IstioServiceEntryAdress addresses = 10;
+  repeated IstioServiceEntryAddress addresses = 10;
 }
 
 // minor abstraction to allow for adding hostnames if relevant
