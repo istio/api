@@ -699,6 +699,15 @@ type StringMatch_Regex = v1alpha3.StringMatch_Regex
 //	    retryOn: gateway-error,connect-failure,refused-stream
 //
 // ```
+//
+// Note: the default cluster-wide retry policy, if not specified, is:
+//
+// ```yaml
+// attempts: 2
+// retryOn: "connect-failure,refused-stream,unavailable,cancelled,503"
+// ```
+//
+// This can be customized in [`Mesh Config` `defaultHttpRetryPolicy`](https://istio.io/latest/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig).
 type HTTPRetry = v1alpha3.HTTPRetry
 
 // Describes the Cross-Origin Resource Sharing (CORS) policy, for a given
