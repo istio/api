@@ -701,6 +701,15 @@ type HTTPRoute struct {
 	// Timeout for HTTP requests, default is disabled.
 	Timeout *duration.Duration `protobuf:"bytes,6,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	// Retry policy for HTTP requests.
+	//
+	// Note: the default cluster-wide retry policy, if not specified, is:
+	//
+	// ```yaml
+	// attempts: 2
+	// retryOn: "connect-failure,refused-stream,unavailable,cancelled,503"
+	// ```
+	//
+	// This can be customized in [`Mesh Config` `defaultHttpRetryPolicy`](https://istio.io/latest/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig).
 	Retries *HTTPRetry `protobuf:"bytes,7,opt,name=retries,proto3" json:"retries,omitempty"`
 	// Fault injection policy to apply on HTTP traffic at the client side.
 	// Note that timeouts or retries will not be enabled when faults are
@@ -2673,15 +2682,6 @@ func (*StringMatch_Regex) isStringMatch_MatchType() {}
 //	    retryOn: gateway-error,connect-failure,refused-stream
 //
 // ```
-//
-// Note: the default cluster-wide retry policy, if not specified, is:
-//
-// ```yaml
-// attempts: 2
-// retryOn: "connect-failure,refused-stream,unavailable,cancelled,503"
-// ```
-//
-// This can be customized in [`Mesh Config` `defaultHttpRetryPolicy`](https://istio.io/latest/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig).
 type HTTPRetry struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

@@ -540,6 +540,11 @@ No
 <td><code><a href="#HTTPRetry">HTTPRetry</a></code></td>
 <td>
 <p>Retry policy for HTTP requests.</p>
+<p>Note: the default cluster-wide retry policy, if not specified, is:</p>
+<pre><code class="language-yaml">attempts: 2
+retryOn: &quot;connect-failure,refused-stream,unavailable,cancelled,503&quot;
+</code></pre>
+<p>This can be customized in <a href="https://istio.io/latest/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig"><code>Mesh Config</code> <code>defaultHttpRetryPolicy</code></a>.</p>
 
 </td>
 <td>
@@ -2015,11 +2020,6 @@ spec:
       perTryTimeout: 2s
       retryOn: gateway-error,connect-failure,refused-stream
 </code></pre>
-<p>Note: the default cluster-wide retry policy, if not specified, is:</p>
-<pre><code class="language-yaml">attempts: 2
-retryOn: &quot;connect-failure,refused-stream,unavailable,cancelled,503&quot;
-</code></pre>
-<p>This can be customized in <a href="https://istio.io/latest/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig"><code>Mesh Config</code> <code>defaultHttpRetryPolicy</code></a>.</p>
 
 <table class="message-fields">
 <thead>

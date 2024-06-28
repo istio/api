@@ -445,6 +445,15 @@ message HTTPRoute {
   google.protobuf.Duration timeout = 6;
 
   // Retry policy for HTTP requests.
+  //
+  // Note: the default cluster-wide retry policy, if not specified, is:
+  //
+  // ```yaml
+  // attempts: 2
+  // retryOn: "connect-failure,refused-stream,unavailable,cancelled,503"
+  // ```
+  //
+  // This can be customized in [`Mesh Config` `defaultHttpRetryPolicy`](https://istio.io/latest/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig).
   HTTPRetry retries = 7;
 
   // Fault injection policy to apply on HTTP traffic at the client side.
@@ -1271,15 +1280,6 @@ message StringMatch {
 //       perTryTimeout: 2s
 //       retryOn: gateway-error,connect-failure,refused-stream
 // ```
-//
-// Note: the default cluster-wide retry policy, if not specified, is:
-//
-// ```yaml
-// attempts: 2
-// retryOn: "connect-failure,refused-stream,unavailable,cancelled,503"
-// ```
-//
-// This can be customized in [`Mesh Config` `defaultHttpRetryPolicy`](https://istio.io/latest/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig).
 message HTTPRetry {
   // Number of retries to be allowed for a given request. The interval
   // between retries will be determined automatically (25ms+). When request
