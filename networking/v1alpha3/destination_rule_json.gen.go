@@ -171,6 +171,17 @@ func (this *ConnectionPoolSettings_HTTPSettings) UnmarshalJSON(b []byte) error {
 	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for RetryBudget
+func (this *RetryBudget) MarshalJSON() ([]byte, error) {
+	str, err := DestinationRuleMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for RetryBudget
+func (this *RetryBudget) UnmarshalJSON(b []byte) error {
+	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 // MarshalJSON is a custom marshaler for OutlierDetection
 func (this *OutlierDetection) MarshalJSON() ([]byte, error) {
 	str, err := DestinationRuleMarshaler.MarshalToString(this)
