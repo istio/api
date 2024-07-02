@@ -554,6 +554,7 @@ message ServiceEntry {
 
   // One or more endpoints associated with the service. Only one of
   // `endpoints` or `workloadSelector` can be specified.
+  // +kubebuilder:validation:MaxItems=4096
   repeated WorkloadEntry endpoints = 6;
 
   // Applicable only for MESH_INTERNAL services. Only one of

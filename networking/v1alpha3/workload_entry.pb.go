@@ -183,6 +183,7 @@ const (
 // Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
 // +cue-gen:WorkloadEntry:printerColumn:name=Address,type=string,JSONPath=.spec.address,description="Address associated with the network endpoint."
 // +cue-gen:WorkloadEntry:preserveUnknownFields:false
+// +cue-gen:WorkloadEntry:spec:required
 // -->
 //
 // <!-- go code generation tags
@@ -191,6 +192,8 @@ const (
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
+// +kubebuilder:validation:XValidation:message="Address is required",rule="has(self.address) || has(self.network)"
+// +kubebuilder:validation:XValidation:message="UDS may not include ports",rule="(has(self.address) && self.address.startsWith('unix://')) ? !has(self.ports) : true"
 type WorkloadEntry struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -201,6 +204,9 @@ type WorkloadEntry struct {
 	// to DNS, and must be fully-qualified without wildcards. Use the form
 	// unix:///absolute/path/to/socket for Unix domain socket endpoints.
 	// If address is empty, network must be specified.
+	// +kubebuilder:validation:XValidation:message="UDS must be an absolute path or abstract socket",rule="self.startsWith('unix://') ? (self.substring(7,8) == '/' || self.substring(7,8) == '@') : true"
+	// +kubebuilder:validation:XValidation:message="UDS may not be a dir",rule="self.startsWith('unix://') ? !self.endsWith('/') : true"
+	// +kubebuilder:validation:MaxLength=256
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	// Set of ports associated with the endpoint. If the port map is
 	// specified, it must be a map of servicePortName to this endpoint's
@@ -216,8 +222,12 @@ type WorkloadEntry struct {
 	// **NOTE 1:** Do not use for `unix://` addresses.
 	//
 	// **NOTE 2:** endpoint port map takes precedence over targetPort.
+	// +kubebuilder:map-value-validation:XValidation:message="port must be between 1-65535",rule="0 < self && self <= 65535"
+	// +kubebuilder:validation:MaxProperties=128
+	// +kubebuilder:validation:XValidation:message="port name must be valid",rule="self.all(key, size(key) < 63 && key.matches('^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$'))"
 	Ports map[string]uint32 `protobuf:"bytes,2,rep,name=ports,proto3" json:"ports,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"varint,2,opt,name=value,proto3"`
 	// One or more labels associated with the endpoint.
+	// +kubebuilder:validation:MaxProperties=256
 	Labels map[string]string `protobuf:"bytes,3,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Network enables Istio to group endpoints resident in the same L3
 	// domain/network. All endpoints in the same network are assumed to be
@@ -227,6 +237,7 @@ type WorkloadEntry struct {
 	// `AUTO_PASSTHROUGH` mode in a Gateway Server). This is
 	// an advanced configuration used typically for spanning an Istio mesh
 	// over multiple clusters. Required if address is not provided.
+	// +kubebuilder:validation:MaxLength=2048
 	Network string `protobuf:"bytes,4,opt,name=network,proto3" json:"network,omitempty"`
 	// The locality associated with the endpoint. A locality corresponds
 	// to a failure domain (e.g., country/region/zone). Arbitrary failure
@@ -245,6 +256,7 @@ type WorkloadEntry struct {
 	// locality. Endpoint e2 could be the IP associated with a gateway
 	// (that bridges networks n1 and n2), or the IP associated with a
 	// standard service endpoint.
+	// +kubebuilder:validation:MaxLength=2048
 	Locality string `protobuf:"bytes,5,opt,name=locality,proto3" json:"locality,omitempty"`
 	// The load balancing weight associated with the endpoint. Endpoints
 	// with higher weights will receive proportionally higher traffic.
@@ -253,6 +265,7 @@ type WorkloadEntry struct {
 	// is present in the workload. The service account must be present
 	// in the same namespace as the configuration ( WorkloadEntry or a
 	// ServiceEntry)
+	// +kubebuilder:validation:MaxLength=253
 	ServiceAccount string `protobuf:"bytes,7,opt,name=service_account,json=serviceAccount,proto3" json:"service_account,omitempty"`
 }
 
