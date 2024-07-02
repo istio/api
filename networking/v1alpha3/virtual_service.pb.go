@@ -701,6 +701,15 @@ type HTTPRoute struct {
 	// Timeout for HTTP requests, default is disabled.
 	Timeout *duration.Duration `protobuf:"bytes,6,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	// Retry policy for HTTP requests.
+	//
+	// Note: the default cluster-wide retry policy, if not specified, is:
+	//
+	// ```yaml
+	// attempts: 2
+	// retryOn: "connect-failure,refused-stream,unavailable,cancelled,503"
+	// ```
+	//
+	// This can be customized in [`Mesh Config` `defaultHttpRetryPolicy`](https://istio.io/latest/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig).
 	Retries *HTTPRetry `protobuf:"bytes,7,opt,name=retries,proto3" json:"retries,omitempty"`
 	// Fault injection policy to apply on HTTP traffic at the client side.
 	// Note that timeouts or retries will not be enabled when faults are
@@ -2692,9 +2701,15 @@ type HTTPRetry struct {
 	PerTryTimeout *duration.Duration `protobuf:"bytes,2,opt,name=per_try_timeout,json=perTryTimeout,proto3" json:"per_try_timeout,omitempty"`
 	// Specifies the conditions under which retry takes place.
 	// One or more policies can be specified using a ‘,’ delimited list.
-	// If `retry_on` specifies a valid HTTP status, it will be added to retriable_status_codes retry policy.
 	// See the [retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on)
 	// and [gRPC retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on) for more details.
+	//
+	// In addition to the policies specified above, a list of HTTP status codes can be passed, such as `retryOn: "503,reset"`.
+	// Note these status codes refer to the actual responses received from the destination.
+	// For example, if a connection is reset, Istio will translate this to 503 for it's response.
+	// However, the destination did not return a 503 error, so this would not match `"503"` (it would, however, match `"reset"`).
+	//
+	// If not specified, this defaults to `connect-failure,refused-stream,unavailable,cancelled,503`.
 	RetryOn string `protobuf:"bytes,3,opt,name=retry_on,json=retryOn,proto3" json:"retry_on,omitempty"`
 	// Flag to specify whether the retries should retry to other localities.
 	// See the [retry plugin configuration](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_connection_management#retry-plugin-configuration) for more details.
