@@ -17,26 +17,25 @@ import "analysis/v1alpha1/message.proto";
 
 import "meta/v1alpha1/status.proto";
 
-
 // IMPORTANT!!
 // IstioServiceEntryStatus IS LARGELY A COPY OF IstioStatus AND SHOULD BE KEPT IN SYNC
 // IMPORTANT!!
 
-// $title: Istio ServiceEntry Status
+// $title: ServiceEntry Status
 // $description: Status field for Istio ServiceEntry.
-// $location: https://istio.io/docs/reference/config/meta/v1beta1/istio-serviceentry-status.html
+// $location: https://istio.io/docs/reference/config/networking/serviceentry-status.html
 
-package istio.meta.v1alpha1;
+package istio.networking.v1alpha3;
 
-option go_package="istio.io/api/meta/v1alpha1";
+option go_package="istio.io/api/networking/v1alpha3";
 
-message IstioServiceEntryStatus {
-  // Current service state of pod.
+message ServiceEntryStatus {
+  // Current service state of ServiceEntry.
   // More info: https://istio.io/docs/reference/config/config-status/
   // +optional
   // +patchMergeKey=type
   // +patchStrategy=merge
-  repeated IstioCondition conditions = 1;
+  repeated meta.v1alpha1.IstioCondition conditions = 1;
 
   // Includes any errors or warnings detected by Istio's analyzers.
   // +optional
@@ -54,11 +53,11 @@ message IstioServiceEntryStatus {
 
   // List of addresses which were assigned to this ServiceEntry.
   // +optional
-  repeated IstioServiceEntryAddress addresses = 10;
+  repeated ServiceEntryAddress addresses = 10;
 }
 
 // minor abstraction to allow for adding hostnames if relevant
-message IstioServiceEntryAddress{
+message ServiceEntryAddress{
   // Value is the address (192.168.0.2)
   string value = 1;
 }

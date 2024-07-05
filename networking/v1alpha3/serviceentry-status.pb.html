@@ -1,12 +1,12 @@
 ---
-title: Istio ServiceEntry Status
+title: ServiceEntry Status
 description: Status field for Istio ServiceEntry.
-location: https://istio.io/docs/reference/config/meta/v1beta1/istio-serviceentry-status.html
+location: https://istio.io/docs/reference/config/networking/serviceentry-status.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 number_of_entries: 2
 ---
-<h2 id="IstioServiceEntryStatus">IstioServiceEntryStatus</h2>
+<h2 id="ServiceEntryStatus">ServiceEntryStatus</h2>
 <section>
 <table class="message-fields">
 <thead>
@@ -18,11 +18,11 @@ number_of_entries: 2
 </tr>
 </thead>
 <tbody>
-<tr id="IstioServiceEntryStatus-conditions">
+<tr id="ServiceEntryStatus-conditions">
 <td><code>conditions</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/meta/v1beta1/istio-status.html#IstioCondition">IstioCondition[]</a></code></td>
 <td>
-<p>Current service state of pod.
+<p>Current service state of ServiceEntry.
 More info: <a href="https://istio.io/docs/reference/config/config-status/">https://istio.io/docs/reference/config/config-status/</a></p>
 
 </td>
@@ -30,7 +30,7 @@ More info: <a href="https://istio.io/docs/reference/config/config-status/">https
 No
 </td>
 </tr>
-<tr id="IstioServiceEntryStatus-validation_messages">
+<tr id="ServiceEntryStatus-validation_messages">
 <td><code>validationMessages</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/istio.analysis.v1alpha1.html#AnalysisMessageBase">AnalysisMessageBase[]</a></code></td>
 <td>
@@ -41,7 +41,7 @@ No
 No
 </td>
 </tr>
-<tr id="IstioServiceEntryStatus-observed_generation">
+<tr id="ServiceEntryStatus-observed_generation">
 <td><code>observedGeneration</code></td>
 <td><code>int64</code></td>
 <td>
@@ -54,11 +54,11 @@ generation is still in progress.  See <a href="https://istio.io/latest/docs/refe
 No
 </td>
 </tr>
-<tr id="IstioServiceEntryStatus-addresses">
+<tr id="ServiceEntryStatus-addresses">
 <td><code>addresses</code></td>
-<td><code><a href="#IstioServiceEntryAddress">IstioServiceEntryAddress[]</a></code></td>
+<td><code><a href="#ServiceEntryAddress">ServiceEntryAddress[]</a></code></td>
 <td>
-<p>List of addresses which were automatically allocated by istiod</p>
+<p>List of addresses which were assigned to this ServiceEntry.</p>
 
 </td>
 <td>
@@ -68,7 +68,7 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="IstioServiceEntryAddress">IstioServiceEntryAddress</h2>
+<h2 id="ServiceEntryAddress">ServiceEntryAddress</h2>
 <section>
 <p>minor abstraction to allow for adding hostnames if relevant</p>
 
@@ -82,7 +82,7 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="IstioServiceEntryAddress-value">
+<tr id="ServiceEntryAddress-value">
 <td><code>value</code></td>
 <td><code>string</code></td>
 <td>
