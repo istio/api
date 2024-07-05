@@ -3170,7 +3170,7 @@ func file_networking_v1alpha3_destination_rule_proto_rawDescGZIP() []byte {
 
 var file_networking_v1alpha3_destination_rule_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
 var file_networking_v1alpha3_destination_rule_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
-var file_networking_v1alpha3_destination_rule_proto_goTypes = []interface{}{
+var file_networking_v1alpha3_destination_rule_proto_goTypes = []any{
 	(TrafficPolicy_ProxyProtocol_VERSION)(0),                 // 0: istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol.VERSION
 	(LoadBalancerSettings_SimpleLB)(0),                       // 1: istio.networking.v1alpha3.LoadBalancerSettings.SimpleLB
 	(ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy)(0), // 2: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicy
@@ -3411,7 +3411,7 @@ func file_networking_v1alpha3_destination_rule_proto_init() {
 				return nil
 			}
 		}
-		file_networking_v1alpha3_destination_rule_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+		file_networking_v1alpha3_destination_rule_proto_msgTypes[13].Exporter = func(v any, i int) any {
 			switch v := v.(*LoadBalancerSettingsSlowStart); i {
 			case 0:
 				return &v.state
@@ -3423,7 +3423,7 @@ func file_networking_v1alpha3_destination_rule_proto_init() {
 				return nil
 			}
 		}
-		file_networking_v1alpha3_destination_rule_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+		file_networking_v1alpha3_destination_rule_proto_msgTypes[14].Exporter = func(v any, i int) any {
 			switch v := v.(*LoadBalancerSettings_ConsistentHashLB_RingHash); i {
 			case 0:
 				return &v.state
@@ -3435,7 +3435,7 @@ func file_networking_v1alpha3_destination_rule_proto_init() {
 				return nil
 			}
 		}
-		file_networking_v1alpha3_destination_rule_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+		file_networking_v1alpha3_destination_rule_proto_msgTypes[15].Exporter = func(v any, i int) any {
 			switch v := v.(*LoadBalancerSettings_ConsistentHashLB_MagLev); i {
 			case 0:
 				return &v.state
@@ -3447,7 +3447,7 @@ func file_networking_v1alpha3_destination_rule_proto_init() {
 				return nil
 			}
 		}
-		file_networking_v1alpha3_destination_rule_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+		file_networking_v1alpha3_destination_rule_proto_msgTypes[16].Exporter = func(v any, i int) any {
 			switch v := v.(*LoadBalancerSettings_ConsistentHashLB_HTTPCookie); i {
 			case 0:
 				return &v.state
@@ -3459,7 +3459,7 @@ func file_networking_v1alpha3_destination_rule_proto_init() {
 				return nil
 			}
 		}
-		file_networking_v1alpha3_destination_rule_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
+		file_networking_v1alpha3_destination_rule_proto_msgTypes[17].Exporter = func(v any, i int) any {
 			switch v := v.(*LoadBalancerSettingsSlowStartAggression); i {
 			case 0:
 				return &v.state
@@ -3471,7 +3471,7 @@ func file_networking_v1alpha3_destination_rule_proto_init() {
 				return nil
 			}
 		}
-		file_networking_v1alpha3_destination_rule_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
+		file_networking_v1alpha3_destination_rule_proto_msgTypes[18].Exporter = func(v any, i int) any {
 			switch v := v.(*ConnectionPoolSettings_TCPSettings); i {
 			case 0:
 				return &v.state
@@ -3483,7 +3483,7 @@ func file_networking_v1alpha3_destination_rule_proto_init() {
 				return nil
 			}
 		}
-		file_networking_v1alpha3_destination_rule_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
+		file_networking_v1alpha3_destination_rule_proto_msgTypes[19].Exporter = func(v any, i int) any {
 			switch v := v.(*ConnectionPoolSettings_HTTPSettings); i {
 			case 0:
 				return &v.state
@@ -3495,7 +3495,7 @@ func file_networking_v1alpha3_destination_rule_proto_init() {
 				return nil
 			}
 		}
-		file_networking_v1alpha3_destination_rule_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
+		file_networking_v1alpha3_destination_rule_proto_msgTypes[20].Exporter = func(v any, i int) any {
 			switch v := v.(*ConnectionPoolSettings_TCPSettings_TcpKeepalive); i {
 			case 0:
 				return &v.state
@@ -3507,7 +3507,7 @@ func file_networking_v1alpha3_destination_rule_proto_init() {
 				return nil
 			}
 		}
-		file_networking_v1alpha3_destination_rule_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
+		file_networking_v1alpha3_destination_rule_proto_msgTypes[21].Exporter = func(v any, i int) any {
 			switch v := v.(*LocalityLoadBalancerSetting_Distribute); i {
 			case 0:
 				return &v.state
@@ -3519,7 +3519,7 @@ func file_networking_v1alpha3_destination_rule_proto_init() {
 				return nil
 			}
 		}
-		file_networking_v1alpha3_destination_rule_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
+		file_networking_v1alpha3_destination_rule_proto_msgTypes[22].Exporter = func(v any, i int) any {
 			switch v := v.(*LocalityLoadBalancerSetting_Failover); i {
 			case 0:
 				return &v.state
