@@ -52,7 +52,7 @@ message IstioServiceEntryStatus {
 
   // Above this is just a copy of the common IstioStatus since proto cannot embed an anonymous message whole cloth
 
-  // List of addresses which were automatically allocated by istiod
+  // List of addresses which were assigned to this ServiceEntry.
   // +optional
   repeated IstioServiceEntryAddress addresses = 10;
 }
