@@ -31,6 +31,7 @@ import "istio.io/api/networking/v1alpha3"
 // +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
 // +genclient
 // +k8s:deepcopy-gen=true
+// istiostatus-override: ServiceEntryStatus: istio.io/api/networking/v1alpha3
 // -->
 type ServiceEntry = v1alpha3.ServiceEntry
 
@@ -98,3 +99,7 @@ const ServiceEntry_DNS_ROUND_ROBIN ServiceEntry_Resolution = v1alpha3.ServiceEnt
 
 // ServicePort describes the properties of a specific port of a service.
 type ServicePort = v1alpha3.ServicePort
+type ServiceEntryStatus = v1alpha3.ServiceEntryStatus
+
+// minor abstraction to allow for adding hostnames if relevant
+type ServiceEntryAddress = v1alpha3.ServiceEntryAddress

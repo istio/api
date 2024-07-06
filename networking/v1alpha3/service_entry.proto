@@ -17,6 +17,8 @@ syntax = "proto3";
 import "google/api/field_behavior.proto";
 import "networking/v1alpha3/sidecar.proto";
 import "networking/v1alpha3/workload_entry.proto";
+import "analysis/v1alpha1/message.proto";
+import "meta/v1alpha1/status.proto";
 
 // $schema: istio.networking.v1alpha3.ServiceEntry
 // $title: Service Entry
@@ -403,6 +405,7 @@ package istio.networking.v1alpha3;
 
 option go_package = "istio.io/api/networking/v1alpha3";
 
+
 // ServiceEntry enables adding additional entries into Istio's internal
 // service registry.
 //
@@ -431,6 +434,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
 // +genclient
 // +k8s:deepcopy-gen=true
+// istiostatus-override: ServiceEntryStatus: istio.io/api/networking/v1alpha3
 // -->
 message ServiceEntry {
   // The hosts associated with the ServiceEntry. Could be a DNS
@@ -610,3 +614,37 @@ message ServicePort {
   // received. If unset, default to `number`.
   uint32 target_port = 4;
 }
+
+message ServiceEntryStatus {
+  // Current service state of ServiceEntry.
+  // More info: https://istio.io/docs/reference/config/config-status/
+  // +optional
+  // +patchMergeKey=type
+  // +patchStrategy=merge
+  repeated meta.v1alpha1.IstioCondition conditions = 1;
+
+  // Includes any errors or warnings detected by Istio's analyzers.
+  // +optional
+  // +patchMergeKey=type
+  // +patchStrategy=merge
+  repeated analysis.v1alpha1.AnalysisMessageBase validation_messages = 2;
+
+  // Resource Generation to which the Reconciled Condition refers.
+  // When this value is not equal to the object's metadata generation, reconciled condition  calculation for the current
+  // generation is still in progress.  See https://istio.io/latest/docs/reference/config/config-status/ for more info.
+  // +optional
+  int64 observed_generation = 3;
+
+  // Above this is just a copy of the common IstioStatus since proto cannot embed an anonymous message whole cloth
+
+  // List of addresses which were assigned to this ServiceEntry.
+  // +optional
+  repeated ServiceEntryAddress addresses = 10;
+}
+
+// minor abstraction to allow for adding hostnames if relevant
+message ServiceEntryAddress{
+  // Value is the address (192.168.0.2)
+  string value = 1;
+}
+
