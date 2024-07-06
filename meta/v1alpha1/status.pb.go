@@ -45,7 +45,7 @@ type IstioStatus struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Current service state of the resouce.
+	// Current service state of the resource.
 	// More info: https://istio.io/docs/reference/config/config-status/
 	// +optional
 	// +patchMergeKey=type
