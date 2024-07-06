@@ -405,6 +405,8 @@ package istio.networking.v1alpha3;
 
 option go_package = "istio.io/api/networking/v1alpha3";
 
+// istiostatus-override: ServiceEntryStatus: istio.io/api/networking/v1alpha3
+
 // ServiceEntry enables adding additional entries into Istio's internal
 // service registry.
 //
