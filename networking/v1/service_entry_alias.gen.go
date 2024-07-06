@@ -98,3 +98,7 @@ const ServiceEntry_DNS_ROUND_ROBIN ServiceEntry_Resolution = v1alpha3.ServiceEnt
 
 // ServicePort describes the properties of a specific port of a service.
 type ServicePort = v1alpha3.ServicePort
+type ServiceEntryStatus = v1alpha3.ServiceEntryStatus
+
+// minor abstraction to allow for adding hostnames if relevant
+type ServiceEntryAddress = v1alpha3.ServiceEntryAddress
