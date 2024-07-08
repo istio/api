@@ -2149,6 +2149,7 @@ type LoadBalancerSettings_ConsistentHashLB_HTTPCookie struct {
 	// Lifetime of the cookie. If specified, a cookie with the TTL will be
 	// generated if the cookie is not present. If the TTL is present and zero,
 	// the generated cookie will be a session cookie.
+	// +kubebuilder:duration-validation:none
 	Ttl *duration.Duration `protobuf:"bytes,3,opt,name=ttl,proto3" json:"ttl,omitempty"`
 }
 
