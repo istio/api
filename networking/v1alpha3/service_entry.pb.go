@@ -651,6 +651,7 @@ type ServiceEntry struct {
 	Resolution ServiceEntry_Resolution `protobuf:"varint,5,opt,name=resolution,proto3,enum=istio.networking.v1alpha3.ServiceEntry_Resolution" json:"resolution,omitempty"`
 	// One or more endpoints associated with the service. Only one of
 	// `endpoints` or `workloadSelector` can be specified.
+	// +kubebuilder:validation:MaxItems=4096
 	Endpoints []*WorkloadEntry `protobuf:"bytes,6,rep,name=endpoints,proto3" json:"endpoints,omitempty"`
 	// Applicable only for MESH_INTERNAL services. Only one of
 	// `endpoints` or `workloadSelector` can be specified. Selects one
