@@ -46,23 +46,22 @@ type IstioEgressListener = v1alpha3.IstioEgressListener
 type WorkloadSelector = v1alpha3.WorkloadSelector
 
 // `OutboundTrafficPolicy` sets the default behavior of the sidecar for
-// handling outbound traffic from the application.
-// If your application uses one or more external
-// services that are not known apriori, setting the policy to `ALLOW_ANY`
-// will cause the sidecars to route any unknown traffic originating from
-// the application to its requested destination.  Users are strongly
-// encouraged to use `ServiceEntry` configurations to explicitly declare any external
-// dependencies, instead of using `ALLOW_ANY`, so that traffic to these
-// services can be monitored.
+// handling unknown outbound traffic from the application.
 type OutboundTrafficPolicy = v1alpha3.OutboundTrafficPolicy
 type OutboundTrafficPolicy_Mode = v1alpha3.OutboundTrafficPolicy_Mode
 
-// Outbound traffic will be restricted to services defined in the
-// service registry as well as those defined through `ServiceEntry` configurations.
+// In `REGISTRY_ONLY` mode, unknown outbound traffic will be dropped.
+// Traffic destinations must be explicitly declared into the service registry through `ServiceEntry` configurations.
+//
+// Note: Istio [does not offer an outbound traffic security policy](https://istio.io/latest/docs/ops/best-practices/security/#understand-traffic-capture-limitations).
+// This option does not act as one, or as any form of an outbound firewall.
+// Instead, this option exists primarily to offer users a way to detect missing `ServiceEntry` configurations by explicitly failing.
 const OutboundTrafficPolicy_REGISTRY_ONLY OutboundTrafficPolicy_Mode = v1alpha3.OutboundTrafficPolicy_REGISTRY_ONLY
 
-// Outbound traffic to unknown destinations will be allowed, in case
-// there are no services or `ServiceEntry` configurations for the destination port.
+// In `ALLOW_ANY` mode, any traffic to unknown destinations will be allowed.
+// Unknown destination traffic will have limited functionality, however, such as reduced observability.
+// This mode allows users that do not have all possible egress destinations registered through `ServiceEntry` configurations to still connect
+// to arbitrary destinations.
 const OutboundTrafficPolicy_ALLOW_ANY OutboundTrafficPolicy_Mode = v1alpha3.OutboundTrafficPolicy_ALLOW_ANY
 
 // Port describes the properties of a specific port of a service.

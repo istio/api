@@ -8275,7 +8275,8 @@ spec:
                   type: object
                 type: array
               outboundTrafficPolicy:
-                description: Configuration for the outbound traffic policy.
+                description: Set the default behavior of the sidecar for handling
+                  outbound traffic from the application.
                 properties:
                   egressProxy:
                     properties:
@@ -8805,7 +8806,8 @@ spec:
                   type: object
                 type: array
               outboundTrafficPolicy:
-                description: Configuration for the outbound traffic policy.
+                description: Set the default behavior of the sidecar for handling
+                  outbound traffic from the application.
                 properties:
                   egressProxy:
                     properties:
@@ -9335,7 +9337,8 @@ spec:
                   type: object
                 type: array
               outboundTrafficPolicy:
-                description: Configuration for the outbound traffic policy.
+                description: Set the default behavior of the sidecar for handling
+                  outbound traffic from the application.
                 properties:
                   egressProxy:
                     properties:
