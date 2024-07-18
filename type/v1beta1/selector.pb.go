@@ -254,7 +254,7 @@ func (x *PortSelector) GetNumber() uint32 {
 //	      ports: ["8080"]
 //
 // ```
-// +kubebuilder:validation:XValidation:message="Support kinds are core/Service and gateway.networking.k8s.io/Gateway",rule="[self.group, self.kind] in [['core','Service'], [”,'Service'], ['gateway.networking.k8s.io','Gateway']]"
+// +kubebuilder:validation:XValidation:message="Support kinds are core/Service, networking.istio.io/ServiceEntry, gateway.networking.k8s.io/Gateway",rule="[self.group, self.kind] in [['core','Service'], [”,'Service'], ['gateway.networking.k8s.io','Gateway'], ['networking.istio.io','ServiceEntry']]"
 type PolicyTargetReference struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
