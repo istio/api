@@ -322,7 +322,7 @@ type RequestAuthentication struct {
 	//
 	// Currently, the following resource attachment types are supported:
 	// * `kind: Gateway` with `group: gateway.networking.k8s.io` in the same namespace.
-	// * `kind: Service` with `""` in the same namespace. This type is only supported for waypoints.
+	// * `kind: Service` with `group: ""` or `group: "core"` in the same namespace. This type is only supported for waypoints.
 	//
 	// If not set, the policy is applied as defined by the selector.
 	// At most one of the selector and targetRefs can be set.
