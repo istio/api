@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package crd
+package base
 
 import (
 	"context"
@@ -21,6 +21,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sigs.k8s.io/yaml"
 	"strings"
 	"testing"
 
@@ -39,8 +40,65 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	kubeyaml "k8s.io/apimachinery/pkg/util/yaml"
-	celconfig "k8s.io/apiserver/pkg/apis/cel"
 )
+
+const (
+	// PerCallLimit specify the actual cost limit per CEL validation call
+	// current PerCallLimit gives roughly 0.1 second for each expression validation call
+	PerCallLimit = 1000000
+
+	// RuntimeCELCostBudget is the overall cost budget for runtime CEL validation cost per ValidatingAdmissionPolicyBinding or CustomResource
+	// current RuntimeCELCostBudget gives roughly 1 seconds for the validation
+	RuntimeCELCostBudget = 10000000
+)
+
+type TestExpectation struct {
+	WantErr string `json:"_err,omitempty"`
+}
+
+func RunTest(t *testing.T) {
+	v := NewIstioValidator(t)
+	d, err := os.ReadDir("../base/testdata")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, f := range d {
+		t.Run(f.Name(), func(t *testing.T) {
+			f, err := os.ReadFile(filepath.Join("../base/testdata", f.Name()))
+			if err != nil {
+				t.Fatal(err)
+			}
+			for _, item := range SplitString(string(f)) {
+				obj := &unstructured.Unstructured{}
+				if err := yaml.Unmarshal([]byte(item), obj); err != nil {
+					t.Fatal(err)
+				}
+				delete(obj.Object, "_err")
+				t.Run(obj.GetName(), func(t *testing.T) {
+					want := TestExpectation{}
+					if err := yaml.Unmarshal([]byte(item), &want); err != nil {
+						t.Fatal(err)
+					}
+					res := v.ValidateCustomResource(obj)
+					if want.WantErr == "" {
+						// Want no error
+						if res != nil {
+							t.Fatalf("configuration was invalid: %v", res)
+						}
+					} else {
+						if res == nil {
+							t.Fatalf("wanted error like %q, got none", want.WantErr)
+						}
+						if !strings.Contains(res.Error(), want.WantErr) {
+							t.Fatalf("wanted error like %q, got %q", want.WantErr, res)
+						}
+					}
+				})
+			}
+		})
+	}
+}
+
 
 // Validator returns a new validator for custom resources
 // Warning: this is meant for usage in tests only
@@ -98,7 +156,7 @@ func (v *Validator) ValidateCustomResource(o runtime.Object) error {
 		return fmt.Errorf("%v/%v/%v: unknown fields %v", un.GroupVersionKind().Kind, un.GetName(), un.GetNamespace(), unknownFieldPaths)
 	}
 
-	errs, _ := v.cel[un.GroupVersionKind()].Validate(context.Background(), nil, structural, un.Object, nil, celconfig.RuntimeCELCostBudget)
+	errs, _ := v.cel[un.GroupVersionKind()].Validate(context.Background(), nil, structural, un.Object, nil, RuntimeCELCostBudget)
 	if errs.ToAggregate() != nil {
 		return fmt.Errorf("%v/%v/%v: %v", un.GroupVersionKind().Kind, un.GetName(), un.GetNamespace(), errs.ToAggregate().Error())
 	}
@@ -211,7 +269,7 @@ func NewValidatorFromCRDs(crds ...apiextensions.CustomResourceDefinition) (*Vali
 			v.byGvk[gvk] = schemaValidator
 			v.structural[gvk] = structural
 			// CEL programs are compiled and cached here
-			if celv := cel.NewValidator(structural, true, celconfig.PerCallLimit); celv != nil {
+			if celv := cel.NewValidator(structural, true, PerCallLimit); celv != nil {
 				v.cel[gvk] = celv
 			}
 
@@ -234,7 +292,7 @@ func formatError(errs field.ErrorList) error {
 }
 
 func NewIstioValidator(t *testing.T) *Validator {
-	v, err := NewValidatorFromFiles(filepath.Join("../kubernetes/customresourcedefinitions.gen.yaml"))
+	v, err := NewValidatorFromFiles(filepath.Join("../../kubernetes/customresourcedefinitions.gen.yaml"))
 	if err != nil {
 		t.Fatal(err)
 	}

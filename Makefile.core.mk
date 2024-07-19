@@ -100,7 +100,7 @@ lint: lint-dockerfiles lint-scripts lint-yaml lint-helm lint-copyright-banner li
  	@$(htmlproofer) . --url-swap "istio.io:preliminary.istio.io" --assume-extension --check-html --check-external-hash --check-opengraph --timeframe 2d --storage-dir $(repo_dir)/.htmlproofer --url-ignore "/localhost/"
 
 test: breaking
-	(pushd tests && go test -v ./...)
+	find tests -name go.mod -exec sh -c 'cd `dirname {}`; go test -v ./...' \;
 
 fmt: format-python
 
