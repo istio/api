@@ -178,9 +178,10 @@ spec:
                 - name
                 type: object
                 x-kubernetes-validations:
-                - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
+                    gateway.networking.k8s.io/Gateway
                   rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
-                    [''gateway.networking.k8s.io'',''Gateway'']]'
+                    [''gateway.networking.k8s.io'',''Gateway''], [''networking.istio.io'',''ServiceEntry'']]'
               targetRefs:
                 description: Optional.
                 items:
@@ -212,9 +213,10 @@ spec:
                   - name
                   type: object
                   x-kubernetes-validations:
-                  - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                  - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
+                      gateway.networking.k8s.io/Gateway
                     rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
-                      [''gateway.networking.k8s.io'',''Gateway'']]'
+                      [''gateway.networking.k8s.io'',''Gateway''], [''networking.istio.io'',''ServiceEntry'']]'
                 type: array
               type:
                 description: |-
@@ -6126,9 +6128,10 @@ spec:
                   - name
                   type: object
                   x-kubernetes-validations:
-                  - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                  - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
+                      gateway.networking.k8s.io/Gateway
                     rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
-                      [''gateway.networking.k8s.io'',''Gateway'']]'
+                      [''gateway.networking.k8s.io'',''Gateway''], [''networking.istio.io'',''ServiceEntry'']]'
                 type: array
               workloadSelector:
                 description: Criteria used to select the specific set of pods/VMs
@@ -14150,9 +14153,10 @@ spec:
                 - name
                 type: object
                 x-kubernetes-validations:
-                - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
+                    gateway.networking.k8s.io/Gateway
                   rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
-                    [''gateway.networking.k8s.io'',''Gateway'']]'
+                    [''gateway.networking.k8s.io'',''Gateway''], [''networking.istio.io'',''ServiceEntry'']]'
               targetRefs:
                 description: Optional.
                 items:
@@ -14184,9 +14188,10 @@ spec:
                   - name
                   type: object
                   x-kubernetes-validations:
-                  - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                  - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
+                      gateway.networking.k8s.io/Gateway
                     rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
-                      [''gateway.networking.k8s.io'',''Gateway'']]'
+                      [''gateway.networking.k8s.io'',''Gateway''], [''networking.istio.io'',''ServiceEntry'']]'
                 type: array
             type: object
           status:
@@ -14495,9 +14500,10 @@ spec:
                 - name
                 type: object
                 x-kubernetes-validations:
-                - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
+                    gateway.networking.k8s.io/Gateway
                   rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
-                    [''gateway.networking.k8s.io'',''Gateway'']]'
+                    [''gateway.networking.k8s.io'',''Gateway''], [''networking.istio.io'',''ServiceEntry'']]'
               targetRefs:
                 description: Optional.
                 items:
@@ -14529,9 +14535,10 @@ spec:
                   - name
                   type: object
                   x-kubernetes-validations:
-                  - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                  - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
+                      gateway.networking.k8s.io/Gateway
                     rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
-                      [''gateway.networking.k8s.io'',''Gateway'']]'
+                      [''gateway.networking.k8s.io'',''Gateway''], [''networking.istio.io'',''ServiceEntry'']]'
                 type: array
             type: object
           status:
@@ -15142,9 +15149,10 @@ spec:
                 - name
                 type: object
                 x-kubernetes-validations:
-                - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
+                    gateway.networking.k8s.io/Gateway
                   rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
-                    [''gateway.networking.k8s.io'',''Gateway'']]'
+                    [''gateway.networking.k8s.io'',''Gateway''], [''networking.istio.io'',''ServiceEntry'']]'
               targetRefs:
                 description: Optional.
                 items:
@@ -15176,9 +15184,10 @@ spec:
                   - name
                   type: object
                   x-kubernetes-validations:
-                  - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                  - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
+                      gateway.networking.k8s.io/Gateway
                     rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
-                      [''gateway.networking.k8s.io'',''Gateway'']]'
+                      [''gateway.networking.k8s.io'',''Gateway''], [''networking.istio.io'',''ServiceEntry'']]'
                 type: array
             type: object
             x-kubernetes-validations:
@@ -15424,9 +15433,10 @@ spec:
                 - name
                 type: object
                 x-kubernetes-validations:
-                - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
+                    gateway.networking.k8s.io/Gateway
                   rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
-                    [''gateway.networking.k8s.io'',''Gateway'']]'
+                    [''gateway.networking.k8s.io'',''Gateway''], [''networking.istio.io'',''ServiceEntry'']]'
               targetRefs:
                 description: Optional.
                 items:
@@ -15458,9 +15468,10 @@ spec:
                   - name
                   type: object
                   x-kubernetes-validations:
-                  - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                  - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
+                      gateway.networking.k8s.io/Gateway
                     rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
-                      [''gateway.networking.k8s.io'',''Gateway'']]'
+                      [''gateway.networking.k8s.io'',''Gateway''], [''networking.istio.io'',''ServiceEntry'']]'
                 type: array
             type: object
             x-kubernetes-validations:
@@ -15785,9 +15796,10 @@ spec:
                 - name
                 type: object
                 x-kubernetes-validations:
-                - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
+                    gateway.networking.k8s.io/Gateway
                   rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
-                    [''gateway.networking.k8s.io'',''Gateway'']]'
+                    [''gateway.networking.k8s.io'',''Gateway''], [''networking.istio.io'',''ServiceEntry'']]'
               targetRefs:
                 description: Optional.
                 items:
@@ -15819,9 +15831,10 @@ spec:
                   - name
                   type: object
                   x-kubernetes-validations:
-                  - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                  - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
+                      gateway.networking.k8s.io/Gateway
                     rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
-                      [''gateway.networking.k8s.io'',''Gateway'']]'
+                      [''gateway.networking.k8s.io'',''Gateway''], [''networking.istio.io'',''ServiceEntry'']]'
                 type: array
               tracing:
                 description: Optional.
@@ -16225,9 +16238,10 @@ spec:
                 - name
                 type: object
                 x-kubernetes-validations:
-                - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
+                    gateway.networking.k8s.io/Gateway
                   rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
-                    [''gateway.networking.k8s.io'',''Gateway'']]'
+                    [''gateway.networking.k8s.io'',''Gateway''], [''networking.istio.io'',''ServiceEntry'']]'
               targetRefs:
                 description: Optional.
                 items:
@@ -16259,9 +16273,10 @@ spec:
                   - name
                   type: object
                   x-kubernetes-validations:
-                  - message: Support kinds are core/Service and gateway.networking.k8s.io/Gateway
+                  - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
+                      gateway.networking.k8s.io/Gateway
                     rule: '[self.group, self.kind] in [[''core'',''Service''], ['''',''Service''],
-                      [''gateway.networking.k8s.io'',''Gateway'']]'
+                      [''gateway.networking.k8s.io'',''Gateway''], [''networking.istio.io'',''ServiceEntry'']]'
                 type: array
               tracing:
                 description: Optional.
