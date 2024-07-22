@@ -785,7 +785,8 @@ type MeshConfig struct {
 	//
 	// A Pattern can be composed of various pre-defined variables. The following variables are supported.
 	//
-	// - `%SERVICE%` - Will be substituted with name of the service.
+	// - `%SERVICE%` - Will be substituted with short hostname of the service.
+	// - `%SERVICE_NAME%` - Will be substituted with name of the service.
 	// - `%SERVICE_FQDN%` - Will be substituted with FQDN of the service.
 	// - `%SERVICE_PORT%` - Will be substituted with port of the service.
 	// - `%TARGET_PORT%`  - Will be substituted with the target port of the service.
@@ -803,7 +804,8 @@ type MeshConfig struct {
 	//
 	// A Pattern can be composed of various pre-defined variables. The following variables are supported.
 	//
-	// - `%SERVICE%` - Will be substituted with name of the service.
+	// - `%SERVICE%` - Will be substituted with short hostname of the service.
+	// - `%SERVICE_NAME%` - Will be substituted with name of the service.
 	// - `%SERVICE_FQDN%` - Will be substituted with FQDN of the service.
 	// - `%SERVICE_PORT%` - Will be substituted with port of the service.
 	// - `%SERVICE_PORT_NAME%` - Will be substituted with port name of the service.
