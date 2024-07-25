@@ -1,0 +1,6 @@
+apiVersion: release-notes/v2
+kind: bug-fix
+area: traffic-management
+releaseNotes:
+  - |
+    **Fixed** ServiceEntryStatus Addresses field could not easily support assigning IPs to each host which lead to an undesired divergence in behavior between the new and old implementations for automatic allocation of IP addresses for SericeEntry. Added a "Host" field to the Address in order to support mapping allocated IP to a host.
