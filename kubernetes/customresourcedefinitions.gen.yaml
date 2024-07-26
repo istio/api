@@ -318,6 +318,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -2160,6 +2161,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -3974,6 +3976,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -5788,6 +5791,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -6181,6 +6185,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -6434,6 +6439,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -6661,6 +6667,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -6888,6 +6895,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -7034,6 +7042,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -7308,6 +7317,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -7556,6 +7566,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -7804,6 +7815,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -8358,6 +8370,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -8888,6 +8901,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -9418,6 +9432,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -10478,6 +10493,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -11512,6 +11528,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -12546,6 +12563,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -12724,6 +12742,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -12880,6 +12899,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -13036,6 +13056,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -13328,6 +13349,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -13592,6 +13614,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -13856,6 +13879,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -14230,6 +14254,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -14577,6 +14602,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -14761,6 +14787,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -14918,6 +14945,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -15229,6 +15257,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -15513,6 +15542,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -15982,6 +16012,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
@@ -16424,6 +16455,7 @@ spec:
                   refers.
                 format: int64
                 type: integer
+                x-kubernetes-int-or-string: true
               validationMessages:
                 description: Includes any errors or warnings detected by Istio's analyzers.
                 items:
