@@ -422,11 +422,17 @@ func (CaptureMode) EnumDescriptor() ([]byte, []int) {
 type OutboundTrafficPolicy_Mode int32
 
 const (
-	// Outbound traffic will be restricted to services defined in the
-	// service registry as well as those defined through `ServiceEntry` configurations.
+	// In `REGISTRY_ONLY` mode, unknown outbound traffic will be dropped.
+	// Traffic destinations must be explicitly declared into the service registry through `ServiceEntry` configurations.
+	//
+	// Note: Istio [does not offer an outbound traffic security policy](https://istio.io/latest/docs/ops/best-practices/security/#understand-traffic-capture-limitations).
+	// This option does not act as one, or as any form of an outbound firewall.
+	// Instead, this option exists primarily to offer users a way to detect missing `ServiceEntry` configurations by explicitly failing.
 	OutboundTrafficPolicy_REGISTRY_ONLY OutboundTrafficPolicy_Mode = 0
-	// Outbound traffic to unknown destinations will be allowed, in case
-	// there are no services or `ServiceEntry` configurations for the destination port.
+	// In `ALLOW_ANY` mode, any traffic to unknown destinations will be allowed.
+	// Unknown destination traffic will have limited functionality, however, such as reduced observability.
+	// This mode allows users that do not have all possible egress destinations registered through `ServiceEntry` configurations to still connect
+	// to arbitrary destinations.
 	OutboundTrafficPolicy_ALLOW_ANY OutboundTrafficPolicy_Mode = 1
 )
 
@@ -536,13 +542,10 @@ type Sidecar struct {
 	//
 	// In every case, the connection pool settings are overriden, not merged.
 	InboundConnectionPool *ConnectionPoolSettings `protobuf:"bytes,7,opt,name=inbound_connection_pool,json=inboundConnectionPool,proto3" json:"inbound_connection_pool,omitempty"`
-	// Configuration for the outbound traffic policy.  If your
-	// application uses one or more external services that are not known
-	// apriori, setting the policy to `ALLOW_ANY` will cause the
-	// sidecars to route any unknown traffic originating from the
-	// application to its requested destination. If not specified,
-	// inherits the system detected defaults from the namespace-wide or
-	// the global default Sidecar.
+	// Set the default behavior of the sidecar for handling outbound
+	// traffic from the application.
+	//
+	// Default mode is `ALLOW_ANY`, which means outbound traffic to unknown destinations will be allowed.
 	OutboundTrafficPolicy *OutboundTrafficPolicy `protobuf:"bytes,4,opt,name=outbound_traffic_policy,json=outboundTrafficPolicy,proto3" json:"outbound_traffic_policy,omitempty"`
 }
 
@@ -909,14 +912,7 @@ func (x *WorkloadSelector) GetLabels() map[string]string {
 }
 
 // `OutboundTrafficPolicy` sets the default behavior of the sidecar for
-// handling outbound traffic from the application.
-// If your application uses one or more external
-// services that are not known apriori, setting the policy to `ALLOW_ANY`
-// will cause the sidecars to route any unknown traffic originating from
-// the application to its requested destination.  Users are strongly
-// encouraged to use `ServiceEntry` configurations to explicitly declare any external
-// dependencies, instead of using `ALLOW_ANY`, so that traffic to these
-// services can be monitored.
+// handling unknown outbound traffic from the application.
 type OutboundTrafficPolicy struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
