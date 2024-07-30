@@ -1277,6 +1277,13 @@ message MeshConfig {
   // for additional detail on selector semantics.
   repeated LabelSelector discovery_selectors = 59;
 
+  // A list of namespaces that are skipped processing by istio. The number of entities (including services, pods, and endpoints) 
+  // in these namespaces are all ignorred. It works in collaboration with `discoverySelectors`
+  // A request to the service or pod can succeed or fail depends on the `outboundTrafficPolicy`.
+  // If `outboundTrafficPolicy` is ALLOW_ANY, it can succeed, otherwise it can fail.
+  repeated string exclude_namespaces = 67;
+
+
   message ProxyPathNormalization {
     enum NormalizationType {
       // Apply default normalizations. Currently, this is BASE.
@@ -1383,7 +1390,7 @@ message MeshConfig {
   TLSConfig tls_defaults = 64;
 
   // $hide_from_docs
-  // Next available field number: 67
+  // Next available field number: 68
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
