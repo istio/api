@@ -576,6 +576,20 @@ for additional detail on selector semantics.</p>
 No
 </td>
 </tr>
+<tr id="MeshConfig-exclude_namespaces">
+<td><code>excludeNamespaces</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>A list of namespaces that are skipped processing by istio. The number of entities (including services, pods, and endpoints)
+in these namespaces are all ignorred. It works in collaboration with <code>discoverySelectors</code>
+A request to the service or pod can succeed or fail depends on the <code>outboundTrafficPolicy</code>.
+If <code>outboundTrafficPolicy</code> is ALLOW_ANY, it can succeed, otherwise it can fail.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="MeshConfig-path_normalization">
 <td><code>pathNormalization</code></td>
 <td><code><a href="#MeshConfig-ProxyPathNormalization">ProxyPathNormalization</a></code></td>
