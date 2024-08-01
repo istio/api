@@ -30,7 +30,6 @@ buf generate \
 # These folders do not have the full plugins used, as they are not full CRDs.
 # We pass them a custom configuration to exclude the non-required files
 buf generate --template buf.gen-noncrd.yaml \
-  --path operator \
   --path mcp \
   --path mesh
 
