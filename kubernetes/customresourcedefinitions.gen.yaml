@@ -667,7 +667,7 @@ spec:
                                     type: object
                                   type: array
                                 enabled:
-                                  description: enable locality load balancing, this
+                                  description: Enable locality load balancing, this
                                     is DestinationRule-level and will override mesh
                                     wide settings in entirety.
                                   nullable: true
@@ -1013,7 +1013,7 @@ spec:
                                           type: object
                                         type: array
                                       enabled:
-                                        description: enable locality load balancing,
+                                        description: Enable locality load balancing,
                                           this is DestinationRule-level and will override
                                           mesh wide settings in entirety.
                                         nullable: true
@@ -1509,7 +1509,7 @@ spec:
                               type: object
                             type: array
                           enabled:
-                            description: enable locality load balancing, this is DestinationRule-level
+                            description: Enable locality load balancing, this is DestinationRule-level
                               and will override mesh wide settings in entirety.
                             nullable: true
                             type: boolean
@@ -1847,7 +1847,7 @@ spec:
                                     type: object
                                   type: array
                                 enabled:
-                                  description: enable locality load balancing, this
+                                  description: Enable locality load balancing, this
                                     is DestinationRule-level and will override mesh
                                     wide settings in entirety.
                                   nullable: true
@@ -2483,7 +2483,7 @@ spec:
                                     type: object
                                   type: array
                                 enabled:
-                                  description: enable locality load balancing, this
+                                  description: Enable locality load balancing, this
                                     is DestinationRule-level and will override mesh
                                     wide settings in entirety.
                                   nullable: true
@@ -2829,7 +2829,7 @@ spec:
                                           type: object
                                         type: array
                                       enabled:
-                                        description: enable locality load balancing,
+                                        description: Enable locality load balancing,
                                           this is DestinationRule-level and will override
                                           mesh wide settings in entirety.
                                         nullable: true
@@ -3325,7 +3325,7 @@ spec:
                               type: object
                             type: array
                           enabled:
-                            description: enable locality load balancing, this is DestinationRule-level
+                            description: Enable locality load balancing, this is DestinationRule-level
                               and will override mesh wide settings in entirety.
                             nullable: true
                             type: boolean
@@ -3663,7 +3663,7 @@ spec:
                                     type: object
                                   type: array
                                 enabled:
-                                  description: enable locality load balancing, this
+                                  description: Enable locality load balancing, this
                                     is DestinationRule-level and will override mesh
                                     wide settings in entirety.
                                   nullable: true
@@ -4299,7 +4299,7 @@ spec:
                                     type: object
                                   type: array
                                 enabled:
-                                  description: enable locality load balancing, this
+                                  description: Enable locality load balancing, this
                                     is DestinationRule-level and will override mesh
                                     wide settings in entirety.
                                   nullable: true
@@ -4645,7 +4645,7 @@ spec:
                                           type: object
                                         type: array
                                       enabled:
-                                        description: enable locality load balancing,
+                                        description: Enable locality load balancing,
                                           this is DestinationRule-level and will override
                                           mesh wide settings in entirety.
                                         nullable: true
@@ -5141,7 +5141,7 @@ spec:
                               type: object
                             type: array
                           enabled:
-                            description: enable locality load balancing, this is DestinationRule-level
+                            description: Enable locality load balancing, this is DestinationRule-level
                               and will override mesh wide settings in entirety.
                             nullable: true
                             type: boolean
@@ -5479,7 +5479,7 @@ spec:
                                     type: object
                                   type: array
                                 enabled:
-                                  description: enable locality load balancing, this
+                                  description: Enable locality load balancing, this
                                     is DestinationRule-level and will override mesh
                                     wide settings in entirety.
                                   nullable: true

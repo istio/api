@@ -1557,8 +1557,11 @@ type LocalityLoadBalancerSetting struct {
 	// Optional: only one of distribute, failover or failoverPriority can be set.
 	// And it should be used together with `OutlierDetection` to detect unhealthy endpoints, otherwise has no effect.
 	FailoverPriority []string `protobuf:"bytes,4,rep,name=failover_priority,json=failoverPriority,proto3" json:"failover_priority,omitempty"`
-	// enable locality load balancing, this is DestinationRule-level and will override mesh wide settings in entirety.
+	// Enable locality load balancing, this is DestinationRule-level and will override mesh wide settings in entirety.
 	// e.g. true means that turn on locality load balancing for this DestinationRule no matter what mesh wide settings is.
+	// When this is enabled, the specified load balancer algorithm, such as LEAST_REQUEST, would be evaluted for a group
+	// of endpoints in the same locality. To achieve load balancing across all locality endpoints, you need to explicitly
+	// set this to false.
 	Enabled *wrappers.BoolValue `protobuf:"bytes,3,opt,name=enabled,proto3" json:"enabled,omitempty"`
 }
 
