@@ -9906,6 +9906,15 @@ spec:
                           name:
                             description: The name assigned to a match.
                             type: string
+                          percentage:
+                            description: Allows specifying a percentage of requests
+                              that will be matches by this route in addition to other
+                              match conditions.
+                            properties:
+                              value:
+                                format: double
+                                type: number
+                            type: object
                           port:
                             description: Specifies the ports on the host that is being
                               addressed.
@@ -10942,6 +10951,15 @@ spec:
                           name:
                             description: The name assigned to a match.
                             type: string
+                          percentage:
+                            description: Allows specifying a percentage of requests
+                              that will be matches by this route in addition to other
+                              match conditions.
+                            properties:
+                              value:
+                                format: double
+                                type: number
+                            type: object
                           port:
                             description: Specifies the ports on the host that is being
                               addressed.
@@ -11978,6 +11996,15 @@ spec:
                           name:
                             description: The name assigned to a match.
                             type: string
+                          percentage:
+                            description: Allows specifying a percentage of requests
+                              that will be matches by this route in addition to other
+                              match conditions.
+                            properties:
+                              value:
+                                format: double
+                                type: number
+                            type: object
                           port:
                             description: Specifies the ports on the host that is being
                               addressed.
