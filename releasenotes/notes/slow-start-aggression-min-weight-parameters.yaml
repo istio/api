@@ -1,0 +1,10 @@
+apiVersion: release-notes/v2
+
+kind: feature
+area: traffic-management
+issue:
+- 3215
+
+releaseNotes:
+- |
+    **Added** aggression and min_weight_percent parameters
