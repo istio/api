@@ -270,6 +270,8 @@ const ConnectionPoolSettings_HTTPSettings_DO_NOT_UPGRADE ConnectionPoolSettings_
 // This opt-in option overrides the default.
 const ConnectionPoolSettings_HTTPSettings_UPGRADE ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy = v1alpha3.ConnectionPoolSettings_HTTPSettings_UPGRADE
 
+type RetryBudget = v1alpha3.RetryBudget
+
 // A Circuit breaker implementation that tracks the status of each
 // individual host in the upstream service.  Applicable to both HTTP and
 // TCP services.  For HTTP services, hosts that continually return 5xx

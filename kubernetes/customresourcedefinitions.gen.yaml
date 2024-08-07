@@ -483,6 +483,28 @@ spec:
                                     given time.
                                   format: int32
                                   type: integer
+                                retryBudget:
+                                  description: The amount of concurrent retries allowed
+                                    in the case of failure, a percentage of the active
+                                    requests.
+                                  properties:
+                                    budgetPercent:
+                                      description: The limit on concurrent retries
+                                        as a percentage of active requests and active
+                                        pending requests.
+                                      properties:
+                                        value:
+                                          format: double
+                                          type: number
+                                      type: object
+                                    minRetryConcurrency:
+                                      description: The minimum number of concurrent
+                                        retries allowed for the retry budget.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                  type: object
                                 useClientProtocol:
                                   description: If set to true, client protocol will
                                     be preserved while initiating connection to backend.
@@ -695,6 +717,25 @@ spec:
                                     type: string
                                   type: array
                               type: object
+                            retryBudget:
+                              properties:
+                                budgetPercent:
+                                  description: The limit on concurrent retries as
+                                    a percentage of active requests and active pending
+                                    requests.
+                                  properties:
+                                    value:
+                                      format: double
+                                      type: number
+                                  type: object
+                                minRetryConcurrency:
+                                  description: The minimum number of concurrent retries
+                                    allowed for the retry budget.
+                                  maximum: 4294967295
+                                  minimum: 0
+                                  nullable: true
+                                  type: integer
+                              type: object
                             simple:
                               description: |2-
 
@@ -824,6 +865,28 @@ spec:
                                           at a given time.
                                         format: int32
                                         type: integer
+                                      retryBudget:
+                                        description: The amount of concurrent retries
+                                          allowed in the case of failure, a percentage
+                                          of the active requests.
+                                        properties:
+                                          budgetPercent:
+                                            description: The limit on concurrent retries
+                                              as a percentage of active requests and
+                                              active pending requests.
+                                            properties:
+                                              value:
+                                                format: double
+                                                type: number
+                                            type: object
+                                          minRetryConcurrency:
+                                            description: The minimum number of concurrent
+                                              retries allowed for the retry budget.
+                                            maximum: 4294967295
+                                            minimum: 0
+                                            nullable: true
+                                            type: integer
+                                        type: object
                                       useClientProtocol:
                                         description: If set to true, client protocol
                                           will be preserved while initiating connection
@@ -1040,6 +1103,25 @@ spec:
                                         items:
                                           type: string
                                         type: array
+                                    type: object
+                                  retryBudget:
+                                    properties:
+                                      budgetPercent:
+                                        description: The limit on concurrent retries
+                                          as a percentage of active requests and active
+                                          pending requests.
+                                        properties:
+                                          value:
+                                            format: double
+                                            type: number
+                                        type: object
+                                      minRetryConcurrency:
+                                        description: The minimum number of concurrent
+                                          retries allowed for the retry budget.
+                                        maximum: 4294967295
+                                        minimum: 0
+                                        nullable: true
+                                        type: integer
                                     type: object
                                   simple:
                                     description: |2-
@@ -1331,6 +1413,27 @@ spec:
                               to all hosts in a cluster at a given time.
                             format: int32
                             type: integer
+                          retryBudget:
+                            description: The amount of concurrent retries allowed
+                              in the case of failure, a percentage of the active requests.
+                            properties:
+                              budgetPercent:
+                                description: The limit on concurrent retries as a
+                                  percentage of active requests and active pending
+                                  requests.
+                                properties:
+                                  value:
+                                    format: double
+                                    type: number
+                                type: object
+                              minRetryConcurrency:
+                                description: The minimum number of concurrent retries
+                                  allowed for the retry budget.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                            type: object
                           useClientProtocol:
                             description: If set to true, client protocol will be preserved
                               while initiating connection to backend.
@@ -1535,6 +1638,24 @@ spec:
                               type: string
                             type: array
                         type: object
+                      retryBudget:
+                        properties:
+                          budgetPercent:
+                            description: The limit on concurrent retries as a percentage
+                              of active requests and active pending requests.
+                            properties:
+                              value:
+                                format: double
+                                type: number
+                            type: object
+                          minRetryConcurrency:
+                            description: The minimum number of concurrent retries
+                              allowed for the retry budget.
+                            maximum: 4294967295
+                            minimum: 0
+                            nullable: true
+                            type: integer
+                        type: object
                       simple:
                         description: |2-
 
@@ -1663,6 +1784,28 @@ spec:
                                     given time.
                                   format: int32
                                   type: integer
+                                retryBudget:
+                                  description: The amount of concurrent retries allowed
+                                    in the case of failure, a percentage of the active
+                                    requests.
+                                  properties:
+                                    budgetPercent:
+                                      description: The limit on concurrent retries
+                                        as a percentage of active requests and active
+                                        pending requests.
+                                      properties:
+                                        value:
+                                          format: double
+                                          type: number
+                                      type: object
+                                    minRetryConcurrency:
+                                      description: The minimum number of concurrent
+                                        retries allowed for the retry budget.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                  type: object
                                 useClientProtocol:
                                   description: If set to true, client protocol will
                                     be preserved while initiating connection to backend.
@@ -1874,6 +2017,25 @@ spec:
                                   items:
                                     type: string
                                   type: array
+                              type: object
+                            retryBudget:
+                              properties:
+                                budgetPercent:
+                                  description: The limit on concurrent retries as
+                                    a percentage of active requests and active pending
+                                    requests.
+                                  properties:
+                                    value:
+                                      format: double
+                                      type: number
+                                  type: object
+                                minRetryConcurrency:
+                                  description: The minimum number of concurrent retries
+                                    allowed for the retry budget.
+                                  maximum: 4294967295
+                                  minimum: 0
+                                  nullable: true
+                                  type: integer
                               type: object
                             simple:
                               description: |2-
@@ -2299,6 +2461,28 @@ spec:
                                     given time.
                                   format: int32
                                   type: integer
+                                retryBudget:
+                                  description: The amount of concurrent retries allowed
+                                    in the case of failure, a percentage of the active
+                                    requests.
+                                  properties:
+                                    budgetPercent:
+                                      description: The limit on concurrent retries
+                                        as a percentage of active requests and active
+                                        pending requests.
+                                      properties:
+                                        value:
+                                          format: double
+                                          type: number
+                                      type: object
+                                    minRetryConcurrency:
+                                      description: The minimum number of concurrent
+                                        retries allowed for the retry budget.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                  type: object
                                 useClientProtocol:
                                   description: If set to true, client protocol will
                                     be preserved while initiating connection to backend.
@@ -2511,6 +2695,25 @@ spec:
                                     type: string
                                   type: array
                               type: object
+                            retryBudget:
+                              properties:
+                                budgetPercent:
+                                  description: The limit on concurrent retries as
+                                    a percentage of active requests and active pending
+                                    requests.
+                                  properties:
+                                    value:
+                                      format: double
+                                      type: number
+                                  type: object
+                                minRetryConcurrency:
+                                  description: The minimum number of concurrent retries
+                                    allowed for the retry budget.
+                                  maximum: 4294967295
+                                  minimum: 0
+                                  nullable: true
+                                  type: integer
+                              type: object
                             simple:
                               description: |2-
 
@@ -2640,6 +2843,28 @@ spec:
                                           at a given time.
                                         format: int32
                                         type: integer
+                                      retryBudget:
+                                        description: The amount of concurrent retries
+                                          allowed in the case of failure, a percentage
+                                          of the active requests.
+                                        properties:
+                                          budgetPercent:
+                                            description: The limit on concurrent retries
+                                              as a percentage of active requests and
+                                              active pending requests.
+                                            properties:
+                                              value:
+                                                format: double
+                                                type: number
+                                            type: object
+                                          minRetryConcurrency:
+                                            description: The minimum number of concurrent
+                                              retries allowed for the retry budget.
+                                            maximum: 4294967295
+                                            minimum: 0
+                                            nullable: true
+                                            type: integer
+                                        type: object
                                       useClientProtocol:
                                         description: If set to true, client protocol
                                           will be preserved while initiating connection
@@ -2856,6 +3081,25 @@ spec:
                                         items:
                                           type: string
                                         type: array
+                                    type: object
+                                  retryBudget:
+                                    properties:
+                                      budgetPercent:
+                                        description: The limit on concurrent retries
+                                          as a percentage of active requests and active
+                                          pending requests.
+                                        properties:
+                                          value:
+                                            format: double
+                                            type: number
+                                        type: object
+                                      minRetryConcurrency:
+                                        description: The minimum number of concurrent
+                                          retries allowed for the retry budget.
+                                        maximum: 4294967295
+                                        minimum: 0
+                                        nullable: true
+                                        type: integer
                                     type: object
                                   simple:
                                     description: |2-
@@ -3147,6 +3391,27 @@ spec:
                               to all hosts in a cluster at a given time.
                             format: int32
                             type: integer
+                          retryBudget:
+                            description: The amount of concurrent retries allowed
+                              in the case of failure, a percentage of the active requests.
+                            properties:
+                              budgetPercent:
+                                description: The limit on concurrent retries as a
+                                  percentage of active requests and active pending
+                                  requests.
+                                properties:
+                                  value:
+                                    format: double
+                                    type: number
+                                type: object
+                              minRetryConcurrency:
+                                description: The minimum number of concurrent retries
+                                  allowed for the retry budget.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                            type: object
                           useClientProtocol:
                             description: If set to true, client protocol will be preserved
                               while initiating connection to backend.
@@ -3351,6 +3616,24 @@ spec:
                               type: string
                             type: array
                         type: object
+                      retryBudget:
+                        properties:
+                          budgetPercent:
+                            description: The limit on concurrent retries as a percentage
+                              of active requests and active pending requests.
+                            properties:
+                              value:
+                                format: double
+                                type: number
+                            type: object
+                          minRetryConcurrency:
+                            description: The minimum number of concurrent retries
+                              allowed for the retry budget.
+                            maximum: 4294967295
+                            minimum: 0
+                            nullable: true
+                            type: integer
+                        type: object
                       simple:
                         description: |2-
 
@@ -3479,6 +3762,28 @@ spec:
                                     given time.
                                   format: int32
                                   type: integer
+                                retryBudget:
+                                  description: The amount of concurrent retries allowed
+                                    in the case of failure, a percentage of the active
+                                    requests.
+                                  properties:
+                                    budgetPercent:
+                                      description: The limit on concurrent retries
+                                        as a percentage of active requests and active
+                                        pending requests.
+                                      properties:
+                                        value:
+                                          format: double
+                                          type: number
+                                      type: object
+                                    minRetryConcurrency:
+                                      description: The minimum number of concurrent
+                                        retries allowed for the retry budget.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                  type: object
                                 useClientProtocol:
                                   description: If set to true, client protocol will
                                     be preserved while initiating connection to backend.
@@ -3690,6 +3995,25 @@ spec:
                                   items:
                                     type: string
                                   type: array
+                              type: object
+                            retryBudget:
+                              properties:
+                                budgetPercent:
+                                  description: The limit on concurrent retries as
+                                    a percentage of active requests and active pending
+                                    requests.
+                                  properties:
+                                    value:
+                                      format: double
+                                      type: number
+                                  type: object
+                                minRetryConcurrency:
+                                  description: The minimum number of concurrent retries
+                                    allowed for the retry budget.
+                                  maximum: 4294967295
+                                  minimum: 0
+                                  nullable: true
+                                  type: integer
                               type: object
                             simple:
                               description: |2-
@@ -4115,6 +4439,28 @@ spec:
                                     given time.
                                   format: int32
                                   type: integer
+                                retryBudget:
+                                  description: The amount of concurrent retries allowed
+                                    in the case of failure, a percentage of the active
+                                    requests.
+                                  properties:
+                                    budgetPercent:
+                                      description: The limit on concurrent retries
+                                        as a percentage of active requests and active
+                                        pending requests.
+                                      properties:
+                                        value:
+                                          format: double
+                                          type: number
+                                      type: object
+                                    minRetryConcurrency:
+                                      description: The minimum number of concurrent
+                                        retries allowed for the retry budget.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                  type: object
                                 useClientProtocol:
                                   description: If set to true, client protocol will
                                     be preserved while initiating connection to backend.
@@ -4327,6 +4673,25 @@ spec:
                                     type: string
                                   type: array
                               type: object
+                            retryBudget:
+                              properties:
+                                budgetPercent:
+                                  description: The limit on concurrent retries as
+                                    a percentage of active requests and active pending
+                                    requests.
+                                  properties:
+                                    value:
+                                      format: double
+                                      type: number
+                                  type: object
+                                minRetryConcurrency:
+                                  description: The minimum number of concurrent retries
+                                    allowed for the retry budget.
+                                  maximum: 4294967295
+                                  minimum: 0
+                                  nullable: true
+                                  type: integer
+                              type: object
                             simple:
                               description: |2-
 
@@ -4456,6 +4821,28 @@ spec:
                                           at a given time.
                                         format: int32
                                         type: integer
+                                      retryBudget:
+                                        description: The amount of concurrent retries
+                                          allowed in the case of failure, a percentage
+                                          of the active requests.
+                                        properties:
+                                          budgetPercent:
+                                            description: The limit on concurrent retries
+                                              as a percentage of active requests and
+                                              active pending requests.
+                                            properties:
+                                              value:
+                                                format: double
+                                                type: number
+                                            type: object
+                                          minRetryConcurrency:
+                                            description: The minimum number of concurrent
+                                              retries allowed for the retry budget.
+                                            maximum: 4294967295
+                                            minimum: 0
+                                            nullable: true
+                                            type: integer
+                                        type: object
                                       useClientProtocol:
                                         description: If set to true, client protocol
                                           will be preserved while initiating connection
@@ -4672,6 +5059,25 @@ spec:
                                         items:
                                           type: string
                                         type: array
+                                    type: object
+                                  retryBudget:
+                                    properties:
+                                      budgetPercent:
+                                        description: The limit on concurrent retries
+                                          as a percentage of active requests and active
+                                          pending requests.
+                                        properties:
+                                          value:
+                                            format: double
+                                            type: number
+                                        type: object
+                                      minRetryConcurrency:
+                                        description: The minimum number of concurrent
+                                          retries allowed for the retry budget.
+                                        maximum: 4294967295
+                                        minimum: 0
+                                        nullable: true
+                                        type: integer
                                     type: object
                                   simple:
                                     description: |2-
@@ -4963,6 +5369,27 @@ spec:
                               to all hosts in a cluster at a given time.
                             format: int32
                             type: integer
+                          retryBudget:
+                            description: The amount of concurrent retries allowed
+                              in the case of failure, a percentage of the active requests.
+                            properties:
+                              budgetPercent:
+                                description: The limit on concurrent retries as a
+                                  percentage of active requests and active pending
+                                  requests.
+                                properties:
+                                  value:
+                                    format: double
+                                    type: number
+                                type: object
+                              minRetryConcurrency:
+                                description: The minimum number of concurrent retries
+                                  allowed for the retry budget.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                            type: object
                           useClientProtocol:
                             description: If set to true, client protocol will be preserved
                               while initiating connection to backend.
@@ -5167,6 +5594,24 @@ spec:
                               type: string
                             type: array
                         type: object
+                      retryBudget:
+                        properties:
+                          budgetPercent:
+                            description: The limit on concurrent retries as a percentage
+                              of active requests and active pending requests.
+                            properties:
+                              value:
+                                format: double
+                                type: number
+                            type: object
+                          minRetryConcurrency:
+                            description: The minimum number of concurrent retries
+                              allowed for the retry budget.
+                            maximum: 4294967295
+                            minimum: 0
+                            nullable: true
+                            type: integer
+                        type: object
                       simple:
                         description: |2-
 
@@ -5295,6 +5740,28 @@ spec:
                                     given time.
                                   format: int32
                                   type: integer
+                                retryBudget:
+                                  description: The amount of concurrent retries allowed
+                                    in the case of failure, a percentage of the active
+                                    requests.
+                                  properties:
+                                    budgetPercent:
+                                      description: The limit on concurrent retries
+                                        as a percentage of active requests and active
+                                        pending requests.
+                                      properties:
+                                        value:
+                                          format: double
+                                          type: number
+                                      type: object
+                                    minRetryConcurrency:
+                                      description: The minimum number of concurrent
+                                        retries allowed for the retry budget.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                  type: object
                                 useClientProtocol:
                                   description: If set to true, client protocol will
                                     be preserved while initiating connection to backend.
@@ -5506,6 +5973,25 @@ spec:
                                   items:
                                     type: string
                                   type: array
+                              type: object
+                            retryBudget:
+                              properties:
+                                budgetPercent:
+                                  description: The limit on concurrent retries as
+                                    a percentage of active requests and active pending
+                                    requests.
+                                  properties:
+                                    value:
+                                      format: double
+                                      type: number
+                                  type: object
+                                minRetryConcurrency:
+                                  description: The minimum number of concurrent retries
+                                    allowed for the retry budget.
+                                  maximum: 4294967295
+                                  minimum: 0
+                                  nullable: true
+                                  type: integer
                               type: object
                             simple:
                               description: |2-
@@ -7995,6 +8481,26 @@ spec:
                           to all hosts in a cluster at a given time.
                         format: int32
                         type: integer
+                      retryBudget:
+                        description: The amount of concurrent retries allowed in the
+                          case of failure, a percentage of the active requests.
+                        properties:
+                          budgetPercent:
+                            description: The limit on concurrent retries as a percentage
+                              of active requests and active pending requests.
+                            properties:
+                              value:
+                                format: double
+                                type: number
+                            type: object
+                          minRetryConcurrency:
+                            description: The minimum number of concurrent retries
+                              allowed for the retry budget.
+                            maximum: 4294967295
+                            minimum: 0
+                            nullable: true
+                            type: integer
+                        type: object
                       useClientProtocol:
                         description: If set to true, client protocol will be preserved
                           while initiating connection to backend.
@@ -8120,6 +8626,28 @@ spec:
                                 to all hosts in a cluster at a given time.
                               format: int32
                               type: integer
+                            retryBudget:
+                              description: The amount of concurrent retries allowed
+                                in the case of failure, a percentage of the active
+                                requests.
+                              properties:
+                                budgetPercent:
+                                  description: The limit on concurrent retries as
+                                    a percentage of active requests and active pending
+                                    requests.
+                                  properties:
+                                    value:
+                                      format: double
+                                      type: number
+                                  type: object
+                                minRetryConcurrency:
+                                  description: The minimum number of concurrent retries
+                                    allowed for the retry budget.
+                                  maximum: 4294967295
+                                  minimum: 0
+                                  nullable: true
+                                  type: integer
+                              type: object
                             useClientProtocol:
                               description: If set to true, client protocol will be
                                 preserved while initiating connection to backend.
@@ -8528,6 +9056,26 @@ spec:
                           to all hosts in a cluster at a given time.
                         format: int32
                         type: integer
+                      retryBudget:
+                        description: The amount of concurrent retries allowed in the
+                          case of failure, a percentage of the active requests.
+                        properties:
+                          budgetPercent:
+                            description: The limit on concurrent retries as a percentage
+                              of active requests and active pending requests.
+                            properties:
+                              value:
+                                format: double
+                                type: number
+                            type: object
+                          minRetryConcurrency:
+                            description: The minimum number of concurrent retries
+                              allowed for the retry budget.
+                            maximum: 4294967295
+                            minimum: 0
+                            nullable: true
+                            type: integer
+                        type: object
                       useClientProtocol:
                         description: If set to true, client protocol will be preserved
                           while initiating connection to backend.
@@ -8653,6 +9201,28 @@ spec:
                                 to all hosts in a cluster at a given time.
                               format: int32
                               type: integer
+                            retryBudget:
+                              description: The amount of concurrent retries allowed
+                                in the case of failure, a percentage of the active
+                                requests.
+                              properties:
+                                budgetPercent:
+                                  description: The limit on concurrent retries as
+                                    a percentage of active requests and active pending
+                                    requests.
+                                  properties:
+                                    value:
+                                      format: double
+                                      type: number
+                                  type: object
+                                minRetryConcurrency:
+                                  description: The minimum number of concurrent retries
+                                    allowed for the retry budget.
+                                  maximum: 4294967295
+                                  minimum: 0
+                                  nullable: true
+                                  type: integer
+                              type: object
                             useClientProtocol:
                               description: If set to true, client protocol will be
                                 preserved while initiating connection to backend.
@@ -9061,6 +9631,26 @@ spec:
                           to all hosts in a cluster at a given time.
                         format: int32
                         type: integer
+                      retryBudget:
+                        description: The amount of concurrent retries allowed in the
+                          case of failure, a percentage of the active requests.
+                        properties:
+                          budgetPercent:
+                            description: The limit on concurrent retries as a percentage
+                              of active requests and active pending requests.
+                            properties:
+                              value:
+                                format: double
+                                type: number
+                            type: object
+                          minRetryConcurrency:
+                            description: The minimum number of concurrent retries
+                              allowed for the retry budget.
+                            maximum: 4294967295
+                            minimum: 0
+                            nullable: true
+                            type: integer
+                        type: object
                       useClientProtocol:
                         description: If set to true, client protocol will be preserved
                           while initiating connection to backend.
@@ -9186,6 +9776,28 @@ spec:
                                 to all hosts in a cluster at a given time.
                               format: int32
                               type: integer
+                            retryBudget:
+                              description: The amount of concurrent retries allowed
+                                in the case of failure, a percentage of the active
+                                requests.
+                              properties:
+                                budgetPercent:
+                                  description: The limit on concurrent retries as
+                                    a percentage of active requests and active pending
+                                    requests.
+                                  properties:
+                                    value:
+                                      format: double
+                                      type: number
+                                  type: object
+                                minRetryConcurrency:
+                                  description: The minimum number of concurrent retries
+                                    allowed for the retry budget.
+                                  maximum: 4294967295
+                                  minimum: 0
+                                  nullable: true
+                                  type: integer
+                              type: object
                             useClientProtocol:
                               description: If set to true, client protocol will be
                                 preserved while initiating connection to backend.
