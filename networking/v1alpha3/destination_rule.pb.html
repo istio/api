@@ -1073,8 +1073,11 @@ No
 <td><code>enabled</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
-<p>enable locality load balancing, this is DestinationRule-level and will override mesh wide settings in entirety.
-e.g. true means that turn on locality load balancing for this DestinationRule no matter what mesh wide settings is.</p>
+<p>Enable locality load balancing, this is DestinationRule-level and will override mesh wide settings in entirety.
+e.g. true means that turn on locality load balancing for this DestinationRule no matter what mesh wide settings is.
+When this is enabled, the specified load balancer algorithm, such as LEAST_REQUEST, would be evaluted for a group
+of endpoints in the same locality. To achieve load balancing across all locality endpoints, you need to explicitly
+set this to false.</p>
 
 </td>
 <td>
