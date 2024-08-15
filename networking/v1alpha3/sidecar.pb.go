@@ -540,7 +540,7 @@ type Sidecar struct {
 	// - top level `TrafficPolicy.ConnectionPool` from the `DestinationRule`
 	// - default connection pool settings (essentially unlimited)
 	//
-	// In every case, the connection pool settings are overriden, not merged.
+	// In every case, the connection pool settings are overridden, not merged.
 	InboundConnectionPool *ConnectionPoolSettings `protobuf:"bytes,7,opt,name=inbound_connection_pool,json=inboundConnectionPool,proto3" json:"inbound_connection_pool,omitempty"`
 	// Set the default behavior of the sidecar for handling outbound
 	// traffic from the application.

@@ -412,7 +412,7 @@ message Sidecar {
   // - top level `TrafficPolicy.ConnectionPool` from the `DestinationRule`
   // - default connection pool settings (essentially unlimited)
   //
-  // In every case, the connection pool settings are overriden, not merged.
+  // In every case, the connection pool settings are overridden, not merged.
   ConnectionPoolSettings inbound_connection_pool = 7;
 
   // Set the default behavior of the sidecar for handling outbound
