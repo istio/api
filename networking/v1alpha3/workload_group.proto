@@ -109,6 +109,7 @@ message WorkloadGroup {
   // should default to `default`. The workload identities (mTLS certificates) will be bootstrapped using the
   // specified service account's token. Workload entries in this group will be in the same namespace as the
   // workload group, and inherit the labels and annotations from the above `metadata` field.
+  // +protoc-gen-crd:validation:IgnoreSubValidation:["Address is required"]
   WorkloadEntry template = 2 [(google.api.field_behavior) = REQUIRED];
 
   // `ObjectMeta` describes metadata that will be attached to a `WorkloadEntry`.
