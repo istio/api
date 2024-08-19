@@ -463,7 +463,7 @@ type JWTRule struct {
 	//     bookstore_web.apps.example.com
 	//
 	// ```
-	// +kubebuilder:list-value-validation:MinLength=1
+	// +protoc-gen-crd:list-value-validation:MinLength=1
 	Audiences []string `protobuf:"bytes,2,rep,name=audiences,proto3" json:"audiences,omitempty"`
 	// URL of the provider's public key set to validate signature of the
 	// JWT. See [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
@@ -513,7 +513,7 @@ type JWTRule struct {
 	//
 	// Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
 	// such requests is undefined.
-	// +kubebuilder:list-value-validation:MinLength=1
+	// +protoc-gen-crd:list-value-validation:MinLength=1
 	FromParams []string `protobuf:"bytes,7,rep,name=from_params,json=fromParams,proto3" json:"from_params,omitempty"`
 	// This field specifies the header name to output a successfully verified JWT payload to the
 	// backend. The forwarded data is `base64_encoded(jwt_payload_in_JSON)`. If it is not specified,
@@ -532,7 +532,7 @@ type JWTRule struct {
 	//
 	// Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
 	// such requests is undefined.
-	// +kubebuilder:list-value-validation:MinLength=1
+	// +protoc-gen-crd:list-value-validation:MinLength=1
 	FromCookies []string `protobuf:"bytes,12,rep,name=from_cookies,json=fromCookies,proto3" json:"from_cookies,omitempty"`
 	// If set to true, the original token will be kept for the upstream request. Default is false.
 	ForwardOriginalToken bool `protobuf:"varint,9,opt,name=forward_original_token,json=forwardOriginalToken,proto3" json:"forward_original_token,omitempty"`

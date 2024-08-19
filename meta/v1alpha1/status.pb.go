@@ -60,7 +60,7 @@ type IstioStatus struct {
 	// When this value is not equal to the object's metadata generation, reconciled condition  calculation for the current
 	// generation is still in progress.  See https://istio.io/latest/docs/reference/config/config-status/ for more info.
 	// +optional
-	// +kubebuilder:validation:XIntOrString
+	// +protoc-gen-crd:validation:XIntOrString
 	ObservedGeneration int64 `protobuf:"varint,3,opt,name=observed_generation,json=observedGeneration,proto3" json:"observed_generation,omitempty"`
 }
 

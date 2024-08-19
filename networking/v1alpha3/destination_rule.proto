@@ -456,7 +456,7 @@ message LoadBalancerSettings {
       // Lifetime of the cookie. If specified, a cookie with the TTL will be
       // generated if the cookie is not present. If the TTL is present and zero, 
       // the generated cookie will be a session cookie.
-      // +kubebuilder:duration-validation:none
+      // +protoc-gen-crd:duration-validation:none
       google.protobuf.Duration ttl = 3;
     };
 

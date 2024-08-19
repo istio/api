@@ -121,8 +121,8 @@ type WorkloadSelector struct {
 	// the configuration namespace in which the resource is present.
 	// +kubebuilder:validation:XValidation:message="wildcard not allowed in label key match",rule="self.all(key, !key.contains('*'))"
 	// +kubebuilder:validation:XValidation:message="key must not be empty",rule="self.all(key, key.size() != 0)"
-	// +kubebuilder:map-value-validation:XValidation:message="wildcard not allowed in label value match",rule="!self.contains('*')"
-	// +kubebuilder:map-value-validation:MaxLength=63
+	// +protoc-gen-crd:map-value-validation:XValidation:message="wildcard not allowed in label value match",rule="!self.contains('*')"
+	// +protoc-gen-crd:map-value-validation:MaxLength=63
 	// +kubebuilder:validation:MaxProperties=4096
 	MatchLabels map[string]string `protobuf:"bytes,1,rep,name=match_labels,json=matchLabels,proto3" json:"match_labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }

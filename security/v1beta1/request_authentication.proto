@@ -340,7 +340,7 @@ message JWTRule {
   // - bookstore_android.apps.example.com
   //   bookstore_web.apps.example.com
   // ```
-  // +kubebuilder:list-value-validation:MinLength=1
+  // +protoc-gen-crd:list-value-validation:MinLength=1
   repeated string audiences = 2;
 
   // URL of the provider's public key set to validate signature of the
@@ -403,7 +403,7 @@ message JWTRule {
   //
   // Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
   // such requests is undefined.
-  // +kubebuilder:list-value-validation:MinLength=1
+  // +protoc-gen-crd:list-value-validation:MinLength=1
   repeated string from_params = 7;
 
   // This field specifies the header name to output a successfully verified JWT payload to the
@@ -422,7 +422,7 @@ message JWTRule {
   //
   // Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
   // such requests is undefined.
-  // +kubebuilder:list-value-validation:MinLength=1
+  // +protoc-gen-crd:list-value-validation:MinLength=1
   repeated string from_cookies = 12;
 
   // If set to true, the original token will be kept for the upstream request. Default is false.
