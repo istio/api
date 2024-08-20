@@ -140,7 +140,7 @@ type ProxyConfig struct {
 	Concurrency *wrappers.Int32Value `protobuf:"bytes,2,opt,name=concurrency,proto3" json:"concurrency,omitempty"`
 	// Additional environment variables for the proxy.
 	// Names starting with `ISTIO_META_` will be included in the generated bootstrap configuration and sent to the XDS server.
-	// +kubebuilder:map-value-validation:MaxLength=2048
+	// +protoc-gen-crd:map-value-validation:MaxLength=2048
 	EnvironmentVariables map[string]string `protobuf:"bytes,3,rep,name=environment_variables,json=environmentVariables,proto3" json:"environment_variables,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Specifies the details of the proxy image.
 	Image *ProxyImage `protobuf:"bytes,4,opt,name=image,proto3" json:"image,omitempty"`

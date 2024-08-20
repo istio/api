@@ -122,7 +122,7 @@ message ProxyConfig {
 
   // Additional environment variables for the proxy.
   // Names starting with `ISTIO_META_` will be included in the generated bootstrap configuration and sent to the XDS server.
-  // +kubebuilder:map-value-validation:MaxLength=2048
+  // +protoc-gen-crd:map-value-validation:MaxLength=2048
   map<string, string> environment_variables = 3;
 
   // Specifies the details of the proxy image.

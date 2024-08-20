@@ -127,6 +127,7 @@ type WorkloadGroup struct {
 	// should default to `default`. The workload identities (mTLS certificates) will be bootstrapped using the
 	// specified service account's token. Workload entries in this group will be in the same namespace as the
 	// workload group, and inherit the labels and annotations from the above `metadata` field.
+	// +protoc-gen-crd:validation:IgnoreSubValidation:["Address is required"]
 	Template *WorkloadEntry `protobuf:"bytes,2,opt,name=template,proto3" json:"template,omitempty"`
 	// `ReadinessProbe` describes the configuration the user must provide for healthchecking on their workload.
 	// This configuration mirrors K8S in both syntax and logic for the most part.
