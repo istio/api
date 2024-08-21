@@ -237,7 +237,7 @@ func (Tracing_OpenCensusAgent_TraceContext) EnumDescriptor() ([]byte, []int) {
 }
 
 // Allows specification of various Istio-supported naming schemes for the
-// Envoy `service_cluster` value. The `servce_cluster` value is primarily used
+// Envoy `service_cluster` value. The `service_cluster` value is primarily used
 // by Envoys to provide service names for tracing spans.
 type ProxyConfig_TracingServiceName int32
 
@@ -440,7 +440,7 @@ type Tracing struct {
 	// The percentage of requests (0.0 - 100.0) that will be randomly selected for trace generation,
 	// if not requested by the client or not forced. Default is 1.0.
 	Sampling float64 `protobuf:"fixed64,7,opt,name=sampling,proto3" json:"sampling,omitempty"`
-	// Use the tls_settings to specify the tls mode to use. If the remote tracing service
+	// Use the tlsSettings to specify the tls mode to use. If the remote tracing service
 	// uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
 	// mode as `ISTIO_MUTUAL`.
 	TlsSettings *v1alpha3.ClientTLSSettings `protobuf:"bytes,8,opt,name=tls_settings,json=tlsSettings,proto3" json:"tls_settings,omitempty"`
@@ -670,7 +670,7 @@ type Topology struct {
 	// address to the X-Forwarded-For (XFF) address and set the
 	// X-Envoy-External-Address header to the trusted client address before
 	// forwarding it to the upstream services in the cluster.
-	// The default value of num_trusted_proxies is 0.
+	// The default value of numTrustedProxies is 0.
 	// See [Envoy XFF](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#config-http-conn-man-headers-x-forwarded-for)
 	// header handling for more details.
 	NumTrustedProxies uint32 `protobuf:"varint,1,opt,name=num_trusted_proxies,json=numTrustedProxies,proto3" json:"num_trusted_proxies,omitempty"`
@@ -955,7 +955,7 @@ type ProxyConfig struct {
 	// The amount of time allowed for connections to complete on proxy shutdown.
 	// On receiving `SIGTERM` or `SIGINT`, `istio-agent` tells the active Envoy to start gracefully draining,
 	// discouraging any new connections and allowing existing connections to complete. It then
-	// sleeps for the `termination_drain_duration` and then kills any remaining active Envoy processes.
+	// sleeps for the `terminationDrainDuration` and then kills any remaining active Envoy processes.
 	// If not set, a default of `5s` will be applied.
 	TerminationDrainDuration *duration.Duration `protobuf:"bytes,29,opt,name=termination_drain_duration,json=terminationDrainDuration,proto3" json:"termination_drain_duration,omitempty"`
 	// The unique identifier for the [service mesh](https://istio.io/docs/reference/glossary/#service-mesh)
@@ -1381,7 +1381,7 @@ type RemoteService struct {
 	// receiver, metrics receiver, etc.). Can be IP address or a fully
 	// qualified DNS name.
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	// Use the `tls_settings` to specify the tls mode to use. If the remote service
+	// Use the `tlsSettings` to specify the tls mode to use. If the remote service
 	// uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
 	// mode as `ISTIO_MUTUAL`.
 	TlsSettings *v1alpha3.ClientTLSSettings `protobuf:"bytes,2,opt,name=tls_settings,json=tlsSettings,proto3" json:"tls_settings,omitempty"`

@@ -182,7 +182,7 @@ func (x *MeshNetworks) GetNetworks() map[string]*Network {
 // 2. Explicitly:
 //
 //	a. By matching the registry name with one of the "fromRegistry"
-//	in the mesh config. A "from_registry" can only be assigned to a
+//	in the mesh config. A "fromRegistry" can only be assigned to a
 //	single network.
 //
 //	b. By matching the IP against one of the CIDR ranges in a mesh
