@@ -88,13 +88,13 @@ message MeshConfig {
 
     // Istio ingress controller will act on ingress resources that do not
     // contain any annotation or whose annotations match the value
-    // specified in the ingress_class parameter described earlier. Use this
+    // specified in the ingressClass parameter described earlier. Use this
     // mode if Istio ingress controller will be the default ingress
     // controller for the entire Kubernetes cluster.
     DEFAULT = 2;
 
     // Istio ingress controller will only act on ingress resources whose
-    // annotations match the value specified in the ingress_class parameter
+    // annotations match the value specified in the ingressClass parameter
     // described earlier. Use this mode if Istio ingress controller will be
     // a secondary ingress controller (e.g., in addition to a
     // cloud-provided ingress controller).
@@ -109,7 +109,7 @@ message MeshConfig {
   // the Gateway.selector field, and will be set as `istio: INGRESS_SELECTOR`.
   // By default, `ingressgateway` is used, which will select the default IngressGateway as it has the
   // `istio: ingressgateway` labels.
-  // It is recommended that this is the same value as ingress_service.
+  // It is recommended that this is the same value as ingressService.
   string ingress_selector = 52;
 
   // $hide_from_docs
@@ -232,7 +232,7 @@ message MeshConfig {
   // Refer to [SPIFFE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)
   string trust_domain = 26;
 
-  // The trust domain aliases represent the aliases of `trust_domain`.
+  // The trust domain aliases represent the aliases of `trustDomain`.
   // For example, if we have
   // ```yaml
   // trustDomain: td1
@@ -261,12 +261,12 @@ message MeshConfig {
     // Optional. Specify the list of trust domains to which this trustAnchor data belongs.
     // If set, they are used for these trust domains. Otherwise, this trustAnchor is used for default trust domain
     // and its aliases.
-    // Note that we can have multiple trustAnchor data for a same trust_domain.
+    // Note that we can have multiple trustAnchor data for a same trustDomain.
     // In that case, trustAnchors with a same trust domain will be merged and used together to verify peer certificates.
-    // If neither cert_signers nor trust_domains is set, this trustAnchor is used for all trust domains and all signers.
-    // If only trust_domains is set, this trustAnchor is used for these trust_domains and all signers.
-    // If only cert_signers is set, this trustAnchor is used for these cert_signers and all trust domains.
-    // If both cert_signers and trust_domains is set, this trustAnchor is only used for these signers and trust domains.
+    // If neither certSigners nor trustDomains is set, this trustAnchor is used for all trust domains and all signers.
+    // If only trustDomains is set, this trustAnchor is used for these trustDomains and all signers.
+    // If only certSigners is set, this trustAnchor is used for these certSigners and all trust domains.
+    // If both certSigners and trustDomains is set, this trustAnchor is only used for these signers and trust domains.
     repeated string trust_domains = 4;
   }
 
@@ -276,7 +276,7 @@ message MeshConfig {
   // The CA certificate that signs the workload certificates is automatically added by Istio Agent.
   repeated CertificateData ca_certificates = 58;
 
-  // The default value for the ServiceEntry.export_to field and services
+  // The default value for the ServiceEntry.exportTo field and services
   // imported through container registry integrations, e.g. this applies to
   // Kubernetes Service resources. The value is a list of namespace names and
   // reserved namespace aliases. The allowed namespace aliases are:
@@ -302,15 +302,15 @@ message MeshConfig {
   // `Sidecar`, and `Gateway`.
   repeated string default_service_export_to = 31;
 
-  // The default value for the VirtualService.export_to field. Has the same
-  // syntax as `default_service_export_to`.
+  // The default value for the VirtualService.exportTo field. Has the same
+  // syntax as `defaultServiceExportTo`.
   //
   // If not set the system will use "*" as the default value which implies that
   // virtual services are exported to all namespaces
   repeated string default_virtual_service_export_to = 32;
 
-  // The default value for the `DestinationRule.export_to` field. Has the same
-  // syntax as `default_service_export_to`.
+  // The default value for the `DestinationRule.exportTo` field. Has the same
+  // syntax as `defaultServiceExportTo`.
   //
   // If not set the system will use "*" as the default value which implies that
   // destination rules are exported to all namespaces
@@ -408,7 +408,7 @@ message MeshConfig {
   // ```yaml
   // serviceSettings:
   //   - settings:
-  //       cluster_local: true
+  //       clusterLocal: true
   //     hosts:
   //       - "*.foo.svc.cluster.local"
   //       - "bar.baz.svc.cluster.local"
@@ -489,8 +489,8 @@ message MeshConfig {
     // Can be IP address or a fully qualified DNS name with port
     // Eg: custom-ca.default.svc.cluster.local:8932, 192.168.23.2:9000
     string address = 1;
-    // Use the tls_settings to specify the tls mode to use.
-    // Regarding tls_settings:
+    // Use the tlsSettings to specify the tls mode to use.
+    // Regarding tlsSettings:
     // - DISABLE MODE is legitimate for the case Istiod is making the request via an Envoy sidecar.
     // DISABLE MODE can also be used for testing
     // - TLS MUTUAL MODE be on by default. If the CA certificates
@@ -500,7 +500,7 @@ message MeshConfig {
     // timeout for forward CSR requests from Istiod to External CA
     // Default: 10s
     google.protobuf.Duration request_timeout = 3;
-    // Use istiod_side to specify CA Server integrate to Istiod side or Agent side
+    // Use istiodSide to specify CA Server integrate to Istiod side or Agent side
     // Default: true
     bool istiod_side = 4;
   }
@@ -554,13 +554,13 @@ message MeshConfig {
 
     message EnvoyExternalAuthorizationRequestBody {
       // Sets the maximum size of a message body that the ext-authz filter will hold in memory.
-      // If max_request_bytes is reached, and allow_partial_message is false, Envoy will return a 413 (Payload Too Large).
+      // If maxRequestBytes is reached, and allowPartialMessage is false, Envoy will return a 413 (Payload Too Large).
       // Otherwise the request will be sent to the provider with a partial message.
-      // Note that this setting will have precedence over the fail_open field, the 413 will be returned even when the
-      // fail_open is set to true.
+      // Note that this setting will have precedence over the failOpen field, the 413 will be returned even when the
+      // failOpen is set to true.
       uint32 max_request_bytes = 1;
 
-      // When this field is true, ext-authz filter will buffer the message until max_request_bytes is reached.
+      // When this field is true, ext-authz filter will buffer the message until maxRequestBytes is reached.
       // The authorization request will be dispatched and no 413 HTTP error will be returned by the filter.
       // A "x-envoy-auth-partial-body: false|true" metadata header will be added to the authorization request message
       // indicating if the body data is partial.
@@ -569,7 +569,7 @@ message MeshConfig {
       // If true, the body sent to the external authorization service in the gRPC authorization request is set with raw bytes
       // in the [raw_body field](https://github.com/envoyproxy/envoy/blame/cffb095d59d7935abda12b9509bcd136808367bb/api/envoy/service/auth/v3/attribute_context.proto#L153).
       // Otherwise, it will be filled with UTF-8 string in the [body field](https://github.com/envoyproxy/envoy/blame/cffb095d59d7935abda12b9509bcd136808367bb/api/envoy/service/auth/v3/attribute_context.proto#L147).
-      // This field only works with the envoy_ext_authz_grpc provider and has no effect for the envoy_ext_authz_http provider.
+      // This field only works with the envoyExtAuthzGrpc provider and has no effect for the envoyExtAuthzHttp provider.
       bool pack_as_bytes = 3;
     }
 
@@ -587,7 +587,7 @@ message MeshConfig {
 
       // The maximum duration that the proxy will wait for a response from the provider (default timeout: 600s).
       // When this timeout condition is met, the proxy marks the communication to the authorization service as failure.
-      // In this situation, the response sent back to the client will depend on the configured `fail_open` field.
+      // In this situation, the response sent back to the client will depend on the configured `failOpen` field.
       google.protobuf.Duration timeout = 9;
 
       // Sets a prefix to the value of authorization request header *Path*.
@@ -604,14 +604,14 @@ message MeshConfig {
       // The default status is "403" (HTTP Forbidden).
       string status_on_error = 5;
 
-      // DEPRECATED. Use include_request_headers_in_check instead.
+      // DEPRECATED. Use includeRequestHeadersInCheck instead.
       repeated string include_headers_in_check = 6 [deprecated=true];
 
       // List of client request headers that should be included in the authorization request sent to the authorization service.
       // Note that in addition to the headers specified here following headers are included by default:
       // 1. *Host*, *Method*, *Path* and *Content-Length* are automatically sent.
       // 2. *Content-Length* will be set to 0 and the request will not have a message body. However, the authorization
-      // request can include the buffered client request body (controlled by include_request_body_in_check setting),
+      // request can include the buffered client request body (controlled by includeRequestBodyInCheck setting),
       // consequently the value of Content-Length of the authorization request reflects the size of its payload size.
       //
       // Exact, prefix and suffix matches are supported (similar to the
@@ -624,7 +624,7 @@ message MeshConfig {
 
       // Set of additional fixed headers that should be included in the authorization request sent to the authorization service.
       // Key is the header name and value is the header value.
-      // Note that client request of the same key or headers specified in include_request_headers_in_check will be overridden.
+      // Note that client request of the same key or headers specified in includeRequestHeadersInCheck will be overridden.
       map<string, string> include_additional_headers_in_check = 11;
 
       // If set, the client request body will be included in the authorization request sent to the authorization service.
@@ -690,7 +690,7 @@ message MeshConfig {
 
       // The maximum duration that the proxy will wait for a response from the provider, this is the timeout for a specific request (default timeout: 600s).
       // When this timeout condition is met, the proxy marks the communication to the authorization service as failure.
-      // In this situation, the response sent back to the client will depend on the configured `fail_open` field.
+      // In this situation, the response sent back to the client will depend on the configured `failOpen` field.
       google.protobuf.Duration timeout = 5;
 
       // If true, the HTTP request or TCP connection will be allowed even if the communication with the authorization service has failed,
@@ -1012,7 +1012,7 @@ message MeshConfig {
           // Textual format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) may be
           // used in the format. The [format string documentation](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-strings)
           // provides more information.
-          // Alias to `body` filed in [Open Telemetry](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/open_telemetry/v3/logs_service.proto)
+          // Alias to `body` field in [Open Telemetry](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/open_telemetry/v3/logs_service.proto)
           // Example: `text: "%LOCAL_REPLY_BODY%:%RESPONSE_CODE%:path=%REQ(:path)%"`
           string text = 1;
 
@@ -1022,7 +1022,7 @@ message MeshConfig {
           // as strings, numbers, or boolean values, as appropriate
           // (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)). Nested JSON is
           // supported for some command operators (e.g. FILTER_STATE or DYNAMIC_METADATA).
-          // Alias to `attributes` filed in [Open Telemetry](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/open_telemetry/v3/logs_service.proto)
+          // Alias to `attributes` field in [Open Telemetry](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/open_telemetry/v3/logs_service.proto)
           //
           // Example:
           // ```
@@ -1113,7 +1113,7 @@ message MeshConfig {
       //   opentelemetry:
       //     port: 443
       //     service: my.olly-backend.com
-      //     resource_detectors:
+      //     resourceDetectors:
       //       environment: {}
       // ```
       ResourceDetectors resource_detectors = 5;
@@ -1137,11 +1137,11 @@ message MeshConfig {
         //       headers:
         //         - name: "Authorization"
         //           value: "Api-Token dt0c01."
-        //     resource_detectors:
+        //     resourceDetectors:
         //       dynatrace: {}
-        //     dynatrace_sampler:
+        //     dynatraceSampler:
         //       tenant: "{your-environment-id}"
-        //       cluster_id: 1234
+        //       clusterId: 1234
         DynatraceSampler dynatrace_sampler = 6;
       }
 
@@ -1162,8 +1162,8 @@ message MeshConfig {
         //
         // A default value of `1000` is used when:
         //
-        // - `root_spans_per_minute` is unset
-        // - `root_spans_per_minute` is set to 0
+        // - `rootSpansPerMinute` is unset
+        // - `rootSpansPerMinute` is set to 0
         uint32 root_spans_per_minute = 3;
 
         // Optional. Dynatrace HTTP API to obtain sampling configuration.
@@ -1239,7 +1239,7 @@ message MeshConfig {
   // Holds the name references to the providers that will be used by default
   // in other Istio configuration resources if the provider is not specified.
   //
-  // These names must match a provider defined in `extension_providers` that is
+  // These names must match a provider defined in `extensionProviders` that is
   // one of the supported tracing providers.
   message DefaultProviders {
     // Name of the default provider(s) for tracing.
@@ -1378,7 +1378,7 @@ message MeshConfig {
   TLSConfig mesh_mTLS = 63;
   //
   // Configuration of TLS for all traffic except for ISTIO_MUTUAL mode.
-  // Currently, this supports configuration of ecdh_curves and cipher_suites only.
+  // Currently, this supports configuration of ecdhCurves and cipherSuites only.
   // For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.
   TLSConfig tls_defaults = 64;
 
@@ -1478,7 +1478,7 @@ message ConfigSource {
  // Use xds:// to specify a grpc-based xds backend, k8s:// to specify a k8s controller or
  // fs:/// to specify a file-based backend with absolute path to the directory.
  string address = 1;
- // Use the tls_settings to specify the tls mode to use. If the MCP server
+ // Use the tlsSettings to specify the tls mode to use. If the MCP server
  // uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
  // mode as `ISTIO_MUTUAL`.
  istio.networking.v1alpha3.ClientTLSSettings tls_settings = 2;
