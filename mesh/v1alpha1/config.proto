@@ -1145,6 +1145,43 @@ message MeshConfig {
         DynatraceSampler dynatrace_sampler = 6;
       }
 
+      // Optional. Specifies the configuration for exporting OTLP traces via GRPC.
+      // When empty, traces will check whether HTTP is set.
+      // If not, traces will use default GRPC configurations.
+      //
+      // The following example shows how to configure the OpenTelemetry ExtensionProvider to export via GRPC:
+      //
+      // 1. Add/change the OpenTelemetry extension provider in `MeshConfig`
+      // ```yaml
+      // - name: opentelemetry
+      //   opentelemetry:
+      //     port: 8090
+      //     service: tracing-analysis-dc-hz.aliyuncs.com
+      //     grpc:
+      //       timeout: 10s
+      //       initialMetadata:
+      //       - name: "Authentication"
+      //         value: "token-xxxxx"
+      // ```
+      //
+      // 2. Deploy a `ServiceEntry` for the observability back-end
+      // ```yaml
+      // apiVersion: networking.istio.io/v1alpha3
+      // kind: ServiceEntry
+      // metadata:
+      //   name: tracing-grpc
+      // spec:
+      //   hosts:
+      //   - tracing-analysis-dc-hz.aliyuncs.com
+      //   ports:
+      //   - number: 8090
+      //     name: groc-port
+      //     protocol: GRPC
+      //   resolution: DNS
+      //   location: MESH_EXTERNAL
+      // ```
+      GrpcService grpc = 7;
+
       message DynatraceSampler {
         // REQUIRED. The Dynatrace customer's tenant identifier.
         //
@@ -1229,6 +1266,25 @@ message MeshConfig {
       //
       // See: [Enrich ingested data with Dynatrace-specific dimensions](https://docs.dynatrace.com/docs/shortlink/enrichment-files)
       message DynatraceResourceDetector { }
+    }
+
+    // Defines configuration for an GRPC service that can be used by an Extension Provider.
+    // that does communication via GRPC.
+    message GrpcService {
+      // Optional. Specifies the timeout for the GRPC request.
+      google.protobuf.Duration timeout = 1;
+
+      // Optional. Additional metadata to include in streams initiated to the GrpcService. This can be used for
+      // scenarios in which additional ad hoc authorization headers (e.g. “x-foo-bar: baz-key“) are to
+      // be injected.
+      repeated HeaderValue initial_metadata = 2;
+    }
+
+    message HeaderValue {
+      // REQUIRED. The header name.
+      string name = 1;
+      // REQUIRED. The header value.
+      string value = 2;
     }
   }
 
