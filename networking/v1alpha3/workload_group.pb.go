@@ -106,6 +106,7 @@ const (
 // Clients may not set this value. It is represented in RFC3339 form and is in UTC.
 // Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
 // +cue-gen:WorkloadGroup:preserveUnknownFields:false
+// +cue-gen:WorkloadGroup:spec:required
 // -->
 //
 // <!-- go code generation tags
@@ -193,18 +194,23 @@ type ReadinessProbe struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Number of seconds after the container has started before readiness probes are initiated.
+	// +kubebuilder:validation:Minimum=0
 	InitialDelaySeconds int32 `protobuf:"varint,2,opt,name=initial_delay_seconds,json=initialDelaySeconds,proto3" json:"initial_delay_seconds,omitempty"`
 	// Number of seconds after which the probe times out.
 	// Defaults to 1 second. Minimum value is 1 second.
+	// +kubebuilder:validation:Minimum=0
 	TimeoutSeconds int32 `protobuf:"varint,3,opt,name=timeout_seconds,json=timeoutSeconds,proto3" json:"timeout_seconds,omitempty"`
 	// How often (in seconds) to perform the probe.
 	// Default to 10 seconds. Minimum value is 1 second.
+	// +kubebuilder:validation:Minimum=0
 	PeriodSeconds int32 `protobuf:"varint,4,opt,name=period_seconds,json=periodSeconds,proto3" json:"period_seconds,omitempty"`
 	// Minimum consecutive successes for the probe to be considered successful after having failed.
 	// Defaults to 1 second.
+	// +kubebuilder:validation:Minimum=0
 	SuccessThreshold int32 `protobuf:"varint,5,opt,name=success_threshold,json=successThreshold,proto3" json:"success_threshold,omitempty"`
 	// Minimum consecutive failures for the probe to be considered failed after having succeeded.
 	// Defaults to 3 seconds.
+	// +kubebuilder:validation:Minimum=0
 	FailureThreshold int32 `protobuf:"varint,6,opt,name=failure_threshold,json=failureThreshold,proto3" json:"failure_threshold,omitempty"`
 	// Users can only provide one configuration for healthchecks (tcp, http, exec),
 	// and this is expressed as a oneof. All of the other configuration values
@@ -347,11 +353,13 @@ type HTTPHealthCheckConfig struct {
 	// Path to access on the HTTP server.
 	Path string `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
 	// Port on which the endpoint lives.
+	// +kubebuilder:validation:XValidation:message="port must be between 1-65535",rule="0 < self && self <= 65535"
 	Port uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
 	// Host name to connect to, defaults to the pod IP. You probably want to set
 	// "Host" in httpHeaders instead.
 	Host string `protobuf:"bytes,3,opt,name=host,proto3" json:"host,omitempty"`
 	// HTTP or HTTPS, defaults to HTTP
+	// +kubebuilder:validation:XValidation:message="scheme must be one of [HTTP, HTTPS]",rule="self in [”, 'HTTP', 'HTTPS']"
 	Scheme string `protobuf:"bytes,4,opt,name=scheme,proto3" json:"scheme,omitempty"`
 	// Headers the proxy will pass on to make the request.
 	// Allows repeated headers.
@@ -431,6 +439,7 @@ type HTTPHeader struct {
 	unknownFields protoimpl.UnknownFields
 
 	// The header field name
+	// +kubebuilder:validation:Pattern=^[-_A-Za-z0-9]+$
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// The header field value
 	Value string `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
@@ -490,6 +499,7 @@ type TCPHealthCheckConfig struct {
 	// Host to connect to, defaults to localhost
 	Host string `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
 	// Port of host
+	// +kubebuilder:validation:XValidation:message="port must be between 1-65535",rule="0 < self && self <= 65535"
 	Port uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
 }
 
@@ -545,6 +555,7 @@ type ExecHealthCheckConfig struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Command to run. Exit status of 0 is treated as live/healthy and non-zero is unhealthy.
+	// +protoc-gen-crd:list-value-validation:MinLength=1
 	Command []string `protobuf:"bytes,1,rep,name=command,proto3" json:"command,omitempty"`
 }
 
@@ -595,8 +606,10 @@ type WorkloadGroup_ObjectMeta struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Labels to attach
+	// +kubebuilder:validation:MaxProperties=256
 	Labels map[string]string `protobuf:"bytes,1,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Annotations to attach
+	// +kubebuilder:validation:MaxProperties=256
 	Annotations map[string]string `protobuf:"bytes,2,rep,name=annotations,proto3" json:"annotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
@@ -744,13 +757,13 @@ var file_networking_v1alpha3_workload_group_proto_rawDesc = []byte{
 	0x68, 0x65, 0x63, 0x6b, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12, 0x12, 0x0a, 0x04, 0x68, 0x6f,
 	0x73, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x68, 0x6f, 0x73, 0x74, 0x12, 0x18,
 	0x0a, 0x04, 0x70, 0x6f, 0x72, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x04, 0xe2, 0x41,
-	0x01, 0x02, 0x52, 0x04, 0x70, 0x6f, 0x72, 0x74, 0x22, 0x31, 0x0a, 0x15, 0x45, 0x78, 0x65, 0x63,
+	0x01, 0x02, 0x52, 0x04, 0x70, 0x6f, 0x72, 0x74, 0x22, 0x37, 0x0a, 0x15, 0x45, 0x78, 0x65, 0x63,
 	0x48, 0x65, 0x61, 0x6c, 0x74, 0x68, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x43, 0x6f, 0x6e, 0x66, 0x69,
-	0x67, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x18, 0x01, 0x20, 0x03,
-	0x28, 0x09, 0x52, 0x07, 0x63, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x42, 0x22, 0x5a, 0x20, 0x69,
-	0x73, 0x74, 0x69, 0x6f, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6e, 0x65, 0x74, 0x77,
-	0x6f, 0x72, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x61, 0x6c, 0x70, 0x68, 0x61, 0x33, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x67, 0x12, 0x1e, 0x0a, 0x07, 0x63, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x18, 0x01, 0x20, 0x03,
+	0x28, 0x09, 0x42, 0x04, 0xe2, 0x41, 0x01, 0x02, 0x52, 0x07, 0x63, 0x6f, 0x6d, 0x6d, 0x61, 0x6e,
+	0x64, 0x42, 0x22, 0x5a, 0x20, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70,
+	0x69, 0x2f, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x61,
+	0x6c, 0x70, 0x68, 0x61, 0x33, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (

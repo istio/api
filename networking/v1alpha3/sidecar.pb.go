@@ -875,6 +875,9 @@ type WorkloadSelector struct {
 	// on which the configuration should be applied. The scope of
 	// label search is restricted to the configuration namespace in which the
 	// the resource is present.
+	// +kubebuilder:validation:MaxProperties=256
+	// +protoc-gen-crd:map-value-validation:MaxLength=63
+	// +protoc-gen-crd:map-value-validation:XValidation:message="wildcard is not supported in selector",rule="!self.contains('*')"
 	Labels map[string]string `protobuf:"bytes,1,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 

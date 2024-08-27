@@ -584,6 +584,7 @@ func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 // Clients may not set this value. It is represented in RFC3339 form and is in UTC.
 // Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
 // +cue-gen:ServiceEntry:preserveUnknownFields:false
+// +cue-gen:ServiceEntry:spec:required
 // -->
 //
 // <!-- go code generation tags
@@ -593,6 +594,10 @@ func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 // +k8s:deepcopy-gen=true
 // istiostatus-override: ServiceEntryStatus: istio.io/api/networking/v1alpha3
 // -->
+// +kubebuilder:validation:XValidation:message="only one of WorkloadSelector or Endpoints can be set",rule="(has(self.workloadSelector)?1:0)+(has(self.endpoints)?1:0)<=1"
+// +kubebuilder:validation:XValidation:message="CIDR addresses are allowed only for NONE/STATIC resolution types",rule="!(has(self.addresses) && self.addresses.exists(k, k.contains('/')) && (self.resolution != 'STATIC' && self.resolution != 'STATIC'))"
+// +kubebuilder:validation:XValidation:message="NONE mode cannot set endpoints",rule="(!has(self.resolution) || self.resolution == 'NONE') ? !has(self.endpoints) : true"
+// +kubebuilder:validation:XValidation:message="DNS_ROUND_ROBIN mode cannot have multiple endpoints",rule="(has(self.resolution) && self.resolution == 'DNS_ROUND_ROBIN') ? (!has(self.endpoints) || size(self.endpoints) == 1) : true"
 type ServiceEntry struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -621,6 +626,10 @@ type ServiceEntry struct {
 	//  1. subjectAltNames: In addition to verifying the SANs of the
 	//     service accounts associated with the pods of the service, the
 	//     SANs specified here will also be verified.
+	//
+	// +kubebuilder:validation:MinItems=1
+	// +kubebuilder:validation:MaxItems=256
+	// +protoc-gen-crd:list-value-validation:XValidation:message="hostname cannot be wildcard",rule="self != '*'"
 	Hosts []string `protobuf:"bytes,1,rep,name=hosts,proto3" json:"hosts,omitempty"`
 	// The virtual IP addresses associated with the service. Could be CIDR
 	// prefix. For HTTP traffic, generated route configurations will include http route
@@ -636,10 +645,16 @@ type ServiceEntry struct {
 	// simple TCP proxy, forwarding incoming traffic on a specified port to
 	// the specified destination endpoint IP/host. Unix domain socket
 	// addresses are not supported in this field.
+	// +kubebuilder:validation:MaxItems=256
+	// +protoc-gen-crd:list-value-validation:MaxLength=64
 	Addresses []string `protobuf:"bytes,2,rep,name=addresses,proto3" json:"addresses,omitempty"`
 	// The ports associated with the external service. If the
 	// Endpoints are Unix domain socket addresses, there must be exactly one
 	// port.
+	// +listType=map
+	// +listMapKey=name
+	// +kubebuilder:validation:MaxItems=256
+	// +kubebuilder:validation:XValidation:message="port number cannot be duplicated",rule="self.all(l1, self.exists_one(l2, l1.number == l2.number))"
 	Ports []*ServicePort `protobuf:"bytes,3,rep,name=ports,proto3" json:"ports,omitempty"`
 	// Specify whether the service should be considered external to the mesh
 	// or part of the mesh.
@@ -789,16 +804,20 @@ type ServicePort struct {
 	unknownFields protoimpl.UnknownFields
 
 	// A valid non-negative integer port number.
+	// +kubebuilder:validation:XValidation:message="port must be between 1-65535",rule="0 < self && self <= 65535"
 	Number uint32 `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
 	// The protocol exposed on the port.
 	// MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS.
 	// TLS implies the connection will be routed based on the SNI header to
 	// the destination without terminating the TLS connection.
+	// +kubebuilder:validation:MaxLength=256
 	Protocol string `protobuf:"bytes,2,opt,name=protocol,proto3" json:"protocol,omitempty"`
 	// Label assigned to the port.
+	// +kubebuilder:validation:MaxLength=256
 	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 	// The port number on the endpoint where the traffic will be
 	// received. If unset, default to `number`.
+	// +kubebuilder:validation:XValidation:message="port must be between 1-65535",rule="0 < self && self <= 65535"
 	TargetPort uint32 `protobuf:"varint,4,opt,name=target_port,json=targetPort,proto3" json:"target_port,omitempty"`
 }
 
