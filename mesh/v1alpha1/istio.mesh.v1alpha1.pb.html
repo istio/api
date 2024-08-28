@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 78
+number_of_entries: 77
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -2474,6 +2474,50 @@ spec:
 No
 </td>
 </tr>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-grpc">
+<td><code>grpc</code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-GrpcService">GrpcService</a></code></td>
+<td>
+<p>Optional. Specifies the configuration for exporting OTLP traces via GRPC.
+When empty, traces will check whether HTTP is set.
+If not, traces will use default GRPC configurations.</p>
+<p>The following example shows how to configure the OpenTelemetry ExtensionProvider to export via GRPC:</p>
+<ol>
+<li>Add/change the OpenTelemetry extension provider in <code>MeshConfig</code></li>
+</ol>
+<pre><code class="language-yaml">- name: opentelemetry
+  opentelemetry:
+    port: 8090
+    service: tracing.example.com
+    grpc:
+      timeout: 10s
+      initialMetadata:
+      - name: &quot;Authentication&quot;
+        value: &quot;token-xxxxx&quot;
+</code></pre>
+<ol start="2">
+<li>Deploy a <code>ServiceEntry</code> for the observability back-end</li>
+</ol>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: tracing-grpc
+spec:
+  hosts:
+  - tracing.example.com
+  ports:
+  - number: 8090
+    name: grpc-port
+    protocol: GRPC
+  resolution: DNS
+  location: MESH_EXTERNAL
+</code></pre>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-resource_detectors">
 <td><code>resourceDetectors</code></td>
 <td><code><a href="#MeshConfig-ExtensionProvider-ResourceDetectors">ResourceDetectors</a></code></td>
@@ -2517,50 +2561,6 @@ No
     dynatraceSampler:
       tenant: &quot;{your-environment-id}&quot;
       clusterId: 1234</code></pre>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-grpc">
-<td><code>grpc</code></td>
-<td><code><a href="#MeshConfig-ExtensionProvider-GrpcService">GrpcService</a></code></td>
-<td>
-<p>Optional. Specifies the configuration for exporting OTLP traces via GRPC.
-When empty, traces will check whether HTTP is set.
-If not, traces will use default GRPC configurations.</p>
-<p>The following example shows how to configure the OpenTelemetry ExtensionProvider to export via GRPC:</p>
-<ol>
-<li>Add/change the OpenTelemetry extension provider in <code>MeshConfig</code></li>
-</ol>
-<pre><code class="language-yaml">- name: opentelemetry
-  opentelemetry:
-    port: 8090
-    service: tracing-analysis-dc-hz.aliyuncs.com
-    grpc:
-      timeout: 10s
-      initialMetadata:
-      - name: &quot;Authentication&quot;
-        value: &quot;token-xxxxx&quot;
-</code></pre>
-<ol start="2">
-<li>Deploy a <code>ServiceEntry</code> for the observability back-end</li>
-</ol>
-<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
-kind: ServiceEntry
-metadata:
-  name: tracing-grpc
-spec:
-  hosts:
-  - tracing-analysis-dc-hz.aliyuncs.com
-  ports:
-  - number: 8090
-    name: groc-port
-    protocol: GRPC
-  resolution: DNS
-  location: MESH_EXTERNAL
-</code></pre>
 
 </td>
 <td>
@@ -2721,48 +2721,11 @@ No
 </tr>
 <tr id="MeshConfig-ExtensionProvider-GrpcService-initial_metadata">
 <td><code>initialMetadata</code></td>
-<td><code><a href="#MeshConfig-ExtensionProvider-HeaderValue">HeaderValue[]</a></code></td>
+<td><code><a href="#MeshConfig-ExtensionProvider-HttpHeader">HttpHeader[]</a></code></td>
 <td>
 <p>Optional. Additional metadata to include in streams initiated to the GrpcService. This can be used for
 scenarios in which additional ad hoc authorization headers (e.g. “x-foo-bar: baz-key“) are to
 be injected.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="MeshConfig-ExtensionProvider-HeaderValue">MeshConfig.ExtensionProvider.HeaderValue</h2>
-<section>
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="MeshConfig-ExtensionProvider-HeaderValue-name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>REQUIRED. The header name.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-ExtensionProvider-HeaderValue-value">
-<td><code>value</code></td>
-<td><code>string</code></td>
-<td>
-<p>REQUIRED. The header value.</p>
 
 </td>
 <td>
