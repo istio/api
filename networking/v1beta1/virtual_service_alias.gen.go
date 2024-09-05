@@ -658,8 +658,8 @@ type HTTPBody_Bytes = v1alpha3.HTTPBody_Bytes
 type HTTPRewrite = v1alpha3.HTTPRewrite
 type RegexRewrite = v1alpha3.RegexRewrite
 
-// Describes how to match a given string in HTTP headers. Match is
-// case-sensitive.
+// Describes how to match a given string in HTTP headers. `exact` and `prefix` matching is
+// case-sensitive. `regex` matching supports case-insensitive matches.
 type StringMatch = v1alpha3.StringMatch
 
 // exact string match
@@ -669,6 +669,8 @@ type StringMatch_Exact = v1alpha3.StringMatch_Exact
 type StringMatch_Prefix = v1alpha3.StringMatch_Prefix
 
 // [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
+//
+// Example: `(?i)^aaa$` can be used to case-insensitive match a string consisting of three a's.
 type StringMatch_Regex = v1alpha3.StringMatch_Regex
 
 // Describes the retry policy to use when a HTTP request fails. For

@@ -2554,8 +2554,8 @@ func (x *RegexRewrite) GetRewrite() string {
 	return ""
 }
 
-// Describes how to match a given string in HTTP headers. Match is
-// case-sensitive.
+// Describes how to match a given string in HTTP headers. `exact` and `prefix` matching is
+// case-sensitive. `regex` matching supports case-insensitive matches.
 type StringMatch struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -2645,6 +2645,8 @@ type StringMatch_Prefix struct {
 
 type StringMatch_Regex struct {
 	// [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
+	//
+	// Example: `(?i)^aaa$` can be used to case-insensitive match a string consisting of three a's.
 	Regex string `protobuf:"bytes,3,opt,name=regex,proto3,oneof"`
 }
 
