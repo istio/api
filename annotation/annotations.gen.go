@@ -29,6 +29,8 @@ const (
 	Unknown ResourceTypes = iota
     Any
     AuthorizationPolicy
+    Gateway
+    GatewayClass
     Ingress
     Namespace
     Pod
@@ -43,14 +45,18 @@ func (r ResourceTypes) String() string {
 	case 2:
 		return "AuthorizationPolicy"
 	case 3:
-		return "Ingress"
+		return "Gateway"
 	case 4:
-		return "Namespace"
+		return "GatewayClass"
 	case 5:
-		return "Pod"
+		return "Ingress"
 	case 6:
-		return "Service"
+		return "Namespace"
 	case 7:
+		return "Pod"
+	case 8:
+		return "Service"
+	case 9:
 		return "WorkloadEntry"
 	}
 	return "Unknown"
@@ -114,6 +120,34 @@ var (
 		},
 	}
 
+	AmbientRedirection = Instance {
+		Name:          "ambient.istio.io/redirection",
+		Description:   `Automatically configured by Istio to indicate a Pod was successfully enrolled in ambient mode.
+This shows the actual state; to specify intent that a workload should be in ambient mode, see "istio.io/dataplane-mode".`,
+		FeatureStatus: Beta,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
+	AmbientWaypointInboundBinding = Instance {
+		Name:          "ambient.istio.io/waypoint-inbound-binding",
+		Description:   `When set on a waypoint (either by its specific "Gateway", or for the entire collection on the "GatewayClass"),
+indicates how traffic should be sent to the waypoint. If unset, traffic will be sent to the waypoint as HBONE directly.
+
+This takes the format: "<protocol>" or "<protocol>/<port>".
+`,
+		FeatureStatus: Alpha,
+		Hidden:        true,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			GatewayClass,
+			Gateway,
+		},
+	}
+
 	GalleyAnalyzeSuppress = Instance {
 		Name:          "galley.istio.io/analyze-suppress",
 		Description:   "A comma separated list of configuration analysis message "+
@@ -141,6 +175,30 @@ var (
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Any,
+		},
+	}
+
+	GatewayNameOverride = Instance {
+		Name:          "gateway.istio.io/name-override",
+		Description:   `Overrides the name of the generated "Deployment" and "Service" resource when using [Gateway auto-deployment](/docs/tasks/traffic-management/ingress/gateway-api/#automated-deployment)
+`,
+		FeatureStatus: Alpha,
+		Hidden:        true,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Gateway,
+		},
+	}
+
+	GatewayServiceAccount = Instance {
+		Name:          "gateway.istio.io/service-account",
+		Description:   `Overrides the name of the generated "ServiceAccount" resource when using [Gateway auto-deployment](/docs/tasks/traffic-management/ingress/gateway-api/#automated-deployment)
+`,
+		FeatureStatus: Alpha,
+		Hidden:        true,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Gateway,
 		},
 	}
 
@@ -293,6 +351,18 @@ var (
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Service,
+		},
+	}
+
+	NetworkingServiceType = Instance {
+		Name:          "networking.istio.io/service-type",
+		Description:   `Overrides the type of the generated "Service" resource when using [Gateway auto-deployment](/docs/tasks/traffic-management/ingress/gateway-api/#automated-deployment)
+`,
+		FeatureStatus: Alpha,
+		Hidden:        true,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Gateway,
 		},
 	}
 
@@ -829,8 +899,12 @@ func AllResourceAnnotations() []*Instance {
 		&AlphaCanonicalServiceAccounts,
 		&AlphaIdentity,
 		&AlphaKubernetesServiceAccounts,
+		&AmbientRedirection,
+		&AmbientWaypointInboundBinding,
 		&GalleyAnalyzeSuppress,
 		&GatewayControllerVersion,
+		&GatewayNameOverride,
+		&GatewayServiceAccount,
 		&InjectTemplates,
 		&OperatorInstallChartOwner,
 		&OperatorInstallOwnerGeneration,
@@ -843,6 +917,7 @@ func AllResourceAnnotations() []*Instance {
 		&IoIstioWorkloadController,
 		&IoKubernetesIngressClass,
 		&NetworkingExportTo,
+		&NetworkingServiceType,
 		&PrometheusMergeMetrics,
 		&ProxyConfig,
 		&ProxyOverrides,
@@ -892,6 +967,8 @@ func AllResourceTypes() []string {
 	return []string {
 		"Any",
 		"AuthorizationPolicy",
+		"Gateway",
+		"GatewayClass",
 		"Ingress",
 		"Namespace",
 		"Pod",

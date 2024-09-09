@@ -530,3 +530,53 @@ annotations:
     hidden: true
     resources:
       - Any
+
+  - name: ambient.istio.io/redirection
+    featureStatus: Beta
+    description: |-
+      Automatically configured by Istio to indicate a Pod was successfully enrolled in ambient mode.
+      This shows the actual state; to specify intent that a workload should be in ambient mode, see `istio.io/dataplane-mode`.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+
+  - name: ambient.istio.io/waypoint-inbound-binding
+    featureStatus: Alpha
+    description: |
+      When set on a waypoint (either by its specific `Gateway`, or for the entire collection on the `GatewayClass`),
+      indicates how traffic should be sent to the waypoint. If unset, traffic will be sent to the waypoint as HBONE directly.
+
+      This takes the format: `<protocol>` or `<protocol>/<port>`.
+    deprecated: false
+    hidden: true
+    resources:
+      - GatewayClass
+      - Gateway
+
+  - name: gateway.istio.io/service-account
+    featureStatus: Alpha
+    description: |
+      Overrides the name of the generated `ServiceAccount` resource when using [Gateway auto-deployment](/docs/tasks/traffic-management/ingress/gateway-api/#automated-deployment)
+    deprecated: false
+    hidden: true
+    resources:
+      - Gateway
+
+  - name: gateway.istio.io/name-override
+    featureStatus: Alpha
+    description: |
+      Overrides the name of the generated `Deployment` and `Service` resource when using [Gateway auto-deployment](/docs/tasks/traffic-management/ingress/gateway-api/#automated-deployment)
+    deprecated: false
+    hidden: true
+    resources:
+      - Gateway
+
+  - name: networking.istio.io/service-type
+    featureStatus: Alpha
+    description: |
+      Overrides the type of the generated `Service` resource when using [Gateway auto-deployment](/docs/tasks/traffic-management/ingress/gateway-api/#automated-deployment)
+    deprecated: false
+    hidden: true
+    resources:
+      - Gateway

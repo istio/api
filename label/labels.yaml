@@ -57,6 +57,14 @@ labels:
     resources:
       - Namespace
 
+  - name: istio.io/tag
+    featureStatus: Alpha
+    description: Istio control plane tag name associated with the resource; e.g. `canary`
+    hidden: false
+    deprecated: false
+    resources:
+      - Namespace
+
   - name: operator.istio.io/component
     featureStatus: Alpha
     description: Istio operator component name of the resource, e.g. `Pilot`
@@ -151,3 +159,90 @@ labels:
     hidden: false
     resources:
       - Pod
+
+  - name: gateway.istio.io/managed
+    featureStatus: Stable
+    description: Automatically added to all resources [automatically created](/docs/tasks/traffic-management/ingress/gateway-api/#automated-deployment)
+      by Istio Gateway controller, to indicate which controller created the resource. Users should not set this label themselves.
+    deprecated: false
+    hidden: false
+    resources:
+      - ServiceAccount
+      - Deployment
+      - Service
+
+  - name: gateway.networking.k8s.io/gateway-name
+    featureStatus: Stable
+    description: Automatically added to all resources [automatically created](/docs/tasks/traffic-management/ingress/gateway-api/#automated-deployment)
+      by Istio Gateway controller to indicate which `Gateway` resulted in the object creation. Users should not set this label themselves.
+    deprecated: false
+    hidden: false
+    resources:
+      - ServiceAccount
+      - Deployment
+      - Service
+
+  - name: istio.io/dataplane-mode
+    featureStatus: Beta
+    description: |
+      When set on a resource, indicates the [data plane mode](/docs/overview/dataplane-modes/) to use.
+      Possible values: `ambient`, `none`.
+      Note: users wishing to use sidecar mode should see the `istio-injection` label; there is no value on this label to configure sidecars.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+      - Namespace
+
+  - name: istio.io/use-waypoint
+    featureStatus: Beta
+    description: |
+      When set on a resource, indicates the resource has an associated waypoint with the given name.
+      The waypoint is assumed to be in the same namespace; for cross-namespace, see `istio.io/use-waypoint-namespace`.
+
+      When set or a `Pod` or a `Service`, this binds that specific resource to the waypoint.
+      When set on a `Namespace`, this applies to all `Pod`/`Service` in the namespace.
+
+      Note: the waypoint must allow the type, see `stio.io/waypoint-for`.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+      - Service
+      - Namespace
+
+  - name: istio.io/use-waypoint-namespace
+    featureStatus: Beta
+    description: |
+      When set on a resource, indicates the resource has an associated waypoint in the provided namespace.
+      This must be set in addition to `istio.io/use-waypoint`, when a cross-namespace reference is desired.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+      - Service
+      - Namespace
+
+  - name: istio.io/waypoint-for
+    featureStatus: Beta
+    description: |
+      When set on a waypoint (either by its specific `Gateway`, or for the entire collection on the `GatewayClass`),
+      indicates the type of traffic this waypoint can handle.
+
+      Valid options: `service`, `workload`, `all`, and `none`.
+    deprecated: false
+    hidden: false
+    resources:
+      - GatewayClass
+      - Gateway
+
+  - name: networking.istio.io/enable-autoallocate-ip
+    featureStatus: Beta
+    description: |
+      Configures whether a `ServiceEntry` without any `spec.addresses` set should get an IP address automatically allocated for it.
+
+      Valid options: `true`, `false`
+    deprecated: false
+    hidden: false
+    resources:
+      - ServiceEntry
