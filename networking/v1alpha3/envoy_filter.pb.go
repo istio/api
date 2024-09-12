@@ -822,6 +822,7 @@ func (EnvoyFilter_Patch_FilterClass) EnumDescriptor() ([]byte, []int) {
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
+// +kubebuilder:validation:XValidation:message="only one of targetRefs or workloadSelector can be set",rule="(has(self.workloadSelector)?1:0)+(has(self.targetRefs)?1:0)<=1"
 type EnvoyFilter struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -851,6 +852,7 @@ type EnvoyFilter struct {
 	// from misinterpreting the policy as namespace-wide during the upgrade process.
 	//
 	// NOTE: Waypoint proxies are required to use this field for policies to apply; `selector` policies will be ignored.
+	// +kubebuilder:validation:MaxItems=16
 	TargetRefs []*v1beta1.PolicyTargetReference `protobuf:"bytes,6,rep,name=targetRefs,proto3" json:"targetRefs,omitempty"`
 	// One or more patches with match conditions.
 	ConfigPatches []*EnvoyFilter_EnvoyConfigObjectPatch `protobuf:"bytes,4,rep,name=config_patches,json=configPatches,proto3" json:"config_patches,omitempty"`
