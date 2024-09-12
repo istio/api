@@ -1741,18 +1741,6 @@ service defined by the Kubernetes service or ServiceEntry.</p>
 No
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-ZipkinTracingProvider-endpoint">
-<td><code>endpoint</code></td>
-<td><code>string</code></td>
-<td>
-<p>Optional. Specifies the endpoint of Zipkin API.
-The default value is &ldquo;/api/v2/spans&rdquo;.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="MeshConfig-ExtensionProvider-ZipkinTracingProvider-port">
 <td><code>port</code></td>
 <td><code>uint32</code></td>
@@ -1782,6 +1770,18 @@ No
 <td>
 <p>Optional. A 128 bit trace id will be used in Istio.
 If true, will result in a 64 bit trace id being used.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-ZipkinTracingProvider-endpoint">
+<td><code>endpoint</code></td>
+<td><code>string</code></td>
+<td>
+<p>Optional. Specifies the endpoint of Zipkin API.
+The default value is &ldquo;/api/v2/spans&rdquo;.</p>
 
 </td>
 <td>

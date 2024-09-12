@@ -719,10 +719,6 @@ message MeshConfig {
       // Example: "zipkin.default.svc.cluster.local" or "bar/zipkin.example.com".
       string service = 1;
 
-      // Optional. Specifies the endpoint of Zipkin API.
-      // The default value is "/api/v2/spans".
-      string endpoint = 5;
-
       // REQUIRED. Specifies the port of the service.
       uint32 port = 2;
 
@@ -733,6 +729,10 @@ message MeshConfig {
       // Optional. A 128 bit trace id will be used in Istio.
       // If true, will result in a 64 bit trace id being used.
       bool enable_64bit_trace_id = 4;
+
+      // Optional. Specifies the endpoint of Zipkin API.
+      // The default value is "/api/v2/spans".
+      string endpoint = 5;
     }
 
     // Defines configuration for a Lightstep tracer.
