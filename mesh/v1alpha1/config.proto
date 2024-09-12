@@ -732,7 +732,7 @@ message MeshConfig {
 
       // Optional. Specifies the endpoint of Zipkin API.
       // The default value is "/api/v2/spans".
-      string endpoint = 5;
+      string path = 5;
     }
 
     // Defines configuration for a Lightstep tracer.
