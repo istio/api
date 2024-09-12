@@ -719,6 +719,10 @@ message MeshConfig {
       // Example: "zipkin.default.svc.cluster.local" or "bar/zipkin.example.com".
       string service = 1;
 
+      // Optional. Specifies the endpoint of Zipkin API.
+      // The default value is "/api/v2/spans".
+      string endpoint = 5;
+
       // REQUIRED. Specifies the port of the service.
       uint32 port = 2;
 
