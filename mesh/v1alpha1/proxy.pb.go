@@ -95,7 +95,7 @@ func (AuthenticationPolicy) EnumDescriptor() ([]byte, []int) {
 }
 
 // ForwardClientCertDetails controls how the x-forwarded-client-cert (XFCC)
-// header is handled by the proxies.
+// header is handled by the gateway proxy.
 // See [Envoy XFCC](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/network/http_connection_manager/v3/http_connection_manager.proto.html#enum-extensions-filters-network-http-connection-manager-v3-httpconnectionmanager-forwardclientcertdetails)
 // header handling for more details.
 type ForwardClientCertDetails int32
@@ -103,7 +103,7 @@ type ForwardClientCertDetails int32
 const (
 	// Field is not set
 	ForwardClientCertDetails_UNDEFINED ForwardClientCertDetails = 0
-	// Do not send the XFCC header to the next hop. This is the default value for gateway proxies.
+	// Do not send the XFCC header to the next hop. This is the default value. This is the default value for gateway proxies.
 	ForwardClientCertDetails_SANITIZE ForwardClientCertDetails = 1
 	// When the client connection is mTLS (Mutual TLS), forward the XFCC header
 	// in the request.
