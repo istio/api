@@ -4737,7 +4737,7 @@ header handling for more details.</p>
 <tr id="ForwardClientCertDetails-SANITIZE">
 <td><code>SANITIZE</code></td>
 <td>
-<p>Do not send the XFCC header to the next hop. This is the default value for gateway proxies.</p>
+<p>Do not send the XFCC header to the next hop.</p>
 
 </td>
 </tr>
@@ -4761,7 +4761,7 @@ information to the request’s XFCC header and forward it. This is the default v
 <td><code>SANITIZE_SET</code></td>
 <td>
 <p>When the client connection is mTLS, reset the XFCC header with the client
-certificate information and send it to the next hop.</p>
+certificate information and send it to the next hop. This is the default value for gateway proxies.</p>
 
 </td>
 </tr>
