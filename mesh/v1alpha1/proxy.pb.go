@@ -95,7 +95,7 @@ func (AuthenticationPolicy) EnumDescriptor() ([]byte, []int) {
 }
 
 // ForwardClientCertDetails controls how the x-forwarded-client-cert (XFCC)
-// header is handled by the gateway proxy.
+// header is handled by a proxy.
 // See [Envoy XFCC](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/network/http_connection_manager/v3/http_connection_manager.proto.html#enum-extensions-filters-network-http-connection-manager-v3-httpconnectionmanager-forwardclientcertdetails)
 // header handling for more details.
 type ForwardClientCertDetails int32
