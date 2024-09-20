@@ -103,7 +103,7 @@ type ForwardClientCertDetails int32
 const (
 	// Field is not set
 	ForwardClientCertDetails_UNDEFINED ForwardClientCertDetails = 0
-	// Do not send the XFCC header to the next hop. This is the default value. This is the default value for gateway proxies.
+	// Do not send the XFCC header to the next hop. This is the default value for gateway proxies.
 	ForwardClientCertDetails_SANITIZE ForwardClientCertDetails = 1
 	// When the client connection is mTLS (Mutual TLS), forward the XFCC header
 	// in the request.

@@ -280,7 +280,7 @@ enum ForwardClientCertDetails {
   // Field is not set
   UNDEFINED = 0;
 
-  // Do not send the XFCC header to the next hop. This is the default value. This is the default value for gateway proxies.
+  // Do not send the XFCC header to the next hop. This is the default value for gateway proxies.
   SANITIZE = 1;
 
   // When the client connection is mTLS (Mutual TLS), forward the XFCC header
