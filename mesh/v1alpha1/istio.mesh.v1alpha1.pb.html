@@ -5020,7 +5020,7 @@ policy.</p>
 <h2 id="ForwardClientCertDetails">ForwardClientCertDetails</h2>
 <section>
 <p>ForwardClientCertDetails controls how the x-forwarded-client-cert (XFCC)
-header is handled by the gateway proxy.
+header is handled by a proxy.
 See <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/network/http_connection_manager/v3/http_connection_manager.proto.html#enum-extensions-filters-network-http-connection-manager-v3-httpconnectionmanager-forwardclientcertdetails">Envoy XFCC</a>
 header handling for more details.</p>
 
@@ -5042,7 +5042,7 @@ header handling for more details.</p>
 <tr id="ForwardClientCertDetails-SANITIZE">
 <td><code>SANITIZE</code></td>
 <td>
-<p>Do not send the XFCC header to the next hop. This is the default value.</p>
+<p>Do not send the XFCC header to the next hop.</p>
 
 </td>
 </tr>
@@ -5058,7 +5058,7 @@ in the request.</p>
 <td><code>APPEND_FORWARD</code></td>
 <td>
 <p>When the client connection is mTLS, append the client certificate
-information to the request’s XFCC header and forward it.</p>
+information to the request’s XFCC header and forward it. This is the default value for sidecar proxies.</p>
 
 </td>
 </tr>
@@ -5066,7 +5066,7 @@ information to the request’s XFCC header and forward it.</p>
 <td><code>SANITIZE_SET</code></td>
 <td>
 <p>When the client connection is mTLS, reset the XFCC header with the client
-certificate information and send it to the next hop.</p>
+certificate information and send it to the next hop. This is the default value for gateway proxies.</p>
 
 </td>
 </tr>
