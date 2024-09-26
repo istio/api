@@ -708,6 +708,26 @@ spec:
                               - ROUND_ROBIN
                               - LEAST_REQUEST
                               type: string
+                            warmup:
+                              properties:
+                                aggression:
+                                  format: double
+                                  minimum: 0
+                                  nullable: true
+                                  type: number
+                                duration:
+                                  type: string
+                                  x-kubernetes-validations:
+                                  - message: must be a valid duration greater than
+                                      1ms
+                                    rule: duration(self) >= duration('1ms')
+                                minimumPercent:
+                                  format: double
+                                  maximum: 100
+                                  minimum: 0
+                                  nullable: true
+                                  type: number
+                              type: object
                             warmupDurationSecs:
                               description: Represents the warmup duration of Service.
                               type: string
@@ -1054,6 +1074,26 @@ spec:
                                     - ROUND_ROBIN
                                     - LEAST_REQUEST
                                     type: string
+                                  warmup:
+                                    properties:
+                                      aggression:
+                                        format: double
+                                        minimum: 0
+                                        nullable: true
+                                        type: number
+                                      duration:
+                                        type: string
+                                        x-kubernetes-validations:
+                                        - message: must be a valid duration greater
+                                            than 1ms
+                                          rule: duration(self) >= duration('1ms')
+                                      minimumPercent:
+                                        format: double
+                                        maximum: 100
+                                        minimum: 0
+                                        nullable: true
+                                        type: number
+                                    type: object
                                   warmupDurationSecs:
                                     description: Represents the warmup duration of
                                       Service.
@@ -1548,6 +1588,25 @@ spec:
                         - ROUND_ROBIN
                         - LEAST_REQUEST
                         type: string
+                      warmup:
+                        properties:
+                          aggression:
+                            format: double
+                            minimum: 0
+                            nullable: true
+                            type: number
+                          duration:
+                            type: string
+                            x-kubernetes-validations:
+                            - message: must be a valid duration greater than 1ms
+                              rule: duration(self) >= duration('1ms')
+                          minimumPercent:
+                            format: double
+                            maximum: 100
+                            minimum: 0
+                            nullable: true
+                            type: number
+                        type: object
                       warmupDurationSecs:
                         description: Represents the warmup duration of Service.
                         type: string
@@ -1888,6 +1947,26 @@ spec:
                               - ROUND_ROBIN
                               - LEAST_REQUEST
                               type: string
+                            warmup:
+                              properties:
+                                aggression:
+                                  format: double
+                                  minimum: 0
+                                  nullable: true
+                                  type: number
+                                duration:
+                                  type: string
+                                  x-kubernetes-validations:
+                                  - message: must be a valid duration greater than
+                                      1ms
+                                    rule: duration(self) >= duration('1ms')
+                                minimumPercent:
+                                  format: double
+                                  maximum: 100
+                                  minimum: 0
+                                  nullable: true
+                                  type: number
+                              type: object
                             warmupDurationSecs:
                               description: Represents the warmup duration of Service.
                               type: string
@@ -2524,6 +2603,26 @@ spec:
                               - ROUND_ROBIN
                               - LEAST_REQUEST
                               type: string
+                            warmup:
+                              properties:
+                                aggression:
+                                  format: double
+                                  minimum: 0
+                                  nullable: true
+                                  type: number
+                                duration:
+                                  type: string
+                                  x-kubernetes-validations:
+                                  - message: must be a valid duration greater than
+                                      1ms
+                                    rule: duration(self) >= duration('1ms')
+                                minimumPercent:
+                                  format: double
+                                  maximum: 100
+                                  minimum: 0
+                                  nullable: true
+                                  type: number
+                              type: object
                             warmupDurationSecs:
                               description: Represents the warmup duration of Service.
                               type: string
@@ -2870,6 +2969,26 @@ spec:
                                     - ROUND_ROBIN
                                     - LEAST_REQUEST
                                     type: string
+                                  warmup:
+                                    properties:
+                                      aggression:
+                                        format: double
+                                        minimum: 0
+                                        nullable: true
+                                        type: number
+                                      duration:
+                                        type: string
+                                        x-kubernetes-validations:
+                                        - message: must be a valid duration greater
+                                            than 1ms
+                                          rule: duration(self) >= duration('1ms')
+                                      minimumPercent:
+                                        format: double
+                                        maximum: 100
+                                        minimum: 0
+                                        nullable: true
+                                        type: number
+                                    type: object
                                   warmupDurationSecs:
                                     description: Represents the warmup duration of
                                       Service.
@@ -3364,6 +3483,25 @@ spec:
                         - ROUND_ROBIN
                         - LEAST_REQUEST
                         type: string
+                      warmup:
+                        properties:
+                          aggression:
+                            format: double
+                            minimum: 0
+                            nullable: true
+                            type: number
+                          duration:
+                            type: string
+                            x-kubernetes-validations:
+                            - message: must be a valid duration greater than 1ms
+                              rule: duration(self) >= duration('1ms')
+                          minimumPercent:
+                            format: double
+                            maximum: 100
+                            minimum: 0
+                            nullable: true
+                            type: number
+                        type: object
                       warmupDurationSecs:
                         description: Represents the warmup duration of Service.
                         type: string
@@ -3704,6 +3842,26 @@ spec:
                               - ROUND_ROBIN
                               - LEAST_REQUEST
                               type: string
+                            warmup:
+                              properties:
+                                aggression:
+                                  format: double
+                                  minimum: 0
+                                  nullable: true
+                                  type: number
+                                duration:
+                                  type: string
+                                  x-kubernetes-validations:
+                                  - message: must be a valid duration greater than
+                                      1ms
+                                    rule: duration(self) >= duration('1ms')
+                                minimumPercent:
+                                  format: double
+                                  maximum: 100
+                                  minimum: 0
+                                  nullable: true
+                                  type: number
+                              type: object
                             warmupDurationSecs:
                               description: Represents the warmup duration of Service.
                               type: string
@@ -4340,6 +4498,26 @@ spec:
                               - ROUND_ROBIN
                               - LEAST_REQUEST
                               type: string
+                            warmup:
+                              properties:
+                                aggression:
+                                  format: double
+                                  minimum: 0
+                                  nullable: true
+                                  type: number
+                                duration:
+                                  type: string
+                                  x-kubernetes-validations:
+                                  - message: must be a valid duration greater than
+                                      1ms
+                                    rule: duration(self) >= duration('1ms')
+                                minimumPercent:
+                                  format: double
+                                  maximum: 100
+                                  minimum: 0
+                                  nullable: true
+                                  type: number
+                              type: object
                             warmupDurationSecs:
                               description: Represents the warmup duration of Service.
                               type: string
@@ -4686,6 +4864,26 @@ spec:
                                     - ROUND_ROBIN
                                     - LEAST_REQUEST
                                     type: string
+                                  warmup:
+                                    properties:
+                                      aggression:
+                                        format: double
+                                        minimum: 0
+                                        nullable: true
+                                        type: number
+                                      duration:
+                                        type: string
+                                        x-kubernetes-validations:
+                                        - message: must be a valid duration greater
+                                            than 1ms
+                                          rule: duration(self) >= duration('1ms')
+                                      minimumPercent:
+                                        format: double
+                                        maximum: 100
+                                        minimum: 0
+                                        nullable: true
+                                        type: number
+                                    type: object
                                   warmupDurationSecs:
                                     description: Represents the warmup duration of
                                       Service.
@@ -5180,6 +5378,25 @@ spec:
                         - ROUND_ROBIN
                         - LEAST_REQUEST
                         type: string
+                      warmup:
+                        properties:
+                          aggression:
+                            format: double
+                            minimum: 0
+                            nullable: true
+                            type: number
+                          duration:
+                            type: string
+                            x-kubernetes-validations:
+                            - message: must be a valid duration greater than 1ms
+                              rule: duration(self) >= duration('1ms')
+                          minimumPercent:
+                            format: double
+                            maximum: 100
+                            minimum: 0
+                            nullable: true
+                            type: number
+                        type: object
                       warmupDurationSecs:
                         description: Represents the warmup duration of Service.
                         type: string
@@ -5520,6 +5737,26 @@ spec:
                               - ROUND_ROBIN
                               - LEAST_REQUEST
                               type: string
+                            warmup:
+                              properties:
+                                aggression:
+                                  format: double
+                                  minimum: 0
+                                  nullable: true
+                                  type: number
+                                duration:
+                                  type: string
+                                  x-kubernetes-validations:
+                                  - message: must be a valid duration greater than
+                                      1ms
+                                    rule: duration(self) >= duration('1ms')
+                                minimumPercent:
+                                  format: double
+                                  maximum: 100
+                                  minimum: 0
+                                  nullable: true
+                                  type: number
+                              type: object
                             warmupDurationSecs:
                               description: Represents the warmup duration of Service.
                               type: string

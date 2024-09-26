@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.DestinationRule
 aliases: [/docs/reference/config/networking/v1alpha3/destination-rule]
-number_of_entries: 27
+number_of_entries: 26
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -471,7 +471,61 @@ This should be enabled for services that require warm up time to serve full prod
 Please note that this is most effective when few new endpoints come up like scale event in Kubernetes. When all the
 endpoints are relatively new like new deployment, this is not very effective as all endpoints end up getting same
 amount of requests.
-Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancers.</p>
+Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancers.
+Deprecated: use <code>warmup</code> instead.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LoadBalancerSettings-warmup">
+<td><code>warmup</code></td>
+<td><code><a href="#WarmupConfiguration">WarmupConfiguration</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="WarmupConfiguration">WarmupConfiguration</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="WarmupConfiguration-duration">
+<td><code>duration</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WarmupConfiguration-minimum_percent">
+<td><code>minimumPercent</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#doublevalue">DoubleValue</a></code></td>
+<td>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WarmupConfiguration-aggression">
+<td><code>aggression</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#doublevalue">DoubleValue</a></code></td>
+<td>
 
 </td>
 <td>
@@ -1346,32 +1400,6 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="LoadBalancerSettings-slowStart">LoadBalancerSettings.slowStart</h2>
-<section>
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="LoadBalancerSettings-slowStart-min_weight_percent">
-<td><code>minWeightPercent</code></td>
-<td><code>uint32</code></td>
-<td>
-<p>MinWeightPercent parameter specifies the minimum percent of origin weight to make sure the EDF scheduler has a reasonable deadline, default is 10%.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="LoadBalancerSettings-ConsistentHashLB-RingHash">LoadBalancerSettings.ConsistentHashLB.RingHash</h2>
 <section>
 <table class="message-fields">
@@ -1477,42 +1505,6 @@ No
 generated if the cookie is not present. If the TTL is present and zero,
 the generated cookie will be a session cookie.</p>
 
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="LoadBalancerSettings-slowStart-aggression">LoadBalancerSettings.slowStart.aggression</h2>
-<section>
-<p>Aggression parameter non-linearly affects endpoint weight and represents the speed of ramp-up.
-By tuning aggression parameter, one could achieve polynomial or exponential speed for traffic increase.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="LoadBalancerSettings-slowStart-aggression-default_value">
-<td><code>defaultValue</code></td>
-<td><code>uint32</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="LoadBalancerSettings-slowStart-aggression-runtime_key">
-<td><code>runtimeKey</code></td>
-<td><code>string</code></td>
-<td>
 </td>
 <td>
 No

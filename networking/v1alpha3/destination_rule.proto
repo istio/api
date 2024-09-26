@@ -524,9 +524,9 @@ message WarmupConfiguration {
   google.protobuf.Duration duration = 1;
   // +kubebuilder:validation:Maximum=100
   // +kubebuilder:validation:Minimum=0
-  google.protobuf.Double minimum_percent = 2;
+  google.protobuf.DoubleValue minimum_percent = 2;
   // +kubebuilder:validation:Minimum=0
-  google.protobuf.Double aggression = 3;
+  google.protobuf.DoubleValue aggression = 3;
 }
 // Connection pool settings for an upstream host. The settings apply to
 // each individual host in the upstream service.  See Envoy's [circuit
