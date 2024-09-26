@@ -539,6 +539,7 @@ func (FailStrategy) EnumDescriptor() ([]byte, []int) {
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
+// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="(has(self.selector)?1:0)+(has(self.targetRef)?1:0)+(has(self.targetRefs)?1:0)<=1"
 type WasmPlugin struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -572,6 +573,7 @@ type WasmPlugin struct {
 	// from misinterpreting the policy as namespace-wide during the upgrade process.
 	//
 	// NOTE: Waypoint proxies are required to use this field for policies to apply; `selector` policies will be ignored.
+	// +kubebuilder:validation:MaxItems=16
 	TargetRefs []*v1beta1.PolicyTargetReference `protobuf:"bytes,16,rep,name=targetRefs,proto3" json:"targetRefs,omitempty"`
 	// URL of a Wasm module or OCI container. If no scheme is present,
 	// defaults to `oci://`, referencing an OCI image. Other valid schemes

@@ -421,6 +421,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
+// +kubebuilder:validation:XValidation:message="only one of targetRefs or workloadSelector can be set",rule="(has(self.workloadSelector)?1:0)+(has(self.targetRefs)?1:0)<=1"
 message EnvoyFilter {
   // `ApplyTo` specifies where in the Envoy configuration, the given patch should be applied.
   enum ApplyTo {
@@ -866,6 +867,7 @@ message EnvoyFilter {
   // from misinterpreting the policy as namespace-wide during the upgrade process.
   //
   // NOTE: Waypoint proxies are required to use this field for policies to apply; `selector` policies will be ignored.
+  // +kubebuilder:validation:MaxItems=16
   repeated istio.type.v1beta1.PolicyTargetReference targetRefs = 6;
 
   // One or more patches with match conditions.
