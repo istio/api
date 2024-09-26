@@ -31,9 +31,15 @@
 // well as accept traffic on all the ports associated with the
 // workload. The `Sidecar` configuration provides a way to fine tune the set of
 // ports, protocols that the proxy will accept when forwarding traffic to
-// and from the workload. In addition, it is possible to restrict the set
-// of services that the proxy can reach when forwarding outbound traffic
-// from workload instances.
+// and from the workload.
+//
+// One the common usages of `Sidecar` is to limit the set of configuration for outbound traffic.
+// This configuration scoping, among [other options](/docs/ops/configuration/mesh/configuration-scoping/), is useful to prune
+// out unneeded configuration, to improve scalability of the mesh.
+// A common misunderstanding is that restricting the configuration amounts to *blocking* the traffic.
+// If requests are sent to destinations not included in the scoping, the traffic will be treated as
+// [unmatched traffic](docs/ops/configuration/traffic-management/traffic-routing/#unmatched-traffic), which is often still allowed.
+// The sidecar is not able to enforce an outbound traffic restriction (see [Egress Gateways](/docs/tasks/traffic-management/egress/egress-gateway/) for how to achieve this).
 //
 // Services and configuration in a mesh are organized into one or more
 // namespaces (e.g., a Kubernetes namespace or a CF org/space). A `Sidecar`
@@ -64,7 +70,7 @@
 //
 // The example below declares a global default `Sidecar` configuration
 // in the root namespace called `istio-config`, that configures
-// sidecars in all namespaces to allow egress traffic only to other
+// sidecars in all namespaces to configure egress traffic only to other
 // workloads in the same namespace as well as to services in the
 // `istio-system` namespace.
 //
@@ -83,7 +89,7 @@
 //
 // The example below declares a `Sidecar` configuration in the
 // `prod-us1` namespace that overrides the global default defined
-// above, and configures the sidecars in the namespace to allow egress
+// above, and configures the sidecars in the namespace to configure egress
 // traffic to public services in the `prod-us1`, `prod-apis`, and the
 // `istio-system` namespaces.
 //
