@@ -514,22 +514,20 @@ message LoadBalancerSettings {
   // endpoints are relatively new like new deployment, this is not very effective as all endpoints end up getting same
   // amount of requests.
   // Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancers.
+  // Deprecated: use `warmup` instead.
   google.protobuf.Duration warmup_duration_secs = 4;
   
-  message slowStart {
-      // Aggression parameter non-linearly affects endpoint weight and represents the speed of ramp-up. 
-  // By tuning aggression parameter, one could achieve polynomial or exponential speed for traffic increase.
-  message aggression {
-    uint32 default_value = 1;
-    string runtime_key = 2;
-  }
-
-  // MinWeightPercent parameter specifies the minimum percent of origin weight to make sure the EDF scheduler has a reasonable deadline, default is 10%.
-  uint32 min_weight_percent = 3;
-  }
-
+  WarmupConfiguration warmup = 5;
 }
 
+message WarmupConfiguration {
+  google.protobuf.Duration duration = 1;
+  // +kubebuilder:validation:Maximum=100
+  // +kubebuilder:validation:Minimum=0
+  google.protobuf.Double minimum_percent = 2;
+  // +kubebuilder:validation:Minimum=0
+  google.protobuf.Double aggression = 3;
+}
 // Connection pool settings for an upstream host. The settings apply to
 // each individual host in the upstream service.  See Envoy's [circuit
 // breaker](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/circuit_breaking)
