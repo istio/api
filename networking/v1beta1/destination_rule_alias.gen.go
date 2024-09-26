@@ -179,6 +179,7 @@ type LoadBalancerSettings_ConsistentHashLB_RingHash_ = v1alpha3.LoadBalancerSett
 // The Maglev load balancer implements consistent hashing to backend hosts.
 type LoadBalancerSettings_ConsistentHashLB_Maglev = v1alpha3.LoadBalancerSettings_ConsistentHashLB_Maglev
 
+// +kubebuilder:validation:XValidation:message="only one of warmupDurationSecs or warmup can be set",rule="(has(self.warmupDurationSecs)?1:0)+(has(self.warmup)?1:0)<=1"
 // Standard load balancing algorithms that require no tuning.
 type LoadBalancerSettings_SimpleLB = v1alpha3.LoadBalancerSettings_SimpleLB
 
