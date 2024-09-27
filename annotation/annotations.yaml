@@ -536,6 +536,7 @@ annotations:
     description: |-
       Automatically configured by Istio to indicate a Pod was successfully enrolled in ambient mode.
       This shows the actual state; to specify intent that a workload should be in ambient mode, see `istio.io/dataplane-mode`.
+      User should not manually modify this annotation.
     deprecated: false
     hidden: false
     resources:

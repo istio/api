@@ -123,7 +123,8 @@ var (
 	AmbientRedirection = Instance {
 		Name:          "ambient.istio.io/redirection",
 		Description:   `Automatically configured by Istio to indicate a Pod was successfully enrolled in ambient mode.
-This shows the actual state; to specify intent that a workload should be in ambient mode, see "istio.io/dataplane-mode".`,
+This shows the actual state; to specify intent that a workload should be in ambient mode, see "istio.io/dataplane-mode".
+User should not manually modify this annotation.`,
 		FeatureStatus: Beta,
 		Hidden:        false,
 		Deprecated:    false,
