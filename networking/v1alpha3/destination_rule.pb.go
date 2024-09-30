@@ -815,7 +815,9 @@ type LoadBalancerSettings struct {
 	// Locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
 	// between this object and the object one in MeshConfig
 	LocalityLbSetting *LocalityLoadBalancerSetting `protobuf:"bytes,3,opt,name=locality_lb_setting,json=localityLbSetting,proto3" json:"locality_lb_setting,omitempty"`
-	// Represents the warmup duration of Service. If set, the newly created endpoint of service
+	// Deprecated: use `warmup` instead.
+	WarmupDurationSecs *duration.Duration `protobuf:"bytes,4,opt,name=warmup_duration_secs,json=warmupDurationSecs,proto3" json:"warmup_duration_secs,omitempty"`
+	// Represents the warmup configuration of Service. If set, the newly created endpoint of service
 	// remains in warmup mode starting from its creation time for the duration of this window and
 	// Istio progressively increases amount of traffic for that endpoint instead of sending proportional amount of traffic.
 	// This should be enabled for services that require warm up time to serve full production load with reasonable latency.
@@ -823,9 +825,7 @@ type LoadBalancerSettings struct {
 	// endpoints are relatively new like new deployment, this is not very effective as all endpoints end up getting same
 	// amount of requests.
 	// Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancers.
-	// Deprecated: use `warmup` instead.
-	WarmupDurationSecs *duration.Duration   `protobuf:"bytes,4,opt,name=warmup_duration_secs,json=warmupDurationSecs,proto3" json:"warmup_duration_secs,omitempty"`
-	Warmup             *WarmupConfiguration `protobuf:"bytes,5,opt,name=warmup,proto3" json:"warmup,omitempty"`
+	Warmup *WarmupConfiguration `protobuf:"bytes,5,opt,name=warmup,proto3" json:"warmup,omitempty"`
 }
 
 func (x *LoadBalancerSettings) Reset() {
@@ -923,11 +923,17 @@ type WarmupConfiguration struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// Duration of warmup mode
 	Duration *duration.Duration `protobuf:"bytes,1,opt,name=duration,proto3" json:"duration,omitempty"`
+	// Configures the minimum percentage of origin weight
+	// If unspecified, defaults to 10
 	// +kubebuilder:validation:Maximum=100
 	// +kubebuilder:validation:Minimum=0
 	MinimumPercent *wrappers.DoubleValue `protobuf:"bytes,2,opt,name=minimum_percent,json=minimumPercent,proto3" json:"minimum_percent,omitempty"`
-	// +kubebuilder:validation:Minimum=0
+	// This parameter controls the speed of traffic increase over the warmup duration. Defaults to 1.0, so that endpoints would
+	// get linearly increasing amount of traffic. When increasing the value for this parameter,
+	// the speed of traffic ramp-up increases non-linearly.
+	// +kubebuilder:validation:Minimum=1
 	Aggression *wrappers.DoubleValue `protobuf:"bytes,3,opt,name=aggression,proto3" json:"aggression,omitempty"`
 }
 

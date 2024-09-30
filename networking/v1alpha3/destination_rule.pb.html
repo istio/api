@@ -464,15 +464,7 @@ No
 <td><code>warmupDurationSecs</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
-<p>Represents the warmup duration of Service. If set, the newly created endpoint of service
-remains in warmup mode starting from its creation time for the duration of this window and
-Istio progressively increases amount of traffic for that endpoint instead of sending proportional amount of traffic.
-This should be enabled for services that require warm up time to serve full production load with reasonable latency.
-Please note that this is most effective when few new endpoints come up like scale event in Kubernetes. When all the
-endpoints are relatively new like new deployment, this is not very effective as all endpoints end up getting same
-amount of requests.
-Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancers.
-Deprecated: use <code>warmup</code> instead.</p>
+<p>Deprecated: use <code>warmup</code> instead.</p>
 
 </td>
 <td>
@@ -483,6 +475,15 @@ No
 <td><code>warmup</code></td>
 <td><code><a href="#WarmupConfiguration">WarmupConfiguration</a></code></td>
 <td>
+<p>Represents the warmup configuration of Service. If set, the newly created endpoint of service
+remains in warmup mode starting from its creation time for the duration of this window and
+Istio progressively increases amount of traffic for that endpoint instead of sending proportional amount of traffic.
+This should be enabled for services that require warm up time to serve full production load with reasonable latency.
+Please note that this is most effective when few new endpoints come up like scale event in Kubernetes. When all the
+endpoints are relatively new like new deployment, this is not very effective as all endpoints end up getting same
+amount of requests.
+Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancers.</p>
+
 </td>
 <td>
 No
@@ -507,6 +508,8 @@ No
 <td><code>duration</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
+<p>Duration of warmup mode</p>
+
 </td>
 <td>
 No
@@ -516,6 +519,8 @@ No
 <td><code>minimumPercent</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#doublevalue">DoubleValue</a></code></td>
 <td>
+<p>Configures the minimum percentage of origin weight
+If unspecified, defaults to 10</p>
 
 </td>
 <td>
@@ -526,6 +531,9 @@ No
 <td><code>aggression</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#doublevalue">DoubleValue</a></code></td>
 <td>
+<p>This parameter controls the speed of traffic increase over the warmup duration. Defaults to 1.0, so that endpoints would
+get linearly increasing amount of traffic. When increasing the value for this parameter,
+the speed of traffic ramp-up increases non-linearly.</p>
 
 </td>
 <td>
