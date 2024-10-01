@@ -523,7 +523,7 @@ message LoadBalancerSettings {
 
 message WarmupConfiguration {
   // Duration of warmup mode
-  google.protobuf.Duration duration = 1;
+  google.protobuf.Duration duration = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Configures the minimum percentage of origin weight
   // If unspecified, defaults to 10
