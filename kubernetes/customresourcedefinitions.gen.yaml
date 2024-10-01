@@ -731,6 +731,8 @@ spec:
                                   minimum: 0
                                   nullable: true
                                   type: number
+                              required:
+                              - duration
                               type: object
                             warmupDurationSecs:
                               description: 'Deprecated: use `warmup` instead.'
@@ -1101,6 +1103,8 @@ spec:
                                         minimum: 0
                                         nullable: true
                                         type: number
+                                    required:
+                                    - duration
                                     type: object
                                   warmupDurationSecs:
                                     description: 'Deprecated: use `warmup` instead.'
@@ -1616,6 +1620,8 @@ spec:
                             minimum: 0
                             nullable: true
                             type: number
+                        required:
+                        - duration
                         type: object
                       warmupDurationSecs:
                         description: 'Deprecated: use `warmup` instead.'
@@ -1980,6 +1986,8 @@ spec:
                                   minimum: 0
                                   nullable: true
                                   type: number
+                              required:
+                              - duration
                               type: object
                             warmupDurationSecs:
                               description: 'Deprecated: use `warmup` instead.'
@@ -2640,6 +2648,8 @@ spec:
                                   minimum: 0
                                   nullable: true
                                   type: number
+                              required:
+                              - duration
                               type: object
                             warmupDurationSecs:
                               description: 'Deprecated: use `warmup` instead.'
@@ -3010,6 +3020,8 @@ spec:
                                         minimum: 0
                                         nullable: true
                                         type: number
+                                    required:
+                                    - duration
                                     type: object
                                   warmupDurationSecs:
                                     description: 'Deprecated: use `warmup` instead.'
@@ -3525,6 +3537,8 @@ spec:
                             minimum: 0
                             nullable: true
                             type: number
+                        required:
+                        - duration
                         type: object
                       warmupDurationSecs:
                         description: 'Deprecated: use `warmup` instead.'
@@ -3889,6 +3903,8 @@ spec:
                                   minimum: 0
                                   nullable: true
                                   type: number
+                              required:
+                              - duration
                               type: object
                             warmupDurationSecs:
                               description: 'Deprecated: use `warmup` instead.'
@@ -4549,6 +4565,8 @@ spec:
                                   minimum: 0
                                   nullable: true
                                   type: number
+                              required:
+                              - duration
                               type: object
                             warmupDurationSecs:
                               description: 'Deprecated: use `warmup` instead.'
@@ -4919,6 +4937,8 @@ spec:
                                         minimum: 0
                                         nullable: true
                                         type: number
+                                    required:
+                                    - duration
                                     type: object
                                   warmupDurationSecs:
                                     description: 'Deprecated: use `warmup` instead.'
@@ -5434,6 +5454,8 @@ spec:
                             minimum: 0
                             nullable: true
                             type: number
+                        required:
+                        - duration
                         type: object
                       warmupDurationSecs:
                         description: 'Deprecated: use `warmup` instead.'
@@ -5798,6 +5820,8 @@ spec:
                                   minimum: 0
                                   nullable: true
                                   type: number
+                              required:
+                              - duration
                               type: object
                             warmupDurationSecs:
                               description: 'Deprecated: use `warmup` instead.'
