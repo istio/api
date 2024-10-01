@@ -1,4 +1,4 @@
-_err: 'spec.warmup.minimumPercent: Invalid value'
+_err: 'spec.trafficPolicy.loadBalancer.warmup.minimumPercent: Invalid value'
 apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
@@ -11,7 +11,7 @@ spec:
         duration: 300s
         minimumPercent: 150.0
 ---
-_err: 'spec.warmup.duration: Required value'
+_err: 'spec.trafficPolicy.loadBalancer.warmup.duration: Required value'
 apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
@@ -23,7 +23,7 @@ spec:
       warmup:
         minimumPercent: 5.0
 ---
-_err: 'spec.warmup.aggression: Invalid value'
+_err: 'spec.trafficPolicy.loadBalancer.warmup.aggression: Invalid value'
 apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
