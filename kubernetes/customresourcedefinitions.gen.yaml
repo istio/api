@@ -7336,7 +7336,7 @@ spec:
             - message: CIDR addresses are allowed only for NONE/STATIC resolution
                 types
               rule: '!(has(self.addresses) && self.addresses.exists(k, k.contains(''/''))
-                && (self.resolution != ''STATIC'' && self.resolution != ''STATIC''))'
+                && (self.resolution != ''STATIC'' && self.resolution != ''NONE''))'
             - message: NONE mode cannot set endpoints
               rule: '(!has(self.resolution) || self.resolution == ''NONE'') ? !has(self.endpoints)
                 : true'
@@ -7630,7 +7630,7 @@ spec:
             - message: CIDR addresses are allowed only for NONE/STATIC resolution
                 types
               rule: '!(has(self.addresses) && self.addresses.exists(k, k.contains(''/''))
-                && (self.resolution != ''STATIC'' && self.resolution != ''STATIC''))'
+                && (self.resolution != ''STATIC'' && self.resolution != ''NONE''))'
             - message: NONE mode cannot set endpoints
               rule: '(!has(self.resolution) || self.resolution == ''NONE'') ? !has(self.endpoints)
                 : true'
@@ -7924,7 +7924,7 @@ spec:
             - message: CIDR addresses are allowed only for NONE/STATIC resolution
                 types
               rule: '!(has(self.addresses) && self.addresses.exists(k, k.contains(''/''))
-                && (self.resolution != ''STATIC'' && self.resolution != ''STATIC''))'
+                && (self.resolution != ''STATIC'' && self.resolution != ''NONE''))'
             - message: NONE mode cannot set endpoints
               rule: '(!has(self.resolution) || self.resolution == ''NONE'') ? !has(self.endpoints)
                 : true'
