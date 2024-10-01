@@ -208,7 +208,9 @@ labels:
     hidden: false
     resources:
       - Pod
+      - WorkloadEntry
       - Service
+      - ServiceEntry
       - Namespace
 
   - name: istio.io/use-waypoint-namespace
@@ -220,7 +222,9 @@ labels:
     hidden: false
     resources:
       - Pod
+      - WorkloadEntry
       - Service
+      - ServiceEntry
       - Namespace
 
   - name: istio.io/waypoint-for

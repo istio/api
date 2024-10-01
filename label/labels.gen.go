@@ -37,6 +37,7 @@ const (
     Service
     ServiceAccount
     ServiceEntry
+    WorkloadEntry
 )
 
 func (r ResourceTypes) String() string {
@@ -61,6 +62,8 @@ func (r ResourceTypes) String() string {
 		return "ServiceAccount"
 	case 10:
 		return "ServiceEntry"
+	case 11:
+		return "WorkloadEntry"
 	}
 	return "Unknown"
 }
@@ -176,7 +179,9 @@ Note: the waypoint must allow the type, see "stio.io/waypoint-for".
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Pod,
+			WorkloadEntry,
 			Service,
+			ServiceEntry,
 			Namespace,
 		},
 	}
@@ -191,7 +196,9 @@ This must be set in addition to "istio.io/use-waypoint", when a cross-namespace 
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Pod,
+			WorkloadEntry,
 			Service,
+			ServiceEntry,
 			Namespace,
 		},
 	}
@@ -445,5 +452,6 @@ func AllResourceTypes() []string {
 		"Service",
 		"ServiceAccount",
 		"ServiceEntry",
+		"WorkloadEntry",
 	}
 }
