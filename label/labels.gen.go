@@ -28,10 +28,16 @@ type ResourceTypes int
 const (
 	Unknown ResourceTypes = iota
     Any
+    Deployment
+    Gateway
+    GatewayClass
     Namespace
     Node
     Pod
     Service
+    ServiceAccount
+    ServiceEntry
+    WorkloadEntry
 )
 
 func (r ResourceTypes) String() string {
@@ -39,13 +45,25 @@ func (r ResourceTypes) String() string {
 	case 1:
 		return "Any"
 	case 2:
-		return "Namespace"
+		return "Deployment"
 	case 3:
-		return "Node"
+		return "Gateway"
 	case 4:
-		return "Pod"
+		return "GatewayClass"
 	case 5:
+		return "Namespace"
+	case 6:
+		return "Node"
+	case 7:
+		return "Pod"
+	case 8:
 		return "Service"
+	case 9:
+		return "ServiceAccount"
+	case 10:
+		return "ServiceEntry"
+	case 11:
+		return "WorkloadEntry"
 	}
 	return "Unknown"
 }
@@ -73,6 +91,55 @@ type Instance struct {
 
 var (
 
+	GatewayManaged = Instance {
+		Name:          "gateway.istio.io/managed",
+		Description:   "Automatically added to all resources [automatically "+
+                        "created](/docs/tasks/traffic-management/ingress/gateway-api/#automated-deployment) "+
+                        "by Istio Gateway controller, to indicate which controller "+
+                        "created the resource. Users should not set this label "+
+                        "themselves.",
+		FeatureStatus: Stable,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			ServiceAccount,
+			Deployment,
+			Service,
+		},
+	}
+
+	IoK8sNetworkingGatewayGatewayName = Instance {
+		Name:          "gateway.networking.k8s.io/gateway-name",
+		Description:   "Automatically added to all resources [automatically "+
+                        "created](/docs/tasks/traffic-management/ingress/gateway-api/#automated-deployment) "+
+                        "by Istio Gateway controller to indicate which `Gateway` "+
+                        "resulted in the object creation. Users should not set "+
+                        "this label themselves.",
+		FeatureStatus: Stable,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			ServiceAccount,
+			Deployment,
+			Service,
+		},
+	}
+
+	IoIstioDataplaneMode = Instance {
+		Name:          "istio.io/dataplane-mode",
+		Description:   `When set on a resource, indicates the [data plane mode](/docs/overview/dataplane-modes/) to use.
+Possible values: "ambient", "none".
+Note: users wishing to use sidecar mode should see the "istio-injection" label; there is no value on this label to configure sidecars.
+`,
+		FeatureStatus: Beta,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+			Namespace,
+		},
+	}
+
 	IoIstioRev = Instance {
 		Name:          "istio.io/rev",
 		Description:   "Istio control plane revision associated with the "+
@@ -82,6 +149,87 @@ var (
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Namespace,
+		},
+	}
+
+	IoIstioTag = Instance {
+		Name:          "istio.io/tag",
+		Description:   "Istio control plane tag name associated with the "+
+                        "resource; e.g. `canary`",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Namespace,
+		},
+	}
+
+	IoIstioUseWaypoint = Instance {
+		Name:          "istio.io/use-waypoint",
+		Description:   `When set on a resource, indicates the resource has an associated waypoint with the given name.
+The waypoint is assumed to be in the same namespace; for cross-namespace, see "istio.io/use-waypoint-namespace".
+
+When set or a "Pod" or a "Service", this binds that specific resource to the waypoint.
+When set on a "Namespace", this applies to all "Pod"/"Service" in the namespace.
+
+Note: the waypoint must allow the type, see "stio.io/waypoint-for".
+`,
+		FeatureStatus: Beta,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+			WorkloadEntry,
+			Service,
+			ServiceEntry,
+			Namespace,
+		},
+	}
+
+	IoIstioUseWaypointNamespace = Instance {
+		Name:          "istio.io/use-waypoint-namespace",
+		Description:   `When set on a resource, indicates the resource has an associated waypoint in the provided namespace.
+This must be set in addition to "istio.io/use-waypoint", when a cross-namespace reference is desired.
+`,
+		FeatureStatus: Beta,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+			WorkloadEntry,
+			Service,
+			ServiceEntry,
+			Namespace,
+		},
+	}
+
+	IoIstioWaypointFor = Instance {
+		Name:          "istio.io/waypoint-for",
+		Description:   `When set on a waypoint (either by its specific "Gateway", or for the entire collection on the "GatewayClass"),
+indicates the type of traffic this waypoint can handle.
+
+Valid options: "service", "workload", "all", and "none".
+`,
+		FeatureStatus: Beta,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			GatewayClass,
+			Gateway,
+		},
+	}
+
+	NetworkingEnableAutoallocateIp = Instance {
+		Name:          "networking.istio.io/enable-autoallocate-ip",
+		Description:   `Configures whether a "ServiceEntry" without any "spec.addresses" set should get an IP address automatically allocated for it.
+
+Valid options: "true", "false"
+`,
+		FeatureStatus: Beta,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			ServiceEntry,
 		},
 	}
 
@@ -269,7 +417,15 @@ resources to help automate Istio's multi-network configuration.
 
 func AllResourceLabels() []*Instance {
 	return []*Instance {
+		&GatewayManaged,
+		&IoK8sNetworkingGatewayGatewayName,
+		&IoIstioDataplaneMode,
 		&IoIstioRev,
+		&IoIstioTag,
+		&IoIstioUseWaypoint,
+		&IoIstioUseWaypointNamespace,
+		&IoIstioWaypointFor,
+		&NetworkingEnableAutoallocateIp,
 		&NetworkingGatewayPort,
 		&OperatorComponent,
 		&OperatorManaged,
@@ -287,9 +443,15 @@ func AllResourceLabels() []*Instance {
 func AllResourceTypes() []string {
 	return []string {
 		"Any",
+		"Deployment",
+		"Gateway",
+		"GatewayClass",
 		"Namespace",
 		"Node",
 		"Pod",
 		"Service",
+		"ServiceAccount",
+		"ServiceEntry",
+		"WorkloadEntry",
 	}
 }

@@ -9,6 +9,30 @@ weight: 60
 This page presents the various resource <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/">annotations</a> that
 Istio supports to control its behavior.
 </p>
+<h2 id="AmbientRedirection">ambient.istio.io/redirection</h2>
+<table class="annotations">
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <td><code>ambient.istio.io/redirection</code></td>
+    </tr>
+    <tr>
+      <th>Feature Status</th>
+      <td>Beta</td>
+    </tr>
+    <tr>
+      <th>Resource Types</th>
+      <td>[Pod]</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td><p>Automatically configured by Istio to indicate a Pod was successfully enrolled in ambient mode.
+This shows the actual state; to specify intent that a workload should be in ambient mode, see <code>istio.io/dataplane-mode</code>.
+User should not manually modify this annotation.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
 <h2 id="GalleyAnalyzeSuppress">galley.istio.io/analyze-suppress</h2>
 <table class="annotations">
   <tbody>
