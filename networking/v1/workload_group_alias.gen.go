@@ -21,6 +21,7 @@ import "istio.io/api/networking/v1alpha3"
 // Clients may not set this value. It is represented in RFC3339 form and is in UTC.
 // Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
 // +cue-gen:WorkloadGroup:preserveUnknownFields:false
+// +cue-gen:WorkloadGroup:spec:required
 // -->
 //
 // <!-- go code generation tags

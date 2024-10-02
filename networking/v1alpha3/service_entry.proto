@@ -427,6 +427,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // Clients may not set this value. It is represented in RFC3339 form and is in UTC.
 // Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
 // +cue-gen:ServiceEntry:preserveUnknownFields:false
+// +cue-gen:ServiceEntry:spec:required
 // -->
 //
 // <!-- go code generation tags
@@ -436,6 +437,10 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // +k8s:deepcopy-gen=true
 // istiostatus-override: ServiceEntryStatus: istio.io/api/networking/v1alpha3
 // -->
+// +kubebuilder:validation:XValidation:message="only one of WorkloadSelector or Endpoints can be set",rule="(has(self.workloadSelector)?1:0)+(has(self.endpoints)?1:0)<=1"
+// +kubebuilder:validation:XValidation:message="CIDR addresses are allowed only for NONE/STATIC resolution types",rule="!(has(self.addresses) && self.addresses.exists(k, k.contains('/')) && (self.resolution != 'STATIC' && self.resolution != 'NONE'))"
+// +kubebuilder:validation:XValidation:message="NONE mode cannot set endpoints",rule="(!has(self.resolution) || self.resolution == 'NONE') ? !has(self.endpoints) : true"
+// +kubebuilder:validation:XValidation:message="DNS_ROUND_ROBIN mode cannot have multiple endpoints",rule="(has(self.resolution) && self.resolution == 'DNS_ROUND_ROBIN') ? (!has(self.endpoints) || size(self.endpoints) == 1) : true"
 message ServiceEntry {
   // The hosts associated with the ServiceEntry. Could be a DNS
   // name with wildcard prefix.
@@ -460,7 +465,9 @@ message ServiceEntry {
   // 1. subjectAltNames: In addition to verifying the SANs of the
   //    service accounts associated with the pods of the service, the
   //    SANs specified here will also be verified.
-  //
+  // +kubebuilder:validation:MinItems=1
+  // +kubebuilder:validation:MaxItems=256
+  // +protoc-gen-crd:list-value-validation:XValidation:message="hostname cannot be wildcard",rule="self != '*'"
   repeated string hosts = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The virtual IP addresses associated with the service. Could be CIDR
@@ -477,11 +484,17 @@ message ServiceEntry {
   // simple TCP proxy, forwarding incoming traffic on a specified port to
   // the specified destination endpoint IP/host. Unix domain socket
   // addresses are not supported in this field.
+  // +kubebuilder:validation:MaxItems=256
+  // +protoc-gen-crd:list-value-validation:MaxLength=64
   repeated string addresses = 2;
 
   // The ports associated with the external service. If the
   // Endpoints are Unix domain socket addresses, there must be exactly one
   // port.
+  // +listType=map
+  // +listMapKey=name
+  // +kubebuilder:validation:MaxItems=256
+  // +kubebuilder:validation:XValidation:message="port number cannot be duplicated",rule="self.all(l1, self.exists_one(l2, l1.number == l2.number))"
   repeated ServicePort ports = 3;
 
   // Location specifies whether the service is part of Istio mesh or
@@ -600,19 +613,23 @@ message ServiceEntry {
 // ServicePort describes the properties of a specific port of a service.
 message ServicePort {
   // A valid non-negative integer port number.
+  // +kubebuilder:validation:XValidation:message="port must be between 1-65535",rule="0 < self && self <= 65535"
   uint32 number = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The protocol exposed on the port.
   // MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS.
   // TLS implies the connection will be routed based on the SNI header to
   // the destination without terminating the TLS connection.
+  // +kubebuilder:validation:MaxLength=256
   string protocol = 2;
 
   // Label assigned to the port.
+  // +kubebuilder:validation:MaxLength=256
   string name = 3 [(google.api.field_behavior) = REQUIRED];
 
   // The port number on the endpoint where the traffic will be
   // received. If unset, default to `number`.
+  // +kubebuilder:validation:XValidation:message="port must be between 1-65535",rule="0 < self && self <= 65535"
   uint32 target_port = 4;
 }
 
