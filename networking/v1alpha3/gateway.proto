@@ -393,12 +393,12 @@ message ServerTLSSettings {
     PASSTHROUGH = 0;
 
     // Secure connections with standard TLS semantics. In this mode
-    // client certificate is not requested during handshake. 
+    // client certificate is not requested during handshake.
     SIMPLE = 1;
 
     // Secure connections to the downstream using mutual TLS by
     // presenting server certificates for authentication.
-    // A client certificate will also be requested during the handshake and 
+    // A client certificate will also be requested during the handshake and
     // at least one valid certificate is required to be sent by the client.
     MUTUAL = 2;
 
@@ -424,9 +424,9 @@ message ServerTLSSettings {
     ISTIO_MUTUAL = 4;
 
     // Similar to MUTUAL mode, except that the client certificate
-    // is optional. Unlike SIMPLE mode, A client certificate will 
-    // still be explicitly requested during handshake, but the client 
-    // is not required to send a certificate. If a client certificate 
+    // is optional. Unlike SIMPLE mode, A client certificate will
+    // still be explicitly requested during handshake, but the client
+    // is not required to send a certificate. If a client certificate
     // is presented, it will be validated. ca_certificates should
     // be specified for validating client certificates.
     OPTIONAL_MUTUAL = 5;
@@ -473,6 +473,7 @@ message ServerTLSSettings {
 
   // A list of alternate names to verify the subject identity in the
   // certificate presented by the client.
+  // Requires TLS mode to be set to `MUTUAL`.
   repeated string subject_alt_names = 6;
 
   // An optional list of base64-encoded SHA-256 hashes of the SPKIs of
