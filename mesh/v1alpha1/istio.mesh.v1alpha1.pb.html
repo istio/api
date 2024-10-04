@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 77
+number_of_entries: 78
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -4062,6 +4062,20 @@ By default, <code>APPEND_FORWARD</code> will be used.</p>
 No
 </td>
 </tr>
+<tr id="ProxyConfig-ProxyHeaders-set_current_client_cert_details">
+<td><code>setCurrentClientCertDetails</code></td>
+<td><code><a href="#ProxyConfig-ProxyHeaders-SetCurrentClientCertDetails">SetCurrentClientCertDetails</a></code></td>
+<td>
+<p>This field is valid only when forward_client_cert_details is APPEND_FORWARD or SANITIZE_SET
+and the client connection is mTLS. It specifies the fields in
+the client certificate to be forwarded. Note that <code>Hash</code> is always set, and
+<code>By</code> is always set when the client certificate presents the URI type Subject Alternative Name value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="ProxyConfig-ProxyHeaders-request_id">
 <td><code>requestId</code></td>
 <td><code><a href="#ProxyConfig-ProxyHeaders-RequestId">RequestId</a></code></td>
@@ -4257,6 +4271,83 @@ No
 <td><code>mode</code></td>
 <td><code><a href="#ProxyConfig-ProxyHeaders-MetadataExchangeMode">MetadataExchangeMode</a></code></td>
 <td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ProxyConfig-ProxyHeaders-SetCurrentClientCertDetails">ProxyConfig.ProxyHeaders.SetCurrentClientCertDetails</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProxyConfig-ProxyHeaders-SetCurrentClientCertDetails-subject">
+<td><code>subject</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+<p>Whether to forward the subject of the client cert. Defaults to true.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-ProxyHeaders-SetCurrentClientCertDetails-cert">
+<td><code>cert</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Whether to forward the entire client cert in URL encoded PEM format. This will appear in the
+XFCC header comma separated from other values with the value Cert=&ldquo;PEM&rdquo;.
+Defaults to false.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-ProxyHeaders-SetCurrentClientCertDetails-chain">
+<td><code>chain</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Whether to forward the entire client cert chain (including the leaf cert) in URL encoded PEM
+format. This will appear in the XFCC header comma separated from other values with the value
+Chain=&ldquo;PEM&rdquo;.
+Defaults to false.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-ProxyHeaders-SetCurrentClientCertDetails-dns">
+<td><code>dns</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+<p>Whether to forward the DNS type Subject Alternative Names of the client cert.
+Defaults to true.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-ProxyHeaders-SetCurrentClientCertDetails-uri">
+<td><code>uri</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+<p>Whether to forward the URI type Subject Alternative Name of the client cert. Defaults to
+true.</p>
+
 </td>
 <td>
 No
