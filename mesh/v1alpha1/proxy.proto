@@ -669,13 +669,13 @@ message ProxyConfig {
       // Whether to forward the entire client cert in URL encoded PEM format. This will appear in the
       // XFCC header comma separated from other values with the value Cert="PEM".
       // Defaults to false.
-      bool cert = 2;
+      google.protobuf.BoolValue cert = 2;
   
       // Whether to forward the entire client cert chain (including the leaf cert) in URL encoded PEM
       // format. This will appear in the XFCC header comma separated from other values with the value
       // Chain="PEM".
       // Defaults to false.
-      bool chain = 3;
+      google.protobuf.BoolValue chain = 3;
   
       // Whether to forward the DNS type Subject Alternative Names of the client cert.
       // Defaults to true.
