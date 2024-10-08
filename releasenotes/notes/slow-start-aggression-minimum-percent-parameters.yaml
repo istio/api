@@ -1,0 +1,13 @@
+apiVersion: release-notes/v2
+
+kind: feature
+area: traffic-management
+issue:
+- 3215
+
+releaseNotes:
+- |
+    **Added** aggression and minimum_percent parameters
+
+docs:
+  - https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/slow_start
