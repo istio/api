@@ -265,6 +265,16 @@ annotations:
     resources:
       - Pod
 
+  - name: sidecar.istio.io/nativeSidecar
+    featureStatus: Alpha
+    description: Specifies if the istio-proxy sidecar should be injected as a
+      native sidecar or not. Takes precedence over the ENABLE_NATIVE_SIDECARS
+      environment variable.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+
   - name: readiness.status.sidecar.istio.io/initialDelaySeconds
     featureStatus: Alpha
     description: Specifies the initial delay (in seconds) for the Envoy sidecar readiness

@@ -575,6 +575,19 @@ This takes the format: "<protocol>" or "<protocol>/<port>".
 		},
 	}
 
+	SidecarNativeSidecar = Instance {
+		Name:          "sidecar.istio.io/nativeSidecar",
+		Description:   "Specifies if the istio-proxy sidecar should be injected "+
+                        "as a native sidecar or not. Takes precedence over the "+
+                        "ENABLE_NATIVE_SIDECARS environment variable.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	SidecarProxyCPU = Instance {
 		Name:          "sidecar.istio.io/proxyCPU",
 		Description:   "Specifies the requested CPU setting for the Envoy "+
@@ -936,6 +949,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarInject,
 		&SidecarInterceptionMode,
 		&SidecarLogLevel,
+		&SidecarNativeSidecar,
 		&SidecarProxyCPU,
 		&SidecarProxyCPULimit,
 		&SidecarProxyImage,

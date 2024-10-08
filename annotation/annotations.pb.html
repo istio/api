@@ -583,6 +583,28 @@ User should not manually modify this annotation.</p>
     </tr>
   </tbody>
 </table>
+<h2 id="SidecarNativeSidecar">sidecar.istio.io/nativeSidecar</h2>
+<table class="annotations">
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <td><code>sidecar.istio.io/nativeSidecar</code></td>
+    </tr>
+    <tr>
+      <th>Feature Status</th>
+      <td>Alpha</td>
+    </tr>
+    <tr>
+      <th>Resource Types</th>
+      <td>[Pod]</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td><p>Specifies if the istio-proxy sidecar should be injected as a native sidecar or not. Takes precedence over the ENABLE_NATIVE_SIDECARS environment variable.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
 <h2 id="SidecarProxyCPU">sidecar.istio.io/proxyCPU</h2>
 <table class="annotations">
   <tbody>

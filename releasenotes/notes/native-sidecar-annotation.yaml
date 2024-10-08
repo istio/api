@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+
+kind: feature
+area: installation
+issue:
+  - https://github.com/istio/istio/issues/53452
+releaseNotes:
+  - |
+    **Added** sidecar.istio.io/nativeSidecar annotation.
