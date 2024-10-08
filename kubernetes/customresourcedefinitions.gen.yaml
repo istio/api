@@ -16188,6 +16188,11 @@ spec:
                       description: Controls span reporting.
                       nullable: true
                       type: boolean
+                    enableIstioTags:
+                      description: Determines whether or not trace spans generated
+                        by Envoy will include Istio specific tags.
+                      nullable: true
+                      type: boolean
                     match:
                       description: Allows tailoring of behavior to specific conditions.
                       properties:
@@ -16222,10 +16227,6 @@ spec:
                       minimum: 0
                       nullable: true
                       type: number
-                    skipIstioTags:
-                      description: Determines whether or not trace spans generated
-                        by Envoy will include Istio specific tags.
-                      type: boolean
                     useRequestIdForTraceSampling:
                       nullable: true
                       type: boolean
@@ -16640,6 +16641,11 @@ spec:
                       description: Controls span reporting.
                       nullable: true
                       type: boolean
+                    enableIstioTags:
+                      description: Determines whether or not trace spans generated
+                        by Envoy will include Istio specific tags.
+                      nullable: true
+                      type: boolean
                     match:
                       description: Allows tailoring of behavior to specific conditions.
                       properties:
@@ -16674,10 +16680,6 @@ spec:
                       minimum: 0
                       nullable: true
                       type: number
-                    skipIstioTags:
-                      description: Determines whether or not trace spans generated
-                        by Envoy will include Istio specific tags.
-                      type: boolean
                     useRequestIdForTraceSampling:
                       nullable: true
                       type: boolean
