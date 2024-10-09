@@ -581,3 +581,21 @@ annotations:
     hidden: true
     resources:
       - Gateway
+
+  - name: networking.istio.io/traffic-distribution
+    featureStatus: Alpha
+    description: |
+      Controls how traffic is distributed across the set of available endpoints.
+      
+      At this time, this annotation only impacts routing done by Ztunnel.
+      
+      Accepted values:
+      * PreferClose: endpoints will be categorized by how "close" they are, consider network, region, zone, and subzone.
+        Traffic will only be sent to the set of closest healthy endpoints.
+        For example, if I have a client in zone `us-west` with endpoints: `us-west,us-west,us-east`, all traffic will go to
+        the two `us-west` backends. If those backends become unhealthy, traffic will send to `us-east`.
+    deprecated: false
+    hidden: false
+    resources:
+      - Service
+      - ServiceEntry

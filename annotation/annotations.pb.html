@@ -231,6 +231,39 @@ User should not manually modify this annotation.</p>
     </tr>
   </tbody>
 </table>
+<h2 id="NetworkingTrafficDistribution">networking.istio.io/traffic-distribution</h2>
+<table class="annotations">
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <td><code>networking.istio.io/traffic-distribution</code></td>
+    </tr>
+    <tr>
+      <th>Feature Status</th>
+      <td>Alpha</td>
+    </tr>
+    <tr>
+      <th>Resource Types</th>
+      <td>[Service ServiceEntry]</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td><p>Controls how traffic is distributed across the set of available endpoints.</p>
+
+<p>At this time, this annotation only impacts routing done by Ztunnel.</p>
+
+<p>Accepted values:</p>
+
+<ul>
+<li>PreferClose: endpoints will be categorized by how &ldquo;close&rdquo; they are, consider network, region, zone, and subzone.
+Traffic will only be sent to the set of closest healthy endpoints.
+For example, if I have a client in zone <code>us-west</code> with endpoints: <code>us-west,us-west,us-east</code>, all traffic will go to
+the two <code>us-west</code> backends. If those backends become unhealthy, traffic will send to <code>us-east</code>.</li>
+</ul>
+</td>
+    </tr>
+  </tbody>
+</table>
 <h2 id="PrometheusMergeMetrics">prometheus.istio.io/merge-metrics</h2>
 <table class="annotations">
   <tbody>
