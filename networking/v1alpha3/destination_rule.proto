@@ -379,7 +379,7 @@ message Subset {
 // ```
 //
 message LoadBalancerSettings {
-  // +kubebuilder:validation:XValidation:message="only one of warmupDurationSecs or warmup can be set",rule="(has(self.warmupDurationSecs)?1:0)+(has(self.warmup)?1:0)<=1"
+  // +kubebuilder:validation:XValidation:message="only one of warmupDurationSecs or warmup can be set",rule="oneof(self.warmupDurationSecs, self.warmup)"
   // Standard load balancing algorithms that require no tuning.
   enum SimpleLB {
     // No load balancing algorithm has been specified by the user. Istio
