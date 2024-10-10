@@ -97,17 +97,6 @@ var (
 		},
 	}
 
-	AlphaIdentity = Instance {
-		Name:          "alpha.istio.io/identity",
-		Description:   "Identity for the workload.",
-		FeatureStatus: Alpha,
-		Hidden:        true,
-		Deprecated:    true,
-		Resources: []ResourceTypes{
-			Pod,
-		},
-	}
-
 	AlphaKubernetesServiceAccounts = Instance {
 		Name:          "alpha.istio.io/kubernetes-serviceaccounts",
 		Description:   "Specifies the Kubernetes service accounts that are "+
@@ -214,41 +203,6 @@ This takes the format: "<protocol>" or "<protocol>/<port>".
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Pod,
-		},
-	}
-
-	OperatorInstallChartOwner = Instance {
-		Name:          "install.operator.istio.io/chart-owner",
-		Description:   "Represents the name of the chart used to create this "+
-                        "resource.",
-		FeatureStatus: Alpha,
-		Hidden:        false,
-		Deprecated:    false,
-		Resources: []ResourceTypes{
-			Any,
-		},
-	}
-
-	OperatorInstallOwnerGeneration = Instance {
-		Name:          "install.operator.istio.io/owner-generation",
-		Description:   "Represents the generation to which the resource was last "+
-                        "reconciled.",
-		FeatureStatus: Alpha,
-		Hidden:        false,
-		Deprecated:    false,
-		Resources: []ResourceTypes{
-			Any,
-		},
-	}
-
-	OperatorInstallVersion = Instance {
-		Name:          "install.operator.istio.io/version",
-		Description:   "Represents the Istio version associated with the resource",
-		FeatureStatus: Alpha,
-		Hidden:        false,
-		Deprecated:    false,
-		Resources: []ResourceTypes{
-			Any,
 		},
 	}
 
@@ -483,20 +437,6 @@ This takes the format: "<protocol>" or "<protocol>/<port>".
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
-		Resources: []ResourceTypes{
-			Pod,
-		},
-	}
-
-	SidecarControlPlaneAuthPolicy = Instance {
-		Name:          "sidecar.istio.io/controlPlaneAuthPolicy",
-		Description:   "Specifies the auth policy used by the Istio control "+
-                        "plane. If NONE, traffic will not be encrypted. If "+
-                        "MUTUAL_TLS, traffic between Envoy sidecar will be wrapped "+
-                        "into mutual TLS connections.",
-		FeatureStatus: Alpha,
-		Hidden:        false,
-		Deprecated:    true,
 		Resources: []ResourceTypes{
 			Pod,
 		},
@@ -898,7 +838,6 @@ This takes the format: "<protocol>" or "<protocol>/<port>".
 func AllResourceAnnotations() []*Instance {
 	return []*Instance {
 		&AlphaCanonicalServiceAccounts,
-		&AlphaIdentity,
 		&AlphaKubernetesServiceAccounts,
 		&AmbientRedirection,
 		&AmbientWaypointInboundBinding,
@@ -907,9 +846,6 @@ func AllResourceAnnotations() []*Instance {
 		&GatewayNameOverride,
 		&GatewayServiceAccount,
 		&InjectTemplates,
-		&OperatorInstallChartOwner,
-		&OperatorInstallOwnerGeneration,
-		&OperatorInstallVersion,
 		&IoIstioAutoRegistrationGroup,
 		&IoIstioConnectedAt,
 		&IoIstioDisconnectedAt,
@@ -929,7 +865,6 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarAgentLogLevel,
 		&SidecarBootstrapOverride,
 		&SidecarComponentLogLevel,
-		&SidecarControlPlaneAuthPolicy,
 		&SidecarDiscoveryAddress,
 		&SidecarEnableCoreDump,
 		&SidecarExtraStatTags,
