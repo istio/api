@@ -260,7 +260,7 @@ const (
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="(has(self.selector)?1:0)+(has(self.targetRef)?1:0)+(has(self.targetRefs)?1:0)<=1"
+// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="oneof(self.selector, self.targetRef, self.targetRefs)"
 type RequestAuthentication struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
