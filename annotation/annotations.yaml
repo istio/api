@@ -43,14 +43,6 @@ annotations:
     resources:
       - Service
 
-  - name: alpha.istio.io/identity
-    featureStatus: Alpha
-    description: Identity for the workload.
-    deprecated: true
-    hidden: true
-    resources:
-      - Pod
-
   - name: networking.istio.io/exportTo
     featureStatus: Alpha
     description: Specifies the namespaces to which this service should be exported to.
@@ -85,15 +77,6 @@ annotations:
     description: Rewrite HTTP readiness and liveness probes to be redirected to
       the Envoy sidecar.
     deprecated: false
-    hidden: false
-    resources:
-      - Pod
-
-  - name: sidecar.istio.io/controlPlaneAuthPolicy
-    description: Specifies the auth policy used by the Istio control plane. If NONE,
-      traffic will not be encrypted. If MUTUAL_TLS, traffic between Envoy sidecar
-      will be wrapped into mutual TLS connections.
-    deprecated: true
     hidden: false
     resources:
       - Pod
@@ -390,30 +373,6 @@ annotations:
     hidden: false
     resources:
       - Ingress
-
-  - name: install.operator.istio.io/chart-owner
-    featureStatus: Alpha
-    description: Represents the name of the chart used to create this resource.
-    deprecated: false
-    hidden: false
-    resources:
-      - Any
-
-  - name: install.operator.istio.io/owner-generation
-    featureStatus: Alpha
-    description: Represents the generation to which the resource was last reconciled.
-    deprecated: false
-    hidden: false
-    resources:
-      - Any
-
-  - name: install.operator.istio.io/version
-    featureStatus: Alpha
-    description: Represents the Istio version associated with the resource
-    deprecated: false
-    hidden: false
-    resources:
-      - Any
 
   - name: galley.istio.io/analyze-suppress
     featureStatus: Alpha

@@ -77,72 +77,6 @@ User should not manually modify this annotation.</p>
     </tr>
   </tbody>
 </table>
-<h2 id="OperatorInstallChartOwner">install.operator.istio.io/chart-owner</h2>
-<table class="annotations">
-  <tbody>
-    <tr>
-      <th>Name</th>
-      <td><code>install.operator.istio.io/chart-owner</code></td>
-    </tr>
-    <tr>
-      <th>Feature Status</th>
-      <td>Alpha</td>
-    </tr>
-    <tr>
-      <th>Resource Types</th>
-      <td>[Any]</td>
-    </tr>
-    <tr>
-      <th>Description</th>
-      <td><p>Represents the name of the chart used to create this resource.</p>
-</td>
-    </tr>
-  </tbody>
-</table>
-<h2 id="OperatorInstallOwnerGeneration">install.operator.istio.io/owner-generation</h2>
-<table class="annotations">
-  <tbody>
-    <tr>
-      <th>Name</th>
-      <td><code>install.operator.istio.io/owner-generation</code></td>
-    </tr>
-    <tr>
-      <th>Feature Status</th>
-      <td>Alpha</td>
-    </tr>
-    <tr>
-      <th>Resource Types</th>
-      <td>[Any]</td>
-    </tr>
-    <tr>
-      <th>Description</th>
-      <td><p>Represents the generation to which the resource was last reconciled.</p>
-</td>
-    </tr>
-  </tbody>
-</table>
-<h2 id="OperatorInstallVersion">install.operator.istio.io/version</h2>
-<table class="annotations">
-  <tbody>
-    <tr>
-      <th>Name</th>
-      <td><code>install.operator.istio.io/version</code></td>
-    </tr>
-    <tr>
-      <th>Feature Status</th>
-      <td>Alpha</td>
-    </tr>
-    <tr>
-      <th>Resource Types</th>
-      <td>[Any]</td>
-    </tr>
-    <tr>
-      <th>Description</th>
-      <td><p>Represents the Istio version associated with the resource</p>
-</td>
-    </tr>
-  </tbody>
-</table>
 <h2 id="IoIstioDryRun">istio.io/dry-run</h2>
 <table class="annotations">
   <tbody>
@@ -425,28 +359,6 @@ User should not manually modify this annotation.</p>
     <tr>
       <th>Description</th>
       <td><p>Specifies the component log level for Envoy.</p>
-</td>
-    </tr>
-  </tbody>
-</table>
-<h2 id="SidecarControlPlaneAuthPolicy">sidecar.istio.io/controlPlaneAuthPolicy</h2>
-<table class="annotations">
-  <tbody>
-    <tr class="deprecated">
-      <th>Name</th>
-      <td><code>sidecar.istio.io/controlPlaneAuthPolicy</code></td>
-    </tr>
-    <tr>
-      <th>Feature Status</th>
-      <td>Deprecated</td>
-    </tr>
-    <tr>
-      <th>Resource Types</th>
-      <td>[Pod]</td>
-    </tr>
-    <tr>
-      <th>Description</th>
-      <td><p>Specifies the auth policy used by the Istio control plane. If NONE, traffic will not be encrypted. If MUTUAL_TLS, traffic between Envoy sidecar will be wrapped into mutual TLS connections.</p>
 </td>
     </tr>
   </tbody>
