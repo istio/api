@@ -7658,9 +7658,9 @@ spec:
                 1 : 0) <= 1'
             - message: CIDR addresses are allowed only for NONE/STATIC resolution
                 types
-              rule: |-
-                !(has(self.addresses) && self.addresses.exists(k, k.contains("/")) && has(self.resolution) &&
-                self.resolution != "STATIC" && self.resolution != "NONE")
+              rule: '!((has(self.addresses) ? self.addresses : []).exists(k, k.contains("/"))
+                && !((has(self.resolution) ? self.resolution : "NONE") in ["STATIC",
+                "NONE"]))'
             - message: NONE mode cannot set endpoints
               rule: '(!has(self.resolution) || self.resolution == "NONE") ? !has(self.endpoints)
                 : true'
@@ -7957,9 +7957,9 @@ spec:
                 1 : 0) <= 1'
             - message: CIDR addresses are allowed only for NONE/STATIC resolution
                 types
-              rule: |-
-                !(has(self.addresses) && self.addresses.exists(k, k.contains("/")) && has(self.resolution) &&
-                self.resolution != "STATIC" && self.resolution != "NONE")
+              rule: '!((has(self.addresses) ? self.addresses : []).exists(k, k.contains("/"))
+                && !((has(self.resolution) ? self.resolution : "NONE") in ["STATIC",
+                "NONE"]))'
             - message: NONE mode cannot set endpoints
               rule: '(!has(self.resolution) || self.resolution == "NONE") ? !has(self.endpoints)
                 : true'
@@ -8256,9 +8256,9 @@ spec:
                 1 : 0) <= 1'
             - message: CIDR addresses are allowed only for NONE/STATIC resolution
                 types
-              rule: |-
-                !(has(self.addresses) && self.addresses.exists(k, k.contains("/")) && has(self.resolution) &&
-                self.resolution != "STATIC" && self.resolution != "NONE")
+              rule: '!((has(self.addresses) ? self.addresses : []).exists(k, k.contains("/"))
+                && !((has(self.resolution) ? self.resolution : "NONE") in ["STATIC",
+                "NONE"]))'
             - message: NONE mode cannot set endpoints
               rule: '(!has(self.resolution) || self.resolution == "NONE") ? !has(self.endpoints)
                 : true'
