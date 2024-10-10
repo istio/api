@@ -1412,7 +1412,8 @@ type ClientTLSSettings struct {
 	// to use in verifying a presented server certificate. `CRL` is a list of certificates
 	// that have been revoked by the CA (Certificate Authority) before their scheduled expiration date.
 	// If specified, the proxy will verify if the presented certificate is part of the revoked list of certificates.
-	// If omitted, the proxy will not verify the certificate against the `crl`.
+	// If omitted, the proxy will not verify the certificate against the `crl`. Note that if `credentialName` is set,
+	// `CRL` cannot be specified using `caCrl`, rather it has to be specified inside the credential.
 	CaCrl string `protobuf:"bytes,9,opt,name=ca_crl,json=caCrl,proto3" json:"ca_crl,omitempty"`
 }
 
