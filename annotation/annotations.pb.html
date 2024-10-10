@@ -255,10 +255,12 @@ User should not manually modify this annotation.</p>
 <p>Accepted values:</p>
 
 <ul>
-<li>PreferClose: endpoints will be categorized by how &ldquo;close&rdquo; they are, consider network, region, zone, and subzone.
-Traffic will only be sent to the set of closest healthy endpoints.
-For example, if I have a client in zone <code>us-west</code> with endpoints: <code>us-west,us-west,us-east</code>, all traffic will go to
-the two <code>us-west</code> backends. If those backends become unhealthy, traffic will send to <code>us-east</code>.</li>
+<li><code>PreferClose</code>: endpoints will be categorized by how &ldquo;close&rdquo; they are, consider network, region, zone, and subzone.
+Traffic will be prioritized to the closest healthy endpoints.
+For example, if I have a Service with <code>PreferClose</code> set, with endpoints in zones <code>us-west,us-west,us-east</code>. When
+sending traffic from a client in zone <code>us-west</code>, all traffic will go to the two <code>us-west</code> backends.
+If one those backends become unhealthy, all traffic will go to the remaining endpoint in <code>us-west</code>.
+If that backend becomes unhealthy, traffic will sent to <code>us-east</code>.</li>
 </ul>
 </td>
     </tr>

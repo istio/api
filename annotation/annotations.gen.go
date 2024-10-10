@@ -377,10 +377,12 @@ This takes the format: "<protocol>" or "<protocol>/<port>".
 At this time, this annotation only impacts routing done by Ztunnel.
 
 Accepted values:
-* PreferClose: endpoints will be categorized by how "close" they are, consider network, region, zone, and subzone.
-  Traffic will only be sent to the set of closest healthy endpoints.
-  For example, if I have a client in zone "us-west" with endpoints: "us-west,us-west,us-east", all traffic will go to
-  the two "us-west" backends. If those backends become unhealthy, traffic will send to "us-east".
+* "PreferClose": endpoints will be categorized by how "close" they are, consider network, region, zone, and subzone.
+  Traffic will be prioritized to the closest healthy endpoints.
+  For example, if I have a Service with "PreferClose" set, with endpoints in zones "us-west,us-west,us-east". When 
+  sending traffic from a client in zone "us-west", all traffic will go to the two "us-west" backends.
+  If one those backends become unhealthy, all traffic will go to the remaining endpoint in "us-west".
+  If that backend becomes unhealthy, traffic will sent to "us-east".
 `,
 		FeatureStatus: Alpha,
 		Hidden:        false,
