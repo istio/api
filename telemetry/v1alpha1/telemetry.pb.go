@@ -1514,8 +1514,8 @@ func (x *Tracing_RequestHeader) GetDefaultValue() string {
 // TagOverride specifies an operation to perform on a metric dimension (also
 // known as a `label`). Tags may be added, removed, or have their default
 // values overridden.
-// +kubebuilder:validation:XValidation:message="value must be set when operation is UPSERT",rule="((has(self.operation) ? self.operation : ”) == 'UPSERT') ? self.value != ” : true"
-// +kubebuilder:validation:XValidation:message="value must not be set when operation is REMOVE",rule="((has(self.operation) ? self.operation : ”) == 'REMOVE') ? !has(self.value) : true"
+// +kubebuilder:validation:XValidation:message="value must be set when operation is UPSERT",rule="default(self.operation, ”) == 'UPSERT' ? self.value != ” : true"
+// +kubebuilder:validation:XValidation:message="value must not be set when operation is REMOVE",rule="default(self.operation, ”) == 'REMOVE' ? !has(self.value) : true"
 type MetricsOverrides_TagOverride struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

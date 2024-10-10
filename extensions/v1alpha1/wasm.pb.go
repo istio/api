@@ -849,7 +849,7 @@ func (x *VmConfig) GetEnv() []*EnvVar {
 	return nil
 }
 
-// +kubebuilder:validation:XValidation:message="value may only be set when valueFrom is INLINE",rule="(has(self.valueFrom) ? self.valueFrom : ”) != 'HOST' || !has(self.value)"
+// +kubebuilder:validation:XValidation:message="value may only be set when valueFrom is INLINE",rule="default(self.valueFrom, ”) != 'HOST' || !has(self.value)"
 type EnvVar struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

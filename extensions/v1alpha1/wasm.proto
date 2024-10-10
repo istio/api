@@ -462,7 +462,7 @@ message VmConfig {
   repeated EnvVar env = 1;
 }
 
-// +kubebuilder:validation:XValidation:message="value may only be set when valueFrom is INLINE",rule="(has(self.valueFrom) ? self.valueFrom : '') != 'HOST' || !has(self.value)"
+// +kubebuilder:validation:XValidation:message="value may only be set when valueFrom is INLINE",rule="default(self.valueFrom, '') != 'HOST' || !has(self.value)"
 message EnvVar {
   // Name of the environment variable.
   // Must be a C_IDENTIFIER.
