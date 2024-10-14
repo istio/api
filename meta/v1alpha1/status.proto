@@ -40,7 +40,7 @@ message IstioStatus {
   repeated analysis.v1alpha1.AnalysisMessageBase validation_messages = 2;
 
   // $hide_from_docs
-  // Deprecated. IstioCondition observed_generation will show the resource generation the condition was generated for.
+  // Deprecated. IstioCondition observed_generation will show the resource generation for which the condition was generated.
   // Resource Generation to which the Reconciled Condition refers.
   // When this value is not equal to the object's metadata generation, reconciled condition  calculation for the current
   // generation is still in progress.  See https://istio.io/latest/docs/reference/config/config-status/ for more info.
@@ -73,9 +73,7 @@ message IstioCondition {
   // +optional
   string message = 6;
 
-  // Resource Generation to which the Reconciled Condition refers.
-  // When this value is not equal to the object's metadata generation, reconciled condition calculation for the current
-  // generation is still in progress.  See https://istio.io/latest/docs/reference/config/config-status/ for more info.
+  // Resource Generation to which the Condition refers.
   // +optional
   // +protoc-gen-crd:validation:XIntOrString
   int64 observed_generation = 7;

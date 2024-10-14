@@ -57,6 +57,7 @@ type IstioStatus struct {
 	// +patchStrategy=merge
 	ValidationMessages []*v1alpha1.AnalysisMessageBase `protobuf:"bytes,2,rep,name=validation_messages,json=validationMessages,proto3" json:"validation_messages,omitempty"`
 	// $hide_from_docs
+	// Deprecated. IstioCondition observed_generation will show the resource generation for which the condition was generated.
 	// Resource Generation to which the Reconciled Condition refers.
 	// When this value is not equal to the object's metadata generation, reconciled condition  calculation for the current
 	// generation is still in progress.  See https://istio.io/latest/docs/reference/config/config-status/ for more info.
@@ -138,9 +139,7 @@ type IstioCondition struct {
 	// Human-readable message indicating details about last transition.
 	// +optional
 	Message string `protobuf:"bytes,6,opt,name=message,proto3" json:"message,omitempty"`
-	// Resource Generation to which the Reconciled Condition refers.
-	// When this value is not equal to the object's metadata generation, reconciled condition  calculation for the current
-	// generation is still in progress.  See https://istio.io/latest/docs/reference/config/config-status/ for more info.
+	// Resource Generation to which the Condition refers.
 	// +optional
 	// +protoc-gen-crd:validation:XIntOrString
 	ObservedGeneration int64 `protobuf:"varint,7,opt,name=observed_generation,json=observedGeneration,proto3" json:"observed_generation,omitempty"`
