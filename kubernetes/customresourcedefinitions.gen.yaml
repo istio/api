@@ -16494,6 +16494,11 @@ spec:
                       description: Controls span reporting.
                       nullable: true
                       type: boolean
+                    enableIstioTags:
+                      description: Determines whether or not trace spans generated
+                        by Envoy will include Istio specific tags.
+                      nullable: true
+                      type: boolean
                     match:
                       description: Allows tailoring of behavior to specific conditions.
                       properties:
@@ -16940,6 +16945,11 @@ spec:
                       type: object
                     disableSpanReporting:
                       description: Controls span reporting.
+                      nullable: true
+                      type: boolean
+                    enableIstioTags:
+                      description: Determines whether or not trace spans generated
+                        by Envoy will include Istio specific tags.
                       nullable: true
                       type: boolean
                     match:
