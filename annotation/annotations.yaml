@@ -570,3 +570,13 @@ annotations:
     resources:
       - Service
       - ServiceEntry
+
+  - name: ambient.istio.io/bypass-inbound-capture
+    featureStatus: Alpha
+    description: |
+      When specified on a `Pod` enrolled in ambient mesh, only outbound traffic will be captured.
+      This is intended to be used when enrolling a workload that only receives traffic from out-of-the-mesh clients, such as third party ingress controllers.
+    deprecated: false
+    hidden: true
+    resources:
+      - Pod
