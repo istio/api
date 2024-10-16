@@ -473,6 +473,7 @@ message ServerTLSSettings {
 
   // A list of alternate names to verify the subject identity in the
   // certificate presented by the client.
+  // Requires TLS mode to be set to `MUTUAL`.
   repeated string subject_alt_names = 6;
 
   // An optional list of base64-encoded SHA-256 hashes of the SPKIs of
