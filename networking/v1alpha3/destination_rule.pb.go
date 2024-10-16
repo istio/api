@@ -188,7 +188,7 @@ func (TrafficPolicy_ProxyProtocol_VERSION) EnumDescriptor() ([]byte, []int) {
 	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{1, 2, 0}
 }
 
-// +kubebuilder:validation:XValidation:message="only one of warmupDurationSecs or warmup can be set",rule="(has(self.warmupDurationSecs)?1:0)+(has(self.warmup)?1:0)<=1"
+// +kubebuilder:validation:XValidation:message="only one of warmupDurationSecs or warmup can be set",rule="oneof(self.warmupDurationSecs, self.warmup)"
 // Standard load balancing algorithms that require no tuning.
 type LoadBalancerSettings_SimpleLB int32
 
