@@ -35,6 +35,7 @@ const (
     Namespace
     Pod
     Service
+    ServiceEntry
     WorkloadEntry
 )
 
@@ -57,6 +58,8 @@ func (r ResourceTypes) String() string {
 	case 8:
 		return "Service"
 	case 9:
+		return "ServiceEntry"
+	case 10:
 		return "WorkloadEntry"
 	}
 	return "Unknown"
@@ -318,6 +321,29 @@ This takes the format: "<protocol>" or "<protocol>/<port>".
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Gateway,
+		},
+	}
+
+	NetworkingTrafficDistribution = Instance {
+		Name:          "networking.istio.io/traffic-distribution",
+		Description:   `Controls how traffic is distributed across the set of available endpoints.
+
+At this time, this annotation only impacts routing done by Ztunnel.
+
+Accepted values:
+* "PreferClose": endpoints will be categorized by how "close" they are, consider network, region, zone, and subzone.
+  Traffic will be prioritized to the closest healthy endpoints.
+  For example, if I have a Service with "PreferClose" set, with endpoints in zones "us-west,us-west,us-east". When 
+  sending traffic from a client in zone "us-west", all traffic will go to the two "us-west" backends.
+  If one those backends become unhealthy, all traffic will go to the remaining endpoint in "us-west".
+  If that backend becomes unhealthy, traffic will sent to "us-east".
+`,
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Service,
+			ServiceEntry,
 		},
 	}
 
@@ -868,6 +894,7 @@ func AllResourceAnnotations() []*Instance {
 		&IoKubernetesIngressClass,
 		&NetworkingExportTo,
 		&NetworkingServiceType,
+		&NetworkingTrafficDistribution,
 		&PrometheusMergeMetrics,
 		&ProxyConfig,
 		&ProxyOverrides,
@@ -923,6 +950,7 @@ func AllResourceTypes() []string {
 		"Namespace",
 		"Pod",
 		"Service",
+		"ServiceEntry",
 		"WorkloadEntry",
 	}
 }
