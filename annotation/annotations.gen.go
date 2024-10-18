@@ -112,6 +112,19 @@ var (
 		},
 	}
 
+	AmbientBypassInboundCapture = Instance {
+		Name:          "ambient.istio.io/bypass-inbound-capture",
+		Description:   `When specified on a "Pod" enrolled in ambient mesh, only outbound traffic will be captured.
+This is intended to be used when enrolling a workload that only receives traffic from out-of-the-mesh clients, such as third party ingress controllers.
+`,
+		FeatureStatus: Alpha,
+		Hidden:        true,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	AmbientRedirection = Instance {
 		Name:          "ambient.istio.io/redirection",
 		Description:   `Automatically configured by Istio to indicate a Pod was successfully enrolled in ambient mode.
@@ -878,6 +891,7 @@ func AllResourceAnnotations() []*Instance {
 	return []*Instance {
 		&AlphaCanonicalServiceAccounts,
 		&AlphaKubernetesServiceAccounts,
+		&AmbientBypassInboundCapture,
 		&AmbientRedirection,
 		&AmbientWaypointInboundBinding,
 		&GalleyAnalyzeSuppress,
