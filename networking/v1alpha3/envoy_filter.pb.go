@@ -822,7 +822,7 @@ func (EnvoyFilter_Patch_FilterClass) EnumDescriptor() ([]byte, []int) {
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-// +kubebuilder:validation:XValidation:message="only one of targetRefs or workloadSelector can be set",rule="(has(self.workloadSelector)?1:0)+(has(self.targetRefs)?1:0)<=1"
+// +kubebuilder:validation:XValidation:message="only one of targetRefs or workloadSelector can be set",rule="oneof(self.workloadSelector, self.targetRefs)"
 type EnvoyFilter struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

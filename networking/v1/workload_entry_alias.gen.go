@@ -29,5 +29,5 @@ import "istio.io/api/networking/v1alpha3"
 // +k8s:deepcopy-gen=true
 // -->
 // +kubebuilder:validation:XValidation:message="Address is required",rule="has(self.address) || has(self.network)"
-// +kubebuilder:validation:XValidation:message="UDS may not include ports",rule="(has(self.address) && self.address.startsWith('unix://')) ? !has(self.ports) : true"
+// +kubebuilder:validation:XValidation:message="UDS may not include ports",rule="(default(self.address, "").startsWith('unix://')) ? !has(self.ports) : true"
 type WorkloadEntry = v1alpha3.WorkloadEntry
