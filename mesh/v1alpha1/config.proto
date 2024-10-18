@@ -600,6 +600,11 @@ message MeshConfig {
       // Default is false and the request will be rejected with "Forbidden" response.
       bool fail_open = 4;
 
+      // If true, clears route cache in order to allow the external authorization service to correctly affect routing decisions.
+      // If true, recalculate routes with the new ExtAuthZ added/removed headers.
+      // Default is false
+      bool clear_route_cache = 14;
+
       // Sets the HTTP status that is returned to the client when there is a network error to the authorization service.
       // The default status is "403" (HTTP Forbidden).
       string status_on_error = 5;
@@ -673,7 +678,7 @@ message MeshConfig {
       repeated string headers_to_downstream_on_allow = 13;
 
       // $hide_from_docs
-      // Next available field number: 14
+      // Next available field number: 15
     }
 
     message EnvoyExternalAuthorizationGrpcProvider {
@@ -698,6 +703,11 @@ message MeshConfig {
       // Default is false. For HTTP request, it will be rejected with 403 (HTTP Forbidden). For TCP connection, it will be closed immediately.
       bool fail_open = 3;
 
+      // If true, clears route cache in order to allow the external authorization service to correctly affect routing decisions.
+      // If true, recalculate routes with the new ExtAuthZ added/removed headers.
+      // Default is false
+      bool clear_route_cache = 7;
+
       // Sets the HTTP status that is returned to the client when there is a network error to the authorization service.
       // The default status is "403" (HTTP Forbidden).
       string status_on_error = 4;
@@ -706,7 +716,7 @@ message MeshConfig {
       EnvoyExternalAuthorizationRequestBody include_request_body_in_check = 6;
 
       // $hide_from_docs
-      // Next available field number: 7
+      // Next available field number: 8
     }
 
     // Defines configuration for a Zipkin tracer.
