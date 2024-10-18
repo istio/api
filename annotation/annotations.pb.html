@@ -165,6 +165,41 @@ User should not manually modify this annotation.</p>
     </tr>
   </tbody>
 </table>
+<h2 id="NetworkingTrafficDistribution">networking.istio.io/traffic-distribution</h2>
+<table class="annotations">
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <td><code>networking.istio.io/traffic-distribution</code></td>
+    </tr>
+    <tr>
+      <th>Feature Status</th>
+      <td>Alpha</td>
+    </tr>
+    <tr>
+      <th>Resource Types</th>
+      <td>[Service ServiceEntry]</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td><p>Controls how traffic is distributed across the set of available endpoints.</p>
+
+<p>At this time, this annotation only impacts routing done by Ztunnel.</p>
+
+<p>Accepted values:</p>
+
+<ul>
+<li><code>PreferClose</code>: endpoints will be categorized by how &ldquo;close&rdquo; they are, consider network, region, zone, and subzone.
+Traffic will be prioritized to the closest healthy endpoints.
+For example, if I have a Service with <code>PreferClose</code> set, with endpoints in zones <code>us-west,us-west,us-east</code>. When
+sending traffic from a client in zone <code>us-west</code>, all traffic will go to the two <code>us-west</code> backends.
+If one those backends become unhealthy, all traffic will go to the remaining endpoint in <code>us-west</code>.
+If that backend becomes unhealthy, traffic will sent to <code>us-east</code>.</li>
+</ul>
+</td>
+    </tr>
+  </tbody>
+</table>
 <h2 id="PrometheusMergeMetrics">prometheus.istio.io/merge-metrics</h2>
 <table class="annotations">
   <tbody>
