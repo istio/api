@@ -14717,6 +14717,11 @@ spec:
                                 items:
                                   type: string
                                 type: array
+                              notServiceAccounts:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
                               principals:
                                 description: Optional.
                                 items:
@@ -14728,6 +14733,11 @@ spec:
                                   type: string
                                 type: array
                               requestPrincipals:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              serviceAccounts:
                                 description: Optional.
                                 items:
                                   type: string
@@ -15077,6 +15087,11 @@ spec:
                                 items:
                                   type: string
                                 type: array
+                              notServiceAccounts:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
                               principals:
                                 description: Optional.
                                 items:
@@ -15088,6 +15103,11 @@ spec:
                                   type: string
                                 type: array
                               requestPrincipals:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              serviceAccounts:
                                 description: Optional.
                                 items:
                                   type: string

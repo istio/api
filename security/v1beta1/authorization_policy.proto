@@ -428,6 +428,8 @@ message Source {
   // `"<TRUST_DOMAIN>/ns/<NAMESPACE>/sa/<SERVICE_ACCOUNT>"`, for example, `"cluster.local/ns/default/sa/productpage"`.
   // This field requires mTLS enabled and is the same as the `source.principal` attribute.
   //
+  // Usage of `serviceAccounts` is typically simpler and offers the same functionality.
+  //
   // If not set, any principal is allowed.
   repeated string principals = 1;
 
@@ -452,6 +454,17 @@ message Source {
 
   // Optional. A list of negative match of namespaces.
   repeated string not_namespaces = 7;
+
+  // Optional. A list of service accounts derived from the peer certificate.
+  // This field requires mTLS enabled and is the same as the `source.serviceaccount` attribute.
+  //
+  // This takes the format `<namespace>/<serviceaccount>`.
+  //
+  // If not set, any service account is allowed.
+  repeated string service_accounts = 11;
+
+  // Optional. A list of negative match of service accounts.
+  repeated string not_service_accounts = 12;
 
   // Optional. A list of IP blocks, populated from the source address of the IP packet. Single IP (e.g. `203.0.113.4`) and
   // CIDR (e.g. `203.0.113.0/24`) are supported. This is the same as the `source.ip` attribute.
