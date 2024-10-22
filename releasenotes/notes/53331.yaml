@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - 53331
+releaseNotes:
+- |
+  **Added** Added ObservedGeneration to IstioCondition type.
+  **Deprecated** Deprecated ObservedGeneration from IstioStatus type.
