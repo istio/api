@@ -1477,6 +1477,19 @@ Default is false and the request will be rejected with &ldquo;Forbidden&rdquo; r
 No
 </td>
 </tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationHttpProvider-clear_route_cache">
+<td><code>clearRouteCache</code></td>
+<td><code>bool</code></td>
+<td>
+<p>If true, clears route cache in order to allow the external authorization service to correctly affect routing decisions.
+If true, recalculate routes with the new ExtAuthZ added/removed headers.
+Default is false</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationHttpProvider-status_on_error">
 <td><code>statusOnError</code></td>
 <td><code>string</code></td>
@@ -1680,6 +1693,19 @@ No
 <p>If true, the HTTP request or TCP connection will be allowed even if the communication with the authorization service has failed,
 or if the authorization service has returned a HTTP 5xx error.
 Default is false. For HTTP request, it will be rejected with 403 (HTTP Forbidden). For TCP connection, it will be closed immediately.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-EnvoyExternalAuthorizationGrpcProvider-clear_route_cache">
+<td><code>clearRouteCache</code></td>
+<td><code>bool</code></td>
+<td>
+<p>If true, clears route cache in order to allow the external authorization service to correctly affect routing decisions.
+If true, recalculate routes with the new ExtAuthZ added/removed headers.
+Default is false</p>
 
 </td>
 <td>
