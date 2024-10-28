@@ -308,6 +308,7 @@ message AuthorizationPolicy {
   //
   // If not set, the match will never occur. This is equivalent to setting a default of deny for the target workloads if
   // the action is ALLOW.
+  // +kubebuilder:validation:MaxItems=512
   repeated Rule rules = 2;
 
   // Action specifies the operation to take.
@@ -393,6 +394,7 @@ message Rule {
   // Optional. `from` specifies the source of a request.
   //
   // If not set, any source is allowed.
+  // +kubebuilder:validation:MaxItems=512
   repeated From from = 1;
 
   // To includes a list of operations.
@@ -423,6 +425,7 @@ message Rule {
 // namespaces: ["prod", "test"]
 // notIpBlocks: ["203.0.113.4"]
 // ```
+// +kubebuilder:validation:XValidation:message="Cannot set serviceAccounts with namespaces or principals",rule="(has(self.serviceAccounts) || has(self.notServiceAccounts)) ? (!has(self.principals) && !has(self.notPrincipals) && !has(self.namespaces) && !has(self.notNamespaces)) : true"
 message Source {
   // Optional. A list of peer identities derived from the peer certificate. The peer identity is in the format of
   // `"<TRUST_DOMAIN>/ns/<NAMESPACE>/sa/<SERVICE_ACCOUNT>"`, for example, `"cluster.local/ns/default/sa/productpage"`.
@@ -461,9 +464,19 @@ message Source {
   // This takes the format `<namespace>/<serviceaccount>`.
   //
   // If not set, any service account is allowed.
+  //
+  // No form of wildcard (`*`) is allowed.
+  // +protoc-gen-crd:list-value-validation:MaxLength=320
+  // +kubebuilder:validation:MaxItems=16
   repeated string service_accounts = 11;
 
   // Optional. A list of negative match of service accounts.
+  //
+  // This takes the format `<namespace>/<serviceaccount>`.
+  //
+  // No form of wildcard (`*`) is allowed.
+  // +protoc-gen-crd:list-value-validation:MaxLength=320
+  // +kubebuilder:validation:MaxItems=16
   repeated string not_service_accounts = 12;
 
   // Optional. A list of IP blocks, populated from the source address of the IP packet. Single IP (e.g. `203.0.113.4`) and
