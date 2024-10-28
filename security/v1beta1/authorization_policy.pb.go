@@ -416,6 +416,7 @@ type AuthorizationPolicy struct {
 	//
 	// If not set, the match will never occur. This is equivalent to setting a default of deny for the target workloads if
 	// the action is ALLOW.
+	// +kubebuilder:validation:MaxItems=512
 	Rules []*Rule `protobuf:"bytes,2,rep,name=rules,proto3" json:"rules,omitempty"`
 	// Optional. The action to take if the request is matched with the rules. Default is ALLOW if not specified.
 	Action AuthorizationPolicy_Action `protobuf:"varint,3,opt,name=action,proto3,enum=istio.security.v1beta1.AuthorizationPolicy_Action" json:"action,omitempty"`
@@ -533,6 +534,7 @@ type Rule struct {
 	// Optional. `from` specifies the source of a request.
 	//
 	// If not set, any source is allowed.
+	// +kubebuilder:validation:MaxItems=512
 	From []*Rule_From `protobuf:"bytes,1,rep,name=from,proto3" json:"from,omitempty"`
 	// Optional. `to` specifies the operation of a request.
 	//
@@ -606,6 +608,7 @@ func (x *Rule) GetWhen() []*Condition {
 // namespaces: ["prod", "test"]
 // notIpBlocks: ["203.0.113.4"]
 // ```
+// +kubebuilder:validation:XValidation:message="Cannot set serviceAccounts with namespaces or principals",rule="(has(self.serviceAccounts) || has(self.notServiceAccounts)) ? (!has(self.principals) && !has(self.notPrincipals) && !has(self.namespaces) && !has(self.notNamespaces)) : true"
 type Source struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -642,8 +645,18 @@ type Source struct {
 	// This takes the format `<namespace>/<serviceaccount>`.
 	//
 	// If not set, any service account is allowed.
+	//
+	// No form of wildcard (`*`) is allowed.
+	// +protoc-gen-crd:list-value-validation:MaxLength=320
+	// +kubebuilder:validation:MaxItems=16
 	ServiceAccounts []string `protobuf:"bytes,11,rep,name=service_accounts,json=serviceAccounts,proto3" json:"service_accounts,omitempty"`
 	// Optional. A list of negative match of service accounts.
+	//
+	// This takes the format `<namespace>/<serviceaccount>`.
+	//
+	// No form of wildcard (`*`) is allowed.
+	// +protoc-gen-crd:list-value-validation:MaxLength=320
+	// +kubebuilder:validation:MaxItems=16
 	NotServiceAccounts []string `protobuf:"bytes,12,rep,name=not_service_accounts,json=notServiceAccounts,proto3" json:"not_service_accounts,omitempty"`
 	// Optional. A list of IP blocks, populated from the source address of the IP packet. Single IP (e.g. `203.0.113.4`) and
 	// CIDR (e.g. `203.0.113.0/24`) are supported. This is the same as the `source.ip` attribute.
