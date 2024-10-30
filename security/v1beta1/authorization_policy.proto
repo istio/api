@@ -466,6 +466,8 @@ message Source {
   // If not set, any service account is allowed.
   //
   // No form of wildcard (`*`) is allowed.
+  // Cannot be set with `principals` or `namespaces`.
+  //
   // +protoc-gen-crd:list-value-validation:MaxLength=320
   // +kubebuilder:validation:MaxItems=16
   repeated string service_accounts = 11;
