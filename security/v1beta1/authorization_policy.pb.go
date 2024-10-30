@@ -647,6 +647,8 @@ type Source struct {
 	// If not set, any service account is allowed.
 	//
 	// No form of wildcard (`*`) is allowed.
+	// Cannot be set with `principals` or `namespaces`.
+	//
 	// +protoc-gen-crd:list-value-validation:MaxLength=320
 	// +kubebuilder:validation:MaxItems=16
 	ServiceAccounts []string `protobuf:"bytes,11,rep,name=service_accounts,json=serviceAccounts,proto3" json:"service_accounts,omitempty"`
