@@ -1,0 +1,8 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - https://github.com/istio/istio/issues/53680
+releaseNotes:
+  - |
+    **Added** StatefulFormatter support in the ProxyConfig CRD, enabling configuration of stateful header formatters that retain context throughout request processing.

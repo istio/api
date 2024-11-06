@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1beta1.ProxyConfig
 aliases: [/docs/reference/config/networking/v1beta1/proxy-config]
-number_of_entries: 2
+number_of_entries: 3
 ---
 <p><code>ProxyConfig</code> exposes proxy level configuration options. <code>ProxyConfig</code> can be configured on a per-workload basis,
 a per-namespace basis, or mesh-wide. <code>ProxyConfig</code> is not a required resource; there are default values in place, which are documented
@@ -50,6 +50,16 @@ spec:
   concurrency: 0
   image:
     imageType: debug
+</code></pre>
+<p>To preserve the header case for HTTP 1.x requests, set the <code>statefulFormatter.preserveCase</code> field on the <code>ProxyConfig</code> resource:</p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1beta1
+kind: ProxyConfig
+metadata:
+  name: my-ns-proxyconfig
+  namespace: user-namespace
+spec:
+  statefulFormatter:
+    preserveCase: true
 </code></pre>
 <p>If a <code>ProxyConfig</code> CR is defined that matches a workload it will merge with its <code>proxy.istio.io/config</code> annotation if present,
 with the CR taking precedence over the annotation for overlapping fields. Similarly, if a mesh wide <code>ProxyConfig</code> CR is defined and
@@ -117,6 +127,17 @@ No
 No
 </td>
 </tr>
+<tr id="ProxyConfig-stateful_formatter">
+<td><code>statefulFormatter</code></td>
+<td><code><a href="#StatefulFormatter">StatefulFormatter</a></code></td>
+<td>
+<p>Defines options for stateful header formatters that maintain context or state across the processing of a request.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -145,6 +166,45 @@ This information was previously part of the Values API.</p>
 Istio publishes default, debug, and distroless images.
 Other values are allowed if those image types (example: centos) are published to the specified hub.
 supported values: default, debug, distroless.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="StatefulFormatter">StatefulFormatter</h2>
+<section>
+<p>StatefulFormatter defines options for stateful header formatters, which allow
+headers to retain specific formatting across requests within Envoy.
+Stateful formatters maintain formatting state from decoding to encoding,
+providing consistency in header transformations for HTTP/1.x traffic.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="StatefulFormatter-preserve_case">
+<td><code>preserveCase</code></td>
+<td><code>bool</code></td>
+<td>
+<p>When true, the formatter will preserve the original case of HTTP/1.x headers
+as they pass through the proxy, rather than normalizing them to lowercase.
+This field is particularly useful for applications that require case-sensitive
+headers for interoperability with downstream systems or APIs that expect specific
+casing.
+The preserve_case option only applies to HTTP/1.x traffic, as HTTP/2 requires all headers
+to be lowercase per the protocol specification. Envoy will ignore this field for HTTP/2
+requests and automatically normalize headers to lowercase, ensuring compliance with HTTP/2
+standards.</p>
 
 </td>
 <td>
