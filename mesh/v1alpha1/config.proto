@@ -336,6 +336,13 @@ message MeshConfig {
   // Default refresh rate is `60s`.
   google.protobuf.Duration dns_refresh_rate = 36;
 
+  // Sets the `max_udp_queries` option in Envoy for the Cares DNS resolver.
+  // Defaults to 0, an unlimited number of connections.
+  // See `extensions.network.dns_resolver.cares.v3.CaresDnsResolverConfig` in
+  // https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/network/dns_resolver/cares/v3/cares_dns_resolver.proto
+  // and `ARES_OPT_UDP_MAX_QUERIES` in https://c-ares.org/docs/ares_init.html
+  google.protobuf.UInt32Value cares_dns_resolver_udp_max_queries = 67;
+
   // Default Policy for upgrading http1.1 connections to http2.
   enum H2UpgradePolicy {
     // Do not upgrade connections to http2.
@@ -1446,7 +1453,7 @@ message MeshConfig {
   TLSConfig tls_defaults = 64;
 
   // $hide_from_docs
-  // Next available field number: 67
+  // Next available field number: 68
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
