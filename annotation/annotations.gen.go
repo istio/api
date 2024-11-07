@@ -493,18 +493,6 @@ Accepted values:
 		},
 	}
 
-	SidecarEnableCoreDump = Instance {
-		Name:          "sidecar.istio.io/enableCoreDump",
-		Description:   "Specifies whether or not an Envoy sidecar should enable "+
-                        "core dump.",
-		FeatureStatus: Alpha,
-		Hidden:        false,
-		Deprecated:    false,
-		Resources: []ResourceTypes{
-			Pod,
-		},
-	}
-
 	SidecarExtraStatTags = Instance {
 		Name:          "sidecar.istio.io/extraStatTags",
 		Description:   "An additional list of tags to extract from the in-proxy "+
@@ -922,7 +910,6 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarBootstrapOverride,
 		&SidecarComponentLogLevel,
 		&SidecarDiscoveryAddress,
-		&SidecarEnableCoreDump,
 		&SidecarExtraStatTags,
 		&SidecarInject,
 		&SidecarInterceptionMode,
