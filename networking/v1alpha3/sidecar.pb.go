@@ -38,7 +38,7 @@
 // out unneeded configuration, to improve scalability of the mesh.
 // A common misunderstanding is that restricting the configuration amounts to *blocking* the traffic.
 // If requests are sent to destinations not included in the scoping, the traffic will be treated as
-// [unmatched traffic](docs/ops/configuration/traffic-management/traffic-routing/#unmatched-traffic), which is often still allowed.
+// [unmatched traffic](/docs/ops/configuration/traffic-management/traffic-routing/#unmatched-traffic), which is often still allowed.
 // The sidecar is not able to enforce an outbound traffic restriction (see [Egress Gateways](/docs/tasks/traffic-management/egress/egress-gateway/) for how to achieve this).
 //
 // Services and configuration in a mesh are organized into one or more
