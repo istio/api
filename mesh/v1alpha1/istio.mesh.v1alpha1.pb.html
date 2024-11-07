@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 78
+number_of_entries: 79
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -425,6 +425,21 @@ No
 <td>
 <p>Configures DNS refresh rate for Envoy clusters of type <code>STRICT_DNS</code>
 Default refresh rate is <code>60s</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-cares_dns_resolver_udp_max_queries">
+<td><code><a href="#MeshConfig-cares_dns_resolver_udp_max_queries">caresDnsResolverUdpMaxQueries</a></code></td>
+<td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
+<td>
+<p>Sets the <code>max_udp_queries</code> option in Envoy for the Cares DNS resolver.
+Defaults to 0, an unlimited number of connections.
+See <code>extensions.network.dns_resolver.cares.v3.CaresDnsResolverConfig</code> in
+<a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/network/dns_resolver/cares/v3/cares_dns_resolver.proto">https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/network/dns_resolver/cares/v3/cares_dns_resolver.proto</a>
+and <code>ARES_OPT_UDP_MAX_QUERIES</code> in <a href="https://c-ares.org/docs/ares_init.html">https://c-ares.org/docs/ares_init.html</a></p>
 
 </td>
 <td>
@@ -3044,6 +3059,35 @@ The resource detector reads from the Dynatrace enrichment files
 and adds host/process related attributes to the OpenTelemetry resource.</p>
 <p>See: <a href="https://docs.dynatrace.com/docs/shortlink/enrichment-files">Enrich ingested data with Dynatrace-specific dimensions</a></p>
 
+</section>
+<h2 id="google-protobuf-UInt32Value">google.protobuf.UInt32Value</h2>
+<section>
+<p>Wrapper message for <code>uint32</code>.</p>
+<p>The JSON representation for <code>UInt32Value</code> is JSON number.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="google-protobuf-UInt32Value-value">
+<td><code><a href="#google-protobuf-UInt32Value-value">value</a></code></td>
+<td><code>uint32</code></td>
+<td>
+<p>The uint32 value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
 </section>
 <h2 id="Tracing">Tracing</h2>
 <section>
