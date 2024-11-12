@@ -172,7 +172,7 @@ The waypoint is assumed to be in the same namespace; for cross-namespace, see "i
 When set or a "Pod" or a "Service", this binds that specific resource to the waypoint.
 When set on a "Namespace", this applies to all "Pod"/"Service" in the namespace.
 
-Note: the waypoint must allow the type, see "stio.io/waypoint-for".
+Note: the waypoint must allow the type, see "istio.io/waypoint-for".
 `,
 		FeatureStatus: Beta,
 		Hidden:        false,
