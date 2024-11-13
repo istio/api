@@ -7341,6 +7341,11 @@ spec:
                     description: The image type of the image.
                     type: string
                 type: object
+              preserveCase:
+                description: When true, the original case of HTTP/1.x headers will
+                  be preserved as they pass through the proxy, rather than normalizing
+                  them to lowercase.
+                type: boolean
               selector:
                 description: Optional.
                 properties:
@@ -7360,16 +7365,6 @@ spec:
                       rule: self.all(key, !key.contains('*'))
                     - message: key must not be empty
                       rule: self.all(key, key.size() != 0)
-                type: object
-              statefulFormatter:
-                description: Defines options for stateful header formatters that maintain
-                  context or state across the processing of a request.
-                properties:
-                  preserveCase:
-                    description: When true, the formatter will preserve the original
-                      case of HTTP/1.x headers as they pass through the proxy, rather
-                      than normalizing them to lowercase.
-                    type: boolean
                 type: object
             type: object
           status:

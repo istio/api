@@ -28,17 +28,6 @@ func (this *ProxyImage) UnmarshalJSON(b []byte) error {
 	return ProxyConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for StatefulFormatter
-func (this *StatefulFormatter) MarshalJSON() ([]byte, error) {
-	str, err := ProxyConfigMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for StatefulFormatter
-func (this *StatefulFormatter) UnmarshalJSON(b []byte) error {
-	return ProxyConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
 var (
 	ProxyConfigMarshaler   = &jsonpb.Marshaler{}
 	ProxyConfigUnmarshaler = &jsonpb.Unmarshaler{AllowUnknownFields: true}
