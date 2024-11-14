@@ -112,6 +112,19 @@ var (
 		},
 	}
 
+	AmbientBypassDnsCapture = Instance {
+		Name:          "ambient.istio.io/bypass-dns-capture",
+		Description:   `When specified on a "Pod" enrolled in ambient mesh, DNS traffic (TCP and UDP on port 53) will not be captured or proxied.
+This will break some Istio features, such as ServiceEntries and egress waypoints, but may be desirable for workloads that interact poorly with DNS proxies.
+`,
+		FeatureStatus: Alpha,
+		Hidden:        true,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	AmbientBypassInboundCapture = Instance {
 		Name:          "ambient.istio.io/bypass-inbound-capture",
 		Description:   `When specified on a "Pod" enrolled in ambient mesh, only outbound traffic will be captured.
@@ -897,6 +910,7 @@ func AllResourceAnnotations() []*Instance {
 	return []*Instance {
 		&AlphaCanonicalServiceAccounts,
 		&AlphaKubernetesServiceAccounts,
+		&AmbientBypassDnsCapture,
 		&AmbientBypassInboundCapture,
 		&AmbientRedirection,
 		&AmbientWaypointInboundBinding,

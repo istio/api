@@ -582,3 +582,13 @@ annotations:
     hidden: false
     resources:
       - Pod
+
+  - name: ambient.istio.io/bypass-dns-capture
+    featureStatus: Alpha
+    description: |
+      When specified on a `Pod` enrolled in ambient mesh, DNS traffic (TCP and UDP on port 53) will not be captured or proxied.
+      This will break some Istio features, such as ServiceEntries and egress waypoints, but may be desirable for workloads that interact poorly with DNS proxies.
+    deprecated: false
+    hidden: true
+    resources:
+      - Pod
