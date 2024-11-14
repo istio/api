@@ -138,6 +138,21 @@ User should not manually modify this annotation.`,
 		},
 	}
 
+	AmbientRerouteVirtualInterfaces = Instance {
+		Name:          "ambient.istio.io/reroute-virtual-interfaces",
+		Description:   "A comma separated list of virtual interfaces whose "+
+                        "inbound traffic will be unconditionally treated as "+
+                        "outbound. This allows workloads using virtualized "+
+                        "networking (kubeVirt, VMs, docker-in-docker, etc) to "+
+                        "function correctly with ambient mesh traffic capture.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	AmbientWaypointInboundBinding = Instance {
 		Name:          "ambient.istio.io/waypoint-inbound-binding",
 		Description:   `When set on a waypoint (either by its specific "Gateway", or for the entire collection on the "GatewayClass"),
@@ -883,6 +898,7 @@ func AllResourceAnnotations() []*Instance {
 		&AlphaKubernetesServiceAccounts,
 		&AmbientBypassInboundCapture,
 		&AmbientRedirection,
+		&AmbientRerouteVirtualInterfaces,
 		&AmbientWaypointInboundBinding,
 		&GalleyAnalyzeSuppress,
 		&GatewayControllerVersion,
