@@ -183,7 +183,7 @@ labels:
       - Service
 
   - name: istio.io/dataplane-mode
-    featureStatus: Beta
+    featureStatus: Stable
     description: |
       When set on a resource, indicates the [data plane mode](/docs/overview/dataplane-modes/) to use.
       Possible values: `ambient`, `none`.
@@ -195,7 +195,7 @@ labels:
       - Namespace
 
   - name: istio.io/use-waypoint
-    featureStatus: Beta
+    featureStatus: Stable
     description: |
       When set on a resource, indicates the resource has an associated waypoint with the given name.
       The waypoint is assumed to be in the same namespace; for cross-namespace, see `istio.io/use-waypoint-namespace`.
@@ -228,7 +228,7 @@ labels:
       - Namespace
 
   - name: istio.io/waypoint-for
-    featureStatus: Beta
+    featureStatus: Stable
     description: |
       When set on a waypoint (either by its specific `Gateway`, or for the entire collection on the `GatewayClass`),
       indicates the type of traffic this waypoint can handle.
