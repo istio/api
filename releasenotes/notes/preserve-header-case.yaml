@@ -5,4 +5,4 @@ issue:
   - https://github.com/istio/istio/issues/53680
 releaseNotes:
   - |
-    **Added** a feature to preserve the original case of HTTP/1.x headers.
+    **Added** a ProxyConfig field to preserve the original case of HTTP/1.x headers.
