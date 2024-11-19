@@ -7341,11 +7341,6 @@ spec:
                     description: The image type of the image.
                     type: string
                 type: object
-              preserveCase:
-                description: When true, the original case of HTTP/1.x headers will
-                  be preserved as they pass through the proxy, rather than normalizing
-                  them to lowercase.
-                type: boolean
               selector:
                 description: Optional.
                 properties:
