@@ -606,17 +606,6 @@ message ProxyConfig {
   // Specifies the details of the proxy image.
   istio.networking.v1beta1.ProxyImage image = 35;
 
-  // When true, the original case of HTTP/1.x headers will be preserved
-  // as they pass through the proxy, rather than normalizing them to lowercase.
-  // This field is particularly useful for applications that require case-sensitive 
-  // headers for interoperability with downstream systems or APIs that expect specific 
-  // casing.
-  // The preserve_case option only applies to HTTP/1.x traffic, as HTTP/2 requires all headers 
-  // to be lowercase per the protocol specification. Envoy will ignore this field for HTTP/2 
-  // requests and automatically normalize headers to lowercase, ensuring compliance with HTTP/2 
-  // standards. 
-  bool preserve_case = 40;
-
   // Specifies the details of the Private Key Provider configuration for gateway and sidecar proxies.
   PrivateKeyProvider private_key_provider = 38;
 
@@ -634,6 +623,13 @@ message ProxyConfig {
   //   requestId: {} // Explicitly enable Request IDs. As this is the default, this has no effect.
   //   attemptCount:
   //     disabled: true
+  // ```
+  //
+  // Below shows an example of preserving the header case for HTTP 1.x requests
+  //
+  // ```yaml
+  // proxyHeaders:
+  //   preserve_http1_header_case: true
   // ```
   //
   // Some headers are enabled by default, and require explicitly disabling. See below for an example of disabling all default-enabled headers:
@@ -736,6 +732,17 @@ message ProxyConfig {
     // By default, the behavior is unspecified.
     // If IN_MESH, these headers will not be appended to outbound requests from sidecars to services not in-mesh.
     MetadataExchangeHeaders metadata_exchange_headers = 6;
+    // When true, the original case of HTTP/1.x headers will be preserved
+    // as they pass through the proxy, rather than normalizing them to lowercase.
+    // This field is particularly useful for applications that require case-sensitive 
+    // headers for interoperability with downstream systems or APIs that expect specific 
+    // casing.
+    // The preserve_http1_header_case option only applies to HTTP/1.x traffic, as HTTP/2 requires all headers 
+    // to be lowercase per the protocol specification. Envoy will ignore this field for HTTP/2 
+    // requests and automatically normalize headers to lowercase, ensuring compliance with HTTP/2 
+    // standards. 
+    bool preserve_http1_header_case = 40;
+
   }
 }
 
