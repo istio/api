@@ -138,18 +138,6 @@ User should not manually modify this annotation.`,
 		},
 	}
 
-	AmbientRerouteVirtualInterfaces = Instance {
-		Name:          "ambient.istio.io/reroute-virtual-interfaces",
-		Description:   `A comma separated list of virtual interfaces whose inbound traffic will be unconditionally treated as outbound. This allows workloads using virtualized networking (kubeVirt, VMs, docker-in-docker, etc) to function correctly with ambient mesh traffic capture.
-`,
-		FeatureStatus: Alpha,
-		Hidden:        false,
-		Deprecated:    false,
-		Resources: []ResourceTypes{
-			Pod,
-		},
-	}
-
 	AmbientWaypointInboundBinding = Instance {
 		Name:          "ambient.istio.io/waypoint-inbound-binding",
 		Description:   `When set on a waypoint (either by its specific "Gateway", or for the entire collection on the "GatewayClass"),
@@ -281,6 +269,18 @@ This takes the format: "<protocol>" or "<protocol>/<port>".
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			AuthorizationPolicy,
+		},
+	}
+
+	IoIstioRerouteVirtualInterfaces = Instance {
+		Name:          "istio.io/reroute-virtual-interfaces",
+		Description:   `A comma separated list of virtual interfaces whose inbound traffic will be unconditionally treated as outbound. This allows workloads using virtualized networking (kubeVirt, VMs, docker-in-docker, etc) to function correctly with mesh traffic capture.
+`,
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
 		},
 	}
 
@@ -878,10 +878,12 @@ Accepted values:
 	SidecarTrafficKubevirtInterfaces = Instance {
 		Name:          "traffic.sidecar.istio.io/kubevirtInterfaces",
 		Description:   "A comma separated list of virtual interfaces whose "+
-                        "inbound traffic (from VM) will be treated as outbound.",
+                        "inbound traffic (from VM) will be treated as outbound. "+
+                        "Deprecated in favor of "+
+                        "`istio.io/redirect-virtual-interfaces`",
 		FeatureStatus: Alpha,
 		Hidden:        false,
-		Deprecated:    false,
+		Deprecated:    true,
 		Resources: []ResourceTypes{
 			Pod,
 		},
@@ -895,7 +897,6 @@ func AllResourceAnnotations() []*Instance {
 		&AlphaKubernetesServiceAccounts,
 		&AmbientBypassInboundCapture,
 		&AmbientRedirection,
-		&AmbientRerouteVirtualInterfaces,
 		&AmbientWaypointInboundBinding,
 		&GalleyAnalyzeSuppress,
 		&GatewayControllerVersion,
@@ -906,6 +907,7 @@ func AllResourceAnnotations() []*Instance {
 		&IoIstioConnectedAt,
 		&IoIstioDisconnectedAt,
 		&IoIstioDryRun,
+		&IoIstioRerouteVirtualInterfaces,
 		&IoIstioRev,
 		&IoIstioWorkloadController,
 		&IoKubernetesIngressClass,

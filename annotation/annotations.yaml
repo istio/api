@@ -363,8 +363,8 @@ annotations:
   - name: traffic.sidecar.istio.io/kubevirtInterfaces
     featureStatus: Alpha
     description: A comma separated list of virtual interfaces whose inbound traffic
-      (from VM) will be treated as outbound.
-    deprecated: false
+      (from VM) will be treated as outbound. Deprecated in favor of `istio.io/redirect-virtual-interfaces`
+    deprecated: true
     hidden: false
     resources:
       - Pod
@@ -574,10 +574,10 @@ annotations:
     resources:
       - Pod
 
-  - name: ambient.istio.io/reroute-virtual-interfaces
+  - name: istio.io/reroute-virtual-interfaces
     featureStatus: Alpha
     description: |
-      A comma separated list of virtual interfaces whose inbound traffic will be unconditionally treated as outbound. This allows workloads using virtualized networking (kubeVirt, VMs, docker-in-docker, etc) to function correctly with ambient mesh traffic capture.
+      A comma separated list of virtual interfaces whose inbound traffic will be unconditionally treated as outbound. This allows workloads using virtualized networking (kubeVirt, VMs, docker-in-docker, etc) to function correctly with mesh traffic capture.
     deprecated: false
     hidden: false
     resources:
