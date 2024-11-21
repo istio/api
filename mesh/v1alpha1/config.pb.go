@@ -2139,6 +2139,7 @@ type MeshConfig_ExtensionProvider_Datadog struct {
 }
 
 type MeshConfig_ExtensionProvider_Stackdriver struct {
+	// $hide_from_docs
 	// Configures a Stackdriver provider.
 	Stackdriver *MeshConfig_ExtensionProvider_StackdriverProvider `protobuf:"bytes,7,opt,name=stackdriver,proto3,oneof"`
 }

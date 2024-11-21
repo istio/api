@@ -569,6 +569,7 @@ type Tracing_Lightstep_ struct {
 	// Use a Lightstep tracer.
 	// NOTE: For Istio 1.15+, this configuration option will result
 	// in using OpenTelemetry-based Lightstep integration.
+	// $hide_from_docs
 	Lightstep *Tracing_Lightstep `protobuf:"bytes,2,opt,name=lightstep,proto3,oneof"`
 }
 
@@ -579,11 +580,13 @@ type Tracing_Datadog_ struct {
 
 type Tracing_Stackdriver_ struct {
 	// Use a Stackdriver tracer.
+	// $hide_from_docs
 	Stackdriver *Tracing_Stackdriver `protobuf:"bytes,4,opt,name=stackdriver,proto3,oneof"`
 }
 
 type Tracing_OpenCensusAgent_ struct {
 	// Use an OpenCensus tracer exporting to an OpenCensus agent.
+	// $hide_from_docs
 	OpenCensusAgent *Tracing_OpenCensusAgent `protobuf:"bytes,9,opt,name=open_census_agent,json=openCensusAgent,proto3,oneof"`
 }
 

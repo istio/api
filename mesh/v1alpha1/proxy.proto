@@ -136,12 +136,15 @@ message Tracing {
     // Use a Lightstep tracer.
     // NOTE: For Istio 1.15+, this configuration option will result
     // in using OpenTelemetry-based Lightstep integration.
+    // $hide_from_docs
     Lightstep lightstep = 2;
     // Use a Datadog tracer.
     Datadog datadog = 3;
     // Use a Stackdriver tracer.
+    // $hide_from_docs
     Stackdriver stackdriver = 4;
     // Use an OpenCensus tracer exporting to an OpenCensus agent.
+    // $hide_from_docs
     OpenCensusAgent open_census_agent = 9;
   }
 
