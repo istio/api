@@ -741,7 +741,7 @@ message ProxyConfig {
     // to be lowercase per the protocol specification. Envoy will ignore this field for HTTP/2 
     // requests and automatically normalize headers to lowercase, ensuring compliance with HTTP/2 
     // standards. 
-    bool preserve_http1_header_case = 40;
+    google.protobuf.BoolValue preserve_http1_header_case = 40;
 
   }
 }
