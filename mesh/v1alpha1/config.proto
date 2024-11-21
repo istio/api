@@ -527,6 +527,7 @@ message MeshConfig {
       LightstepTracingProvider lightstep = 5 [deprecated=true];
       // Configures a Datadog tracing provider.
       DatadogTracingProvider datadog = 6;
+      // $hide_from_docs
       // Configures a Stackdriver provider.
       StackdriverProvider stackdriver = 7;
       // $hide_from_docs
