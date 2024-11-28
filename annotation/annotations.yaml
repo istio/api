@@ -47,7 +47,7 @@ annotations:
     featureStatus: Alpha
     description: Specifies the namespaces to which this service should be exported to.
       A value of '*' indicates it is reachable within the mesh '.' indicates it is
-      reachable within its namespace.
+      reachable within its namespace. '~' indicates it is hidden and exported to no namespaces.
     deprecated: false
     hidden: false
     resources:
