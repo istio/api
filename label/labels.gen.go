@@ -322,6 +322,20 @@ Valid options: "true", "false"
 		},
 	}
 
+	ServiceWorkloadName = Instance {
+		Name:          "service.istio.io/workload-name",
+		Description:   `The workload name of the application a workload belongs to. If unset, defaults to the detect parent resource.
+For example, a "Pod" resource may default to the "Deployment" name.
+`,
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+			WorkloadEntry,
+		},
+	}
+
 	SidecarInject = Instance {
 		Name:          "sidecar.istio.io/inject",
 		Description:   "Specifies whether or not an Envoy sidecar should be "+
@@ -433,6 +447,7 @@ func AllResourceLabels() []*Instance {
 		&SecurityTlsMode,
 		&ServiceCanonicalName,
 		&ServiceCanonicalRevision,
+		&ServiceWorkloadName,
 		&SidecarInject,
 		&TopologyCluster,
 		&TopologyNetwork,
