@@ -261,9 +261,9 @@ message Topology {
   // address to the X-Forwarded-For (XFF) address and set the
   // X-Envoy-External-Address header to the trusted client address before
   // forwarding it to the upstream services in the cluster.
-  // The default value of numTrustedProxies is 0.
+  // The default value of `numTrustedProxies` is 0.
   // See [Envoy XFF](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#config-http-conn-man-headers-x-forwarded-for)
-  // header handling for more details.
+  // header handling for more details. Only one of `numTrustedProxies` and `trustedCidrs` may be set.
   uint32 num_trusted_proxies = 1;
 
   // Configures how the gateway proxy handles x-forwarded-client-cert (XFCC)
@@ -277,6 +277,15 @@ message Topology {
   // Enables [PROXY protocol](http://www.haproxy.org/download/1.5/doc/proxy-protocol.txt) for
   // downstream connections on a gateway.
   ProxyProtocolConfiguration proxy_protocol = 3;
+
+  // List of CIDRs to trust when evaluating the remote IP address to determine the original client’s IP address.
+  // When the remote IP address matches a trusted CIDR and the X-Forwarded-For (XFF) header was sent,
+  // each entry in the X-Forwarded-For (XFF) header is evaluated from right to left
+  // and the first public non-trusted address is used as the original client address.
+  // If all addresses in X-Forwarded-For (XFF) header are within the trusted list, the first (leftmost) entry is used.
+  // See [Envoy XFF](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#config-http-conn-man-headers-x-forwarded-for)
+  // header handling for more details. Only one of `numTrustedProxies` and `trustedCidrs` may be set.
+  repeated string trusted_cidrs = 4;
 }
 
 // ForwardClientCertDetails controls how the x-forwarded-client-cert (XFCC)

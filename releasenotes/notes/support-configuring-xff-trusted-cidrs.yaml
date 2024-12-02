@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: security
+issue:
+  - 53185
+
+releaseNotes:
+  - |
+    **Added** configuration for XFF trusted cidrs.
