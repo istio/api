@@ -1034,7 +1034,7 @@ type ProxyConfig struct {
 	// ```yaml
 	// proxyHeaders:
 	//
-	//	preserve_http1_header_case: true
+	//	perserveHttp1HeaderCase: true
 	//
 	// ```
 	//
