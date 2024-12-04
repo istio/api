@@ -569,6 +569,9 @@ message EnvoyFilter {
       // registry.
       string name = 1;
 
+      // Match a specific domain name in a virtual host.
+      string domain_name=3;
+
       // Match a specific route within the virtual host.
       RouteMatch route = 2;
     }
