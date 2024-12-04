@@ -1,0 +1,10 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - 53085
+
+releaseNotes:
+  - |
+    **Added** `GrpcHealthCheckConfig` type for `HealthCheckMethod` option in `ReadinessProbe` to enable
+    configuring GRPC health probes for `WorkloadGroup`.

@@ -46,7 +46,11 @@ type ReadinessProbe_TcpSocket = v1alpha3.ReadinessProbe_TcpSocket
 
 // Health is determined by how the command that is executed exited.
 type ReadinessProbe_Exec = v1alpha3.ReadinessProbe_Exec
+
+// GRPC call is made and response/error is used to determine health.
+type ReadinessProbe_Grpc = v1alpha3.ReadinessProbe_Grpc
 type HTTPHealthCheckConfig = v1alpha3.HTTPHealthCheckConfig
+type GrpcHealthCheckConfig = v1alpha3.GrpcHealthCheckConfig
 type HTTPHeader = v1alpha3.HTTPHeader
 type TCPHealthCheckConfig = v1alpha3.TCPHealthCheckConfig
 type ExecHealthCheckConfig = v1alpha3.ExecHealthCheckConfig
