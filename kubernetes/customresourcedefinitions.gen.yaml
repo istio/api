@@ -6358,8 +6358,7 @@ spec:
                                 configuration and apply the patch to the virtual host.
                               properties:
                                 domainName:
-                                  description: Match a specific domain name in a virtual
-                                    host.
+                                  description: Match a domain name in a virtual host.
                                   type: string
                                 name:
                                   description: The VirtualHosts objects generated

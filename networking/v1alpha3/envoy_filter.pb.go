@@ -1609,7 +1609,9 @@ type EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch struct {
 	// VirtualService's host field or the hostname of a service in the
 	// registry.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// Match a specific domain name in a virtual host.
+	// Match a domain name in a virtual host. If this domain name is part of
+	// the list of domains that the virtual host serves, the patch will be
+	// applied.
 	DomainName string `protobuf:"bytes,3,opt,name=domain_name,json=domainName,proto3" json:"domain_name,omitempty"`
 	// Match a specific route within the virtual host.
 	Route *EnvoyFilter_RouteConfigurationMatch_RouteMatch `protobuf:"bytes,2,opt,name=route,proto3" json:"route,omitempty"`
