@@ -49,6 +49,17 @@ labels:
     resources:
       - Pod
 
+  - name: service.istio.io/workload-name
+    featureStatus: Alpha
+    description: |
+      The workload name of the application a workload belongs to. If unset, defaults to the detect parent resource.
+      For example, a `Pod` resource may default to the `Deployment` name.
+    hidden: false
+    deprecated: false
+    resources:
+      - Pod
+      - WorkloadEntry
+
   - name: istio.io/rev
     featureStatus: Alpha
     description: Istio control plane revision associated with the resource; e.g. `canary`
