@@ -112,10 +112,10 @@ var (
 		},
 	}
 
-	AmbientBypassDnsCapture = Instance {
-		Name:          "ambient.istio.io/bypass-dns-capture",
-		Description:   `When specified on a "Pod" enrolled in ambient mesh, DNS traffic (TCP and UDP on port 53) will not be captured or proxied.
-This will break some Istio features, such as ServiceEntries and egress waypoints, but may be desirable for workloads that interact poorly with DNS proxies.
+	AmbientBypassInboundCapture = Instance {
+		Name:          "ambient.istio.io/bypass-inbound-capture",
+		Description:   `When specified on a "Pod" enrolled in ambient mesh, only outbound traffic will be captured.
+This is intended to be used when enrolling a workload that only receives traffic from out-of-the-mesh clients, such as third party ingress controllers.
 `,
 		FeatureStatus: Alpha,
 		Hidden:        true,
@@ -125,10 +125,10 @@ This will break some Istio features, such as ServiceEntries and egress waypoints
 		},
 	}
 
-	AmbientBypassInboundCapture = Instance {
-		Name:          "ambient.istio.io/bypass-inbound-capture",
-		Description:   `When specified on a "Pod" enrolled in ambient mesh, only outbound traffic will be captured.
-This is intended to be used when enrolling a workload that only receives traffic from out-of-the-mesh clients, such as third party ingress controllers.
+	AmbientDnsCapture = Instance {
+		Name:          "ambient.istio.io/dns-capture",
+		Description:   `When specified on a "Pod" enrolled in ambient mesh, controls whether DNS traffic (TCP and UDP on port 53) will be captured or proxied in ambient.
+Note that setting this to "false" will break some Istio features, such as ServiceEntries and egress waypoints, but may be desirable for workloads that interact poorly with DNS proxies.
 `,
 		FeatureStatus: Alpha,
 		Hidden:        true,
@@ -908,8 +908,8 @@ func AllResourceAnnotations() []*Instance {
 	return []*Instance {
 		&AlphaCanonicalServiceAccounts,
 		&AlphaKubernetesServiceAccounts,
-		&AmbientBypassDnsCapture,
 		&AmbientBypassInboundCapture,
+		&AmbientDnsCapture,
 		&AmbientRedirection,
 		&AmbientWaypointInboundBinding,
 		&GalleyAnalyzeSuppress,
