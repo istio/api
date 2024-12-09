@@ -46,8 +46,8 @@ annotations:
   - name: networking.istio.io/exportTo
     featureStatus: Alpha
     description: Specifies the namespaces to which this service should be exported to.
-      A value of '*' indicates it is reachable within the mesh '.' indicates it is
-      reachable within its namespace.
+      A value of `*` indicates it is reachable within the mesh. `.` indicates it is
+      reachable within its namespace. '~' indicates it is hidden and exported to no namespaces. Additionally, a list of comma separated namespace names can be specified.
     deprecated: false
     hidden: false
     resources:
