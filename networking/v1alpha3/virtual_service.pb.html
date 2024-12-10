@@ -1238,6 +1238,21 @@ for statistics that are generated when this is configured.</p>
 No
 </td>
 </tr>
+<tr id="HTTPMatchRequest-percentage">
+<td><code>percentage</code></td>
+<td><code><a href="#Percent">Percent</a></code></td>
+<td>
+<p>Allows specifying a percentage of requests that will be matches by this route
+in addition to other match conditions.
+This can be used to route a percentage of traffic to a different service
+or to apply different configurations (tieouts, retries) on a percentage
+of requests.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
