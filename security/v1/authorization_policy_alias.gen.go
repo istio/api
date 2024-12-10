@@ -112,6 +112,7 @@ type Rule_To = v1beta1.Rule_To
 // namespaces: ["prod", "test"]
 // notIpBlocks: ["203.0.113.4"]
 // ```
+// +kubebuilder:validation:XValidation:message="Cannot set serviceAccounts with namespaces or principals",rule="(has(self.serviceAccounts) || has(self.notServiceAccounts)) ? (!has(self.principals) && !has(self.notPrincipals) && !has(self.namespaces) && !has(self.notNamespaces)) : true"
 type Source = v1beta1.Source
 
 // Operation specifies the operations of a request. Fields in the operation are
