@@ -244,7 +244,7 @@ option go_package="istio.io/api/security/v1beta1";
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="(has(self.selector)?1:0)+(has(self.targetRef)?1:0)+(has(self.targetRefs)?1:0)<=1"
+// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="oneof(self.selector, self.targetRef, self.targetRefs)"
 message RequestAuthentication {
   // Optional. The selector decides where to apply the request authentication policy. The selector will match with workloads
   // in the same namespace as the request authentication policy. If the request authentication policy is in the root namespace,
@@ -316,7 +316,7 @@ message RequestAuthentication {
 // fromHeaders:
 // - "x-goog-iap-jwt-assertion"
 // ```
-// +kubebuilder:validation:XValidation:message="only one of jwks or jwksUri can be set",rule="(has(self.jwksUri)?1:0)+(has(self.jwks_uri)?1:0)+(has(self.jwks)?1:0)<=1"
+// +kubebuilder:validation:XValidation:message="only one of jwks or jwksUri can be set",rule="oneof(self.jwksUri, self.jwks_uri, self.jwks)"
 message JWTRule {
   // Identifies the issuer that issued the JWT. See
   // [issuer](https://tools.ietf.org/html/rfc7519#section-4.1.1)
