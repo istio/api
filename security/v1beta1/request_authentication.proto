@@ -23,10 +23,6 @@ import "type/v1beta1/selector.proto";
 // $location: https://istio.io/docs/reference/config/security/request_authentication.html
 // $aliases: [/docs/reference/config/security/v1beta1/request_authentication, /docs/reference/config/security/v1beta1/jwt, /docs/reference/config/security/v1beta1/jwt.html]
 
-package istio.security.v1beta1;
-
-option go_package="istio.io/api/security/v1beta1";
-
 // RequestAuthentication defines what request authentication methods are supported by a workload.
 // It will reject a request if the request contains invalid authentication information, based on the
 // configured authentication rules. A request that does not contain any authentication credentials
@@ -34,7 +30,7 @@ option go_package="istio.io/api/security/v1beta1";
 // requests only, this should be accompanied by an authorization rule.
 // Examples:
 //
-// - Require JWT for all request for workloads that have label `app:httpbin`
+// Require JWT for all request for workloads that have label `app:httpbin`:
 //
 // ```yaml
 // apiVersion: security.istio.io/v1
@@ -65,9 +61,9 @@ option go_package="istio.io/api/security/v1beta1";
 //         requestPrincipals: ["*"]
 // ```
 //
-// - A policy in the root namespace ("istio-system" by default) applies to workloads in all namespaces
+// A policy in the root namespace ("istio-system" by default) applies to workloads in all namespaces
 // in a mesh. The following policy makes all workloads only accept requests that contain a
-// valid JWT token.
+// valid JWT token:
 //
 // ```yaml
 // apiVersion: security.istio.io/v1
@@ -92,9 +88,9 @@ option go_package="istio.io/api/security/v1beta1";
 //         requestPrincipals: ["*"]
 // ```
 //
-// - The next example shows how to set a different JWT requirement for a different `host`. The `RequestAuthentication`
+// The next example shows how to set a different JWT requirement for a different `host`. The `RequestAuthentication`
 // declares it can accept JWTs issued by either `issuer-foo` or `issuer-bar` (the public key set is implicitly
-// set from the OpenID Connect spec).
+// set from the OpenID Connect spec):
 //
 // ```yaml
 // apiVersion: security.istio.io/v1
@@ -134,7 +130,7 @@ option go_package="istio.io/api/security/v1beta1";
 //         hosts: ["another-host.com"]
 // ```
 //
-// - You can fine tune the authorization policy to set different requirement per path. For example,
+// You can fine-tune the authorization policy to set different requirement per path. For example,
 // to require JWT on all paths, except /healthz, the same `RequestAuthentication` can be used, but the
 // authorization policy could be:
 //
@@ -225,7 +221,11 @@ option go_package="istio.io/api/security/v1beta1";
 //         host: foo.prod.svc.cluster.local
 //         subset: v1
 // ```
-//
+package istio.security.v1beta1;
+
+option go_package="istio.io/api/security/v1beta1";
+
+
 // <!-- crd generation tags
 // +cue-gen:RequestAuthentication:groupName:security.istio.io
 // +cue-gen:RequestAuthentication:versions:v1beta1,v1

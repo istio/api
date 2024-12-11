@@ -21,10 +21,6 @@ import "type/v1beta1/selector.proto";
 // $location: https://istio.io/docs/reference/config/security/peer_authentication.html
 // $aliases: [/docs/reference/config/security/v1beta1/peer_authentication]
 
-package istio.security.v1beta1;
-
-option go_package="istio.io/api/security/v1beta1";
-
 // PeerAuthentication defines mutual TLS (mTLS) requirements for incoming connections.
 //
 // In sidecar mode, PeerAuthentication determines whether or not mTLS is allowed or required
@@ -111,7 +107,10 @@ option go_package="istio.io/api/security/v1beta1";
 //     8080:
 //       mode: DISABLE
 // ```
-//
+package istio.security.v1beta1;
+
+option go_package="istio.io/api/security/v1beta1";
+
 // <!-- crd generation tags
 // +cue-gen:PeerAuthentication:groupName:security.istio.io
 // +cue-gen:PeerAuthentication:versions:v1beta1,v1

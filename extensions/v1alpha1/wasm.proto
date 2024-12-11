@@ -28,7 +28,7 @@ import "google/api/field_behavior.proto";
 // WasmPlugins provides a mechanism to extend the functionality provided by
 // the Istio proxy through WebAssembly filters.
 //
-// Order of execution (as part of Envoy's filter chain) is determined by
+// The order of execution (as part of Envoy's filter chain) is determined by
 // phase and priority settings, allowing the configuration of complex
 // interactions between user-supplied WasmPlugins and Istio's internal
 // filters.
@@ -209,7 +209,7 @@ package istio.extensions.v1alpha1;
 
 option go_package="istio.io/api/extensions/v1alpha1";
 
-// WasmPlugins provides a mechanism to extend the functionality provided by
+// WasmPlugin provides a mechanism to extend the functionality provided by
 // the Istio proxy through WebAssembly filters.
 //
 // <!-- crd generation tags
@@ -484,7 +484,7 @@ enum EnvValueSource {
   // Explicitly given key-value pairs to be injected to this VM
   INLINE = 0;
 
-  // *Istio-proxy's* environment variables exposed to this VM.
+  // Proxy environment variables exposed to this VM.
   HOST = 1;
 }
 

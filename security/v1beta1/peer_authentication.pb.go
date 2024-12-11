@@ -24,6 +24,93 @@
 // $location: https://istio.io/docs/reference/config/security/peer_authentication.html
 // $aliases: [/docs/reference/config/security/v1beta1/peer_authentication]
 
+// PeerAuthentication defines mutual TLS (mTLS) requirements for incoming connections.
+//
+// In sidecar mode, PeerAuthentication determines whether or not mTLS is allowed or required
+// for connections to an Envoy proxy sidecar.
+//
+// In ambient mode, security is transparently enabled for a pod by the ztunnel node agent.
+// (Traffic between proxies uses the HBONE protocol, which includes encryption with mTLS.)
+// Because of this, `DISABLE` mode is not supported.
+// `STRICT` mode is useful to ensure that connections that bypass the mesh are not possible.
+//
+// Examples:
+//
+// Policy to require mTLS traffic for all workloads under namespace `foo`:
+// ```yaml
+// apiVersion: security.istio.io/v1
+// kind: PeerAuthentication
+// metadata:
+//   name: default
+//   namespace: foo
+// spec:
+//   mtls:
+//     mode: STRICT
+// ```
+// For mesh level, put the policy in root-namespace according to your Istio installation.
+//
+// Policies to allow both mTLS and plaintext traffic for all workloads under namespace `foo`, but
+// require mTLS for workload `finance`.
+// ```yaml
+// apiVersion: security.istio.io/v1
+// kind: PeerAuthentication
+// metadata:
+//   name: default
+//   namespace: foo
+// spec:
+//   mtls:
+//     mode: PERMISSIVE
+// ---
+// apiVersion: security.istio.io/v1
+// kind: PeerAuthentication
+// metadata:
+//   name: finance
+//   namespace: foo
+// spec:
+//   selector:
+//     matchLabels:
+//       app: finance
+//   mtls:
+//     mode: STRICT
+// ```
+// Policy that enables strict mTLS for all `finance` workloads, but leaves the port `8080` to
+// plaintext. Note the port value in the `portLevelMtls` field refers to the port
+// of the workload, not the port of the Kubernetes service.
+// ```yaml
+// apiVersion: security.istio.io/v1
+// kind: PeerAuthentication
+// metadata:
+//   name: default
+//   namespace: foo
+// spec:
+//   selector:
+//     matchLabels:
+//       app: finance
+//   mtls:
+//     mode: STRICT
+//   portLevelMtls:
+//     8080:
+//       mode: DISABLE
+// ```
+// Policy that inherits mTLS mode from namespace (or mesh) settings, and disables
+// mTLS for workload port `8080`.
+// ```yaml
+// apiVersion: security.istio.io/v1
+// kind: PeerAuthentication
+// metadata:
+//   name: default
+//   namespace: foo
+// spec:
+//   selector:
+//     matchLabels:
+//       app: finance
+//   mtls:
+//     mode: UNSET
+//   portLevelMtls:
+//     8080:
+//       mode: DISABLE
+// ```
+
 package v1beta1
 
 import (
@@ -97,113 +184,6 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 	return file_security_v1beta1_peer_authentication_proto_rawDescGZIP(), []int{0, 0, 0}
 }
 
-// PeerAuthentication defines mutual TLS (mTLS) requirements for incoming connections.
-//
-// In sidecar mode, PeerAuthentication determines whether or not mTLS is allowed or required
-// for connections to an Envoy proxy sidecar.
-//
-// In ambient mode, security is transparently enabled for a pod by the ztunnel node agent.
-// (Traffic between proxies uses the HBONE protocol, which includes encryption with mTLS.)
-// Because of this, `DISABLE` mode is not supported.
-// `STRICT` mode is useful to ensure that connections that bypass the mesh are not possible.
-//
-// Examples:
-//
-// Policy to require mTLS traffic for all workloads under namespace `foo`:
-// ```yaml
-// apiVersion: security.istio.io/v1
-// kind: PeerAuthentication
-// metadata:
-//
-//	name: default
-//	namespace: foo
-//
-// spec:
-//
-//	mtls:
-//	  mode: STRICT
-//
-// ```
-// For mesh level, put the policy in root-namespace according to your Istio installation.
-//
-// Policies to allow both mTLS and plaintext traffic for all workloads under namespace `foo`, but
-// require mTLS for workload `finance`.
-// ```yaml
-// apiVersion: security.istio.io/v1
-// kind: PeerAuthentication
-// metadata:
-//
-//	name: default
-//	namespace: foo
-//
-// spec:
-//
-//	mtls:
-//	  mode: PERMISSIVE
-//
-// ---
-// apiVersion: security.istio.io/v1
-// kind: PeerAuthentication
-// metadata:
-//
-//	name: finance
-//	namespace: foo
-//
-// spec:
-//
-//	selector:
-//	  matchLabels:
-//	    app: finance
-//	mtls:
-//	  mode: STRICT
-//
-// ```
-// Policy that enables strict mTLS for all `finance` workloads, but leaves the port `8080` to
-// plaintext. Note the port value in the `portLevelMtls` field refers to the port
-// of the workload, not the port of the Kubernetes service.
-// ```yaml
-// apiVersion: security.istio.io/v1
-// kind: PeerAuthentication
-// metadata:
-//
-//	name: default
-//	namespace: foo
-//
-// spec:
-//
-//	selector:
-//	  matchLabels:
-//	    app: finance
-//	mtls:
-//	  mode: STRICT
-//	portLevelMtls:
-//	  8080:
-//	    mode: DISABLE
-//
-// ```
-// Policy that inherits mTLS mode from namespace (or mesh) settings, and disables
-// mTLS for workload port `8080`.
-// ```yaml
-// apiVersion: security.istio.io/v1
-// kind: PeerAuthentication
-// metadata:
-//
-//	name: default
-//	namespace: foo
-//
-// spec:
-//
-//	selector:
-//	  matchLabels:
-//	    app: finance
-//	mtls:
-//	  mode: UNSET
-//	portLevelMtls:
-//	  8080:
-//	    mode: DISABLE
-//
-// ```
-//
 // <!-- crd generation tags
 // +cue-gen:PeerAuthentication:groupName:security.istio.io
 // +cue-gen:PeerAuthentication:versions:v1beta1,v1

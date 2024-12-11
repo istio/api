@@ -803,7 +803,7 @@ type ServicePort struct {
 	// +kubebuilder:validation:XValidation:message="port must be between 1-65535",rule="0 < self && self <= 65535"
 	Number uint32 `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
 	// The protocol exposed on the port.
-	// MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS.
+	// MUST be one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS.
 	// TLS implies the connection will be routed based on the SNI header to
 	// the destination without terminating the TLS connection.
 	// +kubebuilder:validation:MaxLength=256
@@ -959,15 +959,15 @@ func (x *ServiceEntryStatus) GetAddresses() []*ServiceEntryAddress {
 	return nil
 }
 
-// minor abstraction to allow for adding hostnames if relevant
+// A minor abstraction to allow for adding hostnames if relevant.
 type ServiceEntryAddress struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Value is the address (192.168.0.2)
+	// The address (e.g. 192.168.0.2)
 	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
-	// Host is the name associated with this address
+	// The host name associated with this address
 	Host string `protobuf:"bytes,2,opt,name=host,proto3" json:"host,omitempty"`
 }
 

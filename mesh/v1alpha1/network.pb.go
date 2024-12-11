@@ -360,7 +360,7 @@ type isNetwork_IstioNetworkGateway_Gw interface {
 }
 
 type Network_IstioNetworkGateway_RegistryServiceName struct {
-	// A fully qualified domain name of the gateway service.  Pilot will
+	// A fully qualified domain name of the gateway service.  istiod will
 	// lookup the service from the service registries in the network and
 	// obtain the endpoint IPs of the gateway from the service
 	// registry. Note that while the service name is a fully qualified
