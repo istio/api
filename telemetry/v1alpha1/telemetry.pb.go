@@ -23,10 +23,18 @@
 // $description: Telemetry configuration for workloads.
 // $location: https://istio.io/docs/reference/config/telemetry.html
 // $aliases: [/docs/reference/config/telemetry/v1alpha1/telemetry]
+// $weight: 45
 
-// Telemetry defines how the telemetry is generated for workloads within a mesh.
+// `Telemetry` defines how telemetry (metrics, logs and traces)
+// is generated for workloads within a mesh.
 //
-// For mesh level configuration, put the resource in root configuration
+// The hierarchy of Telemetry configuration is as follows:
+//
+// 1. Workload-specific configuration
+// 2. Namespace-specific configuration
+// 3. Root namespace configuration
+//
+// For mesh level configuration, put a resource in the root configuration
 // namespace for your Istio installation *without* a workload selector.
 //
 // For any namespace, including the root configuration namespace, it is only
@@ -35,14 +43,12 @@
 // For resources with a workload selector, it is only valid to have one resource
 // selecting any given workload.
 //
-// The hierarchy of Telemetry configuration is as follows:
+// Gateways and waypoints are targeted for telemetry configuration
+// using the `targetRefs` field.
 //
-// 1. Workload-specific configuration
-// 2. Namespace-specific configuration
-// 3. Root namespace configuration
+// Examples:
 //
-// ## Examples
-// Policy to enable random sampling for 10% of traffic:
+// Enable random sampling for 10% of traffic:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
@@ -55,8 +61,8 @@
 //   - randomSamplingPercentage: 10.00
 // ```
 //
-// Policy to disable trace reporting for the `foo` workload (note: tracing
-// context will still be propagated):
+// Disable trace reporting for the `foo` workload
+// (note: tracing context will still be propagated):
 // ```yaml
 // apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
@@ -71,7 +77,7 @@
 //   - disableSpanReporting: true
 // ```
 //
-// Policy to select the alternate zipkin provider for trace reporting:
+// Select a named tracing provider for trace reporting:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
@@ -88,7 +94,7 @@
 //     randomSamplingPercentage: 10.00
 // ```
 //
-// Policy to tailor the zipkin provider to sample traces from Client workloads only:
+// Tailor the "zipkin" provider to sample traces from client workloads only:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
@@ -103,7 +109,7 @@
 //     - name: "zipkin"
 // ```
 //
-// Policy to add a custom tag from a literal value:
+// Add a custom tag from a literal value:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
@@ -120,7 +126,7 @@
 //           value: "foo"
 // ```
 //
-// Policy to disable server-side metrics for Prometheus for an entire mesh:
+// Disable server-side metrics for Prometheus for an entire mesh:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
@@ -139,7 +145,7 @@
 //       disabled: true
 // ```
 //
-// Policy to add dimensions to all Prometheus metrics for the `foo` namespace:
+// Add dimensions to all Prometheus metrics for the `foo` namespace:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
@@ -160,7 +166,7 @@
 //           value: "request.host"
 // ```
 //
-// Policy to remove the `response_code` dimension on some Prometheus metrics for
+// Remove the `response_code` dimension on some Prometheus metrics for
 // the `bar.foo` workload:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1
@@ -198,7 +204,7 @@
 //           operation: REMOVE
 // ```
 //
-// Policy to enable access logging for the entire mesh:
+// Enable access logging for the entire mesh:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
@@ -216,7 +222,7 @@
 //     # those cases, `disabled: false` must be set explicitly to override.
 // ```
 //
-// Policy to disable access logging for the `foo` namespace:
+// Disable access logging for the `foo` namespace:
 // ```yaml
 // apiVersion: telemetry.istio.io/v1
 // kind: Telemetry
