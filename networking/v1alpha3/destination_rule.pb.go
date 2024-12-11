@@ -1141,7 +1141,7 @@ type OutlierDetection struct {
 	// used separately or together. Because the errors counted by
 	// `consecutiveGatewayErrors` are also included in `consecutive5xxErrors`,
 	// if the value of `consecutiveGatewayErrors` is greater than or equal to
-	// the value of `consecutive5xxErrors, `consecutiveGatewayErrors` will have
+	// the value of `consecutive5xxErrors`, `consecutiveGatewayErrors` will have
 	// no effect.
 	ConsecutiveGatewayErrors *wrappers.UInt32Value `protobuf:"bytes,6,opt,name=consecutive_gateway_errors,json=consecutiveGatewayErrors,proto3" json:"consecutive_gateway_errors,omitempty"`
 	// Number of 5xx errors before a host is ejected from the connection pool.
@@ -1154,7 +1154,7 @@ type OutlierDetection struct {
 	// used separately or together. Because the errors counted by
 	// `consecutiveGatewayErrors` are also included in `consecutive5xxErrors`,
 	// if the value of `consecutiveGatewayErrors` is greater than or equal to
-	// the value of `consecutive5xxErrors, `consecutiveGatewayErrors` will have
+	// the value of `consecutive5xxErrors`, `consecutiveGatewayErrors` will have
 	// no effect.
 	Consecutive_5XxErrors *wrappers.UInt32Value `protobuf:"bytes,7,opt,name=consecutive_5xx_errors,json=consecutive5xxErrors,proto3" json:"consecutive_5xx_errors,omitempty"`
 	// Time interval between ejection sweep analysis. format:
