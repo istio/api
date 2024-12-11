@@ -427,9 +427,9 @@ type DestinationRule struct {
 	// the short name based on the namespace of the rule, not the service. A
 	// rule in the "default" namespace containing a host "reviews" will be
 	// interpreted as "reviews.default.svc.cluster.local", irrespective of
-	// the actual namespace associated with the reviews service. _To avoid
+	// the actual namespace associated with the reviews service. To avoid
 	// potential misconfigurations, it is recommended to always use fully
-	// qualified domain names over short names._
+	// qualified domain names over short names.
 	//
 	// Note that the host field applies to both HTTP and TCP services.
 	Host string `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
@@ -1118,7 +1118,7 @@ type OutlierDetection struct {
 	// Deprecated: Marked as deprecated in networking/v1alpha3/destination_rule.proto.
 	ConsecutiveErrors int32 `protobuf:"varint,1,opt,name=consecutive_errors,json=consecutiveErrors,proto3" json:"consecutive_errors,omitempty"`
 	// Determines whether to distinguish local origin failures from external errors. If set to true
-	// `consecutive_local_origin_failure` is taken into account for outlier detection calculations.
+	// `consecutiveLocalOriginFailures` is taken into account for outlier detection calculations.
 	// This should be used when you want to derive the outlier detection status based on the errors
 	// seen locally such as failure to connect, timeout while connecting etc. rather than the status code
 	// returned by upstream service. This is especially useful when the upstream service explicitly returns
@@ -1127,7 +1127,7 @@ type OutlierDetection struct {
 	// Defaults to false.
 	SplitExternalLocalOriginErrors bool `protobuf:"varint,8,opt,name=split_external_local_origin_errors,json=splitExternalLocalOriginErrors,proto3" json:"split_external_local_origin_errors,omitempty"`
 	// The number of consecutive locally originated failures before ejection
-	// occurs. Defaults to 5. Parameter takes effect only when `split_external_local_origin_errors`
+	// occurs. Defaults to 5. Parameter takes effect only when `splitExternalLocalOriginErrors`
 	// is set to true.
 	ConsecutiveLocalOriginFailures *wrappers.UInt32Value `protobuf:"bytes,9,opt,name=consecutive_local_origin_failures,json=consecutiveLocalOriginFailures,proto3" json:"consecutive_local_origin_failures,omitempty"`
 	// Number of gateway errors before a host is ejected from the connection pool.
@@ -1137,11 +1137,11 @@ type OutlierDetection struct {
 	// events qualify as a gateway error.
 	// This feature is disabled by default or when set to the value 0.
 	//
-	// Note that `consecutive_gateway_errors` and `consecutive_5xx_errors` can be
+	// Note that `consecutiveGatewayErrors` and `consecutive5xxErrors` can be
 	// used separately or together. Because the errors counted by
-	// `consecutive_gateway_errors` are also included in `consecutive_5xx_errors`,
-	// if the value of `consecutive_gateway_errors` is greater than or equal to
-	// the value of `consecutive_5xx_errors, `consecutive_gateway_errors` will have
+	// `consecutiveGatewayErrors` are also included in `consecutive5xxErrors`,
+	// if the value of `consecutiveGatewayErrors` is greater than or equal to
+	// the value of `consecutive5xxErrors, `consecutiveGatewayErrors` will have
 	// no effect.
 	ConsecutiveGatewayErrors *wrappers.UInt32Value `protobuf:"bytes,6,opt,name=consecutive_gateway_errors,json=consecutiveGatewayErrors,proto3" json:"consecutive_gateway_errors,omitempty"`
 	// Number of 5xx errors before a host is ejected from the connection pool.
@@ -1150,11 +1150,11 @@ type OutlierDetection struct {
 	// 5xx error.
 	// This feature defaults to 5 but can be disabled by setting the value to 0.
 	//
-	// Note that `consecutive_gateway_errors` and `consecutive_5xx_errors` can be
+	// Note that `consecutiveGatewayErrors` and `consecutive5xxErrors` can be
 	// used separately or together. Because the errors counted by
-	// `consecutive_gateway_errors` are also included in `consecutive_5xx_errors`,
-	// if the value of `consecutive_gateway_errors` is greater than or equal to
-	// the value of `consecutive_5xx_errors, `consecutive_gateway_errors` will have
+	// `consecutiveGatewayErrors` are also included in `consecutive5xxErrors`,
+	// if the value of `consecutiveGatewayErrors` is greater than or equal to
+	// the value of `consecutive5xxErrors, `consecutiveGatewayErrors` will have
 	// no effect.
 	Consecutive_5XxErrors *wrappers.UInt32Value `protobuf:"bytes,7,opt,name=consecutive_5xx_errors,json=consecutive5xxErrors,proto3" json:"consecutive_5xx_errors,omitempty"`
 	// Time interval between ejection sweep analysis. format:
@@ -1170,7 +1170,7 @@ type OutlierDetection struct {
 	// service that can be ejected. Defaults to 10%.
 	MaxEjectionPercent int32 `protobuf:"varint,4,opt,name=max_ejection_percent,json=maxEjectionPercent,proto3" json:"max_ejection_percent,omitempty"`
 	// Outlier detection will be enabled as long as the associated load balancing
-	// pool has at least `min_health_percent` hosts in healthy mode. When the
+	// pool has at least `minHealthPercent` hosts in healthy mode. When the
 	// percentage of healthy hosts in the load balancing pool drops below this
 	// threshold, outlier detection will be disabled and the proxy will load balance
 	// across all hosts in the pool (healthy and unhealthy). The threshold can be
@@ -1381,8 +1381,8 @@ type ClientTLSSettings struct {
 	// A list of alternate names to verify the subject identity in the
 	// certificate. If specified, the proxy will verify that the server
 	// certificate's subject alt name matches one of the specified values.
-	// If specified, this list overrides the value of subject_alt_names
-	// from the ServiceEntry. If unspecified, automatic validation of upstream
+	// If specified, this list overrides the value of `subjectAltNames`
+	// from the `ServiceEntry`. If unspecified, automatic validation of upstream
 	// presented certificate for new upstream connections will be done based on the
 	// downstream HTTP host/authority header.
 	SubjectAltNames []string `protobuf:"bytes,5,rep,name=subject_alt_names,json=subjectAltNames,proto3" json:"subject_alt_names,omitempty"`
@@ -2270,7 +2270,7 @@ type ConnectionPoolSettings_TCPSettings struct {
 	// If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
 	TcpKeepalive *ConnectionPoolSettings_TCPSettings_TcpKeepalive `protobuf:"bytes,3,opt,name=tcp_keepalive,json=tcpKeepalive,proto3" json:"tcp_keepalive,omitempty"`
 	// The maximum duration of a connection. The duration is defined as the period since a connection
-	// was established. If not set, there is no max duration. When max_connection_duration
+	// was established. If not set, there is no max duration. When `maxConnectionDuration`
 	// is reached the connection will be closed. Duration must be at least 1ms.
 	MaxConnectionDuration *duration.Duration `protobuf:"bytes,4,opt,name=max_connection_duration,json=maxConnectionDuration,proto3" json:"max_connection_duration,omitempty"`
 	// The idle timeout for TCP connections.
@@ -2382,7 +2382,7 @@ type ConnectionPoolSettings_HTTPSettings struct {
 	// Specify if http1.1 connection should be upgraded to http2 for the associated destination.
 	H2UpgradePolicy ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy `protobuf:"varint,6,opt,name=h2_upgrade_policy,json=h2UpgradePolicy,proto3,enum=istio.networking.v1alpha3.ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy" json:"h2_upgrade_policy,omitempty"`
 	// If set to true, client protocol will be preserved while initiating connection to backend.
-	// Note that when this is set to true, h2_upgrade_policy will be ineffective i.e. the client
+	// Note that when this is set to true, `h2UpgradePolicy` will be ineffective i.e. the client
 	// connections will not be upgraded to http2.
 	UseClientProtocol bool `protobuf:"varint,7,opt,name=use_client_protocol,json=useClientProtocol,proto3" json:"use_client_protocol,omitempty"`
 	// The maximum number of concurrent streams allowed for a peer on one HTTP/2 connection.

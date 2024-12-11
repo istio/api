@@ -793,7 +793,7 @@ spec:
                             minHealthPercent:
                               description: Outlier detection will be enabled as long
                                 as the associated load balancing pool has at least
-                                `min_health_percent` hosts in healthy mode.
+                                `minHealthPercent` hosts in healthy mode.
                               format: int32
                               type: integer
                             splitExternalLocalOriginErrors:
@@ -1167,7 +1167,7 @@ spec:
                                   minHealthPercent:
                                     description: Outlier detection will be enabled
                                       as long as the associated load balancing pool
-                                      has at least `min_health_percent` hosts in healthy
+                                      has at least `minHealthPercent` hosts in healthy
                                       mode.
                                     format: int32
                                     type: integer
@@ -1678,7 +1678,7 @@ spec:
                         type: integer
                       minHealthPercent:
                         description: Outlier detection will be enabled as long as
-                          the associated load balancing pool has at least `min_health_percent`
+                          the associated load balancing pool has at least `minHealthPercent`
                           hosts in healthy mode.
                         format: int32
                         type: integer
@@ -2043,7 +2043,7 @@ spec:
                             minHealthPercent:
                               description: Outlier detection will be enabled as long
                                 as the associated load balancing pool has at least
-                                `min_health_percent` hosts in healthy mode.
+                                `minHealthPercent` hosts in healthy mode.
                               format: int32
                               type: integer
                             splitExternalLocalOriginErrors:
@@ -2707,7 +2707,7 @@ spec:
                             minHealthPercent:
                               description: Outlier detection will be enabled as long
                                 as the associated load balancing pool has at least
-                                `min_health_percent` hosts in healthy mode.
+                                `minHealthPercent` hosts in healthy mode.
                               format: int32
                               type: integer
                             splitExternalLocalOriginErrors:
@@ -3081,7 +3081,7 @@ spec:
                                   minHealthPercent:
                                     description: Outlier detection will be enabled
                                       as long as the associated load balancing pool
-                                      has at least `min_health_percent` hosts in healthy
+                                      has at least `minHealthPercent` hosts in healthy
                                       mode.
                                     format: int32
                                     type: integer
@@ -3592,7 +3592,7 @@ spec:
                         type: integer
                       minHealthPercent:
                         description: Outlier detection will be enabled as long as
-                          the associated load balancing pool has at least `min_health_percent`
+                          the associated load balancing pool has at least `minHealthPercent`
                           hosts in healthy mode.
                         format: int32
                         type: integer
@@ -3957,7 +3957,7 @@ spec:
                             minHealthPercent:
                               description: Outlier detection will be enabled as long
                                 as the associated load balancing pool has at least
-                                `min_health_percent` hosts in healthy mode.
+                                `minHealthPercent` hosts in healthy mode.
                               format: int32
                               type: integer
                             splitExternalLocalOriginErrors:
@@ -4621,7 +4621,7 @@ spec:
                             minHealthPercent:
                               description: Outlier detection will be enabled as long
                                 as the associated load balancing pool has at least
-                                `min_health_percent` hosts in healthy mode.
+                                `minHealthPercent` hosts in healthy mode.
                               format: int32
                               type: integer
                             splitExternalLocalOriginErrors:
@@ -4995,7 +4995,7 @@ spec:
                                   minHealthPercent:
                                     description: Outlier detection will be enabled
                                       as long as the associated load balancing pool
-                                      has at least `min_health_percent` hosts in healthy
+                                      has at least `minHealthPercent` hosts in healthy
                                       mode.
                                     format: int32
                                     type: integer
@@ -5506,7 +5506,7 @@ spec:
                         type: integer
                       minHealthPercent:
                         description: Outlier detection will be enabled as long as
-                          the associated load balancing pool has at least `min_health_percent`
+                          the associated load balancing pool has at least `minHealthPercent`
                           hosts in healthy mode.
                         format: int32
                         type: integer
@@ -5871,7 +5871,7 @@ spec:
                             minHealthPercent:
                               description: Outlier detection will be enabled as long
                                 as the associated load balancing pool has at least
-                                `min_health_percent` hosts in healthy mode.
+                                `minHealthPercent` hosts in healthy mode.
                               format: int32
                               type: integer
                             splitExternalLocalOriginErrors:
