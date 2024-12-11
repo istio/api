@@ -744,7 +744,7 @@ message OutlierDetection {
   // used separately or together. Because the errors counted by
   // `consecutiveGatewayErrors` are also included in `consecutive5xxErrors`,
   // if the value of `consecutiveGatewayErrors` is greater than or equal to
-  // the value of `consecutive5xxErrors, `consecutiveGatewayErrors` will have
+  // the value of `consecutive5xxErrors`, `consecutiveGatewayErrors` will have
   // no effect.
   google.protobuf.UInt32Value consecutive_gateway_errors = 6;
 
@@ -758,7 +758,7 @@ message OutlierDetection {
   // used separately or together. Because the errors counted by
   // `consecutiveGatewayErrors` are also included in `consecutive5xxErrors`,
   // if the value of `consecutiveGatewayErrors` is greater than or equal to
-  // the value of `consecutive5xxErrors, `consecutiveGatewayErrors` will have
+  // the value of `consecutive5xxErrors`, `consecutiveGatewayErrors` will have
   // no effect.
   google.protobuf.UInt32Value consecutive_5xx_errors = 7;
 
