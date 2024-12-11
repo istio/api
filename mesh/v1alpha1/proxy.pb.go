@@ -441,7 +441,7 @@ type Tracing struct {
 	// if not requested by the client or not forced. Default is 1.0.
 	Sampling float64 `protobuf:"fixed64,7,opt,name=sampling,proto3" json:"sampling,omitempty"`
 	// Use the tlsSettings to specify the tls mode to use. If the remote tracing service
-	// uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
+	// uses Istio mutual TLS and shares the root CA with istiod, specify the TLS
 	// mode as `ISTIO_MUTUAL`.
 	TlsSettings *v1alpha3.ClientTLSSettings `protobuf:"bytes,8,opt,name=tls_settings,json=tlsSettings,proto3" json:"tls_settings,omitempty"`
 }
@@ -730,7 +730,7 @@ func (x *Topology) GetProxyProtocol() *Topology_ProxyProtocolConfiguration {
 }
 
 // PrivateKeyProvider defines private key configuration for gateways and sidecars. This can be configured
-// mesh wide or individual per-workload basis.
+// mesh-wide or individual per-workload basis.
 type PrivateKeyProvider struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -816,7 +816,7 @@ func (*PrivateKeyProvider_Qat) isPrivateKeyProvider_Provider() {}
 
 // ProxyConfig defines variables for individual Envoy instances. This can be configured on a per-workload basis
 // as well as by the mesh-wide defaults.
-// To set the mesh wide defaults, configure the `defaultConfig` section of `meshConfig`. For example:
+// To set the mesh-wide defaults, configure the `defaultConfig` section of `meshConfig`. For example:
 //
 // ```
 // meshConfig:
@@ -890,7 +890,7 @@ type ProxyConfig struct {
 	// Default is set to `MUTUAL_TLS`.
 	ControlPlaneAuthPolicy AuthenticationPolicy `protobuf:"varint,13,opt,name=control_plane_auth_policy,json=controlPlaneAuthPolicy,proto3,enum=istio.mesh.v1alpha1.AuthenticationPolicy" json:"control_plane_auth_policy,omitempty"`
 	// File path of custom proxy configuration, currently used by proxies
-	// in front of Mixer and Pilot.
+	// in front of istiod.
 	CustomConfigFile string `protobuf:"bytes,14,opt,name=custom_config_file,json=customConfigFile,proto3" json:"custom_config_file,omitempty"`
 	// Maximum length of name field in Envoy's metrics. The length of the name field
 	// is determined by the length of a name field in a service and the set of labels that
@@ -1010,7 +1010,9 @@ type ProxyConfig struct {
 	//
 	//	server:
 	//	  value: "my-custom-server"
-	//	requestId: {} // Explicitly enable Request IDs. As this is the default, this has no effect.
+	//	# Explicitly enable Request IDs.
+	//	# As this is the default, this has no effect.
+	//	requestId: {}
 	//	attemptCount:
 	//	  disabled: true
 	//
@@ -1372,7 +1374,7 @@ type RemoteService struct {
 	// qualified DNS name.
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	// Use the `tlsSettings` to specify the tls mode to use. If the remote service
-	// uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
+	// uses Istio mutual TLS and shares the root CA with istiod, specify the TLS
 	// mode as `ISTIO_MUTUAL`.
 	TlsSettings *v1alpha3.ClientTLSSettings `protobuf:"bytes,2,opt,name=tls_settings,json=tlsSettings,proto3" json:"tls_settings,omitempty"`
 	// If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalives.
