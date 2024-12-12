@@ -609,7 +609,7 @@ type MeshConfig struct {
 	ProxyInboundListenPort int32 `protobuf:"varint,65,opt,name=proxy_inbound_listen_port,json=proxyInboundListenPort,proto3" json:"proxy_inbound_listen_port,omitempty"`
 	// Port on which Envoy should listen for HTTP PROXY requests if set.
 	ProxyHttpPort int32 `protobuf:"varint,5,opt,name=proxy_http_port,json=proxyHttpPort,proto3" json:"proxy_http_port,omitempty"`
-	// Connection timeout used by Envoy. (MUST BE >=1ms)
+	// Connection timeout used by Envoy. (MUST be >=1ms)
 	// Default timeout is 10s.
 	ConnectTimeout *duration.Duration `protobuf:"bytes,6,opt,name=connect_timeout,json=connectTimeout,proto3" json:"connect_timeout,omitempty"`
 	// $hide_from_docs
@@ -621,7 +621,7 @@ type MeshConfig struct {
 	// MongoDB, etc. Envoy will timeout on the protocol detection after
 	// the specified period, defaulting to non mTLS plain TCP
 	// traffic. Set this field to tweak the period that Envoy will wait
-	// for the client to send the first bits of data. (MUST BE >=1ms or
+	// for the client to send the first bits of data. (MUST be >=1ms or
 	// 0s to disable). Default detection timeout is 0s (no timeout).
 	//
 	// Setting a timeout is not recommended nor safe. Even high timeouts (>5s) will be hit
@@ -1434,7 +1434,7 @@ type ConfigSource struct {
 	// fs:/// to specify a file-based backend with absolute path to the directory.
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	// Use the tlsSettings to specify the tls mode to use. If the MCP server
-	// uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
+	// uses Istio mutual TLS and shares the root CA with istiod, specify the TLS
 	// mode as `ISTIO_MUTUAL`.
 	TlsSettings *v1alpha3.ClientTLSSettings `protobuf:"bytes,2,opt,name=tls_settings,json=tlsSettings,proto3" json:"tls_settings,omitempty"`
 	// Describes the source of configuration, if nothing is specified default is MCP

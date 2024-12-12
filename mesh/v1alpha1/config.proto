@@ -45,7 +45,7 @@ message MeshConfig {
   // Port on which Envoy should listen for HTTP PROXY requests if set.
   int32 proxy_http_port = 5;
 
-  // Connection timeout used by Envoy. (MUST BE >=1ms)
+  // Connection timeout used by Envoy. (MUST be >=1ms)
   // Default timeout is 10s.
   google.protobuf.Duration connect_timeout = 6;
 
@@ -58,7 +58,7 @@ message MeshConfig {
   // MongoDB, etc. Envoy will timeout on the protocol detection after
   // the specified period, defaulting to non mTLS plain TCP
   // traffic. Set this field to tweak the period that Envoy will wait
-  // for the client to send the first bits of data. (MUST BE >=1ms or
+  // for the client to send the first bits of data. (MUST be >=1ms or
   // 0s to disable). Default detection timeout is 0s (no timeout).
   //
   // Setting a timeout is not recommended nor safe. Even high timeouts (>5s) will be hit
@@ -1543,7 +1543,7 @@ message ConfigSource {
  // fs:/// to specify a file-based backend with absolute path to the directory.
  string address = 1;
  // Use the tlsSettings to specify the tls mode to use. If the MCP server
- // uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
+ // uses Istio mutual TLS and shares the root CA with istiod, specify the TLS
  // mode as `ISTIO_MUTUAL`.
  istio.networking.v1alpha3.ClientTLSSettings tls_settings = 2;
  // Describes the source of configuration, if nothing is specified default is MCP

@@ -161,9 +161,9 @@ message DestinationRule {
   // the short name based on the namespace of the rule, not the service. A
   // rule in the "default" namespace containing a host "reviews" will be
   // interpreted as "reviews.default.svc.cluster.local", irrespective of
-  // the actual namespace associated with the reviews service. _To avoid
+  // the actual namespace associated with the reviews service. To avoid
   // potential misconfigurations, it is recommended to always use fully
-  // qualified domain names over short names._
+  // qualified domain names over short names.
   //
   // Note that the host field applies to both HTTP and TCP services.
   string host = 1 [(google.api.field_behavior) = REQUIRED];
@@ -249,9 +249,11 @@ message TrafficPolicy {
   message TunnelSettings {
     // Specifies which protocol to use for tunneling the downstream connection.
     // Supported protocols are:
-    //   CONNECT - uses HTTP CONNECT;
-    //   POST - uses HTTP POST.
+    //   * CONNECT - uses HTTP CONNECT;
+    //   * POST - uses HTTP POST.
+    //
     // CONNECT is used by default if not specified.
+    //
     // HTTP version for upstream requests is determined by the service protocol defined for the proxy.
     string protocol = 1;
 
@@ -503,7 +505,7 @@ message LoadBalancerSettings {
     ConsistentHashLB consistent_hash = 2;
   }
 
-  // Locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
+  // Locality load balancer settings, this will override mesh-wide settings in entirety, meaning no merging would be performed
   // between this object and the object one in MeshConfig
   LocalityLoadBalancerSetting locality_lb_setting = 3;
 
@@ -588,14 +590,14 @@ message ConnectionPoolSettings {
     int32 max_connections = 1;
 
     // TCP connection timeout. format:
-    // 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
+    // 1h/1m/1s/1ms. MUST be >=1ms. Default is 10s.
     google.protobuf.Duration connect_timeout = 2;
 
     // If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
     TcpKeepalive tcp_keepalive = 3;
 
     // The maximum duration of a connection. The duration is defined as the period since a connection
-    // was established. If not set, there is no max duration. When max_connection_duration
+    // was established. If not set, there is no max duration. When `maxConnectionDuration`
     // is reached the connection will be closed. Duration must be at least 1ms.
     google.protobuf.Duration max_connection_duration = 4;
 
@@ -656,7 +658,7 @@ message ConnectionPoolSettings {
     H2UpgradePolicy h2_upgrade_policy = 6;
 
     // If set to true, client protocol will be preserved while initiating connection to backend.
-    // Note that when this is set to true, h2_upgrade_policy will be ineffective i.e. the client
+    // Note that when this is set to true, `h2UpgradePolicy` will be ineffective i.e. the client
     // connections will not be upgraded to http2.
     bool use_client_protocol = 7;
 
@@ -717,7 +719,7 @@ message OutlierDetection {
   int32 consecutive_errors = 1 [deprecated=true];
 
   // Determines whether to distinguish local origin failures from external errors. If set to true
-  // consecutive_local_origin_failure is taken into account for outlier detection calculations.
+  // `consecutiveLocalOriginFailures` is taken into account for outlier detection calculations.
   // This should be used when you want to derive the outlier detection status based on the errors
   // seen locally such as failure to connect, timeout while connecting etc. rather than the status code
   // returned by upstream service. This is especially useful when the upstream service explicitly returns
@@ -727,7 +729,7 @@ message OutlierDetection {
   bool split_external_local_origin_errors = 8;
 
   // The number of consecutive locally originated failures before ejection
-  // occurs. Defaults to 5. Parameter takes effect only when split_external_local_origin_errors
+  // occurs. Defaults to 5. Parameter takes effect only when `splitExternalLocalOriginErrors`
   // is set to true.
   google.protobuf.UInt32Value consecutive_local_origin_failures = 9;
 
@@ -738,11 +740,11 @@ message OutlierDetection {
   // events qualify as a gateway error.
   // This feature is disabled by default or when set to the value 0.
   //
-  // Note that consecutive_gateway_errors and consecutive_5xx_errors can be
+  // Note that `consecutiveGatewayErrors` and `consecutive5xxErrors` can be
   // used separately or together. Because the errors counted by
-  // consecutive_gateway_errors are also included in consecutive_5xx_errors,
-  // if the value of consecutive_gateway_errors is greater than or equal to
-  // the value of consecutive_5xx_errors, consecutive_gateway_errors will have
+  // `consecutiveGatewayErrors` are also included in `consecutive5xxErrors`,
+  // if the value of `consecutiveGatewayErrors` is greater than or equal to
+  // the value of `consecutive5xxErrors`, `consecutiveGatewayErrors` will have
   // no effect.
   google.protobuf.UInt32Value consecutive_gateway_errors = 6;
 
@@ -752,23 +754,23 @@ message OutlierDetection {
   // 5xx error.
   // This feature defaults to 5 but can be disabled by setting the value to 0.
   //
-  // Note that consecutive_gateway_errors and consecutive_5xx_errors can be
+  // Note that `consecutiveGatewayErrors` and `consecutive5xxErrors` can be
   // used separately or together. Because the errors counted by
-  // consecutive_gateway_errors are also included in consecutive_5xx_errors,
-  // if the value of consecutive_gateway_errors is greater than or equal to
-  // the value of consecutive_5xx_errors, consecutive_gateway_errors will have
+  // `consecutiveGatewayErrors` are also included in `consecutive5xxErrors`,
+  // if the value of `consecutiveGatewayErrors` is greater than or equal to
+  // the value of `consecutive5xxErrors`, `consecutiveGatewayErrors` will have
   // no effect.
   google.protobuf.UInt32Value consecutive_5xx_errors = 7;
 
   // Time interval between ejection sweep analysis. format:
-  // 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
+  // 1h/1m/1s/1ms. MUST be >=1ms. Default is 10s.
   google.protobuf.Duration interval = 2;
 
   // Minimum ejection duration. A host will remain ejected for a period
   // equal to the product of minimum ejection duration and the number of
   // times the host has been ejected. This technique allows the system to
   // automatically increase the ejection period for unhealthy upstream
-  // servers. format: 1h/1m/1s/1ms. MUST BE >=1ms. Default is 30s.
+  // servers. format: 1h/1m/1s/1ms. MUST be >=1ms. Default is 30s.
   google.protobuf.Duration base_ejection_time = 3;
 
   // Maximum % of hosts in the load balancing pool for the upstream
@@ -776,7 +778,7 @@ message OutlierDetection {
   int32 max_ejection_percent = 4;
 
   // Outlier detection will be enabled as long as the associated load balancing
-  // pool has at least min_health_percent hosts in healthy mode. When the
+  // pool has at least `minHealthPercent` hosts in healthy mode. When the
   // percentage of healthy hosts in the load balancing pool drops below this
   // threshold, outlier detection will be disabled and the proxy will load balance
   // across all hosts in the pool (healthy and unhealthy). The threshold can be
@@ -903,8 +905,8 @@ message ClientTLSSettings {
   // A list of alternate names to verify the subject identity in the
   // certificate. If specified, the proxy will verify that the server
   // certificate's subject alt name matches one of the specified values.
-  // If specified, this list overrides the value of subject_alt_names
-  // from the ServiceEntry. If unspecified, automatic validation of upstream
+  // If specified, this list overrides the value of `subjectAltNames`
+  // from the `ServiceEntry`. If unspecified, automatic validation of upstream
   // presented certificate for new upstream connections will be done based on the
   // downstream HTTP host/authority header.
   repeated string subject_alt_names = 5;
@@ -936,13 +938,13 @@ message ClientTLSSettings {
 // [Locality Weight](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight)
 // The following example shows how to setup locality weights mesh-wide.
 //
-// Given a mesh with workloads and their service deployed to "us-west/zone1/*"
-// and "us-west/zone2/*". This example specifies that when traffic accessing a
-// service originates from workloads in "us-west/zone1/*", 80% of the traffic
-// will be sent to endpoints in "us-west/zone1/*", i.e the same zone, and the
-// remaining 20% will go to endpoints in "us-west/zone2/*". This setup is
+// Given a mesh with workloads and their service deployed to "us-west/zone1/\*"
+// and "us-west/zone2/\*". This example specifies that when traffic accessing a
+// service originates from workloads in "us-west/zone1/\*", 80% of the traffic
+// will be sent to endpoints in "us-west/zone1/\*", i.e the same zone, and the
+// remaining 20% will go to endpoints in "us-west/zone2/\*". This setup is
 // intended to favor routing traffic to endpoints in the same locality.
-// A similar setting is specified for traffic originating in "us-west/zone2/*".
+// A similar setting is specified for traffic originating in "us-west/zone2/\*".
 //
 // ```yaml
 //   distribute:
@@ -974,7 +976,6 @@ message ClientTLSSettings {
 //    - from: us-west
 //      to: us-east
 // ```
-// Locality load balancing settings.
 message LocalityLoadBalancerSetting{
     // Describes how traffic originating in the 'from' zone or sub-zone is
     // distributed over a set of 'to' zones. Syntax for specifying a zone is
@@ -1086,7 +1087,7 @@ message LocalityLoadBalancerSetting{
     // And it should be used together with `OutlierDetection` to detect unhealthy endpoints, otherwise has no effect.
     repeated string failover_priority = 4;
 
-    // enable locality load balancing, this is DestinationRule-level and will override mesh wide settings in entirety.
-    // e.g. true means that turn on locality load balancing for this DestinationRule no matter what mesh wide settings is.
+    // Enable locality load balancing. This is DestinationRule-level and will override mesh-wide settings in entirety.
+    // e.g. true means that turn on locality load balancing for this DestinationRule no matter what mesh-wide settings is.
     google.protobuf.BoolValue enabled = 3;
 }

@@ -104,5 +104,5 @@ const ServiceEntry_DNS_ROUND_ROBIN ServiceEntry_Resolution = v1alpha3.ServiceEnt
 type ServicePort = v1alpha3.ServicePort
 type ServiceEntryStatus = v1alpha3.ServiceEntryStatus
 
-// minor abstraction to allow for adding hostnames if relevant
+// A minor abstraction to allow for adding hostnames if relevant.
 type ServiceEntryAddress = v1alpha3.ServiceEntryAddress
