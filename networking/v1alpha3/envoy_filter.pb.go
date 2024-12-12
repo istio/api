@@ -395,6 +395,35 @@
 //         name: "envoy.filters.listener.proxy_protocol"
 //         typed_config:
 //           "@type": "type.googleapis.com/envoy.extensions.filters.listener.proxy_protocol.v3.ProxyProtocol"
+// ```
+//
+// The following example configures ratelimits for the domain `foo.com`.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: EnvoyFilter
+// metadata:
+//   name: domain-match-example
+//   namespace: myns
+// spec:
+//   configPatches:
+//   - applyTo: VIRTUAL_HOST
+//     match:
+//       context: GATEWAY
+//       routeConfiguration:
+//         vhost:
+//           domainName: 'foo.com'
+//     patch:
+//       operation: MERGE
+//       value:
+//         rate_limits:
+//           actions:
+//             - request_headers:
+//                 header_name: "authorization"
+//                 descriptor_key: "jwt"
+//             - request_headers:
+//                 header_name: ":path"
+//                 descriptor_key: "path"
 
 package v1alpha3
 
