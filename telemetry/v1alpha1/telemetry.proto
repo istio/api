@@ -264,7 +264,7 @@ option go_package = "istio.io/api/telemetry/v1alpha1";
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="(has(self.selector)?1:0)+(has(self.targetRef)?1:0)+(has(self.targetRefs)?1:0)<=1"
+// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="oneof(self.selector, self.targetRef, self.targetRefs)"
 message Telemetry {
   // Optional. The selector decides where to apply the policy.
   // If not set, the policy will be applied to all workloads in the
@@ -635,8 +635,8 @@ message MetricsOverrides {
   // TagOverride specifies an operation to perform on a metric dimension (also
   // known as a `label`). Tags may be added, removed, or have their default
   // values overridden.
-  // +kubebuilder:validation:XValidation:message="value must be set when operation is UPSERT",rule="((has(self.operation) ? self.operation : '') == 'UPSERT') ? self.value != '' : true"
-  // +kubebuilder:validation:XValidation:message="value must not be set when operation is REMOVE",rule="((has(self.operation) ? self.operation : '') == 'REMOVE') ? !has(self.value) : true"
+  // +kubebuilder:validation:XValidation:message="value must be set when operation is UPSERT",rule="default(self.operation, '') == 'UPSERT' ? self.value != '' : true"
+  // +kubebuilder:validation:XValidation:message="value must not be set when operation is REMOVE",rule="default(self.operation, '') == 'REMOVE' ? !has(self.value) : true"
   message TagOverride {
     enum Operation {
       // Insert or Update the tag with the provided value expression. The

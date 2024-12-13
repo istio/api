@@ -260,7 +260,7 @@ const (
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="(has(self.selector)?1:0)+(has(self.targetRef)?1:0)+(has(self.targetRefs)?1:0)<=1"
+// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="oneof(self.selector, self.targetRef, self.targetRefs)"
 type RequestAuthentication struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -393,7 +393,7 @@ func (x *RequestAuthentication) GetJwtRules() []*JWTRule {
 // fromHeaders:
 // - "x-goog-iap-jwt-assertion"
 // ```
-// +kubebuilder:validation:XValidation:message="only one of jwks or jwksUri can be set",rule="(has(self.jwksUri)?1:0)+(has(self.jwks_uri)?1:0)+(has(self.jwks)?1:0)<=1"
+// +kubebuilder:validation:XValidation:message="only one of jwks or jwksUri can be set",rule="oneof(self.jwksUri, self.jwks_uri, self.jwks)"
 type JWTRule struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
