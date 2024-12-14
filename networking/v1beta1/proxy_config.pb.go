@@ -82,7 +82,7 @@
 // ```
 //
 // If a `ProxyConfig` CR is defined that matches a workload it will merge with its `proxy.istio.io/config` annotation if present,
-// with the CR taking precedence over the annotation for overlapping fields. Similarly, if a mesh wide `ProxyConfig` CR is defined and
+// with the CR taking precedence over the annotation for overlapping fields. Similarly, if a mesh-wide `ProxyConfig` CR is defined and
 // `meshConfig.DefaultConfig` is set, the two resources will be merged with the CR taking precedence for overlapping fields.
 //
 

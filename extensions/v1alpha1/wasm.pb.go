@@ -27,7 +27,7 @@
 // WasmPlugins provides a mechanism to extend the functionality provided by
 // the Istio proxy through WebAssembly filters.
 //
-// Order of execution (as part of Envoy's filter chain) is determined by
+// The order of execution (as part of Envoy's filter chain) is determined by
 // phase and priority settings, allowing the configuration of complex
 // interactions between user-supplied WasmPlugins and Istio's internal
 // filters.
@@ -417,7 +417,7 @@ type EnvValueSource int32
 const (
 	// Explicitly given key-value pairs to be injected to this VM
 	EnvValueSource_INLINE EnvValueSource = 0
-	// *Istio-proxy's* environment variables exposed to this VM.
+	// Proxy environment variables exposed to this VM.
 	EnvValueSource_HOST EnvValueSource = 1
 )
 
@@ -512,7 +512,7 @@ func (FailStrategy) EnumDescriptor() ([]byte, []int) {
 	return file_extensions_v1alpha1_wasm_proto_rawDescGZIP(), []int{4}
 }
 
-// WasmPlugins provides a mechanism to extend the functionality provided by
+// WasmPlugin provides a mechanism to extend the functionality provided by
 // the Istio proxy through WebAssembly filters.
 //
 // <!-- crd generation tags
