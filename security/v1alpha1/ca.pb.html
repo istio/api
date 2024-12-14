@@ -30,34 +30,28 @@ policies.</li>
 <thead>
 <tr>
 <th>Field</th>
-<th>Type</th>
 <th>Description</th>
-<th>Required</th>
 </tr>
 </thead>
 <tbody>
 <tr id="IstioCertificateRequest-csr">
-<td><code><a href="#IstioCertificateRequest-csr">csr</a></code></td>
-<td><code>string</code></td>
+<td><div class="field"><div class="name"><code><a href="#IstioCertificateRequest-csr">csr</a></code></div>
+<div class="type">string</div>
+</div></td>
 <td>
 <p>PEM-encoded certificate request.
 The public key in the CSR is used to generate the certificate,
 and other fields in the generated certificate may be overwritten by the CA.</p>
 
 </td>
-<td>
-No
-</td>
 </tr>
 <tr id="IstioCertificateRequest-validity_duration">
-<td><code><a href="#IstioCertificateRequest-validity_duration">validityDuration</a></code></td>
-<td><code>int64</code></td>
+<td><div class="field"><div class="name"><code><a href="#IstioCertificateRequest-validity_duration">validityDuration</a></code></div>
+<div class="type">int64</div>
+</div></td>
 <td>
-<p>Optional: requested certificate validity period, in seconds.</p>
+<p>requested certificate validity period, in seconds.</p>
 
-</td>
-<td>
-No
 </td>
 </tr>
 </tbody>
@@ -71,22 +65,18 @@ No
 <thead>
 <tr>
 <th>Field</th>
-<th>Type</th>
 <th>Description</th>
-<th>Required</th>
 </tr>
 </thead>
 <tbody>
 <tr id="IstioCertificateResponse-cert_chain">
-<td><code><a href="#IstioCertificateResponse-cert_chain">certChain</a></code></td>
-<td><code>string[]</code></td>
+<td><div class="field"><div class="name"><code><a href="#IstioCertificateResponse-cert_chain">certChain</a></code></div>
+<div class="type">string[]</div>
+</div></td>
 <td>
 <p>PEM-encoded certificate chain.
 The leaf cert is the first element, and the root cert is the last element.</p>
 
-</td>
-<td>
-No
 </td>
 </tr>
 </tbody>
