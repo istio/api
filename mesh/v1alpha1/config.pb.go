@@ -4201,7 +4201,7 @@ type MeshConfig_ExtensionProvider_GrpcService struct {
 	// Optional. Specifies the timeout for the GRPC request.
 	Timeout *duration.Duration `protobuf:"bytes,1,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	// Optional. Additional metadata to include in streams initiated to the GrpcService. This can be used for
-	// scenarios in which additional ad hoc authorization headers (e.g. “x-foo-bar: baz-key“) are to
+	// scenarios in which additional ad hoc authorization headers (e.g. "x-foo-bar: baz-key") are to
 	// be injected.
 	InitialMetadata []*MeshConfig_ExtensionProvider_HttpHeader `protobuf:"bytes,2,rep,name=initial_metadata,json=initialMetadata,proto3" json:"initial_metadata,omitempty"`
 }
