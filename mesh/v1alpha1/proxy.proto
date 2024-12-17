@@ -220,7 +220,7 @@ message Tracing {
   double sampling = 7;
 
   // Use the tlsSettings to specify the tls mode to use. If the remote tracing service
-  // uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
+  // uses Istio mutual TLS and shares the root CA with istiod, specify the TLS
   // mode as `ISTIO_MUTUAL`.
   istio.networking.v1alpha3.ClientTLSSettings tls_settings = 8;
 
@@ -308,7 +308,7 @@ enum ForwardClientCertDetails {
 }
 
 // PrivateKeyProvider defines private key configuration for gateways and sidecars. This can be configured
-// mesh wide or individual per-workload basis.
+// mesh-wide or individual per-workload basis.
 message PrivateKeyProvider {
   // CryptoMb PrivateKeyProvider configuration
   message CryptoMb {
@@ -349,7 +349,7 @@ message PrivateKeyProvider {
 
 // ProxyConfig defines variables for individual Envoy instances. This can be configured on a per-workload basis
 // as well as by the mesh-wide defaults.
-// To set the mesh wide defaults, configure the `defaultConfig` section of `meshConfig`. For example:
+// To set the mesh-wide defaults, configure the `defaultConfig` section of `meshConfig`. For example:
 //
 // ```
 // meshConfig:
@@ -452,7 +452,7 @@ message ProxyConfig {
   // Default is set to `MUTUAL_TLS`.
   AuthenticationPolicy control_plane_auth_policy = 13;
   // File path of custom proxy configuration, currently used by proxies
-  // in front of Mixer and Pilot.
+  // in front of istiod.
   string custom_config_file = 14;
 
   // Maximum length of name field in Envoy's metrics. The length of the name field
@@ -620,9 +620,18 @@ message ProxyConfig {
   // proxyHeaders:
   //   server:
   //     value: "my-custom-server"
-  //   requestId: {} // Explicitly enable Request IDs. As this is the default, this has no effect.
+  //   # Explicitly enable Request IDs.
+  //   # As this is the default, this has no effect.
+  //   requestId: {}
   //   attemptCount:
   //     disabled: true
+  // ```
+  //
+  // Below shows an example of preserving the header case for HTTP 1.x requests
+  //
+  // ```yaml
+  // proxyHeaders:
+  //   perserveHttp1HeaderCase: true
   // ```
   //
   // Some headers are enabled by default, and require explicitly disabling. See below for an example of disabling all default-enabled headers:
@@ -725,6 +734,17 @@ message ProxyConfig {
     // By default, the behavior is unspecified.
     // If IN_MESH, these headers will not be appended to outbound requests from sidecars to services not in-mesh.
     MetadataExchangeHeaders metadata_exchange_headers = 6;
+    // When true, the original case of HTTP/1.x headers will be preserved
+    // as they pass through the proxy, rather than normalizing them to lowercase.
+    // This field is particularly useful for applications that require case-sensitive 
+    // headers for interoperability with downstream systems or APIs that expect specific 
+    // casing.
+    // The preserve_http1_header_case option only applies to HTTP/1.x traffic, as HTTP/2 requires all headers 
+    // to be lowercase per the protocol specification. Envoy will ignore this field for HTTP/2 
+    // requests and automatically normalize headers to lowercase, ensuring compliance with HTTP/2 
+    // standards. 
+    google.protobuf.BoolValue preserve_http1_header_case = 40;
+
   }
 }
 
@@ -735,7 +755,7 @@ message RemoteService {
   string address = 1;
 
   // Use the `tlsSettings` to specify the tls mode to use. If the remote service
-  // uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
+  // uses Istio mutual TLS and shares the root CA with istiod, specify the TLS
   // mode as `ISTIO_MUTUAL`.
   istio.networking.v1alpha3.ClientTLSSettings tls_settings = 2;
 

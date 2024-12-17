@@ -24,25 +24,6 @@
 // $location: https://istio.io/docs/reference/config/security/request_authentication.html
 // $aliases: [/docs/reference/config/security/v1beta1/request_authentication, /docs/reference/config/security/v1beta1/jwt, /docs/reference/config/security/v1beta1/jwt.html]
 
-package v1beta1
-
-import (
-	duration "github.com/golang/protobuf/ptypes/duration"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	v1beta1 "istio.io/api/type/v1beta1"
-	reflect "reflect"
-	sync "sync"
-)
-
-const (
-	// Verify that this generated code is sufficiently up-to-date.
-	_ = protoimpl.EnforceVersion(20 - protoimpl.MinVersion)
-	// Verify that runtime/protoimpl is sufficiently up-to-date.
-	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
-)
-
 // RequestAuthentication defines what request authentication methods are supported by a workload.
 // It will reject a request if the request contains invalid authentication information, based on the
 // configured authentication rules. A request that does not contain any authentication credentials
@@ -50,131 +31,107 @@ const (
 // requests only, this should be accompanied by an authorization rule.
 // Examples:
 //
-// - Require JWT for all request for workloads that have label `app:httpbin`
+// Require JWT for all request for workloads that have label `app:httpbin`:
 //
 // ```yaml
 // apiVersion: security.istio.io/v1
 // kind: RequestAuthentication
 // metadata:
-//
-//	name: httpbin
-//	namespace: foo
-//
+//   name: httpbin
+//   namespace: foo
 // spec:
-//
-//	selector:
-//	  matchLabels:
-//	    app: httpbin
-//	jwtRules:
-//	- issuer: "issuer-foo"
-//	  jwksUri: https://example.com/.well-known/jwks.json
-//
+//   selector:
+//     matchLabels:
+//       app: httpbin
+//   jwtRules:
+//   - issuer: "issuer-foo"
+//     jwksUri: https://example.com/.well-known/jwks.json
 // ---
 // apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
 // metadata:
-//
-//	name: httpbin
-//	namespace: foo
-//
+//   name: httpbin
+//   namespace: foo
 // spec:
-//
-//	selector:
-//	  matchLabels:
-//	    app: httpbin
-//	rules:
-//	- from:
-//	  - source:
-//	      requestPrincipals: ["*"]
-//
+//   selector:
+//     matchLabels:
+//       app: httpbin
+//   rules:
+//   - from:
+//     - source:
+//         requestPrincipals: ["*"]
 // ```
 //
-// - A policy in the root namespace ("istio-system" by default) applies to workloads in all namespaces
+// A policy in the root namespace ("istio-system" by default) applies to workloads in all namespaces
 // in a mesh. The following policy makes all workloads only accept requests that contain a
-// valid JWT token.
+// valid JWT token:
 //
 // ```yaml
 // apiVersion: security.istio.io/v1
 // kind: RequestAuthentication
 // metadata:
-//
-//	name: req-authn-for-all
-//	namespace: istio-system
-//
+//   name: req-authn-for-all
+//   namespace: istio-system
 // spec:
-//
-//	jwtRules:
-//	- issuer: "issuer-foo"
-//	  jwksUri: https://example.com/.well-known/jwks.json
-//
+//   jwtRules:
+//   - issuer: "issuer-foo"
+//     jwksUri: https://example.com/.well-known/jwks.json
 // ---
 // apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
 // metadata:
-//
-//	name: require-jwt-for-all
-//	namespace: istio-system
-//
+//   name: require-jwt-for-all
+//   namespace: istio-system
 // spec:
-//
-//	rules:
-//	- from:
-//	  - source:
-//	      requestPrincipals: ["*"]
-//
+//   rules:
+//   - from:
+//     - source:
+//         requestPrincipals: ["*"]
 // ```
 //
-// - The next example shows how to set a different JWT requirement for a different `host`. The `RequestAuthentication`
+// The next example shows how to set a different JWT requirement for a different `host`. The `RequestAuthentication`
 // declares it can accept JWTs issued by either `issuer-foo` or `issuer-bar` (the public key set is implicitly
-// set from the OpenID Connect spec).
+// set from the OpenID Connect spec):
 //
 // ```yaml
 // apiVersion: security.istio.io/v1
 // kind: RequestAuthentication
 // metadata:
-//
-//	name: httpbin
-//	namespace: foo
-//
+//   name: httpbin
+//   namespace: foo
 // spec:
-//
-//	selector:
-//	  matchLabels:
-//	    app: httpbin
-//	jwtRules:
-//	- issuer: "issuer-foo"
-//	- issuer: "issuer-bar"
-//
+//   selector:
+//     matchLabels:
+//       app: httpbin
+//   jwtRules:
+//   - issuer: "issuer-foo"
+//   - issuer: "issuer-bar"
 // ---
 // apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
 // metadata:
-//
-//	name: httpbin
-//	namespace: foo
-//
+//   name: httpbin
+//   namespace: foo
 // spec:
-//
-//	selector:
-//	  matchLabels:
-//	    app: httpbin
-//	rules:
-//	- from:
-//	  - source:
-//	      requestPrincipals: ["issuer-foo/*"]
-//	  to:
-//	  - operation:
-//	      hosts: ["example.com"]
-//	- from:
-//	  - source:
-//	      requestPrincipals: ["issuer-bar/*"]
-//	  to:
-//	  - operation:
-//	      hosts: ["another-host.com"]
-//
+//   selector:
+//     matchLabels:
+//       app: httpbin
+//   rules:
+//   - from:
+//     - source:
+//         requestPrincipals: ["issuer-foo/*"]
+//     to:
+//     - operation:
+//         hosts: ["example.com"]
+//   - from:
+//     - source:
+//         requestPrincipals: ["issuer-bar/*"]
+//     to:
+//     - operation:
+//         hosts: ["another-host.com"]
 // ```
 //
-// - You can fine tune the authorization policy to set different requirement per path. For example,
+// You can fine-tune the authorization policy to set different requirement per path. For example,
 // to require JWT on all paths, except /healthz, the same `RequestAuthentication` can be used, but the
 // authorization policy could be:
 //
@@ -182,23 +139,19 @@ const (
 // apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
 // metadata:
-//
-//	name: httpbin
-//	namespace: foo
-//
+//   name: httpbin
+//   namespace: foo
 // spec:
-//
-//	selector:
-//	  matchLabels:
-//	    app: httpbin
-//	rules:
-//	- from:
-//	  - source:
-//	      requestPrincipals: ["*"]
-//	- to:
-//	  - operation:
-//	      paths: ["/healthz"]
-//
+//   selector:
+//     matchLabels:
+//       app: httpbin
+//   rules:
+//   - from:
+//     - source:
+//         requestPrincipals: ["*"]
+//   - to:
+//     - operation:
+//         paths: ["/healthz"]
 // ```
 //
 // [Experimental] Routing based on derived [metadata](https://istio.io/latest/docs/reference/config/security/conditions/)
@@ -220,68 +173,75 @@ const (
 // apiVersion: security.istio.io/v1
 // kind: RequestAuthentication
 // metadata:
-//
-//	name: jwt-on-ingress
-//	namespace: istio-system
-//
+//   name: jwt-on-ingress
+//   namespace: istio-system
 // spec:
-//
-//	selector:
-//	  matchLabels:
-//	    app: istio-ingressgateway
-//	jwtRules:
-//	- issuer: "example.com"
-//	  jwksUri: https://example.com/.well-known/jwks.json
-//
+//   selector:
+//     matchLabels:
+//       app: istio-ingressgateway
+//   jwtRules:
+//   - issuer: "example.com"
+//     jwksUri: https://example.com/.well-known/jwks.json
 // ---
 // apiVersion: security.istio.io/v1
 // kind: AuthorizationPolicy
 // metadata:
-//
-//	name: require-jwt
-//	namespace: istio-system
-//
+//   name: require-jwt
+//   namespace: istio-system
 // spec:
-//
-//	selector:
-//	  matchLabels:
-//	    app: istio-ingressgateway
-//	rules:
-//	- from:
-//	  - source:
-//	      requestPrincipals: ["*"]
-//
+//   selector:
+//     matchLabels:
+//       app: istio-ingressgateway
+//   rules:
+//   - from:
+//     - source:
+//         requestPrincipals: ["*"]
 // ---
 // apiVersion: networking.istio.io/v1
 // kind: VirtualService
 // metadata:
-//
-//	name: route-jwt
-//
+//   name: route-jwt
 // spec:
-//
-//	hosts:
-//	- foo.prod.svc.cluster.local
-//	gateways:
-//	- istio-ingressgateway
-//	http:
-//	- name: "v2"
-//	  match:
-//	  - headers:
-//	      "@request.auth.claims.sub":
-//	        exact: "dev"
-//	  route:
-//	  - destination:
-//	      host: foo.prod.svc.cluster.local
-//	      subset: v2
-//	- name: "default"
-//	  route:
-//	  - destination:
-//	      host: foo.prod.svc.cluster.local
-//	      subset: v1
-//
+//   hosts:
+//   - foo.prod.svc.cluster.local
+//   gateways:
+//   - istio-ingressgateway
+//   http:
+//   - name: "v2"
+//     match:
+//     - headers:
+//         "@request.auth.claims.sub":
+//           exact: "dev"
+//     route:
+//     - destination:
+//         host: foo.prod.svc.cluster.local
+//         subset: v2
+//   - name: "default"
+//     route:
+//     - destination:
+//         host: foo.prod.svc.cluster.local
+//         subset: v1
 // ```
-//
+
+package v1beta1
+
+import (
+	duration "github.com/golang/protobuf/ptypes/duration"
+	_ "google.golang.org/genproto/googleapis/api/annotations"
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	v1beta1 "istio.io/api/type/v1beta1"
+	reflect "reflect"
+	sync "sync"
+)
+
+const (
+	// Verify that this generated code is sufficiently up-to-date.
+	_ = protoimpl.EnforceVersion(20 - protoimpl.MinVersion)
+	// Verify that runtime/protoimpl is sufficiently up-to-date.
+	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
+)
+
 // <!-- crd generation tags
 // +cue-gen:RequestAuthentication:groupName:security.istio.io
 // +cue-gen:RequestAuthentication:versions:v1beta1,v1

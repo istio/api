@@ -427,9 +427,9 @@ type DestinationRule struct {
 	// the short name based on the namespace of the rule, not the service. A
 	// rule in the "default" namespace containing a host "reviews" will be
 	// interpreted as "reviews.default.svc.cluster.local", irrespective of
-	// the actual namespace associated with the reviews service. _To avoid
+	// the actual namespace associated with the reviews service. To avoid
 	// potential misconfigurations, it is recommended to always use fully
-	// qualified domain names over short names._
+	// qualified domain names over short names.
 	//
 	// Note that the host field applies to both HTTP and TCP services.
 	Host string `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
@@ -806,7 +806,7 @@ type LoadBalancerSettings struct {
 	//	*LoadBalancerSettings_Simple
 	//	*LoadBalancerSettings_ConsistentHash
 	LbPolicy isLoadBalancerSettings_LbPolicy `protobuf_oneof:"lb_policy"`
-	// Locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
+	// Locality load balancer settings, this will override mesh-wide settings in entirety, meaning no merging would be performed
 	// between this object and the object one in MeshConfig
 	LocalityLbSetting *LocalityLoadBalancerSetting `protobuf:"bytes,3,opt,name=locality_lb_setting,json=localityLbSetting,proto3" json:"locality_lb_setting,omitempty"`
 	// Deprecated: use `warmup` instead.
@@ -1118,7 +1118,7 @@ type OutlierDetection struct {
 	// Deprecated: Marked as deprecated in networking/v1alpha3/destination_rule.proto.
 	ConsecutiveErrors int32 `protobuf:"varint,1,opt,name=consecutive_errors,json=consecutiveErrors,proto3" json:"consecutive_errors,omitempty"`
 	// Determines whether to distinguish local origin failures from external errors. If set to true
-	// consecutive_local_origin_failure is taken into account for outlier detection calculations.
+	// `consecutiveLocalOriginFailures` is taken into account for outlier detection calculations.
 	// This should be used when you want to derive the outlier detection status based on the errors
 	// seen locally such as failure to connect, timeout while connecting etc. rather than the status code
 	// returned by upstream service. This is especially useful when the upstream service explicitly returns
@@ -1127,7 +1127,7 @@ type OutlierDetection struct {
 	// Defaults to false.
 	SplitExternalLocalOriginErrors bool `protobuf:"varint,8,opt,name=split_external_local_origin_errors,json=splitExternalLocalOriginErrors,proto3" json:"split_external_local_origin_errors,omitempty"`
 	// The number of consecutive locally originated failures before ejection
-	// occurs. Defaults to 5. Parameter takes effect only when split_external_local_origin_errors
+	// occurs. Defaults to 5. Parameter takes effect only when `splitExternalLocalOriginErrors`
 	// is set to true.
 	ConsecutiveLocalOriginFailures *wrappers.UInt32Value `protobuf:"bytes,9,opt,name=consecutive_local_origin_failures,json=consecutiveLocalOriginFailures,proto3" json:"consecutive_local_origin_failures,omitempty"`
 	// Number of gateway errors before a host is ejected from the connection pool.
@@ -1137,11 +1137,11 @@ type OutlierDetection struct {
 	// events qualify as a gateway error.
 	// This feature is disabled by default or when set to the value 0.
 	//
-	// Note that consecutive_gateway_errors and consecutive_5xx_errors can be
+	// Note that `consecutiveGatewayErrors` and `consecutive5xxErrors` can be
 	// used separately or together. Because the errors counted by
-	// consecutive_gateway_errors are also included in consecutive_5xx_errors,
-	// if the value of consecutive_gateway_errors is greater than or equal to
-	// the value of consecutive_5xx_errors, consecutive_gateway_errors will have
+	// `consecutiveGatewayErrors` are also included in `consecutive5xxErrors`,
+	// if the value of `consecutiveGatewayErrors` is greater than or equal to
+	// the value of `consecutive5xxErrors`, `consecutiveGatewayErrors` will have
 	// no effect.
 	ConsecutiveGatewayErrors *wrappers.UInt32Value `protobuf:"bytes,6,opt,name=consecutive_gateway_errors,json=consecutiveGatewayErrors,proto3" json:"consecutive_gateway_errors,omitempty"`
 	// Number of 5xx errors before a host is ejected from the connection pool.
@@ -1150,27 +1150,27 @@ type OutlierDetection struct {
 	// 5xx error.
 	// This feature defaults to 5 but can be disabled by setting the value to 0.
 	//
-	// Note that consecutive_gateway_errors and consecutive_5xx_errors can be
+	// Note that `consecutiveGatewayErrors` and `consecutive5xxErrors` can be
 	// used separately or together. Because the errors counted by
-	// consecutive_gateway_errors are also included in consecutive_5xx_errors,
-	// if the value of consecutive_gateway_errors is greater than or equal to
-	// the value of consecutive_5xx_errors, consecutive_gateway_errors will have
+	// `consecutiveGatewayErrors` are also included in `consecutive5xxErrors`,
+	// if the value of `consecutiveGatewayErrors` is greater than or equal to
+	// the value of `consecutive5xxErrors`, `consecutiveGatewayErrors` will have
 	// no effect.
 	Consecutive_5XxErrors *wrappers.UInt32Value `protobuf:"bytes,7,opt,name=consecutive_5xx_errors,json=consecutive5xxErrors,proto3" json:"consecutive_5xx_errors,omitempty"`
 	// Time interval between ejection sweep analysis. format:
-	// 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
+	// 1h/1m/1s/1ms. MUST be >=1ms. Default is 10s.
 	Interval *duration.Duration `protobuf:"bytes,2,opt,name=interval,proto3" json:"interval,omitempty"`
 	// Minimum ejection duration. A host will remain ejected for a period
 	// equal to the product of minimum ejection duration and the number of
 	// times the host has been ejected. This technique allows the system to
 	// automatically increase the ejection period for unhealthy upstream
-	// servers. format: 1h/1m/1s/1ms. MUST BE >=1ms. Default is 30s.
+	// servers. format: 1h/1m/1s/1ms. MUST be >=1ms. Default is 30s.
 	BaseEjectionTime *duration.Duration `protobuf:"bytes,3,opt,name=base_ejection_time,json=baseEjectionTime,proto3" json:"base_ejection_time,omitempty"`
 	// Maximum % of hosts in the load balancing pool for the upstream
 	// service that can be ejected. Defaults to 10%.
 	MaxEjectionPercent int32 `protobuf:"varint,4,opt,name=max_ejection_percent,json=maxEjectionPercent,proto3" json:"max_ejection_percent,omitempty"`
 	// Outlier detection will be enabled as long as the associated load balancing
-	// pool has at least min_health_percent hosts in healthy mode. When the
+	// pool has at least `minHealthPercent` hosts in healthy mode. When the
 	// percentage of healthy hosts in the load balancing pool drops below this
 	// threshold, outlier detection will be disabled and the proxy will load balance
 	// across all hosts in the pool (healthy and unhealthy). The threshold can be
@@ -1381,8 +1381,8 @@ type ClientTLSSettings struct {
 	// A list of alternate names to verify the subject identity in the
 	// certificate. If specified, the proxy will verify that the server
 	// certificate's subject alt name matches one of the specified values.
-	// If specified, this list overrides the value of subject_alt_names
-	// from the ServiceEntry. If unspecified, automatic validation of upstream
+	// If specified, this list overrides the value of `subjectAltNames`
+	// from the `ServiceEntry`. If unspecified, automatic validation of upstream
 	// presented certificate for new upstream connections will be done based on the
 	// downstream HTTP host/authority header.
 	SubjectAltNames []string `protobuf:"bytes,5,rep,name=subject_alt_names,json=subjectAltNames,proto3" json:"subject_alt_names,omitempty"`
@@ -1504,13 +1504,13 @@ func (x *ClientTLSSettings) GetCaCrl() string {
 // [Locality Weight](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight)
 // The following example shows how to setup locality weights mesh-wide.
 //
-// Given a mesh with workloads and their service deployed to "us-west/zone1/*"
-// and "us-west/zone2/*". This example specifies that when traffic accessing a
-// service originates from workloads in "us-west/zone1/*", 80% of the traffic
-// will be sent to endpoints in "us-west/zone1/*", i.e the same zone, and the
-// remaining 20% will go to endpoints in "us-west/zone2/*". This setup is
+// Given a mesh with workloads and their service deployed to "us-west/zone1/\*"
+// and "us-west/zone2/\*". This example specifies that when traffic accessing a
+// service originates from workloads in "us-west/zone1/\*", 80% of the traffic
+// will be sent to endpoints in "us-west/zone1/\*", i.e the same zone, and the
+// remaining 20% will go to endpoints in "us-west/zone2/\*". This setup is
 // intended to favor routing traffic to endpoints in the same locality.
-// A similar setting is specified for traffic originating in "us-west/zone2/*".
+// A similar setting is specified for traffic originating in "us-west/zone2/\*".
 //
 // ```yaml
 //
@@ -1546,7 +1546,6 @@ func (x *ClientTLSSettings) GetCaCrl() string {
 //	    to: us-east
 //
 // ```
-// Locality load balancing settings.
 type LocalityLoadBalancerSetting struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -1624,8 +1623,8 @@ type LocalityLoadBalancerSetting struct {
 	// Optional: only one of distribute, failover or failoverPriority can be set.
 	// And it should be used together with `OutlierDetection` to detect unhealthy endpoints, otherwise has no effect.
 	FailoverPriority []string `protobuf:"bytes,4,rep,name=failover_priority,json=failoverPriority,proto3" json:"failover_priority,omitempty"`
-	// enable locality load balancing, this is DestinationRule-level and will override mesh wide settings in entirety.
-	// e.g. true means that turn on locality load balancing for this DestinationRule no matter what mesh wide settings is.
+	// Enable locality load balancing. This is DestinationRule-level and will override mesh-wide settings in entirety.
+	// e.g. true means that turn on locality load balancing for this DestinationRule no matter what mesh-wide settings is.
 	Enabled *wrappers.BoolValue `protobuf:"bytes,3,opt,name=enabled,proto3" json:"enabled,omitempty"`
 }
 
@@ -1778,11 +1777,11 @@ type TrafficPolicy_TunnelSettings struct {
 
 	// Specifies which protocol to use for tunneling the downstream connection.
 	// Supported protocols are:
-	//
-	//	CONNECT - uses HTTP CONNECT;
-	//	POST - uses HTTP POST.
+	//   - CONNECT - uses HTTP CONNECT;
+	//   - POST - uses HTTP POST.
 	//
 	// CONNECT is used by default if not specified.
+	//
 	// HTTP version for upstream requests is determined by the service protocol defined for the proxy.
 	Protocol string `protobuf:"bytes,1,opt,name=protocol,proto3" json:"protocol,omitempty"`
 	// Specifies a host to which the downstream connection is tunneled.
@@ -2266,12 +2265,12 @@ type ConnectionPoolSettings_TCPSettings struct {
 	// Maximum number of HTTP1 /TCP connections to a destination host. Default 2^32-1.
 	MaxConnections int32 `protobuf:"varint,1,opt,name=max_connections,json=maxConnections,proto3" json:"max_connections,omitempty"`
 	// TCP connection timeout. format:
-	// 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
+	// 1h/1m/1s/1ms. MUST be >=1ms. Default is 10s.
 	ConnectTimeout *duration.Duration `protobuf:"bytes,2,opt,name=connect_timeout,json=connectTimeout,proto3" json:"connect_timeout,omitempty"`
 	// If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
 	TcpKeepalive *ConnectionPoolSettings_TCPSettings_TcpKeepalive `protobuf:"bytes,3,opt,name=tcp_keepalive,json=tcpKeepalive,proto3" json:"tcp_keepalive,omitempty"`
 	// The maximum duration of a connection. The duration is defined as the period since a connection
-	// was established. If not set, there is no max duration. When max_connection_duration
+	// was established. If not set, there is no max duration. When `maxConnectionDuration`
 	// is reached the connection will be closed. Duration must be at least 1ms.
 	MaxConnectionDuration *duration.Duration `protobuf:"bytes,4,opt,name=max_connection_duration,json=maxConnectionDuration,proto3" json:"max_connection_duration,omitempty"`
 	// The idle timeout for TCP connections.
@@ -2383,7 +2382,7 @@ type ConnectionPoolSettings_HTTPSettings struct {
 	// Specify if http1.1 connection should be upgraded to http2 for the associated destination.
 	H2UpgradePolicy ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy `protobuf:"varint,6,opt,name=h2_upgrade_policy,json=h2UpgradePolicy,proto3,enum=istio.networking.v1alpha3.ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy" json:"h2_upgrade_policy,omitempty"`
 	// If set to true, client protocol will be preserved while initiating connection to backend.
-	// Note that when this is set to true, h2_upgrade_policy will be ineffective i.e. the client
+	// Note that when this is set to true, `h2UpgradePolicy` will be ineffective i.e. the client
 	// connections will not be upgraded to http2.
 	UseClientProtocol bool `protobuf:"varint,7,opt,name=use_client_protocol,json=useClientProtocol,proto3" json:"use_client_protocol,omitempty"`
 	// The maximum number of concurrent streams allowed for a peer on one HTTP/2 connection.

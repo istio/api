@@ -326,9 +326,11 @@ This takes the format: "<protocol>" or "<protocol>/<port>".
 	NetworkingExportTo = Instance {
 		Name:          "networking.istio.io/exportTo",
 		Description:   "Specifies the namespaces to which this service should be "+
-                        "exported to. A value of '*' indicates it is reachable "+
-                        "within the mesh '.' indicates it is reachable within its "+
-                        "namespace.",
+                        "exported to. A value of `*` indicates it is reachable "+
+                        "within the mesh. `.` indicates it is reachable within its "+
+                        "namespace. '~' indicates it is hidden and exported to no "+
+                        "namespaces. Additionally, a list of comma separated "+
+                        "namespace names can be specified.",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
