@@ -639,7 +639,7 @@ type Source struct {
 	Namespaces []string `protobuf:"bytes,3,rep,name=namespaces,proto3" json:"namespaces,omitempty"`
 	// Optional. A list of negative match of namespaces.
 	NotNamespaces []string `protobuf:"bytes,7,rep,name=not_namespaces,json=notNamespaces,proto3" json:"not_namespaces,omitempty"`
-	// Optional. A list of service accounts derived from the peer certificate.
+	// Optional. A list of Kubernetes service accounts derived from the peer certificate.
 	// This field requires mTLS enabled and is the same as the `source.serviceaccount` attribute.
 	//
 	// This takes the format `<namespace>/<serviceaccount>`.
@@ -652,7 +652,7 @@ type Source struct {
 	// +protoc-gen-crd:list-value-validation:MaxLength=320
 	// +kubebuilder:validation:MaxItems=16
 	ServiceAccounts []string `protobuf:"bytes,11,rep,name=service_accounts,json=serviceAccounts,proto3" json:"service_accounts,omitempty"`
-	// Optional. A list of negative match of service accounts.
+	// Optional. A list of negative match of Kubernetes service accounts.
 	//
 	// This takes the format `<namespace>/<serviceaccount>`.
 	//

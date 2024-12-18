@@ -555,7 +555,7 @@ This field requires mTLS enabled and is the same as the <code>source.namespace</
 <div class="type">string[]</div>
 </div></td>
 <td>
-<p>A list of service accounts derived from the peer certificate.
+<p>A list of Kubernetes service accounts derived from the peer certificate.
 This field requires mTLS enabled and is the same as the <code>source.serviceaccount</code> attribute.</p>
 <p>This takes the format <code>&lt;namespace&gt;/&lt;serviceaccount&gt;</code>.</p>
 <p>If not set, any service account is allowed.</p>
@@ -569,7 +569,7 @@ Cannot be set with <code>principals</code> or <code>namespaces</code>.</p>
 <div class="type">string[]</div>
 </div></td>
 <td>
-<p>A list of negative match of service accounts.</p>
+<p>A list of negative match of Kubernetes service accounts.</p>
 <p>This takes the format <code>&lt;namespace&gt;/&lt;serviceaccount&gt;</code>.</p>
 <p>No form of wildcard (<code>*</code>) is allowed.</p>
 
