@@ -270,7 +270,7 @@ option go_package="istio.io/api/security/v1beta1";
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="(has(self.selector)?1:0)+(has(self.targetRef)?1:0)+(has(self.targetRefs)?1:0)<=1"
+// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="oneof(self.selector, self.targetRef, self.targetRefs)"
 message AuthorizationPolicy {
   // Optional. The selector decides where to apply the authorization policy. The selector will match with workloads
   // in the same namespace as the authorization policy. If the authorization policy is in the root namespace, the selector
