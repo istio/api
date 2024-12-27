@@ -440,6 +440,34 @@ spec:
                     name:
                       description: Name of the subset.
                       type: string
+                    selector:
+                      properties:
+                        matchExpressions:
+                          description: matchExpressions is a list of label selector
+                            requirements.
+                          items:
+                            properties:
+                              key:
+                                description: key is the label key that the selector
+                                  applies to.
+                                type: string
+                              operator:
+                                description: operator represents a key's relationship
+                                  to a set of values.
+                                type: string
+                              values:
+                                description: values is an array of string values.
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          type: array
+                        matchLabels:
+                          additionalProperties:
+                            type: string
+                          description: matchLabels is a map of {key,value} pairs.
+                          type: object
+                      type: object
                     trafficPolicy:
                       description: Traffic policies that apply to this subset.
                       properties:
@@ -2354,6 +2382,34 @@ spec:
                     name:
                       description: Name of the subset.
                       type: string
+                    selector:
+                      properties:
+                        matchExpressions:
+                          description: matchExpressions is a list of label selector
+                            requirements.
+                          items:
+                            properties:
+                              key:
+                                description: key is the label key that the selector
+                                  applies to.
+                                type: string
+                              operator:
+                                description: operator represents a key's relationship
+                                  to a set of values.
+                                type: string
+                              values:
+                                description: values is an array of string values.
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          type: array
+                        matchLabels:
+                          additionalProperties:
+                            type: string
+                          description: matchLabels is a map of {key,value} pairs.
+                          type: object
+                      type: object
                     trafficPolicy:
                       description: Traffic policies that apply to this subset.
                       properties:
@@ -4268,6 +4324,34 @@ spec:
                     name:
                       description: Name of the subset.
                       type: string
+                    selector:
+                      properties:
+                        matchExpressions:
+                          description: matchExpressions is a list of label selector
+                            requirements.
+                          items:
+                            properties:
+                              key:
+                                description: key is the label key that the selector
+                                  applies to.
+                                type: string
+                              operator:
+                                description: operator represents a key's relationship
+                                  to a set of values.
+                                type: string
+                              values:
+                                description: values is an array of string values.
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          type: array
+                        matchLabels:
+                          additionalProperties:
+                            type: string
+                          description: matchLabels is a map of {key,value} pairs.
+                          type: object
+                      type: object
                     trafficPolicy:
                       description: Traffic policies that apply to this subset.
                       properties:

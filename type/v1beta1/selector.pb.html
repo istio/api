@@ -4,7 +4,7 @@ description: Definition of a workload selector.
 location: https://istio.io/docs/reference/config/type/workload-selector.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 4
+number_of_entries: 6
 ---
 <h2 id="WorkloadSelector">WorkloadSelector</h2>
 <section>
@@ -139,6 +139,105 @@ spec:
 <p>namespace is the namespace of the referent. When unspecified, the local
 namespace is inferred.</p>
 
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="LabelSelector">LabelSelector</h2>
+<section>
+<p>A label selector requirement is a selector that contains values, a key, and an operator that
+relates the key and values.
+Copied from Kubernetes to avoid expensive dependency on Kubernetes libraries.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LabelSelector-matchLabels">
+<td><code>matchLabels</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+map is equivalent to an element of matchExpressions, whose key field is &ldquo;key&rdquo;, the
+operator is &ldquo;In&rdquo;, and the values array contains only &ldquo;value&rdquo;. The requirements are ANDed.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LabelSelector-matchExpressions">
+<td><code>matchExpressions</code></td>
+<td><code><a href="#LabelSelectorRequirement">LabelSelectorRequirement[]</a></code></td>
+<td>
+<p>matchExpressions is a list of label selector requirements. The requirements are ANDed.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="LabelSelectorRequirement">LabelSelectorRequirement</h2>
+<section>
+<p>A label selector requirement is a selector that contains values, a key, and an operator that
+relates the key and values.
+Copied from Kubernetes to avoid expensive dependency on Kubernetes libraries.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LabelSelectorRequirement-key">
+<td><code>key</code></td>
+<td><code>string</code></td>
+<td>
+<p>key is the label key that the selector applies to.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LabelSelectorRequirement-operator">
+<td><code>operator</code></td>
+<td><code>string</code></td>
+<td>
+<p>operator represents a key&rsquo;s relationship to a set of values.
+Valid operators are In, NotIn, Exists and DoesNotExist.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LabelSelectorRequirement-values">
+<td><code>values</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>values is an array of string values. If the operator is In or NotIn,
+the values array must be non-empty. If the operator is Exists or DoesNotExist,
+the values array must be empty. This array is replaced during a strategic
+merge patch.</p>
+
+</td>
+<td>
+No
 </td>
 </tr>
 </tbody>
