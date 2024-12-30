@@ -544,6 +544,15 @@ annotations:
     resources:
       - Gateway
 
+  - name: networking.istio.io/service-expose-status-port
+    featureStatus: Alpha
+    description: |
+      Controls whether the 15021 health status port is exposed in the generated `Service` resource when using [Gateway auto-deployment](/docs/tasks/traffic-management/ingress/gateway-api/#automated-deployment)
+    deprecated: false
+    hidden: true
+    resources:
+      - Gateway
+
   - name: networking.istio.io/traffic-distribution
     featureStatus: Alpha
     description: |

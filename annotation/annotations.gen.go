@@ -339,6 +339,18 @@ This takes the format: "<protocol>" or "<protocol>/<port>".
 		},
 	}
 
+	NetworkingServiceExposeStatusPort = Instance {
+		Name:          "networking.istio.io/service-expose-status-port",
+		Description:   `Controls whether the 15021 health status port is exposed in the generated "Service" resource when using [Gateway auto-deployment](/docs/tasks/traffic-management/ingress/gateway-api/#automated-deployment)
+`,
+		FeatureStatus: Alpha,
+		Hidden:        true,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Gateway,
+		},
+	}
+
 	NetworkingServiceType = Instance {
 		Name:          "networking.istio.io/service-type",
 		Description:   `Overrides the type of the generated "Service" resource when using [Gateway auto-deployment](/docs/tasks/traffic-management/ingress/gateway-api/#automated-deployment)
@@ -360,7 +372,7 @@ At this time, this annotation only impacts routing done by Ztunnel.
 Accepted values:
 * "PreferClose": endpoints will be categorized by how "close" they are, consider network, region, zone, and subzone.
   Traffic will be prioritized to the closest healthy endpoints.
-  For example, if I have a Service with "PreferClose" set, with endpoints in zones "us-west,us-west,us-east". When 
+  For example, if I have a Service with "PreferClose" set, with endpoints in zones "us-west,us-west,us-east". When
   sending traffic from a client in zone "us-west", all traffic will go to the two "us-west" backends.
   If one those backends become unhealthy, all traffic will go to the remaining endpoint in "us-west".
   If that backend becomes unhealthy, traffic will sent to "us-east".
@@ -914,6 +926,7 @@ func AllResourceAnnotations() []*Instance {
 		&IoIstioWorkloadController,
 		&IoKubernetesIngressClass,
 		&NetworkingExportTo,
+		&NetworkingServiceExposeStatusPort,
 		&NetworkingServiceType,
 		&NetworkingTrafficDistribution,
 		&PrometheusMergeMetrics,
