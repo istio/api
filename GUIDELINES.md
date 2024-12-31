@@ -230,18 +230,18 @@ There are a few types of validations:
 Most validation is driven by comments on fields and messages.
 All validations in [KubeBuilder](https://book.kubebuilder.io/reference/markers/crd-validation) are supported, as well as some extras:
 
-* `+protoc-gen-crd:map-value-validation`: apply the validation to each *value* in a map. 
+- `+protoc-gen-crd:map-value-validation`: apply the validation to each *value* in a map.
   Note it's not possible to apply validations to each key. You can, however, validate the entire map together with a CEL rule.
-* `+protoc-gen-crd:list-value-validation`: apply the validation to each value in a list.
-* `+protoc-gen-crd:duration-validation:none`: exclude the default requirement that a duration field is non-zero.
-* `+protoc-gen-crd:validation:XIntOrString`: marks a field as accepting integers or strings.
-* `+protoc-gen-crd:validation:IgnoreSubValidation`: if referencing a message in a field, and that message has some validation on it already, exclude the listed validations.
+- `+protoc-gen-crd:list-value-validation`: apply the validation to each value in a list.
+- `+protoc-gen-crd:duration-validation:none`: exclude the default requirement that a duration field is non-zero.
+- `+protoc-gen-crd:validation:XIntOrString`: marks a field as accepting integers or strings.
+- `+protoc-gen-crd:validation:IgnoreSubValidation`: if referencing a message in a field, and that message has some validation on it already, exclude the listed validations.
   This is uncommon, but can be used when referencing a message in a certain context has different rules than others.
 
 The most common validations are:
-* Sizes: `MaxLength` (strings), `MaxItems` (lists), `MaxProperties` (maps)
-* Regex: `Pattern`
-* CEL: `XValidation`
+- Sizes: `MaxLength` (strings), `MaxItems` (lists), `MaxProperties` (maps)
+- Regex: `Pattern`
+- CEL: `XValidation`
 
 ### CEL
 
