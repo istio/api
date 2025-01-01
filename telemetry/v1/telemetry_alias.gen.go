@@ -27,7 +27,7 @@ import "istio.io/api/telemetry/v1alpha1"
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="(has(self.selector)?1:0)+(has(self.targetRef)?1:0)+(has(self.targetRefs)?1:0)<=1"
+// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="oneof(self.selector, self.targetRef, self.targetRefs)"
 type Telemetry = v1alpha1.Telemetry
 
 // Tracing configures tracing behavior for workloads within a mesh.
@@ -205,8 +205,8 @@ type MetricsOverrides = v1alpha1.MetricsOverrides
 // TagOverride specifies an operation to perform on a metric dimension (also
 // known as a `label`). Tags may be added, removed, or have their default
 // values overridden.
-// +kubebuilder:validation:XValidation:message="value must be set when operation is UPSERT",rule="((has(self.operation) ? self.operation : ”) == 'UPSERT') ? self.value != ” : true"
-// +kubebuilder:validation:XValidation:message="value must not be set when operation is REMOVE",rule="((has(self.operation) ? self.operation : ”) == 'REMOVE') ? !has(self.value) : true"
+// +kubebuilder:validation:XValidation:message="value must be set when operation is UPSERT",rule="default(self.operation, ”) == 'UPSERT' ? self.value != ” : true"
+// +kubebuilder:validation:XValidation:message="value must not be set when operation is REMOVE",rule="default(self.operation, ”) == 'REMOVE' ? !has(self.value) : true"
 type MetricsOverrides_TagOverride = v1alpha1.MetricsOverrides_TagOverride
 type MetricsOverrides_TagOverride_Operation = v1alpha1.MetricsOverrides_TagOverride_Operation
 
