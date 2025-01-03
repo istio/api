@@ -333,6 +333,146 @@ func (x *PolicyTargetReference) GetNamespace() string {
 	return ""
 }
 
+// A label selector requirement is a selector that contains values, a key, and an operator that
+// relates the key and values.
+// Copied from Kubernetes to avoid expensive dependency on Kubernetes libraries.
+type LabelSelector struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+	// map is equivalent to an element of matchExpressions, whose key field is "key", the
+	// operator is "In", and the values array contains only "value". The requirements are ANDed.
+	// +optional
+	MatchLabels map[string]string `protobuf:"bytes,1,rep,name=matchLabels,proto3" json:"matchLabels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// matchExpressions is a list of label selector requirements. The requirements are ANDed.
+	// +optional
+	MatchExpressions []*LabelSelectorRequirement `protobuf:"bytes,2,rep,name=matchExpressions,proto3" json:"matchExpressions,omitempty"`
+}
+
+func (x *LabelSelector) Reset() {
+	*x = LabelSelector{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_type_v1beta1_selector_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *LabelSelector) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LabelSelector) ProtoMessage() {}
+
+func (x *LabelSelector) ProtoReflect() protoreflect.Message {
+	mi := &file_type_v1beta1_selector_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LabelSelector.ProtoReflect.Descriptor instead.
+func (*LabelSelector) Descriptor() ([]byte, []int) {
+	return file_type_v1beta1_selector_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *LabelSelector) GetMatchLabels() map[string]string {
+	if x != nil {
+		return x.MatchLabels
+	}
+	return nil
+}
+
+func (x *LabelSelector) GetMatchExpressions() []*LabelSelectorRequirement {
+	if x != nil {
+		return x.MatchExpressions
+	}
+	return nil
+}
+
+// A label selector requirement is a selector that contains values, a key, and an operator that
+// relates the key and values.
+// Copied from Kubernetes to avoid expensive dependency on Kubernetes libraries.
+type LabelSelectorRequirement struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// key is the label key that the selector applies to.
+	// +patchMergeKey=key
+	// +patchStrategy=merge
+	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	// operator represents a key's relationship to a set of values.
+	// Valid operators are In, NotIn, Exists and DoesNotExist.
+	Operator string `protobuf:"bytes,2,opt,name=operator,proto3" json:"operator,omitempty"`
+	// values is an array of string values. If the operator is In or NotIn,
+	// the values array must be non-empty. If the operator is Exists or DoesNotExist,
+	// the values array must be empty. This array is replaced during a strategic
+	// merge patch.
+	// +optional
+	Values []string `protobuf:"bytes,3,rep,name=values,proto3" json:"values,omitempty"`
+}
+
+func (x *LabelSelectorRequirement) Reset() {
+	*x = LabelSelectorRequirement{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_type_v1beta1_selector_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *LabelSelectorRequirement) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LabelSelectorRequirement) ProtoMessage() {}
+
+func (x *LabelSelectorRequirement) ProtoReflect() protoreflect.Message {
+	mi := &file_type_v1beta1_selector_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LabelSelectorRequirement.ProtoReflect.Descriptor instead.
+func (*LabelSelectorRequirement) Descriptor() ([]byte, []int) {
+	return file_type_v1beta1_selector_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *LabelSelectorRequirement) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *LabelSelectorRequirement) GetOperator() string {
+	if x != nil {
+		return x.Operator
+	}
+	return ""
+}
+
+func (x *LabelSelectorRequirement) GetValues() []string {
+	if x != nil {
+		return x.Values
+	}
+	return nil
+}
+
 var File_type_v1beta1_selector_proto protoreflect.FileDescriptor
 
 var file_type_v1beta1_selector_proto_rawDesc = []byte{
@@ -363,14 +503,36 @@ var file_type_v1beta1_selector_proto_rawDesc = []byte{
 	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x04, 0xe2, 0x41, 0x01, 0x02, 0x52, 0x04, 0x6e, 0x61,
 	0x6d, 0x65, 0x12, 0x1c, 0x0a, 0x09, 0x6e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x63, 0x65, 0x18,
 	0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x6e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x63, 0x65,
-	0x2a, 0x4c, 0x0a, 0x0c, 0x57, 0x6f, 0x72, 0x6b, 0x6c, 0x6f, 0x61, 0x64, 0x4d, 0x6f, 0x64, 0x65,
-	0x12, 0x0d, 0x0a, 0x09, 0x55, 0x4e, 0x44, 0x45, 0x46, 0x49, 0x4e, 0x45, 0x44, 0x10, 0x00, 0x12,
-	0x0a, 0x0a, 0x06, 0x43, 0x4c, 0x49, 0x45, 0x4e, 0x54, 0x10, 0x01, 0x12, 0x0a, 0x0a, 0x06, 0x53,
-	0x45, 0x52, 0x56, 0x45, 0x52, 0x10, 0x02, 0x12, 0x15, 0x0a, 0x11, 0x43, 0x4c, 0x49, 0x45, 0x4e,
-	0x54, 0x5f, 0x41, 0x4e, 0x44, 0x5f, 0x53, 0x45, 0x52, 0x56, 0x45, 0x52, 0x10, 0x03, 0x42, 0x1b,
-	0x5a, 0x19, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x74,
-	0x79, 0x70, 0x65, 0x2f, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x22, 0xff, 0x01, 0x0a, 0x0d, 0x4c, 0x61, 0x62, 0x65, 0x6c, 0x53, 0x65, 0x6c, 0x65, 0x63, 0x74,
+	0x6f, 0x72, 0x12, 0x54, 0x0a, 0x0b, 0x6d, 0x61, 0x74, 0x63, 0x68, 0x4c, 0x61, 0x62, 0x65, 0x6c,
+	0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x32, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e,
+	0x74, 0x79, 0x70, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x4c, 0x61, 0x62,
+	0x65, 0x6c, 0x53, 0x65, 0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x2e, 0x4d, 0x61, 0x74, 0x63, 0x68,
+	0x4c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x52, 0x0b, 0x6d, 0x61, 0x74,
+	0x63, 0x68, 0x4c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x12, 0x58, 0x0a, 0x10, 0x6d, 0x61, 0x74, 0x63,
+	0x68, 0x45, 0x78, 0x70, 0x72, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x02, 0x20, 0x03,
+	0x28, 0x0b, 0x32, 0x2c, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x74, 0x79, 0x70, 0x65, 0x2e,
+	0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x4c, 0x61, 0x62, 0x65, 0x6c, 0x53, 0x65, 0x6c,
+	0x65, 0x63, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x71, 0x75, 0x69, 0x72, 0x65, 0x6d, 0x65, 0x6e, 0x74,
+	0x52, 0x10, 0x6d, 0x61, 0x74, 0x63, 0x68, 0x45, 0x78, 0x70, 0x72, 0x65, 0x73, 0x73, 0x69, 0x6f,
+	0x6e, 0x73, 0x1a, 0x3e, 0x0a, 0x10, 0x4d, 0x61, 0x74, 0x63, 0x68, 0x4c, 0x61, 0x62, 0x65, 0x6c,
+	0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75,
+	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02,
+	0x38, 0x01, 0x22, 0x60, 0x0a, 0x18, 0x4c, 0x61, 0x62, 0x65, 0x6c, 0x53, 0x65, 0x6c, 0x65, 0x63,
+	0x74, 0x6f, 0x72, 0x52, 0x65, 0x71, 0x75, 0x69, 0x72, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x10,
+	0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79,
+	0x12, 0x1a, 0x0a, 0x08, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x08, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x16, 0x0a, 0x06,
+	0x76, 0x61, 0x6c, 0x75, 0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52, 0x06, 0x76, 0x61,
+	0x6c, 0x75, 0x65, 0x73, 0x2a, 0x4c, 0x0a, 0x0c, 0x57, 0x6f, 0x72, 0x6b, 0x6c, 0x6f, 0x61, 0x64,
+	0x4d, 0x6f, 0x64, 0x65, 0x12, 0x0d, 0x0a, 0x09, 0x55, 0x4e, 0x44, 0x45, 0x46, 0x49, 0x4e, 0x45,
+	0x44, 0x10, 0x00, 0x12, 0x0a, 0x0a, 0x06, 0x43, 0x4c, 0x49, 0x45, 0x4e, 0x54, 0x10, 0x01, 0x12,
+	0x0a, 0x0a, 0x06, 0x53, 0x45, 0x52, 0x56, 0x45, 0x52, 0x10, 0x02, 0x12, 0x15, 0x0a, 0x11, 0x43,
+	0x4c, 0x49, 0x45, 0x4e, 0x54, 0x5f, 0x41, 0x4e, 0x44, 0x5f, 0x53, 0x45, 0x52, 0x56, 0x45, 0x52,
+	0x10, 0x03, 0x42, 0x1b, 0x5a, 0x19, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x69, 0x6f, 0x2f, 0x61,
+	0x70, 0x69, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x2f, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -386,21 +548,26 @@ func file_type_v1beta1_selector_proto_rawDescGZIP() []byte {
 }
 
 var file_type_v1beta1_selector_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_type_v1beta1_selector_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_type_v1beta1_selector_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_type_v1beta1_selector_proto_goTypes = []any{
-	(WorkloadMode)(0),             // 0: istio.type.v1beta1.WorkloadMode
-	(*WorkloadSelector)(nil),      // 1: istio.type.v1beta1.WorkloadSelector
-	(*PortSelector)(nil),          // 2: istio.type.v1beta1.PortSelector
-	(*PolicyTargetReference)(nil), // 3: istio.type.v1beta1.PolicyTargetReference
-	nil,                           // 4: istio.type.v1beta1.WorkloadSelector.MatchLabelsEntry
+	(WorkloadMode)(0),                // 0: istio.type.v1beta1.WorkloadMode
+	(*WorkloadSelector)(nil),         // 1: istio.type.v1beta1.WorkloadSelector
+	(*PortSelector)(nil),             // 2: istio.type.v1beta1.PortSelector
+	(*PolicyTargetReference)(nil),    // 3: istio.type.v1beta1.PolicyTargetReference
+	(*LabelSelector)(nil),            // 4: istio.type.v1beta1.LabelSelector
+	(*LabelSelectorRequirement)(nil), // 5: istio.type.v1beta1.LabelSelectorRequirement
+	nil,                              // 6: istio.type.v1beta1.WorkloadSelector.MatchLabelsEntry
+	nil,                              // 7: istio.type.v1beta1.LabelSelector.MatchLabelsEntry
 }
 var file_type_v1beta1_selector_proto_depIdxs = []int32{
-	4, // 0: istio.type.v1beta1.WorkloadSelector.match_labels:type_name -> istio.type.v1beta1.WorkloadSelector.MatchLabelsEntry
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	6, // 0: istio.type.v1beta1.WorkloadSelector.match_labels:type_name -> istio.type.v1beta1.WorkloadSelector.MatchLabelsEntry
+	7, // 1: istio.type.v1beta1.LabelSelector.matchLabels:type_name -> istio.type.v1beta1.LabelSelector.MatchLabelsEntry
+	5, // 2: istio.type.v1beta1.LabelSelector.matchExpressions:type_name -> istio.type.v1beta1.LabelSelectorRequirement
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_type_v1beta1_selector_proto_init() }
@@ -408,13 +575,117 @@ func file_type_v1beta1_selector_proto_init() {
 	if File_type_v1beta1_selector_proto != nil {
 		return
 	}
+<<<<<<< HEAD
+||||||| parent of 3fd1fea6 (feat: introduce matchExpression syntax subset filtering)
+	if !protoimpl.UnsafeEnabled {
+		file_type_v1beta1_selector_proto_msgTypes[0].Exporter = func(v any, i int) any {
+			switch v := v.(*WorkloadSelector); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_type_v1beta1_selector_proto_msgTypes[1].Exporter = func(v any, i int) any {
+			switch v := v.(*PortSelector); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_type_v1beta1_selector_proto_msgTypes[2].Exporter = func(v any, i int) any {
+			switch v := v.(*PolicyTargetReference); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+	}
+=======
+	if !protoimpl.UnsafeEnabled {
+		file_type_v1beta1_selector_proto_msgTypes[0].Exporter = func(v any, i int) any {
+			switch v := v.(*WorkloadSelector); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_type_v1beta1_selector_proto_msgTypes[1].Exporter = func(v any, i int) any {
+			switch v := v.(*PortSelector); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_type_v1beta1_selector_proto_msgTypes[2].Exporter = func(v any, i int) any {
+			switch v := v.(*PolicyTargetReference); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_type_v1beta1_selector_proto_msgTypes[3].Exporter = func(v any, i int) any {
+			switch v := v.(*LabelSelector); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_type_v1beta1_selector_proto_msgTypes[4].Exporter = func(v any, i int) any {
+			switch v := v.(*LabelSelectorRequirement); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+	}
+>>>>>>> 3fd1fea6 (feat: introduce matchExpression syntax subset filtering)
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_type_v1beta1_selector_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   4,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

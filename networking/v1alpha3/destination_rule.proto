@@ -337,6 +337,8 @@ message Subset {
   // specified at the subset level will override the corresponding settings
   // specified at the DestinationRule level.
   TrafficPolicy traffic_policy = 3;
+
+  istio.type.v1beta1.LabelSelector selector = 4;
 }
 
 // Load balancing policies to apply for a specific destination. See Envoy's

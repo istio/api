@@ -3,6 +3,7 @@ package v1beta1
 
 import (
 	bytes "bytes"
+
 	jsonpb "github.com/golang/protobuf/jsonpb"
 )
 
@@ -36,6 +37,28 @@ func (this *PolicyTargetReference) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for PolicyTargetReference
 func (this *PolicyTargetReference) UnmarshalJSON(b []byte) error {
+	return SelectorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for LabelSelector
+func (this *LabelSelector) MarshalJSON() ([]byte, error) {
+	str, err := SelectorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for LabelSelector
+func (this *LabelSelector) UnmarshalJSON(b []byte) error {
+	return SelectorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for LabelSelectorRequirement
+func (this *LabelSelectorRequirement) MarshalJSON() ([]byte, error) {
+	str, err := SelectorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for LabelSelectorRequirement
+func (this *LabelSelectorRequirement) UnmarshalJSON(b []byte) error {
 	return SelectorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
