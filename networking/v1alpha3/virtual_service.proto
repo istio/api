@@ -864,6 +864,13 @@ message HTTPMatchRequest {
   // Refer to https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto#envoy-v3-api-field-config-route-v3-route-stat-prefix
   // for statistics that are generated when this is configured.
   string stat_prefix = 14;
+
+  // Allows specifying a percentage of requests that will be matches by this route
+  // in addition to other match conditions.
+  // This can be used to route a percentage of traffic to a different service
+  // or to apply different configurations (tieouts, retries) on a percentage
+  // of requests.
+  Percent percentage = 15;
 }
 
 // Each routing rule is associated with one or more service versions (see
