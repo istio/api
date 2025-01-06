@@ -28,7 +28,7 @@ import "istio.io/api/security/v1beta1"
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="(has(self.selector)?1:0)+(has(self.targetRef)?1:0)+(has(self.targetRefs)?1:0)<=1"
+// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="oneof(self.selector, self.targetRef, self.targetRefs)"
 type AuthorizationPolicy = v1beta1.AuthorizationPolicy
 type AuthorizationPolicy_ExtensionProvider = v1beta1.AuthorizationPolicy_ExtensionProvider
 
@@ -112,6 +112,7 @@ type Rule_To = v1beta1.Rule_To
 // namespaces: ["prod", "test"]
 // notIpBlocks: ["203.0.113.4"]
 // ```
+// +kubebuilder:validation:XValidation:message="Cannot set serviceAccounts with namespaces or principals",rule="(has(self.serviceAccounts) || has(self.notServiceAccounts)) ? (!has(self.principals) && !has(self.notPrincipals) && !has(self.namespaces) && !has(self.notNamespaces)) : true"
 type Source = v1beta1.Source
 
 // Operation specifies the operations of a request. Fields in the operation are

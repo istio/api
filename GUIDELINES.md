@@ -19,6 +19,7 @@ followed for Istio APIs.
 - [Proto Guidelines](#proto-guidelines)
     - [Style](#style)
     - [Basic Proto Versioning](#basic-proto-ersioning)
+- [Validation Guidelines](#validation-guidelines)
 - [CRD Guidelines](#crd-guidelines)
     - [Style](#crd-style)
     - [Basic CRD Versioning](#basic-crd-versioning)
@@ -213,6 +214,75 @@ protos.
       configurations beyond X characters upon upgrade, and would not be permitted.
 
     - Loosening validation is permitted. As a result, it is recommended to err on the side of stricter validation.
+
+## Validation Guidelines
+
+All types should have as strict validation specified on it as possible to rule out invalid states.
+These are ultimately compiled to Kubernetes CustomResourceDefinitions, which use OpenAPI validation with some Kubernetes extras.
+This is handled by our own custom [protoc-gen-crd](https://github.com/istio/tools/tree/master/cmd/protoc-gen-crd) which compiles our
+protobuf definitions down to CRDs.
+
+There are a few types of validations:
+* Automatic ones, based on the protobuf type. For example, a UInt32Value automatically has a validation to check the number between `0` and `MaxUint32`
+* Protobuf `field_behavior`. Currently only `[(google.api.field_behavior) = REQUIRED]` is implemented.
+* Comment driven validations (see below).
+
+Most validation is driven by comments on fields and messages.
+All validations in [KubeBuilder](https://book.kubebuilder.io/reference/markers/crd-validation) are supported, as well as some extras:
+
+- `+protoc-gen-crd:map-value-validation`: apply the validation to each *value* in a map.
+  Note it's not possible to apply validations to each key. You can, however, validate the entire map together with a CEL rule.
+- `+protoc-gen-crd:list-value-validation`: apply the validation to each value in a list.
+- `+protoc-gen-crd:duration-validation:none`: exclude the default requirement that a duration field is non-zero.
+- `+protoc-gen-crd:validation:XIntOrString`: marks a field as accepting integers or strings.
+- `+protoc-gen-crd:validation:IgnoreSubValidation`: if referencing a message in a field, and that message has some validation on it already, exclude the listed validations.
+  This is uncommon, but can be used when referencing a message in a certain context has different rules than others.
+
+The most common validations are:
+- Sizes: `MaxLength` (strings), `MaxItems` (lists), `MaxProperties` (maps)
+- Regex: `Pattern`
+- CEL: `XValidation`
+
+### CEL
+
+[CEL](https://cel.dev/) is a small language that allows us to write expressions to represent validation logic.
+This comes with a lot of quirks!
+
+Useful tools and references:
+* [CEL playground](https://playcel.undistro.io/) allows an easy way to run CEL expressions against some types.
+* [Kubernetes CEL docs](https://kubernetes.io/docs/reference/using-api/cel/).
+* [CEL language definition](https://github.com/google/cel-spec/blob/master/doc/langdef.md).
+
+The biggest challenge with CEL is the complexity limit imposed by Kubernetes.
+This estimates the cost to run the function, and rejects it if it is too high.
+This takes into account the cost of a function and the cost of *potential* inputs.
+This makes it, typically, required to put maximum size bounds on items.
+
+Kubernetes changes version-to-version on how it estimates cost (usually getting more lenient) and what functions are available.
+We want to target the oldest version for compatibility purposes.
+Our tests do not currently cover this (a prototype of doing so can be found [here](https://github.com/istio/api/pull/3275)).
+A list of what features are in which versions can be found [here](https://kubernetes.io/docs/reference/using-api/cel/#cel-options-language-features-and-libraries).
+
+Istio has some custom macros that are expanded at compile time, driven by the [celpp](https://github.com/howardjohn/celpp) package.
+This extends CEL with these capabilities:
+* **default**. Usage: `default(self.x, 'DEF')`.
+* **oneof**. Usage: `oneof(self.x, self.y, self.z)`. This checks that 0 or 1 of these fields is set.
+* **index**. Usage: `self.index({}, x, z, b)`. This does `self.x.z.b` and returns `{}` if any of these is not set.
+
+Unlike typical Go usage, CEL does not have a concept of zero values for unset fields.
+As a result, an optional field needs special care.
+Do not write `self.fruit == 'apple'`, for instance, write `default(self.fruit, '') == 'apple'.
+
+### Testing
+
+As validation logic is really easy to get wrong, it's useful to write tests.
+This is done by adding YAML files under `tests/testdata`.
+Each type has a `valid` and `invalid` file to do positive and negative cases.
+
+Aside from explicitly testing these, these also form the seed corpus for fuzzing when these are pulled into `istio/istio`.
+This fuzz testing verifies the CRD validation has the same result as the webhook (Golang) validation code.
+Currently, this mostly serves to ensure we do not make something overly strict.
+In the future, it may show us that its safe to disable the webhook entirely, if CRD validation can cover the full validation surface.
 
 ## CRD Guidelines
 
