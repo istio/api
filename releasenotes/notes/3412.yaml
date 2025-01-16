@@ -5,4 +5,4 @@ issue:
   - https://github.com/istio/istio/issues/54696
 releaseNotes:
 - |
-  **Added** GatewayClass.gateway.networking.k8s.io as a valid PolicyTargetReference
+  **Removed** CEL validation of group/kind for PolicyTargetReference to enable vendor extensions
