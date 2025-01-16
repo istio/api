@@ -179,10 +179,10 @@ spec:
                 type: object
                 x-kubernetes-validations:
                 - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
-                    gateway.networking.k8s.io/Gateway
+                    gateway.networking.k8s.io/Gateway, gateway.networking.k8s.io/GatewayClass
                   rule: '[self.group, self.kind] in [["core", "Service"], ["", "Service"],
                     ["gateway.networking.k8s.io", "Gateway"], ["networking.istio.io",
-                    "ServiceEntry"]]'
+                    "ServiceEntry"], ["gateway.networking.k8s.io", "GatewayClass"]]'
               targetRefs:
                 description: Optional.
                 items:
@@ -215,10 +215,10 @@ spec:
                   type: object
                   x-kubernetes-validations:
                   - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
-                      gateway.networking.k8s.io/Gateway
+                      gateway.networking.k8s.io/Gateway, gateway.networking.k8s.io/GatewayClass
                     rule: '[self.group, self.kind] in [["core", "Service"], ["", "Service"],
                       ["gateway.networking.k8s.io", "Gateway"], ["networking.istio.io",
-                      "ServiceEntry"]]'
+                      "ServiceEntry"], ["gateway.networking.k8s.io", "GatewayClass"]]'
                 maxItems: 16
                 type: array
               type:
@@ -6441,10 +6441,10 @@ spec:
                   type: object
                   x-kubernetes-validations:
                   - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
-                      gateway.networking.k8s.io/Gateway
+                      gateway.networking.k8s.io/Gateway, gateway.networking.k8s.io/GatewayClass
                     rule: '[self.group, self.kind] in [["core", "Service"], ["", "Service"],
                       ["gateway.networking.k8s.io", "Gateway"], ["networking.istio.io",
-                      "ServiceEntry"]]'
+                      "ServiceEntry"], ["gateway.networking.k8s.io", "GatewayClass"]]'
                 maxItems: 16
                 type: array
               workloadSelector:
@@ -14877,10 +14877,10 @@ spec:
                 type: object
                 x-kubernetes-validations:
                 - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
-                    gateway.networking.k8s.io/Gateway
+                    gateway.networking.k8s.io/Gateway, gateway.networking.k8s.io/GatewayClass
                   rule: '[self.group, self.kind] in [["core", "Service"], ["", "Service"],
                     ["gateway.networking.k8s.io", "Gateway"], ["networking.istio.io",
-                    "ServiceEntry"]]'
+                    "ServiceEntry"], ["gateway.networking.k8s.io", "GatewayClass"]]'
               targetRefs:
                 description: Optional.
                 items:
@@ -14913,10 +14913,10 @@ spec:
                   type: object
                   x-kubernetes-validations:
                   - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
-                      gateway.networking.k8s.io/Gateway
+                      gateway.networking.k8s.io/Gateway, gateway.networking.k8s.io/GatewayClass
                     rule: '[self.group, self.kind] in [["core", "Service"], ["", "Service"],
                       ["gateway.networking.k8s.io", "Gateway"], ["networking.istio.io",
-                      "ServiceEntry"]]'
+                      "ServiceEntry"], ["gateway.networking.k8s.io", "GatewayClass"]]'
                 maxItems: 16
                 type: array
             type: object
@@ -15259,10 +15259,10 @@ spec:
                 type: object
                 x-kubernetes-validations:
                 - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
-                    gateway.networking.k8s.io/Gateway
+                    gateway.networking.k8s.io/Gateway, gateway.networking.k8s.io/GatewayClass
                   rule: '[self.group, self.kind] in [["core", "Service"], ["", "Service"],
                     ["gateway.networking.k8s.io", "Gateway"], ["networking.istio.io",
-                    "ServiceEntry"]]'
+                    "ServiceEntry"], ["gateway.networking.k8s.io", "GatewayClass"]]'
               targetRefs:
                 description: Optional.
                 items:
@@ -15295,10 +15295,10 @@ spec:
                   type: object
                   x-kubernetes-validations:
                   - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
-                      gateway.networking.k8s.io/Gateway
+                      gateway.networking.k8s.io/Gateway, gateway.networking.k8s.io/GatewayClass
                     rule: '[self.group, self.kind] in [["core", "Service"], ["", "Service"],
                       ["gateway.networking.k8s.io", "Gateway"], ["networking.istio.io",
-                      "ServiceEntry"]]'
+                      "ServiceEntry"], ["gateway.networking.k8s.io", "GatewayClass"]]'
                 maxItems: 16
                 type: array
             type: object
@@ -15934,10 +15934,10 @@ spec:
                 type: object
                 x-kubernetes-validations:
                 - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
-                    gateway.networking.k8s.io/Gateway
+                    gateway.networking.k8s.io/Gateway, gateway.networking.k8s.io/GatewayClass
                   rule: '[self.group, self.kind] in [["core", "Service"], ["", "Service"],
                     ["gateway.networking.k8s.io", "Gateway"], ["networking.istio.io",
-                    "ServiceEntry"]]'
+                    "ServiceEntry"], ["gateway.networking.k8s.io", "GatewayClass"]]'
               targetRefs:
                 description: Optional.
                 items:
@@ -15970,10 +15970,10 @@ spec:
                   type: object
                   x-kubernetes-validations:
                   - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
-                      gateway.networking.k8s.io/Gateway
+                      gateway.networking.k8s.io/Gateway, gateway.networking.k8s.io/GatewayClass
                     rule: '[self.group, self.kind] in [["core", "Service"], ["", "Service"],
                       ["gateway.networking.k8s.io", "Gateway"], ["networking.istio.io",
-                      "ServiceEntry"]]'
+                      "ServiceEntry"], ["gateway.networking.k8s.io", "GatewayClass"]]'
                 maxItems: 16
                 type: array
             type: object
@@ -16229,10 +16229,10 @@ spec:
                 type: object
                 x-kubernetes-validations:
                 - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
-                    gateway.networking.k8s.io/Gateway
+                    gateway.networking.k8s.io/Gateway, gateway.networking.k8s.io/GatewayClass
                   rule: '[self.group, self.kind] in [["core", "Service"], ["", "Service"],
                     ["gateway.networking.k8s.io", "Gateway"], ["networking.istio.io",
-                    "ServiceEntry"]]'
+                    "ServiceEntry"], ["gateway.networking.k8s.io", "GatewayClass"]]'
               targetRefs:
                 description: Optional.
                 items:
@@ -16265,10 +16265,10 @@ spec:
                   type: object
                   x-kubernetes-validations:
                   - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
-                      gateway.networking.k8s.io/Gateway
+                      gateway.networking.k8s.io/Gateway, gateway.networking.k8s.io/GatewayClass
                     rule: '[self.group, self.kind] in [["core", "Service"], ["", "Service"],
                       ["gateway.networking.k8s.io", "Gateway"], ["networking.istio.io",
-                      "ServiceEntry"]]'
+                      "ServiceEntry"], ["gateway.networking.k8s.io", "GatewayClass"]]'
                 maxItems: 16
                 type: array
             type: object
@@ -16602,10 +16602,10 @@ spec:
                 type: object
                 x-kubernetes-validations:
                 - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
-                    gateway.networking.k8s.io/Gateway
+                    gateway.networking.k8s.io/Gateway, gateway.networking.k8s.io/GatewayClass
                   rule: '[self.group, self.kind] in [["core", "Service"], ["", "Service"],
                     ["gateway.networking.k8s.io", "Gateway"], ["networking.istio.io",
-                    "ServiceEntry"]]'
+                    "ServiceEntry"], ["gateway.networking.k8s.io", "GatewayClass"]]'
               targetRefs:
                 description: Optional.
                 items:
@@ -16638,10 +16638,10 @@ spec:
                   type: object
                   x-kubernetes-validations:
                   - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
-                      gateway.networking.k8s.io/Gateway
+                      gateway.networking.k8s.io/Gateway, gateway.networking.k8s.io/GatewayClass
                     rule: '[self.group, self.kind] in [["core", "Service"], ["", "Service"],
                       ["gateway.networking.k8s.io", "Gateway"], ["networking.istio.io",
-                      "ServiceEntry"]]'
+                      "ServiceEntry"], ["gateway.networking.k8s.io", "GatewayClass"]]'
                 maxItems: 16
                 type: array
               tracing:
@@ -17062,10 +17062,10 @@ spec:
                 type: object
                 x-kubernetes-validations:
                 - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
-                    gateway.networking.k8s.io/Gateway
+                    gateway.networking.k8s.io/Gateway, gateway.networking.k8s.io/GatewayClass
                   rule: '[self.group, self.kind] in [["core", "Service"], ["", "Service"],
                     ["gateway.networking.k8s.io", "Gateway"], ["networking.istio.io",
-                    "ServiceEntry"]]'
+                    "ServiceEntry"], ["gateway.networking.k8s.io", "GatewayClass"]]'
               targetRefs:
                 description: Optional.
                 items:
@@ -17098,10 +17098,10 @@ spec:
                   type: object
                   x-kubernetes-validations:
                   - message: Support kinds are core/Service, networking.istio.io/ServiceEntry,
-                      gateway.networking.k8s.io/Gateway
+                      gateway.networking.k8s.io/Gateway, gateway.networking.k8s.io/GatewayClass
                     rule: '[self.group, self.kind] in [["core", "Service"], ["", "Service"],
                       ["gateway.networking.k8s.io", "Gateway"], ["networking.istio.io",
-                      "ServiceEntry"]]'
+                      "ServiceEntry"], ["gateway.networking.k8s.io", "GatewayClass"]]'
                 maxItems: 16
                 type: array
               tracing:
