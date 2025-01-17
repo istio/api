@@ -1,0 +1,8 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - https://github.com/istio/istio/issues/54696
+releaseNotes:
+- |
+  **Removed** CEL validation of group/kind for PolicyTargetReference to enable vendor extensions

@@ -248,7 +248,8 @@ func (x *PortSelector) GetNumber() uint32 {
 //	      ports: ["8080"]
 //
 // ```
-// +kubebuilder:validation:XValidation:message="Support kinds are core/Service, networking.istio.io/ServiceEntry, gateway.networking.k8s.io/Gateway",rule="[self.group, self.kind] in [['core','Service'], [”,'Service'], ['gateway.networking.k8s.io','Gateway'], ['networking.istio.io','ServiceEntry']]"
+//
+// When binding to a GatewayClass resource using PolicyTargetReference, your policy must be in the root namespace.
 type PolicyTargetReference struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// group is the group of the target resource.
