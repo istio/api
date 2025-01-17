@@ -108,8 +108,6 @@ enum WorkloadMode {
 // ```
 // 
 // When binding to a GatewayClass resource using PolicyTargetReference, your policy must be in the root namespace.
-//
-// Supported kinds are core/Service, networking.istio.io/ServiceEntry, gateway.networking.k8s.io/Gateway, and gateway.networking.k8s.io/GatewayClass
 message PolicyTargetReference {
   // group is the group of the target resource.
   // +kubebuilder:validation:MaxLength=253
