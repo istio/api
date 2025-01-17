@@ -250,8 +250,6 @@ func (x *PortSelector) GetNumber() uint32 {
 // ```
 //
 // When binding to a GatewayClass resource using PolicyTargetReference, your policy must be in the root namespace.
-//
-// Supported kinds are core/Service, networking.istio.io/ServiceEntry, gateway.networking.k8s.io/Gateway, and gateway.networking.k8s.io/GatewayClass
 type PolicyTargetReference struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// group is the group of the target resource.

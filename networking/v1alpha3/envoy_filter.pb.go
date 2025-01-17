@@ -838,7 +838,9 @@ type EnvoyFilter struct {
 	//
 	// Currently, the following resource attachment types are supported:
 	// * `kind: Gateway` with `group: gateway.networking.k8s.io` in the same namespace.
+	// * `kind: GatewayClass` with `group: gateway.networking.k8s.io` in the root namespace.
 	// * `kind: Service` with `""` in the same namespace. This type is only supported for waypoints.
+	// * `kind: ServiceEntry` with `group: networking.istio.io` in the same namespace.
 	//
 	// If not set, the policy is applied as defined by the selector.
 	// At most one of the selector and targetRefs can be set.
