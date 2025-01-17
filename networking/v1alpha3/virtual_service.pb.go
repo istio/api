@@ -2668,7 +2668,7 @@ type HTTPRetry struct {
 	// For example, if a connection is reset, Istio will translate this to 503 for it's response.
 	// However, the destination did not return a 503 error, so this would not match `"503"` (it would, however, match `"reset"`).
 	//
-	// If not specified, this defaults to `connect-failure,refused-stream,unavailable,cancelled,503`.
+	// If not specified, this defaults to `connect-failure,refused-stream,unavailable,cancelled`.
 	RetryOn string `protobuf:"bytes,3,opt,name=retry_on,json=retryOn,proto3" json:"retry_on,omitempty"`
 	// Flag to specify whether the retries should retry to other localities.
 	// See the [retry plugin configuration](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_connection_management#retry-plugin-configuration) for more details.
