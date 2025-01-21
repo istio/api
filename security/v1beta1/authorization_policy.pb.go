@@ -640,6 +640,7 @@ type Source struct {
 	// This field requires mTLS enabled and is the same as the `source.serviceaccount` attribute.
 	//
 	// This takes the format `<namespace>/<serviceaccount>`.
+	// `<serviceaccount>` may also be used to use the same namespace as the `AuthorizationPolicy`.
 	//
 	// If not set, any service account is allowed.
 	//
@@ -652,6 +653,7 @@ type Source struct {
 	// Optional. A list of negative match of Kubernetes service accounts.
 	//
 	// This takes the format `<namespace>/<serviceaccount>`.
+	// `<serviceaccount>` may also be used to use the same namespace as the `AuthorizationPolicy`.
 	//
 	// No form of wildcard (`*`) is allowed.
 	// +protoc-gen-crd:list-value-validation:MaxLength=320
