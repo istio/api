@@ -125,6 +125,19 @@ This is intended to be used when enrolling a workload that only receives traffic
 		},
 	}
 
+	AmbientDnsCapture = Instance {
+		Name:          "ambient.istio.io/dns-capture",
+		Description:   `When specified on a "Pod" enrolled in ambient mesh, controls whether DNS traffic (TCP and UDP on port 53) will be captured and proxied in ambient.
+Note that setting this to "false" will break some Istio features, such as ServiceEntries and egress waypoints, but may be desirable for workloads that interact poorly with DNS proxies.
+`,
+		FeatureStatus: Alpha,
+		Hidden:        true,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	AmbientRedirection = Instance {
 		Name:          "ambient.istio.io/redirection",
 		Description:   `Automatically configured by Istio to indicate a Pod was successfully enrolled in ambient mode.
@@ -898,6 +911,7 @@ func AllResourceAnnotations() []*Instance {
 		&AlphaCanonicalServiceAccounts,
 		&AlphaKubernetesServiceAccounts,
 		&AmbientBypassInboundCapture,
+		&AmbientDnsCapture,
 		&AmbientRedirection,
 		&AmbientWaypointInboundBinding,
 		&GalleyAnalyzeSuppress,
