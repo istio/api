@@ -139,7 +139,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // +cue-gen:DestinationRule:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
 // representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
 // Clients may not set this value. It is represented in RFC3339 form and is in UTC.
-// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// Populated by the system. Read-only. Null for lists. More info: [K8s API Conventions](https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata)"
 // +cue-gen:DestinationRule:preserveUnknownFields:false
 // -->
 //
@@ -278,7 +278,7 @@ message TrafficPolicy {
       // ⁣PROXY protocol version 2. Binary format.
       V2 = 1;
     };
-    // The PROXY protocol version to use. See https://www.haproxy.org/download/2.1/doc/proxy-protocol.txt for details.
+    // The PROXY protocol version to use. See [HAProxy Proxy Protocol](https://www.haproxy.org/download/2.1/doc/proxy-protocol.txt) for details.
     // By default it is `V1`.
     VERSION version = 1;
   }
@@ -480,8 +480,8 @@ message LoadBalancerSettings {
     };
 
         // The hash algorithm to use.
-        // Please refer to https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#ring-hash
-        // and https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#maglev for
+        // Please refer to [Envoy Ring Hash Load Balancer](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#ring-hash)
+        // and [Envoy Maglev Load Balancer](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#maglev) for
         // considerations on choosing an algorithm.
         // Defaults to RingHash if not specified.
         oneof hash_algorithm {
@@ -616,13 +616,13 @@ message ConnectionPoolSettings {
   message HTTPSettings {
     // Maximum number of requests that will be queued while waiting for
     // a ready connection pool connection. Default 2^32-1.
-    // Refer to https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/circuit_breaking
-    // under which conditions a new connection is created for HTTP2.
-    // Please note that this is applicable to both HTTP/1.1 and HTTP2.
+    // Refer to (Envoy Circuit Breaking)[https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/circuit_breaking]
+    // under which conditions a new connection is created for HTTP/2.
+    // Please note that this is applicable to both HTTP/1.1 and HTTP/2.
     int32 http1_max_pending_requests = 1;
 
     // Maximum number of active requests to a destination. Default 2^32-1.
-    // Please note that this is applicable to both HTTP/1.1 and HTTP2.
+    // Please note that this is applicable to both HTTP/1.1 and HTTP/2.
     int32 http2_max_requests = 2;
 
     // Maximum number of requests per connection to a backend. Setting this
@@ -640,7 +640,7 @@ message ConnectionPoolSettings {
     // the connection will be closed. If the connection is an HTTP/2
     // connection a drain sequence will occur prior to closing the connection.
     // Note that request based timeouts mean that HTTP/2 PINGs will not
-    // keep the connection alive. Applies to both HTTP1.1 and HTTP2 connections.
+    // keep the connection alive. Applies to both HTTP/1.1 and HTTP/2 connections.
     google.protobuf.Duration idle_timeout = 5;
 
     // Policy for upgrading http1.1 connections to http2.
@@ -685,7 +685,7 @@ message ConnectionPoolSettings {
 //
 // The following rule sets a connection pool size of 100 HTTP1 connections
 // with no more than 10 req/connection to the "reviews" service. In addition,
-// it sets a limit of 1000 concurrent HTTP2 requests and configures upstream
+// it sets a limit of 1000 concurrent HTTP/2 requests and configures upstream
 // hosts to be scanned every 5 mins so that any host that fails 7 consecutive
 // times with a 502, 503, or 504 error code will be ejected for 15 minutes.
 //
