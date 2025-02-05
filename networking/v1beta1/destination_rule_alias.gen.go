@@ -18,7 +18,7 @@ import "istio.io/api/networking/v1alpha3"
 // +cue-gen:DestinationRule:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
 // representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
 // Clients may not set this value. It is represented in RFC3339 form and is in UTC.
-// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// Populated by the system. Read-only. Null for lists. More info: [K8s API Conventions](https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata)"
 // +cue-gen:DestinationRule:preserveUnknownFields:false
 // -->
 //
@@ -284,7 +284,7 @@ const ConnectionPoolSettings_HTTPSettings_UPGRADE ConnectionPoolSettings_HTTPSet
 //
 // The following rule sets a connection pool size of 100 HTTP1 connections
 // with no more than 10 req/connection to the "reviews" service. In addition,
-// it sets a limit of 1000 concurrent HTTP2 requests and configures upstream
+// it sets a limit of 1000 concurrent HTTP/2 requests and configures upstream
 // hosts to be scanned every 5 mins so that any host that fails 7 consecutive
 // times with a 502, 503, or 504 error code will be ejected for 15 minutes.
 //
