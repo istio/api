@@ -3746,8 +3746,6 @@ Note: currently all headers are enabled by default.</p>
   metadataExchangeHeaders:
     mode: IN_MESH
 </code></pre>
-<p>If <code>ENABLE_HCM_INTERNAL_NETWORKS</code> is set to true, MeshNetworks can be used to
-to explicitly define the networks in Envoy&rsquo;s internal address configuration.</p>
 
 </td>
 </tr>
@@ -4423,6 +4421,8 @@ inside a mesh and how to route to endpoints in each network. For example</p>
       port: 15443
       locality: us-east-1a
 </code></pre>
+<p>If <code>ENABLE_HCM_INTERNAL_NETWORKS</code> is set to true, MeshNetworks can be used to
+to explicitly define the networks in Envoy&rsquo;s internal address configuration.</p>
 
 <table class="message-fields">
 <thead>

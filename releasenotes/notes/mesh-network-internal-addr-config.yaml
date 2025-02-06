@@ -1,0 +1,10 @@
+apiVersion: release-notes/v2
+kind: bug-fix
+area: documentation
+issue:
+  - https://github.com/istio/istio/issues/53402
+
+releaseNotes:
+  - |
+    **Fixed** documentation for using MeshNetworks to configure envoy internal address configuration
+    when ENABLE_HCM_INTERNAL_NETWORKS is set to true.
