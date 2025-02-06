@@ -139,7 +139,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // +cue-gen:DestinationRule:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
 // representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
 // Clients may not set this value. It is represented in RFC3339 form and is in UTC.
-// Populated by the system. Read-only. Null for lists. More info: [K8s API Conventions](https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata)"
+// Populated by the system. Read-only. Null for lists. For more information, see [Kubernetes API Conventions](https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#metadata)"
 // +cue-gen:DestinationRule:preserveUnknownFields:false
 // -->
 //
