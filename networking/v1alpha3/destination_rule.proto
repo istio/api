@@ -278,7 +278,7 @@ message TrafficPolicy {
       // ⁣PROXY protocol version 2. Binary format.
       V2 = 1;
     };
-    // The PROXY protocol version to use. See [HAProxy Proxy Protocol](https://www.haproxy.org/download/2.1/doc/proxy-protocol.txt) for details.
+    // The PROXY protocol version to use. See [the protocol spec](https://www.haproxy.org/download/2.1/doc/proxy-protocol.txt) for details.
     // By default it is `V1`.
     VERSION version = 1;
   }
