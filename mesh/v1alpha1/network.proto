@@ -116,6 +116,18 @@ message Network {
 //
 // If `ENABLE_HCM_INTERNAL_NETWORKS` is set to true, MeshNetworks can be used to
 // to explicitly define the networks in Envoy's internal address configuration.
+// Envoy uses the IPs in the `internalAddressConfig` to decide whether or not to sanitize
+// Envoy headers. If the IP address is listed an internal, the Envoy headers are not
+// sanitized. As of Envoy 1.33, the default value for `internalAddressConfig` is set to
+// an empty set. Previously, the default value was the set of all private IPs. Setting
+// the `internalAddressConfig` to all private IPs (via Envoy's previous default behavior
+// or via the MeshNetworks) will leave users with an Istio Ingress Gateway potentially
+// vulnerable to `x-envoy` header manipulation by external sources. More information about
+// this vulnerability can be found here:
+// https://github.com/envoyproxy/envoy/security/advisories/GHSA-ffhv-fvxq-r6mf
+// To preserve headers, you must explicitly configure MeshNetworks and set
+// `ENABLE_HCM_INTERNAL_NETWORKS` to true. Envoy's `internalAddressConfig` will be set to
+// the endpointed specified by `fromCidr`.
 //
 message MeshNetworks {
   // The set of networks inside this mesh. Each network should
