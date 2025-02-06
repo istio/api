@@ -480,8 +480,8 @@ message LoadBalancerSettings {
     };
 
         // The hash algorithm to use.
-        // Please refer to [Envoy Ring Hash Load Balancer](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#ring-hash)
-        // and [Envoy Maglev Load Balancer](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#maglev) for
+        // Please refer to Envoy's [Ring Hash Load Balancer](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#ring-hash)
+        // and [Maglev Load Balancer](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#maglev) docs for
         // considerations on choosing an algorithm.
         // Defaults to RingHash if not specified.
         oneof hash_algorithm {
