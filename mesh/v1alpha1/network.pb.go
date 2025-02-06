@@ -117,6 +117,9 @@ func (x *Network) GetGateways() []*Network_IstioNetworkGateway {
 //	    locality: us-east-1a
 //
 // ```
+//
+// If `ENABLE_HCM_INTERNAL_NETWORKS` is set to true, MeshNetworks can be used to
+// to explicitly define the networks in Envoy's internal address configuration.
 type MeshNetworks struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The set of networks inside this mesh. Each network should
