@@ -1313,6 +1313,10 @@ message HTTPRetry {
   // Flag to specify whether the retries should retry to other localities.
   // See the [retry plugin configuration](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_connection_management#retry-plugin-configuration) for more details.
   google.protobuf.BoolValue retry_remote_localities = 4;
+
+  // Flag to specify whether the retries should ignore previously tried hosts during retry.
+  // Defaults to true.
+  google.protobuf.BoolValue retry_ignore_previous_hosts = 5;
 }
 
 // Describes the Cross-Origin Resource Sharing (CORS) policy, for a given
