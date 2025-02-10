@@ -784,6 +784,21 @@ Accepted values:
 		},
 	}
 
+	TrafficIngressPublicAddress = Instance {
+		Name:          "traffic.istio.io/ingress-public-address",
+		Description:   "Specifies the public address that can connect to this "+
+                        "service, enabling you to define an address different from "+
+                        "the one provisioned by the load balancer. This is "+
+                        "particularly useful when traffic is DNATed before "+
+                        "reaching a private load balancer.",
+		FeatureStatus: Stable,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Service,
+		},
+	}
+
 	TrafficNodeSelector = Instance {
 		Name:          "traffic.istio.io/nodeSelector",
 		Description:   "This annotation is a set of node-labels "+
@@ -962,6 +977,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarUserVolumeMount,
 		&SidecarStatusPort,
 		&TopologyControlPlaneClusters,
+		&TrafficIngressPublicAddress,
 		&TrafficNodeSelector,
 		&SidecarTrafficExcludeInboundPorts,
 		&SidecarTrafficExcludeInterfaces,
