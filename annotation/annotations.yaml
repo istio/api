@@ -297,6 +297,16 @@ annotations:
     resources:
       - Service
 
+  - name: traffic.istio.io/ingress-public-address
+    featureStatus: Stable
+    description: Specifies the public address that can connect to this service, enabling you to
+      define an address different from the one provisioned by the load balancer. This is particularly useful
+      when traffic is DNATed before reaching a private load balancer.
+    deprecated: false
+    hidden: false
+    resources:
+      - Service
+
   - name: traffic.sidecar.istio.io/includeOutboundIPRanges
     featureStatus: Alpha
     description: A comma separated list of IP ranges in CIDR form to redirect to Envoy
