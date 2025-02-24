@@ -502,7 +502,7 @@ message EnvoyFilter {
   // PatchContext selects a class of configurations based on the
   // traffic flow direction and workload type.
   enum PatchContext {
-    // All listeners/routes/clusters in both sidecars and gateways.
+    // All listeners/routes/clusters in both sidecars, gateways, and waypoints.
     ANY = 0;
 
     // Inbound listener/route/cluster in sidecar.
@@ -513,6 +513,9 @@ message EnvoyFilter {
 
     // Gateway listener/route/cluster.
     GATEWAY = 3;
+
+    // Waypoint listener/route/cluster.
+    WAYPOINT = 4;
   };
 
   // One or more properties of the proxy to match on.
