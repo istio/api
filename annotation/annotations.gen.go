@@ -352,6 +352,18 @@ This takes the format: "<protocol>" or "<protocol>/<port>".
 		},
 	}
 
+	NetworkingServiceExposeStatusPort = Instance {
+		Name:          "networking.istio.io/service-expose-status-port",
+		Description:   `Controls whether the 15021 health status port is exposed in the generated "Service" resource when using [Gateway auto-deployment](/docs/tasks/traffic-management/ingress/gateway-api/#automated-deployment)
+`,
+		FeatureStatus: Alpha,
+		Hidden:        true,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Gateway,
+		},
+	}
+
 	NetworkingServiceType = Instance {
 		Name:          "networking.istio.io/service-type",
 		Description:   `Overrides the type of the generated "Service" resource when using [Gateway auto-deployment](/docs/tasks/traffic-management/ingress/gateway-api/#automated-deployment)
@@ -928,6 +940,7 @@ func AllResourceAnnotations() []*Instance {
 		&IoIstioWorkloadController,
 		&IoKubernetesIngressClass,
 		&NetworkingExportTo,
+		&NetworkingServiceExposeStatusPort,
 		&NetworkingServiceType,
 		&NetworkingTrafficDistribution,
 		&PrometheusMergeMetrics,
