@@ -942,6 +942,11 @@ message MeshConfig {
 
       // Optional. Allows overriding of the default access log format.
       LogFormat log_format = 2;
+
+      // Optional. If set to true, when command operators are evaluated to null,
+      // For text format, the output of the empty operator is changed from “-“ to an empty string.
+      // For json format, the keys with null values are omitted in the output structure.
+      bool omit_empty_values = 3;
     }
 
     // Defines configuration for an Envoy [Access Logging Service](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/grpc/v3/als.proto#grpc-access-log-service-als)
