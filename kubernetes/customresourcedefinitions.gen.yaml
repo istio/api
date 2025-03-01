@@ -8670,6 +8670,10 @@ spec:
                           minimum: 0
                           type: integer
                       type: object
+                    serviceProtocol:
+                      description: The protocol to use when proxying traffic to the
+                        service.
+                      type: string
                     tls:
                       description: Set of TLS related options that will enable TLS
                         termination on the sidecar for requests originating from outside
@@ -9212,6 +9216,10 @@ spec:
                           minimum: 0
                           type: integer
                       type: object
+                    serviceProtocol:
+                      description: The protocol to use when proxying traffic to the
+                        service.
+                      type: string
                     tls:
                       description: Set of TLS related options that will enable TLS
                         termination on the sidecar for requests originating from outside
@@ -9754,6 +9762,10 @@ spec:
                           minimum: 0
                           type: integer
                       type: object
+                    serviceProtocol:
+                      description: The protocol to use when proxying traffic to the
+                        service.
+                      type: string
                     tls:
                       description: Set of TLS related options that will enable TLS
                         termination on the sidecar for requests originating from outside
