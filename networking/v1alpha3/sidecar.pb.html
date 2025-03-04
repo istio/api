@@ -474,6 +474,17 @@ Currently supports only SIMPLE and MUTUAL TLS modes.</p>
 
 </td>
 </tr>
+<tr id="IstioIngressListener-service_protocol">
+<td><div class="field"><div class="name"><code><a href="#IstioIngressListener-service_protocol">serviceProtocol</a></code></div>
+<div class="type">string</div>
+</div></td>
+<td>
+<p>The protocol to use when proxying traffic to the service. This is useful
+when the incoming connection&rsquo;s protocol differs from the service, such as
+when <code>tls</code> is set.</p>
+
+</td>
+</tr>
 <tr id="IstioIngressListener-connection_pool">
 <td><div class="field"><div class="name"><code><a href="#IstioIngressListener-connection_pool">connectionPool</a></code></div>
 <div class="type"><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ConnectionPoolSettings">ConnectionPoolSettings</a></div>
