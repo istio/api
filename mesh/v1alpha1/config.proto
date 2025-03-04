@@ -481,7 +481,7 @@ message MeshConfig {
   // match either `x.y.com` or `*.y.com` for the SAN in the presented server certificate.
   // For wildcard host name in DestinationRule, client-side proxy will do a suffix match. For example,
   // if host is `*.x.y.com`, client-side proxy will verify the presented server certificate SAN matches
-  // ``.x.y.com` suffix.
+  // `.x.y.com` suffix.
   google.protobuf.BoolValue verify_certificate_at_client = 54 [deprecated=true];
 
   message CA {
@@ -944,7 +944,7 @@ message MeshConfig {
       LogFormat log_format = 2;
 
       // Optional. If set to true, when command operators are evaluated to null,
-      // For text format, the output of the empty operator is changed from “-“ to an empty string.
+      // For text format, the output of the empty operator is changed from "-" to an empty string.
       // For json format, the keys with null values are omitted in the output structure.
       bool omit_empty_values = 3;
     }
