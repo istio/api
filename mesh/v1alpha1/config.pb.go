@@ -855,7 +855,7 @@ type MeshConfig struct {
 	// match either `x.y.com` or `*.y.com` for the SAN in the presented server certificate.
 	// For wildcard host name in DestinationRule, client-side proxy will do a suffix match. For example,
 	// if host is `*.x.y.com`, client-side proxy will verify the presented server certificate SAN matches
-	// “.x.y.com` suffix.
+	// `.x.y.com` suffix.
 	//
 	// Deprecated: Marked as deprecated in mesh/v1alpha1/config.proto.
 	VerifyCertificateAtClient *wrappers.BoolValue `protobuf:"bytes,54,opt,name=verify_certificate_at_client,json=verifyCertificateAtClient,proto3" json:"verify_certificate_at_client,omitempty"`
@@ -3464,7 +3464,7 @@ type MeshConfig_ExtensionProvider_EnvoyFileAccessLogProvider struct {
 	// Optional. Allows overriding of the default access log format.
 	LogFormat *MeshConfig_ExtensionProvider_EnvoyFileAccessLogProvider_LogFormat `protobuf:"bytes,2,opt,name=log_format,json=logFormat,proto3" json:"log_format,omitempty"`
 	// Optional. If set to true, when command operators are evaluated to null,
-	// For text format, the output of the empty operator is changed from “-“ to an empty string.
+	// For text format, the output of the empty operator is changed from "-" to an empty string.
 	// For json format, the keys with null values are omitted in the output structure.
 	OmitEmptyValues bool `protobuf:"varint,3,opt,name=omit_empty_values,json=omitEmptyValues,proto3" json:"omit_empty_values,omitempty"`
 	unknownFields   protoimpl.UnknownFields

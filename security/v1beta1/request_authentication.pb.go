@@ -486,7 +486,7 @@ type JWTRule struct {
 	//	- auth-token
 	//
 	// ```
-	// Then JWT will be extracted from “auth-token“ cookie in the request.
+	// Then JWT will be extracted from "auth-token" cookie in the request.
 	//
 	// Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
 	// such requests is undefined.
