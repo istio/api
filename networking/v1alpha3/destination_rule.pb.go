@@ -2281,6 +2281,7 @@ type ConnectionPoolSettings_TCPSettings struct {
 	// because idleTimeout is a property of a listener, not a cluster. In that case, idleTimeout
 	// specified in a destination rule for the first weighted route is configured in the listener,
 	// which means also for all weighted routes.
+	// +protoc-gen-crd:duration-validation:none
 	IdleTimeout *duration.Duration `protobuf:"bytes,5,opt,name=idle_timeout,json=idleTimeout,proto3" json:"idle_timeout,omitempty"`
 }
 
