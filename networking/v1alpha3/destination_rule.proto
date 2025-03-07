@@ -587,6 +587,7 @@ message ConnectionPoolSettings {
     // because idleTimeout is a property of a listener, not a cluster. In that case, idleTimeout
     // specified in a destination rule for the first weighted route is configured in the listener,
     // which means also for all weighted routes.
+    // +kubebuilder:duration-validation:none
     google.protobuf.Duration idle_timeout = 5;
   };
 
