@@ -904,6 +904,28 @@ If that backend becomes unhealthy, traffic will sent to <code>us-east</code>.</l
     </tr>
   </tbody>
 </table>
+<h2 id="TrafficIngressPublicAddress">traffic.istio.io/ingress-public-address</h2>
+<table class="annotations">
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <td><code>traffic.istio.io/ingress-public-address</code></td>
+    </tr>
+    <tr>
+      <th>Feature Status</th>
+      <td>Stable</td>
+    </tr>
+    <tr>
+      <th>Resource Types</th>
+      <td>[Service]</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td><p>Specifies the public address that can connect to this service, enabling you to define an address different from the one provisioned by the load balancer. This is particularly useful when traffic is DNATed before reaching a private load balancer.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
 <h2 id="TrafficNodeSelector">traffic.istio.io/nodeSelector</h2>
 <table class="annotations">
   <tbody>
