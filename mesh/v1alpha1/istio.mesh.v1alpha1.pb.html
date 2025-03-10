@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 78
+number_of_entries: 80
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -2715,6 +2715,101 @@ this service-by-service (e.g. mysvc.myns.svc.cluster.local) or as a group
 <p>By default Istio will consider kubernetes.default.svc (i.e. the API Server) as well as all
 services in the kube-system namespace to be cluster-local, unless explicitly overridden here.</p>
 
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h4 id="MeshConfig-ServiceSettings-ServiceScopeConfig">ServiceScopeConfig</h4>
+<section>
+<p>Scope configuration to be applied to matching services.</p>
+<p>For example, the following configures the scope of all services with the &ldquo;istio.io/global&rdquo; label
+to be global:</p>
+<pre><code class="language-yaml">serviceSettings:
+  serviceScopes:
+    - namespacesSelector: # server-side
+        matchExpressions:
+          - key: istio.io/global
+            operator: In
+            values: [true]
+      servicesSelector:
+        matchExpressions:
+          - key: istio.io/global
+            operator: Exists
+            values: [true]
+      serviceSuffix: .cluster.local # client-side
+      scope: GLOBAL
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ServiceSettings-ServiceScopeConfig-namespace_selector">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceSettings-ServiceScopeConfig-namespace_selector">namespaceSelector</a></code></div>
+<div class="type"><a href="#LabelSelector">LabelSelector</a></div>
+</div></td>
+<td>
+<p>Match expression for namespaces.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ServiceSettings-ServiceScopeConfig-services_selector">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceSettings-ServiceScopeConfig-services_selector">servicesSelector</a></code></div>
+<div class="type"><a href="#LabelSelector">LabelSelector</a></div>
+</div></td>
+<td>
+<p>Match expression for serivces.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ServiceSettings-ServiceScopeConfig-scope">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceSettings-ServiceScopeConfig-scope">scope</a></code></div>
+<div class="type"><a href="#MeshConfig-ServiceSettings-ServiceScopeConfig-Scope">Scope</a></div>
+</div></td>
+<td>
+<p>Specifics the available scope for matching services.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ServiceSettings-ServiceScopeConfig-service_suffix">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceSettings-ServiceScopeConfig-service_suffix">serviceSuffix</a></code></div>
+<div class="type">string</div>
+</div></td>
+<td>
+<p>Custom DNS suffix for &ldquo;exported&rdquo; services.
+Setting service_suffix indicates that local clients will only be able to access remote
+instances of that service through a DNS name matching that suffix.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h5 id="MeshConfig-ServiceSettings-ServiceScopeConfig-Scope">Scope</h5>
+<section>
+<p>The scope of the matching service. Used to determine if the service is local or global.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ServiceSettings-ServiceScopeConfig-Scope-LOCAL">
+<td><code><a href="#MeshConfig-ServiceSettings-ServiceScopeConfig-Scope-LOCAL">LOCAL</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="MeshConfig-ServiceSettings-ServiceScopeConfig-Scope-GLOBAL">
+<td><code><a href="#MeshConfig-ServiceSettings-ServiceScopeConfig-Scope-GLOBAL">GLOBAL</a></code></td>
+<td>
 </td>
 </tr>
 </tbody>

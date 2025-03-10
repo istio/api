@@ -444,6 +444,52 @@ message MeshConfig {
     //
     // For example: foo.bar.svc.cluster.local, *.baz.svc.cluster.local
     repeated string hosts = 2;
+
+    // Scope configuration to be applied to matching services.
+    //
+    // For example, the following configures the scope of all services with the "istio.io/global" label
+    // to be global:
+    //
+    // ```yaml
+    // serviceSettings:
+    //   serviceScopes:
+    //     - namespacesSelector: # server-side
+    //         matchExpressions:
+    //           - key: istio.io/global
+    //             operator: In
+    //             values: [true]
+    //       servicesSelector:
+    //         matchExpressions:
+    //           - key: istio.io/global
+    //             operator: Exists
+    //             values: [true]
+    //       serviceSuffix: .cluster.local # client-side
+    //       scope: GLOBAL
+    // ```
+    message ServiceScopeConfig {
+      // The scope of the matching service. Used to determine if the service is local or global.
+      enum Scope {
+        LOCAL = 0;
+        GLOBAL = 1;
+      }
+
+      // Match expression for namespaces.
+      LabelSelector namespace_selector = 1;
+
+      // Match expression for serivces.
+      LabelSelector services_selector = 2;
+
+      // Specifics the available scope for matching services.
+      Scope scope = 3;
+
+      // Custom DNS suffix for "exported" services.
+      // Setting service_suffix indicates that local clients will only be able to access remote
+      // instances of that service through a DNS name matching that suffix.
+      string service_suffix = 4;
+    }
+
+    // Scope configuration to be applied to matching services.
+    repeated ServiceScopeConfig service_scope = 3;
   }
 
   // $hide_from_docs
