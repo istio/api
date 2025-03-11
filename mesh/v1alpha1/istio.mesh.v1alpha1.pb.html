@@ -2724,7 +2724,7 @@ services in the kube-system namespace to be cluster-local, unless explicitly ove
 <section>
 <p>Scope configuration to be applied to matching services.</p>
 <p>For example, the following configures the scope of all services with the &ldquo;istio.io/global&rdquo; label
-to be global:</p>
+to be available globally:</p>
 <pre><code class="language-yaml">serviceSettings:
   serviceScopes:
     - namespacesSelector: # server-side

@@ -2550,7 +2550,7 @@ func (x *MeshConfig_ServiceSettings_Settings) GetClusterLocal() bool {
 // Scope configuration to be applied to matching services.
 //
 // For example, the following configures the scope of all services with the "istio.io/global" label
-// to be global:
+// to be available globally:
 //
 // ```yaml
 // serviceSettings:
