@@ -2678,6 +2678,10 @@ type HTTPRetry struct {
 	// Defaults to true.
 	RetryIgnorePreviousHosts *wrappers.BoolValue `protobuf:"bytes,5,opt,name=retry_ignore_previous_hosts,json=retryIgnorePreviousHosts,proto3" json:"retry_ignore_previous_hosts,omitempty"`
 	// Specifies the minimum duration between retry attempts.
+	// If unset, default minimum duration of 25ms is used as base interval for exponetial backoff.
+	// This has an impact on the total number of retries that will be attempted based on the `attempts` field
+	// and route timeout. For example, with attempts is set to 3, backoff to 2s and timeout to 3s, the request will
+	// be retried only once.
 	Backoff       *duration.Duration `protobuf:"bytes,6,opt,name=backoff,proto3" json:"backoff,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
