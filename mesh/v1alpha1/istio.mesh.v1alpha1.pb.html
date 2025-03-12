@@ -2727,7 +2727,7 @@ services in the kube-system namespace to be cluster-local, unless explicitly ove
 to be available globally:</p>
 <pre><code class="language-yaml">serviceSettings:
   serviceScopes:
-    - namespacesSelector: # server-side
+    - namespacesSelector:
         matchExpressions:
           - key: istio.io/global
             operator: In
@@ -2737,8 +2737,6 @@ to be available globally:</p>
           - key: istio.io/global
             operator: Exists
             values: [true]
-      serviceSuffix: .cluster.local # client-side
-      scope: GLOBAL
 </code></pre>
 
 <table class="message-fields">
@@ -2776,23 +2774,13 @@ to be available globally:</p>
 
 </td>
 </tr>
-<tr id="MeshConfig-ServiceSettings-ServiceScopeConfig-service_suffix">
-<td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceSettings-ServiceScopeConfig-service_suffix">serviceSuffix</a></code></div>
-<div class="type">string</div>
-</div></td>
-<td>
-<p>Custom DNS suffix for &ldquo;exported&rdquo; services.
-Setting service_suffix indicates that local clients will only be able to access remote
-instances of that service through a DNS name matching that suffix.</p>
-
-</td>
-</tr>
 </tbody>
 </table>
 </section>
 <h5 id="MeshConfig-ServiceSettings-ServiceScopeConfig-Scope">Scope</h5>
 <section>
-<p>The scope of the matching service. Used to determine if the service is local or global.</p>
+<p>The scope of the matching service. Used to determine if the service is available locally
+(cluster local) or globally (mesh-wide).</p>
 
 <table class="enum-values">
 <thead>

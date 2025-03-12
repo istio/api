@@ -408,7 +408,8 @@ func (MeshConfig_InboundTrafficPolicy_Mode) EnumDescriptor() ([]byte, []int) {
 	return file_mesh_v1alpha1_config_proto_rawDescGZIP(), []int{0, 1, 0}
 }
 
-// The scope of the matching service. Used to determine if the service is local or global.
+// The scope of the matching service. Used to determine if the service is available locally
+// (cluster local) or globally (mesh-wide).
 type MeshConfig_ServiceSettings_ServiceScopeConfig_Scope int32
 
 const (
@@ -2556,7 +2557,7 @@ func (x *MeshConfig_ServiceSettings_Settings) GetClusterLocal() bool {
 // serviceSettings:
 //
 //	serviceScopes:
-//	  - namespacesSelector: # server-side
+//	  - namespacesSelector:
 //	      matchExpressions:
 //	        - key: istio.io/global
 //	          operator: In
@@ -2566,8 +2567,6 @@ func (x *MeshConfig_ServiceSettings_Settings) GetClusterLocal() bool {
 //	        - key: istio.io/global
 //	          operator: Exists
 //	          values: [true]
-//	    serviceSuffix: .cluster.local # client-side
-//	    scope: GLOBAL
 //
 // ```
 type MeshConfig_ServiceSettings_ServiceScopeConfig struct {
@@ -2577,11 +2576,7 @@ type MeshConfig_ServiceSettings_ServiceScopeConfig struct {
 	// Match expression for serivces.
 	ServicesSelector *LabelSelector `protobuf:"bytes,2,opt,name=services_selector,json=servicesSelector,proto3" json:"services_selector,omitempty"`
 	// Specifics the available scope for matching services.
-	Scope MeshConfig_ServiceSettings_ServiceScopeConfig_Scope `protobuf:"varint,3,opt,name=scope,proto3,enum=istio.mesh.v1alpha1.MeshConfig_ServiceSettings_ServiceScopeConfig_Scope" json:"scope,omitempty"`
-	// Custom DNS suffix for "exported" services.
-	// Setting service_suffix indicates that local clients will only be able to access remote
-	// instances of that service through a DNS name matching that suffix.
-	ServiceSuffix string `protobuf:"bytes,4,opt,name=service_suffix,json=serviceSuffix,proto3" json:"service_suffix,omitempty"`
+	Scope         MeshConfig_ServiceSettings_ServiceScopeConfig_Scope `protobuf:"varint,3,opt,name=scope,proto3,enum=istio.mesh.v1alpha1.MeshConfig_ServiceSettings_ServiceScopeConfig_Scope" json:"scope,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2635,13 +2630,6 @@ func (x *MeshConfig_ServiceSettings_ServiceScopeConfig) GetScope() MeshConfig_Se
 		return x.Scope
 	}
 	return MeshConfig_ServiceSettings_ServiceScopeConfig_LOCAL
-}
-
-func (x *MeshConfig_ServiceSettings_ServiceScopeConfig) GetServiceSuffix() string {
-	if x != nil {
-		return x.ServiceSuffix
-	}
-	return ""
 }
 
 type MeshConfig_ExtensionProvider_EnvoyExternalAuthorizationRequestBody struct {
