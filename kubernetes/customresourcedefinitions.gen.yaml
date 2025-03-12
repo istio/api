@@ -6594,6 +6594,11 @@ spec:
                             of the secret that holds the TLS certs including the CA
                             certificates.
                           type: string
+                        credentialNames:
+                          description: Same as CredentialName but for multiple certificates.
+                          items:
+                            type: string
+                          type: array
                         httpsRedirect:
                           description: If set to true, the load balancer will send
                             a 301 redirect for all http connections, asking the clients
@@ -6827,6 +6832,11 @@ spec:
                             of the secret that holds the TLS certs including the CA
                             certificates.
                           type: string
+                        credentialNames:
+                          description: Same as CredentialName but for multiple certificates.
+                          items:
+                            type: string
+                          type: array
                         httpsRedirect:
                           description: If set to true, the load balancer will send
                             a 301 redirect for all http connections, asking the clients
@@ -7060,6 +7070,11 @@ spec:
                             of the secret that holds the TLS certs including the CA
                             certificates.
                           type: string
+                        credentialNames:
+                          description: Same as CredentialName but for multiple certificates.
+                          items:
+                            type: string
+                          type: array
                         httpsRedirect:
                           description: If set to true, the load balancer will send
                             a 301 redirect for all http connections, asking the clients
@@ -8643,6 +8658,11 @@ spec:
                             of the secret that holds the TLS certs including the CA
                             certificates.
                           type: string
+                        credentialNames:
+                          description: Same as CredentialName but for multiple certificates.
+                          items:
+                            type: string
+                          type: array
                         httpsRedirect:
                           description: If set to true, the load balancer will send
                             a 301 redirect for all http connections, asking the clients
@@ -9179,6 +9199,11 @@ spec:
                             of the secret that holds the TLS certs including the CA
                             certificates.
                           type: string
+                        credentialNames:
+                          description: Same as CredentialName but for multiple certificates.
+                          items:
+                            type: string
+                          type: array
                         httpsRedirect:
                           description: If set to true, the load balancer will send
                             a 301 redirect for all http connections, asking the clients
@@ -9715,6 +9740,11 @@ spec:
                             of the secret that holds the TLS certs including the CA
                             certificates.
                           type: string
+                        credentialNames:
+                          description: Same as CredentialName but for multiple certificates.
+                          items:
+                            type: string
+                          type: array
                         httpsRedirect:
                           description: If set to true, the load balancer will send
                             a 301 redirect for all http connections, asking the clients

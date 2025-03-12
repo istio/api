@@ -471,6 +471,26 @@ message ServerTLSSettings {
   // or credentialName can be specified.
   string credential_name = 10;
 
+  // Same as CredentialName but for multiple certificates. Mainly used for specifying
+  // RSA and ECDSA certificates for the same server.
+  repeated string credential_names = 14;
+
+  // TLSCertificate describes the server's TLS certificate.
+  message TLSCertificate {
+    // REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file
+    // holding the server-side TLS certificate to use.
+    string server_certificate = 1;
+
+    // REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file
+    // holding the server's private key.
+    string private_key = 2;
+
+    // REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`. The path to a file
+    // containing certificate authority certificates to use in verifying a presented
+    // client side certificate.
+    string ca_certificates = 3;
+  }
+
   // A list of alternate names to verify the subject identity in the
   // certificate presented by the client.
   // Requires TLS mode to be set to `MUTUAL`.
