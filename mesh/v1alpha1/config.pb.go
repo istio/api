@@ -2567,6 +2567,7 @@ func (x *MeshConfig_ServiceSettings_Settings) GetClusterLocal() bool {
 //	        - key: istio.io/global
 //	          operator: Exists
 //	          values: [true]
+//	    scope: GLOBAL
 //
 // ```
 type MeshConfig_ServiceSettings_ServiceScopeConfig struct {

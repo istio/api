@@ -463,6 +463,7 @@ message MeshConfig {
     //           - key: istio.io/global
     //             operator: Exists
     //             values: [true]
+    //       scope: GLOBAL
     // ```
     message ServiceScopeConfig {
       // The scope of the matching service. Used to determine if the service is available locally
