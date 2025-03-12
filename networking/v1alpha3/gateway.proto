@@ -491,6 +491,11 @@ message ServerTLSSettings {
     string ca_certificates = 3;
   }
 
+  // Only one of `server_certificate`, `private_key`, `ca_certificates` or `credential_name`
+  // or `credential_names` or `tls_certificates` should be specified.
+  // This is mainly used for specifying RSA and ECDSA certificates for the same server.
+  repeated TLSCertificate tls_certificates = 15;
+
   // A list of alternate names to verify the subject identity in the
   // certificate presented by the client.
   // Requires TLS mode to be set to `MUTUAL`.

@@ -6653,6 +6653,23 @@ spec:
                           items:
                             type: string
                           type: array
+                        tlsCertificates:
+                          description: Only one of `server_certificate`, `private_key`,
+                            `ca_certificates` or `credential_name` or `credential_names`
+                            or `tls_certificates` should be specified.
+                          items:
+                            properties:
+                              caCertificates:
+                                description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
+                                type: string
+                              privateKey:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                              serverCertificate:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                            type: object
+                          type: array
                         verifyCertificateHash:
                           description: An optional list of hex-encoded SHA-256 hashes
                             of the authorized client certificates.
@@ -6891,6 +6908,23 @@ spec:
                           items:
                             type: string
                           type: array
+                        tlsCertificates:
+                          description: Only one of `server_certificate`, `private_key`,
+                            `ca_certificates` or `credential_name` or `credential_names`
+                            or `tls_certificates` should be specified.
+                          items:
+                            properties:
+                              caCertificates:
+                                description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
+                                type: string
+                              privateKey:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                              serverCertificate:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                            type: object
+                          type: array
                         verifyCertificateHash:
                           description: An optional list of hex-encoded SHA-256 hashes
                             of the authorized client certificates.
@@ -7128,6 +7162,23 @@ spec:
                             identity in the certificate presented by the client.
                           items:
                             type: string
+                          type: array
+                        tlsCertificates:
+                          description: Only one of `server_certificate`, `private_key`,
+                            `ca_certificates` or `credential_name` or `credential_names`
+                            or `tls_certificates` should be specified.
+                          items:
+                            properties:
+                              caCertificates:
+                                description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
+                                type: string
+                              privateKey:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                              serverCertificate:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                            type: object
                           type: array
                         verifyCertificateHash:
                           description: An optional list of hex-encoded SHA-256 hashes
@@ -8717,6 +8768,23 @@ spec:
                           items:
                             type: string
                           type: array
+                        tlsCertificates:
+                          description: Only one of `server_certificate`, `private_key`,
+                            `ca_certificates` or `credential_name` or `credential_names`
+                            or `tls_certificates` should be specified.
+                          items:
+                            properties:
+                              caCertificates:
+                                description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
+                                type: string
+                              privateKey:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                              serverCertificate:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                            type: object
+                          type: array
                         verifyCertificateHash:
                           description: An optional list of hex-encoded SHA-256 hashes
                             of the authorized client certificates.
@@ -9258,6 +9326,23 @@ spec:
                           items:
                             type: string
                           type: array
+                        tlsCertificates:
+                          description: Only one of `server_certificate`, `private_key`,
+                            `ca_certificates` or `credential_name` or `credential_names`
+                            or `tls_certificates` should be specified.
+                          items:
+                            properties:
+                              caCertificates:
+                                description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
+                                type: string
+                              privateKey:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                              serverCertificate:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                            type: object
+                          type: array
                         verifyCertificateHash:
                           description: An optional list of hex-encoded SHA-256 hashes
                             of the authorized client certificates.
@@ -9798,6 +9883,23 @@ spec:
                             identity in the certificate presented by the client.
                           items:
                             type: string
+                          type: array
+                        tlsCertificates:
+                          description: Only one of `server_certificate`, `private_key`,
+                            `ca_certificates` or `credential_name` or `credential_names`
+                            or `tls_certificates` should be specified.
+                          items:
+                            properties:
+                              caCertificates:
+                                description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
+                                type: string
+                              privateKey:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                              serverCertificate:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                            type: object
                           type: array
                         verifyCertificateHash:
                           description: An optional list of hex-encoded SHA-256 hashes

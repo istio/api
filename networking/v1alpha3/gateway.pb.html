@@ -512,6 +512,17 @@ RSA and ECDSA certificates for the same server.</p>
 
 </td>
 </tr>
+<tr id="ServerTLSSettings-tls_certificates">
+<td><div class="field"><div class="name"><code><a href="#ServerTLSSettings-tls_certificates">tlsCertificates</a></code></div>
+<div class="type"><a href="#ServerTLSSettings-TLSCertificate">TLSCertificate[]</a></div>
+</div></td>
+<td>
+<p>Only one of <code>server_certificate</code>, <code>private_key</code>, <code>ca_certificates</code> or <code>credential_name</code>
+or <code>credential_names</code> or <code>tls_certificates</code> should be specified.
+This is mainly used for specifying RSA and ECDSA certificates for the same server.</p>
+
+</td>
+</tr>
 <tr id="ServerTLSSettings-subject_alt_names">
 <td><div class="field"><div class="name"><code><a href="#ServerTLSSettings-subject_alt_names">subjectAltNames</a></code></div>
 <div class="type">string[]</div>
