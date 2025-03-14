@@ -6689,19 +6689,6 @@ spec:
                   type: object
                 type: array
             type: object
-            x-kubernetes-validations:
-            - message: credential_names cannot have more than two credentials
-              rule: '(has(self.credential_names) ? self.credential_names : []).size()
-                <= 2'
-            - message: cannot have more than two tls certificates
-              rule: '(has(self.tls_certificates) ? self.tls_certificates : []).size()
-                <= 2'
-            - message: only one of credential_names or tls_certificates can be set
-              rule: '(has(self.tls_certificates) ? 1 : 0) + (has(self.credential_names)
-                ? 1 : 0) <= 1'
-            - message: only one of credential_name or credential_names can be set
-              rule: '(has(self.credential_name) ? 1 : 0) + (has(self.credential_names)
-                ? 1 : 0) <= 1'
           status:
             properties:
               conditions:
@@ -6957,19 +6944,6 @@ spec:
                   type: object
                 type: array
             type: object
-            x-kubernetes-validations:
-            - message: credential_names cannot have more than two credentials
-              rule: '(has(self.credential_names) ? self.credential_names : []).size()
-                <= 2'
-            - message: cannot have more than two tls certificates
-              rule: '(has(self.tls_certificates) ? self.tls_certificates : []).size()
-                <= 2'
-            - message: only one of credential_names or tls_certificates can be set
-              rule: '(has(self.tls_certificates) ? 1 : 0) + (has(self.credential_names)
-                ? 1 : 0) <= 1'
-            - message: only one of credential_name or credential_names can be set
-              rule: '(has(self.credential_name) ? 1 : 0) + (has(self.credential_names)
-                ? 1 : 0) <= 1'
           status:
             properties:
               conditions:
@@ -7225,19 +7199,6 @@ spec:
                   type: object
                 type: array
             type: object
-            x-kubernetes-validations:
-            - message: credential_names cannot have more than two credentials
-              rule: '(has(self.credential_names) ? self.credential_names : []).size()
-                <= 2'
-            - message: cannot have more than two tls certificates
-              rule: '(has(self.tls_certificates) ? self.tls_certificates : []).size()
-                <= 2'
-            - message: only one of credential_names or tls_certificates can be set
-              rule: '(has(self.tls_certificates) ? 1 : 0) + (has(self.credential_names)
-                ? 1 : 0) <= 1'
-            - message: only one of credential_name or credential_names can be set
-              rule: '(has(self.credential_name) ? 1 : 0) + (has(self.credential_names)
-                ? 1 : 0) <= 1'
           status:
             properties:
               conditions:

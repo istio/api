@@ -385,10 +385,6 @@ func (ServerTLSSettings_TLSProtocol) EnumDescriptor() ([]byte, []int) {
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-// +kubebuilder:validation:XValidation:message="credential_names cannot have more than two credentials",rule="default(self.credential_names, []).size() <= 2"
-// +kubebuilder:validation:XValidation:message="cannot have more than two tls certificates",rule="default(self.tls_certificates, []).size() <= 2"
-// +kubebuilder:validation:XValidation:message="only one of credential_names or tls_certificates can be set",rule="oneof(self.tls_certificates, self.credential_names)"
-// +kubebuilder:validation:XValidation:message="only one of credential_name or credential_names can be set",rule="oneof(self.credential_name, self.credential_names)"
 type Gateway struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// A list of server specifications.
@@ -789,6 +785,8 @@ type ServerTLSSettings struct {
 	// A list of alternate names to verify the subject identity in the
 	// certificate presented by the client.
 	// Requires TLS mode to be set to `MUTUAL`.
+	// When multiple certificates are provided via `credential_names` or `tls_certificates`,
+	// the subject alternate names are validated against the selected certificate.
 	SubjectAltNames []string `protobuf:"bytes,6,rep,name=subject_alt_names,json=subjectAltNames,proto3" json:"subject_alt_names,omitempty"`
 	// An optional list of base64-encoded SHA-256 hashes of the SPKIs of
 	// authorized client certificates.

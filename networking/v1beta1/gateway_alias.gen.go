@@ -23,10 +23,6 @@ import "istio.io/api/networking/v1alpha3"
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-// +kubebuilder:validation:XValidation:message="credential_names cannot have more than two credentials",rule="default(self.credential_names, []).size() <= 2"
-// +kubebuilder:validation:XValidation:message="cannot have more than two tls certificates",rule="default(self.tls_certificates, []).size() <= 2"
-// +kubebuilder:validation:XValidation:message="only one of credential_names or tls_certificates can be set",rule="oneof(self.tls_certificates, self.credential_names)"
-// +kubebuilder:validation:XValidation:message="only one of credential_name or credential_names can be set",rule="oneof(self.credential_name, self.credential_names)"
 type Gateway = v1alpha3.Gateway
 
 // `Server` describes the properties of the proxy on a given load balancer
