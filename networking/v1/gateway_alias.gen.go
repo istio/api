@@ -103,6 +103,9 @@ type Server = v1alpha3.Server
 type Port = v1alpha3.Port
 type ServerTLSSettings = v1alpha3.ServerTLSSettings
 
+// TLSCertificate describes the server's TLS certificate.
+type ServerTLSSettings_TLSCertificate = v1alpha3.ServerTLSSettings_TLSCertificate
+
 // TLS modes enforced by the proxy
 type ServerTLSSettings_TLSmode = v1alpha3.ServerTLSSettings_TLSmode
 

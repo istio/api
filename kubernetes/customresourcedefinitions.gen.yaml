@@ -6594,6 +6594,11 @@ spec:
                             of the secret that holds the TLS certs including the CA
                             certificates.
                           type: string
+                        credentialNames:
+                          description: Same as CredentialName but for multiple certificates.
+                          items:
+                            type: string
+                          type: array
                         httpsRedirect:
                           description: If set to true, the load balancer will send
                             a 301 redirect for all http connections, asking the clients
@@ -6647,6 +6652,23 @@ spec:
                             identity in the certificate presented by the client.
                           items:
                             type: string
+                          type: array
+                        tlsCertificates:
+                          description: Only one of `server_certificate`, `private_key`,
+                            `ca_certificates` or `credential_name` or `credential_names`
+                            or `tls_certificates` should be specified.
+                          items:
+                            properties:
+                              caCertificates:
+                                description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
+                                type: string
+                              privateKey:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                              serverCertificate:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                            type: object
                           type: array
                         verifyCertificateHash:
                           description: An optional list of hex-encoded SHA-256 hashes
@@ -6827,6 +6849,11 @@ spec:
                             of the secret that holds the TLS certs including the CA
                             certificates.
                           type: string
+                        credentialNames:
+                          description: Same as CredentialName but for multiple certificates.
+                          items:
+                            type: string
+                          type: array
                         httpsRedirect:
                           description: If set to true, the load balancer will send
                             a 301 redirect for all http connections, asking the clients
@@ -6880,6 +6907,23 @@ spec:
                             identity in the certificate presented by the client.
                           items:
                             type: string
+                          type: array
+                        tlsCertificates:
+                          description: Only one of `server_certificate`, `private_key`,
+                            `ca_certificates` or `credential_name` or `credential_names`
+                            or `tls_certificates` should be specified.
+                          items:
+                            properties:
+                              caCertificates:
+                                description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
+                                type: string
+                              privateKey:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                              serverCertificate:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                            type: object
                           type: array
                         verifyCertificateHash:
                           description: An optional list of hex-encoded SHA-256 hashes
@@ -7060,6 +7104,11 @@ spec:
                             of the secret that holds the TLS certs including the CA
                             certificates.
                           type: string
+                        credentialNames:
+                          description: Same as CredentialName but for multiple certificates.
+                          items:
+                            type: string
+                          type: array
                         httpsRedirect:
                           description: If set to true, the load balancer will send
                             a 301 redirect for all http connections, asking the clients
@@ -7113,6 +7162,23 @@ spec:
                             identity in the certificate presented by the client.
                           items:
                             type: string
+                          type: array
+                        tlsCertificates:
+                          description: Only one of `server_certificate`, `private_key`,
+                            `ca_certificates` or `credential_name` or `credential_names`
+                            or `tls_certificates` should be specified.
+                          items:
+                            properties:
+                              caCertificates:
+                                description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
+                                type: string
+                              privateKey:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                              serverCertificate:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                            type: object
                           type: array
                         verifyCertificateHash:
                           description: An optional list of hex-encoded SHA-256 hashes
@@ -8643,6 +8709,11 @@ spec:
                             of the secret that holds the TLS certs including the CA
                             certificates.
                           type: string
+                        credentialNames:
+                          description: Same as CredentialName but for multiple certificates.
+                          items:
+                            type: string
+                          type: array
                         httpsRedirect:
                           description: If set to true, the load balancer will send
                             a 301 redirect for all http connections, asking the clients
@@ -8696,6 +8767,23 @@ spec:
                             identity in the certificate presented by the client.
                           items:
                             type: string
+                          type: array
+                        tlsCertificates:
+                          description: Only one of `server_certificate`, `private_key`,
+                            `ca_certificates` or `credential_name` or `credential_names`
+                            or `tls_certificates` should be specified.
+                          items:
+                            properties:
+                              caCertificates:
+                                description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
+                                type: string
+                              privateKey:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                              serverCertificate:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                            type: object
                           type: array
                         verifyCertificateHash:
                           description: An optional list of hex-encoded SHA-256 hashes
@@ -9179,6 +9267,11 @@ spec:
                             of the secret that holds the TLS certs including the CA
                             certificates.
                           type: string
+                        credentialNames:
+                          description: Same as CredentialName but for multiple certificates.
+                          items:
+                            type: string
+                          type: array
                         httpsRedirect:
                           description: If set to true, the load balancer will send
                             a 301 redirect for all http connections, asking the clients
@@ -9232,6 +9325,23 @@ spec:
                             identity in the certificate presented by the client.
                           items:
                             type: string
+                          type: array
+                        tlsCertificates:
+                          description: Only one of `server_certificate`, `private_key`,
+                            `ca_certificates` or `credential_name` or `credential_names`
+                            or `tls_certificates` should be specified.
+                          items:
+                            properties:
+                              caCertificates:
+                                description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
+                                type: string
+                              privateKey:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                              serverCertificate:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                            type: object
                           type: array
                         verifyCertificateHash:
                           description: An optional list of hex-encoded SHA-256 hashes
@@ -9715,6 +9825,11 @@ spec:
                             of the secret that holds the TLS certs including the CA
                             certificates.
                           type: string
+                        credentialNames:
+                          description: Same as CredentialName but for multiple certificates.
+                          items:
+                            type: string
+                          type: array
                         httpsRedirect:
                           description: If set to true, the load balancer will send
                             a 301 redirect for all http connections, asking the clients
@@ -9768,6 +9883,23 @@ spec:
                             identity in the certificate presented by the client.
                           items:
                             type: string
+                          type: array
+                        tlsCertificates:
+                          description: Only one of `server_certificate`, `private_key`,
+                            `ca_certificates` or `credential_name` or `credential_names`
+                            or `tls_certificates` should be specified.
+                          items:
+                            properties:
+                              caCertificates:
+                                description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
+                                type: string
+                              privateKey:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                              serverCertificate:
+                                description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                                type: string
+                            type: object
                           type: array
                         verifyCertificateHash:
                           description: An optional list of hex-encoded SHA-256 hashes
