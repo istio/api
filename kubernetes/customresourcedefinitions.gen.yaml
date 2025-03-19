@@ -6598,6 +6598,8 @@ spec:
                           description: Same as CredentialName but for multiple certificates.
                           items:
                             type: string
+                          maxItems: 2
+                          minItems: 1
                           type: array
                         httpsRedirect:
                           description: If set to true, the load balancer will send
@@ -6669,6 +6671,8 @@ spec:
                                 description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
                                 type: string
                             type: object
+                          maxItems: 2
+                          minItems: 1
                           type: array
                         verifyCertificateHash:
                           description: An optional list of hex-encoded SHA-256 hashes
@@ -6683,6 +6687,19 @@ spec:
                             type: string
                           type: array
                       type: object
+                      x-kubernetes-validations:
+                      - message: only one of credential_names or tls_certificates
+                          can be set
+                        rule: '(has(self.tlsCertificates) ? 1 : 0) + (has(self.credentialNames)
+                          ? 1 : 0) <= 1'
+                      - message: only one of credential_name or credential_names can
+                          be set
+                        rule: '(has(self.credentialName) ? 1 : 0) + (has(self.credentialNames)
+                          ? 1 : 0) <= 1'
+                      - message: only one of credential_name or tls_certificates can
+                          be set
+                        rule: '(has(self.credentialNames) ? 1 : 0) + (has(self.tlsCertificates)
+                          ? 1 : 0) <= 1'
                   required:
                   - port
                   - hosts
@@ -6853,6 +6870,8 @@ spec:
                           description: Same as CredentialName but for multiple certificates.
                           items:
                             type: string
+                          maxItems: 2
+                          minItems: 1
                           type: array
                         httpsRedirect:
                           description: If set to true, the load balancer will send
@@ -6924,6 +6943,8 @@ spec:
                                 description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
                                 type: string
                             type: object
+                          maxItems: 2
+                          minItems: 1
                           type: array
                         verifyCertificateHash:
                           description: An optional list of hex-encoded SHA-256 hashes
@@ -6938,6 +6959,19 @@ spec:
                             type: string
                           type: array
                       type: object
+                      x-kubernetes-validations:
+                      - message: only one of credential_names or tls_certificates
+                          can be set
+                        rule: '(has(self.tlsCertificates) ? 1 : 0) + (has(self.credentialNames)
+                          ? 1 : 0) <= 1'
+                      - message: only one of credential_name or credential_names can
+                          be set
+                        rule: '(has(self.credentialName) ? 1 : 0) + (has(self.credentialNames)
+                          ? 1 : 0) <= 1'
+                      - message: only one of credential_name or tls_certificates can
+                          be set
+                        rule: '(has(self.credentialNames) ? 1 : 0) + (has(self.tlsCertificates)
+                          ? 1 : 0) <= 1'
                   required:
                   - port
                   - hosts
@@ -7108,6 +7142,8 @@ spec:
                           description: Same as CredentialName but for multiple certificates.
                           items:
                             type: string
+                          maxItems: 2
+                          minItems: 1
                           type: array
                         httpsRedirect:
                           description: If set to true, the load balancer will send
@@ -7179,6 +7215,8 @@ spec:
                                 description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
                                 type: string
                             type: object
+                          maxItems: 2
+                          minItems: 1
                           type: array
                         verifyCertificateHash:
                           description: An optional list of hex-encoded SHA-256 hashes
@@ -7193,6 +7231,19 @@ spec:
                             type: string
                           type: array
                       type: object
+                      x-kubernetes-validations:
+                      - message: only one of credential_names or tls_certificates
+                          can be set
+                        rule: '(has(self.tlsCertificates) ? 1 : 0) + (has(self.credentialNames)
+                          ? 1 : 0) <= 1'
+                      - message: only one of credential_name or credential_names can
+                          be set
+                        rule: '(has(self.credentialName) ? 1 : 0) + (has(self.credentialNames)
+                          ? 1 : 0) <= 1'
+                      - message: only one of credential_name or tls_certificates can
+                          be set
+                        rule: '(has(self.credentialNames) ? 1 : 0) + (has(self.tlsCertificates)
+                          ? 1 : 0) <= 1'
                   required:
                   - port
                   - hosts
@@ -8713,6 +8764,8 @@ spec:
                           description: Same as CredentialName but for multiple certificates.
                           items:
                             type: string
+                          maxItems: 2
+                          minItems: 1
                           type: array
                         httpsRedirect:
                           description: If set to true, the load balancer will send
@@ -8784,6 +8837,8 @@ spec:
                                 description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
                                 type: string
                             type: object
+                          maxItems: 2
+                          minItems: 1
                           type: array
                         verifyCertificateHash:
                           description: An optional list of hex-encoded SHA-256 hashes
@@ -8798,6 +8853,19 @@ spec:
                             type: string
                           type: array
                       type: object
+                      x-kubernetes-validations:
+                      - message: only one of credential_names or tls_certificates
+                          can be set
+                        rule: '(has(self.tlsCertificates) ? 1 : 0) + (has(self.credentialNames)
+                          ? 1 : 0) <= 1'
+                      - message: only one of credential_name or credential_names can
+                          be set
+                        rule: '(has(self.credentialName) ? 1 : 0) + (has(self.credentialNames)
+                          ? 1 : 0) <= 1'
+                      - message: only one of credential_name or tls_certificates can
+                          be set
+                        rule: '(has(self.credentialNames) ? 1 : 0) + (has(self.tlsCertificates)
+                          ? 1 : 0) <= 1'
                   required:
                   - port
                   type: object
@@ -9271,6 +9339,8 @@ spec:
                           description: Same as CredentialName but for multiple certificates.
                           items:
                             type: string
+                          maxItems: 2
+                          minItems: 1
                           type: array
                         httpsRedirect:
                           description: If set to true, the load balancer will send
@@ -9342,6 +9412,8 @@ spec:
                                 description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
                                 type: string
                             type: object
+                          maxItems: 2
+                          minItems: 1
                           type: array
                         verifyCertificateHash:
                           description: An optional list of hex-encoded SHA-256 hashes
@@ -9356,6 +9428,19 @@ spec:
                             type: string
                           type: array
                       type: object
+                      x-kubernetes-validations:
+                      - message: only one of credential_names or tls_certificates
+                          can be set
+                        rule: '(has(self.tlsCertificates) ? 1 : 0) + (has(self.credentialNames)
+                          ? 1 : 0) <= 1'
+                      - message: only one of credential_name or credential_names can
+                          be set
+                        rule: '(has(self.credentialName) ? 1 : 0) + (has(self.credentialNames)
+                          ? 1 : 0) <= 1'
+                      - message: only one of credential_name or tls_certificates can
+                          be set
+                        rule: '(has(self.credentialNames) ? 1 : 0) + (has(self.tlsCertificates)
+                          ? 1 : 0) <= 1'
                   required:
                   - port
                   type: object
@@ -9829,6 +9914,8 @@ spec:
                           description: Same as CredentialName but for multiple certificates.
                           items:
                             type: string
+                          maxItems: 2
+                          minItems: 1
                           type: array
                         httpsRedirect:
                           description: If set to true, the load balancer will send
@@ -9900,6 +9987,8 @@ spec:
                                 description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
                                 type: string
                             type: object
+                          maxItems: 2
+                          minItems: 1
                           type: array
                         verifyCertificateHash:
                           description: An optional list of hex-encoded SHA-256 hashes
@@ -9914,6 +10003,19 @@ spec:
                             type: string
                           type: array
                       type: object
+                      x-kubernetes-validations:
+                      - message: only one of credential_names or tls_certificates
+                          can be set
+                        rule: '(has(self.tlsCertificates) ? 1 : 0) + (has(self.credentialNames)
+                          ? 1 : 0) <= 1'
+                      - message: only one of credential_name or credential_names can
+                          be set
+                        rule: '(has(self.credentialName) ? 1 : 0) + (has(self.credentialNames)
+                          ? 1 : 0) <= 1'
+                      - message: only one of credential_name or tls_certificates can
+                          be set
+                        rule: '(has(self.credentialNames) ? 1 : 0) + (has(self.tlsCertificates)
+                          ? 1 : 0) <= 1'
                   required:
                   - port
                   type: object

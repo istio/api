@@ -380,12 +380,10 @@ message Port {
   uint32 target_port = 4 [deprecated=true];
 }
 
+// +kubebuilder:validation:XValidation:message="only one of credential_names or tls_certificates can be set",rule="oneof(self.tlsCertificates, self.credentialNames)"
+// +kubebuilder:validation:XValidation:message="only one of credential_name or credential_names can be set",rule="oneof(self.credentialName, self.credentialNames)"
+// +kubebuilder:validation:XValidation:message="only one of credential_name or tls_certificates can be set",rule="oneof(self.credentialNames, self.tlsCertificates)"
 message ServerTLSSettings {
-// +kubebuilder:validation:XValidation:message="credential_names cannot have more than two credentials",rule="default(self.credential_names, []).size() <= 2"
-// +kubebuilder:validation:XValidation:message="cannot have more than two tls certificates",rule="default(self.tls_certificates, []).size() <= 2"
-// +kubebuilder:validation:XValidation:message="only one of credential_names or tls_certificates can be set",rule="oneof(self.tls_certificates, self.credential_names)"
-// +kubebuilder:validation:XValidation:message="only one of credential_name or credential_names can be set",rule="oneof(self.credential_name, self.credential_names)"
-
   // If set to true, the load balancer will send a 301 redirect for
   // all http connections, asking the clients to use HTTPS.
   bool https_redirect = 1;
@@ -478,6 +476,8 @@ message ServerTLSSettings {
 
   // Same as CredentialName but for multiple certificates. Mainly used for specifying
   // RSA and ECDSA certificates for the same server.
+  // +kubebuilder:validation:MaxItems=2
+  // +kubebuilder:validation:MinItems=1
   repeated string credential_names = 14;
 
   // TLSCertificate describes the server's TLS certificate.
@@ -499,6 +499,8 @@ message ServerTLSSettings {
   // Only one of `server_certificate`, `private_key`, `ca_certificates` or `credential_name`
   // or `credential_names` or `tls_certificates` should be specified.
   // This is mainly used for specifying RSA and ECDSA certificates for the same server.
+  // +kubebuilder:validation:MaxItems=2
+  // +kubebuilder:validation:MinItems=1
   repeated TLSCertificate tls_certificates = 15;
 
   // A list of alternate names to verify the subject identity in the

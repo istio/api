@@ -737,6 +737,9 @@ func (x *Port) GetTargetPort() uint32 {
 	return 0
 }
 
+// +kubebuilder:validation:XValidation:message="only one of credential_names or tls_certificates can be set",rule="oneof(self.tlsCertificates, self.credentialNames)"
+// +kubebuilder:validation:XValidation:message="only one of credential_name or credential_names can be set",rule="oneof(self.credentialName, self.credentialNames)"
+// +kubebuilder:validation:XValidation:message="only one of credential_name or tls_certificates can be set",rule="oneof(self.credentialNames, self.tlsCertificates)"
 type ServerTLSSettings struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// If set to true, the load balancer will send a 301 redirect for
@@ -777,10 +780,14 @@ type ServerTLSSettings struct {
 	CredentialName string `protobuf:"bytes,10,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
 	// Same as CredentialName but for multiple certificates. Mainly used for specifying
 	// RSA and ECDSA certificates for the same server.
+	// +kubebuilder:validation:MaxItems=2
+	// +kubebuilder:validation:MinItems=1
 	CredentialNames []string `protobuf:"bytes,14,rep,name=credential_names,json=credentialNames,proto3" json:"credential_names,omitempty"`
 	// Only one of `server_certificate`, `private_key`, `ca_certificates` or `credential_name`
 	// or `credential_names` or `tls_certificates` should be specified.
 	// This is mainly used for specifying RSA and ECDSA certificates for the same server.
+	// +kubebuilder:validation:MaxItems=2
+	// +kubebuilder:validation:MinItems=1
 	TlsCertificates []*ServerTLSSettings_TLSCertificate `protobuf:"bytes,15,rep,name=tls_certificates,json=tlsCertificates,proto3" json:"tls_certificates,omitempty"`
 	// A list of alternate names to verify the subject identity in the
 	// certificate presented by the client.
