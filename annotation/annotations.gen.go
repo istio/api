@@ -667,6 +667,19 @@ Accepted values:
 		},
 	}
 
+	SidecarStatsCompression = Instance {
+		Name:          "sidecar.istio.io/statsCompression",
+		Description:   `Specifies the compression algorithm to use for stats emitted by the Envoy sidecar.
+Supported values are "brotli", "gzip", and "zstd".
+`,
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	SidecarStatsHistogramBuckets = Instance {
 		Name:          "sidecar.istio.io/statsHistogramBuckets",
 		Description:   "Specifies the custom histogram buckets with a prefix "+
@@ -953,6 +966,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarProxyMemory,
 		&SidecarProxyMemoryLimit,
 		&SidecarRewriteAppHTTPProbers,
+		&SidecarStatsCompression,
 		&SidecarStatsHistogramBuckets,
 		&SidecarStatsInclusionPrefixes,
 		&SidecarStatsInclusionRegexps,
