@@ -43,10 +43,11 @@ spec:
                 description: |-
                   Specifies the failure behavior for the plugin due to fatal errors.
 
-                  Valid Options: FAIL_CLOSE, FAIL_OPEN
+                  Valid Options: FAIL_CLOSE, FAIL_OPEN, FAIL_RELOAD
                 enum:
                 - FAIL_CLOSE
                 - FAIL_OPEN
+                - FAIL_RELOAD
                 type: string
               imagePullPolicy:
                 description: |-
