@@ -592,3 +592,13 @@ annotations:
     hidden: true
     resources:
       - Pod
+
+  - name: sidecar.istio.io/statsCompression
+    featureStatus: Alpha
+    description: |
+      Specifies the compression algorithm to use for stats emitted by the Envoy sidecar.
+      Supported values are `brotli`, `gzip`, and `zstd`.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
