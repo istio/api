@@ -380,6 +380,9 @@ message Port {
   uint32 target_port = 4 [deprecated=true];
 }
 
+// +kubebuilder:validation:XValidation:message="only one of credentialNames or tlsCertificates can be set",rule="oneof(self.tlsCertificates, self.credentialNames)"
+// +kubebuilder:validation:XValidation:message="only one of credentialName or credentialNames can be set",rule="oneof(self.credentialName, self.credentialNames)"
+// +kubebuilder:validation:XValidation:message="only one of credentialName or tlsCertificates can be set",rule="oneof(self.credentialNames, self.tlsCertificates)"
 message ServerTLSSettings {
   // If set to true, the load balancer will send a 301 redirect for
   // all http connections, asking the clients to use HTTPS.
@@ -471,9 +474,40 @@ message ServerTLSSettings {
   // or credentialName can be specified.
   string credential_name = 10;
 
+  // Same as CredentialName but for multiple certificates. Mainly used for specifying
+  // RSA and ECDSA certificates for the same server.
+  // +kubebuilder:validation:MaxItems=2
+  // +kubebuilder:validation:MinItems=1
+  repeated string credential_names = 14;
+
+  // TLSCertificate describes the server's TLS certificate.
+  message TLSCertificate {
+    // REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file
+    // holding the server-side TLS certificate to use.
+    string server_certificate = 1;
+
+    // REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file
+    // holding the server's private key.
+    string private_key = 2;
+
+    // REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`. The path to a file
+    // containing certificate authority certificates to use in verifying a presented
+    // client side certificate.
+    string ca_certificates = 3;
+  }
+
+  // Only one of `server_certificate`, `private_key`, `ca_certificates` or `credential_name`
+  // or `credential_names` or `tls_certificates` should be specified.
+  // This is mainly used for specifying RSA and ECDSA certificates for the same server.
+  // +kubebuilder:validation:MaxItems=2
+  // +kubebuilder:validation:MinItems=1
+  repeated TLSCertificate tls_certificates = 15;
+
   // A list of alternate names to verify the subject identity in the
   // certificate presented by the client.
   // Requires TLS mode to be set to `MUTUAL`.
+  // When multiple certificates are provided via `credential_names` or `tls_certificates`,
+  // the subject alternate names are validated against the selected certificate.
   repeated string subject_alt_names = 6;
 
   // An optional list of base64-encoded SHA-256 hashes of the SPKIs of
