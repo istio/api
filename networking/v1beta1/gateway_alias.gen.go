@@ -102,9 +102,9 @@ type Server = v1alpha3.Server
 // Port describes the properties of a specific port of a service.
 type Port = v1alpha3.Port
 
-// +kubebuilder:validation:XValidation:message="only one of credential_names or tls_certificates can be set",rule="oneof(self.tlsCertificates, self.credentialNames)"
-// +kubebuilder:validation:XValidation:message="only one of credential_name or credential_names can be set",rule="oneof(self.credentialName, self.credentialNames)"
-// +kubebuilder:validation:XValidation:message="only one of credential_name or tls_certificates can be set",rule="oneof(self.credentialNames, self.tlsCertificates)"
+// +kubebuilder:validation:XValidation:message="only one of credentialNames or tlsCertificates can be set",rule="oneof(self.tlsCertificates, self.credentialNames)"
+// +kubebuilder:validation:XValidation:message="only one of credentialName or credentialNames can be set",rule="oneof(self.credentialName, self.credentialNames)"
+// +kubebuilder:validation:XValidation:message="only one of credentialName or tlsCertificates can be set",rule="oneof(self.credentialNames, self.tlsCertificates)"
 type ServerTLSSettings = v1alpha3.ServerTLSSettings
 
 // TLSCertificate describes the server's TLS certificate.

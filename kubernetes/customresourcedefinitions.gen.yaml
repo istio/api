@@ -6688,15 +6688,15 @@ spec:
                           type: array
                       type: object
                       x-kubernetes-validations:
-                      - message: only one of credential_names or tls_certificates
-                          can be set
+                      - message: only one of credentialNames or tlsCertificates can
+                          be set
                         rule: '(has(self.tlsCertificates) ? 1 : 0) + (has(self.credentialNames)
                           ? 1 : 0) <= 1'
-                      - message: only one of credential_name or credential_names can
+                      - message: only one of credentialName or credentialNames can
                           be set
                         rule: '(has(self.credentialName) ? 1 : 0) + (has(self.credentialNames)
                           ? 1 : 0) <= 1'
-                      - message: only one of credential_name or tls_certificates can
+                      - message: only one of credentialName or tlsCertificates can
                           be set
                         rule: '(has(self.credentialNames) ? 1 : 0) + (has(self.tlsCertificates)
                           ? 1 : 0) <= 1'
@@ -6960,15 +6960,15 @@ spec:
                           type: array
                       type: object
                       x-kubernetes-validations:
-                      - message: only one of credential_names or tls_certificates
-                          can be set
+                      - message: only one of credentialNames or tlsCertificates can
+                          be set
                         rule: '(has(self.tlsCertificates) ? 1 : 0) + (has(self.credentialNames)
                           ? 1 : 0) <= 1'
-                      - message: only one of credential_name or credential_names can
+                      - message: only one of credentialName or credentialNames can
                           be set
                         rule: '(has(self.credentialName) ? 1 : 0) + (has(self.credentialNames)
                           ? 1 : 0) <= 1'
-                      - message: only one of credential_name or tls_certificates can
+                      - message: only one of credentialName or tlsCertificates can
                           be set
                         rule: '(has(self.credentialNames) ? 1 : 0) + (has(self.tlsCertificates)
                           ? 1 : 0) <= 1'
@@ -7232,15 +7232,15 @@ spec:
                           type: array
                       type: object
                       x-kubernetes-validations:
-                      - message: only one of credential_names or tls_certificates
-                          can be set
+                      - message: only one of credentialNames or tlsCertificates can
+                          be set
                         rule: '(has(self.tlsCertificates) ? 1 : 0) + (has(self.credentialNames)
                           ? 1 : 0) <= 1'
-                      - message: only one of credential_name or credential_names can
+                      - message: only one of credentialName or credentialNames can
                           be set
                         rule: '(has(self.credentialName) ? 1 : 0) + (has(self.credentialNames)
                           ? 1 : 0) <= 1'
-                      - message: only one of credential_name or tls_certificates can
+                      - message: only one of credentialName or tlsCertificates can
                           be set
                         rule: '(has(self.credentialNames) ? 1 : 0) + (has(self.tlsCertificates)
                           ? 1 : 0) <= 1'
@@ -8854,15 +8854,15 @@ spec:
                           type: array
                       type: object
                       x-kubernetes-validations:
-                      - message: only one of credential_names or tls_certificates
-                          can be set
+                      - message: only one of credentialNames or tlsCertificates can
+                          be set
                         rule: '(has(self.tlsCertificates) ? 1 : 0) + (has(self.credentialNames)
                           ? 1 : 0) <= 1'
-                      - message: only one of credential_name or credential_names can
+                      - message: only one of credentialName or credentialNames can
                           be set
                         rule: '(has(self.credentialName) ? 1 : 0) + (has(self.credentialNames)
                           ? 1 : 0) <= 1'
-                      - message: only one of credential_name or tls_certificates can
+                      - message: only one of credentialName or tlsCertificates can
                           be set
                         rule: '(has(self.credentialNames) ? 1 : 0) + (has(self.tlsCertificates)
                           ? 1 : 0) <= 1'
@@ -9429,15 +9429,15 @@ spec:
                           type: array
                       type: object
                       x-kubernetes-validations:
-                      - message: only one of credential_names or tls_certificates
-                          can be set
+                      - message: only one of credentialNames or tlsCertificates can
+                          be set
                         rule: '(has(self.tlsCertificates) ? 1 : 0) + (has(self.credentialNames)
                           ? 1 : 0) <= 1'
-                      - message: only one of credential_name or credential_names can
+                      - message: only one of credentialName or credentialNames can
                           be set
                         rule: '(has(self.credentialName) ? 1 : 0) + (has(self.credentialNames)
                           ? 1 : 0) <= 1'
-                      - message: only one of credential_name or tls_certificates can
+                      - message: only one of credentialName or tlsCertificates can
                           be set
                         rule: '(has(self.credentialNames) ? 1 : 0) + (has(self.tlsCertificates)
                           ? 1 : 0) <= 1'
@@ -10004,15 +10004,15 @@ spec:
                           type: array
                       type: object
                       x-kubernetes-validations:
-                      - message: only one of credential_names or tls_certificates
-                          can be set
+                      - message: only one of credentialNames or tlsCertificates can
+                          be set
                         rule: '(has(self.tlsCertificates) ? 1 : 0) + (has(self.credentialNames)
                           ? 1 : 0) <= 1'
-                      - message: only one of credential_name or credential_names can
+                      - message: only one of credentialName or credentialNames can
                           be set
                         rule: '(has(self.credentialName) ? 1 : 0) + (has(self.credentialNames)
                           ? 1 : 0) <= 1'
-                      - message: only one of credential_name or tls_certificates can
+                      - message: only one of credentialName or tlsCertificates can
                           be set
                         rule: '(has(self.credentialNames) ? 1 : 0) + (has(self.tlsCertificates)
                           ? 1 : 0) <= 1'
