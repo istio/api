@@ -466,6 +466,10 @@ message IstioIngressListener {
   // sidecar for requests originating from outside the mesh.
   // Currently supports only SIMPLE and MUTUAL TLS modes.
   ServerTLSSettings tls = 7;
+  // The protocol to use when proxying traffic to the service. This is useful
+  // when the incoming connection's protocol differs from the service, such as
+  // when `tls` is set.
+  string service_protocol = 9;
 
   // Settings controlling the volume of connections Envoy will accept from the network.
   // This setting overrides the top-level default `inboundConnectionPool` to configure
