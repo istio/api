@@ -1264,8 +1264,17 @@ message MeshConfig {
     message HttpHeader {
       // REQUIRED. The HTTP header name.
       string name = 1;
-      // REQUIRED. The HTTP header value.
-      string value = 2;
+      // The HTTP header value.
+      oneof header_value {
+        // The HTTP header value.
+        string value = 2;
+        // The HTTP header value from the environment variable.
+        //
+        // Warning:
+        // - The environment variable must be set in the istiod pod spec.
+        // - This is not a end-to-end secure.
+        string env_name = 3;
+      }
     }
 
     message ResourceDetectors {
