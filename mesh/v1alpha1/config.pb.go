@@ -2555,19 +2555,18 @@ func (x *MeshConfig_ServiceSettings_Settings) GetClusterLocal() bool {
 //
 // ```yaml
 // serviceSettings:
-//
-//	serviceScopes:
-//	  - namespacesSelector:
-//	      matchExpressions:
-//	        - key: istio.io/global
-//	          operator: In
-//	          values: [true]
-//	    servicesSelector:
-//	      matchExpressions:
-//	        - key: istio.io/global
-//	          operator: Exists
-//	          values: [true]
-//	    scope: GLOBAL
+//   - serviceScope:
+//   - namespacesSelector:
+//     matchExpressions:
+//   - key: istio.io/global
+//     operator: In
+//     values: [true]
+//     servicesSelector:
+//     matchExpressions:
+//   - key: istio.io/global
+//     operator: Exists
+//     values: [true]
+//     scope: GLOBAL
 //
 // ```
 type MeshConfig_ServiceSettings_ServiceScopeConfig struct {

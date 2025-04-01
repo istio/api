@@ -2726,18 +2726,18 @@ services in the kube-system namespace to be cluster-local, unless explicitly ove
 <p>For example, the following configures the scope of all services with the &ldquo;istio.io/global&rdquo; label
 to be available globally:</p>
 <pre><code class="language-yaml">serviceSettings:
-  serviceScopes:
-    - namespacesSelector:
-        matchExpressions:
-          - key: istio.io/global
-            operator: In
-            values: [true]
-      servicesSelector:
-        matchExpressions:
-          - key: istio.io/global
-            operator: Exists
-            values: [true]
-      scope: GLOBAL
+  -  serviceScope:
+      - namespacesSelector:
+          matchExpressions:
+            - key: istio.io/global
+              operator: In
+              values: [true]
+        servicesSelector:
+          matchExpressions:
+            - key: istio.io/global
+              operator: Exists
+              values: [true]
+        scope: GLOBAL
 </code></pre>
 
 <table class="message-fields">
