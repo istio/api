@@ -452,18 +452,18 @@ message MeshConfig {
     //
     // ```yaml
     // serviceSettings:
-    //   serviceScopes:
-    //     - namespacesSelector:
-    //         matchExpressions:
-    //           - key: istio.io/global
-    //             operator: In
-    //             values: [true]
-    //       servicesSelector:
-    //         matchExpressions:
-    //           - key: istio.io/global
-    //             operator: Exists
-    //             values: [true]
-    //       scope: GLOBAL
+    //   -  serviceScope:
+    //       - namespacesSelector:
+    //           matchExpressions:
+    //             - key: istio.io/global
+    //               operator: In
+    //               values: [true]
+    //         servicesSelector:
+    //           matchExpressions:
+    //             - key: istio.io/global
+    //               operator: Exists
+    //               values: [true]
+    //         scope: GLOBAL
     // ```
     message ServiceScopeConfig {
       // The scope of the matching service. Used to determine if the service is available locally
