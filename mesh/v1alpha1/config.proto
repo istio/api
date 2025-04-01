@@ -484,7 +484,7 @@ message MeshConfig {
     }
 
     // Scope configuration to be applied to matching services.
-    repeated ServiceScopeConfig service_scope = 3;
+    ServiceScopeConfig service_scope = 3;
   }
 
   // $hide_from_docs
