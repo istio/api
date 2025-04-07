@@ -46,6 +46,15 @@ message IstioCertificateResponse {
   // PEM-encoded certificate chain.
   // The leaf cert is the first element, and the root cert is the last element.
   repeated string cert_chain = 1;
+  // Root certificates. This field is newer, and therefor is optional with the following semantics:
+  // * if root_cert is specified, cert_chain contains [leaf, intermediate1, intermediate2] (intermediates are optional).
+  //   root_cert contains [root1, root2].
+  // * if root_cert is not specified, cert_chain contains [leaf, intermediate1, intermediate2, root1+root2] concatenated into one entry.
+  // Note that the individual cert_chain is only signed by a single root. The roots provided here is the full bundle of trusted roots.
+  Roots root_cert = 2;
+}
+message Roots {
+  repeated string ca_cert = 1;
 }
 
 // Service for managing certificates issued by the CA.
