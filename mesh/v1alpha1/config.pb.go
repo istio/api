@@ -4126,8 +4126,13 @@ type MeshConfig_ExtensionProvider_HttpHeader struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// REQUIRED. The HTTP header name.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// REQUIRED. The HTTP header value.
-	Value         string `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	// The HTTP header value.
+	//
+	// Types that are valid to be assigned to HeaderValue:
+	//
+	//	*MeshConfig_ExtensionProvider_HttpHeader_Value
+	//	*MeshConfig_ExtensionProvider_HttpHeader_EnvName
+	HeaderValue   isMeshConfig_ExtensionProvider_HttpHeader_HeaderValue `protobuf_oneof:"header_value"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4169,11 +4174,53 @@ func (x *MeshConfig_ExtensionProvider_HttpHeader) GetName() string {
 	return ""
 }
 
+func (x *MeshConfig_ExtensionProvider_HttpHeader) GetHeaderValue() isMeshConfig_ExtensionProvider_HttpHeader_HeaderValue {
+	if x != nil {
+		return x.HeaderValue
+	}
+	return nil
+}
+
 func (x *MeshConfig_ExtensionProvider_HttpHeader) GetValue() string {
 	if x != nil {
-		return x.Value
+		if x, ok := x.HeaderValue.(*MeshConfig_ExtensionProvider_HttpHeader_Value); ok {
+			return x.Value
+		}
 	}
 	return ""
+}
+
+func (x *MeshConfig_ExtensionProvider_HttpHeader) GetEnvName() string {
+	if x != nil {
+		if x, ok := x.HeaderValue.(*MeshConfig_ExtensionProvider_HttpHeader_EnvName); ok {
+			return x.EnvName
+		}
+	}
+	return ""
+}
+
+type isMeshConfig_ExtensionProvider_HttpHeader_HeaderValue interface {
+	isMeshConfig_ExtensionProvider_HttpHeader_HeaderValue()
+}
+
+type MeshConfig_ExtensionProvider_HttpHeader_Value struct {
+	// The HTTP header value.
+	Value string `protobuf:"bytes,2,opt,name=value,proto3,oneof"`
+}
+
+type MeshConfig_ExtensionProvider_HttpHeader_EnvName struct {
+	// The HTTP header value from the environment variable.
+	//
+	// Warning:
+	// - The environment variable must be set in the istiod pod spec.
+	// - This is not a end-to-end secure.
+	EnvName string `protobuf:"bytes,3,opt,name=env_name,json=envName,proto3,oneof"`
+}
+
+func (*MeshConfig_ExtensionProvider_HttpHeader_Value) isMeshConfig_ExtensionProvider_HttpHeader_HeaderValue() {
+}
+
+func (*MeshConfig_ExtensionProvider_HttpHeader_EnvName) isMeshConfig_ExtensionProvider_HttpHeader_HeaderValue() {
 }
 
 type MeshConfig_ExtensionProvider_ResourceDetectors struct {
@@ -4758,7 +4805,7 @@ var File_mesh_v1alpha1_config_proto protoreflect.FileDescriptor
 
 const file_mesh_v1alpha1_config_proto_rawDesc = "" +
 	"\n" +
-	"\x1amesh/v1alpha1/config.proto\x12\x13istio.mesh.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x19mesh/v1alpha1/proxy.proto\x1a*networking/v1alpha3/destination_rule.proto\x1a)networking/v1alpha3/virtual_service.proto\"\xbch\n" +
+	"\x1amesh/v1alpha1/config.proto\x12\x13istio.mesh.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x19mesh/v1alpha1/proxy.proto\x1a*networking/v1alpha3/destination_rule.proto\x1a)networking/v1alpha3/virtual_service.proto\"\xebh\n" +
 	"\n" +
 	"MeshConfig\x12*\n" +
 	"\x11proxy_listen_port\x18\x04 \x01(\x05R\x0fproxyListenPort\x129\n" +
@@ -4832,7 +4879,7 @@ const file_mesh_v1alpha1_config_proto_rawDesc = "" +
 	"\ftls_settings\x18\x02 \x01(\v2,.istio.networking.v1alpha3.ClientTLSSettingsR\vtlsSettings\x12B\n" +
 	"\x0frequest_timeout\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\x0erequestTimeout\x12\x1f\n" +
 	"\vistiod_side\x18\x04 \x01(\bR\n" +
-	"istiodSide\x1a\x9d=\n" +
+	"istiodSide\x1a\xcc=\n" +
 	"\x11ExtensionProvider\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x8b\x01\n" +
 	"\x14envoy_ext_authz_http\x18\x02 \x01(\v2X.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationHttpProviderH\x00R\x11envoyExtAuthzHttp\x12\x8b\x01\n" +
@@ -4986,11 +5033,13 @@ const file_mesh_v1alpha1_config_proto_rawDesc = "" +
 	"\vHttpService\x12\x12\n" +
 	"\x04path\x18\x01 \x01(\tR\x04path\x123\n" +
 	"\atimeout\x18\x02 \x01(\v2\x19.google.protobuf.DurationR\atimeout\x12V\n" +
-	"\aheaders\x18\x03 \x03(\v2<.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.HttpHeaderR\aheaders\x1a6\n" +
+	"\aheaders\x18\x03 \x03(\v2<.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.HttpHeaderR\aheaders\x1ae\n" +
 	"\n" +
 	"HttpHeader\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value\x1a\xd0\x02\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x16\n" +
+	"\x05value\x18\x02 \x01(\tH\x00R\x05value\x12\x1b\n" +
+	"\benv_name\x18\x03 \x01(\tH\x00R\aenvNameB\x0e\n" +
+	"\fheader_value\x1a\xd0\x02\n" +
 	"\x11ResourceDetectors\x12\x81\x01\n" +
 	"\venvironment\x18\x01 \x01(\v2_.istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ResourceDetectors.EnvironmentResourceDetectorR\venvironment\x12{\n" +
 	"\tdynatrace\x18\x02 \x01(\v2].istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ResourceDetectors.DynatraceResourceDetectorR\tdynatrace\x1a\x1d\n" +
@@ -5254,6 +5303,10 @@ func file_mesh_v1alpha1_config_proto_init() {
 	}
 	file_mesh_v1alpha1_config_proto_msgTypes[29].OneofWrappers = []any{
 		(*MeshConfig_ExtensionProvider_OpenTelemetryTracingProvider_DynatraceSampler_)(nil),
+	}
+	file_mesh_v1alpha1_config_proto_msgTypes[31].OneofWrappers = []any{
+		(*MeshConfig_ExtensionProvider_HttpHeader_Value)(nil),
+		(*MeshConfig_ExtensionProvider_HttpHeader_EnvName)(nil),
 	}
 	file_mesh_v1alpha1_config_proto_msgTypes[37].OneofWrappers = []any{
 		(*MeshConfig_ExtensionProvider_EnvoyFileAccessLogProvider_LogFormat_Text)(nil),
