@@ -164,7 +164,7 @@
 // kind: ServiceEntry
 // metadata:
 //   name: external-svc-httpbin
-//   namespace : egress
+//   namespace: egress
 // spec:
 //   hosts:
 //   - example.com
@@ -327,7 +327,7 @@
 // kind: ServiceEntry
 // metadata:
 //   name: httpbin
-//   namespace : httpbin-ns
+//   namespace: httpbin-ns
 // spec:
 //   hosts:
 //   - example.com

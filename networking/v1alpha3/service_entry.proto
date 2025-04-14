@@ -166,7 +166,7 @@ import "meta/v1alpha1/status.proto";
 // kind: ServiceEntry
 // metadata:
 //   name: external-svc-httpbin
-//   namespace : egress
+//   namespace: egress
 // spec:
 //   hosts:
 //   - example.com
@@ -329,7 +329,7 @@ import "meta/v1alpha1/status.proto";
 // kind: ServiceEntry
 // metadata:
 //   name: httpbin
-//   namespace : httpbin-ns
+//   namespace: httpbin-ns
 // spec:
 //   hosts:
 //   - example.com
