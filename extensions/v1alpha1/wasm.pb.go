@@ -472,6 +472,10 @@ const (
 	// binary, an exception, or abort() on the VM. This flag is not recommended
 	// for the authentication or the authorization plugins.
 	FailStrategy_FAIL_OPEN FailStrategy = 1
+	// New plugin instance will be created for the new request if the Wasm plugin
+	// has failed. This only applies for “proxy_wasm::FailState::RuntimeError“.
+	// For all other error types this will fallback to “FAIL_CLOSED“.
+	FailStrategy_FAIL_RELOAD FailStrategy = 2
 )
 
 // Enum value maps for FailStrategy.
@@ -479,10 +483,12 @@ var (
 	FailStrategy_name = map[int32]string{
 		0: "FAIL_CLOSE",
 		1: "FAIL_OPEN",
+		2: "FAIL_RELOAD",
 	}
 	FailStrategy_value = map[string]int32{
-		"FAIL_CLOSE": 0,
-		"FAIL_OPEN":  1,
+		"FAIL_CLOSE":  0,
+		"FAIL_OPEN":   1,
+		"FAIL_RELOAD": 2,
 	}
 )
 
@@ -1046,11 +1052,12 @@ const file_extensions_v1alpha1_wasm_proto_rawDesc = "" +
 	"\x0eEnvValueSource\x12\n" +
 	"\n" +
 	"\x06INLINE\x10\x00\x12\b\n" +
-	"\x04HOST\x10\x01*-\n" +
+	"\x04HOST\x10\x01*>\n" +
 	"\fFailStrategy\x12\x0e\n" +
 	"\n" +
 	"FAIL_CLOSE\x10\x00\x12\r\n" +
-	"\tFAIL_OPEN\x10\x01B\"Z istio.io/api/extensions/v1alpha1b\x06proto3"
+	"\tFAIL_OPEN\x10\x01\x12\x0f\n" +
+	"\vFAIL_RELOAD\x10\x02B\"Z istio.io/api/extensions/v1alpha1b\x06proto3"
 
 var (
 	file_extensions_v1alpha1_wasm_proto_rawDescOnce sync.Once
