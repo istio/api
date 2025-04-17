@@ -2551,12 +2551,12 @@ func (x *MeshConfig_ServiceSettings_Settings) GetClusterLocal() bool {
 // Scope configuration to be applied to matching services.
 //
 // For example, the following configures the scope of all services with the "istio.io/global" label
-// to be available globally:
+// in matching namespaces to be available globally:
 //
 // ```yaml
 // serviceSettings:
 //   - serviceScope:
-//   - namespacesSelector:
+//     namespacesSelector:
 //     matchExpressions:
 //   - key: istio.io/global
 //     operator: In
@@ -2565,7 +2565,6 @@ func (x *MeshConfig_ServiceSettings_Settings) GetClusterLocal() bool {
 //     matchExpressions:
 //   - key: istio.io/global
 //     operator: Exists
-//     values: [true]
 //     scope: GLOBAL
 //
 // ```
