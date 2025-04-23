@@ -6656,13 +6656,12 @@ spec:
                             type: string
                           type: array
                         tlsCertificates:
-                          description: Only one of `server_certificate`, `private_key`,
-                            `ca_certificates` or `credential_name` or `credential_names`
-                            or `tls_certificates` should be specified.
+                          description: Only one of `server_certificate`, `private_key`
+                            or `credential_name` or `credential_names` or `tls_certificates`
+                            should be specified.
                           items:
                             properties:
                               caCertificates:
-                                description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
                                 type: string
                               privateKey:
                                 description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
@@ -6928,13 +6927,12 @@ spec:
                             type: string
                           type: array
                         tlsCertificates:
-                          description: Only one of `server_certificate`, `private_key`,
-                            `ca_certificates` or `credential_name` or `credential_names`
-                            or `tls_certificates` should be specified.
+                          description: Only one of `server_certificate`, `private_key`
+                            or `credential_name` or `credential_names` or `tls_certificates`
+                            should be specified.
                           items:
                             properties:
                               caCertificates:
-                                description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
                                 type: string
                               privateKey:
                                 description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
@@ -7200,13 +7198,12 @@ spec:
                             type: string
                           type: array
                         tlsCertificates:
-                          description: Only one of `server_certificate`, `private_key`,
-                            `ca_certificates` or `credential_name` or `credential_names`
-                            or `tls_certificates` should be specified.
+                          description: Only one of `server_certificate`, `private_key`
+                            or `credential_name` or `credential_names` or `tls_certificates`
+                            should be specified.
                           items:
                             properties:
                               caCertificates:
-                                description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
                                 type: string
                               privateKey:
                                 description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
@@ -8822,13 +8819,12 @@ spec:
                             type: string
                           type: array
                         tlsCertificates:
-                          description: Only one of `server_certificate`, `private_key`,
-                            `ca_certificates` or `credential_name` or `credential_names`
-                            or `tls_certificates` should be specified.
+                          description: Only one of `server_certificate`, `private_key`
+                            or `credential_name` or `credential_names` or `tls_certificates`
+                            should be specified.
                           items:
                             properties:
                               caCertificates:
-                                description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
                                 type: string
                               privateKey:
                                 description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
@@ -9397,13 +9393,12 @@ spec:
                             type: string
                           type: array
                         tlsCertificates:
-                          description: Only one of `server_certificate`, `private_key`,
-                            `ca_certificates` or `credential_name` or `credential_names`
-                            or `tls_certificates` should be specified.
+                          description: Only one of `server_certificate`, `private_key`
+                            or `credential_name` or `credential_names` or `tls_certificates`
+                            should be specified.
                           items:
                             properties:
                               caCertificates:
-                                description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
                                 type: string
                               privateKey:
                                 description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
@@ -9972,13 +9967,12 @@ spec:
                             type: string
                           type: array
                         tlsCertificates:
-                          description: Only one of `server_certificate`, `private_key`,
-                            `ca_certificates` or `credential_name` or `credential_names`
-                            or `tls_certificates` should be specified.
+                          description: Only one of `server_certificate`, `private_key`
+                            or `credential_name` or `credential_names` or `tls_certificates`
+                            should be specified.
                           items:
                             properties:
                               caCertificates:
-                                description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
                                 type: string
                               privateKey:
                                 description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
