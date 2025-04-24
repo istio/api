@@ -988,6 +988,7 @@ type ServerTLSSettings_TLSCertificate struct {
 	// REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`. The path to a file
 	// containing certificate authority certificates to use in verifying a presented
 	// client side certificate.
+	// $hide_from_docs
 	CaCertificates string `protobuf:"bytes,3,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
