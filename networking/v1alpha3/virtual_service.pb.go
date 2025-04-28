@@ -241,6 +241,7 @@ func (CorsPolicy_UnmatchedPreflights) EnumDescriptor() ([]byte, []int) {
 // <!-- crd generation tags
 // +cue-gen:VirtualService:groupName:networking.istio.io
 // +cue-gen:VirtualService:versions:v1beta1,v1alpha3,v1
+// +cue-gen:VirtualService:storageVersion
 // +cue-gen:VirtualService:annotations:helm.sh/resource-policy=keep
 // +cue-gen:VirtualService:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:VirtualService:subresource:status

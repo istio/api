@@ -10,6 +10,7 @@ import "istio.io/api/networking/v1alpha3"
 // <!-- crd generation tags
 // +cue-gen:Sidecar:groupName:networking.istio.io
 // +cue-gen:Sidecar:versions:v1beta1,v1alpha3,v1
+// +cue-gen:Sidecar:storageVersion
 // +cue-gen:Sidecar:annotations:helm.sh/resource-policy=keep
 // +cue-gen:Sidecar:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:Sidecar:subresource:status
