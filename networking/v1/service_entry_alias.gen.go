@@ -8,8 +8,7 @@ import "istio.io/api/networking/v1alpha3"
 //
 // <!-- crd generation tags
 // +cue-gen:ServiceEntry:groupName:networking.istio.io
-// +cue-gen:ServiceEntry:versions:v1beta1,v1alpha3,v1
-// +cue-gen:ServiceEntry:storageVersion
+// +cue-gen:ServiceEntry:versions:v1,v1beta1,v1alpha3
 // +cue-gen:ServiceEntry:annotations:helm.sh/resource-policy=keep
 // +cue-gen:ServiceEntry:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:ServiceEntry:subresource:status

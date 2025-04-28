@@ -488,8 +488,7 @@ func (OutboundTrafficPolicy_Mode) EnumDescriptor() ([]byte, []int) {
 //
 // <!-- crd generation tags
 // +cue-gen:Sidecar:groupName:networking.istio.io
-// +cue-gen:Sidecar:versions:v1beta1,v1alpha3,v1
-// +cue-gen:Sidecar:storageVersion
+// +cue-gen:Sidecar:versions:v1,v1beta1,v1alpha3
 // +cue-gen:Sidecar:annotations:helm.sh/resource-policy=keep
 // +cue-gen:Sidecar:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:Sidecar:subresource:status
