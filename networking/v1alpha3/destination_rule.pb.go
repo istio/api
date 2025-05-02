@@ -402,7 +402,7 @@ func (ClientTLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) {
 // +cue-gen:DestinationRule:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
 // representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
 // Clients may not set this value. It is represented in RFC3339 form and is in UTC.
-// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// Populated by the system. Read-only. Null for lists. For more information, see [Kubernetes API Conventions](https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#metadata)"
 // +cue-gen:DestinationRule:preserveUnknownFields:false
 // -->
 //
@@ -1075,7 +1075,7 @@ func (x *ConnectionPoolSettings) GetHttp() *ConnectionPoolSettings_HTTPSettings 
 //
 // The following rule sets a connection pool size of 100 HTTP1 connections
 // with no more than 10 req/connection to the "reviews" service. In addition,
-// it sets a limit of 1000 concurrent HTTP2 requests and configures upstream
+// it sets a limit of 1000 concurrent HTTP/2 requests and configures upstream
 // hosts to be scanned every 5 mins so that any host that fails 7 consecutive
 // times with a 502, 503, or 504 error code will be ejected for 15 minutes.
 //
@@ -1838,7 +1838,7 @@ func (x *TrafficPolicy_TunnelSettings) GetTargetPort() uint32 {
 
 type TrafficPolicy_ProxyProtocol struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// The PROXY protocol version to use. See https://www.haproxy.org/download/2.1/doc/proxy-protocol.txt for details.
+	// The PROXY protocol version to use. See [the protocol spec](https://www.haproxy.org/download/2.1/doc/proxy-protocol.txt) for details.
 	// By default it is `V1`.
 	Version       TrafficPolicy_ProxyProtocol_VERSION `protobuf:"varint,1,opt,name=version,proto3,enum=istio.networking.v1alpha3.TrafficPolicy_ProxyProtocol_VERSION" json:"version,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -1910,8 +1910,8 @@ type LoadBalancerSettings_ConsistentHashLB struct {
 	//	*LoadBalancerSettings_ConsistentHashLB_HttpQueryParameterName
 	HashKey isLoadBalancerSettings_ConsistentHashLB_HashKey `protobuf_oneof:"hash_key"`
 	// The hash algorithm to use.
-	// Please refer to https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#ring-hash
-	// and https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#maglev for
+	// Please refer to Envoy's [Ring Hash Load Balancer](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#ring-hash)
+	// and [Maglev Load Balancer](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#maglev) docs for
 	// considerations on choosing an algorithm.
 	// Defaults to RingHash if not specified.
 	//
@@ -2355,12 +2355,12 @@ type ConnectionPoolSettings_HTTPSettings struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Maximum number of requests that will be queued while waiting for
 	// a ready connection pool connection. Default 2^32-1.
-	// Refer to https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/circuit_breaking
-	// under which conditions a new connection is created for HTTP2.
-	// Please note that this is applicable to both HTTP/1.1 and HTTP2.
+	// Refer to [Envoy Circuit Breaking](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/circuit_breaking)
+	// under which conditions a new connection is created for HTTP/2.
+	// Please note that this is applicable to both HTTP/1.1 and HTTP/2.
 	Http1MaxPendingRequests int32 `protobuf:"varint,1,opt,name=http1_max_pending_requests,json=http1MaxPendingRequests,proto3" json:"http1_max_pending_requests,omitempty"`
 	// Maximum number of active requests to a destination. Default 2^32-1.
-	// Please note that this is applicable to both HTTP/1.1 and HTTP2.
+	// Please note that this is applicable to both HTTP/1.1 and HTTP/2.
 	Http2MaxRequests int32 `protobuf:"varint,2,opt,name=http2_max_requests,json=http2MaxRequests,proto3" json:"http2_max_requests,omitempty"`
 	// Maximum number of requests per connection to a backend. Setting this
 	// parameter to 1 disables keep alive. Default 0, meaning "unlimited",
@@ -2375,7 +2375,7 @@ type ConnectionPoolSettings_HTTPSettings struct {
 	// the connection will be closed. If the connection is an HTTP/2
 	// connection a drain sequence will occur prior to closing the connection.
 	// Note that request based timeouts mean that HTTP/2 PINGs will not
-	// keep the connection alive. Applies to both HTTP1.1 and HTTP2 connections.
+	// keep the connection alive. Applies to both HTTP/1.1 and HTTP/2 connections.
 	IdleTimeout *duration.Duration `protobuf:"bytes,5,opt,name=idle_timeout,json=idleTimeout,proto3" json:"idle_timeout,omitempty"`
 	// Specify if http1.1 connection should be upgraded to http2 for the associated destination.
 	H2UpgradePolicy ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy `protobuf:"varint,6,opt,name=h2_upgrade_policy,json=h2UpgradePolicy,proto3,enum=istio.networking.v1alpha3.ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy" json:"h2_upgrade_policy,omitempty"`
