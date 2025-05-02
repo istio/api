@@ -500,4 +500,9 @@ enum FailStrategy {
   // binary, an exception, or abort() on the VM. This flag is not recommended
   // for the authentication or the authorization plugins.
   FAIL_OPEN = 1;
+
+  // New plugin instance will be created for the new request if the Wasm plugin
+  // has failed. This only applies for ``proxy_wasm::FailState::RuntimeError``.
+  // For all other error types this will fallback to ``FAIL_CLOSED``.
+  FAIL_RELOAD = 2;
 }
