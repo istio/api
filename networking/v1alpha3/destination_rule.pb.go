@@ -392,7 +392,7 @@ func (ClientTLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) {
 //
 // <!-- crd generation tags
 // +cue-gen:DestinationRule:groupName:networking.istio.io
-// +cue-gen:DestinationRule:versions:v1beta1,v1alpha3,v1
+// +cue-gen:DestinationRule:versions:v1,v1beta1,v1alpha3
 // +cue-gen:DestinationRule:annotations:helm.sh/resource-policy=keep
 // +cue-gen:DestinationRule:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:DestinationRule:subresource:status

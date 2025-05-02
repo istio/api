@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - 55302
+
+releaseNotes:
+  - |
+    **Updated** storageVersion for networking APIs to v1.
