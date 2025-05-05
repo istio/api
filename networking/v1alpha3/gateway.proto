@@ -490,13 +490,15 @@ message ServerTLSSettings {
     // holding the server's private key.
     string private_key = 2;
 
+    // $hide_from_docs
     // REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`. The path to a file
     // containing certificate authority certificates to use in verifying a presented
     // client side certificate.
+    // $hide_from_docs
     string ca_certificates = 3;
   }
 
-  // Only one of `server_certificate`, `private_key`, `ca_certificates` or `credential_name`
+  // Only one of `server_certificate`, `private_key` or `credential_name`
   // or `credential_names` or `tls_certificates` should be specified.
   // This is mainly used for specifying RSA and ECDSA certificates for the same server.
   // +kubebuilder:validation:MaxItems=2

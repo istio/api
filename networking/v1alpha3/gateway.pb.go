@@ -783,7 +783,7 @@ type ServerTLSSettings struct {
 	// +kubebuilder:validation:MaxItems=2
 	// +kubebuilder:validation:MinItems=1
 	CredentialNames []string `protobuf:"bytes,14,rep,name=credential_names,json=credentialNames,proto3" json:"credential_names,omitempty"`
-	// Only one of `server_certificate`, `private_key`, `ca_certificates` or `credential_name`
+	// Only one of `server_certificate`, `private_key` or `credential_name`
 	// or `credential_names` or `tls_certificates` should be specified.
 	// This is mainly used for specifying RSA and ECDSA certificates for the same server.
 	// +kubebuilder:validation:MaxItems=2
@@ -984,9 +984,11 @@ type ServerTLSSettings_TLSCertificate struct {
 	// REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file
 	// holding the server's private key.
 	PrivateKey string `protobuf:"bytes,2,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
+	// $hide_from_docs
 	// REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`. The path to a file
 	// containing certificate authority certificates to use in verifying a presented
 	// client side certificate.
+	// $hide_from_docs
 	CaCertificates string `protobuf:"bytes,3,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
