@@ -1844,6 +1844,8 @@ type MeshConfig_ServiceSettings struct {
 	// The services to which the Settings should be applied. Services are selected using the hostname
 	// matching rules used by DestinationRule.
 	//
+	// The hosts field is ignored if the `serviceScope` field is set and Ambient is enabled.
+	//
 	// For example: foo.bar.svc.cluster.local, *.baz.svc.cluster.local
 	Hosts []string `protobuf:"bytes,2,rep,name=hosts,proto3" json:"hosts,omitempty"`
 	// Scope configuration to be applied to matching services.
@@ -2548,8 +2550,14 @@ func (x *MeshConfig_ServiceSettings_Settings) GetClusterLocal() bool {
 	return false
 }
 
-// Scope configuration to be applied to matching services.
+// Ambient Multicluster scope configuration to be applied to matching services via namespace and/or
+// service selectors. This configuration is used to define the dicoverability of services in an
+// Ambient Multicluster mesh. A service can be configured to have a local scope, meaning it is not
+// discoverable by a remote cluster, or a global scope, meaning it is discoverable by all remote clusters.
+// This configurations only defines the scope of services in the respective cluster. To ensure consistency
+// across clusters, the same configuration should be applied to all clusters in the mesh.
 //
+// The `serviceScope` field is ignored if the `hosts` field is set and Ambient is enabled.
 // For example, the following configures the scope of all services with the "istio.io/global" label
 // in matching namespaces to be available globally:
 //
