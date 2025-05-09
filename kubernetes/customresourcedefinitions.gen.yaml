@@ -6179,12 +6179,13 @@ spec:
                           description: |-
                             The specific config generation context to match on.
 
-                            Valid Options: ANY, SIDECAR_INBOUND, SIDECAR_OUTBOUND, GATEWAY
+                            Valid Options: ANY, SIDECAR_INBOUND, SIDECAR_OUTBOUND, GATEWAY, WAYPOINT
                           enum:
                           - ANY
                           - SIDECAR_INBOUND
                           - SIDECAR_OUTBOUND
                           - GATEWAY
+                          - WAYPOINT
                           type: string
                         listener:
                           description: Match on envoy listener attributes.
