@@ -495,10 +495,6 @@ message LoadBalancerSettings {
     uint64 minimum_ring_size = 4 [deprecated=true];
   };
 
-  // (-- TODO: Enable Subset load balancing after moving to v2 API Also
-  // look into enabling Priotity based load balancing for spilling over
-  // from one priority pool to another. --)
-
   // Upstream load balancing policy.
   oneof lb_policy {
     SimpleLB simple = 1;
