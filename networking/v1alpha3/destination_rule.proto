@@ -495,6 +495,35 @@ message LoadBalancerSettings {
     uint64 minimum_ring_size = 4 [deprecated=true];
   };
 
+  // Session persistence settings for the destination. Use this for hard session affinity.
+  message SessionPersistence {
+    // Type defines the type of session persistence such as through
+    // the use of a header or cookie. Default is COOKIE.
+    enum Type {
+      // Use a cookie to store the session affinity information.
+      COOKIE  = 0;
+      // Use a header to store the session affinity information.
+      HEADER = 1;
+    }
+
+    // The type of session persistence to use.
+    Type type = 1;
+
+    // The name of the header or cookie to use for session persistence.
+    string name = 2;
+
+    // The cookie settings for session persistence.
+    Cookie cookie = 3;
+
+    message Cookie {
+      // Lifetime of the cookie. If specified, a cookie with the TTL will be
+      // generated if the cookie is not present. If the TTL is present and zero, 
+      // the generated cookie will be a session cookie.
+      // +protoc-gen-crd:duration-validation:none
+      google.protobuf.Duration ttl = 3;
+    }
+  }
+
   // (-- TODO: Enable Subset load balancing after moving to v2 API Also
   // look into enabling Priotity based load balancing for spilling over
   // from one priority pool to another. --)
@@ -503,6 +532,7 @@ message LoadBalancerSettings {
   oneof lb_policy {
     SimpleLB simple = 1;
     ConsistentHashLB consistent_hash = 2;
+    SessionPersistence session_persistence = 6;
   }
 
   // Locality load balancer settings, this will override mesh-wide settings in entirety, meaning no merging would be performed

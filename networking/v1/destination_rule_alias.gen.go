@@ -179,6 +179,20 @@ type LoadBalancerSettings_ConsistentHashLB_RingHash_ = v1alpha3.LoadBalancerSett
 // The Maglev load balancer implements consistent hashing to backend hosts.
 type LoadBalancerSettings_ConsistentHashLB_Maglev = v1alpha3.LoadBalancerSettings_ConsistentHashLB_Maglev
 
+// Session persistence settings for the destination. Use this for hard session affinity.
+type LoadBalancerSettings_SessionPersistence = v1alpha3.LoadBalancerSettings_SessionPersistence
+type LoadBalancerSettings_SessionPersistence_Cookie = v1alpha3.LoadBalancerSettings_SessionPersistence_Cookie
+
+// Type defines the type of session persistence such as through
+// the use of a header or cookie. Default is COOKIE.
+type LoadBalancerSettings_SessionPersistence_Type = v1alpha3.LoadBalancerSettings_SessionPersistence_Type
+
+// Use a cookie to store the session affinity information.
+const LoadBalancerSettings_SessionPersistence_COOKIE LoadBalancerSettings_SessionPersistence_Type = v1alpha3.LoadBalancerSettings_SessionPersistence_COOKIE
+
+// Use a header to store the session affinity information.
+const LoadBalancerSettings_SessionPersistence_HEADER LoadBalancerSettings_SessionPersistence_Type = v1alpha3.LoadBalancerSettings_SessionPersistence_HEADER
+
 // +kubebuilder:validation:XValidation:message="only one of warmupDurationSecs or warmup can be set",rule="oneof(self.warmupDurationSecs, self.warmup)"
 // Standard load balancing algorithms that require no tuning.
 type LoadBalancerSettings_SimpleLB = v1alpha3.LoadBalancerSettings_SimpleLB
@@ -216,6 +230,7 @@ const LoadBalancerSettings_LEAST_REQUEST LoadBalancerSettings_SimpleLB = v1alpha
 
 type LoadBalancerSettings_Simple = v1alpha3.LoadBalancerSettings_Simple
 type LoadBalancerSettings_ConsistentHash = v1alpha3.LoadBalancerSettings_ConsistentHash
+type LoadBalancerSettings_SessionPersistence_ = v1alpha3.LoadBalancerSettings_SessionPersistence_
 type WarmupConfiguration = v1alpha3.WarmupConfiguration
 
 // Connection pool settings for an upstream host. The settings apply to
