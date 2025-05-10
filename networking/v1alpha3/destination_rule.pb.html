@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.DestinationRule
 aliases: [/docs/reference/config/networking/v1alpha3/destination-rule]
-number_of_entries: 26
+number_of_entries: 29
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -569,6 +569,13 @@ spec:
 <td>
 </td>
 </tr>
+<tr id="LoadBalancerSettings-session_persistence" class="oneof">
+<td><div class="field"><div class="name"><code><a href="#LoadBalancerSettings-session_persistence">sessionPersistence</a></code></div>
+<div class="type"><a href="#LoadBalancerSettings-SessionPersistence">SessionPersistence (oneof)</a></div>
+</div></td>
+<td>
+</td>
+</tr>
 <tr id="LoadBalancerSettings-locality_lb_setting">
 <td><div class="field"><div class="name"><code><a href="#LoadBalancerSettings-locality_lb_setting">localityLbSetting</a></code></div>
 <div class="type"><a href="#LocalityLoadBalancerSetting">LocalityLoadBalancerSetting</a></div>
@@ -791,6 +798,102 @@ Consistent Hash load balancer.</p>
 <p>Lifetime of the cookie. If specified, a cookie with the TTL will be
 generated if the cookie is not present. If the TTL is present and zero,
 the generated cookie will be a session cookie.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="LoadBalancerSettings-SessionPersistence">SessionPersistence</h3>
+<section>
+<p>Session persistence settings for the destination. Use this for hard session affinity.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LoadBalancerSettings-SessionPersistence-type">
+<td><div class="field"><div class="name"><code><a href="#LoadBalancerSettings-SessionPersistence-type">type</a></code></div>
+<div class="type"><a href="#LoadBalancerSettings-SessionPersistence-Type">Type</a></div>
+</div></td>
+<td>
+<p>The type of session persistence to use.</p>
+
+</td>
+</tr>
+<tr id="LoadBalancerSettings-SessionPersistence-name">
+<td><div class="field"><div class="name"><code><a href="#LoadBalancerSettings-SessionPersistence-name">name</a></code></div>
+<div class="type">string</div>
+</div></td>
+<td>
+<p>The name of the header or cookie to use for session persistence.</p>
+
+</td>
+</tr>
+<tr id="LoadBalancerSettings-SessionPersistence-cookie">
+<td><div class="field"><div class="name"><code><a href="#LoadBalancerSettings-SessionPersistence-cookie">cookie</a></code></div>
+<div class="type"><a href="#LoadBalancerSettings-SessionPersistence-Cookie">Cookie</a></div>
+</div></td>
+<td>
+<p>The cookie settings for session persistence.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h4 id="LoadBalancerSettings-SessionPersistence-Cookie">Cookie</h4>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LoadBalancerSettings-SessionPersistence-Cookie-ttl">
+<td><div class="field"><div class="name"><code><a href="#LoadBalancerSettings-SessionPersistence-Cookie-ttl">ttl</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></div>
+</div></td>
+<td>
+<p>Lifetime of the cookie. If specified, a cookie with the TTL will be
+generated if the cookie is not present. If the TTL is present and zero,
+the generated cookie will be a session cookie.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h4 id="LoadBalancerSettings-SessionPersistence-Type">Type</h4>
+<section>
+<p>Type defines the type of session persistence such as through
+the use of a header or cookie. Default is COOKIE.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LoadBalancerSettings-SessionPersistence-Type-COOKIE">
+<td><code><a href="#LoadBalancerSettings-SessionPersistence-Type-COOKIE">COOKIE</a></code></td>
+<td>
+<p>Use a cookie to store the session affinity information.</p>
+
+</td>
+</tr>
+<tr id="LoadBalancerSettings-SessionPersistence-Type-HEADER">
+<td><code><a href="#LoadBalancerSettings-SessionPersistence-Type-HEADER">HEADER</a></code></td>
+<td>
+<p>Use a header to store the session affinity information.</p>
 
 </td>
 </tr>
