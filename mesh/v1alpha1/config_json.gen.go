@@ -72,14 +72,14 @@ func (this *MeshConfig_ServiceSettings_Settings) UnmarshalJSON(b []byte) error {
 	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for MeshConfig_ServiceSettings_ServiceScopeConfig
-func (this *MeshConfig_ServiceSettings_ServiceScopeConfig) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for MeshConfig_ServiceScopeConfigs
+func (this *MeshConfig_ServiceScopeConfigs) MarshalJSON() ([]byte, error) {
 	str, err := ConfigMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for MeshConfig_ServiceSettings_ServiceScopeConfig
-func (this *MeshConfig_ServiceSettings_ServiceScopeConfig) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for MeshConfig_ServiceScopeConfigs
+func (this *MeshConfig_ServiceScopeConfigs) UnmarshalJSON(b []byte) error {
 	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

@@ -435,6 +435,15 @@ For example <code>outbound|8080|v2|reviews.prod.svc.cluster.local</code>. This c
 
 </td>
 </tr>
+<tr id="MeshConfig-service_scope_configs">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-service_scope_configs">serviceScopeConfigs</a></code></div>
+<div class="type"><a href="#MeshConfig-ServiceScopeConfigs">ServiceScopeConfigs[]</a></div>
+</div></td>
+<td>
+<p>Scope to be applied to select services.</p>
+
+</td>
+</tr>
 <tr id="MeshConfig-enable_prometheus_merge">
 <td><div class="field"><div class="name"><code><a href="#MeshConfig-enable_prometheus_merge">enablePrometheusMerge</a></code></div>
 <div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></div>
@@ -732,6 +741,104 @@ If only trustDomains is set, this trustAnchor is used for these trustDomains and
 If only certSigners is set, this trustAnchor is used for these certSigners and all trust domains.
 If both certSigners and trustDomains is set, this trustAnchor is only used for these signers and trust domains.</p>
 
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="MeshConfig-ServiceScopeConfigs">ServiceScopeConfigs</h3>
+<section>
+<p>Ambient mode multicluster scope configuration to be applied to matching services via namespace and/or
+service selectors. This configuration is used to define the routability and discoverability of services
+configured by this mesh config in other clusters in the mesh. If a service is selected to be global scoped,
+it will be considered in the load balencing pool for all of clusters in the mesh making requests to
+that service. If a service is locally scoped, it will only be considered in the load balencing pool for
+the local cluster making requests to that service. The locally scoped service will not be included in the
+balencing pool for other clusters. In addition to defining inclusion in the load balencing pool, the
+service scope configuration selection also defines what services are exposd at the clusters E/W gatway.
+To ensure consistency across clusters, the same configuration SHOULD be applied to all clusters in the mesh.</p>
+<p>When in ambient mode, if ServiceSettings are defined they will be considered in addition to the
+ServiceScopeConfigs. If a service is selected by ServiceSettings to be cluster local and selected by
+ServiceScopeConfigs to be global, the service will be considered cluster local. If a service is
+considered global by ServiceSettings and it not selected by ServiceScopeConfigs as globally scoped
+the serive will be considered local. Local scope takes precedence over global scope. Since
+ServiceScopeConfigs is local by default, all services are considered local unless it is considered
+global by ServiceSettings AND ServiceScopeConfigs.</p>
+<p>For example, the following configures the scope of all services with the &ldquo;istio.io/global&rdquo; label
+in matching namespaces to be available globally:</p>
+<pre><code class="language-yaml">serviceSettings:
+  -  serviceScope:
+        namespacesSelector:
+          matchExpressions:
+            - key: istio.io/global
+              operator: In
+              values: [true]
+        servicesSelector:
+          matchExpressions:
+            - key: istio.io/global
+              operator: Exists
+        scope: GLOBAL
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ServiceScopeConfigs-namespace_selector">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceScopeConfigs-namespace_selector">namespaceSelector</a></code></div>
+<div class="type"><a href="#LabelSelector">LabelSelector</a></div>
+</div></td>
+<td>
+<p>Match expression for namespaces.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ServiceScopeConfigs-services_selector">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceScopeConfigs-services_selector">servicesSelector</a></code></div>
+<div class="type"><a href="#LabelSelector">LabelSelector</a></div>
+</div></td>
+<td>
+<p>Match expression for serivces.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ServiceScopeConfigs-scope">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceScopeConfigs-scope">scope</a></code></div>
+<div class="type"><a href="#MeshConfig-ServiceScopeConfigs-Scope">Scope</a></div>
+</div></td>
+<td>
+<p>Specifics the available scope for matching services.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h4 id="MeshConfig-ServiceScopeConfigs-Scope">Scope</h4>
+<section>
+<p>The scope of the matching service. Used to determine if the service is available locally
+(cluster local) or globally (mesh-wide).</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ServiceScopeConfigs-Scope-LOCAL">
+<td><code><a href="#MeshConfig-ServiceScopeConfigs-Scope-LOCAL">LOCAL</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="MeshConfig-ServiceScopeConfigs-Scope-GLOBAL">
+<td><code><a href="#MeshConfig-ServiceScopeConfigs-Scope-GLOBAL">GLOBAL</a></code></td>
+<td>
 </td>
 </tr>
 </tbody>
@@ -2715,97 +2822,6 @@ this service-by-service (e.g. mysvc.myns.svc.cluster.local) or as a group
 <p>By default Istio will consider kubernetes.default.svc (i.e. the API Server) as well as all
 services in the kube-system namespace to be cluster-local, unless explicitly overridden here.</p>
 
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h4 id="MeshConfig-ServiceSettings-ServiceScopeConfig">ServiceScopeConfig</h4>
-<section>
-<p>Ambient mode multicluster scope configuration to be applied to matching services via namespace and/or
-service selectors. This configuration is used to define the dicoverability of services in an
-Ambient mode multicluster mesh. A service can be configured to have a local scope, meaning it is not
-discoverable by a remote cluster, or a global scope, meaning it is discoverable by all remote clusters.
-This setting has no impact on routability and SHOULD NOT be used to write security policies around mesh
-access. This configurations only defines the scope of services in the clusters configured by this
-MeshConfig. To ensure consistency across clusters, the same configuration SHOULD be applied to all
-clusters in the mesh.</p>
-<p>The <code>serviceScope</code> field is ignored if ambient mode is disabled.</p>
-<p>For example, the following configures the scope of all services with the &ldquo;istio.io/global&rdquo; label
-in matching namespaces to be available globally:</p>
-<pre><code class="language-yaml">serviceSettings:
-  -  serviceScope:
-        namespacesSelector:
-          matchExpressions:
-            - key: istio.io/global
-              operator: In
-              values: [true]
-        servicesSelector:
-          matchExpressions:
-            - key: istio.io/global
-              operator: Exists
-        scope: GLOBAL
-</code></pre>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="MeshConfig-ServiceSettings-ServiceScopeConfig-namespace_selector">
-<td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceSettings-ServiceScopeConfig-namespace_selector">namespaceSelector</a></code></div>
-<div class="type"><a href="#LabelSelector">LabelSelector</a></div>
-</div></td>
-<td>
-<p>Match expression for namespaces.</p>
-
-</td>
-</tr>
-<tr id="MeshConfig-ServiceSettings-ServiceScopeConfig-services_selector">
-<td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceSettings-ServiceScopeConfig-services_selector">servicesSelector</a></code></div>
-<div class="type"><a href="#LabelSelector">LabelSelector</a></div>
-</div></td>
-<td>
-<p>Match expression for serivces.</p>
-
-</td>
-</tr>
-<tr id="MeshConfig-ServiceSettings-ServiceScopeConfig-scope">
-<td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceSettings-ServiceScopeConfig-scope">scope</a></code></div>
-<div class="type"><a href="#MeshConfig-ServiceSettings-ServiceScopeConfig-Scope">Scope</a></div>
-</div></td>
-<td>
-<p>Specifics the available scope for matching services.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h5 id="MeshConfig-ServiceSettings-ServiceScopeConfig-Scope">Scope</h5>
-<section>
-<p>The scope of the matching service. Used to determine if the service is available locally
-(cluster local) or globally (mesh-wide).</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="MeshConfig-ServiceSettings-ServiceScopeConfig-Scope-LOCAL">
-<td><code><a href="#MeshConfig-ServiceSettings-ServiceScopeConfig-Scope-LOCAL">LOCAL</a></code></td>
-<td>
-</td>
-</tr>
-<tr id="MeshConfig-ServiceSettings-ServiceScopeConfig-Scope-GLOBAL">
-<td><code><a href="#MeshConfig-ServiceSettings-ServiceScopeConfig-Scope-GLOBAL">GLOBAL</a></code></td>
-<td>
 </td>
 </tr>
 </tbody>
