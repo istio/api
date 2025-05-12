@@ -1904,14 +1904,10 @@ func (x *MeshConfig_ServiceSettings) GetHosts() []string {
 }
 
 // Ambient mode multicluster scope configuration to be applied to matching services via namespace and/or
-// service selectors. This configuration is used to define the routability and discoverability of services
-// configured by this mesh config in other clusters in the mesh. If a service is selected to be global scoped,
-// it will be considered in the load balencing pool for all of clusters in the mesh making requests to
-// that service. If a service is locally scoped, it will only be considered in the load balencing pool for
-// the local cluster making requests to that service. The locally scoped service will not be included in the
-// balencing pool for other clusters. In addition to defining inclusion in the load balencing pool, the
-// service scope configuration selection also defines what services are exposd at the clusters E/W gatway.
-// To ensure consistency across clusters, the same configuration SHOULD be applied to all clusters in the mesh.
+// service selectors. This configuration is used to define the scope of services configured by this
+// MeshConfig in other clusters in the mesh. If a service is selected to be globally scoped,
+// the services endpoints will be globally exposed. If a service is locally scoped, its endpoints will
+// only be exposed to local cluster services.
 //
 // When in ambient mode, if ServiceSettings are defined they will be considered in addition to the
 // ServiceScopeConfigs. If a service is selected by ServiceSettings to be cluster local and selected by
@@ -1925,9 +1921,8 @@ func (x *MeshConfig_ServiceSettings) GetHosts() []string {
 // in matching namespaces to be available globally:
 //
 // ```yaml
-// serviceSettings:
-//   - serviceScope:
-//     namespacesSelector:
+// serviceScopeConfigs:
+//   - namespacesSelector:
 //     matchExpressions:
 //   - key: istio.io/global
 //     operator: In
