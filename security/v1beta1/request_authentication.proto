@@ -327,7 +327,7 @@ message JWTRule {
   // Example: `https://foobar.auth0.com`
   // Example: `1234567-compute@developer.gserviceaccount.com`
   // +kubebuilder:validation:MinLength=1
-  string issuer = 1 [(google.api.field_behavior) = REQUIRED];
+  string issuer = 1;
 
   // The list of JWT
   // [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3)
