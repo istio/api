@@ -545,7 +545,7 @@ func (EnvoyFilter_ApplyTo) EnumDescriptor() ([]byte, []int) {
 type EnvoyFilter_PatchContext int32
 
 const (
-	// All listeners/routes/clusters in both sidecars and gateways.
+	// All listeners/routes/clusters in both sidecars, gateways, and waypoints.
 	EnvoyFilter_ANY EnvoyFilter_PatchContext = 0
 	// Inbound listener/route/cluster in sidecar.
 	EnvoyFilter_SIDECAR_INBOUND EnvoyFilter_PatchContext = 1
@@ -553,6 +553,8 @@ const (
 	EnvoyFilter_SIDECAR_OUTBOUND EnvoyFilter_PatchContext = 2
 	// Gateway listener/route/cluster.
 	EnvoyFilter_GATEWAY EnvoyFilter_PatchContext = 3
+	// Waypoint listener/route/cluster.
+	EnvoyFilter_WAYPOINT EnvoyFilter_PatchContext = 4
 )
 
 // Enum value maps for EnvoyFilter_PatchContext.
@@ -562,12 +564,14 @@ var (
 		1: "SIDECAR_INBOUND",
 		2: "SIDECAR_OUTBOUND",
 		3: "GATEWAY",
+		4: "WAYPOINT",
 	}
 	EnvoyFilter_PatchContext_value = map[string]int32{
 		"ANY":              0,
 		"SIDECAR_INBOUND":  1,
 		"SIDECAR_OUTBOUND": 2,
 		"GATEWAY":          3,
+		"WAYPOINT":         4,
 	}
 )
 
@@ -1922,7 +1926,7 @@ var File_networking_v1alpha3_envoy_filter_proto protoreflect.FileDescriptor
 
 const file_networking_v1alpha3_envoy_filter_proto_rawDesc = "" +
 	"\n" +
-	"&networking/v1alpha3/envoy_filter.proto\x12\x19istio.networking.v1alpha3\x1a\x1cgoogle/protobuf/struct.proto\x1a!networking/v1alpha3/sidecar.proto\x1a\x1btype/v1beta1/selector.proto\"\x86\x1b\n" +
+	"&networking/v1alpha3/envoy_filter.proto\x12\x19istio.networking.v1alpha3\x1a\x1cgoogle/protobuf/struct.proto\x1a!networking/v1alpha3/sidecar.proto\x1a\x1btype/v1beta1/selector.proto\"\x94\x1b\n" +
 	"\vEnvoyFilter\x12X\n" +
 	"\x11workload_selector\x18\x03 \x01(\v2+.istio.networking.v1alpha3.WorkloadSelectorR\x10workloadSelector\x12I\n" +
 	"\n" +
@@ -2028,12 +2032,13 @@ const file_networking_v1alpha3_envoy_filter_proto_rawDesc = "" +
 	"\x10EXTENSION_CONFIG\x10\t\x12\r\n" +
 	"\tBOOTSTRAP\x10\n" +
 	"\x12\x13\n" +
-	"\x0fLISTENER_FILTER\x10\v\"O\n" +
+	"\x0fLISTENER_FILTER\x10\v\"]\n" +
 	"\fPatchContext\x12\a\n" +
 	"\x03ANY\x10\x00\x12\x13\n" +
 	"\x0fSIDECAR_INBOUND\x10\x01\x12\x14\n" +
 	"\x10SIDECAR_OUTBOUND\x10\x02\x12\v\n" +
-	"\aGATEWAY\x10\x03J\x04\b\x01\x10\x02J\x04\b\x02\x10\x03R\afiltersR\x0fworkload_labelsB\"Z istio.io/api/networking/v1alpha3b\x06proto3"
+	"\aGATEWAY\x10\x03\x12\f\n" +
+	"\bWAYPOINT\x10\x04J\x04\b\x01\x10\x02J\x04\b\x02\x10\x03R\afiltersR\x0fworkload_labelsB\"Z istio.io/api/networking/v1alpha3b\x06proto3"
 
 var (
 	file_networking_v1alpha3_envoy_filter_proto_rawDescOnce sync.Once
