@@ -698,7 +698,7 @@ type HTTPRoute struct {
 	//
 	// ```yaml
 	// attempts: 2
-	// retryOn: "connect-failure,refused-stream,unavailable,cancelled,503"
+	// retryOn: "connect-failure,refused-stream,unavailable,cancelled"
 	// ```
 	//
 	// This can be customized in [`Mesh Config` `defaultHttpRetryPolicy`](https://istio.io/latest/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig).
