@@ -418,7 +418,7 @@ message MeshConfig {
   // ServiceScopeConfigs. If a service is defined by ServiceSetting to be cluster local and matches a
   // global service scope selector, the service will be considered cluster local. If a service is 
   // considered global by ServiceSettings and does not match a global service scope selector
-  // the serive will be considered local. Local scope takes precedence over global scope. Since
+  // the service will be considered local. Local scope takes precedence over global scope. Since
   // ServiceScopeConfigs is local by default, all services are considered local unless it is considered
   // global by ServiceSettings AND ServiceScopeConfigs.
   message ServiceSettings {
@@ -459,15 +459,22 @@ message MeshConfig {
   repeated ServiceSettings service_settings = 50;
 
   // Configuration for ambient mode multicluster service scope. This setting allows mesh administrators
-  // to define the criteria by which the cluster's control plane determines which services in other
-  // clusters in the mesh are treated as global (accessible across multiple clusters) versus local
-  // (restricted to a single cluster). The configuration can be applied to services based on namespace
-  // and/or other matching criteria. This is particularly  useful in multicluster service mesh deployments
-  // to control service visibility and access across clusters. This API is not intended to enforce
-  // security policies. Resources like DestinationRules should be used to enforce authorization policies.
+  // to define the criteria by which the cluster's control plane determines which Kubernetes services
+  // in other clusters in the mesh are treated as global (accessible across multiple clusters) versus
+  // local (restricted to a single cluster). The configuration can be applied to services based on
+  // namespace and/or other matching criteria. This is particularly  useful in multicluster service
+  // mesh deployments to control service visibility and access across clusters. This API is not intended
+  // to enforce security policies or load balancing. Resources like AuthorizationPolicy and
+  // DestinationRule should be used to enforce authorization policies and configure load balancing
+  // respectively.
+  // 
   // If a service matches a global service scope selector, the service's endpoints will be globally
   // exposed. If a service is locally scoped, its endpoints will only be exposed to local cluster
-  // services.
+  // services. If multiple serviceScopeConfigs are defined, a service will be considered global if it
+  // matches any of the serviceScopeConfigs with scope set to GLOBAL. One of namespaceSelector or
+  // servicesSelector must be set. If either a namespaceSelector or servicesSelector is not set, it will
+  // match all namespaces or services respectively. To match, a service must match both the
+  // namespaceSelector and servicesSelector.
   // 
   // For example, the following configures the scope of all services with the "istio.io/global" label
   // in matching namespaces to be available globally: 
