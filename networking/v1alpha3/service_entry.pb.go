@@ -623,6 +623,8 @@ type ServiceEntry struct {
 	//     service accounts associated with the pods of the service, the
 	//     SANs specified here will also be verified.
 	//
+	// **NOTE 3:** Wildcard hostnames are not support in ambient mode.
+	//
 	// +kubebuilder:validation:MinItems=1
 	// +kubebuilder:validation:MaxItems=256
 	// +protoc-gen-crd:list-value-validation:XValidation:message="hostname cannot be wildcard",rule="self != '*'"
