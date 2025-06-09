@@ -817,6 +817,9 @@ message HTTPMatchRequest {
   // with the given labels. If the VirtualService has a list of gateways specified
   // in the top-level `gateways` field, it must include the reserved gateway
   // `mesh` for this field to be applicable.
+  //
+  // **Note:** This is not a runtime match, but is a selector; it filters which workloads the
+  // VirtualService applies to.
   map<string, string> source_labels = 7;
 
   // Names of gateways where the rule should be applied. Gateway names
@@ -855,6 +858,9 @@ message HTTPMatchRequest {
   // Source namespace constraining the applicability of a rule to workloads in that namespace.
   // If the VirtualService has a list of gateways specified in the top-level `gateways` field,
   // it must include the reserved gateway `mesh` for this field to be applicable.
+  //
+  // **Note:** This is not a runtime match, but is a selector; it filters which workloads the
+  // VirtualService applies to.
   string source_namespace = 13;
 
   // The human readable prefix to use when emitting statistics for this route.
@@ -983,6 +989,9 @@ message L4MatchAttributes {
   // workloads with the given labels. If the VirtualService has a list of
   // gateways specified in the top-level `gateways` field, it should include the reserved gateway
   // `mesh` in order for this field to be applicable.
+  //
+  // **Note:** This is not a runtime match, but is a selector; it filters which workloads the
+  // VirtualService applies to.
   map<string, string> source_labels = 4;
 
   // Names of gateways where the rule should be applied. Gateway names
@@ -993,6 +1002,9 @@ message L4MatchAttributes {
   // Source namespace constraining the applicability of a rule to workloads in that namespace.
   // If the VirtualService has a list of gateways specified in the top-level `gateways` field,
   // it must include the reserved gateway `mesh` for this field to be applicable.
+  //
+  // **Note:** This is not a runtime match, but is a selector; it filters which workloads the
+  // VirtualService applies to.
   string source_namespace = 6;
 }
 
@@ -1021,6 +1033,9 @@ message TLSMatchAttributes {
   // workloads with the given labels. If the VirtualService has a list of
   // gateways specified in the top-level `gateways` field, it should include the reserved gateway
   // `mesh` in order for this field to be applicable.
+  //
+  // **Note:** This is not a runtime match, but is a selector; it filters which workloads the
+  // VirtualService applies to.  
   map<string, string> source_labels = 5;
 
   // Names of gateways where the rule should be applied. Gateway names
@@ -1031,6 +1046,9 @@ message TLSMatchAttributes {
   // Source namespace constraining the applicability of a rule to workloads in that namespace.
   // If the VirtualService has a list of gateways specified in the top-level `gateways` field,
   // it must include the reserved gateway `mesh` for this field to be applicable.
+  //
+  // **Note:** This is not a runtime match, but is a selector; it filters which workloads the
+  // VirtualService applies to.  
   string source_namespace = 7;
 }
 
