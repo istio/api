@@ -631,7 +631,7 @@ message ProxyConfig {
   //
   // ```yaml
   // proxyHeaders:
-  //   perserveHttp1HeaderCase: true
+  //   preserveHttp1HeaderCase: true
   // ```
   //
   // Some headers are enabled by default, and require explicitly disabling. See below for an example of disabling all default-enabled headers:
