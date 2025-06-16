@@ -36,3 +36,6 @@ buf generate --template buf.gen-noncrd.yaml \
 # These plugins are sent to Envoy, which uses golang/protobuf, so do not use gogo
 buf generate --template buf.gen-golang.yaml \
   --path envoy
+
+# Format Protobuf files
+buf format -w

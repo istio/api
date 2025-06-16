@@ -14,9 +14,6 @@
 
 syntax = "proto3";
 
-import "google/protobuf/wrappers.proto";
-import "type/v1beta1/selector.proto";
-
 // $schema: istio.networking.v1beta1.ProxyConfig
 // $title: ProxyConfig
 // $description: Provides configuration for individual workloads.
@@ -86,7 +83,10 @@ import "type/v1beta1/selector.proto";
 //
 package istio.networking.v1beta1;
 
-option go_package= "istio.io/api/networking/v1beta1";
+import "google/protobuf/wrappers.proto";
+import "type/v1beta1/selector.proto";
+
+option go_package = "istio.io/api/networking/v1beta1";
 
 // `ProxyConfig` exposes proxy level configuration options.
 //

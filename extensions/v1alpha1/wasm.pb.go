@@ -1000,7 +1000,7 @@ var File_extensions_v1alpha1_wasm_proto protoreflect.FileDescriptor
 
 const file_extensions_v1alpha1_wasm_proto_rawDesc = "" +
 	"\n" +
-	"\x1eextensions/v1alpha1/wasm.proto\x12\x19istio.extensions.v1alpha1\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1btype/v1beta1/selector.proto\x1a\x1fgoogle/api/field_behavior.proto\"\xab\b\n" +
+	"\x1eextensions/v1alpha1/wasm.proto\x12\x19istio.extensions.v1alpha1\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1btype/v1beta1/selector.proto\"\xab\b\n" +
 	"\n" +
 	"WasmPlugin\x12@\n" +
 	"\bselector\x18\x01 \x01(\v2$.istio.type.v1beta1.WorkloadSelectorR\bselector\x12G\n" +

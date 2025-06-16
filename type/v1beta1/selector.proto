@@ -21,7 +21,7 @@ package istio.type.v1beta1;
 
 import "google/api/field_behavior.proto";
 
-option go_package="istio.io/api/type/v1beta1";
+option go_package = "istio.io/api/type/v1beta1";
 
 // WorkloadSelector specifies the criteria used to determine if a policy can be applied
 // to a proxy. The matching criteria includes the metadata associated with a proxy,
@@ -41,13 +41,13 @@ message WorkloadSelector {
   map<string, string> match_labels = 1;
 }
 
-// PortSelector is the criteria for specifying if a policy can be applied to 
+// PortSelector is the criteria for specifying if a policy can be applied to
 // a listener having a specific port.
 message PortSelector {
   // Port number
   // +kubebuilder:validation:Minimum=1
   // +kubebuilder:validation:Maximum=65535
-  uint32 number = 1  [(google.api.field_behavior) = REQUIRED];
+  uint32 number = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 // WorkloadMode allows selection of the role of the underlying workload in
@@ -61,7 +61,7 @@ enum WorkloadMode {
   UNDEFINED = 0;
 
   // Selects for scenarios when the workload is the
-  // source of the network traffic. In addition, 
+  // source of the network traffic. In addition,
   // if the workload is a gateway, selects this.
   CLIENT = 1;
 
@@ -83,7 +83,7 @@ enum WorkloadMode {
 // a WorkloadSelector in the RequestAuthentication, AuthorizationPolicy,
 // Telemetry, and WasmPlugin CRDs to target a Kubernetes Gateway.
 //
-// The following is an example of an AuthorizationPolicy bound to a waypoint proxy using 
+// The following is an example of an AuthorizationPolicy bound to a waypoint proxy using
 // a PolicyTargetReference. The example sets `action` to `DENY` to create a deny policy.
 // It denies all the requests with `POST` method on port `8080` directed through the
 // `waypoint` Gateway in the `foo` namespace.
@@ -106,7 +106,7 @@ enum WorkloadMode {
 //         methods: ["POST"]
 //         ports: ["8080"]
 // ```
-// 
+//
 // When binding to a GatewayClass resource using PolicyTargetReference, your policy must be in the root namespace.
 message PolicyTargetReference {
   // group is the group of the target resource.

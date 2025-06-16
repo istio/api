@@ -20,7 +20,7 @@ package istio.mcp.v1alpha1;
 
 import "google/protobuf/timestamp.proto";
 
-option go_package="istio.io/api/mcp/v1alpha1";
+option go_package = "istio.io/api/mcp/v1alpha1";
 
 // Metadata information that all resources within the Mesh Configuration Protocol must have.
 message Metadata {
@@ -67,9 +67,9 @@ message Metadata {
 
   // Map of string keys and values that can be used to organize and categorize
   // resources within a collection.
-  map<string,string> labels = 4;
+  map<string, string> labels = 4;
 
   // Map of string keys and values that can be used by source and sink to communicate
   // arbitrary metadata about this resource.
-  map<string,string> annotations = 5;
+  map<string, string> annotations = 5;
 }

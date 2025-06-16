@@ -13,8 +13,6 @@
 // limitations under the License.
 syntax = "proto3";
 
-import "type/v1beta1/selector.proto";
-
 // $schema: istio.security.v1beta1.PeerAuthentication
 // $title: PeerAuthentication
 // $description: Peer authentication configuration for workloads.
@@ -109,7 +107,9 @@ import "type/v1beta1/selector.proto";
 // ```
 package istio.security.v1beta1;
 
-option go_package="istio.io/api/security/v1beta1";
+import "type/v1beta1/selector.proto";
+
+option go_package = "istio.io/api/security/v1beta1";
 
 // <!-- crd generation tags
 // +cue-gen:PeerAuthentication:groupName:security.istio.io

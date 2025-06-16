@@ -14,8 +14,6 @@
 
 syntax = "proto3";
 
-import "google/api/field_behavior.proto";
-
 // $schema: istio.networking.v1alpha3.Gateway
 // $title: Gateway
 // $description: Configuration affecting edge load balancer.
@@ -193,6 +191,8 @@ import "google/api/field_behavior.proto";
 // ```
 //
 package istio.networking.v1alpha3;
+
+import "google/api/field_behavior.proto";
 
 option go_package = "istio.io/api/networking/v1alpha3";
 
@@ -377,7 +377,7 @@ message Port {
   // The port number on the endpoint where the traffic will be
   // received. Applicable only when used with ServiceEntries.
   // $hide_from_docs
-  uint32 target_port = 4 [deprecated=true];
+  uint32 target_port = 4 [deprecated = true];
 }
 
 // +kubebuilder:validation:XValidation:message="only one of credentialNames or tlsCertificates can be set",rule="oneof(self.tlsCertificates, self.credentialNames)"
@@ -433,7 +433,7 @@ message ServerTLSSettings {
     // is presented, it will be validated. ca_certificates should
     // be specified for validating client certificates.
     OPTIONAL_MUTUAL = 5;
-  };
+  }
 
   // Optional: Indicates whether connections to this port should be
   // secured using TLS. The value of this field determines how TLS is
