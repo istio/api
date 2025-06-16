@@ -1686,7 +1686,7 @@ var File_telemetry_v1alpha1_telemetry_proto protoreflect.FileDescriptor
 
 const file_telemetry_v1alpha1_telemetry_proto_rawDesc = "" +
 	"\n" +
-	"\"telemetry/v1alpha1/telemetry.proto\x12\x18istio.telemetry.v1alpha1\x1a\x1btype/v1beta1/selector.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\xab\x03\n" +
+	"\"telemetry/v1alpha1/telemetry.proto\x12\x18istio.telemetry.v1alpha1\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1btype/v1beta1/selector.proto\"\xab\x03\n" +
 	"\tTelemetry\x12@\n" +
 	"\bselector\x18\x01 \x01(\v2$.istio.type.v1beta1.WorkloadSelectorR\bselector\x12G\n" +
 	"\ttargetRef\x18\x05 \x01(\v2).istio.type.v1beta1.PolicyTargetReferenceR\ttargetRef\x12I\n" +

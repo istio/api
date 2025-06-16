@@ -24,10 +24,10 @@ syntax = "proto3";
 
 package stackdriver.config.v1alpha1;
 
-option go_package = "istio.io/api/envoy/extensions/stackdriver/config/v1alpha1";
-
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
+
+option go_package = "istio.io/api/envoy/extensions/stackdriver/config/v1alpha1";
 
 // Custom instance configuration overrides.
 // Provides a way to customize logs.
@@ -55,11 +55,11 @@ message PluginConfig {
     // logs. A request is classified as error when `status>=400 or
     // response_flag != "-"`
     ERRORS_ONLY = 2;
-  };
+  }
 
   // Optional. Controls whether to export server access log.
   // This is deprecated in favor of AccessLogging enum.
-  bool disable_server_access_logging = 1 [ deprecated = true ];
+  bool disable_server_access_logging = 1 [deprecated = true];
 
   // Optional. Allows configuration of the size of the LogWrite request. The
   // size is in bytes, so that it allows for better performance. Default is 4MB.
@@ -84,7 +84,7 @@ message PluginConfig {
   // service. This is disabled by default.
   // Deprecated -- Mesh edge reporting is no longer supported and this setting
   // is no-op.
-  bool enable_mesh_edges_reporting = 3 [ deprecated = true ];
+  bool enable_mesh_edges_reporting = 3 [deprecated = true];
 
   // Optional. Allows configuration of the time between calls out to the mesh
   // edges service to report *NEW* edges. The minimum configurable duration is
@@ -95,8 +95,7 @@ message PluginConfig {
   // reporting every `10m`.
   // Deprecated -- Mesh edge reporting is no longer supported and this setting
   // is no-op.
-  google.protobuf.Duration mesh_edges_reporting_duration = 4
-      [ deprecated = true ];
+  google.protobuf.Duration mesh_edges_reporting_duration = 4 [deprecated = true];
 
   // maximum size of the peer metadata cache.
   // A long lived proxy that connects with many transient peers can build up a
@@ -117,7 +116,7 @@ message PluginConfig {
   // metrics are enabled).
   // Deprecated -- use `metrics_overrides` instead.
   // if `metrics_overrides` is used, this value will be ignored.
-  bool disable_http_size_metrics = 8 [ deprecated = true ];
+  bool disable_http_size_metrics = 8 [deprecated = true];
 
   // Optional. Allows enabling log compression for stackdriver access logs.
   google.protobuf.BoolValue enable_log_compression = 9;
@@ -128,18 +127,18 @@ message PluginConfig {
   // CEL expression for filtering access logging. If the expression evaluates
   // to true, an access log entry will be generated. Otherwise, no access log
   // entry will be generated. If there are any type errors, the CEL expression
-  // is evaluated as false. More details on type checking can be found 
+  // is evaluated as false. More details on type checking can be found
   // at https://kubernetes.io/docs/reference/using-api/cel/#type-checking.
   // A common error is referring to a non-existent field in the log entry.
   // It's crucial to note that in Envoy, the fields that appear in access log
   // entries can vary. This variation is influenced by several factors,
   // including the protocol in use (such as HTTP or TCP), the applied filters,
-  // and the specific configuration of the Envoy instance. Therefore, when 
+  // and the specific configuration of the Envoy instance. Therefore, when
   // using CEL expressions for filtering access logs, it's essential to ensure
   // that the expressions accurately refer to existing fields in the log entry.
-  // The has() macro in CEL may be used in CEL expressions to check if a field 
-  // is accessible before attempting to access the field's value. 
-  // You can also quickly test CEL expressions at the CEL Playground 
+  // The has() macro in CEL may be used in CEL expressions to check if a field
+  // is accessible before attempting to access the field's value.
+  // You can also quickly test CEL expressions at the CEL Playground
   // at https://playcel.undistro.io/.
   // NOTE: Audit logs ignore configured filters.
   string access_logging_filter_expression = 17;

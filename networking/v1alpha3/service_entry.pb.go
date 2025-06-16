@@ -1016,7 +1016,7 @@ var File_networking_v1alpha3_service_entry_proto protoreflect.FileDescriptor
 
 const file_networking_v1alpha3_service_entry_proto_rawDesc = "" +
 	"\n" +
-	"'networking/v1alpha3/service_entry.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a!networking/v1alpha3/sidecar.proto\x1a(networking/v1alpha3/workload_entry.proto\x1a\x1fanalysis/v1alpha1/message.proto\x1a\x1ameta/v1alpha1/status.proto\"\x87\x05\n" +
+	"'networking/v1alpha3/service_entry.proto\x12\x19istio.networking.v1alpha3\x1a\x1fanalysis/v1alpha1/message.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1ameta/v1alpha1/status.proto\x1a!networking/v1alpha3/sidecar.proto\x1a(networking/v1alpha3/workload_entry.proto\"\x87\x05\n" +
 	"\fServiceEntry\x12\x1a\n" +
 	"\x05hosts\x18\x01 \x03(\tB\x04\xe2A\x01\x02R\x05hosts\x12\x1c\n" +
 	"\taddresses\x18\x02 \x03(\tR\taddresses\x12<\n" +

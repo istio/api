@@ -14,11 +14,6 @@
 
 syntax = "proto3";
 
-import "type/v1beta1/selector.proto";
-import "google/api/field_behavior.proto";
-import "google/protobuf/duration.proto";
-import "google/protobuf/wrappers.proto";
-
 // $schema: istio.telemetry.v1alpha1.Telemetry
 // $title: Telemetry
 // $description: Telemetry configuration for workloads.
@@ -26,7 +21,7 @@ import "google/protobuf/wrappers.proto";
 // $aliases: [/docs/reference/config/telemetry/v1alpha1/telemetry]
 // $weight: 45
 
-// `Telemetry` defines how telemetry (metrics, logs and traces) 
+// `Telemetry` defines how telemetry (metrics, logs and traces)
 // is generated for workloads within a mesh.
 //
 // The hierarchy of Telemetry configuration is as follows:
@@ -238,6 +233,11 @@ import "google/protobuf/wrappers.proto";
 //
 package istio.telemetry.v1alpha1;
 
+import "google/api/field_behavior.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/wrappers.proto";
+import "type/v1beta1/selector.proto";
+
 option go_package = "istio.io/api/telemetry/v1alpha1";
 
 // <!-- crd generation tags
@@ -321,7 +321,6 @@ message Telemetry {
 // from parent resources. However, when specified, `custom_tags` will
 // fully replace any values provided by parent configuration.
 message Tracing {
-
   // TracingSelector provides a coarse-grained ability to configure tracing
   // behavior based on certain traffic metadata (such as traffic direction).
   message TracingSelector {
@@ -459,7 +458,7 @@ message Metrics {
   // a best practice to list any universal overrides first, with tailored
   // overrides following them.
   repeated MetricsOverrides overrides = 2;
-  
+
   // Optional. Reporting interval allows configuration of the time between calls out to for metrics reporting.
   // This currently only supports TCP metrics but we may use this for long duration HTTP streams in the future.
   // The default duration is `5s`.
@@ -619,7 +618,6 @@ message MetricSelector {
 // MetricsOverrides defines custom metric generation behavior for an individual
 // metric or the set of all standard metrics.
 message MetricsOverrides {
-
   // Match allows providing the scope of the override. It can be used to select
   // individual metrics, as well as the workload modes (server, client, or both)
   // in which the metrics will be generated.
@@ -677,7 +675,6 @@ message MetricsOverrides {
 // generation. It can be used to select provider or enable/disable access log
 // generation for a workload.
 message AccessLogging {
-
   // LogSelector provides a coarse-grained ability to configure logging behavior
   // based on certain traffic metadata (such as traffic direction). LogSelector
   // applies to traffic metadata which is not represented in the attribute set

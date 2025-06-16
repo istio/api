@@ -13,10 +13,6 @@
 // limitations under the License.
 syntax = "proto3";
 
-import "google/protobuf/duration.proto";
-import "google/api/field_behavior.proto";
-import "type/v1beta1/selector.proto";
-
 // $schema: istio.security.v1beta1.RequestAuthentication
 // $title: RequestAuthentication
 // $description: Request authentication configuration for workloads.
@@ -223,8 +219,11 @@ import "type/v1beta1/selector.proto";
 // ```
 package istio.security.v1beta1;
 
-option go_package="istio.io/api/security/v1beta1";
+import "google/api/field_behavior.proto";
+import "google/protobuf/duration.proto";
+import "type/v1beta1/selector.proto";
 
+option go_package = "istio.io/api/security/v1beta1";
 
 // <!-- crd generation tags
 // +cue-gen:RequestAuthentication:groupName:security.istio.io
@@ -290,6 +289,7 @@ message RequestAuthentication {
   // +kubebuilder:validation:MaxItems=4096
   repeated JWTRule jwt_rules = 2;
 }
+
 // JSON Web Token (JWT) token format for authentication as defined by
 // [RFC 7519](https://tools.ietf.org/html/rfc7519). See [OAuth 2.0](https://tools.ietf.org/html/rfc6749) and
 // [OIDC 1.0](http://openid.net/connect) for how this is used in the whole
@@ -430,7 +430,6 @@ message JWTRule {
 
   // If set to true, the original token will be kept for the upstream request. Default is false.
   bool forward_original_token = 9;
-
 
   // This field specifies a list of operations to copy the claim to HTTP headers on a successfully verified token.
   // This differs from the `output_payload_to_header` by allowing outputting individual claims instead of the whole payload.

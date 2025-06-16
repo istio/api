@@ -14,11 +14,6 @@
 
 syntax = "proto3";
 
-import "google/protobuf/wrappers.proto";
-import "google/protobuf/struct.proto";
-import "type/v1beta1/selector.proto";
-import "google/api/field_behavior.proto";
-
 // $schema: istio.extensions.v1alpha1.WasmPlugin
 // $title: Wasm Plugin
 // $description: Extend the functionality provided by the Istio proxy through WebAssembly filters.
@@ -207,7 +202,12 @@ import "google/api/field_behavior.proto";
 //
 package istio.extensions.v1alpha1;
 
-option go_package="istio.io/api/extensions/v1alpha1";
+import "google/api/field_behavior.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/wrappers.proto";
+import "type/v1beta1/selector.proto";
+
+option go_package = "istio.io/api/extensions/v1alpha1";
 
 // WasmPlugin provides a mechanism to extend the functionality provided by
 // the Istio proxy through WebAssembly filters.
@@ -389,7 +389,6 @@ message WasmPlugin {
   PluginType type = 14;
 }
 
-
 // PluginType indicates the type of Wasm extension to be used.
 // There are two types of extensions: `HTTP` and `NETWORK`.
 //
@@ -410,7 +409,7 @@ enum PluginType {
 
   // Use HTTP Wasm Extension.
   HTTP = 1;
-  
+
   // Use Network Wasm Extension.
   NETWORK = 2;
 }

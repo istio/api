@@ -745,7 +745,7 @@ var File_security_v1beta1_request_authentication_proto protoreflect.FileDescript
 
 const file_security_v1beta1_request_authentication_proto_rawDesc = "" +
 	"\n" +
-	"-security/v1beta1/request_authentication.proto\x12\x16istio.security.v1beta1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1btype/v1beta1/selector.proto\"\xab\x02\n" +
+	"-security/v1beta1/request_authentication.proto\x12\x16istio.security.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1btype/v1beta1/selector.proto\"\xab\x02\n" +
 	"\x15RequestAuthentication\x12@\n" +
 	"\bselector\x18\x01 \x01(\v2$.istio.type.v1beta1.WorkloadSelectorR\bselector\x12G\n" +
 	"\ttargetRef\x18\x03 \x01(\v2).istio.type.v1beta1.PolicyTargetReferenceR\ttargetRef\x12I\n" +
