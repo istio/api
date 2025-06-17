@@ -18,7 +18,7 @@ package istio.mesh.v1alpha1;
 
 import "google/api/field_behavior.proto";
 
-option go_package="istio.io/api/mesh/v1alpha1";
+option go_package = "istio.io/api/mesh/v1alpha1";
 
 // Network provides information about the endpoints in a routable L3
 // network. A single routable L3 network can have one or more service
@@ -48,15 +48,15 @@ message Network {
   // (2) will override (1) if both are present.
   message NetworkEndpoints {
     oneof ne {
-    // A CIDR range for the set of endpoints in this network. The CIDR
-    // ranges for endpoints from different networks must not overlap.
-    string from_cidr = 1;
+      // A CIDR range for the set of endpoints in this network. The CIDR
+      // ranges for endpoints from different networks must not overlap.
+      string from_cidr = 1;
 
-    // Add all endpoints from the specified registry into this network.
-    // The names of the registries should correspond to the kubeconfig file name
-    // inside the secret that was used to configure the registry (Kubernetes
-    // multicluster) or supplied by MCP server.
-    string from_registry = 2;
+      // Add all endpoints from the specified registry into this network.
+      // The names of the registries should correspond to the kubeconfig file name
+      // inside the secret that was used to configure the registry (Kubernetes
+      // multicluster) or supplied by MCP server.
+      string from_registry = 2;
     }
   }
 

@@ -14,15 +14,15 @@
 
 syntax = "proto3";
 
+package istio.mesh.v1alpha1;
+
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 import "networking/v1alpha3/destination_rule.proto";
 import "networking/v1alpha3/workload_group.proto";
 import "networking/v1beta1/proxy_config.proto";
 
-package istio.mesh.v1alpha1;
-
-option go_package="istio.io/api/mesh/v1alpha1";
+option go_package = "istio.io/api/mesh/v1alpha1";
 
 // AuthenticationPolicy defines how the proxy is authenticated when it connects to the control plane.
 // It can be set for two different scopes, mesh-wide or set on a per-pod basis using the ProxyConfig annotation.
@@ -41,7 +41,6 @@ enum AuthenticationPolicy {
 
 // Tracing defines configuration for the tracing performed by Envoy instances.
 message Tracing {
-
   // Zipkin defines configuration for a Zipkin tracer.
   message Zipkin {
     // Address of the Zipkin service (e.g. _zipkin:9411_).
@@ -230,7 +229,6 @@ message Tracing {
 
   // $hide_from_docs
   // Next available field number: 11
-
 }
 
 // SDS defines secret discovery service(SDS) configuration to be used by the proxy.
@@ -271,8 +269,7 @@ message Topology {
   ForwardClientCertDetails forward_client_cert_details = 2;
 
   // PROXY protocol configuration.
-  message ProxyProtocolConfiguration {
-  }
+  message ProxyProtocolConfiguration {}
 
   // Enables [PROXY protocol](http://www.haproxy.org/download/1.5/doc/proxy-protocol.txt) for
   // downstream connections on a gateway.
@@ -426,11 +423,11 @@ message ProxyConfig {
   string discovery_address = 6;
 
   // $hide_from_docs
-  google.protobuf.Duration discovery_refresh_delay = 7 [deprecated=true];
+  google.protobuf.Duration discovery_refresh_delay = 7 [deprecated = true];
 
   // Address of the Zipkin service (e.g. _zipkin:9411_).
   // DEPRECATED: Use [tracing][istio.mesh.v1alpha1.ProxyConfig.tracing] instead.
-  string zipkin_address = 8 [deprecated=true];
+  string zipkin_address = 8 [deprecated = true];
 
   reserved "connect_timeout";
   reserved 9;
@@ -439,14 +436,14 @@ message ProxyConfig {
   string statsd_udp_address = 10;
 
   // $hide_from_docs
-  string envoy_metrics_service_address = 20 [deprecated=true];
+  string envoy_metrics_service_address = 20 [deprecated = true];
 
   // Port on which Envoy should listen for administrative commands.
   // Default port is `15000`.
   int32 proxy_admin_port = 11;
 
   // $hide_from_docs
-  string availability_zone = 12 [deprecated=true];
+  string availability_zone = 12 [deprecated = true];
 
   // AuthenticationPolicy defines how the proxy is authenticated when it connects to the control plane.
   // Default is set to `MUTUAL_TLS`.
@@ -496,7 +493,7 @@ message ProxyConfig {
 
   // Secret Discovery Service(SDS) configuration to be used by the proxy.
   // $hide_from_docs
-  SDS sds = 21 [deprecated=true];
+  SDS sds = 21 [deprecated = true];
 
   // Address of the service to which access logs from Envoys should be
   // sent. (e.g. `accesslog-service:15000`). See [Access Log
@@ -511,11 +508,11 @@ message ProxyConfig {
 
   // Additional environment variables for the proxy.
   // Names starting with `ISTIO_META_` will be included in the generated bootstrap and sent to the XDS server.
-  map<string,string> proxy_metadata = 24;
+  map<string, string> proxy_metadata = 24;
 
   // Envoy [runtime configuration](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/operations/runtime) to set during bootstrapping.
   // This enables setting experimental, unsafe, unsupported, and deprecated features that should be used with extreme caution.
-  map<string,string>  runtime_values = 37;
+  map<string, string> runtime_values = 37;
 
   // Port on which the agent should listen for administrative commands such as readiness probe.
   // Default is set to port `15020`.
@@ -536,11 +533,11 @@ message ProxyConfig {
   Topology gateway_topology = 28;
 
   // The amount of time allowed for connections to complete on proxy shutdown.
-	// On receiving `SIGTERM` or `SIGINT`, `istio-agent` tells the active Envoy to start gracefully draining,
-	// discouraging any new connections and allowing existing connections to complete. It then
+  // On receiving `SIGTERM` or `SIGINT`, `istio-agent` tells the active Envoy to start gracefully draining,
+  // discouraging any new connections and allowing existing connections to complete. It then
   // sleeps for the `terminationDrainDuration` and then kills any remaining active Envoy processes.
   // If not set, a default of `5s` will be applied.
-  google.protobuf.Duration  termination_drain_duration = 29;
+  google.protobuf.Duration termination_drain_duration = 29;
 
   // The unique identifier for the [service mesh](https://istio.io/docs/reference/glossary/#service-mesh)
   // All control planes running in the same service mesh should specify the same mesh ID.
@@ -589,7 +586,6 @@ message ProxyConfig {
   // collected by prometheus significantly. Care needs to be taken on Prometheus
   // resource provision and configuration to reduce cardinality.
   ProxyStatsMatcher proxy_stats_matcher = 32;
-
 
   // Boolean flag for enabling/disabling the holdApplicationUntilProxyStarts behavior.
   // This feature adds hooks to delay application startup until the pod proxy
@@ -681,22 +677,22 @@ message ProxyConfig {
     message SetCurrentClientCertDetails {
       // Whether to forward the subject of the client cert. Defaults to true.
       google.protobuf.BoolValue subject = 1;
-  
+
       // Whether to forward the entire client cert in URL encoded PEM format. This will appear in the
       // XFCC header comma separated from other values with the value Cert="PEM".
       // Defaults to false.
       google.protobuf.BoolValue cert = 2;
-  
+
       // Whether to forward the entire client cert chain (including the leaf cert) in URL encoded PEM
       // format. This will appear in the XFCC header comma separated from other values with the value
       // Chain="PEM".
       // Defaults to false.
       google.protobuf.BoolValue chain = 3;
-  
+
       // Whether to forward the DNS type Subject Alternative Names of the client cert.
       // Defaults to true.
       google.protobuf.BoolValue dns = 4;
-  
+
       // Whether to forward the URI type Subject Alternative Name of the client cert. Defaults to
       // true.
       google.protobuf.BoolValue uri = 5;
@@ -705,7 +701,7 @@ message ProxyConfig {
     // To disable the header, configure either `SANITIZE` (to always remove the header, if present) or `FORWARD_ONLY` (to leave the header as-is).
     // By default, `APPEND_FORWARD` will be used.
     ForwardClientCertDetails forwarded_client_cert = 1;
-    // This field is valid only when forward_client_cert_details is APPEND_FORWARD or SANITIZE_SET 
+    // This field is valid only when forward_client_cert_details is APPEND_FORWARD or SANITIZE_SET
     // and the client connection is mTLS. It specifies the fields in
     // the client certificate to be forwarded. Note that `Hash` is always set, and
     // `By` is always set when the client certificate presents the URI type Subject Alternative Name value.
@@ -736,15 +732,14 @@ message ProxyConfig {
     MetadataExchangeHeaders metadata_exchange_headers = 6;
     // When true, the original case of HTTP/1.x headers will be preserved
     // as they pass through the proxy, rather than normalizing them to lowercase.
-    // This field is particularly useful for applications that require case-sensitive 
-    // headers for interoperability with downstream systems or APIs that expect specific 
+    // This field is particularly useful for applications that require case-sensitive
+    // headers for interoperability with downstream systems or APIs that expect specific
     // casing.
-    // The preserve_http1_header_case option only applies to HTTP/1.x traffic, as HTTP/2 requires all headers 
-    // to be lowercase per the protocol specification. Envoy will ignore this field for HTTP/2 
-    // requests and automatically normalize headers to lowercase, ensuring compliance with HTTP/2 
-    // standards. 
+    // The preserve_http1_header_case option only applies to HTTP/1.x traffic, as HTTP/2 requires all headers
+    // to be lowercase per the protocol specification. Envoy will ignore this field for HTTP/2
+    // requests and automatically normalize headers to lowercase, ensuring compliance with HTTP/2
+    // standards.
     google.protobuf.BoolValue preserve_http1_header_case = 40;
-
   }
 }
 

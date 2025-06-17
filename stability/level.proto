@@ -16,12 +16,12 @@ syntax = "proto3";
 
 package istio.stability;
 
-option go_package="istio.io/api/stability";
+option go_package = "istio.io/api/stability";
 
 // Level defines the stability levels Istio uses.
 enum Level {
-    EXPERIMENTAL = 0;
-    ALPHA = 1;
-    BETA = 2;
-    STABLE = 3;
+  EXPERIMENTAL = 0;
+  ALPHA = 1;
+  BETA = 2;
+  STABLE = 3;
 }

@@ -13,9 +13,6 @@
 // limitations under the License.
 syntax = "proto3";
 
-import "google/api/field_behavior.proto";
-import "type/v1beta1/selector.proto";
-
 // $schema: istio.security.v1beta1.AuthorizationPolicy
 // $title: Authorization Policy
 // $description: Configuration for access control on workloads.
@@ -243,7 +240,10 @@ import "type/v1beta1/selector.proto";
 // ```
 package istio.security.v1beta1;
 
-option go_package="istio.io/api/security/v1beta1";
+import "google/api/field_behavior.proto";
+import "type/v1beta1/selector.proto";
+
+option go_package = "istio.io/api/security/v1beta1";
 
 // AuthorizationPolicy enables access control on workloads.
 //

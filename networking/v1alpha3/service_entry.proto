@@ -14,12 +14,6 @@
 
 syntax = "proto3";
 
-import "google/api/field_behavior.proto";
-import "networking/v1alpha3/sidecar.proto";
-import "networking/v1alpha3/workload_entry.proto";
-import "analysis/v1alpha1/message.proto";
-import "meta/v1alpha1/status.proto";
-
 // $schema: istio.networking.v1alpha3.ServiceEntry
 // $title: Service Entry
 // $description: Configuration affecting service registry.
@@ -403,8 +397,13 @@ import "meta/v1alpha1/status.proto";
 // ```
 package istio.networking.v1alpha3;
 
-option go_package = "istio.io/api/networking/v1alpha3";
+import "analysis/v1alpha1/message.proto";
+import "google/api/field_behavior.proto";
+import "meta/v1alpha1/status.proto";
+import "networking/v1alpha3/sidecar.proto";
+import "networking/v1alpha3/workload_entry.proto";
 
+option go_package = "istio.io/api/networking/v1alpha3";
 
 // ServiceEntry enables adding additional entries into Istio's internal
 // service registry.
@@ -511,7 +510,7 @@ message ServiceEntry {
     // mesh to include unmanaged infrastructure (e.g., VMs added to a
     // Kubernetes based service mesh).
     MESH_INTERNAL = 1;
-  };
+  }
 
   // Specify whether the service should be considered external to the mesh
   // or part of the mesh.
@@ -559,7 +558,7 @@ message ServiceEntry {
     // specified in the hosts field, if wildcards are not used. DNS resolution
     // cannot be used with Unix domain socket endpoints.
     DNS_ROUND_ROBIN = 3;
-  };
+  }
 
   // Service resolution mode for the hosts. Care must be taken
   // when setting the resolution mode to NONE for a TCP port without
@@ -659,11 +658,10 @@ message ServiceEntryStatus {
 }
 
 // A minor abstraction to allow for adding hostnames if relevant.
-message ServiceEntryAddress{
+message ServiceEntryAddress {
   // The address (e.g. 192.168.0.2)
   string value = 1;
 
   // The host name associated with this address
   string host = 2;
 }
-

@@ -13,17 +13,16 @@
 // limitations under the License.
 syntax = "proto3";
 
-import "analysis/v1alpha1/message.proto";
-
-import "google/protobuf/timestamp.proto";
-
 // $title: Istio Status
 // $description: Common status field for all istio collections.
 // $location: https://istio.io/docs/reference/config/meta/v1beta1/istio-status.html
 
 package istio.meta.v1alpha1;
 
-option go_package="istio.io/api/meta/v1alpha1";
+import "analysis/v1alpha1/message.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "istio.io/api/meta/v1alpha1";
 
 message IstioStatus {
   // Current service state of the resource.
