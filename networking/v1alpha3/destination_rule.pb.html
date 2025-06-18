@@ -469,7 +469,11 @@ Defaults to 20%.</p>
 </div></td>
 <td>
 <p>Specifies the minimum retry concurrency allowed for the retry budget.
-Defaults to 3.</p>
+For example, a budget of 20% with a minimum retry concurrency of 3
+will allow 5 active retries while there are 25 active requests.
+If there are 2 active requests, there are still 3 active retries
+allowed because of the minimum retry concurrency.</p>
+<p>Defaults to 3.</p>
 
 </td>
 </tr>

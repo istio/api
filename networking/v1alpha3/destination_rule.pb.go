@@ -1901,6 +1901,11 @@ type TrafficPolicy_RetryBudget struct {
 	// +kubebuilder:validation:Minimum=0
 	Percent *wrappers.DoubleValue `protobuf:"bytes,1,opt,name=percent,proto3" json:"percent,omitempty"`
 	// Specifies the minimum retry concurrency allowed for the retry budget.
+	// For example, a budget of 20% with a minimum retry concurrency of 3
+	// will allow 5 active retries while there are 25 active requests.
+	// If there are 2 active requests, there are still 3 active retries
+	// allowed because of the minimum retry concurrency.
+	//
 	// Defaults to 3.
 	MinRetryConcurrency uint32 `protobuf:"varint,2,opt,name=min_retry_concurrency,json=minRetryConcurrency,proto3" json:"min_retry_concurrency,omitempty"`
 	unknownFields       protoimpl.UnknownFields
