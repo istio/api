@@ -1,0 +1,16 @@
+apiVersion: release-notes/v2
+kind: bug-fix
+area: documentation
+issue:
+  - https://github.com/istio/istio/issues/53402
+
+releaseNotes:
+  - |
+    **Fixed** documentation for using MeshNetworks to configure envoy internal address configuration
+    when ENABLE_HCM_INTERNAL_NETWORKS is set to true. As of Envoy 1.33, the default value for
+    internalAddressConfig is set to an empty set. Previously, the default value was the set of all
+    private IPs. To preserve Envoy headers, you must explicitly configure MeshNetworks
+    or revert to Envoy's prior behavior by setting envoy.reloadable_features.explicit_internal_address_config
+    to false. Setting MeshNetworks to all private IPs or reverting to Envoy's previous behavior will leave
+    users with an Istio Ingress Gateway potentially vulnerable to x-envoy header manipulation by external
+    sources. More information about this vulnerability can be found here: https://github.com/envoyproxy/envoy/security/advisories/GHSA-ffhv-fvxq-r6mf
