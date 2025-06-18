@@ -302,7 +302,7 @@ message TrafficPolicy {
     //
     // Defaults to 3.
     //
-    uint32  min_retry_concurrency = 2;
+    uint32 min_retry_concurrency = 2;
   }
 
   // Specifies a limit on concurrent retries in relation to the number of active requests.
