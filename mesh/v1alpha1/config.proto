@@ -604,9 +604,14 @@ message MeshConfig {
       EnvoyTcpGrpcV3LogProvider envoy_tcp_als = 13;
       // Configures an Envoy Open Telemetry Access Logging Service provider.
       EnvoyOpenTelemetryLogProvider envoy_otel_als = 14;
+      // Configures an Extension Provider for Gateway SDS. This can be used to
+      // configure an external SDS service to supply secrets for certain Gateways.
+      // This is useful for scenarios where the secrets are stored in an external secret store like Vault.
+      // The secret should be configured with sds://provider-name format.
+      GatewaySDSProvider gateway_sds = 16;
 
       // $hide_from_docs
-      // next id: 16
+      // next id: 17
     }
 
     message EnvoyExternalAuthorizationRequestBody {
@@ -1299,6 +1304,23 @@ message MeshConfig {
           HttpService http = 3;
         }
       }
+    }
+
+    // Defines configuration for an Gateway SDS provider.
+    message GatewaySDSProvider {
+      // REQUIRED. Specifies the name of the provider. This should be used to configure the Gateway SDS.
+      string name = 1;
+
+      // REQUIRED. Specifies the service that implements the  SDS service.
+      // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
+      // to unambiguously resolve a service in the service registry. The `<Hostname>` is a fully qualified host name of a
+      // service defined by the Kubernetes service or ServiceEntry.
+      //
+      // Example: "gateway-sds.foo.svc.cluster.local" or "bar/gateway-sds.example.com".
+      string service = 2;
+
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 3;
     }
 
     // Defines configuration for an HTTP service that can be used by an Extension Provider.
