@@ -818,6 +818,8 @@ message HTTPMatchRequest {
   //
   // **Note:** This is not a runtime match, but is a selector; it filters which workloads the
   // VirtualService applies to.
+  //
+  // **Note:** Ambient mode does not support this field.
   map<string, string> source_labels = 7;
 
   // Names of gateways where the rule should be applied. Gateway names
@@ -859,6 +861,8 @@ message HTTPMatchRequest {
   //
   // **Note:** This is not a runtime match, but is a selector; it filters which workloads the
   // VirtualService applies to.
+  //
+  // **Note:** Ambient mode does not support this field.
   string source_namespace = 13;
 
   // The human readable prefix to use when emitting statistics for this route.
@@ -990,6 +994,8 @@ message L4MatchAttributes {
   //
   // **Note:** This is not a runtime match, but is a selector; it filters which workloads the
   // VirtualService applies to.
+  //
+  // **Note:** Ambient mode does not support this field.
   map<string, string> source_labels = 4;
 
   // Names of gateways where the rule should be applied. Gateway names
@@ -1003,6 +1009,8 @@ message L4MatchAttributes {
   //
   // **Note:** This is not a runtime match, but is a selector; it filters which workloads the
   // VirtualService applies to.
+  //
+  // **Note:** Ambient mode does not support this field.
   string source_namespace = 6;
 }
 
@@ -1034,6 +1042,8 @@ message TLSMatchAttributes {
   //
   // **Note:** This is not a runtime match, but is a selector; it filters which workloads the
   // VirtualService applies to.
+  //
+  // **Note:** Ambient mode does not support this field.
   map<string, string> source_labels = 5;
 
   // Names of gateways where the rule should be applied. Gateway names
@@ -1047,6 +1057,8 @@ message TLSMatchAttributes {
   //
   // **Note:** This is not a runtime match, but is a selector; it filters which workloads the
   // VirtualService applies to.
+  //
+  // **Note:** Ambient mode does not support this field.
   string source_namespace = 7;
 }
 

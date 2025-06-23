@@ -174,8 +174,6 @@ message DestinationRule {
 
   // One or more named sets that represent individual versions of a
   // service. Traffic policies can be overridden at subset level.
-  // Note that subsets are not support in ambient mode.
-  // Define multiple services instead.
   repeated Subset subsets = 3;
 
   // A list of namespaces to which this destination rule is exported.
@@ -319,8 +317,6 @@ message TrafficPolicy {
 //
 // **Note:** Policies specified for subsets will not take effect until
 // a route rule explicitly sends traffic to this subset.
-//
-// **Note:** Subsets are not supported in ambient mode. Define multiple services instead.
 //
 // One or more labels are typically required to identify the subset destination,
 // however, when the corresponding DestinationRule represents a host that

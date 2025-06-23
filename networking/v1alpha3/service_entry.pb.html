@@ -382,7 +382,7 @@ additional properties will be considered by <code>istiod</code>:</p>
 service accounts associated with the pods of the service, the
 SANs specified here will also be verified.</li>
 </ol>
-<p><strong>NOTE 3:</strong> Wildcard hostnames are not support in ambient mode.</p>
+<p><strong>NOTE 3:</strong> Ambient mode does not support wildcard hostsnames.</p>
 
 </td>
 </tr>
@@ -483,6 +483,8 @@ defines an export to all namespaces.</p>
 <p>For a Kubernetes Service, the equivalent effect can be achieved by setting
 the annotation &ldquo;networking.istio.io/exportTo&rdquo; to a comma-separated list
 of namespace names.</p>
+<p><strong>Note:</strong> Ambient mode does not support this field. Service entries will
+be exported to all namespaces.</p>
 
 </td>
 </tr>

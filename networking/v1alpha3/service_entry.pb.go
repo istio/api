@@ -623,7 +623,7 @@ type ServiceEntry struct {
 	//     service accounts associated with the pods of the service, the
 	//     SANs specified here will also be verified.
 	//
-	// **NOTE 3:** Wildcard hostnames are not support in ambient mode.
+	// **NOTE 3:** Ambient mode does not support wildcard hostsnames.
 	//
 	// +kubebuilder:validation:MinItems=1
 	// +kubebuilder:validation:MaxItems=256
@@ -689,6 +689,9 @@ type ServiceEntry struct {
 	// For a Kubernetes Service, the equivalent effect can be achieved by setting
 	// the annotation "networking.istio.io/exportTo" to a comma-separated list
 	// of namespace names.
+	//
+	// **Note:** Ambient mode does not support this field. Service entries will
+	// be exported to all namespaces.
 	ExportTo []string `protobuf:"bytes,7,rep,name=export_to,json=exportTo,proto3" json:"export_to,omitempty"`
 	// If specified, the proxy will verify that the server certificate's
 	// subject alternate name matches one of the specified values.
