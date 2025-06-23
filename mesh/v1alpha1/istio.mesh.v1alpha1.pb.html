@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 82
+number_of_entries: 81
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -2436,39 +2436,8 @@ host name defined in the ServiceEntry.</p>
 
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-SDSProvider-sds_service" class="oneof oneof-start">
-<td><div class="field"><div class="name"><code><a href="#MeshConfig-ExtensionProvider-SDSProvider-sds_service">sdsService</a></code></div>
-<div class="type"><a href="#MeshConfig-ExtensionProvider-SDSProvider-SDSService">SDSService (oneof)</a></div>
-</div></td>
-<td>
-<p>Specifies the service that implements the  SDS service.</p>
-
-</td>
-</tr>
-<tr id="MeshConfig-ExtensionProvider-SDSProvider-path" class="oneof">
-<td><div class="field"><div class="name"><code><a href="#MeshConfig-ExtensionProvider-SDSProvider-path">path</a></code></div>
-<div class="type">string (oneof)</div>
-</div></td>
-<td>
-<p>Unix Domain Socket path to the SDS service.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h5 id="MeshConfig-ExtensionProvider-SDSProvider-SDSService">SDSService</h5>
-<section>
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="MeshConfig-ExtensionProvider-SDSProvider-SDSService-service">
-<td><div class="field"><div class="name"><code><a href="#MeshConfig-ExtensionProvider-SDSProvider-SDSService-service">service</a></code></div>
+<tr id="MeshConfig-ExtensionProvider-SDSProvider-service">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ExtensionProvider-SDSProvider-service">service</a></code></div>
 <div class="type">string</div>
 </div></td>
 <td>
@@ -2480,8 +2449,8 @@ service defined by the Kubernetes service or ServiceEntry.</p>
 
 </td>
 </tr>
-<tr id="MeshConfig-ExtensionProvider-SDSProvider-SDSService-port">
-<td><div class="field"><div class="name"><code><a href="#MeshConfig-ExtensionProvider-SDSProvider-SDSService-port">port</a></code></div>
+<tr id="MeshConfig-ExtensionProvider-SDSProvider-port">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ExtensionProvider-SDSProvider-port">port</a></code></div>
 <div class="type">uint32</div>
 </div></td>
 <td>

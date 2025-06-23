@@ -1311,26 +1311,16 @@ message MeshConfig {
       // REQUIRED. Specifies the name of the provider. This should be used to configure the Gateway SDS.
       string name = 1;
 
-      message SDSService {
-        // REQUIRED. Specifies the service that implements the  SDS service.
-        // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
-        // to unambiguously resolve a service in the service registry. The `<Hostname>` is a fully qualified host name of a
-        // service defined by the Kubernetes service or ServiceEntry.
-        //
-        // Example: "gateway-sds.foo.svc.cluster.local" or "bar/gateway-sds.example.com".
-        string service = 1;
+      // REQUIRED. Specifies the service that implements the  SDS service.
+      // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
+      // to unambiguously resolve a service in the service registry. The `<Hostname>` is a fully qualified host name of a
+      // service defined by the Kubernetes service or ServiceEntry.
+      //
+      // Example: "gateway-sds.foo.svc.cluster.local" or "bar/gateway-sds.example.com".
+      string service = 2;
 
-        // REQUIRED. Specifies the port of the service.
-        uint32 port = 2;
-      }
-
-      oneof sds_provider {
-        // Specifies the service that implements the  SDS service.
-        SDSService sds_service = 2;
-
-        // Unix Domain Socket path to the SDS service.
-        string path = 3;
-      }
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 3;
     }
 
     // Defines configuration for an HTTP service that can be used by an Extension Provider.
