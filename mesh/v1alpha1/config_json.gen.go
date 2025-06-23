@@ -325,14 +325,25 @@ func (this *MeshConfig_ExtensionProvider_OpenTelemetryTracingProvider_DynatraceS
 	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for MeshConfig_ExtensionProvider_GatewaySDSProvider
-func (this *MeshConfig_ExtensionProvider_GatewaySDSProvider) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for MeshConfig_ExtensionProvider_SDSProvider
+func (this *MeshConfig_ExtensionProvider_SDSProvider) MarshalJSON() ([]byte, error) {
 	str, err := ConfigMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for MeshConfig_ExtensionProvider_GatewaySDSProvider
-func (this *MeshConfig_ExtensionProvider_GatewaySDSProvider) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for MeshConfig_ExtensionProvider_SDSProvider
+func (this *MeshConfig_ExtensionProvider_SDSProvider) UnmarshalJSON(b []byte) error {
+	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for MeshConfig_ExtensionProvider_SDSProvider_SDSService
+func (this *MeshConfig_ExtensionProvider_SDSProvider_SDSService) MarshalJSON() ([]byte, error) {
+	str, err := ConfigMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for MeshConfig_ExtensionProvider_SDSProvider_SDSService
+func (this *MeshConfig_ExtensionProvider_SDSProvider_SDSService) UnmarshalJSON(b []byte) error {
 	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
