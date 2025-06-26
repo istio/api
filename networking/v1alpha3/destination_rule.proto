@@ -285,6 +285,28 @@ message TrafficPolicy {
 
   // The upstream PROXY protocol settings.
   ProxyProtocol proxy_protocol = 7;
+
+  message RetryBudget {
+    // Specifies the limit on concurrent retries as a percentage of
+    // the sum of active requests and active pending requests.
+    // Defaults to 20%.
+    //
+    // +kubebuilder:validation:Maximum=100
+    // +kubebuilder:validation:Minimum=0
+    google.protobuf.DoubleValue percent = 1;
+    // Specifies the minimum retry concurrency allowed for the retry budget.
+    // For example, a budget of 20% with a minimum retry concurrency of 3
+    // will allow 5 active retries while there are 25 active requests.
+    // If there are 2 active requests, there are still 3 active retries
+    // allowed because of the minimum retry concurrency.
+    //
+    // Defaults to 3.
+    //
+    uint32 min_retry_concurrency = 2;
+  }
+
+  // Specifies a limit on concurrent retries in relation to the number of active requests.
+  RetryBudget retry_budget = 8;
 }
 
 // A subset of endpoints of a service. Subsets can be used for scenarios
