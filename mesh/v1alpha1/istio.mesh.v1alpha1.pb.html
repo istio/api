@@ -4103,7 +4103,8 @@ standards.</p>
 </div></td>
 <td>
 <p>Controls the <code>X-Forwarded-Host</code> header. If enabled, the <code>X-Forwarded-Host</code> header is appended
-with the original host when it is rewritten.</p>
+with the original host when it is rewritten.
+This header is disabled by default.</p>
 
 </td>
 </tr>
@@ -4114,7 +4115,8 @@ with the original host when it is rewritten.</p>
 <td>
 <p>Controls the <code>X-Forwarded-Port</code> header. If enabled, the <code>X-Forwarded-Port</code> header is header with the port value
 client used to connect to Envoy. It will be ignored if the <code>x-forwarded-port</code> header has been set by any
-trusted proxy in front of Envoy.</p>
+trusted proxy in front of Envoy.
+This header is disabled by default.</p>
 
 </td>
 </tr>
@@ -4200,8 +4202,8 @@ trusted proxy in front of Envoy.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="ProxyConfig-ProxyHeaders-XForwardedHost-disabled">
-<td><div class="field"><div class="name"><code><a href="#ProxyConfig-ProxyHeaders-XForwardedHost-disabled">disabled</a></code></div>
+<tr id="ProxyConfig-ProxyHeaders-XForwardedHost-enabled">
+<td><div class="field"><div class="name"><code><a href="#ProxyConfig-ProxyHeaders-XForwardedHost-enabled">enabled</a></code></div>
 <div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></div>
 </div></td>
 <td>
@@ -4220,8 +4222,8 @@ trusted proxy in front of Envoy.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="ProxyConfig-ProxyHeaders-XForwardedPort-disabled">
-<td><div class="field"><div class="name"><code><a href="#ProxyConfig-ProxyHeaders-XForwardedPort-disabled">disabled</a></code></div>
+<tr id="ProxyConfig-ProxyHeaders-XForwardedPort-enabled">
+<td><div class="field"><div class="name"><code><a href="#ProxyConfig-ProxyHeaders-XForwardedPort-enabled">enabled</a></code></div>
 <div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></div>
 </div></td>
 <td>

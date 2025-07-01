@@ -2306,10 +2306,12 @@ type ProxyConfig_ProxyHeaders struct {
 	PreserveHttp1HeaderCase *wrappers.BoolValue `protobuf:"bytes,40,opt,name=preserve_http1_header_case,json=preserveHttp1HeaderCase,proto3" json:"preserve_http1_header_case,omitempty"`
 	// Controls the `X-Forwarded-Host` header. If enabled, the `X-Forwarded-Host` header is appended
 	// with the original host when it is rewritten.
+	// This header is disabled by default.
 	XForwardedHost *ProxyConfig_ProxyHeaders_XForwardedHost `protobuf:"bytes,41,opt,name=x_forwarded_host,json=xForwardedHost,proto3" json:"x_forwarded_host,omitempty"`
 	// Controls the `X-Forwarded-Port` header. If enabled, the `X-Forwarded-Port` header is header with the port value
 	// client used to connect to Envoy. It will be ignored if the “x-forwarded-port“ header has been set by any
 	// trusted proxy in front of Envoy.
+	// This header is disabled by default.
 	XForwardedPort *ProxyConfig_ProxyHeaders_XForwardedPort `protobuf:"bytes,42,opt,name=x_forwarded_port,json=xForwardedPort,proto3" json:"x_forwarded_port,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
@@ -2558,7 +2560,7 @@ func (x *ProxyConfig_ProxyHeaders_AttemptCount) GetDisabled() *wrappers.BoolValu
 
 type ProxyConfig_ProxyHeaders_XForwardedHost struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Disabled      *wrappers.BoolValue    `protobuf:"bytes,1,opt,name=disabled,proto3" json:"disabled,omitempty"`
+	Enabled       *wrappers.BoolValue    `protobuf:"bytes,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2593,16 +2595,16 @@ func (*ProxyConfig_ProxyHeaders_XForwardedHost) Descriptor() ([]byte, []int) {
 	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 3, 3}
 }
 
-func (x *ProxyConfig_ProxyHeaders_XForwardedHost) GetDisabled() *wrappers.BoolValue {
+func (x *ProxyConfig_ProxyHeaders_XForwardedHost) GetEnabled() *wrappers.BoolValue {
 	if x != nil {
-		return x.Disabled
+		return x.Enabled
 	}
 	return nil
 }
 
 type ProxyConfig_ProxyHeaders_XForwardedPort struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Disabled      *wrappers.BoolValue    `protobuf:"bytes,1,opt,name=disabled,proto3" json:"disabled,omitempty"`
+	Enabled       *wrappers.BoolValue    `protobuf:"bytes,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2637,9 +2639,9 @@ func (*ProxyConfig_ProxyHeaders_XForwardedPort) Descriptor() ([]byte, []int) {
 	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 3, 4}
 }
 
-func (x *ProxyConfig_ProxyHeaders_XForwardedPort) GetDisabled() *wrappers.BoolValue {
+func (x *ProxyConfig_ProxyHeaders_XForwardedPort) GetEnabled() *wrappers.BoolValue {
 	if x != nil {
-		return x.Disabled
+		return x.Enabled
 	}
 	return nil
 }
@@ -2896,7 +2898,7 @@ const file_mesh_v1alpha1_proxy_proto_rawDesc = "" +
 	"poll_delay\x18\x01 \x01(\v2\x19.google.protobuf.DurationR\tpollDelay\x126\n" +
 	"\bfallback\x18\x02 \x01(\v2\x1a.google.protobuf.BoolValueR\bfallbackB\n" +
 	"\n" +
-	"\bprovider\"\xa7&\n" +
+	"\bprovider\"\xa3&\n" +
 	"\vProxyConfig\x12\x1f\n" +
 	"\vconfig_path\x18\x01 \x01(\tR\n" +
 	"configPath\x12\x1f\n" +
@@ -2947,7 +2949,7 @@ const file_mesh_v1alpha1_proxy_proto_rawDesc = "" +
 	"\x11ProxyStatsMatcher\x12-\n" +
 	"\x12inclusion_prefixes\x18\x01 \x03(\tR\x11inclusionPrefixes\x12-\n" +
 	"\x12inclusion_suffixes\x18\x02 \x03(\tR\x11inclusionSuffixes\x12+\n" +
-	"\x11inclusion_regexps\x18\x03 \x03(\tR\x10inclusionRegexps\x1a\xa9\x0f\n" +
+	"\x11inclusion_regexps\x18\x03 \x03(\tR\x10inclusionRegexps\x1a\xa5\x0f\n" +
 	"\fProxyHeaders\x12a\n" +
 	"\x15forwarded_client_cert\x18\x01 \x01(\x0e2-.istio.mesh.v1alpha1.ForwardClientCertDetailsR\x13forwardedClientCert\x12\x8f\x01\n" +
 	"\x1fset_current_client_cert_details\x18\a \x01(\v2I.istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.SetCurrentClientCertDetailsR\x1bsetCurrentClientCertDetails\x12V\n" +
@@ -2966,11 +2968,11 @@ const file_mesh_v1alpha1_proxy_proto_rawDesc = "" +
 	"\tRequestId\x126\n" +
 	"\bdisabled\x18\x01 \x01(\v2\x1a.google.protobuf.BoolValueR\bdisabled\x1aF\n" +
 	"\fAttemptCount\x126\n" +
-	"\bdisabled\x18\x01 \x01(\v2\x1a.google.protobuf.BoolValueR\bdisabled\x1aH\n" +
-	"\x0eXForwardedHost\x126\n" +
-	"\bdisabled\x18\x01 \x01(\v2\x1a.google.protobuf.BoolValueR\bdisabled\x1aH\n" +
-	"\x0eXForwardedPort\x126\n" +
-	"\bdisabled\x18\x01 \x01(\v2\x1a.google.protobuf.BoolValueR\bdisabled\x1aK\n" +
+	"\bdisabled\x18\x01 \x01(\v2\x1a.google.protobuf.BoolValueR\bdisabled\x1aF\n" +
+	"\x0eXForwardedHost\x124\n" +
+	"\aenabled\x18\x01 \x01(\v2\x1a.google.protobuf.BoolValueR\aenabled\x1aF\n" +
+	"\x0eXForwardedPort\x124\n" +
+	"\aenabled\x18\x01 \x01(\v2\x1a.google.protobuf.BoolValueR\aenabled\x1aK\n" +
 	"\x11EnvoyDebugHeaders\x126\n" +
 	"\bdisabled\x18\x01 \x01(\v2\x1a.google.protobuf.BoolValueR\bdisabled\x1aq\n" +
 	"\x17MetadataExchangeHeaders\x12V\n" +
@@ -3133,8 +3135,8 @@ var file_mesh_v1alpha1_proxy_proto_depIdxs = []int32{
 	38, // 56: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.Server.disabled:type_name -> google.protobuf.BoolValue
 	38, // 57: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.RequestId.disabled:type_name -> google.protobuf.BoolValue
 	38, // 58: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.AttemptCount.disabled:type_name -> google.protobuf.BoolValue
-	38, // 59: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.XForwardedHost.disabled:type_name -> google.protobuf.BoolValue
-	38, // 60: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.XForwardedPort.disabled:type_name -> google.protobuf.BoolValue
+	38, // 59: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.XForwardedHost.enabled:type_name -> google.protobuf.BoolValue
+	38, // 60: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.XForwardedPort.enabled:type_name -> google.protobuf.BoolValue
 	38, // 61: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.EnvoyDebugHeaders.disabled:type_name -> google.protobuf.BoolValue
 	5,  // 62: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.MetadataExchangeHeaders.mode:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.MetadataExchangeMode
 	38, // 63: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.SetCurrentClientCertDetails.subject:type_name -> google.protobuf.BoolValue
