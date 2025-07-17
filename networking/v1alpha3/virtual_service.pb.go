@@ -1395,6 +1395,8 @@ type HTTPMatchRequest struct {
 	//
 	// **Note:** This is not a runtime match, but is a selector; it filters which workloads the
 	// VirtualService applies to.
+	//
+	// **Note:** Ambient mode does not support this field.
 	SourceLabels map[string]string `protobuf:"bytes,7,rep,name=source_labels,json=sourceLabels,proto3" json:"source_labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	// Names of gateways where the rule should be applied. Gateway names
 	// in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
@@ -1431,6 +1433,8 @@ type HTTPMatchRequest struct {
 	//
 	// **Note:** This is not a runtime match, but is a selector; it filters which workloads the
 	// VirtualService applies to.
+	//
+	// **Note:** Ambient mode does not support this field.
 	SourceNamespace string `protobuf:"bytes,13,opt,name=source_namespace,json=sourceNamespace,proto3" json:"source_namespace,omitempty"`
 	// The human readable prefix to use when emitting statistics for this route.
 	// The statistics are generated with prefix route.<stat_prefix>.
@@ -1795,6 +1799,8 @@ type L4MatchAttributes struct {
 	//
 	// **Note:** This is not a runtime match, but is a selector; it filters which workloads the
 	// VirtualService applies to.
+	//
+	// **Note:** Ambient mode does not support this field.
 	SourceLabels map[string]string `protobuf:"bytes,4,rep,name=source_labels,json=sourceLabels,proto3" json:"source_labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	// Names of gateways where the rule should be applied. Gateway names
 	// in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
@@ -1806,6 +1812,8 @@ type L4MatchAttributes struct {
 	//
 	// **Note:** This is not a runtime match, but is a selector; it filters which workloads the
 	// VirtualService applies to.
+	//
+	// **Note:** Ambient mode does not support this field.
 	SourceNamespace string `protobuf:"bytes,6,opt,name=source_namespace,json=sourceNamespace,proto3" json:"source_namespace,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
@@ -1906,6 +1914,8 @@ type TLSMatchAttributes struct {
 	//
 	// **Note:** This is not a runtime match, but is a selector; it filters which workloads the
 	// VirtualService applies to.
+	//
+	// **Note:** Ambient mode does not support this field.
 	SourceLabels map[string]string `protobuf:"bytes,5,rep,name=source_labels,json=sourceLabels,proto3" json:"source_labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	// Names of gateways where the rule should be applied. Gateway names
 	// in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
@@ -1917,6 +1927,8 @@ type TLSMatchAttributes struct {
 	//
 	// **Note:** This is not a runtime match, but is a selector; it filters which workloads the
 	// VirtualService applies to.
+	//
+	// **Note:** Ambient mode does not support this field.
 	SourceNamespace string `protobuf:"bytes,7,opt,name=source_namespace,json=sourceNamespace,proto3" json:"source_namespace,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
