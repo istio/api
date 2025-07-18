@@ -473,6 +473,15 @@ message LoadBalancerSettings {
     // Describes a HTTP cookie that will be used as the hash key for the
     // Consistent Hash load balancer.
     message HTTPCookie {
+      // Attribute defines an API for adding additional attributes for a HTTP cookie.
+      message Attribute {
+        // The name of the cookie attribute.
+        string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+        // The optional value of the cookie attribute.
+        string value = 2;
+      }
+
       // Name of the cookie.
       string name = 1 [(google.api.field_behavior) = REQUIRED];
       // Path to set for the cookie.
@@ -482,6 +491,8 @@ message LoadBalancerSettings {
       // the generated cookie will be a session cookie.
       // +protoc-gen-crd:duration-validation:none
       google.protobuf.Duration ttl = 3;
+      // Additional attributes for the cookie. They will be used when generating a new cookie.
+      repeated Attribute attributes = 4;
     }
 
     // The hash key to use.
