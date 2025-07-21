@@ -660,6 +660,12 @@ message ProxyConfig {
     message AttemptCount {
       google.protobuf.BoolValue disabled = 1;
     }
+    message XForwardedHost {
+      google.protobuf.BoolValue enabled = 1;
+    }
+    message XForwardedPort {
+      google.protobuf.BoolValue enabled = 1;
+    }
     message EnvoyDebugHeaders {
       google.protobuf.BoolValue disabled = 1;
     }
@@ -740,6 +746,15 @@ message ProxyConfig {
     // requests and automatically normalize headers to lowercase, ensuring compliance with HTTP/2
     // standards.
     google.protobuf.BoolValue preserve_http1_header_case = 40;
+    // Controls the `X-Forwarded-Host` header. If enabled, the `X-Forwarded-Host` header is appended
+    // with the original host when it is rewritten.
+    // This header is disabled by default.
+    XForwardedHost x_forwarded_host = 41;
+    // Controls the `X-Forwarded-Port` header. If enabled, the `X-Forwarded-Port` header is header with the port value
+    // client used to connect to Envoy. It will be ignored if the ``x-forwarded-port`` header has been set by any
+    // trusted proxy in front of Envoy.
+    // This header is disabled by default.
+    XForwardedPort x_forwarded_port = 42;
   }
 }
 

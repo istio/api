@@ -248,6 +248,28 @@ func (this *ProxyConfig_ProxyHeaders_AttemptCount) UnmarshalJSON(b []byte) error
 	return ProxyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for ProxyConfig_ProxyHeaders_XForwardedHost
+func (this *ProxyConfig_ProxyHeaders_XForwardedHost) MarshalJSON() ([]byte, error) {
+	str, err := ProxyMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ProxyConfig_ProxyHeaders_XForwardedHost
+func (this *ProxyConfig_ProxyHeaders_XForwardedHost) UnmarshalJSON(b []byte) error {
+	return ProxyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ProxyConfig_ProxyHeaders_XForwardedPort
+func (this *ProxyConfig_ProxyHeaders_XForwardedPort) MarshalJSON() ([]byte, error) {
+	str, err := ProxyMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ProxyConfig_ProxyHeaders_XForwardedPort
+func (this *ProxyConfig_ProxyHeaders_XForwardedPort) UnmarshalJSON(b []byte) error {
+	return ProxyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 // MarshalJSON is a custom marshaler for ProxyConfig_ProxyHeaders_EnvoyDebugHeaders
 func (this *ProxyConfig_ProxyHeaders_EnvoyDebugHeaders) MarshalJSON() ([]byte, error) {
 	str, err := ProxyMarshaler.MarshalToString(this)
