@@ -118,7 +118,7 @@ var (
 This is intended to be used when enrolling a workload that only receives traffic from out-of-the-mesh clients, such as third party ingress controllers.
 `,
 		FeatureStatus: Alpha,
-		Hidden:        true,
+		Hidden:        false,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Pod,
