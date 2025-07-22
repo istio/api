@@ -37,6 +37,10 @@ protocol. If the traffic is matched, then it is sent to a named destination serv
 (or subset/version of it) defined in the registry.</p>
 <p>The source of traffic can also be matched in a routing rule. This allows routing
 to be customized for specific client contexts.</p>
+<p><em>Note for Ambient Users</em>: Support for <code>VirtualService</code> in Ambient mode is alpha, and
+there are no plans to increase support.
+Use <a href="https://istio.io/latest/docs/tasks/traffic-management/ingress/gateway-api/#mesh-traffic">Gateway API</a>
+for a stable traffic management API.</p>
 <p>The following example on Kubernetes, routes all HTTP traffic by default to
 pods of the reviews service with label &ldquo;version: v1&rdquo;. In addition,
 HTTP requests with path starting with /wpcatalog/ or /consumercatalog/ will

@@ -61,6 +61,11 @@
 // The source of traffic can also be matched in a routing rule. This allows routing
 // to be customized for specific client contexts.
 //
+// *Note for Ambient Users*: Support for `VirtualService` in Ambient mode is alpha, and
+// there are no plans to increase support.
+// Use [Gateway API](https://istio.io/latest/docs/tasks/traffic-management/ingress/gateway-api/#mesh-traffic)
+// for a stable traffic management API.
+//
 // The following example on Kubernetes, routes all HTTP traffic by default to
 // pods of the reviews service with label "version: v1". In addition,
 // HTTP requests with path starting with /wpcatalog/ or /consumercatalog/ will
