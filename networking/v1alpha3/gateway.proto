@@ -480,6 +480,10 @@ message ServerTLSSettings {
   // +kubebuilder:validation:MinItems=1
   repeated string credential_names = 14;
 
+  // For mutual TLS, the name of the secret or the configmap that holds CA certificates.
+  // Takes precedence over CA certificates in the Secret referenced with `credentialName(s)`.
+  string ca_cert_credential_name = 16;
+
   // TLSCertificate describes the server's TLS certificate.
   message TLSCertificate {
     // REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file
