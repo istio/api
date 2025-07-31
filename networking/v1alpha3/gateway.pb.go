@@ -783,6 +783,9 @@ type ServerTLSSettings struct {
 	// +kubebuilder:validation:MaxItems=2
 	// +kubebuilder:validation:MinItems=1
 	CredentialNames []string `protobuf:"bytes,14,rep,name=credential_names,json=credentialNames,proto3" json:"credential_names,omitempty"`
+	// For mutual TLS, the name of the secret or the configmap that holds CA certificates.
+	// Takes precedence over CA certificates in the Secret referenced with `credentialName(s)`.
+	CaCertCredentialName string `protobuf:"bytes,16,opt,name=ca_cert_credential_name,json=caCertCredentialName,proto3" json:"ca_cert_credential_name,omitempty"`
 	// Only one of `server_certificate`, `private_key` or `credential_name`
 	// or `credential_names` or `tls_certificates` should be specified.
 	// This is mainly used for specifying RSA and ECDSA certificates for the same server.
@@ -924,6 +927,13 @@ func (x *ServerTLSSettings) GetCredentialNames() []string {
 		return x.CredentialNames
 	}
 	return nil
+}
+
+func (x *ServerTLSSettings) GetCaCertCredentialName() string {
+	if x != nil {
+		return x.CaCertCredentialName
+	}
+	return ""
 }
 
 func (x *ServerTLSSettings) GetTlsCertificates() []*ServerTLSSettings_TLSCertificate {
@@ -1068,7 +1078,7 @@ const file_networking_v1alpha3_gateway_proto_rawDesc = "" +
 	"\bprotocol\x18\x02 \x01(\tB\x04\xe2A\x01\x02R\bprotocol\x12\x18\n" +
 	"\x04name\x18\x03 \x01(\tB\x04\xe2A\x01\x02R\x04name\x12#\n" +
 	"\vtarget_port\x18\x04 \x01(\rB\x02\x18\x01R\n" +
-	"targetPort\"\xb7\t\n" +
+	"targetPort\"\xee\t\n" +
 	"\x11ServerTLSSettings\x12%\n" +
 	"\x0ehttps_redirect\x18\x01 \x01(\bR\rhttpsRedirect\x12H\n" +
 	"\x04mode\x18\x02 \x01(\x0e24.istio.networking.v1alpha3.ServerTLSSettings.TLSmodeR\x04mode\x12-\n" +
@@ -1079,7 +1089,8 @@ const file_networking_v1alpha3_gateway_proto_rawDesc = "" +
 	"\x06ca_crl\x18\r \x01(\tR\x05caCrl\x12'\n" +
 	"\x0fcredential_name\x18\n" +
 	" \x01(\tR\x0ecredentialName\x12)\n" +
-	"\x10credential_names\x18\x0e \x03(\tR\x0fcredentialNames\x12f\n" +
+	"\x10credential_names\x18\x0e \x03(\tR\x0fcredentialNames\x125\n" +
+	"\x17ca_cert_credential_name\x18\x10 \x01(\tR\x14caCertCredentialName\x12f\n" +
 	"\x10tls_certificates\x18\x0f \x03(\v2;.istio.networking.v1alpha3.ServerTLSSettings.TLSCertificateR\x0ftlsCertificates\x12*\n" +
 	"\x11subject_alt_names\x18\x06 \x03(\tR\x0fsubjectAltNames\x126\n" +
 	"\x17verify_certificate_spki\x18\v \x03(\tR\x15verifyCertificateSpki\x126\n" +
