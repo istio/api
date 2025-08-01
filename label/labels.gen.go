@@ -31,6 +31,7 @@ const (
     Deployment
     Gateway
     GatewayClass
+    MutatingWebhookConfiguration
     Namespace
     Node
     Pod
@@ -51,18 +52,20 @@ func (r ResourceTypes) String() string {
 	case 4:
 		return "GatewayClass"
 	case 5:
-		return "Namespace"
+		return "MutatingWebhookConfiguration"
 	case 6:
-		return "Node"
+		return "Namespace"
 	case 7:
-		return "Pod"
+		return "Node"
 	case 8:
-		return "Service"
+		return "Pod"
 	case 9:
-		return "ServiceAccount"
+		return "Service"
 	case 10:
-		return "ServiceEntry"
+		return "ServiceAccount"
 	case 11:
+		return "ServiceEntry"
+	case 12:
 		return "WorkloadEntry"
 	}
 	return "Unknown"
@@ -142,25 +145,27 @@ Note: users wishing to use sidecar mode should see the "istio-injection" label; 
 
 	IoIstioRev = Instance {
 		Name:          "istio.io/rev",
-		Description:   "Istio control plane revision associated with the "+
+		Description:   "Istio control plane revision or tag associated with the "+
                         "resource; e.g. `canary`",
-		FeatureStatus: Alpha,
+		FeatureStatus: Beta,
 		Hidden:        false,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Namespace,
+			Gateway,
+			Pod,
 		},
 	}
 
 	IoIstioTag = Instance {
 		Name:          "istio.io/tag",
-		Description:   "Istio control plane tag name associated with the "+
-                        "resource; e.g. `canary`",
+		Description:   "Istio control plane tag name associated with the resource "+
+                        "- for internal use only",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
-			Namespace,
+			MutatingWebhookConfiguration,
 		},
 	}
 
@@ -461,6 +466,7 @@ func AllResourceTypes() []string {
 		"Deployment",
 		"Gateway",
 		"GatewayClass",
+		"MutatingWebhookConfiguration",
 		"Namespace",
 		"Node",
 		"Pod",
