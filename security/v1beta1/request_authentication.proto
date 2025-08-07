@@ -318,6 +318,21 @@ message RequestAuthentication {
 // fromHeaders:
 // - "x-goog-iap-jwt-assertion"
 // ```
+//
+// This example shows how to configure custom claims to be treated as space-delimited strings.
+// This is useful when JWT tokens contain custom claims with multiple space-separated values
+// that should be available for individual matching in authorization policies.
+//
+// ```yaml
+// issuer: https://example.com
+// spaceDelimitedClaims:
+// - "custom_scope"
+// - "provider.login.scope"
+// - "roles"
+// ```
+//
+// With this configuration, a JWT containing `"custom_scope": "read write admin"` will allow
+// authorization policies to match against individual values like "read", "write", or "admin".
 // +kubebuilder:validation:XValidation:message="only one of jwks or jwksUri can be set",rule="oneof(self.jwksUri, self.jwks_uri, self.jwks)"
 message JWTRule {
   // Identifies the issuer that issued the JWT. See
@@ -450,8 +465,30 @@ message JWTRule {
   // will spend waiting for the JWKS to be fetched. Default is 5s.
   google.protobuf.Duration timeout = 13;
 
+  // List of JWT claim names that should be treated as space-delimited strings.
+  // These claims will be split on whitespace and each individual value will be available
+  // for matching in authorization policies. This extends the default behavior that only
+  // treats 'scope' and 'permission' claims as space-delimited.
+  //
+  // Example usage for custom claims:
+  // ```yaml
+  // spaceDelimitedClaims:
+  // - "custom_scope"
+  // - "provider.login.scope"
+  // - "roles"
+  // ```
+  //
+  // This allows authorization policies to match individual values within space-separated
+  // claim strings, maintaining compatibility with existing JWT token formats.
+  //
+  // Note: The default claims 'scope' and 'permission' are always treated as space-delimited
+  // regardless of this setting.
+  // +protoc-gen-crd:list-value-validation:MinLength=1
+  // +kubebuilder:validation:MaxItems=64
+  repeated string space_delimited_claims = 14;
+
   // $hide_from_docs
-  // Next available field number: 14
+  // Next available field number: 15
 }
 
 // This message specifies a header location to extract JWT token.
