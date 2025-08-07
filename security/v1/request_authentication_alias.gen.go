@@ -53,6 +53,21 @@ type RequestAuthentication = v1beta1.RequestAuthentication
 // fromHeaders:
 // - "x-goog-iap-jwt-assertion"
 // ```
+//
+// This example shows how to configure custom claims to be treated as space-delimited strings.
+// This is useful when JWT tokens contain custom claims with multiple space-separated values
+// that should be available for individual matching in authorization policies.
+//
+// ```yaml
+// issuer: https://example.com
+// spaceDelimitedClaims:
+// - "custom_scope"
+// - "provider.login.scope"
+// - "roles"
+// ```
+//
+// With this configuration, a JWT containing `"custom_scope": "read write admin"` will allow
+// authorization policies to match against individual values like "read", "write", or "admin".
 // +kubebuilder:validation:XValidation:message="only one of jwks or jwksUri can be set",rule="oneof(self.jwksUri, self.jwks_uri, self.jwks)"
 type JWTRule = v1beta1.JWTRule
 
