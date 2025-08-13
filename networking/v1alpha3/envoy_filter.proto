@@ -496,6 +496,9 @@ message EnvoyFilter {
 
     // Applies the patch to the listener filter.
     LISTENER_FILTER = 11;
+
+    // Applies the patch to an upstream HTTP filter in a HTTP cluster.
+    UPSTREAM_HTTP_FILTER = 12;
   }
 
   // PatchContext selects a class of configurations based on the
@@ -538,6 +541,14 @@ message EnvoyFilter {
   // Conditions specified in `ClusterMatch` must be met for the patch
   // to be applied to a cluster.
   message ClusterMatch {
+    // Conditions to match a specific filter within a cluster filter chain.
+    message UpstreamFilterMatch {
+      // The filter name to match on.
+      // For standard Envoy filters, [canonical filter](https://www.envoyproxy.io/docs/envoy/latest/version_history/v1.14.0#deprecated)
+      // names should be used.
+      string name = 1;
+    }
+
     // The service port for which this cluster was generated.  If
     // omitted, applies to clusters for any port.
     // **Note:** for inbound cluster, it is the service target port.
@@ -559,6 +570,9 @@ message EnvoyFilter {
     // cluster, leave all fields in clusterMatch empty, except the
     // name.
     string name = 4;
+
+    // The name of a specific filter to apply the patch to.
+    UpstreamFilterMatch filter = 5;
   }
 
   // Conditions specified in RouteConfigurationMatch must be met for

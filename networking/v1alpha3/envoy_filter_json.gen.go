@@ -39,6 +39,17 @@ func (this *EnvoyFilter_ClusterMatch) UnmarshalJSON(b []byte) error {
 	return EnvoyFilterUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for EnvoyFilter_ClusterMatch_UpstreamFilterMatch
+func (this *EnvoyFilter_ClusterMatch_UpstreamFilterMatch) MarshalJSON() ([]byte, error) {
+	str, err := EnvoyFilterMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for EnvoyFilter_ClusterMatch_UpstreamFilterMatch
+func (this *EnvoyFilter_ClusterMatch_UpstreamFilterMatch) UnmarshalJSON(b []byte) error {
+	return EnvoyFilterUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 // MarshalJSON is a custom marshaler for EnvoyFilter_RouteConfigurationMatch
 func (this *EnvoyFilter_RouteConfigurationMatch) MarshalJSON() ([]byte, error) {
 	str, err := EnvoyFilterMarshaler.MarshalToString(this)
