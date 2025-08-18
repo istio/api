@@ -420,6 +420,47 @@ syntax = "proto3";
 //             - request_headers:
 //                 header_name: ":path"
 //                 descriptor_key: "path"
+// ```
+//
+// The following example configures client-side throttling for the service `foo.myns.svc.cluster.local` by
+// adding the `envoy.filters.http.admission_control` upstream HTTP filter to its cluster.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: EnvoyFilter
+// metadata:
+//   name: admission-control-example
+//   namespace: myns
+// spec:
+//   configPatches:
+//   - applyTo: UPSTREAM_HTTP_FILTER
+//     match:
+//       context: SIDECAR_OUTBOUND
+//       cluster:
+//         service: foo.myns.svc.cluster.local
+//     patch:
+//       operation: ADD
+//       value:
+//         name: envoy.filters.http.upstream_codec
+//         typed_config:
+//           "@type": type.googleapis.com/envoy.extensions.filters.http.upstream_codec.v3.UpstreamCodec
+//   - applyTo: UPSTREAM_HTTP_FILTER
+//     match:
+//       context: SIDECAR_OUTBOUND
+//       cluster:
+//         service: foo.myns.svc.cluster.local
+//         filter:
+//           name: envoy.filters.http.upstream_codec
+//     patch:
+//       operation: INSERT_BEFORE
+//       value:
+//         name: envoy.filters.http.admission_control
+//         typed_config:
+//           "@type": type.googleapis.com/envoy.extensions.filters.http.admission_control.v3.AdmissionControl
+//           enabled:
+//             default_value: true
+//           success_criteria: {}
+// ```
 package istio.networking.v1alpha3;
 
 import "google/protobuf/struct.proto";

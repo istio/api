@@ -378,6 +378,43 @@ spec:
                 header_name: &quot;:path&quot;
                 descriptor_key: &quot;path&quot;
 </code></pre>
+<p>The following example configures client-side throttling for the service <code>foo.myns.svc.cluster.local</code> by
+adding the <code>envoy.filters.http.admission_control</code> upstream HTTP filter to its cluster.</p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: admission-control-example
+  namespace: myns
+spec:
+  configPatches:
+  - applyTo: UPSTREAM_HTTP_FILTER
+    match:
+      context: SIDECAR_OUTBOUND
+      cluster:
+        service: foo.myns.svc.cluster.local
+    patch:
+      operation: ADD
+      value:
+        name: envoy.filters.http.upstream_codec
+        typed_config:
+          &quot;@type&quot;: type.googleapis.com/envoy.extensions.filters.http.upstream_codec.v3.UpstreamCodec
+  - applyTo: UPSTREAM_HTTP_FILTER
+    match:
+      context: SIDECAR_OUTBOUND
+      cluster:
+        service: foo.myns.svc.cluster.local
+        filter:
+          name: envoy.filters.http.upstream_codec
+    patch:
+      operation: INSERT_BEFORE
+      value:
+        name: envoy.filters.http.admission_control
+        typed_config:
+          &quot;@type&quot;: type.googleapis.com/envoy.extensions.filters.http.admission_control.v3.AdmissionControl
+          enabled:
+            default_value: true
+          success_criteria: {}
+</code></pre>
 
 <h2 id="EnvoyFilter">EnvoyFilter</h2>
 <section>
