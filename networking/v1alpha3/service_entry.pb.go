@@ -640,7 +640,9 @@ type ServiceEntry struct {
 	// service in the mesh. In other words, the sidecar will behave as a
 	// simple TCP proxy, forwarding incoming traffic on a specified port to
 	// the specified destination endpoint IP/host. Unix domain socket
-	// addresses are not supported in this field.
+	// addresses are not supported in this field. Although the API allows
+	// specifying addresses in a list, multiple addresses will not be used by a single host.
+	// This means manual specification of dual-stack addressing is not supported.
 	// +kubebuilder:validation:MaxItems=256
 	// +protoc-gen-crd:list-value-validation:MaxLength=64
 	Addresses []string `protobuf:"bytes,2,rep,name=addresses,proto3" json:"addresses,omitempty"`
