@@ -424,6 +424,47 @@
 //             - request_headers:
 //                 header_name: ":path"
 //                 descriptor_key: "path"
+// ```
+//
+// The following example configures client-side throttling for the service `foo.myns.svc.cluster.local` by
+// adding the `envoy.filters.http.admission_control` upstream HTTP filter to its cluster.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: EnvoyFilter
+// metadata:
+//   name: admission-control-example
+//   namespace: myns
+// spec:
+//   configPatches:
+//   - applyTo: UPSTREAM_HTTP_FILTER
+//     match:
+//       context: SIDECAR_OUTBOUND
+//       cluster:
+//         service: foo.myns.svc.cluster.local
+//     patch:
+//       operation: ADD
+//       value:
+//         name: envoy.filters.http.upstream_codec
+//         typed_config:
+//           "@type": type.googleapis.com/envoy.extensions.filters.http.upstream_codec.v3.UpstreamCodec
+//   - applyTo: UPSTREAM_HTTP_FILTER
+//     match:
+//       context: SIDECAR_OUTBOUND
+//       cluster:
+//         service: foo.myns.svc.cluster.local
+//         filter:
+//           name: envoy.filters.http.upstream_codec
+//     patch:
+//       operation: INSERT_BEFORE
+//       value:
+//         name: envoy.filters.http.admission_control
+//         typed_config:
+//           "@type": type.googleapis.com/envoy.extensions.filters.http.admission_control.v3.AdmissionControl
+//           enabled:
+//             default_value: true
+//           success_criteria: {}
+// ```
 
 package v1alpha3
 
@@ -479,6 +520,8 @@ const (
 	EnvoyFilter_BOOTSTRAP EnvoyFilter_ApplyTo = 10
 	// Applies the patch to the listener filter.
 	EnvoyFilter_LISTENER_FILTER EnvoyFilter_ApplyTo = 11
+	// Applies the patch to an upstream HTTP filter in a HTTP cluster.
+	EnvoyFilter_UPSTREAM_HTTP_FILTER EnvoyFilter_ApplyTo = 12
 )
 
 // Enum value maps for EnvoyFilter_ApplyTo.
@@ -496,20 +539,22 @@ var (
 		9:  "EXTENSION_CONFIG",
 		10: "BOOTSTRAP",
 		11: "LISTENER_FILTER",
+		12: "UPSTREAM_HTTP_FILTER",
 	}
 	EnvoyFilter_ApplyTo_value = map[string]int32{
-		"INVALID":             0,
-		"LISTENER":            1,
-		"FILTER_CHAIN":        2,
-		"NETWORK_FILTER":      3,
-		"HTTP_FILTER":         4,
-		"ROUTE_CONFIGURATION": 5,
-		"VIRTUAL_HOST":        6,
-		"HTTP_ROUTE":          7,
-		"CLUSTER":             8,
-		"EXTENSION_CONFIG":    9,
-		"BOOTSTRAP":           10,
-		"LISTENER_FILTER":     11,
+		"INVALID":              0,
+		"LISTENER":             1,
+		"FILTER_CHAIN":         2,
+		"NETWORK_FILTER":       3,
+		"HTTP_FILTER":          4,
+		"ROUTE_CONFIGURATION":  5,
+		"VIRTUAL_HOST":         6,
+		"HTTP_ROUTE":           7,
+		"CLUSTER":              8,
+		"EXTENSION_CONFIG":     9,
+		"BOOTSTRAP":            10,
+		"LISTENER_FILTER":      11,
+		"UPSTREAM_HTTP_FILTER": 12,
 	}
 )
 
@@ -1052,7 +1097,9 @@ type EnvoyFilter_ClusterMatch struct {
 	// cluster by name, such as the internally generated `Passthrough`
 	// cluster, leave all fields in clusterMatch empty, except the
 	// name.
-	Name          string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Name string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	// The name of a specific filter to apply the patch to.
+	Filter        *EnvoyFilter_ClusterMatch_UpstreamFilterMatch `protobuf:"bytes,5,opt,name=filter,proto3" json:"filter,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1113,6 +1160,13 @@ func (x *EnvoyFilter_ClusterMatch) GetName() string {
 		return x.Name
 	}
 	return ""
+}
+
+func (x *EnvoyFilter_ClusterMatch) GetFilter() *EnvoyFilter_ClusterMatch_UpstreamFilterMatch {
+	if x != nil {
+		return x.Filter
+	}
+	return nil
 }
 
 // Conditions specified in RouteConfigurationMatch must be met for
@@ -1569,6 +1623,54 @@ func (x *EnvoyFilter_EnvoyConfigObjectPatch) GetPatch() *EnvoyFilter_Patch {
 	return nil
 }
 
+// Conditions to match a specific filter within a cluster filter chain.
+type EnvoyFilter_ClusterMatch_UpstreamFilterMatch struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The filter name to match on.
+	// For standard Envoy filters, [canonical filter](https://www.envoyproxy.io/docs/envoy/latest/version_history/v1.14.0#deprecated)
+	// names should be used.
+	Name          string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EnvoyFilter_ClusterMatch_UpstreamFilterMatch) Reset() {
+	*x = EnvoyFilter_ClusterMatch_UpstreamFilterMatch{}
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EnvoyFilter_ClusterMatch_UpstreamFilterMatch) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EnvoyFilter_ClusterMatch_UpstreamFilterMatch) ProtoMessage() {}
+
+func (x *EnvoyFilter_ClusterMatch_UpstreamFilterMatch) ProtoReflect() protoreflect.Message {
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EnvoyFilter_ClusterMatch_UpstreamFilterMatch.ProtoReflect.Descriptor instead.
+func (*EnvoyFilter_ClusterMatch_UpstreamFilterMatch) Descriptor() ([]byte, []int) {
+	return file_networking_v1alpha3_envoy_filter_proto_rawDescGZIP(), []int{0, 1, 0}
+}
+
+func (x *EnvoyFilter_ClusterMatch_UpstreamFilterMatch) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
 // Match a specific route inside a virtual host in a route configuration.
 type EnvoyFilter_RouteConfigurationMatch_RouteMatch struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -1585,7 +1687,7 @@ type EnvoyFilter_RouteConfigurationMatch_RouteMatch struct {
 
 func (x *EnvoyFilter_RouteConfigurationMatch_RouteMatch) Reset() {
 	*x = EnvoyFilter_RouteConfigurationMatch_RouteMatch{}
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[9]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1597,7 +1699,7 @@ func (x *EnvoyFilter_RouteConfigurationMatch_RouteMatch) String() string {
 func (*EnvoyFilter_RouteConfigurationMatch_RouteMatch) ProtoMessage() {}
 
 func (x *EnvoyFilter_RouteConfigurationMatch_RouteMatch) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[9]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1647,7 +1749,7 @@ type EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch struct {
 
 func (x *EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch) Reset() {
 	*x = EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch{}
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[10]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1659,7 +1761,7 @@ func (x *EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch) String() string {
 func (*EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch) ProtoMessage() {}
 
 func (x *EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[10]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1740,7 +1842,7 @@ type EnvoyFilter_ListenerMatch_FilterChainMatch struct {
 
 func (x *EnvoyFilter_ListenerMatch_FilterChainMatch) Reset() {
 	*x = EnvoyFilter_ListenerMatch_FilterChainMatch{}
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[11]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1752,7 +1854,7 @@ func (x *EnvoyFilter_ListenerMatch_FilterChainMatch) String() string {
 func (*EnvoyFilter_ListenerMatch_FilterChainMatch) ProtoMessage() {}
 
 func (x *EnvoyFilter_ListenerMatch_FilterChainMatch) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[11]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1827,7 +1929,7 @@ type EnvoyFilter_ListenerMatch_FilterMatch struct {
 
 func (x *EnvoyFilter_ListenerMatch_FilterMatch) Reset() {
 	*x = EnvoyFilter_ListenerMatch_FilterMatch{}
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[12]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1839,7 +1941,7 @@ func (x *EnvoyFilter_ListenerMatch_FilterMatch) String() string {
 func (*EnvoyFilter_ListenerMatch_FilterMatch) ProtoMessage() {}
 
 func (x *EnvoyFilter_ListenerMatch_FilterMatch) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[12]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1883,7 +1985,7 @@ type EnvoyFilter_ListenerMatch_SubFilterMatch struct {
 
 func (x *EnvoyFilter_ListenerMatch_SubFilterMatch) Reset() {
 	*x = EnvoyFilter_ListenerMatch_SubFilterMatch{}
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[13]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1895,7 +1997,7 @@ func (x *EnvoyFilter_ListenerMatch_SubFilterMatch) String() string {
 func (*EnvoyFilter_ListenerMatch_SubFilterMatch) ProtoMessage() {}
 
 func (x *EnvoyFilter_ListenerMatch_SubFilterMatch) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[13]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1922,7 +2024,7 @@ var File_networking_v1alpha3_envoy_filter_proto protoreflect.FileDescriptor
 
 const file_networking_v1alpha3_envoy_filter_proto_rawDesc = "" +
 	"\n" +
-	"&networking/v1alpha3/envoy_filter.proto\x12\x19istio.networking.v1alpha3\x1a\x1cgoogle/protobuf/struct.proto\x1a!networking/v1alpha3/sidecar.proto\x1a\x1btype/v1beta1/selector.proto\"\x86\x1b\n" +
+	"&networking/v1alpha3/envoy_filter.proto\x12\x19istio.networking.v1alpha3\x1a\x1cgoogle/protobuf/struct.proto\x1a!networking/v1alpha3/sidecar.proto\x1a\x1btype/v1beta1/selector.proto\"\xad\x1c\n" +
 	"\vEnvoyFilter\x12X\n" +
 	"\x11workload_selector\x18\x03 \x01(\v2+.istio.networking.v1alpha3.WorkloadSelectorR\x10workloadSelector\x12I\n" +
 	"\n" +
@@ -1936,13 +2038,16 @@ const file_networking_v1alpha3_envoy_filter_proto_rawDesc = "" +
 	"\bmetadata\x18\x02 \x03(\v2?.istio.networking.v1alpha3.EnvoyFilter.ProxyMatch.MetadataEntryR\bmetadata\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1au\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a\x81\x02\n" +
 	"\fClusterMatch\x12\x1f\n" +
 	"\vport_number\x18\x01 \x01(\rR\n" +
 	"portNumber\x12\x18\n" +
 	"\aservice\x18\x02 \x01(\tR\aservice\x12\x16\n" +
 	"\x06subset\x18\x03 \x01(\tR\x06subset\x12\x12\n" +
-	"\x04name\x18\x04 \x01(\tR\x04name\x1a\xe5\x04\n" +
+	"\x04name\x18\x04 \x01(\tR\x04name\x12_\n" +
+	"\x06filter\x18\x05 \x01(\v2G.istio.networking.v1alpha3.EnvoyFilter.ClusterMatch.UpstreamFilterMatchR\x06filter\x1a)\n" +
+	"\x13UpstreamFilterMatch\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x1a\xe5\x04\n" +
 	"\x17RouteConfigurationMatch\x12\x1f\n" +
 	"\vport_number\x18\x01 \x01(\rR\n" +
 	"portNumber\x12\x1b\n" +
@@ -2013,7 +2118,7 @@ const file_networking_v1alpha3_envoy_filter_proto_rawDesc = "" +
 	"\x16EnvoyConfigObjectPatch\x12I\n" +
 	"\bapply_to\x18\x01 \x01(\x0e2..istio.networking.v1alpha3.EnvoyFilter.ApplyToR\aapplyTo\x12S\n" +
 	"\x05match\x18\x02 \x01(\v2=.istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatchR\x05match\x12B\n" +
-	"\x05patch\x18\x03 \x01(\v2,.istio.networking.v1alpha3.EnvoyFilter.PatchR\x05patch\"\xdd\x01\n" +
+	"\x05patch\x18\x03 \x01(\v2,.istio.networking.v1alpha3.EnvoyFilter.PatchR\x05patch\"\xf7\x01\n" +
 	"\aApplyTo\x12\v\n" +
 	"\aINVALID\x10\x00\x12\f\n" +
 	"\bLISTENER\x10\x01\x12\x10\n" +
@@ -2028,7 +2133,8 @@ const file_networking_v1alpha3_envoy_filter_proto_rawDesc = "" +
 	"\x10EXTENSION_CONFIG\x10\t\x12\r\n" +
 	"\tBOOTSTRAP\x10\n" +
 	"\x12\x13\n" +
-	"\x0fLISTENER_FILTER\x10\v\"O\n" +
+	"\x0fLISTENER_FILTER\x10\v\x12\x18\n" +
+	"\x14UPSTREAM_HTTP_FILTER\x10\f\"O\n" +
 	"\fPatchContext\x12\a\n" +
 	"\x03ANY\x10\x00\x12\x13\n" +
 	"\x0fSIDECAR_INBOUND\x10\x01\x12\x14\n" +
@@ -2048,7 +2154,7 @@ func file_networking_v1alpha3_envoy_filter_proto_rawDescGZIP() []byte {
 }
 
 var file_networking_v1alpha3_envoy_filter_proto_enumTypes = make([]protoimpl.EnumInfo, 5)
-var file_networking_v1alpha3_envoy_filter_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_networking_v1alpha3_envoy_filter_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_networking_v1alpha3_envoy_filter_proto_goTypes = []any{
 	(EnvoyFilter_ApplyTo)(0),                                   // 0: istio.networking.v1alpha3.EnvoyFilter.ApplyTo
 	(EnvoyFilter_PatchContext)(0),                              // 1: istio.networking.v1alpha3.EnvoyFilter.PatchContext
@@ -2064,42 +2170,44 @@ var file_networking_v1alpha3_envoy_filter_proto_goTypes = []any{
 	(*EnvoyFilter_EnvoyConfigObjectMatch)(nil),                 // 11: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch
 	(*EnvoyFilter_EnvoyConfigObjectPatch)(nil),                 // 12: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch
 	nil, // 13: istio.networking.v1alpha3.EnvoyFilter.ProxyMatch.MetadataEntry
-	(*EnvoyFilter_RouteConfigurationMatch_RouteMatch)(nil),       // 14: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.RouteMatch
-	(*EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch)(nil), // 15: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.VirtualHostMatch
-	(*EnvoyFilter_ListenerMatch_FilterChainMatch)(nil),           // 16: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterChainMatch
-	(*EnvoyFilter_ListenerMatch_FilterMatch)(nil),                // 17: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterMatch
-	(*EnvoyFilter_ListenerMatch_SubFilterMatch)(nil),             // 18: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.SubFilterMatch
-	(*WorkloadSelector)(nil),                                     // 19: istio.networking.v1alpha3.WorkloadSelector
-	(*v1beta1.PolicyTargetReference)(nil),                        // 20: istio.type.v1beta1.PolicyTargetReference
-	(*_struct.Struct)(nil),                                       // 21: google.protobuf.Struct
+	(*EnvoyFilter_ClusterMatch_UpstreamFilterMatch)(nil),         // 14: istio.networking.v1alpha3.EnvoyFilter.ClusterMatch.UpstreamFilterMatch
+	(*EnvoyFilter_RouteConfigurationMatch_RouteMatch)(nil),       // 15: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.RouteMatch
+	(*EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch)(nil), // 16: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.VirtualHostMatch
+	(*EnvoyFilter_ListenerMatch_FilterChainMatch)(nil),           // 17: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterChainMatch
+	(*EnvoyFilter_ListenerMatch_FilterMatch)(nil),                // 18: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterMatch
+	(*EnvoyFilter_ListenerMatch_SubFilterMatch)(nil),             // 19: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.SubFilterMatch
+	(*WorkloadSelector)(nil),                                     // 20: istio.networking.v1alpha3.WorkloadSelector
+	(*v1beta1.PolicyTargetReference)(nil),                        // 21: istio.type.v1beta1.PolicyTargetReference
+	(*_struct.Struct)(nil),                                       // 22: google.protobuf.Struct
 }
 var file_networking_v1alpha3_envoy_filter_proto_depIdxs = []int32{
-	19, // 0: istio.networking.v1alpha3.EnvoyFilter.workload_selector:type_name -> istio.networking.v1alpha3.WorkloadSelector
-	20, // 1: istio.networking.v1alpha3.EnvoyFilter.targetRefs:type_name -> istio.type.v1beta1.PolicyTargetReference
+	20, // 0: istio.networking.v1alpha3.EnvoyFilter.workload_selector:type_name -> istio.networking.v1alpha3.WorkloadSelector
+	21, // 1: istio.networking.v1alpha3.EnvoyFilter.targetRefs:type_name -> istio.type.v1beta1.PolicyTargetReference
 	12, // 2: istio.networking.v1alpha3.EnvoyFilter.config_patches:type_name -> istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch
 	13, // 3: istio.networking.v1alpha3.EnvoyFilter.ProxyMatch.metadata:type_name -> istio.networking.v1alpha3.EnvoyFilter.ProxyMatch.MetadataEntry
-	15, // 4: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.vhost:type_name -> istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.VirtualHostMatch
-	16, // 5: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.filter_chain:type_name -> istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterChainMatch
-	3,  // 6: istio.networking.v1alpha3.EnvoyFilter.Patch.operation:type_name -> istio.networking.v1alpha3.EnvoyFilter.Patch.Operation
-	21, // 7: istio.networking.v1alpha3.EnvoyFilter.Patch.value:type_name -> google.protobuf.Struct
-	4,  // 8: istio.networking.v1alpha3.EnvoyFilter.Patch.filter_class:type_name -> istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass
-	1,  // 9: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.context:type_name -> istio.networking.v1alpha3.EnvoyFilter.PatchContext
-	6,  // 10: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.proxy:type_name -> istio.networking.v1alpha3.EnvoyFilter.ProxyMatch
-	9,  // 11: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.listener:type_name -> istio.networking.v1alpha3.EnvoyFilter.ListenerMatch
-	8,  // 12: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.route_configuration:type_name -> istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch
-	7,  // 13: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.cluster:type_name -> istio.networking.v1alpha3.EnvoyFilter.ClusterMatch
-	0,  // 14: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch.apply_to:type_name -> istio.networking.v1alpha3.EnvoyFilter.ApplyTo
-	11, // 15: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch.match:type_name -> istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch
-	10, // 16: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch.patch:type_name -> istio.networking.v1alpha3.EnvoyFilter.Patch
-	2,  // 17: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.RouteMatch.action:type_name -> istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.RouteMatch.Action
-	14, // 18: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.VirtualHostMatch.route:type_name -> istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.RouteMatch
-	17, // 19: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterChainMatch.filter:type_name -> istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterMatch
-	18, // 20: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterMatch.sub_filter:type_name -> istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.SubFilterMatch
-	21, // [21:21] is the sub-list for method output_type
-	21, // [21:21] is the sub-list for method input_type
-	21, // [21:21] is the sub-list for extension type_name
-	21, // [21:21] is the sub-list for extension extendee
-	0,  // [0:21] is the sub-list for field type_name
+	14, // 4: istio.networking.v1alpha3.EnvoyFilter.ClusterMatch.filter:type_name -> istio.networking.v1alpha3.EnvoyFilter.ClusterMatch.UpstreamFilterMatch
+	16, // 5: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.vhost:type_name -> istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.VirtualHostMatch
+	17, // 6: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.filter_chain:type_name -> istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterChainMatch
+	3,  // 7: istio.networking.v1alpha3.EnvoyFilter.Patch.operation:type_name -> istio.networking.v1alpha3.EnvoyFilter.Patch.Operation
+	22, // 8: istio.networking.v1alpha3.EnvoyFilter.Patch.value:type_name -> google.protobuf.Struct
+	4,  // 9: istio.networking.v1alpha3.EnvoyFilter.Patch.filter_class:type_name -> istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass
+	1,  // 10: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.context:type_name -> istio.networking.v1alpha3.EnvoyFilter.PatchContext
+	6,  // 11: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.proxy:type_name -> istio.networking.v1alpha3.EnvoyFilter.ProxyMatch
+	9,  // 12: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.listener:type_name -> istio.networking.v1alpha3.EnvoyFilter.ListenerMatch
+	8,  // 13: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.route_configuration:type_name -> istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch
+	7,  // 14: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.cluster:type_name -> istio.networking.v1alpha3.EnvoyFilter.ClusterMatch
+	0,  // 15: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch.apply_to:type_name -> istio.networking.v1alpha3.EnvoyFilter.ApplyTo
+	11, // 16: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch.match:type_name -> istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch
+	10, // 17: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch.patch:type_name -> istio.networking.v1alpha3.EnvoyFilter.Patch
+	2,  // 18: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.RouteMatch.action:type_name -> istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.RouteMatch.Action
+	15, // 19: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.VirtualHostMatch.route:type_name -> istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.RouteMatch
+	18, // 20: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterChainMatch.filter:type_name -> istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterMatch
+	19, // 21: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterMatch.sub_filter:type_name -> istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.SubFilterMatch
+	22, // [22:22] is the sub-list for method output_type
+	22, // [22:22] is the sub-list for method input_type
+	22, // [22:22] is the sub-list for extension type_name
+	22, // [22:22] is the sub-list for extension extendee
+	0,  // [0:22] is the sub-list for field type_name
 }
 
 func init() { file_networking_v1alpha3_envoy_filter_proto_init() }
@@ -2119,7 +2227,7 @@ func file_networking_v1alpha3_envoy_filter_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_networking_v1alpha3_envoy_filter_proto_rawDesc), len(file_networking_v1alpha3_envoy_filter_proto_rawDesc)),
 			NumEnums:      5,
-			NumMessages:   14,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
