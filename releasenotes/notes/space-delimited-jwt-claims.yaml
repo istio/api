@@ -1,0 +1,13 @@
+apiVersion: release-notes/v2
+kind: feature
+area: security
+issue:
+  - https://github.com/istio/istio/issues/56873
+
+releaseNotes:
+  - |
+    **Added** `spaceDelimitedClaims` field in `RequestAuthentication` under `spec.jwtRules.` to configure custom JWT claims
+    that should be treated as space-delimited strings.
+    This allows authorization policies to match individual values within space-separated claim strings,
+    extending beyond the default `scope` and `permission` claims.
+    This addresses compatibility issues when upgrading from older Istio versions with custom space-delimited JWT claim fields.
