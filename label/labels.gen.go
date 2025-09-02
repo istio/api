@@ -108,6 +108,23 @@ var (
 		},
 	}
 
+	IoK8sNetworkingGatewayGatewayClassName = Instance {
+		Name:          "gateway.networking.k8s.io/gateway-class-name",
+		Description:   "Automatically added to all resources [automatically "+
+                        "created](/docs/tasks/traffic-management/ingress/gateway-api/#automated-deployment) "+
+                        "by Istio Gateway controller to indicate which "+
+                        "`GatewayClass` resulted in the object creation. Users "+
+                        "should not set this label themselves.",
+		FeatureStatus: Stable,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			ServiceAccount,
+			Deployment,
+			Service,
+		},
+	}
+
 	IoK8sNetworkingGatewayGatewayName = Instance {
 		Name:          "gateway.networking.k8s.io/gateway-name",
 		Description:   "Automatically added to all resources [automatically "+
@@ -432,6 +449,7 @@ resources to help automate Istio's multi-network configuration.
 func AllResourceLabels() []*Instance {
 	return []*Instance {
 		&GatewayManaged,
+		&IoK8sNetworkingGatewayGatewayClassName,
 		&IoK8sNetworkingGatewayGatewayName,
 		&IoIstioDataplaneMode,
 		&IoIstioRev,
