@@ -31,9 +31,11 @@ const (
     Deployment
     Gateway
     GatewayClass
+    HorizontalPodAutoscaler
     Namespace
     Node
     Pod
+    PodDisruptionBudget
     Service
     ServiceAccount
     ServiceEntry
@@ -51,18 +53,22 @@ func (r ResourceTypes) String() string {
 	case 4:
 		return "GatewayClass"
 	case 5:
-		return "Namespace"
+		return "HorizontalPodAutoscaler"
 	case 6:
-		return "Node"
+		return "Namespace"
 	case 7:
-		return "Pod"
+		return "Node"
 	case 8:
-		return "Service"
+		return "Pod"
 	case 9:
-		return "ServiceAccount"
+		return "PodDisruptionBudget"
 	case 10:
-		return "ServiceEntry"
+		return "Service"
 	case 11:
+		return "ServiceAccount"
+	case 12:
+		return "ServiceEntry"
+	case 13:
 		return "WorkloadEntry"
 	}
 	return "Unknown"
@@ -122,6 +128,8 @@ var (
 			ServiceAccount,
 			Deployment,
 			Service,
+			PodDisruptionBudget,
+			HorizontalPodAutoscaler,
 		},
 	}
 
@@ -139,6 +147,8 @@ var (
 			ServiceAccount,
 			Deployment,
 			Service,
+			PodDisruptionBudget,
+			HorizontalPodAutoscaler,
 		},
 	}
 
@@ -479,9 +489,11 @@ func AllResourceTypes() []string {
 		"Deployment",
 		"Gateway",
 		"GatewayClass",
+		"HorizontalPodAutoscaler",
 		"Namespace",
 		"Node",
 		"Pod",
+		"PodDisruptionBudget",
 		"Service",
 		"ServiceAccount",
 		"ServiceEntry",
