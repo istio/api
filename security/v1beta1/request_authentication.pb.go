@@ -395,6 +395,21 @@ func (x *RequestAuthentication) GetJwtRules() []*JWTRule {
 // fromHeaders:
 // - "x-goog-iap-jwt-assertion"
 // ```
+//
+// This example shows how to configure custom claims to be treated as space-delimited strings.
+// This is useful when JWT tokens contain custom claims with multiple space-separated values
+// that should be available for individual matching in authorization policies.
+//
+// ```yaml
+// issuer: https://example.com
+// spaceDelimitedClaims:
+// - "custom_scope"
+// - "provider.login.scope"
+// - "roles"
+// ```
+//
+// With this configuration, a JWT containing `"custom_scope": "read write admin"` will allow
+// authorization policies to match against individual values like "read", "write", or "admin".
 // +kubebuilder:validation:XValidation:message="only one of jwks or jwksUri can be set",rule="oneof(self.jwksUri, self.jwks_uri, self.jwks)"
 type JWTRule struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -512,9 +527,30 @@ type JWTRule struct {
 	OutputClaimToHeaders []*ClaimToHeader `protobuf:"bytes,11,rep,name=output_claim_to_headers,json=outputClaimToHeaders,proto3" json:"output_claim_to_headers,omitempty"` // [TODO:Update the status whenever this feature is promoted.]
 	// The maximum amount of time that the resolver, determined by the PILOT_JWT_ENABLE_REMOTE_JWKS environment variable,
 	// will spend waiting for the JWKS to be fetched. Default is 5s.
-	Timeout       *duration.Duration `protobuf:"bytes,13,opt,name=timeout,proto3" json:"timeout,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	Timeout *duration.Duration `protobuf:"bytes,13,opt,name=timeout,proto3" json:"timeout,omitempty"`
+	// List of JWT claim names that should be treated as space-delimited strings.
+	// These claims will be split on whitespace and each individual value will be available
+	// for matching in authorization policies. This extends the default behavior that only
+	// treats 'scope' and 'permission' claims as space-delimited.
+	//
+	// Example usage for custom claims:
+	// ```yaml
+	// spaceDelimitedClaims:
+	// - "custom_scope"
+	// - "provider.login.scope"
+	// - "roles"
+	// ```
+	//
+	// This allows authorization policies to match individual values within space-separated
+	// claim strings, maintaining compatibility with existing JWT token formats.
+	//
+	// Note: The default claims 'scope' and 'permission' are always treated as space-delimited
+	// regardless of this setting.
+	// +protoc-gen-crd:list-value-validation:MinLength=1
+	// +kubebuilder:validation:MaxItems=64
+	SpaceDelimitedClaims []string `protobuf:"bytes,14,rep,name=space_delimited_claims,json=spaceDelimitedClaims,proto3" json:"space_delimited_claims,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *JWTRule) Reset() {
@@ -620,6 +656,13 @@ func (x *JWTRule) GetOutputClaimToHeaders() []*ClaimToHeader {
 func (x *JWTRule) GetTimeout() *duration.Duration {
 	if x != nil {
 		return x.Timeout
+	}
+	return nil
+}
+
+func (x *JWTRule) GetSpaceDelimitedClaims() []string {
+	if x != nil {
+		return x.SpaceDelimitedClaims
 	}
 	return nil
 }
@@ -752,7 +795,7 @@ const file_security_v1beta1_request_authentication_proto_rawDesc = "" +
 	"\n" +
 	"targetRefs\x18\x04 \x03(\v2).istio.type.v1beta1.PolicyTargetReferenceR\n" +
 	"targetRefs\x12<\n" +
-	"\tjwt_rules\x18\x02 \x03(\v2\x1f.istio.security.v1beta1.JWTRuleR\bjwtRules\"\xfa\x03\n" +
+	"\tjwt_rules\x18\x02 \x03(\v2\x1f.istio.security.v1beta1.JWTRuleR\bjwtRules\"\xb0\x04\n" +
 	"\aJWTRule\x12\x16\n" +
 	"\x06issuer\x18\x01 \x01(\tR\x06issuer\x12\x1c\n" +
 	"\taudiences\x18\x02 \x03(\tR\taudiences\x12\x19\n" +
@@ -766,7 +809,8 @@ const file_security_v1beta1_request_authentication_proto_rawDesc = "" +
 	"\ffrom_cookies\x18\f \x03(\tR\vfromCookies\x124\n" +
 	"\x16forward_original_token\x18\t \x01(\bR\x14forwardOriginalToken\x12\\\n" +
 	"\x17output_claim_to_headers\x18\v \x03(\v2%.istio.security.v1beta1.ClaimToHeaderR\x14outputClaimToHeaders\x123\n" +
-	"\atimeout\x18\r \x01(\v2\x19.google.protobuf.DurationR\atimeout\"=\n" +
+	"\atimeout\x18\r \x01(\v2\x19.google.protobuf.DurationR\atimeout\x124\n" +
+	"\x16space_delimited_claims\x18\x0e \x03(\tR\x14spaceDelimitedClaims\"=\n" +
 	"\tJWTHeader\x12\x18\n" +
 	"\x04name\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x04name\x12\x16\n" +
 	"\x06prefix\x18\x02 \x01(\tR\x06prefix\"I\n" +
