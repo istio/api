@@ -681,6 +681,32 @@ Supported values are "brotli", "gzip", and "zstd".
 		},
 	}
 
+	SidecarStatsEvictionInterval = Instance {
+		Name:          "sidecar.istio.io/statsEvictionInterval",
+		Description:   "Specifies the expiration interval for the Istio standard "+
+                        "metrics. This gets rounded to a multiple of the flush "+
+                        "interval. A time series is expected to be evicted after 2 "+
+                        "iterations of this interval from the last measurement.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
+	SidecarStatsFlushInterval = Instance {
+		Name:          "sidecar.istio.io/statsFlushInterval",
+		Description:   "Specifies the flush interval for push-based stat sinks, "+
+                        "e.g. OTLP. Default interval is `5s`.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	SidecarStatsHistogramBuckets = Instance {
 		Name:          "sidecar.istio.io/statsHistogramBuckets",
 		Description:   "Specifies the custom histogram buckets with a prefix "+
@@ -968,6 +994,8 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarProxyMemoryLimit,
 		&SidecarRewriteAppHTTPProbers,
 		&SidecarStatsCompression,
+		&SidecarStatsEvictionInterval,
+		&SidecarStatsFlushInterval,
 		&SidecarStatsHistogramBuckets,
 		&SidecarStatsInclusionPrefixes,
 		&SidecarStatsInclusionRegexps,
