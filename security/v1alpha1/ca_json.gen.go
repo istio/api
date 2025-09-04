@@ -28,6 +28,17 @@ func (this *IstioCertificateResponse) UnmarshalJSON(b []byte) error {
 	return CaUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for Roots
+func (this *Roots) MarshalJSON() ([]byte, error) {
+	str, err := CaMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for Roots
+func (this *Roots) UnmarshalJSON(b []byte) error {
+	return CaUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 var (
 	CaMarshaler   = &jsonpb.Marshaler{}
 	CaUnmarshaler = &jsonpb.Unmarshaler{AllowUnknownFields: true}
