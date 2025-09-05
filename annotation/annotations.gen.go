@@ -707,6 +707,20 @@ Supported values are "brotli", "gzip", and "zstd".
 		},
 	}
 
+	SidecarStatsHistogramBins = Instance {
+		Name:          "sidecar.istio.io/statsHistogramBins",
+		Description:   "Specifies the bin size per time series for the Istio "+
+                        "standard metrics histograms. Reducing this value from the "+
+                        "default `100` decreases overall memory usage for sparse "+
+                        "and/or high cardinality histograms.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	SidecarStatsHistogramBuckets = Instance {
 		Name:          "sidecar.istio.io/statsHistogramBuckets",
 		Description:   "Specifies the custom histogram buckets with a prefix "+
@@ -996,6 +1010,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarStatsCompression,
 		&SidecarStatsEvictionInterval,
 		&SidecarStatsFlushInterval,
+		&SidecarStatsHistogramBins,
 		&SidecarStatsHistogramBuckets,
 		&SidecarStatsInclusionPrefixes,
 		&SidecarStatsInclusionRegexps,
