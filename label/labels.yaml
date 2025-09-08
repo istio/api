@@ -61,20 +61,22 @@ labels:
       - WorkloadEntry
 
   - name: istio.io/rev
-    featureStatus: Alpha
-    description: Istio control plane revision associated with the resource; e.g. `canary`
+    featureStatus: Beta
+    description: Istio control plane revision or tag associated with the resource; e.g. `canary`
     hidden: false
     deprecated: false
     resources:
       - Namespace
+      - Gateway
+      - Pod
 
   - name: istio.io/tag
     featureStatus: Alpha
-    description: Istio control plane tag name associated with the resource; e.g. `canary`
+    description: Istio control plane tag name associated with the resource - for internal use only
     hidden: false
     deprecated: false
     resources:
-      - Namespace
+      - MutatingWebhookConfiguration
 
   - name: operator.istio.io/component
     featureStatus: Alpha
