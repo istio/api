@@ -609,6 +609,19 @@ cannot be used with Unix domain socket endpoints.</p>
 
 </td>
 </tr>
+<tr id="ServiceEntry-Resolution-DELAYED_DNS">
+<td><code><a href="#ServiceEntry-Resolution-DELAYED_DNS">DELAYED_DNS</a></code></td>
+<td>
+<p>Similar to DNS, but delays request hostname resolution until runtime.
+Initial DNS resolution returns the allocated VIP for the matching wildcard
+hosts specified in the ServiceEntry. <code>DELAYED_DNS</code> must be used with
+wildcard hosts. Depending on the traffic type, the proxy will resolve
+the DNS address specified in the hosts header or SNI of the proxied
+request. Specified endpoints will be ignored. Only supported for
+<code>MESH_EXTERNAL</code> ServiceEntries.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>

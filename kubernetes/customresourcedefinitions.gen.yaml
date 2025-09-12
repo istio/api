@@ -7748,9 +7748,6 @@ spec:
                 description: The hosts associated with the ServiceEntry.
                 items:
                   type: string
-                  x-kubernetes-validations:
-                  - message: hostname cannot be wildcard
-                    rule: self != "*"
                 maxItems: 256
                 minItems: 1
                 type: array
@@ -7808,12 +7805,13 @@ spec:
                 description: |-
                   Service resolution mode for the hosts.
 
-                  Valid Options: NONE, STATIC, DNS, DNS_ROUND_ROBIN
+                  Valid Options: NONE, STATIC, DNS, DNS_ROUND_ROBIN, DELAYED_DNS
                 enum:
                 - NONE
                 - STATIC
                 - DNS
                 - DNS_ROUND_ROBIN
+                - DELAYED_DNS
                 type: string
               subjectAltNames:
                 description: If specified, the proxy will verify that the server certificate's
@@ -7854,6 +7852,9 @@ spec:
             - message: DNS_ROUND_ROBIN mode cannot have multiple endpoints
               rule: '((has(self.resolution) ? self.resolution : "") == "DNS_ROUND_ROBIN")
                 ? ((has(self.endpoints) ? self.endpoints : []).size() <= 1) : true'
+            - message: hostname cannot be wildcard
+              rule: '!(self.hosts == "*" && self.resolution in ["STATIC", "DNS", "DNS_ROUND_ROBIN",
+                "NONE"])'
           status:
             properties:
               conditions:
@@ -8046,9 +8047,6 @@ spec:
                 description: The hosts associated with the ServiceEntry.
                 items:
                   type: string
-                  x-kubernetes-validations:
-                  - message: hostname cannot be wildcard
-                    rule: self != "*"
                 maxItems: 256
                 minItems: 1
                 type: array
@@ -8106,12 +8104,13 @@ spec:
                 description: |-
                   Service resolution mode for the hosts.
 
-                  Valid Options: NONE, STATIC, DNS, DNS_ROUND_ROBIN
+                  Valid Options: NONE, STATIC, DNS, DNS_ROUND_ROBIN, DELAYED_DNS
                 enum:
                 - NONE
                 - STATIC
                 - DNS
                 - DNS_ROUND_ROBIN
+                - DELAYED_DNS
                 type: string
               subjectAltNames:
                 description: If specified, the proxy will verify that the server certificate's
@@ -8152,6 +8151,9 @@ spec:
             - message: DNS_ROUND_ROBIN mode cannot have multiple endpoints
               rule: '((has(self.resolution) ? self.resolution : "") == "DNS_ROUND_ROBIN")
                 ? ((has(self.endpoints) ? self.endpoints : []).size() <= 1) : true'
+            - message: hostname cannot be wildcard
+              rule: '!(self.hosts == "*" && self.resolution in ["STATIC", "DNS", "DNS_ROUND_ROBIN",
+                "NONE"])'
           status:
             properties:
               conditions:
@@ -8344,9 +8346,6 @@ spec:
                 description: The hosts associated with the ServiceEntry.
                 items:
                   type: string
-                  x-kubernetes-validations:
-                  - message: hostname cannot be wildcard
-                    rule: self != "*"
                 maxItems: 256
                 minItems: 1
                 type: array
@@ -8404,12 +8403,13 @@ spec:
                 description: |-
                   Service resolution mode for the hosts.
 
-                  Valid Options: NONE, STATIC, DNS, DNS_ROUND_ROBIN
+                  Valid Options: NONE, STATIC, DNS, DNS_ROUND_ROBIN, DELAYED_DNS
                 enum:
                 - NONE
                 - STATIC
                 - DNS
                 - DNS_ROUND_ROBIN
+                - DELAYED_DNS
                 type: string
               subjectAltNames:
                 description: If specified, the proxy will verify that the server certificate's
@@ -8450,6 +8450,9 @@ spec:
             - message: DNS_ROUND_ROBIN mode cannot have multiple endpoints
               rule: '((has(self.resolution) ? self.resolution : "") == "DNS_ROUND_ROBIN")
                 ? ((has(self.endpoints) ? self.endpoints : []).size() <= 1) : true'
+            - message: hostname cannot be wildcard
+              rule: '!(self.hosts == "*" && self.resolution in ["STATIC", "DNS", "DNS_ROUND_ROBIN",
+                "NONE"])'
           status:
             properties:
               conditions:

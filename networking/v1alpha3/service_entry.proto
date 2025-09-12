@@ -440,6 +440,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // +kubebuilder:validation:XValidation:message="CIDR addresses are allowed only for NONE/STATIC resolution types",rule="!(default(self.addresses, []).exists(k, k.contains('/')) && !(default(self.resolution, 'NONE') in ['STATIC', 'NONE']))"
 // +kubebuilder:validation:XValidation:message="NONE mode cannot set endpoints",rule="default(self.resolution, 'NONE') == 'NONE' ? !has(self.endpoints) : true"
 // +kubebuilder:validation:XValidation:message="DNS_ROUND_ROBIN mode cannot have multiple endpoints",rule="default(self.resolution, '') == 'DNS_ROUND_ROBIN' ? default(self.endpoints, []).size() <= 1 : true"
+// +kubebuilder:validation:XValidation:message="hostname cannot be wildcard",rule="!(self.hosts == '*' && (self.resolution) in ['STATIC', 'DNS', 'DNS_ROUND_ROBIN', 'NONE'])"
 message ServiceEntry {
   // The hosts associated with the ServiceEntry. Could be a DNS
   // name with wildcard prefix.
@@ -466,7 +467,6 @@ message ServiceEntry {
   //    SANs specified here will also be verified.
   // +kubebuilder:validation:MinItems=1
   // +kubebuilder:validation:MaxItems=256
-  // +protoc-gen-crd:list-value-validation:XValidation:message="hostname cannot be wildcard",rule="self != '*'"
   repeated string hosts = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The virtual IP addresses associated with the service. Could be CIDR
@@ -560,6 +560,15 @@ message ServiceEntry {
     // specified in the hosts field, if wildcards are not used. DNS resolution
     // cannot be used with Unix domain socket endpoints.
     DNS_ROUND_ROBIN = 3;
+
+    // Similar to DNS, but delays request hostname resolution until runtime.
+    // Initial DNS resolution returns the allocated VIP for the matching wildcard
+    // hosts specified in the ServiceEntry. `DELAYED_DNS` must be used with
+    // wildcard hosts. Depending on the traffic type, the proxy will resolve
+    // the DNS address specified in the hosts header or SNI of the proxied
+    // request. Specified endpoints will be ignored. Only supported for
+    // `MESH_EXTERNAL` ServiceEntries.
+    DELAYED_DNS = 4;
   }
 
   // Service resolution mode for the hosts. Care must be taken

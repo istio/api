@@ -517,6 +517,14 @@ const (
 	// specified in the hosts field, if wildcards are not used. DNS resolution
 	// cannot be used with Unix domain socket endpoints.
 	ServiceEntry_DNS_ROUND_ROBIN ServiceEntry_Resolution = 3
+	// Similar to DNS, but delays request hostname resolution until runtime.
+	// Initial DNS resolution returns the allocated VIP for the matching wildcard
+	// hosts specified in the ServiceEntry. `DELAYED_DNS` must be used with
+	// wildcard hosts. Depending on the traffic type, the proxy will resolve
+	// the DNS address specified in the hosts header or SNI of the proxied
+	// request. Specified endpoints will be ignored. Only supported for
+	// `MESH_EXTERNAL` ServiceEntries.
+	ServiceEntry_DELAYED_DNS ServiceEntry_Resolution = 4
 )
 
 // Enum value maps for ServiceEntry_Resolution.
@@ -526,12 +534,14 @@ var (
 		1: "STATIC",
 		2: "DNS",
 		3: "DNS_ROUND_ROBIN",
+		4: "DELAYED_DNS",
 	}
 	ServiceEntry_Resolution_value = map[string]int32{
 		"NONE":            0,
 		"STATIC":          1,
 		"DNS":             2,
 		"DNS_ROUND_ROBIN": 3,
+		"DELAYED_DNS":     4,
 	}
 )
 
@@ -597,6 +607,7 @@ func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 // +kubebuilder:validation:XValidation:message="CIDR addresses are allowed only for NONE/STATIC resolution types",rule="!(default(self.addresses, []).exists(k, k.contains('/')) && !(default(self.resolution, 'NONE') in ['STATIC', 'NONE']))"
 // +kubebuilder:validation:XValidation:message="NONE mode cannot set endpoints",rule="default(self.resolution, 'NONE') == 'NONE' ? !has(self.endpoints) : true"
 // +kubebuilder:validation:XValidation:message="DNS_ROUND_ROBIN mode cannot have multiple endpoints",rule="default(self.resolution, ”) == 'DNS_ROUND_ROBIN' ? default(self.endpoints, []).size() <= 1 : true"
+// +kubebuilder:validation:XValidation:message="hostname cannot be wildcard",rule="!(self.hosts == '*' && (self.resolution) in ['STATIC', 'DNS', 'DNS_ROUND_ROBIN', 'NONE'])"
 type ServiceEntry struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The hosts associated with the ServiceEntry. Could be a DNS
@@ -625,7 +636,6 @@ type ServiceEntry struct {
 	//
 	// +kubebuilder:validation:MinItems=1
 	// +kubebuilder:validation:MaxItems=256
-	// +protoc-gen-crd:list-value-validation:XValidation:message="hostname cannot be wildcard",rule="self != '*'"
 	Hosts []string `protobuf:"bytes,1,rep,name=hosts,proto3" json:"hosts,omitempty"`
 	// The virtual IP addresses associated with the service. Could be CIDR
 	// prefix. For HTTP traffic, generated route configurations will include http route
@@ -1018,7 +1028,7 @@ var File_networking_v1alpha3_service_entry_proto protoreflect.FileDescriptor
 
 const file_networking_v1alpha3_service_entry_proto_rawDesc = "" +
 	"\n" +
-	"'networking/v1alpha3/service_entry.proto\x12\x19istio.networking.v1alpha3\x1a\x1fanalysis/v1alpha1/message.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1ameta/v1alpha1/status.proto\x1a!networking/v1alpha3/sidecar.proto\x1a(networking/v1alpha3/workload_entry.proto\"\x87\x05\n" +
+	"'networking/v1alpha3/service_entry.proto\x12\x19istio.networking.v1alpha3\x1a\x1fanalysis/v1alpha1/message.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1ameta/v1alpha1/status.proto\x1a!networking/v1alpha3/sidecar.proto\x1a(networking/v1alpha3/workload_entry.proto\"\x98\x05\n" +
 	"\fServiceEntry\x12\x1a\n" +
 	"\x05hosts\x18\x01 \x03(\tB\x04\xe2A\x01\x02R\x05hosts\x12\x1c\n" +
 	"\taddresses\x18\x02 \x03(\tR\taddresses\x12<\n" +
@@ -1033,14 +1043,15 @@ const file_networking_v1alpha3_service_entry_proto_rawDesc = "" +
 	"\x11subject_alt_names\x18\b \x03(\tR\x0fsubjectAltNames\"0\n" +
 	"\bLocation\x12\x11\n" +
 	"\rMESH_EXTERNAL\x10\x00\x12\x11\n" +
-	"\rMESH_INTERNAL\x10\x01\"@\n" +
+	"\rMESH_INTERNAL\x10\x01\"Q\n" +
 	"\n" +
 	"Resolution\x12\b\n" +
 	"\x04NONE\x10\x00\x12\n" +
 	"\n" +
 	"\x06STATIC\x10\x01\x12\a\n" +
 	"\x03DNS\x10\x02\x12\x13\n" +
-	"\x0fDNS_ROUND_ROBIN\x10\x03\"\x82\x01\n" +
+	"\x0fDNS_ROUND_ROBIN\x10\x03\x12\x0f\n" +
+	"\vDELAYED_DNS\x10\x04\"\x82\x01\n" +
 	"\vServicePort\x12\x1c\n" +
 	"\x06number\x18\x01 \x01(\rB\x04\xe2A\x01\x02R\x06number\x12\x1a\n" +
 	"\bprotocol\x18\x02 \x01(\tR\bprotocol\x12\x18\n" +

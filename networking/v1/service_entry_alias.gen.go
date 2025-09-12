@@ -38,6 +38,7 @@ import "istio.io/api/networking/v1alpha3"
 // +kubebuilder:validation:XValidation:message="CIDR addresses are allowed only for NONE/STATIC resolution types",rule="!(default(self.addresses, []).exists(k, k.contains('/')) && !(default(self.resolution, 'NONE') in ['STATIC', 'NONE']))"
 // +kubebuilder:validation:XValidation:message="NONE mode cannot set endpoints",rule="default(self.resolution, 'NONE') == 'NONE' ? !has(self.endpoints) : true"
 // +kubebuilder:validation:XValidation:message="DNS_ROUND_ROBIN mode cannot have multiple endpoints",rule="default(self.resolution, ”) == 'DNS_ROUND_ROBIN' ? default(self.endpoints, []).size() <= 1 : true"
+// +kubebuilder:validation:XValidation:message="hostname cannot be wildcard",rule="!(self.hosts == '*' && (self.resolution) in ['STATIC', 'DNS', 'DNS_ROUND_ROBIN', 'NONE'])"
 type ServiceEntry = v1alpha3.ServiceEntry
 
 // Location specifies whether the service is part of Istio mesh or
@@ -99,6 +100,15 @@ const ServiceEntry_DNS ServiceEntry_Resolution = v1alpha3.ServiceEntry_DNS
 // specified in the hosts field, if wildcards are not used. DNS resolution
 // cannot be used with Unix domain socket endpoints.
 const ServiceEntry_DNS_ROUND_ROBIN ServiceEntry_Resolution = v1alpha3.ServiceEntry_DNS_ROUND_ROBIN
+
+// Similar to DNS, but delays request hostname resolution until runtime.
+// Initial DNS resolution returns the allocated VIP for the matching wildcard
+// hosts specified in the ServiceEntry. `DELAYED_DNS` must be used with
+// wildcard hosts. Depending on the traffic type, the proxy will resolve
+// the DNS address specified in the hosts header or SNI of the proxied
+// request. Specified endpoints will be ignored. Only supported for
+// `MESH_EXTERNAL` ServiceEntries.
+const ServiceEntry_DELAYED_DNS ServiceEntry_Resolution = v1alpha3.ServiceEntry_DELAYED_DNS
 
 // ServicePort describes the properties of a specific port of a service.
 type ServicePort = v1alpha3.ServicePort
