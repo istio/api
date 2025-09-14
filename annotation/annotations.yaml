@@ -363,7 +363,7 @@ annotations:
   - name: traffic.sidecar.istio.io/kubevirtInterfaces
     featureStatus: Alpha
     description: A comma separated list of virtual interfaces whose inbound traffic
-      (from VM) will be treated as outbound. Deprecated in favor of `istio.io/redirect-virtual-interfaces`
+      (from VM) will be treated as outbound. Deprecated in favor of `istio.io/reroute-virtual-interfaces`
     deprecated: true
     hidden: false
     resources:
