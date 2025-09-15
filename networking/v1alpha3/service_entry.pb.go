@@ -524,7 +524,8 @@ const (
 	// wildcard hosts. Depending on the traffic type, the proxy will resolve
 	// the DNS address specified in the Hosts header or SNI of the proxied
 	// request. Specified endpoints will be ignored. Only supported for
-	// `MESH_EXTERNAL` ServiceEntries.
+	// `MESH_EXTERNAL` ServiceEntries and in ambient mode. The ServiceEntry
+	// must be bound to a waypoint.
 	ServiceEntry_DYNAMIC_DNS ServiceEntry_Resolution = 4
 )
 

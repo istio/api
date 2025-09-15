@@ -619,7 +619,8 @@ hosts specified in the ServiceEntry. <code>DYNAMIC_DNS</code> must be used with
 wildcard hosts. Depending on the traffic type, the proxy will resolve
 the DNS address specified in the Hosts header or SNI of the proxied
 request. Specified endpoints will be ignored. Only supported for
-<code>MESH_EXTERNAL</code> ServiceEntries.</p>
+<code>MESH_EXTERNAL</code> ServiceEntries and in ambient mode. The ServiceEntry
+must be bound to a waypoint.</p>
 
 </td>
 </tr>
