@@ -609,14 +609,15 @@ cannot be used with Unix domain socket endpoints.</p>
 
 </td>
 </tr>
-<tr id="ServiceEntry-Resolution-DELAYED_DNS">
-<td><code><a href="#ServiceEntry-Resolution-DELAYED_DNS">DELAYED_DNS</a></code></td>
+<tr id="ServiceEntry-Resolution-DYNAMIC_DNS">
+<td><code><a href="#ServiceEntry-Resolution-DYNAMIC_DNS">DYNAMIC_DNS</a></code></td>
 <td>
-<p>Similar to DNS, but delays request hostname resolution until runtime.
-Initial DNS resolution returns the allocated VIP for the matching wildcard
-hosts specified in the ServiceEntry. <code>DELAYED_DNS</code> must be used with
+<p>Similar to DNS, by obtains the FQDN from the Host header or SNI to
+perform DNS resolution when the matching Host is a wildcard. Initial
+DNS resolution returns the allocated VIP for the matching wildcard
+hosts specified in the ServiceEntry. <code>DYNAMIC_DNS</code> must be used with
 wildcard hosts. Depending on the traffic type, the proxy will resolve
-the DNS address specified in the hosts header or SNI of the proxied
+the DNS address specified in the Hosts header or SNI of the proxied
 request. Specified endpoints will be ignored. Only supported for
 <code>MESH_EXTERNAL</code> ServiceEntries.</p>
 

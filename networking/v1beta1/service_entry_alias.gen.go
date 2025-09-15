@@ -101,15 +101,6 @@ const ServiceEntry_DNS ServiceEntry_Resolution = v1alpha3.ServiceEntry_DNS
 // cannot be used with Unix domain socket endpoints.
 const ServiceEntry_DNS_ROUND_ROBIN ServiceEntry_Resolution = v1alpha3.ServiceEntry_DNS_ROUND_ROBIN
 
-// Similar to DNS, but delays request hostname resolution until runtime.
-// Initial DNS resolution returns the allocated VIP for the matching wildcard
-// hosts specified in the ServiceEntry. `DELAYED_DNS` must be used with
-// wildcard hosts. Depending on the traffic type, the proxy will resolve
-// the DNS address specified in the hosts header or SNI of the proxied
-// request. Specified endpoints will be ignored. Only supported for
-// `MESH_EXTERNAL` ServiceEntries.
-const ServiceEntry_DELAYED_DNS ServiceEntry_Resolution = v1alpha3.ServiceEntry_DELAYED_DNS
-
 // ServicePort describes the properties of a specific port of a service.
 type ServicePort = v1alpha3.ServicePort
 type ServiceEntryStatus = v1alpha3.ServiceEntryStatus

@@ -517,14 +517,15 @@ const (
 	// specified in the hosts field, if wildcards are not used. DNS resolution
 	// cannot be used with Unix domain socket endpoints.
 	ServiceEntry_DNS_ROUND_ROBIN ServiceEntry_Resolution = 3
-	// Similar to DNS, but delays request hostname resolution until runtime.
-	// Initial DNS resolution returns the allocated VIP for the matching wildcard
-	// hosts specified in the ServiceEntry. `DELAYED_DNS` must be used with
+	// Similar to DNS, by obtains the FQDN from the Host header or SNI to
+	// perform DNS resolution when the matching Host is a wildcard. Initial
+	// DNS resolution returns the allocated VIP for the matching wildcard
+	// hosts specified in the ServiceEntry. `DYNAMIC_DNS` must be used with
 	// wildcard hosts. Depending on the traffic type, the proxy will resolve
-	// the DNS address specified in the hosts header or SNI of the proxied
+	// the DNS address specified in the Hosts header or SNI of the proxied
 	// request. Specified endpoints will be ignored. Only supported for
 	// `MESH_EXTERNAL` ServiceEntries.
-	ServiceEntry_DELAYED_DNS ServiceEntry_Resolution = 4
+	ServiceEntry_DYNAMIC_DNS ServiceEntry_Resolution = 4
 )
 
 // Enum value maps for ServiceEntry_Resolution.
@@ -534,14 +535,14 @@ var (
 		1: "STATIC",
 		2: "DNS",
 		3: "DNS_ROUND_ROBIN",
-		4: "DELAYED_DNS",
+		4: "DYNAMIC_DNS",
 	}
 	ServiceEntry_Resolution_value = map[string]int32{
 		"NONE":            0,
 		"STATIC":          1,
 		"DNS":             2,
 		"DNS_ROUND_ROBIN": 3,
-		"DELAYED_DNS":     4,
+		"DYNAMIC_DNS":     4,
 	}
 )
 
@@ -1051,7 +1052,7 @@ const file_networking_v1alpha3_service_entry_proto_rawDesc = "" +
 	"\x06STATIC\x10\x01\x12\a\n" +
 	"\x03DNS\x10\x02\x12\x13\n" +
 	"\x0fDNS_ROUND_ROBIN\x10\x03\x12\x0f\n" +
-	"\vDELAYED_DNS\x10\x04\"\x82\x01\n" +
+	"\vDYNAMIC_DNS\x10\x04\"\x82\x01\n" +
 	"\vServicePort\x12\x1c\n" +
 	"\x06number\x18\x01 \x01(\rB\x04\xe2A\x01\x02R\x06number\x12\x1a\n" +
 	"\bprotocol\x18\x02 \x01(\tR\bprotocol\x12\x18\n" +
