@@ -909,7 +909,7 @@ Supported values are "brotli", "gzip", and "zstd".
 		Description:   "A comma separated list of virtual interfaces whose "+
                         "inbound traffic (from VM) will be treated as outbound. "+
                         "Deprecated in favor of "+
-                        "`istio.io/redirect-virtual-interfaces`",
+                        "`istio.io/reroute-virtual-interfaces`",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    true,
