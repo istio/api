@@ -37,10 +37,6 @@ protocol. If the traffic is matched, then it is sent to a named destination serv
 (or subset/version of it) defined in the registry.</p>
 <p>The source of traffic can also be matched in a routing rule. This allows routing
 to be customized for specific client contexts.</p>
-<p><em>Note for Ambient Users</em>: Support for <code>VirtualService</code> in Ambient mode is alpha, and
-there are no plans to increase support.
-Use <a href="https://istio.io/latest/docs/tasks/traffic-management/ingress/gateway-api/#mesh-traffic">Gateway API</a>
-for a stable traffic management API.</p>
 <p>The following example on Kubernetes, routes all HTTP traffic by default to
 pods of the reviews service with label &ldquo;version: v1&rdquo;. In addition,
 HTTP requests with path starting with /wpcatalog/ or /consumercatalog/ will
@@ -1092,7 +1088,6 @@ in the top-level <code>gateways</code> field, it must include the reserved gatew
 <code>mesh</code> for this field to be applicable.</p>
 <p><strong>Note:</strong> This is not a runtime match, but is a selector; it filters which workloads the
 VirtualService applies to.</p>
-<p><strong>Note:</strong> Ambient mode does not support this field.</p>
 
 </td>
 </tr>
@@ -1167,7 +1162,6 @@ If the VirtualService has a list of gateways specified in the top-level <code>ga
 it must include the reserved gateway <code>mesh</code> for this field to be applicable.</p>
 <p><strong>Note:</strong> This is not a runtime match, but is a selector; it filters which workloads the
 VirtualService applies to.</p>
-<p><strong>Note:</strong> Ambient mode does not support this field.</p>
 
 </td>
 </tr>
@@ -1373,7 +1367,6 @@ gateways specified in the top-level <code>gateways</code> field, it should inclu
 <code>mesh</code> in order for this field to be applicable.</p>
 <p><strong>Note:</strong> This is not a runtime match, but is a selector; it filters which workloads the
 VirtualService applies to.</p>
-<p><strong>Note:</strong> Ambient mode does not support this field.</p>
 
 </td>
 </tr>
@@ -1398,7 +1391,6 @@ If the VirtualService has a list of gateways specified in the top-level <code>ga
 it must include the reserved gateway <code>mesh</code> for this field to be applicable.</p>
 <p><strong>Note:</strong> This is not a runtime match, but is a selector; it filters which workloads the
 VirtualService applies to.</p>
-<p><strong>Note:</strong> Ambient mode does not support this field.</p>
 
 </td>
 </tr>
@@ -1463,7 +1455,6 @@ gateways specified in the top-level <code>gateways</code> field, it should inclu
 <code>mesh</code> in order for this field to be applicable.</p>
 <p><strong>Note:</strong> This is not a runtime match, but is a selector; it filters which workloads the
 VirtualService applies to.</p>
-<p><strong>Note:</strong> Ambient mode does not support this field.</p>
 
 </td>
 </tr>
@@ -1488,7 +1479,6 @@ If the VirtualService has a list of gateways specified in the top-level <code>ga
 it must include the reserved gateway <code>mesh</code> for this field to be applicable.</p>
 <p><strong>Note:</strong> This is not a runtime match, but is a selector; it filters which workloads the
 VirtualService applies to.</p>
-<p><strong>Note:</strong> Ambient mode does not support this field.</p>
 
 </td>
 </tr>

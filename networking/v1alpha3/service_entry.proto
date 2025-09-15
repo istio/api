@@ -465,7 +465,7 @@ message ServiceEntry {
   //    service accounts associated with the pods of the service, the
   //    SANs specified here will also be verified.
   //
-  // **NOTE 3:** Ambient mode does not support wildcard hostsnames.
+  // **NOTE 3:** Ztunnel and Waypoint proxies does not support wildcard hostnames.
   //
   // +kubebuilder:validation:MinItems=1
   // +kubebuilder:validation:MaxItems=256
@@ -599,8 +599,7 @@ message ServiceEntry {
   // the annotation "networking.istio.io/exportTo" to a comma-separated list
   // of namespace names.
   //
-  // **Note:** Ambient mode does not support this field. Service entries will
-  // be exported to all namespaces.
+  // **Note:** Ztunnel and Waypoint proxies not support this field and will read it at "*".
   repeated string export_to = 7;
 
   // If specified, the proxy will verify that the server certificate's
