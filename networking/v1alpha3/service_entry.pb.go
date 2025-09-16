@@ -517,15 +517,15 @@ const (
 	// specified in the hosts field, if wildcards are not used. DNS resolution
 	// cannot be used with Unix domain socket endpoints.
 	ServiceEntry_DNS_ROUND_ROBIN ServiceEntry_Resolution = 3
-	// Similar to DNS, by obtains the FQDN from the Host header or SNI to
-	// perform DNS resolution when the matching Host is a wildcard. Initial
-	// DNS resolution returns the allocated VIP for the matching wildcard
-	// hosts specified in the ServiceEntry. `DYNAMIC_DNS` must be used with
-	// wildcard hosts. Depending on the traffic type, the proxy will resolve
-	// the DNS address specified in the Hosts header or SNI of the proxied
-	// request. Specified endpoints will be ignored. Only supported for
-	// `MESH_EXTERNAL` ServiceEntries and in ambient mode. The ServiceEntry
-	// must be bound to a waypoint.
+	// Similar to DNS, but obtains the FQDN from the Host header or SNI to
+	// perform DNS resolution when the matching Host is a wildcard. Client
+	// initiated DNS resolution returns the allocated VIP for the matching
+	// wildcard hosts specified in the ServiceEntry. `DYNAMIC_DNS` must be
+	// used with wildcard hosts. Depending on the traffic type, the proxy
+	// will resolve the DNS address specified in the Hosts header or SNI of
+	// the proxied request. Specified endpoints will be ignored. Only
+	// supported for `MESH_EXTERNAL` ServiceEntries and in ambient mode.
+	// The ServiceEntry must be bound to a waypoint.
 	ServiceEntry_DYNAMIC_DNS ServiceEntry_Resolution = 4
 )
 
