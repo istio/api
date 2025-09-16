@@ -465,7 +465,7 @@ message ServiceEntry {
   //    service accounts associated with the pods of the service, the
   //    SANs specified here will also be verified.
   //
-  // **NOTE 3:** Ztunnel and Waypoint proxies does not support wildcard hostnames.
+  // **NOTE 3:** Ztunnel and Waypoint proxies do not support wildcard hosts.
   //
   // +kubebuilder:validation:MinItems=1
   // +kubebuilder:validation:MaxItems=256

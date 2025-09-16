@@ -623,7 +623,7 @@ type ServiceEntry struct {
 	//     service accounts associated with the pods of the service, the
 	//     SANs specified here will also be verified.
 	//
-	// **NOTE 3:** Ztunnel and Waypoint proxies does not support wildcard hostnames.
+	// **NOTE 3:** Ztunnel and Waypoint proxies do not support wildcard hosts.
 	//
 	// +kubebuilder:validation:MinItems=1
 	// +kubebuilder:validation:MaxItems=256
@@ -690,7 +690,7 @@ type ServiceEntry struct {
 	// the annotation "networking.istio.io/exportTo" to a comma-separated list
 	// of namespace names.
 	//
-	// **Note:** Ztunnel and Waypoint proxies not support this field and will read it at "*"
+	// **Note:** Ztunnel and Waypoint proxies not support this field and will read it at "*".
 	ExportTo []string `protobuf:"bytes,7,rep,name=export_to,json=exportTo,proto3" json:"export_to,omitempty"`
 	// If specified, the proxy will verify that the server certificate's
 	// subject alternate name matches one of the specified values.
