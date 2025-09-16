@@ -609,7 +609,6 @@ func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 // +kubebuilder:validation:XValidation:message="CIDR addresses are allowed only for NONE/STATIC resolution types",rule="!(default(self.addresses, []).exists(k, k.contains('/')) && !(default(self.resolution, 'NONE') in ['STATIC', 'NONE']))"
 // +kubebuilder:validation:XValidation:message="NONE mode cannot set endpoints",rule="default(self.resolution, 'NONE') == 'NONE' ? !has(self.endpoints) : true"
 // +kubebuilder:validation:XValidation:message="DNS_ROUND_ROBIN mode cannot have multiple endpoints",rule="default(self.resolution, ”) == 'DNS_ROUND_ROBIN' ? default(self.endpoints, []).size() <= 1 : true"
-// +kubebuilder:validation:XValidation:message="hostname cannot be wildcard",rule="!(self.hosts == '*' && (self.resolution) in ['STATIC', 'DNS', 'DNS_ROUND_ROBIN', 'NONE'])"
 type ServiceEntry struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The hosts associated with the ServiceEntry. Could be a DNS
@@ -638,6 +637,7 @@ type ServiceEntry struct {
 	//
 	// +kubebuilder:validation:MinItems=1
 	// +kubebuilder:validation:MaxItems=256
+	// +protoc-gen-crd:list-value-validation:XValidation:message="hostname cannot be wildcard",rule="self != '*'"
 	Hosts []string `protobuf:"bytes,1,rep,name=hosts,proto3" json:"hosts,omitempty"`
 	// The virtual IP addresses associated with the service. Could be CIDR
 	// prefix. For HTTP traffic, generated route configurations will include http route

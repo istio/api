@@ -7748,6 +7748,9 @@ spec:
                 description: The hosts associated with the ServiceEntry.
                 items:
                   type: string
+                  x-kubernetes-validations:
+                  - message: hostname cannot be wildcard
+                    rule: self != "*"
                 maxItems: 256
                 minItems: 1
                 type: array
@@ -7852,9 +7855,6 @@ spec:
             - message: DNS_ROUND_ROBIN mode cannot have multiple endpoints
               rule: '((has(self.resolution) ? self.resolution : "") == "DNS_ROUND_ROBIN")
                 ? ((has(self.endpoints) ? self.endpoints : []).size() <= 1) : true'
-            - message: hostname cannot be wildcard
-              rule: '!(self.hosts == "*" && self.resolution in ["STATIC", "DNS", "DNS_ROUND_ROBIN",
-                "NONE"])'
           status:
             properties:
               conditions:
@@ -8047,6 +8047,9 @@ spec:
                 description: The hosts associated with the ServiceEntry.
                 items:
                   type: string
+                  x-kubernetes-validations:
+                  - message: hostname cannot be wildcard
+                    rule: self != "*"
                 maxItems: 256
                 minItems: 1
                 type: array
@@ -8151,9 +8154,6 @@ spec:
             - message: DNS_ROUND_ROBIN mode cannot have multiple endpoints
               rule: '((has(self.resolution) ? self.resolution : "") == "DNS_ROUND_ROBIN")
                 ? ((has(self.endpoints) ? self.endpoints : []).size() <= 1) : true'
-            - message: hostname cannot be wildcard
-              rule: '!(self.hosts == "*" && self.resolution in ["STATIC", "DNS", "DNS_ROUND_ROBIN",
-                "NONE"])'
           status:
             properties:
               conditions:
@@ -8346,6 +8346,9 @@ spec:
                 description: The hosts associated with the ServiceEntry.
                 items:
                   type: string
+                  x-kubernetes-validations:
+                  - message: hostname cannot be wildcard
+                    rule: self != "*"
                 maxItems: 256
                 minItems: 1
                 type: array
@@ -8450,9 +8453,6 @@ spec:
             - message: DNS_ROUND_ROBIN mode cannot have multiple endpoints
               rule: '((has(self.resolution) ? self.resolution : "") == "DNS_ROUND_ROBIN")
                 ? ((has(self.endpoints) ? self.endpoints : []).size() <= 1) : true'
-            - message: hostname cannot be wildcard
-              rule: '!(self.hosts == "*" && self.resolution in ["STATIC", "DNS", "DNS_ROUND_ROBIN",
-                "NONE"])'
           status:
             properties:
               conditions:
