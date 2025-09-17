@@ -100,15 +100,18 @@ const ServiceEntry_DNS ServiceEntry_Resolution = v1alpha3.ServiceEntry_DNS
 // cannot be used with Unix domain socket endpoints.
 const ServiceEntry_DNS_ROUND_ROBIN ServiceEntry_Resolution = v1alpha3.ServiceEntry_DNS_ROUND_ROBIN
 
-// Similar to DNS, but obtains the FQDN from the Host header or SNI to
-// perform DNS resolution when the matching Host is a wildcard. Client
-// initiated DNS resolution returns the allocated VIP for the matching
-// wildcard hosts specified in the ServiceEntry. `DYNAMIC_DNS` must be
-// used with wildcard hosts. Depending on the traffic type, the proxy
-// will resolve the DNS address specified in the Hosts header or SNI of
-// the proxied request. Specified endpoints will be ignored. Only
-// supported for `MESH_EXTERNAL` ServiceEntries and in ambient mode.
-// The ServiceEntry must be bound to a waypoint.
+// DYNAMIC_DNS will attempt to resolve the host name specified in
+// the Host header or SNI to an IP address when handling traffic. This
+// is particularly useful when multiple dns addresses can be represented
+// by a single wildcard `host` entry without having to explicitly
+// enumerate all possible endpoints. DYNAMIC_DNS resolution when
+// egressing the mesh returns the allocated VIP for the matching
+// wildcard `hosts` specified in the ServiceEntry. Depending on the
+// traffic type, the proxy will resolve the address specified in the
+// Hosts header or SNI of the proxied request. `DYNAMIC_DNS` is
+// only supported for wildcard hosts, `MESH_EXTERNAL` location and in
+// ambient mode. The ServiceEntry must be bound to a waypoint. Specified
+// endpoints will be ignored.
 const ServiceEntry_DYNAMIC_DNS ServiceEntry_Resolution = v1alpha3.ServiceEntry_DYNAMIC_DNS
 
 // ServicePort describes the properties of a specific port of a service.

@@ -612,15 +612,18 @@ cannot be used with Unix domain socket endpoints.</p>
 <tr id="ServiceEntry-Resolution-DYNAMIC_DNS">
 <td><code><a href="#ServiceEntry-Resolution-DYNAMIC_DNS">DYNAMIC_DNS</a></code></td>
 <td>
-<p>Similar to DNS, but obtains the FQDN from the Host header or SNI to
-perform DNS resolution when the matching Host is a wildcard. Client
-initiated DNS resolution returns the allocated VIP for the matching
-wildcard hosts specified in the ServiceEntry. <code>DYNAMIC_DNS</code> must be
-used with wildcard hosts. Depending on the traffic type, the proxy
-will resolve the DNS address specified in the Hosts header or SNI of
-the proxied request. Specified endpoints will be ignored. Only
-supported for <code>MESH_EXTERNAL</code> ServiceEntries and in ambient mode.
-The ServiceEntry must be bound to a waypoint.</p>
+<p>DYNAMIC_DNS will attempt to resolve the host name specified in
+the Host header or SNI to an IP address when handling traffic. This
+is particularly useful when multiple dns addresses can be represented
+by a single wildcard <code>host</code> entry without having to explicitly
+enumerate all possible endpoints. DYNAMIC_DNS resolution when
+egressing the mesh returns the allocated VIP for the matching
+wildcard <code>hosts</code> specified in the ServiceEntry. Depending on the
+traffic type, the proxy will resolve the address specified in the
+Hosts header or SNI of the proxied request. <code>DYNAMIC_DNS</code> is
+only supported for wildcard hosts, <code>MESH_EXTERNAL</code> location and in
+ambient mode. The ServiceEntry must be bound to a waypoint. Specified
+endpoints will be ignored.</p>
 
 </td>
 </tr>
