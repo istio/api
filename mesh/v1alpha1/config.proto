@@ -783,6 +783,17 @@ message MeshConfig {
 
     // Defines configuration for a Zipkin tracer.
     message ZipkinTracingProvider {
+      // Available trace context options for handling different trace header formats.
+      enum TraceContextOption {
+        // Use B3 headers only (default behavior).
+        USE_B3 = 0;
+        // Enable B3 and W3C dual header support:
+        // - For downstream: Extract from B3 headers first, fallback to W3C traceparent if B3 is unavailable.
+        // - For upstream: Inject both B3 and W3C traceparent headers.
+        // When this option is NOT set, only B3 headers are used for both extraction and injection.
+        USE_B3_WITH_W3C_PROPAGATION = 1;
+      }
+
       // REQUIRED. Specifies the service that the Zipkin API.
       // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
       // to unambiguously resolve a service in the service registry. The `<Hostname>` is a fully qualified host name of a
@@ -805,6 +816,11 @@ message MeshConfig {
       // Optional. Specifies the endpoint of Zipkin API.
       // The default value is "/api/v2/spans".
       string path = 5;
+
+      // Optional. Determines which trace context format to use for trace header extraction and propagation.
+      // This controls both downstream request header extraction and upstream request header injection.
+      // The default value is USE_B3 to maintain backward compatibility.
+      TraceContextOption trace_context_option = 6;
     }
 
     // Defines configuration for a Lightstep tracer.
