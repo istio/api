@@ -521,14 +521,17 @@ const (
 	// the Host header or SNI to an IP address when handling traffic. This
 	// is particularly useful when multiple dns addresses can be represented
 	// by a single wildcard `host` entry without having to explicitly
-	// enumerate all possible endpoints. DYNAMIC_DNS resolution when
-	// egressing the mesh returns the allocated VIP for the matching
-	// wildcard `hosts` specified in the ServiceEntry. Depending on the
-	// traffic type, the proxy will resolve the address specified in the
-	// Hosts header or SNI of the proxied request. `DYNAMIC_DNS` is
-	// only supported for wildcard hosts, `MESH_EXTERNAL` location and in
-	// ambient mode. The ServiceEntry must be bound to a waypoint. Specified
-	// endpoints will be ignored.
+	// enumerate all possible endpoints. During DNS proxying, ztunnel will
+	// resolve all subdomains matching the wildcard host name to a VIP which
+	// isn't used for routing outside the mesh. `DYNAMIC_DNS` will provide
+	// configuration to a waypoint proxy to recover the original host name
+	// using information from SNI or a Host header in an HTTP Request. This
+	// original host name will then be resolved so that traffic can be routed
+	// to the intended IP address. This method of handling wildcard traffic
+	// is not compatible with raw TCP traffic where the original host cannot
+	// be recovered. `DYNAMIC_DNS` is only supported for wildcard hosts,
+	// `MESH_EXTERNAL` location and in ambient mode. The ServiceEntry must
+	// be bound to a waypoint. Specified endpoints will be ignored.
 	ServiceEntry_DYNAMIC_DNS ServiceEntry_Resolution = 4
 )
 
