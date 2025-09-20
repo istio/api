@@ -162,6 +162,9 @@ type LoadBalancerSettings_ConsistentHashLB_MagLev = v1alpha3.LoadBalancerSetting
 // Consistent Hash load balancer.
 type LoadBalancerSettings_ConsistentHashLB_HTTPCookie = v1alpha3.LoadBalancerSettings_ConsistentHashLB_HTTPCookie
 
+// Attribute defines an API for adding additional attributes for a HTTP cookie.
+type LoadBalancerSettings_ConsistentHashLB_HTTPCookie_Attribute = v1alpha3.LoadBalancerSettings_ConsistentHashLB_HTTPCookie_Attribute
+
 // Hash based on a specific HTTP header.
 type LoadBalancerSettings_ConsistentHashLB_HttpHeaderName = v1alpha3.LoadBalancerSettings_ConsistentHashLB_HttpHeaderName
 
