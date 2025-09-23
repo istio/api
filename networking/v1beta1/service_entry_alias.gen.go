@@ -100,6 +100,23 @@ const ServiceEntry_DNS ServiceEntry_Resolution = v1alpha3.ServiceEntry_DNS
 // cannot be used with Unix domain socket endpoints.
 const ServiceEntry_DNS_ROUND_ROBIN ServiceEntry_Resolution = v1alpha3.ServiceEntry_DNS_ROUND_ROBIN
 
+// DYNAMIC_DNS will attempt to resolve the host name specified in
+// the Host header or SNI to an IP address when handling traffic. This
+// allows multiple DNS addresses to be represented by a single wildcard
+// `host` entry without having to explicitly enumerate all possible
+// endpoints. During DNS proxying, ztunnel will resolve all subdomains
+// matching the wildcard host name to a VIP which isn't used for routing
+// outside the mesh. `DYNAMIC_DNS` will provide configuration to a
+// waypoint proxy to recover the original host name using information
+// from SNI or a Host header in an HTTP Request. This original host name
+// will then be resolved so that traffic can be routed to the intended
+// IP address. This method of handling wildcard traffic is not
+// compatible with raw TCP traffic where the original host cannot
+// be recovered. `DYNAMIC_DNS` is only supported for wildcard hosts,
+// `MESH_EXTERNAL` location and in ambient mode. The ServiceEntry must
+// be bound to a waypoint. Specified endpoints will be ignored.
+const ServiceEntry_DYNAMIC_DNS ServiceEntry_Resolution = v1alpha3.ServiceEntry_DYNAMIC_DNS
+
 // ServicePort describes the properties of a specific port of a service.
 type ServicePort = v1alpha3.ServicePort
 type ServiceEntryStatus = v1alpha3.ServiceEntryStatus

@@ -517,6 +517,22 @@ const (
 	// specified in the hosts field, if wildcards are not used. DNS resolution
 	// cannot be used with Unix domain socket endpoints.
 	ServiceEntry_DNS_ROUND_ROBIN ServiceEntry_Resolution = 3
+	// DYNAMIC_DNS will attempt to resolve the host name specified in
+	// the Host header or SNI to an IP address when handling traffic. This
+	// allows multiple DNS addresses to be represented by a single wildcard
+	// `host` entry without having to explicitly enumerate all possible
+	// endpoints. During DNS proxying, ztunnel will resolve all subdomains
+	// matching the wildcard host name to a VIP which isn't used for routing
+	// outside the mesh. `DYNAMIC_DNS` will provide configuration to a
+	// waypoint proxy to recover the original host name using information
+	// from SNI or a Host header in an HTTP Request. This original host name
+	// will then be resolved so that traffic can be routed to the intended
+	// IP address. This method of handling wildcard traffic is not
+	// compatible with raw TCP traffic where the original host cannot
+	// be recovered. `DYNAMIC_DNS` is only supported for wildcard hosts,
+	// `MESH_EXTERNAL` location and in ambient mode. The ServiceEntry must
+	// be bound to a waypoint. Specified endpoints will be ignored.
+	ServiceEntry_DYNAMIC_DNS ServiceEntry_Resolution = 4
 )
 
 // Enum value maps for ServiceEntry_Resolution.
@@ -526,12 +542,14 @@ var (
 		1: "STATIC",
 		2: "DNS",
 		3: "DNS_ROUND_ROBIN",
+		4: "DYNAMIC_DNS",
 	}
 	ServiceEntry_Resolution_value = map[string]int32{
 		"NONE":            0,
 		"STATIC":          1,
 		"DNS":             2,
 		"DNS_ROUND_ROBIN": 3,
+		"DYNAMIC_DNS":     4,
 	}
 )
 
@@ -1018,7 +1036,7 @@ var File_networking_v1alpha3_service_entry_proto protoreflect.FileDescriptor
 
 const file_networking_v1alpha3_service_entry_proto_rawDesc = "" +
 	"\n" +
-	"'networking/v1alpha3/service_entry.proto\x12\x19istio.networking.v1alpha3\x1a\x1fanalysis/v1alpha1/message.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1ameta/v1alpha1/status.proto\x1a!networking/v1alpha3/sidecar.proto\x1a(networking/v1alpha3/workload_entry.proto\"\x87\x05\n" +
+	"'networking/v1alpha3/service_entry.proto\x12\x19istio.networking.v1alpha3\x1a\x1fanalysis/v1alpha1/message.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1ameta/v1alpha1/status.proto\x1a!networking/v1alpha3/sidecar.proto\x1a(networking/v1alpha3/workload_entry.proto\"\x98\x05\n" +
 	"\fServiceEntry\x12\x1a\n" +
 	"\x05hosts\x18\x01 \x03(\tB\x04\xe2A\x01\x02R\x05hosts\x12\x1c\n" +
 	"\taddresses\x18\x02 \x03(\tR\taddresses\x12<\n" +
@@ -1033,14 +1051,15 @@ const file_networking_v1alpha3_service_entry_proto_rawDesc = "" +
 	"\x11subject_alt_names\x18\b \x03(\tR\x0fsubjectAltNames\"0\n" +
 	"\bLocation\x12\x11\n" +
 	"\rMESH_EXTERNAL\x10\x00\x12\x11\n" +
-	"\rMESH_INTERNAL\x10\x01\"@\n" +
+	"\rMESH_INTERNAL\x10\x01\"Q\n" +
 	"\n" +
 	"Resolution\x12\b\n" +
 	"\x04NONE\x10\x00\x12\n" +
 	"\n" +
 	"\x06STATIC\x10\x01\x12\a\n" +
 	"\x03DNS\x10\x02\x12\x13\n" +
-	"\x0fDNS_ROUND_ROBIN\x10\x03\"\x82\x01\n" +
+	"\x0fDNS_ROUND_ROBIN\x10\x03\x12\x0f\n" +
+	"\vDYNAMIC_DNS\x10\x04\"\x82\x01\n" +
 	"\vServicePort\x12\x1c\n" +
 	"\x06number\x18\x01 \x01(\rB\x04\xe2A\x01\x02R\x06number\x12\x1a\n" +
 	"\bprotocol\x18\x02 \x01(\tR\bprotocol\x12\x18\n" +
