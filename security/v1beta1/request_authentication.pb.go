@@ -497,7 +497,7 @@ type JWTRule struct {
 	//
 	// ``` yaml
 	//
-	//	from_cookies:
+	//	fromCookies:
 	//	- auth-token
 	//
 	// ```

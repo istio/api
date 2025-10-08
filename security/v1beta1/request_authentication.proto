@@ -433,7 +433,7 @@ message JWTRule {
   // For example, if config is:
   //
   // ``` yaml
-  //   from_cookies:
+  //   fromCookies:
   //   - auth-token
   // ```
   // Then JWT will be extracted from `auth-token` cookie in the request.
