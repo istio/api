@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: waypoint
+spec:
+  configPatches:
+    - applyTo: HTTP_FILTER
+      match:
+        context: WAYPOINT
+        waypoint:
+          filter:
+            name: "envoy.filters.network.http_connection_manager"
+            subFilter:
+              name: "envoy.filters.http.router"
+---
