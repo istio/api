@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: waypoint
+  name: waypoint-http-filter
 spec:
   configPatches:
     - applyTo: HTTP_FILTER
@@ -16,11 +16,23 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: waypoint
+  name: waypoint-cluster
 spec:
   configPatches:
     - applyTo: CLUSTER
       match:
         context: WAYPOINT
         waypoint: {}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: add-cluster
+spec:
+  configPatches:
+    - applyTo: CLUSTER
+      patch:
+        operation: ADD
+        value: # cluster specification
+          name: "lua_cluster"
 ---

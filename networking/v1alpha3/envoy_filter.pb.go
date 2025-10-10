@@ -1314,6 +1314,8 @@ type EnvoyFilter_WaypointMatch struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The service port to match on.
 	// If not specified, matches all ports.
+	//
+	// +kubebuilder:validation:XValidation:message="port must be between 1-65535",rule="0 < self && self <= 65535
 	PortNumber uint32 `protobuf:"varint,1,opt,name=port_number,json=portNumber,proto3" json:"port_number,omitempty"`
 	// Match a specific route.
 	Route *EnvoyFilter_WaypointMatch_RouteMatch `protobuf:"bytes,2,opt,name=route,proto3" json:"route,omitempty"`
