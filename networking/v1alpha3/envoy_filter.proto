@@ -420,6 +420,47 @@ syntax = "proto3";
 //             - request_headers:
 //                 header_name: ":path"
 //                 descriptor_key: "path"
+// ```
+//
+// The following example configures client-side throttling for the service `foo.myns.svc.cluster.local` by
+// adding the `envoy.filters.http.admission_control` upstream HTTP filter to its cluster.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: EnvoyFilter
+// metadata:
+//   name: admission-control-example
+//   namespace: myns
+// spec:
+//   configPatches:
+//   - applyTo: UPSTREAM_HTTP_FILTER
+//     match:
+//       context: SIDECAR_OUTBOUND
+//       cluster:
+//         service: foo.myns.svc.cluster.local
+//     patch:
+//       operation: ADD
+//       value:
+//         name: envoy.filters.http.upstream_codec
+//         typed_config:
+//           "@type": type.googleapis.com/envoy.extensions.filters.http.upstream_codec.v3.UpstreamCodec
+//   - applyTo: UPSTREAM_HTTP_FILTER
+//     match:
+//       context: SIDECAR_OUTBOUND
+//       cluster:
+//         service: foo.myns.svc.cluster.local
+//         filter:
+//           name: envoy.filters.http.upstream_codec
+//     patch:
+//       operation: INSERT_BEFORE
+//       value:
+//         name: envoy.filters.http.admission_control
+//         typed_config:
+//           "@type": type.googleapis.com/envoy.extensions.filters.http.admission_control.v3.AdmissionControl
+//           enabled:
+//             default_value: true
+//           success_criteria: {}
+// ```
 package istio.networking.v1alpha3;
 
 import "google/protobuf/struct.proto";
@@ -496,6 +537,9 @@ message EnvoyFilter {
 
     // Applies the patch to the listener filter.
     LISTENER_FILTER = 11;
+
+    // Applies the patch to an upstream HTTP filter in a HTTP cluster.
+    UPSTREAM_HTTP_FILTER = 12;
   }
 
   // PatchContext selects a class of configurations based on the
@@ -538,6 +582,14 @@ message EnvoyFilter {
   // Conditions specified in `ClusterMatch` must be met for the patch
   // to be applied to a cluster.
   message ClusterMatch {
+    // Conditions to match a specific filter within a cluster filter chain.
+    message UpstreamFilterMatch {
+      // The filter name to match on.
+      // For standard Envoy filters, [canonical filter](https://www.envoyproxy.io/docs/envoy/latest/version_history/v1.14.0#deprecated)
+      // names should be used.
+      string name = 1;
+    }
+
     // The service port for which this cluster was generated.  If
     // omitted, applies to clusters for any port.
     // **Note:** for inbound cluster, it is the service target port.
@@ -559,6 +611,9 @@ message EnvoyFilter {
     // cluster, leave all fields in clusterMatch empty, except the
     // name.
     string name = 4;
+
+    // The name of a specific filter to apply the patch to.
+    UpstreamFilterMatch filter = 5;
   }
 
   // Conditions specified in RouteConfigurationMatch must be met for
