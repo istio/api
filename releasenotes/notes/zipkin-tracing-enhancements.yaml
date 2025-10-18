@@ -7,6 +7,10 @@ issue: []
 releaseNotes:
 - |
     **Added** `trace_context_option` field to `ZipkinTracingProvider` in MeshConfig to support configuring trace context propagation format. Users can now choose between B3-only headers (default) or dual B3/W3C header support for better interoperability with W3C trace context systems.
+- |
+    **Added** `timeout` field to `ZipkinTracingProvider` in MeshConfig to allow configuring the timeout for HTTP requests to the Zipkin collector.
+- |
+    **Added** `headers` field to `ZipkinTracingProvider` in MeshConfig to allow adding custom HTTP headers to requests sent to the Zipkin collector.
 
 docs:
 - https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/trace/v3/zipkin.proto#enum-config-trace-v3-zipkinconfig-tracecontextoption
