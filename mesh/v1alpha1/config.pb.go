@@ -3155,7 +3155,7 @@ type MeshConfig_ExtensionProvider_ZipkinTracingProvider struct {
 	// The default value is USE_B3 to maintain backward compatibility.
 	TraceContextOption MeshConfig_ExtensionProvider_ZipkinTracingProvider_TraceContextOption `protobuf:"varint,6,opt,name=trace_context_option,json=traceContextOption,proto3,enum=istio.mesh.v1alpha1.MeshConfig_ExtensionProvider_ZipkinTracingProvider_TraceContextOption" json:"trace_context_option,omitempty"`
 	// Optional. The timeout for the HTTP request to the Zipkin collector.
-	// If not specified, the default timeout from Envoy's configuration will be used.
+	// If not specified, the default timeout from Envoy's configuration will be used (which is 5 seconds currently).
 	Timeout *duration.Duration `protobuf:"bytes,7,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	// Optional. Additional HTTP headers to include in the request to the Zipkin collector.
 	// These headers will be added to the HTTP request when sending spans to the collector.
