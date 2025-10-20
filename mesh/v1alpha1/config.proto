@@ -823,7 +823,7 @@ message MeshConfig {
       TraceContextOption trace_context_option = 6;
 
       // Optional. The timeout for the HTTP request to the Zipkin collector.
-      // If not specified, the default timeout from Envoy's configuration will be used.
+      // If not specified, the default timeout from Envoy's configuration will be used (which is 5 seconds currently).
       google.protobuf.Duration timeout = 7;
 
       // Optional. Additional HTTP headers to include in the request to the Zipkin collector.
