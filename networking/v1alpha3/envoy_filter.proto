@@ -880,7 +880,7 @@ message EnvoyFilter {
 
   // One or more match conditions to be met before a patch is applied
   // to the generated configuration for a given proxy.
-  // +kubebuilder:validation:XValidation:message="only support waypointMatch when context is WAYPOINT",rule="(self.context == 'WAYPOINT' && has(self.waypoint)) || (self.context != 'WAYPOINT' && !has(self.waypoint))"
+  // +kubebuilder:validation:XValidation:message="only support waypointMatch when context is WAYPOINT",rule="has(self.context) ? (self.context == 'WAYPOINT' ? has(self.waypoint) : !has(self.waypoint)) : !has(self.waypoint)"
   message EnvoyConfigObjectMatch {
     // The specific config generation context to match on. istiod
     // generates envoy configuration in the context of a gateway,

@@ -1445,7 +1445,7 @@ func (x *EnvoyFilter_Patch) GetFilterClass() EnvoyFilter_Patch_FilterClass {
 
 // One or more match conditions to be met before a patch is applied
 // to the generated configuration for a given proxy.
-// +kubebuilder:validation:XValidation:message="only support waypointMatch when context is WAYPOINT",rule="(self.context == 'WAYPOINT' && has(self.waypoint)) || (self.context != 'WAYPOINT' && !has(self.waypoint))"
+// +kubebuilder:validation:XValidation:message="only support waypointMatch when context is WAYPOINT",rule="has(self.context) ? (self.context == 'WAYPOINT' ? has(self.waypoint) : !has(self.waypoint)) : !has(self.waypoint)"
 type EnvoyFilter_EnvoyConfigObjectMatch struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The specific config generation context to match on. istiod
