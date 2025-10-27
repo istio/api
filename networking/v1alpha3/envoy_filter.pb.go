@@ -553,8 +553,6 @@ const (
 	EnvoyFilter_SIDECAR_OUTBOUND EnvoyFilter_PatchContext = 2
 	// Gateway listener/route/cluster.
 	EnvoyFilter_GATEWAY EnvoyFilter_PatchContext = 3
-	// Waypoint listener/route/cluster.
-	EnvoyFilter_WAYPOINT EnvoyFilter_PatchContext = 4
 )
 
 // Enum value maps for EnvoyFilter_PatchContext.
@@ -564,14 +562,12 @@ var (
 		1: "SIDECAR_INBOUND",
 		2: "SIDECAR_OUTBOUND",
 		3: "GATEWAY",
-		4: "WAYPOINT",
 	}
 	EnvoyFilter_PatchContext_value = map[string]int32{
 		"ANY":              0,
 		"SIDECAR_INBOUND":  1,
 		"SIDECAR_OUTBOUND": 2,
 		"GATEWAY":          3,
-		"WAYPOINT":         4,
 	}
 )
 
@@ -765,7 +761,7 @@ func (x EnvoyFilter_Patch_Operation) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use EnvoyFilter_Patch_Operation.Descriptor instead.
 func (EnvoyFilter_Patch_Operation) EnumDescriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_envoy_filter_proto_rawDescGZIP(), []int{0, 5, 0}
+	return file_networking_v1alpha3_envoy_filter_proto_rawDescGZIP(), []int{0, 4, 0}
 }
 
 // FilterClass determines the filter insertion point in the filter chain
@@ -831,7 +827,7 @@ func (x EnvoyFilter_Patch_FilterClass) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use EnvoyFilter_Patch_FilterClass.Descriptor instead.
 func (EnvoyFilter_Patch_FilterClass) EnumDescriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_envoy_filter_proto_rawDescGZIP(), []int{0, 5, 1}
+	return file_networking_v1alpha3_envoy_filter_proto_rawDescGZIP(), []int{0, 4, 1}
 }
 
 // EnvoyFilter provides a mechanism to customize the Envoy configuration
@@ -1310,74 +1306,6 @@ func (x *EnvoyFilter_ListenerMatch) GetName() string {
 	return ""
 }
 
-type EnvoyFilter_WaypointMatch struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// The service port to match on.
-	// If not specified, matches all ports.
-	//
-	// +kubebuilder:validation:XValidation:message="port must be between 1-65535",rule="0 < self && self <= 65535
-	PortNumber uint32 `protobuf:"varint,1,opt,name=port_number,json=portNumber,proto3" json:"port_number,omitempty"`
-	// Match a specific route.
-	Route *EnvoyFilter_WaypointMatch_RouteMatch `protobuf:"bytes,2,opt,name=route,proto3" json:"route,omitempty"`
-	// The name of a specific filter to apply the patch to.
-	// Set this to `envoy.filters.network.http_connection_manager`
-	// to add a filter or apply a patch to the HTTP connection manager.
-	Filter        *EnvoyFilter_WaypointMatch_FilterMatch `protobuf:"bytes,3,opt,name=filter,proto3" json:"filter,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *EnvoyFilter_WaypointMatch) Reset() {
-	*x = EnvoyFilter_WaypointMatch{}
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[5]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *EnvoyFilter_WaypointMatch) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*EnvoyFilter_WaypointMatch) ProtoMessage() {}
-
-func (x *EnvoyFilter_WaypointMatch) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[5]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use EnvoyFilter_WaypointMatch.ProtoReflect.Descriptor instead.
-func (*EnvoyFilter_WaypointMatch) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_envoy_filter_proto_rawDescGZIP(), []int{0, 4}
-}
-
-func (x *EnvoyFilter_WaypointMatch) GetPortNumber() uint32 {
-	if x != nil {
-		return x.PortNumber
-	}
-	return 0
-}
-
-func (x *EnvoyFilter_WaypointMatch) GetRoute() *EnvoyFilter_WaypointMatch_RouteMatch {
-	if x != nil {
-		return x.Route
-	}
-	return nil
-}
-
-func (x *EnvoyFilter_WaypointMatch) GetFilter() *EnvoyFilter_WaypointMatch_FilterMatch {
-	if x != nil {
-		return x.Filter
-	}
-	return nil
-}
-
 // Patch specifies how the selected object should be modified.
 type EnvoyFilter_Patch struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -1394,7 +1322,7 @@ type EnvoyFilter_Patch struct {
 
 func (x *EnvoyFilter_Patch) Reset() {
 	*x = EnvoyFilter_Patch{}
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[6]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1406,7 +1334,7 @@ func (x *EnvoyFilter_Patch) String() string {
 func (*EnvoyFilter_Patch) ProtoMessage() {}
 
 func (x *EnvoyFilter_Patch) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[6]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1419,7 +1347,7 @@ func (x *EnvoyFilter_Patch) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnvoyFilter_Patch.ProtoReflect.Descriptor instead.
 func (*EnvoyFilter_Patch) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_envoy_filter_proto_rawDescGZIP(), []int{0, 5}
+	return file_networking_v1alpha3_envoy_filter_proto_rawDescGZIP(), []int{0, 4}
 }
 
 func (x *EnvoyFilter_Patch) GetOperation() EnvoyFilter_Patch_Operation {
@@ -1445,7 +1373,6 @@ func (x *EnvoyFilter_Patch) GetFilterClass() EnvoyFilter_Patch_FilterClass {
 
 // One or more match conditions to be met before a patch is applied
 // to the generated configuration for a given proxy.
-// +kubebuilder:validation:XValidation:message="only support waypointMatch when context is WAYPOINT",rule="(self.context == 'WAYPOINT' && has(self.waypoint)) || (self.context != 'WAYPOINT' && !has(self.waypoint))"
 type EnvoyFilter_EnvoyConfigObjectMatch struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The specific config generation context to match on. istiod
@@ -1459,7 +1386,6 @@ type EnvoyFilter_EnvoyConfigObjectMatch struct {
 	//	*EnvoyFilter_EnvoyConfigObjectMatch_Listener
 	//	*EnvoyFilter_EnvoyConfigObjectMatch_RouteConfiguration
 	//	*EnvoyFilter_EnvoyConfigObjectMatch_Cluster
-	//	*EnvoyFilter_EnvoyConfigObjectMatch_Waypoint
 	ObjectTypes   isEnvoyFilter_EnvoyConfigObjectMatch_ObjectTypes `protobuf_oneof:"object_types"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1467,7 +1393,7 @@ type EnvoyFilter_EnvoyConfigObjectMatch struct {
 
 func (x *EnvoyFilter_EnvoyConfigObjectMatch) Reset() {
 	*x = EnvoyFilter_EnvoyConfigObjectMatch{}
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[7]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1479,7 +1405,7 @@ func (x *EnvoyFilter_EnvoyConfigObjectMatch) String() string {
 func (*EnvoyFilter_EnvoyConfigObjectMatch) ProtoMessage() {}
 
 func (x *EnvoyFilter_EnvoyConfigObjectMatch) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[7]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1492,7 +1418,7 @@ func (x *EnvoyFilter_EnvoyConfigObjectMatch) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use EnvoyFilter_EnvoyConfigObjectMatch.ProtoReflect.Descriptor instead.
 func (*EnvoyFilter_EnvoyConfigObjectMatch) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_envoy_filter_proto_rawDescGZIP(), []int{0, 6}
+	return file_networking_v1alpha3_envoy_filter_proto_rawDescGZIP(), []int{0, 5}
 }
 
 func (x *EnvoyFilter_EnvoyConfigObjectMatch) GetContext() EnvoyFilter_PatchContext {
@@ -1543,15 +1469,6 @@ func (x *EnvoyFilter_EnvoyConfigObjectMatch) GetCluster() *EnvoyFilter_ClusterMa
 	return nil
 }
 
-func (x *EnvoyFilter_EnvoyConfigObjectMatch) GetWaypoint() *EnvoyFilter_WaypointMatch {
-	if x != nil {
-		if x, ok := x.ObjectTypes.(*EnvoyFilter_EnvoyConfigObjectMatch_Waypoint); ok {
-			return x.Waypoint
-		}
-	}
-	return nil
-}
-
 type isEnvoyFilter_EnvoyConfigObjectMatch_ObjectTypes interface {
 	isEnvoyFilter_EnvoyConfigObjectMatch_ObjectTypes()
 }
@@ -1571,12 +1488,6 @@ type EnvoyFilter_EnvoyConfigObjectMatch_Cluster struct {
 	Cluster *EnvoyFilter_ClusterMatch `protobuf:"bytes,5,opt,name=cluster,proto3,oneof"`
 }
 
-type EnvoyFilter_EnvoyConfigObjectMatch_Waypoint struct {
-	// Match on waypoint attributes.
-	// Only work when patch context is WAYPOINT.
-	Waypoint *EnvoyFilter_WaypointMatch `protobuf:"bytes,6,opt,name=waypoint,proto3,oneof"`
-}
-
 func (*EnvoyFilter_EnvoyConfigObjectMatch_Listener) isEnvoyFilter_EnvoyConfigObjectMatch_ObjectTypes() {
 }
 
@@ -1584,9 +1495,6 @@ func (*EnvoyFilter_EnvoyConfigObjectMatch_RouteConfiguration) isEnvoyFilter_Envo
 }
 
 func (*EnvoyFilter_EnvoyConfigObjectMatch_Cluster) isEnvoyFilter_EnvoyConfigObjectMatch_ObjectTypes() {
-}
-
-func (*EnvoyFilter_EnvoyConfigObjectMatch_Waypoint) isEnvoyFilter_EnvoyConfigObjectMatch_ObjectTypes() {
 }
 
 // Changes to be made to various envoy config objects.
@@ -1612,7 +1520,7 @@ type EnvoyFilter_EnvoyConfigObjectPatch struct {
 
 func (x *EnvoyFilter_EnvoyConfigObjectPatch) Reset() {
 	*x = EnvoyFilter_EnvoyConfigObjectPatch{}
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[8]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1624,7 +1532,7 @@ func (x *EnvoyFilter_EnvoyConfigObjectPatch) String() string {
 func (*EnvoyFilter_EnvoyConfigObjectPatch) ProtoMessage() {}
 
 func (x *EnvoyFilter_EnvoyConfigObjectPatch) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[8]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1637,7 +1545,7 @@ func (x *EnvoyFilter_EnvoyConfigObjectPatch) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use EnvoyFilter_EnvoyConfigObjectPatch.ProtoReflect.Descriptor instead.
 func (*EnvoyFilter_EnvoyConfigObjectPatch) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_envoy_filter_proto_rawDescGZIP(), []int{0, 7}
+	return file_networking_v1alpha3_envoy_filter_proto_rawDescGZIP(), []int{0, 6}
 }
 
 func (x *EnvoyFilter_EnvoyConfigObjectPatch) GetApplyTo() EnvoyFilter_ApplyTo {
@@ -1677,7 +1585,7 @@ type EnvoyFilter_RouteConfigurationMatch_RouteMatch struct {
 
 func (x *EnvoyFilter_RouteConfigurationMatch_RouteMatch) Reset() {
 	*x = EnvoyFilter_RouteConfigurationMatch_RouteMatch{}
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[10]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1689,7 +1597,7 @@ func (x *EnvoyFilter_RouteConfigurationMatch_RouteMatch) String() string {
 func (*EnvoyFilter_RouteConfigurationMatch_RouteMatch) ProtoMessage() {}
 
 func (x *EnvoyFilter_RouteConfigurationMatch_RouteMatch) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[10]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1739,7 +1647,7 @@ type EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch struct {
 
 func (x *EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch) Reset() {
 	*x = EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch{}
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[11]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1751,7 +1659,7 @@ func (x *EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch) String() string {
 func (*EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch) ProtoMessage() {}
 
 func (x *EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[11]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1832,7 +1740,7 @@ type EnvoyFilter_ListenerMatch_FilterChainMatch struct {
 
 func (x *EnvoyFilter_ListenerMatch_FilterChainMatch) Reset() {
 	*x = EnvoyFilter_ListenerMatch_FilterChainMatch{}
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[12]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1844,7 +1752,7 @@ func (x *EnvoyFilter_ListenerMatch_FilterChainMatch) String() string {
 func (*EnvoyFilter_ListenerMatch_FilterChainMatch) ProtoMessage() {}
 
 func (x *EnvoyFilter_ListenerMatch_FilterChainMatch) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[12]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1919,7 +1827,7 @@ type EnvoyFilter_ListenerMatch_FilterMatch struct {
 
 func (x *EnvoyFilter_ListenerMatch_FilterMatch) Reset() {
 	*x = EnvoyFilter_ListenerMatch_FilterMatch{}
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[13]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1931,7 +1839,7 @@ func (x *EnvoyFilter_ListenerMatch_FilterMatch) String() string {
 func (*EnvoyFilter_ListenerMatch_FilterMatch) ProtoMessage() {}
 
 func (x *EnvoyFilter_ListenerMatch_FilterMatch) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[13]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1975,7 +1883,7 @@ type EnvoyFilter_ListenerMatch_SubFilterMatch struct {
 
 func (x *EnvoyFilter_ListenerMatch_SubFilterMatch) Reset() {
 	*x = EnvoyFilter_ListenerMatch_SubFilterMatch{}
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[14]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1987,7 +1895,7 @@ func (x *EnvoyFilter_ListenerMatch_SubFilterMatch) String() string {
 func (*EnvoyFilter_ListenerMatch_SubFilterMatch) ProtoMessage() {}
 
 func (x *EnvoyFilter_ListenerMatch_SubFilterMatch) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[14]
+	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2010,167 +1918,11 @@ func (x *EnvoyFilter_ListenerMatch_SubFilterMatch) GetName() string {
 	return ""
 }
 
-// Conditions specified in `RouteMatch` must be met for the patch
-// to be applied to a route.
-type EnvoyFilter_WaypointMatch_RouteMatch struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// The Route objects generated by default are named as
-	// default.  Route objects generated using a virtual service
-	// will carry the name used in the virtual service's HTTP
-	// routes.
-	Name          string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *EnvoyFilter_WaypointMatch_RouteMatch) Reset() {
-	*x = EnvoyFilter_WaypointMatch_RouteMatch{}
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[15]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *EnvoyFilter_WaypointMatch_RouteMatch) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*EnvoyFilter_WaypointMatch_RouteMatch) ProtoMessage() {}
-
-func (x *EnvoyFilter_WaypointMatch_RouteMatch) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[15]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use EnvoyFilter_WaypointMatch_RouteMatch.ProtoReflect.Descriptor instead.
-func (*EnvoyFilter_WaypointMatch_RouteMatch) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_envoy_filter_proto_rawDescGZIP(), []int{0, 4, 0}
-}
-
-func (x *EnvoyFilter_WaypointMatch_RouteMatch) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-// Conditions to match a specific filter within a filter chain.
-type EnvoyFilter_WaypointMatch_FilterMatch struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// The filter name to match on.
-	// For standard Envoy filters, [canonical filter](https://www.envoyproxy.io/docs/envoy/latest/version_history/v1.14.0#deprecated)
-	// names should be used.
-	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// The next level filter within this filter to match on.
-	// Typically used for HTTP Connection Manager filters.
-	SubFilter     *EnvoyFilter_WaypointMatch_FilterMatch_SubFilterMatch `protobuf:"bytes,2,opt,name=sub_filter,json=subFilter,proto3" json:"sub_filter,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *EnvoyFilter_WaypointMatch_FilterMatch) Reset() {
-	*x = EnvoyFilter_WaypointMatch_FilterMatch{}
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[16]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *EnvoyFilter_WaypointMatch_FilterMatch) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*EnvoyFilter_WaypointMatch_FilterMatch) ProtoMessage() {}
-
-func (x *EnvoyFilter_WaypointMatch_FilterMatch) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[16]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use EnvoyFilter_WaypointMatch_FilterMatch.ProtoReflect.Descriptor instead.
-func (*EnvoyFilter_WaypointMatch_FilterMatch) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_envoy_filter_proto_rawDescGZIP(), []int{0, 4, 1}
-}
-
-func (x *EnvoyFilter_WaypointMatch_FilterMatch) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *EnvoyFilter_WaypointMatch_FilterMatch) GetSubFilter() *EnvoyFilter_WaypointMatch_FilterMatch_SubFilterMatch {
-	if x != nil {
-		return x.SubFilter
-	}
-	return nil
-}
-
-// Conditions to match a specific filter within another
-// filter. This field is typically useful to match a HTTP filter
-// inside the `envoy.filters.network.http_connection_manager` network filter.
-type EnvoyFilter_WaypointMatch_FilterMatch_SubFilterMatch struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// The filter name to match on.
-	Name          string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *EnvoyFilter_WaypointMatch_FilterMatch_SubFilterMatch) Reset() {
-	*x = EnvoyFilter_WaypointMatch_FilterMatch_SubFilterMatch{}
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[17]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *EnvoyFilter_WaypointMatch_FilterMatch_SubFilterMatch) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*EnvoyFilter_WaypointMatch_FilterMatch_SubFilterMatch) ProtoMessage() {}
-
-func (x *EnvoyFilter_WaypointMatch_FilterMatch_SubFilterMatch) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_envoy_filter_proto_msgTypes[17]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use EnvoyFilter_WaypointMatch_FilterMatch_SubFilterMatch.ProtoReflect.Descriptor instead.
-func (*EnvoyFilter_WaypointMatch_FilterMatch_SubFilterMatch) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_envoy_filter_proto_rawDescGZIP(), []int{0, 4, 1, 0}
-}
-
-func (x *EnvoyFilter_WaypointMatch_FilterMatch_SubFilterMatch) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
 var File_networking_v1alpha3_envoy_filter_proto protoreflect.FileDescriptor
 
 const file_networking_v1alpha3_envoy_filter_proto_rawDesc = "" +
 	"\n" +
-	"&networking/v1alpha3/envoy_filter.proto\x12\x19istio.networking.v1alpha3\x1a\x1cgoogle/protobuf/struct.proto\x1a!networking/v1alpha3/sidecar.proto\x1a\x1btype/v1beta1/selector.proto\"\xa8\x1f\n" +
+	"&networking/v1alpha3/envoy_filter.proto\x12\x19istio.networking.v1alpha3\x1a\x1cgoogle/protobuf/struct.proto\x1a!networking/v1alpha3/sidecar.proto\x1a\x1btype/v1beta1/selector.proto\"\x86\x1b\n" +
 	"\vEnvoyFilter\x12X\n" +
 	"\x11workload_selector\x18\x03 \x01(\v2+.istio.networking.v1alpha3.WorkloadSelectorR\x10workloadSelector\x12I\n" +
 	"\n" +
@@ -2231,20 +1983,6 @@ const file_networking_v1alpha3_envoy_filter_proto_rawDesc = "" +
 	"\n" +
 	"sub_filter\x18\x02 \x01(\v2C.istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.SubFilterMatchR\tsubFilter\x1a$\n" +
 	"\x0eSubFilterMatch\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x1a\xbd\x03\n" +
-	"\rWaypointMatch\x12\x1f\n" +
-	"\vport_number\x18\x01 \x01(\rR\n" +
-	"portNumber\x12U\n" +
-	"\x05route\x18\x02 \x01(\v2?.istio.networking.v1alpha3.EnvoyFilter.WaypointMatch.RouteMatchR\x05route\x12X\n" +
-	"\x06filter\x18\x03 \x01(\v2@.istio.networking.v1alpha3.EnvoyFilter.WaypointMatch.FilterMatchR\x06filter\x1a \n" +
-	"\n" +
-	"RouteMatch\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x1a\xb7\x01\n" +
-	"\vFilterMatch\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x12n\n" +
-	"\n" +
-	"sub_filter\x18\x02 \x01(\v2O.istio.networking.v1alpha3.EnvoyFilter.WaypointMatch.FilterMatch.SubFilterMatchR\tsubFilter\x1a$\n" +
-	"\x0eSubFilterMatch\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x1a\xa8\x03\n" +
 	"\x05Patch\x12T\n" +
 	"\toperation\x18\x01 \x01(\x0e26.istio.networking.v1alpha3.EnvoyFilter.Patch.OperationR\toperation\x12-\n" +
@@ -2264,14 +2002,13 @@ const file_networking_v1alpha3_envoy_filter_proto_rawDesc = "" +
 	"\vUNSPECIFIED\x10\x00\x12\t\n" +
 	"\x05AUTHN\x10\x01\x12\t\n" +
 	"\x05AUTHZ\x10\x02\x12\t\n" +
-	"\x05STATS\x10\x03\x1a\xac\x04\n" +
+	"\x05STATS\x10\x03\x1a\xd8\x03\n" +
 	"\x16EnvoyConfigObjectMatch\x12M\n" +
 	"\acontext\x18\x01 \x01(\x0e23.istio.networking.v1alpha3.EnvoyFilter.PatchContextR\acontext\x12G\n" +
 	"\x05proxy\x18\x02 \x01(\v21.istio.networking.v1alpha3.EnvoyFilter.ProxyMatchR\x05proxy\x12R\n" +
 	"\blistener\x18\x03 \x01(\v24.istio.networking.v1alpha3.EnvoyFilter.ListenerMatchH\x00R\blistener\x12q\n" +
 	"\x13route_configuration\x18\x04 \x01(\v2>.istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatchH\x00R\x12routeConfiguration\x12O\n" +
-	"\acluster\x18\x05 \x01(\v23.istio.networking.v1alpha3.EnvoyFilter.ClusterMatchH\x00R\acluster\x12R\n" +
-	"\bwaypoint\x18\x06 \x01(\v24.istio.networking.v1alpha3.EnvoyFilter.WaypointMatchH\x00R\bwaypointB\x0e\n" +
+	"\acluster\x18\x05 \x01(\v23.istio.networking.v1alpha3.EnvoyFilter.ClusterMatchH\x00R\aclusterB\x0e\n" +
 	"\fobject_types\x1a\xfc\x01\n" +
 	"\x16EnvoyConfigObjectPatch\x12I\n" +
 	"\bapply_to\x18\x01 \x01(\x0e2..istio.networking.v1alpha3.EnvoyFilter.ApplyToR\aapplyTo\x12S\n" +
@@ -2291,13 +2028,12 @@ const file_networking_v1alpha3_envoy_filter_proto_rawDesc = "" +
 	"\x10EXTENSION_CONFIG\x10\t\x12\r\n" +
 	"\tBOOTSTRAP\x10\n" +
 	"\x12\x13\n" +
-	"\x0fLISTENER_FILTER\x10\v\"]\n" +
+	"\x0fLISTENER_FILTER\x10\v\"O\n" +
 	"\fPatchContext\x12\a\n" +
 	"\x03ANY\x10\x00\x12\x13\n" +
 	"\x0fSIDECAR_INBOUND\x10\x01\x12\x14\n" +
 	"\x10SIDECAR_OUTBOUND\x10\x02\x12\v\n" +
-	"\aGATEWAY\x10\x03\x12\f\n" +
-	"\bWAYPOINT\x10\x04J\x04\b\x01\x10\x02J\x04\b\x02\x10\x03R\afiltersR\x0fworkload_labelsB\"Z istio.io/api/networking/v1alpha3b\x06proto3"
+	"\aGATEWAY\x10\x03J\x04\b\x01\x10\x02J\x04\b\x02\x10\x03R\afiltersR\x0fworkload_labelsB\"Z istio.io/api/networking/v1alpha3b\x06proto3"
 
 var (
 	file_networking_v1alpha3_envoy_filter_proto_rawDescOnce sync.Once
@@ -2312,7 +2048,7 @@ func file_networking_v1alpha3_envoy_filter_proto_rawDescGZIP() []byte {
 }
 
 var file_networking_v1alpha3_envoy_filter_proto_enumTypes = make([]protoimpl.EnumInfo, 5)
-var file_networking_v1alpha3_envoy_filter_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
+var file_networking_v1alpha3_envoy_filter_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_networking_v1alpha3_envoy_filter_proto_goTypes = []any{
 	(EnvoyFilter_ApplyTo)(0),                                   // 0: istio.networking.v1alpha3.EnvoyFilter.ApplyTo
 	(EnvoyFilter_PatchContext)(0),                              // 1: istio.networking.v1alpha3.EnvoyFilter.PatchContext
@@ -2324,54 +2060,46 @@ var file_networking_v1alpha3_envoy_filter_proto_goTypes = []any{
 	(*EnvoyFilter_ClusterMatch)(nil),                           // 7: istio.networking.v1alpha3.EnvoyFilter.ClusterMatch
 	(*EnvoyFilter_RouteConfigurationMatch)(nil),                // 8: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch
 	(*EnvoyFilter_ListenerMatch)(nil),                          // 9: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch
-	(*EnvoyFilter_WaypointMatch)(nil),                          // 10: istio.networking.v1alpha3.EnvoyFilter.WaypointMatch
-	(*EnvoyFilter_Patch)(nil),                                  // 11: istio.networking.v1alpha3.EnvoyFilter.Patch
-	(*EnvoyFilter_EnvoyConfigObjectMatch)(nil),                 // 12: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch
-	(*EnvoyFilter_EnvoyConfigObjectPatch)(nil),                 // 13: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch
-	nil, // 14: istio.networking.v1alpha3.EnvoyFilter.ProxyMatch.MetadataEntry
-	(*EnvoyFilter_RouteConfigurationMatch_RouteMatch)(nil),       // 15: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.RouteMatch
-	(*EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch)(nil), // 16: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.VirtualHostMatch
-	(*EnvoyFilter_ListenerMatch_FilterChainMatch)(nil),           // 17: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterChainMatch
-	(*EnvoyFilter_ListenerMatch_FilterMatch)(nil),                // 18: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterMatch
-	(*EnvoyFilter_ListenerMatch_SubFilterMatch)(nil),             // 19: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.SubFilterMatch
-	(*EnvoyFilter_WaypointMatch_RouteMatch)(nil),                 // 20: istio.networking.v1alpha3.EnvoyFilter.WaypointMatch.RouteMatch
-	(*EnvoyFilter_WaypointMatch_FilterMatch)(nil),                // 21: istio.networking.v1alpha3.EnvoyFilter.WaypointMatch.FilterMatch
-	(*EnvoyFilter_WaypointMatch_FilterMatch_SubFilterMatch)(nil), // 22: istio.networking.v1alpha3.EnvoyFilter.WaypointMatch.FilterMatch.SubFilterMatch
-	(*WorkloadSelector)(nil),                                     // 23: istio.networking.v1alpha3.WorkloadSelector
-	(*v1beta1.PolicyTargetReference)(nil),                        // 24: istio.type.v1beta1.PolicyTargetReference
-	(*_struct.Struct)(nil),                                       // 25: google.protobuf.Struct
+	(*EnvoyFilter_Patch)(nil),                                  // 10: istio.networking.v1alpha3.EnvoyFilter.Patch
+	(*EnvoyFilter_EnvoyConfigObjectMatch)(nil),                 // 11: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch
+	(*EnvoyFilter_EnvoyConfigObjectPatch)(nil),                 // 12: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch
+	nil, // 13: istio.networking.v1alpha3.EnvoyFilter.ProxyMatch.MetadataEntry
+	(*EnvoyFilter_RouteConfigurationMatch_RouteMatch)(nil),       // 14: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.RouteMatch
+	(*EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch)(nil), // 15: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.VirtualHostMatch
+	(*EnvoyFilter_ListenerMatch_FilterChainMatch)(nil),           // 16: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterChainMatch
+	(*EnvoyFilter_ListenerMatch_FilterMatch)(nil),                // 17: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterMatch
+	(*EnvoyFilter_ListenerMatch_SubFilterMatch)(nil),             // 18: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.SubFilterMatch
+	(*WorkloadSelector)(nil),                                     // 19: istio.networking.v1alpha3.WorkloadSelector
+	(*v1beta1.PolicyTargetReference)(nil),                        // 20: istio.type.v1beta1.PolicyTargetReference
+	(*_struct.Struct)(nil),                                       // 21: google.protobuf.Struct
 }
 var file_networking_v1alpha3_envoy_filter_proto_depIdxs = []int32{
-	23, // 0: istio.networking.v1alpha3.EnvoyFilter.workload_selector:type_name -> istio.networking.v1alpha3.WorkloadSelector
-	24, // 1: istio.networking.v1alpha3.EnvoyFilter.targetRefs:type_name -> istio.type.v1beta1.PolicyTargetReference
-	13, // 2: istio.networking.v1alpha3.EnvoyFilter.config_patches:type_name -> istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch
-	14, // 3: istio.networking.v1alpha3.EnvoyFilter.ProxyMatch.metadata:type_name -> istio.networking.v1alpha3.EnvoyFilter.ProxyMatch.MetadataEntry
-	16, // 4: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.vhost:type_name -> istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.VirtualHostMatch
-	17, // 5: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.filter_chain:type_name -> istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterChainMatch
-	20, // 6: istio.networking.v1alpha3.EnvoyFilter.WaypointMatch.route:type_name -> istio.networking.v1alpha3.EnvoyFilter.WaypointMatch.RouteMatch
-	21, // 7: istio.networking.v1alpha3.EnvoyFilter.WaypointMatch.filter:type_name -> istio.networking.v1alpha3.EnvoyFilter.WaypointMatch.FilterMatch
-	3,  // 8: istio.networking.v1alpha3.EnvoyFilter.Patch.operation:type_name -> istio.networking.v1alpha3.EnvoyFilter.Patch.Operation
-	25, // 9: istio.networking.v1alpha3.EnvoyFilter.Patch.value:type_name -> google.protobuf.Struct
-	4,  // 10: istio.networking.v1alpha3.EnvoyFilter.Patch.filter_class:type_name -> istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass
-	1,  // 11: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.context:type_name -> istio.networking.v1alpha3.EnvoyFilter.PatchContext
-	6,  // 12: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.proxy:type_name -> istio.networking.v1alpha3.EnvoyFilter.ProxyMatch
-	9,  // 13: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.listener:type_name -> istio.networking.v1alpha3.EnvoyFilter.ListenerMatch
-	8,  // 14: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.route_configuration:type_name -> istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch
-	7,  // 15: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.cluster:type_name -> istio.networking.v1alpha3.EnvoyFilter.ClusterMatch
-	10, // 16: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.waypoint:type_name -> istio.networking.v1alpha3.EnvoyFilter.WaypointMatch
-	0,  // 17: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch.apply_to:type_name -> istio.networking.v1alpha3.EnvoyFilter.ApplyTo
-	12, // 18: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch.match:type_name -> istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch
-	11, // 19: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch.patch:type_name -> istio.networking.v1alpha3.EnvoyFilter.Patch
-	2,  // 20: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.RouteMatch.action:type_name -> istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.RouteMatch.Action
-	15, // 21: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.VirtualHostMatch.route:type_name -> istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.RouteMatch
-	18, // 22: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterChainMatch.filter:type_name -> istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterMatch
-	19, // 23: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterMatch.sub_filter:type_name -> istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.SubFilterMatch
-	22, // 24: istio.networking.v1alpha3.EnvoyFilter.WaypointMatch.FilterMatch.sub_filter:type_name -> istio.networking.v1alpha3.EnvoyFilter.WaypointMatch.FilterMatch.SubFilterMatch
-	25, // [25:25] is the sub-list for method output_type
-	25, // [25:25] is the sub-list for method input_type
-	25, // [25:25] is the sub-list for extension type_name
-	25, // [25:25] is the sub-list for extension extendee
-	0,  // [0:25] is the sub-list for field type_name
+	19, // 0: istio.networking.v1alpha3.EnvoyFilter.workload_selector:type_name -> istio.networking.v1alpha3.WorkloadSelector
+	20, // 1: istio.networking.v1alpha3.EnvoyFilter.targetRefs:type_name -> istio.type.v1beta1.PolicyTargetReference
+	12, // 2: istio.networking.v1alpha3.EnvoyFilter.config_patches:type_name -> istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch
+	13, // 3: istio.networking.v1alpha3.EnvoyFilter.ProxyMatch.metadata:type_name -> istio.networking.v1alpha3.EnvoyFilter.ProxyMatch.MetadataEntry
+	15, // 4: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.vhost:type_name -> istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.VirtualHostMatch
+	16, // 5: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.filter_chain:type_name -> istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterChainMatch
+	3,  // 6: istio.networking.v1alpha3.EnvoyFilter.Patch.operation:type_name -> istio.networking.v1alpha3.EnvoyFilter.Patch.Operation
+	21, // 7: istio.networking.v1alpha3.EnvoyFilter.Patch.value:type_name -> google.protobuf.Struct
+	4,  // 8: istio.networking.v1alpha3.EnvoyFilter.Patch.filter_class:type_name -> istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass
+	1,  // 9: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.context:type_name -> istio.networking.v1alpha3.EnvoyFilter.PatchContext
+	6,  // 10: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.proxy:type_name -> istio.networking.v1alpha3.EnvoyFilter.ProxyMatch
+	9,  // 11: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.listener:type_name -> istio.networking.v1alpha3.EnvoyFilter.ListenerMatch
+	8,  // 12: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.route_configuration:type_name -> istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch
+	7,  // 13: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.cluster:type_name -> istio.networking.v1alpha3.EnvoyFilter.ClusterMatch
+	0,  // 14: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch.apply_to:type_name -> istio.networking.v1alpha3.EnvoyFilter.ApplyTo
+	11, // 15: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch.match:type_name -> istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch
+	10, // 16: istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch.patch:type_name -> istio.networking.v1alpha3.EnvoyFilter.Patch
+	2,  // 17: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.RouteMatch.action:type_name -> istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.RouteMatch.Action
+	14, // 18: istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.VirtualHostMatch.route:type_name -> istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.RouteMatch
+	17, // 19: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterChainMatch.filter:type_name -> istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterMatch
+	18, // 20: istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterMatch.sub_filter:type_name -> istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.SubFilterMatch
+	21, // [21:21] is the sub-list for method output_type
+	21, // [21:21] is the sub-list for method input_type
+	21, // [21:21] is the sub-list for extension type_name
+	21, // [21:21] is the sub-list for extension extendee
+	0,  // [0:21] is the sub-list for field type_name
 }
 
 func init() { file_networking_v1alpha3_envoy_filter_proto_init() }
@@ -2380,11 +2108,10 @@ func file_networking_v1alpha3_envoy_filter_proto_init() {
 		return
 	}
 	file_networking_v1alpha3_sidecar_proto_init()
-	file_networking_v1alpha3_envoy_filter_proto_msgTypes[7].OneofWrappers = []any{
+	file_networking_v1alpha3_envoy_filter_proto_msgTypes[6].OneofWrappers = []any{
 		(*EnvoyFilter_EnvoyConfigObjectMatch_Listener)(nil),
 		(*EnvoyFilter_EnvoyConfigObjectMatch_RouteConfiguration)(nil),
 		(*EnvoyFilter_EnvoyConfigObjectMatch_Cluster)(nil),
-		(*EnvoyFilter_EnvoyConfigObjectMatch_Waypoint)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -2392,7 +2119,7 @@ func file_networking_v1alpha3_envoy_filter_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_networking_v1alpha3_envoy_filter_proto_rawDesc), len(file_networking_v1alpha3_envoy_filter_proto_rawDesc)),
 			NumEnums:      5,
-			NumMessages:   18,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
