@@ -2,7 +2,7 @@
 title: istio.v1.auth
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 3
+number_of_entries: 4
 ---
 <h2 id="Services">Services</h2>
 <h3 id="IstioCertificateService">IstioCertificateService</h3>
@@ -77,6 +77,41 @@ and other fields in the generated certificate may be overwritten by the CA.</p>
 <p>PEM-encoded certificate chain.
 The leaf cert is the first element, and the root cert is the last element.</p>
 
+</td>
+</tr>
+<tr id="IstioCertificateResponse-root_cert">
+<td><div class="field"><div class="name"><code><a href="#IstioCertificateResponse-root_cert">rootCert</a></code></div>
+<div class="type"><a href="#Roots">Roots</a></div>
+</div></td>
+<td>
+<p>Root certificates. This field is newer, and therefor is optional with the following semantics:</p>
+<ul>
+<li>if root_cert is specified, cert_chain contains [leaf, intermediate1, intermediate2] (intermediates are optional).
+root_cert contains [root1, root2].</li>
+<li>if root_cert is not specified, cert_chain contains [leaf, intermediate1, intermediate2, root1+root2] concatenated into one entry.
+Note that the individual cert_chain is only signed by a single root. The roots provided here is the full bundle of trusted roots.</li>
+</ul>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="Roots">Roots</h3>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Roots-ca_cert">
+<td><div class="field"><div class="name"><code><a href="#Roots-ca_cert">caCert</a></code></div>
+<div class="type">string[]</div>
+</div></td>
+<td>
 </td>
 </tr>
 </tbody>
