@@ -149,6 +149,30 @@ syntax = "proto3";
 //         paths: ["/healthz"]
 // ```
 //
+// Alternatively, you can use `requireJwt: true` to enforce JWT requirement directly in the RequestAuthentication
+// policy without needing a separate AuthorizationPolicy. This approach returns 401 Unauthorized with a
+// `WWW-Authenticate: Bearer` header for missing JWTs instead of 403 Forbidden:
+//
+// ```yaml
+// apiVersion: security.istio.io/v1
+// kind: RequestAuthentication
+// metadata:
+//   name: httpbin
+//   namespace: foo
+// spec:
+//   selector:
+//     matchLabels:
+//       app: httpbin
+//   jwtRules:
+//   - issuer: "issuer-foo"
+//     jwksUri: https://example.com/.well-known/jwks.json
+//     requireJwt: true
+// ```
+//
+// With `requireJwt: true`, requests without a JWT will be rejected with 401 Unauthorized and a
+// `WWW-Authenticate: Bearer` header, making it clearer that authentication is required. This is semantically
+// more accurate than the 403 Forbidden returned by AuthorizationPolicy and complies with RFC 7235.
+//
 // [Experimental] Routing based on derived [metadata](https://istio.io/latest/docs/reference/config/security/conditions/)
 // is now supported. A prefix '@' is used to denote a match against internal metadata instead of the headers in the request.
 // Currently this feature is only supported for the following metadata:
@@ -333,6 +357,18 @@ message RequestAuthentication {
 //
 // With this configuration, a JWT containing `"custom_scope": "read write admin"` will allow
 // authorization policies to match against individual values like "read", "write", or "admin".
+//
+// This example shows how to require JWT tokens and return 401 for missing tokens:
+//
+// ```yaml
+// issuer: https://example.com
+// jwksUri: https://example.com/.well-known/jwks.json
+// requireJwt: true
+// ```
+//
+// With `requireJwt: true`, requests without a JWT will receive a 401 Unauthorized response with a
+// `WWW-Authenticate: Bearer` header directly from the authentication filter, eliminating the need
+// for a separate AuthorizationPolicy when you simply want to require authentication.
 // +kubebuilder:validation:XValidation:message="only one of jwks or jwksUri can be set",rule="oneof(self.jwksUri, self.jwks_uri, self.jwks)"
 message JWTRule {
   // Identifies the issuer that issued the JWT. See
@@ -487,8 +523,37 @@ message JWTRule {
   // +kubebuilder:validation:MaxItems=64
   repeated string space_delimited_claims = 14;
 
+  // If set to true, requests without a valid JWT token will be rejected with a 401 Unauthorized status code
+  // along with a `WWW-Authenticate` header indicating the Bearer authentication scheme is required.
+  // If set to false or unset (default), requests without a JWT token are allowed to pass through but will not have
+  // an authenticated identity. In the default case, to enforce that requests must have authentication,
+  // you should use an AuthorizationPolicy with requestPrincipals.
+  //
+  // Note: Setting this to true changes the HTTP status code for missing JWT from 403 (via AuthorizationPolicy)
+  // to 401 (via RequestAuthentication), which is semantically more accurate for authentication failures and
+  // includes the proper `WWW-Authenticate` header as required by RFC 7235.
+  //
+  // Example usage:
+  // ```yaml
+  // jwtRules:
+  // - issuer: "https://example.com"
+  //   jwksUri: https://example.com/.well-known/jwks.json
+  //   requireJwt: true
+  // ```
+  //
+  // With `requireJwt: true`:
+  // - Request with missing JWT -> 401 Unauthorized (with WWW-Authenticate: Bearer header)
+  // - Request with invalid/expired JWT -> 401 Unauthorized (with WWW-Authenticate: Bearer header)
+  // - Request with valid JWT -> Accepted
+  //
+  // With `requireJwt: false` (default):
+  // - Request with missing JWT -> Accepted (no authenticated identity)
+  // - Request with invalid/expired JWT -> 401 Unauthorized (with WWW-Authenticate: Bearer header)
+  // - Request with valid JWT -> Accepted (with authenticated identity)
+  bool require_jwt = 15;
+
   // $hide_from_docs
-  // Next available field number: 15
+  // Next available field number: 16
 }
 
 // This message specifies a header location to extract JWT token.
