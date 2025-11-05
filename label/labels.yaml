@@ -164,6 +164,16 @@ labels:
     resources:
       - Pod
 
+  - name: topology.istio.io/locality
+    featureStatus: Alpha
+    description: This label is applied to a workload internally that indicates the region/zone/subzone of an instance. 
+      It is used to override the native registry's value. Kubernetes labels does not support `/`, use `.` instead in kubernetes.
+      e.g. `regionA.zoneB.subZoneC`
+    hidden: false
+    deprecated: false
+    resources:
+      - Pod
+
   - name: sidecar.istio.io/inject
     featureStatus: Beta
     description: Specifies whether or not an Envoy sidecar should be automatically

@@ -405,6 +405,21 @@ For example, a "Pod" resource may default to the "Deployment" name.
 		},
 	}
 
+	TopologyLocality = Instance {
+		Name:          "topology.istio.io/locality",
+		Description:   "This label is applied to a workload internally that "+
+                        "indicates the region/zone/subzone of an instance. It is "+
+                        "used to override the native registry's value. Kubernetes "+
+                        "labels does not support `/`, use `.` instead in "+
+                        "kubernetes. e.g. `regionA.zoneB.subZoneC`",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	TopologyNetwork = Instance {
 		Name:          "topology.istio.io/network",
 		Description:   `A label used to identify the network for one or more pods. This is used
@@ -483,6 +498,7 @@ func AllResourceLabels() []*Instance {
 		&ServiceWorkloadName,
 		&SidecarInject,
 		&TopologyCluster,
+		&TopologyLocality,
 		&TopologyNetwork,
 		&TopologySubzone,
 	}
