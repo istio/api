@@ -411,7 +411,7 @@ For example, a "Pod" resource may default to the "Deployment" name.
                         "indicates the region/zone/subzone of an instance. It is "+
                         "used to override the native registry's value. Kubernetes "+
                         "labels does not support `/`, use `.` instead in "+
-                        "kubernetes.",
+                        "kubernetes. e.g. `regionA.zoneB.subZoneC`",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    false,
