@@ -564,7 +564,7 @@ message WarmupConfiguration {
   // This parameter controls the speed of traffic increase over the warmup duration. Defaults to 1.0, so that endpoints would
   // get linearly increasing amount of traffic. When increasing the value for this parameter,
   // the speed of traffic ramp-up increases non-linearly.
-  // +kubebuilder:validation:Minimum=1
+  // +kubebuilder:validation:Minimum=0
   google.protobuf.DoubleValue aggression = 3;
 }
 
