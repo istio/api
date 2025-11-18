@@ -932,7 +932,7 @@ type WarmupConfiguration struct {
 	// This parameter controls the speed of traffic increase over the warmup duration. Defaults to 1.0, so that endpoints would
 	// get linearly increasing amount of traffic. When increasing the value for this parameter,
 	// the speed of traffic ramp-up increases non-linearly.
-	// +kubebuilder:validation:Minimum=1
+	// +kubebuilder:validation:Minimum=0
 	Aggression    *wrappers.DoubleValue `protobuf:"bytes,3,opt,name=aggression,proto3" json:"aggression,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
