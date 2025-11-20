@@ -1259,6 +1259,7 @@ type Tracing_CustomTag struct {
 	//	*Tracing_CustomTag_Literal
 	//	*Tracing_CustomTag_Environment
 	//	*Tracing_CustomTag_Header
+	//	*Tracing_CustomTag_Formatter
 	Type          isTracing_CustomTag_Type `protobuf_oneof:"type"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1328,6 +1329,15 @@ func (x *Tracing_CustomTag) GetHeader() *Tracing_RequestHeader {
 	return nil
 }
 
+func (x *Tracing_CustomTag) GetFormatter() *Tracing_Formatter {
+	if x != nil {
+		if x, ok := x.Type.(*Tracing_CustomTag_Formatter); ok {
+			return x.Formatter
+		}
+	}
+	return nil
+}
+
 type isTracing_CustomTag_Type interface {
 	isTracing_CustomTag_Type()
 }
@@ -1345,7 +1355,12 @@ type Tracing_CustomTag_Environment struct {
 type Tracing_CustomTag_Header struct {
 	// RequestHeader adds the value of an header from the request to each
 	// span.
-	Header *Tracing_RequestHeader `protobuf:"bytes,3,opt,name=header,proto3,oneof"` // TODO: add support for Metadata tags
+	Header *Tracing_RequestHeader `protobuf:"bytes,3,opt,name=header,proto3,oneof"`
+}
+
+type Tracing_CustomTag_Formatter struct {
+	// Formatter adds the value of access logging substitution formatter.
+	Formatter *Tracing_Formatter `protobuf:"bytes,4,opt,name=formatter,proto3,oneof"`
 }
 
 func (*Tracing_CustomTag_Literal) isTracing_CustomTag_Type() {}
@@ -1353,6 +1368,8 @@ func (*Tracing_CustomTag_Literal) isTracing_CustomTag_Type() {}
 func (*Tracing_CustomTag_Environment) isTracing_CustomTag_Type() {}
 
 func (*Tracing_CustomTag_Header) isTracing_CustomTag_Type() {}
+
+func (*Tracing_CustomTag_Formatter) isTracing_CustomTag_Type() {}
 
 type Tracing_Literal struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -1512,6 +1529,55 @@ func (x *Tracing_RequestHeader) GetDefaultValue() string {
 	return ""
 }
 
+type Tracing_Formatter struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The formatter tag value to use, same formatter as HTTP access logging
+	// (e.g. %REQUESTED_SERVER_NAME%). Unknown specifier values are replaced
+	// with the empty string.
+	//
+	// +kubebuilder:validation:MinLength=1
+	Value         string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Tracing_Formatter) Reset() {
+	*x = Tracing_Formatter{}
+	mi := &file_telemetry_v1alpha1_telemetry_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Tracing_Formatter) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Tracing_Formatter) ProtoMessage() {}
+
+func (x *Tracing_Formatter) ProtoReflect() protoreflect.Message {
+	mi := &file_telemetry_v1alpha1_telemetry_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Tracing_Formatter.ProtoReflect.Descriptor instead.
+func (*Tracing_Formatter) Descriptor() ([]byte, []int) {
+	return file_telemetry_v1alpha1_telemetry_proto_rawDescGZIP(), []int{1, 5}
+}
+
+func (x *Tracing_Formatter) GetValue() string {
+	if x != nil {
+		return x.Value
+	}
+	return ""
+}
+
 // TagOverride specifies an operation to perform on a metric dimension (also
 // known as a `label`). Tags may be added, removed, or have their default
 // values overridden.
@@ -1536,7 +1602,7 @@ type MetricsOverrides_TagOverride struct {
 
 func (x *MetricsOverrides_TagOverride) Reset() {
 	*x = MetricsOverrides_TagOverride{}
-	mi := &file_telemetry_v1alpha1_telemetry_proto_msgTypes[13]
+	mi := &file_telemetry_v1alpha1_telemetry_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1548,7 +1614,7 @@ func (x *MetricsOverrides_TagOverride) String() string {
 func (*MetricsOverrides_TagOverride) ProtoMessage() {}
 
 func (x *MetricsOverrides_TagOverride) ProtoReflect() protoreflect.Message {
-	mi := &file_telemetry_v1alpha1_telemetry_proto_msgTypes[13]
+	mi := &file_telemetry_v1alpha1_telemetry_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1595,7 +1661,7 @@ type AccessLogging_LogSelector struct {
 
 func (x *AccessLogging_LogSelector) Reset() {
 	*x = AccessLogging_LogSelector{}
-	mi := &file_telemetry_v1alpha1_telemetry_proto_msgTypes[15]
+	mi := &file_telemetry_v1alpha1_telemetry_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1607,7 +1673,7 @@ func (x *AccessLogging_LogSelector) String() string {
 func (*AccessLogging_LogSelector) ProtoMessage() {}
 
 func (x *AccessLogging_LogSelector) ProtoReflect() protoreflect.Message {
-	mi := &file_telemetry_v1alpha1_telemetry_proto_msgTypes[15]
+	mi := &file_telemetry_v1alpha1_telemetry_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1647,7 +1713,7 @@ type AccessLogging_Filter struct {
 
 func (x *AccessLogging_Filter) Reset() {
 	*x = AccessLogging_Filter{}
-	mi := &file_telemetry_v1alpha1_telemetry_proto_msgTypes[16]
+	mi := &file_telemetry_v1alpha1_telemetry_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1659,7 +1725,7 @@ func (x *AccessLogging_Filter) String() string {
 func (*AccessLogging_Filter) ProtoMessage() {}
 
 func (x *AccessLogging_Filter) ProtoReflect() protoreflect.Message {
-	mi := &file_telemetry_v1alpha1_telemetry_proto_msgTypes[16]
+	mi := &file_telemetry_v1alpha1_telemetry_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1695,7 +1761,8 @@ const file_telemetry_v1alpha1_telemetry_proto_rawDesc = "" +
 	"targetRefs\x12;\n" +
 	"\atracing\x18\x02 \x03(\v2!.istio.telemetry.v1alpha1.TracingR\atracing\x12;\n" +
 	"\ametrics\x18\x03 \x03(\v2!.istio.telemetry.v1alpha1.MetricsR\ametrics\x12N\n" +
-	"\x0eaccess_logging\x18\x04 \x03(\v2'.istio.telemetry.v1alpha1.AccessLoggingR\raccessLogging\"\xc1\t\n" +
+	"\x0eaccess_logging\x18\x04 \x03(\v2'.istio.telemetry.v1alpha1.AccessLoggingR\raccessLogging\"\xb7\n" +
+	"\n" +
 	"\aTracing\x12G\n" +
 	"\x05match\x18\a \x01(\v21.istio.telemetry.v1alpha1.Tracing.TracingSelectorR\x05match\x12C\n" +
 	"\tproviders\x18\x02 \x03(\v2%.istio.telemetry.v1alpha1.ProviderRefR\tproviders\x12Z\n" +
@@ -1706,11 +1773,12 @@ const file_telemetry_v1alpha1_telemetry_proto_rawDesc = "" +
 	"!use_request_id_for_trace_sampling\x18\x06 \x01(\v2\x1a.google.protobuf.BoolValueR\x1cuseRequestIdForTraceSampling\x12F\n" +
 	"\x11enable_istio_tags\x18\b \x01(\v2\x1a.google.protobuf.BoolValueR\x0fenableIstioTags\x1aM\n" +
 	"\x0fTracingSelector\x12:\n" +
-	"\x04mode\x18\x01 \x01(\x0e2&.istio.telemetry.v1alpha1.WorkloadModeR\x04mode\x1a\xf8\x01\n" +
+	"\x04mode\x18\x01 \x01(\x0e2&.istio.telemetry.v1alpha1.WorkloadModeR\x04mode\x1a\xc5\x02\n" +
 	"\tCustomTag\x12E\n" +
 	"\aliteral\x18\x01 \x01(\v2).istio.telemetry.v1alpha1.Tracing.LiteralH\x00R\aliteral\x12Q\n" +
 	"\venvironment\x18\x02 \x01(\v2-.istio.telemetry.v1alpha1.Tracing.EnvironmentH\x00R\venvironment\x12I\n" +
-	"\x06header\x18\x03 \x01(\v2/.istio.telemetry.v1alpha1.Tracing.RequestHeaderH\x00R\x06headerB\x06\n" +
+	"\x06header\x18\x03 \x01(\v2/.istio.telemetry.v1alpha1.Tracing.RequestHeaderH\x00R\x06header\x12K\n" +
+	"\tformatter\x18\x04 \x01(\v2+.istio.telemetry.v1alpha1.Tracing.FormatterH\x00R\tformatterB\x06\n" +
 	"\x04type\x1a%\n" +
 	"\aLiteral\x12\x1a\n" +
 	"\x05value\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x05value\x1aL\n" +
@@ -1719,7 +1787,9 @@ const file_telemetry_v1alpha1_telemetry_proto_rawDesc = "" +
 	"\rdefault_value\x18\x02 \x01(\tR\fdefaultValue\x1aN\n" +
 	"\rRequestHeader\x12\x18\n" +
 	"\x04name\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x04name\x12#\n" +
-	"\rdefault_value\x18\x02 \x01(\tR\fdefaultValue\x1aj\n" +
+	"\rdefault_value\x18\x02 \x01(\tR\fdefaultValue\x1a'\n" +
+	"\tFormatter\x12\x1a\n" +
+	"\x05value\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x05value\x1aj\n" +
 	"\x0fCustomTagsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12A\n" +
 	"\x05value\x18\x02 \x01(\v2+.istio.telemetry.v1alpha1.Tracing.CustomTagR\x05value:\x028\x01\"'\n" +
@@ -1793,7 +1863,7 @@ func file_telemetry_v1alpha1_telemetry_proto_rawDescGZIP() []byte {
 }
 
 var file_telemetry_v1alpha1_telemetry_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_telemetry_v1alpha1_telemetry_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_telemetry_v1alpha1_telemetry_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_telemetry_v1alpha1_telemetry_proto_goTypes = []any{
 	(WorkloadMode)(0),                           // 0: istio.telemetry.v1alpha1.WorkloadMode
 	(MetricSelector_IstioMetric)(0),             // 1: istio.telemetry.v1alpha1.MetricSelector.IstioMetric
@@ -1810,56 +1880,58 @@ var file_telemetry_v1alpha1_telemetry_proto_goTypes = []any{
 	(*Tracing_Literal)(nil),                     // 12: istio.telemetry.v1alpha1.Tracing.Literal
 	(*Tracing_Environment)(nil),                 // 13: istio.telemetry.v1alpha1.Tracing.Environment
 	(*Tracing_RequestHeader)(nil),               // 14: istio.telemetry.v1alpha1.Tracing.RequestHeader
-	nil,                                         // 15: istio.telemetry.v1alpha1.Tracing.CustomTagsEntry
-	(*MetricsOverrides_TagOverride)(nil),        // 16: istio.telemetry.v1alpha1.MetricsOverrides.TagOverride
-	nil,                                         // 17: istio.telemetry.v1alpha1.MetricsOverrides.TagOverridesEntry
-	(*AccessLogging_LogSelector)(nil),           // 18: istio.telemetry.v1alpha1.AccessLogging.LogSelector
-	(*AccessLogging_Filter)(nil),                // 19: istio.telemetry.v1alpha1.AccessLogging.Filter
-	(*v1beta1.WorkloadSelector)(nil),            // 20: istio.type.v1beta1.WorkloadSelector
-	(*v1beta1.PolicyTargetReference)(nil),       // 21: istio.type.v1beta1.PolicyTargetReference
-	(*wrappers.DoubleValue)(nil),                // 22: google.protobuf.DoubleValue
-	(*wrappers.BoolValue)(nil),                  // 23: google.protobuf.BoolValue
-	(*duration.Duration)(nil),                   // 24: google.protobuf.Duration
+	(*Tracing_Formatter)(nil),                   // 15: istio.telemetry.v1alpha1.Tracing.Formatter
+	nil,                                         // 16: istio.telemetry.v1alpha1.Tracing.CustomTagsEntry
+	(*MetricsOverrides_TagOverride)(nil),        // 17: istio.telemetry.v1alpha1.MetricsOverrides.TagOverride
+	nil,                                         // 18: istio.telemetry.v1alpha1.MetricsOverrides.TagOverridesEntry
+	(*AccessLogging_LogSelector)(nil),           // 19: istio.telemetry.v1alpha1.AccessLogging.LogSelector
+	(*AccessLogging_Filter)(nil),                // 20: istio.telemetry.v1alpha1.AccessLogging.Filter
+	(*v1beta1.WorkloadSelector)(nil),            // 21: istio.type.v1beta1.WorkloadSelector
+	(*v1beta1.PolicyTargetReference)(nil),       // 22: istio.type.v1beta1.PolicyTargetReference
+	(*wrappers.DoubleValue)(nil),                // 23: google.protobuf.DoubleValue
+	(*wrappers.BoolValue)(nil),                  // 24: google.protobuf.BoolValue
+	(*duration.Duration)(nil),                   // 25: google.protobuf.Duration
 }
 var file_telemetry_v1alpha1_telemetry_proto_depIdxs = []int32{
-	20, // 0: istio.telemetry.v1alpha1.Telemetry.selector:type_name -> istio.type.v1beta1.WorkloadSelector
-	21, // 1: istio.telemetry.v1alpha1.Telemetry.targetRef:type_name -> istio.type.v1beta1.PolicyTargetReference
-	21, // 2: istio.telemetry.v1alpha1.Telemetry.targetRefs:type_name -> istio.type.v1beta1.PolicyTargetReference
+	21, // 0: istio.telemetry.v1alpha1.Telemetry.selector:type_name -> istio.type.v1beta1.WorkloadSelector
+	22, // 1: istio.telemetry.v1alpha1.Telemetry.targetRef:type_name -> istio.type.v1beta1.PolicyTargetReference
+	22, // 2: istio.telemetry.v1alpha1.Telemetry.targetRefs:type_name -> istio.type.v1beta1.PolicyTargetReference
 	4,  // 3: istio.telemetry.v1alpha1.Telemetry.tracing:type_name -> istio.telemetry.v1alpha1.Tracing
 	6,  // 4: istio.telemetry.v1alpha1.Telemetry.metrics:type_name -> istio.telemetry.v1alpha1.Metrics
 	9,  // 5: istio.telemetry.v1alpha1.Telemetry.access_logging:type_name -> istio.telemetry.v1alpha1.AccessLogging
 	10, // 6: istio.telemetry.v1alpha1.Tracing.match:type_name -> istio.telemetry.v1alpha1.Tracing.TracingSelector
 	5,  // 7: istio.telemetry.v1alpha1.Tracing.providers:type_name -> istio.telemetry.v1alpha1.ProviderRef
-	22, // 8: istio.telemetry.v1alpha1.Tracing.random_sampling_percentage:type_name -> google.protobuf.DoubleValue
-	23, // 9: istio.telemetry.v1alpha1.Tracing.disable_span_reporting:type_name -> google.protobuf.BoolValue
-	15, // 10: istio.telemetry.v1alpha1.Tracing.custom_tags:type_name -> istio.telemetry.v1alpha1.Tracing.CustomTagsEntry
-	23, // 11: istio.telemetry.v1alpha1.Tracing.use_request_id_for_trace_sampling:type_name -> google.protobuf.BoolValue
-	23, // 12: istio.telemetry.v1alpha1.Tracing.enable_istio_tags:type_name -> google.protobuf.BoolValue
+	23, // 8: istio.telemetry.v1alpha1.Tracing.random_sampling_percentage:type_name -> google.protobuf.DoubleValue
+	24, // 9: istio.telemetry.v1alpha1.Tracing.disable_span_reporting:type_name -> google.protobuf.BoolValue
+	16, // 10: istio.telemetry.v1alpha1.Tracing.custom_tags:type_name -> istio.telemetry.v1alpha1.Tracing.CustomTagsEntry
+	24, // 11: istio.telemetry.v1alpha1.Tracing.use_request_id_for_trace_sampling:type_name -> google.protobuf.BoolValue
+	24, // 12: istio.telemetry.v1alpha1.Tracing.enable_istio_tags:type_name -> google.protobuf.BoolValue
 	5,  // 13: istio.telemetry.v1alpha1.Metrics.providers:type_name -> istio.telemetry.v1alpha1.ProviderRef
 	8,  // 14: istio.telemetry.v1alpha1.Metrics.overrides:type_name -> istio.telemetry.v1alpha1.MetricsOverrides
-	24, // 15: istio.telemetry.v1alpha1.Metrics.reporting_interval:type_name -> google.protobuf.Duration
+	25, // 15: istio.telemetry.v1alpha1.Metrics.reporting_interval:type_name -> google.protobuf.Duration
 	1,  // 16: istio.telemetry.v1alpha1.MetricSelector.metric:type_name -> istio.telemetry.v1alpha1.MetricSelector.IstioMetric
 	0,  // 17: istio.telemetry.v1alpha1.MetricSelector.mode:type_name -> istio.telemetry.v1alpha1.WorkloadMode
 	7,  // 18: istio.telemetry.v1alpha1.MetricsOverrides.match:type_name -> istio.telemetry.v1alpha1.MetricSelector
-	23, // 19: istio.telemetry.v1alpha1.MetricsOverrides.disabled:type_name -> google.protobuf.BoolValue
-	17, // 20: istio.telemetry.v1alpha1.MetricsOverrides.tag_overrides:type_name -> istio.telemetry.v1alpha1.MetricsOverrides.TagOverridesEntry
-	18, // 21: istio.telemetry.v1alpha1.AccessLogging.match:type_name -> istio.telemetry.v1alpha1.AccessLogging.LogSelector
+	24, // 19: istio.telemetry.v1alpha1.MetricsOverrides.disabled:type_name -> google.protobuf.BoolValue
+	18, // 20: istio.telemetry.v1alpha1.MetricsOverrides.tag_overrides:type_name -> istio.telemetry.v1alpha1.MetricsOverrides.TagOverridesEntry
+	19, // 21: istio.telemetry.v1alpha1.AccessLogging.match:type_name -> istio.telemetry.v1alpha1.AccessLogging.LogSelector
 	5,  // 22: istio.telemetry.v1alpha1.AccessLogging.providers:type_name -> istio.telemetry.v1alpha1.ProviderRef
-	23, // 23: istio.telemetry.v1alpha1.AccessLogging.disabled:type_name -> google.protobuf.BoolValue
-	19, // 24: istio.telemetry.v1alpha1.AccessLogging.filter:type_name -> istio.telemetry.v1alpha1.AccessLogging.Filter
+	24, // 23: istio.telemetry.v1alpha1.AccessLogging.disabled:type_name -> google.protobuf.BoolValue
+	20, // 24: istio.telemetry.v1alpha1.AccessLogging.filter:type_name -> istio.telemetry.v1alpha1.AccessLogging.Filter
 	0,  // 25: istio.telemetry.v1alpha1.Tracing.TracingSelector.mode:type_name -> istio.telemetry.v1alpha1.WorkloadMode
 	12, // 26: istio.telemetry.v1alpha1.Tracing.CustomTag.literal:type_name -> istio.telemetry.v1alpha1.Tracing.Literal
 	13, // 27: istio.telemetry.v1alpha1.Tracing.CustomTag.environment:type_name -> istio.telemetry.v1alpha1.Tracing.Environment
 	14, // 28: istio.telemetry.v1alpha1.Tracing.CustomTag.header:type_name -> istio.telemetry.v1alpha1.Tracing.RequestHeader
-	11, // 29: istio.telemetry.v1alpha1.Tracing.CustomTagsEntry.value:type_name -> istio.telemetry.v1alpha1.Tracing.CustomTag
-	2,  // 30: istio.telemetry.v1alpha1.MetricsOverrides.TagOverride.operation:type_name -> istio.telemetry.v1alpha1.MetricsOverrides.TagOverride.Operation
-	16, // 31: istio.telemetry.v1alpha1.MetricsOverrides.TagOverridesEntry.value:type_name -> istio.telemetry.v1alpha1.MetricsOverrides.TagOverride
-	0,  // 32: istio.telemetry.v1alpha1.AccessLogging.LogSelector.mode:type_name -> istio.telemetry.v1alpha1.WorkloadMode
-	33, // [33:33] is the sub-list for method output_type
-	33, // [33:33] is the sub-list for method input_type
-	33, // [33:33] is the sub-list for extension type_name
-	33, // [33:33] is the sub-list for extension extendee
-	0,  // [0:33] is the sub-list for field type_name
+	15, // 29: istio.telemetry.v1alpha1.Tracing.CustomTag.formatter:type_name -> istio.telemetry.v1alpha1.Tracing.Formatter
+	11, // 30: istio.telemetry.v1alpha1.Tracing.CustomTagsEntry.value:type_name -> istio.telemetry.v1alpha1.Tracing.CustomTag
+	2,  // 31: istio.telemetry.v1alpha1.MetricsOverrides.TagOverride.operation:type_name -> istio.telemetry.v1alpha1.MetricsOverrides.TagOverride.Operation
+	17, // 32: istio.telemetry.v1alpha1.MetricsOverrides.TagOverridesEntry.value:type_name -> istio.telemetry.v1alpha1.MetricsOverrides.TagOverride
+	0,  // 33: istio.telemetry.v1alpha1.AccessLogging.LogSelector.mode:type_name -> istio.telemetry.v1alpha1.WorkloadMode
+	34, // [34:34] is the sub-list for method output_type
+	34, // [34:34] is the sub-list for method input_type
+	34, // [34:34] is the sub-list for extension type_name
+	34, // [34:34] is the sub-list for extension extendee
+	0,  // [0:34] is the sub-list for field type_name
 }
 
 func init() { file_telemetry_v1alpha1_telemetry_proto_init() }
@@ -1875,6 +1947,7 @@ func file_telemetry_v1alpha1_telemetry_proto_init() {
 		(*Tracing_CustomTag_Literal)(nil),
 		(*Tracing_CustomTag_Environment)(nil),
 		(*Tracing_CustomTag_Header)(nil),
+		(*Tracing_CustomTag_Formatter)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1882,7 +1955,7 @@ func file_telemetry_v1alpha1_telemetry_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_telemetry_v1alpha1_telemetry_proto_rawDesc), len(file_telemetry_v1alpha1_telemetry_proto_rawDesc)),
 			NumEnums:      3,
-			NumMessages:   17,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

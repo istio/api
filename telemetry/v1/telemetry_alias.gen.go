@@ -63,9 +63,13 @@ type Tracing_CustomTag_Environment = v1alpha1.Tracing_CustomTag_Environment
 // RequestHeader adds the value of an header from the request to each
 // span.
 type Tracing_CustomTag_Header = v1alpha1.Tracing_CustomTag_Header
+
+// Formatter adds the value of access logging substitution formatter.
+type Tracing_CustomTag_Formatter = v1alpha1.Tracing_CustomTag_Formatter
 type Tracing_Literal = v1alpha1.Tracing_Literal
 type Tracing_Environment = v1alpha1.Tracing_Environment
 type Tracing_RequestHeader = v1alpha1.Tracing_RequestHeader
+type Tracing_Formatter = v1alpha1.Tracing_Formatter
 
 // Used to bind Telemetry configuration to specific providers for
 // targeted customization.
