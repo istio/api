@@ -44,6 +44,8 @@ syntax = "proto3";
 // ```
 // For mesh level, put the policy in root-namespace according to your Istio installation.
 //
+// Note: PeerAuthentication policies with workload selectors are ignored when deployed in the root namespace.
+//
 // Policies to allow both mTLS and plaintext traffic for all workloads under namespace `foo`, but
 // require mTLS for workload `finance`.
 // ```yaml
