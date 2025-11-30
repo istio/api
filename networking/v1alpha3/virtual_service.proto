@@ -190,7 +190,29 @@ message VirtualService {
   // sidecars in the mesh. If a list of gateway names is provided, the
   // rules will apply only to the gateways. To apply the rules to both
   // gateways and sidecars, specify `mesh` as one of the gateway names.
+  //
+  // **Note:** This field is mutually exclusive with `gateway_selector`. If both
+  // are specified, `gateway_selector` takes precedence.
   repeated string gateways = 2;
+
+  // Gateway selector allows selecting gateways using label selectors instead of
+  // explicit names. This provides more flexibility for dynamic gateway selection.
+  // Each entry can specify either a gateway name or a label selector.
+  //
+  // Example:
+  // ```yaml
+  // gateway_selector:
+  // - name: "mesh"
+  // - selector:
+  //     env: "prod"
+  //     version: "v1"
+  // - selector:
+  //     region: "us-east"
+  // ```
+  //
+  // **Note:** This field is mutually exclusive with `gateways`. If both are
+  // specified, `gateway_selector` takes precedence.
+  repeated GatewayReference gateway_selector = 7;
 
   // An ordered list of route rules for HTTP traffic. HTTP routes will be
   // applied to platform service ports using HTTP/HTTP2/GRPC protocols, gateway
@@ -228,6 +250,60 @@ message VirtualService {
   // the virtual service is declared in. Similarly the value "*" is reserved and
   // defines an export to all namespaces.
   repeated string export_to = 6;
+}
+
+// GatewayReference specifies a reference to a gateway either by name or by label selector.
+// This allows for flexible gateway selection in VirtualService configurations.
+//
+// Example using name:
+// ```yaml
+// gateway_selector:
+// - name: "my-gateway"
+// - name: "istio-system/another-gateway"
+// ```
+//
+// Example using label selector (Kubernetes-style):
+// ```yaml
+// gateway_selector:
+// - selector:
+//     env: "prod"
+//     version: "v1"
+// - selector:
+//     region: "us-east"
+// ```
+//
+// Example mixing both:
+// ```yaml
+// gateway_selector:
+// - name: "mesh"
+// - selector:
+//     env: "prod"
+// ```
+message GatewayReference {
+  // Name specifies the gateway by name. This can be a simple name like "my-gateway"
+  // or a namespaced name like "istio-system/my-gateway".
+  // The reserved word "mesh" can be used to refer to all sidecars in the mesh.
+  //
+  // **Note:** This field is mutually exclusive with `selector`. If both are specified,
+  // `selector` takes precedence.
+  string name = 1;
+
+  // Selector specifies a label selector to match gateways. All labels in the selector
+  // must be present on the gateway for it to match (subset matching).
+  //
+  // Example:
+  // ```yaml
+  // selector:
+  //   env: "prod"
+  //   version: "v1"
+  //   region: "us-east"
+  // ```
+  //
+  // This will match any gateway that has all three labels with the specified values.
+  //
+  // **Note:** This field is mutually exclusive with `name`. If both are specified,
+  // `selector` takes precedence.
+  map<string, string> selector = 2;
 }
 
 // Destination indicates the network addressable service to which the

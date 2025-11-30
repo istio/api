@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.VirtualService
 aliases: [/docs/reference/config/networking/v1alpha3/virtual-service]
-number_of_entries: 30
+number_of_entries: 31
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -148,6 +148,30 @@ gateway (<code>mesh</code>) will be used, which would apply the rule to all
 sidecars in the mesh. If a list of gateway names is provided, the
 rules will apply only to the gateways. To apply the rules to both
 gateways and sidecars, specify <code>mesh</code> as one of the gateway names.</p>
+<p><strong>Note:</strong> This field is mutually exclusive with <code>gateway_selector</code>. If both
+are specified, <code>gateway_selector</code> takes precedence.</p>
+
+</td>
+</tr>
+<tr id="VirtualService-gateway_selector">
+<td><div class="field"><div class="name"><code><a href="#VirtualService-gateway_selector">gatewaySelector</a></code></div>
+<div class="type"><a href="#GatewayReference">GatewayReference[]</a></div>
+</div></td>
+<td>
+<p>Gateway selector allows selecting gateways using label selectors instead of
+explicit names. This provides more flexibility for dynamic gateway selection.
+Each entry can specify either a gateway name or a label selector.</p>
+<p>Example:</p>
+<pre><code class="language-yaml">gateway_selector:
+- name: &quot;mesh&quot;
+- selector:
+    env: &quot;prod&quot;
+    version: &quot;v1&quot;
+- selector:
+    region: &quot;us-east&quot;
+</code></pre>
+<p><strong>Note:</strong> This field is mutually exclusive with <code>gateways</code>. If both are
+specified, <code>gateway_selector</code> takes precedence.</p>
 
 </td>
 </tr>
@@ -207,6 +231,73 @@ namespaces by default.</p>
 <p>The value &ldquo;.&rdquo; is reserved and defines an export to the same namespace that
 the virtual service is declared in. Similarly the value &ldquo;*&rdquo; is reserved and
 defines an export to all namespaces.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="GatewayReference">GatewayReference</h2>
+<section>
+<p>GatewayReference specifies a reference to a gateway either by name or by label selector.
+This allows for flexible gateway selection in VirtualService configurations.</p>
+<p>Example using name:</p>
+<pre><code class="language-yaml">gateway_selector:
+- name: &quot;my-gateway&quot;
+- name: &quot;istio-system/another-gateway&quot;
+</code></pre>
+<p>Example using label selector (Kubernetes-style):</p>
+<pre><code class="language-yaml">gateway_selector:
+- selector:
+    env: &quot;prod&quot;
+    version: &quot;v1&quot;
+- selector:
+    region: &quot;us-east&quot;
+</code></pre>
+<p>Example mixing both:</p>
+<pre><code class="language-yaml">gateway_selector:
+- name: &quot;mesh&quot;
+- selector:
+    env: &quot;prod&quot;
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="GatewayReference-name">
+<td><div class="field"><div class="name"><code><a href="#GatewayReference-name">name</a></code></div>
+<div class="type">string</div>
+</div></td>
+<td>
+<p>Name specifies the gateway by name. This can be a simple name like &ldquo;my-gateway&rdquo;
+or a namespaced name like &ldquo;istio-system/my-gateway&rdquo;.
+The reserved word &ldquo;mesh&rdquo; can be used to refer to all sidecars in the mesh.</p>
+<p><strong>Note:</strong> This field is mutually exclusive with <code>selector</code>. If both are specified,
+<code>selector</code> takes precedence.</p>
+
+</td>
+</tr>
+<tr id="GatewayReference-selector">
+<td><div class="field"><div class="name"><code><a href="#GatewayReference-selector">selector</a></code></div>
+<div class="type">map&lt;string,&nbsp;string&gt;</div>
+</div></td>
+<td>
+<p>Selector specifies a label selector to match gateways. All labels in the selector
+must be present on the gateway for it to match (subset matching).</p>
+<p>Example:</p>
+<pre><code class="language-yaml">selector:
+  env: &quot;prod&quot;
+  version: &quot;v1&quot;
+  region: &quot;us-east&quot;
+</code></pre>
+<p>This will match any gateway that has all three labels with the specified values.</p>
+<p><strong>Note:</strong> This field is mutually exclusive with <code>name</code>. If both are specified,
+<code>selector</code> takes precedence.</p>
 
 </td>
 </tr>
