@@ -1,12 +1,12 @@
 apiVersion: release-notes/v2
-
 kind: feature
 area: traffic-management
 issue:
-- https://github.com/istio/api/pull/3611
+  - https://github.com/istio/ztunnel/issues/1637
+  - https://github.com/istio/ztunnel/issues/1662
 
 releaseNotes:
-- |
+  - |
     **Added** `hboneIdleTimeout` field to MeshConfig API to configure idle timeout for HBONE connections between proxies and ztunnel in Ambient mesh mode.
     This prevents stale connection reuse when pod IPs are recycled in environments with aggressive IP address reuse (e.g., AWS EKS with VPC CNI).
     Default is 1 hour; recommended setting for AWS VPC CNI is 15 seconds.
