@@ -594,6 +594,26 @@ message WarmupConfiguration {
 //           interval: 75s
 // ```
 //
+// The following example sets a per-host connection limit of 10 connections
+// for each individual endpoint in the reviews service. This is useful for
+// preventing overload of individual endpoints, especially in autoscaling scenarios.
+// Note: currently only the max_connections field is supported for per-host limits.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1
+// kind: DestinationRule
+// metadata:
+//   name: reviews-per-host-limits
+// spec:
+//   host: reviews.prod.svc.cluster.local
+//   trafficPolicy:
+//     connectionPool:
+//       tcp:
+//         maxConnections: 100
+//       perHostLimits:
+//         maxConnections: 10
+// ```
+//
 message ConnectionPoolSettings {
   // Settings common to both HTTP and TCP upstream connections.
   message TCPSettings {
@@ -701,6 +721,22 @@ message ConnectionPoolSettings {
   TCPSettings tcp = 1;
   // HTTP connection pool settings.
   HTTPSettings http = 2;
+
+  // Per-host connection limits that apply to each individual host in the upstream service.
+  // These limits allow controlling connections to each endpoint independently,
+  // which is useful for preventing overload of individual hosts and managing
+  // concurrency in autoscaling scenarios.
+  //
+  // Note: Currently only the `maxConnections` field is supported for per-host limits,
+  // as per Envoy's circuit breaker implementation.
+  message PerHostLimits {
+    // Maximum number of connections to each individual host in the upstream cluster.
+    // If not specified, there is no per-host limit.
+    int32 max_connections = 1;
+  }
+
+  // Optional per-host connection limits.
+  PerHostLimits per_host_limits = 3;
 }
 
 // A Circuit breaker implementation that tracks the status of each

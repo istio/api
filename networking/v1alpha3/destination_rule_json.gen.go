@@ -204,6 +204,17 @@ func (this *ConnectionPoolSettings_HTTPSettings) UnmarshalJSON(b []byte) error {
 	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for ConnectionPoolSettings_PerHostLimits
+func (this *ConnectionPoolSettings_PerHostLimits) MarshalJSON() ([]byte, error) {
+	str, err := DestinationRuleMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ConnectionPoolSettings_PerHostLimits
+func (this *ConnectionPoolSettings_PerHostLimits) UnmarshalJSON(b []byte) error {
+	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 // MarshalJSON is a custom marshaler for OutlierDetection
 func (this *OutlierDetection) MarshalJSON() ([]byte, error) {
 	str, err := DestinationRuleMarshaler.MarshalToString(this)
