@@ -10581,6 +10581,21 @@ spec:
                 items:
                   type: string
                 type: array
+              gatewaySelector:
+                description: Gateway selector allows selecting gateways using label
+                  selectors instead of explicit names.
+                items:
+                  properties:
+                    name:
+                      description: Name specifies the gateway by name.
+                      type: string
+                    selector:
+                      additionalProperties:
+                        type: string
+                      description: Selector specifies a label selector to match gateways.
+                      type: object
+                  type: object
+                type: array
               gateways:
                 description: The names of gateways and sidecars that should apply
                   these routes.
@@ -11633,6 +11648,21 @@ spec:
                 items:
                   type: string
                 type: array
+              gatewaySelector:
+                description: Gateway selector allows selecting gateways using label
+                  selectors instead of explicit names.
+                items:
+                  properties:
+                    name:
+                      description: Name specifies the gateway by name.
+                      type: string
+                    selector:
+                      additionalProperties:
+                        type: string
+                      description: Selector specifies a label selector to match gateways.
+                      type: object
+                  type: object
+                type: array
               gateways:
                 description: The names of gateways and sidecars that should apply
                   these routes.
@@ -12684,6 +12714,21 @@ spec:
                   exported.
                 items:
                   type: string
+                type: array
+              gatewaySelector:
+                description: Gateway selector allows selecting gateways using label
+                  selectors instead of explicit names.
+                items:
+                  properties:
+                    name:
+                      description: Name specifies the gateway by name.
+                      type: string
+                    selector:
+                      additionalProperties:
+                        type: string
+                      description: Selector specifies a label selector to match gateways.
+                      type: object
+                  type: object
                 type: array
               gateways:
                 description: The names of gateways and sidecars that should apply

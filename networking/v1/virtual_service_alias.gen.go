@@ -31,6 +31,37 @@ import "istio.io/api/networking/v1alpha3"
 // -->
 type VirtualService = v1alpha3.VirtualService
 
+// GatewayReference specifies a reference to a gateway either by name or by label selector.
+// This allows for flexible gateway selection in VirtualService configurations.
+//
+// Example using name:
+// ```yaml
+// gateway_selector:
+// - name: "my-gateway"
+// - name: "istio-system/another-gateway"
+// ```
+//
+// Example using label selector (Kubernetes-style):
+// ```yaml
+// gateway_selector:
+//   - selector:
+//     env: "prod"
+//     version: "v1"
+//   - selector:
+//     region: "us-east"
+//
+// ```
+//
+// Example mixing both:
+// ```yaml
+// gateway_selector:
+//   - name: "mesh"
+//   - selector:
+//     env: "prod"
+//
+// ```
+type GatewayReference = v1alpha3.GatewayReference
+
 // Destination indicates the network addressable service to which the
 // request/connection will be sent after processing a routing rule. The
 // destination.host should unambiguously refer to a service in the service
