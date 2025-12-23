@@ -1561,8 +1561,18 @@ message MeshConfig {
   // For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.
   TLSConfig tls_defaults = 64;
 
+  // File flush interval for envoy flushes buffers to disk in milliseconds.
+  // Default is 1000.
+  // Optional.
+  uint32 file_flush_interval = 68;
+
+  // File flush buffer size for envoy flushes buffers to disk in kilobytes.
+  // Defaults to 64.
+  // Optional.
+  uint32 file_flush_min_size = 69;
+
   // $hide_from_docs
-  // Next available field number: 67
+  // Next available field number: 70
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
