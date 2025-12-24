@@ -49,6 +49,15 @@ message MeshConfig {
   // Default timeout is 10s.
   google.protobuf.Duration connect_timeout = 6;
 
+  // Idle timeout configured on Envoy proxies for their connection pools to ztunnel via HBONE.
+  // This controls how long Envoy will keep idle connections to ztunnel before closing them.
+  // Note: This setting is applied only on the Envoy proxy side; ztunnel does not use it.
+  // Default timeout is 1 hour (3600s).
+  // For environments with aggressive IP address reuse, it is recommended to set
+  // this to a value less than the CNI IP cooldown period to prevent stale connection reuse.
+  // For example, if your CNI has a 30s cooldown period, setting this to 15s is recommended.
+  google.protobuf.Duration hbone_idle_timeout = 70;
+
   // $hide_from_docs
   // Automatic protocol detection uses a set of heuristics to
   // determine whether the connection is using TLS or not (on the
