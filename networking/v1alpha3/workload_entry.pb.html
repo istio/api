@@ -235,6 +235,18 @@ ServiceEntry)</p>
 
 </td>
 </tr>
+<tr id="WorkloadEntry-priority">
+<td><div class="field"><div class="name"><code><a href="#WorkloadEntry-priority">priority</a></code></div>
+<div class="type">uint32</div>
+</div></td>
+<td>
+<p>The priority for this Endpoint. If unspecified this will default to the highest priority (0).
+Under usual circumstances, Istio  will only select endpoints for the highest priority (0).
+In the event that enough endpoints for a particular priority are unavailable/unhealthy,
+Istio will fail over to selecting endpoints for the next highest priority group.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
