@@ -487,6 +487,15 @@ spec:
                                     be preserved while initiating connection to backend.
                                   type: boolean
                               type: object
+                            perHostLimits:
+                              description: Optional per-host connection limits.
+                              properties:
+                                maxConnections:
+                                  description: Maximum number of connections to each
+                                    individual host in the upstream cluster.
+                                  format: int32
+                                  type: integer
+                              type: object
                             tcp:
                               description: Settings common to both HTTP and TCP upstream
                                 connections.
@@ -863,6 +872,16 @@ spec:
                                           will be preserved while initiating connection
                                           to backend.
                                         type: boolean
+                                    type: object
+                                  perHostLimits:
+                                    description: Optional per-host connection limits.
+                                    properties:
+                                      maxConnections:
+                                        description: Maximum number of connections
+                                          to each individual host in the upstream
+                                          cluster.
+                                        format: int32
+                                        type: integer
                                     type: object
                                   tcp:
                                     description: Settings common to both HTTP and
@@ -1426,6 +1445,15 @@ spec:
                               while initiating connection to backend.
                             type: boolean
                         type: object
+                      perHostLimits:
+                        description: Optional per-host connection limits.
+                        properties:
+                          maxConnections:
+                            description: Maximum number of connections to each individual
+                              host in the upstream cluster.
+                            format: int32
+                            type: integer
+                        type: object
                       tcp:
                         description: Settings common to both HTTP and TCP upstream
                           connections.
@@ -1792,6 +1820,15 @@ spec:
                                   description: If set to true, client protocol will
                                     be preserved while initiating connection to backend.
                                   type: boolean
+                              type: object
+                            perHostLimits:
+                              description: Optional per-host connection limits.
+                              properties:
+                                maxConnections:
+                                  description: Maximum number of connections to each
+                                    individual host in the upstream cluster.
+                                  format: int32
+                                  type: integer
                               type: object
                             tcp:
                               description: Settings common to both HTTP and TCP upstream
@@ -2488,6 +2525,15 @@ spec:
                                     be preserved while initiating connection to backend.
                                   type: boolean
                               type: object
+                            perHostLimits:
+                              description: Optional per-host connection limits.
+                              properties:
+                                maxConnections:
+                                  description: Maximum number of connections to each
+                                    individual host in the upstream cluster.
+                                  format: int32
+                                  type: integer
+                              type: object
                             tcp:
                               description: Settings common to both HTTP and TCP upstream
                                 connections.
@@ -2864,6 +2910,16 @@ spec:
                                           will be preserved while initiating connection
                                           to backend.
                                         type: boolean
+                                    type: object
+                                  perHostLimits:
+                                    description: Optional per-host connection limits.
+                                    properties:
+                                      maxConnections:
+                                        description: Maximum number of connections
+                                          to each individual host in the upstream
+                                          cluster.
+                                        format: int32
+                                        type: integer
                                     type: object
                                   tcp:
                                     description: Settings common to both HTTP and
@@ -3427,6 +3483,15 @@ spec:
                               while initiating connection to backend.
                             type: boolean
                         type: object
+                      perHostLimits:
+                        description: Optional per-host connection limits.
+                        properties:
+                          maxConnections:
+                            description: Maximum number of connections to each individual
+                              host in the upstream cluster.
+                            format: int32
+                            type: integer
+                        type: object
                       tcp:
                         description: Settings common to both HTTP and TCP upstream
                           connections.
@@ -3793,6 +3858,15 @@ spec:
                                   description: If set to true, client protocol will
                                     be preserved while initiating connection to backend.
                                   type: boolean
+                              type: object
+                            perHostLimits:
+                              description: Optional per-host connection limits.
+                              properties:
+                                maxConnections:
+                                  description: Maximum number of connections to each
+                                    individual host in the upstream cluster.
+                                  format: int32
+                                  type: integer
                               type: object
                             tcp:
                               description: Settings common to both HTTP and TCP upstream
@@ -4489,6 +4563,15 @@ spec:
                                     be preserved while initiating connection to backend.
                                   type: boolean
                               type: object
+                            perHostLimits:
+                              description: Optional per-host connection limits.
+                              properties:
+                                maxConnections:
+                                  description: Maximum number of connections to each
+                                    individual host in the upstream cluster.
+                                  format: int32
+                                  type: integer
+                              type: object
                             tcp:
                               description: Settings common to both HTTP and TCP upstream
                                 connections.
@@ -4865,6 +4948,16 @@ spec:
                                           will be preserved while initiating connection
                                           to backend.
                                         type: boolean
+                                    type: object
+                                  perHostLimits:
+                                    description: Optional per-host connection limits.
+                                    properties:
+                                      maxConnections:
+                                        description: Maximum number of connections
+                                          to each individual host in the upstream
+                                          cluster.
+                                        format: int32
+                                        type: integer
                                     type: object
                                   tcp:
                                     description: Settings common to both HTTP and
@@ -5428,6 +5521,15 @@ spec:
                               while initiating connection to backend.
                             type: boolean
                         type: object
+                      perHostLimits:
+                        description: Optional per-host connection limits.
+                        properties:
+                          maxConnections:
+                            description: Maximum number of connections to each individual
+                              host in the upstream cluster.
+                            format: int32
+                            type: integer
+                        type: object
                       tcp:
                         description: Settings common to both HTTP and TCP upstream
                           connections.
@@ -5794,6 +5896,15 @@ spec:
                                   description: If set to true, client protocol will
                                     be preserved while initiating connection to backend.
                                   type: boolean
+                              type: object
+                            perHostLimits:
+                              description: Optional per-host connection limits.
+                              properties:
+                                maxConnections:
+                                  description: Maximum number of connections to each
+                                    individual host in the upstream cluster.
+                                  format: int32
+                                  type: integer
                               type: object
                             tcp:
                               description: Settings common to both HTTP and TCP upstream
@@ -8900,6 +9011,15 @@ spec:
                           while initiating connection to backend.
                         type: boolean
                     type: object
+                  perHostLimits:
+                    description: Optional per-host connection limits.
+                    properties:
+                      maxConnections:
+                        description: Maximum number of connections to each individual
+                          host in the upstream cluster.
+                        format: int32
+                        type: integer
+                    type: object
                   tcp:
                     description: Settings common to both HTTP and TCP upstream connections.
                     properties:
@@ -9021,6 +9141,15 @@ spec:
                               description: If set to true, client protocol will be
                                 preserved while initiating connection to backend.
                               type: boolean
+                          type: object
+                        perHostLimits:
+                          description: Optional per-host connection limits.
+                          properties:
+                            maxConnections:
+                              description: Maximum number of connections to each individual
+                                host in the upstream cluster.
+                              format: int32
+                              type: integer
                           type: object
                         tcp:
                           description: Settings common to both HTTP and TCP upstream
@@ -9478,6 +9607,15 @@ spec:
                           while initiating connection to backend.
                         type: boolean
                     type: object
+                  perHostLimits:
+                    description: Optional per-host connection limits.
+                    properties:
+                      maxConnections:
+                        description: Maximum number of connections to each individual
+                          host in the upstream cluster.
+                        format: int32
+                        type: integer
+                    type: object
                   tcp:
                     description: Settings common to both HTTP and TCP upstream connections.
                     properties:
@@ -9599,6 +9737,15 @@ spec:
                               description: If set to true, client protocol will be
                                 preserved while initiating connection to backend.
                               type: boolean
+                          type: object
+                        perHostLimits:
+                          description: Optional per-host connection limits.
+                          properties:
+                            maxConnections:
+                              description: Maximum number of connections to each individual
+                                host in the upstream cluster.
+                              format: int32
+                              type: integer
                           type: object
                         tcp:
                           description: Settings common to both HTTP and TCP upstream
@@ -10056,6 +10203,15 @@ spec:
                           while initiating connection to backend.
                         type: boolean
                     type: object
+                  perHostLimits:
+                    description: Optional per-host connection limits.
+                    properties:
+                      maxConnections:
+                        description: Maximum number of connections to each individual
+                          host in the upstream cluster.
+                        format: int32
+                        type: integer
+                    type: object
                   tcp:
                     description: Settings common to both HTTP and TCP upstream connections.
                     properties:
@@ -10177,6 +10333,15 @@ spec:
                               description: If set to true, client protocol will be
                                 preserved while initiating connection to backend.
                               type: boolean
+                          type: object
+                        perHostLimits:
+                          description: Optional per-host connection limits.
+                          properties:
+                            maxConnections:
+                              description: Maximum number of connections to each individual
+                                host in the upstream cluster.
+                              format: int32
+                              type: integer
                           type: object
                         tcp:
                           description: Settings common to both HTTP and TCP upstream

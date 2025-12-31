@@ -252,6 +252,30 @@ type WarmupConfiguration = v1alpha3.WarmupConfiguration
 //	        interval: 75s
 //
 // ```
+//
+// The following example sets a per-host connection limit of 10 connections
+// for each individual endpoint in the reviews service. This is useful for
+// preventing overload of individual endpoints, especially in autoscaling scenarios.
+// Note: currently only the max_connections field is supported for per-host limits.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1
+// kind: DestinationRule
+// metadata:
+//
+//	name: reviews-per-host-limits
+//
+// spec:
+//
+//	host: reviews.prod.svc.cluster.local
+//	trafficPolicy:
+//	  connectionPool:
+//	    tcp:
+//	      maxConnections: 100
+//	    perHostLimits:
+//	      maxConnections: 10
+//
+// ```
 type ConnectionPoolSettings = v1alpha3.ConnectionPoolSettings
 
 // Settings common to both HTTP and TCP upstream connections.
@@ -276,6 +300,15 @@ const ConnectionPoolSettings_HTTPSettings_DO_NOT_UPGRADE ConnectionPoolSettings_
 // Upgrade the connection to http2.
 // This opt-in option overrides the default.
 const ConnectionPoolSettings_HTTPSettings_UPGRADE ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy = v1alpha3.ConnectionPoolSettings_HTTPSettings_UPGRADE
+
+// Per-host connection limits that apply to each individual host in the upstream service.
+// These limits allow controlling connections to each endpoint independently,
+// which is useful for preventing overload of individual hosts and managing
+// concurrency in autoscaling scenarios.
+//
+// Note: Currently only the `maxConnections` field is supported for per-host limits,
+// as per Envoy's circuit breaker implementation.
+type ConnectionPoolSettings_PerHostLimits = v1alpha3.ConnectionPoolSettings_PerHostLimits
 
 // A Circuit breaker implementation that tracks the status of each
 // individual host in the upstream service.  Applicable to both HTTP and

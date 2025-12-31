@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - https://github.com/istio/istio/issues/42490
+
+releaseNotes:
+  - |
+    **Added** `perHostSettings` to the `ConnectionPoolSettings` in the `DestinationRule` API to enable configuring per-host connection limits for each individual endpoint in a cluster. This is useful for preventing overload of individual hosts and managing concurrency in autoscaling scenarios. Note: currently only the `maxConnections` field is supported for per-host limits.
