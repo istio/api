@@ -1066,9 +1066,17 @@ type ProxyConfig struct {
 	//	  mode: IN_MESH
 	//
 	// ```
-	ProxyHeaders  *ProxyConfig_ProxyHeaders `protobuf:"bytes,39,opt,name=proxy_headers,json=proxyHeaders,proto3" json:"proxy_headers,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	ProxyHeaders *ProxyConfig_ProxyHeaders `protobuf:"bytes,39,opt,name=proxy_headers,json=proxyHeaders,proto3" json:"proxy_headers,omitempty"`
+	// File flush interval for envoy flushes buffers to disk in milliseconds.
+	// Default is 1000.
+	// Optional.
+	FileFlushInterval uint32 `protobuf:"varint,40,opt,name=file_flush_interval,json=fileFlushInterval,proto3" json:"file_flush_interval,omitempty"`
+	// File flush buffer size for envoy flushes buffers to disk in kilobytes.
+	// Defaults to 64.
+	// Optional.
+	FileFlushMinSize uint32 `protobuf:"varint,41,opt,name=file_flush_min_size,json=fileFlushMinSize,proto3" json:"file_flush_min_size,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *ProxyConfig) Reset() {
@@ -1367,6 +1375,20 @@ func (x *ProxyConfig) GetProxyHeaders() *ProxyConfig_ProxyHeaders {
 		return x.ProxyHeaders
 	}
 	return nil
+}
+
+func (x *ProxyConfig) GetFileFlushInterval() uint32 {
+	if x != nil {
+		return x.FileFlushInterval
+	}
+	return 0
+}
+
+func (x *ProxyConfig) GetFileFlushMinSize() uint32 {
+	if x != nil {
+		return x.FileFlushMinSize
+	}
+	return 0
 }
 
 type isProxyConfig_ClusterName interface {
@@ -2898,7 +2920,7 @@ const file_mesh_v1alpha1_proxy_proto_rawDesc = "" +
 	"poll_delay\x18\x01 \x01(\v2\x19.google.protobuf.DurationR\tpollDelay\x126\n" +
 	"\bfallback\x18\x02 \x01(\v2\x1a.google.protobuf.BoolValueR\bfallbackB\n" +
 	"\n" +
-	"\bprovider\"\xa3&\n" +
+	"\bprovider\"\x82'\n" +
 	"\vProxyConfig\x12\x1f\n" +
 	"\vconfig_path\x18\x01 \x01(\tR\n" +
 	"configPath\x12\x1f\n" +
@@ -2939,7 +2961,9 @@ const file_mesh_v1alpha1_proxy_proto_rawDesc = "" +
 	"\x13ca_certificates_pem\x18\" \x03(\tR\x11caCertificatesPem\x12:\n" +
 	"\x05image\x18# \x01(\v2$.istio.networking.v1beta1.ProxyImageR\x05image\x12Y\n" +
 	"\x14private_key_provider\x18& \x01(\v2'.istio.mesh.v1alpha1.PrivateKeyProviderR\x12privateKeyProvider\x12R\n" +
-	"\rproxy_headers\x18' \x01(\v2-.istio.mesh.v1alpha1.ProxyConfig.ProxyHeadersR\fproxyHeaders\x1a@\n" +
+	"\rproxy_headers\x18' \x01(\v2-.istio.mesh.v1alpha1.ProxyConfig.ProxyHeadersR\fproxyHeaders\x12.\n" +
+	"\x13file_flush_interval\x18( \x01(\rR\x11fileFlushInterval\x12-\n" +
+	"\x13file_flush_min_size\x18) \x01(\rR\x10fileFlushMinSize\x1a@\n" +
 	"\x12ProxyMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a@\n" +

@@ -1034,17 +1034,9 @@ type MeshConfig struct {
 	// Configuration of TLS for all traffic except for ISTIO_MUTUAL mode.
 	// Currently, this supports configuration of ecdhCurves and cipherSuites only.
 	// For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.
-	TlsDefaults *MeshConfig_TLSConfig `protobuf:"bytes,64,opt,name=tls_defaults,json=tlsDefaults,proto3" json:"tls_defaults,omitempty"`
-	// File flush interval for envoy flushes buffers to disk in milliseconds.
-	// Default is 1000.
-	// Optional.
-	FileFlushInterval uint32 `protobuf:"varint,68,opt,name=file_flush_interval,json=fileFlushInterval,proto3" json:"file_flush_interval,omitempty"`
-	// File flush buffer size for envoy flushes buffers to disk in kilobytes.
-	// Defaults to 64.
-	// Optional.
-	FileFlushMinSize uint32 `protobuf:"varint,69,opt,name=file_flush_min_size,json=fileFlushMinSize,proto3" json:"file_flush_min_size,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	TlsDefaults   *MeshConfig_TLSConfig `protobuf:"bytes,64,opt,name=tls_defaults,json=tlsDefaults,proto3" json:"tls_defaults,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *MeshConfig) Reset() {
@@ -1399,20 +1391,6 @@ func (x *MeshConfig) GetTlsDefaults() *MeshConfig_TLSConfig {
 		return x.TlsDefaults
 	}
 	return nil
-}
-
-func (x *MeshConfig) GetFileFlushInterval() uint32 {
-	if x != nil {
-		return x.FileFlushInterval
-	}
-	return 0
-}
-
-func (x *MeshConfig) GetFileFlushMinSize() uint32 {
-	if x != nil {
-		return x.FileFlushMinSize
-	}
-	return 0
 }
 
 // A label selector requirement is a selector that contains values, a key, and an operator that
@@ -5155,7 +5133,7 @@ var File_mesh_v1alpha1_config_proto protoreflect.FileDescriptor
 
 const file_mesh_v1alpha1_config_proto_rawDesc = "" +
 	"\n" +
-	"\x1amesh/v1alpha1/config.proto\x12\x13istio.mesh.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x19mesh/v1alpha1/proxy.proto\x1a*networking/v1alpha3/destination_rule.proto\x1a)networking/v1alpha3/virtual_service.proto\"\xe3p\n" +
+	"\x1amesh/v1alpha1/config.proto\x12\x13istio.mesh.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x19mesh/v1alpha1/proxy.proto\x1a*networking/v1alpha3/destination_rule.proto\x1a)networking/v1alpha3/virtual_service.proto\"\xbap\n" +
 	"\n" +
 	"MeshConfig\x12*\n" +
 	"\x11proxy_listen_port\x18\x04 \x01(\x05R\x0fproxyListenPort\x129\n" +
@@ -5203,9 +5181,7 @@ const file_mesh_v1alpha1_config_proto_rawDesc = "" +
 	"\x12path_normalization\x18= \x01(\v26.istio.mesh.v1alpha1.MeshConfig.ProxyPathNormalizationR\x11pathNormalization\x12_\n" +
 	"\x19default_http_retry_policy\x18> \x01(\v2$.istio.networking.v1alpha3.HTTPRetryR\x16defaultHttpRetryPolicy\x12F\n" +
 	"\tmesh_mTLS\x18? \x01(\v2).istio.mesh.v1alpha1.MeshConfig.TLSConfigR\bmeshMTLS\x12L\n" +
-	"\ftls_defaults\x18@ \x01(\v2).istio.mesh.v1alpha1.MeshConfig.TLSConfigR\vtlsDefaults\x12.\n" +
-	"\x13file_flush_interval\x18D \x01(\rR\x11fileFlushInterval\x12-\n" +
-	"\x13file_flush_min_size\x18E \x01(\rR\x10fileFlushMinSize\x1a\xad\x01\n" +
+	"\ftls_defaults\x18@ \x01(\v2).istio.mesh.v1alpha1.MeshConfig.TLSConfigR\vtlsDefaults\x1a\xad\x01\n" +
 	"\x15OutboundTrafficPolicy\x12N\n" +
 	"\x04mode\x18\x01 \x01(\x0e2:.istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.ModeR\x04mode\"D\n" +
 	"\x04Mode\x12\x11\n" +
@@ -5461,7 +5437,7 @@ const file_mesh_v1alpha1_config_proto_rawDesc = "" +
 	"\x0fH2UpgradePolicy\x12\x12\n" +
 	"\x0eDO_NOT_UPGRADE\x10\x00\x12\v\n" +
 	"\aUPGRADE\x10\x01J\x04\b1\x102J\x04\b\x01\x10\x02J\x04\b\x02\x10\x03J\x04\b\x03\x10\x04J\x04\b0\x101J\x04\b\x19\x10\x1aJ\x04\b\x1e\x10\x1fJ\x04\b\n" +
-	"\x10\vJ\x04\b\v\x10\fJ\x04\b\x0f\x10\x10J\x04\b\x10\x10\x11J\x04\b\x12\x10\x13J\x04\b\x13\x10\x14J\x04\b\x14\x10\x15J\x04\b\x15\x10\x16J\x04\b\x17\x10\x18J\x04\b\x1d\x10\x1eJ\x04\b5\x106J\x04\b%\x10&J\x04\b&\x10'J\x04\b'\x10(R\rthrift_configR\x12mixer_check_serverR\x13mixer_report_serverR\x15disable_policy_checksR\x1adisable_mixer_http_reportsR\x16policy_check_fail_openR%sidecar_to_telemetry_session_affinityR\vauth_policyR\x11rds_refresh_delayR\rmixer_addressR\x1fenable_client_side_policy_checkR\fsds_uds_pathR\x11sds_refresh_delayR\x16enable_sds_token_mountR\x12sds_use_k8s_sa_jwtR\x1atermination_drain_durationR\x14disable_report_batchR\x18report_batch_max_entriesR\x15report_batch_max_time\"\x81\x02\n" +
+	"\x10\vJ\x04\b\v\x10\fJ\x04\b\x0f\x10\x10J\x04\b\x10\x10\x11J\x04\b\x12\x10\x13J\x04\b\x13\x10\x14J\x04\b\x14\x10\x15J\x04\b\x15\x10\x16J\x04\b\x17\x10\x18J\x04\b\x1d\x10\x1eJ\x04\b5\x106J\x04\b%\x10&J\x04\b&\x10'J\x04\b'\x10(J\x04\bD\x10EJ\x04\bE\x10FR\rthrift_configR\x12mixer_check_serverR\x13mixer_report_serverR\x15disable_policy_checksR\x1adisable_mixer_http_reportsR\x16policy_check_fail_openR%sidecar_to_telemetry_session_affinityR\vauth_policyR\x11rds_refresh_delayR\rmixer_addressR\x1fenable_client_side_policy_checkR\fsds_uds_pathR\x11sds_refresh_delayR\x16enable_sds_token_mountR\x12sds_use_k8s_sa_jwtR\x1atermination_drain_durationR\x14disable_report_batchR\x18report_batch_max_entriesR\x15report_batch_max_timeR\x13file_flush_intervalR\x13file_flush_min_size\"\x81\x02\n" +
 	"\rLabelSelector\x12U\n" +
 	"\vmatchLabels\x18\x01 \x03(\v23.istio.mesh.v1alpha1.LabelSelector.MatchLabelsEntryR\vmatchLabels\x12Y\n" +
 	"\x10matchExpressions\x18\x02 \x03(\v2-.istio.mesh.v1alpha1.LabelSelectorRequirementR\x10matchExpressions\x1a>\n" +

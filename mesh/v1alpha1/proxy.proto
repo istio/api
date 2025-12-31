@@ -756,6 +756,16 @@ message ProxyConfig {
     // This header is disabled by default.
     XForwardedPort x_forwarded_port = 42;
   }
+
+  // File flush interval for envoy flushes buffers to disk in milliseconds.
+  // Default is 1000.
+  // Optional.
+  uint32 file_flush_interval = 40;
+
+  // File flush buffer size for envoy flushes buffers to disk in kilobytes.
+  // Defaults to 64.
+  // Optional.
+  uint32 file_flush_min_size = 41;
 }
 
 message RemoteService {
