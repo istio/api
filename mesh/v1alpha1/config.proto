@@ -1571,7 +1571,7 @@ message MeshConfig {
   TLSConfig tls_defaults = 64;
 
   // $hide_from_docs
-  // Next available field number: 70
+  // Next available field number: 71
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
