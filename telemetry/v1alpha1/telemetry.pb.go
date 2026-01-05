@@ -104,8 +104,9 @@
 // spec:
 //   # no selector specified, applies to all workloads
 //   tracing:
-//   - match: CLIENT
-//   - providers:
+//   - match:
+//       mode: CLIENT
+//     providers:
 //     - name: "zipkin"
 // ```
 //
