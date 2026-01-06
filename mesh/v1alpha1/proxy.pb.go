@@ -1075,9 +1075,9 @@ type ProxyConfig struct {
 	// File flush buffer size for envoy flushes buffers to disk in kilobytes.
 	// Defaults to 64.
 	// Optional.
-	FileFlushMinSize uint32 `protobuf:"varint,41,opt,name=file_flush_min_size,json=fileFlushMinSize,proto3" json:"file_flush_min_size,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	FileFlushMinSizeKb uint32 `protobuf:"varint,41,opt,name=file_flush_min_size_kb,json=fileFlushMinSizeKb,proto3" json:"file_flush_min_size_kb,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *ProxyConfig) Reset() {
@@ -1385,9 +1385,9 @@ func (x *ProxyConfig) GetFileFlushInterval() *duration.Duration {
 	return nil
 }
 
-func (x *ProxyConfig) GetFileFlushMinSize() uint32 {
+func (x *ProxyConfig) GetFileFlushMinSizeKb() uint32 {
 	if x != nil {
-		return x.FileFlushMinSize
+		return x.FileFlushMinSizeKb
 	}
 	return 0
 }
@@ -2921,7 +2921,7 @@ const file_mesh_v1alpha1_proxy_proto_rawDesc = "" +
 	"poll_delay\x18\x01 \x01(\v2\x19.google.protobuf.DurationR\tpollDelay\x126\n" +
 	"\bfallback\x18\x02 \x01(\v2\x1a.google.protobuf.BoolValueR\bfallbackB\n" +
 	"\n" +
-	"\bprovider\"\x9d'\n" +
+	"\bprovider\"\xa2'\n" +
 	"\vProxyConfig\x12\x1f\n" +
 	"\vconfig_path\x18\x01 \x01(\tR\n" +
 	"configPath\x12\x1f\n" +
@@ -2963,8 +2963,8 @@ const file_mesh_v1alpha1_proxy_proto_rawDesc = "" +
 	"\x05image\x18# \x01(\v2$.istio.networking.v1beta1.ProxyImageR\x05image\x12Y\n" +
 	"\x14private_key_provider\x18& \x01(\v2'.istio.mesh.v1alpha1.PrivateKeyProviderR\x12privateKeyProvider\x12R\n" +
 	"\rproxy_headers\x18' \x01(\v2-.istio.mesh.v1alpha1.ProxyConfig.ProxyHeadersR\fproxyHeaders\x12I\n" +
-	"\x13file_flush_interval\x18( \x01(\v2\x19.google.protobuf.DurationR\x11fileFlushInterval\x12-\n" +
-	"\x13file_flush_min_size\x18) \x01(\rR\x10fileFlushMinSize\x1a@\n" +
+	"\x13file_flush_interval\x18( \x01(\v2\x19.google.protobuf.DurationR\x11fileFlushInterval\x122\n" +
+	"\x16file_flush_min_size_kb\x18) \x01(\rR\x12fileFlushMinSizeKb\x1a@\n" +
 	"\x12ProxyMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a@\n" +

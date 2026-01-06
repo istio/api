@@ -766,7 +766,7 @@ message ProxyConfig {
   // File flush buffer size for envoy flushes buffers to disk in kilobytes.
   // Defaults to 64.
   // Optional.
-  uint32 file_flush_min_size = 41;
+  uint32 file_flush_min_size_kb = 41;
 }
 
 message RemoteService {
