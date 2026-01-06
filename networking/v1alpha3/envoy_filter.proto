@@ -514,6 +514,7 @@ message EnvoyFilter {
     GATEWAY = 3;
 
     // Waypoint listener/route/cluster.
+    // $hide_from_docs
     WAYPOINT = 4;
   }
 
@@ -733,6 +734,7 @@ message EnvoyFilter {
     string name = 4;
   }
 
+  // $hide_from_docs
   message WaypointMatch {
     // The service port to match on.
     // If not specified, matches all ports.
@@ -899,6 +901,7 @@ message EnvoyFilter {
       ClusterMatch cluster = 5;
       // Match on waypoint attributes.
       // Only work when patch context is WAYPOINT.
+      // $hide_from_docs
       WaypointMatch waypoint = 6;
     }
   }
