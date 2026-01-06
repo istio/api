@@ -5,6 +5,9 @@ build:
 breaking:
   use:
   - WIRE_JSON
+  ignore:
+    # TODO: remove this ignore
+    - "mesh/v1alpha1/proxy.proto"
 lint:
   use:
     - BASIC

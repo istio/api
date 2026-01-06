@@ -758,9 +758,10 @@ message ProxyConfig {
   }
 
   // File flush interval for envoy flushes buffers to disk in milliseconds.
-  // Default is 1000.
+  // The duration needs to be set to a value greater than or equal to 1 millisecond.
+  // Default is 1000ms.
   // Optional.
-  uint32 file_flush_interval = 40;
+  google.protobuf.Duration file_flush_interval = 40;
 
   // File flush buffer size for envoy flushes buffers to disk in kilobytes.
   // Defaults to 64.
