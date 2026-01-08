@@ -773,6 +773,134 @@ message ProxyConfig {
   // Defaults to false.
   // Optional.
   google.protobuf.BoolValue stats_compression = 42;
+
+  // ProxyConfigProfile defines the configuration profile for the proxy.
+  // Different profiles optimize the proxy's behavior for specific deployment patterns.
+  // The profile determines which configuration settings are applied by default.
+  enum ProxyConfigProfile {
+    // SIDECAR profile is optimized for sidecar deployments.
+    // This is the default profile and is suitable for proxies running alongside application containers.
+    // Sidecar proxies typically handle lower connection volumes and shorter-lived connections.
+    SIDECAR = 0;
+
+    // EDGE profile is optimized for edge gateway deployments.
+    // This profile is suitable for proxies that serve as ingress or egress gateways.
+    // Edge proxies typically handle higher connection volumes, longer-lived connections,
+    // and require more robust buffer and timeout configurations.
+    EDGE = 1;
+  }
+
+  // The config profile to use for this proxy.
+  ProxyConfigProfile profile = 43;
+
+  // Soft limit on size of the listener's new connection read and write buffers in bytes.
+  // See Envoy's [per_connection_buffer_limit_bytes](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/listener/v3/listener.proto#envoy-v3-api-field-config-listener-v3-listener-per-connection-buffer-limit-bytes).
+  int32 listener_per_connection_buffer_limit_bytes = 44;
+
+  // Soft limit on size of the cluster's new connection read and write buffers in bytes.
+  // See Envoy's [per_connection_buffer_limit_bytes](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/cluster/v3/cluster.proto#envoy-v3-api-field-config-cluster-v3-cluster-per-connection-buffer-limit-bytes).
+  int32 cluster_per_connection_buffer_limit_bytes = 45;
+
+  // The idle timeout for HTTP connections. The idle timeout is defined as the period in which there are no active requests.
+  // When the idle timeout is reached, the connection will be closed.
+  // Note that request-based timeouts mean that HTTP/2 PINGs will not keep the connection alive.
+  // See Envoy's [idle_timeout](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-httpprotocoloptions-idle-timeout).
+  google.protobuf.Duration http_idle_timeout = 46;
+
+  // The maximum duration of a connection.
+  // When this timeout is reached, the connection will be closed.
+  // See Envoy's [max_connection_duration](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-httpprotocoloptions-max-connection-duration).
+  google.protobuf.Duration http_max_connection_duration = 47;
+
+  // The time that Envoy will wait between sending an HTTP/2 shutdown notification (GOAWAY frame with max stream ID)
+  // and a final GOAWAY frame. This is used so that Envoy can drain in-flight requests.
+  // See Envoy's [drain_timeout](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-httpprotocoloptions-drain-timeout).
+  google.protobuf.Duration http_drain_timeout = 48;
+
+  // The amount of time that Envoy will wait for the entire request to be received.
+  // The timer is activated when the request is initiated, and is reset each time new data arrives.
+  // See Envoy's [request_timeout](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/network/http_connection_manager/v3/http_connection_manager.proto#envoy-v3-api-field-extensions-filters-network-http-connection-manager-v3-httpconnectionmanager-request-timeout).
+  google.protobuf.Duration http_request_timeout = 49;
+
+  // The amount of time Envoy will wait for the request headers to be received.
+  // The timer is activated when the first byte of the headers is received and is disarmed when the last byte of the headers has been received.
+  // See Envoy's [request_headers_timeout](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/network/http_connection_manager/v3/http_connection_manager.proto#envoy-v3-api-field-extensions-filters-network-http-connection-manager-v3-httpconnectionmanager-request-headers-timeout).
+  google.protobuf.Duration http_request_headers_timeout = 50;
+
+  // The amount of time that Envoy will allow a stream to exist with no upstream or downstream activity.
+  // The timer is activated when the downstream connection sends the request and is reset on any frame from the upstream or downstream for the stream.
+  // See Envoy's [stream_idle_timeout](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/network/http_connection_manager/v3/http_connection_manager.proto#envoy-v3-api-field-extensions-filters-network-http-connection-manager-v3-httpconnectionmanager-stream-idle-timeout).
+  google.protobuf.Duration http_stream_idle_timeout = 51;
+
+  // The maximum duration of a stream.
+  // When this timeout is reached, the stream will be closed.
+  // See Envoy's [max_stream_duration](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-httpprotocoloptions-max-stream-duration).
+  google.protobuf.Duration http_max_stream_duration = 52;
+
+  // Maximum number of concurrent streams allowed for HTTP/2 and HTTP/3 connections.
+  // See Envoy's [max_concurrent_streams](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-http2protocoloptions-max-concurrent-streams).
+  int32 http_max_concurrent_streams = 53;
+
+  // Initial stream-level flow-control window size for HTTP/2 connections.
+  // Valid values range from 65535 (2^16 - 1, HTTP/2 default) to 2147483647 (2^31 - 1, HTTP/2 maximum).
+  // See Envoy's [initial_stream_window_size](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-http2protocoloptions-initial-stream-window-size).
+  int32 http2_initial_stream_window_size = 54;
+
+  // Initial connection-level flow-control window size for HTTP/2 connections.
+  // Valid values range from 65535 (2^16 - 1, HTTP/2 default) to 2147483647 (2^31 - 1, HTTP/2 maximum).
+  // See Envoy's [initial_connection_window_size](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-http2protocoloptions-initial-connection-window-size).
+  int32 http2_initial_connection_window_size = 55;
+
+  // Action to take when Envoy receives client request with header names containing underscore characters.
+  enum HeadersWithUnderscoresAction {
+    // Allow headers with underscores.
+    HEADERS_WITH_UNDERSCORES_ALLOW = 0;
+
+    // Reject client request with 400 status. HTTP/1 requests are rejected with the "underscore_in_headers" response code.
+    HEADERS_WITH_UNDERSCORES_REJECT_REQUEST = 1;
+
+    // Drop the header with name containing underscores. The header is dropped before the filter chain is invoked
+    // and as such filters will not see the header.
+    HEADERS_WITH_UNDERSCORES_DROP_HEADER = 2;
+  }
+
+  // Action to take when a client request contains header names with underscore characters.
+  // See Envoy's [headers_with_underscores_action](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-httpprotocoloptions-headers-with-underscores-action).
+  HeadersWithUnderscoresAction http_headers_with_underscores_action = 56;
+
+  // The maximum number of connections that a single listener will accept.
+  // See Envoy's [connection_balance_config](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/listener/v3/listener.proto#envoy-v3-api-field-config-listener-v3-listener-connection-balance-config).
+  int32 listener_connection_limit = 57;
+
+  // The maximum number of downstream connections allowed across all listeners.
+  // See Envoy's [max_connections](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/overload/v3/overload.proto#envoy-v3-api-field-config-overload-v3-scaleloadsheddingpoint-max-connections).
+  int32 global_downstream_connection_limit = 58;
+
+  // Determines if adjacent slashes in the path are merged into a single slash.
+  // This is useful for protecting against path confusion attacks where different backend services
+  // interpret paths with multiple slashes differently.
+  // See Envoy's [merge_slashes](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/network/http_connection_manager/v3/http_connection_manager.proto#envoy-v3-api-field-extensions-filters-network-http-connection-manager-v3-httpconnectionmanager-merge-slashes).
+  google.protobuf.BoolValue http_merge_slashes = 59;
+
+  // Determines the action for request paths that contain escaped slashes (%2F, %2f, %5C, %5c).
+  enum PathWithEscapedSlashesAction {
+    // Keep escaped slashes as they are.
+    KEEP_UNCHANGED = 0;
+
+    // Reject client request with 400 status.
+    REJECT_REQUEST = 1;
+
+    // Unescape %2F and %5C sequences and redirect the request to the new path if the result path is different.
+    UNESCAPE_AND_REDIRECT = 2;
+
+    // Unescape %2F and %5C sequences and forward the request. Note that this option may introduce path confusion
+    // vulnerabilities if the backend service does not expect unescaped slashes.
+    UNESCAPE_AND_FORWARD = 3;
+  }
+
+  // Action to take when a request path contains escaped slash sequences (%2F, %5C).
+  // See Envoy's [path_with_escaped_slashes_action](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/network/http_connection_manager/v3/http_connection_manager.proto#envoy-v3-api-field-extensions-filters-network-http-connection-manager-v3-httpconnectionmanager-path-with-escaped-slashes-action).
+  PathWithEscapedSlashesAction http_path_with_escaped_slashes_action = 60;
 }
 
 message RemoteService {
