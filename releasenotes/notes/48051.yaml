@@ -1,0 +1,10 @@
+apiVersion: release-notes/v2
+kind: feature
+area: telemetry
+issue:
+- 48051
+releaseNotes:
+- |
+  **Deprecated** Deprecated `sidecar.istio.io/statsCompression` annotation
+  **Added** Added `StatsCompression` to offer optional (depending on `Accept-Encoding`) HTTP compression (brotli, zstd, gzip) for metrics. Using compression for metric scraping saves substancial bandwith.
+
