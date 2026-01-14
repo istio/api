@@ -119,6 +119,7 @@ package istio.networking.v1alpha3;
 import "google/api/field_behavior.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
+import "mesh/v1alpha1/config.proto";
 import "networking/v1alpha3/virtual_service.proto";
 import "type/v1beta1/selector.proto";
 
@@ -191,6 +192,39 @@ message DestinationRule {
   // the destination rule is declared in. Similarly, the value "*" is reserved and
   // defines an export to all namespaces.
   repeated string export_to = 4;
+
+  // A list of label selectors to dynamically select namespaces to which this
+  // destination rule is exported. Each selector can match namespaces based on their labels.
+  // This provides a mechanism for service owners and mesh administrators to control
+  // the visibility of destination rules across namespace boundaries without knowing namespace
+  // names in advance.
+  //
+  // For example, to export to all namespaces with a specific label:
+  // ```yaml
+  // exportToSelectors:
+  // - matchLabels:
+  //     mesh: enabled
+  // ```
+  //
+  // Or using match expressions for more complex selection:
+  // ```yaml
+  // exportToSelectors:
+  // - matchExpressions:
+  //   - key: environment
+  //     operator: In
+  //     values: [production, staging]
+  // ```
+  //
+  // When both export_to and export_to_selectors are specified, the destination rule is
+  // exported to the union of all matched namespaces. If neither is specified,
+  // the destination rule is exported to all namespaces by default.
+  //
+  // **Note:** Using "*" in export_to makes export_to_selectors redundant as
+  // the destination rule would already be visible to all namespaces.
+  //
+  // **Note:** DestinationRule with workload_selector cannot use export_to_selectors
+  // and must only export to the current namespace (".").
+  repeated istio.mesh.v1alpha1.LabelSelector export_to_selectors = 6;
   //
   // Criteria used to select the specific set of pods/VMs on which this
   // `DestinationRule` configuration should be applied. If specified, the `DestinationRule`

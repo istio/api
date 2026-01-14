@@ -399,6 +399,7 @@ package istio.networking.v1alpha3;
 
 import "analysis/v1alpha1/message.proto";
 import "google/api/field_behavior.proto";
+import "mesh/v1alpha1/config.proto";
 import "meta/v1alpha1/status.proto";
 import "networking/v1alpha3/sidecar.proto";
 import "networking/v1alpha3/workload_entry.proto";
@@ -620,6 +621,38 @@ message ServiceEntry {
   //
   // **Note:** Ztunnel and Waypoint proxies not support this field and will read it at "*".
   repeated string export_to = 7;
+
+  // A list of label selectors to dynamically select namespaces to which this
+  // service is exported. Each selector can match namespaces based on their labels.
+  // This provides a mechanism for service owners and mesh administrators to control
+  // the visibility of services across namespace boundaries without knowing namespace
+  // names in advance.
+  //
+  // For example, to export to all namespaces with a specific label:
+  // ```yaml
+  // exportToSelectors:
+  // - matchLabels:
+  //     mesh: enabled
+  // ```
+  //
+  // Or using match expressions for more complex selection:
+  // ```yaml
+  // exportToSelectors:
+  // - matchExpressions:
+  //   - key: environment
+  //     operator: In
+  //     values: [production, staging]
+  // ```
+  //
+  // When both export_to and export_to_selectors are specified, the service is
+  // exported to the union of all matched namespaces. If neither is specified,
+  // the service is exported to all namespaces by default.
+  //
+  // **Note:** Using "*" in export_to makes export_to_selectors redundant as
+  // the service would already be visible to all namespaces.
+  //
+  // **Note:** Ztunnel and Waypoint proxies do not support this field.
+  repeated istio.mesh.v1alpha1.LabelSelector export_to_selectors = 10;
 
   // If specified, the proxy will verify that the server certificate's
   // subject alternate name matches one of the specified values.
