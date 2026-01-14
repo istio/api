@@ -192,6 +192,16 @@ message DestinationRule {
   // defines an export to all namespaces.
   repeated string export_to = 4;
 
+  // Criteria used to select the specific set of pods/VMs on which this
+  // `DestinationRule` configuration should be applied. If specified, the `DestinationRule`
+  // configuration will be applied only to the workload instances matching the workload selector
+  // label in the same namespace. Workload selectors do not apply across namespace boundaries.
+  // If omitted, the `DestinationRule` falls back to its default behavior.
+  // For example, if specific sidecars need to have egress TLS settings for services outside
+  // of the mesh, instead of every sidecar in the mesh needing to have the
+  // configuration (which is the default behaviour), a workload selector can be specified.
+  istio.type.v1beta1.WorkloadSelector workload_selector = 5;
+
   // A list of label selectors to dynamically select namespaces to which this
   // destination rule is exported. Each selector can match namespaces based on their labels.
   // This provides a mechanism for service owners and mesh administrators to control
@@ -224,16 +234,6 @@ message DestinationRule {
   // **Note:** DestinationRule with workload_selector cannot use export_to_selectors
   // and must only export to the current namespace (".").
   repeated istio.type.v1beta1.LabelSelector export_to_selectors = 6;
-  //
-  // Criteria used to select the specific set of pods/VMs on which this
-  // `DestinationRule` configuration should be applied. If specified, the `DestinationRule`
-  // configuration will be applied only to the workload instances matching the workload selector
-  // label in the same namespace. Workload selectors do not apply across namespace boundaries.
-  // If omitted, the `DestinationRule` falls back to its default behavior.
-  // For example, if specific sidecars need to have egress TLS settings for services outside
-  // of the mesh, instead of every sidecar in the mesh needing to have the
-  // configuration (which is the default behaviour), a workload selector can be specified.
-  istio.type.v1beta1.WorkloadSelector workload_selector = 5;
 }
 
 // Traffic policies to apply for a specific destination, across all

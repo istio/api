@@ -594,14 +594,6 @@ message ServiceEntry {
   // +kubebuilder:validation:MaxItems=4096
   repeated WorkloadEntry endpoints = 6;
 
-  // Applicable only for MESH_INTERNAL services. Only one of
-  // `endpoints` or `workloadSelector` can be specified. Selects one
-  // or more Kubernetes pods or VM workloads (specified using
-  // `WorkloadEntry`) based on their labels. The `WorkloadEntry` object
-  // representing the VMs should be defined in the same namespace as
-  // the ServiceEntry.
-  WorkloadSelector workload_selector = 9;
-
   // A list of namespaces to which this service is exported. Exporting a service
   // allows it to be used by sidecars, gateways and virtual services defined in
   // other namespaces. This feature provides a mechanism for service owners
@@ -621,6 +613,23 @@ message ServiceEntry {
   //
   // **Note:** Ztunnel and Waypoint proxies not support this field and will read it at "*".
   repeated string export_to = 7;
+
+  // If specified, the proxy will verify that the server certificate's
+  // subject alternate name matches one of the specified values.
+  //
+  // NOTE: When using the workloadEntry with workloadSelectors, the
+  // service account specified in the workloadEntry will also be used
+  // to derive the additional subject alternate names that should be
+  // verified.
+  repeated string subject_alt_names = 8;
+
+  // Applicable only for MESH_INTERNAL services. Only one of
+  // `endpoints` or `workloadSelector` can be specified. Selects one
+  // or more Kubernetes pods or VM workloads (specified using
+  // `WorkloadEntry`) based on their labels. The `WorkloadEntry` object
+  // representing the VMs should be defined in the same namespace as
+  // the ServiceEntry.
+  WorkloadSelector workload_selector = 9;
 
   // A list of label selectors to dynamically select namespaces to which this
   // service is exported. Each selector can match namespaces based on their labels.
@@ -653,15 +662,6 @@ message ServiceEntry {
   //
   // **Note:** Ztunnel and Waypoint proxies do not support this field.
   repeated istio.type.v1beta1.LabelSelector export_to_selectors = 10;
-
-  // If specified, the proxy will verify that the server certificate's
-  // subject alternate name matches one of the specified values.
-  //
-  // NOTE: When using the workloadEntry with workloadSelectors, the
-  // service account specified in the workloadEntry will also be used
-  // to derive the additional subject alternate names that should be
-  // verified.
-  repeated string subject_alt_names = 8;
 }
 
 // ServicePort describes the properties of a specific port of a service.

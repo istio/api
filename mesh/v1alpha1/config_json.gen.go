@@ -435,6 +435,28 @@ func (this *MeshConfig_TLSConfig) UnmarshalJSON(b []byte) error {
 	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for LabelSelector
+func (this *LabelSelector) MarshalJSON() ([]byte, error) {
+	str, err := ConfigMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for LabelSelector
+func (this *LabelSelector) UnmarshalJSON(b []byte) error {
+	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for LabelSelectorRequirement
+func (this *LabelSelectorRequirement) MarshalJSON() ([]byte, error) {
+	str, err := ConfigMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for LabelSelectorRequirement
+func (this *LabelSelectorRequirement) UnmarshalJSON(b []byte) error {
+	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 // MarshalJSON is a custom marshaler for ConfigSource
 func (this *ConfigSource) MarshalJSON() ([]byte, error) {
 	str, err := ConfigMarshaler.MarshalToString(this)
