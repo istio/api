@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 83
+number_of_entries: 84
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -497,7 +497,7 @@ can be used with an extension provider to delegate the authorization decision to
 </tr>
 <tr id="MeshConfig-discovery_selectors">
 <td><div class="field"><div class="name"><code><a href="#MeshConfig-discovery_selectors">discoverySelectors</a></code></div>
-<div class="type"><a href="https://istio.io/docs/reference/config/type/workload-selector.html#LabelSelector">LabelSelector[]</a></div>
+<div class="type"><a href="#LabelSelector">LabelSelector[]</a></div>
 </div></td>
 <td>
 <p>A list of Kubernetes selectors that specify the set of namespaces that Istio considers when
@@ -798,7 +798,7 @@ in matching namespaces to be available globally:</p>
 <tbody>
 <tr id="MeshConfig-ServiceScopeConfigs-namespace_selector">
 <td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceScopeConfigs-namespace_selector">namespaceSelector</a></code></div>
-<div class="type"><a href="https://istio.io/docs/reference/config/type/workload-selector.html#LabelSelector">LabelSelector</a></div>
+<div class="type"><a href="#LabelSelector">LabelSelector</a></div>
 </div></td>
 <td>
 <p>Match expression for namespaces.</p>
@@ -807,7 +807,7 @@ in matching namespaces to be available globally:</p>
 </tr>
 <tr id="MeshConfig-ServiceScopeConfigs-services_selector">
 <td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceScopeConfigs-services_selector">servicesSelector</a></code></div>
-<div class="type"><a href="https://istio.io/docs/reference/config/type/workload-selector.html#LabelSelector">LabelSelector</a></div>
+<div class="type"><a href="#LabelSelector">LabelSelector</a></div>
 </div></td>
 <td>
 <p>Match expression for serivces.</p>
@@ -3063,6 +3063,91 @@ cloud-provided ingress controller).</p>
 </tbody>
 </table>
 </section>
+<h2 id="LabelSelector">LabelSelector</h2>
+<section>
+<p>A label selector requirement is a selector that contains values, a key, and an operator that
+relates the key and values.
+Copied from Kubernetes to avoid expensive dependency on Kubernetes libraries.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LabelSelector-matchLabels">
+<td><div class="field"><div class="name"><code><a href="#LabelSelector-matchLabels">matchLabels</a></code></div>
+<div class="type">map&lt;string,&nbsp;string&gt;</div>
+</div></td>
+<td>
+<p>matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+map is equivalent to an element of matchExpressions, whose key field is &ldquo;key&rdquo;, the
+operator is &ldquo;In&rdquo;, and the values array contains only &ldquo;value&rdquo;. The requirements are ANDed.</p>
+
+</td>
+</tr>
+<tr id="LabelSelector-matchExpressions">
+<td><div class="field"><div class="name"><code><a href="#LabelSelector-matchExpressions">matchExpressions</a></code></div>
+<div class="type"><a href="#LabelSelectorRequirement">LabelSelectorRequirement[]</a></div>
+</div></td>
+<td>
+<p>matchExpressions is a list of label selector requirements. The requirements are ANDed.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="LabelSelectorRequirement">LabelSelectorRequirement</h2>
+<section>
+<p>A label selector requirement is a selector that contains values, a key, and an operator that
+relates the key and values.
+Copied from Kubernetes to avoid expensive dependency on Kubernetes libraries.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LabelSelectorRequirement-key">
+<td><div class="field"><div class="name"><code><a href="#LabelSelectorRequirement-key">key</a></code></div>
+<div class="type">string</div>
+</div></td>
+<td>
+<p>key is the label key that the selector applies to.</p>
+
+</td>
+</tr>
+<tr id="LabelSelectorRequirement-operator">
+<td><div class="field"><div class="name"><code><a href="#LabelSelectorRequirement-operator">operator</a></code></div>
+<div class="type">string</div>
+</div></td>
+<td>
+<p>operator represents a key&rsquo;s relationship to a set of values.
+Valid operators are In, NotIn, Exists and DoesNotExist.</p>
+
+</td>
+</tr>
+<tr id="LabelSelectorRequirement-values">
+<td><div class="field"><div class="name"><code><a href="#LabelSelectorRequirement-values">values</a></code></div>
+<div class="type">string[]</div>
+</div></td>
+<td>
+<p>values is an array of string values. If the operator is In or NotIn,
+the values array must be non-empty. If the operator is Exists or DoesNotExist,
+the values array must be empty. This array is replaced during a strategic
+merge patch.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="ConfigSource">ConfigSource</h2>
 <section>
 <p>ConfigSource describes information about a configuration store inside a
@@ -3106,43 +3191,6 @@ mode as <code>ISTIO_MUTUAL</code>.</p>
 </div></td>
 <td>
 <p>Describes the source of configuration, if nothing is specified default is MCP</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h5 id="istio-type-v1beta1-LabelSelector">LabelSelector</h5>
-<section>
-<p>LabelSelector is a label query over resources.
-It matches resources based on their labels.
-Copied from Kubernetes to avoid expensive dependency on Kubernetes libraries.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="istio-type-v1beta1-LabelSelector-matchLabels">
-<td><div class="field"><div class="name"><code><a href="#istio-type-v1beta1-LabelSelector-matchLabels">matchLabels</a></code></div>
-<div class="type">map&lt;string,&nbsp;string&gt;</div>
-</div></td>
-<td>
-<p>matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
-map is equivalent to an element of matchExpressions, whose key field is &ldquo;key&rdquo;, the
-operator is &ldquo;In&rdquo;, and the values array contains only &ldquo;value&rdquo;. The requirements are ANDed.</p>
-
-</td>
-</tr>
-<tr id="istio-type-v1beta1-LabelSelector-matchExpressions">
-<td><div class="field"><div class="name"><code><a href="#istio-type-v1beta1-LabelSelector-matchExpressions">matchExpressions</a></code></div>
-<div class="type"><a href="https://istio.io/docs/reference/config/type/workload-selector.html#LabelSelectorRequirement">LabelSelectorRequirement[]</a></div>
-</div></td>
-<td>
-<p>matchExpressions is a list of label selector requirements. The requirements are ANDed.</p>
 
 </td>
 </tr>
