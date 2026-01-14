@@ -412,6 +412,37 @@ spec:
                 items:
                   type: string
                 type: array
+              exportToSelectors:
+                description: A list of label selectors to dynamically select namespaces
+                  to which this destination rule is exported.
+                items:
+                  properties:
+                    matchExpressions:
+                      description: matchExpressions is a list of label selector requirements.
+                      items:
+                        properties:
+                          key:
+                            description: key is the label key that the selector applies
+                              to.
+                            type: string
+                          operator:
+                            description: operator represents a key's relationship
+                              to a set of values.
+                            type: string
+                          values:
+                            description: values is an array of string values.
+                            items:
+                              type: string
+                            type: array
+                        type: object
+                      type: array
+                    matchLabels:
+                      additionalProperties:
+                        type: string
+                      description: matchLabels is a map of {key,value} pairs.
+                      type: object
+                  type: object
+                type: array
               host:
                 description: The name of a service from the service registry.
                 type: string
@@ -2413,6 +2444,37 @@ spec:
                 items:
                   type: string
                 type: array
+              exportToSelectors:
+                description: A list of label selectors to dynamically select namespaces
+                  to which this destination rule is exported.
+                items:
+                  properties:
+                    matchExpressions:
+                      description: matchExpressions is a list of label selector requirements.
+                      items:
+                        properties:
+                          key:
+                            description: key is the label key that the selector applies
+                              to.
+                            type: string
+                          operator:
+                            description: operator represents a key's relationship
+                              to a set of values.
+                            type: string
+                          values:
+                            description: values is an array of string values.
+                            items:
+                              type: string
+                            type: array
+                        type: object
+                      type: array
+                    matchLabels:
+                      additionalProperties:
+                        type: string
+                      description: matchLabels is a map of {key,value} pairs.
+                      type: object
+                  type: object
+                type: array
               host:
                 description: The name of a service from the service registry.
                 type: string
@@ -4413,6 +4475,37 @@ spec:
                   exported.
                 items:
                   type: string
+                type: array
+              exportToSelectors:
+                description: A list of label selectors to dynamically select namespaces
+                  to which this destination rule is exported.
+                items:
+                  properties:
+                    matchExpressions:
+                      description: matchExpressions is a list of label selector requirements.
+                      items:
+                        properties:
+                          key:
+                            description: key is the label key that the selector applies
+                              to.
+                            type: string
+                          operator:
+                            description: operator represents a key's relationship
+                              to a set of values.
+                            type: string
+                          values:
+                            description: values is an array of string values.
+                            items:
+                              type: string
+                            type: array
+                        type: object
+                      type: array
+                    matchLabels:
+                      additionalProperties:
+                        type: string
+                      description: matchLabels is a map of {key,value} pairs.
+                      type: object
+                  type: object
                 type: array
               host:
                 description: The name of a service from the service registry.
@@ -7974,6 +8067,37 @@ spec:
                 items:
                   type: string
                 type: array
+              exportToSelectors:
+                description: A list of label selectors to dynamically select namespaces
+                  to which this service is exported.
+                items:
+                  properties:
+                    matchExpressions:
+                      description: matchExpressions is a list of label selector requirements.
+                      items:
+                        properties:
+                          key:
+                            description: key is the label key that the selector applies
+                              to.
+                            type: string
+                          operator:
+                            description: operator represents a key's relationship
+                              to a set of values.
+                            type: string
+                          values:
+                            description: values is an array of string values.
+                            items:
+                              type: string
+                            type: array
+                        type: object
+                      type: array
+                    matchLabels:
+                      additionalProperties:
+                        type: string
+                      description: matchLabels is a map of {key,value} pairs.
+                      type: object
+                  type: object
+                type: array
               hosts:
                 description: The hosts associated with the ServiceEntry.
                 items:
@@ -8273,6 +8397,37 @@ spec:
                 items:
                   type: string
                 type: array
+              exportToSelectors:
+                description: A list of label selectors to dynamically select namespaces
+                  to which this service is exported.
+                items:
+                  properties:
+                    matchExpressions:
+                      description: matchExpressions is a list of label selector requirements.
+                      items:
+                        properties:
+                          key:
+                            description: key is the label key that the selector applies
+                              to.
+                            type: string
+                          operator:
+                            description: operator represents a key's relationship
+                              to a set of values.
+                            type: string
+                          values:
+                            description: values is an array of string values.
+                            items:
+                              type: string
+                            type: array
+                        type: object
+                      type: array
+                    matchLabels:
+                      additionalProperties:
+                        type: string
+                      description: matchLabels is a map of {key,value} pairs.
+                      type: object
+                  type: object
+                type: array
               hosts:
                 description: The hosts associated with the ServiceEntry.
                 items:
@@ -8571,6 +8726,37 @@ spec:
                 description: A list of namespaces to which this service is exported.
                 items:
                   type: string
+                type: array
+              exportToSelectors:
+                description: A list of label selectors to dynamically select namespaces
+                  to which this service is exported.
+                items:
+                  properties:
+                    matchExpressions:
+                      description: matchExpressions is a list of label selector requirements.
+                      items:
+                        properties:
+                          key:
+                            description: key is the label key that the selector applies
+                              to.
+                            type: string
+                          operator:
+                            description: operator represents a key's relationship
+                              to a set of values.
+                            type: string
+                          values:
+                            description: values is an array of string values.
+                            items:
+                              type: string
+                            type: array
+                        type: object
+                      type: array
+                    matchLabels:
+                      additionalProperties:
+                        type: string
+                      description: matchLabels is a map of {key,value} pairs.
+                      type: object
+                  type: object
                 type: array
               hosts:
                 description: The hosts associated with the ServiceEntry.
@@ -10580,6 +10766,37 @@ spec:
                 items:
                   type: string
                 type: array
+              exportToSelectors:
+                description: A list of label selectors to dynamically select namespaces
+                  to which this virtual service is exported.
+                items:
+                  properties:
+                    matchExpressions:
+                      description: matchExpressions is a list of label selector requirements.
+                      items:
+                        properties:
+                          key:
+                            description: key is the label key that the selector applies
+                              to.
+                            type: string
+                          operator:
+                            description: operator represents a key's relationship
+                              to a set of values.
+                            type: string
+                          values:
+                            description: values is an array of string values.
+                            items:
+                              type: string
+                            type: array
+                        type: object
+                      type: array
+                    matchLabels:
+                      additionalProperties:
+                        type: string
+                      description: matchLabels is a map of {key,value} pairs.
+                      type: object
+                  type: object
+                type: array
               gateways:
                 description: The names of gateways and sidecars that should apply
                   these routes.
@@ -11632,6 +11849,37 @@ spec:
                 items:
                   type: string
                 type: array
+              exportToSelectors:
+                description: A list of label selectors to dynamically select namespaces
+                  to which this virtual service is exported.
+                items:
+                  properties:
+                    matchExpressions:
+                      description: matchExpressions is a list of label selector requirements.
+                      items:
+                        properties:
+                          key:
+                            description: key is the label key that the selector applies
+                              to.
+                            type: string
+                          operator:
+                            description: operator represents a key's relationship
+                              to a set of values.
+                            type: string
+                          values:
+                            description: values is an array of string values.
+                            items:
+                              type: string
+                            type: array
+                        type: object
+                      type: array
+                    matchLabels:
+                      additionalProperties:
+                        type: string
+                      description: matchLabels is a map of {key,value} pairs.
+                      type: object
+                  type: object
+                type: array
               gateways:
                 description: The names of gateways and sidecars that should apply
                   these routes.
@@ -12683,6 +12931,37 @@ spec:
                   exported.
                 items:
                   type: string
+                type: array
+              exportToSelectors:
+                description: A list of label selectors to dynamically select namespaces
+                  to which this virtual service is exported.
+                items:
+                  properties:
+                    matchExpressions:
+                      description: matchExpressions is a list of label selector requirements.
+                      items:
+                        properties:
+                          key:
+                            description: key is the label key that the selector applies
+                              to.
+                            type: string
+                          operator:
+                            description: operator represents a key's relationship
+                              to a set of values.
+                            type: string
+                          values:
+                            description: values is an array of string values.
+                            items:
+                              type: string
+                            type: array
+                        type: object
+                      type: array
+                    matchLabels:
+                      additionalProperties:
+                        type: string
+                      description: matchLabels is a map of {key,value} pairs.
+                      type: object
+                  type: object
                 type: array
               gateways:
                 description: The names of gateways and sidecars that should apply

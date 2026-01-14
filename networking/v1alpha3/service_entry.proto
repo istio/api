@@ -399,10 +399,10 @@ package istio.networking.v1alpha3;
 
 import "analysis/v1alpha1/message.proto";
 import "google/api/field_behavior.proto";
-import "mesh/v1alpha1/config.proto";
 import "meta/v1alpha1/status.proto";
 import "networking/v1alpha3/sidecar.proto";
 import "networking/v1alpha3/workload_entry.proto";
+import "type/v1beta1/selector.proto";
 
 option go_package = "istio.io/api/networking/v1alpha3";
 
@@ -652,7 +652,7 @@ message ServiceEntry {
   // the service would already be visible to all namespaces.
   //
   // **Note:** Ztunnel and Waypoint proxies do not support this field.
-  repeated istio.mesh.v1alpha1.LabelSelector export_to_selectors = 10;
+  repeated istio.type.v1beta1.LabelSelector export_to_selectors = 10;
 
   // If specified, the proxy will verify that the server certificate's
   // subject alternate name matches one of the specified values.

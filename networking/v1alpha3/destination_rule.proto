@@ -119,7 +119,6 @@ package istio.networking.v1alpha3;
 import "google/api/field_behavior.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
-import "mesh/v1alpha1/config.proto";
 import "networking/v1alpha3/virtual_service.proto";
 import "type/v1beta1/selector.proto";
 
@@ -224,7 +223,7 @@ message DestinationRule {
   //
   // **Note:** DestinationRule with workload_selector cannot use export_to_selectors
   // and must only export to the current namespace (".").
-  repeated istio.mesh.v1alpha1.LabelSelector export_to_selectors = 6;
+  repeated istio.type.v1beta1.LabelSelector export_to_selectors = 6;
   //
   // Criteria used to select the specific set of pods/VMs on which this
   // `DestinationRule` configuration should be applied. If specified, the `DestinationRule`

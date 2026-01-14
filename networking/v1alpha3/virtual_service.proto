@@ -116,7 +116,7 @@ package istio.networking.v1alpha3;
 import "google/api/field_behavior.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
-import "mesh/v1alpha1/config.proto";
+import "type/v1beta1/selector.proto";
 
 option go_package = "istio.io/api/networking/v1alpha3";
 
@@ -258,7 +258,7 @@ message VirtualService {
   //
   // **Note:** Using "*" in export_to makes export_to_selectors redundant as
   // the virtual service would already be visible to all namespaces.
-  repeated istio.mesh.v1alpha1.LabelSelector export_to_selectors = 7;
+  repeated istio.type.v1beta1.LabelSelector export_to_selectors = 7;
 }
 
 // Destination indicates the network addressable service to which the

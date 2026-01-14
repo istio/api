@@ -213,6 +213,140 @@ func (x *PortSelector) GetNumber() uint32 {
 	return 0
 }
 
+// LabelSelector is a label query over resources.
+// It matches resources based on their labels.
+// Copied from Kubernetes to avoid expensive dependency on Kubernetes libraries.
+type LabelSelector struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+	// map is equivalent to an element of matchExpressions, whose key field is "key", the
+	// operator is "In", and the values array contains only "value". The requirements are ANDed.
+	// +optional
+	MatchLabels map[string]string `protobuf:"bytes,1,rep,name=matchLabels,proto3" json:"matchLabels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	// matchExpressions is a list of label selector requirements. The requirements are ANDed.
+	// +optional
+	MatchExpressions []*LabelSelectorRequirement `protobuf:"bytes,2,rep,name=matchExpressions,proto3" json:"matchExpressions,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *LabelSelector) Reset() {
+	*x = LabelSelector{}
+	mi := &file_type_v1beta1_selector_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LabelSelector) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LabelSelector) ProtoMessage() {}
+
+func (x *LabelSelector) ProtoReflect() protoreflect.Message {
+	mi := &file_type_v1beta1_selector_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LabelSelector.ProtoReflect.Descriptor instead.
+func (*LabelSelector) Descriptor() ([]byte, []int) {
+	return file_type_v1beta1_selector_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *LabelSelector) GetMatchLabels() map[string]string {
+	if x != nil {
+		return x.MatchLabels
+	}
+	return nil
+}
+
+func (x *LabelSelector) GetMatchExpressions() []*LabelSelectorRequirement {
+	if x != nil {
+		return x.MatchExpressions
+	}
+	return nil
+}
+
+// A label selector requirement is a selector that contains values, a key, and an operator that
+// relates the key and values.
+// Copied from Kubernetes to avoid expensive dependency on Kubernetes libraries.
+type LabelSelectorRequirement struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// key is the label key that the selector applies to.
+	// +patchMergeKey=key
+	// +patchStrategy=merge
+	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	// operator represents a key's relationship to a set of values.
+	// Valid operators are In, NotIn, Exists and DoesNotExist.
+	Operator string `protobuf:"bytes,2,opt,name=operator,proto3" json:"operator,omitempty"`
+	// values is an array of string values. If the operator is In or NotIn,
+	// the values array must be non-empty. If the operator is Exists or DoesNotExist,
+	// the values array must be empty. This array is replaced during a strategic
+	// merge patch.
+	// +optional
+	Values        []string `protobuf:"bytes,3,rep,name=values,proto3" json:"values,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LabelSelectorRequirement) Reset() {
+	*x = LabelSelectorRequirement{}
+	mi := &file_type_v1beta1_selector_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LabelSelectorRequirement) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LabelSelectorRequirement) ProtoMessage() {}
+
+func (x *LabelSelectorRequirement) ProtoReflect() protoreflect.Message {
+	mi := &file_type_v1beta1_selector_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LabelSelectorRequirement.ProtoReflect.Descriptor instead.
+func (*LabelSelectorRequirement) Descriptor() ([]byte, []int) {
+	return file_type_v1beta1_selector_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *LabelSelectorRequirement) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *LabelSelectorRequirement) GetOperator() string {
+	if x != nil {
+		return x.Operator
+	}
+	return ""
+}
+
+func (x *LabelSelectorRequirement) GetValues() []string {
+	if x != nil {
+		return x.Values
+	}
+	return nil
+}
+
 // PolicyTargetReference format as defined by [GEP-2648](https://gateway-api.sigs.k8s.io/geps/gep-2648/#direct-policy-design-rules).
 //
 // PolicyTargetReference specifies the targeted resource which the policy
@@ -276,7 +410,7 @@ type PolicyTargetReference struct {
 
 func (x *PolicyTargetReference) Reset() {
 	*x = PolicyTargetReference{}
-	mi := &file_type_v1beta1_selector_proto_msgTypes[2]
+	mi := &file_type_v1beta1_selector_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -288,7 +422,7 @@ func (x *PolicyTargetReference) String() string {
 func (*PolicyTargetReference) ProtoMessage() {}
 
 func (x *PolicyTargetReference) ProtoReflect() protoreflect.Message {
-	mi := &file_type_v1beta1_selector_proto_msgTypes[2]
+	mi := &file_type_v1beta1_selector_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -301,7 +435,7 @@ func (x *PolicyTargetReference) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PolicyTargetReference.ProtoReflect.Descriptor instead.
 func (*PolicyTargetReference) Descriptor() ([]byte, []int) {
-	return file_type_v1beta1_selector_proto_rawDescGZIP(), []int{2}
+	return file_type_v1beta1_selector_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *PolicyTargetReference) GetGroup() string {
@@ -343,7 +477,17 @@ const file_type_v1beta1_selector_proto_rawDesc = "" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\",\n" +
 	"\fPortSelector\x12\x1c\n" +
-	"\x06number\x18\x01 \x01(\rB\x04\xe2A\x01\x02R\x06number\"\x7f\n" +
+	"\x06number\x18\x01 \x01(\rB\x04\xe2A\x01\x02R\x06number\"\xff\x01\n" +
+	"\rLabelSelector\x12T\n" +
+	"\vmatchLabels\x18\x01 \x03(\v22.istio.type.v1beta1.LabelSelector.MatchLabelsEntryR\vmatchLabels\x12X\n" +
+	"\x10matchExpressions\x18\x02 \x03(\v2,.istio.type.v1beta1.LabelSelectorRequirementR\x10matchExpressions\x1a>\n" +
+	"\x10MatchLabelsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"`\n" +
+	"\x18LabelSelectorRequirement\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x1a\n" +
+	"\boperator\x18\x02 \x01(\tR\boperator\x12\x16\n" +
+	"\x06values\x18\x03 \x03(\tR\x06values\"\x7f\n" +
 	"\x15PolicyTargetReference\x12\x14\n" +
 	"\x05group\x18\x01 \x01(\tR\x05group\x12\x18\n" +
 	"\x04kind\x18\x02 \x01(\tB\x04\xe2A\x01\x02R\x04kind\x12\x18\n" +
@@ -370,21 +514,26 @@ func file_type_v1beta1_selector_proto_rawDescGZIP() []byte {
 }
 
 var file_type_v1beta1_selector_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_type_v1beta1_selector_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_type_v1beta1_selector_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_type_v1beta1_selector_proto_goTypes = []any{
-	(WorkloadMode)(0),             // 0: istio.type.v1beta1.WorkloadMode
-	(*WorkloadSelector)(nil),      // 1: istio.type.v1beta1.WorkloadSelector
-	(*PortSelector)(nil),          // 2: istio.type.v1beta1.PortSelector
-	(*PolicyTargetReference)(nil), // 3: istio.type.v1beta1.PolicyTargetReference
-	nil,                           // 4: istio.type.v1beta1.WorkloadSelector.MatchLabelsEntry
+	(WorkloadMode)(0),                // 0: istio.type.v1beta1.WorkloadMode
+	(*WorkloadSelector)(nil),         // 1: istio.type.v1beta1.WorkloadSelector
+	(*PortSelector)(nil),             // 2: istio.type.v1beta1.PortSelector
+	(*LabelSelector)(nil),            // 3: istio.type.v1beta1.LabelSelector
+	(*LabelSelectorRequirement)(nil), // 4: istio.type.v1beta1.LabelSelectorRequirement
+	(*PolicyTargetReference)(nil),    // 5: istio.type.v1beta1.PolicyTargetReference
+	nil,                              // 6: istio.type.v1beta1.WorkloadSelector.MatchLabelsEntry
+	nil,                              // 7: istio.type.v1beta1.LabelSelector.MatchLabelsEntry
 }
 var file_type_v1beta1_selector_proto_depIdxs = []int32{
-	4, // 0: istio.type.v1beta1.WorkloadSelector.match_labels:type_name -> istio.type.v1beta1.WorkloadSelector.MatchLabelsEntry
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	6, // 0: istio.type.v1beta1.WorkloadSelector.match_labels:type_name -> istio.type.v1beta1.WorkloadSelector.MatchLabelsEntry
+	7, // 1: istio.type.v1beta1.LabelSelector.matchLabels:type_name -> istio.type.v1beta1.LabelSelector.MatchLabelsEntry
+	4, // 2: istio.type.v1beta1.LabelSelector.matchExpressions:type_name -> istio.type.v1beta1.LabelSelectorRequirement
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_type_v1beta1_selector_proto_init() }
@@ -398,7 +547,7 @@ func file_type_v1beta1_selector_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_type_v1beta1_selector_proto_rawDesc), len(file_type_v1beta1_selector_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   4,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
