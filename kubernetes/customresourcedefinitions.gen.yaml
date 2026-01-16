@@ -16409,6 +16409,12 @@ spec:
                       description: This field specifies the header name to output
                         a successfully verified JWT payload to the backend.
                       type: string
+                    requireJwt:
+                      description: If set to true, requests without a valid JWT token
+                        will be rejected with a 401 Unauthorized status code along
+                        with a `WWW-Authenticate` header indicating the Bearer authentication
+                        scheme is required.
+                      type: boolean
                     spaceDelimitedClaims:
                       description: List of JWT claim names that should be treated
                         as space-delimited strings.
@@ -16698,6 +16704,12 @@ spec:
                       description: This field specifies the header name to output
                         a successfully verified JWT payload to the backend.
                       type: string
+                    requireJwt:
+                      description: If set to true, requests without a valid JWT token
+                        will be rejected with a 401 Unauthorized status code along
+                        with a `WWW-Authenticate` header indicating the Bearer authentication
+                        scheme is required.
+                      type: boolean
                     spaceDelimitedClaims:
                       description: List of JWT claim names that should be treated
                         as space-delimited strings.
