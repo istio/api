@@ -210,6 +210,36 @@ defines an export to all namespaces.</p>
 
 </td>
 </tr>
+<tr id="VirtualService-export_to_selectors">
+<td><div class="field"><div class="name"><code><a href="#VirtualService-export_to_selectors">exportToSelectors</a></code></div>
+<div class="type"><a href="https://istio.io/docs/reference/config/type/workload-selector.html#LabelSelector">LabelSelector[]</a></div>
+</div></td>
+<td>
+<p>A list of label selectors to dynamically select namespaces to which this
+virtual service is exported. Each selector can match namespaces based on their labels.
+This provides a mechanism for service owners and mesh administrators to control
+the visibility of virtual services across namespace boundaries without knowing namespace
+names in advance.</p>
+<p>For example, to export to all namespaces with a specific label:</p>
+<pre><code class="language-yaml">exportToSelectors:
+- matchLabels:
+    mesh: enabled
+</code></pre>
+<p>Or using match expressions for more complex selection:</p>
+<pre><code class="language-yaml">exportToSelectors:
+- matchExpressions:
+  - key: environment
+    operator: In
+    values: [production, staging]
+</code></pre>
+<p>When both export_to and export_to_selectors are specified, the virtual service is
+exported to the union of all matched namespaces. If neither is specified,
+the virtual service is exported to all namespaces by default.</p>
+<p><strong>Note:</strong> Using &ldquo;*&rdquo; in export_to makes export_to_selectors redundant as
+the virtual service would already be visible to all namespaces.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
