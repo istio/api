@@ -1077,7 +1077,7 @@ type ProxyConfig struct {
 	// Optional.
 	FileFlushMinSizeKb uint32 `protobuf:"varint,41,opt,name=file_flush_min_size_kb,json=fileFlushMinSizeKb,proto3" json:"file_flush_min_size_kb,omitempty"`
 	// Offer HTTP compression for stats
-	// Defaults to false.
+	// Defaults to true.
 	// Optional.
 	StatsCompression *wrappers.BoolValue `protobuf:"bytes,42,opt,name=stats_compression,json=statsCompression,proto3" json:"stats_compression,omitempty"`
 	unknownFields    protoimpl.UnknownFields

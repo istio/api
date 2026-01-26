@@ -770,7 +770,7 @@ message ProxyConfig {
   uint32 file_flush_min_size_kb = 41;
 
   // Offer HTTP compression for stats
-  // Defaults to false.
+  // Defaults to true.
   // Optional.
   google.protobuf.BoolValue stats_compression = 42;
 }
