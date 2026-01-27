@@ -703,6 +703,7 @@ message ProxyConfig {
       // true.
       google.protobuf.BoolValue uri = 5;
     }
+
     // Controls the `X-Forwarded-Client-Cert` header for inbound sidecar requests. To set this on gateways, use the `Topology` setting.
     // To disable the header, configure either `SANITIZE` (to always remove the header, if present) or `FORWARD_ONLY` (to leave the header as-is).
     // By default, `APPEND_FORWARD` will be used.
@@ -767,6 +768,11 @@ message ProxyConfig {
   // Defaults to 64.
   // Optional.
   uint32 file_flush_min_size_kb = 41;
+
+  // Offer HTTP compression for stats
+  // Defaults to true.
+  // Optional.
+  google.protobuf.BoolValue stats_compression = 42;
 }
 
 message RemoteService {
