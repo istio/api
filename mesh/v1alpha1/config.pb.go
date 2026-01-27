@@ -1040,7 +1040,6 @@ type MeshConfig struct {
 	// Note: Mesh mTLS does not respect ECDH curves.
 	MeshMTLS *MeshConfig_TLSConfig `protobuf:"bytes,63,opt,name=mesh_mTLS,json=meshMTLS,proto3" json:"mesh_mTLS,omitempty"`
 	// Configuration of TLS for all traffic except for ISTIO_MUTUAL mode.
-	// Currently, this supports configuration of ecdhCurves and cipherSuites only.
 	// For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.
 	TlsDefaults   *MeshConfig_TLSConfig `protobuf:"bytes,64,opt,name=tls_defaults,json=tlsDefaults,proto3" json:"tls_defaults,omitempty"`
 	unknownFields protoimpl.UnknownFields
