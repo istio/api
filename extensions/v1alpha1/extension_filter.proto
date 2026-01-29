@@ -1,0 +1,495 @@
+// Copyright Istio Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+// $schema: istio.extensions.v1alpha1.ExtensionFilter
+// $title: Extension Filter
+// $description: Extend the functionality provided by the Istio proxy through WebAssembly or Lua filters.
+// $location: https://istio.io/docs/reference/config/proxy_extensions/v1alpha1/extension_filter.html
+// $aliases: [/docs/reference/config/extensions/v1alpha1/extension_filter]
+
+// ExtensionFilter provides a mechanism to extend the functionality provided by
+// the Istio proxy through WebAssembly or Lua filters.
+//
+// This API supersedes WasmPlugin by providing a unified mechanism for configuring
+// multiple extension types (WebAssembly and Lua) while maintaining consistent
+// targeting and configuration patterns.
+//
+// The order of execution (as part of Envoy's filter chain) is determined by
+// phase and priority settings, allowing the configuration of complex
+// interactions between user-supplied WebAssembly or Lua and Istio's internal
+// filters.
+//
+// Examples:
+//
+// AuthN Filter deployed to ingress-gateway that implements an OpenID flow
+// and populates the `Authorization` header with a JWT to be consumed by
+// Istio AuthN.
+//
+// ```yaml
+// apiVersion: extensions.istio.io/v1alpha1
+// kind: ExtensionFilter
+// metadata:
+//   name: openid-connect
+//   namespace: istio-ingress
+// spec:
+//   selector:
+//     matchLabels:
+//       istio: ingressgateway
+//   phase: AUTHN
+//   wasm:
+//     url: file:///opt/filters/openid.wasm
+//     sha256: 1ef0c9a92b0420cf25f7fe5d481b231464bc88f486ca3b9c83ed5cc21d2f6210
+//     pluginConfig:
+//       openid_server: authn
+//       openid_realm: ingress
+// ```
+//
+// This is the same as the last example, but using an OCI image.
+//
+// ```yaml
+// apiVersion: extensions.istio.io/v1alpha1
+// kind: ExtensionFilter
+// metadata:
+//   name: openid-connect
+//   namespace: istio-ingress
+// spec:
+//   selector:
+//     matchLabels:
+//       istio: ingressgateway
+//   phase: AUTHN
+//   wasm:
+//     url: oci://private-registry:5000/openid-connect/openid:latest
+//     imagePullPolicy: IfNotPresent
+//     imagePullSecret: private-registry-pull-secret
+//     pluginConfig:
+//       openid_server: authn
+//       openid_realm: ingress
+// ```
+//
+// This is the same as the last example, but using VmConfig to configure environment variables in the VM.
+//
+// ```yaml
+// apiVersion: extensions.istio.io/v1alpha1
+// kind: ExtensionFilter
+// metadata:
+//   name: openid-connect
+//   namespace: istio-ingress
+// spec:
+//   selector:
+//     matchLabels:
+//       istio: ingressgateway
+//   phase: AUTHN
+//   wasm:
+//     url: oci://private-registry:5000/openid-connect/openid:latest
+//     imagePullPolicy: IfNotPresent
+//     imagePullSecret: private-registry-pull-secret
+//     pluginConfig:
+//       openid_server: authn
+//       openid_realm: ingress
+//     vmConfig:
+//       env:
+//       - name: POD_NAME
+//         valueFrom: HOST
+//       - name: TRUST_DOMAIN
+//         value: "cluster.local"
+// ```
+//
+// This is also the same as the last example, but the Wasm module is pulled via https and updated for each time when this plugin resource is changed.
+//
+// ```yaml
+// apiVersion: extensions.istio.io/v1alpha1
+// kind: ExtensionFilter
+// metadata:
+//   name: openid-connect
+//   namespace: istio-ingress
+// spec:
+//   selector:
+//     matchLabels:
+//       istio: ingressgateway
+//   phase: AUTHN
+//   wasm:
+//     url: https://private-bucket/filters/openid.wasm
+//     imagePullPolicy: Always
+//     pluginConfig:
+//       openid_server: authn
+//       openid_realm: ingress
+//     vmConfig:
+//       env:
+//       - name: POD_NAME
+//         valueFrom: HOST
+//       - name: TRUST_DOMAIN
+//         value: "cluster.local"
+// ```
+//
+// And a more complex example that deploys three ExtensionFilters and orders them
+// using `phase` and `priority`. The (hypothetical) setup is that the
+// `openid-connect` filter performs an OpenID Connect flow to authenticate the
+// user, writing a signed JWT into the Authorization header of the request,
+// which can be verified by the Istio authn plugin. Then, the `acl-check` plugin
+// kicks in, passing the JWT to a policy server, which in turn responds with a
+// signed token that contains information about which files and functions of the
+// system are available to the user that was previously authenticated. The
+// `acl-check` filter writes this token to a header. Finally, the `check-header`
+// filter verifies the token in that header and makes sure that the token's
+// contents (the permitted 'function') matches its plugin configuration.
+//
+// The resulting filter chain looks like this:
+// -> openid-connect -> istio.authn -> acl-check -> check-header -> router
+//
+// ```yaml
+// apiVersion: extensions.istio.io/v1alpha1
+// kind: ExtensionFilter
+// metadata:
+//   name: openid-connect
+//   namespace: istio-ingress
+// spec:
+//   selector:
+//     matchLabels:
+//       istio: ingressgateway
+//   phase: AUTHN
+//   wasm:
+//     url: oci://private-registry:5000/openid-connect/openid:latest
+//     imagePullPolicy: IfNotPresent
+//     imagePullSecret: private-registry-pull-secret
+//     pluginConfig:
+//       openid_server: authn
+//       openid_realm: ingress
+// ```
+//
+// ```yaml
+// apiVersion: extensions.istio.io/v1alpha1
+// kind: ExtensionFilter
+// metadata:
+//   name: acl-check
+//   namespace: istio-ingress
+// spec:
+//   selector:
+//     matchLabels:
+//       istio: ingressgateway
+//   phase: AUTHZ
+//   priority: 1000
+//   wasm:
+//     url: oci://private-registry:5000/acl-check/acl:latest
+//     imagePullPolicy: Always
+//     imagePullSecret: private-registry-pull-secret
+//     pluginConfig:
+//       acl_server: some_server
+//       set_header: authz_complete
+// ```
+//
+// ```yaml
+// apiVersion: extensions.istio.io/v1alpha1
+// kind: ExtensionFilter
+// metadata:
+//   name: check-header
+//   namespace: istio-ingress
+// spec:
+//   selector:
+//     matchLabels:
+//       istio: ingressgateway
+//   phase: AUTHZ
+//   priority: 10
+//   wasm:
+//     url: oci://private-registry:5000/check-header:latest
+//     imagePullPolicy: IfNotPresent
+//     imagePullSecret: private-registry-pull-secret
+//     pluginConfig:
+//       read_header: authz_complete
+//       verification_key: a89gAzxvls0JKAKIJSBnnvvvkIO
+//       function: read_data
+// ```
+//
+// Gateway with Lua filter for conditional header modification:
+//
+// ```yaml
+// apiVersion: extensions.istio.io/v1alpha1
+// kind: ExtensionFilter
+// metadata:
+//   name: conditional-header-modifier
+//   namespace: istio-ingress
+// spec:
+//   selector:
+//     matchLabels:
+//       istio: ingressgateway
+//   match:
+//   - mode: CLIENT
+//     ports:
+//     - number: 8080
+//     - number: 8081
+//   phase: AUTHN
+//   priority: 1000
+//   lua:
+//     inlineCode: |
+//       function envoy_on_request(request_handle)
+//         local domain = "foo.com"
+//         local headers = request_handle:headers()
+//         local host = headers:get(":authority")
+//         local existing_auth_header = headers:get("Authorization")
+//         if (domain ~= nil and host ~= nil and existing_auth_header == nil and domain == host) then
+//           local bearer_token = headers:get("cookie"):match("foo")
+//           if (bearer_token ~= nil) then
+//             headers:add("Authorization", "Bearer " .. bearer_token)
+//           end
+//         end
+//       end
+// ```
+//
+// Waypoint with Lua filter for header count logging:
+//
+// ```yaml
+// apiVersion: extensions.istio.io/v1alpha1
+// kind: ExtensionFilter
+// metadata:
+//   name: reviews-header-logger
+//   namespace: default
+// spec:
+//   targetRefs:
+//   - kind: Service
+//     name: reviews
+//   match:
+//   - mode: SERVER
+//   phase: STATS
+//   lua:
+//     inlineCode: |
+//       function envoy_on_request(request_handle)
+//         local headers = request_handle:headers()
+//         local num_headers = 0
+//         for key, value in pairs(headers) do
+//           num_headers = num_headers + 1
+//         end
+//         request_handle:logInfo("Request to reviews service has " .. num_headers .. " headers")
+//       end
+// ```
+package istio.extensions.v1alpha1;
+
+import "extensions/v1alpha1/wasm.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/wrappers.proto";
+import "type/v1beta1/selector.proto";
+
+option go_package = "istio.io/api/extensions/v1alpha1";
+
+//
+// <!-- crd generation tags
+// +cue-gen:ExtensionFilter:groupName:extensions.istio.io
+// +cue-gen:ExtensionFilter:versions:v1alpha1
+// +cue-gen:ExtensionFilter:storageVersion
+// +cue-gen:ExtensionFilter:annotations:helm.sh/resource-policy=keep
+// +cue-gen:ExtensionFilter:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
+// +cue-gen:ExtensionFilter:subresource:status
+// +cue-gen:ExtensionFilter:spec:required
+// +cue-gen:ExtensionFilter:scope:Namespaced
+// +cue-gen:ExtensionFilter:releaseChannel:extended
+// +cue-gen:ExtensionFilter:resource:categories=istio-io,extensions-istio-io
+// +cue-gen:ExtensionFilter:preserveUnknownFields:wasm.pluginConfig
+// +cue-gen:ExtensionFilter:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// -->
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=extensions.istio.io/v1alpha1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
+// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="(has(self.selector)?1:0)+(has(self.targetRef)?1:0)+(has(self.targetRefs)?1:0)<=1"
+// +kubebuilder:validation:XValidation:message="exactly one of wasm or lua must be set",rule="has(self.wasm) != has(self.lua)"
+message ExtensionFilter {
+  // Optional. Criteria used to select the specific set of pods/VMs on which
+  // this plugin configuration should be applied. If omitted, this
+  // configuration will be applied to all workload instances in the same
+  // namespace. If the `ExtensionFilter` is present in the config root
+  // namespace, it will be applied to all applicable workloads in any
+  // namespace.
+  //
+  // At most, only one of `selector` or `targetRefs` can be set for a given policy.
+  istio.type.v1beta1.WorkloadSelector selector = 1;
+
+  // Optional. The targetRefs specifies a list of resources the policy should be
+  // applied to. The targeted resources specified will determine which workloads
+  // the policy applies to.
+  //
+  // Currently, the following resource attachment types are supported:
+  // * `kind: Gateway` with `group: gateway.networking.k8s.io` in the same namespace.
+  // * `kind: GatewayClass` with `group: gateway.networking.k8s.io` in the root namespace.
+  // * `kind: Service` with `group: ""` or `group: "core"` in the same namespace. This type is only supported for waypoints.
+  // * `kind: ServiceEntry` with `group: networking.istio.io` in the same namespace.
+  //
+  // If not set, the policy is applied as defined by the selector.
+  // At most one of the selector and targetRefs can be set.
+  //
+  // NOTE: Waypoint proxies are required to use this field for policies to apply; `selector` policies will be ignored.
+  // +kubebuilder:validation:MaxItems=16
+  repeated istio.type.v1beta1.PolicyTargetReference targetRefs = 3;
+
+  // Determines where in the filter chain this `ExtensionFilter` is to be injected.
+  PluginPhase phase = 4;
+
+  // Determines ordering of `ExtensionFilters` in the same `phase`.
+  // When multiple `ExtensionFilters` are applied to the same workload in the
+  // same `phase`, they will be applied by priority, in descending order.
+  // If `priority` is not set, or two `ExtensionFilters` exist with the same
+  // value, the ordering will be deterministically derived from name and
+  // namespace of the `ExtensionFilters`. Defaults to `0`.
+  google.protobuf.Int32Value priority = 5;
+
+  // Specifies the criteria to determine which traffic is passed to ExtensionFilter.
+  // If a traffic satisfies any of TrafficSelectors,
+  // the traffic passes the ExtensionFilter.
+  repeated TrafficSelector match = 6;
+
+  // WebAssembly filter configuration. Mutually exclusive with `lua`.
+  WasmConfig wasm = 10;
+
+  // Lua filter configuration. Mutually exclusive with `wasm`.
+  LuaConfig lua = 11;
+}
+
+// WasmConfig configures a WebAssembly filter.
+//
+// Example:
+//
+// ```yaml
+// wasm:
+//   url: oci://gcr.io/myproject/filter:v1.0.0
+//   sha256: abc123...
+//   imagePullPolicy: IfNotPresent
+//   imagePullSecret: gcr-secret
+//   pluginName: my-filter
+//   pluginConfig:
+//     key1: value1
+//     key2: value2
+//   failStrategy: FAIL_CLOSE
+//   vmConfig:
+//     env:
+//     - name: SOME_ENV_VAR
+//       value: some_value
+//   type: HTTP
+// ```
+message WasmConfig {
+  // URL of a Wasm module or OCI container. If no scheme is present,
+  // defaults to `oci://`, referencing an OCI image. Other valid schemes
+  // are `file://` for referencing .wasm module files present locally
+  // within the proxy container, and `http[s]://` for .wasm module files
+  // hosted remotely.
+  //
+  // +kubebuilder:validation:MinLength=1
+  // +kubebuilder:validation:XValidation:message="url must have schema one of [http, https, file, oci]",rule="isURL(self) ? (url(self).getScheme() in ['', 'http', 'https', 'file', 'oci']) : (isURL('http://' + self) && url('http://' + self).getScheme() in ['', 'http', 'https', 'file', 'oci'])"
+  string url = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // SHA256 checksum that will be used to verify Wasm module or OCI container.
+  // If the `url` field already references a SHA256 (using the `@sha256:`
+  // notation), it must match the value of this field. If an OCI image is
+  // referenced by tag and this field is set, its checksum will be verified
+  // against the contents of this field after pulling.
+  // +kubebuilder:validation:Pattern="(^$|^[a-f0-9]{64}$)"
+  string sha256 = 2;
+
+  // The pull behaviour to be applied when fetching Wasm module by either
+  // OCI image or `http/https`. Only relevant when referencing Wasm module without
+  // any digest, including the digest in OCI image URL or `sha256` field in `vm_config`.
+  // Defaults to `IfNotPresent`, except when an OCI image is referenced in the `url`
+  // and the `latest` tag is used, in which case `Always` is the default,
+  // mirroring Kubernetes behaviour.
+  PullPolicy image_pull_policy = 3;
+
+  // Credentials to use for OCI image pulling.
+  // Name of a Kubernetes Secret in the same namespace as the `ExtensionFilter` that
+  // contains a Docker pull secret which is to be used to authenticate
+  // against the registry when pulling the image.
+  // +kubebuilder:validation:MinLength=1
+  // +kubebuilder:validation:MaxLength=253
+  string image_pull_secret = 4;
+
+  // $hide_from_docs
+  // Public key that will be used to verify signatures of signed OCI images
+  // or Wasm modules.
+  //
+  // At this moment, various ways for signing/verifying are emerging and being proposed.
+  // We can observe two major streams for signing OCI images: Cosign from Sigstore and Notary,
+  // which is used in Docker Content Trust.
+  // In case of Wasm module, multiple approaches are still in discussion.
+  //  * https://github.com/WebAssembly/design/issues/1413
+  //  * https://github.com/wasm-signatures/design (various signing tools are enumerated)
+  //
+  // In addition, for each method for signing&verifying, we may need to consider to provide
+  // additional data or configuration (e.g., key rolling, KMS, root certs, ...) as well.
+  //
+  // To deal with this situation, we need to elaborate more generic way to describe
+  // how to sign and verify the image or wasm binary, and how to specify relevant data,
+  // including this `verification_key`.
+  //
+  // Therefore, this field will not be implemented until the detailed design is established.
+  // For the future use, just keep this field in proto and hide from documentation.
+  string verification_key = 5;
+
+  // The configuration that will be passed on to the plugin.
+  google.protobuf.Struct plugin_config = 6;
+
+  // The plugin name to be used in the Envoy configuration (used to be called
+  // `rootID`). Some .wasm modules might require this value to select the Wasm
+  // plugin to execute.
+  // +kubebuilder:validation:MaxLength=256
+  // +kubebuilder:validation:MinLength=1
+  string plugin_name = 7;
+
+  // Specifies the failure behavior for the plugin due to fatal errors.
+  FailStrategy fail_strategy = 8;
+
+  // Configuration for a Wasm VM.
+  // More details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).
+  VmConfig vm_config = 9;
+
+  // Specifies the type of Wasm Extension to be used.
+  PluginType type = 10;
+}
+
+// LuaConfig configures a Lua filter.
+//
+// Lua filters provide a lightweight alternative to WebAssembly for simple
+// request/response transformations. The Lua code is executed inline within
+// the Envoy proxy.
+//
+// Example: Simple header manipulation
+//
+// ```yaml
+// lua:
+//   inlineCode: |
+//     function envoy_on_request(request_handle)
+//       request_handle:headers():add("x-custom-header", "custom-value")
+//     end
+// ```
+//
+// The Lua script must define one or both of the following functions:
+// - `envoy_on_request(request_handle)`: Called when a request is received
+// - `envoy_on_response(response_handle)`: Called when a response is received
+//
+// The request_handle and response_handle provide access to headers, body,
+// metadata, and other request/response attributes. See the Envoy Lua filter
+// documentation for the complete API:
+// https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/lua_filter
+message LuaConfig {
+  // The inline Lua code to be executed. The code must be a valid Lua script
+  // that defines the appropriate callback functions (`envoy_on_request` and/or
+  // `envoy_on_response`).
+  //
+  // The maximum size is 64KB. For larger or more complex filters, use a
+  // WebAssembly filter instead.
+  //
+  // +kubebuilder:validation:MinLength=1
+  // +kubebuilder:validation:MaxLength=65536
+  string inline_code = 1 [(google.api.field_behavior) = REQUIRED];
+}
