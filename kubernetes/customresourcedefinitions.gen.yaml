@@ -10703,7 +10703,7 @@ spec:
                           properties:
                             bytes:
                               description: response body as base64 encoded bytes.
-                              format: byte
+                              format: binary
                               type: string
                             string:
                               type: string
@@ -11755,7 +11755,7 @@ spec:
                           properties:
                             bytes:
                               description: response body as base64 encoded bytes.
-                              format: byte
+                              format: binary
                               type: string
                             string:
                               type: string
@@ -12807,7 +12807,7 @@ spec:
                           properties:
                             bytes:
                               description: response body as base64 encoded bytes.
-                              format: byte
+                              format: binary
                               type: string
                             string:
                               type: string
@@ -17248,6 +17248,12 @@ spec:
                       description: Controls span reporting.
                       nullable: true
                       type: boolean
+                    enableContextPropagation:
+                      description: Controls whether trace context headers (e.g., `traceparent`/`tracestate`
+                        for W3C, `X-B3-*` for Zipkin) are propagated in forwarded
+                        requests.
+                      nullable: true
+                      type: boolean
                     enableIstioTags:
                       description: Determines whether or not trace spans generated
                         by Envoy will include Istio specific tags.
@@ -17710,6 +17716,12 @@ spec:
                       type: object
                     disableSpanReporting:
                       description: Controls span reporting.
+                      nullable: true
+                      type: boolean
+                    enableContextPropagation:
+                      description: Controls whether trace context headers (e.g., `traceparent`/`tracestate`
+                        for W3C, `X-B3-*` for Zipkin) are propagated in forwarded
+                        requests.
                       nullable: true
                       type: boolean
                     enableIstioTags:
