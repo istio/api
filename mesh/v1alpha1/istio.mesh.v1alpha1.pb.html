@@ -60,6 +60,21 @@ Default timeout is 10s.</p>
 
 </td>
 </tr>
+<tr id="MeshConfig-hbone_idle_timeout">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-hbone_idle_timeout">hboneIdleTimeout</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></div>
+</div></td>
+<td>
+<p>Idle timeout configured on Envoy proxies for their connection pools to ztunnel via HBONE.
+This controls how long Envoy will keep idle connections to ztunnel before closing them.
+Note: This setting is applied only on the Envoy proxy side; ztunnel does not use it.
+Default timeout is 1 hour (3600s).
+For environments with aggressive IP address reuse, it is recommended to set
+this to a value less than the CNI IP cooldown period to prevent stale connection reuse.
+For example, if your CNI has a 30s cooldown period, setting this to 15s is recommended.</p>
+
+</td>
+</tr>
 <tr id="MeshConfig-tcp_keepalive">
 <td><div class="field"><div class="name"><code><a href="#MeshConfig-tcp_keepalive">tcpKeepalive</a></code></div>
 <div class="type"><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ConnectionPoolSettings-TCPSettings-TcpKeepalive">TcpKeepalive</a></div>
@@ -3994,6 +4009,40 @@ Note: currently all headers are enabled by default.</p>
   metadataExchangeHeaders:
     mode: IN_MESH
 </code></pre>
+
+</td>
+</tr>
+<tr id="ProxyConfig-file_flush_interval">
+<td><div class="field"><div class="name"><code><a href="#ProxyConfig-file_flush_interval">fileFlushInterval</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></div>
+</div></td>
+<td>
+<p>File flush interval for envoy flushes buffers to disk in milliseconds.
+The duration needs to be set to a value greater than or equal to 1 millisecond.
+Default is 1000ms.
+Optional.</p>
+
+</td>
+</tr>
+<tr id="ProxyConfig-file_flush_min_size_kb">
+<td><div class="field"><div class="name"><code><a href="#ProxyConfig-file_flush_min_size_kb">fileFlushMinSizeKb</a></code></div>
+<div class="type">uint32</div>
+</div></td>
+<td>
+<p>File flush buffer size for envoy flushes buffers to disk in kilobytes.
+Defaults to 64.
+Optional.</p>
+
+</td>
+</tr>
+<tr id="ProxyConfig-stats_compression">
+<td><div class="field"><div class="name"><code><a href="#ProxyConfig-stats_compression">statsCompression</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></div>
+</div></td>
+<td>
+<p>Offer HTTP compression for stats
+Defaults to true.
+Optional.</p>
 
 </td>
 </tr>
