@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.DestinationRule
 aliases: [/docs/reference/config/networking/v1alpha3/destination-rule]
-number_of_entries: 28
+number_of_entries: 29
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -1025,6 +1025,23 @@ spec:
           time: 7200s
           interval: 75s
 </code></pre>
+<p>The following example sets a per-host connection limit of 10 connections
+for each individual endpoint in the reviews service. This is useful for
+preventing overload of individual endpoints, especially in autoscaling scenarios.
+Note: currently only the max_connections field is supported for per-host limits.</p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: reviews-per-host-limits
+spec:
+  host: reviews.prod.svc.cluster.local
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      perHostLimits:
+        maxConnections: 10
+</code></pre>
 
 <table class="message-fields">
 <thead>
@@ -1049,6 +1066,15 @@ spec:
 </div></td>
 <td>
 <p>HTTP connection pool settings.</p>
+
+</td>
+</tr>
+<tr id="ConnectionPoolSettings-per_host_limits">
+<td><div class="field"><div class="name"><code><a href="#ConnectionPoolSettings-per_host_limits">perHostLimits</a></code></div>
+<div class="type"><a href="#ConnectionPoolSettings-PerHostLimits">PerHostLimits</a></div>
+</div></td>
+<td>
+<p>Optional per-host connection limits.</p>
 
 </td>
 </tr>
@@ -1309,6 +1335,36 @@ This opt-out option overrides the default.</p>
 <td>
 <p>Upgrade the connection to http2.
 This opt-in option overrides the default.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="ConnectionPoolSettings-PerHostLimits">PerHostLimits</h3>
+<section>
+<p>Per-host connection limits that apply to each individual host in the upstream service.
+These limits allow controlling connections to each endpoint independently,
+which is useful for preventing overload of individual hosts and managing
+concurrency in autoscaling scenarios.</p>
+<p>Note: Currently only the <code>maxConnections</code> field is supported for per-host limits,
+as per Envoy&rsquo;s circuit breaker implementation.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ConnectionPoolSettings-PerHostLimits-max_connections">
+<td><div class="field"><div class="name"><code><a href="#ConnectionPoolSettings-PerHostLimits-max_connections">maxConnections</a></code></div>
+<div class="type">int32</div>
+</div></td>
+<td>
+<p>Maximum number of connections to each individual host in the upstream cluster.
+If not specified, there is no per-host limit.</p>
 
 </td>
 </tr>
