@@ -249,7 +249,7 @@
 //     matchLabels:
 //       istio: egressgateway
 //   tracing:
-//   - enableContextPropagation: false
+//   - disableContextPropagation: true
 // ```
 //
 
@@ -740,15 +740,15 @@ type Tracing struct {
 	EnableIstioTags *wrappers.BoolValue `protobuf:"bytes,8,opt,name=enable_istio_tags,json=enableIstioTags,proto3" json:"enable_istio_tags,omitempty"`
 	// Controls whether trace context headers (e.g., `traceparent`/`tracestate` for W3C,
 	// `X-B3-*` for Zipkin) are propagated in forwarded requests.
-	// When set to false, trace context headers will not be included in proxied requests,
+	// When set to true, trace context headers will not be included in proxied requests,
 	// effectively stopping trace context propagation at the selected workloads.
 	// This is useful for egress gateways where you want to prevent leaking trace context
 	// to external services while still reporting spans for internal observability.
-	// Defaults to true (context propagation enabled).
+	// Defaults to false (context propagation enabled).
 	// NOTE: This does NOT impact span reporting; use `disable_span_reporting` to control that.
-	EnableContextPropagation *wrappers.BoolValue `protobuf:"bytes,9,opt,name=enable_context_propagation,json=enableContextPropagation,proto3" json:"enable_context_propagation,omitempty"`
-	unknownFields            protoimpl.UnknownFields
-	sizeCache                protoimpl.SizeCache
+	DisableContextPropagation *wrappers.BoolValue `protobuf:"bytes,9,opt,name=disable_context_propagation,json=disableContextPropagation,proto3" json:"disable_context_propagation,omitempty"`
+	unknownFields             protoimpl.UnknownFields
+	sizeCache                 protoimpl.SizeCache
 }
 
 func (x *Tracing) Reset() {
@@ -830,9 +830,9 @@ func (x *Tracing) GetEnableIstioTags() *wrappers.BoolValue {
 	return nil
 }
 
-func (x *Tracing) GetEnableContextPropagation() *wrappers.BoolValue {
+func (x *Tracing) GetDisableContextPropagation() *wrappers.BoolValue {
 	if x != nil {
-		return x.EnableContextPropagation
+		return x.DisableContextPropagation
 	}
 	return nil
 }
@@ -1794,7 +1794,7 @@ const file_telemetry_v1alpha1_telemetry_proto_rawDesc = "" +
 	"targetRefs\x12;\n" +
 	"\atracing\x18\x02 \x03(\v2!.istio.telemetry.v1alpha1.TracingR\atracing\x12;\n" +
 	"\ametrics\x18\x03 \x03(\v2!.istio.telemetry.v1alpha1.MetricsR\ametrics\x12N\n" +
-	"\x0eaccess_logging\x18\x04 \x03(\v2'.istio.telemetry.v1alpha1.AccessLoggingR\raccessLogging\"\x91\v\n" +
+	"\x0eaccess_logging\x18\x04 \x03(\v2'.istio.telemetry.v1alpha1.AccessLoggingR\raccessLogging\"\x93\v\n" +
 	"\aTracing\x12G\n" +
 	"\x05match\x18\a \x01(\v21.istio.telemetry.v1alpha1.Tracing.TracingSelectorR\x05match\x12C\n" +
 	"\tproviders\x18\x02 \x03(\v2%.istio.telemetry.v1alpha1.ProviderRefR\tproviders\x12Z\n" +
@@ -1803,8 +1803,8 @@ const file_telemetry_v1alpha1_telemetry_proto_rawDesc = "" +
 	"\vcustom_tags\x18\x05 \x03(\v21.istio.telemetry.v1alpha1.Tracing.CustomTagsEntryR\n" +
 	"customTags\x12c\n" +
 	"!use_request_id_for_trace_sampling\x18\x06 \x01(\v2\x1a.google.protobuf.BoolValueR\x1cuseRequestIdForTraceSampling\x12F\n" +
-	"\x11enable_istio_tags\x18\b \x01(\v2\x1a.google.protobuf.BoolValueR\x0fenableIstioTags\x12X\n" +
-	"\x1aenable_context_propagation\x18\t \x01(\v2\x1a.google.protobuf.BoolValueR\x18enableContextPropagation\x1aM\n" +
+	"\x11enable_istio_tags\x18\b \x01(\v2\x1a.google.protobuf.BoolValueR\x0fenableIstioTags\x12Z\n" +
+	"\x1bdisable_context_propagation\x18\t \x01(\v2\x1a.google.protobuf.BoolValueR\x19disableContextPropagation\x1aM\n" +
 	"\x0fTracingSelector\x12:\n" +
 	"\x04mode\x18\x01 \x01(\x0e2&.istio.telemetry.v1alpha1.WorkloadModeR\x04mode\x1a\xc5\x02\n" +
 	"\tCustomTag\x12E\n" +
@@ -1939,7 +1939,7 @@ var file_telemetry_v1alpha1_telemetry_proto_depIdxs = []int32{
 	16, // 10: istio.telemetry.v1alpha1.Tracing.custom_tags:type_name -> istio.telemetry.v1alpha1.Tracing.CustomTagsEntry
 	24, // 11: istio.telemetry.v1alpha1.Tracing.use_request_id_for_trace_sampling:type_name -> google.protobuf.BoolValue
 	24, // 12: istio.telemetry.v1alpha1.Tracing.enable_istio_tags:type_name -> google.protobuf.BoolValue
-	24, // 13: istio.telemetry.v1alpha1.Tracing.enable_context_propagation:type_name -> google.protobuf.BoolValue
+	24, // 13: istio.telemetry.v1alpha1.Tracing.disable_context_propagation:type_name -> google.protobuf.BoolValue
 	5,  // 14: istio.telemetry.v1alpha1.Metrics.providers:type_name -> istio.telemetry.v1alpha1.ProviderRef
 	8,  // 15: istio.telemetry.v1alpha1.Metrics.overrides:type_name -> istio.telemetry.v1alpha1.MetricsOverrides
 	25, // 16: istio.telemetry.v1alpha1.Metrics.reporting_interval:type_name -> google.protobuf.Duration

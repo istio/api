@@ -17244,14 +17244,14 @@ spec:
                         type: object
                       description: Optional.
                       type: object
-                    disableSpanReporting:
-                      description: Controls span reporting.
-                      nullable: true
-                      type: boolean
-                    enableContextPropagation:
+                    disableContextPropagation:
                       description: Controls whether trace context headers (e.g., `traceparent`/`tracestate`
                         for W3C, `X-B3-*` for Zipkin) are propagated in forwarded
                         requests.
+                      nullable: true
+                      type: boolean
+                    disableSpanReporting:
+                      description: Controls span reporting.
                       nullable: true
                       type: boolean
                     enableIstioTags:
@@ -17714,14 +17714,14 @@ spec:
                         type: object
                       description: Optional.
                       type: object
-                    disableSpanReporting:
-                      description: Controls span reporting.
-                      nullable: true
-                      type: boolean
-                    enableContextPropagation:
+                    disableContextPropagation:
                       description: Controls whether trace context headers (e.g., `traceparent`/`tracestate`
                         for W3C, `X-B3-*` for Zipkin) are propagated in forwarded
                         requests.
+                      nullable: true
+                      type: boolean
+                    disableSpanReporting:
+                      description: Controls span reporting.
                       nullable: true
                       type: boolean
                     enableIstioTags:
