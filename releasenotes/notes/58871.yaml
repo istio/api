@@ -6,4 +6,4 @@ issue:
 
 releaseNotes:
   - |
-    **Added** `enableContextPropagation` field to the Telemetry Tracing API, allowing users to disable trace context header propagation (e.g., X-B3-*, traceparent) independently from span reporting. This is useful for preventing trace context leakage at egress gateways while maintaining internal observability.
+    **Added** `disableContextPropagation` field to the Telemetry Tracing API, allowing users to disable trace context header propagation (e.g., X-B3-*, traceparent) independently from span reporting. This is useful for preventing trace context leakage at egress gateways while maintaining internal observability.
