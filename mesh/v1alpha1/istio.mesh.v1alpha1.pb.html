@@ -4783,7 +4783,7 @@ inside a mesh and how to route to endpoints in each network. For example</p>
 <p>If <code>ENABLE_HCM_INTERNAL_NETWORKS</code> is set to true, MeshNetworks can be used to
 to explicitly define the networks in Envoy&rsquo;s internal address configuration.
 Envoy uses the IPs in the <code>internalAddressConfig</code> to decide whether or not to sanitize
-Envoy headers. If the IP address is listed an internal, the Envoy headers are not
+Envoy headers. If the IP address is listed as internal, the Envoy headers are not
 sanitized. As of Envoy 1.33, the default value for <code>internalAddressConfig</code> is set to
 an empty set. Previously, the default value was the set of all private IPs. Setting
 the <code>internalAddressConfig</code> to all private IPs (via Envoy&rsquo;s previous default behavior
