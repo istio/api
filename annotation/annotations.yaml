@@ -580,6 +580,9 @@ annotations:
 
       At this time, this annotation only impacts routing done by Ztunnel.
 
+      When applied to a Namespace, Services and ServiceEntries in that namespace inherit the setting
+      unless they have their own annotation.
+
       Accepted values:
       * `PreferClose`: endpoints will be categorized by how "close" they are, consider network, region, zone, and subzone.
         Traffic will be prioritized to the closest healthy endpoints.
@@ -590,6 +593,7 @@ annotations:
     deprecated: false
     hidden: false
     resources:
+      - Namespace
       - Service
       - ServiceEntry
 

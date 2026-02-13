@@ -371,6 +371,9 @@ Note: When using docker-in-docker container, the default bridge interface name i
 
 At this time, this annotation only impacts routing done by Ztunnel.
 
+When applied to a Namespace, Services and ServiceEntries in that namespace inherit the setting
+unless they have their own annotation.
+
 Accepted values:
 * "PreferClose": endpoints will be categorized by how "close" they are, consider network, region, zone, and subzone.
   Traffic will be prioritized to the closest healthy endpoints.
@@ -383,6 +386,7 @@ Accepted values:
 		Hidden:        false,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
+			Namespace,
 			Service,
 			ServiceEntry,
 		},
