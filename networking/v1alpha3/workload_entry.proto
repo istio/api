@@ -252,4 +252,10 @@ message WorkloadEntry {
   // ServiceEntry)
   // +kubebuilder:validation:MaxLength=253
   string service_account = 7;
+
+  // The priority for this Endpoint. If unspecified this will default to the highest priority (0).
+  // Under usual circumstances, Istio  will only select endpoints for the highest priority (0).
+  // In the event that enough endpoints for a particular priority are unavailable/unhealthy,
+  // Istio will fail over to selecting endpoints for the next highest priority group.
+  uint32 priority = 8;
 }
