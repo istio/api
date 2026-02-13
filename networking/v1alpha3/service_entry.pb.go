@@ -408,6 +408,7 @@ import (
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	v1alpha11 "istio.io/api/analysis/v1alpha1"
 	v1alpha1 "istio.io/api/meta/v1alpha1"
+	v1beta1 "istio.io/api/type/v1beta1"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -712,6 +713,39 @@ type ServiceEntry struct {
 	//
 	// **Note:** Ztunnel and Waypoint proxies not support this field and will read it at "*".
 	ExportTo []string `protobuf:"bytes,7,rep,name=export_to,json=exportTo,proto3" json:"export_to,omitempty"`
+	// A list of label selectors to dynamically select namespaces to which this
+	// service is exported. Each selector can match namespaces based on their labels.
+	// This provides a mechanism for service owners and mesh administrators to control
+	// the visibility of services across namespace boundaries without knowing namespace
+	// names in advance.
+	//
+	// For example, to export to all namespaces with a specific label:
+	// ```yaml
+	// exportToSelectors:
+	//   - matchLabels:
+	//     mesh: enabled
+	//
+	// ```
+	//
+	// Or using match expressions for more complex selection:
+	// ```yaml
+	// exportToSelectors:
+	// - matchExpressions:
+	//   - key: environment
+	//     operator: In
+	//     values: [production, staging]
+	//
+	// ```
+	//
+	// When both export_to and export_to_selectors are specified, the service is
+	// exported to the union of all matched namespaces. If neither is specified,
+	// the service is exported to all namespaces by default.
+	//
+	// **Note:** Using "*" in export_to makes export_to_selectors redundant as
+	// the service would already be visible to all namespaces.
+	//
+	// **Note:** Ztunnel and Waypoint proxies do not support this field.
+	ExportToSelectors []*v1beta1.LabelSelector `protobuf:"bytes,10,rep,name=export_to_selectors,json=exportToSelectors,proto3" json:"export_to_selectors,omitempty"`
 	// If specified, the proxy will verify that the server certificate's
 	// subject alternate name matches one of the specified values.
 	//
@@ -806,6 +840,13 @@ func (x *ServiceEntry) GetWorkloadSelector() *WorkloadSelector {
 func (x *ServiceEntry) GetExportTo() []string {
 	if x != nil {
 		return x.ExportTo
+	}
+	return nil
+}
+
+func (x *ServiceEntry) GetExportToSelectors() []*v1beta1.LabelSelector {
+	if x != nil {
+		return x.ExportToSelectors
 	}
 	return nil
 }
@@ -1040,7 +1081,7 @@ var File_networking_v1alpha3_service_entry_proto protoreflect.FileDescriptor
 
 const file_networking_v1alpha3_service_entry_proto_rawDesc = "" +
 	"\n" +
-	"'networking/v1alpha3/service_entry.proto\x12\x19istio.networking.v1alpha3\x1a\x1fanalysis/v1alpha1/message.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1ameta/v1alpha1/status.proto\x1a!networking/v1alpha3/sidecar.proto\x1a(networking/v1alpha3/workload_entry.proto\"\x98\x05\n" +
+	"'networking/v1alpha3/service_entry.proto\x12\x19istio.networking.v1alpha3\x1a\x1fanalysis/v1alpha1/message.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1ameta/v1alpha1/status.proto\x1a!networking/v1alpha3/sidecar.proto\x1a(networking/v1alpha3/workload_entry.proto\x1a\x1btype/v1beta1/selector.proto\"\xeb\x05\n" +
 	"\fServiceEntry\x12\x1a\n" +
 	"\x05hosts\x18\x01 \x03(\tB\x04\xe2A\x01\x02R\x05hosts\x12\x1c\n" +
 	"\taddresses\x18\x02 \x03(\tR\taddresses\x12<\n" +
@@ -1051,7 +1092,9 @@ const file_networking_v1alpha3_service_entry_proto_rawDesc = "" +
 	"resolution\x12F\n" +
 	"\tendpoints\x18\x06 \x03(\v2(.istio.networking.v1alpha3.WorkloadEntryR\tendpoints\x12X\n" +
 	"\x11workload_selector\x18\t \x01(\v2+.istio.networking.v1alpha3.WorkloadSelectorR\x10workloadSelector\x12\x1b\n" +
-	"\texport_to\x18\a \x03(\tR\bexportTo\x12*\n" +
+	"\texport_to\x18\a \x03(\tR\bexportTo\x12Q\n" +
+	"\x13export_to_selectors\x18\n" +
+	" \x03(\v2!.istio.type.v1beta1.LabelSelectorR\x11exportToSelectors\x12*\n" +
 	"\x11subject_alt_names\x18\b \x03(\tR\x0fsubjectAltNames\"0\n" +
 	"\bLocation\x12\x11\n" +
 	"\rMESH_EXTERNAL\x10\x00\x12\x11\n" +
@@ -1105,23 +1148,25 @@ var file_networking_v1alpha3_service_entry_proto_goTypes = []any{
 	(*ServiceEntryAddress)(nil),           // 5: istio.networking.v1alpha3.ServiceEntryAddress
 	(*WorkloadEntry)(nil),                 // 6: istio.networking.v1alpha3.WorkloadEntry
 	(*WorkloadSelector)(nil),              // 7: istio.networking.v1alpha3.WorkloadSelector
-	(*v1alpha1.IstioCondition)(nil),       // 8: istio.meta.v1alpha1.IstioCondition
-	(*v1alpha11.AnalysisMessageBase)(nil), // 9: istio.analysis.v1alpha1.AnalysisMessageBase
+	(*v1beta1.LabelSelector)(nil),         // 8: istio.type.v1beta1.LabelSelector
+	(*v1alpha1.IstioCondition)(nil),       // 9: istio.meta.v1alpha1.IstioCondition
+	(*v1alpha11.AnalysisMessageBase)(nil), // 10: istio.analysis.v1alpha1.AnalysisMessageBase
 }
 var file_networking_v1alpha3_service_entry_proto_depIdxs = []int32{
-	3, // 0: istio.networking.v1alpha3.ServiceEntry.ports:type_name -> istio.networking.v1alpha3.ServicePort
-	0, // 1: istio.networking.v1alpha3.ServiceEntry.location:type_name -> istio.networking.v1alpha3.ServiceEntry.Location
-	1, // 2: istio.networking.v1alpha3.ServiceEntry.resolution:type_name -> istio.networking.v1alpha3.ServiceEntry.Resolution
-	6, // 3: istio.networking.v1alpha3.ServiceEntry.endpoints:type_name -> istio.networking.v1alpha3.WorkloadEntry
-	7, // 4: istio.networking.v1alpha3.ServiceEntry.workload_selector:type_name -> istio.networking.v1alpha3.WorkloadSelector
-	8, // 5: istio.networking.v1alpha3.ServiceEntryStatus.conditions:type_name -> istio.meta.v1alpha1.IstioCondition
-	9, // 6: istio.networking.v1alpha3.ServiceEntryStatus.validation_messages:type_name -> istio.analysis.v1alpha1.AnalysisMessageBase
-	5, // 7: istio.networking.v1alpha3.ServiceEntryStatus.addresses:type_name -> istio.networking.v1alpha3.ServiceEntryAddress
-	8, // [8:8] is the sub-list for method output_type
-	8, // [8:8] is the sub-list for method input_type
-	8, // [8:8] is the sub-list for extension type_name
-	8, // [8:8] is the sub-list for extension extendee
-	0, // [0:8] is the sub-list for field type_name
+	3,  // 0: istio.networking.v1alpha3.ServiceEntry.ports:type_name -> istio.networking.v1alpha3.ServicePort
+	0,  // 1: istio.networking.v1alpha3.ServiceEntry.location:type_name -> istio.networking.v1alpha3.ServiceEntry.Location
+	1,  // 2: istio.networking.v1alpha3.ServiceEntry.resolution:type_name -> istio.networking.v1alpha3.ServiceEntry.Resolution
+	6,  // 3: istio.networking.v1alpha3.ServiceEntry.endpoints:type_name -> istio.networking.v1alpha3.WorkloadEntry
+	7,  // 4: istio.networking.v1alpha3.ServiceEntry.workload_selector:type_name -> istio.networking.v1alpha3.WorkloadSelector
+	8,  // 5: istio.networking.v1alpha3.ServiceEntry.export_to_selectors:type_name -> istio.type.v1beta1.LabelSelector
+	9,  // 6: istio.networking.v1alpha3.ServiceEntryStatus.conditions:type_name -> istio.meta.v1alpha1.IstioCondition
+	10, // 7: istio.networking.v1alpha3.ServiceEntryStatus.validation_messages:type_name -> istio.analysis.v1alpha1.AnalysisMessageBase
+	5,  // 8: istio.networking.v1alpha3.ServiceEntryStatus.addresses:type_name -> istio.networking.v1alpha3.ServiceEntryAddress
+	9,  // [9:9] is the sub-list for method output_type
+	9,  // [9:9] is the sub-list for method input_type
+	9,  // [9:9] is the sub-list for extension type_name
+	9,  // [9:9] is the sub-list for extension extendee
+	0,  // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_networking_v1alpha3_service_entry_proto_init() }
