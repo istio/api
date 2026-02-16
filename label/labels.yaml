@@ -265,6 +265,18 @@ labels:
       - ServiceEntry
       - Namespace
 
+  - name: istio.io/ingress-use-waypoint
+    featureStatus: Beta
+    descriptions: |
+      When set on a resource, indicates the resource should be accessed via it's associated waypoint by ingress gateways.
+      This must be set in addition to `istio.io/use-waypoint`, when you require ingress gateways to route through waypoint.
+    deprecated: false
+    hidden: false
+    resources:
+      - Service
+      - ServiceEntry
+      - Namespace
+
   - name: istio.io/waypoint-for
     featureStatus: Stable
     description: |
