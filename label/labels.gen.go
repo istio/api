@@ -170,6 +170,19 @@ Note: users wishing to use sidecar mode should see the "istio-injection" label; 
 		},
 	}
 
+	IoIstioIngressUseWaypoint = Instance {
+		Name:          "istio.io/ingress-use-waypoint",
+		Description:   "",
+		FeatureStatus: Beta,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Service,
+			ServiceEntry,
+			Namespace,
+		},
+	}
+
 	IoIstioRev = Instance {
 		Name:          "istio.io/rev",
 		Description:   "Istio control plane revision or tag associated with the "+
@@ -482,6 +495,7 @@ func AllResourceLabels() []*Instance {
 		&IoK8sNetworkingGatewayGatewayClassName,
 		&IoK8sNetworkingGatewayGatewayName,
 		&IoIstioDataplaneMode,
+		&IoIstioIngressUseWaypoint,
 		&IoIstioRev,
 		&IoIstioTag,
 		&IoIstioUseWaypoint,
