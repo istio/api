@@ -1148,6 +1148,42 @@ message MeshConfig {
       }
     }
 
+    // ServiceAttributeEnrichment controls how service resource attributes
+    // (such as `service.name`, `service.namespace`, `service.version`, and
+    // `service.instance.id`) are populated in exported trace spans.
+    enum ServiceAttributeEnrichment {
+      // Use Istio's default service attribute enrichment logic.
+      // The service name is determined by the `TracingServiceName` setting in
+      // `ProxyConfig` (e.g., based on the `app` label, canonical name, etc.).
+      ISTIO_CANONICAL = 0;
+
+      // Follow the OpenTelemetry semantic conventions for Kubernetes service
+      // attributes. The service attributes are calculated following the fallback
+      // chain defined in:
+      // https://opentelemetry.io/docs/specs/semconv/non-normative/k8s-attributes/#service-attributes
+      //
+      // The fallback chain for `service.name` is:
+      //   1. `resource.opentelemetry.io/service.name` annotation on the pod
+      //   2. `app.kubernetes.io/name` label
+      //   3. Name of the owning Kubernetes resource (Deployment, StatefulSet, etc.)
+      //   4. Pod name
+      //   5. Container name (if single container in the pod)
+      //   6. `unknown_service`
+      //
+      // The fallback chain for `service.namespace` is:
+      //   1. `resource.opentelemetry.io/service.namespace` annotation on the pod
+      //   2. Kubernetes namespace name
+      //
+      // The fallback chain for `service.version` is:
+      //   1. `resource.opentelemetry.io/service.version` annotation on the pod
+      //   2. `app.kubernetes.io/version` label
+      //
+      // The fallback chain for `service.instance.id` is:
+      //   1. `resource.opentelemetry.io/service.instance.id` annotation on the pod
+      //   2. Pod UID
+      OTEL_SEMANTIC_CONVENTIONS = 1;
+    }
+
     // Defines configuration for an OpenTelemetry tracing backend. Istio 1.16.1 or higher is needed.
     message OpenTelemetryTracingProvider {
       // REQUIRED. Specifies the OpenTelemetry endpoint that will receive OTLP traces.
@@ -1268,6 +1304,27 @@ message MeshConfig {
       //       environment: {}
       // ```
       ResourceDetectors resource_detectors = 5;
+
+      // Optional. Controls how service resource attributes are enriched in
+      // exported trace spans. When set to `OTEL_SEMANTIC_CONVENTIONS`, the
+      // service attributes (`service.name`, `service.namespace`,
+      // `service.version`, `service.instance.id`) will be populated following
+      // the OpenTelemetry semantic conventions for Kubernetes:
+      // https://opentelemetry.io/docs/specs/semconv/non-normative/k8s-attributes/#service-attributes
+      //
+      // When not set or set to `ISTIO_CANONICAL`, Istio's default enrichment
+      // logic is used (controlled by `TracingServiceName` in `ProxyConfig`).
+      //
+      // Example:
+      // ```yaml
+      // extensionProviders:
+      // - name: otel-tracing
+      //   opentelemetry:
+      //     port: 443
+      //     service: my.olly-backend.com
+      //     serviceAttributeEnrichment: OTEL_SEMANTIC_CONVENTIONS
+      // ```
+      ServiceAttributeEnrichment service_attribute_enrichment = 8;
 
       // Optional. Configure a [Sampler](https://opentelemetry.io/docs/specs/otel/trace/sdk/#sampler)
       // to be used by the OpenTelemetry Tracer.
