@@ -356,30 +356,6 @@ message WasmPlugin {
   // More details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).
   VmConfig vm_config = 11;
 
-  // TrafficSelector provides a mechanism to select a specific traffic flow
-  // for which this Wasm Plugin will be enabled.
-  // When all the sub conditions in the TrafficSelector are satisfied, the
-  // traffic will be selected.
-  message TrafficSelector {
-    // Criteria for selecting traffic by their direction.
-    // Note that `CLIENT` and `SERVER` are analogous to OUTBOUND and INBOUND,
-    // respectively.
-    // For the gateway, the field should be `CLIENT` or `CLIENT_AND_SERVER`.
-    // If not specified, the default value is `CLIENT_AND_SERVER`.
-    istio.type.v1beta1.WorkloadMode mode = 1;
-
-    // Criteria for selecting traffic by their destination port.
-    // More specifically, for the outbound traffic, the destination port would be
-    // the port of the target service. On the other hand, for the inbound traffic,
-    // the destination port is the port bound by the server process in the same Pod.
-    //
-    // If one of the given `ports` is matched, this condition is evaluated to true.
-    // If not specified, this condition is evaluated to true for any port.
-    // +listType=map
-    // +listMapKey=number
-    repeated istio.type.v1beta1.PortSelector ports = 2;
-  }
-
   // Specifies the criteria to determine which traffic is passed to WasmPlugin.
   // If a traffic satisfies any of TrafficSelectors,
   // the traffic passes the WasmPlugin.
@@ -387,6 +363,30 @@ message WasmPlugin {
 
   // Specifies the type of Wasm Extension to be used.
   PluginType type = 14;
+}
+
+// TrafficSelector provides a mechanism to select a specific traffic flow
+// for which this Wasm Plugin or Extension Filter will be enabled.
+// When all the sub conditions in the TrafficSelector are satisfied, the
+// traffic will be selected.
+message TrafficSelector {
+  // Criteria for selecting traffic by their direction.
+  // Note that `CLIENT` and `SERVER` are analogous to OUTBOUND and INBOUND,
+  // respectively.
+  // For the gateway, the field should be `CLIENT` or `CLIENT_AND_SERVER`.
+  // If not specified, the default value is `CLIENT_AND_SERVER`.
+  istio.type.v1beta1.WorkloadMode mode = 1;
+
+  // Criteria for selecting traffic by their destination port.
+  // More specifically, for the outbound traffic, the destination port would be
+  // the port of the target service. On the other hand, for the inbound traffic,
+  // the destination port is the port bound by the server process in the same Pod.
+  //
+  // If one of the given `ports` is matched, this condition is evaluated to true.
+  // If not specified, this condition is evaluated to true for any port.
+  // +listType=map
+  // +listMapKey=number
+  repeated istio.type.v1beta1.PortSelector ports = 2;
 }
 
 // PluginType indicates the type of Wasm extension to be used.
