@@ -402,6 +402,7 @@ import "google/api/field_behavior.proto";
 import "meta/v1alpha1/status.proto";
 import "networking/v1alpha3/sidecar.proto";
 import "networking/v1alpha3/workload_entry.proto";
+import "type/v1beta1/selector.proto";
 
 option go_package = "istio.io/api/networking/v1alpha3";
 
@@ -593,14 +594,6 @@ message ServiceEntry {
   // +kubebuilder:validation:MaxItems=4096
   repeated WorkloadEntry endpoints = 6;
 
-  // Applicable only for MESH_INTERNAL services. Only one of
-  // `endpoints` or `workloadSelector` can be specified. Selects one
-  // or more Kubernetes pods or VM workloads (specified using
-  // `WorkloadEntry`) based on their labels. The `WorkloadEntry` object
-  // representing the VMs should be defined in the same namespace as
-  // the ServiceEntry.
-  WorkloadSelector workload_selector = 9;
-
   // A list of namespaces to which this service is exported. Exporting a service
   // allows it to be used by sidecars, gateways and virtual services defined in
   // other namespaces. This feature provides a mechanism for service owners
@@ -629,6 +622,46 @@ message ServiceEntry {
   // to derive the additional subject alternate names that should be
   // verified.
   repeated string subject_alt_names = 8;
+
+  // Applicable only for MESH_INTERNAL services. Only one of
+  // `endpoints` or `workloadSelector` can be specified. Selects one
+  // or more Kubernetes pods or VM workloads (specified using
+  // `WorkloadEntry`) based on their labels. The `WorkloadEntry` object
+  // representing the VMs should be defined in the same namespace as
+  // the ServiceEntry.
+  WorkloadSelector workload_selector = 9;
+
+  // A list of label selectors to dynamically select namespaces to which this
+  // service is exported. Each selector can match namespaces based on their labels.
+  // This provides a mechanism for service owners and mesh administrators to control
+  // the visibility of services across namespace boundaries without knowing namespace
+  // names in advance.
+  //
+  // For example, to export to all namespaces with a specific label:
+  // ```yaml
+  // exportToSelectors:
+  // - matchLabels:
+  //     mesh: enabled
+  // ```
+  //
+  // Or using match expressions for more complex selection:
+  // ```yaml
+  // exportToSelectors:
+  // - matchExpressions:
+  //   - key: environment
+  //     operator: In
+  //     values: [production, staging]
+  // ```
+  //
+  // When both export_to and export_to_selectors are specified, the service is
+  // exported to the union of all matched namespaces. If neither is specified,
+  // the service is exported to all namespaces by default.
+  //
+  // **Note:** Using "*" in export_to makes export_to_selectors redundant as
+  // the service would already be visible to all namespaces.
+  //
+  // **Note:** Ztunnel and Waypoint proxies do not support this field.
+  repeated istio.type.v1beta1.LabelSelector export_to_selectors = 10;
 }
 
 // ServicePort describes the properties of a specific port of a service.
