@@ -154,6 +154,30 @@
 //         paths: ["/healthz"]
 // ```
 //
+// Alternatively, you can use `requireJwt: true` to enforce JWT requirement directly in the RequestAuthentication
+// policy without needing a separate AuthorizationPolicy. This approach returns 401 Unauthorized with a
+// `WWW-Authenticate: Bearer` header for missing JWTs instead of 403 Forbidden:
+//
+// ```yaml
+// apiVersion: security.istio.io/v1
+// kind: RequestAuthentication
+// metadata:
+//   name: httpbin
+//   namespace: foo
+// spec:
+//   selector:
+//     matchLabels:
+//       app: httpbin
+//   jwtRules:
+//   - issuer: "issuer-foo"
+//     jwksUri: https://example.com/.well-known/jwks.json
+//     requireJwt: true
+// ```
+//
+// With `requireJwt: true`, requests without a JWT will be rejected with 401 Unauthorized and a
+// `WWW-Authenticate: Bearer` header, making it clearer that authentication is required. This is semantically
+// more accurate than the 403 Forbidden returned by AuthorizationPolicy and complies with RFC 7235.
+//
 // [Experimental] Routing based on derived [metadata](https://istio.io/latest/docs/reference/config/security/conditions/)
 // is now supported. A prefix '@' is used to denote a match against internal metadata instead of the headers in the request.
 // Currently this feature is only supported for the following metadata:
@@ -410,6 +434,18 @@ func (x *RequestAuthentication) GetJwtRules() []*JWTRule {
 //
 // With this configuration, a JWT containing `"custom_scope": "read write admin"` will allow
 // authorization policies to match against individual values like "read", "write", or "admin".
+//
+// This example shows how to require JWT tokens and return 401 for missing tokens:
+//
+// ```yaml
+// issuer: https://example.com
+// jwksUri: https://example.com/.well-known/jwks.json
+// requireJwt: true
+// ```
+//
+// With `requireJwt: true`, requests without a JWT will receive a 401 Unauthorized response with a
+// `WWW-Authenticate: Bearer` header directly from the authentication filter, eliminating the need
+// for a separate AuthorizationPolicy when you simply want to require authentication.
 // +kubebuilder:validation:XValidation:message="only one of jwks or jwksUri can be set",rule="oneof(self.jwksUri, self.jwks_uri, self.jwks)"
 type JWTRule struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -549,8 +585,37 @@ type JWTRule struct {
 	// +protoc-gen-crd:list-value-validation:MinLength=1
 	// +kubebuilder:validation:MaxItems=64
 	SpaceDelimitedClaims []string `protobuf:"bytes,14,rep,name=space_delimited_claims,json=spaceDelimitedClaims,proto3" json:"space_delimited_claims,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+	// If set to true, requests without a valid JWT token will be rejected with a 401 Unauthorized status code
+	// along with a `WWW-Authenticate` header indicating the Bearer authentication scheme is required.
+	// If set to false or unset (default), requests without a JWT token are allowed to pass through but will not have
+	// an authenticated identity. In the default case, to enforce that requests must have authentication,
+	// you should use an AuthorizationPolicy with requestPrincipals.
+	//
+	// Note: Setting this to true changes the HTTP status code for missing JWT from 403 (via AuthorizationPolicy)
+	// to 401 (via RequestAuthentication), which is semantically more accurate for authentication failures and
+	// includes the proper `WWW-Authenticate` header as required by RFC 7235.
+	//
+	// Example usage:
+	// ```yaml
+	// jwtRules:
+	//   - issuer: "https://example.com"
+	//     jwksUri: https://example.com/.well-known/jwks.json
+	//     requireJwt: true
+	//
+	// ```
+	//
+	// With `requireJwt: true`:
+	// - Request with missing JWT -> 401 Unauthorized (with WWW-Authenticate: Bearer header)
+	// - Request with invalid/expired JWT -> 401 Unauthorized (with WWW-Authenticate: Bearer header)
+	// - Request with valid JWT -> Accepted
+	//
+	// With `requireJwt: false` (default):
+	// - Request with missing JWT -> Accepted (no authenticated identity)
+	// - Request with invalid/expired JWT -> 401 Unauthorized (with WWW-Authenticate: Bearer header)
+	// - Request with valid JWT -> Accepted (with authenticated identity)
+	RequireJwt    bool `protobuf:"varint,15,opt,name=require_jwt,json=requireJwt,proto3" json:"require_jwt,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *JWTRule) Reset() {
@@ -665,6 +730,13 @@ func (x *JWTRule) GetSpaceDelimitedClaims() []string {
 		return x.SpaceDelimitedClaims
 	}
 	return nil
+}
+
+func (x *JWTRule) GetRequireJwt() bool {
+	if x != nil {
+		return x.RequireJwt
+	}
+	return false
 }
 
 // This message specifies a header location to extract JWT token.
@@ -795,7 +867,7 @@ const file_security_v1beta1_request_authentication_proto_rawDesc = "" +
 	"\n" +
 	"targetRefs\x18\x04 \x03(\v2).istio.type.v1beta1.PolicyTargetReferenceR\n" +
 	"targetRefs\x12<\n" +
-	"\tjwt_rules\x18\x02 \x03(\v2\x1f.istio.security.v1beta1.JWTRuleR\bjwtRules\"\xb0\x04\n" +
+	"\tjwt_rules\x18\x02 \x03(\v2\x1f.istio.security.v1beta1.JWTRuleR\bjwtRules\"\xd1\x04\n" +
 	"\aJWTRule\x12\x16\n" +
 	"\x06issuer\x18\x01 \x01(\tR\x06issuer\x12\x1c\n" +
 	"\taudiences\x18\x02 \x03(\tR\taudiences\x12\x19\n" +
@@ -810,7 +882,9 @@ const file_security_v1beta1_request_authentication_proto_rawDesc = "" +
 	"\x16forward_original_token\x18\t \x01(\bR\x14forwardOriginalToken\x12\\\n" +
 	"\x17output_claim_to_headers\x18\v \x03(\v2%.istio.security.v1beta1.ClaimToHeaderR\x14outputClaimToHeaders\x123\n" +
 	"\atimeout\x18\r \x01(\v2\x19.google.protobuf.DurationR\atimeout\x124\n" +
-	"\x16space_delimited_claims\x18\x0e \x03(\tR\x14spaceDelimitedClaims\"=\n" +
+	"\x16space_delimited_claims\x18\x0e \x03(\tR\x14spaceDelimitedClaims\x12\x1f\n" +
+	"\vrequire_jwt\x18\x0f \x01(\bR\n" +
+	"requireJwt\"=\n" +
 	"\tJWTHeader\x12\x18\n" +
 	"\x04name\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x04name\x12\x16\n" +
 	"\x06prefix\x18\x02 \x01(\tR\x06prefix\"I\n" +
