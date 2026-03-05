@@ -506,6 +506,21 @@ message Source {
 
   // Optional. A list of negative match of remote IP blocks.
   repeated string not_remote_ip_blocks = 10;
+
+  // Optional. A list of trust domains derived from the peer certificate.
+  // Can be exact, prefix, suffix and presence.
+  // This field requires mTLS enabled and is the same as the `source.trustDomain` attribute.
+  //
+  // If not set, any trust domain is allowed.
+  //
+  // +cue-gen:AuthorizationPolicy:releaseChannel:extended
+  repeated string trust_domains = 13;
+
+  // Optional. A list of negative match of trust domains.
+  // Can be exact, prefix, suffix and presence.
+  //
+  // +cue-gen:AuthorizationPolicy:releaseChannel:extended
+  repeated string not_trust_domains = 14;
 }
 
 // Operation specifies the operations of a request. Fields in the operation are

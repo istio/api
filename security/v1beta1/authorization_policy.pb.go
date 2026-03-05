@@ -680,8 +680,21 @@ type Source struct {
 	RemoteIpBlocks []string `protobuf:"bytes,9,rep,name=remote_ip_blocks,json=remoteIpBlocks,proto3" json:"remote_ip_blocks,omitempty"`
 	// Optional. A list of negative match of remote IP blocks.
 	NotRemoteIpBlocks []string `protobuf:"bytes,10,rep,name=not_remote_ip_blocks,json=notRemoteIpBlocks,proto3" json:"not_remote_ip_blocks,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// Optional. A list of trust domains derived from the peer certificate.
+	// Can be exact, prefix, suffix and presence.
+	// This field requires mTLS enabled and is the same as the `source.trustDomain` attribute.
+	//
+	// If not set, any trust domain is allowed.
+	//
+	// +cue-gen:AuthorizationPolicy:releaseChannel:extended
+	TrustDomains []string `protobuf:"bytes,13,rep,name=trust_domains,json=trustDomains,proto3" json:"trust_domains,omitempty"`
+	// Optional. A list of negative match of trust domains.
+	// Can be exact, prefix, suffix and presence.
+	//
+	// +cue-gen:AuthorizationPolicy:releaseChannel:extended
+	NotTrustDomains []string `protobuf:"bytes,14,rep,name=not_trust_domains,json=notTrustDomains,proto3" json:"not_trust_domains,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *Source) Reset() {
@@ -794,6 +807,20 @@ func (x *Source) GetRemoteIpBlocks() []string {
 func (x *Source) GetNotRemoteIpBlocks() []string {
 	if x != nil {
 		return x.NotRemoteIpBlocks
+	}
+	return nil
+}
+
+func (x *Source) GetTrustDomains() []string {
+	if x != nil {
+		return x.TrustDomains
+	}
+	return nil
+}
+
+func (x *Source) GetNotTrustDomains() []string {
+	if x != nil {
+		return x.NotTrustDomains
 	}
 	return nil
 }
@@ -1179,7 +1206,7 @@ const file_security_v1beta1_authorization_policy_proto_rawDesc = "" +
 	"\x04From\x126\n" +
 	"\x06source\x18\x01 \x01(\v2\x1e.istio.security.v1beta1.SourceR\x06source\x1aE\n" +
 	"\x02To\x12?\n" +
-	"\toperation\x18\x01 \x01(\v2!.istio.security.v1beta1.OperationR\toperation\"\xf4\x03\n" +
+	"\toperation\x18\x01 \x01(\v2!.istio.security.v1beta1.OperationR\toperation\"\xc5\x04\n" +
 	"\x06Source\x12\x1e\n" +
 	"\n" +
 	"principals\x18\x01 \x03(\tR\n" +
@@ -1197,7 +1224,9 @@ const file_security_v1beta1_authorization_policy_proto_rawDesc = "" +
 	"\rnot_ip_blocks\x18\b \x03(\tR\vnotIpBlocks\x12(\n" +
 	"\x10remote_ip_blocks\x18\t \x03(\tR\x0eremoteIpBlocks\x12/\n" +
 	"\x14not_remote_ip_blocks\x18\n" +
-	" \x03(\tR\x11notRemoteIpBlocks\"\xdf\x01\n" +
+	" \x03(\tR\x11notRemoteIpBlocks\x12#\n" +
+	"\rtrust_domains\x18\r \x03(\tR\ftrustDomains\x12*\n" +
+	"\x11not_trust_domains\x18\x0e \x03(\tR\x0fnotTrustDomains\"\xdf\x01\n" +
 	"\tOperation\x12\x14\n" +
 	"\x05hosts\x18\x01 \x03(\tR\x05hosts\x12\x1b\n" +
 	"\tnot_hosts\x18\x05 \x03(\tR\bnotHosts\x12\x14\n" +
