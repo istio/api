@@ -572,6 +572,13 @@ type TrafficPolicy struct {
 	// circuit breaker statistics (e.g. upstream_cx_overflow). They are tracked
 	// separately via the adaptive_concurrency.gradient_controller.rq_blocked
 	// counter.
+	//
+	// Unlike circuit breaker overflows, responses rejected by adaptive concurrency
+	// will NOT include the x-envoy-overloaded header. Clients or sidecars that
+	// rely on this header to detect overload-induced 503s (e.g. for retry
+	// decisions or backoff) should be aware of this difference. The response body
+	// will be "reached concurrency limit" and the response details will be
+	// "reached_concurrency_limit".
 	AdaptiveConcurrency *AdaptiveConcurrency `protobuf:"bytes,9,opt,name=adaptive_concurrency,json=adaptiveConcurrency,proto3" json:"adaptive_concurrency,omitempty"`
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
