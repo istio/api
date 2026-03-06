@@ -560,6 +560,18 @@ type TrafficPolicy struct {
 	// Adaptive concurrency settings for dynamically adjusting the allowed number of
 	// outstanding requests based on sampled latencies. This enables the Envoy
 	// adaptive concurrency filter for the destination.
+	//
+	// Note: This operates independently from circuit breaker thresholds (e.g.
+	// max_connections). Both mechanisms can reject requests, but they act at
+	// different layers: adaptive concurrency limits outstanding requests at
+	// the HTTP filter level before routing, while circuit breakers limit
+	// connections and requests at the cluster connection pool level. When both
+	// are configured, the more restrictive limit is the effective constraint.
+	//
+	// Requests rejected by adaptive concurrency will NOT be reflected in
+	// circuit breaker statistics (e.g. upstream_cx_overflow). They are tracked
+	// separately via the adaptive_concurrency.gradient_controller.rq_blocked
+	// counter.
 	AdaptiveConcurrency *AdaptiveConcurrency `protobuf:"bytes,9,opt,name=adaptive_concurrency,json=adaptiveConcurrency,proto3" json:"adaptive_concurrency,omitempty"`
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
