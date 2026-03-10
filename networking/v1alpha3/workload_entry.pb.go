@@ -265,8 +265,13 @@ type WorkloadEntry struct {
 	// ServiceEntry)
 	// +kubebuilder:validation:MaxLength=253
 	ServiceAccount string `protobuf:"bytes,7,opt,name=service_account,json=serviceAccount,proto3" json:"service_account,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	// The priority for this Endpoint. If unspecified this will default to the highest priority (0).
+	// Under usual circumstances, Istio  will only select endpoints for the highest priority (0).
+	// In the event that enough endpoints for a particular priority are unavailable/unhealthy,
+	// Istio will fail over to selecting endpoints for the next highest priority group.
+	Priority      uint32 `protobuf:"varint,8,opt,name=priority,proto3" json:"priority,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *WorkloadEntry) Reset() {
@@ -348,11 +353,18 @@ func (x *WorkloadEntry) GetServiceAccount() string {
 	return ""
 }
 
+func (x *WorkloadEntry) GetPriority() uint32 {
+	if x != nil {
+		return x.Priority
+	}
+	return 0
+}
+
 var File_networking_v1alpha3_workload_entry_proto protoreflect.FileDescriptor
 
 const file_networking_v1alpha3_workload_entry_proto_rawDesc = "" +
 	"\n" +
-	"(networking/v1alpha3/workload_entry.proto\x12\x19istio.networking.v1alpha3\"\xae\x03\n" +
+	"(networking/v1alpha3/workload_entry.proto\x12\x19istio.networking.v1alpha3\"\xca\x03\n" +
 	"\rWorkloadEntry\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\x12I\n" +
 	"\x05ports\x18\x02 \x03(\v23.istio.networking.v1alpha3.WorkloadEntry.PortsEntryR\x05ports\x12L\n" +
@@ -360,7 +372,8 @@ const file_networking_v1alpha3_workload_entry_proto_rawDesc = "" +
 	"\anetwork\x18\x04 \x01(\tR\anetwork\x12\x1a\n" +
 	"\blocality\x18\x05 \x01(\tR\blocality\x12\x16\n" +
 	"\x06weight\x18\x06 \x01(\rR\x06weight\x12'\n" +
-	"\x0fservice_account\x18\a \x01(\tR\x0eserviceAccount\x1a8\n" +
+	"\x0fservice_account\x18\a \x01(\tR\x0eserviceAccount\x12\x1a\n" +
+	"\bpriority\x18\b \x01(\rR\bpriority\x1a8\n" +
 	"\n" +
 	"PortsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
