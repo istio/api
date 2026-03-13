@@ -432,6 +432,113 @@ spec:
                     trafficPolicy:
                       description: Traffic policies that apply to this subset.
                       properties:
+                        adaptiveConcurrency:
+                          description: Adaptive concurrency settings for dynamically
+                            adjusting the allowed number of outstanding requests based
+                            on sampled latencies.
+                          oneOf:
+                          - not:
+                              anyOf:
+                              - required:
+                                - gradientControllerConfig
+                          - required:
+                            - gradientControllerConfig
+                          properties:
+                            concurrencyLimitExceededStatus:
+                              description: Custom HTTP response status code to the
+                                downstream client when the concurrency limit has been
+                                exceeded.
+                              maximum: 4294967295
+                              minimum: 0
+                              type: integer
+                            gradientControllerConfig:
+                              description: Gradient concurrency control will be used.
+                              properties:
+                                concurrencyLimitParams:
+                                  description: Parameters for periodic recalculation
+                                    of the concurrency limit.
+                                  properties:
+                                    concurrencyUpdateInterval:
+                                      description: The period of time samples are
+                                        taken to recalculate the concurrency limit.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                    maxConcurrencyLimit:
+                                      description: The allowed upper-bound on the
+                                        calculated concurrency limit.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                  required:
+                                  - concurrencyUpdateInterval
+                                  type: object
+                                minRttCalcParams:
+                                  description: Parameters for periodic minRTT recalculation.
+                                  properties:
+                                    buffer:
+                                      description: Amount added to the measured minRTT
+                                        to add stability to the concurrency limit
+                                        during natural variability in latency.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                    fixedValue:
+                                      description: The fixed value for the minRTT,
+                                        used when dynamic sampling is disabled (i.e.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                    interval:
+                                      description: The time interval between recalculating
+                                        the minimum request round-trip time.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                    jitter:
+                                      description: Randomized time delta that will
+                                        be introduced to the start of the minRTT calculation
+                                        window.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                    minConcurrency:
+                                      description: The concurrency limit set while
+                                        measuring the minRTT.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                    requestCount:
+                                      description: The number of requests to aggregate/sample
+                                        during the minRTT recalculation window before
+                                        updating.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                  type: object
+                                sampleAggregatePercentile:
+                                  description: The percentile to use when summarizing
+                                    aggregated samples.
+                                  maximum: 4294967295
+                                  minimum: 0
+                                  nullable: true
+                                  type: integer
+                              required:
+                              - concurrencyLimitParams
+                              - minRttCalcParams
+                              type: object
+                          type: object
                         connectionPool:
                           properties:
                             http:
@@ -1375,6 +1482,107 @@ spec:
                 description: Traffic policies to apply (load balancing policy, connection
                   pool sizes, outlier detection).
                 properties:
+                  adaptiveConcurrency:
+                    description: Adaptive concurrency settings for dynamically adjusting
+                      the allowed number of outstanding requests based on sampled
+                      latencies.
+                    oneOf:
+                    - not:
+                        anyOf:
+                        - required:
+                          - gradientControllerConfig
+                    - required:
+                      - gradientControllerConfig
+                    properties:
+                      concurrencyLimitExceededStatus:
+                        description: Custom HTTP response status code to the downstream
+                          client when the concurrency limit has been exceeded.
+                        maximum: 4294967295
+                        minimum: 0
+                        type: integer
+                      gradientControllerConfig:
+                        description: Gradient concurrency control will be used.
+                        properties:
+                          concurrencyLimitParams:
+                            description: Parameters for periodic recalculation of
+                              the concurrency limit.
+                            properties:
+                              concurrencyUpdateInterval:
+                                description: The period of time samples are taken
+                                  to recalculate the concurrency limit.
+                                type: string
+                                x-kubernetes-validations:
+                                - message: must be a valid duration greater than 1ms
+                                  rule: duration(self) >= duration('1ms')
+                              maxConcurrencyLimit:
+                                description: The allowed upper-bound on the calculated
+                                  concurrency limit.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                            required:
+                            - concurrencyUpdateInterval
+                            type: object
+                          minRttCalcParams:
+                            description: Parameters for periodic minRTT recalculation.
+                            properties:
+                              buffer:
+                                description: Amount added to the measured minRTT to
+                                  add stability to the concurrency limit during natural
+                                  variability in latency.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                              fixedValue:
+                                description: The fixed value for the minRTT, used
+                                  when dynamic sampling is disabled (i.e.
+                                type: string
+                                x-kubernetes-validations:
+                                - message: must be a valid duration greater than 1ms
+                                  rule: duration(self) >= duration('1ms')
+                              interval:
+                                description: The time interval between recalculating
+                                  the minimum request round-trip time.
+                                type: string
+                                x-kubernetes-validations:
+                                - message: must be a valid duration greater than 1ms
+                                  rule: duration(self) >= duration('1ms')
+                              jitter:
+                                description: Randomized time delta that will be introduced
+                                  to the start of the minRTT calculation window.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                              minConcurrency:
+                                description: The concurrency limit set while measuring
+                                  the minRTT.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                              requestCount:
+                                description: The number of requests to aggregate/sample
+                                  during the minRTT recalculation window before updating.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                            type: object
+                          sampleAggregatePercentile:
+                            description: The percentile to use when summarizing aggregated
+                              samples.
+                            maximum: 4294967295
+                            minimum: 0
+                            nullable: true
+                            type: integer
+                        required:
+                        - concurrencyLimitParams
+                        - minRttCalcParams
+                        type: object
+                    type: object
                   connectionPool:
                     properties:
                       http:
@@ -2433,6 +2641,113 @@ spec:
                     trafficPolicy:
                       description: Traffic policies that apply to this subset.
                       properties:
+                        adaptiveConcurrency:
+                          description: Adaptive concurrency settings for dynamically
+                            adjusting the allowed number of outstanding requests based
+                            on sampled latencies.
+                          oneOf:
+                          - not:
+                              anyOf:
+                              - required:
+                                - gradientControllerConfig
+                          - required:
+                            - gradientControllerConfig
+                          properties:
+                            concurrencyLimitExceededStatus:
+                              description: Custom HTTP response status code to the
+                                downstream client when the concurrency limit has been
+                                exceeded.
+                              maximum: 4294967295
+                              minimum: 0
+                              type: integer
+                            gradientControllerConfig:
+                              description: Gradient concurrency control will be used.
+                              properties:
+                                concurrencyLimitParams:
+                                  description: Parameters for periodic recalculation
+                                    of the concurrency limit.
+                                  properties:
+                                    concurrencyUpdateInterval:
+                                      description: The period of time samples are
+                                        taken to recalculate the concurrency limit.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                    maxConcurrencyLimit:
+                                      description: The allowed upper-bound on the
+                                        calculated concurrency limit.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                  required:
+                                  - concurrencyUpdateInterval
+                                  type: object
+                                minRttCalcParams:
+                                  description: Parameters for periodic minRTT recalculation.
+                                  properties:
+                                    buffer:
+                                      description: Amount added to the measured minRTT
+                                        to add stability to the concurrency limit
+                                        during natural variability in latency.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                    fixedValue:
+                                      description: The fixed value for the minRTT,
+                                        used when dynamic sampling is disabled (i.e.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                    interval:
+                                      description: The time interval between recalculating
+                                        the minimum request round-trip time.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                    jitter:
+                                      description: Randomized time delta that will
+                                        be introduced to the start of the minRTT calculation
+                                        window.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                    minConcurrency:
+                                      description: The concurrency limit set while
+                                        measuring the minRTT.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                    requestCount:
+                                      description: The number of requests to aggregate/sample
+                                        during the minRTT recalculation window before
+                                        updating.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                  type: object
+                                sampleAggregatePercentile:
+                                  description: The percentile to use when summarizing
+                                    aggregated samples.
+                                  maximum: 4294967295
+                                  minimum: 0
+                                  nullable: true
+                                  type: integer
+                              required:
+                              - concurrencyLimitParams
+                              - minRttCalcParams
+                              type: object
+                          type: object
                         connectionPool:
                           properties:
                             http:
@@ -3376,6 +3691,107 @@ spec:
                 description: Traffic policies to apply (load balancing policy, connection
                   pool sizes, outlier detection).
                 properties:
+                  adaptiveConcurrency:
+                    description: Adaptive concurrency settings for dynamically adjusting
+                      the allowed number of outstanding requests based on sampled
+                      latencies.
+                    oneOf:
+                    - not:
+                        anyOf:
+                        - required:
+                          - gradientControllerConfig
+                    - required:
+                      - gradientControllerConfig
+                    properties:
+                      concurrencyLimitExceededStatus:
+                        description: Custom HTTP response status code to the downstream
+                          client when the concurrency limit has been exceeded.
+                        maximum: 4294967295
+                        minimum: 0
+                        type: integer
+                      gradientControllerConfig:
+                        description: Gradient concurrency control will be used.
+                        properties:
+                          concurrencyLimitParams:
+                            description: Parameters for periodic recalculation of
+                              the concurrency limit.
+                            properties:
+                              concurrencyUpdateInterval:
+                                description: The period of time samples are taken
+                                  to recalculate the concurrency limit.
+                                type: string
+                                x-kubernetes-validations:
+                                - message: must be a valid duration greater than 1ms
+                                  rule: duration(self) >= duration('1ms')
+                              maxConcurrencyLimit:
+                                description: The allowed upper-bound on the calculated
+                                  concurrency limit.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                            required:
+                            - concurrencyUpdateInterval
+                            type: object
+                          minRttCalcParams:
+                            description: Parameters for periodic minRTT recalculation.
+                            properties:
+                              buffer:
+                                description: Amount added to the measured minRTT to
+                                  add stability to the concurrency limit during natural
+                                  variability in latency.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                              fixedValue:
+                                description: The fixed value for the minRTT, used
+                                  when dynamic sampling is disabled (i.e.
+                                type: string
+                                x-kubernetes-validations:
+                                - message: must be a valid duration greater than 1ms
+                                  rule: duration(self) >= duration('1ms')
+                              interval:
+                                description: The time interval between recalculating
+                                  the minimum request round-trip time.
+                                type: string
+                                x-kubernetes-validations:
+                                - message: must be a valid duration greater than 1ms
+                                  rule: duration(self) >= duration('1ms')
+                              jitter:
+                                description: Randomized time delta that will be introduced
+                                  to the start of the minRTT calculation window.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                              minConcurrency:
+                                description: The concurrency limit set while measuring
+                                  the minRTT.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                              requestCount:
+                                description: The number of requests to aggregate/sample
+                                  during the minRTT recalculation window before updating.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                            type: object
+                          sampleAggregatePercentile:
+                            description: The percentile to use when summarizing aggregated
+                              samples.
+                            maximum: 4294967295
+                            minimum: 0
+                            nullable: true
+                            type: integer
+                        required:
+                        - concurrencyLimitParams
+                        - minRttCalcParams
+                        type: object
+                    type: object
                   connectionPool:
                     properties:
                       http:
@@ -4434,6 +4850,113 @@ spec:
                     trafficPolicy:
                       description: Traffic policies that apply to this subset.
                       properties:
+                        adaptiveConcurrency:
+                          description: Adaptive concurrency settings for dynamically
+                            adjusting the allowed number of outstanding requests based
+                            on sampled latencies.
+                          oneOf:
+                          - not:
+                              anyOf:
+                              - required:
+                                - gradientControllerConfig
+                          - required:
+                            - gradientControllerConfig
+                          properties:
+                            concurrencyLimitExceededStatus:
+                              description: Custom HTTP response status code to the
+                                downstream client when the concurrency limit has been
+                                exceeded.
+                              maximum: 4294967295
+                              minimum: 0
+                              type: integer
+                            gradientControllerConfig:
+                              description: Gradient concurrency control will be used.
+                              properties:
+                                concurrencyLimitParams:
+                                  description: Parameters for periodic recalculation
+                                    of the concurrency limit.
+                                  properties:
+                                    concurrencyUpdateInterval:
+                                      description: The period of time samples are
+                                        taken to recalculate the concurrency limit.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                    maxConcurrencyLimit:
+                                      description: The allowed upper-bound on the
+                                        calculated concurrency limit.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                  required:
+                                  - concurrencyUpdateInterval
+                                  type: object
+                                minRttCalcParams:
+                                  description: Parameters for periodic minRTT recalculation.
+                                  properties:
+                                    buffer:
+                                      description: Amount added to the measured minRTT
+                                        to add stability to the concurrency limit
+                                        during natural variability in latency.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                    fixedValue:
+                                      description: The fixed value for the minRTT,
+                                        used when dynamic sampling is disabled (i.e.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                    interval:
+                                      description: The time interval between recalculating
+                                        the minimum request round-trip time.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                    jitter:
+                                      description: Randomized time delta that will
+                                        be introduced to the start of the minRTT calculation
+                                        window.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                    minConcurrency:
+                                      description: The concurrency limit set while
+                                        measuring the minRTT.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                    requestCount:
+                                      description: The number of requests to aggregate/sample
+                                        during the minRTT recalculation window before
+                                        updating.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                  type: object
+                                sampleAggregatePercentile:
+                                  description: The percentile to use when summarizing
+                                    aggregated samples.
+                                  maximum: 4294967295
+                                  minimum: 0
+                                  nullable: true
+                                  type: integer
+                              required:
+                              - concurrencyLimitParams
+                              - minRttCalcParams
+                              type: object
+                          type: object
                         connectionPool:
                           properties:
                             http:
@@ -5377,6 +5900,107 @@ spec:
                 description: Traffic policies to apply (load balancing policy, connection
                   pool sizes, outlier detection).
                 properties:
+                  adaptiveConcurrency:
+                    description: Adaptive concurrency settings for dynamically adjusting
+                      the allowed number of outstanding requests based on sampled
+                      latencies.
+                    oneOf:
+                    - not:
+                        anyOf:
+                        - required:
+                          - gradientControllerConfig
+                    - required:
+                      - gradientControllerConfig
+                    properties:
+                      concurrencyLimitExceededStatus:
+                        description: Custom HTTP response status code to the downstream
+                          client when the concurrency limit has been exceeded.
+                        maximum: 4294967295
+                        minimum: 0
+                        type: integer
+                      gradientControllerConfig:
+                        description: Gradient concurrency control will be used.
+                        properties:
+                          concurrencyLimitParams:
+                            description: Parameters for periodic recalculation of
+                              the concurrency limit.
+                            properties:
+                              concurrencyUpdateInterval:
+                                description: The period of time samples are taken
+                                  to recalculate the concurrency limit.
+                                type: string
+                                x-kubernetes-validations:
+                                - message: must be a valid duration greater than 1ms
+                                  rule: duration(self) >= duration('1ms')
+                              maxConcurrencyLimit:
+                                description: The allowed upper-bound on the calculated
+                                  concurrency limit.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                            required:
+                            - concurrencyUpdateInterval
+                            type: object
+                          minRttCalcParams:
+                            description: Parameters for periodic minRTT recalculation.
+                            properties:
+                              buffer:
+                                description: Amount added to the measured minRTT to
+                                  add stability to the concurrency limit during natural
+                                  variability in latency.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                              fixedValue:
+                                description: The fixed value for the minRTT, used
+                                  when dynamic sampling is disabled (i.e.
+                                type: string
+                                x-kubernetes-validations:
+                                - message: must be a valid duration greater than 1ms
+                                  rule: duration(self) >= duration('1ms')
+                              interval:
+                                description: The time interval between recalculating
+                                  the minimum request round-trip time.
+                                type: string
+                                x-kubernetes-validations:
+                                - message: must be a valid duration greater than 1ms
+                                  rule: duration(self) >= duration('1ms')
+                              jitter:
+                                description: Randomized time delta that will be introduced
+                                  to the start of the minRTT calculation window.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                              minConcurrency:
+                                description: The concurrency limit set while measuring
+                                  the minRTT.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                              requestCount:
+                                description: The number of requests to aggregate/sample
+                                  during the minRTT recalculation window before updating.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                            type: object
+                          sampleAggregatePercentile:
+                            description: The percentile to use when summarizing aggregated
+                              samples.
+                            maximum: 4294967295
+                            minimum: 0
+                            nullable: true
+                            type: integer
+                        required:
+                        - concurrencyLimitParams
+                        - minRttCalcParams
+                        type: object
+                    type: object
                   connectionPool:
                     properties:
                       http:

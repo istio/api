@@ -318,6 +318,60 @@ const ConnectionPoolSettings_HTTPSettings_UPGRADE ConnectionPoolSettings_HTTPSet
 // ```
 type OutlierDetection = v1alpha3.OutlierDetection
 
+// Adaptive concurrency settings for dynamically adjusting the allowed number of
+// outstanding requests based on sampled latencies. See Envoy's
+// [adaptive concurrency filter](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/adaptive_concurrency_filter)
+// for more details.
+//
+// The following example configures adaptive concurrency for the my-service
+// service with a gradient controller:
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1
+// kind: DestinationRule
+// metadata:
+//
+//	name: my-service-adaptive
+//
+// spec:
+//
+//	host: my-service.default.svc.cluster.local
+//	trafficPolicy:
+//	  adaptiveConcurrency:
+//	    gradientControllerConfig:
+//	      sampleAggregatePercentile: 50
+//	      concurrencyLimitParams:
+//	        maxConcurrencyLimit: 1000
+//	        concurrencyUpdateInterval: 100ms
+//	      minRttCalcParams:
+//	        interval: 60s
+//	        requestCount: 50
+//	        jitter: 10
+//	        minConcurrency: 3
+//	        buffer: 25
+//	    concurrencyLimitExceededStatus: 503
+//
+// ```
+type AdaptiveConcurrency = v1alpha3.AdaptiveConcurrency
+
+// Configuration parameters for the gradient concurrency controller.
+// The gradient controller makes forwarding decisions based on a periodically
+// measured ideal round-trip time (minRTT) for an upstream.
+type AdaptiveConcurrency_GradientControllerConfig = v1alpha3.AdaptiveConcurrency_GradientControllerConfig
+
+// Parameters controlling the periodic recalculation of the concurrency limit
+// from sampled request latencies.
+type AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams
+
+// Parameters controlling the periodic minRTT recalculation.
+// The minRTT is periodically measured by allowing only a very low outstanding
+// request count to an upstream cluster and measuring the latency under
+// these ideal conditions.
+type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams
+
+// Gradient concurrency control will be used.
+type AdaptiveConcurrency_GradientControllerConfig_ = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_
+
 // SSL/TLS related settings for upstream connections. See Envoy's [TLS
 // context](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto.html#common-tls-configuration)
 // for more details. These settings are common to both HTTP and TCP upstreams.
