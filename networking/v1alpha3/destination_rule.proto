@@ -858,7 +858,6 @@ message OutlierDetection {
 //   host: my-service.default.svc.cluster.local
 //   trafficPolicy:
 //     adaptiveConcurrency:
-//       enabled: true
 //       gradientControllerConfig:
 //         sampleAggregatePercentile: 50
 //         concurrencyLimitParams:
@@ -882,6 +881,26 @@ message AdaptiveConcurrency {
     // from sampled request latencies.
     message ConcurrencyLimitCalculationParams {
       // The allowed upper-bound on the calculated concurrency limit. Defaults to 1000.
+      //
+      // This acts as a safety cap on the gradient algorithm's output, the algorithm
+      // dynamically adjusts the concurrency limit based on measured latency (via the
+      // gradient formula: new_limit = old_limit * gradient + headroom), but the result
+      // is clamped to [min_concurrency, max_concurrency_limit] before being applied.
+      // The gradient calculation itself is not influenced by this value.
+      //
+      // In most cases the default of 1000 is sufficient, since the algorithm will
+      // self-regulate well below this ceiling based on observed latencies. Consider
+      // lowering it only if you know the upstream's maximum sustainable concurrency
+      // and want a hard safety net beyond the algorithm's own backoff behavior.
+      // Setting this too low may prevent the algorithm from reaching the upstream's
+      // true capacity. Note that this limit applies per filter config instance
+      // (typically one per Envoy process per listener), so the aggregate concurrency
+      // across N Envoy instances can reach up to N * max_concurrency_limit.
+      //
+      // Overridable at runtime via
+      // adaptive_concurrency.gradient_controller.max_concurrency_limit.
+      // Monitor the concurrency_limit gauge to observe where the algorithm settles
+      // under normal load.
       google.protobuf.UInt32Value max_concurrency_limit = 2;
 
       // The period of time samples are taken to recalculate the concurrency limit.
@@ -895,12 +914,23 @@ message AdaptiveConcurrency {
     // these ideal conditions.
     message MinimumRTTCalculationParams {
       // The time interval between recalculating the minimum request round-trip time.
-      // Has to be positive. If set to zero, dynamic sampling of the minRTT is disabled.
+      // Must be >= 1ms when set. If unset or zero, dynamic sampling of the minRTT
+      // is disabled and `fixed_value` must be provided instead.
+      // There is no default — one of `interval` or `fixed_value` must be specified.
+      //
+      // When dynamic sampling is enabled (interval > 0), the controller periodically
+      // enters a low-concurrency measurement window (pinned to `min_concurrency`) to
+      // re-measure the baseline latency. During this window, throughput is temporarily
+      // reduced, so longer intervals reduce overhead but may react slower to changes
+      // in upstream performance.
       google.protobuf.Duration interval = 1;
 
-      // The fixed value for the minRTT. This value is used when minRTT is not sampled
-      // dynamically. If dynamic sampling of the minRTT is disabled (i.e. `interval` is
-      // set to zero), this field must be set.
+      // The fixed value for the minRTT, used when dynamic sampling is disabled
+      // (i.e. `interval` is unset or zero). Must be positive when set.
+      // This field is mutually exclusive with a positive `interval` — if `interval`
+      // is set, `fixed_value` is ignored and the minRTT is sampled dynamically.
+      // Use this when the baseline latency of the upstream is well-known and stable,
+      // to avoid the periodic low-concurrency measurement windows.
       google.protobuf.Duration fixed_value = 6;
 
       // The number of requests to aggregate/sample during the minRTT recalculation
@@ -909,9 +939,10 @@ message AdaptiveConcurrency {
 
       // Randomized time delta that will be introduced to the start of the minRTT
       // calculation window. This is represented as a percentage of the interval duration.
-      // Defaults to 15%. This is recommended to prevent all hosts in a cluster from
+      // Defaults to 15%. Value must be in the range [0, 100].
+      // This is recommended to prevent all hosts in a cluster from
       // being in a minRTT calculation window at the same time.
-      google.protobuf.DoubleValue jitter = 3;
+      google.protobuf.UInt32Value jitter = 3;
 
       // The concurrency limit set while measuring the minRTT. Defaults to 3.
       google.protobuf.UInt32Value min_concurrency = 4;
@@ -919,13 +950,13 @@ message AdaptiveConcurrency {
       // Amount added to the measured minRTT to add stability to the concurrency limit
       // during natural variability in latency. This is expressed as a percentage of the
       // measured value and can be adjusted to allow more or less tolerance to the sampled
-      // latency values. Defaults to 25%.
-      google.protobuf.DoubleValue buffer = 5;
+      // latency values. Defaults to 25%. Value must be in the range [0, 100].
+      google.protobuf.UInt32Value buffer = 5;
     }
 
     // The percentile to use when summarizing aggregated samples. Defaults to p50.
-    // Value should be between 0 and 100.
-    google.protobuf.DoubleValue sample_aggregate_percentile = 1;
+    // Value must be in the range [0, 100].
+    google.protobuf.UInt32Value sample_aggregate_percentile = 1;
 
     // Parameters for periodic recalculation of the concurrency limit.
     ConcurrencyLimitCalculationParams concurrency_limit_params = 2 [(google.api.field_behavior) = REQUIRED];
@@ -938,10 +969,6 @@ message AdaptiveConcurrency {
     // Gradient concurrency control will be used.
     GradientControllerConfig gradient_controller_config = 1;
   }
-
-  // If set to false, the adaptive concurrency filter will operate as a pass-through
-  // filter. If unspecified, the filter will be enabled.
-  bool enabled = 2;
 
   // Custom HTTP response status code to the downstream client when
   // the concurrency limit has been exceeded.
