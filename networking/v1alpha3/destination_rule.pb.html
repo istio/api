@@ -1518,7 +1518,6 @@ spec:
   host: my-service.default.svc.cluster.local
   trafficPolicy:
     adaptiveConcurrency:
-      enabled: true
       gradientControllerConfig:
         sampleAggregatePercentile: 50
         concurrencyLimitParams:
@@ -1547,16 +1546,6 @@ spec:
 </div></td>
 <td>
 <p>Gradient concurrency control will be used.</p>
-
-</td>
-</tr>
-<tr id="AdaptiveConcurrency-enabled">
-<td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-enabled">enabled</a></code></div>
-<div class="type">bool</div>
-</div></td>
-<td>
-<p>If set to false, the adaptive concurrency filter will operate as a pass-through
-filter. If unspecified, the filter will be enabled.</p>
 
 </td>
 </tr>
@@ -1591,11 +1580,11 @@ measured ideal round-trip time (minRTT) for an upstream.</p>
 <tbody>
 <tr id="AdaptiveConcurrency-GradientControllerConfig-sample_aggregate_percentile">
 <td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-GradientControllerConfig-sample_aggregate_percentile">sampleAggregatePercentile</a></code></div>
-<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#doublevalue">DoubleValue</a></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
 </div></td>
 <td>
 <p>The percentile to use when summarizing aggregated samples. Defaults to p50.
-Value should be between 0 and 100.</p>
+Value must be in the range [0, 100].</p>
 
 </td>
 </tr>
@@ -1641,6 +1630,23 @@ from sampled request latencies.</p>
 </div></td>
 <td>
 <p>The allowed upper-bound on the calculated concurrency limit. Defaults to 1000.</p>
+<p>This acts as a safety cap on the gradient algorithm&rsquo;s output, the algorithm
+dynamically adjusts the concurrency limit based on measured latency (via the
+gradient formula: new_limit = old_limit * gradient + headroom), but the result
+is clamped to [min_concurrency, max_concurrency_limit] before being applied.
+The gradient calculation itself is not influenced by this value.</p>
+<p>In most cases the default of 1000 is sufficient, since the algorithm will
+self-regulate well below this ceiling based on observed latencies. Consider
+lowering it only if you know the upstream&rsquo;s maximum sustainable concurrency
+and want a hard safety net beyond the algorithm&rsquo;s own backoff behavior.
+Setting this too low may prevent the algorithm from reaching the upstream&rsquo;s
+true capacity. Note that this limit applies per filter config instance
+(typically one per Envoy process per listener), so the aggregate concurrency
+across N Envoy instances can reach up to N * max_concurrency_limit.</p>
+<p>Overridable at runtime via
+adaptive_concurrency.gradient_controller.max_concurrency_limit.
+Monitor the concurrency_limit gauge to observe where the algorithm settles
+under normal load.</p>
 
 </td>
 </tr>
@@ -1679,7 +1685,14 @@ these ideal conditions.</p>
 </div></td>
 <td>
 <p>The time interval between recalculating the minimum request round-trip time.
-Has to be positive. If set to zero, dynamic sampling of the minRTT is disabled.</p>
+Must be &gt;= 1ms when set. If unset or zero, dynamic sampling of the minRTT
+is disabled and <code>fixed_value</code> must be provided instead.
+There is no default — one of <code>interval</code> or <code>fixed_value</code> must be specified.</p>
+<p>When dynamic sampling is enabled (interval &gt; 0), the controller periodically
+enters a low-concurrency measurement window (pinned to <code>min_concurrency</code>) to
+re-measure the baseline latency. During this window, throughput is temporarily
+reduced, so longer intervals reduce overhead but may react slower to changes
+in upstream performance.</p>
 
 </td>
 </tr>
@@ -1688,9 +1701,12 @@ Has to be positive. If set to zero, dynamic sampling of the minRTT is disabled.<
 <div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></div>
 </div></td>
 <td>
-<p>The fixed value for the minRTT. This value is used when minRTT is not sampled
-dynamically. If dynamic sampling of the minRTT is disabled (i.e. <code>interval</code> is
-set to zero), this field must be set.</p>
+<p>The fixed value for the minRTT, used when dynamic sampling is disabled
+(i.e. <code>interval</code> is unset or zero). Must be positive when set.
+This field is mutually exclusive with a positive <code>interval</code> — if <code>interval</code>
+is set, <code>fixed_value</code> is ignored and the minRTT is sampled dynamically.
+Use this when the baseline latency of the upstream is well-known and stable,
+to avoid the periodic low-concurrency measurement windows.</p>
 
 </td>
 </tr>
@@ -1706,12 +1722,13 @@ window before updating. Defaults to 50.</p>
 </tr>
 <tr id="AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-jitter">
 <td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-jitter">jitter</a></code></div>
-<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#doublevalue">DoubleValue</a></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
 </div></td>
 <td>
 <p>Randomized time delta that will be introduced to the start of the minRTT
 calculation window. This is represented as a percentage of the interval duration.
-Defaults to 15%. This is recommended to prevent all hosts in a cluster from
+Defaults to 15%. Value must be in the range [0, 100].
+This is recommended to prevent all hosts in a cluster from
 being in a minRTT calculation window at the same time.</p>
 
 </td>
@@ -1727,13 +1744,13 @@ being in a minRTT calculation window at the same time.</p>
 </tr>
 <tr id="AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-buffer">
 <td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-buffer">buffer</a></code></div>
-<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#doublevalue">DoubleValue</a></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
 </div></td>
 <td>
 <p>Amount added to the measured minRTT to add stability to the concurrency limit
 during natural variability in latency. This is expressed as a percentage of the
 measured value and can be adjusted to allow more or less tolerance to the sampled
-latency values. Defaults to 25%.</p>
+latency values. Defaults to 25%. Value must be in the range [0, 100].</p>
 
 </td>
 </tr>

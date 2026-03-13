@@ -338,7 +338,6 @@ type OutlierDetection = v1alpha3.OutlierDetection
 //	host: my-service.default.svc.cluster.local
 //	trafficPolicy:
 //	  adaptiveConcurrency:
-//	    enabled: true
 //	    gradientControllerConfig:
 //	      sampleAggregatePercentile: 50
 //	      concurrencyLimitParams:

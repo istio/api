@@ -1330,7 +1330,6 @@ func (x *OutlierDetection) GetMinHealthPercent() int32 {
 //	host: my-service.default.svc.cluster.local
 //	trafficPolicy:
 //	  adaptiveConcurrency:
-//	    enabled: true
 //	    gradientControllerConfig:
 //	      sampleAggregatePercentile: 50
 //	      concurrencyLimitParams:
@@ -1351,9 +1350,6 @@ type AdaptiveConcurrency struct {
 	//
 	//	*AdaptiveConcurrency_GradientControllerConfig_
 	ConcurrencyControllerConfig isAdaptiveConcurrency_ConcurrencyControllerConfig `protobuf_oneof:"concurrency_controller_config"`
-	// If set to false, the adaptive concurrency filter will operate as a pass-through
-	// filter. If unspecified, the filter will be enabled.
-	Enabled bool `protobuf:"varint,2,opt,name=enabled,proto3" json:"enabled,omitempty"`
 	// Custom HTTP response status code to the downstream client when
 	// the concurrency limit has been exceeded.
 	// Defaults to 503 (Service Unavailable).
@@ -1407,13 +1403,6 @@ func (x *AdaptiveConcurrency) GetGradientControllerConfig() *AdaptiveConcurrency
 		}
 	}
 	return nil
-}
-
-func (x *AdaptiveConcurrency) GetEnabled() bool {
-	if x != nil {
-		return x.Enabled
-	}
-	return false
 }
 
 func (x *AdaptiveConcurrency) GetConcurrencyLimitExceededStatus() uint32 {
@@ -2845,8 +2834,8 @@ func (x *ConnectionPoolSettings_TCPSettings_TcpKeepalive) GetInterval() *duratio
 type AdaptiveConcurrency_GradientControllerConfig struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The percentile to use when summarizing aggregated samples. Defaults to p50.
-	// Value should be between 0 and 100.
-	SampleAggregatePercentile *wrappers.DoubleValue `protobuf:"bytes,1,opt,name=sample_aggregate_percentile,json=sampleAggregatePercentile,proto3" json:"sample_aggregate_percentile,omitempty"`
+	// Value must be in the range [0, 100].
+	SampleAggregatePercentile *wrappers.UInt32Value `protobuf:"bytes,1,opt,name=sample_aggregate_percentile,json=sampleAggregatePercentile,proto3" json:"sample_aggregate_percentile,omitempty"`
 	// Parameters for periodic recalculation of the concurrency limit.
 	ConcurrencyLimitParams *AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams `protobuf:"bytes,2,opt,name=concurrency_limit_params,json=concurrencyLimitParams,proto3" json:"concurrency_limit_params,omitempty"`
 	// Parameters for periodic minRTT recalculation.
@@ -2885,7 +2874,7 @@ func (*AdaptiveConcurrency_GradientControllerConfig) Descriptor() ([]byte, []int
 	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{7, 0}
 }
 
-func (x *AdaptiveConcurrency_GradientControllerConfig) GetSampleAggregatePercentile() *wrappers.DoubleValue {
+func (x *AdaptiveConcurrency_GradientControllerConfig) GetSampleAggregatePercentile() *wrappers.UInt32Value {
 	if x != nil {
 		return x.SampleAggregatePercentile
 	}
@@ -2911,6 +2900,26 @@ func (x *AdaptiveConcurrency_GradientControllerConfig) GetMinRttCalcParams() *Ad
 type AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The allowed upper-bound on the calculated concurrency limit. Defaults to 1000.
+	//
+	// This acts as a safety cap on the gradient algorithm's output, the algorithm
+	// dynamically adjusts the concurrency limit based on measured latency (via the
+	// gradient formula: new_limit = old_limit * gradient + headroom), but the result
+	// is clamped to [min_concurrency, max_concurrency_limit] before being applied.
+	// The gradient calculation itself is not influenced by this value.
+	//
+	// In most cases the default of 1000 is sufficient, since the algorithm will
+	// self-regulate well below this ceiling based on observed latencies. Consider
+	// lowering it only if you know the upstream's maximum sustainable concurrency
+	// and want a hard safety net beyond the algorithm's own backoff behavior.
+	// Setting this too low may prevent the algorithm from reaching the upstream's
+	// true capacity. Note that this limit applies per filter config instance
+	// (typically one per Envoy process per listener), so the aggregate concurrency
+	// across N Envoy instances can reach up to N * max_concurrency_limit.
+	//
+	// Overridable at runtime via
+	// adaptive_concurrency.gradient_controller.max_concurrency_limit.
+	// Monitor the concurrency_limit gauge to observe where the algorithm settles
+	// under normal load.
 	MaxConcurrencyLimit *wrappers.UInt32Value `protobuf:"bytes,2,opt,name=max_concurrency_limit,json=maxConcurrencyLimit,proto3" json:"max_concurrency_limit,omitempty"`
 	// The period of time samples are taken to recalculate the concurrency limit.
 	// This is required.
@@ -2971,27 +2980,39 @@ func (x *AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculatio
 type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The time interval between recalculating the minimum request round-trip time.
-	// Has to be positive. If set to zero, dynamic sampling of the minRTT is disabled.
+	// Must be >= 1ms when set. If unset or zero, dynamic sampling of the minRTT
+	// is disabled and `fixed_value` must be provided instead.
+	// There is no default — one of `interval` or `fixed_value` must be specified.
+	//
+	// When dynamic sampling is enabled (interval > 0), the controller periodically
+	// enters a low-concurrency measurement window (pinned to `min_concurrency`) to
+	// re-measure the baseline latency. During this window, throughput is temporarily
+	// reduced, so longer intervals reduce overhead but may react slower to changes
+	// in upstream performance.
 	Interval *duration.Duration `protobuf:"bytes,1,opt,name=interval,proto3" json:"interval,omitempty"`
-	// The fixed value for the minRTT. This value is used when minRTT is not sampled
-	// dynamically. If dynamic sampling of the minRTT is disabled (i.e. `interval` is
-	// set to zero), this field must be set.
+	// The fixed value for the minRTT, used when dynamic sampling is disabled
+	// (i.e. `interval` is unset or zero). Must be positive when set.
+	// This field is mutually exclusive with a positive `interval` — if `interval`
+	// is set, `fixed_value` is ignored and the minRTT is sampled dynamically.
+	// Use this when the baseline latency of the upstream is well-known and stable,
+	// to avoid the periodic low-concurrency measurement windows.
 	FixedValue *duration.Duration `protobuf:"bytes,6,opt,name=fixed_value,json=fixedValue,proto3" json:"fixed_value,omitempty"`
 	// The number of requests to aggregate/sample during the minRTT recalculation
 	// window before updating. Defaults to 50.
 	RequestCount *wrappers.UInt32Value `protobuf:"bytes,2,opt,name=request_count,json=requestCount,proto3" json:"request_count,omitempty"`
 	// Randomized time delta that will be introduced to the start of the minRTT
 	// calculation window. This is represented as a percentage of the interval duration.
-	// Defaults to 15%. This is recommended to prevent all hosts in a cluster from
+	// Defaults to 15%. Value must be in the range [0, 100].
+	// This is recommended to prevent all hosts in a cluster from
 	// being in a minRTT calculation window at the same time.
-	Jitter *wrappers.DoubleValue `protobuf:"bytes,3,opt,name=jitter,proto3" json:"jitter,omitempty"`
+	Jitter *wrappers.UInt32Value `protobuf:"bytes,3,opt,name=jitter,proto3" json:"jitter,omitempty"`
 	// The concurrency limit set while measuring the minRTT. Defaults to 3.
 	MinConcurrency *wrappers.UInt32Value `protobuf:"bytes,4,opt,name=min_concurrency,json=minConcurrency,proto3" json:"min_concurrency,omitempty"`
 	// Amount added to the measured minRTT to add stability to the concurrency limit
 	// during natural variability in latency. This is expressed as a percentage of the
 	// measured value and can be adjusted to allow more or less tolerance to the sampled
-	// latency values. Defaults to 25%.
-	Buffer        *wrappers.DoubleValue `protobuf:"bytes,5,opt,name=buffer,proto3" json:"buffer,omitempty"`
+	// latency values. Defaults to 25%. Value must be in the range [0, 100].
+	Buffer        *wrappers.UInt32Value `protobuf:"bytes,5,opt,name=buffer,proto3" json:"buffer,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3047,7 +3068,7 @@ func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParam
 	return nil
 }
 
-func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams) GetJitter() *wrappers.DoubleValue {
+func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams) GetJitter() *wrappers.UInt32Value {
 	if x != nil {
 		return x.Jitter
 	}
@@ -3061,7 +3082,7 @@ func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParam
 	return nil
 }
 
-func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams) GetBuffer() *wrappers.DoubleValue {
+func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams) GetBuffer() *wrappers.UInt32Value {
 	if x != nil {
 		return x.Buffer
 	}
@@ -3331,14 +3352,13 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\binterval\x18\x02 \x01(\v2\x19.google.protobuf.DurationR\binterval\x12G\n" +
 	"\x12base_ejection_time\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\x10baseEjectionTime\x120\n" +
 	"\x14max_ejection_percent\x18\x04 \x01(\x05R\x12maxEjectionPercent\x12,\n" +
-	"\x12min_health_percent\x18\x05 \x01(\x05R\x10minHealthPercent\"\xc9\n" +
+	"\x12min_health_percent\x18\x05 \x01(\x05R\x10minHealthPercent\"\xaf\n" +
 	"\n" +
 	"\x13AdaptiveConcurrency\x12\x87\x01\n" +
-	"\x1agradient_controller_config\x18\x01 \x01(\v2G.istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfigH\x00R\x18gradientControllerConfig\x12\x18\n" +
-	"\aenabled\x18\x02 \x01(\bR\aenabled\x12I\n" +
+	"\x1agradient_controller_config\x18\x01 \x01(\v2G.istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfigH\x00R\x18gradientControllerConfig\x12I\n" +
 	"!concurrency_limit_exceeded_status\x18\x03 \x01(\rR\x1econcurrencyLimitExceededStatus\x1a\xa1\b\n" +
 	"\x18GradientControllerConfig\x12\\\n" +
-	"\x1bsample_aggregate_percentile\x18\x01 \x01(\v2\x1c.google.protobuf.DoubleValueR\x19sampleAggregatePercentile\x12\xa9\x01\n" +
+	"\x1bsample_aggregate_percentile\x18\x01 \x01(\v2\x1c.google.protobuf.UInt32ValueR\x19sampleAggregatePercentile\x12\xa9\x01\n" +
 	"\x18concurrency_limit_params\x18\x02 \x01(\v2i.istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.ConcurrencyLimitCalculationParamsB\x04\xe2A\x01\x02R\x16concurrencyLimitParams\x12\x98\x01\n" +
 	"\x13min_rtt_calc_params\x18\x03 \x01(\v2c.istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParamsB\x04\xe2A\x01\x02R\x10minRttCalcParams\x1a\xd6\x01\n" +
 	"!ConcurrencyLimitCalculationParams\x12P\n" +
@@ -3349,9 +3369,9 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\vfixed_value\x18\x06 \x01(\v2\x19.google.protobuf.DurationR\n" +
 	"fixedValue\x12A\n" +
 	"\rrequest_count\x18\x02 \x01(\v2\x1c.google.protobuf.UInt32ValueR\frequestCount\x124\n" +
-	"\x06jitter\x18\x03 \x01(\v2\x1c.google.protobuf.DoubleValueR\x06jitter\x12E\n" +
+	"\x06jitter\x18\x03 \x01(\v2\x1c.google.protobuf.UInt32ValueR\x06jitter\x12E\n" +
 	"\x0fmin_concurrency\x18\x04 \x01(\v2\x1c.google.protobuf.UInt32ValueR\x0eminConcurrency\x124\n" +
-	"\x06buffer\x18\x05 \x01(\v2\x1c.google.protobuf.DoubleValueR\x06bufferB\x1f\n" +
+	"\x06buffer\x18\x05 \x01(\v2\x1c.google.protobuf.UInt32ValueR\x06bufferB\x1f\n" +
 	"\x1dconcurrency_controller_config\"\xe4\x03\n" +
 	"\x11ClientTLSSettings\x12H\n" +
 	"\x04mode\x18\x01 \x01(\x0e24.istio.networking.v1alpha3.ClientTLSSettings.TLSmodeR\x04mode\x12-\n" +
@@ -3500,7 +3520,7 @@ var file_networking_v1alpha3_destination_rule_proto_depIdxs = []int32{
 	2,  // 52: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.h2_upgrade_policy:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicy
 	34, // 53: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.time:type_name -> google.protobuf.Duration
 	34, // 54: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.interval:type_name -> google.protobuf.Duration
-	35, // 55: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.sample_aggregate_percentile:type_name -> google.protobuf.DoubleValue
+	36, // 55: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.sample_aggregate_percentile:type_name -> google.protobuf.UInt32Value
 	28, // 56: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.concurrency_limit_params:type_name -> istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.ConcurrencyLimitCalculationParams
 	29, // 57: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.min_rtt_calc_params:type_name -> istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams
 	36, // 58: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.ConcurrencyLimitCalculationParams.max_concurrency_limit:type_name -> google.protobuf.UInt32Value
@@ -3508,9 +3528,9 @@ var file_networking_v1alpha3_destination_rule_proto_depIdxs = []int32{
 	34, // 60: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams.interval:type_name -> google.protobuf.Duration
 	34, // 61: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams.fixed_value:type_name -> google.protobuf.Duration
 	36, // 62: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams.request_count:type_name -> google.protobuf.UInt32Value
-	35, // 63: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams.jitter:type_name -> google.protobuf.DoubleValue
+	36, // 63: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams.jitter:type_name -> google.protobuf.UInt32Value
 	36, // 64: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams.min_concurrency:type_name -> google.protobuf.UInt32Value
-	35, // 65: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams.buffer:type_name -> google.protobuf.DoubleValue
+	36, // 65: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams.buffer:type_name -> google.protobuf.UInt32Value
 	32, // 66: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.to:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.ToEntry
 	67, // [67:67] is the sub-list for method output_type
 	67, // [67:67] is the sub-list for method input_type

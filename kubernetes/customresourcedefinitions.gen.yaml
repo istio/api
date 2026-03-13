@@ -451,10 +451,6 @@ spec:
                               maximum: 4294967295
                               minimum: 0
                               type: integer
-                            enabled:
-                              description: If set to false, the adaptive concurrency
-                                filter will operate as a pass-through filter.
-                              type: boolean
                             gradientControllerConfig:
                               description: Gradient concurrency control will be used.
                               properties:
@@ -487,11 +483,13 @@ spec:
                                       description: Amount added to the measured minRTT
                                         to add stability to the concurrency limit
                                         during natural variability in latency.
-                                      format: double
+                                      maximum: 4294967295
+                                      minimum: 0
                                       nullable: true
-                                      type: number
+                                      type: integer
                                     fixedValue:
-                                      description: The fixed value for the minRTT.
+                                      description: The fixed value for the minRTT,
+                                        used when dynamic sampling is disabled (i.e.
                                       type: string
                                       x-kubernetes-validations:
                                       - message: must be a valid duration greater
@@ -509,9 +507,10 @@ spec:
                                       description: Randomized time delta that will
                                         be introduced to the start of the minRTT calculation
                                         window.
-                                      format: double
+                                      maximum: 4294967295
+                                      minimum: 0
                                       nullable: true
-                                      type: number
+                                      type: integer
                                     minConcurrency:
                                       description: The concurrency limit set while
                                         measuring the minRTT.
@@ -531,9 +530,10 @@ spec:
                                 sampleAggregatePercentile:
                                   description: The percentile to use when summarizing
                                     aggregated samples.
-                                  format: double
+                                  maximum: 4294967295
+                                  minimum: 0
                                   nullable: true
-                                  type: number
+                                  type: integer
                               required:
                               - concurrencyLimitParams
                               - minRttCalcParams
@@ -1500,10 +1500,6 @@ spec:
                         maximum: 4294967295
                         minimum: 0
                         type: integer
-                      enabled:
-                        description: If set to false, the adaptive concurrency filter
-                          will operate as a pass-through filter.
-                        type: boolean
                       gradientControllerConfig:
                         description: Gradient concurrency control will be used.
                         properties:
@@ -1535,11 +1531,13 @@ spec:
                                 description: Amount added to the measured minRTT to
                                   add stability to the concurrency limit during natural
                                   variability in latency.
-                                format: double
+                                maximum: 4294967295
+                                minimum: 0
                                 nullable: true
-                                type: number
+                                type: integer
                               fixedValue:
-                                description: The fixed value for the minRTT.
+                                description: The fixed value for the minRTT, used
+                                  when dynamic sampling is disabled (i.e.
                                 type: string
                                 x-kubernetes-validations:
                                 - message: must be a valid duration greater than 1ms
@@ -1554,9 +1552,10 @@ spec:
                               jitter:
                                 description: Randomized time delta that will be introduced
                                   to the start of the minRTT calculation window.
-                                format: double
+                                maximum: 4294967295
+                                minimum: 0
                                 nullable: true
-                                type: number
+                                type: integer
                               minConcurrency:
                                 description: The concurrency limit set while measuring
                                   the minRTT.
@@ -1575,9 +1574,10 @@ spec:
                           sampleAggregatePercentile:
                             description: The percentile to use when summarizing aggregated
                               samples.
-                            format: double
+                            maximum: 4294967295
+                            minimum: 0
                             nullable: true
-                            type: number
+                            type: integer
                         required:
                         - concurrencyLimitParams
                         - minRttCalcParams
@@ -2660,10 +2660,6 @@ spec:
                               maximum: 4294967295
                               minimum: 0
                               type: integer
-                            enabled:
-                              description: If set to false, the adaptive concurrency
-                                filter will operate as a pass-through filter.
-                              type: boolean
                             gradientControllerConfig:
                               description: Gradient concurrency control will be used.
                               properties:
@@ -2696,11 +2692,13 @@ spec:
                                       description: Amount added to the measured minRTT
                                         to add stability to the concurrency limit
                                         during natural variability in latency.
-                                      format: double
+                                      maximum: 4294967295
+                                      minimum: 0
                                       nullable: true
-                                      type: number
+                                      type: integer
                                     fixedValue:
-                                      description: The fixed value for the minRTT.
+                                      description: The fixed value for the minRTT,
+                                        used when dynamic sampling is disabled (i.e.
                                       type: string
                                       x-kubernetes-validations:
                                       - message: must be a valid duration greater
@@ -2718,9 +2716,10 @@ spec:
                                       description: Randomized time delta that will
                                         be introduced to the start of the minRTT calculation
                                         window.
-                                      format: double
+                                      maximum: 4294967295
+                                      minimum: 0
                                       nullable: true
-                                      type: number
+                                      type: integer
                                     minConcurrency:
                                       description: The concurrency limit set while
                                         measuring the minRTT.
@@ -2740,9 +2739,10 @@ spec:
                                 sampleAggregatePercentile:
                                   description: The percentile to use when summarizing
                                     aggregated samples.
-                                  format: double
+                                  maximum: 4294967295
+                                  minimum: 0
                                   nullable: true
-                                  type: number
+                                  type: integer
                               required:
                               - concurrencyLimitParams
                               - minRttCalcParams
@@ -3709,10 +3709,6 @@ spec:
                         maximum: 4294967295
                         minimum: 0
                         type: integer
-                      enabled:
-                        description: If set to false, the adaptive concurrency filter
-                          will operate as a pass-through filter.
-                        type: boolean
                       gradientControllerConfig:
                         description: Gradient concurrency control will be used.
                         properties:
@@ -3744,11 +3740,13 @@ spec:
                                 description: Amount added to the measured minRTT to
                                   add stability to the concurrency limit during natural
                                   variability in latency.
-                                format: double
+                                maximum: 4294967295
+                                minimum: 0
                                 nullable: true
-                                type: number
+                                type: integer
                               fixedValue:
-                                description: The fixed value for the minRTT.
+                                description: The fixed value for the minRTT, used
+                                  when dynamic sampling is disabled (i.e.
                                 type: string
                                 x-kubernetes-validations:
                                 - message: must be a valid duration greater than 1ms
@@ -3763,9 +3761,10 @@ spec:
                               jitter:
                                 description: Randomized time delta that will be introduced
                                   to the start of the minRTT calculation window.
-                                format: double
+                                maximum: 4294967295
+                                minimum: 0
                                 nullable: true
-                                type: number
+                                type: integer
                               minConcurrency:
                                 description: The concurrency limit set while measuring
                                   the minRTT.
@@ -3784,9 +3783,10 @@ spec:
                           sampleAggregatePercentile:
                             description: The percentile to use when summarizing aggregated
                               samples.
-                            format: double
+                            maximum: 4294967295
+                            minimum: 0
                             nullable: true
-                            type: number
+                            type: integer
                         required:
                         - concurrencyLimitParams
                         - minRttCalcParams
@@ -4869,10 +4869,6 @@ spec:
                               maximum: 4294967295
                               minimum: 0
                               type: integer
-                            enabled:
-                              description: If set to false, the adaptive concurrency
-                                filter will operate as a pass-through filter.
-                              type: boolean
                             gradientControllerConfig:
                               description: Gradient concurrency control will be used.
                               properties:
@@ -4905,11 +4901,13 @@ spec:
                                       description: Amount added to the measured minRTT
                                         to add stability to the concurrency limit
                                         during natural variability in latency.
-                                      format: double
+                                      maximum: 4294967295
+                                      minimum: 0
                                       nullable: true
-                                      type: number
+                                      type: integer
                                     fixedValue:
-                                      description: The fixed value for the minRTT.
+                                      description: The fixed value for the minRTT,
+                                        used when dynamic sampling is disabled (i.e.
                                       type: string
                                       x-kubernetes-validations:
                                       - message: must be a valid duration greater
@@ -4927,9 +4925,10 @@ spec:
                                       description: Randomized time delta that will
                                         be introduced to the start of the minRTT calculation
                                         window.
-                                      format: double
+                                      maximum: 4294967295
+                                      minimum: 0
                                       nullable: true
-                                      type: number
+                                      type: integer
                                     minConcurrency:
                                       description: The concurrency limit set while
                                         measuring the minRTT.
@@ -4949,9 +4948,10 @@ spec:
                                 sampleAggregatePercentile:
                                   description: The percentile to use when summarizing
                                     aggregated samples.
-                                  format: double
+                                  maximum: 4294967295
+                                  minimum: 0
                                   nullable: true
-                                  type: number
+                                  type: integer
                               required:
                               - concurrencyLimitParams
                               - minRttCalcParams
@@ -5918,10 +5918,6 @@ spec:
                         maximum: 4294967295
                         minimum: 0
                         type: integer
-                      enabled:
-                        description: If set to false, the adaptive concurrency filter
-                          will operate as a pass-through filter.
-                        type: boolean
                       gradientControllerConfig:
                         description: Gradient concurrency control will be used.
                         properties:
@@ -5953,11 +5949,13 @@ spec:
                                 description: Amount added to the measured minRTT to
                                   add stability to the concurrency limit during natural
                                   variability in latency.
-                                format: double
+                                maximum: 4294967295
+                                minimum: 0
                                 nullable: true
-                                type: number
+                                type: integer
                               fixedValue:
-                                description: The fixed value for the minRTT.
+                                description: The fixed value for the minRTT, used
+                                  when dynamic sampling is disabled (i.e.
                                 type: string
                                 x-kubernetes-validations:
                                 - message: must be a valid duration greater than 1ms
@@ -5972,9 +5970,10 @@ spec:
                               jitter:
                                 description: Randomized time delta that will be introduced
                                   to the start of the minRTT calculation window.
-                                format: double
+                                maximum: 4294967295
+                                minimum: 0
                                 nullable: true
-                                type: number
+                                type: integer
                               minConcurrency:
                                 description: The concurrency limit set while measuring
                                   the minRTT.
@@ -5993,9 +5992,10 @@ spec:
                           sampleAggregatePercentile:
                             description: The percentile to use when summarizing aggregated
                               samples.
-                            format: double
+                            maximum: 4294967295
+                            minimum: 0
                             nullable: true
-                            type: number
+                            type: integer
                         required:
                         - concurrencyLimitParams
                         - minRttCalcParams
