@@ -530,8 +530,9 @@ const (
 	// IP address. This method of handling wildcard traffic is not
 	// compatible with raw TCP traffic where the original host cannot
 	// be recovered. `DYNAMIC_DNS` is only supported for wildcard hosts,
-	// `MESH_EXTERNAL` location and in ambient mode. The ServiceEntry must
-	// be bound to a waypoint. Specified endpoints will be ignored.
+	// both `MESH_INTERNAL` and `MESH_EXTERNAL` locations in sidecar mode
+	// and only `MESH_EXTERNAL` in ambient mode (bound to a waypoint).
+	// Specified endpoints will be ignored.
 	ServiceEntry_DYNAMIC_DNS ServiceEntry_Resolution = 4
 )
 
