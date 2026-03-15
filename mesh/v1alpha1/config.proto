@@ -186,11 +186,18 @@ message MeshConfig {
       // This mode allows users that do not have all possible egress destinations registered through `ServiceEntry` configurations to still connect
       // to arbitrary destinations.
       ALLOW_ANY = 1;
+      // In `ALLOW_ANY_DYNAMIC_DNS` mode, traffic to unknown destinations will be allowed via dynamic DNS resolution.
+      // This mode allows users that do not have all possible egress destinations registered through `ServiceEntry` configurations to still connect
+      // to arbitrary destinations. Client TLS settings can be configured for connections to such destinations.
+      ALLOW_ANY_DYNAMIC_DNS = 3;
 
       reserved 2;
       reserved "VIRTUAL_SERVICE_ONLY";
     }
     Mode mode = 1;
+
+    // TLS settings for client connections to unknown destinations. Applicable only when mode is set to `ALLOW_ANY_DYNAMIC_DNS`.
+    istio.networking.v1alpha3.ClientTLSSettings tls = 2;
   }
 
   // Set the default behavior of the sidecar for handling outbound
