@@ -320,11 +320,11 @@ const (
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="(has(self.selector)?1:0)+(has(self.targetRef)?1:0)+(has(self.targetRefs)?1:0)<=1"
+// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="(has(self.selector)?1:0)+(has(self.targetRefs)?1:0)<=1"
 // +kubebuilder:validation:XValidation:message="exactly one of wasm or lua must be set",rule="has(self.wasm) != has(self.lua)"
 type ExtensionFilter struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Criteria used to select the specific set of pods/VMs on which
+	// Optional. Criteria used to select the specific set of pods/VMs on which
 	// this plugin configuration should be applied. If omitted, this
 	// configuration will be applied to all workload instances in the same
 	// namespace. If the `ExtensionFilter` is present in the config root
@@ -333,30 +333,6 @@ type ExtensionFilter struct {
 	//
 	// At most, only one of `selector` or `targetRefs` can be set for a given policy.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
-	// Optional. The targetRef specifies the gateway the policy should be
-	// applied to. The targeted resource specified will determine which
-	// workloads the extension filter applies to. The targeted resource
-	// must be a resource in the same namespace as the ExtensionFilter.
-	//
-	// If the targeted resource is a Gateway, the extension filter will be
-	// applied to all pods that match the targeted Gateway. If the targeted
-	// resource is a Service, the extension filter will be applied to all pods
-	// that match the service selector.
-	//
-	// If not set, the extension filter is applied to all workloads in the same
-	// namespace as the ExtensionFilter resource.
-	//
-	// At most one of `selector` or `targetRefs` can be set for a given policy.
-	//
-	// NOTE: If you are using the `targetRefs` field in "WAYPOINT" mode, you
-	// should either set a single `targetRef` or set multiple `targetRefs` (using
-	// the `targetRefs` field). You should not set both the `targetRef` and
-	// `targetRefs` fields at the same time as it is invalid.
-	//
-	// +kubebuilder:validation:XValidation:message="targetRef namespace must be unset",rule="!has(self.__namespace__)"
-	//
-	// Deprecated: Marked as deprecated in extensions/v1alpha1/extension_filter.proto.
-	TargetRef *v1beta1.PolicyTargetReference `protobuf:"bytes,2,opt,name=targetRef,proto3" json:"targetRef,omitempty"`
 	// Optional. The targetRefs specifies a list of resources the policy should be
 	// applied to. The targeted resources specified will determine which workloads
 	// the policy applies to.
@@ -369,11 +345,6 @@ type ExtensionFilter struct {
 	//
 	// If not set, the policy is applied as defined by the selector.
 	// At most one of the selector and targetRefs can be set.
-	//
-	// NOTE: If you are using the `targetRefs` field in a multi-revision environment with Istio versions prior to 1.22,
-	// it is highly recommended that you pin the policy to a revision running 1.22+ via the `istio.io/rev` label.
-	// This is to prevent proxies connected to older control planes (that don't know about the `targetRefs` field)
-	// from misinterpreting the policy as namespace-wide during the upgrade process.
 	//
 	// NOTE: Waypoint proxies are required to use this field for policies to apply; `selector` policies will be ignored.
 	// +kubebuilder:validation:MaxItems=16
@@ -432,14 +403,6 @@ func (*ExtensionFilter) Descriptor() ([]byte, []int) {
 func (x *ExtensionFilter) GetSelector() *v1beta1.WorkloadSelector {
 	if x != nil {
 		return x.Selector
-	}
-	return nil
-}
-
-// Deprecated: Marked as deprecated in extensions/v1alpha1/extension_filter.proto.
-func (x *ExtensionFilter) GetTargetRef() *v1beta1.PolicyTargetReference {
-	if x != nil {
-		return x.TargetRef
 	}
 	return nil
 }
@@ -761,7 +724,7 @@ func (x *LuaConfig) GetInlineCode() string {
 }
 
 // TrafficSelector provides a mechanism to select a specific traffic flow
-// for which this Extension Filter will be enabled.
+// for which an Extension Filter will be enabled.
 // When all the sub conditions in the TrafficSelector are satisfied, the
 // traffic will be selected.
 type TrafficSelector struct {
@@ -834,10 +797,9 @@ var File_extensions_v1alpha1_extension_filter_proto protoreflect.FileDescriptor
 
 const file_extensions_v1alpha1_extension_filter_proto_rawDesc = "" +
 	"\n" +
-	"*extensions/v1alpha1/extension_filter.proto\x12\x19istio.extensions.v1alpha1\x1a\x1eextensions/v1alpha1/wasm.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1btype/v1beta1/selector.proto\"\x97\x04\n" +
+	"*extensions/v1alpha1/extension_filter.proto\x12\x19istio.extensions.v1alpha1\x1a\x1eextensions/v1alpha1/wasm.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1btype/v1beta1/selector.proto\"\xca\x03\n" +
 	"\x0fExtensionFilter\x12@\n" +
-	"\bselector\x18\x01 \x01(\v2$.istio.type.v1beta1.WorkloadSelectorR\bselector\x12K\n" +
-	"\ttargetRef\x18\x02 \x01(\v2).istio.type.v1beta1.PolicyTargetReferenceB\x02\x18\x01R\ttargetRef\x12I\n" +
+	"\bselector\x18\x01 \x01(\v2$.istio.type.v1beta1.WorkloadSelectorR\bselector\x12I\n" +
 	"\n" +
 	"targetRefs\x18\x03 \x03(\v2).istio.type.v1beta1.PolicyTargetReferenceR\n" +
 	"targetRefs\x12<\n" +
@@ -900,25 +862,24 @@ var file_extensions_v1alpha1_extension_filter_proto_goTypes = []any{
 }
 var file_extensions_v1alpha1_extension_filter_proto_depIdxs = []int32{
 	4,  // 0: istio.extensions.v1alpha1.ExtensionFilter.selector:type_name -> istio.type.v1beta1.WorkloadSelector
-	5,  // 1: istio.extensions.v1alpha1.ExtensionFilter.targetRef:type_name -> istio.type.v1beta1.PolicyTargetReference
-	5,  // 2: istio.extensions.v1alpha1.ExtensionFilter.targetRefs:type_name -> istio.type.v1beta1.PolicyTargetReference
-	6,  // 3: istio.extensions.v1alpha1.ExtensionFilter.phase:type_name -> istio.extensions.v1alpha1.PluginPhase
-	7,  // 4: istio.extensions.v1alpha1.ExtensionFilter.priority:type_name -> google.protobuf.Int32Value
-	3,  // 5: istio.extensions.v1alpha1.ExtensionFilter.match:type_name -> istio.extensions.v1alpha1.TrafficSelector
-	1,  // 6: istio.extensions.v1alpha1.ExtensionFilter.wasm:type_name -> istio.extensions.v1alpha1.WasmConfig
-	2,  // 7: istio.extensions.v1alpha1.ExtensionFilter.lua:type_name -> istio.extensions.v1alpha1.LuaConfig
-	8,  // 8: istio.extensions.v1alpha1.WasmConfig.image_pull_policy:type_name -> istio.extensions.v1alpha1.PullPolicy
-	9,  // 9: istio.extensions.v1alpha1.WasmConfig.plugin_config:type_name -> google.protobuf.Struct
-	10, // 10: istio.extensions.v1alpha1.WasmConfig.fail_strategy:type_name -> istio.extensions.v1alpha1.FailStrategy
-	11, // 11: istio.extensions.v1alpha1.WasmConfig.vm_config:type_name -> istio.extensions.v1alpha1.VmConfig
-	12, // 12: istio.extensions.v1alpha1.WasmConfig.type:type_name -> istio.extensions.v1alpha1.PluginType
-	13, // 13: istio.extensions.v1alpha1.TrafficSelector.mode:type_name -> istio.type.v1beta1.WorkloadMode
-	14, // 14: istio.extensions.v1alpha1.TrafficSelector.ports:type_name -> istio.type.v1beta1.PortSelector
-	15, // [15:15] is the sub-list for method output_type
-	15, // [15:15] is the sub-list for method input_type
-	15, // [15:15] is the sub-list for extension type_name
-	15, // [15:15] is the sub-list for extension extendee
-	0,  // [0:15] is the sub-list for field type_name
+	5,  // 1: istio.extensions.v1alpha1.ExtensionFilter.targetRefs:type_name -> istio.type.v1beta1.PolicyTargetReference
+	6,  // 2: istio.extensions.v1alpha1.ExtensionFilter.phase:type_name -> istio.extensions.v1alpha1.PluginPhase
+	7,  // 3: istio.extensions.v1alpha1.ExtensionFilter.priority:type_name -> google.protobuf.Int32Value
+	3,  // 4: istio.extensions.v1alpha1.ExtensionFilter.match:type_name -> istio.extensions.v1alpha1.TrafficSelector
+	1,  // 5: istio.extensions.v1alpha1.ExtensionFilter.wasm:type_name -> istio.extensions.v1alpha1.WasmConfig
+	2,  // 6: istio.extensions.v1alpha1.ExtensionFilter.lua:type_name -> istio.extensions.v1alpha1.LuaConfig
+	8,  // 7: istio.extensions.v1alpha1.WasmConfig.image_pull_policy:type_name -> istio.extensions.v1alpha1.PullPolicy
+	9,  // 8: istio.extensions.v1alpha1.WasmConfig.plugin_config:type_name -> google.protobuf.Struct
+	10, // 9: istio.extensions.v1alpha1.WasmConfig.fail_strategy:type_name -> istio.extensions.v1alpha1.FailStrategy
+	11, // 10: istio.extensions.v1alpha1.WasmConfig.vm_config:type_name -> istio.extensions.v1alpha1.VmConfig
+	12, // 11: istio.extensions.v1alpha1.WasmConfig.type:type_name -> istio.extensions.v1alpha1.PluginType
+	13, // 12: istio.extensions.v1alpha1.TrafficSelector.mode:type_name -> istio.type.v1beta1.WorkloadMode
+	14, // 13: istio.extensions.v1alpha1.TrafficSelector.ports:type_name -> istio.type.v1beta1.PortSelector
+	14, // [14:14] is the sub-list for method output_type
+	14, // [14:14] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_extensions_v1alpha1_extension_filter_proto_init() }

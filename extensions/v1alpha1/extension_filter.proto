@@ -305,7 +305,7 @@ option go_package = "istio.io/api/extensions/v1alpha1";
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
-// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="(has(self.selector)?1:0)+(has(self.targetRef)?1:0)+(has(self.targetRefs)?1:0)<=1"
+// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="(has(self.selector)?1:0)+(has(self.targetRefs)?1:0)<=1"
 // +kubebuilder:validation:XValidation:message="exactly one of wasm or lua must be set",rule="has(self.wasm) != has(self.lua)"
 message ExtensionFilter {
   // Optional. Criteria used to select the specific set of pods/VMs on which
@@ -492,4 +492,30 @@ message LuaConfig {
   // +kubebuilder:validation:MinLength=1
   // +kubebuilder:validation:MaxLength=65536
   string inline_code = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+/* NOTE: WasmPlugin defines an identical nested message (WasmPlugin.TrafficSelector)
+   for backward compatibility. */
+// TrafficSelector provides a mechanism to select a specific traffic flow
+// for which an Extension Filter will be enabled.
+// When all the sub conditions in the TrafficSelector are satisfied, the
+// traffic will be selected.
+message TrafficSelector {
+  // Criteria for selecting traffic by their direction.
+  // Note that `CLIENT` and `SERVER` are analogous to OUTBOUND and INBOUND,
+  // respectively.
+  // For the gateway, the field should be `CLIENT` or `CLIENT_AND_SERVER`.
+  // If not specified, the default value is `CLIENT_AND_SERVER`.
+  istio.type.v1beta1.WorkloadMode mode = 1;
+
+  // Criteria for selecting traffic by their destination port.
+  // More specifically, for the outbound traffic, the destination port would be
+  // the port of the target service. On the other hand, for the inbound traffic,
+  // the destination port is the port bound by the server process in the same Pod.
+  //
+  // If one of the given `ports` is matched, this condition is evaluated to true.
+  // If not specified, this condition is evaluated to true for any port.
+  // +listType=map
+  // +listMapKey=number
+  repeated istio.type.v1beta1.PortSelector ports = 2;
 }

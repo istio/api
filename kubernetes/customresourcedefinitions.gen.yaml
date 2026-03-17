@@ -102,8 +102,7 @@ spec:
                 nullable: true
                 type: integer
               selector:
-                description: Criteria used to select the specific set of pods/VMs
-                  on which this plugin configuration should be applied.
+                description: Optional.
                 properties:
                   matchLabels:
                     additionalProperties:
@@ -122,38 +121,6 @@ spec:
                     - message: key must not be empty
                       rule: self.all(key, key.size() != 0)
                 type: object
-              targetRef:
-                description: Optional.
-                properties:
-                  group:
-                    description: group is the group of the target resource.
-                    maxLength: 253
-                    pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
-                    type: string
-                  kind:
-                    description: kind is kind of the target resource.
-                    maxLength: 63
-                    minLength: 1
-                    pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
-                    type: string
-                  name:
-                    description: name is the name of the target resource.
-                    maxLength: 253
-                    minLength: 1
-                    type: string
-                  namespace:
-                    description: namespace is the namespace of the referent.
-                    type: string
-                    x-kubernetes-validations:
-                    - message: cross namespace referencing is not currently supported
-                      rule: self.size() == 0
-                required:
-                - kind
-                - name
-                type: object
-                x-kubernetes-validations:
-                - message: targetRef namespace must be unset
-                  rule: '!has(self.__namespace__)'
               targetRefs:
                 description: Optional.
                 items:
@@ -295,8 +262,8 @@ spec:
             type: object
             x-kubernetes-validations:
             - message: only one of targetRefs or selector can be set
-              rule: '(has(self.selector) ? 1 : 0) + (has(self.targetRef) ? 1 : 0)
-                + (has(self.targetRefs) ? 1 : 0) <= 1'
+              rule: '(has(self.selector) ? 1 : 0) + (has(self.targetRefs) ? 1 : 0)
+                <= 1'
             - message: exactly one of wasm or lua must be set
               rule: has(self.wasm) != has(self.lua)
           status:
