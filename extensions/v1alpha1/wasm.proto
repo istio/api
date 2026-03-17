@@ -356,14 +356,6 @@ message WasmPlugin {
   // More details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).
   VmConfig vm_config = 11;
 
-  // Specifies the criteria to determine which traffic is passed to WasmPlugin.
-  // If a traffic satisfies any of TrafficSelectors,
-  // the traffic passes the WasmPlugin.
-  repeated TrafficSelector match = 12;
-
-  // Specifies the type of Wasm Extension to be used.
-  PluginType type = 14;
-
   /* NOTE: This nested type is intentionally kept for backward compatibility.
      The canonical definition is the top-level TrafficSelector in
      extension_filter.proto. */
@@ -390,6 +382,14 @@ message WasmPlugin {
     // +listMapKey=number
     repeated istio.type.v1beta1.PortSelector ports = 2;
   }
+
+  // Specifies the criteria to determine which traffic is passed to WasmPlugin.
+  // If a traffic satisfies any of TrafficSelectors,
+  // the traffic passes the WasmPlugin.
+  repeated TrafficSelector match = 12;
+
+  // Specifies the type of Wasm Extension to be used.
+  PluginType type = 14;
 }
 
 // PluginType indicates the type of Wasm extension to be used.
