@@ -300,8 +300,9 @@ At most one of the selector and targetRefs can be set.</p>
 When multiple <code>ExtensionFilters</code> are applied to the same workload in the
 same <code>phase</code>, they will be applied by priority, in descending order.
 If <code>priority</code> is not set, or two <code>ExtensionFilters</code> exist with the same
-value, the ordering will be deterministically derived from name and
-namespace of the <code>ExtensionFilters</code>. Defaults to <code>0</code>.</p>
+value, the ordering will be deterministically derived from the
+<code>creationTimestamp</code>, then name and namespace of the <code>ExtensionFilters</code>.
+Defaults to <code>0</code>.</p>
 
 </td>
 </tr>
@@ -316,21 +317,21 @@ the traffic passes the ExtensionFilter.</p>
 
 </td>
 </tr>
-<tr id="ExtensionFilter-wasm">
+<tr id="ExtensionFilter-wasm" class="oneof oneof-start">
 <td><div class="field"><div class="name"><code><a href="#ExtensionFilter-wasm">wasm</a></code></div>
-<div class="type"><a href="#WasmConfig">WasmConfig</a></div>
+<div class="type"><a href="#WasmConfig">WasmConfig (oneof)</a></div>
 </div></td>
 <td>
-<p>WebAssembly filter configuration. Mutually exclusive with <code>lua</code>.</p>
+<p>WebAssembly filter configuration.</p>
 
 </td>
 </tr>
-<tr id="ExtensionFilter-lua">
+<tr id="ExtensionFilter-lua" class="oneof">
 <td><div class="field"><div class="name"><code><a href="#ExtensionFilter-lua">lua</a></code></div>
-<div class="type"><a href="#LuaConfig">LuaConfig</a></div>
+<div class="type"><a href="#LuaConfig">LuaConfig (oneof)</a></div>
 </div></td>
 <td>
-<p>Lua filter configuration. Mutually exclusive with <code>wasm</code>.</p>
+<p>Lua filter configuration.</p>
 
 </td>
 </tr>

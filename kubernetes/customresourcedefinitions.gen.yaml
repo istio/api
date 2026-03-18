@@ -38,6 +38,17 @@ spec:
           spec:
             description: 'Extend the functionality provided by the Istio proxy through
               WebAssembly or Lua filters. See more details at: https://istio.io/docs/reference/config/proxy_extensions/v1alpha1/extension_filter.html'
+            oneOf:
+            - not:
+                anyOf:
+                - required:
+                  - wasm
+                - required:
+                  - lua
+            - required:
+              - wasm
+            - required:
+              - lua
             properties:
               lua:
                 description: Lua filter configuration.

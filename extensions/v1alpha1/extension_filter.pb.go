@@ -348,24 +348,28 @@ type ExtensionFilter struct {
 	//
 	// NOTE: Waypoint proxies are required to use this field for policies to apply; `selector` policies will be ignored.
 	// +kubebuilder:validation:MaxItems=16
-	TargetRefs []*v1beta1.PolicyTargetReference `protobuf:"bytes,3,rep,name=targetRefs,proto3" json:"targetRefs,omitempty"`
+	TargetRefs []*v1beta1.PolicyTargetReference `protobuf:"bytes,2,rep,name=targetRefs,proto3" json:"targetRefs,omitempty"`
 	// Determines where in the filter chain this `ExtensionFilter` is to be injected.
-	Phase PluginPhase `protobuf:"varint,4,opt,name=phase,proto3,enum=istio.extensions.v1alpha1.PluginPhase" json:"phase,omitempty"`
+	Phase PluginPhase `protobuf:"varint,3,opt,name=phase,proto3,enum=istio.extensions.v1alpha1.PluginPhase" json:"phase,omitempty"`
 	// Determines ordering of `ExtensionFilters` in the same `phase`.
 	// When multiple `ExtensionFilters` are applied to the same workload in the
 	// same `phase`, they will be applied by priority, in descending order.
 	// If `priority` is not set, or two `ExtensionFilters` exist with the same
-	// value, the ordering will be deterministically derived from name and
-	// namespace of the `ExtensionFilters`. Defaults to `0`.
-	Priority *wrappers.Int32Value `protobuf:"bytes,5,opt,name=priority,proto3" json:"priority,omitempty"`
+	// value, the ordering will be deterministically derived from the
+	// `creationTimestamp`, then name and namespace of the `ExtensionFilters`.
+	// Defaults to `0`.
+	Priority *wrappers.Int32Value `protobuf:"bytes,4,opt,name=priority,proto3" json:"priority,omitempty"`
 	// Specifies the criteria to determine which traffic is passed to ExtensionFilter.
 	// If a traffic satisfies any of TrafficSelectors,
 	// the traffic passes the ExtensionFilter.
-	Match []*TrafficSelector `protobuf:"bytes,6,rep,name=match,proto3" json:"match,omitempty"`
-	// WebAssembly filter configuration. Mutually exclusive with `lua`.
-	Wasm *WasmConfig `protobuf:"bytes,10,opt,name=wasm,proto3" json:"wasm,omitempty"`
-	// Lua filter configuration. Mutually exclusive with `wasm`.
-	Lua           *LuaConfig `protobuf:"bytes,11,opt,name=lua,proto3" json:"lua,omitempty"`
+	Match []*TrafficSelector `protobuf:"bytes,5,rep,name=match,proto3" json:"match,omitempty"`
+	// Exactly one of `wasm` or `lua` must be set.
+	//
+	// Types that are valid to be assigned to FilterConfig:
+	//
+	//	*ExtensionFilter_Wasm
+	//	*ExtensionFilter_Lua
+	FilterConfig  isExtensionFilter_FilterConfig `protobuf_oneof:"filter_config"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -435,19 +439,48 @@ func (x *ExtensionFilter) GetMatch() []*TrafficSelector {
 	return nil
 }
 
+func (x *ExtensionFilter) GetFilterConfig() isExtensionFilter_FilterConfig {
+	if x != nil {
+		return x.FilterConfig
+	}
+	return nil
+}
+
 func (x *ExtensionFilter) GetWasm() *WasmConfig {
 	if x != nil {
-		return x.Wasm
+		if x, ok := x.FilterConfig.(*ExtensionFilter_Wasm); ok {
+			return x.Wasm
+		}
 	}
 	return nil
 }
 
 func (x *ExtensionFilter) GetLua() *LuaConfig {
 	if x != nil {
-		return x.Lua
+		if x, ok := x.FilterConfig.(*ExtensionFilter_Lua); ok {
+			return x.Lua
+		}
 	}
 	return nil
 }
+
+type isExtensionFilter_FilterConfig interface {
+	isExtensionFilter_FilterConfig()
+}
+
+type ExtensionFilter_Wasm struct {
+	// WebAssembly filter configuration.
+	Wasm *WasmConfig `protobuf:"bytes,10,opt,name=wasm,proto3,oneof"`
+}
+
+type ExtensionFilter_Lua struct {
+	// Lua filter configuration.
+	Lua *LuaConfig `protobuf:"bytes,11,opt,name=lua,proto3,oneof"`
+}
+
+func (*ExtensionFilter_Wasm) isExtensionFilter_FilterConfig() {}
+
+func (*ExtensionFilter_Lua) isExtensionFilter_FilterConfig() {}
 
 // WasmConfig configures a WebAssembly filter.
 //
@@ -797,18 +830,19 @@ var File_extensions_v1alpha1_extension_filter_proto protoreflect.FileDescriptor
 
 const file_extensions_v1alpha1_extension_filter_proto_rawDesc = "" +
 	"\n" +
-	"*extensions/v1alpha1/extension_filter.proto\x12\x19istio.extensions.v1alpha1\x1a\x1eextensions/v1alpha1/wasm.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1btype/v1beta1/selector.proto\"\xca\x03\n" +
+	"*extensions/v1alpha1/extension_filter.proto\x12\x19istio.extensions.v1alpha1\x1a\x1eextensions/v1alpha1/wasm.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1btype/v1beta1/selector.proto\"\xdf\x03\n" +
 	"\x0fExtensionFilter\x12@\n" +
 	"\bselector\x18\x01 \x01(\v2$.istio.type.v1beta1.WorkloadSelectorR\bselector\x12I\n" +
 	"\n" +
-	"targetRefs\x18\x03 \x03(\v2).istio.type.v1beta1.PolicyTargetReferenceR\n" +
+	"targetRefs\x18\x02 \x03(\v2).istio.type.v1beta1.PolicyTargetReferenceR\n" +
 	"targetRefs\x12<\n" +
-	"\x05phase\x18\x04 \x01(\x0e2&.istio.extensions.v1alpha1.PluginPhaseR\x05phase\x127\n" +
-	"\bpriority\x18\x05 \x01(\v2\x1b.google.protobuf.Int32ValueR\bpriority\x12@\n" +
-	"\x05match\x18\x06 \x03(\v2*.istio.extensions.v1alpha1.TrafficSelectorR\x05match\x129\n" +
+	"\x05phase\x18\x03 \x01(\x0e2&.istio.extensions.v1alpha1.PluginPhaseR\x05phase\x127\n" +
+	"\bpriority\x18\x04 \x01(\v2\x1b.google.protobuf.Int32ValueR\bpriority\x12@\n" +
+	"\x05match\x18\x05 \x03(\v2*.istio.extensions.v1alpha1.TrafficSelectorR\x05match\x12;\n" +
 	"\x04wasm\x18\n" +
-	" \x01(\v2%.istio.extensions.v1alpha1.WasmConfigR\x04wasm\x126\n" +
-	"\x03lua\x18\v \x01(\v2$.istio.extensions.v1alpha1.LuaConfigR\x03lua\"\x90\x04\n" +
+	" \x01(\v2%.istio.extensions.v1alpha1.WasmConfigH\x00R\x04wasm\x128\n" +
+	"\x03lua\x18\v \x01(\v2$.istio.extensions.v1alpha1.LuaConfigH\x00R\x03luaB\x0f\n" +
+	"\rfilter_config\"\x90\x04\n" +
 	"\n" +
 	"WasmConfig\x12\x16\n" +
 	"\x03url\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x03url\x12\x16\n" +
@@ -888,6 +922,10 @@ func file_extensions_v1alpha1_extension_filter_proto_init() {
 		return
 	}
 	file_extensions_v1alpha1_wasm_proto_init()
+	file_extensions_v1alpha1_extension_filter_proto_msgTypes[0].OneofWrappers = []any{
+		(*ExtensionFilter_Wasm)(nil),
+		(*ExtensionFilter_Lua)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

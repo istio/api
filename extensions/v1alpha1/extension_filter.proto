@@ -333,29 +333,33 @@ message ExtensionFilter {
   //
   // NOTE: Waypoint proxies are required to use this field for policies to apply; `selector` policies will be ignored.
   // +kubebuilder:validation:MaxItems=16
-  repeated istio.type.v1beta1.PolicyTargetReference targetRefs = 3;
+  repeated istio.type.v1beta1.PolicyTargetReference targetRefs = 2;
 
   // Determines where in the filter chain this `ExtensionFilter` is to be injected.
-  PluginPhase phase = 4;
+  PluginPhase phase = 3;
 
   // Determines ordering of `ExtensionFilters` in the same `phase`.
   // When multiple `ExtensionFilters` are applied to the same workload in the
   // same `phase`, they will be applied by priority, in descending order.
   // If `priority` is not set, or two `ExtensionFilters` exist with the same
-  // value, the ordering will be deterministically derived from name and
-  // namespace of the `ExtensionFilters`. Defaults to `0`.
-  google.protobuf.Int32Value priority = 5;
+  // value, the ordering will be deterministically derived from the
+  // `creationTimestamp`, then name and namespace of the `ExtensionFilters`.
+  // Defaults to `0`.
+  google.protobuf.Int32Value priority = 4;
 
   // Specifies the criteria to determine which traffic is passed to ExtensionFilter.
   // If a traffic satisfies any of TrafficSelectors,
   // the traffic passes the ExtensionFilter.
-  repeated TrafficSelector match = 6;
+  repeated TrafficSelector match = 5;
 
-  // WebAssembly filter configuration. Mutually exclusive with `lua`.
-  WasmConfig wasm = 10;
+  // Exactly one of `wasm` or `lua` must be set.
+  oneof filter_config {
+    // WebAssembly filter configuration.
+    WasmConfig wasm = 10;
 
-  // Lua filter configuration. Mutually exclusive with `wasm`.
-  LuaConfig lua = 11;
+    // Lua filter configuration.
+    LuaConfig lua = 11;
+  }
 }
 
 // WasmConfig configures a WebAssembly filter.
