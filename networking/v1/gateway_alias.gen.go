@@ -174,3 +174,20 @@ const ServerTLSSettings_TLSV1_2 ServerTLSSettings_TLSProtocol = v1alpha3.ServerT
 
 // TLS version 1.3
 const ServerTLSSettings_TLSV1_3 ServerTLSSettings_TLSProtocol = v1alpha3.ServerTLSSettings_TLSV1_3
+
+type ServerTLSSettings_CompliancePolicy = v1alpha3.ServerTLSSettings_CompliancePolicy
+
+// FIPS_202205 configures a TLS connection to use:
+//
+//   - TLS 1.2 or 1.3
+//   - For TLS 1.2, only ECDHE_[RSA|ECDSA]_WITH_AES_*_GCM_SHA*.
+//   - For TLS 1.3, only AES-GCM
+//   - P-256 or P-384 for key agreement.
+//   - For server signatures, only “PKCS#1/PSS“ with “SHA256/384/512“, or ECDSA
+//     with P-256 or P-384.
+//
+// .. attention::
+//
+//	Please refer to `BoringSSL policies <https://boringssl.googlesource.com/boringssl/+/refs/tags/0.20240913.0/include/openssl/ssl.h#5608>`_
+//	for details.
+const ServerTLSSettings_FIPS_202205 ServerTLSSettings_CompliancePolicy = v1alpha3.ServerTLSSettings_FIPS_202205

@@ -6944,6 +6944,16 @@ spec:
                           items:
                             type: string
                           type: array
+                        compliancePolicies:
+                          description: |-
+                            Optional list of compliance policies.
+
+                            Valid Options: FIPS_202205
+                          items:
+                            enum:
+                            - FIPS_202205
+                            type: string
+                          type: array
                         credentialName:
                           description: For gateways running on Kubernetes, the name
                             of the secret that holds the TLS certs including the CA
@@ -7219,6 +7229,16 @@ spec:
                           items:
                             type: string
                           type: array
+                        compliancePolicies:
+                          description: |-
+                            Optional list of compliance policies.
+
+                            Valid Options: FIPS_202205
+                          items:
+                            enum:
+                            - FIPS_202205
+                            type: string
+                          type: array
                         credentialName:
                           description: For gateways running on Kubernetes, the name
                             of the secret that holds the TLS certs including the CA
@@ -7492,6 +7512,16 @@ spec:
                           description: 'Optional: If specified, only support the specified
                             cipher list.'
                           items:
+                            type: string
+                          type: array
+                        compliancePolicies:
+                          description: |-
+                            Optional list of compliance policies.
+
+                            Valid Options: FIPS_202205
+                          items:
+                            enum:
+                            - FIPS_202205
                             type: string
                           type: array
                         credentialName:
@@ -9122,6 +9152,16 @@ spec:
                           items:
                             type: string
                           type: array
+                        compliancePolicies:
+                          description: |-
+                            Optional list of compliance policies.
+
+                            Valid Options: FIPS_202205
+                          items:
+                            enum:
+                            - FIPS_202205
+                            type: string
+                          type: array
                         credentialName:
                           description: For gateways running on Kubernetes, the name
                             of the secret that holds the TLS certs including the CA
@@ -9700,6 +9740,16 @@ spec:
                           items:
                             type: string
                           type: array
+                        compliancePolicies:
+                          description: |-
+                            Optional list of compliance policies.
+
+                            Valid Options: FIPS_202205
+                          items:
+                            enum:
+                            - FIPS_202205
+                            type: string
+                          type: array
                         credentialName:
                           description: For gateways running on Kubernetes, the name
                             of the secret that holds the TLS certs including the CA
@@ -10276,6 +10326,16 @@ spec:
                           description: 'Optional: If specified, only support the specified
                             cipher list.'
                           items:
+                            type: string
+                          type: array
+                        compliancePolicies:
+                          description: |-
+                            Optional list of compliance policies.
+
+                            Valid Options: FIPS_202205
+                          items:
+                            enum:
+                            - FIPS_202205
                             type: string
                           type: array
                         credentialName:
