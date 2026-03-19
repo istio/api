@@ -470,12 +470,12 @@ type isExtensionFilter_FilterConfig interface {
 
 type ExtensionFilter_Wasm struct {
 	// WebAssembly filter configuration.
-	Wasm *WasmConfig `protobuf:"bytes,10,opt,name=wasm,proto3,oneof"`
+	Wasm *WasmConfig `protobuf:"bytes,6,opt,name=wasm,proto3,oneof"`
 }
 
 type ExtensionFilter_Lua struct {
 	// Lua filter configuration.
-	Lua *LuaConfig `protobuf:"bytes,11,opt,name=lua,proto3,oneof"`
+	Lua *LuaConfig `protobuf:"bytes,7,opt,name=lua,proto3,oneof"`
 }
 
 func (*ExtensionFilter_Wasm) isExtensionFilter_FilterConfig() {}
@@ -839,9 +839,8 @@ const file_extensions_v1alpha1_extension_filter_proto_rawDesc = "" +
 	"\x05phase\x18\x03 \x01(\x0e2&.istio.extensions.v1alpha1.PluginPhaseR\x05phase\x127\n" +
 	"\bpriority\x18\x04 \x01(\v2\x1b.google.protobuf.Int32ValueR\bpriority\x12@\n" +
 	"\x05match\x18\x05 \x03(\v2*.istio.extensions.v1alpha1.TrafficSelectorR\x05match\x12;\n" +
-	"\x04wasm\x18\n" +
-	" \x01(\v2%.istio.extensions.v1alpha1.WasmConfigH\x00R\x04wasm\x128\n" +
-	"\x03lua\x18\v \x01(\v2$.istio.extensions.v1alpha1.LuaConfigH\x00R\x03luaB\x0f\n" +
+	"\x04wasm\x18\x06 \x01(\v2%.istio.extensions.v1alpha1.WasmConfigH\x00R\x04wasm\x128\n" +
+	"\x03lua\x18\a \x01(\v2$.istio.extensions.v1alpha1.LuaConfigH\x00R\x03luaB\x0f\n" +
 	"\rfilter_config\"\x90\x04\n" +
 	"\n" +
 	"WasmConfig\x12\x16\n" +

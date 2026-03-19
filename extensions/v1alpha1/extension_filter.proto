@@ -355,10 +355,10 @@ message ExtensionFilter {
   // Exactly one of `wasm` or `lua` must be set.
   oneof filter_config {
     // WebAssembly filter configuration.
-    WasmConfig wasm = 10;
+    WasmConfig wasm = 6;
 
     // Lua filter configuration.
-    LuaConfig lua = 11;
+    LuaConfig lua = 7;
   }
 }
 
