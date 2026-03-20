@@ -956,6 +956,12 @@ type MeshConfig struct {
 	// Configures DNS refresh rate for Envoy clusters of type `STRICT_DNS`
 	// Default refresh rate is `60s`.
 	DnsRefreshRate *duration.Duration `protobuf:"bytes,36,opt,name=dns_refresh_rate,json=dnsRefreshRate,proto3" json:"dns_refresh_rate,omitempty"`
+	// If true, Envoy will respect the TTL returned by the DNS server for clusters
+	// of type `STRICT_DNS` and `LOGICAL_DNS`, using it as the DNS refresh rate
+	// instead of `dns_refresh_rate`. When the TTL is 0 or absent, `dns_refresh_rate`
+	// is used as a fallback.
+	// Default is `true`.
+	RespectDnsTtl *wrappers.BoolValue `protobuf:"bytes,71,opt,name=respect_dns_ttl,json=respectDnsTtl,proto3" json:"respect_dns_ttl,omitempty"`
 	// Specify if http1.1 connections should be upgraded to http2 by default.
 	// if sidecar is installed on all pods in the mesh, then this should be set to `UPGRADE`.
 	// If one or more services or namespaces do not have sidecar(s), then this should be set to `DO_NOT_UPGRADE`.
@@ -1365,6 +1371,13 @@ func (x *MeshConfig) GetLocalityLbSetting() *v1alpha3.LocalityLoadBalancerSettin
 func (x *MeshConfig) GetDnsRefreshRate() *duration.Duration {
 	if x != nil {
 		return x.DnsRefreshRate
+	}
+	return nil
+}
+
+func (x *MeshConfig) GetRespectDnsTtl() *wrappers.BoolValue {
+	if x != nil {
+		return x.RespectDnsTtl
 	}
 	return nil
 }
@@ -5251,7 +5264,7 @@ var File_mesh_v1alpha1_config_proto protoreflect.FileDescriptor
 
 const file_mesh_v1alpha1_config_proto_rawDesc = "" +
 	"\n" +
-	"\x1amesh/v1alpha1/config.proto\x12\x13istio.mesh.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x19mesh/v1alpha1/proxy.proto\x1a*networking/v1alpha3/destination_rule.proto\x1a)networking/v1alpha3/virtual_service.proto\"\xe6r\n" +
+	"\x1amesh/v1alpha1/config.proto\x12\x13istio.mesh.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x19mesh/v1alpha1/proxy.proto\x1a*networking/v1alpha3/destination_rule.proto\x1a)networking/v1alpha3/virtual_service.proto\"\xaas\n" +
 	"\n" +
 	"MeshConfig\x12*\n" +
 	"\x11proxy_listen_port\x18\x04 \x01(\x05R\x0fproxyListenPort\x129\n" +
@@ -5284,7 +5297,8 @@ const file_mesh_v1alpha1_config_proto_rawDesc = "" +
 	"\"default_destination_rule_export_to\x18! \x03(\tR\x1edefaultDestinationRuleExportTo\x12%\n" +
 	"\x0eroot_namespace\x18\" \x01(\tR\rrootNamespace\x12f\n" +
 	"\x13locality_lb_setting\x18# \x01(\v26.istio.networking.v1alpha3.LocalityLoadBalancerSettingR\x11localityLbSetting\x12C\n" +
-	"\x10dns_refresh_rate\x18$ \x01(\v2\x19.google.protobuf.DurationR\x0ednsRefreshRate\x12[\n" +
+	"\x10dns_refresh_rate\x18$ \x01(\v2\x19.google.protobuf.DurationR\x0ednsRefreshRate\x12B\n" +
+	"\x0frespect_dns_ttl\x18G \x01(\v2\x1a.google.protobuf.BoolValueR\rrespectDnsTtl\x12[\n" +
 	"\x11h2_upgrade_policy\x18) \x01(\x0e2/.istio.mesh.v1alpha1.MeshConfig.H2UpgradePolicyR\x0fh2UpgradePolicy\x129\n" +
 	"\x19inbound_cluster_stat_name\x18, \x01(\tR\x16inboundClusterStatName\x12;\n" +
 	"\x1aoutbound_cluster_stat_name\x18- \x01(\tR\x17outboundClusterStatName\x12H\n" +
@@ -5681,85 +5695,86 @@ var file_mesh_v1alpha1_config_proto_depIdxs = []int32{
 	20, // 11: istio.mesh.v1alpha1.MeshConfig.ca_certificates:type_name -> istio.mesh.v1alpha1.MeshConfig.CertificateData
 	63, // 12: istio.mesh.v1alpha1.MeshConfig.locality_lb_setting:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting
 	59, // 13: istio.mesh.v1alpha1.MeshConfig.dns_refresh_rate:type_name -> google.protobuf.Duration
-	4,  // 14: istio.mesh.v1alpha1.MeshConfig.h2_upgrade_policy:type_name -> istio.mesh.v1alpha1.MeshConfig.H2UpgradePolicy
-	17, // 15: istio.mesh.v1alpha1.MeshConfig.certificates:type_name -> istio.mesh.v1alpha1.Certificate
-	21, // 16: istio.mesh.v1alpha1.MeshConfig.service_settings:type_name -> istio.mesh.v1alpha1.MeshConfig.ServiceSettings
-	22, // 17: istio.mesh.v1alpha1.MeshConfig.service_scope_configs:type_name -> istio.mesh.v1alpha1.MeshConfig.ServiceScopeConfigs
-	62, // 18: istio.mesh.v1alpha1.MeshConfig.enable_prometheus_merge:type_name -> google.protobuf.BoolValue
-	62, // 19: istio.mesh.v1alpha1.MeshConfig.verify_certificate_at_client:type_name -> google.protobuf.BoolValue
-	23, // 20: istio.mesh.v1alpha1.MeshConfig.ca:type_name -> istio.mesh.v1alpha1.MeshConfig.CA
-	24, // 21: istio.mesh.v1alpha1.MeshConfig.extension_providers:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider
-	25, // 22: istio.mesh.v1alpha1.MeshConfig.default_providers:type_name -> istio.mesh.v1alpha1.MeshConfig.DefaultProviders
-	14, // 23: istio.mesh.v1alpha1.MeshConfig.discovery_selectors:type_name -> istio.mesh.v1alpha1.LabelSelector
-	26, // 24: istio.mesh.v1alpha1.MeshConfig.path_normalization:type_name -> istio.mesh.v1alpha1.MeshConfig.ProxyPathNormalization
-	64, // 25: istio.mesh.v1alpha1.MeshConfig.default_http_retry_policy:type_name -> istio.networking.v1alpha3.HTTPRetry
-	27, // 26: istio.mesh.v1alpha1.MeshConfig.mesh_mTLS:type_name -> istio.mesh.v1alpha1.MeshConfig.TLSConfig
-	27, // 27: istio.mesh.v1alpha1.MeshConfig.tls_defaults:type_name -> istio.mesh.v1alpha1.MeshConfig.TLSConfig
-	58, // 28: istio.mesh.v1alpha1.LabelSelector.matchLabels:type_name -> istio.mesh.v1alpha1.LabelSelector.MatchLabelsEntry
-	15, // 29: istio.mesh.v1alpha1.LabelSelector.matchExpressions:type_name -> istio.mesh.v1alpha1.LabelSelectorRequirement
-	65, // 30: istio.mesh.v1alpha1.ConfigSource.tls_settings:type_name -> istio.networking.v1alpha3.ClientTLSSettings
-	0,  // 31: istio.mesh.v1alpha1.ConfigSource.subscribed_resources:type_name -> istio.mesh.v1alpha1.Resource
-	5,  // 32: istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.mode:type_name -> istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.Mode
-	6,  // 33: istio.mesh.v1alpha1.MeshConfig.InboundTrafficPolicy.mode:type_name -> istio.mesh.v1alpha1.MeshConfig.InboundTrafficPolicy.Mode
-	28, // 34: istio.mesh.v1alpha1.MeshConfig.ServiceSettings.settings:type_name -> istio.mesh.v1alpha1.MeshConfig.ServiceSettings.Settings
-	14, // 35: istio.mesh.v1alpha1.MeshConfig.ServiceScopeConfigs.namespace_selector:type_name -> istio.mesh.v1alpha1.LabelSelector
-	14, // 36: istio.mesh.v1alpha1.MeshConfig.ServiceScopeConfigs.services_selector:type_name -> istio.mesh.v1alpha1.LabelSelector
-	7,  // 37: istio.mesh.v1alpha1.MeshConfig.ServiceScopeConfigs.scope:type_name -> istio.mesh.v1alpha1.MeshConfig.ServiceScopeConfigs.Scope
-	65, // 38: istio.mesh.v1alpha1.MeshConfig.CA.tls_settings:type_name -> istio.networking.v1alpha3.ClientTLSSettings
-	59, // 39: istio.mesh.v1alpha1.MeshConfig.CA.request_timeout:type_name -> google.protobuf.Duration
-	30, // 40: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.envoy_ext_authz_http:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationHttpProvider
-	31, // 41: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.envoy_ext_authz_grpc:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationGrpcProvider
-	32, // 42: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.zipkin:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProvider
-	33, // 43: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.lightstep:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider
-	34, // 44: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.datadog:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.DatadogTracingProvider
-	36, // 45: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.stackdriver:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider
-	37, // 46: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.opencensus:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider
-	35, // 47: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.skywalking:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SkyWalkingTracingProvider
-	43, // 48: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.opentelemetry:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider
-	38, // 49: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.prometheus:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.PrometheusMetricsProvider
-	39, // 50: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.envoy_file_access_log:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider
-	40, // 51: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.envoy_http_als:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyHttpGrpcV3LogProvider
-	41, // 52: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.envoy_tcp_als:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTcpGrpcV3LogProvider
-	42, // 53: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.envoy_otel_als:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider
-	44, // 54: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.sds:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SDSProvider
-	11, // 55: istio.mesh.v1alpha1.MeshConfig.ProxyPathNormalization.normalization:type_name -> istio.mesh.v1alpha1.MeshConfig.ProxyPathNormalization.NormalizationType
-	12, // 56: istio.mesh.v1alpha1.MeshConfig.TLSConfig.min_protocol_version:type_name -> istio.mesh.v1alpha1.MeshConfig.TLSConfig.TLSProtocol
-	59, // 57: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationHttpProvider.timeout:type_name -> google.protobuf.Duration
-	49, // 58: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationHttpProvider.include_additional_headers_in_check:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationHttpProvider.IncludeAdditionalHeadersInCheckEntry
-	29, // 59: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationHttpProvider.include_request_body_in_check:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationRequestBody
-	59, // 60: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationGrpcProvider.timeout:type_name -> google.protobuf.Duration
-	29, // 61: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationGrpcProvider.include_request_body_in_check:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationRequestBody
-	9,  // 62: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProvider.trace_context_option:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProvider.TraceContextOption
-	59, // 63: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProvider.timeout:type_name -> google.protobuf.Duration
-	46, // 64: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProvider.headers:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.HttpHeader
-	66, // 65: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.max_number_of_attributes:type_name -> google.protobuf.Int64Value
-	66, // 66: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.max_number_of_annotations:type_name -> google.protobuf.Int64Value
-	66, // 67: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.max_number_of_message_events:type_name -> google.protobuf.Int64Value
-	50, // 68: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.logging:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.Logging
-	10, // 69: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider.context:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider.TraceContext
-	52, // 70: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider.log_format:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider.LogFormat
-	53, // 71: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.log_format:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.LogFormat
-	45, // 72: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.http:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.HttpService
-	48, // 73: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.grpc:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.GrpcService
-	47, // 74: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.resource_detectors:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ResourceDetectors
-	8,  // 75: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.service_attribute_enrichment:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ServiceAttributeEnrichment
-	54, // 76: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.dynatrace_sampler:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.DynatraceSampler
-	59, // 77: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.HttpService.timeout:type_name -> google.protobuf.Duration
-	46, // 78: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.HttpService.headers:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.HttpHeader
-	56, // 79: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ResourceDetectors.environment:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ResourceDetectors.EnvironmentResourceDetector
-	57, // 80: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ResourceDetectors.dynatrace:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ResourceDetectors.DynatraceResourceDetector
-	59, // 81: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.GrpcService.timeout:type_name -> google.protobuf.Duration
-	46, // 82: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.GrpcService.initial_metadata:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.HttpHeader
-	51, // 83: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.Logging.labels:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.Logging.LabelsEntry
-	67, // 84: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider.LogFormat.labels:type_name -> google.protobuf.Struct
-	67, // 85: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.LogFormat.labels:type_name -> google.protobuf.Struct
-	55, // 86: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.DynatraceSampler.http_service:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.DynatraceSampler.DynatraceApi
-	45, // 87: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.DynatraceSampler.DynatraceApi.http:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.HttpService
-	88, // [88:88] is the sub-list for method output_type
-	88, // [88:88] is the sub-list for method input_type
-	88, // [88:88] is the sub-list for extension type_name
-	88, // [88:88] is the sub-list for extension extendee
-	0,  // [0:88] is the sub-list for field type_name
+	62, // 14: istio.mesh.v1alpha1.MeshConfig.respect_dns_ttl:type_name -> google.protobuf.BoolValue
+	4,  // 15: istio.mesh.v1alpha1.MeshConfig.h2_upgrade_policy:type_name -> istio.mesh.v1alpha1.MeshConfig.H2UpgradePolicy
+	17, // 16: istio.mesh.v1alpha1.MeshConfig.certificates:type_name -> istio.mesh.v1alpha1.Certificate
+	21, // 17: istio.mesh.v1alpha1.MeshConfig.service_settings:type_name -> istio.mesh.v1alpha1.MeshConfig.ServiceSettings
+	22, // 18: istio.mesh.v1alpha1.MeshConfig.service_scope_configs:type_name -> istio.mesh.v1alpha1.MeshConfig.ServiceScopeConfigs
+	62, // 19: istio.mesh.v1alpha1.MeshConfig.enable_prometheus_merge:type_name -> google.protobuf.BoolValue
+	62, // 20: istio.mesh.v1alpha1.MeshConfig.verify_certificate_at_client:type_name -> google.protobuf.BoolValue
+	23, // 21: istio.mesh.v1alpha1.MeshConfig.ca:type_name -> istio.mesh.v1alpha1.MeshConfig.CA
+	24, // 22: istio.mesh.v1alpha1.MeshConfig.extension_providers:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider
+	25, // 23: istio.mesh.v1alpha1.MeshConfig.default_providers:type_name -> istio.mesh.v1alpha1.MeshConfig.DefaultProviders
+	14, // 24: istio.mesh.v1alpha1.MeshConfig.discovery_selectors:type_name -> istio.mesh.v1alpha1.LabelSelector
+	26, // 25: istio.mesh.v1alpha1.MeshConfig.path_normalization:type_name -> istio.mesh.v1alpha1.MeshConfig.ProxyPathNormalization
+	64, // 26: istio.mesh.v1alpha1.MeshConfig.default_http_retry_policy:type_name -> istio.networking.v1alpha3.HTTPRetry
+	27, // 27: istio.mesh.v1alpha1.MeshConfig.mesh_mTLS:type_name -> istio.mesh.v1alpha1.MeshConfig.TLSConfig
+	27, // 28: istio.mesh.v1alpha1.MeshConfig.tls_defaults:type_name -> istio.mesh.v1alpha1.MeshConfig.TLSConfig
+	58, // 29: istio.mesh.v1alpha1.LabelSelector.matchLabels:type_name -> istio.mesh.v1alpha1.LabelSelector.MatchLabelsEntry
+	15, // 30: istio.mesh.v1alpha1.LabelSelector.matchExpressions:type_name -> istio.mesh.v1alpha1.LabelSelectorRequirement
+	65, // 31: istio.mesh.v1alpha1.ConfigSource.tls_settings:type_name -> istio.networking.v1alpha3.ClientTLSSettings
+	0,  // 32: istio.mesh.v1alpha1.ConfigSource.subscribed_resources:type_name -> istio.mesh.v1alpha1.Resource
+	5,  // 33: istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.mode:type_name -> istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.Mode
+	6,  // 34: istio.mesh.v1alpha1.MeshConfig.InboundTrafficPolicy.mode:type_name -> istio.mesh.v1alpha1.MeshConfig.InboundTrafficPolicy.Mode
+	28, // 35: istio.mesh.v1alpha1.MeshConfig.ServiceSettings.settings:type_name -> istio.mesh.v1alpha1.MeshConfig.ServiceSettings.Settings
+	14, // 36: istio.mesh.v1alpha1.MeshConfig.ServiceScopeConfigs.namespace_selector:type_name -> istio.mesh.v1alpha1.LabelSelector
+	14, // 37: istio.mesh.v1alpha1.MeshConfig.ServiceScopeConfigs.services_selector:type_name -> istio.mesh.v1alpha1.LabelSelector
+	7,  // 38: istio.mesh.v1alpha1.MeshConfig.ServiceScopeConfigs.scope:type_name -> istio.mesh.v1alpha1.MeshConfig.ServiceScopeConfigs.Scope
+	65, // 39: istio.mesh.v1alpha1.MeshConfig.CA.tls_settings:type_name -> istio.networking.v1alpha3.ClientTLSSettings
+	59, // 40: istio.mesh.v1alpha1.MeshConfig.CA.request_timeout:type_name -> google.protobuf.Duration
+	30, // 41: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.envoy_ext_authz_http:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationHttpProvider
+	31, // 42: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.envoy_ext_authz_grpc:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationGrpcProvider
+	32, // 43: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.zipkin:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProvider
+	33, // 44: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.lightstep:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.LightstepTracingProvider
+	34, // 45: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.datadog:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.DatadogTracingProvider
+	36, // 46: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.stackdriver:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider
+	37, // 47: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.opencensus:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider
+	35, // 48: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.skywalking:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SkyWalkingTracingProvider
+	43, // 49: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.opentelemetry:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider
+	38, // 50: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.prometheus:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.PrometheusMetricsProvider
+	39, // 51: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.envoy_file_access_log:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider
+	40, // 52: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.envoy_http_als:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyHttpGrpcV3LogProvider
+	41, // 53: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.envoy_tcp_als:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyTcpGrpcV3LogProvider
+	42, // 54: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.envoy_otel_als:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider
+	44, // 55: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.sds:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.SDSProvider
+	11, // 56: istio.mesh.v1alpha1.MeshConfig.ProxyPathNormalization.normalization:type_name -> istio.mesh.v1alpha1.MeshConfig.ProxyPathNormalization.NormalizationType
+	12, // 57: istio.mesh.v1alpha1.MeshConfig.TLSConfig.min_protocol_version:type_name -> istio.mesh.v1alpha1.MeshConfig.TLSConfig.TLSProtocol
+	59, // 58: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationHttpProvider.timeout:type_name -> google.protobuf.Duration
+	49, // 59: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationHttpProvider.include_additional_headers_in_check:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationHttpProvider.IncludeAdditionalHeadersInCheckEntry
+	29, // 60: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationHttpProvider.include_request_body_in_check:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationRequestBody
+	59, // 61: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationGrpcProvider.timeout:type_name -> google.protobuf.Duration
+	29, // 62: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationGrpcProvider.include_request_body_in_check:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyExternalAuthorizationRequestBody
+	9,  // 63: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProvider.trace_context_option:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProvider.TraceContextOption
+	59, // 64: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProvider.timeout:type_name -> google.protobuf.Duration
+	46, // 65: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ZipkinTracingProvider.headers:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.HttpHeader
+	66, // 66: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.max_number_of_attributes:type_name -> google.protobuf.Int64Value
+	66, // 67: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.max_number_of_annotations:type_name -> google.protobuf.Int64Value
+	66, // 68: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.max_number_of_message_events:type_name -> google.protobuf.Int64Value
+	50, // 69: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.logging:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.Logging
+	10, // 70: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider.context:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider.TraceContext
+	52, // 71: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider.log_format:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider.LogFormat
+	53, // 72: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.log_format:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.LogFormat
+	45, // 73: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.http:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.HttpService
+	48, // 74: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.grpc:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.GrpcService
+	47, // 75: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.resource_detectors:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ResourceDetectors
+	8,  // 76: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.service_attribute_enrichment:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ServiceAttributeEnrichment
+	54, // 77: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.dynatrace_sampler:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.DynatraceSampler
+	59, // 78: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.HttpService.timeout:type_name -> google.protobuf.Duration
+	46, // 79: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.HttpService.headers:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.HttpHeader
+	56, // 80: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ResourceDetectors.environment:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ResourceDetectors.EnvironmentResourceDetector
+	57, // 81: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ResourceDetectors.dynatrace:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ResourceDetectors.DynatraceResourceDetector
+	59, // 82: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.GrpcService.timeout:type_name -> google.protobuf.Duration
+	46, // 83: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.GrpcService.initial_metadata:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.HttpHeader
+	51, // 84: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.Logging.labels:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.StackdriverProvider.Logging.LabelsEntry
+	67, // 85: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyFileAccessLogProvider.LogFormat.labels:type_name -> google.protobuf.Struct
+	67, // 86: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.LogFormat.labels:type_name -> google.protobuf.Struct
+	55, // 87: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.DynatraceSampler.http_service:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.DynatraceSampler.DynatraceApi
+	45, // 88: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.DynatraceSampler.DynatraceApi.http:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.HttpService
+	89, // [89:89] is the sub-list for method output_type
+	89, // [89:89] is the sub-list for method input_type
+	89, // [89:89] is the sub-list for extension type_name
+	89, // [89:89] is the sub-list for extension extendee
+	0,  // [0:89] is the sub-list for field type_name
 }
 
 func init() { file_mesh_v1alpha1_config_proto_init() }
