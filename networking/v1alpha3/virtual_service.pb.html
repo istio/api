@@ -1882,6 +1882,21 @@ case-sensitive. <code>regex</code> matching supports case-insensitive matches.</
 
 </td>
 </tr>
+<tr id="StringMatch-path_template" class="oneof">
+<td><div class="field"><div class="name"><code><a href="#StringMatch-path_template">pathTemplate</a></code></div>
+<div class="type">string (oneof)</div>
+</div></td>
+<td>
+<p>URI template path match using <code>{*}</code> (matches one path segment) and <code>{**}</code> (matches one or more
+path segments) operators. This leverages Envoy&rsquo;s
+<a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/path/match/uri_template/v3/uri_template_match.proto">UriTemplateMatchConfig</a>
+and is more readable and performant than equivalent regex patterns.</p>
+<p>Example: <code>/users/{*}/orders/{**}</code> matches <code>/users/alice/orders</code> and <code>/users/alice/orders/123/items</code>.</p>
+<p>Note: <code>{**}</code> must be the last operator in the path template. Only valid for <code>uri</code> matches
+in HTTPMatchRequest.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>

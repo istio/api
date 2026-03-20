@@ -2539,6 +2539,7 @@ type StringMatch struct {
 	//	*StringMatch_Exact
 	//	*StringMatch_Prefix
 	//	*StringMatch_Regex
+	//	*StringMatch_PathTemplate
 	MatchType     isStringMatch_MatchType `protobuf_oneof:"match_type"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -2608,6 +2609,15 @@ func (x *StringMatch) GetRegex() string {
 	return ""
 }
 
+func (x *StringMatch) GetPathTemplate() string {
+	if x != nil {
+		if x, ok := x.MatchType.(*StringMatch_PathTemplate); ok {
+			return x.PathTemplate
+		}
+	}
+	return ""
+}
+
 type isStringMatch_MatchType interface {
 	isStringMatch_MatchType()
 }
@@ -2629,11 +2639,26 @@ type StringMatch_Regex struct {
 	Regex string `protobuf:"bytes,3,opt,name=regex,proto3,oneof"`
 }
 
+type StringMatch_PathTemplate struct {
+	// URI template path match using `{*}` (matches one path segment) and `{**}` (matches one or more
+	// path segments) operators. This leverages Envoy's
+	// [UriTemplateMatchConfig](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/path/match/uri_template/v3/uri_template_match.proto)
+	// and is more readable and performant than equivalent regex patterns.
+	//
+	// Example: `/users/{*}/orders/{**}` matches `/users/alice/orders` and `/users/alice/orders/123/items`.
+	//
+	// Note: `{**}` must be the last operator in the path template. Only valid for `uri` matches
+	// in HTTPMatchRequest.
+	PathTemplate string `protobuf:"bytes,4,opt,name=path_template,json=pathTemplate,proto3,oneof"`
+}
+
 func (*StringMatch_Exact) isStringMatch_MatchType() {}
 
 func (*StringMatch_Prefix) isStringMatch_MatchType() {}
 
 func (*StringMatch_Regex) isStringMatch_MatchType() {}
+
+func (*StringMatch_PathTemplate) isStringMatch_MatchType() {}
 
 // Describes the retry policy to use when a HTTP request fails. For
 // example, the following rule sets the maximum number of retries to 3 when
@@ -3648,11 +3673,12 @@ const file_networking_v1alpha3_virtual_service_proto_rawDesc = "" +
 	"\x11uri_regex_rewrite\x18\x03 \x01(\v2'.istio.networking.v1alpha3.RegexRewriteR\x0furiRegexRewrite\">\n" +
 	"\fRegexRewrite\x12\x14\n" +
 	"\x05match\x18\x01 \x01(\tR\x05match\x12\x18\n" +
-	"\arewrite\x18\x02 \x01(\tR\arewrite\"e\n" +
+	"\arewrite\x18\x02 \x01(\tR\arewrite\"\x8c\x01\n" +
 	"\vStringMatch\x12\x16\n" +
 	"\x05exact\x18\x01 \x01(\tH\x00R\x05exact\x12\x18\n" +
 	"\x06prefix\x18\x02 \x01(\tH\x00R\x06prefix\x12\x16\n" +
-	"\x05regex\x18\x03 \x01(\tH\x00R\x05regexB\f\n" +
+	"\x05regex\x18\x03 \x01(\tH\x00R\x05regex\x12%\n" +
+	"\rpath_template\x18\x04 \x01(\tH\x00R\fpathTemplateB\f\n" +
 	"\n" +
 	"match_type\"\xe9\x02\n" +
 	"\tHTTPRetry\x12\x1a\n" +
@@ -3854,6 +3880,7 @@ func file_networking_v1alpha3_virtual_service_proto_init() {
 		(*StringMatch_Exact)(nil),
 		(*StringMatch_Prefix)(nil),
 		(*StringMatch_Regex)(nil),
+		(*StringMatch_PathTemplate)(nil),
 	}
 	file_networking_v1alpha3_virtual_service_proto_msgTypes[33].OneofWrappers = []any{
 		(*HTTPFaultInjection_Delay_FixedDelay)(nil),

@@ -10631,14 +10631,23 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - pathTemplate
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - pathTemplate
                             properties:
                               exact:
+                                type: string
+                              pathTemplate:
+                                description: URI template path match using `{*}` (matches
+                                  one path segment) and `{**}` (matches one or more
+                                  path segments) operators.
                                 type: string
                               prefix:
                                 type: string
@@ -10854,14 +10863,23 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - pathTemplate
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - pathTemplate
                             properties:
                               exact:
+                                type: string
+                              pathTemplate:
+                                description: URI template path match using `{*}` (matches
+                                  one path segment) and `{**}` (matches one or more
+                                  path segments) operators.
                                 type: string
                               prefix:
                                 type: string
@@ -10886,14 +10904,23 @@ spec:
                                     - prefix
                                   - required:
                                     - regex
+                                  - required:
+                                    - pathTemplate
                               - required:
                                 - exact
                               - required:
                                 - prefix
                               - required:
                                 - regex
+                              - required:
+                                - pathTemplate
                               properties:
                                 exact:
+                                  type: string
+                                pathTemplate:
+                                  description: URI template path match using `{*}`
+                                    (matches one path segment) and `{**}` (matches
+                                    one or more path segments) operators.
                                   type: string
                                 prefix:
                                   type: string
@@ -10922,14 +10949,23 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - pathTemplate
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - pathTemplate
                             properties:
                               exact:
+                                type: string
+                              pathTemplate:
+                                description: URI template path match using `{*}` (matches
+                                  one path segment) and `{**}` (matches one or more
+                                  path segments) operators.
                                 type: string
                               prefix:
                                 type: string
@@ -10957,14 +10993,23 @@ spec:
                                     - prefix
                                   - required:
                                     - regex
+                                  - required:
+                                    - pathTemplate
                               - required:
                                 - exact
                               - required:
                                 - prefix
                               - required:
                                 - regex
+                              - required:
+                                - pathTemplate
                               properties:
                                 exact:
+                                  type: string
+                                pathTemplate:
+                                  description: URI template path match using `{*}`
+                                    (matches one path segment) and `{**}` (matches
+                                    one or more path segments) operators.
                                   type: string
                                 prefix:
                                   type: string
@@ -10988,14 +11033,23 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - pathTemplate
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - pathTemplate
                             properties:
                               exact:
+                                type: string
+                              pathTemplate:
+                                description: URI template path match using `{*}` (matches
+                                  one path segment) and `{**}` (matches one or more
+                                  path segments) operators.
                                 type: string
                               prefix:
                                 type: string
@@ -11032,14 +11086,23 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - pathTemplate
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - pathTemplate
                             properties:
                               exact:
+                                type: string
+                              pathTemplate:
+                                description: URI template path match using `{*}` (matches
+                                  one path segment) and `{**}` (matches one or more
+                                  path segments) operators.
                                 type: string
                               prefix:
                                 type: string
@@ -11058,14 +11121,23 @@ spec:
                                     - prefix
                                   - required:
                                     - regex
+                                  - required:
+                                    - pathTemplate
                               - required:
                                 - exact
                               - required:
                                 - prefix
                               - required:
                                 - regex
+                              - required:
+                                - pathTemplate
                               properties:
                                 exact:
+                                  type: string
+                                pathTemplate:
+                                  description: URI template path match using `{*}`
+                                    (matches one path segment) and `{**}` (matches
+                                    one or more path segments) operators.
                                   type: string
                                 prefix:
                                   type: string
@@ -11683,14 +11755,23 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - pathTemplate
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - pathTemplate
                             properties:
                               exact:
+                                type: string
+                              pathTemplate:
+                                description: URI template path match using `{*}` (matches
+                                  one path segment) and `{**}` (matches one or more
+                                  path segments) operators.
                                 type: string
                               prefix:
                                 type: string
@@ -11906,14 +11987,23 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - pathTemplate
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - pathTemplate
                             properties:
                               exact:
+                                type: string
+                              pathTemplate:
+                                description: URI template path match using `{*}` (matches
+                                  one path segment) and `{**}` (matches one or more
+                                  path segments) operators.
                                 type: string
                               prefix:
                                 type: string
@@ -11938,14 +12028,23 @@ spec:
                                     - prefix
                                   - required:
                                     - regex
+                                  - required:
+                                    - pathTemplate
                               - required:
                                 - exact
                               - required:
                                 - prefix
                               - required:
                                 - regex
+                              - required:
+                                - pathTemplate
                               properties:
                                 exact:
+                                  type: string
+                                pathTemplate:
+                                  description: URI template path match using `{*}`
+                                    (matches one path segment) and `{**}` (matches
+                                    one or more path segments) operators.
                                   type: string
                                 prefix:
                                   type: string
@@ -11974,14 +12073,23 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - pathTemplate
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - pathTemplate
                             properties:
                               exact:
+                                type: string
+                              pathTemplate:
+                                description: URI template path match using `{*}` (matches
+                                  one path segment) and `{**}` (matches one or more
+                                  path segments) operators.
                                 type: string
                               prefix:
                                 type: string
@@ -12009,14 +12117,23 @@ spec:
                                     - prefix
                                   - required:
                                     - regex
+                                  - required:
+                                    - pathTemplate
                               - required:
                                 - exact
                               - required:
                                 - prefix
                               - required:
                                 - regex
+                              - required:
+                                - pathTemplate
                               properties:
                                 exact:
+                                  type: string
+                                pathTemplate:
+                                  description: URI template path match using `{*}`
+                                    (matches one path segment) and `{**}` (matches
+                                    one or more path segments) operators.
                                   type: string
                                 prefix:
                                   type: string
@@ -12040,14 +12157,23 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - pathTemplate
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - pathTemplate
                             properties:
                               exact:
+                                type: string
+                              pathTemplate:
+                                description: URI template path match using `{*}` (matches
+                                  one path segment) and `{**}` (matches one or more
+                                  path segments) operators.
                                 type: string
                               prefix:
                                 type: string
@@ -12084,14 +12210,23 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - pathTemplate
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - pathTemplate
                             properties:
                               exact:
+                                type: string
+                              pathTemplate:
+                                description: URI template path match using `{*}` (matches
+                                  one path segment) and `{**}` (matches one or more
+                                  path segments) operators.
                                 type: string
                               prefix:
                                 type: string
@@ -12110,14 +12245,23 @@ spec:
                                     - prefix
                                   - required:
                                     - regex
+                                  - required:
+                                    - pathTemplate
                               - required:
                                 - exact
                               - required:
                                 - prefix
                               - required:
                                 - regex
+                              - required:
+                                - pathTemplate
                               properties:
                                 exact:
+                                  type: string
+                                pathTemplate:
+                                  description: URI template path match using `{*}`
+                                    (matches one path segment) and `{**}` (matches
+                                    one or more path segments) operators.
                                   type: string
                                 prefix:
                                   type: string
@@ -12735,14 +12879,23 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - pathTemplate
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - pathTemplate
                             properties:
                               exact:
+                                type: string
+                              pathTemplate:
+                                description: URI template path match using `{*}` (matches
+                                  one path segment) and `{**}` (matches one or more
+                                  path segments) operators.
                                 type: string
                               prefix:
                                 type: string
@@ -12958,14 +13111,23 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - pathTemplate
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - pathTemplate
                             properties:
                               exact:
+                                type: string
+                              pathTemplate:
+                                description: URI template path match using `{*}` (matches
+                                  one path segment) and `{**}` (matches one or more
+                                  path segments) operators.
                                 type: string
                               prefix:
                                 type: string
@@ -12990,14 +13152,23 @@ spec:
                                     - prefix
                                   - required:
                                     - regex
+                                  - required:
+                                    - pathTemplate
                               - required:
                                 - exact
                               - required:
                                 - prefix
                               - required:
                                 - regex
+                              - required:
+                                - pathTemplate
                               properties:
                                 exact:
+                                  type: string
+                                pathTemplate:
+                                  description: URI template path match using `{*}`
+                                    (matches one path segment) and `{**}` (matches
+                                    one or more path segments) operators.
                                   type: string
                                 prefix:
                                   type: string
@@ -13026,14 +13197,23 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - pathTemplate
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - pathTemplate
                             properties:
                               exact:
+                                type: string
+                              pathTemplate:
+                                description: URI template path match using `{*}` (matches
+                                  one path segment) and `{**}` (matches one or more
+                                  path segments) operators.
                                 type: string
                               prefix:
                                 type: string
@@ -13061,14 +13241,23 @@ spec:
                                     - prefix
                                   - required:
                                     - regex
+                                  - required:
+                                    - pathTemplate
                               - required:
                                 - exact
                               - required:
                                 - prefix
                               - required:
                                 - regex
+                              - required:
+                                - pathTemplate
                               properties:
                                 exact:
+                                  type: string
+                                pathTemplate:
+                                  description: URI template path match using `{*}`
+                                    (matches one path segment) and `{**}` (matches
+                                    one or more path segments) operators.
                                   type: string
                                 prefix:
                                   type: string
@@ -13092,14 +13281,23 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - pathTemplate
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - pathTemplate
                             properties:
                               exact:
+                                type: string
+                              pathTemplate:
+                                description: URI template path match using `{*}` (matches
+                                  one path segment) and `{**}` (matches one or more
+                                  path segments) operators.
                                 type: string
                               prefix:
                                 type: string
@@ -13136,14 +13334,23 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - pathTemplate
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - pathTemplate
                             properties:
                               exact:
+                                type: string
+                              pathTemplate:
+                                description: URI template path match using `{*}` (matches
+                                  one path segment) and `{**}` (matches one or more
+                                  path segments) operators.
                                 type: string
                               prefix:
                                 type: string
@@ -13162,14 +13369,23 @@ spec:
                                     - prefix
                                   - required:
                                     - regex
+                                  - required:
+                                    - pathTemplate
                               - required:
                                 - exact
                               - required:
                                 - prefix
                               - required:
                                 - regex
+                              - required:
+                                - pathTemplate
                               properties:
                                 exact:
+                                  type: string
+                                pathTemplate:
+                                  description: URI template path match using `{*}`
+                                    (matches one path segment) and `{**}` (matches
+                                    one or more path segments) operators.
                                   type: string
                                 prefix:
                                   type: string
