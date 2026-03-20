@@ -356,6 +356,9 @@ message WasmPlugin {
   // More details can be found [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/wasm/v3/wasm.proto#extensions-wasm-v3-vmconfig).
   VmConfig vm_config = 11;
 
+  /* NOTE: This nested type is intentionally kept for backward compatibility.
+     The canonical definition is the top-level TrafficSelector in
+     extension_filter.proto. */
   // TrafficSelector provides a mechanism to select a specific traffic flow
   // for which this Wasm Plugin will be enabled.
   // When all the sub conditions in the TrafficSelector are satisfied, the
