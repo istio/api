@@ -345,6 +345,13 @@ message MeshConfig {
   // Default refresh rate is `60s`.
   google.protobuf.Duration dns_refresh_rate = 36;
 
+  // If true, Envoy will respect the TTL returned by the DNS server for clusters
+  // of type `STRICT_DNS` and `LOGICAL_DNS`, using it as the DNS refresh rate
+  // instead of `dns_refresh_rate`. When the TTL is 0 or absent, `dns_refresh_rate`
+  // is used as a fallback.
+  // Default is `true`.
+  google.protobuf.BoolValue respect_dns_ttl = 71;
+
   // Default Policy for upgrading http1.1 connections to http2.
   enum H2UpgradePolicy {
     // Do not upgrade connections to http2.
