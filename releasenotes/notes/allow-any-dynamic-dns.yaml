@@ -1,0 +1,8 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue: []
+
+releaseNotes:
+  - |
+    **Added** a new `ALLOW_ANY_DYNAMIC_DNS` mode to `OutboundTrafficPolicy` in MeshConfig. In this mode, outbound traffic to unknown destinations is allowed with dynamic DNS resolution. Client TLS settings (`tls`) can be configured for connections to such destinations; the TLS config is valid only when using `ALLOW_ANY_DYNAMIC_DNS` mode.
