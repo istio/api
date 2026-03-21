@@ -225,10 +225,10 @@ spec:
                 minLength: 1
                 type: string
                 x-kubernetes-validations:
-                - message: url must have schema one of [http, https, file, oci]
-                  rule: |-
-                    isURL(self) ? (url(self).getScheme() in ["", "http", "https", "oci", "file"]) : (isURL("http://" + self) &&
-                    url("http://" + self).getScheme() in ["", "http", "https", "oci", "file"])
+                - message: url must have schema one of [http, https, file, oci] or
+                    be a valid OCI image reference
+                  rule: isURL(self) && url(self).getScheme() in ["http", "https",
+                    "file", "oci"] || matches(self, "^([A-Za-z0-9.-]+(?::[0-9]+)?)?(/[A-Za-z0-9][A-Za-z0-9._-]*)*(?::[\\w][\\w.-]{0,127})?$")
               verificationKey:
                 type: string
               vmConfig:
