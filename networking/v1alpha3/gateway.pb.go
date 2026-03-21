@@ -365,6 +365,62 @@ func (ServerTLSSettings_TLSProtocol) EnumDescriptor() ([]byte, []int) {
 	return file_networking_v1alpha3_gateway_proto_rawDescGZIP(), []int{3, 1}
 }
 
+type ServerTLSSettings_CompliancePolicy int32
+
+const (
+	// FIPS_202205 configures a TLS connection to use:
+	//
+	//   - TLS 1.2 or 1.3
+	//   - For TLS 1.2, only ECDHE_[RSA|ECDSA]_WITH_AES_*_GCM_SHA*.
+	//   - For TLS 1.3, only AES-GCM
+	//   - P-256 or P-384 for key agreement.
+	//   - For server signatures, only “PKCS#1/PSS“ with “SHA256/384/512“, or ECDSA
+	//     with P-256 or P-384.
+	//
+	// .. attention::
+	//
+	//	Please refer to `BoringSSL policies <https://boringssl.googlesource.com/boringssl/+/refs/tags/0.20240913.0/include/openssl/ssl.h#5608>`_
+	//	for details.
+	ServerTLSSettings_FIPS_202205 ServerTLSSettings_CompliancePolicy = 0
+)
+
+// Enum value maps for ServerTLSSettings_CompliancePolicy.
+var (
+	ServerTLSSettings_CompliancePolicy_name = map[int32]string{
+		0: "FIPS_202205",
+	}
+	ServerTLSSettings_CompliancePolicy_value = map[string]int32{
+		"FIPS_202205": 0,
+	}
+)
+
+func (x ServerTLSSettings_CompliancePolicy) Enum() *ServerTLSSettings_CompliancePolicy {
+	p := new(ServerTLSSettings_CompliancePolicy)
+	*p = x
+	return p
+}
+
+func (x ServerTLSSettings_CompliancePolicy) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ServerTLSSettings_CompliancePolicy) Descriptor() protoreflect.EnumDescriptor {
+	return file_networking_v1alpha3_gateway_proto_enumTypes[2].Descriptor()
+}
+
+func (ServerTLSSettings_CompliancePolicy) Type() protoreflect.EnumType {
+	return &file_networking_v1alpha3_gateway_proto_enumTypes[2]
+}
+
+func (x ServerTLSSettings_CompliancePolicy) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ServerTLSSettings_CompliancePolicy.Descriptor instead.
+func (ServerTLSSettings_CompliancePolicy) EnumDescriptor() ([]byte, []int) {
+	return file_networking_v1alpha3_gateway_proto_rawDescGZIP(), []int{3, 2}
+}
+
 // Gateway describes a load balancer operating at the edge of the mesh
 // receiving incoming or outgoing HTTP/TCP connections.
 //
@@ -838,9 +894,13 @@ type ServerTLSSettings struct {
 	// * `AES128-SHA`
 	// * `AES256-SHA`
 	// * `DES-CBC3-SHA`
-	CipherSuites  []string `protobuf:"bytes,9,rep,name=cipher_suites,json=cipherSuites,proto3" json:"cipher_suites,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	CipherSuites []string `protobuf:"bytes,9,rep,name=cipher_suites,json=cipherSuites,proto3" json:"cipher_suites,omitempty"`
+	// Optional list of compliance policies. Compliance policies configure various aspects of the TLS
+	// based on the given policy. The policies are applied last during configuration and may override
+	// the other TLS parameters, or any previous policy.
+	CompliancePolicies []ServerTLSSettings_CompliancePolicy `protobuf:"varint,17,rep,packed,name=compliance_policies,json=compliancePolicies,proto3,enum=istio.networking.v1alpha3.ServerTLSSettings_CompliancePolicy" json:"compliance_policies,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *ServerTLSSettings) Reset() {
@@ -985,6 +1045,13 @@ func (x *ServerTLSSettings) GetCipherSuites() []string {
 	return nil
 }
 
+func (x *ServerTLSSettings) GetCompliancePolicies() []ServerTLSSettings_CompliancePolicy {
+	if x != nil {
+		return x.CompliancePolicies
+	}
+	return nil
+}
+
 // TLSCertificate describes the server's TLS certificate.
 type ServerTLSSettings_TLSCertificate struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -1078,7 +1145,7 @@ const file_networking_v1alpha3_gateway_proto_rawDesc = "" +
 	"\bprotocol\x18\x02 \x01(\tB\x04\xe2A\x01\x02R\bprotocol\x12\x18\n" +
 	"\x04name\x18\x03 \x01(\tB\x04\xe2A\x01\x02R\x04name\x12#\n" +
 	"\vtarget_port\x18\x04 \x01(\rB\x02\x18\x01R\n" +
-	"targetPort\"\xee\t\n" +
+	"targetPort\"\x83\v\n" +
 	"\x11ServerTLSSettings\x12%\n" +
 	"\x0ehttps_redirect\x18\x01 \x01(\bR\rhttpsRedirect\x12H\n" +
 	"\x04mode\x18\x02 \x01(\x0e24.istio.networking.v1alpha3.ServerTLSSettings.TLSmodeR\x04mode\x12-\n" +
@@ -1097,7 +1164,8 @@ const file_networking_v1alpha3_gateway_proto_rawDesc = "" +
 	"\x17verify_certificate_hash\x18\f \x03(\tR\x15verifyCertificateHash\x12j\n" +
 	"\x14min_protocol_version\x18\a \x01(\x0e28.istio.networking.v1alpha3.ServerTLSSettings.TLSProtocolR\x12minProtocolVersion\x12j\n" +
 	"\x14max_protocol_version\x18\b \x01(\x0e28.istio.networking.v1alpha3.ServerTLSSettings.TLSProtocolR\x12maxProtocolVersion\x12#\n" +
-	"\rcipher_suites\x18\t \x03(\tR\fcipherSuites\x1a\x89\x01\n" +
+	"\rcipher_suites\x18\t \x03(\tR\fcipherSuites\x12n\n" +
+	"\x13compliance_policies\x18\x11 \x03(\x0e2=.istio.networking.v1alpha3.ServerTLSSettings.CompliancePolicyR\x12compliancePolicies\x1a\x89\x01\n" +
 	"\x0eTLSCertificate\x12-\n" +
 	"\x12server_certificate\x18\x01 \x01(\tR\x11serverCertificate\x12\x1f\n" +
 	"\vprivate_key\x18\x02 \x01(\tR\n" +
@@ -1117,7 +1185,9 @@ const file_networking_v1alpha3_gateway_proto_rawDesc = "" +
 	"\aTLSV1_0\x10\x01\x12\v\n" +
 	"\aTLSV1_1\x10\x02\x12\v\n" +
 	"\aTLSV1_2\x10\x03\x12\v\n" +
-	"\aTLSV1_3\x10\x04B\"Z istio.io/api/networking/v1alpha3b\x06proto3"
+	"\aTLSV1_3\x10\x04\"#\n" +
+	"\x10CompliancePolicy\x12\x0f\n" +
+	"\vFIPS_202205\x10\x00B\"Z istio.io/api/networking/v1alpha3b\x06proto3"
 
 var (
 	file_networking_v1alpha3_gateway_proto_rawDescOnce sync.Once
@@ -1131,32 +1201,34 @@ func file_networking_v1alpha3_gateway_proto_rawDescGZIP() []byte {
 	return file_networking_v1alpha3_gateway_proto_rawDescData
 }
 
-var file_networking_v1alpha3_gateway_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_networking_v1alpha3_gateway_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
 var file_networking_v1alpha3_gateway_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_networking_v1alpha3_gateway_proto_goTypes = []any{
 	(ServerTLSSettings_TLSmode)(0),           // 0: istio.networking.v1alpha3.ServerTLSSettings.TLSmode
 	(ServerTLSSettings_TLSProtocol)(0),       // 1: istio.networking.v1alpha3.ServerTLSSettings.TLSProtocol
-	(*Gateway)(nil),                          // 2: istio.networking.v1alpha3.Gateway
-	(*Server)(nil),                           // 3: istio.networking.v1alpha3.Server
-	(*Port)(nil),                             // 4: istio.networking.v1alpha3.Port
-	(*ServerTLSSettings)(nil),                // 5: istio.networking.v1alpha3.ServerTLSSettings
-	nil,                                      // 6: istio.networking.v1alpha3.Gateway.SelectorEntry
-	(*ServerTLSSettings_TLSCertificate)(nil), // 7: istio.networking.v1alpha3.ServerTLSSettings.TLSCertificate
+	(ServerTLSSettings_CompliancePolicy)(0),  // 2: istio.networking.v1alpha3.ServerTLSSettings.CompliancePolicy
+	(*Gateway)(nil),                          // 3: istio.networking.v1alpha3.Gateway
+	(*Server)(nil),                           // 4: istio.networking.v1alpha3.Server
+	(*Port)(nil),                             // 5: istio.networking.v1alpha3.Port
+	(*ServerTLSSettings)(nil),                // 6: istio.networking.v1alpha3.ServerTLSSettings
+	nil,                                      // 7: istio.networking.v1alpha3.Gateway.SelectorEntry
+	(*ServerTLSSettings_TLSCertificate)(nil), // 8: istio.networking.v1alpha3.ServerTLSSettings.TLSCertificate
 }
 var file_networking_v1alpha3_gateway_proto_depIdxs = []int32{
-	3, // 0: istio.networking.v1alpha3.Gateway.servers:type_name -> istio.networking.v1alpha3.Server
-	6, // 1: istio.networking.v1alpha3.Gateway.selector:type_name -> istio.networking.v1alpha3.Gateway.SelectorEntry
-	4, // 2: istio.networking.v1alpha3.Server.port:type_name -> istio.networking.v1alpha3.Port
-	5, // 3: istio.networking.v1alpha3.Server.tls:type_name -> istio.networking.v1alpha3.ServerTLSSettings
+	4, // 0: istio.networking.v1alpha3.Gateway.servers:type_name -> istio.networking.v1alpha3.Server
+	7, // 1: istio.networking.v1alpha3.Gateway.selector:type_name -> istio.networking.v1alpha3.Gateway.SelectorEntry
+	5, // 2: istio.networking.v1alpha3.Server.port:type_name -> istio.networking.v1alpha3.Port
+	6, // 3: istio.networking.v1alpha3.Server.tls:type_name -> istio.networking.v1alpha3.ServerTLSSettings
 	0, // 4: istio.networking.v1alpha3.ServerTLSSettings.mode:type_name -> istio.networking.v1alpha3.ServerTLSSettings.TLSmode
-	7, // 5: istio.networking.v1alpha3.ServerTLSSettings.tls_certificates:type_name -> istio.networking.v1alpha3.ServerTLSSettings.TLSCertificate
+	8, // 5: istio.networking.v1alpha3.ServerTLSSettings.tls_certificates:type_name -> istio.networking.v1alpha3.ServerTLSSettings.TLSCertificate
 	1, // 6: istio.networking.v1alpha3.ServerTLSSettings.min_protocol_version:type_name -> istio.networking.v1alpha3.ServerTLSSettings.TLSProtocol
 	1, // 7: istio.networking.v1alpha3.ServerTLSSettings.max_protocol_version:type_name -> istio.networking.v1alpha3.ServerTLSSettings.TLSProtocol
-	8, // [8:8] is the sub-list for method output_type
-	8, // [8:8] is the sub-list for method input_type
-	8, // [8:8] is the sub-list for extension type_name
-	8, // [8:8] is the sub-list for extension extendee
-	0, // [0:8] is the sub-list for field type_name
+	2, // 8: istio.networking.v1alpha3.ServerTLSSettings.compliance_policies:type_name -> istio.networking.v1alpha3.ServerTLSSettings.CompliancePolicy
+	9, // [9:9] is the sub-list for method output_type
+	9, // [9:9] is the sub-list for method input_type
+	9, // [9:9] is the sub-list for extension type_name
+	9, // [9:9] is the sub-list for extension extendee
+	0, // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_networking_v1alpha3_gateway_proto_init() }
@@ -1169,7 +1241,7 @@ func file_networking_v1alpha3_gateway_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_networking_v1alpha3_gateway_proto_rawDesc), len(file_networking_v1alpha3_gateway_proto_rawDesc)),
-			NumEnums:      2,
+			NumEnums:      3,
 			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,

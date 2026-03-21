@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.Gateway
 aliases: [/docs/reference/config/networking/v1alpha3/gateway]
-number_of_entries: 7
+number_of_entries: 8
 ---
 <p><code>Gateway</code> describes a load balancer operating at the edge of the mesh
 receiving incoming or outgoing HTTP/TCP connections. The specification
@@ -624,6 +624,17 @@ The supported list of ciphers are:</p>
 
 </td>
 </tr>
+<tr id="ServerTLSSettings-compliance_policies">
+<td><div class="field"><div class="name"><code><a href="#ServerTLSSettings-compliance_policies">compliancePolicies</a></code></div>
+<div class="type"><a href="#ServerTLSSettings-CompliancePolicy">CompliancePolicy[]</a></div>
+</div></td>
+<td>
+<p>Optional list of compliance policies. Compliance policies configure various aspects of the TLS
+based on the given policy. The policies are applied last during configuration and may override
+the other TLS parameters, or any previous policy.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -789,6 +800,37 @@ be specified for validating client certificates.</p>
 <td><code><a href="#ServerTLSSettings-TLSProtocol-TLSV1_3">TLSV1_3</a></code></td>
 <td>
 <p>TLS version 1.3</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="ServerTLSSettings-CompliancePolicy">CompliancePolicy</h3>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ServerTLSSettings-CompliancePolicy-FIPS_202205">
+<td><code><a href="#ServerTLSSettings-CompliancePolicy-FIPS_202205">FIPS_202205</a></code></td>
+<td>
+<p>FIPS_202205 configures a TLS connection to use:</p>
+<ul>
+<li>TLS 1.2 or 1.3</li>
+<li>For TLS 1.2, only ECDHE_[RSA|ECDSA]<em>WITH_AES</em><em>_GCM_SHA</em>.</li>
+<li>For TLS 1.3, only AES-GCM</li>
+<li>P-256 or P-384 for key agreement.</li>
+<li>For server signatures, only <code>PKCS#1/PSS</code> with <code>SHA256/384/512</code>, or ECDSA
+with P-256 or P-384.</li>
+</ul>
+<p>.. attention::</p>
+<p>Please refer to <code>BoringSSL policies &lt;https://boringssl.googlesource.com/boringssl/+/refs/tags/0.20240913.0/include/openssl/ssl.h#5608&gt;</code>_
+for details.</p>
 
 </td>
 </tr>
