@@ -1679,34 +1679,28 @@ these ideal conditions.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-interval">
+<tr id="AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-interval" class="oneof oneof-start">
 <td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-interval">interval</a></code></div>
-<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration (oneof)</a></div>
 </div></td>
 <td>
-<p>The time interval between recalculating the minimum request round-trip time.
-Must be &gt;= 1ms when set. If unset or zero, dynamic sampling of the minRTT
-is disabled and <code>fixed_value</code> must be provided instead.
-There is no default — one of <code>interval</code> or <code>fixed_value</code> must be specified.</p>
-<p>When dynamic sampling is enabled (interval &gt; 0), the controller periodically
-enters a low-concurrency measurement window (pinned to <code>min_concurrency</code>) to
-re-measure the baseline latency. During this window, throughput is temporarily
-reduced, so longer intervals reduce overhead but may react slower to changes
-in upstream performance.</p>
+<p>The time interval between recalculating the minimum request round-trip
+time. Must be &gt;= 1ms.</p>
+<p>When set, the controller periodically enters a low-concurrency measurement
+window (pinned to <code>min_concurrency</code>) to re-measure the baseline latency.
+During this window, throughput is temporarily reduced, so longer intervals
+reduce overhead but may react slower to changes in upstream performance.</p>
 
 </td>
 </tr>
-<tr id="AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-fixed_value">
+<tr id="AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-fixed_value" class="oneof">
 <td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-fixed_value">fixedValue</a></code></div>
-<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration (oneof)</a></div>
 </div></td>
 <td>
-<p>The fixed value for the minRTT, used when dynamic sampling is disabled
-(i.e. <code>interval</code> is unset or zero). Must be positive when set.
-This field is mutually exclusive with a positive <code>interval</code> — if <code>interval</code>
-is set, <code>fixed_value</code> is ignored and the minRTT is sampled dynamically.
-Use this when the baseline latency of the upstream is well-known and stable,
-to avoid the periodic low-concurrency measurement windows.</p>
+<p>A fixed value for the minRTT. Must be positive.
+Use this when the baseline latency of the upstream is well-known and
+stable, to avoid the periodic low-concurrency measurement windows.</p>
 
 </td>
 </tr>

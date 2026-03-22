@@ -369,6 +369,20 @@ type AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationPar
 // these ideal conditions.
 type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams
 
+// The time interval between recalculating the minimum request round-trip
+// time. Must be >= 1ms.
+//
+// When set, the controller periodically enters a low-concurrency measurement
+// window (pinned to `min_concurrency`) to re-measure the baseline latency.
+// During this window, throughput is temporarily reduced, so longer intervals
+// reduce overhead but may react slower to changes in upstream performance.
+type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_Interval = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_Interval
+
+// A fixed value for the minRTT. Must be positive.
+// Use this when the baseline latency of the upstream is well-known and
+// stable, to avoid the periodic low-concurrency measurement windows.
+type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_FixedValue = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_FixedValue
+
 // Gradient concurrency control will be used.
 type AdaptiveConcurrency_GradientControllerConfig_ = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_
 

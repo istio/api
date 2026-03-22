@@ -478,6 +478,17 @@ spec:
                                   type: object
                                 minRttCalcParams:
                                   description: Parameters for periodic minRTT recalculation.
+                                  oneOf:
+                                  - not:
+                                      anyOf:
+                                      - required:
+                                        - interval
+                                      - required:
+                                        - fixedValue
+                                  - required:
+                                    - interval
+                                  - required:
+                                    - fixedValue
                                   properties:
                                     buffer:
                                       description: Amount added to the measured minRTT
@@ -488,8 +499,7 @@ spec:
                                       nullable: true
                                       type: integer
                                     fixedValue:
-                                      description: The fixed value for the minRTT,
-                                        used when dynamic sampling is disabled (i.e.
+                                      description: A fixed value for the minRTT.
                                       type: string
                                       x-kubernetes-validations:
                                       - message: must be a valid duration greater
@@ -1526,6 +1536,17 @@ spec:
                             type: object
                           minRttCalcParams:
                             description: Parameters for periodic minRTT recalculation.
+                            oneOf:
+                            - not:
+                                anyOf:
+                                - required:
+                                  - interval
+                                - required:
+                                  - fixedValue
+                            - required:
+                              - interval
+                            - required:
+                              - fixedValue
                             properties:
                               buffer:
                                 description: Amount added to the measured minRTT to
@@ -1536,8 +1557,7 @@ spec:
                                 nullable: true
                                 type: integer
                               fixedValue:
-                                description: The fixed value for the minRTT, used
-                                  when dynamic sampling is disabled (i.e.
+                                description: A fixed value for the minRTT.
                                 type: string
                                 x-kubernetes-validations:
                                 - message: must be a valid duration greater than 1ms
@@ -2687,6 +2707,17 @@ spec:
                                   type: object
                                 minRttCalcParams:
                                   description: Parameters for periodic minRTT recalculation.
+                                  oneOf:
+                                  - not:
+                                      anyOf:
+                                      - required:
+                                        - interval
+                                      - required:
+                                        - fixedValue
+                                  - required:
+                                    - interval
+                                  - required:
+                                    - fixedValue
                                   properties:
                                     buffer:
                                       description: Amount added to the measured minRTT
@@ -2697,8 +2728,7 @@ spec:
                                       nullable: true
                                       type: integer
                                     fixedValue:
-                                      description: The fixed value for the minRTT,
-                                        used when dynamic sampling is disabled (i.e.
+                                      description: A fixed value for the minRTT.
                                       type: string
                                       x-kubernetes-validations:
                                       - message: must be a valid duration greater
@@ -3735,6 +3765,17 @@ spec:
                             type: object
                           minRttCalcParams:
                             description: Parameters for periodic minRTT recalculation.
+                            oneOf:
+                            - not:
+                                anyOf:
+                                - required:
+                                  - interval
+                                - required:
+                                  - fixedValue
+                            - required:
+                              - interval
+                            - required:
+                              - fixedValue
                             properties:
                               buffer:
                                 description: Amount added to the measured minRTT to
@@ -3745,8 +3786,7 @@ spec:
                                 nullable: true
                                 type: integer
                               fixedValue:
-                                description: The fixed value for the minRTT, used
-                                  when dynamic sampling is disabled (i.e.
+                                description: A fixed value for the minRTT.
                                 type: string
                                 x-kubernetes-validations:
                                 - message: must be a valid duration greater than 1ms
@@ -4896,6 +4936,17 @@ spec:
                                   type: object
                                 minRttCalcParams:
                                   description: Parameters for periodic minRTT recalculation.
+                                  oneOf:
+                                  - not:
+                                      anyOf:
+                                      - required:
+                                        - interval
+                                      - required:
+                                        - fixedValue
+                                  - required:
+                                    - interval
+                                  - required:
+                                    - fixedValue
                                   properties:
                                     buffer:
                                       description: Amount added to the measured minRTT
@@ -4906,8 +4957,7 @@ spec:
                                       nullable: true
                                       type: integer
                                     fixedValue:
-                                      description: The fixed value for the minRTT,
-                                        used when dynamic sampling is disabled (i.e.
+                                      description: A fixed value for the minRTT.
                                       type: string
                                       x-kubernetes-validations:
                                       - message: must be a valid duration greater
@@ -5944,6 +5994,17 @@ spec:
                             type: object
                           minRttCalcParams:
                             description: Parameters for periodic minRTT recalculation.
+                            oneOf:
+                            - not:
+                                anyOf:
+                                - required:
+                                  - interval
+                                - required:
+                                  - fixedValue
+                            - required:
+                              - interval
+                            - required:
+                              - fixedValue
                             properties:
                               buffer:
                                 description: Amount added to the measured minRTT to
@@ -5954,8 +6015,7 @@ spec:
                                 nullable: true
                                 type: integer
                               fixedValue:
-                                description: The fixed value for the minRTT, used
-                                  when dynamic sampling is disabled (i.e.
+                                description: A fixed value for the minRTT.
                                 type: string
                                 x-kubernetes-validations:
                                 - message: must be a valid duration greater than 1ms
