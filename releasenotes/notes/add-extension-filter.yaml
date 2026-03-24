@@ -6,5 +6,5 @@ issue: []
 
 releaseNotes:
 - |
-    **Added** `ExtensionFilter` API to the extensions package, enabling first-class support
+    **Added** `MeshExtension` API to the extensions package, enabling first-class support
     for Lua extensibility.

@@ -14,13 +14,13 @@
 
 syntax = "proto3";
 
-// $schema: istio.extensions.v1alpha1.ExtensionFilter
-// $title: Extension Filter
+// $schema: istio.extensions.v1alpha1.MeshExtension
+// $title: Mesh Extension
 // $description: Extend the functionality provided by the Istio proxy through WebAssembly or Lua filters.
-// $location: https://istio.io/docs/reference/config/proxy_extensions/v1alpha1/extension_filter.html
-// $aliases: [/docs/reference/config/extensions/v1alpha1/extension_filter]
+// $location: https://istio.io/docs/reference/config/proxy_extensions/v1alpha1/mesh_extension.html
+// $aliases: [/docs/reference/config/extensions/v1alpha1/mesh_extension]
 
-// ExtensionFilter provides a mechanism to extend the functionality provided by
+// MeshExtension provides a mechanism to extend the functionality provided by
 // the Istio proxy through WebAssembly or Lua filters.
 //
 // This API supersedes WasmPlugin by providing a unified mechanism for configuring
@@ -40,7 +40,7 @@ syntax = "proto3";
 //
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
-// kind: ExtensionFilter
+// kind: MeshExtension
 // metadata:
 //   name: openid-connect
 //   namespace: istio-ingress
@@ -61,7 +61,7 @@ syntax = "proto3";
 //
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
-// kind: ExtensionFilter
+// kind: MeshExtension
 // metadata:
 //   name: openid-connect
 //   namespace: istio-ingress
@@ -83,7 +83,7 @@ syntax = "proto3";
 //
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
-// kind: ExtensionFilter
+// kind: MeshExtension
 // metadata:
 //   name: openid-connect
 //   namespace: istio-ingress
@@ -111,7 +111,7 @@ syntax = "proto3";
 //
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
-// kind: ExtensionFilter
+// kind: MeshExtension
 // metadata:
 //   name: openid-connect
 //   namespace: istio-ingress
@@ -134,7 +134,7 @@ syntax = "proto3";
 //         value: "cluster.local"
 // ```
 //
-// And a more complex example that deploys three ExtensionFilters and orders them
+// And a more complex example that deploys three MeshExtensions and orders them
 // using `phase` and `priority`. The (hypothetical) setup is that the
 // `openid-connect` filter performs an OpenID Connect flow to authenticate the
 // user, writing a signed JWT into the Authorization header of the request,
@@ -151,7 +151,7 @@ syntax = "proto3";
 //
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
-// kind: ExtensionFilter
+// kind: MeshExtension
 // metadata:
 //   name: openid-connect
 //   namespace: istio-ingress
@@ -171,7 +171,7 @@ syntax = "proto3";
 //
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
-// kind: ExtensionFilter
+// kind: MeshExtension
 // metadata:
 //   name: acl-check
 //   namespace: istio-ingress
@@ -192,7 +192,7 @@ syntax = "proto3";
 //
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
-// kind: ExtensionFilter
+// kind: MeshExtension
 // metadata:
 //   name: check-header
 //   namespace: istio-ingress
@@ -216,7 +216,7 @@ syntax = "proto3";
 //
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
-// kind: ExtensionFilter
+// kind: MeshExtension
 // metadata:
 //   name: conditional-header-modifier
 //   namespace: istio-ingress
@@ -251,7 +251,7 @@ syntax = "proto3";
 //
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
-// kind: ExtensionFilter
+// kind: MeshExtension
 // metadata:
 //   name: reviews-header-logger
 //   namespace: default
@@ -285,18 +285,18 @@ option go_package = "istio.io/api/extensions/v1alpha1";
 
 //
 // <!-- crd generation tags
-// +cue-gen:ExtensionFilter:groupName:extensions.istio.io
-// +cue-gen:ExtensionFilter:versions:v1alpha1
-// +cue-gen:ExtensionFilter:storageVersion
-// +cue-gen:ExtensionFilter:annotations:helm.sh/resource-policy=keep
-// +cue-gen:ExtensionFilter:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
-// +cue-gen:ExtensionFilter:subresource:status
-// +cue-gen:ExtensionFilter:spec:required
-// +cue-gen:ExtensionFilter:scope:Namespaced
-// +cue-gen:ExtensionFilter:releaseChannel:extended
-// +cue-gen:ExtensionFilter:resource:categories=istio-io,extensions-istio-io
-// +cue-gen:ExtensionFilter:preserveUnknownFields:wasm.pluginConfig
-// +cue-gen:ExtensionFilter:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// +cue-gen:MeshExtension:groupName:extensions.istio.io
+// +cue-gen:MeshExtension:versions:v1alpha1
+// +cue-gen:MeshExtension:storageVersion
+// +cue-gen:MeshExtension:annotations:helm.sh/resource-policy=keep
+// +cue-gen:MeshExtension:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
+// +cue-gen:MeshExtension:subresource:status
+// +cue-gen:MeshExtension:spec:required
+// +cue-gen:MeshExtension:scope:Namespaced
+// +cue-gen:MeshExtension:releaseChannel:extended
+// +cue-gen:MeshExtension:resource:categories=istio-io,extensions-istio-io
+// +cue-gen:MeshExtension:preserveUnknownFields:wasm.pluginConfig
+// +cue-gen:MeshExtension:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
 // -->
 //
 // <!-- go code generation tags
@@ -307,11 +307,11 @@ option go_package = "istio.io/api/extensions/v1alpha1";
 // -->
 // +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="(has(self.selector)?1:0)+(has(self.targetRefs)?1:0)<=1"
 // +kubebuilder:validation:XValidation:message="exactly one of wasm or lua must be set",rule="has(self.wasm) != has(self.lua)"
-message ExtensionFilter {
+message MeshExtension {
   // Optional. Criteria used to select the specific set of pods/VMs on which
-  // this plugin configuration should be applied. If omitted, this
+  // this configuration should be applied. If omitted, this
   // configuration will be applied to all workload instances in the same
-  // namespace. If the `ExtensionFilter` is present in the config root
+  // namespace. If the `MeshExtension` is present in the config root
   // namespace, it will be applied to all applicable workloads in any
   // namespace.
   //
@@ -335,21 +335,21 @@ message ExtensionFilter {
   // +kubebuilder:validation:MaxItems=16
   repeated istio.type.v1beta1.PolicyTargetReference targetRefs = 2;
 
-  // Determines where in the filter chain this `ExtensionFilter` is to be injected.
+  // Determines where in the filter chain this `MeshExtension` is to be injected.
   PluginPhase phase = 3;
 
-  // Determines ordering of `ExtensionFilters` in the same `phase`.
-  // When multiple `ExtensionFilters` are applied to the same workload in the
+  // Determines ordering of `MeshExtensions` in the same `phase`.
+  // When multiple `MeshExtensions` are applied to the same workload in the
   // same `phase`, they will be applied by priority, in descending order.
-  // If `priority` is not set, or two `ExtensionFilters` exist with the same
+  // If `priority` is not set, or two `MeshExtensions` exist with the same
   // value, the ordering will be deterministically derived from the
-  // `creationTimestamp`, then name and namespace of the `ExtensionFilters`.
+  // `creationTimestamp`, then name and namespace of the `MeshExtensions`.
   // Defaults to `0`.
   google.protobuf.Int32Value priority = 4;
 
-  // Specifies the criteria to determine which traffic is passed to ExtensionFilter.
+  // Specifies the criteria to determine which traffic is passed to MeshExtension.
   // If a traffic satisfies any of TrafficSelectors,
-  // the traffic passes the ExtensionFilter.
+  // the traffic passes the MeshExtension.
   repeated TrafficSelector match = 5;
 
   // Exactly one of `wasm` or `lua` must be set.
@@ -411,7 +411,7 @@ message WasmConfig {
   PullPolicy image_pull_policy = 3;
 
   // Credentials to use for OCI image pulling.
-  // Name of a Kubernetes Secret in the same namespace as the `ExtensionFilter` that
+  // Name of a Kubernetes Secret in the same namespace as the `MeshExtension` that
   // contains a Docker pull secret which is to be used to authenticate
   // against the registry when pulling the image.
   // +kubebuilder:validation:MinLength=1
@@ -501,7 +501,7 @@ message LuaConfig {
 /* NOTE: WasmPlugin defines an identical nested message (WasmPlugin.TrafficSelector)
    for backward compatibility. */
 // TrafficSelector provides a mechanism to select a specific traffic flow
-// for which an Extension Filter will be enabled.
+// for which a MeshExtension will be enabled.
 // When all the sub conditions in the TrafficSelector are satisfied, the
 // traffic will be selected.
 message TrafficSelector {
