@@ -336,7 +336,7 @@ message TrafficExtension {
   repeated istio.type.v1beta1.PolicyTargetReference targetRefs = 2;
 
   // Determines where in the filter chain this `TrafficExtension` is to be injected.
-  PluginPhase phase = 3;
+  ExecutionPhase phase = 3;
 
   // Determines ordering of `TrafficExtensions` in the same `phase`.
   // When multiple `TrafficExtensions` are applied to the same workload in the
@@ -496,6 +496,25 @@ message LuaConfig {
   // +kubebuilder:validation:MinLength=1
   // +kubebuilder:validation:MaxLength=65536
   string inline_code = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+/* NOTE: WasmPlugin.PluginPhase is kept for backward compatibility.
+   This is the canonical definition. */
+// ExecutionPhase specifies where in the filter chain a `TrafficExtension` is injected.
+enum ExecutionPhase {
+  // Control plane decides where to insert the extension. This will generally
+  // be at the end of the filter chain, right before the Router.
+  // Do not specify `ExecutionPhase` if the extension is independent of others.
+  EXECUTION_PHASE_UNSPECIFIED = 0;
+
+  // Insert before Istio authentication filters.
+  EXECUTION_PHASE_AUTHN = 1;
+
+  // Insert before Istio authorization filters and after Istio authentication filters.
+  EXECUTION_PHASE_AUTHZ = 2;
+
+  // Insert before Istio stats filters and after Istio authorization filters.
+  EXECUTION_PHASE_STATS = 3;
 }
 
 /* NOTE: WasmPlugin defines an identical nested message (WasmPlugin.TrafficSelector)

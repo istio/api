@@ -299,6 +299,65 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// ExecutionPhase specifies where in the filter chain a `TrafficExtension` is injected.
+type ExecutionPhase int32
+
+const (
+	// Control plane decides where to insert the extension. This will generally
+	// be at the end of the filter chain, right before the Router.
+	// Do not specify `ExecutionPhase` if the extension is independent of others.
+	ExecutionPhase_EXECUTION_PHASE_UNSPECIFIED ExecutionPhase = 0
+	// Insert before Istio authentication filters.
+	ExecutionPhase_EXECUTION_PHASE_AUTHN ExecutionPhase = 1
+	// Insert before Istio authorization filters and after Istio authentication filters.
+	ExecutionPhase_EXECUTION_PHASE_AUTHZ ExecutionPhase = 2
+	// Insert before Istio stats filters and after Istio authorization filters.
+	ExecutionPhase_EXECUTION_PHASE_STATS ExecutionPhase = 3
+)
+
+// Enum value maps for ExecutionPhase.
+var (
+	ExecutionPhase_name = map[int32]string{
+		0: "EXECUTION_PHASE_UNSPECIFIED",
+		1: "EXECUTION_PHASE_AUTHN",
+		2: "EXECUTION_PHASE_AUTHZ",
+		3: "EXECUTION_PHASE_STATS",
+	}
+	ExecutionPhase_value = map[string]int32{
+		"EXECUTION_PHASE_UNSPECIFIED": 0,
+		"EXECUTION_PHASE_AUTHN":       1,
+		"EXECUTION_PHASE_AUTHZ":       2,
+		"EXECUTION_PHASE_STATS":       3,
+	}
+)
+
+func (x ExecutionPhase) Enum() *ExecutionPhase {
+	p := new(ExecutionPhase)
+	*p = x
+	return p
+}
+
+func (x ExecutionPhase) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ExecutionPhase) Descriptor() protoreflect.EnumDescriptor {
+	return file_extensions_v1alpha1_traffic_extension_proto_enumTypes[0].Descriptor()
+}
+
+func (ExecutionPhase) Type() protoreflect.EnumType {
+	return &file_extensions_v1alpha1_traffic_extension_proto_enumTypes[0]
+}
+
+func (x ExecutionPhase) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ExecutionPhase.Descriptor instead.
+func (ExecutionPhase) EnumDescriptor() ([]byte, []int) {
+	return file_extensions_v1alpha1_traffic_extension_proto_rawDescGZIP(), []int{0}
+}
+
 // <!-- crd generation tags
 // +cue-gen:TrafficExtension:groupName:extensions.istio.io
 // +cue-gen:TrafficExtension:versions:v1alpha1
@@ -350,7 +409,7 @@ type TrafficExtension struct {
 	// +kubebuilder:validation:MaxItems=16
 	TargetRefs []*v1beta1.PolicyTargetReference `protobuf:"bytes,2,rep,name=targetRefs,proto3" json:"targetRefs,omitempty"`
 	// Determines where in the filter chain this `TrafficExtension` is to be injected.
-	Phase PluginPhase `protobuf:"varint,3,opt,name=phase,proto3,enum=istio.extensions.v1alpha1.PluginPhase" json:"phase,omitempty"`
+	Phase ExecutionPhase `protobuf:"varint,3,opt,name=phase,proto3,enum=istio.extensions.v1alpha1.ExecutionPhase" json:"phase,omitempty"`
 	// Determines ordering of `TrafficExtensions` in the same `phase`.
 	// When multiple `TrafficExtensions` are applied to the same workload in the
 	// same `phase`, they will be applied by priority, in descending order.
@@ -418,11 +477,11 @@ func (x *TrafficExtension) GetTargetRefs() []*v1beta1.PolicyTargetReference {
 	return nil
 }
 
-func (x *TrafficExtension) GetPhase() PluginPhase {
+func (x *TrafficExtension) GetPhase() ExecutionPhase {
 	if x != nil {
 		return x.Phase
 	}
-	return PluginPhase_UNSPECIFIED_PHASE
+	return ExecutionPhase_EXECUTION_PHASE_UNSPECIFIED
 }
 
 func (x *TrafficExtension) GetPriority() *wrappers.Int32Value {
@@ -830,13 +889,13 @@ var File_extensions_v1alpha1_traffic_extension_proto protoreflect.FileDescriptor
 
 const file_extensions_v1alpha1_traffic_extension_proto_rawDesc = "" +
 	"\n" +
-	"+extensions/v1alpha1/traffic_extension.proto\x12\x19istio.extensions.v1alpha1\x1a\x1eextensions/v1alpha1/wasm.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1btype/v1beta1/selector.proto\"\xe0\x03\n" +
+	"+extensions/v1alpha1/traffic_extension.proto\x12\x19istio.extensions.v1alpha1\x1a\x1eextensions/v1alpha1/wasm.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1btype/v1beta1/selector.proto\"\xe3\x03\n" +
 	"\x10TrafficExtension\x12@\n" +
 	"\bselector\x18\x01 \x01(\v2$.istio.type.v1beta1.WorkloadSelectorR\bselector\x12I\n" +
 	"\n" +
 	"targetRefs\x18\x02 \x03(\v2).istio.type.v1beta1.PolicyTargetReferenceR\n" +
-	"targetRefs\x12<\n" +
-	"\x05phase\x18\x03 \x01(\x0e2&.istio.extensions.v1alpha1.PluginPhaseR\x05phase\x127\n" +
+	"targetRefs\x12?\n" +
+	"\x05phase\x18\x03 \x01(\x0e2).istio.extensions.v1alpha1.ExecutionPhaseR\x05phase\x127\n" +
 	"\bpriority\x18\x04 \x01(\v2\x1b.google.protobuf.Int32ValueR\bpriority\x12@\n" +
 	"\x05match\x18\x05 \x03(\v2*.istio.extensions.v1alpha1.TrafficSelectorR\x05match\x12;\n" +
 	"\x04wasm\x18\x06 \x01(\v2%.istio.extensions.v1alpha1.WasmConfigH\x00R\x04wasm\x128\n" +
@@ -861,7 +920,12 @@ const file_extensions_v1alpha1_traffic_extension_proto_rawDesc = "" +
 	"inlineCode\"\x7f\n" +
 	"\x0fTrafficSelector\x124\n" +
 	"\x04mode\x18\x01 \x01(\x0e2 .istio.type.v1beta1.WorkloadModeR\x04mode\x126\n" +
-	"\x05ports\x18\x02 \x03(\v2 .istio.type.v1beta1.PortSelectorR\x05portsB\"Z istio.io/api/extensions/v1alpha1b\x06proto3"
+	"\x05ports\x18\x02 \x03(\v2 .istio.type.v1beta1.PortSelectorR\x05ports*\x82\x01\n" +
+	"\x0eExecutionPhase\x12\x1f\n" +
+	"\x1bEXECUTION_PHASE_UNSPECIFIED\x10\x00\x12\x19\n" +
+	"\x15EXECUTION_PHASE_AUTHN\x10\x01\x12\x19\n" +
+	"\x15EXECUTION_PHASE_AUTHZ\x10\x02\x12\x19\n" +
+	"\x15EXECUTION_PHASE_STATS\x10\x03B\"Z istio.io/api/extensions/v1alpha1b\x06proto3"
 
 var (
 	file_extensions_v1alpha1_traffic_extension_proto_rawDescOnce sync.Once
@@ -875,15 +939,16 @@ func file_extensions_v1alpha1_traffic_extension_proto_rawDescGZIP() []byte {
 	return file_extensions_v1alpha1_traffic_extension_proto_rawDescData
 }
 
+var file_extensions_v1alpha1_traffic_extension_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_extensions_v1alpha1_traffic_extension_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_extensions_v1alpha1_traffic_extension_proto_goTypes = []any{
-	(*TrafficExtension)(nil),              // 0: istio.extensions.v1alpha1.TrafficExtension
-	(*WasmConfig)(nil),                    // 1: istio.extensions.v1alpha1.WasmConfig
-	(*LuaConfig)(nil),                     // 2: istio.extensions.v1alpha1.LuaConfig
-	(*TrafficSelector)(nil),               // 3: istio.extensions.v1alpha1.TrafficSelector
-	(*v1beta1.WorkloadSelector)(nil),      // 4: istio.type.v1beta1.WorkloadSelector
-	(*v1beta1.PolicyTargetReference)(nil), // 5: istio.type.v1beta1.PolicyTargetReference
-	(PluginPhase)(0),                      // 6: istio.extensions.v1alpha1.PluginPhase
+	(ExecutionPhase)(0),                   // 0: istio.extensions.v1alpha1.ExecutionPhase
+	(*TrafficExtension)(nil),              // 1: istio.extensions.v1alpha1.TrafficExtension
+	(*WasmConfig)(nil),                    // 2: istio.extensions.v1alpha1.WasmConfig
+	(*LuaConfig)(nil),                     // 3: istio.extensions.v1alpha1.LuaConfig
+	(*TrafficSelector)(nil),               // 4: istio.extensions.v1alpha1.TrafficSelector
+	(*v1beta1.WorkloadSelector)(nil),      // 5: istio.type.v1beta1.WorkloadSelector
+	(*v1beta1.PolicyTargetReference)(nil), // 6: istio.type.v1beta1.PolicyTargetReference
 	(*wrappers.Int32Value)(nil),           // 7: google.protobuf.Int32Value
 	(PullPolicy)(0),                       // 8: istio.extensions.v1alpha1.PullPolicy
 	(*_struct.Struct)(nil),                // 9: google.protobuf.Struct
@@ -894,13 +959,13 @@ var file_extensions_v1alpha1_traffic_extension_proto_goTypes = []any{
 	(*v1beta1.PortSelector)(nil),          // 14: istio.type.v1beta1.PortSelector
 }
 var file_extensions_v1alpha1_traffic_extension_proto_depIdxs = []int32{
-	4,  // 0: istio.extensions.v1alpha1.TrafficExtension.selector:type_name -> istio.type.v1beta1.WorkloadSelector
-	5,  // 1: istio.extensions.v1alpha1.TrafficExtension.targetRefs:type_name -> istio.type.v1beta1.PolicyTargetReference
-	6,  // 2: istio.extensions.v1alpha1.TrafficExtension.phase:type_name -> istio.extensions.v1alpha1.PluginPhase
+	5,  // 0: istio.extensions.v1alpha1.TrafficExtension.selector:type_name -> istio.type.v1beta1.WorkloadSelector
+	6,  // 1: istio.extensions.v1alpha1.TrafficExtension.targetRefs:type_name -> istio.type.v1beta1.PolicyTargetReference
+	0,  // 2: istio.extensions.v1alpha1.TrafficExtension.phase:type_name -> istio.extensions.v1alpha1.ExecutionPhase
 	7,  // 3: istio.extensions.v1alpha1.TrafficExtension.priority:type_name -> google.protobuf.Int32Value
-	3,  // 4: istio.extensions.v1alpha1.TrafficExtension.match:type_name -> istio.extensions.v1alpha1.TrafficSelector
-	1,  // 5: istio.extensions.v1alpha1.TrafficExtension.wasm:type_name -> istio.extensions.v1alpha1.WasmConfig
-	2,  // 6: istio.extensions.v1alpha1.TrafficExtension.lua:type_name -> istio.extensions.v1alpha1.LuaConfig
+	4,  // 4: istio.extensions.v1alpha1.TrafficExtension.match:type_name -> istio.extensions.v1alpha1.TrafficSelector
+	2,  // 5: istio.extensions.v1alpha1.TrafficExtension.wasm:type_name -> istio.extensions.v1alpha1.WasmConfig
+	3,  // 6: istio.extensions.v1alpha1.TrafficExtension.lua:type_name -> istio.extensions.v1alpha1.LuaConfig
 	8,  // 7: istio.extensions.v1alpha1.WasmConfig.image_pull_policy:type_name -> istio.extensions.v1alpha1.PullPolicy
 	9,  // 8: istio.extensions.v1alpha1.WasmConfig.plugin_config:type_name -> google.protobuf.Struct
 	10, // 9: istio.extensions.v1alpha1.WasmConfig.fail_strategy:type_name -> istio.extensions.v1alpha1.FailStrategy
@@ -930,13 +995,14 @@ func file_extensions_v1alpha1_traffic_extension_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_extensions_v1alpha1_traffic_extension_proto_rawDesc), len(file_extensions_v1alpha1_traffic_extension_proto_rawDesc)),
-			NumEnums:      0,
+			NumEnums:      1,
 			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_extensions_v1alpha1_traffic_extension_proto_goTypes,
 		DependencyIndexes: file_extensions_v1alpha1_traffic_extension_proto_depIdxs,
+		EnumInfos:         file_extensions_v1alpha1_traffic_extension_proto_enumTypes,
 		MessageInfos:      file_extensions_v1alpha1_traffic_extension_proto_msgTypes,
 	}.Build()
 	File_extensions_v1alpha1_traffic_extension_proto = out.File
