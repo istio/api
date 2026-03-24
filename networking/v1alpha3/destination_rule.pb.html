@@ -284,8 +284,7 @@ Tunnel settings can be applied to TCP or TLS routes and can&rsquo;t be applied t
 </div></td>
 <td>
 <p>Adaptive concurrency settings for dynamically adjusting the allowed number of
-outstanding requests based on sampled latencies. This enables the Envoy
-adaptive concurrency filter for the destination.</p>
+outstanding requests based on sampled latencies.</p>
 <p>Note: This operates independently from circuit breaker thresholds (e.g.
 max_connections). Both mechanisms can reject requests, but they act at
 different layers: adaptive concurrency limits outstanding requests at

@@ -309,8 +309,7 @@ message TrafficPolicy {
   RetryBudget retry_budget = 8;
 
   // Adaptive concurrency settings for dynamically adjusting the allowed number of
-  // outstanding requests based on sampled latencies. This enables the Envoy
-  // adaptive concurrency filter for the destination.
+  // outstanding requests based on sampled latencies.
   //
   // Note: This operates independently from circuit breaker thresholds (e.g.
   // max_connections). Both mechanisms can reject requests, but they act at

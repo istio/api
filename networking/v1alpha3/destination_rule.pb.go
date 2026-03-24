@@ -558,8 +558,7 @@ type TrafficPolicy struct {
 	// Specifies a limit on concurrent retries in relation to the number of active requests.
 	RetryBudget *TrafficPolicy_RetryBudget `protobuf:"bytes,8,opt,name=retry_budget,json=retryBudget,proto3" json:"retry_budget,omitempty"`
 	// Adaptive concurrency settings for dynamically adjusting the allowed number of
-	// outstanding requests based on sampled latencies. This enables the Envoy
-	// adaptive concurrency filter for the destination.
+	// outstanding requests based on sampled latencies.
 	//
 	// Note: This operates independently from circuit breaker thresholds (e.g.
 	// max_connections). Both mechanisms can reject requests, but they act at
