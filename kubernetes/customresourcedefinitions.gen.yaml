@@ -9,17 +9,17 @@ metadata:
     chart: istio
     heritage: Tiller
     release: istio
-  name: meshextensions.extensions.istio.io
+  name: trafficextensions.extensions.istio.io
 spec:
   group: extensions.istio.io
   names:
     categories:
     - istio-io
     - extensions-istio-io
-    kind: MeshExtension
-    listKind: MeshExtensionList
-    plural: meshextensions
-    singular: meshextension
+    kind: TrafficExtension
+    listKind: TrafficExtensionList
+    plural: trafficextensions
+    singular: trafficextension
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -37,7 +37,7 @@ spec:
         properties:
           spec:
             description: 'Extend the functionality provided by the Istio proxy through
-              WebAssembly or Lua filters. See more details at: https://istio.io/docs/reference/config/proxy_extensions/v1alpha1/mesh_extension.html'
+              WebAssembly or Lua filters. See more details at: https://istio.io/docs/reference/config/proxy_extensions/v1alpha1/traffic_extension.html'
             oneOf:
             - not:
                 anyOf:
@@ -63,7 +63,7 @@ spec:
                 type: object
               match:
                 description: Specifies the criteria to determine which traffic is
-                  passed to MeshExtension.
+                  passed to TrafficExtension.
                 items:
                   properties:
                     mode:
@@ -97,7 +97,7 @@ spec:
                 type: array
               phase:
                 description: |-
-                  Determines where in the filter chain this `MeshExtension` is to be injected.
+                  Determines where in the filter chain this `TrafficExtension` is to be injected.
 
                   Valid Options: AUTHN, AUTHZ, STATS
                 enum:
@@ -107,7 +107,8 @@ spec:
                 - STATS
                 type: string
               priority:
-                description: Determines ordering of `MeshExtensions` in the same `phase`.
+                description: Determines ordering of `TrafficExtensions` in the same
+                  `phase`.
                 format: int32
                 nullable: true
                 type: integer

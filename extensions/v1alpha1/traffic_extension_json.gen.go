@@ -6,51 +6,51 @@ import (
 	jsonpb "github.com/golang/protobuf/jsonpb"
 )
 
-// MarshalJSON is a custom marshaler for MeshExtension
-func (this *MeshExtension) MarshalJSON() ([]byte, error) {
-	str, err := MeshExtensionMarshaler.MarshalToString(this)
+// MarshalJSON is a custom marshaler for TrafficExtension
+func (this *TrafficExtension) MarshalJSON() ([]byte, error) {
+	str, err := TrafficExtensionMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for MeshExtension
-func (this *MeshExtension) UnmarshalJSON(b []byte) error {
-	return MeshExtensionUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+// UnmarshalJSON is a custom unmarshaler for TrafficExtension
+func (this *TrafficExtension) UnmarshalJSON(b []byte) error {
+	return TrafficExtensionUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
 // MarshalJSON is a custom marshaler for WasmConfig
 func (this *WasmConfig) MarshalJSON() ([]byte, error) {
-	str, err := MeshExtensionMarshaler.MarshalToString(this)
+	str, err := TrafficExtensionMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
 // UnmarshalJSON is a custom unmarshaler for WasmConfig
 func (this *WasmConfig) UnmarshalJSON(b []byte) error {
-	return MeshExtensionUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+	return TrafficExtensionUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
 // MarshalJSON is a custom marshaler for LuaConfig
 func (this *LuaConfig) MarshalJSON() ([]byte, error) {
-	str, err := MeshExtensionMarshaler.MarshalToString(this)
+	str, err := TrafficExtensionMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
 // UnmarshalJSON is a custom unmarshaler for LuaConfig
 func (this *LuaConfig) UnmarshalJSON(b []byte) error {
-	return MeshExtensionUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+	return TrafficExtensionUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
 // MarshalJSON is a custom marshaler for TrafficSelector
 func (this *TrafficSelector) MarshalJSON() ([]byte, error) {
-	str, err := MeshExtensionMarshaler.MarshalToString(this)
+	str, err := TrafficExtensionMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
 // UnmarshalJSON is a custom unmarshaler for TrafficSelector
 func (this *TrafficSelector) UnmarshalJSON(b []byte) error {
-	return MeshExtensionUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+	return TrafficExtensionUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
 var (
-	MeshExtensionMarshaler   = &jsonpb.Marshaler{}
-	MeshExtensionUnmarshaler = &jsonpb.Unmarshaler{AllowUnknownFields: true}
+	TrafficExtensionMarshaler   = &jsonpb.Marshaler{}
+	TrafficExtensionUnmarshaler = &jsonpb.Unmarshaler{AllowUnknownFields: true}
 )

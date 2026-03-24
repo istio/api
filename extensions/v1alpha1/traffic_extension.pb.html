@@ -1,14 +1,14 @@
 ---
-title: Mesh Extension
+title: Traffic Extension
 description: Extend the functionality provided by the Istio proxy through WebAssembly or Lua filters.
-location: https://istio.io/docs/reference/config/proxy_extensions/v1alpha1/mesh_extension.html
+location: https://istio.io/docs/reference/config/proxy_extensions/v1alpha1/traffic_extension.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-schema: istio.extensions.v1alpha1.MeshExtension
-aliases: [/docs/reference/config/extensions/v1alpha1/mesh_extension]
+schema: istio.extensions.v1alpha1.TrafficExtension
+aliases: [/docs/reference/config/extensions/v1alpha1/traffic_extension]
 number_of_entries: 4
 ---
-<p>MeshExtension provides a mechanism to extend the functionality provided by
+<p>TrafficExtension provides a mechanism to extend the functionality provided by
 the Istio proxy through WebAssembly or Lua filters.</p>
 <p>This API supersedes WasmPlugin by providing a unified mechanism for configuring
 multiple extension types (WebAssembly and Lua) while maintaining consistent
@@ -22,7 +22,7 @@ filters.</p>
 and populates the <code>Authorization</code> header with a JWT to be consumed by
 Istio AuthN.</p>
 <pre><code class="language-yaml">apiVersion: extensions.istio.io/v1alpha1
-kind: MeshExtension
+kind: TrafficExtension
 metadata:
   name: openid-connect
   namespace: istio-ingress
@@ -40,7 +40,7 @@ spec:
 </code></pre>
 <p>This is the same as the last example, but using an OCI image.</p>
 <pre><code class="language-yaml">apiVersion: extensions.istio.io/v1alpha1
-kind: MeshExtension
+kind: TrafficExtension
 metadata:
   name: openid-connect
   namespace: istio-ingress
@@ -59,7 +59,7 @@ spec:
 </code></pre>
 <p>This is the same as the last example, but using VmConfig to configure environment variables in the VM.</p>
 <pre><code class="language-yaml">apiVersion: extensions.istio.io/v1alpha1
-kind: MeshExtension
+kind: TrafficExtension
 metadata:
   name: openid-connect
   namespace: istio-ingress
@@ -84,7 +84,7 @@ spec:
 </code></pre>
 <p>This is also the same as the last example, but the Wasm module is pulled via https and updated for each time when this plugin resource is changed.</p>
 <pre><code class="language-yaml">apiVersion: extensions.istio.io/v1alpha1
-kind: MeshExtension
+kind: TrafficExtension
 metadata:
   name: openid-connect
   namespace: istio-ingress
@@ -106,7 +106,7 @@ spec:
       - name: TRUST_DOMAIN
         value: &quot;cluster.local&quot;
 </code></pre>
-<p>And a more complex example that deploys three MeshExtensions and orders them
+<p>And a more complex example that deploys three TrafficExtensions and orders them
 using <code>phase</code> and <code>priority</code>. The (hypothetical) setup is that the
 <code>openid-connect</code> filter performs an OpenID Connect flow to authenticate the
 user, writing a signed JWT into the Authorization header of the request,
@@ -120,7 +120,7 @@ contents (the permitted &lsquo;function&rsquo;) matches its plugin configuration
 <p>The resulting filter chain looks like this:
 -&gt; openid-connect -&gt; istio.authn -&gt; acl-check -&gt; check-header -&gt; router</p>
 <pre><code class="language-yaml">apiVersion: extensions.istio.io/v1alpha1
-kind: MeshExtension
+kind: TrafficExtension
 metadata:
   name: openid-connect
   namespace: istio-ingress
@@ -138,7 +138,7 @@ spec:
       openid_realm: ingress
 </code></pre>
 <pre><code class="language-yaml">apiVersion: extensions.istio.io/v1alpha1
-kind: MeshExtension
+kind: TrafficExtension
 metadata:
   name: acl-check
   namespace: istio-ingress
@@ -157,7 +157,7 @@ spec:
       set_header: authz_complete
 </code></pre>
 <pre><code class="language-yaml">apiVersion: extensions.istio.io/v1alpha1
-kind: MeshExtension
+kind: TrafficExtension
 metadata:
   name: check-header
   namespace: istio-ingress
@@ -178,7 +178,7 @@ spec:
 </code></pre>
 <p>Gateway with Lua filter for conditional header modification:</p>
 <pre><code class="language-yaml">apiVersion: extensions.istio.io/v1alpha1
-kind: MeshExtension
+kind: TrafficExtension
 metadata:
   name: conditional-header-modifier
   namespace: istio-ingress
@@ -210,7 +210,7 @@ spec:
 </code></pre>
 <p>Waypoint with Lua filter for header count logging:</p>
 <pre><code class="language-yaml">apiVersion: extensions.istio.io/v1alpha1
-kind: MeshExtension
+kind: TrafficExtension
 metadata:
   name: reviews-header-logger
   namespace: default
@@ -233,7 +233,7 @@ spec:
       end
 </code></pre>
 
-<h2 id="MeshExtension">MeshExtension</h2>
+<h2 id="TrafficExtension">TrafficExtension</h2>
 <section>
 <p>+kubebuilder:validation:XValidation:message=&ldquo;only one of targetRefs or selector can be set&rdquo;,rule=&quot;(has(self.selector)?1:0)+(has(self.targetRefs)?1:0)&lt;=1&quot;
 +kubebuilder:validation:XValidation:message=&ldquo;exactly one of wasm or lua must be set&rdquo;,rule=&ldquo;has(self.wasm) != has(self.lua)&rdquo;</p>
@@ -246,23 +246,23 @@ spec:
 </tr>
 </thead>
 <tbody>
-<tr id="MeshExtension-selector">
-<td><div class="field"><div class="name"><code><a href="#MeshExtension-selector">selector</a></code></div>
+<tr id="TrafficExtension-selector">
+<td><div class="field"><div class="name"><code><a href="#TrafficExtension-selector">selector</a></code></div>
 <div class="type"><a href="https://istio.io/docs/reference/config/type/workload-selector.html#WorkloadSelector">WorkloadSelector</a></div>
 </div></td>
 <td>
 <p>Criteria used to select the specific set of pods/VMs on which
 this configuration should be applied. If omitted, this
 configuration will be applied to all workload instances in the same
-namespace. If the <code>MeshExtension</code> is present in the config root
+namespace. If the <code>TrafficExtension</code> is present in the config root
 namespace, it will be applied to all applicable workloads in any
 namespace.</p>
 <p>At most, only one of <code>selector</code> or <code>targetRefs</code> can be set for a given policy.</p>
 
 </td>
 </tr>
-<tr id="MeshExtension-targetRefs">
-<td><div class="field"><div class="name"><code><a href="#MeshExtension-targetRefs">targetRefs</a></code></div>
+<tr id="TrafficExtension-targetRefs">
+<td><div class="field"><div class="name"><code><a href="#TrafficExtension-targetRefs">targetRefs</a></code></div>
 <div class="type"><a href="https://istio.io/docs/reference/config/type/workload-selector.html#PolicyTargetReference">PolicyTargetReference[]</a></div>
 </div></td>
 <td>
@@ -282,43 +282,43 @@ At most one of the selector and targetRefs can be set.</p>
 
 </td>
 </tr>
-<tr id="MeshExtension-phase">
-<td><div class="field"><div class="name"><code><a href="#MeshExtension-phase">phase</a></code></div>
+<tr id="TrafficExtension-phase">
+<td><div class="field"><div class="name"><code><a href="#TrafficExtension-phase">phase</a></code></div>
 <div class="type"><a href="https://istio.io/docs/reference/config/proxy_extensions/wasm-plugin.html#PluginPhase">PluginPhase</a></div>
 </div></td>
 <td>
-<p>Determines where in the filter chain this <code>MeshExtension</code> is to be injected.</p>
+<p>Determines where in the filter chain this <code>TrafficExtension</code> is to be injected.</p>
 
 </td>
 </tr>
-<tr id="MeshExtension-priority">
-<td><div class="field"><div class="name"><code><a href="#MeshExtension-priority">priority</a></code></div>
+<tr id="TrafficExtension-priority">
+<td><div class="field"><div class="name"><code><a href="#TrafficExtension-priority">priority</a></code></div>
 <div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#int32value">Int32Value</a></div>
 </div></td>
 <td>
-<p>Determines ordering of <code>MeshExtensions</code> in the same <code>phase</code>.
-When multiple <code>MeshExtensions</code> are applied to the same workload in the
+<p>Determines ordering of <code>TrafficExtensions</code> in the same <code>phase</code>.
+When multiple <code>TrafficExtensions</code> are applied to the same workload in the
 same <code>phase</code>, they will be applied by priority, in descending order.
-If <code>priority</code> is not set, or two <code>MeshExtensions</code> exist with the same
+If <code>priority</code> is not set, or two <code>TrafficExtensions</code> exist with the same
 value, the ordering will be deterministically derived from the
-<code>creationTimestamp</code>, then name and namespace of the <code>MeshExtensions</code>.
+<code>creationTimestamp</code>, then name and namespace of the <code>TrafficExtensions</code>.
 Defaults to <code>0</code>.</p>
 
 </td>
 </tr>
-<tr id="MeshExtension-match">
-<td><div class="field"><div class="name"><code><a href="#MeshExtension-match">match</a></code></div>
+<tr id="TrafficExtension-match">
+<td><div class="field"><div class="name"><code><a href="#TrafficExtension-match">match</a></code></div>
 <div class="type"><a href="#TrafficSelector">TrafficSelector[]</a></div>
 </div></td>
 <td>
-<p>Specifies the criteria to determine which traffic is passed to MeshExtension.
+<p>Specifies the criteria to determine which traffic is passed to TrafficExtension.
 If a traffic satisfies any of TrafficSelectors,
-the traffic passes the MeshExtension.</p>
+the traffic passes the TrafficExtension.</p>
 
 </td>
 </tr>
-<tr id="MeshExtension-wasm" class="oneof oneof-start">
-<td><div class="field"><div class="name"><code><a href="#MeshExtension-wasm">wasm</a></code></div>
+<tr id="TrafficExtension-wasm" class="oneof oneof-start">
+<td><div class="field"><div class="name"><code><a href="#TrafficExtension-wasm">wasm</a></code></div>
 <div class="type"><a href="#WasmConfig">WasmConfig (oneof)</a></div>
 </div></td>
 <td>
@@ -326,8 +326,8 @@ the traffic passes the MeshExtension.</p>
 
 </td>
 </tr>
-<tr id="MeshExtension-lua" class="oneof">
-<td><div class="field"><div class="name"><code><a href="#MeshExtension-lua">lua</a></code></div>
+<tr id="TrafficExtension-lua" class="oneof">
+<td><div class="field"><div class="name"><code><a href="#TrafficExtension-lua">lua</a></code></div>
 <div class="type"><a href="#LuaConfig">LuaConfig (oneof)</a></div>
 </div></td>
 <td>
@@ -414,7 +414,7 @@ mirroring Kubernetes behaviour.</p>
 </div></td>
 <td>
 <p>Credentials to use for OCI image pulling.
-Name of a Kubernetes Secret in the same namespace as the <code>MeshExtension</code> that
+Name of a Kubernetes Secret in the same namespace as the <code>TrafficExtension</code> that
 contains a Docker pull secret which is to be used to authenticate
 against the registry when pulling the image.</p>
 
@@ -522,7 +522,7 @@ WebAssembly filter instead.</p>
 <h2 id="TrafficSelector">TrafficSelector</h2>
 <section>
 <p>TrafficSelector provides a mechanism to select a specific traffic flow
-for which a MeshExtension will be enabled.
+for which a TrafficExtension will be enabled.
 When all the sub conditions in the TrafficSelector are satisfied, the
 traffic will be selected.</p>
 

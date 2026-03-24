@@ -16,15 +16,15 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        (unknown)
-// source: extensions/v1alpha1/mesh_extension.proto
+// source: extensions/v1alpha1/traffic_extension.proto
 
-// $schema: istio.extensions.v1alpha1.MeshExtension
-// $title: Mesh Extension
+// $schema: istio.extensions.v1alpha1.TrafficExtension
+// $title: Traffic Extension
 // $description: Extend the functionality provided by the Istio proxy through WebAssembly or Lua filters.
-// $location: https://istio.io/docs/reference/config/proxy_extensions/v1alpha1/mesh_extension.html
-// $aliases: [/docs/reference/config/extensions/v1alpha1/mesh_extension]
+// $location: https://istio.io/docs/reference/config/proxy_extensions/v1alpha1/traffic_extension.html
+// $aliases: [/docs/reference/config/extensions/v1alpha1/traffic_extension]
 
-// MeshExtension provides a mechanism to extend the functionality provided by
+// TrafficExtension provides a mechanism to extend the functionality provided by
 // the Istio proxy through WebAssembly or Lua filters.
 //
 // This API supersedes WasmPlugin by providing a unified mechanism for configuring
@@ -44,7 +44,7 @@
 //
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
-// kind: MeshExtension
+// kind: TrafficExtension
 // metadata:
 //   name: openid-connect
 //   namespace: istio-ingress
@@ -65,7 +65,7 @@
 //
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
-// kind: MeshExtension
+// kind: TrafficExtension
 // metadata:
 //   name: openid-connect
 //   namespace: istio-ingress
@@ -87,7 +87,7 @@
 //
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
-// kind: MeshExtension
+// kind: TrafficExtension
 // metadata:
 //   name: openid-connect
 //   namespace: istio-ingress
@@ -115,7 +115,7 @@
 //
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
-// kind: MeshExtension
+// kind: TrafficExtension
 // metadata:
 //   name: openid-connect
 //   namespace: istio-ingress
@@ -138,7 +138,7 @@
 //         value: "cluster.local"
 // ```
 //
-// And a more complex example that deploys three MeshExtensions and orders them
+// And a more complex example that deploys three TrafficExtensions and orders them
 // using `phase` and `priority`. The (hypothetical) setup is that the
 // `openid-connect` filter performs an OpenID Connect flow to authenticate the
 // user, writing a signed JWT into the Authorization header of the request,
@@ -155,7 +155,7 @@
 //
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
-// kind: MeshExtension
+// kind: TrafficExtension
 // metadata:
 //   name: openid-connect
 //   namespace: istio-ingress
@@ -175,7 +175,7 @@
 //
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
-// kind: MeshExtension
+// kind: TrafficExtension
 // metadata:
 //   name: acl-check
 //   namespace: istio-ingress
@@ -196,7 +196,7 @@
 //
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
-// kind: MeshExtension
+// kind: TrafficExtension
 // metadata:
 //   name: check-header
 //   namespace: istio-ingress
@@ -220,7 +220,7 @@
 //
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
-// kind: MeshExtension
+// kind: TrafficExtension
 // metadata:
 //   name: conditional-header-modifier
 //   namespace: istio-ingress
@@ -255,7 +255,7 @@
 //
 // ```yaml
 // apiVersion: extensions.istio.io/v1alpha1
-// kind: MeshExtension
+// kind: TrafficExtension
 // metadata:
 //   name: reviews-header-logger
 //   namespace: default
@@ -300,18 +300,18 @@ const (
 )
 
 // <!-- crd generation tags
-// +cue-gen:MeshExtension:groupName:extensions.istio.io
-// +cue-gen:MeshExtension:versions:v1alpha1
-// +cue-gen:MeshExtension:storageVersion
-// +cue-gen:MeshExtension:annotations:helm.sh/resource-policy=keep
-// +cue-gen:MeshExtension:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
-// +cue-gen:MeshExtension:subresource:status
-// +cue-gen:MeshExtension:spec:required
-// +cue-gen:MeshExtension:scope:Namespaced
-// +cue-gen:MeshExtension:releaseChannel:extended
-// +cue-gen:MeshExtension:resource:categories=istio-io,extensions-istio-io
-// +cue-gen:MeshExtension:preserveUnknownFields:wasm.pluginConfig
-// +cue-gen:MeshExtension:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// +cue-gen:TrafficExtension:groupName:extensions.istio.io
+// +cue-gen:TrafficExtension:versions:v1alpha1
+// +cue-gen:TrafficExtension:storageVersion
+// +cue-gen:TrafficExtension:annotations:helm.sh/resource-policy=keep
+// +cue-gen:TrafficExtension:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
+// +cue-gen:TrafficExtension:subresource:status
+// +cue-gen:TrafficExtension:spec:required
+// +cue-gen:TrafficExtension:scope:Namespaced
+// +cue-gen:TrafficExtension:releaseChannel:extended
+// +cue-gen:TrafficExtension:resource:categories=istio-io,extensions-istio-io
+// +cue-gen:TrafficExtension:preserveUnknownFields:wasm.pluginConfig
+// +cue-gen:TrafficExtension:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
 // -->
 //
 // <!-- go code generation tags
@@ -322,12 +322,12 @@ const (
 // -->
 // +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="(has(self.selector)?1:0)+(has(self.targetRefs)?1:0)<=1"
 // +kubebuilder:validation:XValidation:message="exactly one of wasm or lua must be set",rule="has(self.wasm) != has(self.lua)"
-type MeshExtension struct {
+type TrafficExtension struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Optional. Criteria used to select the specific set of pods/VMs on which
 	// this configuration should be applied. If omitted, this
 	// configuration will be applied to all workload instances in the same
-	// namespace. If the `MeshExtension` is present in the config root
+	// namespace. If the `TrafficExtension` is present in the config root
 	// namespace, it will be applied to all applicable workloads in any
 	// namespace.
 	//
@@ -349,46 +349,46 @@ type MeshExtension struct {
 	// NOTE: Waypoint proxies are required to use this field for policies to apply; `selector` policies will be ignored.
 	// +kubebuilder:validation:MaxItems=16
 	TargetRefs []*v1beta1.PolicyTargetReference `protobuf:"bytes,2,rep,name=targetRefs,proto3" json:"targetRefs,omitempty"`
-	// Determines where in the filter chain this `MeshExtension` is to be injected.
+	// Determines where in the filter chain this `TrafficExtension` is to be injected.
 	Phase PluginPhase `protobuf:"varint,3,opt,name=phase,proto3,enum=istio.extensions.v1alpha1.PluginPhase" json:"phase,omitempty"`
-	// Determines ordering of `MeshExtensions` in the same `phase`.
-	// When multiple `MeshExtensions` are applied to the same workload in the
+	// Determines ordering of `TrafficExtensions` in the same `phase`.
+	// When multiple `TrafficExtensions` are applied to the same workload in the
 	// same `phase`, they will be applied by priority, in descending order.
-	// If `priority` is not set, or two `MeshExtensions` exist with the same
+	// If `priority` is not set, or two `TrafficExtensions` exist with the same
 	// value, the ordering will be deterministically derived from the
-	// `creationTimestamp`, then name and namespace of the `MeshExtensions`.
+	// `creationTimestamp`, then name and namespace of the `TrafficExtensions`.
 	// Defaults to `0`.
 	Priority *wrappers.Int32Value `protobuf:"bytes,4,opt,name=priority,proto3" json:"priority,omitempty"`
-	// Specifies the criteria to determine which traffic is passed to MeshExtension.
+	// Specifies the criteria to determine which traffic is passed to TrafficExtension.
 	// If a traffic satisfies any of TrafficSelectors,
-	// the traffic passes the MeshExtension.
+	// the traffic passes the TrafficExtension.
 	Match []*TrafficSelector `protobuf:"bytes,5,rep,name=match,proto3" json:"match,omitempty"`
 	// Exactly one of `wasm` or `lua` must be set.
 	//
 	// Types that are valid to be assigned to FilterConfig:
 	//
-	//	*MeshExtension_Wasm
-	//	*MeshExtension_Lua
-	FilterConfig  isMeshExtension_FilterConfig `protobuf_oneof:"filter_config"`
+	//	*TrafficExtension_Wasm
+	//	*TrafficExtension_Lua
+	FilterConfig  isTrafficExtension_FilterConfig `protobuf_oneof:"filter_config"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *MeshExtension) Reset() {
-	*x = MeshExtension{}
-	mi := &file_extensions_v1alpha1_mesh_extension_proto_msgTypes[0]
+func (x *TrafficExtension) Reset() {
+	*x = TrafficExtension{}
+	mi := &file_extensions_v1alpha1_traffic_extension_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *MeshExtension) String() string {
+func (x *TrafficExtension) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MeshExtension) ProtoMessage() {}
+func (*TrafficExtension) ProtoMessage() {}
 
-func (x *MeshExtension) ProtoReflect() protoreflect.Message {
-	mi := &file_extensions_v1alpha1_mesh_extension_proto_msgTypes[0]
+func (x *TrafficExtension) ProtoReflect() protoreflect.Message {
+	mi := &file_extensions_v1alpha1_traffic_extension_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -399,88 +399,88 @@ func (x *MeshExtension) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use MeshExtension.ProtoReflect.Descriptor instead.
-func (*MeshExtension) Descriptor() ([]byte, []int) {
-	return file_extensions_v1alpha1_mesh_extension_proto_rawDescGZIP(), []int{0}
+// Deprecated: Use TrafficExtension.ProtoReflect.Descriptor instead.
+func (*TrafficExtension) Descriptor() ([]byte, []int) {
+	return file_extensions_v1alpha1_traffic_extension_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *MeshExtension) GetSelector() *v1beta1.WorkloadSelector {
+func (x *TrafficExtension) GetSelector() *v1beta1.WorkloadSelector {
 	if x != nil {
 		return x.Selector
 	}
 	return nil
 }
 
-func (x *MeshExtension) GetTargetRefs() []*v1beta1.PolicyTargetReference {
+func (x *TrafficExtension) GetTargetRefs() []*v1beta1.PolicyTargetReference {
 	if x != nil {
 		return x.TargetRefs
 	}
 	return nil
 }
 
-func (x *MeshExtension) GetPhase() PluginPhase {
+func (x *TrafficExtension) GetPhase() PluginPhase {
 	if x != nil {
 		return x.Phase
 	}
 	return PluginPhase_UNSPECIFIED_PHASE
 }
 
-func (x *MeshExtension) GetPriority() *wrappers.Int32Value {
+func (x *TrafficExtension) GetPriority() *wrappers.Int32Value {
 	if x != nil {
 		return x.Priority
 	}
 	return nil
 }
 
-func (x *MeshExtension) GetMatch() []*TrafficSelector {
+func (x *TrafficExtension) GetMatch() []*TrafficSelector {
 	if x != nil {
 		return x.Match
 	}
 	return nil
 }
 
-func (x *MeshExtension) GetFilterConfig() isMeshExtension_FilterConfig {
+func (x *TrafficExtension) GetFilterConfig() isTrafficExtension_FilterConfig {
 	if x != nil {
 		return x.FilterConfig
 	}
 	return nil
 }
 
-func (x *MeshExtension) GetWasm() *WasmConfig {
+func (x *TrafficExtension) GetWasm() *WasmConfig {
 	if x != nil {
-		if x, ok := x.FilterConfig.(*MeshExtension_Wasm); ok {
+		if x, ok := x.FilterConfig.(*TrafficExtension_Wasm); ok {
 			return x.Wasm
 		}
 	}
 	return nil
 }
 
-func (x *MeshExtension) GetLua() *LuaConfig {
+func (x *TrafficExtension) GetLua() *LuaConfig {
 	if x != nil {
-		if x, ok := x.FilterConfig.(*MeshExtension_Lua); ok {
+		if x, ok := x.FilterConfig.(*TrafficExtension_Lua); ok {
 			return x.Lua
 		}
 	}
 	return nil
 }
 
-type isMeshExtension_FilterConfig interface {
-	isMeshExtension_FilterConfig()
+type isTrafficExtension_FilterConfig interface {
+	isTrafficExtension_FilterConfig()
 }
 
-type MeshExtension_Wasm struct {
+type TrafficExtension_Wasm struct {
 	// WebAssembly filter configuration.
 	Wasm *WasmConfig `protobuf:"bytes,6,opt,name=wasm,proto3,oneof"`
 }
 
-type MeshExtension_Lua struct {
+type TrafficExtension_Lua struct {
 	// Lua filter configuration.
 	Lua *LuaConfig `protobuf:"bytes,7,opt,name=lua,proto3,oneof"`
 }
 
-func (*MeshExtension_Wasm) isMeshExtension_FilterConfig() {}
+func (*TrafficExtension_Wasm) isTrafficExtension_FilterConfig() {}
 
-func (*MeshExtension_Lua) isMeshExtension_FilterConfig() {}
+func (*TrafficExtension_Lua) isTrafficExtension_FilterConfig() {}
 
 // WasmConfig configures a WebAssembly filter.
 //
@@ -531,7 +531,7 @@ type WasmConfig struct {
 	// mirroring Kubernetes behaviour.
 	ImagePullPolicy PullPolicy `protobuf:"varint,3,opt,name=image_pull_policy,json=imagePullPolicy,proto3,enum=istio.extensions.v1alpha1.PullPolicy" json:"image_pull_policy,omitempty"`
 	// Credentials to use for OCI image pulling.
-	// Name of a Kubernetes Secret in the same namespace as the `MeshExtension` that
+	// Name of a Kubernetes Secret in the same namespace as the `TrafficExtension` that
 	// contains a Docker pull secret which is to be used to authenticate
 	// against the registry when pulling the image.
 	// +kubebuilder:validation:MinLength=1
@@ -579,7 +579,7 @@ type WasmConfig struct {
 
 func (x *WasmConfig) Reset() {
 	*x = WasmConfig{}
-	mi := &file_extensions_v1alpha1_mesh_extension_proto_msgTypes[1]
+	mi := &file_extensions_v1alpha1_traffic_extension_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -591,7 +591,7 @@ func (x *WasmConfig) String() string {
 func (*WasmConfig) ProtoMessage() {}
 
 func (x *WasmConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_extensions_v1alpha1_mesh_extension_proto_msgTypes[1]
+	mi := &file_extensions_v1alpha1_traffic_extension_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -604,7 +604,7 @@ func (x *WasmConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WasmConfig.ProtoReflect.Descriptor instead.
 func (*WasmConfig) Descriptor() ([]byte, []int) {
-	return file_extensions_v1alpha1_mesh_extension_proto_rawDescGZIP(), []int{1}
+	return file_extensions_v1alpha1_traffic_extension_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *WasmConfig) GetUrl() string {
@@ -721,7 +721,7 @@ type LuaConfig struct {
 
 func (x *LuaConfig) Reset() {
 	*x = LuaConfig{}
-	mi := &file_extensions_v1alpha1_mesh_extension_proto_msgTypes[2]
+	mi := &file_extensions_v1alpha1_traffic_extension_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -733,7 +733,7 @@ func (x *LuaConfig) String() string {
 func (*LuaConfig) ProtoMessage() {}
 
 func (x *LuaConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_extensions_v1alpha1_mesh_extension_proto_msgTypes[2]
+	mi := &file_extensions_v1alpha1_traffic_extension_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -746,7 +746,7 @@ func (x *LuaConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LuaConfig.ProtoReflect.Descriptor instead.
 func (*LuaConfig) Descriptor() ([]byte, []int) {
-	return file_extensions_v1alpha1_mesh_extension_proto_rawDescGZIP(), []int{2}
+	return file_extensions_v1alpha1_traffic_extension_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *LuaConfig) GetInlineCode() string {
@@ -757,7 +757,7 @@ func (x *LuaConfig) GetInlineCode() string {
 }
 
 // TrafficSelector provides a mechanism to select a specific traffic flow
-// for which a MeshExtension will be enabled.
+// for which a TrafficExtension will be enabled.
 // When all the sub conditions in the TrafficSelector are satisfied, the
 // traffic will be selected.
 type TrafficSelector struct {
@@ -784,7 +784,7 @@ type TrafficSelector struct {
 
 func (x *TrafficSelector) Reset() {
 	*x = TrafficSelector{}
-	mi := &file_extensions_v1alpha1_mesh_extension_proto_msgTypes[3]
+	mi := &file_extensions_v1alpha1_traffic_extension_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -796,7 +796,7 @@ func (x *TrafficSelector) String() string {
 func (*TrafficSelector) ProtoMessage() {}
 
 func (x *TrafficSelector) ProtoReflect() protoreflect.Message {
-	mi := &file_extensions_v1alpha1_mesh_extension_proto_msgTypes[3]
+	mi := &file_extensions_v1alpha1_traffic_extension_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -809,7 +809,7 @@ func (x *TrafficSelector) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TrafficSelector.ProtoReflect.Descriptor instead.
 func (*TrafficSelector) Descriptor() ([]byte, []int) {
-	return file_extensions_v1alpha1_mesh_extension_proto_rawDescGZIP(), []int{3}
+	return file_extensions_v1alpha1_traffic_extension_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *TrafficSelector) GetMode() v1beta1.WorkloadMode {
@@ -826,12 +826,12 @@ func (x *TrafficSelector) GetPorts() []*v1beta1.PortSelector {
 	return nil
 }
 
-var File_extensions_v1alpha1_mesh_extension_proto protoreflect.FileDescriptor
+var File_extensions_v1alpha1_traffic_extension_proto protoreflect.FileDescriptor
 
-const file_extensions_v1alpha1_mesh_extension_proto_rawDesc = "" +
+const file_extensions_v1alpha1_traffic_extension_proto_rawDesc = "" +
 	"\n" +
-	"(extensions/v1alpha1/mesh_extension.proto\x12\x19istio.extensions.v1alpha1\x1a\x1eextensions/v1alpha1/wasm.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1btype/v1beta1/selector.proto\"\xdd\x03\n" +
-	"\rMeshExtension\x12@\n" +
+	"+extensions/v1alpha1/traffic_extension.proto\x12\x19istio.extensions.v1alpha1\x1a\x1eextensions/v1alpha1/wasm.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1btype/v1beta1/selector.proto\"\xe0\x03\n" +
+	"\x10TrafficExtension\x12@\n" +
 	"\bselector\x18\x01 \x01(\v2$.istio.type.v1beta1.WorkloadSelectorR\bselector\x12I\n" +
 	"\n" +
 	"targetRefs\x18\x02 \x03(\v2).istio.type.v1beta1.PolicyTargetReferenceR\n" +
@@ -864,20 +864,20 @@ const file_extensions_v1alpha1_mesh_extension_proto_rawDesc = "" +
 	"\x05ports\x18\x02 \x03(\v2 .istio.type.v1beta1.PortSelectorR\x05portsB\"Z istio.io/api/extensions/v1alpha1b\x06proto3"
 
 var (
-	file_extensions_v1alpha1_mesh_extension_proto_rawDescOnce sync.Once
-	file_extensions_v1alpha1_mesh_extension_proto_rawDescData []byte
+	file_extensions_v1alpha1_traffic_extension_proto_rawDescOnce sync.Once
+	file_extensions_v1alpha1_traffic_extension_proto_rawDescData []byte
 )
 
-func file_extensions_v1alpha1_mesh_extension_proto_rawDescGZIP() []byte {
-	file_extensions_v1alpha1_mesh_extension_proto_rawDescOnce.Do(func() {
-		file_extensions_v1alpha1_mesh_extension_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_extensions_v1alpha1_mesh_extension_proto_rawDesc), len(file_extensions_v1alpha1_mesh_extension_proto_rawDesc)))
+func file_extensions_v1alpha1_traffic_extension_proto_rawDescGZIP() []byte {
+	file_extensions_v1alpha1_traffic_extension_proto_rawDescOnce.Do(func() {
+		file_extensions_v1alpha1_traffic_extension_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_extensions_v1alpha1_traffic_extension_proto_rawDesc), len(file_extensions_v1alpha1_traffic_extension_proto_rawDesc)))
 	})
-	return file_extensions_v1alpha1_mesh_extension_proto_rawDescData
+	return file_extensions_v1alpha1_traffic_extension_proto_rawDescData
 }
 
-var file_extensions_v1alpha1_mesh_extension_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
-var file_extensions_v1alpha1_mesh_extension_proto_goTypes = []any{
-	(*MeshExtension)(nil),                 // 0: istio.extensions.v1alpha1.MeshExtension
+var file_extensions_v1alpha1_traffic_extension_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_extensions_v1alpha1_traffic_extension_proto_goTypes = []any{
+	(*TrafficExtension)(nil),              // 0: istio.extensions.v1alpha1.TrafficExtension
 	(*WasmConfig)(nil),                    // 1: istio.extensions.v1alpha1.WasmConfig
 	(*LuaConfig)(nil),                     // 2: istio.extensions.v1alpha1.LuaConfig
 	(*TrafficSelector)(nil),               // 3: istio.extensions.v1alpha1.TrafficSelector
@@ -893,14 +893,14 @@ var file_extensions_v1alpha1_mesh_extension_proto_goTypes = []any{
 	(v1beta1.WorkloadMode)(0),             // 13: istio.type.v1beta1.WorkloadMode
 	(*v1beta1.PortSelector)(nil),          // 14: istio.type.v1beta1.PortSelector
 }
-var file_extensions_v1alpha1_mesh_extension_proto_depIdxs = []int32{
-	4,  // 0: istio.extensions.v1alpha1.MeshExtension.selector:type_name -> istio.type.v1beta1.WorkloadSelector
-	5,  // 1: istio.extensions.v1alpha1.MeshExtension.targetRefs:type_name -> istio.type.v1beta1.PolicyTargetReference
-	6,  // 2: istio.extensions.v1alpha1.MeshExtension.phase:type_name -> istio.extensions.v1alpha1.PluginPhase
-	7,  // 3: istio.extensions.v1alpha1.MeshExtension.priority:type_name -> google.protobuf.Int32Value
-	3,  // 4: istio.extensions.v1alpha1.MeshExtension.match:type_name -> istio.extensions.v1alpha1.TrafficSelector
-	1,  // 5: istio.extensions.v1alpha1.MeshExtension.wasm:type_name -> istio.extensions.v1alpha1.WasmConfig
-	2,  // 6: istio.extensions.v1alpha1.MeshExtension.lua:type_name -> istio.extensions.v1alpha1.LuaConfig
+var file_extensions_v1alpha1_traffic_extension_proto_depIdxs = []int32{
+	4,  // 0: istio.extensions.v1alpha1.TrafficExtension.selector:type_name -> istio.type.v1beta1.WorkloadSelector
+	5,  // 1: istio.extensions.v1alpha1.TrafficExtension.targetRefs:type_name -> istio.type.v1beta1.PolicyTargetReference
+	6,  // 2: istio.extensions.v1alpha1.TrafficExtension.phase:type_name -> istio.extensions.v1alpha1.PluginPhase
+	7,  // 3: istio.extensions.v1alpha1.TrafficExtension.priority:type_name -> google.protobuf.Int32Value
+	3,  // 4: istio.extensions.v1alpha1.TrafficExtension.match:type_name -> istio.extensions.v1alpha1.TrafficSelector
+	1,  // 5: istio.extensions.v1alpha1.TrafficExtension.wasm:type_name -> istio.extensions.v1alpha1.WasmConfig
+	2,  // 6: istio.extensions.v1alpha1.TrafficExtension.lua:type_name -> istio.extensions.v1alpha1.LuaConfig
 	8,  // 7: istio.extensions.v1alpha1.WasmConfig.image_pull_policy:type_name -> istio.extensions.v1alpha1.PullPolicy
 	9,  // 8: istio.extensions.v1alpha1.WasmConfig.plugin_config:type_name -> google.protobuf.Struct
 	10, // 9: istio.extensions.v1alpha1.WasmConfig.fail_strategy:type_name -> istio.extensions.v1alpha1.FailStrategy
@@ -915,31 +915,31 @@ var file_extensions_v1alpha1_mesh_extension_proto_depIdxs = []int32{
 	0,  // [0:14] is the sub-list for field type_name
 }
 
-func init() { file_extensions_v1alpha1_mesh_extension_proto_init() }
-func file_extensions_v1alpha1_mesh_extension_proto_init() {
-	if File_extensions_v1alpha1_mesh_extension_proto != nil {
+func init() { file_extensions_v1alpha1_traffic_extension_proto_init() }
+func file_extensions_v1alpha1_traffic_extension_proto_init() {
+	if File_extensions_v1alpha1_traffic_extension_proto != nil {
 		return
 	}
 	file_extensions_v1alpha1_wasm_proto_init()
-	file_extensions_v1alpha1_mesh_extension_proto_msgTypes[0].OneofWrappers = []any{
-		(*MeshExtension_Wasm)(nil),
-		(*MeshExtension_Lua)(nil),
+	file_extensions_v1alpha1_traffic_extension_proto_msgTypes[0].OneofWrappers = []any{
+		(*TrafficExtension_Wasm)(nil),
+		(*TrafficExtension_Lua)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_extensions_v1alpha1_mesh_extension_proto_rawDesc), len(file_extensions_v1alpha1_mesh_extension_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_extensions_v1alpha1_traffic_extension_proto_rawDesc), len(file_extensions_v1alpha1_traffic_extension_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_extensions_v1alpha1_mesh_extension_proto_goTypes,
-		DependencyIndexes: file_extensions_v1alpha1_mesh_extension_proto_depIdxs,
-		MessageInfos:      file_extensions_v1alpha1_mesh_extension_proto_msgTypes,
+		GoTypes:           file_extensions_v1alpha1_traffic_extension_proto_goTypes,
+		DependencyIndexes: file_extensions_v1alpha1_traffic_extension_proto_depIdxs,
+		MessageInfos:      file_extensions_v1alpha1_traffic_extension_proto_msgTypes,
 	}.Build()
-	File_extensions_v1alpha1_mesh_extension_proto = out.File
-	file_extensions_v1alpha1_mesh_extension_proto_goTypes = nil
-	file_extensions_v1alpha1_mesh_extension_proto_depIdxs = nil
+	File_extensions_v1alpha1_traffic_extension_proto = out.File
+	file_extensions_v1alpha1_traffic_extension_proto_goTypes = nil
+	file_extensions_v1alpha1_traffic_extension_proto_depIdxs = nil
 }
