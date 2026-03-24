@@ -499,7 +499,9 @@ spec:
                                       nullable: true
                                       type: integer
                                     fixedValue:
-                                      description: A fixed value for the minRTT.
+                                      description: A fixed baseline round-trip time
+                                        (minRTT) for the upstream, specified as a
+                                        duration (e.g., `5ms`, `10ms`).
                                       type: string
                                       x-kubernetes-validations:
                                       - message: must be a valid duration greater
@@ -522,8 +524,8 @@ spec:
                                       nullable: true
                                       type: integer
                                     minConcurrency:
-                                      description: The concurrency limit set while
-                                        measuring the minRTT.
+                                      description: The concurrency limit pinned during
+                                        the minRTT measurement window.
                                       maximum: 4294967295
                                       minimum: 0
                                       nullable: true
@@ -1557,7 +1559,9 @@ spec:
                                 nullable: true
                                 type: integer
                               fixedValue:
-                                description: A fixed value for the minRTT.
+                                description: A fixed baseline round-trip time (minRTT)
+                                  for the upstream, specified as a duration (e.g.,
+                                  `5ms`, `10ms`).
                                 type: string
                                 x-kubernetes-validations:
                                 - message: must be a valid duration greater than 1ms
@@ -1577,8 +1581,8 @@ spec:
                                 nullable: true
                                 type: integer
                               minConcurrency:
-                                description: The concurrency limit set while measuring
-                                  the minRTT.
+                                description: The concurrency limit pinned during the
+                                  minRTT measurement window.
                                 maximum: 4294967295
                                 minimum: 0
                                 nullable: true
@@ -2728,7 +2732,9 @@ spec:
                                       nullable: true
                                       type: integer
                                     fixedValue:
-                                      description: A fixed value for the minRTT.
+                                      description: A fixed baseline round-trip time
+                                        (minRTT) for the upstream, specified as a
+                                        duration (e.g., `5ms`, `10ms`).
                                       type: string
                                       x-kubernetes-validations:
                                       - message: must be a valid duration greater
@@ -2751,8 +2757,8 @@ spec:
                                       nullable: true
                                       type: integer
                                     minConcurrency:
-                                      description: The concurrency limit set while
-                                        measuring the minRTT.
+                                      description: The concurrency limit pinned during
+                                        the minRTT measurement window.
                                       maximum: 4294967295
                                       minimum: 0
                                       nullable: true
@@ -3786,7 +3792,9 @@ spec:
                                 nullable: true
                                 type: integer
                               fixedValue:
-                                description: A fixed value for the minRTT.
+                                description: A fixed baseline round-trip time (minRTT)
+                                  for the upstream, specified as a duration (e.g.,
+                                  `5ms`, `10ms`).
                                 type: string
                                 x-kubernetes-validations:
                                 - message: must be a valid duration greater than 1ms
@@ -3806,8 +3814,8 @@ spec:
                                 nullable: true
                                 type: integer
                               minConcurrency:
-                                description: The concurrency limit set while measuring
-                                  the minRTT.
+                                description: The concurrency limit pinned during the
+                                  minRTT measurement window.
                                 maximum: 4294967295
                                 minimum: 0
                                 nullable: true
@@ -4957,7 +4965,9 @@ spec:
                                       nullable: true
                                       type: integer
                                     fixedValue:
-                                      description: A fixed value for the minRTT.
+                                      description: A fixed baseline round-trip time
+                                        (minRTT) for the upstream, specified as a
+                                        duration (e.g., `5ms`, `10ms`).
                                       type: string
                                       x-kubernetes-validations:
                                       - message: must be a valid duration greater
@@ -4980,8 +4990,8 @@ spec:
                                       nullable: true
                                       type: integer
                                     minConcurrency:
-                                      description: The concurrency limit set while
-                                        measuring the minRTT.
+                                      description: The concurrency limit pinned during
+                                        the minRTT measurement window.
                                       maximum: 4294967295
                                       minimum: 0
                                       nullable: true
@@ -6015,7 +6025,9 @@ spec:
                                 nullable: true
                                 type: integer
                               fixedValue:
-                                description: A fixed value for the minRTT.
+                                description: A fixed baseline round-trip time (minRTT)
+                                  for the upstream, specified as a duration (e.g.,
+                                  `5ms`, `10ms`).
                                 type: string
                                 x-kubernetes-validations:
                                 - message: must be a valid duration greater than 1ms
@@ -6035,8 +6047,8 @@ spec:
                                 nullable: true
                                 type: integer
                               minConcurrency:
-                                description: The concurrency limit set while measuring
-                                  the minRTT.
+                                description: The concurrency limit pinned during the
+                                  minRTT measurement window.
                                 maximum: 4294967295
                                 minimum: 0
                                 nullable: true

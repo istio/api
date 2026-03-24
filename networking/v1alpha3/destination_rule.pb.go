@@ -1310,13 +1310,26 @@ func (x *OutlierDetection) GetMinHealthPercent() int32 {
 	return 0
 }
 
-// Adaptive concurrency settings for dynamically adjusting the allowed number of
-// outstanding requests based on sampled latencies. See Envoy's
+// Configures automatic concurrency limits for requests to an upstream service.
+// When enabled, the sidecar proxy will dynamically calculate and enforce a
+// maximum number of outstanding requests allowed to the destination based on
+// periodic latency sampling. If the measured latency increases relative to the
+// baseline (minRTT), the concurrency limit is reduced; if latency remains
+// stable, the limit is gradually increased. Requests that exceed the current
+// concurrency limit are immediately rejected with the configured HTTP status
+// code (default 503) without being forwarded to the upstream.
+//
+// This is useful for protecting upstream services from being overwhelmed during
+// load spikes or degraded performance, without requiring operators to manually
+// set fixed concurrency thresholds.
+//
+// See Envoy's
 // [adaptive concurrency filter](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/adaptive_concurrency_filter)
 // for more details.
 //
-// The following example configures adaptive concurrency for the my-service
-// service with a gradient controller:
+// The following example enables adaptive concurrency limiting for my-service,
+// using the gradient controller to automatically adjust the concurrency limit
+// based on latency measurements taken every 60 seconds:
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1
@@ -2901,24 +2914,20 @@ type AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationPar
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The allowed upper-bound on the calculated concurrency limit. Defaults to 1000.
 	//
-	// This acts as a safety cap on the gradient algorithm's output, the algorithm
+	// This acts as a safety cap on the gradient algorithm's output. The algorithm
 	// dynamically adjusts the concurrency limit based on measured latency (via the
 	// gradient formula: new_limit = old_limit * gradient + headroom), but the result
-	// is clamped to [min_concurrency, max_concurrency_limit] before being applied.
-	// The gradient calculation itself is not influenced by this value.
+	// will never exceed this value. The gradient calculation itself is not influenced
+	// by this cap.
 	//
 	// In most cases the default of 1000 is sufficient, since the algorithm will
 	// self-regulate well below this ceiling based on observed latencies. Consider
 	// lowering it only if you know the upstream's maximum sustainable concurrency
 	// and want a hard safety net beyond the algorithm's own backoff behavior.
 	// Setting this too low may prevent the algorithm from reaching the upstream's
-	// true capacity. Note that this limit applies per filter config instance
-	// (typically one per Envoy process per listener), so the aggregate concurrency
-	// across N Envoy instances can reach up to N * max_concurrency_limit.
+	// true capacity.
 	//
-	// Overridable at runtime via
-	// adaptive_concurrency.gradient_controller.max_concurrency_limit.
-	// Monitor the concurrency_limit gauge to observe where the algorithm settles
+	// Monitor the `concurrency_limit` gauge to observe where the algorithm settles
 	// under normal load.
 	MaxConcurrencyLimit *wrappers.UInt32Value `protobuf:"bytes,2,opt,name=max_concurrency_limit,json=maxConcurrencyLimit,proto3" json:"max_concurrency_limit,omitempty"`
 	// The period of time samples are taken to recalculate the concurrency limit.
@@ -2996,7 +3005,23 @@ type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams st
 	// This is recommended to prevent all hosts in a cluster from
 	// being in a minRTT calculation window at the same time.
 	Jitter *wrappers.UInt32Value `protobuf:"bytes,3,opt,name=jitter,proto3" json:"jitter,omitempty"`
-	// The concurrency limit set while measuring the minRTT. Defaults to 3.
+	// The concurrency limit pinned during the minRTT measurement window.
+	// Defaults to 3.
+	//
+	// During the measurement window, the filter drops the concurrency limit to
+	// this value to measure latency under near-idle conditions. Requests that
+	// exceed this limit during the window are rejected with the configured
+	// status code (default 503). The window lasts until `request_count` samples
+	// are collected.
+	//
+	// To mitigate 503s during measurement windows:
+	//   - Use `jitter` to stagger measurement windows across hosts so they
+	//     don't all enter the window simultaneously.
+	//   - Configure retries (with the `previous_hosts` retry predicate) so
+	//     rejected requests are retried on a different host not currently in
+	//     a measurement window.
+	//   - Alternatively, use `fixed_value` instead of `interval` to skip
+	//     dynamic measurement entirely if the baseline latency is known.
 	MinConcurrency *wrappers.UInt32Value `protobuf:"bytes,4,opt,name=min_concurrency,json=minConcurrency,proto3" json:"min_concurrency,omitempty"`
 	// Amount added to the measured minRTT to add stability to the concurrency limit
 	// during natural variability in latency. This is expressed as a percentage of the
@@ -3106,9 +3131,23 @@ type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_In
 }
 
 type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_FixedValue struct {
-	// A fixed value for the minRTT. Must be positive.
+	// A fixed baseline round-trip time (minRTT) for the upstream, specified
+	// as a duration (e.g., `5ms`, `10ms`). Must be positive. This tells the
+	// gradient controller "assume the upstream responds in this time under
+	// ideal conditions" and skips dynamic sampling entirely.
+	//
+	// The gradient algorithm uses minRTT as the reference in its formula:
+	//
+	//	gradient = (minRTT + buffer) / sampleRTT
+	//	new_limit = old_limit × gradient + headroom
+	//
+	// where buffer = minRTT × buffer_percent, and headroom = sqrt(limit).
+	// So if measured latency rises above minRTT + buffer, the concurrency
+	// limit is reduced; if it stays near minRTT, the limit grows.
+	//
 	// Use this when the baseline latency of the upstream is well-known and
-	// stable, to avoid the periodic low-concurrency measurement windows.
+	// stable, to avoid the periodic low-concurrency measurement windows
+	// that dynamic sampling (`interval`) requires.
 	FixedValue *duration.Duration `protobuf:"bytes,6,opt,name=fixed_value,json=fixedValue,proto3,oneof"`
 }
 

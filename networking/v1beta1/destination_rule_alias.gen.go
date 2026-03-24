@@ -318,13 +318,26 @@ const ConnectionPoolSettings_HTTPSettings_UPGRADE ConnectionPoolSettings_HTTPSet
 // ```
 type OutlierDetection = v1alpha3.OutlierDetection
 
-// Adaptive concurrency settings for dynamically adjusting the allowed number of
-// outstanding requests based on sampled latencies. See Envoy's
+// Configures automatic concurrency limits for requests to an upstream service.
+// When enabled, the sidecar proxy will dynamically calculate and enforce a
+// maximum number of outstanding requests allowed to the destination based on
+// periodic latency sampling. If the measured latency increases relative to the
+// baseline (minRTT), the concurrency limit is reduced; if latency remains
+// stable, the limit is gradually increased. Requests that exceed the current
+// concurrency limit are immediately rejected with the configured HTTP status
+// code (default 503) without being forwarded to the upstream.
+//
+// This is useful for protecting upstream services from being overwhelmed during
+// load spikes or degraded performance, without requiring operators to manually
+// set fixed concurrency thresholds.
+//
+// See Envoy's
 // [adaptive concurrency filter](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/adaptive_concurrency_filter)
 // for more details.
 //
-// The following example configures adaptive concurrency for the my-service
-// service with a gradient controller:
+// The following example enables adaptive concurrency limiting for my-service,
+// using the gradient controller to automatically adjust the concurrency limit
+// based on latency measurements taken every 60 seconds:
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1
@@ -378,9 +391,23 @@ type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams = 
 // reduce overhead but may react slower to changes in upstream performance.
 type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_Interval = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_Interval
 
-// A fixed value for the minRTT. Must be positive.
+// A fixed baseline round-trip time (minRTT) for the upstream, specified
+// as a duration (e.g., `5ms`, `10ms`). Must be positive. This tells the
+// gradient controller "assume the upstream responds in this time under
+// ideal conditions" and skips dynamic sampling entirely.
+//
+// The gradient algorithm uses minRTT as the reference in its formula:
+//
+//	gradient = (minRTT + buffer) / sampleRTT
+//	new_limit = old_limit × gradient + headroom
+//
+// where buffer = minRTT × buffer_percent, and headroom = sqrt(limit).
+// So if measured latency rises above minRTT + buffer, the concurrency
+// limit is reduced; if it stays near minRTT, the limit grows.
+//
 // Use this when the baseline latency of the upstream is well-known and
-// stable, to avoid the periodic low-concurrency measurement windows.
+// stable, to avoid the periodic low-concurrency measurement windows
+// that dynamic sampling (`interval`) requires.
 type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_FixedValue = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_FixedValue
 
 // Gradient concurrency control will be used.
