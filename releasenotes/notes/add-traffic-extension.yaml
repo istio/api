@@ -6,5 +6,5 @@ issue: []
 
 releaseNotes:
 - |
-    **Added** `MeshExtension` API to the extensions package, enabling first-class support
+    **Added** `TrafficExtension` API to the extensions package, enabling first-class support
     for Lua extensibility.
