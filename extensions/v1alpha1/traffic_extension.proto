@@ -308,6 +308,23 @@ option go_package = "istio.io/api/extensions/v1alpha1";
 // +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="(has(self.selector)?1:0)+(has(self.targetRefs)?1:0)<=1"
 // +kubebuilder:validation:XValidation:message="exactly one of wasm or lua must be set",rule="has(self.wasm) != has(self.lua)"
 message TrafficExtension {
+  // ExecutionPhase specifies where in the filter chain a `TrafficExtension` is injected.
+  enum ExecutionPhase {
+    // Control plane decides where to insert the extension. This will generally
+    // be at the end of the filter chain, right before the Router.
+    // Do not specify `ExecutionPhase` if the extension is independent of others.
+    UNSPECIFIED = 0;
+
+    // Insert before Istio authentication filters.
+    AUTHN = 1;
+
+    // Insert before Istio authorization filters and after Istio authentication filters.
+    AUTHZ = 2;
+
+    // Insert before Istio stats filters and after Istio authorization filters.
+    STATS = 3;
+  }
+
   // Optional. Criteria used to select the specific set of pods/VMs on which
   // this configuration should be applied. If omitted, this
   // configuration will be applied to all workload instances in the same
@@ -496,25 +513,6 @@ message LuaConfig {
   // +kubebuilder:validation:MinLength=1
   // +kubebuilder:validation:MaxLength=65536
   string inline_code = 1 [(google.api.field_behavior) = REQUIRED];
-}
-
-/* NOTE: WasmPlugin.PluginPhase is kept for backward compatibility.
-   This is the canonical definition. */
-// ExecutionPhase specifies where in the filter chain a `TrafficExtension` is injected.
-enum ExecutionPhase {
-  // Control plane decides where to insert the extension. This will generally
-  // be at the end of the filter chain, right before the Router.
-  // Do not specify `ExecutionPhase` if the extension is independent of others.
-  EXECUTION_PHASE_UNSPECIFIED = 0;
-
-  // Insert before Istio authentication filters.
-  EXECUTION_PHASE_AUTHN = 1;
-
-  // Insert before Istio authorization filters and after Istio authentication filters.
-  EXECUTION_PHASE_AUTHZ = 2;
-
-  // Insert before Istio stats filters and after Istio authorization filters.
-  EXECUTION_PHASE_STATS = 3;
 }
 
 /* NOTE: WasmPlugin defines an identical nested message (WasmPlugin.TrafficSelector)

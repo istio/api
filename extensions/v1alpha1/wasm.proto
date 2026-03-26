@@ -418,7 +418,7 @@ enum PluginType {
 }
 
 /* NOTE: This enum is intentionally kept for backward compatibility with WasmPlugin.
-   The canonical definition is ExecutionPhase in traffic_extension.proto. */
+   The canonical definition is TrafficExtension.ExecutionPhase in traffic_extension.proto. */
 // The phase in the filter chain where the plugin will be injected.
 enum PluginPhase {
   // Control plane decides where to insert the plugin. This will generally
