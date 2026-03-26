@@ -311,7 +311,12 @@ message TrafficPolicy {
   // Adaptive concurrency settings for dynamically adjusting the allowed number of
   // outstanding requests based on sampled latencies.
   //
-  // Note: This operates independently from circuit breaker thresholds (e.g.
+  // Note: This applies only to HTTP/1.1 and HTTP/2 unary request-response
+  // traffic and is enforced on the server-side (inbound) proxy. It does not
+  // apply to TCP connections, gRPC streaming, or WebSocket connections, since
+  // the filter relies on measuring individual request round-trip latencies.
+  //
+  // This operates independently from circuit breaker thresholds (e.g.
   // max_connections). Both mechanisms can reject requests, but they act at
   // different layers: adaptive concurrency limits outstanding requests at
   // the HTTP filter level before routing, while circuit breakers limit
@@ -853,6 +858,20 @@ message OutlierDetection {
 // load spikes or degraded performance, without requiring operators to manually
 // set fixed concurrency thresholds.
 //
+// **Important:** When using dynamic sampling (`dynamic_sampling`), the controller
+// periodically enters a minRTT measurement window where the concurrency limit
+// drops to `min_concurrency` (default 3). During this window, requests exceeding
+// that limit are rejected with 503. This can cause a noticeable spike in errors,
+// especially under high traffic. To mitigate this:
+//   - Enable client-side retries for 503s, ideally with the `previous_hosts`
+//     retry predicate so rejected requests are retried on a different host
+//     that is not in a measurement window.
+//   - Use `jitter` to stagger measurement windows across hosts.
+//   - Consider using `fixed_latency` instead of `dynamic_sampling` if the
+//     upstream's baseline latency is well-known and stable.
+// See https://github.com/envoyproxy/envoy/issues/18152 for a real-world
+// example of 503s during minRTT calculation windows.
+//
 // See Envoy's
 // [adaptive concurrency filter](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/adaptive_concurrency_filter)
 // for more details.
@@ -876,10 +895,11 @@ message OutlierDetection {
 //           maxConcurrencyLimit: 1000
 //           concurrencyUpdateInterval: 100ms
 //         minRttCalcParams:
-//           interval: 60s
-//           requestCount: 50
-//           jitter: 10
-//           minConcurrency: 3
+//           dynamicSampling:
+//             interval: 60s
+//             requestCount: 50
+//             jitter: 10
+//             minConcurrency: 3
 //           buffer: 25
 //       concurrencyLimitExceededStatus: 503
 // ```
@@ -916,14 +936,14 @@ message AdaptiveConcurrency {
       google.protobuf.Duration concurrency_update_interval = 3 [(google.api.field_behavior) = REQUIRED];
     }
 
-    // Parameters controlling the periodic minRTT recalculation.
+    // Parameters controlling how the minRTT (baseline latency) is determined.
     // The minRTT is periodically measured by allowing only a very low outstanding
     // request count to an upstream cluster and measuring the latency under
     // these ideal conditions.
     message MinimumRTTCalculationParams {
-      // Exactly one of `interval` or `fixed_value` must be set to determine
-      // how the minRTT is obtained.
-      oneof min_rtt_source {
+      // Parameters for dynamically sampling the minRTT by periodically entering
+      // a low-concurrency measurement window.
+      message DynamicSampling {
         // The time interval between recalculating the minimum request round-trip
         // time. Must be >= 1ms.
         //
@@ -932,6 +952,44 @@ message AdaptiveConcurrency {
         // During this window, throughput is temporarily reduced, so longer intervals
         // reduce overhead but may react slower to changes in upstream performance.
         google.protobuf.Duration interval = 1;
+
+        // The number of requests to aggregate/sample during the minRTT
+        // recalculation window before updating. Defaults to 50.
+        google.protobuf.UInt32Value request_count = 2;
+
+        // Randomized time delta that will be introduced to the start of the minRTT
+        // calculation window. This is represented as a percentage of the interval
+        // duration. Defaults to 15%. Value must be in the range [0, 100].
+        // This is recommended to prevent all hosts in a cluster from
+        // being in a minRTT calculation window at the same time.
+        google.protobuf.UInt32Value jitter = 3;
+
+        // The concurrency limit pinned during the minRTT measurement window.
+        // Defaults to 3.
+        //
+        // During the measurement window, the filter drops the concurrency limit to
+        // this value to measure latency under near-idle conditions. Requests that
+        // exceed this limit during the window are rejected with the configured
+        // status code (default 503). The window lasts until `request_count` samples
+        // are collected.
+        //
+        // To mitigate 503s during measurement windows:
+        //   - Use `jitter` to stagger measurement windows across hosts so they
+        //     don't all enter the window simultaneously.
+        //   - Configure retries (with the `previous_hosts` retry predicate) so
+        //     rejected requests are retried on a different host not currently in
+        //     a measurement window.
+        //   - Alternatively, use `fixed_latency` instead to skip dynamic
+        //     measurement entirely if the baseline latency is known.
+        google.protobuf.UInt32Value min_concurrency = 4;
+      }
+
+      // Exactly one of `dynamic_sampling` or `fixed_latency` must be set.
+      oneof min_rtt_source {
+        // Periodically sample the minRTT by entering a low-concurrency
+        // measurement window. Use this when the upstream's baseline latency
+        // may change over time.
+        DynamicSampling dynamic_sampling = 1;
 
         // A fixed baseline round-trip time (minRTT) for the upstream, specified
         // as a duration (e.g., `5ms`, `10ms`). Must be positive. This tells the
@@ -947,45 +1005,17 @@ message AdaptiveConcurrency {
         //
         // Use this when the baseline latency of the upstream is well-known and
         // stable, to avoid the periodic low-concurrency measurement windows
-        // that dynamic sampling (`interval`) requires.
-        google.protobuf.Duration fixed_value = 6;
+        // that dynamic sampling requires.
+        google.protobuf.Duration fixed_latency = 2;
       }
 
-      // The number of requests to aggregate/sample during the minRTT recalculation
-      // window before updating. Defaults to 50.
-      google.protobuf.UInt32Value request_count = 2;
-
-      // Randomized time delta that will be introduced to the start of the minRTT
-      // calculation window. This is represented as a percentage of the interval duration.
-      // Defaults to 15%. Value must be in the range [0, 100].
-      // This is recommended to prevent all hosts in a cluster from
-      // being in a minRTT calculation window at the same time.
-      google.protobuf.UInt32Value jitter = 3;
-
-      // The concurrency limit pinned during the minRTT measurement window.
-      // Defaults to 3.
-      //
-      // During the measurement window, the filter drops the concurrency limit to
-      // this value to measure latency under near-idle conditions. Requests that
-      // exceed this limit during the window are rejected with the configured
-      // status code (default 503). The window lasts until `request_count` samples
-      // are collected.
-      //
-      // To mitigate 503s during measurement windows:
-      //   - Use `jitter` to stagger measurement windows across hosts so they
-      //     don't all enter the window simultaneously.
-      //   - Configure retries (with the `previous_hosts` retry predicate) so
-      //     rejected requests are retried on a different host not currently in
-      //     a measurement window.
-      //   - Alternatively, use `fixed_value` instead of `interval` to skip
-      //     dynamic measurement entirely if the baseline latency is known.
-      google.protobuf.UInt32Value min_concurrency = 4;
-
-      // Amount added to the measured minRTT to add stability to the concurrency limit
-      // during natural variability in latency. This is expressed as a percentage of the
-      // measured value and can be adjusted to allow more or less tolerance to the sampled
-      // latency values. Defaults to 25%. Value must be in the range [0, 100].
-      google.protobuf.UInt32Value buffer = 5;
+      // Amount added to the measured minRTT to add stability to the concurrency
+      // limit during natural variability in latency. This is expressed as a
+      // percentage of the measured value and can be adjusted to allow more or
+      // less tolerance to the sampled latency values. Defaults to 25%.
+      // Value must be in the range [0, 100].
+      // This applies regardless of whether minRTT is dynamically sampled or fixed.
+      google.protobuf.UInt32Value buffer = 3;
     }
 
     // The percentile to use when summarizing aggregated samples. Defaults to p50.

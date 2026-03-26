@@ -331,6 +331,21 @@ type OutlierDetection = v1alpha3.OutlierDetection
 // load spikes or degraded performance, without requiring operators to manually
 // set fixed concurrency thresholds.
 //
+// **Important:** When using dynamic sampling (`dynamic_sampling`), the controller
+// periodically enters a minRTT measurement window where the concurrency limit
+// drops to `min_concurrency` (default 3). During this window, requests exceeding
+// that limit are rejected with 503. This can cause a noticeable spike in errors,
+// especially under high traffic. To mitigate this:
+//   - Enable client-side retries for 503s, ideally with the `previous_hosts`
+//     retry predicate so rejected requests are retried on a different host
+//     that is not in a measurement window.
+//   - Use `jitter` to stagger measurement windows across hosts.
+//   - Consider using `fixed_latency` instead of `dynamic_sampling` if the
+//     upstream's baseline latency is well-known and stable.
+//
+// See https://github.com/envoyproxy/envoy/issues/18152 for a real-world
+// example of 503s during minRTT calculation windows.
+//
 // See Envoy's
 // [adaptive concurrency filter](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/adaptive_concurrency_filter)
 // for more details.
@@ -357,10 +372,11 @@ type OutlierDetection = v1alpha3.OutlierDetection
 //	        maxConcurrencyLimit: 1000
 //	        concurrencyUpdateInterval: 100ms
 //	      minRttCalcParams:
-//	        interval: 60s
-//	        requestCount: 50
-//	        jitter: 10
-//	        minConcurrency: 3
+//	        dynamicSampling:
+//	          interval: 60s
+//	          requestCount: 50
+//	          jitter: 10
+//	          minConcurrency: 3
 //	        buffer: 25
 //	    concurrencyLimitExceededStatus: 503
 //
@@ -376,20 +392,20 @@ type AdaptiveConcurrency_GradientControllerConfig = v1alpha3.AdaptiveConcurrency
 // from sampled request latencies.
 type AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams
 
-// Parameters controlling the periodic minRTT recalculation.
+// Parameters controlling how the minRTT (baseline latency) is determined.
 // The minRTT is periodically measured by allowing only a very low outstanding
 // request count to an upstream cluster and measuring the latency under
 // these ideal conditions.
 type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams
 
-// The time interval between recalculating the minimum request round-trip
-// time. Must be >= 1ms.
-//
-// When set, the controller periodically enters a low-concurrency measurement
-// window (pinned to `min_concurrency`) to re-measure the baseline latency.
-// During this window, throughput is temporarily reduced, so longer intervals
-// reduce overhead but may react slower to changes in upstream performance.
-type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_Interval = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_Interval
+// Parameters for dynamically sampling the minRTT by periodically entering
+// a low-concurrency measurement window.
+type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling
+
+// Periodically sample the minRTT by entering a low-concurrency
+// measurement window. Use this when the upstream's baseline latency
+// may change over time.
+type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling_ = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling_
 
 // A fixed baseline round-trip time (minRTT) for the upstream, specified
 // as a duration (e.g., `5ms`, `10ms`). Must be positive. This tells the
@@ -407,8 +423,8 @@ type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_In
 //
 // Use this when the baseline latency of the upstream is well-known and
 // stable, to avoid the periodic low-concurrency measurement windows
-// that dynamic sampling (`interval`) requires.
-type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_FixedValue = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_FixedValue
+// that dynamic sampling requires.
+type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_FixedLatency = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_FixedLatency
 
 // Gradient concurrency control will be used.
 type AdaptiveConcurrency_GradientControllerConfig_ = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_

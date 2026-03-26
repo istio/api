@@ -259,6 +259,17 @@ func (this *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationPa
 	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling
+func (this *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling) MarshalJSON() ([]byte, error) {
+	str, err := DestinationRuleMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling
+func (this *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling) UnmarshalJSON(b []byte) error {
+	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 // MarshalJSON is a custom marshaler for ClientTLSSettings
 func (this *ClientTLSSettings) MarshalJSON() ([]byte, error) {
 	str, err := DestinationRuleMarshaler.MarshalToString(this)
