@@ -386,6 +386,19 @@ Default refresh rate is <code>60s</code>.</p>
 
 </td>
 </tr>
+<tr id="MeshConfig-respect_dns_ttl">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-respect_dns_ttl">respectDnsTtl</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></div>
+</div></td>
+<td>
+<p>If true, Envoy will respect the TTL returned by the DNS server for clusters
+of type <code>STRICT_DNS</code> and <code>LOGICAL_DNS</code>, using it as the DNS refresh rate
+instead of <code>dns_refresh_rate</code>. When the TTL is 0 or absent, <code>dns_refresh_rate</code>
+is used as a fallback.
+Default is <code>true</code>.</p>
+
+</td>
+</tr>
 <tr id="MeshConfig-h2_upgrade_policy">
 <td><div class="field"><div class="name"><code><a href="#MeshConfig-h2_upgrade_policy">h2UpgradePolicy</a></code></div>
 <div class="type"><a href="#MeshConfig-H2UpgradePolicy">H2UpgradePolicy</a></div>
