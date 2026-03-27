@@ -300,62 +300,62 @@ const (
 )
 
 // ExecutionPhase specifies where in the filter chain a `TrafficExtension` is injected.
-type ExecutionPhase int32
+type TrafficExtension_ExecutionPhase int32
 
 const (
 	// Control plane decides where to insert the extension. This will generally
 	// be at the end of the filter chain, right before the Router.
 	// Do not specify `ExecutionPhase` if the extension is independent of others.
-	ExecutionPhase_EXECUTION_PHASE_UNSPECIFIED ExecutionPhase = 0
+	TrafficExtension_UNSPECIFIED TrafficExtension_ExecutionPhase = 0
 	// Insert before Istio authentication filters.
-	ExecutionPhase_EXECUTION_PHASE_AUTHN ExecutionPhase = 1
+	TrafficExtension_AUTHN TrafficExtension_ExecutionPhase = 1
 	// Insert before Istio authorization filters and after Istio authentication filters.
-	ExecutionPhase_EXECUTION_PHASE_AUTHZ ExecutionPhase = 2
+	TrafficExtension_AUTHZ TrafficExtension_ExecutionPhase = 2
 	// Insert before Istio stats filters and after Istio authorization filters.
-	ExecutionPhase_EXECUTION_PHASE_STATS ExecutionPhase = 3
+	TrafficExtension_STATS TrafficExtension_ExecutionPhase = 3
 )
 
-// Enum value maps for ExecutionPhase.
+// Enum value maps for TrafficExtension_ExecutionPhase.
 var (
-	ExecutionPhase_name = map[int32]string{
-		0: "EXECUTION_PHASE_UNSPECIFIED",
-		1: "EXECUTION_PHASE_AUTHN",
-		2: "EXECUTION_PHASE_AUTHZ",
-		3: "EXECUTION_PHASE_STATS",
+	TrafficExtension_ExecutionPhase_name = map[int32]string{
+		0: "UNSPECIFIED",
+		1: "AUTHN",
+		2: "AUTHZ",
+		3: "STATS",
 	}
-	ExecutionPhase_value = map[string]int32{
-		"EXECUTION_PHASE_UNSPECIFIED": 0,
-		"EXECUTION_PHASE_AUTHN":       1,
-		"EXECUTION_PHASE_AUTHZ":       2,
-		"EXECUTION_PHASE_STATS":       3,
+	TrafficExtension_ExecutionPhase_value = map[string]int32{
+		"UNSPECIFIED": 0,
+		"AUTHN":       1,
+		"AUTHZ":       2,
+		"STATS":       3,
 	}
 )
 
-func (x ExecutionPhase) Enum() *ExecutionPhase {
-	p := new(ExecutionPhase)
+func (x TrafficExtension_ExecutionPhase) Enum() *TrafficExtension_ExecutionPhase {
+	p := new(TrafficExtension_ExecutionPhase)
 	*p = x
 	return p
 }
 
-func (x ExecutionPhase) String() string {
+func (x TrafficExtension_ExecutionPhase) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (ExecutionPhase) Descriptor() protoreflect.EnumDescriptor {
+func (TrafficExtension_ExecutionPhase) Descriptor() protoreflect.EnumDescriptor {
 	return file_extensions_v1alpha1_traffic_extension_proto_enumTypes[0].Descriptor()
 }
 
-func (ExecutionPhase) Type() protoreflect.EnumType {
+func (TrafficExtension_ExecutionPhase) Type() protoreflect.EnumType {
 	return &file_extensions_v1alpha1_traffic_extension_proto_enumTypes[0]
 }
 
-func (x ExecutionPhase) Number() protoreflect.EnumNumber {
+func (x TrafficExtension_ExecutionPhase) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use ExecutionPhase.Descriptor instead.
-func (ExecutionPhase) EnumDescriptor() ([]byte, []int) {
-	return file_extensions_v1alpha1_traffic_extension_proto_rawDescGZIP(), []int{0}
+// Deprecated: Use TrafficExtension_ExecutionPhase.Descriptor instead.
+func (TrafficExtension_ExecutionPhase) EnumDescriptor() ([]byte, []int) {
+	return file_extensions_v1alpha1_traffic_extension_proto_rawDescGZIP(), []int{0, 0}
 }
 
 // <!-- crd generation tags
@@ -409,7 +409,7 @@ type TrafficExtension struct {
 	// +kubebuilder:validation:MaxItems=16
 	TargetRefs []*v1beta1.PolicyTargetReference `protobuf:"bytes,2,rep,name=targetRefs,proto3" json:"targetRefs,omitempty"`
 	// Determines where in the filter chain this `TrafficExtension` is to be injected.
-	Phase ExecutionPhase `protobuf:"varint,3,opt,name=phase,proto3,enum=istio.extensions.v1alpha1.ExecutionPhase" json:"phase,omitempty"`
+	Phase TrafficExtension_ExecutionPhase `protobuf:"varint,3,opt,name=phase,proto3,enum=istio.extensions.v1alpha1.TrafficExtension_ExecutionPhase" json:"phase,omitempty"`
 	// Determines ordering of `TrafficExtensions` in the same `phase`.
 	// When multiple `TrafficExtensions` are applied to the same workload in the
 	// same `phase`, they will be applied by priority, in descending order.
@@ -477,11 +477,11 @@ func (x *TrafficExtension) GetTargetRefs() []*v1beta1.PolicyTargetReference {
 	return nil
 }
 
-func (x *TrafficExtension) GetPhase() ExecutionPhase {
+func (x *TrafficExtension) GetPhase() TrafficExtension_ExecutionPhase {
 	if x != nil {
 		return x.Phase
 	}
-	return ExecutionPhase_EXECUTION_PHASE_UNSPECIFIED
+	return TrafficExtension_UNSPECIFIED
 }
 
 func (x *TrafficExtension) GetPriority() *wrappers.Int32Value {
@@ -889,17 +889,22 @@ var File_extensions_v1alpha1_traffic_extension_proto protoreflect.FileDescriptor
 
 const file_extensions_v1alpha1_traffic_extension_proto_rawDesc = "" +
 	"\n" +
-	"+extensions/v1alpha1/traffic_extension.proto\x12\x19istio.extensions.v1alpha1\x1a\x1eextensions/v1alpha1/wasm.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1btype/v1beta1/selector.proto\"\xe3\x03\n" +
+	"+extensions/v1alpha1/traffic_extension.proto\x12\x19istio.extensions.v1alpha1\x1a\x1eextensions/v1alpha1/wasm.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1btype/v1beta1/selector.proto\"\xb8\x04\n" +
 	"\x10TrafficExtension\x12@\n" +
 	"\bselector\x18\x01 \x01(\v2$.istio.type.v1beta1.WorkloadSelectorR\bselector\x12I\n" +
 	"\n" +
 	"targetRefs\x18\x02 \x03(\v2).istio.type.v1beta1.PolicyTargetReferenceR\n" +
-	"targetRefs\x12?\n" +
-	"\x05phase\x18\x03 \x01(\x0e2).istio.extensions.v1alpha1.ExecutionPhaseR\x05phase\x127\n" +
+	"targetRefs\x12P\n" +
+	"\x05phase\x18\x03 \x01(\x0e2:.istio.extensions.v1alpha1.TrafficExtension.ExecutionPhaseR\x05phase\x127\n" +
 	"\bpriority\x18\x04 \x01(\v2\x1b.google.protobuf.Int32ValueR\bpriority\x12@\n" +
 	"\x05match\x18\x05 \x03(\v2*.istio.extensions.v1alpha1.TrafficSelectorR\x05match\x12;\n" +
 	"\x04wasm\x18\x06 \x01(\v2%.istio.extensions.v1alpha1.WasmConfigH\x00R\x04wasm\x128\n" +
-	"\x03lua\x18\a \x01(\v2$.istio.extensions.v1alpha1.LuaConfigH\x00R\x03luaB\x0f\n" +
+	"\x03lua\x18\a \x01(\v2$.istio.extensions.v1alpha1.LuaConfigH\x00R\x03lua\"B\n" +
+	"\x0eExecutionPhase\x12\x0f\n" +
+	"\vUNSPECIFIED\x10\x00\x12\t\n" +
+	"\x05AUTHN\x10\x01\x12\t\n" +
+	"\x05AUTHZ\x10\x02\x12\t\n" +
+	"\x05STATS\x10\x03B\x0f\n" +
 	"\rfilter_config\"\x90\x04\n" +
 	"\n" +
 	"WasmConfig\x12\x16\n" +
@@ -920,12 +925,7 @@ const file_extensions_v1alpha1_traffic_extension_proto_rawDesc = "" +
 	"inlineCode\"\x7f\n" +
 	"\x0fTrafficSelector\x124\n" +
 	"\x04mode\x18\x01 \x01(\x0e2 .istio.type.v1beta1.WorkloadModeR\x04mode\x126\n" +
-	"\x05ports\x18\x02 \x03(\v2 .istio.type.v1beta1.PortSelectorR\x05ports*\x82\x01\n" +
-	"\x0eExecutionPhase\x12\x1f\n" +
-	"\x1bEXECUTION_PHASE_UNSPECIFIED\x10\x00\x12\x19\n" +
-	"\x15EXECUTION_PHASE_AUTHN\x10\x01\x12\x19\n" +
-	"\x15EXECUTION_PHASE_AUTHZ\x10\x02\x12\x19\n" +
-	"\x15EXECUTION_PHASE_STATS\x10\x03B\"Z istio.io/api/extensions/v1alpha1b\x06proto3"
+	"\x05ports\x18\x02 \x03(\v2 .istio.type.v1beta1.PortSelectorR\x05portsB\"Z istio.io/api/extensions/v1alpha1b\x06proto3"
 
 var (
 	file_extensions_v1alpha1_traffic_extension_proto_rawDescOnce sync.Once
@@ -942,7 +942,7 @@ func file_extensions_v1alpha1_traffic_extension_proto_rawDescGZIP() []byte {
 var file_extensions_v1alpha1_traffic_extension_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_extensions_v1alpha1_traffic_extension_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_extensions_v1alpha1_traffic_extension_proto_goTypes = []any{
-	(ExecutionPhase)(0),                   // 0: istio.extensions.v1alpha1.ExecutionPhase
+	(TrafficExtension_ExecutionPhase)(0),  // 0: istio.extensions.v1alpha1.TrafficExtension.ExecutionPhase
 	(*TrafficExtension)(nil),              // 1: istio.extensions.v1alpha1.TrafficExtension
 	(*WasmConfig)(nil),                    // 2: istio.extensions.v1alpha1.WasmConfig
 	(*LuaConfig)(nil),                     // 3: istio.extensions.v1alpha1.LuaConfig
@@ -961,7 +961,7 @@ var file_extensions_v1alpha1_traffic_extension_proto_goTypes = []any{
 var file_extensions_v1alpha1_traffic_extension_proto_depIdxs = []int32{
 	5,  // 0: istio.extensions.v1alpha1.TrafficExtension.selector:type_name -> istio.type.v1beta1.WorkloadSelector
 	6,  // 1: istio.extensions.v1alpha1.TrafficExtension.targetRefs:type_name -> istio.type.v1beta1.PolicyTargetReference
-	0,  // 2: istio.extensions.v1alpha1.TrafficExtension.phase:type_name -> istio.extensions.v1alpha1.ExecutionPhase
+	0,  // 2: istio.extensions.v1alpha1.TrafficExtension.phase:type_name -> istio.extensions.v1alpha1.TrafficExtension.ExecutionPhase
 	7,  // 3: istio.extensions.v1alpha1.TrafficExtension.priority:type_name -> google.protobuf.Int32Value
 	4,  // 4: istio.extensions.v1alpha1.TrafficExtension.match:type_name -> istio.extensions.v1alpha1.TrafficSelector
 	2,  // 5: istio.extensions.v1alpha1.TrafficExtension.wasm:type_name -> istio.extensions.v1alpha1.WasmConfig
