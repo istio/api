@@ -99,7 +99,10 @@ local-lint-protos:
 lint: lint-dockerfiles lint-scripts lint-yaml lint-helm lint-copyright-banner lint-go lint-python lint-markdown lint-sass lint-typescript lint-licenses local-lint-protos
  	@$(htmlproofer) . --url-swap "istio.io:preliminary.istio.io" --assume-extension --check-html --check-external-hash --check-opengraph --timeframe 2d --storage-dir $(repo_dir)/.htmlproofer --url-ignore "/localhost/"
 
-test: breaking
+check-release-channel:
+	@./scripts/check-release-channel.sh $(UPDATE_BRANCH)
+
+test: breaking check-release-channel
 	(pushd tests && go test -v ./...)
 
 fmt: format-python
