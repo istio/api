@@ -795,8 +795,6 @@ type ServerTLSSettings struct {
 	// A list of alternate names to verify the subject identity in the
 	// certificate presented by the client.
 	// Requires TLS mode to be set to `MUTUAL`.
-	// When multiple certificates are provided via `credential_names` or `tls_certificates`,
-	// the subject alternate names are validated against the selected certificate.
 	SubjectAltNames []string `protobuf:"bytes,6,rep,name=subject_alt_names,json=subjectAltNames,proto3" json:"subject_alt_names,omitempty"`
 	// An optional list of base64-encoded SHA-256 hashes of the SPKIs of
 	// authorized client certificates.
