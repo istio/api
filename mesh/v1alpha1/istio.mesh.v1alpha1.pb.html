@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 85
+number_of_entries: 86
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -72,6 +72,52 @@ Default timeout is 1 hour (3600s).
 For environments with aggressive IP address reuse, it is recommended to set
 this to a value less than the CNI IP cooldown period to prevent stale connection reuse.
 For example, if your CNI has a 30s cooldown period, setting this to 15s is recommended.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-hbone_initial_stream_window_size">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-hbone_initial_stream_window_size">hboneInitialStreamWindowSize</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>HTTP/2 <code>initial_stream_window_size</code> applied to the HBONE CONNECT upstream cluster
+used by Envoy proxies (waypoints, ingress/east-west gateways) when tunneling to ztunnel.
+When unset, the field is not set on Envoy and Envoy&rsquo;s built-in default is used.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-hbone_initial_connection_window_size">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-hbone_initial_connection_window_size">hboneInitialConnectionWindowSize</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>HTTP/2 <code>initial_connection_window_size</code> applied to the HBONE CONNECT upstream cluster
+used by Envoy proxies (waypoints, ingress/east-west gateways) when tunneling to ztunnel.
+When unset, the field is not set on Envoy and Envoy&rsquo;s built-in default is used.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-hbone_no_pooling_initial_stream_window_size">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-hbone_no_pooling_initial_stream_window_size">hboneNoPoolingInitialStreamWindowSize</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>HTTP/2 <code>initial_stream_window_size</code> applied to the HBONE CONNECT upstream clusters
+used for double-HBONE tunneling in ambient multi-network deployments (inner and outer
+connect-originate clusters on east-west gateways).
+When unset, the field is not set on Envoy and Envoy&rsquo;s built-in default is used.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-hbone_no_pooling_initial_connection_window_size">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-hbone_no_pooling_initial_connection_window_size">hboneNoPoolingInitialConnectionWindowSize</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>HTTP/2 <code>initial_connection_window_size</code> applied to the HBONE CONNECT upstream clusters
+used for double-HBONE tunneling in ambient multi-network deployments (inner and outer
+connect-originate clusters on east-west gateways).
+When unset, the field is not set on Envoy and Envoy&rsquo;s built-in default is used.</p>
 
 </td>
 </tr>
@@ -3292,6 +3338,31 @@ mode as <code>ISTIO_MUTUAL</code>.</p>
 </div></td>
 <td>
 <p>Describes the source of configuration, if nothing is specified default is MCP</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h4 id="google-protobuf-UInt32Value">UInt32Value</h4>
+<section>
+<p>Wrapper message for <code>uint32</code>.</p>
+<p>The JSON representation for <code>UInt32Value</code> is JSON number.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="google-protobuf-UInt32Value-value">
+<td><div class="field"><div class="name"><code><a href="#google-protobuf-UInt32Value-value">value</a></code></div>
+<div class="type">uint32</div>
+</div></td>
+<td>
+<p>The uint32 value.</p>
 
 </td>
 </tr>
