@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: bug-fix
+area: installation
+issue:
+  - https://github.com/istio/istio/issues/58461
+
+releaseNotes:
+  - |
+    **Fixed** warning when installing VirtualService CRD due to 'unrecognized format "binary"' by switching to `format: byte` for the field `spec.http.directResponse.body.bytes`. This does not impact user experience, as input is still expected in base64-encoded form as is already documented.

@@ -14,12 +14,12 @@
 
 syntax = "proto3";
 
-import "google/protobuf/struct.proto";
-
 // Keep this package for backward compatibility.
 package istio.v1.auth;
 
-option go_package="istio.io/api/security/v1alpha1";
+import "google/protobuf/struct.proto";
+
+option go_package = "istio.io/api/security/v1alpha1";
 
 // Certificate request message. The authentication should be based on:
 // 1. Bearer tokens carried in the side channel;
@@ -51,7 +51,5 @@ message IstioCertificateResponse {
 // Service for managing certificates issued by the CA.
 service IstioCertificateService {
   // Using provided CSR, returns a signed certificate.
-  rpc CreateCertificate(IstioCertificateRequest)
-      returns (IstioCertificateResponse) {
-  }
+  rpc CreateCertificate(IstioCertificateRequest) returns (IstioCertificateResponse) {}
 }

@@ -1,0 +1,11 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - https://github.com/istio/istio/issues/54540
+
+releaseNotes:
+  - |
+    **Added** a new `DYNAMIC_DNS` resolution option for `ServiceEntry` to enable
+    dynamic DNS resolution based on the request's Host header or SNI when the
+    ServiceEntry has a wildcard host.

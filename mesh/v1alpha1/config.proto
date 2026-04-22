@@ -14,13 +14,6 @@
 
 syntax = "proto3";
 
-import "google/protobuf/duration.proto";
-import "google/protobuf/struct.proto";
-import "google/protobuf/wrappers.proto";
-import "mesh/v1alpha1/proxy.proto";
-import "networking/v1alpha3/destination_rule.proto";
-import "networking/v1alpha3/virtual_service.proto";
-
 // $title: Global Mesh Options
 // $description: Configuration affecting the service mesh as a whole.
 // $location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
@@ -30,7 +23,14 @@ import "networking/v1alpha3/virtual_service.proto";
 // Configuration affecting the service mesh as a whole.
 package istio.mesh.v1alpha1;
 
-option go_package="istio.io/api/mesh/v1alpha1";
+import "google/protobuf/duration.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/wrappers.proto";
+import "mesh/v1alpha1/proxy.proto";
+import "networking/v1alpha3/destination_rule.proto";
+import "networking/v1alpha3/virtual_service.proto";
+
+option go_package = "istio.io/api/mesh/v1alpha1";
 
 // MeshConfig defines mesh-wide settings for the Istio service mesh.
 message MeshConfig {
@@ -48,6 +48,15 @@ message MeshConfig {
   // Connection timeout used by Envoy. (MUST be >=1ms)
   // Default timeout is 10s.
   google.protobuf.Duration connect_timeout = 6;
+
+  // Idle timeout configured on Envoy proxies for their connection pools to ztunnel via HBONE.
+  // This controls how long Envoy will keep idle connections to ztunnel before closing them.
+  // Note: This setting is applied only on the Envoy proxy side; ztunnel does not use it.
+  // Default timeout is 1 hour (3600s).
+  // For environments with aggressive IP address reuse, it is recommended to set
+  // this to a value less than the CNI IP cooldown period to prevent stale connection reuse.
+  // For example, if your CNI has a 30s cooldown period, setting this to 15s is recommended.
+  google.protobuf.Duration hbone_idle_timeout = 70;
 
   // $hide_from_docs
   // Automatic protocol detection uses a set of heuristics to
@@ -177,11 +186,18 @@ message MeshConfig {
       // This mode allows users that do not have all possible egress destinations registered through `ServiceEntry` configurations to still connect
       // to arbitrary destinations.
       ALLOW_ANY = 1;
+      // In `ALLOW_ANY_DYNAMIC_DNS` mode, traffic to unknown destinations will be allowed via dynamic DNS resolution.
+      // This mode allows users that do not have all possible egress destinations registered through `ServiceEntry` configurations to still connect
+      // to arbitrary destinations. Client TLS settings can be configured for connections to such destinations.
+      ALLOW_ANY_DYNAMIC_DNS = 3;
 
       reserved 2;
       reserved "VIRTUAL_SERVICE_ONLY";
     }
     Mode mode = 1;
+
+    // TLS settings for client connections to unknown destinations. Applicable only when mode is set to `ALLOW_ANY_DYNAMIC_DNS`.
+    istio.networking.v1alpha3.ClientTLSSettings tls = 2;
   }
 
   // Set the default behavior of the sidecar for handling outbound
@@ -394,7 +410,7 @@ message MeshConfig {
   // Configure the provision of certificates.
   //
   // Note: Deprecated, please refer to Cert-Manager or other cert provisioning solutions to sign DNS certificates.
-  repeated Certificate certificates = 47 [deprecated=true];
+  repeated Certificate certificates = 47 [deprecated = true];
 
   reserved 49;
   reserved "thrift_config";
@@ -413,6 +429,14 @@ message MeshConfig {
   //       - "*.foo.svc.cluster.local"
   //       - "bar.baz.svc.cluster.local"
   // ```
+  //
+  // When in ambient mode, if ServiceSettings are defined they will be considered in addition to the
+  // ServiceScopeConfigs. If a service is defined by ServiceSetting to be cluster local and matches a
+  // global service scope selector, the service will be considered cluster local. If a service is
+  // considered global by ServiceSettings and does not match a global service scope selector
+  // the serive will be considered local. Local scope takes precedence over global scope. Since
+  // ServiceScopeConfigs is local by default, all services are considered local unless it is considered
+  // global by ServiceSettings AND ServiceScopeConfigs.
   message ServiceSettings {
     // Settings for the selected services.
     message Settings {
@@ -450,6 +474,54 @@ message MeshConfig {
   // Settings to be applied to select services.
   repeated ServiceSettings service_settings = 50;
 
+  // Configuration for ambient mode multicluster service scope. This setting allows mesh administrators
+  // to define the criteria by which the cluster's control plane determines which services in other
+  // clusters in the mesh are treated as global (accessible across multiple clusters) versus local
+  // (restricted to a single cluster). The configuration can be applied to services based on namespace
+  // and/or other matching criteria. This is particularly  useful in multicluster service mesh deployments
+  // to control service visibility and access across clusters. This API is not intended to enforce
+  // security policies. Resources like DestinationRules should be used to enforce authorization policies.
+  // If a service matches a global service scope selector, the service's endpoints will be globally
+  // exposed. If a service is locally scoped, its endpoints will only be exposed to local cluster
+  // services.
+  //
+  // For example, the following configures the scope of all services with the "istio.io/global" label
+  // in matching namespaces to be available globally:
+  //
+  // ```yaml
+  // serviceScopeConfigs:
+  //  - namespacesSelector:
+  //      matchExpressions:
+  //        - key: istio.io/global
+  //          operator: In
+  //          values: [true]
+  //    servicesSelector:
+  //      matchExpressions:
+  //        - key: istio.io/global
+  //          operator: Exists
+  //    scope: GLOBAL
+  // ```
+  message ServiceScopeConfigs {
+    // The scope of the matching service. Used to determine if the service is available locally
+    // (cluster local) or globally (mesh-wide).
+    enum Scope {
+      LOCAL = 0;
+      GLOBAL = 1;
+    }
+
+    // Match expression for namespaces.
+    LabelSelector namespace_selector = 1;
+
+    // Match expression for serivces.
+    LabelSelector services_selector = 2;
+
+    // Specifics the available scope for matching services.
+    Scope scope = 3;
+  }
+
+  // Scope to be applied to select services.
+  repeated ServiceScopeConfigs service_scope_configs = 67;
+
   // If enabled, Istio agent will merge metrics exposed by the application with metrics from Envoy
   // and Istio agent. The sidecar injection will replace `prometheus.io` annotations present on the pod
   // and redirect them towards Istio agent, which will then merge metrics of from the application with Istio metrics.
@@ -482,7 +554,7 @@ message MeshConfig {
   // For wildcard host name in DestinationRule, client-side proxy will do a suffix match. For example,
   // if host is `*.x.y.com`, client-side proxy will verify the presented server certificate SAN matches
   // `.x.y.com` suffix.
-  google.protobuf.BoolValue verify_certificate_at_client = 54 [deprecated=true];
+  google.protobuf.BoolValue verify_certificate_at_client = 54 [deprecated = true];
 
   message CA {
     // REQUIRED. Address of the CA server implementing the Istio CA gRPC API.
@@ -524,7 +596,7 @@ message MeshConfig {
       // $hide_from_docs
       // Configures a Lightstep tracing provider.
       // Deprecated: For Istio 1.15+, please use an OpenTelemetryTracingProvider instead, more details can be found at https://github.com/istio/istio/issues/40027
-      LightstepTracingProvider lightstep = 5 [deprecated=true];
+      LightstepTracingProvider lightstep = 5 [deprecated = true];
       // Configures a Datadog tracing provider.
       DatadogTracingProvider datadog = 6;
       // $hide_from_docs
@@ -533,7 +605,7 @@ message MeshConfig {
       // $hide_from_docs
       // Configures an OpenCensusAgent tracing provider.
       // Deprecated: OpenCensus is deprecated, more details can be found at https://opentelemetry.io/blog/2023/sunsetting-opencensus/
-      OpenCensusAgentTracingProvider opencensus = 8 [deprecated=true];
+      OpenCensusAgentTracingProvider opencensus = 8 [deprecated = true];
       // Configures a Apache SkyWalking provider.
       SkyWalkingTracingProvider skywalking = 9;
       // Configures an OpenTelemetry tracing provider.
@@ -548,9 +620,14 @@ message MeshConfig {
       EnvoyTcpGrpcV3LogProvider envoy_tcp_als = 13;
       // Configures an Envoy Open Telemetry Access Logging Service provider.
       EnvoyOpenTelemetryLogProvider envoy_otel_als = 14;
+      // Configures an Extension Provider for SDS. This can be used to
+      // configure an external SDS service to supply secrets for certain Gateways for example.
+      // This is useful for scenarios where the secrets are stored in an external secret store like Vault.
+      // The secret should be configured with sds://provider-name format.
+      SDSProvider sds = 16;
 
       // $hide_from_docs
-      // next id: 16
+      // next id: 17
     }
 
     message EnvoyExternalAuthorizationRequestBody {
@@ -611,7 +688,7 @@ message MeshConfig {
       string status_on_error = 5;
 
       // DEPRECATED. Use includeRequestHeadersInCheck instead.
-      repeated string include_headers_in_check = 6 [deprecated=true];
+      repeated string include_headers_in_check = 6 [deprecated = true];
 
       // List of client request headers that should be included in the authorization request sent to the authorization service.
       // Note that in addition to the headers specified here following headers are included by default:
@@ -722,6 +799,17 @@ message MeshConfig {
 
     // Defines configuration for a Zipkin tracer.
     message ZipkinTracingProvider {
+      // Available trace context options for handling different trace header formats.
+      enum TraceContextOption {
+        // Use B3 headers only (default behavior).
+        USE_B3 = 0;
+        // Enable B3 and W3C dual header support:
+        // - For downstream: Extract from B3 headers first, fallback to W3C traceparent if B3 is unavailable.
+        // - For upstream: Inject both B3 and W3C traceparent headers.
+        // When this option is NOT set, only B3 headers are used for both extraction and injection.
+        USE_B3_WITH_W3C_PROPAGATION = 1;
+      }
+
       // REQUIRED. Specifies the service that the Zipkin API.
       // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
       // to unambiguously resolve a service in the service registry. The `<Hostname>` is a fully qualified host name of a
@@ -744,6 +832,19 @@ message MeshConfig {
       // Optional. Specifies the endpoint of Zipkin API.
       // The default value is "/api/v2/spans".
       string path = 5;
+
+      // Optional. Determines which trace context format to use for trace header extraction and propagation.
+      // This controls both downstream request header extraction and upstream request header injection.
+      // The default value is USE_B3 to maintain backward compatibility.
+      TraceContextOption trace_context_option = 6;
+
+      // Optional. The timeout for the HTTP request to the Zipkin collector.
+      // If not specified, the default timeout from Envoy's configuration will be used (which is 5 seconds currently).
+      google.protobuf.Duration timeout = 7;
+
+      // Optional. Additional HTTP headers to include in the request to the Zipkin collector.
+      // These headers will be added to the HTTP request when sending spans to the collector.
+      repeated HttpHeader headers = 8;
     }
 
     // Defines configuration for a Lightstep tracer.
@@ -812,19 +913,19 @@ message MeshConfig {
     message StackdriverProvider {
       // debug enables trace output to stdout.
       // $hide_from_docs
-      bool debug = 1 [deprecated=true];
+      bool debug = 1 [deprecated = true];
       // The global default max number of attributes per span.
       // default is 200.
       // $hide_from_docs
-      google.protobuf.Int64Value max_number_of_attributes = 2 [deprecated=true];
+      google.protobuf.Int64Value max_number_of_attributes = 2 [deprecated = true];
       // The global default max number of annotation events per span.
       // default is 200.
       // $hide_from_docs
-      google.protobuf.Int64Value max_number_of_annotations = 3 [deprecated=true];
+      google.protobuf.Int64Value max_number_of_annotations = 3 [deprecated = true];
       // The global default max number of message events per span.
       // default is 200.
       // $hide_from_docs
-      google.protobuf.Int64Value max_number_of_message_events = 4 [deprecated=true];
+      google.protobuf.Int64Value max_number_of_message_events = 4 [deprecated = true];
 
       // Optional. Controls the overall path length allowed in a reported span.
       // NOTE: currently only controls max length of the path tag.
@@ -1029,29 +1130,65 @@ message MeshConfig {
       LogFormat log_format = 4;
 
       message LogFormat {
-          // Textual format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) may be
-          // used in the format. The [format string documentation](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-strings)
-          // provides more information.
-          // Alias to `body` field in [Open Telemetry](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/open_telemetry/v3/logs_service.proto)
-          // Example: `text: "%LOCAL_REPLY_BODY%:%RESPONSE_CODE%:path=%REQ(:path)%"`
-          string text = 1;
+        // Textual format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators) may be
+        // used in the format. The [format string documentation](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-strings)
+        // provides more information.
+        // Alias to `body` field in [Open Telemetry](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/open_telemetry/v3/logs_service.proto)
+        // Example: `text: "%LOCAL_REPLY_BODY%:%RESPONSE_CODE%:path=%REQ(:path)%"`
+        string text = 1;
 
-          // Optional. Additional attributes that describe the specific event occurrence.
-          // Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators)
-          // can be used as values for fields within the Struct. Values are rendered
-          // as strings, numbers, or boolean values, as appropriate
-          // (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)). Nested JSON is
-          // supported for some command operators (e.g. FILTER_STATE or DYNAMIC_METADATA).
-          // Alias to `attributes` field in [Open Telemetry](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/open_telemetry/v3/logs_service.proto)
-          //
-          // Example:
-          // ```
-          // labels:
-          //   status: "%RESPONSE_CODE%"
-          //   message: "%LOCAL_REPLY_BODY%"
-          // ```
-          google.protobuf.Struct labels = 2;
+        // Optional. Additional attributes that describe the specific event occurrence.
+        // Structured format for the envoy access logs. Envoy [command operators](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators)
+        // can be used as values for fields within the Struct. Values are rendered
+        // as strings, numbers, or boolean values, as appropriate
+        // (see: [format dictionaries](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#config-access-log-format-dictionaries)). Nested JSON is
+        // supported for some command operators (e.g. FILTER_STATE or DYNAMIC_METADATA).
+        // Alias to `attributes` field in [Open Telemetry](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/access_loggers/open_telemetry/v3/logs_service.proto)
+        //
+        // Example:
+        // ```
+        // labels:
+        //   status: "%RESPONSE_CODE%"
+        //   message: "%LOCAL_REPLY_BODY%"
+        // ```
+        google.protobuf.Struct labels = 2;
       }
+    }
+
+    // ServiceAttributeEnrichment controls how service resource attributes
+    // (such as `service.name`, `service.namespace`, `service.version`, and
+    // `service.instance.id`) are populated in exported trace spans.
+    enum ServiceAttributeEnrichment {
+      // Use Istio's default service attribute enrichment logic.
+      // The service name is determined by the `TracingServiceName` setting in
+      // `ProxyConfig` (e.g., based on the `app` label, canonical name, etc.).
+      ISTIO_CANONICAL = 0;
+
+      // Follow the OpenTelemetry semantic conventions for Kubernetes service
+      // attributes. The service attributes are calculated following the fallback
+      // chain defined in:
+      // https://opentelemetry.io/docs/specs/semconv/non-normative/k8s-attributes/#service-attributes
+      //
+      // The fallback chain for `service.name` is:
+      //   1. `resource.opentelemetry.io/service.name` annotation on the pod
+      //   2. `app.kubernetes.io/name` label
+      //   3. Name of the owning Kubernetes resource (Deployment, StatefulSet, etc.)
+      //   4. Pod name
+      //   5. Container name (if single container in the pod)
+      //   6. `unknown_service`
+      //
+      // The fallback chain for `service.namespace` is:
+      //   1. `resource.opentelemetry.io/service.namespace` annotation on the pod
+      //   2. Kubernetes namespace name
+      //
+      // The fallback chain for `service.version` is:
+      //   1. `resource.opentelemetry.io/service.version` annotation on the pod
+      //   2. `app.kubernetes.io/version` label
+      //
+      // The fallback chain for `service.instance.id` is:
+      //   1. `resource.opentelemetry.io/service.instance.id` annotation on the pod
+      //   2. Pod UID
+      OTEL_SEMANTIC_CONVENTIONS = 1;
     }
 
     // Defines configuration for an OpenTelemetry tracing backend. Istio 1.16.1 or higher is needed.
@@ -1175,10 +1312,30 @@ message MeshConfig {
       // ```
       ResourceDetectors resource_detectors = 5;
 
+      // Optional. Controls how service resource attributes are enriched in
+      // exported trace spans. When set to `OTEL_SEMANTIC_CONVENTIONS`, the
+      // service attributes (`service.name`, `service.namespace`,
+      // `service.version`, `service.instance.id`) will be populated following
+      // the OpenTelemetry semantic conventions for Kubernetes:
+      // https://opentelemetry.io/docs/specs/semconv/non-normative/k8s-attributes/#service-attributes
+      //
+      // When not set or set to `ISTIO_CANONICAL`, Istio's default enrichment
+      // logic is used (controlled by `TracingServiceName` in `ProxyConfig`).
+      //
+      // Example:
+      // ```yaml
+      // extensionProviders:
+      // - name: otel-tracing
+      //   opentelemetry:
+      //     port: 443
+      //     service: my.olly-backend.com
+      //     serviceAttributeEnrichment: OTEL_SEMANTIC_CONVENTIONS
+      // ```
+      ServiceAttributeEnrichment service_attribute_enrichment = 8;
+
       // Optional. Configure a [Sampler](https://opentelemetry.io/docs/specs/otel/trace/sdk/#sampler)
       // to be used by the OpenTelemetry Tracer.
       oneof sampling {
-
         // The Dynatrace adaptive traffic management (ATM) sampler.
         //
         // Example configuration:
@@ -1246,6 +1403,23 @@ message MeshConfig {
       }
     }
 
+    // Defines configuration for an Gateway SDS provider.
+    message SDSProvider {
+      // REQUIRED. Specifies the name of the provider. This should be used to configure the Gateway SDS.
+      string name = 1;
+
+      // REQUIRED. Specifies the service that implements the  SDS service.
+      // The format is `[<Namespace>/]<Hostname>`. The specification of `<Namespace>` is required only when it is insufficient
+      // to unambiguously resolve a service in the service registry. The `<Hostname>` is a fully qualified host name of a
+      // service defined by the Kubernetes service or ServiceEntry.
+      //
+      // Example: "gateway-sds.foo.svc.cluster.local" or "bar/gateway-sds.example.com".
+      string service = 2;
+
+      // REQUIRED. Specifies the port of the service.
+      uint32 port = 3;
+    }
+
     // Defines configuration for an HTTP service that can be used by an Extension Provider.
     // that does communication via HTTP.
     message HttpService {
@@ -1287,14 +1461,14 @@ message MeshConfig {
       // and adds them to the OpenTelemetry resource.
       //
       // See: [Resource specification](https://opentelemetry.io/docs/specs/otel/resource/sdk/#specifying-resource-information-via-an-environment-variable)
-      message EnvironmentResourceDetector { }
+      message EnvironmentResourceDetector {}
 
       // Dynatrace Resource Detector.
       // The resource detector reads from the Dynatrace enrichment files
       // and adds host/process related attributes to the OpenTelemetry resource.
       //
       // See: [Enrich ingested data with Dynatrace-specific dimensions](https://docs.dynatrace.com/docs/shortlink/enrichment-files)
-      message DynatraceResourceDetector { }
+      message DynatraceResourceDetector {}
     }
 
     // Defines configuration for an GRPC service that can be used by an Extension Provider.
@@ -1456,12 +1630,11 @@ message MeshConfig {
   TLSConfig mesh_mTLS = 63;
   //
   // Configuration of TLS for all traffic except for ISTIO_MUTUAL mode.
-  // Currently, this supports configuration of ecdhCurves and cipherSuites only.
   // For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.
   TLSConfig tls_defaults = 64;
 
   // $hide_from_docs
-  // Next available field number: 67
+  // Next available field number: 71
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
@@ -1500,16 +1673,19 @@ message MeshConfig {
   reserved "report_batch_max_entries";
   reserved 39;
   reserved "report_batch_max_time";
+  reserved 68;
+  reserved "file_flush_interval";
+  reserved 69;
+  reserved "file_flush_min_size";
 }
 
 // Resource describes the source of configuration
- enum Resource {
-   // Set to only receive service entries that are generated by the platform.
-   // These auto generated service entries are combination of services and endpoints
-   // that are generated by a specific platform e.g. k8
-   SERVICE_REGISTRY = 0;
- }
-
+enum Resource {
+  // Set to only receive service entries that are generated by the platform.
+  // These auto generated service entries are combination of services and endpoints
+  // that are generated by a specific platform e.g. k8
+  SERVICE_REGISTRY = 0;
+}
 
 // A label selector requirement is a selector that contains values, a key, and an operator that
 // relates the key and values.
@@ -1551,20 +1727,18 @@ message LabelSelectorRequirement {
 // mesh. A single control plane instance can interact with one or more data
 // sources.
 message ConfigSource {
- // Address of the server implementing the Istio Mesh Configuration
- // protocol (MCP). Can be IP address or a fully qualified DNS name.
- // Use xds:// to specify a grpc-based xds backend, k8s:// to specify a k8s controller or
- // fs:/// to specify a file-based backend with absolute path to the directory.
- string address = 1;
- // Use the tlsSettings to specify the tls mode to use. If the MCP server
- // uses Istio mutual TLS and shares the root CA with istiod, specify the TLS
- // mode as `ISTIO_MUTUAL`.
- istio.networking.v1alpha3.ClientTLSSettings tls_settings = 2;
- // Describes the source of configuration, if nothing is specified default is MCP
- repeated Resource subscribed_resources = 3;
+  // Address of the server implementing the Istio Mesh Configuration
+  // protocol (MCP). Can be IP address or a fully qualified DNS name.
+  // Use xds:// to specify a grpc-based xds backend, k8s:// to specify a k8s controller or
+  // fs:/// to specify a file-based backend with absolute path to the directory.
+  string address = 1;
+  // Use the tlsSettings to specify the tls mode to use. If the MCP server
+  // uses Istio mutual TLS and shares the root CA with istiod, specify the TLS
+  // mode as `ISTIO_MUTUAL`.
+  istio.networking.v1alpha3.ClientTLSSettings tls_settings = 2;
+  // Describes the source of configuration, if nothing is specified default is MCP
+  repeated Resource subscribed_resources = 3;
 }
-
-
 
 // $hide_from_docs
 // Certificate configures the provision of a certificate and its key.

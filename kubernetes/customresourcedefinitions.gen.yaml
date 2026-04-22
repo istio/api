@@ -9,6 +9,367 @@ metadata:
     chart: istio
     heritage: Tiller
     release: istio
+  name: trafficextensions.extensions.istio.io
+spec:
+  group: extensions.istio.io
+  names:
+    categories:
+    - istio-io
+    - extensions-istio-io
+    kind: TrafficExtension
+    listKind: TrafficExtensionList
+    plural: trafficextensions
+    singular: trafficextension
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: 'CreationTimestamp is a timestamp representing the server time
+        when this object was created. It is not guaranteed to be set in happens-before
+        order across separate operations. Clients may not set this value. It is represented
+        in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for
+        lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata'
+      jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            description: 'Extend the functionality provided by the Istio proxy through
+              WebAssembly or Lua filters. See more details at: https://istio.io/docs/reference/config/proxy_extensions/v1alpha1/traffic_extension.html'
+            oneOf:
+            - not:
+                anyOf:
+                - required:
+                  - wasm
+                - required:
+                  - lua
+            - required:
+              - wasm
+            - required:
+              - lua
+            properties:
+              lua:
+                description: Lua filter configuration.
+                properties:
+                  inlineCode:
+                    description: The inline Lua code to be executed.
+                    maxLength: 65536
+                    minLength: 1
+                    type: string
+                required:
+                - inlineCode
+                type: object
+              match:
+                description: Specifies the criteria to determine which traffic is
+                  passed to TrafficExtension.
+                items:
+                  properties:
+                    mode:
+                      description: |-
+                        Criteria for selecting traffic by their direction.
+
+                        Valid Options: CLIENT, SERVER, CLIENT_AND_SERVER
+                      enum:
+                      - UNDEFINED
+                      - CLIENT
+                      - SERVER
+                      - CLIENT_AND_SERVER
+                      type: string
+                    ports:
+                      description: Criteria for selecting traffic by their destination
+                        port.
+                      items:
+                        properties:
+                          number:
+                            maximum: 65535
+                            minimum: 1
+                            type: integer
+                        required:
+                        - number
+                        type: object
+                      type: array
+                      x-kubernetes-list-map-keys:
+                      - number
+                      x-kubernetes-list-type: map
+                  type: object
+                type: array
+              phase:
+                description: |-
+                  Determines where in the filter chain this `TrafficExtension` is to be injected.
+
+                  Valid Options: AUTHN, AUTHZ, STATS
+                enum:
+                - UNSPECIFIED
+                - AUTHN
+                - AUTHZ
+                - STATS
+                type: string
+              priority:
+                description: Determines ordering of `TrafficExtensions` in the same
+                  `phase`.
+                format: int32
+                nullable: true
+                type: integer
+              selector:
+                description: Optional.
+                properties:
+                  matchLabels:
+                    additionalProperties:
+                      maxLength: 63
+                      type: string
+                      x-kubernetes-validations:
+                      - message: wildcard not allowed in label value match
+                        rule: '!self.contains("*")'
+                    description: One or more labels that indicate a specific set of
+                      pods/VMs on which a policy should be applied.
+                    maxProperties: 4096
+                    type: object
+                    x-kubernetes-validations:
+                    - message: wildcard not allowed in label key match
+                      rule: self.all(key, !key.contains("*"))
+                    - message: key must not be empty
+                      rule: self.all(key, key.size() != 0)
+                type: object
+              targetRefs:
+                description: Optional.
+                items:
+                  properties:
+                    group:
+                      description: group is the group of the target resource.
+                      maxLength: 253
+                      pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                      type: string
+                    kind:
+                      description: kind is kind of the target resource.
+                      maxLength: 63
+                      minLength: 1
+                      pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
+                      type: string
+                    name:
+                      description: name is the name of the target resource.
+                      maxLength: 253
+                      minLength: 1
+                      type: string
+                    namespace:
+                      description: namespace is the namespace of the referent.
+                      type: string
+                      x-kubernetes-validations:
+                      - message: cross namespace referencing is not currently supported
+                        rule: self.size() == 0
+                  required:
+                  - kind
+                  - name
+                  type: object
+                maxItems: 16
+                type: array
+              wasm:
+                description: WebAssembly filter configuration.
+                properties:
+                  failStrategy:
+                    description: |-
+                      Specifies the failure behavior for the plugin due to fatal errors.
+
+                      Valid Options: FAIL_CLOSE, FAIL_OPEN, FAIL_RELOAD
+                    enum:
+                    - FAIL_CLOSE
+                    - FAIL_OPEN
+                    - FAIL_RELOAD
+                    type: string
+                  imagePullPolicy:
+                    description: |-
+                      The pull behaviour to be applied when fetching Wasm module by either OCI image or `http/https`.
+
+                      Valid Options: IfNotPresent, Always
+                    enum:
+                    - UNSPECIFIED_POLICY
+                    - IfNotPresent
+                    - Always
+                    type: string
+                  imagePullSecret:
+                    description: Credentials to use for OCI image pulling.
+                    maxLength: 253
+                    minLength: 1
+                    type: string
+                  pluginConfig:
+                    description: The configuration that will be passed on to the plugin.
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
+                  pluginName:
+                    description: The plugin name to be used in the Envoy configuration
+                      (used to be called `rootID`).
+                    maxLength: 256
+                    minLength: 1
+                    type: string
+                  sha256:
+                    description: SHA256 checksum that will be used to verify Wasm
+                      module or OCI container.
+                    pattern: (^$|^[a-f0-9]{64}$)
+                    type: string
+                  type:
+                    description: |-
+                      Specifies the type of Wasm Extension to be used.
+
+                      Valid Options: HTTP, NETWORK
+                    enum:
+                    - UNSPECIFIED_PLUGIN_TYPE
+                    - HTTP
+                    - NETWORK
+                    type: string
+                  url:
+                    description: URL of a Wasm module or OCI container.
+                    minLength: 1
+                    type: string
+                    x-kubernetes-validations:
+                    - message: url must have schema one of [http, https, file, oci]
+                      rule: |-
+                        isURL(self) ? (url(self).getScheme() in ["", "http", "https", "file", "oci"]) : (isURL("http://" + self) &&
+                        url("http://" + self).getScheme() in ["", "http", "https", "file", "oci"])
+                  verificationKey:
+                    type: string
+                  vmConfig:
+                    description: Configuration for a Wasm VM.
+                    properties:
+                      env:
+                        description: Specifies environment variables to be injected
+                          to this VM.
+                        items:
+                          properties:
+                            name:
+                              description: Name of the environment variable.
+                              maxLength: 256
+                              minLength: 1
+                              type: string
+                            value:
+                              description: Value for the environment variable.
+                              maxLength: 2048
+                              type: string
+                            valueFrom:
+                              description: |-
+                                Source for the environment variable's value.
+
+                                Valid Options: INLINE, HOST
+                              enum:
+                              - INLINE
+                              - HOST
+                              type: string
+                          required:
+                          - name
+                          type: object
+                          x-kubernetes-validations:
+                          - message: value may only be set when valueFrom is INLINE
+                            rule: '(has(self.valueFrom) ? self.valueFrom : "") !=
+                              "HOST" || !has(self.value)'
+                        maxItems: 256
+                        type: array
+                        x-kubernetes-list-map-keys:
+                        - name
+                        x-kubernetes-list-type: map
+                    type: object
+                required:
+                - url
+                type: object
+            type: object
+            x-kubernetes-validations:
+            - message: only one of targetRefs or selector can be set
+              rule: '(has(self.selector) ? 1 : 0) + (has(self.targetRefs) ? 1 : 0)
+                <= 1'
+            - message: exactly one of wasm or lua must be set
+              rule: has(self.wasm) != has(self.lua)
+          status:
+            properties:
+              conditions:
+                description: Current service state of the resource.
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      format: date-time
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about
+                        last transition.
+                      type: string
+                    observedGeneration:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      description: Resource Generation to which the Condition refers.
+                      x-kubernetes-int-or-string: true
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's
+                        last transition.
+                      type: string
+                    status:
+                      description: Status is the status of the condition.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                type: array
+              observedGeneration:
+                anyOf:
+                - type: integer
+                - type: string
+                x-kubernetes-int-or-string: true
+              validationMessages:
+                description: Includes any errors or warnings detected by Istio's analyzers.
+                items:
+                  properties:
+                    documentationUrl:
+                      description: A url pointing to the Istio documentation for this
+                        specific error type.
+                      type: string
+                    level:
+                      description: |-
+                        Represents how severe a message is.
+
+                        Valid Options: UNKNOWN, ERROR, WARNING, INFO
+                      enum:
+                      - UNKNOWN
+                      - ERROR
+                      - WARNING
+                      - INFO
+                      type: string
+                    type:
+                      properties:
+                        code:
+                          description: A 7 character code matching `^IST[0-9]{4}$`
+                            intended to uniquely identify the message type.
+                          type: string
+                        name:
+                          description: A human-readable name for the message type.
+                          type: string
+                      type: object
+                  type: object
+                type: array
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    app: istio-pilot
+    chart: istio
+    heritage: Tiller
+    release: istio
   name: wasmplugins.extensions.istio.io
 spec:
   group: extensions.istio.io
@@ -598,6 +959,21 @@ spec:
                                 httpCookie:
                                   description: Hash based on HTTP cookie.
                                   properties:
+                                    attributes:
+                                      description: Additional attributes for the cookie.
+                                      items:
+                                        properties:
+                                          name:
+                                            description: The name of the cookie attribute.
+                                            type: string
+                                          value:
+                                            description: The optional value of the
+                                              cookie attribute.
+                                            type: string
+                                        required:
+                                        - name
+                                        type: object
+                                      type: array
                                     name:
                                       description: Name of the cookie.
                                       type: string
@@ -736,7 +1112,7 @@ spec:
                                   description: This parameter controls the speed of
                                     traffic increase over the warmup duration.
                                   format: double
-                                  minimum: 1
+                                  minimum: 0
                                   nullable: true
                                   type: number
                                 duration:
@@ -988,6 +1364,23 @@ spec:
                                       httpCookie:
                                         description: Hash based on HTTP cookie.
                                         properties:
+                                          attributes:
+                                            description: Additional attributes for
+                                              the cookie.
+                                            items:
+                                              properties:
+                                                name:
+                                                  description: The name of the cookie
+                                                    attribute.
+                                                  type: string
+                                                value:
+                                                  description: The optional value
+                                                    of the cookie attribute.
+                                                  type: string
+                                              required:
+                                              - name
+                                              type: object
+                                            type: array
                                           name:
                                             description: Name of the cookie.
                                             type: string
@@ -1130,7 +1523,7 @@ spec:
                                         description: This parameter controls the speed
                                           of traffic increase over the warmup duration.
                                         format: double
-                                        minimum: 1
+                                        minimum: 0
                                         nullable: true
                                         type: number
                                       duration:
@@ -1293,6 +1686,26 @@ spec:
                               - V1
                               - V2
                               type: string
+                          type: object
+                        retryBudget:
+                          description: Specifies a limit on concurrent retries in
+                            relation to the number of active requests.
+                          properties:
+                            minRetryConcurrency:
+                              description: Specifies the minimum retry concurrency
+                                allowed for the retry budget.
+                              maximum: 4294967295
+                              minimum: 0
+                              type: integer
+                            percent:
+                              description: Specifies the limit on concurrent retries
+                                as a percentage of the sum of active requests and
+                                active pending requests.
+                              format: double
+                              maximum: 100
+                              minimum: 0
+                              nullable: true
+                              type: number
                           type: object
                         tls:
                           description: TLS related settings for connections to the
@@ -1536,6 +1949,21 @@ spec:
                           httpCookie:
                             description: Hash based on HTTP cookie.
                             properties:
+                              attributes:
+                                description: Additional attributes for the cookie.
+                                items:
+                                  properties:
+                                    name:
+                                      description: The name of the cookie attribute.
+                                      type: string
+                                    value:
+                                      description: The optional value of the cookie
+                                        attribute.
+                                      type: string
+                                  required:
+                                  - name
+                                  type: object
+                                type: array
                               name:
                                 description: Name of the cookie.
                                 type: string
@@ -1671,7 +2099,7 @@ spec:
                             description: This parameter controls the speed of traffic
                               increase over the warmup duration.
                             format: double
-                            minimum: 1
+                            minimum: 0
                             nullable: true
                             type: number
                           duration:
@@ -1919,6 +2347,21 @@ spec:
                                 httpCookie:
                                   description: Hash based on HTTP cookie.
                                   properties:
+                                    attributes:
+                                      description: Additional attributes for the cookie.
+                                      items:
+                                        properties:
+                                          name:
+                                            description: The name of the cookie attribute.
+                                            type: string
+                                          value:
+                                            description: The optional value of the
+                                              cookie attribute.
+                                            type: string
+                                        required:
+                                        - name
+                                        type: object
+                                      type: array
                                     name:
                                       description: Name of the cookie.
                                       type: string
@@ -2057,7 +2500,7 @@ spec:
                                   description: This parameter controls the speed of
                                     traffic increase over the warmup duration.
                                   format: double
-                                  minimum: 1
+                                  minimum: 0
                                   nullable: true
                                   type: number
                                 duration:
@@ -2213,6 +2656,26 @@ spec:
                         - V1
                         - V2
                         type: string
+                    type: object
+                  retryBudget:
+                    description: Specifies a limit on concurrent retries in relation
+                      to the number of active requests.
+                    properties:
+                      minRetryConcurrency:
+                        description: Specifies the minimum retry concurrency allowed
+                          for the retry budget.
+                        maximum: 4294967295
+                        minimum: 0
+                        type: integer
+                      percent:
+                        description: Specifies the limit on concurrent retries as
+                          a percentage of the sum of active requests and active pending
+                          requests.
+                        format: double
+                        maximum: 100
+                        minimum: 0
+                        nullable: true
+                        type: number
                     type: object
                   tls:
                     description: TLS related settings for connections to the upstream
@@ -2606,6 +3069,21 @@ spec:
                                 httpCookie:
                                   description: Hash based on HTTP cookie.
                                   properties:
+                                    attributes:
+                                      description: Additional attributes for the cookie.
+                                      items:
+                                        properties:
+                                          name:
+                                            description: The name of the cookie attribute.
+                                            type: string
+                                          value:
+                                            description: The optional value of the
+                                              cookie attribute.
+                                            type: string
+                                        required:
+                                        - name
+                                        type: object
+                                      type: array
                                     name:
                                       description: Name of the cookie.
                                       type: string
@@ -2744,7 +3222,7 @@ spec:
                                   description: This parameter controls the speed of
                                     traffic increase over the warmup duration.
                                   format: double
-                                  minimum: 1
+                                  minimum: 0
                                   nullable: true
                                   type: number
                                 duration:
@@ -2996,6 +3474,23 @@ spec:
                                       httpCookie:
                                         description: Hash based on HTTP cookie.
                                         properties:
+                                          attributes:
+                                            description: Additional attributes for
+                                              the cookie.
+                                            items:
+                                              properties:
+                                                name:
+                                                  description: The name of the cookie
+                                                    attribute.
+                                                  type: string
+                                                value:
+                                                  description: The optional value
+                                                    of the cookie attribute.
+                                                  type: string
+                                              required:
+                                              - name
+                                              type: object
+                                            type: array
                                           name:
                                             description: Name of the cookie.
                                             type: string
@@ -3138,7 +3633,7 @@ spec:
                                         description: This parameter controls the speed
                                           of traffic increase over the warmup duration.
                                         format: double
-                                        minimum: 1
+                                        minimum: 0
                                         nullable: true
                                         type: number
                                       duration:
@@ -3301,6 +3796,26 @@ spec:
                               - V1
                               - V2
                               type: string
+                          type: object
+                        retryBudget:
+                          description: Specifies a limit on concurrent retries in
+                            relation to the number of active requests.
+                          properties:
+                            minRetryConcurrency:
+                              description: Specifies the minimum retry concurrency
+                                allowed for the retry budget.
+                              maximum: 4294967295
+                              minimum: 0
+                              type: integer
+                            percent:
+                              description: Specifies the limit on concurrent retries
+                                as a percentage of the sum of active requests and
+                                active pending requests.
+                              format: double
+                              maximum: 100
+                              minimum: 0
+                              nullable: true
+                              type: number
                           type: object
                         tls:
                           description: TLS related settings for connections to the
@@ -3544,6 +4059,21 @@ spec:
                           httpCookie:
                             description: Hash based on HTTP cookie.
                             properties:
+                              attributes:
+                                description: Additional attributes for the cookie.
+                                items:
+                                  properties:
+                                    name:
+                                      description: The name of the cookie attribute.
+                                      type: string
+                                    value:
+                                      description: The optional value of the cookie
+                                        attribute.
+                                      type: string
+                                  required:
+                                  - name
+                                  type: object
+                                type: array
                               name:
                                 description: Name of the cookie.
                                 type: string
@@ -3679,7 +4209,7 @@ spec:
                             description: This parameter controls the speed of traffic
                               increase over the warmup duration.
                             format: double
-                            minimum: 1
+                            minimum: 0
                             nullable: true
                             type: number
                           duration:
@@ -3927,6 +4457,21 @@ spec:
                                 httpCookie:
                                   description: Hash based on HTTP cookie.
                                   properties:
+                                    attributes:
+                                      description: Additional attributes for the cookie.
+                                      items:
+                                        properties:
+                                          name:
+                                            description: The name of the cookie attribute.
+                                            type: string
+                                          value:
+                                            description: The optional value of the
+                                              cookie attribute.
+                                            type: string
+                                        required:
+                                        - name
+                                        type: object
+                                      type: array
                                     name:
                                       description: Name of the cookie.
                                       type: string
@@ -4065,7 +4610,7 @@ spec:
                                   description: This parameter controls the speed of
                                     traffic increase over the warmup duration.
                                   format: double
-                                  minimum: 1
+                                  minimum: 0
                                   nullable: true
                                   type: number
                                 duration:
@@ -4221,6 +4766,26 @@ spec:
                         - V1
                         - V2
                         type: string
+                    type: object
+                  retryBudget:
+                    description: Specifies a limit on concurrent retries in relation
+                      to the number of active requests.
+                    properties:
+                      minRetryConcurrency:
+                        description: Specifies the minimum retry concurrency allowed
+                          for the retry budget.
+                        maximum: 4294967295
+                        minimum: 0
+                        type: integer
+                      percent:
+                        description: Specifies the limit on concurrent retries as
+                          a percentage of the sum of active requests and active pending
+                          requests.
+                        format: double
+                        maximum: 100
+                        minimum: 0
+                        nullable: true
+                        type: number
                     type: object
                   tls:
                     description: TLS related settings for connections to the upstream
@@ -4614,6 +5179,21 @@ spec:
                                 httpCookie:
                                   description: Hash based on HTTP cookie.
                                   properties:
+                                    attributes:
+                                      description: Additional attributes for the cookie.
+                                      items:
+                                        properties:
+                                          name:
+                                            description: The name of the cookie attribute.
+                                            type: string
+                                          value:
+                                            description: The optional value of the
+                                              cookie attribute.
+                                            type: string
+                                        required:
+                                        - name
+                                        type: object
+                                      type: array
                                     name:
                                       description: Name of the cookie.
                                       type: string
@@ -4752,7 +5332,7 @@ spec:
                                   description: This parameter controls the speed of
                                     traffic increase over the warmup duration.
                                   format: double
-                                  minimum: 1
+                                  minimum: 0
                                   nullable: true
                                   type: number
                                 duration:
@@ -5004,6 +5584,23 @@ spec:
                                       httpCookie:
                                         description: Hash based on HTTP cookie.
                                         properties:
+                                          attributes:
+                                            description: Additional attributes for
+                                              the cookie.
+                                            items:
+                                              properties:
+                                                name:
+                                                  description: The name of the cookie
+                                                    attribute.
+                                                  type: string
+                                                value:
+                                                  description: The optional value
+                                                    of the cookie attribute.
+                                                  type: string
+                                              required:
+                                              - name
+                                              type: object
+                                            type: array
                                           name:
                                             description: Name of the cookie.
                                             type: string
@@ -5146,7 +5743,7 @@ spec:
                                         description: This parameter controls the speed
                                           of traffic increase over the warmup duration.
                                         format: double
-                                        minimum: 1
+                                        minimum: 0
                                         nullable: true
                                         type: number
                                       duration:
@@ -5309,6 +5906,26 @@ spec:
                               - V1
                               - V2
                               type: string
+                          type: object
+                        retryBudget:
+                          description: Specifies a limit on concurrent retries in
+                            relation to the number of active requests.
+                          properties:
+                            minRetryConcurrency:
+                              description: Specifies the minimum retry concurrency
+                                allowed for the retry budget.
+                              maximum: 4294967295
+                              minimum: 0
+                              type: integer
+                            percent:
+                              description: Specifies the limit on concurrent retries
+                                as a percentage of the sum of active requests and
+                                active pending requests.
+                              format: double
+                              maximum: 100
+                              minimum: 0
+                              nullable: true
+                              type: number
                           type: object
                         tls:
                           description: TLS related settings for connections to the
@@ -5552,6 +6169,21 @@ spec:
                           httpCookie:
                             description: Hash based on HTTP cookie.
                             properties:
+                              attributes:
+                                description: Additional attributes for the cookie.
+                                items:
+                                  properties:
+                                    name:
+                                      description: The name of the cookie attribute.
+                                      type: string
+                                    value:
+                                      description: The optional value of the cookie
+                                        attribute.
+                                      type: string
+                                  required:
+                                  - name
+                                  type: object
+                                type: array
                               name:
                                 description: Name of the cookie.
                                 type: string
@@ -5687,7 +6319,7 @@ spec:
                             description: This parameter controls the speed of traffic
                               increase over the warmup duration.
                             format: double
-                            minimum: 1
+                            minimum: 0
                             nullable: true
                             type: number
                           duration:
@@ -5935,6 +6567,21 @@ spec:
                                 httpCookie:
                                   description: Hash based on HTTP cookie.
                                   properties:
+                                    attributes:
+                                      description: Additional attributes for the cookie.
+                                      items:
+                                        properties:
+                                          name:
+                                            description: The name of the cookie attribute.
+                                            type: string
+                                          value:
+                                            description: The optional value of the
+                                              cookie attribute.
+                                            type: string
+                                        required:
+                                        - name
+                                        type: object
+                                      type: array
                                     name:
                                       description: Name of the cookie.
                                       type: string
@@ -6073,7 +6720,7 @@ spec:
                                   description: This parameter controls the speed of
                                     traffic increase over the warmup duration.
                                   format: double
-                                  minimum: 1
+                                  minimum: 0
                                   nullable: true
                                   type: number
                                 duration:
@@ -6229,6 +6876,26 @@ spec:
                         - V1
                         - V2
                         type: string
+                    type: object
+                  retryBudget:
+                    description: Specifies a limit on concurrent retries in relation
+                      to the number of active requests.
+                    properties:
+                      minRetryConcurrency:
+                        description: Specifies the minimum retry concurrency allowed
+                          for the retry budget.
+                        maximum: 4294967295
+                        minimum: 0
+                        type: integer
+                      percent:
+                        description: Specifies the limit on concurrent retries as
+                          a percentage of the sum of active requests and active pending
+                          requests.
+                        format: double
+                        maximum: 100
+                        minimum: 0
+                        nullable: true
+                        type: number
                     type: object
                   tls:
                     description: TLS related settings for connections to the upstream
@@ -6475,12 +7142,16 @@ spec:
                             - routeConfiguration
                           - required:
                             - cluster
+                          - required:
+                            - waypoint
                       - required:
                         - listener
                       - required:
                         - routeConfiguration
                       - required:
                         - cluster
+                      - required:
+                        - waypoint
                       properties:
                         cluster:
                           description: Match on envoy cluster attributes.
@@ -6506,12 +7177,13 @@ spec:
                           description: |-
                             The specific config generation context to match on.
 
-                            Valid Options: ANY, SIDECAR_INBOUND, SIDECAR_OUTBOUND, GATEWAY
+                            Valid Options: ANY, SIDECAR_INBOUND, SIDECAR_OUTBOUND, GATEWAY, WAYPOINT
                           enum:
                           - ANY
                           - SIDECAR_INBOUND
                           - SIDECAR_OUTBOUND
                           - GATEWAY
+                          - WAYPOINT
                           type: string
                         listener:
                           description: Match on envoy listener attributes.
@@ -6641,7 +7313,46 @@ spec:
                                   type: object
                               type: object
                           type: object
+                        waypoint:
+                          properties:
+                            filter:
+                              description: The name of a specific filter to apply
+                                the patch to.
+                              properties:
+                                name:
+                                  description: The filter name to match on.
+                                  type: string
+                                subFilter:
+                                  description: The next level filter within this filter
+                                    to match on.
+                                  properties:
+                                    name:
+                                      description: The filter name to match on.
+                                      type: string
+                                  type: object
+                              type: object
+                            portNumber:
+                              description: The service port to match on.
+                              maximum: 4294967295
+                              minimum: 0
+                              type: integer
+                              x-kubernetes-validations:
+                              - message: port must be between 1-65535
+                                rule: 0 < self && self <= 65535
+                            route:
+                              description: Match a specific route.
+                              properties:
+                                name:
+                                  description: The Route objects generated by default
+                                    are named as default.
+                                  type: string
+                              type: object
+                          type: object
                       type: object
+                      x-kubernetes-validations:
+                      - message: only support waypointMatch when context is WAYPOINT
+                        rule: 'has(self.context) ? ((self.context == "WAYPOINT") ?
+                          has(self.waypoint) : !has(self.waypoint)) : !has(self.waypoint)'
                     patch:
                       description: The patch to apply along with the operation.
                       properties:
@@ -6903,6 +7614,10 @@ spec:
                       description: Set of TLS related options that govern the server's
                         behavior.
                       properties:
+                        caCertCredentialName:
+                          description: For mutual TLS, the name of the secret or the
+                            configmap that holds CA certificates.
+                          type: string
                         caCertificates:
                           description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
                           type: string
@@ -7174,6 +7889,10 @@ spec:
                       description: Set of TLS related options that govern the server's
                         behavior.
                       properties:
+                        caCertCredentialName:
+                          description: For mutual TLS, the name of the secret or the
+                            configmap that holds CA certificates.
+                          type: string
                         caCertificates:
                           description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
                           type: string
@@ -7445,6 +8164,10 @@ spec:
                       description: Set of TLS related options that govern the server's
                         behavior.
                       properties:
+                        caCertCredentialName:
+                          description: For mutual TLS, the name of the secret or the
+                            configmap that holds CA certificates.
+                          type: string
                         caCertificates:
                           description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
                           type: string
@@ -8003,12 +8726,13 @@ spec:
                 description: |-
                   Service resolution mode for the hosts.
 
-                  Valid Options: NONE, STATIC, DNS, DNS_ROUND_ROBIN
+                  Valid Options: NONE, STATIC, DNS, DNS_ROUND_ROBIN, DYNAMIC_DNS
                 enum:
                 - NONE
                 - STATIC
                 - DNS
                 - DNS_ROUND_ROBIN
+                - DYNAMIC_DNS
                 type: string
               subjectAltNames:
                 description: If specified, the proxy will verify that the server certificate's
@@ -8301,12 +9025,13 @@ spec:
                 description: |-
                   Service resolution mode for the hosts.
 
-                  Valid Options: NONE, STATIC, DNS, DNS_ROUND_ROBIN
+                  Valid Options: NONE, STATIC, DNS, DNS_ROUND_ROBIN, DYNAMIC_DNS
                 enum:
                 - NONE
                 - STATIC
                 - DNS
                 - DNS_ROUND_ROBIN
+                - DYNAMIC_DNS
                 type: string
               subjectAltNames:
                 description: If specified, the proxy will verify that the server certificate's
@@ -8599,12 +9324,13 @@ spec:
                 description: |-
                   Service resolution mode for the hosts.
 
-                  Valid Options: NONE, STATIC, DNS, DNS_ROUND_ROBIN
+                  Valid Options: NONE, STATIC, DNS, DNS_ROUND_ROBIN, DYNAMIC_DNS
                 enum:
                 - NONE
                 - STATIC
                 - DNS
                 - DNS_ROUND_ROBIN
+                - DYNAMIC_DNS
                 type: string
               subjectAltNames:
                 description: If specified, the proxy will verify that the server certificate's
@@ -9066,6 +9792,10 @@ spec:
                         termination on the sidecar for requests originating from outside
                         the mesh.
                       properties:
+                        caCertCredentialName:
+                          description: For mutual TLS, the name of the secret or the
+                            configmap that holds CA certificates.
+                          type: string
                         caCertificates:
                           description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
                           type: string
@@ -9640,6 +10370,10 @@ spec:
                         termination on the sidecar for requests originating from outside
                         the mesh.
                       properties:
+                        caCertCredentialName:
+                          description: For mutual TLS, the name of the secret or the
+                            configmap that holds CA certificates.
+                          type: string
                         caCertificates:
                           description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
                           type: string
@@ -10214,6 +10948,10 @@ spec:
                         termination on the sidecar for requests originating from outside
                         the mesh.
                       properties:
+                        caCertCredentialName:
+                          description: For mutual TLS, the name of the secret or the
+                            configmap that holds CA certificates.
+                          type: string
                         caCertificates:
                           description: REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
                           type: string
@@ -10653,7 +11391,7 @@ spec:
                           properties:
                             bytes:
                               description: response body as base64 encoded bytes.
-                              format: binary
+                              format: byte
                               type: string
                             string:
                               type: string
@@ -11705,7 +12443,7 @@ spec:
                           properties:
                             bytes:
                               description: response body as base64 encoded bytes.
-                              format: binary
+                              format: byte
                               type: string
                             string:
                               type: string
@@ -12757,7 +13495,7 @@ spec:
                           properties:
                             bytes:
                               description: response body as base64 encoded bytes.
-                              format: binary
+                              format: byte
                               type: string
                             string:
                               type: string
@@ -14165,6 +14903,8 @@ spec:
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
+  annotations:
+    "helm.sh/resource-policy": keep
   labels:
     app: istio-pilot
     chart: istio
@@ -15235,6 +15975,11 @@ spec:
                                   type: string
                                 maxItems: 16
                                 type: array
+                              notTrustDomains:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
                               principals:
                                 description: Optional.
                                 items:
@@ -15257,375 +16002,10 @@ spec:
                                   type: string
                                 maxItems: 16
                                 type: array
-                            type: object
-                            x-kubernetes-validations:
-                            - message: Cannot set serviceAccounts with namespaces
-                                or principals
-                              rule: |-
-                                (has(self.serviceAccounts) || has(self.notServiceAccounts)) ? (!has(self.principals) &&
-                                !has(self.notPrincipals) && !has(self.namespaces) && !has(self.notNamespaces)) : true
-                        type: object
-                      maxItems: 512
-                      type: array
-                    to:
-                      description: Optional.
-                      items:
-                        properties:
-                          operation:
-                            description: Operation specifies the operation of a request.
-                            properties:
-                              hosts:
+                              trustDomains:
                                 description: Optional.
                                 items:
                                   type: string
-                                type: array
-                              methods:
-                                description: Optional.
-                                items:
-                                  type: string
-                                type: array
-                              notHosts:
-                                description: Optional.
-                                items:
-                                  type: string
-                                type: array
-                              notMethods:
-                                description: Optional.
-                                items:
-                                  type: string
-                                type: array
-                              notPaths:
-                                description: Optional.
-                                items:
-                                  type: string
-                                type: array
-                              notPorts:
-                                description: Optional.
-                                items:
-                                  type: string
-                                type: array
-                              paths:
-                                description: Optional.
-                                items:
-                                  type: string
-                                type: array
-                              ports:
-                                description: Optional.
-                                items:
-                                  type: string
-                                type: array
-                            type: object
-                        type: object
-                      type: array
-                    when:
-                      description: Optional.
-                      items:
-                        properties:
-                          key:
-                            description: The name of an Istio attribute.
-                            type: string
-                          notValues:
-                            description: Optional.
-                            items:
-                              type: string
-                            type: array
-                          values:
-                            description: Optional.
-                            items:
-                              type: string
-                            type: array
-                        required:
-                        - key
-                        type: object
-                      type: array
-                  type: object
-                maxItems: 512
-                type: array
-              selector:
-                description: Optional.
-                properties:
-                  matchLabels:
-                    additionalProperties:
-                      maxLength: 63
-                      type: string
-                      x-kubernetes-validations:
-                      - message: wildcard not allowed in label value match
-                        rule: '!self.contains("*")'
-                    description: One or more labels that indicate a specific set of
-                      pods/VMs on which a policy should be applied.
-                    maxProperties: 4096
-                    type: object
-                    x-kubernetes-validations:
-                    - message: wildcard not allowed in label key match
-                      rule: self.all(key, !key.contains("*"))
-                    - message: key must not be empty
-                      rule: self.all(key, key.size() != 0)
-                type: object
-              targetRef:
-                properties:
-                  group:
-                    description: group is the group of the target resource.
-                    maxLength: 253
-                    pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
-                    type: string
-                  kind:
-                    description: kind is kind of the target resource.
-                    maxLength: 63
-                    minLength: 1
-                    pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
-                    type: string
-                  name:
-                    description: name is the name of the target resource.
-                    maxLength: 253
-                    minLength: 1
-                    type: string
-                  namespace:
-                    description: namespace is the namespace of the referent.
-                    type: string
-                    x-kubernetes-validations:
-                    - message: cross namespace referencing is not currently supported
-                      rule: self.size() == 0
-                required:
-                - kind
-                - name
-                type: object
-              targetRefs:
-                description: Optional.
-                items:
-                  properties:
-                    group:
-                      description: group is the group of the target resource.
-                      maxLength: 253
-                      pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
-                      type: string
-                    kind:
-                      description: kind is kind of the target resource.
-                      maxLength: 63
-                      minLength: 1
-                      pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
-                      type: string
-                    name:
-                      description: name is the name of the target resource.
-                      maxLength: 253
-                      minLength: 1
-                      type: string
-                    namespace:
-                      description: namespace is the namespace of the referent.
-                      type: string
-                      x-kubernetes-validations:
-                      - message: cross namespace referencing is not currently supported
-                        rule: self.size() == 0
-                  required:
-                  - kind
-                  - name
-                  type: object
-                maxItems: 16
-                type: array
-            type: object
-            x-kubernetes-validations:
-            - message: only one of targetRefs or selector can be set
-              rule: '(has(self.selector) ? 1 : 0) + (has(self.targetRef) ? 1 : 0)
-                + (has(self.targetRefs) ? 1 : 0) <= 1'
-          status:
-            properties:
-              conditions:
-                description: Current service state of the resource.
-                items:
-                  properties:
-                    lastProbeTime:
-                      description: Last time we probed the condition.
-                      format: date-time
-                      type: string
-                    lastTransitionTime:
-                      description: Last time the condition transitioned from one status
-                        to another.
-                      format: date-time
-                      type: string
-                    message:
-                      description: Human-readable message indicating details about
-                        last transition.
-                      type: string
-                    observedGeneration:
-                      anyOf:
-                      - type: integer
-                      - type: string
-                      description: Resource Generation to which the Condition refers.
-                      x-kubernetes-int-or-string: true
-                    reason:
-                      description: Unique, one-word, CamelCase reason for the condition's
-                        last transition.
-                      type: string
-                    status:
-                      description: Status is the status of the condition.
-                      type: string
-                    type:
-                      description: Type is the type of the condition.
-                      type: string
-                  type: object
-                type: array
-              observedGeneration:
-                anyOf:
-                - type: integer
-                - type: string
-                x-kubernetes-int-or-string: true
-              validationMessages:
-                description: Includes any errors or warnings detected by Istio's analyzers.
-                items:
-                  properties:
-                    documentationUrl:
-                      description: A url pointing to the Istio documentation for this
-                        specific error type.
-                      type: string
-                    level:
-                      description: |-
-                        Represents how severe a message is.
-
-                        Valid Options: UNKNOWN, ERROR, WARNING, INFO
-                      enum:
-                      - UNKNOWN
-                      - ERROR
-                      - WARNING
-                      - INFO
-                      type: string
-                    type:
-                      properties:
-                        code:
-                          description: A 7 character code matching `^IST[0-9]{4}$`
-                            intended to uniquely identify the message type.
-                          type: string
-                        name:
-                          description: A human-readable name for the message type.
-                          type: string
-                      type: object
-                  type: object
-                type: array
-            type: object
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: true
-    storage: false
-    subresources:
-      status: {}
-  - additionalPrinterColumns:
-    - description: The operation to take.
-      jsonPath: .spec.action
-      name: Action
-      type: string
-    - description: 'CreationTimestamp is a timestamp representing the server time
-        when this object was created. It is not guaranteed to be set in happens-before
-        order across separate operations. Clients may not set this value. It is represented
-        in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for
-        lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata'
-      jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        properties:
-          spec:
-            description: 'Configuration for access control on workloads. See more
-              details at: https://istio.io/docs/reference/config/security/authorization-policy.html'
-            oneOf:
-            - not:
-                anyOf:
-                - required:
-                  - provider
-            - required:
-              - provider
-            properties:
-              action:
-                description: |-
-                  Optional.
-
-                  Valid Options: ALLOW, DENY, AUDIT, CUSTOM
-                enum:
-                - ALLOW
-                - DENY
-                - AUDIT
-                - CUSTOM
-                type: string
-              provider:
-                description: Specifies detailed configuration of the CUSTOM action.
-                properties:
-                  name:
-                    description: Specifies the name of the extension provider.
-                    type: string
-                type: object
-              rules:
-                description: Optional.
-                items:
-                  properties:
-                    from:
-                      description: Optional.
-                      items:
-                        properties:
-                          source:
-                            description: Source specifies the source of a request.
-                            properties:
-                              ipBlocks:
-                                description: Optional.
-                                items:
-                                  type: string
-                                type: array
-                              namespaces:
-                                description: Optional.
-                                items:
-                                  type: string
-                                type: array
-                              notIpBlocks:
-                                description: Optional.
-                                items:
-                                  type: string
-                                type: array
-                              notNamespaces:
-                                description: Optional.
-                                items:
-                                  type: string
-                                type: array
-                              notPrincipals:
-                                description: Optional.
-                                items:
-                                  type: string
-                                type: array
-                              notRemoteIpBlocks:
-                                description: Optional.
-                                items:
-                                  type: string
-                                type: array
-                              notRequestPrincipals:
-                                description: Optional.
-                                items:
-                                  type: string
-                                type: array
-                              notServiceAccounts:
-                                description: Optional.
-                                items:
-                                  maxLength: 320
-                                  type: string
-                                maxItems: 16
-                                type: array
-                              principals:
-                                description: Optional.
-                                items:
-                                  type: string
-                                type: array
-                              remoteIpBlocks:
-                                description: Optional.
-                                items:
-                                  type: string
-                                type: array
-                              requestPrincipals:
-                                description: Optional.
-                                items:
-                                  type: string
-                                type: array
-                              serviceAccounts:
-                                description: Optional.
-                                items:
-                                  maxLength: 320
-                                  type: string
-                                maxItems: 16
                                 type: array
                             type: object
                             x-kubernetes-validations:
@@ -15874,6 +16254,386 @@ spec:
         type: object
     served: true
     storage: true
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - description: The operation to take.
+      jsonPath: .spec.action
+      name: Action
+      type: string
+    - description: 'CreationTimestamp is a timestamp representing the server time
+        when this object was created. It is not guaranteed to be set in happens-before
+        order across separate operations. Clients may not set this value. It is represented
+        in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for
+        lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata'
+      jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta1
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            description: 'Configuration for access control on workloads. See more
+              details at: https://istio.io/docs/reference/config/security/authorization-policy.html'
+            oneOf:
+            - not:
+                anyOf:
+                - required:
+                  - provider
+            - required:
+              - provider
+            properties:
+              action:
+                description: |-
+                  Optional.
+
+                  Valid Options: ALLOW, DENY, AUDIT, CUSTOM
+                enum:
+                - ALLOW
+                - DENY
+                - AUDIT
+                - CUSTOM
+                type: string
+              provider:
+                description: Specifies detailed configuration of the CUSTOM action.
+                properties:
+                  name:
+                    description: Specifies the name of the extension provider.
+                    type: string
+                type: object
+              rules:
+                description: Optional.
+                items:
+                  properties:
+                    from:
+                      description: Optional.
+                      items:
+                        properties:
+                          source:
+                            description: Source specifies the source of a request.
+                            properties:
+                              ipBlocks:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              namespaces:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              notIpBlocks:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              notNamespaces:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              notPrincipals:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              notRemoteIpBlocks:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              notRequestPrincipals:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              notServiceAccounts:
+                                description: Optional.
+                                items:
+                                  maxLength: 320
+                                  type: string
+                                maxItems: 16
+                                type: array
+                              notTrustDomains:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              principals:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              remoteIpBlocks:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              requestPrincipals:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              serviceAccounts:
+                                description: Optional.
+                                items:
+                                  maxLength: 320
+                                  type: string
+                                maxItems: 16
+                                type: array
+                              trustDomains:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                            x-kubernetes-validations:
+                            - message: Cannot set serviceAccounts with namespaces
+                                or principals
+                              rule: |-
+                                (has(self.serviceAccounts) || has(self.notServiceAccounts)) ? (!has(self.principals) &&
+                                !has(self.notPrincipals) && !has(self.namespaces) && !has(self.notNamespaces)) : true
+                        type: object
+                      maxItems: 512
+                      type: array
+                    to:
+                      description: Optional.
+                      items:
+                        properties:
+                          operation:
+                            description: Operation specifies the operation of a request.
+                            properties:
+                              hosts:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              methods:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              notHosts:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              notMethods:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              notPaths:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              notPorts:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              paths:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                              ports:
+                                description: Optional.
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                        type: object
+                      type: array
+                    when:
+                      description: Optional.
+                      items:
+                        properties:
+                          key:
+                            description: The name of an Istio attribute.
+                            type: string
+                          notValues:
+                            description: Optional.
+                            items:
+                              type: string
+                            type: array
+                          values:
+                            description: Optional.
+                            items:
+                              type: string
+                            type: array
+                        required:
+                        - key
+                        type: object
+                      type: array
+                  type: object
+                maxItems: 512
+                type: array
+              selector:
+                description: Optional.
+                properties:
+                  matchLabels:
+                    additionalProperties:
+                      maxLength: 63
+                      type: string
+                      x-kubernetes-validations:
+                      - message: wildcard not allowed in label value match
+                        rule: '!self.contains("*")'
+                    description: One or more labels that indicate a specific set of
+                      pods/VMs on which a policy should be applied.
+                    maxProperties: 4096
+                    type: object
+                    x-kubernetes-validations:
+                    - message: wildcard not allowed in label key match
+                      rule: self.all(key, !key.contains("*"))
+                    - message: key must not be empty
+                      rule: self.all(key, key.size() != 0)
+                type: object
+              targetRef:
+                properties:
+                  group:
+                    description: group is the group of the target resource.
+                    maxLength: 253
+                    pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                    type: string
+                  kind:
+                    description: kind is kind of the target resource.
+                    maxLength: 63
+                    minLength: 1
+                    pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
+                    type: string
+                  name:
+                    description: name is the name of the target resource.
+                    maxLength: 253
+                    minLength: 1
+                    type: string
+                  namespace:
+                    description: namespace is the namespace of the referent.
+                    type: string
+                    x-kubernetes-validations:
+                    - message: cross namespace referencing is not currently supported
+                      rule: self.size() == 0
+                required:
+                - kind
+                - name
+                type: object
+              targetRefs:
+                description: Optional.
+                items:
+                  properties:
+                    group:
+                      description: group is the group of the target resource.
+                      maxLength: 253
+                      pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                      type: string
+                    kind:
+                      description: kind is kind of the target resource.
+                      maxLength: 63
+                      minLength: 1
+                      pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
+                      type: string
+                    name:
+                      description: name is the name of the target resource.
+                      maxLength: 253
+                      minLength: 1
+                      type: string
+                    namespace:
+                      description: namespace is the namespace of the referent.
+                      type: string
+                      x-kubernetes-validations:
+                      - message: cross namespace referencing is not currently supported
+                        rule: self.size() == 0
+                  required:
+                  - kind
+                  - name
+                  type: object
+                maxItems: 16
+                type: array
+            type: object
+            x-kubernetes-validations:
+            - message: only one of targetRefs or selector can be set
+              rule: '(has(self.selector) ? 1 : 0) + (has(self.targetRef) ? 1 : 0)
+                + (has(self.targetRefs) ? 1 : 0) <= 1'
+          status:
+            properties:
+              conditions:
+                description: Current service state of the resource.
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      format: date-time
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about
+                        last transition.
+                      type: string
+                    observedGeneration:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      description: Resource Generation to which the Condition refers.
+                      x-kubernetes-int-or-string: true
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's
+                        last transition.
+                      type: string
+                    status:
+                      description: Status is the status of the condition.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                type: array
+              observedGeneration:
+                anyOf:
+                - type: integer
+                - type: string
+                x-kubernetes-int-or-string: true
+              validationMessages:
+                description: Includes any errors or warnings detected by Istio's analyzers.
+                items:
+                  properties:
+                    documentationUrl:
+                      description: A url pointing to the Istio documentation for this
+                        specific error type.
+                      type: string
+                    level:
+                      description: |-
+                        Represents how severe a message is.
+
+                        Valid Options: UNKNOWN, ERROR, WARNING, INFO
+                      enum:
+                      - UNKNOWN
+                      - ERROR
+                      - WARNING
+                      - INFO
+                      type: string
+                    type:
+                      properties:
+                        code:
+                          description: A 7 character code matching `^IST[0-9]{4}$`
+                            intended to uniquely identify the message type.
+                          type: string
+                        name:
+                          description: A human-readable name for the message type.
+                          type: string
+                      type: object
+                  type: object
+                type: array
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+        type: object
+    served: true
+    storage: false
     subresources:
       status: {}
 ---
@@ -16063,7 +16823,7 @@ spec:
             x-kubernetes-preserve-unknown-fields: true
         type: object
     served: true
-    storage: false
+    storage: true
     subresources:
       status: {}
   - additionalPrinterColumns:
@@ -16226,7 +16986,7 @@ spec:
             x-kubernetes-preserve-unknown-fields: true
         type: object
     served: true
-    storage: true
+    storage: false
     subresources:
       status: {}
 ---
@@ -16357,6 +17117,14 @@ spec:
                       description: This field specifies the header name to output
                         a successfully verified JWT payload to the backend.
                       type: string
+                    spaceDelimitedClaims:
+                      description: List of JWT claim names that should be treated
+                        as space-delimited strings.
+                      items:
+                        minLength: 1
+                        type: string
+                      maxItems: 64
+                      type: array
                     timeout:
                       description: The maximum amount of time that the resolver, determined
                         by the PILOT_JWT_ENABLE_REMOTE_JWKS environment variable,
@@ -16365,8 +17133,295 @@ spec:
                       x-kubernetes-validations:
                       - message: must be a valid duration greater than 1ms
                         rule: duration(self) >= duration('1ms')
+                  type: object
+                  x-kubernetes-validations:
+                  - message: only one of jwks or jwksUri can be set
+                    rule: '(has(self.jwksUri) ? 1 : 0) + (has(self.jwks_uri) ? 1 :
+                      0) + (has(self.jwks) ? 1 : 0) <= 1'
+                maxItems: 4096
+                type: array
+              selector:
+                description: Optional.
+                properties:
+                  matchLabels:
+                    additionalProperties:
+                      maxLength: 63
+                      type: string
+                      x-kubernetes-validations:
+                      - message: wildcard not allowed in label value match
+                        rule: '!self.contains("*")'
+                    description: One or more labels that indicate a specific set of
+                      pods/VMs on which a policy should be applied.
+                    maxProperties: 4096
+                    type: object
+                    x-kubernetes-validations:
+                    - message: wildcard not allowed in label key match
+                      rule: self.all(key, !key.contains("*"))
+                    - message: key must not be empty
+                      rule: self.all(key, key.size() != 0)
+                type: object
+              targetRef:
+                properties:
+                  group:
+                    description: group is the group of the target resource.
+                    maxLength: 253
+                    pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                    type: string
+                  kind:
+                    description: kind is kind of the target resource.
+                    maxLength: 63
+                    minLength: 1
+                    pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
+                    type: string
+                  name:
+                    description: name is the name of the target resource.
+                    maxLength: 253
+                    minLength: 1
+                    type: string
+                  namespace:
+                    description: namespace is the namespace of the referent.
+                    type: string
+                    x-kubernetes-validations:
+                    - message: cross namespace referencing is not currently supported
+                      rule: self.size() == 0
+                required:
+                - kind
+                - name
+                type: object
+              targetRefs:
+                description: Optional.
+                items:
+                  properties:
+                    group:
+                      description: group is the group of the target resource.
+                      maxLength: 253
+                      pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                      type: string
+                    kind:
+                      description: kind is kind of the target resource.
+                      maxLength: 63
+                      minLength: 1
+                      pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
+                      type: string
+                    name:
+                      description: name is the name of the target resource.
+                      maxLength: 253
+                      minLength: 1
+                      type: string
+                    namespace:
+                      description: namespace is the namespace of the referent.
+                      type: string
+                      x-kubernetes-validations:
+                      - message: cross namespace referencing is not currently supported
+                        rule: self.size() == 0
                   required:
-                  - issuer
+                  - kind
+                  - name
+                  type: object
+                maxItems: 16
+                type: array
+            type: object
+            x-kubernetes-validations:
+            - message: only one of targetRefs or selector can be set
+              rule: '(has(self.selector) ? 1 : 0) + (has(self.targetRef) ? 1 : 0)
+                + (has(self.targetRefs) ? 1 : 0) <= 1'
+          status:
+            properties:
+              conditions:
+                description: Current service state of the resource.
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      format: date-time
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about
+                        last transition.
+                      type: string
+                    observedGeneration:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      description: Resource Generation to which the Condition refers.
+                      x-kubernetes-int-or-string: true
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's
+                        last transition.
+                      type: string
+                    status:
+                      description: Status is the status of the condition.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                type: array
+              observedGeneration:
+                anyOf:
+                - type: integer
+                - type: string
+                x-kubernetes-int-or-string: true
+              validationMessages:
+                description: Includes any errors or warnings detected by Istio's analyzers.
+                items:
+                  properties:
+                    documentationUrl:
+                      description: A url pointing to the Istio documentation for this
+                        specific error type.
+                      type: string
+                    level:
+                      description: |-
+                        Represents how severe a message is.
+
+                        Valid Options: UNKNOWN, ERROR, WARNING, INFO
+                      enum:
+                      - UNKNOWN
+                      - ERROR
+                      - WARNING
+                      - INFO
+                      type: string
+                    type:
+                      properties:
+                        code:
+                          description: A 7 character code matching `^IST[0-9]{4}$`
+                            intended to uniquely identify the message type.
+                          type: string
+                        name:
+                          description: A human-readable name for the message type.
+                          type: string
+                      type: object
+                  type: object
+                type: array
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+  - name: v1beta1
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            description: 'Request authentication configuration for workloads. See
+              more details at: https://istio.io/docs/reference/config/security/request_authentication.html'
+            properties:
+              jwtRules:
+                description: Define the list of JWTs that can be validated at the
+                  selected workloads' proxy.
+                items:
+                  properties:
+                    audiences:
+                      description: The list of JWT [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3)
+                        that are allowed to access.
+                      items:
+                        minLength: 1
+                        type: string
+                      type: array
+                    forwardOriginalToken:
+                      description: If set to true, the original token will be kept
+                        for the upstream request.
+                      type: boolean
+                    fromCookies:
+                      description: List of cookie names from which JWT is expected.
+                      items:
+                        minLength: 1
+                        type: string
+                      type: array
+                    fromHeaders:
+                      description: List of header locations from which JWT is expected.
+                      items:
+                        properties:
+                          name:
+                            description: The HTTP header name.
+                            minLength: 1
+                            type: string
+                          prefix:
+                            description: The prefix that should be stripped before
+                              decoding the token.
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      type: array
+                    fromParams:
+                      description: List of query parameters from which JWT is expected.
+                      items:
+                        minLength: 1
+                        type: string
+                      type: array
+                    issuer:
+                      description: Identifies the issuer that issued the JWT.
+                      minLength: 1
+                      type: string
+                    jwks:
+                      description: JSON Web Key Set of public keys to validate signature
+                        of the JWT.
+                      type: string
+                    jwks_uri:
+                      description: URL of the provider's public key set to validate
+                        signature of the JWT.
+                      maxLength: 2048
+                      minLength: 1
+                      type: string
+                      x-kubernetes-validations:
+                      - message: url must have scheme http:// or https://
+                        rule: url(self).getScheme() in ["http", "https"]
+                    jwksUri:
+                      description: URL of the provider's public key set to validate
+                        signature of the JWT.
+                      maxLength: 2048
+                      minLength: 1
+                      type: string
+                      x-kubernetes-validations:
+                      - message: url must have scheme http:// or https://
+                        rule: url(self).getScheme() in ["http", "https"]
+                    outputClaimToHeaders:
+                      description: This field specifies a list of operations to copy
+                        the claim to HTTP headers on a successfully verified token.
+                      items:
+                        properties:
+                          claim:
+                            description: The name of the claim to be copied from.
+                            minLength: 1
+                            type: string
+                          header:
+                            description: The name of the header to be created.
+                            minLength: 1
+                            pattern: ^[-_A-Za-z0-9]+$
+                            type: string
+                        required:
+                        - header
+                        - claim
+                        type: object
+                      type: array
+                    outputPayloadToHeader:
+                      description: This field specifies the header name to output
+                        a successfully verified JWT payload to the backend.
+                      type: string
+                    spaceDelimitedClaims:
+                      description: List of JWT claim names that should be treated
+                        as space-delimited strings.
+                      items:
+                        minLength: 1
+                        type: string
+                      maxItems: 64
+                      type: array
+                    timeout:
+                      description: The maximum amount of time that the resolver, determined
+                        by the PILOT_JWT_ENABLE_REMOTE_JWKS environment variable,
+                        will spend waiting for the JWKS to be fetched.
+                      type: string
+                      x-kubernetes-validations:
+                      - message: must be a valid duration greater than 1ms
+                        rule: duration(self) >= duration('1ms')
                   type: object
                   x-kubernetes-validations:
                   - message: only one of jwks or jwksUri can be set
@@ -16537,289 +17592,6 @@ spec:
         type: object
     served: true
     storage: false
-    subresources:
-      status: {}
-  - name: v1beta1
-    schema:
-      openAPIV3Schema:
-        properties:
-          spec:
-            description: 'Request authentication configuration for workloads. See
-              more details at: https://istio.io/docs/reference/config/security/request_authentication.html'
-            properties:
-              jwtRules:
-                description: Define the list of JWTs that can be validated at the
-                  selected workloads' proxy.
-                items:
-                  properties:
-                    audiences:
-                      description: The list of JWT [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3)
-                        that are allowed to access.
-                      items:
-                        minLength: 1
-                        type: string
-                      type: array
-                    forwardOriginalToken:
-                      description: If set to true, the original token will be kept
-                        for the upstream request.
-                      type: boolean
-                    fromCookies:
-                      description: List of cookie names from which JWT is expected.
-                      items:
-                        minLength: 1
-                        type: string
-                      type: array
-                    fromHeaders:
-                      description: List of header locations from which JWT is expected.
-                      items:
-                        properties:
-                          name:
-                            description: The HTTP header name.
-                            minLength: 1
-                            type: string
-                          prefix:
-                            description: The prefix that should be stripped before
-                              decoding the token.
-                            type: string
-                        required:
-                        - name
-                        type: object
-                      type: array
-                    fromParams:
-                      description: List of query parameters from which JWT is expected.
-                      items:
-                        minLength: 1
-                        type: string
-                      type: array
-                    issuer:
-                      description: Identifies the issuer that issued the JWT.
-                      minLength: 1
-                      type: string
-                    jwks:
-                      description: JSON Web Key Set of public keys to validate signature
-                        of the JWT.
-                      type: string
-                    jwks_uri:
-                      description: URL of the provider's public key set to validate
-                        signature of the JWT.
-                      maxLength: 2048
-                      minLength: 1
-                      type: string
-                      x-kubernetes-validations:
-                      - message: url must have scheme http:// or https://
-                        rule: url(self).getScheme() in ["http", "https"]
-                    jwksUri:
-                      description: URL of the provider's public key set to validate
-                        signature of the JWT.
-                      maxLength: 2048
-                      minLength: 1
-                      type: string
-                      x-kubernetes-validations:
-                      - message: url must have scheme http:// or https://
-                        rule: url(self).getScheme() in ["http", "https"]
-                    outputClaimToHeaders:
-                      description: This field specifies a list of operations to copy
-                        the claim to HTTP headers on a successfully verified token.
-                      items:
-                        properties:
-                          claim:
-                            description: The name of the claim to be copied from.
-                            minLength: 1
-                            type: string
-                          header:
-                            description: The name of the header to be created.
-                            minLength: 1
-                            pattern: ^[-_A-Za-z0-9]+$
-                            type: string
-                        required:
-                        - header
-                        - claim
-                        type: object
-                      type: array
-                    outputPayloadToHeader:
-                      description: This field specifies the header name to output
-                        a successfully verified JWT payload to the backend.
-                      type: string
-                    timeout:
-                      description: The maximum amount of time that the resolver, determined
-                        by the PILOT_JWT_ENABLE_REMOTE_JWKS environment variable,
-                        will spend waiting for the JWKS to be fetched.
-                      type: string
-                      x-kubernetes-validations:
-                      - message: must be a valid duration greater than 1ms
-                        rule: duration(self) >= duration('1ms')
-                  required:
-                  - issuer
-                  type: object
-                  x-kubernetes-validations:
-                  - message: only one of jwks or jwksUri can be set
-                    rule: '(has(self.jwksUri) ? 1 : 0) + (has(self.jwks_uri) ? 1 :
-                      0) + (has(self.jwks) ? 1 : 0) <= 1'
-                maxItems: 4096
-                type: array
-              selector:
-                description: Optional.
-                properties:
-                  matchLabels:
-                    additionalProperties:
-                      maxLength: 63
-                      type: string
-                      x-kubernetes-validations:
-                      - message: wildcard not allowed in label value match
-                        rule: '!self.contains("*")'
-                    description: One or more labels that indicate a specific set of
-                      pods/VMs on which a policy should be applied.
-                    maxProperties: 4096
-                    type: object
-                    x-kubernetes-validations:
-                    - message: wildcard not allowed in label key match
-                      rule: self.all(key, !key.contains("*"))
-                    - message: key must not be empty
-                      rule: self.all(key, key.size() != 0)
-                type: object
-              targetRef:
-                properties:
-                  group:
-                    description: group is the group of the target resource.
-                    maxLength: 253
-                    pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
-                    type: string
-                  kind:
-                    description: kind is kind of the target resource.
-                    maxLength: 63
-                    minLength: 1
-                    pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
-                    type: string
-                  name:
-                    description: name is the name of the target resource.
-                    maxLength: 253
-                    minLength: 1
-                    type: string
-                  namespace:
-                    description: namespace is the namespace of the referent.
-                    type: string
-                    x-kubernetes-validations:
-                    - message: cross namespace referencing is not currently supported
-                      rule: self.size() == 0
-                required:
-                - kind
-                - name
-                type: object
-              targetRefs:
-                description: Optional.
-                items:
-                  properties:
-                    group:
-                      description: group is the group of the target resource.
-                      maxLength: 253
-                      pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
-                      type: string
-                    kind:
-                      description: kind is kind of the target resource.
-                      maxLength: 63
-                      minLength: 1
-                      pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
-                      type: string
-                    name:
-                      description: name is the name of the target resource.
-                      maxLength: 253
-                      minLength: 1
-                      type: string
-                    namespace:
-                      description: namespace is the namespace of the referent.
-                      type: string
-                      x-kubernetes-validations:
-                      - message: cross namespace referencing is not currently supported
-                        rule: self.size() == 0
-                  required:
-                  - kind
-                  - name
-                  type: object
-                maxItems: 16
-                type: array
-            type: object
-            x-kubernetes-validations:
-            - message: only one of targetRefs or selector can be set
-              rule: '(has(self.selector) ? 1 : 0) + (has(self.targetRef) ? 1 : 0)
-                + (has(self.targetRefs) ? 1 : 0) <= 1'
-          status:
-            properties:
-              conditions:
-                description: Current service state of the resource.
-                items:
-                  properties:
-                    lastProbeTime:
-                      description: Last time we probed the condition.
-                      format: date-time
-                      type: string
-                    lastTransitionTime:
-                      description: Last time the condition transitioned from one status
-                        to another.
-                      format: date-time
-                      type: string
-                    message:
-                      description: Human-readable message indicating details about
-                        last transition.
-                      type: string
-                    observedGeneration:
-                      anyOf:
-                      - type: integer
-                      - type: string
-                      description: Resource Generation to which the Condition refers.
-                      x-kubernetes-int-or-string: true
-                    reason:
-                      description: Unique, one-word, CamelCase reason for the condition's
-                        last transition.
-                      type: string
-                    status:
-                      description: Status is the status of the condition.
-                      type: string
-                    type:
-                      description: Type is the type of the condition.
-                      type: string
-                  type: object
-                type: array
-              observedGeneration:
-                anyOf:
-                - type: integer
-                - type: string
-                x-kubernetes-int-or-string: true
-              validationMessages:
-                description: Includes any errors or warnings detected by Istio's analyzers.
-                items:
-                  properties:
-                    documentationUrl:
-                      description: A url pointing to the Istio documentation for this
-                        specific error type.
-                      type: string
-                    level:
-                      description: |-
-                        Represents how severe a message is.
-
-                        Valid Options: UNKNOWN, ERROR, WARNING, INFO
-                      enum:
-                      - UNKNOWN
-                      - ERROR
-                      - WARNING
-                      - INFO
-                      type: string
-                    type:
-                      properties:
-                        code:
-                          description: A 7 character code matching `^IST[0-9]{4}$`
-                            intended to uniquely identify the message type.
-                          type: string
-                        name:
-                          description: A human-readable name for the message type.
-                          type: string
-                      type: object
-                  type: object
-                type: array
-            type: object
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: true
-    storage: true
     subresources:
       status: {}
 ---
@@ -17113,12 +17885,16 @@ spec:
                               - environment
                             - required:
                               - header
+                            - required:
+                              - formatter
                         - required:
                           - literal
                         - required:
                           - environment
                         - required:
                           - header
+                        - required:
+                          - formatter
                         properties:
                           environment:
                             description: Environment adds the value of an environment
@@ -17134,6 +17910,18 @@ spec:
                                 type: string
                             required:
                             - name
+                            type: object
+                          formatter:
+                            description: Formatter adds the value of access logging
+                              substitution formatter.
+                            properties:
+                              value:
+                                description: The formatter tag value to use, same
+                                  formatter as HTTP access logging (e.g.
+                                minLength: 1
+                                type: string
+                            required:
+                            - value
                             type: object
                           header:
                             description: RequestHeader adds the value of an header
@@ -17164,6 +17952,12 @@ spec:
                         type: object
                       description: Optional.
                       type: object
+                    disableContextPropagation:
+                      description: Controls whether trace context headers (e.g., `traceparent`/`tracestate`
+                        for W3C, `X-B3-*` for Zipkin) are propagated in forwarded
+                        requests.
+                      nullable: true
+                      type: boolean
                     disableSpanReporting:
                       description: Controls span reporting.
                       nullable: true
@@ -17561,12 +18355,16 @@ spec:
                               - environment
                             - required:
                               - header
+                            - required:
+                              - formatter
                         - required:
                           - literal
                         - required:
                           - environment
                         - required:
                           - header
+                        - required:
+                          - formatter
                         properties:
                           environment:
                             description: Environment adds the value of an environment
@@ -17582,6 +18380,18 @@ spec:
                                 type: string
                             required:
                             - name
+                            type: object
+                          formatter:
+                            description: Formatter adds the value of access logging
+                              substitution formatter.
+                            properties:
+                              value:
+                                description: The formatter tag value to use, same
+                                  formatter as HTTP access logging (e.g.
+                                minLength: 1
+                                type: string
+                            required:
+                            - value
                             type: object
                           header:
                             description: RequestHeader adds the value of an header
@@ -17612,6 +18422,12 @@ spec:
                         type: object
                       description: Optional.
                       type: object
+                    disableContextPropagation:
+                      description: Controls whether trace context headers (e.g., `traceparent`/`tracestate`
+                        for W3C, `X-B3-*` for Zipkin) are propagated in forwarded
+                        requests.
+                      nullable: true
+                      type: boolean
                     disableSpanReporting:
                       description: Controls span reporting.
                       nullable: true

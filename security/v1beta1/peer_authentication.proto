@@ -13,8 +13,6 @@
 // limitations under the License.
 syntax = "proto3";
 
-import "type/v1beta1/selector.proto";
-
 // $schema: istio.security.v1beta1.PeerAuthentication
 // $title: PeerAuthentication
 // $description: Peer authentication configuration for workloads.
@@ -45,6 +43,8 @@ import "type/v1beta1/selector.proto";
 //     mode: STRICT
 // ```
 // For mesh level, put the policy in root-namespace according to your Istio installation.
+//
+// Note: PeerAuthentication policies with workload selectors are ignored when deployed in the root namespace.
 //
 // Policies to allow both mTLS and plaintext traffic for all workloads under namespace `foo`, but
 // require mTLS for workload `finance`.
@@ -109,11 +109,13 @@ import "type/v1beta1/selector.proto";
 // ```
 package istio.security.v1beta1;
 
-option go_package="istio.io/api/security/v1beta1";
+import "type/v1beta1/selector.proto";
+
+option go_package = "istio.io/api/security/v1beta1";
 
 // <!-- crd generation tags
 // +cue-gen:PeerAuthentication:groupName:security.istio.io
-// +cue-gen:PeerAuthentication:versions:v1beta1,v1
+// +cue-gen:PeerAuthentication:versions:v1,v1beta1
 // +cue-gen:PeerAuthentication:storageVersion
 // +cue-gen:PeerAuthentication:annotations:helm.sh/resource-policy=keep
 // +cue-gen:PeerAuthentication:labels:app=istio-pilot,chart=istio,istio=security,heritage=Tiller,release=istio

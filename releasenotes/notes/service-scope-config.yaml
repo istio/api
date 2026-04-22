@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - https://github.com/istio/istio/issues/54245
+
+releaseNotes:
+  - |
+    **Added** API to configure service scopes in the MeshConfig.

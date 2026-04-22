@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: security
+issue:
+  - 55302
+
+releaseNotes:
+  - |
+    **Updated** storageVersion for security APIs to v1.

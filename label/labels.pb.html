@@ -31,6 +31,28 @@ Istio supports to control its behavior.
     </tr>
   </tbody>
 </table>
+<h2 id="IoK8sNetworkingGatewayGatewayClassName">gateway.networking.k8s.io/gateway-class-name</h2>
+<table class="annotations">
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <td><code>gateway.networking.k8s.io/gateway-class-name</code></td>
+    </tr>
+    <tr>
+      <th>Feature Status</th>
+      <td>Stable</td>
+    </tr>
+    <tr>
+      <th>Resource Types</th>
+      <td>[ServiceAccount Deployment Service PodDisruptionBudget HorizontalPodAutoscaler]</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td><p>Automatically added to all resources <a href="/docs/tasks/traffic-management/ingress/gateway-api/#automated-deployment">automatically created</a> by Istio Gateway controller to indicate which <code>GatewayClass</code> resulted in the object creation. Users should not set this label themselves.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
 <h2 id="IoK8sNetworkingGatewayGatewayName">gateway.networking.k8s.io/gateway-name</h2>
 <table class="annotations">
   <tbody>
@@ -44,7 +66,7 @@ Istio supports to control its behavior.
     </tr>
     <tr>
       <th>Resource Types</th>
-      <td>[ServiceAccount Deployment Service]</td>
+      <td>[ServiceAccount Deployment Service PodDisruptionBudget HorizontalPodAutoscaler]</td>
     </tr>
     <tr>
       <th>Description</th>
@@ -77,6 +99,27 @@ Note: users wishing to use sidecar mode should see the <code>istio-injection</co
     </tr>
   </tbody>
 </table>
+<h2 id="IoIstioIngressUseWaypoint">istio.io/ingress-use-waypoint</h2>
+<table class="annotations">
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <td><code>istio.io/ingress-use-waypoint</code></td>
+    </tr>
+    <tr>
+      <th>Feature Status</th>
+      <td>Beta</td>
+    </tr>
+    <tr>
+      <th>Resource Types</th>
+      <td>[Service ServiceEntry Namespace]</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
 <h2 id="IoIstioRev">istio.io/rev</h2>
 <table class="annotations">
   <tbody>
@@ -86,15 +129,15 @@ Note: users wishing to use sidecar mode should see the <code>istio-injection</co
     </tr>
     <tr>
       <th>Feature Status</th>
-      <td>Alpha</td>
+      <td>Beta</td>
     </tr>
     <tr>
       <th>Resource Types</th>
-      <td>[Namespace]</td>
+      <td>[Namespace Gateway Pod]</td>
     </tr>
     <tr>
       <th>Description</th>
-      <td><p>Istio control plane revision associated with the resource; e.g. <code>canary</code></p>
+      <td><p>Istio control plane revision or tag associated with the resource; e.g. <code>canary</code></p>
 </td>
     </tr>
   </tbody>
@@ -112,11 +155,11 @@ Note: users wishing to use sidecar mode should see the <code>istio-injection</co
     </tr>
     <tr>
       <th>Resource Types</th>
-      <td>[Namespace]</td>
+      <td>[MutatingWebhookConfiguration]</td>
     </tr>
     <tr>
       <th>Description</th>
-      <td><p>Istio control plane tag name associated with the resource; e.g. <code>canary</code></p>
+      <td><p>Istio control plane tag name associated with the resource - for internal use only</p>
 </td>
     </tr>
   </tbody>
@@ -350,6 +393,28 @@ For example, a <code>Pod</code> resource may default to the <code>Deployment</co
     <tr>
       <th>Description</th>
       <td><p>This label is applied to a workload internally that identifies the Kubernetes cluster containing the workload. The cluster ID is specified during Istio installation for each cluster via <code>values.global.multiCluster.clusterName</code>. It should be noted that this is only used internally within Istio and is not an actual label on workload pods. If a pod contains this label, it will be overridden by Istio internally with the cluster ID specified during Istio installation. This label provides a way to select workloads by cluster when using DestinationRules. For example, a service owner could create a DestinationRule containing a subset per cluster and then use these subsets to control traffic flow to each cluster independently.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
+<h2 id="TopologyLocality">topology.istio.io/locality</h2>
+<table class="annotations">
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <td><code>topology.istio.io/locality</code></td>
+    </tr>
+    <tr>
+      <th>Feature Status</th>
+      <td>Alpha</td>
+    </tr>
+    <tr>
+      <th>Resource Types</th>
+      <td>[Pod]</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td><p>This label is applied to a workload internally that indicates the region/zone/subzone of an instance. It is used to override the native registry&rsquo;s value. Kubernetes labels does not support <code>/</code>, use <code>.</code> instead in kubernetes. e.g. <code>regionA.zoneB.subZoneC</code></p>
 </td>
     </tr>
   </tbody>

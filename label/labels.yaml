@@ -61,20 +61,22 @@ labels:
       - WorkloadEntry
 
   - name: istio.io/rev
-    featureStatus: Alpha
-    description: Istio control plane revision associated with the resource; e.g. `canary`
+    featureStatus: Beta
+    description: Istio control plane revision or tag associated with the resource; e.g. `canary`
     hidden: false
     deprecated: false
     resources:
       - Namespace
+      - Gateway
+      - Pod
 
   - name: istio.io/tag
     featureStatus: Alpha
-    description: Istio control plane tag name associated with the resource; e.g. `canary`
+    description: Istio control plane tag name associated with the resource - for internal use only
     hidden: false
     deprecated: false
     resources:
-      - Namespace
+      - MutatingWebhookConfiguration
 
   - name: operator.istio.io/component
     featureStatus: Alpha
@@ -162,6 +164,16 @@ labels:
     resources:
       - Pod
 
+  - name: topology.istio.io/locality
+    featureStatus: Alpha
+    description: This label is applied to a workload internally that indicates the region/zone/subzone of an instance. 
+      It is used to override the native registry's value. Kubernetes labels does not support `/`, use `.` instead in kubernetes.
+      e.g. `regionA.zoneB.subZoneC`
+    hidden: false
+    deprecated: false
+    resources:
+      - Pod
+
   - name: sidecar.istio.io/inject
     featureStatus: Beta
     description: Specifies whether or not an Envoy sidecar should be automatically
@@ -192,6 +204,21 @@ labels:
       - ServiceAccount
       - Deployment
       - Service
+      - PodDisruptionBudget
+      - HorizontalPodAutoscaler
+
+  - name: gateway.networking.k8s.io/gateway-class-name
+    featureStatus: Stable
+    description: Automatically added to all resources [automatically created](/docs/tasks/traffic-management/ingress/gateway-api/#automated-deployment)
+      by Istio Gateway controller to indicate which `GatewayClass` resulted in the object creation. Users should not set this label themselves.
+    deprecated: false
+    hidden: false
+    resources:
+      - ServiceAccount
+      - Deployment
+      - Service
+      - PodDisruptionBudget
+      - HorizontalPodAutoscaler
 
   - name: istio.io/dataplane-mode
     featureStatus: Stable
@@ -234,6 +261,18 @@ labels:
     resources:
       - Pod
       - WorkloadEntry
+      - Service
+      - ServiceEntry
+      - Namespace
+
+  - name: istio.io/ingress-use-waypoint
+    featureStatus: Beta
+    descriptions: |
+      When set on a resource, indicates the resource should be accessed via it's associated waypoint by ingress gateways.
+      This must be set in addition to `istio.io/use-waypoint`, when you require ingress gateways to route through waypoint.
+    deprecated: false
+    hidden: false
+    resources:
       - Service
       - ServiceEntry
       - Namespace

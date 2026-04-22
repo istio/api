@@ -46,6 +46,8 @@ const TrafficPolicy_ProxyProtocol_V1 TrafficPolicy_ProxyProtocol_VERSION = v1alp
 // ⁣PROXY protocol version 2. Binary format.
 const TrafficPolicy_ProxyProtocol_V2 TrafficPolicy_ProxyProtocol_VERSION = v1alpha3.TrafficPolicy_ProxyProtocol_V2
 
+type TrafficPolicy_RetryBudget = v1alpha3.TrafficPolicy_RetryBudget
+
 // A subset of endpoints of a service. Subsets can be used for scenarios
 // like A/B testing, or routing to a specific version of a service. Refer
 // to [VirtualService](https://istio.io/docs/reference/config/networking/virtual-service/#VirtualService) documentation for examples of using
@@ -159,6 +161,9 @@ type LoadBalancerSettings_ConsistentHashLB_MagLev = v1alpha3.LoadBalancerSetting
 // Describes a HTTP cookie that will be used as the hash key for the
 // Consistent Hash load balancer.
 type LoadBalancerSettings_ConsistentHashLB_HTTPCookie = v1alpha3.LoadBalancerSettings_ConsistentHashLB_HTTPCookie
+
+// Attribute defines an API for adding additional attributes for a HTTP cookie.
+type LoadBalancerSettings_ConsistentHashLB_HTTPCookie_Attribute = v1alpha3.LoadBalancerSettings_ConsistentHashLB_HTTPCookie_Attribute
 
 // Hash based on a specific HTTP header.
 type LoadBalancerSettings_ConsistentHashLB_HttpHeaderName = v1alpha3.LoadBalancerSettings_ConsistentHashLB_HttpHeaderName

@@ -1,0 +1,8 @@
+apiVersion: release-notes/v2
+kind: bug-fix
+area: traffic-management
+issue:
+  - https://github.com/istio/api/pull/3688
+releaseNotes:
+  - |
+    **Fixed** EnvoyFilter port validation rule for `WaypointMatch` which had a truncated upper bound (`6553` instead of `65535`).

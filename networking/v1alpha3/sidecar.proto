@@ -14,11 +14,6 @@
 
 syntax = "proto3";
 
-import "google/api/field_behavior.proto";
-import "networking/v1alpha3/destination_rule.proto";
-import "networking/v1alpha3/gateway.proto";
-import "networking/v1alpha3/virtual_service.proto";
-
 // $schema: istio.networking.v1alpha3.Sidecar
 // $title: Sidecar
 // $description: Configuration affecting network reachability of a sidecar.
@@ -352,6 +347,11 @@ import "networking/v1alpha3/virtual_service.proto";
 // ```
 package istio.networking.v1alpha3;
 
+import "google/api/field_behavior.proto";
+import "networking/v1alpha3/destination_rule.proto";
+import "networking/v1alpha3/gateway.proto";
+import "networking/v1alpha3/virtual_service.proto";
+
 option go_package = "istio.io/api/networking/v1alpha3";
 
 // `Sidecar` describes the configuration of the sidecar proxy that mediates
@@ -599,7 +599,6 @@ message OutboundTrafficPolicy {
   Destination egress_proxy = 2;
 }
 
-
 // `CaptureMode` describes how traffic to a listener is expected to be
 // captured. Applicable only when the listener is bound to an IP.
 enum CaptureMode {
@@ -634,5 +633,5 @@ message SidecarPort {
   // Has no effect, only for backwards compatibility
   // received. Applicable only when used with ServiceEntries.
   // $hide_from_docs
-  uint32 target_port = 4 [deprecated=true];
+  uint32 target_port = 4 [deprecated = true];
 }

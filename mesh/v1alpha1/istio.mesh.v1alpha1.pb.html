@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 78
+number_of_entries: 85
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -57,6 +57,21 @@ Default port is 15006.</p>
 <td>
 <p>Connection timeout used by Envoy. (MUST be &gt;=1ms)
 Default timeout is 10s.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-hbone_idle_timeout">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-hbone_idle_timeout">hboneIdleTimeout</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></div>
+</div></td>
+<td>
+<p>Idle timeout configured on Envoy proxies for their connection pools to ztunnel via HBONE.
+This controls how long Envoy will keep idle connections to ztunnel before closing them.
+Note: This setting is applied only on the Envoy proxy side; ztunnel does not use it.
+Default timeout is 1 hour (3600s).
+For environments with aggressive IP address reuse, it is recommended to set
+this to a value less than the CNI IP cooldown period to prevent stale connection reuse.
+For example, if your CNI has a 30s cooldown period, setting this to 15s is recommended.</p>
 
 </td>
 </tr>
@@ -435,6 +450,15 @@ For example <code>outbound|8080|v2|reviews.prod.svc.cluster.local</code>. This c
 
 </td>
 </tr>
+<tr id="MeshConfig-service_scope_configs">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-service_scope_configs">serviceScopeConfigs</a></code></div>
+<div class="type"><a href="#MeshConfig-ServiceScopeConfigs">ServiceScopeConfigs[]</a></div>
+</div></td>
+<td>
+<p>Scope to be applied to select services.</p>
+
+</td>
+</tr>
 <tr id="MeshConfig-enable_prometheus_merge">
 <td><div class="field"><div class="name"><code><a href="#MeshConfig-enable_prometheus_merge">enablePrometheusMerge</a></code></div>
 <div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></div>
@@ -560,7 +584,6 @@ For example, a user could enable min TLS version for ISTIO_MUTUAL traffic and sp
 </div></td>
 <td>
 <p>Configuration of TLS for all traffic except for ISTIO_MUTUAL mode.
-Currently, this supports configuration of ecdhCurves and cipherSuites only.
 For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.</p>
 
 </td>
@@ -586,6 +609,15 @@ handling unknown outbound traffic from the application.</p>
 <div class="type"><a href="#MeshConfig-OutboundTrafficPolicy-Mode">Mode</a></div>
 </div></td>
 <td>
+</td>
+</tr>
+<tr id="MeshConfig-OutboundTrafficPolicy-tls">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-OutboundTrafficPolicy-tls">tls</a></code></div>
+<div class="type"><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ClientTLSSettings">ClientTLSSettings</a></div>
+</div></td>
+<td>
+<p>TLS settings for client connections to unknown destinations. Applicable only when mode is set to <code>ALLOW_ANY_DYNAMIC_DNS</code>.</p>
+
 </td>
 </tr>
 </tbody>
@@ -619,6 +651,15 @@ Instead, this option exists primarily to offer users a way to detect missing <co
 Unknown destination traffic will have limited functionality, however, such as reduced observability.
 This mode allows users that do not have all possible egress destinations registered through <code>ServiceEntry</code> configurations to still connect
 to arbitrary destinations.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-OutboundTrafficPolicy-Mode-ALLOW_ANY_DYNAMIC_DNS">
+<td><code><a href="#MeshConfig-OutboundTrafficPolicy-Mode-ALLOW_ANY_DYNAMIC_DNS">ALLOW_ANY_DYNAMIC_DNS</a></code></td>
+<td>
+<p>In <code>ALLOW_ANY_DYNAMIC_DNS</code> mode, traffic to unknown destinations will be allowed via dynamic DNS resolution.
+This mode allows users that do not have all possible egress destinations registered through <code>ServiceEntry</code> configurations to still connect
+to arbitrary destinations. Client TLS settings can be configured for connections to such destinations.</p>
 
 </td>
 </tr>
@@ -732,6 +773,97 @@ If only trustDomains is set, this trustAnchor is used for these trustDomains and
 If only certSigners is set, this trustAnchor is used for these certSigners and all trust domains.
 If both certSigners and trustDomains is set, this trustAnchor is only used for these signers and trust domains.</p>
 
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="MeshConfig-ServiceScopeConfigs">ServiceScopeConfigs</h3>
+<section>
+<p>Configuration for ambient mode multicluster service scope. This setting allows mesh administrators
+to define the criteria by which the cluster&rsquo;s control plane determines which services in other
+clusters in the mesh are treated as global (accessible across multiple clusters) versus local
+(restricted to a single cluster). The configuration can be applied to services based on namespace
+and/or other matching criteria. This is particularly  useful in multicluster service mesh deployments
+to control service visibility and access across clusters. This API is not intended to enforce
+security policies. Resources like DestinationRules should be used to enforce authorization policies.
+If a service matches a global service scope selector, the service&rsquo;s endpoints will be globally
+exposed. If a service is locally scoped, its endpoints will only be exposed to local cluster
+services.</p>
+<p>For example, the following configures the scope of all services with the &ldquo;istio.io/global&rdquo; label
+in matching namespaces to be available globally:</p>
+<pre><code class="language-yaml">serviceScopeConfigs:
+ - namespacesSelector:
+     matchExpressions:
+       - key: istio.io/global
+         operator: In
+         values: [true]
+   servicesSelector:
+     matchExpressions:
+       - key: istio.io/global
+         operator: Exists
+   scope: GLOBAL
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ServiceScopeConfigs-namespace_selector">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceScopeConfigs-namespace_selector">namespaceSelector</a></code></div>
+<div class="type"><a href="#LabelSelector">LabelSelector</a></div>
+</div></td>
+<td>
+<p>Match expression for namespaces.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ServiceScopeConfigs-services_selector">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceScopeConfigs-services_selector">servicesSelector</a></code></div>
+<div class="type"><a href="#LabelSelector">LabelSelector</a></div>
+</div></td>
+<td>
+<p>Match expression for serivces.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ServiceScopeConfigs-scope">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceScopeConfigs-scope">scope</a></code></div>
+<div class="type"><a href="#MeshConfig-ServiceScopeConfigs-Scope">Scope</a></div>
+</div></td>
+<td>
+<p>Specifics the available scope for matching services.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h4 id="MeshConfig-ServiceScopeConfigs-Scope">Scope</h4>
+<section>
+<p>The scope of the matching service. Used to determine if the service is available locally
+(cluster local) or globally (mesh-wide).</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ServiceScopeConfigs-Scope-LOCAL">
+<td><code><a href="#MeshConfig-ServiceScopeConfigs-Scope-LOCAL">LOCAL</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="MeshConfig-ServiceScopeConfigs-Scope-GLOBAL">
+<td><code><a href="#MeshConfig-ServiceScopeConfigs-Scope-GLOBAL">GLOBAL</a></code></td>
+<td>
 </td>
 </tr>
 </tbody>
@@ -913,6 +1045,18 @@ Default: true</p>
 </div></td>
 <td>
 <p>Configures an Envoy Open Telemetry Access Logging Service provider.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-sds" class="oneof">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ExtensionProvider-sds">sds</a></code></div>
+<div class="type"><a href="#MeshConfig-ExtensionProvider-SDSProvider">SDSProvider (oneof)</a></div>
+</div></td>
+<td>
+<p>Configures an Extension Provider for SDS. This can be used to
+configure an external SDS service to supply secrets for certain Gateways for example.
+This is useful for scenarios where the secrets are stored in an external secret store like Vault.
+The secret should be configured with sds://provider-name format.</p>
 
 </td>
 </tr>
@@ -1322,6 +1466,71 @@ If true, will result in a 64 bit trace id being used.</p>
 <td>
 <p>Specifies the endpoint of Zipkin API.
 The default value is &ldquo;/api/v2/spans&rdquo;.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-ZipkinTracingProvider-trace_context_option">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ExtensionProvider-ZipkinTracingProvider-trace_context_option">traceContextOption</a></code></div>
+<div class="type"><a href="#MeshConfig-ExtensionProvider-ZipkinTracingProvider-TraceContextOption">TraceContextOption</a></div>
+</div></td>
+<td>
+<p>Determines which trace context format to use for trace header extraction and propagation.
+This controls both downstream request header extraction and upstream request header injection.
+The default value is USE_B3 to maintain backward compatibility.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-ZipkinTracingProvider-timeout">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ExtensionProvider-ZipkinTracingProvider-timeout">timeout</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></div>
+</div></td>
+<td>
+<p>The timeout for the HTTP request to the Zipkin collector.
+If not specified, the default timeout from Envoy&rsquo;s configuration will be used (which is 5 seconds currently).</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-ZipkinTracingProvider-headers">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ExtensionProvider-ZipkinTracingProvider-headers">headers</a></code></div>
+<div class="type"><a href="#MeshConfig-ExtensionProvider-HttpHeader">HttpHeader[]</a></div>
+</div></td>
+<td>
+<p>Additional HTTP headers to include in the request to the Zipkin collector.
+These headers will be added to the HTTP request when sending spans to the collector.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h5 id="MeshConfig-ExtensionProvider-ZipkinTracingProvider-TraceContextOption">TraceContextOption</h5>
+<section>
+<p>Available trace context options for handling different trace header formats.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-ZipkinTracingProvider-TraceContextOption-USE_B3">
+<td><code><a href="#MeshConfig-ExtensionProvider-ZipkinTracingProvider-TraceContextOption-USE_B3">USE_B3</a></code></td>
+<td>
+<p>Use B3 headers only (default behavior).</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-ZipkinTracingProvider-TraceContextOption-USE_B3_WITH_W3C_PROPAGATION">
+<td><code><a href="#MeshConfig-ExtensionProvider-ZipkinTracingProvider-TraceContextOption-USE_B3_WITH_W3C_PROPAGATION">USE_B3_WITH_W3C_PROPAGATION</a></code></td>
+<td>
+<p>Enable B3 and W3C dual header support:</p>
+<ul>
+<li>For downstream: Extract from B3 headers first, fallback to W3C traceparent if B3 is unavailable.</li>
+<li>For upstream: Inject both B3 and W3C traceparent headers.
+When this option is NOT set, only B3 headers are used for both extraction and injection.</li>
+</ul>
 
 </td>
 </tr>
@@ -2171,6 +2380,30 @@ read the attributes from the environment variable <code>OTEL_RESOURCE_ATTRIBUTES
 
 </td>
 </tr>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-service_attribute_enrichment">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-service_attribute_enrichment">serviceAttributeEnrichment</a></code></div>
+<div class="type"><a href="#MeshConfig-ExtensionProvider-ServiceAttributeEnrichment">ServiceAttributeEnrichment</a></div>
+</div></td>
+<td>
+<p>Controls how service resource attributes are enriched in
+exported trace spans. When set to <code>OTEL_SEMANTIC_CONVENTIONS</code>, the
+service attributes (<code>service.name</code>, <code>service.namespace</code>,
+<code>service.version</code>, <code>service.instance.id</code>) will be populated following
+the OpenTelemetry semantic conventions for Kubernetes:
+<a href="https://opentelemetry.io/docs/specs/semconv/non-normative/k8s-attributes/#service-attributes">https://opentelemetry.io/docs/specs/semconv/non-normative/k8s-attributes/#service-attributes</a></p>
+<p>When not set or set to <code>ISTIO_CANONICAL</code>, Istio&rsquo;s default enrichment
+logic is used (controlled by <code>TracingServiceName</code> in <code>ProxyConfig</code>).</p>
+<p>Example:</p>
+<pre><code class="language-yaml">extensionProviders:
+- name: otel-tracing
+  opentelemetry:
+    port: 443
+    service: my.olly-backend.com
+    serviceAttributeEnrichment: OTEL_SEMANTIC_CONVENTIONS
+</code></pre>
+
+</td>
+</tr>
 <tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-dynatrace_sampler" class="oneof oneof-start">
 <td><div class="field"><div class="name"><code><a href="#MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-dynatrace_sampler">dynatraceSampler</a></code></div>
 <div class="type"><a href="#MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-DynatraceSampler">DynatraceSampler (oneof)</a></div>
@@ -2297,6 +2530,52 @@ host name defined in the ServiceEntry.</p>
 </div></td>
 <td>
 <p>REQUIRED. Specifies sampling configuration URI.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h4 id="MeshConfig-ExtensionProvider-SDSProvider">SDSProvider</h4>
+<section>
+<p>Defines configuration for an Gateway SDS provider.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-SDSProvider-name">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ExtensionProvider-SDSProvider-name">name</a></code></div>
+<div class="type">string</div>
+</div></td>
+<td>
+<p>REQUIRED. Specifies the name of the provider. This should be used to configure the Gateway SDS.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-SDSProvider-service">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ExtensionProvider-SDSProvider-service">service</a></code></div>
+<div class="type">string</div>
+</div></td>
+<td>
+<p>REQUIRED. Specifies the service that implements the  SDS service.
+The format is <code>[&lt;Namespace&gt;/]&lt;Hostname&gt;</code>. The specification of <code>&lt;Namespace&gt;</code> is required only when it is insufficient
+to unambiguously resolve a service in the service registry. The <code>&lt;Hostname&gt;</code> is a fully qualified host name of a
+service defined by the Kubernetes service or ServiceEntry.</p>
+<p>Example: &ldquo;gateway-sds.foo.svc.cluster.local&rdquo; or &ldquo;bar/gateway-sds.example.com&rdquo;.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-SDSProvider-port">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ExtensionProvider-SDSProvider-port">port</a></code></div>
+<div class="type">uint32</div>
+</div></td>
+<td>
+<p>REQUIRED. Specifies the port of the service.</p>
 
 </td>
 </tr>
@@ -2466,6 +2745,66 @@ that does communication via GRPC.</p>
 <p>Additional metadata to include in streams initiated to the GrpcService. This can be used for
 scenarios in which additional ad hoc authorization headers (e.g. &ldquo;x-foo-bar: baz-key&rdquo;) are to
 be injected.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h4 id="MeshConfig-ExtensionProvider-ServiceAttributeEnrichment">ServiceAttributeEnrichment</h4>
+<section>
+<p>ServiceAttributeEnrichment controls how service resource attributes
+(such as <code>service.name</code>, <code>service.namespace</code>, <code>service.version</code>, and
+<code>service.instance.id</code>) are populated in exported trace spans.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ExtensionProvider-ServiceAttributeEnrichment-ISTIO_CANONICAL">
+<td><code><a href="#MeshConfig-ExtensionProvider-ServiceAttributeEnrichment-ISTIO_CANONICAL">ISTIO_CANONICAL</a></code></td>
+<td>
+<p>Use Istio&rsquo;s default service attribute enrichment logic.
+The service name is determined by the <code>TracingServiceName</code> setting in
+<code>ProxyConfig</code> (e.g., based on the <code>app</code> label, canonical name, etc.).</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ExtensionProvider-ServiceAttributeEnrichment-OTEL_SEMANTIC_CONVENTIONS">
+<td><code><a href="#MeshConfig-ExtensionProvider-ServiceAttributeEnrichment-OTEL_SEMANTIC_CONVENTIONS">OTEL_SEMANTIC_CONVENTIONS</a></code></td>
+<td>
+<p>Follow the OpenTelemetry semantic conventions for Kubernetes service
+attributes. The service attributes are calculated following the fallback
+chain defined in:
+<a href="https://opentelemetry.io/docs/specs/semconv/non-normative/k8s-attributes/#service-attributes">https://opentelemetry.io/docs/specs/semconv/non-normative/k8s-attributes/#service-attributes</a></p>
+<p>The fallback chain for <code>service.name</code> is:</p>
+<ol>
+<li><code>resource.opentelemetry.io/service.name</code> annotation on the pod</li>
+<li><code>app.kubernetes.io/name</code> label</li>
+<li>Name of the owning Kubernetes resource (Deployment, StatefulSet, etc.)</li>
+<li>Pod name</li>
+<li>Container name (if single container in the pod)</li>
+<li><code>unknown_service</code></li>
+</ol>
+<p>The fallback chain for <code>service.namespace</code> is:</p>
+<ol>
+<li><code>resource.opentelemetry.io/service.namespace</code> annotation on the pod</li>
+<li>Kubernetes namespace name</li>
+</ol>
+<p>The fallback chain for <code>service.version</code> is:</p>
+<ol>
+<li><code>resource.opentelemetry.io/service.version</code> annotation on the pod</li>
+<li><code>app.kubernetes.io/version</code> label</li>
+</ol>
+<p>The fallback chain for <code>service.instance.id</code> is:</p>
+<ol>
+<li><code>resource.opentelemetry.io/service.instance.id</code> annotation on the pod</li>
+<li>Pod UID</li>
+</ol>
 
 </td>
 </tr>
@@ -3755,7 +4094,7 @@ Note: currently all headers are enabled by default.</p>
 </code></pre>
 <p>Below shows an example of preserving the header case for HTTP 1.x requests</p>
 <pre><code class="language-yaml">proxyHeaders:
-  perserveHttp1HeaderCase: true
+  preserveHttp1HeaderCase: true
 </code></pre>
 <p>Some headers are enabled by default, and require explicitly disabling. See below for an example of disabling all default-enabled headers:</p>
 <pre><code class="language-yaml">proxyHeaders:
@@ -3771,6 +4110,40 @@ Note: currently all headers are enabled by default.</p>
   metadataExchangeHeaders:
     mode: IN_MESH
 </code></pre>
+
+</td>
+</tr>
+<tr id="ProxyConfig-file_flush_interval">
+<td><div class="field"><div class="name"><code><a href="#ProxyConfig-file_flush_interval">fileFlushInterval</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></div>
+</div></td>
+<td>
+<p>File flush interval for envoy flushes buffers to disk in milliseconds.
+The duration needs to be set to a value greater than or equal to 1 millisecond.
+Default is 1000ms.
+Optional.</p>
+
+</td>
+</tr>
+<tr id="ProxyConfig-file_flush_min_size_kb">
+<td><div class="field"><div class="name"><code><a href="#ProxyConfig-file_flush_min_size_kb">fileFlushMinSizeKb</a></code></div>
+<div class="type">uint32</div>
+</div></td>
+<td>
+<p>File flush buffer size for envoy flushes buffers to disk in kilobytes.
+Defaults to 64.
+Optional.</p>
+
+</td>
+</tr>
+<tr id="ProxyConfig-stats_compression">
+<td><div class="field"><div class="name"><code><a href="#ProxyConfig-stats_compression">statsCompression</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></div>
+</div></td>
+<td>
+<p>Offer HTTP compression for stats
+Defaults to true.
+Optional.</p>
 
 </td>
 </tr>
@@ -3939,6 +4312,29 @@ standards.</p>
 
 </td>
 </tr>
+<tr id="ProxyConfig-ProxyHeaders-x_forwarded_host">
+<td><div class="field"><div class="name"><code><a href="#ProxyConfig-ProxyHeaders-x_forwarded_host">xForwardedHost</a></code></div>
+<div class="type"><a href="#ProxyConfig-ProxyHeaders-XForwardedHost">XForwardedHost</a></div>
+</div></td>
+<td>
+<p>Controls the <code>X-Forwarded-Host</code> header. If enabled, the <code>X-Forwarded-Host</code> header is appended
+with the original host when it is rewritten.
+This header is disabled by default.</p>
+
+</td>
+</tr>
+<tr id="ProxyConfig-ProxyHeaders-x_forwarded_port">
+<td><div class="field"><div class="name"><code><a href="#ProxyConfig-ProxyHeaders-x_forwarded_port">xForwardedPort</a></code></div>
+<div class="type"><a href="#ProxyConfig-ProxyHeaders-XForwardedPort">XForwardedPort</a></div>
+</div></td>
+<td>
+<p>Controls the <code>X-Forwarded-Port</code> header. If enabled, the <code>X-Forwarded-Port</code> header is header with the port value
+client used to connect to Envoy. It will be ignored if the <code>x-forwarded-port</code> header has been set by any
+trusted proxy in front of Envoy.
+This header is disabled by default.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -4003,6 +4399,46 @@ standards.</p>
 <tbody>
 <tr id="ProxyConfig-ProxyHeaders-AttemptCount-disabled">
 <td><div class="field"><div class="name"><code><a href="#ProxyConfig-ProxyHeaders-AttemptCount-disabled">disabled</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></div>
+</div></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h4 id="ProxyConfig-ProxyHeaders-XForwardedHost">XForwardedHost</h4>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProxyConfig-ProxyHeaders-XForwardedHost-enabled">
+<td><div class="field"><div class="name"><code><a href="#ProxyConfig-ProxyHeaders-XForwardedHost-enabled">enabled</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></div>
+</div></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h4 id="ProxyConfig-ProxyHeaders-XForwardedPort">XForwardedPort</h4>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProxyConfig-ProxyHeaders-XForwardedPort-enabled">
+<td><div class="field"><div class="name"><code><a href="#ProxyConfig-ProxyHeaders-XForwardedPort-enabled">enabled</a></code></div>
 <div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></div>
 </div></td>
 <td>
@@ -4449,7 +4885,7 @@ inside a mesh and how to route to endpoints in each network. For example</p>
 <p>If <code>ENABLE_HCM_INTERNAL_NETWORKS</code> is set to true, MeshNetworks can be used to
 to explicitly define the networks in Envoy&rsquo;s internal address configuration.
 Envoy uses the IPs in the <code>internalAddressConfig</code> to decide whether or not to sanitize
-Envoy headers. If the IP address is listed an internal, the Envoy headers are not
+Envoy headers. If the IP address is listed as internal, the Envoy headers are not
 sanitized. As of Envoy 1.33, the default value for <code>internalAddressConfig</code> is set to
 an empty set. Previously, the default value was the set of all private IPs. Setting
 the <code>internalAddressConfig</code> to all private IPs (via Envoy&rsquo;s previous default behavior

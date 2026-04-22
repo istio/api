@@ -16,6 +16,7 @@ package crd
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -230,7 +231,7 @@ func formatError(errs field.ErrorList) error {
 	for _, e := range errs.ToAggregate().Errors() {
 		s.WriteString(fmt.Sprintf("- %v\n", strings.TrimPrefix(e.Error(), "spec.validation.openAPIV3Schema")))
 	}
-	return fmt.Errorf(s.String())
+	return errors.New(s.String())
 }
 
 func NewIstioValidator(t *testing.T) *Validator {

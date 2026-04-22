@@ -129,9 +129,9 @@ syntax = "proto3";
 // ```
 //
 // The following example declares a VM workload without an address.
-// An alternative to having istiod read from remote API servers is 
-// to write a `WorkloadEntry` in the local cluster that represents 
-// the Workload(s) in the remote network with the given labels. A 
+// An alternative to having istiod read from remote API servers is
+// to write a `WorkloadEntry` in the local cluster that represents
+// the Workload(s) in the remote network with the given labels. A
 // single `WorkloadEntry` with weights represent the aggregate of all
 // the actual workloads in a given remote network.
 //
@@ -252,5 +252,4 @@ message WorkloadEntry {
   // ServiceEntry)
   // +kubebuilder:validation:MaxLength=253
   string service_account = 7;
-};
-
+}

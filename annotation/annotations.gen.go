@@ -118,7 +118,7 @@ var (
 This is intended to be used when enrolling a workload that only receives traffic from out-of-the-mesh clients, such as third party ingress controllers.
 `,
 		FeatureStatus: Alpha,
-		Hidden:        true,
+		Hidden:        false,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Pod,
@@ -371,10 +371,13 @@ Note: When using docker-in-docker container, the default bridge interface name i
 
 At this time, this annotation only impacts routing done by Ztunnel.
 
+When applied to a Namespace, Services and ServiceEntries in that namespace inherit the setting
+unless they have their own annotation.
+
 Accepted values:
 * "PreferClose": endpoints will be categorized by how "close" they are, consider network, region, zone, and subzone.
   Traffic will be prioritized to the closest healthy endpoints.
-  For example, if I have a Service with "PreferClose" set, with endpoints in zones "us-west,us-west,us-east". When 
+  For example, if I have a Service with "PreferClose" set, with endpoints in zones "us-west,us-west,us-east". When
   sending traffic from a client in zone "us-west", all traffic will go to the two "us-west" backends.
   If one those backends become unhealthy, all traffic will go to the remaining endpoint in "us-west".
   If that backend becomes unhealthy, traffic will sent to "us-east".
@@ -383,6 +386,7 @@ Accepted values:
 		Hidden:        false,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
+			Namespace,
 			Service,
 			ServiceEntry,
 		},
@@ -675,6 +679,46 @@ Supported values are "brotli", "gzip", and "zstd".
 `,
 		FeatureStatus: Alpha,
 		Hidden:        false,
+		Deprecated:    true,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
+	SidecarStatsEvictionInterval = Instance {
+		Name:          "sidecar.istio.io/statsEvictionInterval",
+		Description:   "Specifies the expiration interval for the Istio standard "+
+                        "metrics. This gets rounded to a multiple of the flush "+
+                        "interval. A time series is expected to be evicted after 2 "+
+                        "iterations of this interval from the last measurement.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
+	SidecarStatsFlushInterval = Instance {
+		Name:          "sidecar.istio.io/statsFlushInterval",
+		Description:   "Specifies the flush interval for push-based stat sinks, "+
+                        "e.g. OTLP. Default interval is `5s`.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
+	SidecarStatsHistogramBins = Instance {
+		Name:          "sidecar.istio.io/statsHistogramBins",
+		Description:   "Specifies the bin size per time series for the Istio "+
+                        "standard metrics histograms. Reducing this value from the "+
+                        "default `100` decreases overall memory usage for sparse "+
+                        "and/or high cardinality histograms.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Pod,
@@ -909,7 +953,7 @@ Supported values are "brotli", "gzip", and "zstd".
 		Description:   "A comma separated list of virtual interfaces whose "+
                         "inbound traffic (from VM) will be treated as outbound. "+
                         "Deprecated in favor of "+
-                        "`istio.io/redirect-virtual-interfaces`",
+                        "`istio.io/reroute-virtual-interfaces`",
 		FeatureStatus: Alpha,
 		Hidden:        false,
 		Deprecated:    true,
@@ -968,6 +1012,9 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarProxyMemoryLimit,
 		&SidecarRewriteAppHTTPProbers,
 		&SidecarStatsCompression,
+		&SidecarStatsEvictionInterval,
+		&SidecarStatsFlushInterval,
+		&SidecarStatsHistogramBins,
 		&SidecarStatsHistogramBuckets,
 		&SidecarStatsInclusionPrefixes,
 		&SidecarStatsInclusionRegexps,
