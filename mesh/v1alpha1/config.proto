@@ -68,18 +68,6 @@ message MeshConfig {
   // When unset, the field is not set on Envoy and Envoy's built-in default is used.
   google.protobuf.UInt32Value hbone_initial_connection_window_size = 72;
 
-  // HTTP/2 `initial_stream_window_size` applied to the HBONE CONNECT upstream clusters
-  // used for double-HBONE tunneling in ambient multi-network deployments (inner and outer
-  // connect-originate clusters on east-west gateways).
-  // When unset, the field is not set on Envoy and Envoy's built-in default is used.
-  google.protobuf.UInt32Value hbone_no_pooling_initial_stream_window_size = 73;
-
-  // HTTP/2 `initial_connection_window_size` applied to the HBONE CONNECT upstream clusters
-  // used for double-HBONE tunneling in ambient multi-network deployments (inner and outer
-  // connect-originate clusters on east-west gateways).
-  // When unset, the field is not set on Envoy and Envoy's built-in default is used.
-  google.protobuf.UInt32Value hbone_no_pooling_initial_connection_window_size = 74;
-
   // $hide_from_docs
   // Automatic protocol detection uses a set of heuristics to
   // determine whether the connection is using TLS or not (on the
@@ -1656,7 +1644,7 @@ message MeshConfig {
   TLSConfig tls_defaults = 64;
 
   // $hide_from_docs
-  // Next available field number: 75
+  // Next available field number: 73
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;

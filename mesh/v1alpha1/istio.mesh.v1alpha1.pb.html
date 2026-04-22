@@ -97,30 +97,6 @@ When unset, the field is not set on Envoy and Envoy&rsquo;s built-in default is 
 
 </td>
 </tr>
-<tr id="MeshConfig-hbone_no_pooling_initial_stream_window_size">
-<td><div class="field"><div class="name"><code><a href="#MeshConfig-hbone_no_pooling_initial_stream_window_size">hboneNoPoolingInitialStreamWindowSize</a></code></div>
-<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
-</div></td>
-<td>
-<p>HTTP/2 <code>initial_stream_window_size</code> applied to the HBONE CONNECT upstream clusters
-used for double-HBONE tunneling in ambient multi-network deployments (inner and outer
-connect-originate clusters on east-west gateways).
-When unset, the field is not set on Envoy and Envoy&rsquo;s built-in default is used.</p>
-
-</td>
-</tr>
-<tr id="MeshConfig-hbone_no_pooling_initial_connection_window_size">
-<td><div class="field"><div class="name"><code><a href="#MeshConfig-hbone_no_pooling_initial_connection_window_size">hboneNoPoolingInitialConnectionWindowSize</a></code></div>
-<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
-</div></td>
-<td>
-<p>HTTP/2 <code>initial_connection_window_size</code> applied to the HBONE CONNECT upstream clusters
-used for double-HBONE tunneling in ambient multi-network deployments (inner and outer
-connect-originate clusters on east-west gateways).
-When unset, the field is not set on Envoy and Envoy&rsquo;s built-in default is used.</p>
-
-</td>
-</tr>
 <tr id="MeshConfig-tcp_keepalive">
 <td><div class="field"><div class="name"><code><a href="#MeshConfig-tcp_keepalive">tcpKeepalive</a></code></div>
 <div class="type"><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ConnectionPoolSettings-TCPSettings-TcpKeepalive">TcpKeepalive</a></div>
