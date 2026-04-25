@@ -11881,6 +11881,87 @@ spec:
                   - match
                   type: object
                 type: array
+              udp:
+                description: An ordered list of route rules for UDP traffic.
+                items:
+                  properties:
+                    match:
+                      description: Match conditions to be satisfied for the rule to
+                        be activated.
+                      items:
+                        properties:
+                          destinationSubnets:
+                            description: IPv4 or IPv6 ip addresses of destination
+                              with optional subnet.
+                            items:
+                              type: string
+                            type: array
+                          gateways:
+                            description: Names of gateways where the rule should be
+                              applied.
+                            items:
+                              type: string
+                            type: array
+                          port:
+                            description: Specifies the port on the host that is being
+                              addressed.
+                            maximum: 4294967295
+                            minimum: 0
+                            type: integer
+                          sourceLabels:
+                            additionalProperties:
+                              type: string
+                            description: One or more labels that constrain the applicability
+                              of a rule to workloads with the given labels.
+                            type: object
+                          sourceNamespace:
+                            description: Source namespace constraining the applicability
+                              of a rule to workloads in that namespace.
+                            type: string
+                          sourceSubnet:
+                            type: string
+                        type: object
+                      type: array
+                    route:
+                      description: The destination to which the datagrams should be
+                        forwarded to.
+                      items:
+                        properties:
+                          destination:
+                            description: Destination uniquely identifies the instances
+                              of a service to which the request/connection should
+                              be forwarded to.
+                            properties:
+                              host:
+                                description: The name of a service from the service
+                                  registry.
+                                type: string
+                              port:
+                                description: Specifies the port on the host that is
+                                  being addressed.
+                                properties:
+                                  number:
+                                    maximum: 4294967295
+                                    minimum: 0
+                                    type: integer
+                                type: object
+                              subset:
+                                description: The name of a subset within the service.
+                                type: string
+                            required:
+                            - host
+                            type: object
+                          weight:
+                            description: Weight specifies the relative proportion
+                              of traffic to be forwarded to the destination.
+                            format: int32
+                            type: integer
+                        required:
+                        - destination
+                        type: object
+                      type: array
+                  type: object
+                type: array
             type: object
           status:
             properties:
@@ -12933,6 +13014,87 @@ spec:
                   - match
                   type: object
                 type: array
+              udp:
+                description: An ordered list of route rules for UDP traffic.
+                items:
+                  properties:
+                    match:
+                      description: Match conditions to be satisfied for the rule to
+                        be activated.
+                      items:
+                        properties:
+                          destinationSubnets:
+                            description: IPv4 or IPv6 ip addresses of destination
+                              with optional subnet.
+                            items:
+                              type: string
+                            type: array
+                          gateways:
+                            description: Names of gateways where the rule should be
+                              applied.
+                            items:
+                              type: string
+                            type: array
+                          port:
+                            description: Specifies the port on the host that is being
+                              addressed.
+                            maximum: 4294967295
+                            minimum: 0
+                            type: integer
+                          sourceLabels:
+                            additionalProperties:
+                              type: string
+                            description: One or more labels that constrain the applicability
+                              of a rule to workloads with the given labels.
+                            type: object
+                          sourceNamespace:
+                            description: Source namespace constraining the applicability
+                              of a rule to workloads in that namespace.
+                            type: string
+                          sourceSubnet:
+                            type: string
+                        type: object
+                      type: array
+                    route:
+                      description: The destination to which the datagrams should be
+                        forwarded to.
+                      items:
+                        properties:
+                          destination:
+                            description: Destination uniquely identifies the instances
+                              of a service to which the request/connection should
+                              be forwarded to.
+                            properties:
+                              host:
+                                description: The name of a service from the service
+                                  registry.
+                                type: string
+                              port:
+                                description: Specifies the port on the host that is
+                                  being addressed.
+                                properties:
+                                  number:
+                                    maximum: 4294967295
+                                    minimum: 0
+                                    type: integer
+                                type: object
+                              subset:
+                                description: The name of a subset within the service.
+                                type: string
+                            required:
+                            - host
+                            type: object
+                          weight:
+                            description: Weight specifies the relative proportion
+                              of traffic to be forwarded to the destination.
+                            format: int32
+                            type: integer
+                        required:
+                        - destination
+                        type: object
+                      type: array
+                  type: object
+                type: array
             type: object
           status:
             properties:
@@ -13983,6 +14145,87 @@ spec:
                       type: array
                   required:
                   - match
+                  type: object
+                type: array
+              udp:
+                description: An ordered list of route rules for UDP traffic.
+                items:
+                  properties:
+                    match:
+                      description: Match conditions to be satisfied for the rule to
+                        be activated.
+                      items:
+                        properties:
+                          destinationSubnets:
+                            description: IPv4 or IPv6 ip addresses of destination
+                              with optional subnet.
+                            items:
+                              type: string
+                            type: array
+                          gateways:
+                            description: Names of gateways where the rule should be
+                              applied.
+                            items:
+                              type: string
+                            type: array
+                          port:
+                            description: Specifies the port on the host that is being
+                              addressed.
+                            maximum: 4294967295
+                            minimum: 0
+                            type: integer
+                          sourceLabels:
+                            additionalProperties:
+                              type: string
+                            description: One or more labels that constrain the applicability
+                              of a rule to workloads with the given labels.
+                            type: object
+                          sourceNamespace:
+                            description: Source namespace constraining the applicability
+                              of a rule to workloads in that namespace.
+                            type: string
+                          sourceSubnet:
+                            type: string
+                        type: object
+                      type: array
+                    route:
+                      description: The destination to which the datagrams should be
+                        forwarded to.
+                      items:
+                        properties:
+                          destination:
+                            description: Destination uniquely identifies the instances
+                              of a service to which the request/connection should
+                              be forwarded to.
+                            properties:
+                              host:
+                                description: The name of a service from the service
+                                  registry.
+                                type: string
+                              port:
+                                description: Specifies the port on the host that is
+                                  being addressed.
+                                properties:
+                                  number:
+                                    maximum: 4294967295
+                                    minimum: 0
+                                    type: integer
+                                type: object
+                              subset:
+                                description: The name of a subset within the service.
+                                type: string
+                            required:
+                            - host
+                            type: object
+                          weight:
+                            description: Weight specifies the relative proportion
+                              of traffic to be forwarded to the destination.
+                            format: int32
+                            type: integer
+                        required:
+                        - destination
+                        type: object
+                      type: array
                   type: object
                 type: array
             type: object

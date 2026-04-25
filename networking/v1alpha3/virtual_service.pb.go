@@ -179,7 +179,7 @@ func (x HTTPRedirect_RedirectPortSelection) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use HTTPRedirect_RedirectPortSelection.Descriptor instead.
 func (HTTPRedirect_RedirectPortSelection) EnumDescriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{12, 0}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{13, 0}
 }
 
 type CorsPolicy_UnmatchedPreflights int32
@@ -233,7 +233,7 @@ func (x CorsPolicy_UnmatchedPreflights) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use CorsPolicy_UnmatchedPreflights.Descriptor instead.
 func (CorsPolicy_UnmatchedPreflights) EnumDescriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{19, 0}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{20, 0}
 }
 
 // Configuration affecting traffic routing.
@@ -328,6 +328,10 @@ type VirtualService struct {
 	// be applied to any port that is not a HTTP or TLS port. The first rule
 	// matching an incoming request is used.
 	Tcp []*TCPRoute `protobuf:"bytes,4,rep,name=tcp,proto3" json:"tcp,omitempty"`
+	// An ordered list of route rules for UDP traffic. UDP routes apply to
+	// gateway servers whose port protocol is UDP. The first rule matching
+	// an incoming request is used.
+	Udp []*UDPRoute `protobuf:"bytes,7,rep,name=udp,proto3" json:"udp,omitempty"`
 	// A list of namespaces to which this virtual service is exported. Exporting a
 	// virtual service allows it to be used by sidecars and gateways defined in
 	// other namespaces. This feature provides a mechanism for service owners
@@ -406,6 +410,13 @@ func (x *VirtualService) GetTls() []*TLSRoute {
 func (x *VirtualService) GetTcp() []*TCPRoute {
 	if x != nil {
 		return x.Tcp
+	}
+	return nil
+}
+
+func (x *VirtualService) GetUdp() []*UDPRoute {
+	if x != nil {
+		return x.Udp
 	}
 	return nil
 }
@@ -1282,6 +1293,89 @@ func (x *TCPRoute) GetRoute() []*RouteDestination {
 	return nil
 }
 
+// Describes match conditions and actions for routing UDP traffic. The
+// following routing rule forwards traffic arriving at port 5353 from
+// 172.17.16.0/24 subnet to the DNS server on port 53.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1
+// kind: VirtualService
+// metadata:
+//
+//	name: coredns
+//
+// spec:
+//
+//	hosts:
+//	  - coredns.kube-system.svc.cluster.local
+//	udp:
+//	- match:
+//	  - port: 5353
+//	    sourceSubnet: 172.17.16.0/24
+//	  route:
+//	  - destination:
+//	      host: coredns.kube-system.svc.cluster.local
+//	      port:
+//	        number: 53
+//
+// ```
+type UDPRoute struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Match conditions to be satisfied for the rule to be
+	// activated. All conditions inside a single match block have AND
+	// semantics, while the list of match blocks have OR semantics. The rule
+	// is matched if any one of the match blocks succeed.
+	Match []*L4MatchAttributes `protobuf:"bytes,1,rep,name=match,proto3" json:"match,omitempty"`
+	// The destination to which the datagrams should be forwarded to.
+	Route         []*RouteDestination `protobuf:"bytes,2,rep,name=route,proto3" json:"route,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UDPRoute) Reset() {
+	*x = UDPRoute{}
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UDPRoute) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UDPRoute) ProtoMessage() {}
+
+func (x *UDPRoute) ProtoReflect() protoreflect.Message {
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UDPRoute.ProtoReflect.Descriptor instead.
+func (*UDPRoute) Descriptor() ([]byte, []int) {
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *UDPRoute) GetMatch() []*L4MatchAttributes {
+	if x != nil {
+		return x.Match
+	}
+	return nil
+}
+
+func (x *UDPRoute) GetRoute() []*RouteDestination {
+	if x != nil {
+		return x.Route
+	}
+	return nil
+}
+
 // HttpMatchRequest specifies a set of criteria to be met in order for the
 // rule to be applied to the HTTP request. For example, the following
 // restricts the rule to match only requests where the URL path
@@ -1445,7 +1539,7 @@ type HTTPMatchRequest struct {
 
 func (x *HTTPMatchRequest) Reset() {
 	*x = HTTPMatchRequest{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[7]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1457,7 +1551,7 @@ func (x *HTTPMatchRequest) String() string {
 func (*HTTPMatchRequest) ProtoMessage() {}
 
 func (x *HTTPMatchRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[7]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1470,7 +1564,7 @@ func (x *HTTPMatchRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HTTPMatchRequest.ProtoReflect.Descriptor instead.
 func (*HTTPMatchRequest) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{7}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *HTTPMatchRequest) GetName() string {
@@ -1666,7 +1760,7 @@ type HTTPRouteDestination struct {
 
 func (x *HTTPRouteDestination) Reset() {
 	*x = HTTPRouteDestination{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[8]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1678,7 +1772,7 @@ func (x *HTTPRouteDestination) String() string {
 func (*HTTPRouteDestination) ProtoMessage() {}
 
 func (x *HTTPRouteDestination) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[8]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1691,7 +1785,7 @@ func (x *HTTPRouteDestination) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HTTPRouteDestination.ProtoReflect.Descriptor instead.
 func (*HTTPRouteDestination) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{8}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *HTTPRouteDestination) GetDestination() *Destination {
@@ -1731,7 +1825,7 @@ type RouteDestination struct {
 
 func (x *RouteDestination) Reset() {
 	*x = RouteDestination{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[9]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1743,7 +1837,7 @@ func (x *RouteDestination) String() string {
 func (*RouteDestination) ProtoMessage() {}
 
 func (x *RouteDestination) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[9]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1756,7 +1850,7 @@ func (x *RouteDestination) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RouteDestination.ProtoReflect.Descriptor instead.
 func (*RouteDestination) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{9}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *RouteDestination) GetDestination() *Destination {
@@ -1813,7 +1907,7 @@ type L4MatchAttributes struct {
 
 func (x *L4MatchAttributes) Reset() {
 	*x = L4MatchAttributes{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[10]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1825,7 +1919,7 @@ func (x *L4MatchAttributes) String() string {
 func (*L4MatchAttributes) ProtoMessage() {}
 
 func (x *L4MatchAttributes) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[10]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1838,7 +1932,7 @@ func (x *L4MatchAttributes) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use L4MatchAttributes.ProtoReflect.Descriptor instead.
 func (*L4MatchAttributes) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{10}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *L4MatchAttributes) GetDestinationSubnets() []string {
@@ -1924,7 +2018,7 @@ type TLSMatchAttributes struct {
 
 func (x *TLSMatchAttributes) Reset() {
 	*x = TLSMatchAttributes{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[11]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1936,7 +2030,7 @@ func (x *TLSMatchAttributes) String() string {
 func (*TLSMatchAttributes) ProtoMessage() {}
 
 func (x *TLSMatchAttributes) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[11]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1949,7 +2043,7 @@ func (x *TLSMatchAttributes) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TLSMatchAttributes.ProtoReflect.Descriptor instead.
 func (*TLSMatchAttributes) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{11}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *TLSMatchAttributes) GetSniHosts() []string {
@@ -2049,7 +2143,7 @@ type HTTPRedirect struct {
 
 func (x *HTTPRedirect) Reset() {
 	*x = HTTPRedirect{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[12]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2061,7 +2155,7 @@ func (x *HTTPRedirect) String() string {
 func (*HTTPRedirect) ProtoMessage() {}
 
 func (x *HTTPRedirect) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[12]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2074,7 +2168,7 @@ func (x *HTTPRedirect) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HTTPRedirect.ProtoReflect.Descriptor instead.
 func (*HTTPRedirect) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{12}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *HTTPRedirect) GetUri() string {
@@ -2246,7 +2340,7 @@ type HTTPDirectResponse struct {
 
 func (x *HTTPDirectResponse) Reset() {
 	*x = HTTPDirectResponse{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[13]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2258,7 +2352,7 @@ func (x *HTTPDirectResponse) String() string {
 func (*HTTPDirectResponse) ProtoMessage() {}
 
 func (x *HTTPDirectResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[13]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2271,7 +2365,7 @@ func (x *HTTPDirectResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HTTPDirectResponse.ProtoReflect.Descriptor instead.
 func (*HTTPDirectResponse) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{13}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *HTTPDirectResponse) GetStatus() uint32 {
@@ -2301,7 +2395,7 @@ type HTTPBody struct {
 
 func (x *HTTPBody) Reset() {
 	*x = HTTPBody{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[14]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2313,7 +2407,7 @@ func (x *HTTPBody) String() string {
 func (*HTTPBody) ProtoMessage() {}
 
 func (x *HTTPBody) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[14]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2326,7 +2420,7 @@ func (x *HTTPBody) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HTTPBody.ProtoReflect.Descriptor instead.
 func (*HTTPBody) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{14}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *HTTPBody) GetSpecifier() isHTTPBody_Specifier {
@@ -2417,7 +2511,7 @@ type HTTPRewrite struct {
 
 func (x *HTTPRewrite) Reset() {
 	*x = HTTPRewrite{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[15]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2429,7 +2523,7 @@ func (x *HTTPRewrite) String() string {
 func (*HTTPRewrite) ProtoMessage() {}
 
 func (x *HTTPRewrite) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[15]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2442,7 +2536,7 @@ func (x *HTTPRewrite) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HTTPRewrite.ProtoReflect.Descriptor instead.
 func (*HTTPRewrite) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{15}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *HTTPRewrite) GetUri() string {
@@ -2488,7 +2582,7 @@ type RegexRewrite struct {
 
 func (x *RegexRewrite) Reset() {
 	*x = RegexRewrite{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[16]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2500,7 +2594,7 @@ func (x *RegexRewrite) String() string {
 func (*RegexRewrite) ProtoMessage() {}
 
 func (x *RegexRewrite) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[16]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2513,7 +2607,7 @@ func (x *RegexRewrite) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegexRewrite.ProtoReflect.Descriptor instead.
 func (*RegexRewrite) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{16}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *RegexRewrite) GetMatch() string {
@@ -2546,7 +2640,7 @@ type StringMatch struct {
 
 func (x *StringMatch) Reset() {
 	*x = StringMatch{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[17]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2558,7 +2652,7 @@ func (x *StringMatch) String() string {
 func (*StringMatch) ProtoMessage() {}
 
 func (x *StringMatch) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[17]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2571,7 +2665,7 @@ func (x *StringMatch) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StringMatch.ProtoReflect.Descriptor instead.
 func (*StringMatch) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{17}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *StringMatch) GetMatchType() isStringMatch_MatchType {
@@ -2707,7 +2801,7 @@ type HTTPRetry struct {
 
 func (x *HTTPRetry) Reset() {
 	*x = HTTPRetry{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[18]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2719,7 +2813,7 @@ func (x *HTTPRetry) String() string {
 func (*HTTPRetry) ProtoMessage() {}
 
 func (x *HTTPRetry) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[18]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2732,7 +2826,7 @@ func (x *HTTPRetry) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HTTPRetry.ProtoReflect.Descriptor instead.
 func (*HTTPRetry) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{18}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *HTTPRetry) GetAttempts() int32 {
@@ -2852,7 +2946,7 @@ type CorsPolicy struct {
 
 func (x *CorsPolicy) Reset() {
 	*x = CorsPolicy{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[19]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2864,7 +2958,7 @@ func (x *CorsPolicy) String() string {
 func (*CorsPolicy) ProtoMessage() {}
 
 func (x *CorsPolicy) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[19]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2877,7 +2971,7 @@ func (x *CorsPolicy) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CorsPolicy.ProtoReflect.Descriptor instead.
 func (*CorsPolicy) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{19}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{20}
 }
 
 // Deprecated: Marked as deprecated in networking/v1alpha3/virtual_service.proto.
@@ -2959,7 +3053,7 @@ type HTTPFaultInjection struct {
 
 func (x *HTTPFaultInjection) Reset() {
 	*x = HTTPFaultInjection{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[20]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2971,7 +3065,7 @@ func (x *HTTPFaultInjection) String() string {
 func (*HTTPFaultInjection) ProtoMessage() {}
 
 func (x *HTTPFaultInjection) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[20]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2984,7 +3078,7 @@ func (x *HTTPFaultInjection) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HTTPFaultInjection.ProtoReflect.Descriptor instead.
 func (*HTTPFaultInjection) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{20}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *HTTPFaultInjection) GetDelay() *HTTPFaultInjection_Delay {
@@ -3021,7 +3115,7 @@ type HTTPMirrorPolicy struct {
 
 func (x *HTTPMirrorPolicy) Reset() {
 	*x = HTTPMirrorPolicy{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[21]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3033,7 +3127,7 @@ func (x *HTTPMirrorPolicy) String() string {
 func (*HTTPMirrorPolicy) ProtoMessage() {}
 
 func (x *HTTPMirrorPolicy) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[21]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3046,7 +3140,7 @@ func (x *HTTPMirrorPolicy) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HTTPMirrorPolicy.ProtoReflect.Descriptor instead.
 func (*HTTPMirrorPolicy) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{21}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *HTTPMirrorPolicy) GetDestination() *Destination {
@@ -3075,7 +3169,7 @@ type PortSelector struct {
 
 func (x *PortSelector) Reset() {
 	*x = PortSelector{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[22]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3087,7 +3181,7 @@ func (x *PortSelector) String() string {
 func (*PortSelector) ProtoMessage() {}
 
 func (x *PortSelector) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[22]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3100,7 +3194,7 @@ func (x *PortSelector) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PortSelector.ProtoReflect.Descriptor instead.
 func (*PortSelector) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{22}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *PortSelector) GetNumber() uint32 {
@@ -3120,7 +3214,7 @@ type Percent struct {
 
 func (x *Percent) Reset() {
 	*x = Percent{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[23]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3132,7 +3226,7 @@ func (x *Percent) String() string {
 func (*Percent) ProtoMessage() {}
 
 func (x *Percent) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[23]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3145,7 +3239,7 @@ func (x *Percent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Percent.ProtoReflect.Descriptor instead.
 func (*Percent) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{23}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *Percent) GetValue() float64 {
@@ -3171,7 +3265,7 @@ type Headers_HeaderOperations struct {
 
 func (x *Headers_HeaderOperations) Reset() {
 	*x = Headers_HeaderOperations{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[24]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3183,7 +3277,7 @@ func (x *Headers_HeaderOperations) String() string {
 func (*Headers_HeaderOperations) ProtoMessage() {}
 
 func (x *Headers_HeaderOperations) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[24]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3277,7 +3371,7 @@ type HTTPFaultInjection_Delay struct {
 
 func (x *HTTPFaultInjection_Delay) Reset() {
 	*x = HTTPFaultInjection_Delay{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[33]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3289,7 +3383,7 @@ func (x *HTTPFaultInjection_Delay) String() string {
 func (*HTTPFaultInjection_Delay) ProtoMessage() {}
 
 func (x *HTTPFaultInjection_Delay) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[33]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3302,7 +3396,7 @@ func (x *HTTPFaultInjection_Delay) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HTTPFaultInjection_Delay.ProtoReflect.Descriptor instead.
 func (*HTTPFaultInjection_Delay) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{20, 0}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{21, 0}
 }
 
 // Deprecated: Marked as deprecated in networking/v1alpha3/virtual_service.proto.
@@ -3413,7 +3507,7 @@ type HTTPFaultInjection_Abort struct {
 
 func (x *HTTPFaultInjection_Abort) Reset() {
 	*x = HTTPFaultInjection_Abort{}
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[34]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3425,7 +3519,7 @@ func (x *HTTPFaultInjection_Abort) String() string {
 func (*HTTPFaultInjection_Abort) ProtoMessage() {}
 
 func (x *HTTPFaultInjection_Abort) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[34]
+	mi := &file_networking_v1alpha3_virtual_service_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3438,7 +3532,7 @@ func (x *HTTPFaultInjection_Abort) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HTTPFaultInjection_Abort.ProtoReflect.Descriptor instead.
 func (*HTTPFaultInjection_Abort) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{20, 1}
+	return file_networking_v1alpha3_virtual_service_proto_rawDescGZIP(), []int{21, 1}
 }
 
 func (x *HTTPFaultInjection_Abort) GetErrorType() isHTTPFaultInjection_Abort_ErrorType {
@@ -3514,13 +3608,14 @@ var File_networking_v1alpha3_virtual_service_proto protoreflect.FileDescriptor
 
 const file_networking_v1alpha3_virtual_service_proto_rawDesc = "" +
 	"\n" +
-	")networking/v1alpha3/virtual_service.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x87\x02\n" +
+	")networking/v1alpha3/virtual_service.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\xbe\x02\n" +
 	"\x0eVirtualService\x12\x14\n" +
 	"\x05hosts\x18\x01 \x03(\tR\x05hosts\x12\x1a\n" +
 	"\bgateways\x18\x02 \x03(\tR\bgateways\x128\n" +
 	"\x04http\x18\x03 \x03(\v2$.istio.networking.v1alpha3.HTTPRouteR\x04http\x125\n" +
 	"\x03tls\x18\x05 \x03(\v2#.istio.networking.v1alpha3.TLSRouteR\x03tls\x125\n" +
-	"\x03tcp\x18\x04 \x03(\v2#.istio.networking.v1alpha3.TCPRouteR\x03tcp\x12\x1b\n" +
+	"\x03tcp\x18\x04 \x03(\v2#.istio.networking.v1alpha3.TCPRouteR\x03tcp\x125\n" +
+	"\x03udp\x18\a \x03(\v2#.istio.networking.v1alpha3.UDPRouteR\x03udp\x12\x1b\n" +
 	"\texport_to\x18\x06 \x03(\tR\bexportTo\"|\n" +
 	"\vDestination\x12\x18\n" +
 	"\x04host\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x04host\x12\x16\n" +
@@ -3565,6 +3660,9 @@ const file_networking_v1alpha3_virtual_service_proto_rawDesc = "" +
 	"\x05match\x18\x01 \x03(\v2-.istio.networking.v1alpha3.TLSMatchAttributesB\x04\xe2A\x01\x02R\x05match\x12A\n" +
 	"\x05route\x18\x02 \x03(\v2+.istio.networking.v1alpha3.RouteDestinationR\x05route\"\x91\x01\n" +
 	"\bTCPRoute\x12B\n" +
+	"\x05match\x18\x01 \x03(\v2,.istio.networking.v1alpha3.L4MatchAttributesR\x05match\x12A\n" +
+	"\x05route\x18\x02 \x03(\v2+.istio.networking.v1alpha3.RouteDestinationR\x05route\"\x91\x01\n" +
+	"\bUDPRoute\x12B\n" +
 	"\x05match\x18\x01 \x03(\v2,.istio.networking.v1alpha3.L4MatchAttributesR\x05match\x12A\n" +
 	"\x05route\x18\x02 \x03(\v2+.istio.networking.v1alpha3.RouteDestinationR\x05route\"\xc5\t\n" +
 	"\x10HTTPMatchRequest\x12\x12\n" +
@@ -3724,7 +3822,7 @@ func file_networking_v1alpha3_virtual_service_proto_rawDescGZIP() []byte {
 }
 
 var file_networking_v1alpha3_virtual_service_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_networking_v1alpha3_virtual_service_proto_msgTypes = make([]protoimpl.MessageInfo, 35)
+var file_networking_v1alpha3_virtual_service_proto_msgTypes = make([]protoimpl.MessageInfo, 36)
 var file_networking_v1alpha3_virtual_service_proto_goTypes = []any{
 	(HTTPRedirect_RedirectPortSelection)(0), // 0: istio.networking.v1alpha3.HTTPRedirect.RedirectPortSelection
 	(CorsPolicy_UnmatchedPreflights)(0),     // 1: istio.networking.v1alpha3.CorsPolicy.UnmatchedPreflights
@@ -3735,106 +3833,110 @@ var file_networking_v1alpha3_virtual_service_proto_goTypes = []any{
 	(*Headers)(nil),                         // 6: istio.networking.v1alpha3.Headers
 	(*TLSRoute)(nil),                        // 7: istio.networking.v1alpha3.TLSRoute
 	(*TCPRoute)(nil),                        // 8: istio.networking.v1alpha3.TCPRoute
-	(*HTTPMatchRequest)(nil),                // 9: istio.networking.v1alpha3.HTTPMatchRequest
-	(*HTTPRouteDestination)(nil),            // 10: istio.networking.v1alpha3.HTTPRouteDestination
-	(*RouteDestination)(nil),                // 11: istio.networking.v1alpha3.RouteDestination
-	(*L4MatchAttributes)(nil),               // 12: istio.networking.v1alpha3.L4MatchAttributes
-	(*TLSMatchAttributes)(nil),              // 13: istio.networking.v1alpha3.TLSMatchAttributes
-	(*HTTPRedirect)(nil),                    // 14: istio.networking.v1alpha3.HTTPRedirect
-	(*HTTPDirectResponse)(nil),              // 15: istio.networking.v1alpha3.HTTPDirectResponse
-	(*HTTPBody)(nil),                        // 16: istio.networking.v1alpha3.HTTPBody
-	(*HTTPRewrite)(nil),                     // 17: istio.networking.v1alpha3.HTTPRewrite
-	(*RegexRewrite)(nil),                    // 18: istio.networking.v1alpha3.RegexRewrite
-	(*StringMatch)(nil),                     // 19: istio.networking.v1alpha3.StringMatch
-	(*HTTPRetry)(nil),                       // 20: istio.networking.v1alpha3.HTTPRetry
-	(*CorsPolicy)(nil),                      // 21: istio.networking.v1alpha3.CorsPolicy
-	(*HTTPFaultInjection)(nil),              // 22: istio.networking.v1alpha3.HTTPFaultInjection
-	(*HTTPMirrorPolicy)(nil),                // 23: istio.networking.v1alpha3.HTTPMirrorPolicy
-	(*PortSelector)(nil),                    // 24: istio.networking.v1alpha3.PortSelector
-	(*Percent)(nil),                         // 25: istio.networking.v1alpha3.Percent
-	(*Headers_HeaderOperations)(nil),        // 26: istio.networking.v1alpha3.Headers.HeaderOperations
-	nil,                                     // 27: istio.networking.v1alpha3.Headers.HeaderOperations.SetEntry
-	nil,                                     // 28: istio.networking.v1alpha3.Headers.HeaderOperations.AddEntry
-	nil,                                     // 29: istio.networking.v1alpha3.HTTPMatchRequest.HeadersEntry
-	nil,                                     // 30: istio.networking.v1alpha3.HTTPMatchRequest.SourceLabelsEntry
-	nil,                                     // 31: istio.networking.v1alpha3.HTTPMatchRequest.QueryParamsEntry
-	nil,                                     // 32: istio.networking.v1alpha3.HTTPMatchRequest.WithoutHeadersEntry
-	nil,                                     // 33: istio.networking.v1alpha3.L4MatchAttributes.SourceLabelsEntry
-	nil,                                     // 34: istio.networking.v1alpha3.TLSMatchAttributes.SourceLabelsEntry
-	(*HTTPFaultInjection_Delay)(nil),        // 35: istio.networking.v1alpha3.HTTPFaultInjection.Delay
-	(*HTTPFaultInjection_Abort)(nil),        // 36: istio.networking.v1alpha3.HTTPFaultInjection.Abort
-	(*duration.Duration)(nil),               // 37: google.protobuf.Duration
-	(*wrappers.UInt32Value)(nil),            // 38: google.protobuf.UInt32Value
-	(*wrappers.BoolValue)(nil),              // 39: google.protobuf.BoolValue
+	(*UDPRoute)(nil),                        // 9: istio.networking.v1alpha3.UDPRoute
+	(*HTTPMatchRequest)(nil),                // 10: istio.networking.v1alpha3.HTTPMatchRequest
+	(*HTTPRouteDestination)(nil),            // 11: istio.networking.v1alpha3.HTTPRouteDestination
+	(*RouteDestination)(nil),                // 12: istio.networking.v1alpha3.RouteDestination
+	(*L4MatchAttributes)(nil),               // 13: istio.networking.v1alpha3.L4MatchAttributes
+	(*TLSMatchAttributes)(nil),              // 14: istio.networking.v1alpha3.TLSMatchAttributes
+	(*HTTPRedirect)(nil),                    // 15: istio.networking.v1alpha3.HTTPRedirect
+	(*HTTPDirectResponse)(nil),              // 16: istio.networking.v1alpha3.HTTPDirectResponse
+	(*HTTPBody)(nil),                        // 17: istio.networking.v1alpha3.HTTPBody
+	(*HTTPRewrite)(nil),                     // 18: istio.networking.v1alpha3.HTTPRewrite
+	(*RegexRewrite)(nil),                    // 19: istio.networking.v1alpha3.RegexRewrite
+	(*StringMatch)(nil),                     // 20: istio.networking.v1alpha3.StringMatch
+	(*HTTPRetry)(nil),                       // 21: istio.networking.v1alpha3.HTTPRetry
+	(*CorsPolicy)(nil),                      // 22: istio.networking.v1alpha3.CorsPolicy
+	(*HTTPFaultInjection)(nil),              // 23: istio.networking.v1alpha3.HTTPFaultInjection
+	(*HTTPMirrorPolicy)(nil),                // 24: istio.networking.v1alpha3.HTTPMirrorPolicy
+	(*PortSelector)(nil),                    // 25: istio.networking.v1alpha3.PortSelector
+	(*Percent)(nil),                         // 26: istio.networking.v1alpha3.Percent
+	(*Headers_HeaderOperations)(nil),        // 27: istio.networking.v1alpha3.Headers.HeaderOperations
+	nil,                                     // 28: istio.networking.v1alpha3.Headers.HeaderOperations.SetEntry
+	nil,                                     // 29: istio.networking.v1alpha3.Headers.HeaderOperations.AddEntry
+	nil,                                     // 30: istio.networking.v1alpha3.HTTPMatchRequest.HeadersEntry
+	nil,                                     // 31: istio.networking.v1alpha3.HTTPMatchRequest.SourceLabelsEntry
+	nil,                                     // 32: istio.networking.v1alpha3.HTTPMatchRequest.QueryParamsEntry
+	nil,                                     // 33: istio.networking.v1alpha3.HTTPMatchRequest.WithoutHeadersEntry
+	nil,                                     // 34: istio.networking.v1alpha3.L4MatchAttributes.SourceLabelsEntry
+	nil,                                     // 35: istio.networking.v1alpha3.TLSMatchAttributes.SourceLabelsEntry
+	(*HTTPFaultInjection_Delay)(nil),        // 36: istio.networking.v1alpha3.HTTPFaultInjection.Delay
+	(*HTTPFaultInjection_Abort)(nil),        // 37: istio.networking.v1alpha3.HTTPFaultInjection.Abort
+	(*duration.Duration)(nil),               // 38: google.protobuf.Duration
+	(*wrappers.UInt32Value)(nil),            // 39: google.protobuf.UInt32Value
+	(*wrappers.BoolValue)(nil),              // 40: google.protobuf.BoolValue
 }
 var file_networking_v1alpha3_virtual_service_proto_depIdxs = []int32{
 	4,  // 0: istio.networking.v1alpha3.VirtualService.http:type_name -> istio.networking.v1alpha3.HTTPRoute
 	7,  // 1: istio.networking.v1alpha3.VirtualService.tls:type_name -> istio.networking.v1alpha3.TLSRoute
 	8,  // 2: istio.networking.v1alpha3.VirtualService.tcp:type_name -> istio.networking.v1alpha3.TCPRoute
-	24, // 3: istio.networking.v1alpha3.Destination.port:type_name -> istio.networking.v1alpha3.PortSelector
-	9,  // 4: istio.networking.v1alpha3.HTTPRoute.match:type_name -> istio.networking.v1alpha3.HTTPMatchRequest
-	10, // 5: istio.networking.v1alpha3.HTTPRoute.route:type_name -> istio.networking.v1alpha3.HTTPRouteDestination
-	14, // 6: istio.networking.v1alpha3.HTTPRoute.redirect:type_name -> istio.networking.v1alpha3.HTTPRedirect
-	15, // 7: istio.networking.v1alpha3.HTTPRoute.direct_response:type_name -> istio.networking.v1alpha3.HTTPDirectResponse
-	5,  // 8: istio.networking.v1alpha3.HTTPRoute.delegate:type_name -> istio.networking.v1alpha3.Delegate
-	17, // 9: istio.networking.v1alpha3.HTTPRoute.rewrite:type_name -> istio.networking.v1alpha3.HTTPRewrite
-	37, // 10: istio.networking.v1alpha3.HTTPRoute.timeout:type_name -> google.protobuf.Duration
-	20, // 11: istio.networking.v1alpha3.HTTPRoute.retries:type_name -> istio.networking.v1alpha3.HTTPRetry
-	22, // 12: istio.networking.v1alpha3.HTTPRoute.fault:type_name -> istio.networking.v1alpha3.HTTPFaultInjection
-	3,  // 13: istio.networking.v1alpha3.HTTPRoute.mirror:type_name -> istio.networking.v1alpha3.Destination
-	23, // 14: istio.networking.v1alpha3.HTTPRoute.mirrors:type_name -> istio.networking.v1alpha3.HTTPMirrorPolicy
-	38, // 15: istio.networking.v1alpha3.HTTPRoute.mirror_percent:type_name -> google.protobuf.UInt32Value
-	25, // 16: istio.networking.v1alpha3.HTTPRoute.mirror_percentage:type_name -> istio.networking.v1alpha3.Percent
-	21, // 17: istio.networking.v1alpha3.HTTPRoute.cors_policy:type_name -> istio.networking.v1alpha3.CorsPolicy
-	6,  // 18: istio.networking.v1alpha3.HTTPRoute.headers:type_name -> istio.networking.v1alpha3.Headers
-	26, // 19: istio.networking.v1alpha3.Headers.request:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations
-	26, // 20: istio.networking.v1alpha3.Headers.response:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations
-	13, // 21: istio.networking.v1alpha3.TLSRoute.match:type_name -> istio.networking.v1alpha3.TLSMatchAttributes
-	11, // 22: istio.networking.v1alpha3.TLSRoute.route:type_name -> istio.networking.v1alpha3.RouteDestination
-	12, // 23: istio.networking.v1alpha3.TCPRoute.match:type_name -> istio.networking.v1alpha3.L4MatchAttributes
-	11, // 24: istio.networking.v1alpha3.TCPRoute.route:type_name -> istio.networking.v1alpha3.RouteDestination
-	19, // 25: istio.networking.v1alpha3.HTTPMatchRequest.uri:type_name -> istio.networking.v1alpha3.StringMatch
-	19, // 26: istio.networking.v1alpha3.HTTPMatchRequest.scheme:type_name -> istio.networking.v1alpha3.StringMatch
-	19, // 27: istio.networking.v1alpha3.HTTPMatchRequest.method:type_name -> istio.networking.v1alpha3.StringMatch
-	19, // 28: istio.networking.v1alpha3.HTTPMatchRequest.authority:type_name -> istio.networking.v1alpha3.StringMatch
-	29, // 29: istio.networking.v1alpha3.HTTPMatchRequest.headers:type_name -> istio.networking.v1alpha3.HTTPMatchRequest.HeadersEntry
-	30, // 30: istio.networking.v1alpha3.HTTPMatchRequest.source_labels:type_name -> istio.networking.v1alpha3.HTTPMatchRequest.SourceLabelsEntry
-	31, // 31: istio.networking.v1alpha3.HTTPMatchRequest.query_params:type_name -> istio.networking.v1alpha3.HTTPMatchRequest.QueryParamsEntry
-	32, // 32: istio.networking.v1alpha3.HTTPMatchRequest.without_headers:type_name -> istio.networking.v1alpha3.HTTPMatchRequest.WithoutHeadersEntry
-	3,  // 33: istio.networking.v1alpha3.HTTPRouteDestination.destination:type_name -> istio.networking.v1alpha3.Destination
-	6,  // 34: istio.networking.v1alpha3.HTTPRouteDestination.headers:type_name -> istio.networking.v1alpha3.Headers
-	3,  // 35: istio.networking.v1alpha3.RouteDestination.destination:type_name -> istio.networking.v1alpha3.Destination
-	33, // 36: istio.networking.v1alpha3.L4MatchAttributes.source_labels:type_name -> istio.networking.v1alpha3.L4MatchAttributes.SourceLabelsEntry
-	34, // 37: istio.networking.v1alpha3.TLSMatchAttributes.source_labels:type_name -> istio.networking.v1alpha3.TLSMatchAttributes.SourceLabelsEntry
-	0,  // 38: istio.networking.v1alpha3.HTTPRedirect.derive_port:type_name -> istio.networking.v1alpha3.HTTPRedirect.RedirectPortSelection
-	16, // 39: istio.networking.v1alpha3.HTTPDirectResponse.body:type_name -> istio.networking.v1alpha3.HTTPBody
-	18, // 40: istio.networking.v1alpha3.HTTPRewrite.uri_regex_rewrite:type_name -> istio.networking.v1alpha3.RegexRewrite
-	37, // 41: istio.networking.v1alpha3.HTTPRetry.per_try_timeout:type_name -> google.protobuf.Duration
-	39, // 42: istio.networking.v1alpha3.HTTPRetry.retry_remote_localities:type_name -> google.protobuf.BoolValue
-	39, // 43: istio.networking.v1alpha3.HTTPRetry.retry_ignore_previous_hosts:type_name -> google.protobuf.BoolValue
-	37, // 44: istio.networking.v1alpha3.HTTPRetry.backoff:type_name -> google.protobuf.Duration
-	19, // 45: istio.networking.v1alpha3.CorsPolicy.allow_origins:type_name -> istio.networking.v1alpha3.StringMatch
-	37, // 46: istio.networking.v1alpha3.CorsPolicy.max_age:type_name -> google.protobuf.Duration
-	39, // 47: istio.networking.v1alpha3.CorsPolicy.allow_credentials:type_name -> google.protobuf.BoolValue
-	1,  // 48: istio.networking.v1alpha3.CorsPolicy.unmatched_preflights:type_name -> istio.networking.v1alpha3.CorsPolicy.UnmatchedPreflights
-	35, // 49: istio.networking.v1alpha3.HTTPFaultInjection.delay:type_name -> istio.networking.v1alpha3.HTTPFaultInjection.Delay
-	36, // 50: istio.networking.v1alpha3.HTTPFaultInjection.abort:type_name -> istio.networking.v1alpha3.HTTPFaultInjection.Abort
-	3,  // 51: istio.networking.v1alpha3.HTTPMirrorPolicy.destination:type_name -> istio.networking.v1alpha3.Destination
-	25, // 52: istio.networking.v1alpha3.HTTPMirrorPolicy.percentage:type_name -> istio.networking.v1alpha3.Percent
-	27, // 53: istio.networking.v1alpha3.Headers.HeaderOperations.set:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations.SetEntry
-	28, // 54: istio.networking.v1alpha3.Headers.HeaderOperations.add:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations.AddEntry
-	19, // 55: istio.networking.v1alpha3.HTTPMatchRequest.HeadersEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
-	19, // 56: istio.networking.v1alpha3.HTTPMatchRequest.QueryParamsEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
-	19, // 57: istio.networking.v1alpha3.HTTPMatchRequest.WithoutHeadersEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
-	37, // 58: istio.networking.v1alpha3.HTTPFaultInjection.Delay.fixed_delay:type_name -> google.protobuf.Duration
-	37, // 59: istio.networking.v1alpha3.HTTPFaultInjection.Delay.exponential_delay:type_name -> google.protobuf.Duration
-	25, // 60: istio.networking.v1alpha3.HTTPFaultInjection.Delay.percentage:type_name -> istio.networking.v1alpha3.Percent
-	25, // 61: istio.networking.v1alpha3.HTTPFaultInjection.Abort.percentage:type_name -> istio.networking.v1alpha3.Percent
-	62, // [62:62] is the sub-list for method output_type
-	62, // [62:62] is the sub-list for method input_type
-	62, // [62:62] is the sub-list for extension type_name
-	62, // [62:62] is the sub-list for extension extendee
-	0,  // [0:62] is the sub-list for field type_name
+	9,  // 3: istio.networking.v1alpha3.VirtualService.udp:type_name -> istio.networking.v1alpha3.UDPRoute
+	25, // 4: istio.networking.v1alpha3.Destination.port:type_name -> istio.networking.v1alpha3.PortSelector
+	10, // 5: istio.networking.v1alpha3.HTTPRoute.match:type_name -> istio.networking.v1alpha3.HTTPMatchRequest
+	11, // 6: istio.networking.v1alpha3.HTTPRoute.route:type_name -> istio.networking.v1alpha3.HTTPRouteDestination
+	15, // 7: istio.networking.v1alpha3.HTTPRoute.redirect:type_name -> istio.networking.v1alpha3.HTTPRedirect
+	16, // 8: istio.networking.v1alpha3.HTTPRoute.direct_response:type_name -> istio.networking.v1alpha3.HTTPDirectResponse
+	5,  // 9: istio.networking.v1alpha3.HTTPRoute.delegate:type_name -> istio.networking.v1alpha3.Delegate
+	18, // 10: istio.networking.v1alpha3.HTTPRoute.rewrite:type_name -> istio.networking.v1alpha3.HTTPRewrite
+	38, // 11: istio.networking.v1alpha3.HTTPRoute.timeout:type_name -> google.protobuf.Duration
+	21, // 12: istio.networking.v1alpha3.HTTPRoute.retries:type_name -> istio.networking.v1alpha3.HTTPRetry
+	23, // 13: istio.networking.v1alpha3.HTTPRoute.fault:type_name -> istio.networking.v1alpha3.HTTPFaultInjection
+	3,  // 14: istio.networking.v1alpha3.HTTPRoute.mirror:type_name -> istio.networking.v1alpha3.Destination
+	24, // 15: istio.networking.v1alpha3.HTTPRoute.mirrors:type_name -> istio.networking.v1alpha3.HTTPMirrorPolicy
+	39, // 16: istio.networking.v1alpha3.HTTPRoute.mirror_percent:type_name -> google.protobuf.UInt32Value
+	26, // 17: istio.networking.v1alpha3.HTTPRoute.mirror_percentage:type_name -> istio.networking.v1alpha3.Percent
+	22, // 18: istio.networking.v1alpha3.HTTPRoute.cors_policy:type_name -> istio.networking.v1alpha3.CorsPolicy
+	6,  // 19: istio.networking.v1alpha3.HTTPRoute.headers:type_name -> istio.networking.v1alpha3.Headers
+	27, // 20: istio.networking.v1alpha3.Headers.request:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations
+	27, // 21: istio.networking.v1alpha3.Headers.response:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations
+	14, // 22: istio.networking.v1alpha3.TLSRoute.match:type_name -> istio.networking.v1alpha3.TLSMatchAttributes
+	12, // 23: istio.networking.v1alpha3.TLSRoute.route:type_name -> istio.networking.v1alpha3.RouteDestination
+	13, // 24: istio.networking.v1alpha3.TCPRoute.match:type_name -> istio.networking.v1alpha3.L4MatchAttributes
+	12, // 25: istio.networking.v1alpha3.TCPRoute.route:type_name -> istio.networking.v1alpha3.RouteDestination
+	13, // 26: istio.networking.v1alpha3.UDPRoute.match:type_name -> istio.networking.v1alpha3.L4MatchAttributes
+	12, // 27: istio.networking.v1alpha3.UDPRoute.route:type_name -> istio.networking.v1alpha3.RouteDestination
+	20, // 28: istio.networking.v1alpha3.HTTPMatchRequest.uri:type_name -> istio.networking.v1alpha3.StringMatch
+	20, // 29: istio.networking.v1alpha3.HTTPMatchRequest.scheme:type_name -> istio.networking.v1alpha3.StringMatch
+	20, // 30: istio.networking.v1alpha3.HTTPMatchRequest.method:type_name -> istio.networking.v1alpha3.StringMatch
+	20, // 31: istio.networking.v1alpha3.HTTPMatchRequest.authority:type_name -> istio.networking.v1alpha3.StringMatch
+	30, // 32: istio.networking.v1alpha3.HTTPMatchRequest.headers:type_name -> istio.networking.v1alpha3.HTTPMatchRequest.HeadersEntry
+	31, // 33: istio.networking.v1alpha3.HTTPMatchRequest.source_labels:type_name -> istio.networking.v1alpha3.HTTPMatchRequest.SourceLabelsEntry
+	32, // 34: istio.networking.v1alpha3.HTTPMatchRequest.query_params:type_name -> istio.networking.v1alpha3.HTTPMatchRequest.QueryParamsEntry
+	33, // 35: istio.networking.v1alpha3.HTTPMatchRequest.without_headers:type_name -> istio.networking.v1alpha3.HTTPMatchRequest.WithoutHeadersEntry
+	3,  // 36: istio.networking.v1alpha3.HTTPRouteDestination.destination:type_name -> istio.networking.v1alpha3.Destination
+	6,  // 37: istio.networking.v1alpha3.HTTPRouteDestination.headers:type_name -> istio.networking.v1alpha3.Headers
+	3,  // 38: istio.networking.v1alpha3.RouteDestination.destination:type_name -> istio.networking.v1alpha3.Destination
+	34, // 39: istio.networking.v1alpha3.L4MatchAttributes.source_labels:type_name -> istio.networking.v1alpha3.L4MatchAttributes.SourceLabelsEntry
+	35, // 40: istio.networking.v1alpha3.TLSMatchAttributes.source_labels:type_name -> istio.networking.v1alpha3.TLSMatchAttributes.SourceLabelsEntry
+	0,  // 41: istio.networking.v1alpha3.HTTPRedirect.derive_port:type_name -> istio.networking.v1alpha3.HTTPRedirect.RedirectPortSelection
+	17, // 42: istio.networking.v1alpha3.HTTPDirectResponse.body:type_name -> istio.networking.v1alpha3.HTTPBody
+	19, // 43: istio.networking.v1alpha3.HTTPRewrite.uri_regex_rewrite:type_name -> istio.networking.v1alpha3.RegexRewrite
+	38, // 44: istio.networking.v1alpha3.HTTPRetry.per_try_timeout:type_name -> google.protobuf.Duration
+	40, // 45: istio.networking.v1alpha3.HTTPRetry.retry_remote_localities:type_name -> google.protobuf.BoolValue
+	40, // 46: istio.networking.v1alpha3.HTTPRetry.retry_ignore_previous_hosts:type_name -> google.protobuf.BoolValue
+	38, // 47: istio.networking.v1alpha3.HTTPRetry.backoff:type_name -> google.protobuf.Duration
+	20, // 48: istio.networking.v1alpha3.CorsPolicy.allow_origins:type_name -> istio.networking.v1alpha3.StringMatch
+	38, // 49: istio.networking.v1alpha3.CorsPolicy.max_age:type_name -> google.protobuf.Duration
+	40, // 50: istio.networking.v1alpha3.CorsPolicy.allow_credentials:type_name -> google.protobuf.BoolValue
+	1,  // 51: istio.networking.v1alpha3.CorsPolicy.unmatched_preflights:type_name -> istio.networking.v1alpha3.CorsPolicy.UnmatchedPreflights
+	36, // 52: istio.networking.v1alpha3.HTTPFaultInjection.delay:type_name -> istio.networking.v1alpha3.HTTPFaultInjection.Delay
+	37, // 53: istio.networking.v1alpha3.HTTPFaultInjection.abort:type_name -> istio.networking.v1alpha3.HTTPFaultInjection.Abort
+	3,  // 54: istio.networking.v1alpha3.HTTPMirrorPolicy.destination:type_name -> istio.networking.v1alpha3.Destination
+	26, // 55: istio.networking.v1alpha3.HTTPMirrorPolicy.percentage:type_name -> istio.networking.v1alpha3.Percent
+	28, // 56: istio.networking.v1alpha3.Headers.HeaderOperations.set:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations.SetEntry
+	29, // 57: istio.networking.v1alpha3.Headers.HeaderOperations.add:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations.AddEntry
+	20, // 58: istio.networking.v1alpha3.HTTPMatchRequest.HeadersEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
+	20, // 59: istio.networking.v1alpha3.HTTPMatchRequest.QueryParamsEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
+	20, // 60: istio.networking.v1alpha3.HTTPMatchRequest.WithoutHeadersEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
+	38, // 61: istio.networking.v1alpha3.HTTPFaultInjection.Delay.fixed_delay:type_name -> google.protobuf.Duration
+	38, // 62: istio.networking.v1alpha3.HTTPFaultInjection.Delay.exponential_delay:type_name -> google.protobuf.Duration
+	26, // 63: istio.networking.v1alpha3.HTTPFaultInjection.Delay.percentage:type_name -> istio.networking.v1alpha3.Percent
+	26, // 64: istio.networking.v1alpha3.HTTPFaultInjection.Abort.percentage:type_name -> istio.networking.v1alpha3.Percent
+	65, // [65:65] is the sub-list for method output_type
+	65, // [65:65] is the sub-list for method input_type
+	65, // [65:65] is the sub-list for extension type_name
+	65, // [65:65] is the sub-list for extension extendee
+	0,  // [0:65] is the sub-list for field type_name
 }
 
 func init() { file_networking_v1alpha3_virtual_service_proto_init() }
@@ -3842,24 +3944,24 @@ func file_networking_v1alpha3_virtual_service_proto_init() {
 	if File_networking_v1alpha3_virtual_service_proto != nil {
 		return
 	}
-	file_networking_v1alpha3_virtual_service_proto_msgTypes[12].OneofWrappers = []any{
+	file_networking_v1alpha3_virtual_service_proto_msgTypes[13].OneofWrappers = []any{
 		(*HTTPRedirect_Port)(nil),
 		(*HTTPRedirect_DerivePort)(nil),
 	}
-	file_networking_v1alpha3_virtual_service_proto_msgTypes[14].OneofWrappers = []any{
+	file_networking_v1alpha3_virtual_service_proto_msgTypes[15].OneofWrappers = []any{
 		(*HTTPBody_String_)(nil),
 		(*HTTPBody_Bytes)(nil),
 	}
-	file_networking_v1alpha3_virtual_service_proto_msgTypes[17].OneofWrappers = []any{
+	file_networking_v1alpha3_virtual_service_proto_msgTypes[18].OneofWrappers = []any{
 		(*StringMatch_Exact)(nil),
 		(*StringMatch_Prefix)(nil),
 		(*StringMatch_Regex)(nil),
 	}
-	file_networking_v1alpha3_virtual_service_proto_msgTypes[33].OneofWrappers = []any{
+	file_networking_v1alpha3_virtual_service_proto_msgTypes[34].OneofWrappers = []any{
 		(*HTTPFaultInjection_Delay_FixedDelay)(nil),
 		(*HTTPFaultInjection_Delay_ExponentialDelay)(nil),
 	}
-	file_networking_v1alpha3_virtual_service_proto_msgTypes[34].OneofWrappers = []any{
+	file_networking_v1alpha3_virtual_service_proto_msgTypes[35].OneofWrappers = []any{
 		(*HTTPFaultInjection_Abort_HttpStatus)(nil),
 		(*HTTPFaultInjection_Abort_GrpcStatus)(nil),
 		(*HTTPFaultInjection_Abort_Http2Error)(nil),
@@ -3870,7 +3972,7 @@ func file_networking_v1alpha3_virtual_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_networking_v1alpha3_virtual_service_proto_rawDesc), len(file_networking_v1alpha3_virtual_service_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   35,
+			NumMessages:   36,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
