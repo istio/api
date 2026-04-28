@@ -1326,6 +1326,14 @@ failures to a given host counts as an error when measuring the
 consecutive errors metric. See Envoy&rsquo;s <a href="https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/outlier">outlier
 detection</a>
 for more details.</p>
+<p><strong>Note:</strong> Istio&rsquo;s default mesh configuration enables locality load balancing
+(<code>localityLbSetting.enabled: true</code>). As a result, configuring
+<code>OutlierDetection</code> in a <code>DestinationRule</code> will automatically activate
+locality-aware failover behavior — Envoy uses the outlier detection state to
+determine when endpoints are unhealthy and should be failed over to the next
+locality. To suppress this implicit failover, explicitly set
+<code>localityLbSetting.enabled: false</code> in the <code>DestinationRule</code>&rsquo;s load balancer
+settings.</p>
 <p>The following rule sets a connection pool size of 100 HTTP1 connections
 with no more than 10 req/connection to the &ldquo;reviews&rdquo; service. In addition,
 it sets a limit of 1000 concurrent HTTP/2 requests and configures upstream

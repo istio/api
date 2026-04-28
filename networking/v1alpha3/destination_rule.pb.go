@@ -1082,6 +1082,15 @@ func (x *ConnectionPoolSettings) GetHttp() *ConnectionPoolSettings_HTTPSettings 
 // detection](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/outlier)
 // for more details.
 //
+// **Note:** Istio's default mesh configuration enables locality load balancing
+// (`localityLbSetting.enabled: true`). As a result, configuring
+// `OutlierDetection` in a `DestinationRule` will automatically activate
+// locality-aware failover behavior — Envoy uses the outlier detection state to
+// determine when endpoints are unhealthy and should be failed over to the next
+// locality. To suppress this implicit failover, explicitly set
+// `localityLbSetting.enabled: false` in the `DestinationRule`'s load balancer
+// settings.
+//
 // The following rule sets a connection pool size of 100 HTTP1 connections
 // with no more than 10 req/connection to the "reviews" service. In addition,
 // it sets a limit of 1000 concurrent HTTP/2 requests and configures upstream
