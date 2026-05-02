@@ -673,6 +673,17 @@ type StringMatch_Prefix = v1alpha3.StringMatch_Prefix
 // Example: `(?i)^aaa$` can be used to case-insensitive match a string consisting of three a's.
 type StringMatch_Regex = v1alpha3.StringMatch_Regex
 
+// URI template path match using `{*}` (matches one path segment) and `{**}` (matches one or more
+// path segments) operators. This leverages Envoy's
+// [UriTemplateMatchConfig](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/path/match/uri_template/v3/uri_template_match.proto)
+// and is more readable and performant than equivalent regex patterns.
+//
+// Example: `/users/{*}/orders/{**}` matches `/users/alice/orders` and `/users/alice/orders/123/items`.
+//
+// Note: `{**}` must be the last operator in the path template. Only valid for `uri` matches
+// in HTTPMatchRequest.
+type StringMatch_PathTemplate = v1alpha3.StringMatch_PathTemplate
+
 // Describes the retry policy to use when a HTTP request fails. For
 // example, the following rule sets the maximum number of retries to 3 when
 // calling ratings:v1 service, with a 2s timeout per retry attempt.
