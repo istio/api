@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.DestinationRule
 aliases: [/docs/reference/config/networking/v1alpha3/destination-rule]
-number_of_entries: 28
+number_of_entries: 33
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -275,6 +275,36 @@ Tunnel settings can be applied to TCP or TLS routes and can&rsquo;t be applied t
 </div></td>
 <td>
 <p>Specifies a limit on concurrent retries in relation to the number of active requests.</p>
+
+</td>
+</tr>
+<tr id="TrafficPolicy-adaptive_concurrency">
+<td><div class="field"><div class="name"><code><a href="#TrafficPolicy-adaptive_concurrency">adaptiveConcurrency</a></code></div>
+<div class="type"><a href="#AdaptiveConcurrency">AdaptiveConcurrency</a></div>
+</div></td>
+<td>
+<p>Adaptive concurrency settings for dynamically adjusting the allowed number of
+outstanding requests based on sampled latencies.</p>
+<p>Note: This applies only to HTTP/1.1 and HTTP/2 unary request-response
+traffic and is enforced on the server-side (inbound) proxy. It does not
+apply to TCP connections, gRPC streaming, or WebSocket connections, since
+the filter relies on measuring individual request round-trip latencies.</p>
+<p>This operates independently from circuit breaker thresholds (e.g.
+max_connections). Both mechanisms can reject requests, but they act at
+different layers: adaptive concurrency limits outstanding requests at
+the HTTP filter level before routing, while circuit breakers limit
+connections and requests at the cluster connection pool level. When both
+are configured, the more restrictive limit is the effective constraint.</p>
+<p>Requests rejected by adaptive concurrency will NOT be reflected in
+circuit breaker statistics (e.g. upstream_cx_overflow). They are tracked
+separately via the adaptive_concurrency.gradient_controller.rq_blocked
+counter.</p>
+<p>Unlike circuit breaker overflows, responses rejected by adaptive concurrency
+will NOT include the x-envoy-overloaded header. Clients or sidecars that
+rely on this header to detect overload-induced 503s (e.g. for retry
+decisions or backoff) should be aware of this difference. The response body
+will be &ldquo;reached concurrency limit&rdquo; and the response details will be
+&ldquo;reached_concurrency_limit&rdquo;.</p>
 
 </td>
 </tr>
@@ -1477,6 +1507,333 @@ threshold, outlier detection will be disabled and the proxy will load balance
 across all hosts in the pool (healthy and unhealthy). The threshold can be
 disabled by setting it to 0%. The default is 0% as it&rsquo;s not typically
 applicable in k8s environments with few pods per service.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="AdaptiveConcurrency">AdaptiveConcurrency</h2>
+<section>
+<p>Configures automatic concurrency limits for requests to an upstream service.
+When enabled, the sidecar proxy will dynamically calculate and enforce a
+maximum number of outstanding requests allowed to the destination based on
+periodic latency sampling. If the measured latency increases relative to the
+baseline (minRTT), the concurrency limit is reduced; if latency remains
+stable, the limit is gradually increased. Requests that exceed the current
+concurrency limit are immediately rejected with the configured HTTP status
+code (default 503) without being forwarded to the upstream.</p>
+<p>This is useful for protecting upstream services from being overwhelmed during
+load spikes or degraded performance, without requiring operators to manually
+set fixed concurrency thresholds.</p>
+<p><strong>Important:</strong> When using dynamic sampling (<code>dynamic_sampling</code>), the controller
+periodically enters a minRTT measurement window where the concurrency limit
+drops to <code>min_concurrency</code> (default 3). During this window, requests exceeding
+that limit are rejected with 503. This can cause a noticeable spike in errors,
+especially under high traffic. To mitigate this:</p>
+<ul>
+<li>Enable client-side retries for 503s, ideally with the <code>previous_hosts</code>
+retry predicate so rejected requests are retried on a different host
+that is not in a measurement window.</li>
+<li>Use <code>jitter</code> to stagger measurement windows across hosts.</li>
+<li>Consider using <code>fixed_latency</code> instead of <code>dynamic_sampling</code> if the
+upstream&rsquo;s baseline latency is well-known and stable.
+See <a href="https://github.com/envoyproxy/envoy/issues/18152">https://github.com/envoyproxy/envoy/issues/18152</a> for a real-world
+example of 503s during minRTT calculation windows.</li>
+</ul>
+<p>See Envoy&rsquo;s
+<a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/adaptive_concurrency_filter">adaptive concurrency filter</a>
+for more details.</p>
+<p>The following example enables adaptive concurrency limiting for my-service,
+using the gradient controller to automatically adjust the concurrency limit
+based on latency measurements taken every 60 seconds:</p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: my-service-adaptive
+spec:
+  host: my-service.default.svc.cluster.local
+  trafficPolicy:
+    adaptiveConcurrency:
+      gradientControllerConfig:
+        sampleAggregatePercentile: 50
+        concurrencyLimitParams:
+          maxConcurrencyLimit: 1000
+          concurrencyUpdateInterval: 100ms
+        minRttCalcParams:
+          dynamicSampling:
+            interval: 60s
+            requestCount: 50
+            jitter: 10
+            minConcurrency: 3
+          buffer: 25
+      concurrencyLimitExceededStatus: 503
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AdaptiveConcurrency-gradient_controller_config" class="oneof oneof-start">
+<td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-gradient_controller_config">gradientControllerConfig</a></code></div>
+<div class="type"><a href="#AdaptiveConcurrency-GradientControllerConfig">GradientControllerConfig (oneof)</a></div>
+</div></td>
+<td>
+<p>Gradient concurrency control will be used.</p>
+
+</td>
+</tr>
+<tr id="AdaptiveConcurrency-concurrency_limit_exceeded_status">
+<td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-concurrency_limit_exceeded_status">concurrencyLimitExceededStatus</a></code></div>
+<div class="type">uint32</div>
+</div></td>
+<td>
+<p>Custom HTTP response status code to the downstream client when
+the concurrency limit has been exceeded.
+Defaults to 503 (Service Unavailable).
+Note: If this is set to &lt; 400, 503 will be used instead.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="AdaptiveConcurrency-GradientControllerConfig">GradientControllerConfig</h3>
+<section>
+<p>Configuration parameters for the gradient concurrency controller.
+The gradient controller makes forwarding decisions based on a periodically
+measured ideal round-trip time (minRTT) for an upstream.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AdaptiveConcurrency-GradientControllerConfig-sample_aggregate_percentile">
+<td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-GradientControllerConfig-sample_aggregate_percentile">sampleAggregatePercentile</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>The percentile to use when summarizing aggregated samples. Defaults to p50.
+Value must be in the range [0, 100].</p>
+
+</td>
+</tr>
+<tr id="AdaptiveConcurrency-GradientControllerConfig-concurrency_limit_params">
+<td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-GradientControllerConfig-concurrency_limit_params">concurrencyLimitParams</a></code></div>
+<div class="type"><a href="#AdaptiveConcurrency-GradientControllerConfig-ConcurrencyLimitCalculationParams">ConcurrencyLimitCalculationParams</a></div>
+<div class="required">Required</div>
+</div></td>
+<td>
+<p>Parameters for periodic recalculation of the concurrency limit.</p>
+
+</td>
+</tr>
+<tr id="AdaptiveConcurrency-GradientControllerConfig-min_rtt_calc_params">
+<td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-GradientControllerConfig-min_rtt_calc_params">minRttCalcParams</a></code></div>
+<div class="type"><a href="#AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams">MinimumRTTCalculationParams</a></div>
+<div class="required">Required</div>
+</div></td>
+<td>
+<p>Parameters for periodic minRTT recalculation.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h4 id="AdaptiveConcurrency-GradientControllerConfig-ConcurrencyLimitCalculationParams">ConcurrencyLimitCalculationParams</h4>
+<section>
+<p>Parameters controlling the periodic recalculation of the concurrency limit
+from sampled request latencies.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AdaptiveConcurrency-GradientControllerConfig-ConcurrencyLimitCalculationParams-max_concurrency_limit">
+<td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-GradientControllerConfig-ConcurrencyLimitCalculationParams-max_concurrency_limit">maxConcurrencyLimit</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>The allowed upper-bound on the calculated concurrency limit. Defaults to 1000.</p>
+<p>This acts as a safety cap on the gradient algorithm&rsquo;s output. The algorithm
+dynamically adjusts the concurrency limit based on measured latency (via the
+gradient formula: new_limit = old_limit * gradient + headroom), but the result
+will never exceed this value. The gradient calculation itself is not influenced
+by this cap.</p>
+<p>In most cases the default of 1000 is sufficient, since the algorithm will
+self-regulate well below this ceiling based on observed latencies. Consider
+lowering it only if you know the upstream&rsquo;s maximum sustainable concurrency
+and want a hard safety net beyond the algorithm&rsquo;s own backoff behavior.
+Setting this too low may prevent the algorithm from reaching the upstream&rsquo;s
+true capacity.</p>
+<p>Monitor the <code>concurrency_limit</code> gauge to observe where the algorithm settles
+under normal load.</p>
+
+</td>
+</tr>
+<tr id="AdaptiveConcurrency-GradientControllerConfig-ConcurrencyLimitCalculationParams-concurrency_update_interval">
+<td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-GradientControllerConfig-ConcurrencyLimitCalculationParams-concurrency_update_interval">concurrencyUpdateInterval</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></div>
+<div class="required">Required</div>
+</div></td>
+<td>
+<p>The period of time samples are taken to recalculate the concurrency limit.
+This is required.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h4 id="AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams">MinimumRTTCalculationParams</h4>
+<section>
+<p>Parameters controlling how the minRTT (baseline latency) is determined.
+The minRTT is periodically measured by allowing only a very low outstanding
+request count to an upstream cluster and measuring the latency under
+these ideal conditions.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-dynamic_sampling" class="oneof oneof-start">
+<td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-dynamic_sampling">dynamicSampling</a></code></div>
+<div class="type"><a href="#AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-DynamicSampling">DynamicSampling (oneof)</a></div>
+</div></td>
+<td>
+<p>Periodically sample the minRTT by entering a low-concurrency
+measurement window. Use this when the upstream&rsquo;s baseline latency
+may change over time.</p>
+
+</td>
+</tr>
+<tr id="AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-fixed_latency" class="oneof">
+<td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-fixed_latency">fixedLatency</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration (oneof)</a></div>
+</div></td>
+<td>
+<p>A fixed baseline round-trip time (minRTT) for the upstream, specified
+as a duration (e.g., <code>5ms</code>, <code>10ms</code>). Must be positive. This tells the
+gradient controller &ldquo;assume the upstream responds in this time under
+ideal conditions&rdquo; and skips dynamic sampling entirely.</p>
+<p>The gradient algorithm uses minRTT as the reference in its formula:
+gradient = (minRTT + buffer) / sampleRTT
+new_limit = old_limit × gradient + headroom
+where buffer = minRTT × buffer_percent, and headroom = sqrt(limit).
+So if measured latency rises above minRTT + buffer, the concurrency
+limit is reduced; if it stays near minRTT, the limit grows.</p>
+<p>Use this when the baseline latency of the upstream is well-known and
+stable, to avoid the periodic low-concurrency measurement windows
+that dynamic sampling requires.</p>
+
+</td>
+</tr>
+<tr id="AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-buffer">
+<td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-buffer">buffer</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>Amount added to the measured minRTT to add stability to the concurrency
+limit during natural variability in latency. This is expressed as a
+percentage of the measured value and can be adjusted to allow more or
+less tolerance to the sampled latency values. Defaults to 25%.
+Value must be in the range [0, 100].
+This applies regardless of whether minRTT is dynamically sampled or fixed.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h5 id="AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-DynamicSampling">DynamicSampling</h5>
+<section>
+<p>Parameters for dynamically sampling the minRTT by periodically entering
+a low-concurrency measurement window.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-DynamicSampling-interval">
+<td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-DynamicSampling-interval">interval</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></div>
+</div></td>
+<td>
+<p>The time interval between recalculating the minimum request round-trip
+time. Must be &gt;= 1ms.</p>
+<p>When set, the controller periodically enters a low-concurrency measurement
+window (pinned to <code>min_concurrency</code>) to re-measure the baseline latency.
+During this window, throughput is temporarily reduced, so longer intervals
+reduce overhead but may react slower to changes in upstream performance.</p>
+
+</td>
+</tr>
+<tr id="AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-DynamicSampling-request_count">
+<td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-DynamicSampling-request_count">requestCount</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>The number of requests to aggregate/sample during the minRTT
+recalculation window before updating. Defaults to 50.</p>
+
+</td>
+</tr>
+<tr id="AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-DynamicSampling-jitter">
+<td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-DynamicSampling-jitter">jitter</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>Randomized time delta that will be introduced to the start of the minRTT
+calculation window. This is represented as a percentage of the interval
+duration. Defaults to 15%. Value must be in the range [0, 100].
+This is recommended to prevent all hosts in a cluster from
+being in a minRTT calculation window at the same time.</p>
+
+</td>
+</tr>
+<tr id="AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-DynamicSampling-min_concurrency">
+<td><div class="field"><div class="name"><code><a href="#AdaptiveConcurrency-GradientControllerConfig-MinimumRTTCalculationParams-DynamicSampling-min_concurrency">minConcurrency</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>The concurrency limit pinned during the minRTT measurement window.
+Defaults to 3.</p>
+<p>During the measurement window, the filter drops the concurrency limit to
+this value to measure latency under near-idle conditions. Requests that
+exceed this limit during the window are rejected with the configured
+status code (default 503). The window lasts until <code>request_count</code> samples
+are collected.</p>
+<p>To mitigate 503s during measurement windows:</p>
+<ul>
+<li>Use <code>jitter</code> to stagger measurement windows across hosts so they
+don&rsquo;t all enter the window simultaneously.</li>
+<li>Configure retries (with the <code>previous_hosts</code> retry predicate) so
+rejected requests are retried on a different host not currently in
+a measurement window.</li>
+<li>Alternatively, use <code>fixed_latency</code> instead to skip dynamic
+measurement entirely if the baseline latency is known.</li>
+</ul>
 
 </td>
 </tr>

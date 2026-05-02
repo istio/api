@@ -384,7 +384,7 @@ func (x ClientTLSSettings_TLSmode) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use ClientTLSSettings_TLSmode.Descriptor instead.
 func (ClientTLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{7, 0}
+	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{8, 0}
 }
 
 // DestinationRule defines policies that apply to traffic intended for a service
@@ -556,9 +556,36 @@ type TrafficPolicy struct {
 	// The upstream PROXY protocol settings.
 	ProxyProtocol *TrafficPolicy_ProxyProtocol `protobuf:"bytes,7,opt,name=proxy_protocol,json=proxyProtocol,proto3" json:"proxy_protocol,omitempty"`
 	// Specifies a limit on concurrent retries in relation to the number of active requests.
-	RetryBudget   *TrafficPolicy_RetryBudget `protobuf:"bytes,8,opt,name=retry_budget,json=retryBudget,proto3" json:"retry_budget,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	RetryBudget *TrafficPolicy_RetryBudget `protobuf:"bytes,8,opt,name=retry_budget,json=retryBudget,proto3" json:"retry_budget,omitempty"`
+	// Adaptive concurrency settings for dynamically adjusting the allowed number of
+	// outstanding requests based on sampled latencies.
+	//
+	// Note: This applies only to HTTP/1.1 and HTTP/2 unary request-response
+	// traffic and is enforced on the server-side (inbound) proxy. It does not
+	// apply to TCP connections, gRPC streaming, or WebSocket connections, since
+	// the filter relies on measuring individual request round-trip latencies.
+	//
+	// This operates independently from circuit breaker thresholds (e.g.
+	// max_connections). Both mechanisms can reject requests, but they act at
+	// different layers: adaptive concurrency limits outstanding requests at
+	// the HTTP filter level before routing, while circuit breakers limit
+	// connections and requests at the cluster connection pool level. When both
+	// are configured, the more restrictive limit is the effective constraint.
+	//
+	// Requests rejected by adaptive concurrency will NOT be reflected in
+	// circuit breaker statistics (e.g. upstream_cx_overflow). They are tracked
+	// separately via the adaptive_concurrency.gradient_controller.rq_blocked
+	// counter.
+	//
+	// Unlike circuit breaker overflows, responses rejected by adaptive concurrency
+	// will NOT include the x-envoy-overloaded header. Clients or sidecars that
+	// rely on this header to detect overload-induced 503s (e.g. for retry
+	// decisions or backoff) should be aware of this difference. The response body
+	// will be "reached concurrency limit" and the response details will be
+	// "reached_concurrency_limit".
+	AdaptiveConcurrency *AdaptiveConcurrency `protobuf:"bytes,9,opt,name=adaptive_concurrency,json=adaptiveConcurrency,proto3" json:"adaptive_concurrency,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *TrafficPolicy) Reset() {
@@ -643,6 +670,13 @@ func (x *TrafficPolicy) GetProxyProtocol() *TrafficPolicy_ProxyProtocol {
 func (x *TrafficPolicy) GetRetryBudget() *TrafficPolicy_RetryBudget {
 	if x != nil {
 		return x.RetryBudget
+	}
+	return nil
+}
+
+func (x *TrafficPolicy) GetAdaptiveConcurrency() *AdaptiveConcurrency {
+	if x != nil {
+		return x.AdaptiveConcurrency
 	}
 	return nil
 }
@@ -1289,6 +1323,149 @@ func (x *OutlierDetection) GetMinHealthPercent() int32 {
 	return 0
 }
 
+// Configures automatic concurrency limits for requests to an upstream service.
+// When enabled, the sidecar proxy will dynamically calculate and enforce a
+// maximum number of outstanding requests allowed to the destination based on
+// periodic latency sampling. If the measured latency increases relative to the
+// baseline (minRTT), the concurrency limit is reduced; if latency remains
+// stable, the limit is gradually increased. Requests that exceed the current
+// concurrency limit are immediately rejected with the configured HTTP status
+// code (default 503) without being forwarded to the upstream.
+//
+// This is useful for protecting upstream services from being overwhelmed during
+// load spikes or degraded performance, without requiring operators to manually
+// set fixed concurrency thresholds.
+//
+// **Important:** When using dynamic sampling (`dynamic_sampling`), the controller
+// periodically enters a minRTT measurement window where the concurrency limit
+// drops to `min_concurrency` (default 3). During this window, requests exceeding
+// that limit are rejected with 503. This can cause a noticeable spike in errors,
+// especially under high traffic. To mitigate this:
+//   - Enable client-side retries for 503s, ideally with the `previous_hosts`
+//     retry predicate so rejected requests are retried on a different host
+//     that is not in a measurement window.
+//   - Use `jitter` to stagger measurement windows across hosts.
+//   - Consider using `fixed_latency` instead of `dynamic_sampling` if the
+//     upstream's baseline latency is well-known and stable.
+//
+// See https://github.com/envoyproxy/envoy/issues/18152 for a real-world
+// example of 503s during minRTT calculation windows.
+//
+// See Envoy's
+// [adaptive concurrency filter](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/adaptive_concurrency_filter)
+// for more details.
+//
+// The following example enables adaptive concurrency limiting for my-service,
+// using the gradient controller to automatically adjust the concurrency limit
+// based on latency measurements taken every 60 seconds:
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1
+// kind: DestinationRule
+// metadata:
+//
+//	name: my-service-adaptive
+//
+// spec:
+//
+//	host: my-service.default.svc.cluster.local
+//	trafficPolicy:
+//	  adaptiveConcurrency:
+//	    gradientControllerConfig:
+//	      sampleAggregatePercentile: 50
+//	      concurrencyLimitParams:
+//	        maxConcurrencyLimit: 1000
+//	        concurrencyUpdateInterval: 100ms
+//	      minRttCalcParams:
+//	        dynamicSampling:
+//	          interval: 60s
+//	          requestCount: 50
+//	          jitter: 10
+//	          minConcurrency: 3
+//	        buffer: 25
+//	    concurrencyLimitExceededStatus: 503
+//
+// ```
+type AdaptiveConcurrency struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to ConcurrencyControllerConfig:
+	//
+	//	*AdaptiveConcurrency_GradientControllerConfig_
+	ConcurrencyControllerConfig isAdaptiveConcurrency_ConcurrencyControllerConfig `protobuf_oneof:"concurrency_controller_config"`
+	// Custom HTTP response status code to the downstream client when
+	// the concurrency limit has been exceeded.
+	// Defaults to 503 (Service Unavailable).
+	// Note: If this is set to < 400, 503 will be used instead.
+	ConcurrencyLimitExceededStatus uint32 `protobuf:"varint,3,opt,name=concurrency_limit_exceeded_status,json=concurrencyLimitExceededStatus,proto3" json:"concurrency_limit_exceeded_status,omitempty"`
+	unknownFields                  protoimpl.UnknownFields
+	sizeCache                      protoimpl.SizeCache
+}
+
+func (x *AdaptiveConcurrency) Reset() {
+	*x = AdaptiveConcurrency{}
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdaptiveConcurrency) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdaptiveConcurrency) ProtoMessage() {}
+
+func (x *AdaptiveConcurrency) ProtoReflect() protoreflect.Message {
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdaptiveConcurrency.ProtoReflect.Descriptor instead.
+func (*AdaptiveConcurrency) Descriptor() ([]byte, []int) {
+	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *AdaptiveConcurrency) GetConcurrencyControllerConfig() isAdaptiveConcurrency_ConcurrencyControllerConfig {
+	if x != nil {
+		return x.ConcurrencyControllerConfig
+	}
+	return nil
+}
+
+func (x *AdaptiveConcurrency) GetGradientControllerConfig() *AdaptiveConcurrency_GradientControllerConfig {
+	if x != nil {
+		if x, ok := x.ConcurrencyControllerConfig.(*AdaptiveConcurrency_GradientControllerConfig_); ok {
+			return x.GradientControllerConfig
+		}
+	}
+	return nil
+}
+
+func (x *AdaptiveConcurrency) GetConcurrencyLimitExceededStatus() uint32 {
+	if x != nil {
+		return x.ConcurrencyLimitExceededStatus
+	}
+	return 0
+}
+
+type isAdaptiveConcurrency_ConcurrencyControllerConfig interface {
+	isAdaptiveConcurrency_ConcurrencyControllerConfig()
+}
+
+type AdaptiveConcurrency_GradientControllerConfig_ struct {
+	// Gradient concurrency control will be used.
+	GradientControllerConfig *AdaptiveConcurrency_GradientControllerConfig `protobuf:"bytes,1,opt,name=gradient_controller_config,json=gradientControllerConfig,proto3,oneof"`
+}
+
+func (*AdaptiveConcurrency_GradientControllerConfig_) isAdaptiveConcurrency_ConcurrencyControllerConfig() {
+}
+
 // SSL/TLS related settings for upstream connections. See Envoy's [TLS
 // context](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto.html#common-tls-configuration)
 // for more details. These settings are common to both HTTP and TCP upstreams.
@@ -1420,7 +1597,7 @@ type ClientTLSSettings struct {
 
 func (x *ClientTLSSettings) Reset() {
 	*x = ClientTLSSettings{}
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[7]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1432,7 +1609,7 @@ func (x *ClientTLSSettings) String() string {
 func (*ClientTLSSettings) ProtoMessage() {}
 
 func (x *ClientTLSSettings) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[7]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1445,7 +1622,7 @@ func (x *ClientTLSSettings) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClientTLSSettings.ProtoReflect.Descriptor instead.
 func (*ClientTLSSettings) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{7}
+	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *ClientTLSSettings) GetMode() ClientTLSSettings_TLSmode {
@@ -1644,7 +1821,7 @@ type LocalityLoadBalancerSetting struct {
 
 func (x *LocalityLoadBalancerSetting) Reset() {
 	*x = LocalityLoadBalancerSetting{}
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[8]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1656,7 +1833,7 @@ func (x *LocalityLoadBalancerSetting) String() string {
 func (*LocalityLoadBalancerSetting) ProtoMessage() {}
 
 func (x *LocalityLoadBalancerSetting) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[8]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1669,7 +1846,7 @@ func (x *LocalityLoadBalancerSetting) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LocalityLoadBalancerSetting.ProtoReflect.Descriptor instead.
 func (*LocalityLoadBalancerSetting) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{8}
+	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *LocalityLoadBalancerSetting) GetDistribute() []*LocalityLoadBalancerSetting_Distribute {
@@ -1720,7 +1897,7 @@ type TrafficPolicy_PortTrafficPolicy struct {
 
 func (x *TrafficPolicy_PortTrafficPolicy) Reset() {
 	*x = TrafficPolicy_PortTrafficPolicy{}
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[9]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1732,7 +1909,7 @@ func (x *TrafficPolicy_PortTrafficPolicy) String() string {
 func (*TrafficPolicy_PortTrafficPolicy) ProtoMessage() {}
 
 func (x *TrafficPolicy_PortTrafficPolicy) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[9]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1805,7 +1982,7 @@ type TrafficPolicy_TunnelSettings struct {
 
 func (x *TrafficPolicy_TunnelSettings) Reset() {
 	*x = TrafficPolicy_TunnelSettings{}
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[10]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1817,7 +1994,7 @@ func (x *TrafficPolicy_TunnelSettings) String() string {
 func (*TrafficPolicy_TunnelSettings) ProtoMessage() {}
 
 func (x *TrafficPolicy_TunnelSettings) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[10]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1865,7 +2042,7 @@ type TrafficPolicy_ProxyProtocol struct {
 
 func (x *TrafficPolicy_ProxyProtocol) Reset() {
 	*x = TrafficPolicy_ProxyProtocol{}
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[11]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1877,7 +2054,7 @@ func (x *TrafficPolicy_ProxyProtocol) String() string {
 func (*TrafficPolicy_ProxyProtocol) ProtoMessage() {}
 
 func (x *TrafficPolicy_ProxyProtocol) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[11]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1923,7 +2100,7 @@ type TrafficPolicy_RetryBudget struct {
 
 func (x *TrafficPolicy_RetryBudget) Reset() {
 	*x = TrafficPolicy_RetryBudget{}
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[12]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1935,7 +2112,7 @@ func (x *TrafficPolicy_RetryBudget) String() string {
 func (*TrafficPolicy_RetryBudget) ProtoMessage() {}
 
 func (x *TrafficPolicy_RetryBudget) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[12]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2013,7 +2190,7 @@ type LoadBalancerSettings_ConsistentHashLB struct {
 
 func (x *LoadBalancerSettings_ConsistentHashLB) Reset() {
 	*x = LoadBalancerSettings_ConsistentHashLB{}
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[14]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2025,7 +2202,7 @@ func (x *LoadBalancerSettings_ConsistentHashLB) String() string {
 func (*LoadBalancerSettings_ConsistentHashLB) ProtoMessage() {}
 
 func (x *LoadBalancerSettings_ConsistentHashLB) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[14]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2188,7 +2365,7 @@ type LoadBalancerSettings_ConsistentHashLB_RingHash struct {
 
 func (x *LoadBalancerSettings_ConsistentHashLB_RingHash) Reset() {
 	*x = LoadBalancerSettings_ConsistentHashLB_RingHash{}
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[15]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2200,7 +2377,7 @@ func (x *LoadBalancerSettings_ConsistentHashLB_RingHash) String() string {
 func (*LoadBalancerSettings_ConsistentHashLB_RingHash) ProtoMessage() {}
 
 func (x *LoadBalancerSettings_ConsistentHashLB_RingHash) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[15]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2237,7 +2414,7 @@ type LoadBalancerSettings_ConsistentHashLB_MagLev struct {
 
 func (x *LoadBalancerSettings_ConsistentHashLB_MagLev) Reset() {
 	*x = LoadBalancerSettings_ConsistentHashLB_MagLev{}
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[16]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2249,7 +2426,7 @@ func (x *LoadBalancerSettings_ConsistentHashLB_MagLev) String() string {
 func (*LoadBalancerSettings_ConsistentHashLB_MagLev) ProtoMessage() {}
 
 func (x *LoadBalancerSettings_ConsistentHashLB_MagLev) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[16]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2293,7 +2470,7 @@ type LoadBalancerSettings_ConsistentHashLB_HTTPCookie struct {
 
 func (x *LoadBalancerSettings_ConsistentHashLB_HTTPCookie) Reset() {
 	*x = LoadBalancerSettings_ConsistentHashLB_HTTPCookie{}
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[17]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2305,7 +2482,7 @@ func (x *LoadBalancerSettings_ConsistentHashLB_HTTPCookie) String() string {
 func (*LoadBalancerSettings_ConsistentHashLB_HTTPCookie) ProtoMessage() {}
 
 func (x *LoadBalancerSettings_ConsistentHashLB_HTTPCookie) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[17]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2362,7 +2539,7 @@ type LoadBalancerSettings_ConsistentHashLB_HTTPCookie_Attribute struct {
 
 func (x *LoadBalancerSettings_ConsistentHashLB_HTTPCookie_Attribute) Reset() {
 	*x = LoadBalancerSettings_ConsistentHashLB_HTTPCookie_Attribute{}
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[18]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2374,7 +2551,7 @@ func (x *LoadBalancerSettings_ConsistentHashLB_HTTPCookie_Attribute) String() st
 func (*LoadBalancerSettings_ConsistentHashLB_HTTPCookie_Attribute) ProtoMessage() {}
 
 func (x *LoadBalancerSettings_ConsistentHashLB_HTTPCookie_Attribute) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[18]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2434,7 +2611,7 @@ type ConnectionPoolSettings_TCPSettings struct {
 
 func (x *ConnectionPoolSettings_TCPSettings) Reset() {
 	*x = ConnectionPoolSettings_TCPSettings{}
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[19]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2446,7 +2623,7 @@ func (x *ConnectionPoolSettings_TCPSettings) String() string {
 func (*ConnectionPoolSettings_TCPSettings) ProtoMessage() {}
 
 func (x *ConnectionPoolSettings_TCPSettings) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[19]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2539,7 +2716,7 @@ type ConnectionPoolSettings_HTTPSettings struct {
 
 func (x *ConnectionPoolSettings_HTTPSettings) Reset() {
 	*x = ConnectionPoolSettings_HTTPSettings{}
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[20]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2551,7 +2728,7 @@ func (x *ConnectionPoolSettings_HTTPSettings) String() string {
 func (*ConnectionPoolSettings_HTTPSettings) ProtoMessage() {}
 
 func (x *ConnectionPoolSettings_HTTPSettings) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[20]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2644,7 +2821,7 @@ type ConnectionPoolSettings_TCPSettings_TcpKeepalive struct {
 
 func (x *ConnectionPoolSettings_TCPSettings_TcpKeepalive) Reset() {
 	*x = ConnectionPoolSettings_TCPSettings_TcpKeepalive{}
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[21]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2656,7 +2833,7 @@ func (x *ConnectionPoolSettings_TCPSettings_TcpKeepalive) String() string {
 func (*ConnectionPoolSettings_TCPSettings_TcpKeepalive) ProtoMessage() {}
 
 func (x *ConnectionPoolSettings_TCPSettings_TcpKeepalive) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[21]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2693,6 +2870,373 @@ func (x *ConnectionPoolSettings_TCPSettings_TcpKeepalive) GetInterval() *duratio
 	return nil
 }
 
+// Configuration parameters for the gradient concurrency controller.
+// The gradient controller makes forwarding decisions based on a periodically
+// measured ideal round-trip time (minRTT) for an upstream.
+type AdaptiveConcurrency_GradientControllerConfig struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The percentile to use when summarizing aggregated samples. Defaults to p50.
+	// Value must be in the range [0, 100].
+	SampleAggregatePercentile *wrappers.UInt32Value `protobuf:"bytes,1,opt,name=sample_aggregate_percentile,json=sampleAggregatePercentile,proto3" json:"sample_aggregate_percentile,omitempty"`
+	// Parameters for periodic recalculation of the concurrency limit.
+	ConcurrencyLimitParams *AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams `protobuf:"bytes,2,opt,name=concurrency_limit_params,json=concurrencyLimitParams,proto3" json:"concurrency_limit_params,omitempty"`
+	// Parameters for periodic minRTT recalculation.
+	MinRttCalcParams *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams `protobuf:"bytes,3,opt,name=min_rtt_calc_params,json=minRttCalcParams,proto3" json:"min_rtt_calc_params,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig) Reset() {
+	*x = AdaptiveConcurrency_GradientControllerConfig{}
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdaptiveConcurrency_GradientControllerConfig) ProtoMessage() {}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdaptiveConcurrency_GradientControllerConfig.ProtoReflect.Descriptor instead.
+func (*AdaptiveConcurrency_GradientControllerConfig) Descriptor() ([]byte, []int) {
+	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{7, 0}
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig) GetSampleAggregatePercentile() *wrappers.UInt32Value {
+	if x != nil {
+		return x.SampleAggregatePercentile
+	}
+	return nil
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig) GetConcurrencyLimitParams() *AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams {
+	if x != nil {
+		return x.ConcurrencyLimitParams
+	}
+	return nil
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig) GetMinRttCalcParams() *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams {
+	if x != nil {
+		return x.MinRttCalcParams
+	}
+	return nil
+}
+
+// Parameters controlling the periodic recalculation of the concurrency limit
+// from sampled request latencies.
+type AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The allowed upper-bound on the calculated concurrency limit. Defaults to 1000.
+	//
+	// This acts as a safety cap on the gradient algorithm's output. The algorithm
+	// dynamically adjusts the concurrency limit based on measured latency (via the
+	// gradient formula: new_limit = old_limit * gradient + headroom), but the result
+	// will never exceed this value. The gradient calculation itself is not influenced
+	// by this cap.
+	//
+	// In most cases the default of 1000 is sufficient, since the algorithm will
+	// self-regulate well below this ceiling based on observed latencies. Consider
+	// lowering it only if you know the upstream's maximum sustainable concurrency
+	// and want a hard safety net beyond the algorithm's own backoff behavior.
+	// Setting this too low may prevent the algorithm from reaching the upstream's
+	// true capacity.
+	//
+	// Monitor the `concurrency_limit` gauge to observe where the algorithm settles
+	// under normal load.
+	MaxConcurrencyLimit *wrappers.UInt32Value `protobuf:"bytes,2,opt,name=max_concurrency_limit,json=maxConcurrencyLimit,proto3" json:"max_concurrency_limit,omitempty"`
+	// The period of time samples are taken to recalculate the concurrency limit.
+	// This is required.
+	ConcurrencyUpdateInterval *duration.Duration `protobuf:"bytes,3,opt,name=concurrency_update_interval,json=concurrencyUpdateInterval,proto3" json:"concurrency_update_interval,omitempty"`
+	unknownFields             protoimpl.UnknownFields
+	sizeCache                 protoimpl.SizeCache
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams) Reset() {
+	*x = AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams{}
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams) ProtoMessage() {
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams) ProtoReflect() protoreflect.Message {
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams.ProtoReflect.Descriptor instead.
+func (*AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams) Descriptor() ([]byte, []int) {
+	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{7, 0, 0}
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams) GetMaxConcurrencyLimit() *wrappers.UInt32Value {
+	if x != nil {
+		return x.MaxConcurrencyLimit
+	}
+	return nil
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams) GetConcurrencyUpdateInterval() *duration.Duration {
+	if x != nil {
+		return x.ConcurrencyUpdateInterval
+	}
+	return nil
+}
+
+// Parameters controlling how the minRTT (baseline latency) is determined.
+// The minRTT is periodically measured by allowing only a very low outstanding
+// request count to an upstream cluster and measuring the latency under
+// these ideal conditions.
+type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Exactly one of `dynamic_sampling` or `fixed_latency` must be set.
+	//
+	// Types that are valid to be assigned to MinRttSource:
+	//
+	//	*AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling_
+	//	*AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_FixedLatency
+	MinRttSource isAdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_MinRttSource `protobuf_oneof:"min_rtt_source"`
+	// Amount added to the measured minRTT to add stability to the concurrency
+	// limit during natural variability in latency. This is expressed as a
+	// percentage of the measured value and can be adjusted to allow more or
+	// less tolerance to the sampled latency values. Defaults to 25%.
+	// Value must be in the range [0, 100].
+	// This applies regardless of whether minRTT is dynamically sampled or fixed.
+	Buffer        *wrappers.UInt32Value `protobuf:"bytes,3,opt,name=buffer,proto3" json:"buffer,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams) Reset() {
+	*x = AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams{}
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams) ProtoMessage() {}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams) ProtoReflect() protoreflect.Message {
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams.ProtoReflect.Descriptor instead.
+func (*AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams) Descriptor() ([]byte, []int) {
+	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{7, 0, 1}
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams) GetMinRttSource() isAdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_MinRttSource {
+	if x != nil {
+		return x.MinRttSource
+	}
+	return nil
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams) GetDynamicSampling() *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling {
+	if x != nil {
+		if x, ok := x.MinRttSource.(*AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling_); ok {
+			return x.DynamicSampling
+		}
+	}
+	return nil
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams) GetFixedLatency() *duration.Duration {
+	if x != nil {
+		if x, ok := x.MinRttSource.(*AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_FixedLatency); ok {
+			return x.FixedLatency
+		}
+	}
+	return nil
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams) GetBuffer() *wrappers.UInt32Value {
+	if x != nil {
+		return x.Buffer
+	}
+	return nil
+}
+
+type isAdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_MinRttSource interface {
+	isAdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_MinRttSource()
+}
+
+type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling_ struct {
+	// Periodically sample the minRTT by entering a low-concurrency
+	// measurement window. Use this when the upstream's baseline latency
+	// may change over time.
+	DynamicSampling *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling `protobuf:"bytes,1,opt,name=dynamic_sampling,json=dynamicSampling,proto3,oneof"`
+}
+
+type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_FixedLatency struct {
+	// A fixed baseline round-trip time (minRTT) for the upstream, specified
+	// as a duration (e.g., `5ms`, `10ms`). Must be positive. This tells the
+	// gradient controller "assume the upstream responds in this time under
+	// ideal conditions" and skips dynamic sampling entirely.
+	//
+	// The gradient algorithm uses minRTT as the reference in its formula:
+	//
+	//	gradient = (minRTT + buffer) / sampleRTT
+	//	new_limit = old_limit × gradient + headroom
+	//
+	// where buffer = minRTT × buffer_percent, and headroom = sqrt(limit).
+	// So if measured latency rises above minRTT + buffer, the concurrency
+	// limit is reduced; if it stays near minRTT, the limit grows.
+	//
+	// Use this when the baseline latency of the upstream is well-known and
+	// stable, to avoid the periodic low-concurrency measurement windows
+	// that dynamic sampling requires.
+	FixedLatency *duration.Duration `protobuf:"bytes,2,opt,name=fixed_latency,json=fixedLatency,proto3,oneof"`
+}
+
+func (*AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling_) isAdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_MinRttSource() {
+}
+
+func (*AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_FixedLatency) isAdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_MinRttSource() {
+}
+
+// Parameters for dynamically sampling the minRTT by periodically entering
+// a low-concurrency measurement window.
+type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The time interval between recalculating the minimum request round-trip
+	// time. Must be >= 1ms.
+	//
+	// When set, the controller periodically enters a low-concurrency measurement
+	// window (pinned to `min_concurrency`) to re-measure the baseline latency.
+	// During this window, throughput is temporarily reduced, so longer intervals
+	// reduce overhead but may react slower to changes in upstream performance.
+	Interval *duration.Duration `protobuf:"bytes,1,opt,name=interval,proto3" json:"interval,omitempty"`
+	// The number of requests to aggregate/sample during the minRTT
+	// recalculation window before updating. Defaults to 50.
+	RequestCount *wrappers.UInt32Value `protobuf:"bytes,2,opt,name=request_count,json=requestCount,proto3" json:"request_count,omitempty"`
+	// Randomized time delta that will be introduced to the start of the minRTT
+	// calculation window. This is represented as a percentage of the interval
+	// duration. Defaults to 15%. Value must be in the range [0, 100].
+	// This is recommended to prevent all hosts in a cluster from
+	// being in a minRTT calculation window at the same time.
+	Jitter *wrappers.UInt32Value `protobuf:"bytes,3,opt,name=jitter,proto3" json:"jitter,omitempty"`
+	// The concurrency limit pinned during the minRTT measurement window.
+	// Defaults to 3.
+	//
+	// During the measurement window, the filter drops the concurrency limit to
+	// this value to measure latency under near-idle conditions. Requests that
+	// exceed this limit during the window are rejected with the configured
+	// status code (default 503). The window lasts until `request_count` samples
+	// are collected.
+	//
+	// To mitigate 503s during measurement windows:
+	//   - Use `jitter` to stagger measurement windows across hosts so they
+	//     don't all enter the window simultaneously.
+	//   - Configure retries (with the `previous_hosts` retry predicate) so
+	//     rejected requests are retried on a different host not currently in
+	//     a measurement window.
+	//   - Alternatively, use `fixed_latency` instead to skip dynamic
+	//     measurement entirely if the baseline latency is known.
+	MinConcurrency *wrappers.UInt32Value `protobuf:"bytes,4,opt,name=min_concurrency,json=minConcurrency,proto3" json:"min_concurrency,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling) Reset() {
+	*x = AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling{}
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling) ProtoMessage() {
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling) ProtoReflect() protoreflect.Message {
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling.ProtoReflect.Descriptor instead.
+func (*AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling) Descriptor() ([]byte, []int) {
+	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{7, 0, 1, 0}
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling) GetInterval() *duration.Duration {
+	if x != nil {
+		return x.Interval
+	}
+	return nil
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling) GetRequestCount() *wrappers.UInt32Value {
+	if x != nil {
+		return x.RequestCount
+	}
+	return nil
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling) GetJitter() *wrappers.UInt32Value {
+	if x != nil {
+		return x.Jitter
+	}
+	return nil
+}
+
+func (x *AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling) GetMinConcurrency() *wrappers.UInt32Value {
+	if x != nil {
+		return x.MinConcurrency
+	}
+	return nil
+}
+
 // Describes how traffic originating in the 'from' zone or sub-zone is
 // distributed over a set of 'to' zones. Syntax for specifying a zone is
 // {region}/{zone}/{sub-zone} and terminal wildcards are allowed on any
@@ -2717,7 +3261,7 @@ type LocalityLoadBalancerSetting_Distribute struct {
 
 func (x *LocalityLoadBalancerSetting_Distribute) Reset() {
 	*x = LocalityLoadBalancerSetting_Distribute{}
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[22]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2729,7 +3273,7 @@ func (x *LocalityLoadBalancerSetting_Distribute) String() string {
 func (*LocalityLoadBalancerSetting_Distribute) ProtoMessage() {}
 
 func (x *LocalityLoadBalancerSetting_Distribute) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[22]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2742,7 +3286,7 @@ func (x *LocalityLoadBalancerSetting_Distribute) ProtoReflect() protoreflect.Mes
 
 // Deprecated: Use LocalityLoadBalancerSetting_Distribute.ProtoReflect.Descriptor instead.
 func (*LocalityLoadBalancerSetting_Distribute) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{8, 0}
+	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{9, 0}
 }
 
 func (x *LocalityLoadBalancerSetting_Distribute) GetFrom() string {
@@ -2779,7 +3323,7 @@ type LocalityLoadBalancerSetting_Failover struct {
 
 func (x *LocalityLoadBalancerSetting_Failover) Reset() {
 	*x = LocalityLoadBalancerSetting_Failover{}
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[23]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2791,7 +3335,7 @@ func (x *LocalityLoadBalancerSetting_Failover) String() string {
 func (*LocalityLoadBalancerSetting_Failover) ProtoMessage() {}
 
 func (x *LocalityLoadBalancerSetting_Failover) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[23]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2804,7 +3348,7 @@ func (x *LocalityLoadBalancerSetting_Failover) ProtoReflect() protoreflect.Messa
 
 // Deprecated: Use LocalityLoadBalancerSetting_Failover.ProtoReflect.Descriptor instead.
 func (*LocalityLoadBalancerSetting_Failover) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{8, 1}
+	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{9, 1}
 }
 
 func (x *LocalityLoadBalancerSetting_Failover) GetFrom() string {
@@ -2831,7 +3375,7 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\x0etraffic_policy\x18\x02 \x01(\v2(.istio.networking.v1alpha3.TrafficPolicyR\rtrafficPolicy\x12;\n" +
 	"\asubsets\x18\x03 \x03(\v2!.istio.networking.v1alpha3.SubsetR\asubsets\x12\x1b\n" +
 	"\texport_to\x18\x04 \x03(\tR\bexportTo\x12Q\n" +
-	"\x11workload_selector\x18\x05 \x01(\v2$.istio.type.v1beta1.WorkloadSelectorR\x10workloadSelector\"\xed\v\n" +
+	"\x11workload_selector\x18\x05 \x01(\v2$.istio.type.v1beta1.WorkloadSelectorR\x10workloadSelector\"\xd0\f\n" +
 	"\rTrafficPolicy\x12T\n" +
 	"\rload_balancer\x18\x01 \x01(\v2/.istio.networking.v1alpha3.LoadBalancerSettingsR\floadBalancer\x12Z\n" +
 	"\x0fconnection_pool\x18\x02 \x01(\v21.istio.networking.v1alpha3.ConnectionPoolSettingsR\x0econnectionPool\x12X\n" +
@@ -2840,7 +3384,8 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\x13port_level_settings\x18\x05 \x03(\v2:.istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicyR\x11portLevelSettings\x12O\n" +
 	"\x06tunnel\x18\x06 \x01(\v27.istio.networking.v1alpha3.TrafficPolicy.TunnelSettingsR\x06tunnel\x12]\n" +
 	"\x0eproxy_protocol\x18\a \x01(\v26.istio.networking.v1alpha3.TrafficPolicy.ProxyProtocolR\rproxyProtocol\x12W\n" +
-	"\fretry_budget\x18\b \x01(\v24.istio.networking.v1alpha3.TrafficPolicy.RetryBudgetR\vretryBudget\x1a\x9c\x03\n" +
+	"\fretry_budget\x18\b \x01(\v24.istio.networking.v1alpha3.TrafficPolicy.RetryBudgetR\vretryBudget\x12a\n" +
+	"\x14adaptive_concurrency\x18\t \x01(\v2..istio.networking.v1alpha3.AdaptiveConcurrencyR\x13adaptiveConcurrency\x1a\x9c\x03\n" +
 	"\x11PortTrafficPolicy\x12;\n" +
 	"\x04port\x18\x01 \x01(\v2'.istio.networking.v1alpha3.PortSelectorR\x04port\x12T\n" +
 	"\rload_balancer\x18\x02 \x01(\v2/.istio.networking.v1alpha3.LoadBalancerSettingsR\floadBalancer\x12Z\n" +
@@ -2955,7 +3500,28 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\binterval\x18\x02 \x01(\v2\x19.google.protobuf.DurationR\binterval\x12G\n" +
 	"\x12base_ejection_time\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\x10baseEjectionTime\x120\n" +
 	"\x14max_ejection_percent\x18\x04 \x01(\x05R\x12maxEjectionPercent\x12,\n" +
-	"\x12min_health_percent\x18\x05 \x01(\x05R\x10minHealthPercent\"\xe4\x03\n" +
+	"\x12min_health_percent\x18\x05 \x01(\x05R\x10minHealthPercent\"\xfe\v\n" +
+	"\x13AdaptiveConcurrency\x12\x87\x01\n" +
+	"\x1agradient_controller_config\x18\x01 \x01(\v2G.istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfigH\x00R\x18gradientControllerConfig\x12I\n" +
+	"!concurrency_limit_exceeded_status\x18\x03 \x01(\rR\x1econcurrencyLimitExceededStatus\x1a\xf0\t\n" +
+	"\x18GradientControllerConfig\x12\\\n" +
+	"\x1bsample_aggregate_percentile\x18\x01 \x01(\v2\x1c.google.protobuf.UInt32ValueR\x19sampleAggregatePercentile\x12\xa9\x01\n" +
+	"\x18concurrency_limit_params\x18\x02 \x01(\v2i.istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.ConcurrencyLimitCalculationParamsB\x04\xe2A\x01\x02R\x16concurrencyLimitParams\x12\x98\x01\n" +
+	"\x13min_rtt_calc_params\x18\x03 \x01(\v2c.istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParamsB\x04\xe2A\x01\x02R\x10minRttCalcParams\x1a\xd6\x01\n" +
+	"!ConcurrencyLimitCalculationParams\x12P\n" +
+	"\x15max_concurrency_limit\x18\x02 \x01(\v2\x1c.google.protobuf.UInt32ValueR\x13maxConcurrencyLimit\x12_\n" +
+	"\x1bconcurrency_update_interval\x18\x03 \x01(\v2\x19.google.protobuf.DurationB\x04\xe2A\x01\x02R\x19concurrencyUpdateInterval\x1a\xd5\x04\n" +
+	"\x1bMinimumRTTCalculationParams\x12\xa0\x01\n" +
+	"\x10dynamic_sampling\x18\x01 \x01(\v2s.istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams.DynamicSamplingH\x00R\x0fdynamicSampling\x12@\n" +
+	"\rfixed_latency\x18\x02 \x01(\v2\x19.google.protobuf.DurationH\x00R\ffixedLatency\x124\n" +
+	"\x06buffer\x18\x03 \x01(\v2\x1c.google.protobuf.UInt32ValueR\x06buffer\x1a\x88\x02\n" +
+	"\x0fDynamicSampling\x125\n" +
+	"\binterval\x18\x01 \x01(\v2\x19.google.protobuf.DurationR\binterval\x12A\n" +
+	"\rrequest_count\x18\x02 \x01(\v2\x1c.google.protobuf.UInt32ValueR\frequestCount\x124\n" +
+	"\x06jitter\x18\x03 \x01(\v2\x1c.google.protobuf.UInt32ValueR\x06jitter\x12E\n" +
+	"\x0fmin_concurrency\x18\x04 \x01(\v2\x1c.google.protobuf.UInt32ValueR\x0eminConcurrencyB\x10\n" +
+	"\x0emin_rtt_sourceB\x1f\n" +
+	"\x1dconcurrency_controller_config\"\xe4\x03\n" +
 	"\x11ClientTLSSettings\x12H\n" +
 	"\x04mode\x18\x01 \x01(\x0e24.istio.networking.v1alpha3.ClientTLSSettings.TLSmodeR\x04mode\x12-\n" +
 	"\x12client_certificate\x18\x02 \x01(\tR\x11clientCertificate\x12\x1f\n" +
@@ -3005,7 +3571,7 @@ func file_networking_v1alpha3_destination_rule_proto_rawDescGZIP() []byte {
 }
 
 var file_networking_v1alpha3_destination_rule_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_networking_v1alpha3_destination_rule_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
+var file_networking_v1alpha3_destination_rule_proto_msgTypes = make([]protoimpl.MessageInfo, 30)
 var file_networking_v1alpha3_destination_rule_proto_goTypes = []any{
 	(TrafficPolicy_ProxyProtocol_VERSION)(0),                           // 0: istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol.VERSION
 	(LoadBalancerSettings_SimpleLB)(0),                                 // 1: istio.networking.v1alpha3.LoadBalancerSettings.SimpleLB
@@ -3018,91 +3584,110 @@ var file_networking_v1alpha3_destination_rule_proto_goTypes = []any{
 	(*WarmupConfiguration)(nil),                                        // 8: istio.networking.v1alpha3.WarmupConfiguration
 	(*ConnectionPoolSettings)(nil),                                     // 9: istio.networking.v1alpha3.ConnectionPoolSettings
 	(*OutlierDetection)(nil),                                           // 10: istio.networking.v1alpha3.OutlierDetection
-	(*ClientTLSSettings)(nil),                                          // 11: istio.networking.v1alpha3.ClientTLSSettings
-	(*LocalityLoadBalancerSetting)(nil),                                // 12: istio.networking.v1alpha3.LocalityLoadBalancerSetting
-	(*TrafficPolicy_PortTrafficPolicy)(nil),                            // 13: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy
-	(*TrafficPolicy_TunnelSettings)(nil),                               // 14: istio.networking.v1alpha3.TrafficPolicy.TunnelSettings
-	(*TrafficPolicy_ProxyProtocol)(nil),                                // 15: istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol
-	(*TrafficPolicy_RetryBudget)(nil),                                  // 16: istio.networking.v1alpha3.TrafficPolicy.RetryBudget
-	nil,                                                                // 17: istio.networking.v1alpha3.Subset.LabelsEntry
-	(*LoadBalancerSettings_ConsistentHashLB)(nil),                      // 18: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB
-	(*LoadBalancerSettings_ConsistentHashLB_RingHash)(nil),             // 19: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.RingHash
-	(*LoadBalancerSettings_ConsistentHashLB_MagLev)(nil),               // 20: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.MagLev
-	(*LoadBalancerSettings_ConsistentHashLB_HTTPCookie)(nil),           // 21: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie
-	(*LoadBalancerSettings_ConsistentHashLB_HTTPCookie_Attribute)(nil), // 22: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.Attribute
-	(*ConnectionPoolSettings_TCPSettings)(nil),                         // 23: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings
-	(*ConnectionPoolSettings_HTTPSettings)(nil),                        // 24: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings
-	(*ConnectionPoolSettings_TCPSettings_TcpKeepalive)(nil),            // 25: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive
-	(*LocalityLoadBalancerSetting_Distribute)(nil),                     // 26: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute
-	(*LocalityLoadBalancerSetting_Failover)(nil),                       // 27: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Failover
-	nil,                              // 28: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.ToEntry
-	(*v1beta1.WorkloadSelector)(nil), // 29: istio.type.v1beta1.WorkloadSelector
-	(*duration.Duration)(nil),        // 30: google.protobuf.Duration
-	(*wrappers.DoubleValue)(nil),     // 31: google.protobuf.DoubleValue
-	(*wrappers.UInt32Value)(nil),     // 32: google.protobuf.UInt32Value
-	(*wrappers.BoolValue)(nil),       // 33: google.protobuf.BoolValue
-	(*PortSelector)(nil),             // 34: istio.networking.v1alpha3.PortSelector
+	(*AdaptiveConcurrency)(nil),                                        // 11: istio.networking.v1alpha3.AdaptiveConcurrency
+	(*ClientTLSSettings)(nil),                                          // 12: istio.networking.v1alpha3.ClientTLSSettings
+	(*LocalityLoadBalancerSetting)(nil),                                // 13: istio.networking.v1alpha3.LocalityLoadBalancerSetting
+	(*TrafficPolicy_PortTrafficPolicy)(nil),                            // 14: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy
+	(*TrafficPolicy_TunnelSettings)(nil),                               // 15: istio.networking.v1alpha3.TrafficPolicy.TunnelSettings
+	(*TrafficPolicy_ProxyProtocol)(nil),                                // 16: istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol
+	(*TrafficPolicy_RetryBudget)(nil),                                  // 17: istio.networking.v1alpha3.TrafficPolicy.RetryBudget
+	nil,                                                                // 18: istio.networking.v1alpha3.Subset.LabelsEntry
+	(*LoadBalancerSettings_ConsistentHashLB)(nil),                      // 19: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB
+	(*LoadBalancerSettings_ConsistentHashLB_RingHash)(nil),             // 20: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.RingHash
+	(*LoadBalancerSettings_ConsistentHashLB_MagLev)(nil),               // 21: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.MagLev
+	(*LoadBalancerSettings_ConsistentHashLB_HTTPCookie)(nil),           // 22: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie
+	(*LoadBalancerSettings_ConsistentHashLB_HTTPCookie_Attribute)(nil), // 23: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.Attribute
+	(*ConnectionPoolSettings_TCPSettings)(nil),                         // 24: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings
+	(*ConnectionPoolSettings_HTTPSettings)(nil),                        // 25: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings
+	(*ConnectionPoolSettings_TCPSettings_TcpKeepalive)(nil),            // 26: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive
+	(*AdaptiveConcurrency_GradientControllerConfig)(nil),               // 27: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig
+	(*AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams)(nil),           // 28: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.ConcurrencyLimitCalculationParams
+	(*AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams)(nil),                 // 29: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams
+	(*AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling)(nil), // 30: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams.DynamicSampling
+	(*LocalityLoadBalancerSetting_Distribute)(nil),                                                   // 31: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute
+	(*LocalityLoadBalancerSetting_Failover)(nil),                                                     // 32: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Failover
+	nil,                              // 33: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.ToEntry
+	(*v1beta1.WorkloadSelector)(nil), // 34: istio.type.v1beta1.WorkloadSelector
+	(*duration.Duration)(nil),        // 35: google.protobuf.Duration
+	(*wrappers.DoubleValue)(nil),     // 36: google.protobuf.DoubleValue
+	(*wrappers.UInt32Value)(nil),     // 37: google.protobuf.UInt32Value
+	(*wrappers.BoolValue)(nil),       // 38: google.protobuf.BoolValue
+	(*PortSelector)(nil),             // 39: istio.networking.v1alpha3.PortSelector
 }
 var file_networking_v1alpha3_destination_rule_proto_depIdxs = []int32{
 	5,  // 0: istio.networking.v1alpha3.DestinationRule.traffic_policy:type_name -> istio.networking.v1alpha3.TrafficPolicy
 	6,  // 1: istio.networking.v1alpha3.DestinationRule.subsets:type_name -> istio.networking.v1alpha3.Subset
-	29, // 2: istio.networking.v1alpha3.DestinationRule.workload_selector:type_name -> istio.type.v1beta1.WorkloadSelector
+	34, // 2: istio.networking.v1alpha3.DestinationRule.workload_selector:type_name -> istio.type.v1beta1.WorkloadSelector
 	7,  // 3: istio.networking.v1alpha3.TrafficPolicy.load_balancer:type_name -> istio.networking.v1alpha3.LoadBalancerSettings
 	9,  // 4: istio.networking.v1alpha3.TrafficPolicy.connection_pool:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings
 	10, // 5: istio.networking.v1alpha3.TrafficPolicy.outlier_detection:type_name -> istio.networking.v1alpha3.OutlierDetection
-	11, // 6: istio.networking.v1alpha3.TrafficPolicy.tls:type_name -> istio.networking.v1alpha3.ClientTLSSettings
-	13, // 7: istio.networking.v1alpha3.TrafficPolicy.port_level_settings:type_name -> istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy
-	14, // 8: istio.networking.v1alpha3.TrafficPolicy.tunnel:type_name -> istio.networking.v1alpha3.TrafficPolicy.TunnelSettings
-	15, // 9: istio.networking.v1alpha3.TrafficPolicy.proxy_protocol:type_name -> istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol
-	16, // 10: istio.networking.v1alpha3.TrafficPolicy.retry_budget:type_name -> istio.networking.v1alpha3.TrafficPolicy.RetryBudget
-	17, // 11: istio.networking.v1alpha3.Subset.labels:type_name -> istio.networking.v1alpha3.Subset.LabelsEntry
-	5,  // 12: istio.networking.v1alpha3.Subset.traffic_policy:type_name -> istio.networking.v1alpha3.TrafficPolicy
-	1,  // 13: istio.networking.v1alpha3.LoadBalancerSettings.simple:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.SimpleLB
-	18, // 14: istio.networking.v1alpha3.LoadBalancerSettings.consistent_hash:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB
-	12, // 15: istio.networking.v1alpha3.LoadBalancerSettings.locality_lb_setting:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting
-	30, // 16: istio.networking.v1alpha3.LoadBalancerSettings.warmup_duration_secs:type_name -> google.protobuf.Duration
-	8,  // 17: istio.networking.v1alpha3.LoadBalancerSettings.warmup:type_name -> istio.networking.v1alpha3.WarmupConfiguration
-	30, // 18: istio.networking.v1alpha3.WarmupConfiguration.duration:type_name -> google.protobuf.Duration
-	31, // 19: istio.networking.v1alpha3.WarmupConfiguration.minimum_percent:type_name -> google.protobuf.DoubleValue
-	31, // 20: istio.networking.v1alpha3.WarmupConfiguration.aggression:type_name -> google.protobuf.DoubleValue
-	23, // 21: istio.networking.v1alpha3.ConnectionPoolSettings.tcp:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings
-	24, // 22: istio.networking.v1alpha3.ConnectionPoolSettings.http:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings
-	32, // 23: istio.networking.v1alpha3.OutlierDetection.consecutive_local_origin_failures:type_name -> google.protobuf.UInt32Value
-	32, // 24: istio.networking.v1alpha3.OutlierDetection.consecutive_gateway_errors:type_name -> google.protobuf.UInt32Value
-	32, // 25: istio.networking.v1alpha3.OutlierDetection.consecutive_5xx_errors:type_name -> google.protobuf.UInt32Value
-	30, // 26: istio.networking.v1alpha3.OutlierDetection.interval:type_name -> google.protobuf.Duration
-	30, // 27: istio.networking.v1alpha3.OutlierDetection.base_ejection_time:type_name -> google.protobuf.Duration
-	3,  // 28: istio.networking.v1alpha3.ClientTLSSettings.mode:type_name -> istio.networking.v1alpha3.ClientTLSSettings.TLSmode
-	33, // 29: istio.networking.v1alpha3.ClientTLSSettings.insecure_skip_verify:type_name -> google.protobuf.BoolValue
-	26, // 30: istio.networking.v1alpha3.LocalityLoadBalancerSetting.distribute:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute
-	27, // 31: istio.networking.v1alpha3.LocalityLoadBalancerSetting.failover:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Failover
-	33, // 32: istio.networking.v1alpha3.LocalityLoadBalancerSetting.enabled:type_name -> google.protobuf.BoolValue
-	34, // 33: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.port:type_name -> istio.networking.v1alpha3.PortSelector
-	7,  // 34: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.load_balancer:type_name -> istio.networking.v1alpha3.LoadBalancerSettings
-	9,  // 35: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.connection_pool:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings
-	10, // 36: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.outlier_detection:type_name -> istio.networking.v1alpha3.OutlierDetection
-	11, // 37: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.tls:type_name -> istio.networking.v1alpha3.ClientTLSSettings
-	0,  // 38: istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol.version:type_name -> istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol.VERSION
-	31, // 39: istio.networking.v1alpha3.TrafficPolicy.RetryBudget.percent:type_name -> google.protobuf.DoubleValue
-	21, // 40: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.http_cookie:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie
-	19, // 41: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.ring_hash:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.RingHash
-	20, // 42: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.maglev:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.MagLev
-	30, // 43: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.ttl:type_name -> google.protobuf.Duration
-	22, // 44: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.attributes:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.Attribute
-	30, // 45: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.connect_timeout:type_name -> google.protobuf.Duration
-	25, // 46: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.tcp_keepalive:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive
-	30, // 47: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.max_connection_duration:type_name -> google.protobuf.Duration
-	30, // 48: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.idle_timeout:type_name -> google.protobuf.Duration
-	30, // 49: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.idle_timeout:type_name -> google.protobuf.Duration
-	2,  // 50: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.h2_upgrade_policy:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicy
-	30, // 51: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.time:type_name -> google.protobuf.Duration
-	30, // 52: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.interval:type_name -> google.protobuf.Duration
-	28, // 53: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.to:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.ToEntry
-	54, // [54:54] is the sub-list for method output_type
-	54, // [54:54] is the sub-list for method input_type
-	54, // [54:54] is the sub-list for extension type_name
-	54, // [54:54] is the sub-list for extension extendee
-	0,  // [0:54] is the sub-list for field type_name
+	12, // 6: istio.networking.v1alpha3.TrafficPolicy.tls:type_name -> istio.networking.v1alpha3.ClientTLSSettings
+	14, // 7: istio.networking.v1alpha3.TrafficPolicy.port_level_settings:type_name -> istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy
+	15, // 8: istio.networking.v1alpha3.TrafficPolicy.tunnel:type_name -> istio.networking.v1alpha3.TrafficPolicy.TunnelSettings
+	16, // 9: istio.networking.v1alpha3.TrafficPolicy.proxy_protocol:type_name -> istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol
+	17, // 10: istio.networking.v1alpha3.TrafficPolicy.retry_budget:type_name -> istio.networking.v1alpha3.TrafficPolicy.RetryBudget
+	11, // 11: istio.networking.v1alpha3.TrafficPolicy.adaptive_concurrency:type_name -> istio.networking.v1alpha3.AdaptiveConcurrency
+	18, // 12: istio.networking.v1alpha3.Subset.labels:type_name -> istio.networking.v1alpha3.Subset.LabelsEntry
+	5,  // 13: istio.networking.v1alpha3.Subset.traffic_policy:type_name -> istio.networking.v1alpha3.TrafficPolicy
+	1,  // 14: istio.networking.v1alpha3.LoadBalancerSettings.simple:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.SimpleLB
+	19, // 15: istio.networking.v1alpha3.LoadBalancerSettings.consistent_hash:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB
+	13, // 16: istio.networking.v1alpha3.LoadBalancerSettings.locality_lb_setting:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting
+	35, // 17: istio.networking.v1alpha3.LoadBalancerSettings.warmup_duration_secs:type_name -> google.protobuf.Duration
+	8,  // 18: istio.networking.v1alpha3.LoadBalancerSettings.warmup:type_name -> istio.networking.v1alpha3.WarmupConfiguration
+	35, // 19: istio.networking.v1alpha3.WarmupConfiguration.duration:type_name -> google.protobuf.Duration
+	36, // 20: istio.networking.v1alpha3.WarmupConfiguration.minimum_percent:type_name -> google.protobuf.DoubleValue
+	36, // 21: istio.networking.v1alpha3.WarmupConfiguration.aggression:type_name -> google.protobuf.DoubleValue
+	24, // 22: istio.networking.v1alpha3.ConnectionPoolSettings.tcp:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings
+	25, // 23: istio.networking.v1alpha3.ConnectionPoolSettings.http:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings
+	37, // 24: istio.networking.v1alpha3.OutlierDetection.consecutive_local_origin_failures:type_name -> google.protobuf.UInt32Value
+	37, // 25: istio.networking.v1alpha3.OutlierDetection.consecutive_gateway_errors:type_name -> google.protobuf.UInt32Value
+	37, // 26: istio.networking.v1alpha3.OutlierDetection.consecutive_5xx_errors:type_name -> google.protobuf.UInt32Value
+	35, // 27: istio.networking.v1alpha3.OutlierDetection.interval:type_name -> google.protobuf.Duration
+	35, // 28: istio.networking.v1alpha3.OutlierDetection.base_ejection_time:type_name -> google.protobuf.Duration
+	27, // 29: istio.networking.v1alpha3.AdaptiveConcurrency.gradient_controller_config:type_name -> istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig
+	3,  // 30: istio.networking.v1alpha3.ClientTLSSettings.mode:type_name -> istio.networking.v1alpha3.ClientTLSSettings.TLSmode
+	38, // 31: istio.networking.v1alpha3.ClientTLSSettings.insecure_skip_verify:type_name -> google.protobuf.BoolValue
+	31, // 32: istio.networking.v1alpha3.LocalityLoadBalancerSetting.distribute:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute
+	32, // 33: istio.networking.v1alpha3.LocalityLoadBalancerSetting.failover:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Failover
+	38, // 34: istio.networking.v1alpha3.LocalityLoadBalancerSetting.enabled:type_name -> google.protobuf.BoolValue
+	39, // 35: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.port:type_name -> istio.networking.v1alpha3.PortSelector
+	7,  // 36: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.load_balancer:type_name -> istio.networking.v1alpha3.LoadBalancerSettings
+	9,  // 37: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.connection_pool:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings
+	10, // 38: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.outlier_detection:type_name -> istio.networking.v1alpha3.OutlierDetection
+	12, // 39: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.tls:type_name -> istio.networking.v1alpha3.ClientTLSSettings
+	0,  // 40: istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol.version:type_name -> istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol.VERSION
+	36, // 41: istio.networking.v1alpha3.TrafficPolicy.RetryBudget.percent:type_name -> google.protobuf.DoubleValue
+	22, // 42: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.http_cookie:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie
+	20, // 43: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.ring_hash:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.RingHash
+	21, // 44: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.maglev:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.MagLev
+	35, // 45: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.ttl:type_name -> google.protobuf.Duration
+	23, // 46: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.attributes:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.Attribute
+	35, // 47: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.connect_timeout:type_name -> google.protobuf.Duration
+	26, // 48: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.tcp_keepalive:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive
+	35, // 49: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.max_connection_duration:type_name -> google.protobuf.Duration
+	35, // 50: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.idle_timeout:type_name -> google.protobuf.Duration
+	35, // 51: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.idle_timeout:type_name -> google.protobuf.Duration
+	2,  // 52: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.h2_upgrade_policy:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicy
+	35, // 53: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.time:type_name -> google.protobuf.Duration
+	35, // 54: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.interval:type_name -> google.protobuf.Duration
+	37, // 55: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.sample_aggregate_percentile:type_name -> google.protobuf.UInt32Value
+	28, // 56: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.concurrency_limit_params:type_name -> istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.ConcurrencyLimitCalculationParams
+	29, // 57: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.min_rtt_calc_params:type_name -> istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams
+	37, // 58: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.ConcurrencyLimitCalculationParams.max_concurrency_limit:type_name -> google.protobuf.UInt32Value
+	35, // 59: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.ConcurrencyLimitCalculationParams.concurrency_update_interval:type_name -> google.protobuf.Duration
+	30, // 60: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams.dynamic_sampling:type_name -> istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams.DynamicSampling
+	35, // 61: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams.fixed_latency:type_name -> google.protobuf.Duration
+	37, // 62: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams.buffer:type_name -> google.protobuf.UInt32Value
+	35, // 63: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams.DynamicSampling.interval:type_name -> google.protobuf.Duration
+	37, // 64: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams.DynamicSampling.request_count:type_name -> google.protobuf.UInt32Value
+	37, // 65: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams.DynamicSampling.jitter:type_name -> google.protobuf.UInt32Value
+	37, // 66: istio.networking.v1alpha3.AdaptiveConcurrency.GradientControllerConfig.MinimumRTTCalculationParams.DynamicSampling.min_concurrency:type_name -> google.protobuf.UInt32Value
+	33, // 67: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.to:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.ToEntry
+	68, // [68:68] is the sub-list for method output_type
+	68, // [68:68] is the sub-list for method input_type
+	68, // [68:68] is the sub-list for extension type_name
+	68, // [68:68] is the sub-list for extension extendee
+	0,  // [0:68] is the sub-list for field type_name
 }
 
 func init() { file_networking_v1alpha3_destination_rule_proto_init() }
@@ -3115,7 +3700,10 @@ func file_networking_v1alpha3_destination_rule_proto_init() {
 		(*LoadBalancerSettings_Simple)(nil),
 		(*LoadBalancerSettings_ConsistentHash)(nil),
 	}
-	file_networking_v1alpha3_destination_rule_proto_msgTypes[14].OneofWrappers = []any{
+	file_networking_v1alpha3_destination_rule_proto_msgTypes[7].OneofWrappers = []any{
+		(*AdaptiveConcurrency_GradientControllerConfig_)(nil),
+	}
+	file_networking_v1alpha3_destination_rule_proto_msgTypes[15].OneofWrappers = []any{
 		(*LoadBalancerSettings_ConsistentHashLB_HttpHeaderName)(nil),
 		(*LoadBalancerSettings_ConsistentHashLB_HttpCookie)(nil),
 		(*LoadBalancerSettings_ConsistentHashLB_UseSourceIp)(nil),
@@ -3123,13 +3711,17 @@ func file_networking_v1alpha3_destination_rule_proto_init() {
 		(*LoadBalancerSettings_ConsistentHashLB_RingHash_)(nil),
 		(*LoadBalancerSettings_ConsistentHashLB_Maglev)(nil),
 	}
+	file_networking_v1alpha3_destination_rule_proto_msgTypes[25].OneofWrappers = []any{
+		(*AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling_)(nil),
+		(*AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_FixedLatency)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_networking_v1alpha3_destination_rule_proto_rawDesc), len(file_networking_v1alpha3_destination_rule_proto_rawDesc)),
 			NumEnums:      4,
-			NumMessages:   25,
+			NumMessages:   30,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

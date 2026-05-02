@@ -307,6 +307,34 @@ message TrafficPolicy {
 
   // Specifies a limit on concurrent retries in relation to the number of active requests.
   RetryBudget retry_budget = 8;
+
+  // Adaptive concurrency settings for dynamically adjusting the allowed number of
+  // outstanding requests based on sampled latencies.
+  //
+  // Note: This applies only to HTTP/1.1 and HTTP/2 unary request-response
+  // traffic and is enforced on the server-side (inbound) proxy. It does not
+  // apply to TCP connections, gRPC streaming, or WebSocket connections, since
+  // the filter relies on measuring individual request round-trip latencies.
+  //
+  // This operates independently from circuit breaker thresholds (e.g.
+  // max_connections). Both mechanisms can reject requests, but they act at
+  // different layers: adaptive concurrency limits outstanding requests at
+  // the HTTP filter level before routing, while circuit breakers limit
+  // connections and requests at the cluster connection pool level. When both
+  // are configured, the more restrictive limit is the effective constraint.
+  //
+  // Requests rejected by adaptive concurrency will NOT be reflected in
+  // circuit breaker statistics (e.g. upstream_cx_overflow). They are tracked
+  // separately via the adaptive_concurrency.gradient_controller.rq_blocked
+  // counter.
+  //
+  // Unlike circuit breaker overflows, responses rejected by adaptive concurrency
+  // will NOT include the x-envoy-overloaded header. Clients or sidecars that
+  // rely on this header to detect overload-induced 503s (e.g. for retry
+  // decisions or backoff) should be aware of this difference. The response body
+  // will be "reached concurrency limit" and the response details will be
+  // "reached_concurrency_limit".
+  AdaptiveConcurrency adaptive_concurrency = 9;
 }
 
 // A subset of endpoints of a service. Subsets can be used for scenarios
@@ -824,6 +852,202 @@ message OutlierDetection {
   // disabled by setting it to 0%. The default is 0% as it's not typically
   // applicable in k8s environments with few pods per service.
   int32 min_health_percent = 5;
+}
+
+// Configures automatic concurrency limits for requests to an upstream service.
+// When enabled, the sidecar proxy will dynamically calculate and enforce a
+// maximum number of outstanding requests allowed to the destination based on
+// periodic latency sampling. If the measured latency increases relative to the
+// baseline (minRTT), the concurrency limit is reduced; if latency remains
+// stable, the limit is gradually increased. Requests that exceed the current
+// concurrency limit are immediately rejected with the configured HTTP status
+// code (default 503) without being forwarded to the upstream.
+//
+// This is useful for protecting upstream services from being overwhelmed during
+// load spikes or degraded performance, without requiring operators to manually
+// set fixed concurrency thresholds.
+//
+// **Important:** When using dynamic sampling (`dynamic_sampling`), the controller
+// periodically enters a minRTT measurement window where the concurrency limit
+// drops to `min_concurrency` (default 3). During this window, requests exceeding
+// that limit are rejected with 503. This can cause a noticeable spike in errors,
+// especially under high traffic. To mitigate this:
+//   - Enable client-side retries for 503s, ideally with the `previous_hosts`
+//     retry predicate so rejected requests are retried on a different host
+//     that is not in a measurement window.
+//   - Use `jitter` to stagger measurement windows across hosts.
+//   - Consider using `fixed_latency` instead of `dynamic_sampling` if the
+//     upstream's baseline latency is well-known and stable.
+// See https://github.com/envoyproxy/envoy/issues/18152 for a real-world
+// example of 503s during minRTT calculation windows.
+//
+// See Envoy's
+// [adaptive concurrency filter](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/adaptive_concurrency_filter)
+// for more details.
+//
+// The following example enables adaptive concurrency limiting for my-service,
+// using the gradient controller to automatically adjust the concurrency limit
+// based on latency measurements taken every 60 seconds:
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1
+// kind: DestinationRule
+// metadata:
+//   name: my-service-adaptive
+// spec:
+//   host: my-service.default.svc.cluster.local
+//   trafficPolicy:
+//     adaptiveConcurrency:
+//       gradientControllerConfig:
+//         sampleAggregatePercentile: 50
+//         concurrencyLimitParams:
+//           maxConcurrencyLimit: 1000
+//           concurrencyUpdateInterval: 100ms
+//         minRttCalcParams:
+//           dynamicSampling:
+//             interval: 60s
+//             requestCount: 50
+//             jitter: 10
+//             minConcurrency: 3
+//           buffer: 25
+//       concurrencyLimitExceededStatus: 503
+// ```
+//
+message AdaptiveConcurrency {
+  // Configuration parameters for the gradient concurrency controller.
+  // The gradient controller makes forwarding decisions based on a periodically
+  // measured ideal round-trip time (minRTT) for an upstream.
+  message GradientControllerConfig {
+    // Parameters controlling the periodic recalculation of the concurrency limit
+    // from sampled request latencies.
+    message ConcurrencyLimitCalculationParams {
+      // The allowed upper-bound on the calculated concurrency limit. Defaults to 1000.
+      //
+      // This acts as a safety cap on the gradient algorithm's output. The algorithm
+      // dynamically adjusts the concurrency limit based on measured latency (via the
+      // gradient formula: new_limit = old_limit * gradient + headroom), but the result
+      // will never exceed this value. The gradient calculation itself is not influenced
+      // by this cap.
+      //
+      // In most cases the default of 1000 is sufficient, since the algorithm will
+      // self-regulate well below this ceiling based on observed latencies. Consider
+      // lowering it only if you know the upstream's maximum sustainable concurrency
+      // and want a hard safety net beyond the algorithm's own backoff behavior.
+      // Setting this too low may prevent the algorithm from reaching the upstream's
+      // true capacity.
+      //
+      // Monitor the `concurrency_limit` gauge to observe where the algorithm settles
+      // under normal load.
+      google.protobuf.UInt32Value max_concurrency_limit = 2;
+
+      // The period of time samples are taken to recalculate the concurrency limit.
+      // This is required.
+      google.protobuf.Duration concurrency_update_interval = 3 [(google.api.field_behavior) = REQUIRED];
+    }
+
+    // Parameters controlling how the minRTT (baseline latency) is determined.
+    // The minRTT is periodically measured by allowing only a very low outstanding
+    // request count to an upstream cluster and measuring the latency under
+    // these ideal conditions.
+    message MinimumRTTCalculationParams {
+      // Parameters for dynamically sampling the minRTT by periodically entering
+      // a low-concurrency measurement window.
+      message DynamicSampling {
+        // The time interval between recalculating the minimum request round-trip
+        // time. Must be >= 1ms.
+        //
+        // When set, the controller periodically enters a low-concurrency measurement
+        // window (pinned to `min_concurrency`) to re-measure the baseline latency.
+        // During this window, throughput is temporarily reduced, so longer intervals
+        // reduce overhead but may react slower to changes in upstream performance.
+        google.protobuf.Duration interval = 1;
+
+        // The number of requests to aggregate/sample during the minRTT
+        // recalculation window before updating. Defaults to 50.
+        google.protobuf.UInt32Value request_count = 2;
+
+        // Randomized time delta that will be introduced to the start of the minRTT
+        // calculation window. This is represented as a percentage of the interval
+        // duration. Defaults to 15%. Value must be in the range [0, 100].
+        // This is recommended to prevent all hosts in a cluster from
+        // being in a minRTT calculation window at the same time.
+        google.protobuf.UInt32Value jitter = 3;
+
+        // The concurrency limit pinned during the minRTT measurement window.
+        // Defaults to 3.
+        //
+        // During the measurement window, the filter drops the concurrency limit to
+        // this value to measure latency under near-idle conditions. Requests that
+        // exceed this limit during the window are rejected with the configured
+        // status code (default 503). The window lasts until `request_count` samples
+        // are collected.
+        //
+        // To mitigate 503s during measurement windows:
+        //   - Use `jitter` to stagger measurement windows across hosts so they
+        //     don't all enter the window simultaneously.
+        //   - Configure retries (with the `previous_hosts` retry predicate) so
+        //     rejected requests are retried on a different host not currently in
+        //     a measurement window.
+        //   - Alternatively, use `fixed_latency` instead to skip dynamic
+        //     measurement entirely if the baseline latency is known.
+        google.protobuf.UInt32Value min_concurrency = 4;
+      }
+
+      // Exactly one of `dynamic_sampling` or `fixed_latency` must be set.
+      oneof min_rtt_source {
+        // Periodically sample the minRTT by entering a low-concurrency
+        // measurement window. Use this when the upstream's baseline latency
+        // may change over time.
+        DynamicSampling dynamic_sampling = 1;
+
+        // A fixed baseline round-trip time (minRTT) for the upstream, specified
+        // as a duration (e.g., `5ms`, `10ms`). Must be positive. This tells the
+        // gradient controller "assume the upstream responds in this time under
+        // ideal conditions" and skips dynamic sampling entirely.
+        //
+        // The gradient algorithm uses minRTT as the reference in its formula:
+        //   gradient = (minRTT + buffer) / sampleRTT
+        //   new_limit = old_limit × gradient + headroom
+        // where buffer = minRTT × buffer_percent, and headroom = sqrt(limit).
+        // So if measured latency rises above minRTT + buffer, the concurrency
+        // limit is reduced; if it stays near minRTT, the limit grows.
+        //
+        // Use this when the baseline latency of the upstream is well-known and
+        // stable, to avoid the periodic low-concurrency measurement windows
+        // that dynamic sampling requires.
+        google.protobuf.Duration fixed_latency = 2;
+      }
+
+      // Amount added to the measured minRTT to add stability to the concurrency
+      // limit during natural variability in latency. This is expressed as a
+      // percentage of the measured value and can be adjusted to allow more or
+      // less tolerance to the sampled latency values. Defaults to 25%.
+      // Value must be in the range [0, 100].
+      // This applies regardless of whether minRTT is dynamically sampled or fixed.
+      google.protobuf.UInt32Value buffer = 3;
+    }
+
+    // The percentile to use when summarizing aggregated samples. Defaults to p50.
+    // Value must be in the range [0, 100].
+    google.protobuf.UInt32Value sample_aggregate_percentile = 1;
+
+    // Parameters for periodic recalculation of the concurrency limit.
+    ConcurrencyLimitCalculationParams concurrency_limit_params = 2 [(google.api.field_behavior) = REQUIRED];
+
+    // Parameters for periodic minRTT recalculation.
+    MinimumRTTCalculationParams min_rtt_calc_params = 3 [(google.api.field_behavior) = REQUIRED];
+  }
+
+  oneof concurrency_controller_config {
+    // Gradient concurrency control will be used.
+    GradientControllerConfig gradient_controller_config = 1;
+  }
+
+  // Custom HTTP response status code to the downstream client when
+  // the concurrency limit has been exceeded.
+  // Defaults to 503 (Service Unavailable).
+  // Note: If this is set to < 400, 503 will be used instead.
+  uint32 concurrency_limit_exceeded_status = 3;
 }
 
 // SSL/TLS related settings for upstream connections. See Envoy's [TLS
