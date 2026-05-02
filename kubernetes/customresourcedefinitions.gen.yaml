@@ -914,10 +914,14 @@ spec:
                                 - simple
                               - required:
                                 - consistentHash
+                              - required:
+                                - sessionPersistence
                           - required:
                             - simple
                           - required:
                             - consistentHash
+                          - required:
+                            - sessionPersistence
                           properties:
                             consistentHash:
                               allOf:
@@ -1063,6 +1067,29 @@ spec:
                                   items:
                                     type: string
                                   type: array
+                              type: object
+                            sessionPersistence:
+                              properties:
+                                cookie:
+                                  description: The cookie settings for session persistence.
+                                  properties:
+                                    ttl:
+                                      description: Lifetime of the cookie.
+                                      type: string
+                                  type: object
+                                name:
+                                  description: The name of the header or cookie to
+                                    use for session persistence.
+                                  type: string
+                                type:
+                                  description: |-
+                                    The type of session persistence to use.
+
+                                    Valid Options: COOKIE, HEADER
+                                  enum:
+                                  - COOKIE
+                                  - HEADER
+                                  type: string
                               type: object
                             simple:
                               description: |2-
@@ -1292,10 +1319,14 @@ spec:
                                       - simple
                                     - required:
                                       - consistentHash
+                                    - required:
+                                      - sessionPersistence
                                 - required:
                                   - simple
                                 - required:
                                   - consistentHash
+                                - required:
+                                  - sessionPersistence
                                 properties:
                                   consistentHash:
                                     allOf:
@@ -1446,6 +1477,30 @@ spec:
                                         items:
                                           type: string
                                         type: array
+                                    type: object
+                                  sessionPersistence:
+                                    properties:
+                                      cookie:
+                                        description: The cookie settings for session
+                                          persistence.
+                                        properties:
+                                          ttl:
+                                            description: Lifetime of the cookie.
+                                            type: string
+                                        type: object
+                                      name:
+                                        description: The name of the header or cookie
+                                          to use for session persistence.
+                                        type: string
+                                      type:
+                                        description: |-
+                                          The type of session persistence to use.
+
+                                          Valid Options: COOKIE, HEADER
+                                        enum:
+                                        - COOKIE
+                                        - HEADER
+                                        type: string
                                     type: object
                                   simple:
                                     description: |2-
@@ -1849,10 +1904,14 @@ spec:
                           - simple
                         - required:
                           - consistentHash
+                        - required:
+                          - sessionPersistence
                     - required:
                       - simple
                     - required:
                       - consistentHash
+                    - required:
+                      - sessionPersistence
                     properties:
                       consistentHash:
                         allOf:
@@ -1996,6 +2055,29 @@ spec:
                             items:
                               type: string
                             type: array
+                        type: object
+                      sessionPersistence:
+                        properties:
+                          cookie:
+                            description: The cookie settings for session persistence.
+                            properties:
+                              ttl:
+                                description: Lifetime of the cookie.
+                                type: string
+                            type: object
+                          name:
+                            description: The name of the header or cookie to use for
+                              session persistence.
+                            type: string
+                          type:
+                            description: |-
+                              The type of session persistence to use.
+
+                              Valid Options: COOKIE, HEADER
+                            enum:
+                            - COOKIE
+                            - HEADER
+                            type: string
                         type: object
                       simple:
                         description: |2-
@@ -2220,10 +2302,14 @@ spec:
                                 - simple
                               - required:
                                 - consistentHash
+                              - required:
+                                - sessionPersistence
                           - required:
                             - simple
                           - required:
                             - consistentHash
+                          - required:
+                            - sessionPersistence
                           properties:
                             consistentHash:
                               allOf:
@@ -2369,6 +2455,29 @@ spec:
                                   items:
                                     type: string
                                   type: array
+                              type: object
+                            sessionPersistence:
+                              properties:
+                                cookie:
+                                  description: The cookie settings for session persistence.
+                                  properties:
+                                    ttl:
+                                      description: Lifetime of the cookie.
+                                      type: string
+                                  type: object
+                                name:
+                                  description: The name of the header or cookie to
+                                    use for session persistence.
+                                  type: string
+                                type:
+                                  description: |-
+                                    The type of session persistence to use.
+
+                                    Valid Options: COOKIE, HEADER
+                                  enum:
+                                  - COOKIE
+                                  - HEADER
+                                  type: string
                               type: object
                             simple:
                               description: |2-
@@ -2915,10 +3024,14 @@ spec:
                                 - simple
                               - required:
                                 - consistentHash
+                              - required:
+                                - sessionPersistence
                           - required:
                             - simple
                           - required:
                             - consistentHash
+                          - required:
+                            - sessionPersistence
                           properties:
                             consistentHash:
                               allOf:
@@ -3064,6 +3177,29 @@ spec:
                                   items:
                                     type: string
                                   type: array
+                              type: object
+                            sessionPersistence:
+                              properties:
+                                cookie:
+                                  description: The cookie settings for session persistence.
+                                  properties:
+                                    ttl:
+                                      description: Lifetime of the cookie.
+                                      type: string
+                                  type: object
+                                name:
+                                  description: The name of the header or cookie to
+                                    use for session persistence.
+                                  type: string
+                                type:
+                                  description: |-
+                                    The type of session persistence to use.
+
+                                    Valid Options: COOKIE, HEADER
+                                  enum:
+                                  - COOKIE
+                                  - HEADER
+                                  type: string
                               type: object
                             simple:
                               description: |2-
@@ -3293,10 +3429,14 @@ spec:
                                       - simple
                                     - required:
                                       - consistentHash
+                                    - required:
+                                      - sessionPersistence
                                 - required:
                                   - simple
                                 - required:
                                   - consistentHash
+                                - required:
+                                  - sessionPersistence
                                 properties:
                                   consistentHash:
                                     allOf:
@@ -3447,6 +3587,30 @@ spec:
                                         items:
                                           type: string
                                         type: array
+                                    type: object
+                                  sessionPersistence:
+                                    properties:
+                                      cookie:
+                                        description: The cookie settings for session
+                                          persistence.
+                                        properties:
+                                          ttl:
+                                            description: Lifetime of the cookie.
+                                            type: string
+                                        type: object
+                                      name:
+                                        description: The name of the header or cookie
+                                          to use for session persistence.
+                                        type: string
+                                      type:
+                                        description: |-
+                                          The type of session persistence to use.
+
+                                          Valid Options: COOKIE, HEADER
+                                        enum:
+                                        - COOKIE
+                                        - HEADER
+                                        type: string
                                     type: object
                                   simple:
                                     description: |2-
@@ -3850,10 +4014,14 @@ spec:
                           - simple
                         - required:
                           - consistentHash
+                        - required:
+                          - sessionPersistence
                     - required:
                       - simple
                     - required:
                       - consistentHash
+                    - required:
+                      - sessionPersistence
                     properties:
                       consistentHash:
                         allOf:
@@ -3997,6 +4165,29 @@ spec:
                             items:
                               type: string
                             type: array
+                        type: object
+                      sessionPersistence:
+                        properties:
+                          cookie:
+                            description: The cookie settings for session persistence.
+                            properties:
+                              ttl:
+                                description: Lifetime of the cookie.
+                                type: string
+                            type: object
+                          name:
+                            description: The name of the header or cookie to use for
+                              session persistence.
+                            type: string
+                          type:
+                            description: |-
+                              The type of session persistence to use.
+
+                              Valid Options: COOKIE, HEADER
+                            enum:
+                            - COOKIE
+                            - HEADER
+                            type: string
                         type: object
                       simple:
                         description: |2-
@@ -4221,10 +4412,14 @@ spec:
                                 - simple
                               - required:
                                 - consistentHash
+                              - required:
+                                - sessionPersistence
                           - required:
                             - simple
                           - required:
                             - consistentHash
+                          - required:
+                            - sessionPersistence
                           properties:
                             consistentHash:
                               allOf:
@@ -4370,6 +4565,29 @@ spec:
                                   items:
                                     type: string
                                   type: array
+                              type: object
+                            sessionPersistence:
+                              properties:
+                                cookie:
+                                  description: The cookie settings for session persistence.
+                                  properties:
+                                    ttl:
+                                      description: Lifetime of the cookie.
+                                      type: string
+                                  type: object
+                                name:
+                                  description: The name of the header or cookie to
+                                    use for session persistence.
+                                  type: string
+                                type:
+                                  description: |-
+                                    The type of session persistence to use.
+
+                                    Valid Options: COOKIE, HEADER
+                                  enum:
+                                  - COOKIE
+                                  - HEADER
+                                  type: string
                               type: object
                             simple:
                               description: |2-
@@ -4916,10 +5134,14 @@ spec:
                                 - simple
                               - required:
                                 - consistentHash
+                              - required:
+                                - sessionPersistence
                           - required:
                             - simple
                           - required:
                             - consistentHash
+                          - required:
+                            - sessionPersistence
                           properties:
                             consistentHash:
                               allOf:
@@ -5065,6 +5287,29 @@ spec:
                                   items:
                                     type: string
                                   type: array
+                              type: object
+                            sessionPersistence:
+                              properties:
+                                cookie:
+                                  description: The cookie settings for session persistence.
+                                  properties:
+                                    ttl:
+                                      description: Lifetime of the cookie.
+                                      type: string
+                                  type: object
+                                name:
+                                  description: The name of the header or cookie to
+                                    use for session persistence.
+                                  type: string
+                                type:
+                                  description: |-
+                                    The type of session persistence to use.
+
+                                    Valid Options: COOKIE, HEADER
+                                  enum:
+                                  - COOKIE
+                                  - HEADER
+                                  type: string
                               type: object
                             simple:
                               description: |2-
@@ -5294,10 +5539,14 @@ spec:
                                       - simple
                                     - required:
                                       - consistentHash
+                                    - required:
+                                      - sessionPersistence
                                 - required:
                                   - simple
                                 - required:
                                   - consistentHash
+                                - required:
+                                  - sessionPersistence
                                 properties:
                                   consistentHash:
                                     allOf:
@@ -5448,6 +5697,30 @@ spec:
                                         items:
                                           type: string
                                         type: array
+                                    type: object
+                                  sessionPersistence:
+                                    properties:
+                                      cookie:
+                                        description: The cookie settings for session
+                                          persistence.
+                                        properties:
+                                          ttl:
+                                            description: Lifetime of the cookie.
+                                            type: string
+                                        type: object
+                                      name:
+                                        description: The name of the header or cookie
+                                          to use for session persistence.
+                                        type: string
+                                      type:
+                                        description: |-
+                                          The type of session persistence to use.
+
+                                          Valid Options: COOKIE, HEADER
+                                        enum:
+                                        - COOKIE
+                                        - HEADER
+                                        type: string
                                     type: object
                                   simple:
                                     description: |2-
@@ -5851,10 +6124,14 @@ spec:
                           - simple
                         - required:
                           - consistentHash
+                        - required:
+                          - sessionPersistence
                     - required:
                       - simple
                     - required:
                       - consistentHash
+                    - required:
+                      - sessionPersistence
                     properties:
                       consistentHash:
                         allOf:
@@ -5998,6 +6275,29 @@ spec:
                             items:
                               type: string
                             type: array
+                        type: object
+                      sessionPersistence:
+                        properties:
+                          cookie:
+                            description: The cookie settings for session persistence.
+                            properties:
+                              ttl:
+                                description: Lifetime of the cookie.
+                                type: string
+                            type: object
+                          name:
+                            description: The name of the header or cookie to use for
+                              session persistence.
+                            type: string
+                          type:
+                            description: |-
+                              The type of session persistence to use.
+
+                              Valid Options: COOKIE, HEADER
+                            enum:
+                            - COOKIE
+                            - HEADER
+                            type: string
                         type: object
                       simple:
                         description: |2-
@@ -6222,10 +6522,14 @@ spec:
                                 - simple
                               - required:
                                 - consistentHash
+                              - required:
+                                - sessionPersistence
                           - required:
                             - simple
                           - required:
                             - consistentHash
+                          - required:
+                            - sessionPersistence
                           properties:
                             consistentHash:
                               allOf:
@@ -6371,6 +6675,29 @@ spec:
                                   items:
                                     type: string
                                   type: array
+                              type: object
+                            sessionPersistence:
+                              properties:
+                                cookie:
+                                  description: The cookie settings for session persistence.
+                                  properties:
+                                    ttl:
+                                      description: Lifetime of the cookie.
+                                      type: string
+                                  type: object
+                                name:
+                                  description: The name of the header or cookie to
+                                    use for session persistence.
+                                  type: string
+                                type:
+                                  description: |-
+                                    The type of session persistence to use.
+
+                                    Valid Options: COOKIE, HEADER
+                                  enum:
+                                  - COOKIE
+                                  - HEADER
+                                  type: string
                               type: object
                             simple:
                               description: |2-
