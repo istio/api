@@ -577,4 +577,9 @@ message ServerTLSSettings {
   // * `AES256-SHA`
   // * `DES-CBC3-SHA`
   repeated string cipher_suites = 9;
+
+  // Optional: If specified, only support the specified ecdh curves.
+  // Otherwise default to the default ecdh list supported by Envoy
+  // as specified [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto).
+  repeated string ecdh_curves = 17;
 }
