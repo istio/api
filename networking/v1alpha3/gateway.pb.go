@@ -836,7 +836,11 @@ type ServerTLSSettings struct {
 	// * `AES128-SHA`
 	// * `AES256-SHA`
 	// * `DES-CBC3-SHA`
-	CipherSuites  []string `protobuf:"bytes,9,rep,name=cipher_suites,json=cipherSuites,proto3" json:"cipher_suites,omitempty"`
+	CipherSuites []string `protobuf:"bytes,9,rep,name=cipher_suites,json=cipherSuites,proto3" json:"cipher_suites,omitempty"`
+	// Optional: If specified, only support the specified ecdh curves.
+	// Otherwise default to the default ecdh list supported by Envoy
+	// as specified [here](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto).
+	EcdhCurves    []string `protobuf:"bytes,17,rep,name=ecdh_curves,json=ecdhCurves,proto3" json:"ecdh_curves,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -983,6 +987,13 @@ func (x *ServerTLSSettings) GetCipherSuites() []string {
 	return nil
 }
 
+func (x *ServerTLSSettings) GetEcdhCurves() []string {
+	if x != nil {
+		return x.EcdhCurves
+	}
+	return nil
+}
+
 // TLSCertificate describes the server's TLS certificate.
 type ServerTLSSettings_TLSCertificate struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -1076,7 +1087,8 @@ const file_networking_v1alpha3_gateway_proto_rawDesc = "" +
 	"\bprotocol\x18\x02 \x01(\tB\x04\xe2A\x01\x02R\bprotocol\x12\x18\n" +
 	"\x04name\x18\x03 \x01(\tB\x04\xe2A\x01\x02R\x04name\x12#\n" +
 	"\vtarget_port\x18\x04 \x01(\rB\x02\x18\x01R\n" +
-	"targetPort\"\xee\t\n" +
+	"targetPort\"\x8f\n" +
+	"\n" +
 	"\x11ServerTLSSettings\x12%\n" +
 	"\x0ehttps_redirect\x18\x01 \x01(\bR\rhttpsRedirect\x12H\n" +
 	"\x04mode\x18\x02 \x01(\x0e24.istio.networking.v1alpha3.ServerTLSSettings.TLSmodeR\x04mode\x12-\n" +
@@ -1095,7 +1107,9 @@ const file_networking_v1alpha3_gateway_proto_rawDesc = "" +
 	"\x17verify_certificate_hash\x18\f \x03(\tR\x15verifyCertificateHash\x12j\n" +
 	"\x14min_protocol_version\x18\a \x01(\x0e28.istio.networking.v1alpha3.ServerTLSSettings.TLSProtocolR\x12minProtocolVersion\x12j\n" +
 	"\x14max_protocol_version\x18\b \x01(\x0e28.istio.networking.v1alpha3.ServerTLSSettings.TLSProtocolR\x12maxProtocolVersion\x12#\n" +
-	"\rcipher_suites\x18\t \x03(\tR\fcipherSuites\x1a\x89\x01\n" +
+	"\rcipher_suites\x18\t \x03(\tR\fcipherSuites\x12\x1f\n" +
+	"\vecdh_curves\x18\x11 \x03(\tR\n" +
+	"ecdhCurves\x1a\x89\x01\n" +
 	"\x0eTLSCertificate\x12-\n" +
 	"\x12server_certificate\x18\x01 \x01(\tR\x11serverCertificate\x12\x1f\n" +
 	"\vprivate_key\x18\x02 \x01(\tR\n" +
