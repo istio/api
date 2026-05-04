@@ -2418,8 +2418,7 @@ type ConnectionPoolSettings_TCPSettings struct {
 	// was established. If not set, there is no max duration. When `maxConnectionDuration`
 	// is reached the connection will be closed. Duration must be at least 1ms.
 	MaxConnectionDuration *duration.Duration `protobuf:"bytes,4,opt,name=max_connection_duration,json=maxConnectionDuration,proto3" json:"max_connection_duration,omitempty"`
-	// The idle timeout for TCP connections. This is applied to the outbound TCP proxy
-	// filter on the listener for the upstream cluster.
+	// The idle timeout for TCP connections. This is applied to the outbound connections to the upstream service.
 	// The idle timeout is defined as the period in which there are no bytes sent or received on the
 	// upstream connection.
 	// If not set, the default idle timeout is 1 hour. If set to 0s, the timeout will be disabled.
@@ -2427,10 +2426,9 @@ type ConnectionPoolSettings_TCPSettings struct {
 	// because idleTimeout is a property of a listener, not a cluster. In that case, idleTimeout
 	// specified in a destination rule for the first weighted route is configured in the listener,
 	// which means also for all weighted routes.
-	// To set the idle timeout for downstream (inbound) TCP connections, use the
+	// To set the idle timeout for downstream (inbound) connections, use the
 	// `idleTimeout` field in the proxy configuration (e.g., via the `proxy.istio.io/config`
-	// annotation) or use an EnvoyFilter to patch the inbound listener's
-	// `envoy.filters.network.tcp_proxy` network filter.
+	// annotation) which applies to all inbound connections.
 	// +protoc-gen-crd:duration-validation:none
 	IdleTimeout   *duration.Duration `protobuf:"bytes,5,opt,name=idle_timeout,json=idleTimeout,proto3" json:"idle_timeout,omitempty"`
 	unknownFields protoimpl.UnknownFields
