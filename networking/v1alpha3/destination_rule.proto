@@ -630,14 +630,17 @@ message ConnectionPoolSettings {
     // is reached the connection will be closed. Duration must be at least 1ms.
     google.protobuf.Duration max_connection_duration = 4;
 
-    // The idle timeout for TCP connections.
-    // The idle timeout is defined as the period in which there are no bytes sent or received on either
-    // the upstream or downstream connection.
+    // The idle timeout for TCP connections. This is applied to the outbound connections to the upstream service.
+    // The idle timeout is defined as the period in which there are no bytes sent or received on the
+    // upstream connection.
     // If not set, the default idle timeout is 1 hour. If set to 0s, the timeout will be disabled.
     // Idle timeout is not configured per each cluster individually when weighted destinations are used,
     // because idleTimeout is a property of a listener, not a cluster. In that case, idleTimeout
     // specified in a destination rule for the first weighted route is configured in the listener,
     // which means also for all weighted routes.
+    // To set the idle timeout for downstream (inbound) connections, use the
+    // `idleTimeout` field in the proxy configuration (e.g., via the `proxy.istio.io/config`
+    // annotation) which applies to all inbound connections.
     // +protoc-gen-crd:duration-validation:none
     google.protobuf.Duration idle_timeout = 5;
   }
