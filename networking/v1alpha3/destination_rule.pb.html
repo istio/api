@@ -1120,8 +1120,12 @@ because idleTimeout is a property of a listener, not a cluster. In that case, id
 specified in a destination rule for the first weighted route is configured in the listener,
 which means also for all weighted routes.
 To set the idle timeout for downstream (inbound) connections, use the
-<code>idleTimeout</code> field in the proxy configuration (e.g., via the <code>proxy.istio.io/config</code>
+<code>ISTIO_META_IDLE_TIMEOUT</code> field in the proxy configuration (e.g., via the <code>proxy.istio.io/config</code>
 annotation) which applies to all inbound connections.</p>
+<pre><code>proxy.istio.io/config: |-
+   proxyMetadata:
+      ISTIO_META_IDLE_TIMEOUT: &quot;100s&quot;
+</code></pre>
 
 </td>
 </tr>

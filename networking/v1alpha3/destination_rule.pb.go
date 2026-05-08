@@ -2427,8 +2427,15 @@ type ConnectionPoolSettings_TCPSettings struct {
 	// specified in a destination rule for the first weighted route is configured in the listener,
 	// which means also for all weighted routes.
 	// To set the idle timeout for downstream (inbound) connections, use the
-	// `idleTimeout` field in the proxy configuration (e.g., via the `proxy.istio.io/config`
+	// `ISTIO_META_IDLE_TIMEOUT` field in the proxy configuration (e.g., via the `proxy.istio.io/config`
 	// annotation) which applies to all inbound connections.
+	// ```
+	// proxy.istio.io/config: |-
+	//
+	//	proxyMetadata:
+	//	   ISTIO_META_IDLE_TIMEOUT: "100s"
+	//
+	// ```
 	// +protoc-gen-crd:duration-validation:none
 	IdleTimeout   *duration.Duration `protobuf:"bytes,5,opt,name=idle_timeout,json=idleTimeout,proto3" json:"idle_timeout,omitempty"`
 	unknownFields protoimpl.UnknownFields
