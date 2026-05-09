@@ -263,6 +263,12 @@ type ConnectionPoolSettings_TCPSettings_TcpKeepalive = v1alpha3.ConnectionPoolSe
 // Settings applicable to HTTP1.1/HTTP2/GRPC connections.
 type ConnectionPoolSettings_HTTPSettings = v1alpha3.ConnectionPoolSettings_HTTPSettings
 
+// Settings for HTTP/2 protocol options.
+type ConnectionPoolSettings_HTTPSettings_Http2ProtocolOptions = v1alpha3.ConnectionPoolSettings_HTTPSettings_Http2ProtocolOptions
+
+// Settings for HTTP/2 PING frames.
+type ConnectionPoolSettings_HTTPSettings_Http2ProtocolOptions_ConnectionKeepalive = v1alpha3.ConnectionPoolSettings_HTTPSettings_Http2ProtocolOptions_ConnectionKeepalive
+
 // Policy for upgrading http1.1 connections to http2.
 type ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy = v1alpha3.ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy
 

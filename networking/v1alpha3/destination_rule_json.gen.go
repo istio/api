@@ -3,6 +3,7 @@ package v1alpha3
 
 import (
 	bytes "bytes"
+
 	jsonpb "github.com/golang/protobuf/jsonpb"
 )
 
@@ -201,6 +202,28 @@ func (this *ConnectionPoolSettings_HTTPSettings) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for ConnectionPoolSettings_HTTPSettings
 func (this *ConnectionPoolSettings_HTTPSettings) UnmarshalJSON(b []byte) error {
+	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ConnectionPoolSettings_HTTPSettings_Http2ProtocolOptions
+func (this *ConnectionPoolSettings_HTTPSettings_Http2ProtocolOptions) MarshalJSON() ([]byte, error) {
+	str, err := DestinationRuleMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ConnectionPoolSettings_HTTPSettings_Http2ProtocolOptions
+func (this *ConnectionPoolSettings_HTTPSettings_Http2ProtocolOptions) UnmarshalJSON(b []byte) error {
+	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ConnectionPoolSettings_HTTPSettings_Http2ProtocolOptions_ConnectionKeepalive
+func (this *ConnectionPoolSettings_HTTPSettings_Http2ProtocolOptions_ConnectionKeepalive) MarshalJSON() ([]byte, error) {
+	str, err := DestinationRuleMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ConnectionPoolSettings_HTTPSettings_Http2ProtocolOptions_ConnectionKeepalive
+func (this *ConnectionPoolSettings_HTTPSettings_Http2ProtocolOptions_ConnectionKeepalive) UnmarshalJSON(b []byte) error {
 	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
