@@ -798,6 +798,10 @@ spec:
                             http:
                               description: HTTP connection pool settings.
                               properties:
+                                allowConnect:
+                                  description: If set to true, HTTP/2 extended CONNECT
+                                    support will be enabled for upstream HTTP/2 connections.
+                                  type: boolean
                                 h2UpgradePolicy:
                                   description: |-
                                     Specify if http1.1 connection should be upgraded to http2 for the associated destination.
@@ -1173,6 +1177,11 @@ spec:
                                   http:
                                     description: HTTP connection pool settings.
                                     properties:
+                                      allowConnect:
+                                        description: If set to true, HTTP/2 extended
+                                          CONNECT support will be enabled for upstream
+                                          HTTP/2 connections.
+                                        type: boolean
                                       h2UpgradePolicy:
                                         description: |-
                                           Specify if http1.1 connection should be upgraded to http2 for the associated destination.
@@ -1741,6 +1750,10 @@ spec:
                       http:
                         description: HTTP connection pool settings.
                         properties:
+                          allowConnect:
+                            description: If set to true, HTTP/2 extended CONNECT support
+                              will be enabled for upstream HTTP/2 connections.
+                            type: boolean
                           h2UpgradePolicy:
                             description: |-
                               Specify if http1.1 connection should be upgraded to http2 for the associated destination.
@@ -2104,6 +2117,10 @@ spec:
                             http:
                               description: HTTP connection pool settings.
                               properties:
+                                allowConnect:
+                                  description: If set to true, HTTP/2 extended CONNECT
+                                    support will be enabled for upstream HTTP/2 connections.
+                                  type: boolean
                                 h2UpgradePolicy:
                                   description: |-
                                     Specify if http1.1 connection should be upgraded to http2 for the associated destination.
@@ -2799,6 +2816,10 @@ spec:
                             http:
                               description: HTTP connection pool settings.
                               properties:
+                                allowConnect:
+                                  description: If set to true, HTTP/2 extended CONNECT
+                                    support will be enabled for upstream HTTP/2 connections.
+                                  type: boolean
                                 h2UpgradePolicy:
                                   description: |-
                                     Specify if http1.1 connection should be upgraded to http2 for the associated destination.
@@ -3174,6 +3195,11 @@ spec:
                                   http:
                                     description: HTTP connection pool settings.
                                     properties:
+                                      allowConnect:
+                                        description: If set to true, HTTP/2 extended
+                                          CONNECT support will be enabled for upstream
+                                          HTTP/2 connections.
+                                        type: boolean
                                       h2UpgradePolicy:
                                         description: |-
                                           Specify if http1.1 connection should be upgraded to http2 for the associated destination.
@@ -3742,6 +3768,10 @@ spec:
                       http:
                         description: HTTP connection pool settings.
                         properties:
+                          allowConnect:
+                            description: If set to true, HTTP/2 extended CONNECT support
+                              will be enabled for upstream HTTP/2 connections.
+                            type: boolean
                           h2UpgradePolicy:
                             description: |-
                               Specify if http1.1 connection should be upgraded to http2 for the associated destination.
@@ -4105,6 +4135,10 @@ spec:
                             http:
                               description: HTTP connection pool settings.
                               properties:
+                                allowConnect:
+                                  description: If set to true, HTTP/2 extended CONNECT
+                                    support will be enabled for upstream HTTP/2 connections.
+                                  type: boolean
                                 h2UpgradePolicy:
                                   description: |-
                                     Specify if http1.1 connection should be upgraded to http2 for the associated destination.
@@ -4800,6 +4834,10 @@ spec:
                             http:
                               description: HTTP connection pool settings.
                               properties:
+                                allowConnect:
+                                  description: If set to true, HTTP/2 extended CONNECT
+                                    support will be enabled for upstream HTTP/2 connections.
+                                  type: boolean
                                 h2UpgradePolicy:
                                   description: |-
                                     Specify if http1.1 connection should be upgraded to http2 for the associated destination.
@@ -5175,6 +5213,11 @@ spec:
                                   http:
                                     description: HTTP connection pool settings.
                                     properties:
+                                      allowConnect:
+                                        description: If set to true, HTTP/2 extended
+                                          CONNECT support will be enabled for upstream
+                                          HTTP/2 connections.
+                                        type: boolean
                                       h2UpgradePolicy:
                                         description: |-
                                           Specify if http1.1 connection should be upgraded to http2 for the associated destination.
@@ -5743,6 +5786,10 @@ spec:
                       http:
                         description: HTTP connection pool settings.
                         properties:
+                          allowConnect:
+                            description: If set to true, HTTP/2 extended CONNECT support
+                              will be enabled for upstream HTTP/2 connections.
+                            type: boolean
                           h2UpgradePolicy:
                             description: |-
                               Specify if http1.1 connection should be upgraded to http2 for the associated destination.
@@ -6106,6 +6153,10 @@ spec:
                             http:
                               description: HTTP connection pool settings.
                               properties:
+                                allowConnect:
+                                  description: If set to true, HTTP/2 extended CONNECT
+                                    support will be enabled for upstream HTTP/2 connections.
+                                  type: boolean
                                 h2UpgradePolicy:
                                   description: |-
                                     Specify if http1.1 connection should be upgraded to http2 for the associated destination.
@@ -9214,6 +9265,10 @@ spec:
                   http:
                     description: HTTP connection pool settings.
                     properties:
+                      allowConnect:
+                        description: If set to true, HTTP/2 extended CONNECT support
+                          will be enabled for upstream HTTP/2 connections.
+                        type: boolean
                       h2UpgradePolicy:
                         description: |-
                           Specify if http1.1 connection should be upgraded to http2 for the associated destination.
@@ -9335,6 +9390,10 @@ spec:
                         http:
                           description: HTTP connection pool settings.
                           properties:
+                            allowConnect:
+                              description: If set to true, HTTP/2 extended CONNECT
+                                support will be enabled for upstream HTTP/2 connections.
+                              type: boolean
                             h2UpgradePolicy:
                               description: |-
                                 Specify if http1.1 connection should be upgraded to http2 for the associated destination.
@@ -9792,6 +9851,10 @@ spec:
                   http:
                     description: HTTP connection pool settings.
                     properties:
+                      allowConnect:
+                        description: If set to true, HTTP/2 extended CONNECT support
+                          will be enabled for upstream HTTP/2 connections.
+                        type: boolean
                       h2UpgradePolicy:
                         description: |-
                           Specify if http1.1 connection should be upgraded to http2 for the associated destination.
@@ -9913,6 +9976,10 @@ spec:
                         http:
                           description: HTTP connection pool settings.
                           properties:
+                            allowConnect:
+                              description: If set to true, HTTP/2 extended CONNECT
+                                support will be enabled for upstream HTTP/2 connections.
+                              type: boolean
                             h2UpgradePolicy:
                               description: |-
                                 Specify if http1.1 connection should be upgraded to http2 for the associated destination.
@@ -10370,6 +10437,10 @@ spec:
                   http:
                     description: HTTP connection pool settings.
                     properties:
+                      allowConnect:
+                        description: If set to true, HTTP/2 extended CONNECT support
+                          will be enabled for upstream HTTP/2 connections.
+                        type: boolean
                       h2UpgradePolicy:
                         description: |-
                           Specify if http1.1 connection should be upgraded to http2 for the associated destination.
@@ -10491,6 +10562,10 @@ spec:
                         http:
                           description: HTTP connection pool settings.
                           properties:
+                            allowConnect:
+                              description: If set to true, HTTP/2 extended CONNECT
+                                support will be enabled for upstream HTTP/2 connections.
+                              type: boolean
                             h2UpgradePolicy:
                               description: |-
                                 Specify if http1.1 connection should be upgraded to http2 for the associated destination.

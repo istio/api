@@ -2533,8 +2533,13 @@ type ConnectionPoolSettings_HTTPSettings struct {
 	// The maximum number of concurrent streams allowed for a peer on one HTTP/2 connection.
 	// Defaults to 2^31-1.
 	MaxConcurrentStreams int32 `protobuf:"varint,8,opt,name=max_concurrent_streams,json=maxConcurrentStreams,proto3" json:"max_concurrent_streams,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+	// If set to true, HTTP/2 extended CONNECT support will be enabled for upstream
+	// HTTP/2 connections. This allows WebSocket upgrades to be proxied over HTTP/2
+	// hops using RFC 8441. The setting has no effect unless the upstream connection
+	// uses HTTP/2, such as when `h2UpgradePolicy` is set to `UPGRADE`.
+	AllowConnect  bool `protobuf:"varint,9,opt,name=allow_connect,json=allowConnect,proto3" json:"allow_connect,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ConnectionPoolSettings_HTTPSettings) Reset() {
@@ -2621,6 +2626,13 @@ func (x *ConnectionPoolSettings_HTTPSettings) GetMaxConcurrentStreams() int32 {
 		return x.MaxConcurrentStreams
 	}
 	return 0
+}
+
+func (x *ConnectionPoolSettings_HTTPSettings) GetAllowConnect() bool {
+	if x != nil {
+		return x.AllowConnect
+	}
+	return false
 }
 
 // TCP keepalive.
@@ -2917,7 +2929,7 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\x0fminimum_percent\x18\x02 \x01(\v2\x1c.google.protobuf.DoubleValueR\x0eminimumPercent\x12<\n" +
 	"\n" +
 	"aggression\x18\x03 \x01(\v2\x1c.google.protobuf.DoubleValueR\n" +
-	"aggression\"\x88\n" +
+	"aggression\"\xad\n" +
 	"\n" +
 	"\x16ConnectionPoolSettings\x12O\n" +
 	"\x03tcp\x18\x01 \x01(\v2=.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettingsR\x03tcp\x12R\n" +
@@ -2931,7 +2943,7 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\fTcpKeepalive\x12\x16\n" +
 	"\x06probes\x18\x01 \x01(\rR\x06probes\x12-\n" +
 	"\x04time\x18\x02 \x01(\v2\x19.google.protobuf.DurationR\x04time\x125\n" +
-	"\binterval\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\binterval\x1a\xba\x04\n" +
+	"\binterval\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\binterval\x1a\xdf\x04\n" +
 	"\fHTTPSettings\x12;\n" +
 	"\x1ahttp1_max_pending_requests\x18\x01 \x01(\x05R\x17http1MaxPendingRequests\x12,\n" +
 	"\x12http2_max_requests\x18\x02 \x01(\x05R\x10http2MaxRequests\x12=\n" +
@@ -2941,7 +2953,8 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\fidle_timeout\x18\x05 \x01(\v2\x19.google.protobuf.DurationR\vidleTimeout\x12z\n" +
 	"\x11h2_upgrade_policy\x18\x06 \x01(\x0e2N.istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicyR\x0fh2UpgradePolicy\x12.\n" +
 	"\x13use_client_protocol\x18\a \x01(\bR\x11useClientProtocol\x124\n" +
-	"\x16max_concurrent_streams\x18\b \x01(\x05R\x14maxConcurrentStreams\"?\n" +
+	"\x16max_concurrent_streams\x18\b \x01(\x05R\x14maxConcurrentStreams\x12#\n" +
+	"\rallow_connect\x18\t \x01(\bR\fallowConnect\"?\n" +
 	"\x0fH2UpgradePolicy\x12\v\n" +
 	"\aDEFAULT\x10\x00\x12\x12\n" +
 	"\x0eDO_NOT_UPGRADE\x10\x01\x12\v\n" +
