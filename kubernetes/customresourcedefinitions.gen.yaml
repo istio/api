@@ -11484,6 +11484,11 @@ spec:
                         in addition to the original destination.
                       items:
                         properties:
+                          authority:
+                            description: If set, the Host (`:authority`) header of
+                              the mirrored request is rewritten to this value before
+                              being sent to the mirror destination.
+                            type: string
                           destination:
                             description: Destination specifies the target of the mirror
                               operation.
@@ -11507,60 +11512,21 @@ spec:
                             required:
                             - host
                             type: object
-                          authority:
-                            description: If set, the Host (`:authority`) header
-                              of the mirrored request is rewritten to this value
-                              before being sent to the mirror destination.
-                            type: string
                           headers:
                             description: Header manipulation rules applied to the
-                              mirrored request.
+                              mirrored request before it is sent to the mirror destination.
                             properties:
-                              request:
-                                properties:
-                                  add:
-                                    additionalProperties:
-                                      maxLength: 16384
-                                      type: string
-                                    description: Append the given values to the
-                                      headers specified by keys (will create a comma-separated
-                                      list of values).
-                                    type: object
-                                  remove:
-                                    description: Remove the specified headers.
-                                    items:
-                                      type: string
-                                    type: array
-                                  set:
-                                    additionalProperties:
-                                      maxLength: 16384
-                                      type: string
-                                    description: Overwrite the headers specified
-                                      by key with the given values.
-                                    type: object
+                              add:
+                                additionalProperties:
+                                  type: string
                                 type: object
-                              response:
-                                properties:
-                                  add:
-                                    additionalProperties:
-                                      maxLength: 16384
-                                      type: string
-                                    description: Append the given values to the
-                                      headers specified by keys (will create a comma-separated
-                                      list of values).
-                                    type: object
-                                  remove:
-                                    description: Remove the specified headers.
-                                    items:
-                                      type: string
-                                    type: array
-                                  set:
-                                    additionalProperties:
-                                      maxLength: 16384
-                                      type: string
-                                    description: Overwrite the headers specified
-                                      by key with the given values.
-                                    type: object
+                              remove:
+                                items:
+                                  type: string
+                                type: array
+                              set:
+                                additionalProperties:
+                                  type: string
                                 type: object
                             type: object
                           percentage:
@@ -12592,6 +12558,11 @@ spec:
                         in addition to the original destination.
                       items:
                         properties:
+                          authority:
+                            description: If set, the Host (`:authority`) header of
+                              the mirrored request is rewritten to this value before
+                              being sent to the mirror destination.
+                            type: string
                           destination:
                             description: Destination specifies the target of the mirror
                               operation.
@@ -12615,60 +12586,21 @@ spec:
                             required:
                             - host
                             type: object
-                          authority:
-                            description: If set, the Host (`:authority`) header
-                              of the mirrored request is rewritten to this value
-                              before being sent to the mirror destination.
-                            type: string
                           headers:
                             description: Header manipulation rules applied to the
-                              mirrored request.
+                              mirrored request before it is sent to the mirror destination.
                             properties:
-                              request:
-                                properties:
-                                  add:
-                                    additionalProperties:
-                                      maxLength: 16384
-                                      type: string
-                                    description: Append the given values to the
-                                      headers specified by keys (will create a comma-separated
-                                      list of values).
-                                    type: object
-                                  remove:
-                                    description: Remove the specified headers.
-                                    items:
-                                      type: string
-                                    type: array
-                                  set:
-                                    additionalProperties:
-                                      maxLength: 16384
-                                      type: string
-                                    description: Overwrite the headers specified
-                                      by key with the given values.
-                                    type: object
+                              add:
+                                additionalProperties:
+                                  type: string
                                 type: object
-                              response:
-                                properties:
-                                  add:
-                                    additionalProperties:
-                                      maxLength: 16384
-                                      type: string
-                                    description: Append the given values to the
-                                      headers specified by keys (will create a comma-separated
-                                      list of values).
-                                    type: object
-                                  remove:
-                                    description: Remove the specified headers.
-                                    items:
-                                      type: string
-                                    type: array
-                                  set:
-                                    additionalProperties:
-                                      maxLength: 16384
-                                      type: string
-                                    description: Overwrite the headers specified
-                                      by key with the given values.
-                                    type: object
+                              remove:
+                                items:
+                                  type: string
+                                type: array
+                              set:
+                                additionalProperties:
+                                  type: string
                                 type: object
                             type: object
                           percentage:
@@ -13700,6 +13632,11 @@ spec:
                         in addition to the original destination.
                       items:
                         properties:
+                          authority:
+                            description: If set, the Host (`:authority`) header of
+                              the mirrored request is rewritten to this value before
+                              being sent to the mirror destination.
+                            type: string
                           destination:
                             description: Destination specifies the target of the mirror
                               operation.
@@ -13723,60 +13660,21 @@ spec:
                             required:
                             - host
                             type: object
-                          authority:
-                            description: If set, the Host (`:authority`) header
-                              of the mirrored request is rewritten to this value
-                              before being sent to the mirror destination.
-                            type: string
                           headers:
                             description: Header manipulation rules applied to the
-                              mirrored request.
+                              mirrored request before it is sent to the mirror destination.
                             properties:
-                              request:
-                                properties:
-                                  add:
-                                    additionalProperties:
-                                      maxLength: 16384
-                                      type: string
-                                    description: Append the given values to the
-                                      headers specified by keys (will create a comma-separated
-                                      list of values).
-                                    type: object
-                                  remove:
-                                    description: Remove the specified headers.
-                                    items:
-                                      type: string
-                                    type: array
-                                  set:
-                                    additionalProperties:
-                                      maxLength: 16384
-                                      type: string
-                                    description: Overwrite the headers specified
-                                      by key with the given values.
-                                    type: object
+                              add:
+                                additionalProperties:
+                                  type: string
                                 type: object
-                              response:
-                                properties:
-                                  add:
-                                    additionalProperties:
-                                      maxLength: 16384
-                                      type: string
-                                    description: Append the given values to the
-                                      headers specified by keys (will create a comma-separated
-                                      list of values).
-                                    type: object
-                                  remove:
-                                    description: Remove the specified headers.
-                                    items:
-                                      type: string
-                                    type: array
-                                  set:
-                                    additionalProperties:
-                                      maxLength: 16384
-                                      type: string
-                                    description: Overwrite the headers specified
-                                      by key with the given values.
-                                    type: object
+                              remove:
+                                items:
+                                  type: string
+                                type: array
+                              set:
+                                additionalProperties:
+                                  type: string
                                 type: object
                             type: object
                           percentage:
