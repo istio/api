@@ -11507,6 +11507,62 @@ spec:
                             required:
                             - host
                             type: object
+                          authority:
+                            description: If set, the Host (`:authority`) header
+                              of the mirrored request is rewritten to this value
+                              before being sent to the mirror destination.
+                            type: string
+                          headers:
+                            description: Header manipulation rules applied to the
+                              mirrored request.
+                            properties:
+                              request:
+                                properties:
+                                  add:
+                                    additionalProperties:
+                                      maxLength: 16384
+                                      type: string
+                                    description: Append the given values to the
+                                      headers specified by keys (will create a comma-separated
+                                      list of values).
+                                    type: object
+                                  remove:
+                                    description: Remove the specified headers.
+                                    items:
+                                      type: string
+                                    type: array
+                                  set:
+                                    additionalProperties:
+                                      maxLength: 16384
+                                      type: string
+                                    description: Overwrite the headers specified
+                                      by key with the given values.
+                                    type: object
+                                type: object
+                              response:
+                                properties:
+                                  add:
+                                    additionalProperties:
+                                      maxLength: 16384
+                                      type: string
+                                    description: Append the given values to the
+                                      headers specified by keys (will create a comma-separated
+                                      list of values).
+                                    type: object
+                                  remove:
+                                    description: Remove the specified headers.
+                                    items:
+                                      type: string
+                                    type: array
+                                  set:
+                                    additionalProperties:
+                                      maxLength: 16384
+                                      type: string
+                                    description: Overwrite the headers specified
+                                      by key with the given values.
+                                    type: object
+                                type: object
+                            type: object
                           percentage:
                             description: Percentage of the traffic to be mirrored
                               by the `destination` field.
@@ -12559,6 +12615,62 @@ spec:
                             required:
                             - host
                             type: object
+                          authority:
+                            description: If set, the Host (`:authority`) header
+                              of the mirrored request is rewritten to this value
+                              before being sent to the mirror destination.
+                            type: string
+                          headers:
+                            description: Header manipulation rules applied to the
+                              mirrored request.
+                            properties:
+                              request:
+                                properties:
+                                  add:
+                                    additionalProperties:
+                                      maxLength: 16384
+                                      type: string
+                                    description: Append the given values to the
+                                      headers specified by keys (will create a comma-separated
+                                      list of values).
+                                    type: object
+                                  remove:
+                                    description: Remove the specified headers.
+                                    items:
+                                      type: string
+                                    type: array
+                                  set:
+                                    additionalProperties:
+                                      maxLength: 16384
+                                      type: string
+                                    description: Overwrite the headers specified
+                                      by key with the given values.
+                                    type: object
+                                type: object
+                              response:
+                                properties:
+                                  add:
+                                    additionalProperties:
+                                      maxLength: 16384
+                                      type: string
+                                    description: Append the given values to the
+                                      headers specified by keys (will create a comma-separated
+                                      list of values).
+                                    type: object
+                                  remove:
+                                    description: Remove the specified headers.
+                                    items:
+                                      type: string
+                                    type: array
+                                  set:
+                                    additionalProperties:
+                                      maxLength: 16384
+                                      type: string
+                                    description: Overwrite the headers specified
+                                      by key with the given values.
+                                    type: object
+                                type: object
+                            type: object
                           percentage:
                             description: Percentage of the traffic to be mirrored
                               by the `destination` field.
@@ -13610,6 +13722,62 @@ spec:
                                 type: string
                             required:
                             - host
+                            type: object
+                          authority:
+                            description: If set, the Host (`:authority`) header
+                              of the mirrored request is rewritten to this value
+                              before being sent to the mirror destination.
+                            type: string
+                          headers:
+                            description: Header manipulation rules applied to the
+                              mirrored request.
+                            properties:
+                              request:
+                                properties:
+                                  add:
+                                    additionalProperties:
+                                      maxLength: 16384
+                                      type: string
+                                    description: Append the given values to the
+                                      headers specified by keys (will create a comma-separated
+                                      list of values).
+                                    type: object
+                                  remove:
+                                    description: Remove the specified headers.
+                                    items:
+                                      type: string
+                                    type: array
+                                  set:
+                                    additionalProperties:
+                                      maxLength: 16384
+                                      type: string
+                                    description: Overwrite the headers specified
+                                      by key with the given values.
+                                    type: object
+                                type: object
+                              response:
+                                properties:
+                                  add:
+                                    additionalProperties:
+                                      maxLength: 16384
+                                      type: string
+                                    description: Append the given values to the
+                                      headers specified by keys (will create a comma-separated
+                                      list of values).
+                                    type: object
+                                  remove:
+                                    description: Remove the specified headers.
+                                    items:
+                                      type: string
+                                    type: array
+                                  set:
+                                    additionalProperties:
+                                      maxLength: 16384
+                                      type: string
+                                    description: Overwrite the headers specified
+                                      by key with the given values.
+                                    type: object
+                                type: object
                             type: object
                           percentage:
                             description: Percentage of the traffic to be mirrored
