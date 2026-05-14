@@ -43,7 +43,6 @@ spec:
   trafficPolicy:
     connectionPool:
       http:
-        http2ProtocolOptions:
-          connectionKeepalive:
-            interval: 15s
-            timeout: 5s
+        http2KeepAlive:
+          interval: 15s
+          timeout: 5s

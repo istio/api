@@ -814,38 +814,33 @@ spec:
                                     pool connection.
                                   format: int32
                                   type: integer
+                                http2KeepAlive:
+                                  description: Configure HTTP/2 PING frames for upstream
+                                    connections.
+                                  properties:
+                                    interval:
+                                      description: Send HTTP/2 PING frames at this
+                                        interval.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                    timeout:
+                                      description: How long to wait for a response
+                                        to an HTTP/2 PING frame before closing the
+                                        connection.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                  type: object
                                 http2MaxRequests:
                                   description: Maximum number of active requests to
                                     a destination.
                                   format: int32
                                   type: integer
-                                http2ProtocolOptions:
-                                  description: HTTP/2 protocol options for upstream
-                                    connections.
-                                  properties:
-                                    connectionKeepalive:
-                                      description: Configure HTTP/2 PING frames for
-                                        upstream connections.
-                                      properties:
-                                        interval:
-                                          description: Send HTTP/2 PING frames at
-                                            this interval.
-                                          type: string
-                                          x-kubernetes-validations:
-                                          - message: must be a valid duration greater
-                                              than 1ms
-                                            rule: duration(self) >= duration('1ms')
-                                        timeout:
-                                          description: How long to wait for a response
-                                            to an HTTP/2 PING frame before closing
-                                            the connection.
-                                          type: string
-                                          x-kubernetes-validations:
-                                          - message: must be a valid duration greater
-                                              than 1ms
-                                            rule: duration(self) >= duration('1ms')
-                                      type: object
-                                  type: object
                                 idleTimeout:
                                   description: The idle timeout for upstream connection
                                     pool connections.
@@ -1216,38 +1211,33 @@ spec:
                                           connection pool connection.
                                         format: int32
                                         type: integer
+                                      http2KeepAlive:
+                                        description: Configure HTTP/2 PING frames
+                                          for upstream connections.
+                                        properties:
+                                          interval:
+                                            description: Send HTTP/2 PING frames at
+                                              this interval.
+                                            type: string
+                                            x-kubernetes-validations:
+                                            - message: must be a valid duration greater
+                                                than 1ms
+                                              rule: duration(self) >= duration('1ms')
+                                          timeout:
+                                            description: How long to wait for a response
+                                              to an HTTP/2 PING frame before closing
+                                              the connection.
+                                            type: string
+                                            x-kubernetes-validations:
+                                            - message: must be a valid duration greater
+                                                than 1ms
+                                              rule: duration(self) >= duration('1ms')
+                                        type: object
                                       http2MaxRequests:
                                         description: Maximum number of active requests
                                           to a destination.
                                         format: int32
                                         type: integer
-                                      http2ProtocolOptions:
-                                        description: HTTP/2 protocol options for upstream
-                                          connections.
-                                        properties:
-                                          connectionKeepalive:
-                                            description: Configure HTTP/2 PING frames
-                                              for upstream connections.
-                                            properties:
-                                              interval:
-                                                description: Send HTTP/2 PING frames
-                                                  at this interval.
-                                                type: string
-                                                x-kubernetes-validations:
-                                                - message: must be a valid duration
-                                                    greater than 1ms
-                                                  rule: duration(self) >= duration('1ms')
-                                              timeout:
-                                                description: How long to wait for
-                                                  a response to an HTTP/2 PING frame
-                                                  before closing the connection.
-                                                type: string
-                                                x-kubernetes-validations:
-                                                - message: must be a valid duration
-                                                    greater than 1ms
-                                                  rule: duration(self) >= duration('1ms')
-                                            type: object
-                                        type: object
                                       idleTimeout:
                                         description: The idle timeout for upstream
                                           connection pool connections.
@@ -1810,34 +1800,28 @@ spec:
                               while waiting for a ready connection pool connection.
                             format: int32
                             type: integer
+                          http2KeepAlive:
+                            description: Configure HTTP/2 PING frames for upstream
+                              connections.
+                            properties:
+                              interval:
+                                description: Send HTTP/2 PING frames at this interval.
+                                type: string
+                                x-kubernetes-validations:
+                                - message: must be a valid duration greater than 1ms
+                                  rule: duration(self) >= duration('1ms')
+                              timeout:
+                                description: How long to wait for a response to an
+                                  HTTP/2 PING frame before closing the connection.
+                                type: string
+                                x-kubernetes-validations:
+                                - message: must be a valid duration greater than 1ms
+                                  rule: duration(self) >= duration('1ms')
+                            type: object
                           http2MaxRequests:
                             description: Maximum number of active requests to a destination.
                             format: int32
                             type: integer
-                          http2ProtocolOptions:
-                            description: HTTP/2 protocol options for upstream connections.
-                            properties:
-                              connectionKeepalive:
-                                description: Configure HTTP/2 PING frames for upstream
-                                  connections.
-                                properties:
-                                  interval:
-                                    description: Send HTTP/2 PING frames at this interval.
-                                    type: string
-                                    x-kubernetes-validations:
-                                    - message: must be a valid duration greater than
-                                        1ms
-                                      rule: duration(self) >= duration('1ms')
-                                  timeout:
-                                    description: How long to wait for a response to
-                                      an HTTP/2 PING frame before closing the connection.
-                                    type: string
-                                    x-kubernetes-validations:
-                                    - message: must be a valid duration greater than
-                                        1ms
-                                      rule: duration(self) >= duration('1ms')
-                                type: object
-                            type: object
                           idleTimeout:
                             description: The idle timeout for upstream connection
                               pool connections.
@@ -2198,38 +2182,33 @@ spec:
                                     pool connection.
                                   format: int32
                                   type: integer
+                                http2KeepAlive:
+                                  description: Configure HTTP/2 PING frames for upstream
+                                    connections.
+                                  properties:
+                                    interval:
+                                      description: Send HTTP/2 PING frames at this
+                                        interval.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                    timeout:
+                                      description: How long to wait for a response
+                                        to an HTTP/2 PING frame before closing the
+                                        connection.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                  type: object
                                 http2MaxRequests:
                                   description: Maximum number of active requests to
                                     a destination.
                                   format: int32
                                   type: integer
-                                http2ProtocolOptions:
-                                  description: HTTP/2 protocol options for upstream
-                                    connections.
-                                  properties:
-                                    connectionKeepalive:
-                                      description: Configure HTTP/2 PING frames for
-                                        upstream connections.
-                                      properties:
-                                        interval:
-                                          description: Send HTTP/2 PING frames at
-                                            this interval.
-                                          type: string
-                                          x-kubernetes-validations:
-                                          - message: must be a valid duration greater
-                                              than 1ms
-                                            rule: duration(self) >= duration('1ms')
-                                        timeout:
-                                          description: How long to wait for a response
-                                            to an HTTP/2 PING frame before closing
-                                            the connection.
-                                          type: string
-                                          x-kubernetes-validations:
-                                          - message: must be a valid duration greater
-                                              than 1ms
-                                            rule: duration(self) >= duration('1ms')
-                                      type: object
-                                  type: object
                                 idleTimeout:
                                   description: The idle timeout for upstream connection
                                     pool connections.
@@ -2920,38 +2899,33 @@ spec:
                                     pool connection.
                                   format: int32
                                   type: integer
+                                http2KeepAlive:
+                                  description: Configure HTTP/2 PING frames for upstream
+                                    connections.
+                                  properties:
+                                    interval:
+                                      description: Send HTTP/2 PING frames at this
+                                        interval.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                    timeout:
+                                      description: How long to wait for a response
+                                        to an HTTP/2 PING frame before closing the
+                                        connection.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                  type: object
                                 http2MaxRequests:
                                   description: Maximum number of active requests to
                                     a destination.
                                   format: int32
                                   type: integer
-                                http2ProtocolOptions:
-                                  description: HTTP/2 protocol options for upstream
-                                    connections.
-                                  properties:
-                                    connectionKeepalive:
-                                      description: Configure HTTP/2 PING frames for
-                                        upstream connections.
-                                      properties:
-                                        interval:
-                                          description: Send HTTP/2 PING frames at
-                                            this interval.
-                                          type: string
-                                          x-kubernetes-validations:
-                                          - message: must be a valid duration greater
-                                              than 1ms
-                                            rule: duration(self) >= duration('1ms')
-                                        timeout:
-                                          description: How long to wait for a response
-                                            to an HTTP/2 PING frame before closing
-                                            the connection.
-                                          type: string
-                                          x-kubernetes-validations:
-                                          - message: must be a valid duration greater
-                                              than 1ms
-                                            rule: duration(self) >= duration('1ms')
-                                      type: object
-                                  type: object
                                 idleTimeout:
                                   description: The idle timeout for upstream connection
                                     pool connections.
@@ -3322,38 +3296,33 @@ spec:
                                           connection pool connection.
                                         format: int32
                                         type: integer
+                                      http2KeepAlive:
+                                        description: Configure HTTP/2 PING frames
+                                          for upstream connections.
+                                        properties:
+                                          interval:
+                                            description: Send HTTP/2 PING frames at
+                                              this interval.
+                                            type: string
+                                            x-kubernetes-validations:
+                                            - message: must be a valid duration greater
+                                                than 1ms
+                                              rule: duration(self) >= duration('1ms')
+                                          timeout:
+                                            description: How long to wait for a response
+                                              to an HTTP/2 PING frame before closing
+                                              the connection.
+                                            type: string
+                                            x-kubernetes-validations:
+                                            - message: must be a valid duration greater
+                                                than 1ms
+                                              rule: duration(self) >= duration('1ms')
+                                        type: object
                                       http2MaxRequests:
                                         description: Maximum number of active requests
                                           to a destination.
                                         format: int32
                                         type: integer
-                                      http2ProtocolOptions:
-                                        description: HTTP/2 protocol options for upstream
-                                          connections.
-                                        properties:
-                                          connectionKeepalive:
-                                            description: Configure HTTP/2 PING frames
-                                              for upstream connections.
-                                            properties:
-                                              interval:
-                                                description: Send HTTP/2 PING frames
-                                                  at this interval.
-                                                type: string
-                                                x-kubernetes-validations:
-                                                - message: must be a valid duration
-                                                    greater than 1ms
-                                                  rule: duration(self) >= duration('1ms')
-                                              timeout:
-                                                description: How long to wait for
-                                                  a response to an HTTP/2 PING frame
-                                                  before closing the connection.
-                                                type: string
-                                                x-kubernetes-validations:
-                                                - message: must be a valid duration
-                                                    greater than 1ms
-                                                  rule: duration(self) >= duration('1ms')
-                                            type: object
-                                        type: object
                                       idleTimeout:
                                         description: The idle timeout for upstream
                                           connection pool connections.
@@ -3916,34 +3885,28 @@ spec:
                               while waiting for a ready connection pool connection.
                             format: int32
                             type: integer
+                          http2KeepAlive:
+                            description: Configure HTTP/2 PING frames for upstream
+                              connections.
+                            properties:
+                              interval:
+                                description: Send HTTP/2 PING frames at this interval.
+                                type: string
+                                x-kubernetes-validations:
+                                - message: must be a valid duration greater than 1ms
+                                  rule: duration(self) >= duration('1ms')
+                              timeout:
+                                description: How long to wait for a response to an
+                                  HTTP/2 PING frame before closing the connection.
+                                type: string
+                                x-kubernetes-validations:
+                                - message: must be a valid duration greater than 1ms
+                                  rule: duration(self) >= duration('1ms')
+                            type: object
                           http2MaxRequests:
                             description: Maximum number of active requests to a destination.
                             format: int32
                             type: integer
-                          http2ProtocolOptions:
-                            description: HTTP/2 protocol options for upstream connections.
-                            properties:
-                              connectionKeepalive:
-                                description: Configure HTTP/2 PING frames for upstream
-                                  connections.
-                                properties:
-                                  interval:
-                                    description: Send HTTP/2 PING frames at this interval.
-                                    type: string
-                                    x-kubernetes-validations:
-                                    - message: must be a valid duration greater than
-                                        1ms
-                                      rule: duration(self) >= duration('1ms')
-                                  timeout:
-                                    description: How long to wait for a response to
-                                      an HTTP/2 PING frame before closing the connection.
-                                    type: string
-                                    x-kubernetes-validations:
-                                    - message: must be a valid duration greater than
-                                        1ms
-                                      rule: duration(self) >= duration('1ms')
-                                type: object
-                            type: object
                           idleTimeout:
                             description: The idle timeout for upstream connection
                               pool connections.
@@ -4304,38 +4267,33 @@ spec:
                                     pool connection.
                                   format: int32
                                   type: integer
+                                http2KeepAlive:
+                                  description: Configure HTTP/2 PING frames for upstream
+                                    connections.
+                                  properties:
+                                    interval:
+                                      description: Send HTTP/2 PING frames at this
+                                        interval.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                    timeout:
+                                      description: How long to wait for a response
+                                        to an HTTP/2 PING frame before closing the
+                                        connection.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                  type: object
                                 http2MaxRequests:
                                   description: Maximum number of active requests to
                                     a destination.
                                   format: int32
                                   type: integer
-                                http2ProtocolOptions:
-                                  description: HTTP/2 protocol options for upstream
-                                    connections.
-                                  properties:
-                                    connectionKeepalive:
-                                      description: Configure HTTP/2 PING frames for
-                                        upstream connections.
-                                      properties:
-                                        interval:
-                                          description: Send HTTP/2 PING frames at
-                                            this interval.
-                                          type: string
-                                          x-kubernetes-validations:
-                                          - message: must be a valid duration greater
-                                              than 1ms
-                                            rule: duration(self) >= duration('1ms')
-                                        timeout:
-                                          description: How long to wait for a response
-                                            to an HTTP/2 PING frame before closing
-                                            the connection.
-                                          type: string
-                                          x-kubernetes-validations:
-                                          - message: must be a valid duration greater
-                                              than 1ms
-                                            rule: duration(self) >= duration('1ms')
-                                      type: object
-                                  type: object
                                 idleTimeout:
                                   description: The idle timeout for upstream connection
                                     pool connections.
@@ -5026,38 +4984,33 @@ spec:
                                     pool connection.
                                   format: int32
                                   type: integer
+                                http2KeepAlive:
+                                  description: Configure HTTP/2 PING frames for upstream
+                                    connections.
+                                  properties:
+                                    interval:
+                                      description: Send HTTP/2 PING frames at this
+                                        interval.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                    timeout:
+                                      description: How long to wait for a response
+                                        to an HTTP/2 PING frame before closing the
+                                        connection.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                  type: object
                                 http2MaxRequests:
                                   description: Maximum number of active requests to
                                     a destination.
                                   format: int32
                                   type: integer
-                                http2ProtocolOptions:
-                                  description: HTTP/2 protocol options for upstream
-                                    connections.
-                                  properties:
-                                    connectionKeepalive:
-                                      description: Configure HTTP/2 PING frames for
-                                        upstream connections.
-                                      properties:
-                                        interval:
-                                          description: Send HTTP/2 PING frames at
-                                            this interval.
-                                          type: string
-                                          x-kubernetes-validations:
-                                          - message: must be a valid duration greater
-                                              than 1ms
-                                            rule: duration(self) >= duration('1ms')
-                                        timeout:
-                                          description: How long to wait for a response
-                                            to an HTTP/2 PING frame before closing
-                                            the connection.
-                                          type: string
-                                          x-kubernetes-validations:
-                                          - message: must be a valid duration greater
-                                              than 1ms
-                                            rule: duration(self) >= duration('1ms')
-                                      type: object
-                                  type: object
                                 idleTimeout:
                                   description: The idle timeout for upstream connection
                                     pool connections.
@@ -5428,38 +5381,33 @@ spec:
                                           connection pool connection.
                                         format: int32
                                         type: integer
+                                      http2KeepAlive:
+                                        description: Configure HTTP/2 PING frames
+                                          for upstream connections.
+                                        properties:
+                                          interval:
+                                            description: Send HTTP/2 PING frames at
+                                              this interval.
+                                            type: string
+                                            x-kubernetes-validations:
+                                            - message: must be a valid duration greater
+                                                than 1ms
+                                              rule: duration(self) >= duration('1ms')
+                                          timeout:
+                                            description: How long to wait for a response
+                                              to an HTTP/2 PING frame before closing
+                                              the connection.
+                                            type: string
+                                            x-kubernetes-validations:
+                                            - message: must be a valid duration greater
+                                                than 1ms
+                                              rule: duration(self) >= duration('1ms')
+                                        type: object
                                       http2MaxRequests:
                                         description: Maximum number of active requests
                                           to a destination.
                                         format: int32
                                         type: integer
-                                      http2ProtocolOptions:
-                                        description: HTTP/2 protocol options for upstream
-                                          connections.
-                                        properties:
-                                          connectionKeepalive:
-                                            description: Configure HTTP/2 PING frames
-                                              for upstream connections.
-                                            properties:
-                                              interval:
-                                                description: Send HTTP/2 PING frames
-                                                  at this interval.
-                                                type: string
-                                                x-kubernetes-validations:
-                                                - message: must be a valid duration
-                                                    greater than 1ms
-                                                  rule: duration(self) >= duration('1ms')
-                                              timeout:
-                                                description: How long to wait for
-                                                  a response to an HTTP/2 PING frame
-                                                  before closing the connection.
-                                                type: string
-                                                x-kubernetes-validations:
-                                                - message: must be a valid duration
-                                                    greater than 1ms
-                                                  rule: duration(self) >= duration('1ms')
-                                            type: object
-                                        type: object
                                       idleTimeout:
                                         description: The idle timeout for upstream
                                           connection pool connections.
@@ -6022,34 +5970,28 @@ spec:
                               while waiting for a ready connection pool connection.
                             format: int32
                             type: integer
+                          http2KeepAlive:
+                            description: Configure HTTP/2 PING frames for upstream
+                              connections.
+                            properties:
+                              interval:
+                                description: Send HTTP/2 PING frames at this interval.
+                                type: string
+                                x-kubernetes-validations:
+                                - message: must be a valid duration greater than 1ms
+                                  rule: duration(self) >= duration('1ms')
+                              timeout:
+                                description: How long to wait for a response to an
+                                  HTTP/2 PING frame before closing the connection.
+                                type: string
+                                x-kubernetes-validations:
+                                - message: must be a valid duration greater than 1ms
+                                  rule: duration(self) >= duration('1ms')
+                            type: object
                           http2MaxRequests:
                             description: Maximum number of active requests to a destination.
                             format: int32
                             type: integer
-                          http2ProtocolOptions:
-                            description: HTTP/2 protocol options for upstream connections.
-                            properties:
-                              connectionKeepalive:
-                                description: Configure HTTP/2 PING frames for upstream
-                                  connections.
-                                properties:
-                                  interval:
-                                    description: Send HTTP/2 PING frames at this interval.
-                                    type: string
-                                    x-kubernetes-validations:
-                                    - message: must be a valid duration greater than
-                                        1ms
-                                      rule: duration(self) >= duration('1ms')
-                                  timeout:
-                                    description: How long to wait for a response to
-                                      an HTTP/2 PING frame before closing the connection.
-                                    type: string
-                                    x-kubernetes-validations:
-                                    - message: must be a valid duration greater than
-                                        1ms
-                                      rule: duration(self) >= duration('1ms')
-                                type: object
-                            type: object
                           idleTimeout:
                             description: The idle timeout for upstream connection
                               pool connections.
@@ -6410,38 +6352,33 @@ spec:
                                     pool connection.
                                   format: int32
                                   type: integer
+                                http2KeepAlive:
+                                  description: Configure HTTP/2 PING frames for upstream
+                                    connections.
+                                  properties:
+                                    interval:
+                                      description: Send HTTP/2 PING frames at this
+                                        interval.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                    timeout:
+                                      description: How long to wait for a response
+                                        to an HTTP/2 PING frame before closing the
+                                        connection.
+                                      type: string
+                                      x-kubernetes-validations:
+                                      - message: must be a valid duration greater
+                                          than 1ms
+                                        rule: duration(self) >= duration('1ms')
+                                  type: object
                                 http2MaxRequests:
                                   description: Maximum number of active requests to
                                     a destination.
                                   format: int32
                                   type: integer
-                                http2ProtocolOptions:
-                                  description: HTTP/2 protocol options for upstream
-                                    connections.
-                                  properties:
-                                    connectionKeepalive:
-                                      description: Configure HTTP/2 PING frames for
-                                        upstream connections.
-                                      properties:
-                                        interval:
-                                          description: Send HTTP/2 PING frames at
-                                            this interval.
-                                          type: string
-                                          x-kubernetes-validations:
-                                          - message: must be a valid duration greater
-                                              than 1ms
-                                            rule: duration(self) >= duration('1ms')
-                                        timeout:
-                                          description: How long to wait for a response
-                                            to an HTTP/2 PING frame before closing
-                                            the connection.
-                                          type: string
-                                          x-kubernetes-validations:
-                                          - message: must be a valid duration greater
-                                              than 1ms
-                                            rule: duration(self) >= duration('1ms')
-                                      type: object
-                                  type: object
                                 idleTimeout:
                                   description: The idle timeout for upstream connection
                                     pool connections.
@@ -9544,32 +9481,27 @@ spec:
                           while waiting for a ready connection pool connection.
                         format: int32
                         type: integer
+                      http2KeepAlive:
+                        description: Configure HTTP/2 PING frames for upstream connections.
+                        properties:
+                          interval:
+                            description: Send HTTP/2 PING frames at this interval.
+                            type: string
+                            x-kubernetes-validations:
+                            - message: must be a valid duration greater than 1ms
+                              rule: duration(self) >= duration('1ms')
+                          timeout:
+                            description: How long to wait for a response to an HTTP/2
+                              PING frame before closing the connection.
+                            type: string
+                            x-kubernetes-validations:
+                            - message: must be a valid duration greater than 1ms
+                              rule: duration(self) >= duration('1ms')
+                        type: object
                       http2MaxRequests:
                         description: Maximum number of active requests to a destination.
                         format: int32
                         type: integer
-                      http2ProtocolOptions:
-                        description: HTTP/2 protocol options for upstream connections.
-                        properties:
-                          connectionKeepalive:
-                            description: Configure HTTP/2 PING frames for upstream
-                              connections.
-                            properties:
-                              interval:
-                                description: Send HTTP/2 PING frames at this interval.
-                                type: string
-                                x-kubernetes-validations:
-                                - message: must be a valid duration greater than 1ms
-                                  rule: duration(self) >= duration('1ms')
-                              timeout:
-                                description: How long to wait for a response to an
-                                  HTTP/2 PING frame before closing the connection.
-                                type: string
-                                x-kubernetes-validations:
-                                - message: must be a valid duration greater than 1ms
-                                  rule: duration(self) >= duration('1ms')
-                            type: object
-                        type: object
                       idleTimeout:
                         description: The idle timeout for upstream connection pool
                           connections.
@@ -9687,37 +9619,31 @@ spec:
                                 queued while waiting for a ready connection pool connection.
                               format: int32
                               type: integer
+                            http2KeepAlive:
+                              description: Configure HTTP/2 PING frames for upstream
+                                connections.
+                              properties:
+                                interval:
+                                  description: Send HTTP/2 PING frames at this interval.
+                                  type: string
+                                  x-kubernetes-validations:
+                                  - message: must be a valid duration greater than
+                                      1ms
+                                    rule: duration(self) >= duration('1ms')
+                                timeout:
+                                  description: How long to wait for a response to
+                                    an HTTP/2 PING frame before closing the connection.
+                                  type: string
+                                  x-kubernetes-validations:
+                                  - message: must be a valid duration greater than
+                                      1ms
+                                    rule: duration(self) >= duration('1ms')
+                              type: object
                             http2MaxRequests:
                               description: Maximum number of active requests to a
                                 destination.
                               format: int32
                               type: integer
-                            http2ProtocolOptions:
-                              description: HTTP/2 protocol options for upstream connections.
-                              properties:
-                                connectionKeepalive:
-                                  description: Configure HTTP/2 PING frames for upstream
-                                    connections.
-                                  properties:
-                                    interval:
-                                      description: Send HTTP/2 PING frames at this
-                                        interval.
-                                      type: string
-                                      x-kubernetes-validations:
-                                      - message: must be a valid duration greater
-                                          than 1ms
-                                        rule: duration(self) >= duration('1ms')
-                                    timeout:
-                                      description: How long to wait for a response
-                                        to an HTTP/2 PING frame before closing the
-                                        connection.
-                                      type: string
-                                      x-kubernetes-validations:
-                                      - message: must be a valid duration greater
-                                          than 1ms
-                                        rule: duration(self) >= duration('1ms')
-                                  type: object
-                              type: object
                             idleTimeout:
                               description: The idle timeout for upstream connection
                                 pool connections.
@@ -10170,32 +10096,27 @@ spec:
                           while waiting for a ready connection pool connection.
                         format: int32
                         type: integer
+                      http2KeepAlive:
+                        description: Configure HTTP/2 PING frames for upstream connections.
+                        properties:
+                          interval:
+                            description: Send HTTP/2 PING frames at this interval.
+                            type: string
+                            x-kubernetes-validations:
+                            - message: must be a valid duration greater than 1ms
+                              rule: duration(self) >= duration('1ms')
+                          timeout:
+                            description: How long to wait for a response to an HTTP/2
+                              PING frame before closing the connection.
+                            type: string
+                            x-kubernetes-validations:
+                            - message: must be a valid duration greater than 1ms
+                              rule: duration(self) >= duration('1ms')
+                        type: object
                       http2MaxRequests:
                         description: Maximum number of active requests to a destination.
                         format: int32
                         type: integer
-                      http2ProtocolOptions:
-                        description: HTTP/2 protocol options for upstream connections.
-                        properties:
-                          connectionKeepalive:
-                            description: Configure HTTP/2 PING frames for upstream
-                              connections.
-                            properties:
-                              interval:
-                                description: Send HTTP/2 PING frames at this interval.
-                                type: string
-                                x-kubernetes-validations:
-                                - message: must be a valid duration greater than 1ms
-                                  rule: duration(self) >= duration('1ms')
-                              timeout:
-                                description: How long to wait for a response to an
-                                  HTTP/2 PING frame before closing the connection.
-                                type: string
-                                x-kubernetes-validations:
-                                - message: must be a valid duration greater than 1ms
-                                  rule: duration(self) >= duration('1ms')
-                            type: object
-                        type: object
                       idleTimeout:
                         description: The idle timeout for upstream connection pool
                           connections.
@@ -10313,37 +10234,31 @@ spec:
                                 queued while waiting for a ready connection pool connection.
                               format: int32
                               type: integer
+                            http2KeepAlive:
+                              description: Configure HTTP/2 PING frames for upstream
+                                connections.
+                              properties:
+                                interval:
+                                  description: Send HTTP/2 PING frames at this interval.
+                                  type: string
+                                  x-kubernetes-validations:
+                                  - message: must be a valid duration greater than
+                                      1ms
+                                    rule: duration(self) >= duration('1ms')
+                                timeout:
+                                  description: How long to wait for a response to
+                                    an HTTP/2 PING frame before closing the connection.
+                                  type: string
+                                  x-kubernetes-validations:
+                                  - message: must be a valid duration greater than
+                                      1ms
+                                    rule: duration(self) >= duration('1ms')
+                              type: object
                             http2MaxRequests:
                               description: Maximum number of active requests to a
                                 destination.
                               format: int32
                               type: integer
-                            http2ProtocolOptions:
-                              description: HTTP/2 protocol options for upstream connections.
-                              properties:
-                                connectionKeepalive:
-                                  description: Configure HTTP/2 PING frames for upstream
-                                    connections.
-                                  properties:
-                                    interval:
-                                      description: Send HTTP/2 PING frames at this
-                                        interval.
-                                      type: string
-                                      x-kubernetes-validations:
-                                      - message: must be a valid duration greater
-                                          than 1ms
-                                        rule: duration(self) >= duration('1ms')
-                                    timeout:
-                                      description: How long to wait for a response
-                                        to an HTTP/2 PING frame before closing the
-                                        connection.
-                                      type: string
-                                      x-kubernetes-validations:
-                                      - message: must be a valid duration greater
-                                          than 1ms
-                                        rule: duration(self) >= duration('1ms')
-                                  type: object
-                              type: object
                             idleTimeout:
                               description: The idle timeout for upstream connection
                                 pool connections.
@@ -10796,32 +10711,27 @@ spec:
                           while waiting for a ready connection pool connection.
                         format: int32
                         type: integer
+                      http2KeepAlive:
+                        description: Configure HTTP/2 PING frames for upstream connections.
+                        properties:
+                          interval:
+                            description: Send HTTP/2 PING frames at this interval.
+                            type: string
+                            x-kubernetes-validations:
+                            - message: must be a valid duration greater than 1ms
+                              rule: duration(self) >= duration('1ms')
+                          timeout:
+                            description: How long to wait for a response to an HTTP/2
+                              PING frame before closing the connection.
+                            type: string
+                            x-kubernetes-validations:
+                            - message: must be a valid duration greater than 1ms
+                              rule: duration(self) >= duration('1ms')
+                        type: object
                       http2MaxRequests:
                         description: Maximum number of active requests to a destination.
                         format: int32
                         type: integer
-                      http2ProtocolOptions:
-                        description: HTTP/2 protocol options for upstream connections.
-                        properties:
-                          connectionKeepalive:
-                            description: Configure HTTP/2 PING frames for upstream
-                              connections.
-                            properties:
-                              interval:
-                                description: Send HTTP/2 PING frames at this interval.
-                                type: string
-                                x-kubernetes-validations:
-                                - message: must be a valid duration greater than 1ms
-                                  rule: duration(self) >= duration('1ms')
-                              timeout:
-                                description: How long to wait for a response to an
-                                  HTTP/2 PING frame before closing the connection.
-                                type: string
-                                x-kubernetes-validations:
-                                - message: must be a valid duration greater than 1ms
-                                  rule: duration(self) >= duration('1ms')
-                            type: object
-                        type: object
                       idleTimeout:
                         description: The idle timeout for upstream connection pool
                           connections.
@@ -10939,37 +10849,31 @@ spec:
                                 queued while waiting for a ready connection pool connection.
                               format: int32
                               type: integer
+                            http2KeepAlive:
+                              description: Configure HTTP/2 PING frames for upstream
+                                connections.
+                              properties:
+                                interval:
+                                  description: Send HTTP/2 PING frames at this interval.
+                                  type: string
+                                  x-kubernetes-validations:
+                                  - message: must be a valid duration greater than
+                                      1ms
+                                    rule: duration(self) >= duration('1ms')
+                                timeout:
+                                  description: How long to wait for a response to
+                                    an HTTP/2 PING frame before closing the connection.
+                                  type: string
+                                  x-kubernetes-validations:
+                                  - message: must be a valid duration greater than
+                                      1ms
+                                    rule: duration(self) >= duration('1ms')
+                              type: object
                             http2MaxRequests:
                               description: Maximum number of active requests to a
                                 destination.
                               format: int32
                               type: integer
-                            http2ProtocolOptions:
-                              description: HTTP/2 protocol options for upstream connections.
-                              properties:
-                                connectionKeepalive:
-                                  description: Configure HTTP/2 PING frames for upstream
-                                    connections.
-                                  properties:
-                                    interval:
-                                      description: Send HTTP/2 PING frames at this
-                                        interval.
-                                      type: string
-                                      x-kubernetes-validations:
-                                      - message: must be a valid duration greater
-                                          than 1ms
-                                        rule: duration(self) >= duration('1ms')
-                                    timeout:
-                                      description: How long to wait for a response
-                                        to an HTTP/2 PING frame before closing the
-                                        connection.
-                                      type: string
-                                      x-kubernetes-validations:
-                                      - message: must be a valid duration greater
-                                          than 1ms
-                                        rule: duration(self) >= duration('1ms')
-                                  type: object
-                              type: object
                             idleTimeout:
                               description: The idle timeout for upstream connection
                                 pool connections.
