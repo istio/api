@@ -1525,6 +1525,7 @@ spec:
 <p>On a redirect, overwrite the Path portion of the URL with this
 value. Note that the entire path will be replaced, irrespective of the
 request URI being matched as an exact path or prefix.</p>
+<p>Mutually exclusive with <code>prefixRewrite</code> and <code>uriRegexRewrite</code>.</p>
 
 </td>
 </tr>
@@ -1579,6 +1580,36 @@ If <code>derivePort</code> is set to <code>FROM_PROTOCOL_DEFAULT</code>, this wi
 <td>
 <p>On a redirect, Specifies the HTTP status code to use in the redirect
 response. The default response code is MOVED_PERMANENTLY (301).</p>
+
+</td>
+</tr>
+<tr id="HTTPRedirect-prefix_rewrite" class="oneof oneof-start">
+<td><div class="field"><div class="name"><code><a href="#HTTPRedirect-prefix_rewrite">prefixRewrite</a></code></div>
+<div class="type">string (oneof)</div>
+</div></td>
+<td>
+<p>On a redirect, replace the matched route prefix with this value. The route
+match must use a prefix match type. The matched prefix is stripped from the
+path and this value is prepended.</p>
+<p>Examples (route prefix match: /foo):</p>
+<ul>
+<li>prefixRewrite: /bar → /foo/baz becomes /bar/baz</li>
+<li>prefixRewrite: / → /foo/baz becomes //baz (use /foo/ match to get /baz)</li>
+</ul>
+<p>Mutually exclusive with <code>uri</code> and <code>uriRegexRewrite</code>.</p>
+
+</td>
+</tr>
+<tr id="HTTPRedirect-uri_regex_rewrite" class="oneof">
+<td><div class="field"><div class="name"><code><a href="#HTTPRedirect-uri_regex_rewrite">uriRegexRewrite</a></code></div>
+<div class="type"><a href="#RegexRewrite">RegexRewrite (oneof)</a></div>
+</div></td>
+<td>
+<p>On a redirect, rewrite the path portion of the URI with the specified
+RE2 regex. Capture groups in the pattern may be referenced in the
+replacement string.</p>
+<p>Example: match <code>^/foo(/.*)$</code> with rewrite <code>\1</code> rewrites /foo/bar to /bar.</p>
+<p>Mutually exclusive with <code>uri</code> and <code>prefixRewrite</code>.</p>
 
 </td>
 </tr>

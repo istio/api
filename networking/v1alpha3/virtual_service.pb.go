@@ -2021,11 +2021,40 @@ func (x *TLSMatchAttributes) GetSourceNamespace() string {
 //	...
 //
 // ```
+//
+// The following rule redirects requests with a path prefix of /foo to the
+// authority foo.example.com, stripping the /foo prefix from the path:
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1
+// kind: VirtualService
+// metadata:
+//
+//	name: foo-redirect
+//
+// spec:
+//
+//	hosts:
+//	- example.com
+//	http:
+//	- match:
+//	  - uri:
+//	      prefix: /foo/
+//	  redirect:
+//	    authority: foo.example.com
+//	    prefix_rewrite: /
+//
+// ```
+//
+// With this rule, a request to example.com/foo/bar is redirected to
+// foo.example.com/bar.
 type HTTPRedirect struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// On a redirect, overwrite the Path portion of the URL with this
 	// value. Note that the entire path will be replaced, irrespective of the
 	// request URI being matched as an exact path or prefix.
+	//
+	// Mutually exclusive with prefix_rewrite and uri_regex_rewrite.
 	Uri string `protobuf:"bytes,1,opt,name=uri,proto3" json:"uri,omitempty"`
 	// On a redirect, overwrite the Authority/Host portion of the URL with
 	// this value.
@@ -2042,9 +2071,17 @@ type HTTPRedirect struct {
 	Scheme string `protobuf:"bytes,6,opt,name=scheme,proto3" json:"scheme,omitempty"`
 	// On a redirect, Specifies the HTTP status code to use in the redirect
 	// response. The default response code is MOVED_PERMANENTLY (301).
-	RedirectCode  uint32 `protobuf:"varint,3,opt,name=redirect_code,json=redirectCode,proto3" json:"redirect_code,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	RedirectCode uint32 `protobuf:"varint,3,opt,name=redirect_code,json=redirectCode,proto3" json:"redirect_code,omitempty"`
+	// Specifies how to rewrite the path on redirect. Exactly one of uri,
+	// prefix_rewrite, or uri_regex_rewrite may be set.
+	//
+	// Types that are valid to be assigned to PathRewriteSpecifier:
+	//
+	//	*HTTPRedirect_PrefixRewrite
+	//	*HTTPRedirect_UriRegexRewrite
+	PathRewriteSpecifier isHTTPRedirect_PathRewriteSpecifier `protobuf_oneof:"path_rewrite_specifier"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *HTTPRedirect) Reset() {
@@ -2130,6 +2167,31 @@ func (x *HTTPRedirect) GetRedirectCode() uint32 {
 	return 0
 }
 
+func (x *HTTPRedirect) GetPathRewriteSpecifier() isHTTPRedirect_PathRewriteSpecifier {
+	if x != nil {
+		return x.PathRewriteSpecifier
+	}
+	return nil
+}
+
+func (x *HTTPRedirect) GetPrefixRewrite() string {
+	if x != nil {
+		if x, ok := x.PathRewriteSpecifier.(*HTTPRedirect_PrefixRewrite); ok {
+			return x.PrefixRewrite
+		}
+	}
+	return ""
+}
+
+func (x *HTTPRedirect) GetUriRegexRewrite() *RegexRewrite {
+	if x != nil {
+		if x, ok := x.PathRewriteSpecifier.(*HTTPRedirect_UriRegexRewrite); ok {
+			return x.UriRegexRewrite
+		}
+	}
+	return nil
+}
+
 type isHTTPRedirect_RedirectPort interface {
 	isHTTPRedirect_RedirectPort()
 }
@@ -2149,6 +2211,38 @@ type HTTPRedirect_DerivePort struct {
 func (*HTTPRedirect_Port) isHTTPRedirect_RedirectPort() {}
 
 func (*HTTPRedirect_DerivePort) isHTTPRedirect_RedirectPort() {}
+
+type isHTTPRedirect_PathRewriteSpecifier interface {
+	isHTTPRedirect_PathRewriteSpecifier()
+}
+
+type HTTPRedirect_PrefixRewrite struct {
+	// On a redirect, replace the matched prefix (or the entire path for exact
+	// matches) with this value. The route match must use a prefix match type.
+	// The matched prefix is stripped from the path and this value is prepended.
+	//
+	// Examples (route prefix match: /foo):
+	// - prefix_rewrite: /bar → /foo/baz becomes /bar/baz
+	// - prefix_rewrite: /   → /foo/baz becomes //baz (use /foo/ match to get /baz)
+	//
+	// Mutually exclusive with uri and uri_regex_rewrite.
+	PrefixRewrite string `protobuf:"bytes,7,opt,name=prefix_rewrite,json=prefixRewrite,proto3,oneof"`
+}
+
+type HTTPRedirect_UriRegexRewrite struct {
+	// On a redirect, rewrite the path portion of the URI with the specified
+	// RE2 regex. Capture groups in the pattern may be referenced in the
+	// replacement string.
+	//
+	// Example: match "^/foo(/.*)$" with rewrite "\\1" rewrites /foo/bar to /bar.
+	//
+	// Mutually exclusive with uri and prefix_rewrite.
+	UriRegexRewrite *RegexRewrite `protobuf:"bytes,8,opt,name=uri_regex_rewrite,json=uriRegexRewrite,proto3,oneof"`
+}
+
+func (*HTTPRedirect_PrefixRewrite) isHTTPRedirect_PathRewriteSpecifier() {}
+
+func (*HTTPRedirect_UriRegexRewrite) isHTTPRedirect_PathRewriteSpecifier() {}
 
 // HTTPDirectResponse can be used to send a fixed response to clients.
 // For example, the following rule returns a fixed 503 status with a body
@@ -3622,7 +3716,7 @@ const file_networking_v1alpha3_virtual_service_proto_rawDesc = "" +
 	"\x10source_namespace\x18\a \x01(\tR\x0fsourceNamespace\x1a?\n" +
 	"\x11SourceLabelsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01J\x04\b\x04\x10\x05R\rsource_subnet\"\xcf\x02\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01J\x04\b\x04\x10\x05R\rsource_subnet\"\xe9\x03\n" +
 	"\fHTTPRedirect\x12\x10\n" +
 	"\x03uri\x18\x01 \x01(\tR\x03uri\x12\x1c\n" +
 	"\tauthority\x18\x02 \x01(\tR\tauthority\x12\x14\n" +
@@ -3630,11 +3724,14 @@ const file_networking_v1alpha3_virtual_service_proto_rawDesc = "" +
 	"\vderive_port\x18\x05 \x01(\x0e2=.istio.networking.v1alpha3.HTTPRedirect.RedirectPortSelectionH\x00R\n" +
 	"derivePort\x12\x16\n" +
 	"\x06scheme\x18\x06 \x01(\tR\x06scheme\x12#\n" +
-	"\rredirect_code\x18\x03 \x01(\rR\fredirectCode\"I\n" +
+	"\rredirect_code\x18\x03 \x01(\rR\fredirectCode\x12'\n" +
+	"\x0eprefix_rewrite\x18\a \x01(\tH\x01R\rprefixRewrite\x12U\n" +
+	"\x11uri_regex_rewrite\x18\b \x01(\v2'.istio.networking.v1alpha3.RegexRewriteH\x01R\x0furiRegexRewrite\"I\n" +
 	"\x15RedirectPortSelection\x12\x19\n" +
 	"\x15FROM_PROTOCOL_DEFAULT\x10\x00\x12\x15\n" +
 	"\x11FROM_REQUEST_PORT\x10\x01B\x0f\n" +
-	"\rredirect_port\"k\n" +
+	"\rredirect_portB\x18\n" +
+	"\x16path_rewrite_specifier\"k\n" +
 	"\x12HTTPDirectResponse\x12\x1c\n" +
 	"\x06status\x18\x01 \x01(\rB\x04\xe2A\x01\x02R\x06status\x127\n" +
 	"\x04body\x18\x02 \x01(\v2#.istio.networking.v1alpha3.HTTPBodyR\x04body\"I\n" +
@@ -3807,34 +3904,35 @@ var file_networking_v1alpha3_virtual_service_proto_depIdxs = []int32{
 	33, // 36: istio.networking.v1alpha3.L4MatchAttributes.source_labels:type_name -> istio.networking.v1alpha3.L4MatchAttributes.SourceLabelsEntry
 	34, // 37: istio.networking.v1alpha3.TLSMatchAttributes.source_labels:type_name -> istio.networking.v1alpha3.TLSMatchAttributes.SourceLabelsEntry
 	0,  // 38: istio.networking.v1alpha3.HTTPRedirect.derive_port:type_name -> istio.networking.v1alpha3.HTTPRedirect.RedirectPortSelection
-	16, // 39: istio.networking.v1alpha3.HTTPDirectResponse.body:type_name -> istio.networking.v1alpha3.HTTPBody
-	18, // 40: istio.networking.v1alpha3.HTTPRewrite.uri_regex_rewrite:type_name -> istio.networking.v1alpha3.RegexRewrite
-	37, // 41: istio.networking.v1alpha3.HTTPRetry.per_try_timeout:type_name -> google.protobuf.Duration
-	39, // 42: istio.networking.v1alpha3.HTTPRetry.retry_remote_localities:type_name -> google.protobuf.BoolValue
-	39, // 43: istio.networking.v1alpha3.HTTPRetry.retry_ignore_previous_hosts:type_name -> google.protobuf.BoolValue
-	37, // 44: istio.networking.v1alpha3.HTTPRetry.backoff:type_name -> google.protobuf.Duration
-	19, // 45: istio.networking.v1alpha3.CorsPolicy.allow_origins:type_name -> istio.networking.v1alpha3.StringMatch
-	37, // 46: istio.networking.v1alpha3.CorsPolicy.max_age:type_name -> google.protobuf.Duration
-	39, // 47: istio.networking.v1alpha3.CorsPolicy.allow_credentials:type_name -> google.protobuf.BoolValue
-	1,  // 48: istio.networking.v1alpha3.CorsPolicy.unmatched_preflights:type_name -> istio.networking.v1alpha3.CorsPolicy.UnmatchedPreflights
-	35, // 49: istio.networking.v1alpha3.HTTPFaultInjection.delay:type_name -> istio.networking.v1alpha3.HTTPFaultInjection.Delay
-	36, // 50: istio.networking.v1alpha3.HTTPFaultInjection.abort:type_name -> istio.networking.v1alpha3.HTTPFaultInjection.Abort
-	3,  // 51: istio.networking.v1alpha3.HTTPMirrorPolicy.destination:type_name -> istio.networking.v1alpha3.Destination
-	25, // 52: istio.networking.v1alpha3.HTTPMirrorPolicy.percentage:type_name -> istio.networking.v1alpha3.Percent
-	27, // 53: istio.networking.v1alpha3.Headers.HeaderOperations.set:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations.SetEntry
-	28, // 54: istio.networking.v1alpha3.Headers.HeaderOperations.add:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations.AddEntry
-	19, // 55: istio.networking.v1alpha3.HTTPMatchRequest.HeadersEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
-	19, // 56: istio.networking.v1alpha3.HTTPMatchRequest.QueryParamsEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
-	19, // 57: istio.networking.v1alpha3.HTTPMatchRequest.WithoutHeadersEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
-	37, // 58: istio.networking.v1alpha3.HTTPFaultInjection.Delay.fixed_delay:type_name -> google.protobuf.Duration
-	37, // 59: istio.networking.v1alpha3.HTTPFaultInjection.Delay.exponential_delay:type_name -> google.protobuf.Duration
-	25, // 60: istio.networking.v1alpha3.HTTPFaultInjection.Delay.percentage:type_name -> istio.networking.v1alpha3.Percent
-	25, // 61: istio.networking.v1alpha3.HTTPFaultInjection.Abort.percentage:type_name -> istio.networking.v1alpha3.Percent
-	62, // [62:62] is the sub-list for method output_type
-	62, // [62:62] is the sub-list for method input_type
-	62, // [62:62] is the sub-list for extension type_name
-	62, // [62:62] is the sub-list for extension extendee
-	0,  // [0:62] is the sub-list for field type_name
+	18, // 39: istio.networking.v1alpha3.HTTPRedirect.uri_regex_rewrite:type_name -> istio.networking.v1alpha3.RegexRewrite
+	16, // 40: istio.networking.v1alpha3.HTTPDirectResponse.body:type_name -> istio.networking.v1alpha3.HTTPBody
+	18, // 41: istio.networking.v1alpha3.HTTPRewrite.uri_regex_rewrite:type_name -> istio.networking.v1alpha3.RegexRewrite
+	37, // 42: istio.networking.v1alpha3.HTTPRetry.per_try_timeout:type_name -> google.protobuf.Duration
+	39, // 43: istio.networking.v1alpha3.HTTPRetry.retry_remote_localities:type_name -> google.protobuf.BoolValue
+	39, // 44: istio.networking.v1alpha3.HTTPRetry.retry_ignore_previous_hosts:type_name -> google.protobuf.BoolValue
+	37, // 45: istio.networking.v1alpha3.HTTPRetry.backoff:type_name -> google.protobuf.Duration
+	19, // 46: istio.networking.v1alpha3.CorsPolicy.allow_origins:type_name -> istio.networking.v1alpha3.StringMatch
+	37, // 47: istio.networking.v1alpha3.CorsPolicy.max_age:type_name -> google.protobuf.Duration
+	39, // 48: istio.networking.v1alpha3.CorsPolicy.allow_credentials:type_name -> google.protobuf.BoolValue
+	1,  // 49: istio.networking.v1alpha3.CorsPolicy.unmatched_preflights:type_name -> istio.networking.v1alpha3.CorsPolicy.UnmatchedPreflights
+	35, // 50: istio.networking.v1alpha3.HTTPFaultInjection.delay:type_name -> istio.networking.v1alpha3.HTTPFaultInjection.Delay
+	36, // 51: istio.networking.v1alpha3.HTTPFaultInjection.abort:type_name -> istio.networking.v1alpha3.HTTPFaultInjection.Abort
+	3,  // 52: istio.networking.v1alpha3.HTTPMirrorPolicy.destination:type_name -> istio.networking.v1alpha3.Destination
+	25, // 53: istio.networking.v1alpha3.HTTPMirrorPolicy.percentage:type_name -> istio.networking.v1alpha3.Percent
+	27, // 54: istio.networking.v1alpha3.Headers.HeaderOperations.set:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations.SetEntry
+	28, // 55: istio.networking.v1alpha3.Headers.HeaderOperations.add:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations.AddEntry
+	19, // 56: istio.networking.v1alpha3.HTTPMatchRequest.HeadersEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
+	19, // 57: istio.networking.v1alpha3.HTTPMatchRequest.QueryParamsEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
+	19, // 58: istio.networking.v1alpha3.HTTPMatchRequest.WithoutHeadersEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
+	37, // 59: istio.networking.v1alpha3.HTTPFaultInjection.Delay.fixed_delay:type_name -> google.protobuf.Duration
+	37, // 60: istio.networking.v1alpha3.HTTPFaultInjection.Delay.exponential_delay:type_name -> google.protobuf.Duration
+	25, // 61: istio.networking.v1alpha3.HTTPFaultInjection.Delay.percentage:type_name -> istio.networking.v1alpha3.Percent
+	25, // 62: istio.networking.v1alpha3.HTTPFaultInjection.Abort.percentage:type_name -> istio.networking.v1alpha3.Percent
+	63, // [63:63] is the sub-list for method output_type
+	63, // [63:63] is the sub-list for method input_type
+	63, // [63:63] is the sub-list for extension type_name
+	63, // [63:63] is the sub-list for extension extendee
+	0,  // [0:63] is the sub-list for field type_name
 }
 
 func init() { file_networking_v1alpha3_virtual_service_proto_init() }
@@ -3845,6 +3943,8 @@ func file_networking_v1alpha3_virtual_service_proto_init() {
 	file_networking_v1alpha3_virtual_service_proto_msgTypes[12].OneofWrappers = []any{
 		(*HTTPRedirect_Port)(nil),
 		(*HTTPRedirect_DerivePort)(nil),
+		(*HTTPRedirect_PrefixRewrite)(nil),
+		(*HTTPRedirect_UriRegexRewrite)(nil),
 	}
 	file_networking_v1alpha3_virtual_service_proto_msgTypes[14].OneofWrappers = []any{
 		(*HTTPBody_String_)(nil),
