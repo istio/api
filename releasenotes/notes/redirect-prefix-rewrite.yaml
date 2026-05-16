@@ -1,0 +1,14 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - 47500
+  - 47777
+  - 52521
+
+releaseNotes:
+  - |
+    **Added** `prefix_rewrite` and `uri_regex_rewrite` fields to `HTTPRedirect`, allowing redirects
+    that preserve the path suffix. `prefix_rewrite` replaces only the matched route prefix (e.g.
+    `example.com/foo/bar` → `foo.example.com/bar`); `uri_regex_rewrite` applies an RE2 regex
+    substitution. Both are mutually exclusive with the existing `uri` field.
