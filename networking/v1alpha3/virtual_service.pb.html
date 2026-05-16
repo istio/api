@@ -1508,6 +1508,25 @@ spec:
       authority: newratings.default.svc.cluster.local
   ...
 </code></pre>
+<p>The following rule redirects requests with a path prefix of /foo to the
+authority foo.example.com, stripping the /foo prefix from the path:</p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: foo-redirect
+spec:
+  hosts:
+  - example.com
+  http:
+  - match:
+    - uri:
+        prefix: /foo/
+    redirect:
+      authority: foo.example.com
+      prefix_rewrite: /
+</code></pre>
+<p>With this rule, a request to example.com/foo/bar is redirected to
+foo.example.com/bar.</p>
 
 <table class="message-fields">
 <thead>
@@ -1525,7 +1544,7 @@ spec:
 <p>On a redirect, overwrite the Path portion of the URL with this
 value. Note that the entire path will be replaced, irrespective of the
 request URI being matched as an exact path or prefix.</p>
-<p>Mutually exclusive with <code>prefixRewrite</code> and <code>uriRegexRewrite</code>.</p>
+<p>Mutually exclusive with prefix_rewrite and uri_regex_rewrite.</p>
 
 </td>
 </tr>
@@ -1588,15 +1607,15 @@ response. The default response code is MOVED_PERMANENTLY (301).</p>
 <div class="type">string (oneof)</div>
 </div></td>
 <td>
-<p>On a redirect, replace the matched route prefix with this value. The route
-match must use a prefix match type. The matched prefix is stripped from the
-path and this value is prepended.</p>
+<p>On a redirect, replace the matched prefix (or the entire path for exact
+matches) with this value. The route match must use a prefix match type.
+The matched prefix is stripped from the path and this value is prepended.</p>
 <p>Examples (route prefix match: /foo):</p>
 <ul>
-<li>prefixRewrite: /bar → /foo/baz becomes /bar/baz</li>
-<li>prefixRewrite: / → /foo/baz becomes //baz (use /foo/ match to get /baz)</li>
+<li>prefix_rewrite: /bar → /foo/baz becomes /bar/baz</li>
+<li>prefix_rewrite: /   → /foo/baz becomes //baz (use /foo/ match to get /baz)</li>
 </ul>
-<p>Mutually exclusive with <code>uri</code> and <code>uriRegexRewrite</code>.</p>
+<p>Mutually exclusive with uri and uri_regex_rewrite.</p>
 
 </td>
 </tr>
@@ -1608,8 +1627,8 @@ path and this value is prepended.</p>
 <p>On a redirect, rewrite the path portion of the URI with the specified
 RE2 regex. Capture groups in the pattern may be referenced in the
 replacement string.</p>
-<p>Example: match <code>^/foo(/.*)$</code> with rewrite <code>\1</code> rewrites /foo/bar to /bar.</p>
-<p>Mutually exclusive with <code>uri</code> and <code>prefixRewrite</code>.</p>
+<p>Example: match &ldquo;^/foo(/.*)$&rdquo; with rewrite &ldquo;\1&rdquo; rewrites /foo/bar to /bar.</p>
+<p>Mutually exclusive with uri and prefix_rewrite.</p>
 
 </td>
 </tr>

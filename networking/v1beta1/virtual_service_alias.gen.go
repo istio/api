@@ -520,6 +520,33 @@ type TLSMatchAttributes = v1alpha3.TLSMatchAttributes
 //	...
 //
 // ```
+//
+// The following rule redirects requests with a path prefix of /foo to the
+// authority foo.example.com, stripping the /foo prefix from the path:
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1
+// kind: VirtualService
+// metadata:
+//
+//	name: foo-redirect
+//
+// spec:
+//
+//	hosts:
+//	- example.com
+//	http:
+//	- match:
+//	  - uri:
+//	      prefix: /foo/
+//	  redirect:
+//	    authority: foo.example.com
+//	    prefix_rewrite: /
+//
+// ```
+//
+// With this rule, a request to example.com/foo/bar is redirected to
+// foo.example.com/bar.
 type HTTPRedirect = v1alpha3.HTTPRedirect
 type HTTPRedirect_RedirectPortSelection = v1alpha3.HTTPRedirect_RedirectPortSelection
 
@@ -533,6 +560,26 @@ type HTTPRedirect_Port = v1alpha3.HTTPRedirect_Port
 // * FROM_PROTOCOL_DEFAULT: automatically set to 80 for HTTP and 443 for HTTPS.
 // * FROM_REQUEST_PORT: automatically use the port of the request.
 type HTTPRedirect_DerivePort = v1alpha3.HTTPRedirect_DerivePort
+
+// On a redirect, replace the matched prefix (or the entire path for exact
+// matches) with this value. The route match must use a prefix match type.
+// The matched prefix is stripped from the path and this value is prepended.
+//
+// Examples (route prefix match: /foo):
+// - prefix_rewrite: /bar → /foo/baz becomes /bar/baz
+// - prefix_rewrite: /   → /foo/baz becomes //baz (use /foo/ match to get /baz)
+//
+// Mutually exclusive with uri and uri_regex_rewrite.
+type HTTPRedirect_PrefixRewrite = v1alpha3.HTTPRedirect_PrefixRewrite
+
+// On a redirect, rewrite the path portion of the URI with the specified
+// RE2 regex. Capture groups in the pattern may be referenced in the
+// replacement string.
+//
+// Example: match "^/foo(/.*)$" with rewrite "\\1" rewrites /foo/bar to /bar.
+//
+// Mutually exclusive with uri and prefix_rewrite.
+type HTTPRedirect_UriRegexRewrite = v1alpha3.HTTPRedirect_UriRegexRewrite
 
 // HTTPDirectResponse can be used to send a fixed response to clients.
 // For example, the following rule returns a fixed 503 status with a body
