@@ -29,6 +29,8 @@ const (
 	Unknown ResourceTypes = iota
     Any
     AuthorizationPolicy
+    BackendTLSPolicy
+    BackendTrafficPolicy
     Gateway
     GatewayClass
     Ingress
@@ -46,20 +48,24 @@ func (r ResourceTypes) String() string {
 	case 2:
 		return "AuthorizationPolicy"
 	case 3:
-		return "Gateway"
+		return "BackendTLSPolicy"
 	case 4:
-		return "GatewayClass"
+		return "BackendTrafficPolicy"
 	case 5:
-		return "Ingress"
+		return "Gateway"
 	case 6:
-		return "Namespace"
+		return "GatewayClass"
 	case 7:
-		return "Pod"
+		return "Ingress"
 	case 8:
-		return "Service"
+		return "Namespace"
 	case 9:
-		return "ServiceEntry"
+		return "Pod"
 	case 10:
+		return "Service"
+	case 11:
+		return "ServiceEntry"
+	case 12:
 		return "WorkloadEntry"
 	}
 	return "Unknown"
@@ -282,6 +288,21 @@ This takes the format: "<protocol>" or "<protocol>/<port>".
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			AuthorizationPolicy,
+		},
+	}
+
+	IoIstioIgnorePolicyAttachment = Instance {
+		Name:          "istio.io/ignore-policy-attachment",
+		Description:   "When set to true on a policy attachment CRD object "+
+                        "(BackendTLSPolicy, BackendTrafficPolicy), the object will "+
+                        "not be used by the Istio control plane to generate "+
+                        "configuration or conflict with other policies.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			BackendTLSPolicy,
+			BackendTrafficPolicy,
 		},
 	}
 
@@ -981,6 +1002,7 @@ func AllResourceAnnotations() []*Instance {
 		&IoIstioConnectedAt,
 		&IoIstioDisconnectedAt,
 		&IoIstioDryRun,
+		&IoIstioIgnorePolicyAttachment,
 		&IoIstioRerouteVirtualInterfaces,
 		&IoIstioRev,
 		&IoIstioWorkloadController,
@@ -1040,6 +1062,8 @@ func AllResourceTypes() []string {
 	return []string {
 		"Any",
 		"AuthorizationPolicy",
+		"BackendTLSPolicy",
+		"BackendTrafficPolicy",
 		"Gateway",
 		"GatewayClass",
 		"Ingress",
