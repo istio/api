@@ -1,0 +1,11 @@
+apiVersion: release-notes/v2
+kind: feature
+area: security
+issue:
+  - https://github.com/istio/istio/issues/60259
+
+releaseNotes:
+  - |
+    **Added** `clockSkewSeconds` field in `RequestAuthentication` under `spec.jwtRules.` to configure the
+    clock skew tolerance (in seconds) applied when validating the JWT `exp` and `nbf` claims. When unset,
+    the previous default of 60 seconds is preserved.

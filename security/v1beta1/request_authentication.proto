@@ -487,8 +487,12 @@ message JWTRule {
   // +kubebuilder:validation:MaxItems=64
   repeated string space_delimited_claims = 14;
 
+  // The clock skew, in seconds, allowed when verifying the JWT `exp` and `nbf`
+  // claims. If not specified, the default is 60 seconds.
+  uint32 clock_skew_seconds = 15;
+
   // $hide_from_docs
-  // Next available field number: 15
+  // Next available field number: 16
 }
 
 // This message specifies a header location to extract JWT token.
