@@ -320,6 +320,7 @@ const (
 	// In `ALLOW_ANY_DYNAMIC_DNS` mode, traffic to unknown destinations will be allowed via dynamic DNS resolution.
 	// This mode allows users that do not have all possible egress destinations registered through `ServiceEntry` configurations to still connect
 	// to arbitrary destinations. Client TLS settings can be configured for connections to such destinations.
+	// This mode cannot be used at the Sidecar level.
 	MeshConfig_OutboundTrafficPolicy_ALLOW_ANY_DYNAMIC_DNS MeshConfig_OutboundTrafficPolicy_Mode = 3
 )
 
@@ -864,7 +865,7 @@ type MeshConfig struct {
 	// On Kubernetes, this can be overridden on individual pods with the `proxy.istio.io/config` annotation.
 	DefaultConfig *ProxyConfig `protobuf:"bytes,14,opt,name=default_config,json=defaultConfig,proto3" json:"default_config,omitempty"`
 	// Set the default behavior of the sidecar for handling outbound
-	// traffic from the application.
+	// traffic from the application. This does not apply to gateways.
 	//
 	// Can be overridden at a Sidecar level by setting the `OutboundTrafficPolicy` in the
 	// [Sidecar API](https://istio.io/docs/reference/config/networking/sidecar/#OutboundTrafficPolicy).
