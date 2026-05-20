@@ -4152,7 +4152,8 @@ Optional.</p>
 <div class="type"><a href="#ProxyConfig-ProxyConfigProfile">ProxyConfigProfile</a></div>
 </div></td>
 <td>
-<p>The config profile to use for this proxy.</p>
+<p>The config profile to use for this proxy.
+See <code>ProxyConfigProfile</code> for how this interacts with the fields below.</p>
 
 </td>
 </tr>
@@ -4856,8 +4857,9 @@ configuration that typically requires changes to user applications.</p>
 <h3 id="ProxyConfig-ProxyConfigProfile">ProxyConfigProfile</h3>
 <section>
 <p>ProxyConfigProfile defines the configuration profile for the proxy.
-Different profiles optimize the proxy&rsquo;s behavior for specific deployment patterns.
-The profile determines which configuration settings are applied by default.</p>
+The profile determines default values for the fields below (buffer limits,
+timeouts, HTTP/2 tuning, header/path normalization, and connection limits).
+Explicitly setting any field always takes precedence over profile defaults.</p>
 
 <table class="enum-values">
 <thead>
@@ -4870,19 +4872,18 @@ The profile determines which configuration settings are applied by default.</p>
 <tr id="ProxyConfig-ProxyConfigProfile-SIDECAR">
 <td><code><a href="#ProxyConfig-ProxyConfigProfile-SIDECAR">SIDECAR</a></code></td>
 <td>
-<p>SIDECAR profile is optimized for sidecar deployments.
-This is the default profile and is suitable for proxies running alongside application containers.
-Sidecar proxies typically handle lower connection volumes and shorter-lived connections.</p>
+<p>SIDECAR profile preserves existing Istio behavior.
+This is the default profile. No additional defaults are applied.</p>
 
 </td>
 </tr>
 <tr id="ProxyConfig-ProxyConfigProfile-EDGE">
 <td><code><a href="#ProxyConfig-ProxyConfigProfile-EDGE">EDGE</a></code></td>
 <td>
-<p>EDGE profile is optimized for edge gateway deployments.
-This profile is suitable for proxies that serve as ingress or egress gateways.
-Edge proxies typically handle higher connection volumes, longer-lived connections,
-and require more robust buffer and timeout configurations.</p>
+<p>EDGE profile applies Envoy&rsquo;s recommended defaults for edge gateway deployments.
+See <a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/best_practices/edge">https://www.envoyproxy.io/docs/envoy/latest/configuration/best_practices/edge</a>
+When selected, recommended defaults are applied for the fields below.
+Explicitly setting any field overrides the corresponding profile default.</p>
 
 </td>
 </tr>

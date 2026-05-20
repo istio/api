@@ -775,22 +775,23 @@ message ProxyConfig {
   google.protobuf.BoolValue stats_compression = 42;
 
   // ProxyConfigProfile defines the configuration profile for the proxy.
-  // Different profiles optimize the proxy's behavior for specific deployment patterns.
-  // The profile determines which configuration settings are applied by default.
+  // The profile determines default values for the fields below (buffer limits,
+  // timeouts, HTTP/2 tuning, header/path normalization, and connection limits).
+  // Explicitly setting any field always takes precedence over profile defaults.
   enum ProxyConfigProfile {
-    // SIDECAR profile is optimized for sidecar deployments.
-    // This is the default profile and is suitable for proxies running alongside application containers.
-    // Sidecar proxies typically handle lower connection volumes and shorter-lived connections.
+    // SIDECAR profile preserves existing Istio behavior.
+    // This is the default profile. No additional defaults are applied.
     SIDECAR = 0;
 
-    // EDGE profile is optimized for edge gateway deployments.
-    // This profile is suitable for proxies that serve as ingress or egress gateways.
-    // Edge proxies typically handle higher connection volumes, longer-lived connections,
-    // and require more robust buffer and timeout configurations.
+    // EDGE profile applies Envoy's recommended defaults for edge gateway deployments.
+    // See https://www.envoyproxy.io/docs/envoy/latest/configuration/best_practices/edge
+    // When selected, recommended defaults are applied for the fields below.
+    // Explicitly setting any field overrides the corresponding profile default.
     EDGE = 1;
   }
 
   // The config profile to use for this proxy.
+  // See `ProxyConfigProfile` for how this interacts with the fields below.
   ProxyConfigProfile profile = 43;
 
   // Soft limit on size of the listener's new connection read and write buffers in bytes.
