@@ -327,6 +327,117 @@ const ConnectionPoolSettings_HTTPSettings_UPGRADE ConnectionPoolSettings_HTTPSet
 // ```
 type OutlierDetection = v1alpha3.OutlierDetection
 
+// Configures automatic concurrency limits for requests to an upstream service.
+// When enabled, the sidecar proxy will dynamically calculate and enforce a
+// maximum number of outstanding requests allowed to the destination based on
+// periodic latency sampling. If the measured latency increases relative to the
+// baseline (minRTT), the concurrency limit is reduced; if latency remains
+// stable, the limit is gradually increased. Requests that exceed the current
+// concurrency limit are immediately rejected with the configured HTTP status
+// code (default 503) without being forwarded to the upstream.
+//
+// This is useful for protecting upstream services from being overwhelmed during
+// load spikes or degraded performance, without requiring operators to manually
+// set fixed concurrency thresholds.
+//
+// **Important:** When using dynamic sampling (`dynamic_sampling`), the controller
+// periodically enters a minRTT measurement window where the concurrency limit
+// drops to `min_concurrency` (default 3). During this window, requests exceeding
+// that limit are rejected with 503. This can cause a noticeable spike in errors,
+// especially under high traffic. To mitigate this:
+//   - Enable client-side retries for 503s, ideally with the `previous_hosts`
+//     retry predicate so rejected requests are retried on a different host
+//     that is not in a measurement window.
+//   - Use `jitter` to stagger measurement windows across hosts.
+//   - Consider using `fixed_latency` instead of `dynamic_sampling` if the
+//     upstream's baseline latency is well-known and stable.
+//
+// See https://github.com/envoyproxy/envoy/issues/18152 for a real-world
+// example of 503s during minRTT calculation windows.
+//
+// See Envoy's
+// [adaptive concurrency filter](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/adaptive_concurrency_filter)
+// for more details.
+//
+// The following example enables adaptive concurrency limiting for my-service,
+// using the gradient controller to automatically adjust the concurrency limit
+// based on latency measurements taken every 60 seconds:
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1
+// kind: DestinationRule
+// metadata:
+//
+//	name: my-service-adaptive
+//
+// spec:
+//
+//	host: my-service.default.svc.cluster.local
+//	trafficPolicy:
+//	  adaptiveConcurrency:
+//	    gradientControllerConfig:
+//	      sampleAggregatePercentile: 50
+//	      concurrencyLimitParams:
+//	        maxConcurrencyLimit: 1000
+//	        concurrencyUpdateInterval: 100ms
+//	      minRttCalcParams:
+//	        dynamicSampling:
+//	          interval: 60s
+//	          requestCount: 50
+//	          jitter: 10
+//	          minConcurrency: 3
+//	        buffer: 25
+//	    concurrencyLimitExceededStatus: 503
+//
+// ```
+type AdaptiveConcurrency = v1alpha3.AdaptiveConcurrency
+
+// Configuration parameters for the gradient concurrency controller.
+// The gradient controller makes forwarding decisions based on a periodically
+// measured ideal round-trip time (minRTT) for an upstream.
+type AdaptiveConcurrency_GradientControllerConfig = v1alpha3.AdaptiveConcurrency_GradientControllerConfig
+
+// Parameters controlling the periodic recalculation of the concurrency limit
+// from sampled request latencies.
+type AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_ConcurrencyLimitCalculationParams
+
+// Parameters controlling how the minRTT (baseline latency) is determined.
+// The minRTT is periodically measured by allowing only a very low outstanding
+// request count to an upstream cluster and measuring the latency under
+// these ideal conditions.
+type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams
+
+// Parameters for dynamically sampling the minRTT by periodically entering
+// a low-concurrency measurement window.
+type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling
+
+// Periodically sample the minRTT by entering a low-concurrency
+// measurement window. Use this when the upstream's baseline latency
+// may change over time.
+type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling_ = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_DynamicSampling_
+
+// A fixed baseline round-trip time (minRTT) for the upstream, specified
+// as a duration (e.g., `5ms`, `10ms`). Must be positive. This tells the
+// gradient controller "assume the upstream responds in this time under
+// ideal conditions" and skips dynamic sampling entirely.
+//
+// The gradient algorithm uses minRTT as the reference in its formula:
+//
+//	gradient = (minRTT + buffer) / sampleRTT
+//	new_limit = old_limit × gradient + headroom
+//
+// where buffer = minRTT × buffer_percent, and headroom = sqrt(limit).
+// So if measured latency rises above minRTT + buffer, the concurrency
+// limit is reduced; if it stays near minRTT, the limit grows.
+//
+// Use this when the baseline latency of the upstream is well-known and
+// stable, to avoid the periodic low-concurrency measurement windows
+// that dynamic sampling requires.
+type AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_FixedLatency = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_MinimumRTTCalculationParams_FixedLatency
+
+// Gradient concurrency control will be used.
+type AdaptiveConcurrency_GradientControllerConfig_ = v1alpha3.AdaptiveConcurrency_GradientControllerConfig_
+
 // SSL/TLS related settings for upstream connections. See Envoy's [TLS
 // context](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/common.proto.html#common-tls-configuration)
 // for more details. These settings are common to both HTTP and TCP upstreams.

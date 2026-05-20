@@ -1,0 +1,11 @@
+apiVersion: release-notes/v2
+
+kind: feature
+area: traffic-management
+issue: []
+
+releaseNotes:
+- |
+    **Added** adaptive concurrency filter configuration to DestinationRule TrafficPolicy API.
+    This enables dynamic concurrency limiting for upstream services based on sampled latency
+    measurements using Envoy's gradient controller.
