@@ -124,6 +124,7 @@ import (
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	v1beta1 "istio.io/api/type/v1beta1"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -340,9 +341,40 @@ type VirtualService struct {
 	// The value "." is reserved and defines an export to the same namespace that
 	// the virtual service is declared in. Similarly the value "*" is reserved and
 	// defines an export to all namespaces.
-	ExportTo      []string `protobuf:"bytes,6,rep,name=export_to,json=exportTo,proto3" json:"export_to,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	ExportTo []string `protobuf:"bytes,6,rep,name=export_to,json=exportTo,proto3" json:"export_to,omitempty"`
+	// A list of label selectors to dynamically select namespaces to which this
+	// virtual service is exported. Each selector can match namespaces based on their labels.
+	// This provides a mechanism for service owners and mesh administrators to control
+	// the visibility of virtual services across namespace boundaries without knowing namespace
+	// names in advance.
+	//
+	// For example, to export to all namespaces with a specific label:
+	// ```yaml
+	// exportToSelectors:
+	//   - matchLabels:
+	//     mesh: enabled
+	//
+	// ```
+	//
+	// Or using match expressions for more complex selection:
+	// ```yaml
+	// exportToSelectors:
+	// - matchExpressions:
+	//   - key: environment
+	//     operator: In
+	//     values: [production, staging]
+	//
+	// ```
+	//
+	// When both export_to and export_to_selectors are specified, the virtual service is
+	// exported to the union of all matched namespaces. If neither is specified,
+	// the virtual service is exported to all namespaces by default.
+	//
+	// **Note:** Using "*" in export_to makes export_to_selectors redundant as
+	// the virtual service would already be visible to all namespaces.
+	ExportToSelectors []*v1beta1.LabelSelector `protobuf:"bytes,7,rep,name=export_to_selectors,json=exportToSelectors,proto3" json:"export_to_selectors,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *VirtualService) Reset() {
@@ -413,6 +445,13 @@ func (x *VirtualService) GetTcp() []*TCPRoute {
 func (x *VirtualService) GetExportTo() []string {
 	if x != nil {
 		return x.ExportTo
+	}
+	return nil
+}
+
+func (x *VirtualService) GetExportToSelectors() []*v1beta1.LabelSelector {
+	if x != nil {
+		return x.ExportToSelectors
 	}
 	return nil
 }
@@ -3514,14 +3553,15 @@ var File_networking_v1alpha3_virtual_service_proto protoreflect.FileDescriptor
 
 const file_networking_v1alpha3_virtual_service_proto_rawDesc = "" +
 	"\n" +
-	")networking/v1alpha3/virtual_service.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x87\x02\n" +
+	")networking/v1alpha3/virtual_service.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1btype/v1beta1/selector.proto\"\xda\x02\n" +
 	"\x0eVirtualService\x12\x14\n" +
 	"\x05hosts\x18\x01 \x03(\tR\x05hosts\x12\x1a\n" +
 	"\bgateways\x18\x02 \x03(\tR\bgateways\x128\n" +
 	"\x04http\x18\x03 \x03(\v2$.istio.networking.v1alpha3.HTTPRouteR\x04http\x125\n" +
 	"\x03tls\x18\x05 \x03(\v2#.istio.networking.v1alpha3.TLSRouteR\x03tls\x125\n" +
 	"\x03tcp\x18\x04 \x03(\v2#.istio.networking.v1alpha3.TCPRouteR\x03tcp\x12\x1b\n" +
-	"\texport_to\x18\x06 \x03(\tR\bexportTo\"|\n" +
+	"\texport_to\x18\x06 \x03(\tR\bexportTo\x12Q\n" +
+	"\x13export_to_selectors\x18\a \x03(\v2!.istio.type.v1beta1.LabelSelectorR\x11exportToSelectors\"|\n" +
 	"\vDestination\x12\x18\n" +
 	"\x04host\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x04host\x12\x16\n" +
 	"\x06subset\x18\x02 \x01(\tR\x06subset\x12;\n" +
@@ -3763,78 +3803,80 @@ var file_networking_v1alpha3_virtual_service_proto_goTypes = []any{
 	nil,                                     // 34: istio.networking.v1alpha3.TLSMatchAttributes.SourceLabelsEntry
 	(*HTTPFaultInjection_Delay)(nil),        // 35: istio.networking.v1alpha3.HTTPFaultInjection.Delay
 	(*HTTPFaultInjection_Abort)(nil),        // 36: istio.networking.v1alpha3.HTTPFaultInjection.Abort
-	(*duration.Duration)(nil),               // 37: google.protobuf.Duration
-	(*wrappers.UInt32Value)(nil),            // 38: google.protobuf.UInt32Value
-	(*wrappers.BoolValue)(nil),              // 39: google.protobuf.BoolValue
+	(*v1beta1.LabelSelector)(nil),           // 37: istio.type.v1beta1.LabelSelector
+	(*duration.Duration)(nil),               // 38: google.protobuf.Duration
+	(*wrappers.UInt32Value)(nil),            // 39: google.protobuf.UInt32Value
+	(*wrappers.BoolValue)(nil),              // 40: google.protobuf.BoolValue
 }
 var file_networking_v1alpha3_virtual_service_proto_depIdxs = []int32{
 	4,  // 0: istio.networking.v1alpha3.VirtualService.http:type_name -> istio.networking.v1alpha3.HTTPRoute
 	7,  // 1: istio.networking.v1alpha3.VirtualService.tls:type_name -> istio.networking.v1alpha3.TLSRoute
 	8,  // 2: istio.networking.v1alpha3.VirtualService.tcp:type_name -> istio.networking.v1alpha3.TCPRoute
-	24, // 3: istio.networking.v1alpha3.Destination.port:type_name -> istio.networking.v1alpha3.PortSelector
-	9,  // 4: istio.networking.v1alpha3.HTTPRoute.match:type_name -> istio.networking.v1alpha3.HTTPMatchRequest
-	10, // 5: istio.networking.v1alpha3.HTTPRoute.route:type_name -> istio.networking.v1alpha3.HTTPRouteDestination
-	14, // 6: istio.networking.v1alpha3.HTTPRoute.redirect:type_name -> istio.networking.v1alpha3.HTTPRedirect
-	15, // 7: istio.networking.v1alpha3.HTTPRoute.direct_response:type_name -> istio.networking.v1alpha3.HTTPDirectResponse
-	5,  // 8: istio.networking.v1alpha3.HTTPRoute.delegate:type_name -> istio.networking.v1alpha3.Delegate
-	17, // 9: istio.networking.v1alpha3.HTTPRoute.rewrite:type_name -> istio.networking.v1alpha3.HTTPRewrite
-	37, // 10: istio.networking.v1alpha3.HTTPRoute.timeout:type_name -> google.protobuf.Duration
-	20, // 11: istio.networking.v1alpha3.HTTPRoute.retries:type_name -> istio.networking.v1alpha3.HTTPRetry
-	22, // 12: istio.networking.v1alpha3.HTTPRoute.fault:type_name -> istio.networking.v1alpha3.HTTPFaultInjection
-	3,  // 13: istio.networking.v1alpha3.HTTPRoute.mirror:type_name -> istio.networking.v1alpha3.Destination
-	23, // 14: istio.networking.v1alpha3.HTTPRoute.mirrors:type_name -> istio.networking.v1alpha3.HTTPMirrorPolicy
-	38, // 15: istio.networking.v1alpha3.HTTPRoute.mirror_percent:type_name -> google.protobuf.UInt32Value
-	25, // 16: istio.networking.v1alpha3.HTTPRoute.mirror_percentage:type_name -> istio.networking.v1alpha3.Percent
-	21, // 17: istio.networking.v1alpha3.HTTPRoute.cors_policy:type_name -> istio.networking.v1alpha3.CorsPolicy
-	6,  // 18: istio.networking.v1alpha3.HTTPRoute.headers:type_name -> istio.networking.v1alpha3.Headers
-	26, // 19: istio.networking.v1alpha3.Headers.request:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations
-	26, // 20: istio.networking.v1alpha3.Headers.response:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations
-	13, // 21: istio.networking.v1alpha3.TLSRoute.match:type_name -> istio.networking.v1alpha3.TLSMatchAttributes
-	11, // 22: istio.networking.v1alpha3.TLSRoute.route:type_name -> istio.networking.v1alpha3.RouteDestination
-	12, // 23: istio.networking.v1alpha3.TCPRoute.match:type_name -> istio.networking.v1alpha3.L4MatchAttributes
-	11, // 24: istio.networking.v1alpha3.TCPRoute.route:type_name -> istio.networking.v1alpha3.RouteDestination
-	19, // 25: istio.networking.v1alpha3.HTTPMatchRequest.uri:type_name -> istio.networking.v1alpha3.StringMatch
-	19, // 26: istio.networking.v1alpha3.HTTPMatchRequest.scheme:type_name -> istio.networking.v1alpha3.StringMatch
-	19, // 27: istio.networking.v1alpha3.HTTPMatchRequest.method:type_name -> istio.networking.v1alpha3.StringMatch
-	19, // 28: istio.networking.v1alpha3.HTTPMatchRequest.authority:type_name -> istio.networking.v1alpha3.StringMatch
-	29, // 29: istio.networking.v1alpha3.HTTPMatchRequest.headers:type_name -> istio.networking.v1alpha3.HTTPMatchRequest.HeadersEntry
-	30, // 30: istio.networking.v1alpha3.HTTPMatchRequest.source_labels:type_name -> istio.networking.v1alpha3.HTTPMatchRequest.SourceLabelsEntry
-	31, // 31: istio.networking.v1alpha3.HTTPMatchRequest.query_params:type_name -> istio.networking.v1alpha3.HTTPMatchRequest.QueryParamsEntry
-	32, // 32: istio.networking.v1alpha3.HTTPMatchRequest.without_headers:type_name -> istio.networking.v1alpha3.HTTPMatchRequest.WithoutHeadersEntry
-	3,  // 33: istio.networking.v1alpha3.HTTPRouteDestination.destination:type_name -> istio.networking.v1alpha3.Destination
-	6,  // 34: istio.networking.v1alpha3.HTTPRouteDestination.headers:type_name -> istio.networking.v1alpha3.Headers
-	3,  // 35: istio.networking.v1alpha3.RouteDestination.destination:type_name -> istio.networking.v1alpha3.Destination
-	33, // 36: istio.networking.v1alpha3.L4MatchAttributes.source_labels:type_name -> istio.networking.v1alpha3.L4MatchAttributes.SourceLabelsEntry
-	34, // 37: istio.networking.v1alpha3.TLSMatchAttributes.source_labels:type_name -> istio.networking.v1alpha3.TLSMatchAttributes.SourceLabelsEntry
-	0,  // 38: istio.networking.v1alpha3.HTTPRedirect.derive_port:type_name -> istio.networking.v1alpha3.HTTPRedirect.RedirectPortSelection
-	16, // 39: istio.networking.v1alpha3.HTTPDirectResponse.body:type_name -> istio.networking.v1alpha3.HTTPBody
-	18, // 40: istio.networking.v1alpha3.HTTPRewrite.uri_regex_rewrite:type_name -> istio.networking.v1alpha3.RegexRewrite
-	37, // 41: istio.networking.v1alpha3.HTTPRetry.per_try_timeout:type_name -> google.protobuf.Duration
-	39, // 42: istio.networking.v1alpha3.HTTPRetry.retry_remote_localities:type_name -> google.protobuf.BoolValue
-	39, // 43: istio.networking.v1alpha3.HTTPRetry.retry_ignore_previous_hosts:type_name -> google.protobuf.BoolValue
-	37, // 44: istio.networking.v1alpha3.HTTPRetry.backoff:type_name -> google.protobuf.Duration
-	19, // 45: istio.networking.v1alpha3.CorsPolicy.allow_origins:type_name -> istio.networking.v1alpha3.StringMatch
-	37, // 46: istio.networking.v1alpha3.CorsPolicy.max_age:type_name -> google.protobuf.Duration
-	39, // 47: istio.networking.v1alpha3.CorsPolicy.allow_credentials:type_name -> google.protobuf.BoolValue
-	1,  // 48: istio.networking.v1alpha3.CorsPolicy.unmatched_preflights:type_name -> istio.networking.v1alpha3.CorsPolicy.UnmatchedPreflights
-	35, // 49: istio.networking.v1alpha3.HTTPFaultInjection.delay:type_name -> istio.networking.v1alpha3.HTTPFaultInjection.Delay
-	36, // 50: istio.networking.v1alpha3.HTTPFaultInjection.abort:type_name -> istio.networking.v1alpha3.HTTPFaultInjection.Abort
-	3,  // 51: istio.networking.v1alpha3.HTTPMirrorPolicy.destination:type_name -> istio.networking.v1alpha3.Destination
-	25, // 52: istio.networking.v1alpha3.HTTPMirrorPolicy.percentage:type_name -> istio.networking.v1alpha3.Percent
-	27, // 53: istio.networking.v1alpha3.Headers.HeaderOperations.set:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations.SetEntry
-	28, // 54: istio.networking.v1alpha3.Headers.HeaderOperations.add:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations.AddEntry
-	19, // 55: istio.networking.v1alpha3.HTTPMatchRequest.HeadersEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
-	19, // 56: istio.networking.v1alpha3.HTTPMatchRequest.QueryParamsEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
-	19, // 57: istio.networking.v1alpha3.HTTPMatchRequest.WithoutHeadersEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
-	37, // 58: istio.networking.v1alpha3.HTTPFaultInjection.Delay.fixed_delay:type_name -> google.protobuf.Duration
-	37, // 59: istio.networking.v1alpha3.HTTPFaultInjection.Delay.exponential_delay:type_name -> google.protobuf.Duration
-	25, // 60: istio.networking.v1alpha3.HTTPFaultInjection.Delay.percentage:type_name -> istio.networking.v1alpha3.Percent
-	25, // 61: istio.networking.v1alpha3.HTTPFaultInjection.Abort.percentage:type_name -> istio.networking.v1alpha3.Percent
-	62, // [62:62] is the sub-list for method output_type
-	62, // [62:62] is the sub-list for method input_type
-	62, // [62:62] is the sub-list for extension type_name
-	62, // [62:62] is the sub-list for extension extendee
-	0,  // [0:62] is the sub-list for field type_name
+	37, // 3: istio.networking.v1alpha3.VirtualService.export_to_selectors:type_name -> istio.type.v1beta1.LabelSelector
+	24, // 4: istio.networking.v1alpha3.Destination.port:type_name -> istio.networking.v1alpha3.PortSelector
+	9,  // 5: istio.networking.v1alpha3.HTTPRoute.match:type_name -> istio.networking.v1alpha3.HTTPMatchRequest
+	10, // 6: istio.networking.v1alpha3.HTTPRoute.route:type_name -> istio.networking.v1alpha3.HTTPRouteDestination
+	14, // 7: istio.networking.v1alpha3.HTTPRoute.redirect:type_name -> istio.networking.v1alpha3.HTTPRedirect
+	15, // 8: istio.networking.v1alpha3.HTTPRoute.direct_response:type_name -> istio.networking.v1alpha3.HTTPDirectResponse
+	5,  // 9: istio.networking.v1alpha3.HTTPRoute.delegate:type_name -> istio.networking.v1alpha3.Delegate
+	17, // 10: istio.networking.v1alpha3.HTTPRoute.rewrite:type_name -> istio.networking.v1alpha3.HTTPRewrite
+	38, // 11: istio.networking.v1alpha3.HTTPRoute.timeout:type_name -> google.protobuf.Duration
+	20, // 12: istio.networking.v1alpha3.HTTPRoute.retries:type_name -> istio.networking.v1alpha3.HTTPRetry
+	22, // 13: istio.networking.v1alpha3.HTTPRoute.fault:type_name -> istio.networking.v1alpha3.HTTPFaultInjection
+	3,  // 14: istio.networking.v1alpha3.HTTPRoute.mirror:type_name -> istio.networking.v1alpha3.Destination
+	23, // 15: istio.networking.v1alpha3.HTTPRoute.mirrors:type_name -> istio.networking.v1alpha3.HTTPMirrorPolicy
+	39, // 16: istio.networking.v1alpha3.HTTPRoute.mirror_percent:type_name -> google.protobuf.UInt32Value
+	25, // 17: istio.networking.v1alpha3.HTTPRoute.mirror_percentage:type_name -> istio.networking.v1alpha3.Percent
+	21, // 18: istio.networking.v1alpha3.HTTPRoute.cors_policy:type_name -> istio.networking.v1alpha3.CorsPolicy
+	6,  // 19: istio.networking.v1alpha3.HTTPRoute.headers:type_name -> istio.networking.v1alpha3.Headers
+	26, // 20: istio.networking.v1alpha3.Headers.request:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations
+	26, // 21: istio.networking.v1alpha3.Headers.response:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations
+	13, // 22: istio.networking.v1alpha3.TLSRoute.match:type_name -> istio.networking.v1alpha3.TLSMatchAttributes
+	11, // 23: istio.networking.v1alpha3.TLSRoute.route:type_name -> istio.networking.v1alpha3.RouteDestination
+	12, // 24: istio.networking.v1alpha3.TCPRoute.match:type_name -> istio.networking.v1alpha3.L4MatchAttributes
+	11, // 25: istio.networking.v1alpha3.TCPRoute.route:type_name -> istio.networking.v1alpha3.RouteDestination
+	19, // 26: istio.networking.v1alpha3.HTTPMatchRequest.uri:type_name -> istio.networking.v1alpha3.StringMatch
+	19, // 27: istio.networking.v1alpha3.HTTPMatchRequest.scheme:type_name -> istio.networking.v1alpha3.StringMatch
+	19, // 28: istio.networking.v1alpha3.HTTPMatchRequest.method:type_name -> istio.networking.v1alpha3.StringMatch
+	19, // 29: istio.networking.v1alpha3.HTTPMatchRequest.authority:type_name -> istio.networking.v1alpha3.StringMatch
+	29, // 30: istio.networking.v1alpha3.HTTPMatchRequest.headers:type_name -> istio.networking.v1alpha3.HTTPMatchRequest.HeadersEntry
+	30, // 31: istio.networking.v1alpha3.HTTPMatchRequest.source_labels:type_name -> istio.networking.v1alpha3.HTTPMatchRequest.SourceLabelsEntry
+	31, // 32: istio.networking.v1alpha3.HTTPMatchRequest.query_params:type_name -> istio.networking.v1alpha3.HTTPMatchRequest.QueryParamsEntry
+	32, // 33: istio.networking.v1alpha3.HTTPMatchRequest.without_headers:type_name -> istio.networking.v1alpha3.HTTPMatchRequest.WithoutHeadersEntry
+	3,  // 34: istio.networking.v1alpha3.HTTPRouteDestination.destination:type_name -> istio.networking.v1alpha3.Destination
+	6,  // 35: istio.networking.v1alpha3.HTTPRouteDestination.headers:type_name -> istio.networking.v1alpha3.Headers
+	3,  // 36: istio.networking.v1alpha3.RouteDestination.destination:type_name -> istio.networking.v1alpha3.Destination
+	33, // 37: istio.networking.v1alpha3.L4MatchAttributes.source_labels:type_name -> istio.networking.v1alpha3.L4MatchAttributes.SourceLabelsEntry
+	34, // 38: istio.networking.v1alpha3.TLSMatchAttributes.source_labels:type_name -> istio.networking.v1alpha3.TLSMatchAttributes.SourceLabelsEntry
+	0,  // 39: istio.networking.v1alpha3.HTTPRedirect.derive_port:type_name -> istio.networking.v1alpha3.HTTPRedirect.RedirectPortSelection
+	16, // 40: istio.networking.v1alpha3.HTTPDirectResponse.body:type_name -> istio.networking.v1alpha3.HTTPBody
+	18, // 41: istio.networking.v1alpha3.HTTPRewrite.uri_regex_rewrite:type_name -> istio.networking.v1alpha3.RegexRewrite
+	38, // 42: istio.networking.v1alpha3.HTTPRetry.per_try_timeout:type_name -> google.protobuf.Duration
+	40, // 43: istio.networking.v1alpha3.HTTPRetry.retry_remote_localities:type_name -> google.protobuf.BoolValue
+	40, // 44: istio.networking.v1alpha3.HTTPRetry.retry_ignore_previous_hosts:type_name -> google.protobuf.BoolValue
+	38, // 45: istio.networking.v1alpha3.HTTPRetry.backoff:type_name -> google.protobuf.Duration
+	19, // 46: istio.networking.v1alpha3.CorsPolicy.allow_origins:type_name -> istio.networking.v1alpha3.StringMatch
+	38, // 47: istio.networking.v1alpha3.CorsPolicy.max_age:type_name -> google.protobuf.Duration
+	40, // 48: istio.networking.v1alpha3.CorsPolicy.allow_credentials:type_name -> google.protobuf.BoolValue
+	1,  // 49: istio.networking.v1alpha3.CorsPolicy.unmatched_preflights:type_name -> istio.networking.v1alpha3.CorsPolicy.UnmatchedPreflights
+	35, // 50: istio.networking.v1alpha3.HTTPFaultInjection.delay:type_name -> istio.networking.v1alpha3.HTTPFaultInjection.Delay
+	36, // 51: istio.networking.v1alpha3.HTTPFaultInjection.abort:type_name -> istio.networking.v1alpha3.HTTPFaultInjection.Abort
+	3,  // 52: istio.networking.v1alpha3.HTTPMirrorPolicy.destination:type_name -> istio.networking.v1alpha3.Destination
+	25, // 53: istio.networking.v1alpha3.HTTPMirrorPolicy.percentage:type_name -> istio.networking.v1alpha3.Percent
+	27, // 54: istio.networking.v1alpha3.Headers.HeaderOperations.set:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations.SetEntry
+	28, // 55: istio.networking.v1alpha3.Headers.HeaderOperations.add:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations.AddEntry
+	19, // 56: istio.networking.v1alpha3.HTTPMatchRequest.HeadersEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
+	19, // 57: istio.networking.v1alpha3.HTTPMatchRequest.QueryParamsEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
+	19, // 58: istio.networking.v1alpha3.HTTPMatchRequest.WithoutHeadersEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
+	38, // 59: istio.networking.v1alpha3.HTTPFaultInjection.Delay.fixed_delay:type_name -> google.protobuf.Duration
+	38, // 60: istio.networking.v1alpha3.HTTPFaultInjection.Delay.exponential_delay:type_name -> google.protobuf.Duration
+	25, // 61: istio.networking.v1alpha3.HTTPFaultInjection.Delay.percentage:type_name -> istio.networking.v1alpha3.Percent
+	25, // 62: istio.networking.v1alpha3.HTTPFaultInjection.Abort.percentage:type_name -> istio.networking.v1alpha3.Percent
+	63, // [63:63] is the sub-list for method output_type
+	63, // [63:63] is the sub-list for method input_type
+	63, // [63:63] is the sub-list for extension type_name
+	63, // [63:63] is the sub-list for extension extendee
+	0,  // [0:63] is the sub-list for field type_name
 }
 
 func init() { file_networking_v1alpha3_virtual_service_proto_init() }

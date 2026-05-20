@@ -116,6 +116,7 @@ package istio.networking.v1alpha3;
 import "google/api/field_behavior.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
+import "type/v1beta1/selector.proto";
 
 option go_package = "istio.io/api/networking/v1alpha3";
 
@@ -228,6 +229,36 @@ message VirtualService {
   // the virtual service is declared in. Similarly the value "*" is reserved and
   // defines an export to all namespaces.
   repeated string export_to = 6;
+
+  // A list of label selectors to dynamically select namespaces to which this
+  // virtual service is exported. Each selector can match namespaces based on their labels.
+  // This provides a mechanism for service owners and mesh administrators to control
+  // the visibility of virtual services across namespace boundaries without knowing namespace
+  // names in advance.
+  //
+  // For example, to export to all namespaces with a specific label:
+  // ```yaml
+  // exportToSelectors:
+  // - matchLabels:
+  //     mesh: enabled
+  // ```
+  //
+  // Or using match expressions for more complex selection:
+  // ```yaml
+  // exportToSelectors:
+  // - matchExpressions:
+  //   - key: environment
+  //     operator: In
+  //     values: [production, staging]
+  // ```
+  //
+  // When both export_to and export_to_selectors are specified, the virtual service is
+  // exported to the union of all matched namespaces. If neither is specified,
+  // the virtual service is exported to all namespaces by default.
+  //
+  // **Note:** Using "*" in export_to makes export_to_selectors redundant as
+  // the virtual service would already be visible to all namespaces.
+  repeated istio.type.v1beta1.LabelSelector export_to_selectors = 7;
 }
 
 // Destination indicates the network addressable service to which the
