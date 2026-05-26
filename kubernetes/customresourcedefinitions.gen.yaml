@@ -11523,29 +11523,17 @@ spec:
                       description: The name assigned to the route for debugging purposes.
                       type: string
                     redirect:
-                      allOf:
-                      - oneOf:
-                        - not:
-                            anyOf:
-                            - required:
-                              - port
-                            - required:
-                              - derivePort
-                        - required:
-                          - port
-                        - required:
-                          - derivePort
-                      - oneOf:
-                        - not:
-                            anyOf:
-                            - required:
-                              - prefixRewrite
-                            - required:
-                              - uriRegexRewrite
-                        - required:
-                          - prefixRewrite
-                        - required:
-                          - uriRegexRewrite
+                      oneOf:
+                      - not:
+                          anyOf:
+                          - required:
+                            - port
+                          - required:
+                            - derivePort
+                      - required:
+                        - port
+                      - required:
+                        - derivePort
                       description: A HTTP rule can either return a direct_response,
                         redirect or forward (default) traffic.
                       properties:
@@ -11569,8 +11557,8 @@ spec:
                           minimum: 0
                           type: integer
                         prefixRewrite:
-                          description: On a redirect, replace the matched prefix (or
-                            the entire path for exact matches) with this value.
+                          description: On a redirect, replace the matched prefix with
+                            this value.
                           type: string
                         redirectCode:
                           description: On a redirect, Specifies the HTTP status code
@@ -11586,18 +11574,6 @@ spec:
                           description: On a redirect, overwrite the Path portion of
                             the URL with this value.
                           type: string
-                        uriRegexRewrite:
-                          description: On a redirect, rewrite the path portion of
-                            the URI with the specified RE2 regex.
-                          properties:
-                            match:
-                              description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
-                              type: string
-                            rewrite:
-                              description: The string that should replace into matching
-                                portions of original URI.
-                              type: string
-                          type: object
                       type: object
                     retries:
                       description: Retry policy for HTTP requests.
@@ -12603,29 +12579,17 @@ spec:
                       description: The name assigned to the route for debugging purposes.
                       type: string
                     redirect:
-                      allOf:
-                      - oneOf:
-                        - not:
-                            anyOf:
-                            - required:
-                              - port
-                            - required:
-                              - derivePort
-                        - required:
-                          - port
-                        - required:
-                          - derivePort
-                      - oneOf:
-                        - not:
-                            anyOf:
-                            - required:
-                              - prefixRewrite
-                            - required:
-                              - uriRegexRewrite
-                        - required:
-                          - prefixRewrite
-                        - required:
-                          - uriRegexRewrite
+                      oneOf:
+                      - not:
+                          anyOf:
+                          - required:
+                            - port
+                          - required:
+                            - derivePort
+                      - required:
+                        - port
+                      - required:
+                        - derivePort
                       description: A HTTP rule can either return a direct_response,
                         redirect or forward (default) traffic.
                       properties:
@@ -12649,8 +12613,8 @@ spec:
                           minimum: 0
                           type: integer
                         prefixRewrite:
-                          description: On a redirect, replace the matched prefix (or
-                            the entire path for exact matches) with this value.
+                          description: On a redirect, replace the matched prefix with
+                            this value.
                           type: string
                         redirectCode:
                           description: On a redirect, Specifies the HTTP status code
@@ -12666,18 +12630,6 @@ spec:
                           description: On a redirect, overwrite the Path portion of
                             the URL with this value.
                           type: string
-                        uriRegexRewrite:
-                          description: On a redirect, rewrite the path portion of
-                            the URI with the specified RE2 regex.
-                          properties:
-                            match:
-                              description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
-                              type: string
-                            rewrite:
-                              description: The string that should replace into matching
-                                portions of original URI.
-                              type: string
-                          type: object
                       type: object
                     retries:
                       description: Retry policy for HTTP requests.
@@ -13683,29 +13635,17 @@ spec:
                       description: The name assigned to the route for debugging purposes.
                       type: string
                     redirect:
-                      allOf:
-                      - oneOf:
-                        - not:
-                            anyOf:
-                            - required:
-                              - port
-                            - required:
-                              - derivePort
-                        - required:
-                          - port
-                        - required:
-                          - derivePort
-                      - oneOf:
-                        - not:
-                            anyOf:
-                            - required:
-                              - prefixRewrite
-                            - required:
-                              - uriRegexRewrite
-                        - required:
-                          - prefixRewrite
-                        - required:
-                          - uriRegexRewrite
+                      oneOf:
+                      - not:
+                          anyOf:
+                          - required:
+                            - port
+                          - required:
+                            - derivePort
+                      - required:
+                        - port
+                      - required:
+                        - derivePort
                       description: A HTTP rule can either return a direct_response,
                         redirect or forward (default) traffic.
                       properties:
@@ -13729,8 +13669,8 @@ spec:
                           minimum: 0
                           type: integer
                         prefixRewrite:
-                          description: On a redirect, replace the matched prefix (or
-                            the entire path for exact matches) with this value.
+                          description: On a redirect, replace the matched prefix with
+                            this value.
                           type: string
                         redirectCode:
                           description: On a redirect, Specifies the HTTP status code
@@ -13746,18 +13686,6 @@ spec:
                           description: On a redirect, overwrite the Path portion of
                             the URL with this value.
                           type: string
-                        uriRegexRewrite:
-                          description: On a redirect, rewrite the path portion of
-                            the URI with the specified RE2 regex.
-                          properties:
-                            match:
-                              description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
-                              type: string
-                            rewrite:
-                              description: The string that should replace into matching
-                                portions of original URI.
-                              type: string
-                          type: object
                       type: object
                     retries:
                       description: Retry policy for HTTP requests.

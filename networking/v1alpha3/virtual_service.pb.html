@@ -1544,7 +1544,7 @@ foo.example.com/bar.</p>
 <p>On a redirect, overwrite the Path portion of the URL with this
 value. Note that the entire path will be replaced, irrespective of the
 request URI being matched as an exact path or prefix.</p>
-<p>Mutually exclusive with prefix_rewrite and uri_regex_rewrite.</p>
+<p>Mutually exclusive with prefix_rewrite.</p>
 
 </td>
 </tr>
@@ -1602,33 +1602,20 @@ response. The default response code is MOVED_PERMANENTLY (301).</p>
 
 </td>
 </tr>
-<tr id="HTTPRedirect-prefix_rewrite" class="oneof oneof-start">
+<tr id="HTTPRedirect-prefix_rewrite">
 <td><div class="field"><div class="name"><code><a href="#HTTPRedirect-prefix_rewrite">prefixRewrite</a></code></div>
-<div class="type">string (oneof)</div>
+<div class="type">string</div>
 </div></td>
 <td>
-<p>On a redirect, replace the matched prefix (or the entire path for exact
-matches) with this value. The route match must use a prefix match type.
-The matched prefix is stripped from the path and this value is prepended.</p>
+<p>On a redirect, replace the matched prefix with this value. The route
+match must use a prefix match type. The matched prefix is stripped from
+the path and this value is prepended.</p>
 <p>Examples (route prefix match: /foo):</p>
 <ul>
 <li>prefix_rewrite: /bar → /foo/baz becomes /bar/baz</li>
 <li>prefix_rewrite: /   → /foo/baz becomes //baz (use /foo/ match to get /baz)</li>
 </ul>
-<p>Mutually exclusive with uri and uri_regex_rewrite.</p>
-
-</td>
-</tr>
-<tr id="HTTPRedirect-uri_regex_rewrite" class="oneof">
-<td><div class="field"><div class="name"><code><a href="#HTTPRedirect-uri_regex_rewrite">uriRegexRewrite</a></code></div>
-<div class="type"><a href="#RegexRewrite">RegexRewrite (oneof)</a></div>
-</div></td>
-<td>
-<p>On a redirect, rewrite the path portion of the URI with the specified
-RE2 regex. Capture groups in the pattern may be referenced in the
-replacement string.</p>
-<p>Example: match &ldquo;^/foo(/.*)$&rdquo; with rewrite &ldquo;\1&rdquo; rewrites /foo/bar to /bar.</p>
-<p>Mutually exclusive with uri and prefix_rewrite.</p>
+<p>Mutually exclusive with uri.</p>
 
 </td>
 </tr>
