@@ -8,7 +8,6 @@ issue:
 
 releaseNotes:
   - |
-    **Added** `prefix_rewrite` and `uri_regex_rewrite` fields to `HTTPRedirect`, allowing redirects
-    that preserve the path suffix. `prefix_rewrite` replaces only the matched route prefix (e.g.
-    `example.com/foo/bar` → `foo.example.com/bar`); `uri_regex_rewrite` applies an RE2 regex
-    substitution. Both are mutually exclusive with the existing `uri` field.
+    **Added** `prefix_rewrite` field to `HTTPRedirect`, allowing redirects that preserve the path
+    suffix. The matched route prefix is stripped and replaced with the specified value (e.g.
+    `example.com/foo/bar` → `foo.example.com/bar`). Mutually exclusive with the existing `uri` field.
