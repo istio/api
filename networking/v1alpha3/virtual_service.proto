@@ -1102,7 +1102,7 @@ message HTTPRedirect {
   // value. Note that the entire path will be replaced, irrespective of the
   // request URI being matched as an exact path or prefix.
   //
-  // Mutually exclusive with prefix_rewrite and uri_regex_rewrite.
+  // Mutually exclusive with prefix_rewrite.
   string uri = 1;
 
   // On a redirect, overwrite the Authority/Host portion of the URL with
@@ -1132,29 +1132,16 @@ message HTTPRedirect {
   // response. The default response code is MOVED_PERMANENTLY (301).
   uint32 redirect_code = 3;
 
-  // Specifies how to rewrite the path on redirect. Exactly one of uri,
-  // prefix_rewrite, or uri_regex_rewrite may be set.
-  oneof path_rewrite_specifier {
-    // On a redirect, replace the matched prefix (or the entire path for exact
-    // matches) with this value. The route match must use a prefix match type.
-    // The matched prefix is stripped from the path and this value is prepended.
-    //
-    // Examples (route prefix match: /foo):
-    // - prefix_rewrite: /bar → /foo/baz becomes /bar/baz
-    // - prefix_rewrite: /   → /foo/baz becomes //baz (use /foo/ match to get /baz)
-    //
-    // Mutually exclusive with uri and uri_regex_rewrite.
-    string prefix_rewrite = 7;
-
-    // On a redirect, rewrite the path portion of the URI with the specified
-    // RE2 regex. Capture groups in the pattern may be referenced in the
-    // replacement string.
-    //
-    // Example: match "^/foo(/.*)$" with rewrite "\\1" rewrites /foo/bar to /bar.
-    //
-    // Mutually exclusive with uri and prefix_rewrite.
-    RegexRewrite uri_regex_rewrite = 8;
-  }
+  // On a redirect, replace the matched prefix with this value. The route match
+  // must use a prefix match type. The matched prefix is stripped from the path
+  // and this value is prepended.
+  //
+  // Examples (route prefix match: /foo):
+  // - prefix_rewrite: /bar → /foo/baz becomes /bar/baz
+  // - prefix_rewrite: /   → /foo/baz becomes //baz (use /foo/ match to get /baz)
+  //
+  // Mutually exclusive with uri.
+  string prefix_rewrite = 7;
 }
 
 // HTTPDirectResponse can be used to send a fixed response to clients.
