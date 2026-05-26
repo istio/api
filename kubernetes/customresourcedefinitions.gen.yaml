@@ -11523,6 +11523,8 @@ spec:
                       description: The name assigned to the route for debugging purposes.
                       type: string
                     redirect:
+                      description: A HTTP rule can either return a direct_response,
+                        redirect or forward (default) traffic.
                       oneOf:
                       - not:
                           anyOf:
@@ -11534,8 +11536,6 @@ spec:
                         - port
                       - required:
                         - derivePort
-                      description: A HTTP rule can either return a direct_response,
-                        redirect or forward (default) traffic.
                       properties:
                         authority:
                           description: On a redirect, overwrite the Authority/Host
@@ -12579,6 +12579,8 @@ spec:
                       description: The name assigned to the route for debugging purposes.
                       type: string
                     redirect:
+                      description: A HTTP rule can either return a direct_response,
+                        redirect or forward (default) traffic.
                       oneOf:
                       - not:
                           anyOf:
@@ -12590,8 +12592,6 @@ spec:
                         - port
                       - required:
                         - derivePort
-                      description: A HTTP rule can either return a direct_response,
-                        redirect or forward (default) traffic.
                       properties:
                         authority:
                           description: On a redirect, overwrite the Authority/Host
@@ -13635,6 +13635,8 @@ spec:
                       description: The name assigned to the route for debugging purposes.
                       type: string
                     redirect:
+                      description: A HTTP rule can either return a direct_response,
+                        redirect or forward (default) traffic.
                       oneOf:
                       - not:
                           anyOf:
@@ -13646,8 +13648,6 @@ spec:
                         - port
                       - required:
                         - derivePort
-                      description: A HTTP rule can either return a direct_response,
-                        redirect or forward (default) traffic.
                       properties:
                         authority:
                           description: On a redirect, overwrite the Authority/Host
