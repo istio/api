@@ -303,6 +303,17 @@ func (this *ProxyConfig_ProxyHeaders_SetCurrentClientCertDetails) UnmarshalJSON(
 	return ProxyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for ProxyConfig_ConnectionSettings
+func (this *ProxyConfig_ConnectionSettings) MarshalJSON() ([]byte, error) {
+	str, err := ProxyMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ProxyConfig_ConnectionSettings
+func (this *ProxyConfig_ConnectionSettings) UnmarshalJSON(b []byte) error {
+	return ProxyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 // MarshalJSON is a custom marshaler for RemoteService
 func (this *RemoteService) MarshalJSON() ([]byte, error) {
 	str, err := ProxyMarshaler.MarshalToString(this)
