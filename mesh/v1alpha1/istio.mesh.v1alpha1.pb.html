@@ -4619,7 +4619,7 @@ connection pool configuration, use DestinationRule&rsquo;s
 <tbody>
 <tr id="ProxyConfig-ConnectionSettings-profile">
 <td><div class="field"><div class="name"><code><a href="#ProxyConfig-ConnectionSettings-profile">profile</a></code></div>
-<div class="type"><a href="#ProxyConfig-ConnectionSettings-ProxyConfigProfile">ProxyConfigProfile</a></div>
+<div class="type"><a href="#ProxyConfig-ConnectionSettings-Profile">Profile</a></div>
 </div></td>
 <td>
 <p>The config profile to use. Determines default values for all fields in this message.</p>
@@ -4628,7 +4628,7 @@ connection pool configuration, use DestinationRule&rsquo;s
 </tr>
 <tr id="ProxyConfig-ConnectionSettings-listener_per_connection_buffer_limit_bytes">
 <td><div class="field"><div class="name"><code><a href="#ProxyConfig-ConnectionSettings-listener_per_connection_buffer_limit_bytes">listenerPerConnectionBufferLimitBytes</a></code></div>
-<div class="type">int32</div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#int32value">Int32Value</a></div>
 </div></td>
 <td>
 <p>Soft limit on size of the listener&rsquo;s new connection read and write buffers in bytes.
@@ -4638,7 +4638,7 @@ See Envoy&rsquo;s <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/co
 </tr>
 <tr id="ProxyConfig-ConnectionSettings-cluster_per_connection_buffer_limit_bytes">
 <td><div class="field"><div class="name"><code><a href="#ProxyConfig-ConnectionSettings-cluster_per_connection_buffer_limit_bytes">clusterPerConnectionBufferLimitBytes</a></code></div>
-<div class="type">int32</div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#int32value">Int32Value</a></div>
 </div></td>
 <td>
 <p>Soft limit on size of the cluster&rsquo;s new connection read and write buffers in bytes.
@@ -4728,7 +4728,7 @@ See Envoy&rsquo;s <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/co
 </tr>
 <tr id="ProxyConfig-ConnectionSettings-http_max_concurrent_streams">
 <td><div class="field"><div class="name"><code><a href="#ProxyConfig-ConnectionSettings-http_max_concurrent_streams">httpMaxConcurrentStreams</a></code></div>
-<div class="type">int32</div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#int32value">Int32Value</a></div>
 </div></td>
 <td>
 <p>Maximum number of concurrent streams allowed for HTTP/2 connections.
@@ -4738,7 +4738,7 @@ See Envoy&rsquo;s <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/co
 </tr>
 <tr id="ProxyConfig-ConnectionSettings-http2_initial_stream_window_size">
 <td><div class="field"><div class="name"><code><a href="#ProxyConfig-ConnectionSettings-http2_initial_stream_window_size">http2InitialStreamWindowSize</a></code></div>
-<div class="type">int32</div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#int32value">Int32Value</a></div>
 </div></td>
 <td>
 <p>Initial stream-level flow-control window size for HTTP/2 connections.
@@ -4749,7 +4749,7 @@ See Envoy&rsquo;s <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/co
 </tr>
 <tr id="ProxyConfig-ConnectionSettings-http2_initial_connection_window_size">
 <td><div class="field"><div class="name"><code><a href="#ProxyConfig-ConnectionSettings-http2_initial_connection_window_size">http2InitialConnectionWindowSize</a></code></div>
-<div class="type">int32</div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#int32value">Int32Value</a></div>
 </div></td>
 <td>
 <p>Initial connection-level flow-control window size for HTTP/2 connections.
@@ -4792,7 +4792,7 @@ See Envoy&rsquo;s <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/ex
 </tr>
 <tr id="ProxyConfig-ConnectionSettings-listener_connection_limit">
 <td><div class="field"><div class="name"><code><a href="#ProxyConfig-ConnectionSettings-listener_connection_limit">listenerConnectionLimit</a></code></div>
-<div class="type">int32</div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#int32value">Int32Value</a></div>
 </div></td>
 <td>
 <p>The maximum number of connections that a single listener will accept.
@@ -4804,7 +4804,7 @@ See Envoy&rsquo;s <a href="https://www.envoyproxy.io/docs/envoy/latest/configura
 </tr>
 <tr id="ProxyConfig-ConnectionSettings-global_downstream_connection_limit">
 <td><div class="field"><div class="name"><code><a href="#ProxyConfig-ConnectionSettings-global_downstream_connection_limit">globalDownstreamConnectionLimit</a></code></div>
-<div class="type">int32</div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#int32value">Int32Value</a></div>
 </div></td>
 <td>
 <p>The maximum number of downstream connections allowed across all listeners.
@@ -4817,9 +4817,9 @@ See Envoy&rsquo;s <a href="https://www.envoyproxy.io/docs/envoy/latest/configura
 </tbody>
 </table>
 </section>
-<h4 id="ProxyConfig-ConnectionSettings-ProxyConfigProfile">ProxyConfigProfile</h4>
+<h4 id="ProxyConfig-ConnectionSettings-Profile">Profile</h4>
 <section>
-<p>ProxyConfigProfile selects a default value set for the fields in this message.
+<p>Profile selects a default value set for the fields in this message.
 Explicitly setting any field always takes precedence over profile defaults.</p>
 
 <table class="enum-values">
@@ -4830,20 +4830,32 @@ Explicitly setting any field always takes precedence over profile defaults.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="ProxyConfig-ConnectionSettings-ProxyConfigProfile-SIDECAR">
-<td><code><a href="#ProxyConfig-ConnectionSettings-ProxyConfigProfile-SIDECAR">SIDECAR</a></code></td>
+<tr id="ProxyConfig-ConnectionSettings-Profile-SIDECAR">
+<td><code><a href="#ProxyConfig-ConnectionSettings-Profile-SIDECAR">SIDECAR</a></code></td>
 <td>
 <p>SIDECAR profile preserves existing Istio behavior.
 This is the default profile. No additional defaults are applied.</p>
 
 </td>
 </tr>
-<tr id="ProxyConfig-ConnectionSettings-ProxyConfigProfile-EDGE">
-<td><code><a href="#ProxyConfig-ConnectionSettings-ProxyConfigProfile-EDGE">EDGE</a></code></td>
+<tr id="ProxyConfig-ConnectionSettings-Profile-EDGE">
+<td><code><a href="#ProxyConfig-ConnectionSettings-Profile-EDGE">EDGE</a></code></td>
 <td>
 <p>EDGE profile applies Envoy&rsquo;s recommended defaults for edge gateway deployments.
 See <a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/best_practices/edge">https://www.envoyproxy.io/docs/envoy/latest/configuration/best_practices/edge</a>
 Explicitly setting any field overrides the corresponding profile default.</p>
+<p>Defaults applied by this profile:
+listener_per_connection_buffer_limit_bytes: 32768 (32 KiB)
+cluster_per_connection_buffer_limit_bytes:  32768 (32 KiB)
+http_idle_timeout:                          3600s (1 hour)
+http_request_timeout:                       300s  (5 minutes)
+http_stream_idle_timeout:                   300s  (5 minutes)
+http_max_concurrent_streams:                100
+http2_initial_stream_window_size:           65536 (64 KiB)
+http2_initial_connection_window_size:       1048576 (1 MiB)
+http_headers_with_underscores_action:       HEADERS_WITH_UNDERSCORES_REJECT_REQUEST
+http_merge_slashes:                         true
+http_path_with_escaped_slashes_action:      UNESCAPE_AND_REDIRECT</p>
 
 </td>
 </tr>

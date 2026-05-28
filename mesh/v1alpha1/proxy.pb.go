@@ -402,56 +402,70 @@ func (ProxyConfig_ProxyHeaders_MetadataExchangeMode) EnumDescriptor() ([]byte, [
 	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 3, 0}
 }
 
-// ProxyConfigProfile selects a default value set for the fields in this message.
+// Profile selects a default value set for the fields in this message.
 // Explicitly setting any field always takes precedence over profile defaults.
-type ProxyConfig_ConnectionSettings_ProxyConfigProfile int32
+type ProxyConfig_ConnectionSettings_Profile int32
 
 const (
 	// SIDECAR profile preserves existing Istio behavior.
 	// This is the default profile. No additional defaults are applied.
-	ProxyConfig_ConnectionSettings_SIDECAR ProxyConfig_ConnectionSettings_ProxyConfigProfile = 0
+	ProxyConfig_ConnectionSettings_SIDECAR ProxyConfig_ConnectionSettings_Profile = 0
 	// EDGE profile applies Envoy's recommended defaults for edge gateway deployments.
 	// See https://www.envoyproxy.io/docs/envoy/latest/configuration/best_practices/edge
 	// Explicitly setting any field overrides the corresponding profile default.
-	ProxyConfig_ConnectionSettings_EDGE ProxyConfig_ConnectionSettings_ProxyConfigProfile = 1
+	//
+	// Defaults applied by this profile:
+	//
+	//	listener_per_connection_buffer_limit_bytes: 32768 (32 KiB)
+	//	cluster_per_connection_buffer_limit_bytes:  32768 (32 KiB)
+	//	http_idle_timeout:                          3600s (1 hour)
+	//	http_request_timeout:                       300s  (5 minutes)
+	//	http_stream_idle_timeout:                   300s  (5 minutes)
+	//	http_max_concurrent_streams:                100
+	//	http2_initial_stream_window_size:           65536 (64 KiB)
+	//	http2_initial_connection_window_size:       1048576 (1 MiB)
+	//	http_headers_with_underscores_action:       HEADERS_WITH_UNDERSCORES_REJECT_REQUEST
+	//	http_merge_slashes:                         true
+	//	http_path_with_escaped_slashes_action:      UNESCAPE_AND_REDIRECT
+	ProxyConfig_ConnectionSettings_EDGE ProxyConfig_ConnectionSettings_Profile = 1
 )
 
-// Enum value maps for ProxyConfig_ConnectionSettings_ProxyConfigProfile.
+// Enum value maps for ProxyConfig_ConnectionSettings_Profile.
 var (
-	ProxyConfig_ConnectionSettings_ProxyConfigProfile_name = map[int32]string{
+	ProxyConfig_ConnectionSettings_Profile_name = map[int32]string{
 		0: "SIDECAR",
 		1: "EDGE",
 	}
-	ProxyConfig_ConnectionSettings_ProxyConfigProfile_value = map[string]int32{
+	ProxyConfig_ConnectionSettings_Profile_value = map[string]int32{
 		"SIDECAR": 0,
 		"EDGE":    1,
 	}
 )
 
-func (x ProxyConfig_ConnectionSettings_ProxyConfigProfile) Enum() *ProxyConfig_ConnectionSettings_ProxyConfigProfile {
-	p := new(ProxyConfig_ConnectionSettings_ProxyConfigProfile)
+func (x ProxyConfig_ConnectionSettings_Profile) Enum() *ProxyConfig_ConnectionSettings_Profile {
+	p := new(ProxyConfig_ConnectionSettings_Profile)
 	*p = x
 	return p
 }
 
-func (x ProxyConfig_ConnectionSettings_ProxyConfigProfile) String() string {
+func (x ProxyConfig_ConnectionSettings_Profile) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (ProxyConfig_ConnectionSettings_ProxyConfigProfile) Descriptor() protoreflect.EnumDescriptor {
+func (ProxyConfig_ConnectionSettings_Profile) Descriptor() protoreflect.EnumDescriptor {
 	return file_mesh_v1alpha1_proxy_proto_enumTypes[6].Descriptor()
 }
 
-func (ProxyConfig_ConnectionSettings_ProxyConfigProfile) Type() protoreflect.EnumType {
+func (ProxyConfig_ConnectionSettings_Profile) Type() protoreflect.EnumType {
 	return &file_mesh_v1alpha1_proxy_proto_enumTypes[6]
 }
 
-func (x ProxyConfig_ConnectionSettings_ProxyConfigProfile) Number() protoreflect.EnumNumber {
+func (x ProxyConfig_ConnectionSettings_Profile) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use ProxyConfig_ConnectionSettings_ProxyConfigProfile.Descriptor instead.
-func (ProxyConfig_ConnectionSettings_ProxyConfigProfile) EnumDescriptor() ([]byte, []int) {
+// Deprecated: Use ProxyConfig_ConnectionSettings_Profile.Descriptor instead.
+func (ProxyConfig_ConnectionSettings_Profile) EnumDescriptor() ([]byte, []int) {
 	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 4, 0}
 }
 
@@ -2648,13 +2662,13 @@ func (x *ProxyConfig_ProxyHeaders) GetXForwardedPort() *ProxyConfig_ProxyHeaders
 type ProxyConfig_ConnectionSettings struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The config profile to use. Determines default values for all fields in this message.
-	Profile ProxyConfig_ConnectionSettings_ProxyConfigProfile `protobuf:"varint,1,opt,name=profile,proto3,enum=istio.mesh.v1alpha1.ProxyConfig_ConnectionSettings_ProxyConfigProfile" json:"profile,omitempty"`
+	Profile ProxyConfig_ConnectionSettings_Profile `protobuf:"varint,1,opt,name=profile,proto3,enum=istio.mesh.v1alpha1.ProxyConfig_ConnectionSettings_Profile" json:"profile,omitempty"`
 	// Soft limit on size of the listener's new connection read and write buffers in bytes.
 	// See Envoy's [per_connection_buffer_limit_bytes](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/listener/v3/listener.proto#envoy-v3-api-field-config-listener-v3-listener-per-connection-buffer-limit-bytes).
-	ListenerPerConnectionBufferLimitBytes int32 `protobuf:"varint,2,opt,name=listener_per_connection_buffer_limit_bytes,json=listenerPerConnectionBufferLimitBytes,proto3" json:"listener_per_connection_buffer_limit_bytes,omitempty"`
+	ListenerPerConnectionBufferLimitBytes *wrappers.Int32Value `protobuf:"bytes,2,opt,name=listener_per_connection_buffer_limit_bytes,json=listenerPerConnectionBufferLimitBytes,proto3" json:"listener_per_connection_buffer_limit_bytes,omitempty"`
 	// Soft limit on size of the cluster's new connection read and write buffers in bytes.
 	// See Envoy's [per_connection_buffer_limit_bytes](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/cluster/v3/cluster.proto#envoy-v3-api-field-config-cluster-v3-cluster-per-connection-buffer-limit-bytes).
-	ClusterPerConnectionBufferLimitBytes int32 `protobuf:"varint,3,opt,name=cluster_per_connection_buffer_limit_bytes,json=clusterPerConnectionBufferLimitBytes,proto3" json:"cluster_per_connection_buffer_limit_bytes,omitempty"`
+	ClusterPerConnectionBufferLimitBytes *wrappers.Int32Value `protobuf:"bytes,3,opt,name=cluster_per_connection_buffer_limit_bytes,json=clusterPerConnectionBufferLimitBytes,proto3" json:"cluster_per_connection_buffer_limit_bytes,omitempty"`
 	// The idle timeout for HTTP connections. The idle timeout is defined as the period in which there are no active requests.
 	// When the idle timeout is reached, the connection will be closed.
 	// Note that request-based timeouts mean that HTTP/2 PINGs will not keep the connection alive.
@@ -2688,15 +2702,15 @@ type ProxyConfig_ConnectionSettings struct {
 	HttpMaxStreamDuration *duration.Duration `protobuf:"bytes,10,opt,name=http_max_stream_duration,json=httpMaxStreamDuration,proto3" json:"http_max_stream_duration,omitempty"`
 	// Maximum number of concurrent streams allowed for HTTP/2 connections.
 	// See Envoy's [max_concurrent_streams](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-http2protocoloptions-max-concurrent-streams).
-	HttpMaxConcurrentStreams int32 `protobuf:"varint,11,opt,name=http_max_concurrent_streams,json=httpMaxConcurrentStreams,proto3" json:"http_max_concurrent_streams,omitempty"`
+	HttpMaxConcurrentStreams *wrappers.Int32Value `protobuf:"bytes,11,opt,name=http_max_concurrent_streams,json=httpMaxConcurrentStreams,proto3" json:"http_max_concurrent_streams,omitempty"`
 	// Initial stream-level flow-control window size for HTTP/2 connections.
 	// Valid values range from 65535 (2^16 - 1, HTTP/2 default) to 2147483647 (2^31 - 1, HTTP/2 maximum).
 	// See Envoy's [initial_stream_window_size](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-http2protocoloptions-initial-stream-window-size).
-	Http2InitialStreamWindowSize int32 `protobuf:"varint,12,opt,name=http2_initial_stream_window_size,json=http2InitialStreamWindowSize,proto3" json:"http2_initial_stream_window_size,omitempty"`
+	Http2InitialStreamWindowSize *wrappers.Int32Value `protobuf:"bytes,12,opt,name=http2_initial_stream_window_size,json=http2InitialStreamWindowSize,proto3" json:"http2_initial_stream_window_size,omitempty"`
 	// Initial connection-level flow-control window size for HTTP/2 connections.
 	// Valid values range from 65535 (2^16 - 1, HTTP/2 default) to 2147483647 (2^31 - 1, HTTP/2 maximum).
 	// See Envoy's [initial_connection_window_size](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-http2protocoloptions-initial-connection-window-size).
-	Http2InitialConnectionWindowSize int32 `protobuf:"varint,13,opt,name=http2_initial_connection_window_size,json=http2InitialConnectionWindowSize,proto3" json:"http2_initial_connection_window_size,omitempty"`
+	Http2InitialConnectionWindowSize *wrappers.Int32Value `protobuf:"bytes,13,opt,name=http2_initial_connection_window_size,json=http2InitialConnectionWindowSize,proto3" json:"http2_initial_connection_window_size,omitempty"`
 	// Action to take when a client request contains header names with underscore characters.
 	// See Envoy's [headers_with_underscores_action](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-httpprotocoloptions-headers-with-underscores-action).
 	HttpHeadersWithUnderscoresAction ProxyConfig_ConnectionSettings_HeadersWithUnderscoresAction `protobuf:"varint,14,opt,name=http_headers_with_underscores_action,json=httpHeadersWithUnderscoresAction,proto3,enum=istio.mesh.v1alpha1.ProxyConfig_ConnectionSettings_HeadersWithUnderscoresAction" json:"http_headers_with_underscores_action,omitempty"`
@@ -2712,12 +2726,12 @@ type ProxyConfig_ConnectionSettings struct {
 	// Maps to Envoy's per-listener connection limit via runtime configuration
 	// (`envoy.resource_limits.listener.<listener_name>.connection_limit`).
 	// See Envoy's [edge best practices](https://www.envoyproxy.io/docs/envoy/latest/configuration/best_practices/edge).
-	ListenerConnectionLimit int32 `protobuf:"varint,17,opt,name=listener_connection_limit,json=listenerConnectionLimit,proto3" json:"listener_connection_limit,omitempty"`
+	ListenerConnectionLimit *wrappers.Int32Value `protobuf:"bytes,17,opt,name=listener_connection_limit,json=listenerConnectionLimit,proto3" json:"listener_connection_limit,omitempty"`
 	// The maximum number of downstream connections allowed across all listeners.
 	// Maps to Envoy's global downstream max connections via runtime configuration
 	// (`overload.global_downstream_max_connections`).
 	// See Envoy's [edge best practices](https://www.envoyproxy.io/docs/envoy/latest/configuration/best_practices/edge).
-	GlobalDownstreamConnectionLimit int32 `protobuf:"varint,18,opt,name=global_downstream_connection_limit,json=globalDownstreamConnectionLimit,proto3" json:"global_downstream_connection_limit,omitempty"`
+	GlobalDownstreamConnectionLimit *wrappers.Int32Value `protobuf:"bytes,18,opt,name=global_downstream_connection_limit,json=globalDownstreamConnectionLimit,proto3" json:"global_downstream_connection_limit,omitempty"`
 	unknownFields                   protoimpl.UnknownFields
 	sizeCache                       protoimpl.SizeCache
 }
@@ -2752,25 +2766,25 @@ func (*ProxyConfig_ConnectionSettings) Descriptor() ([]byte, []int) {
 	return file_mesh_v1alpha1_proxy_proto_rawDescGZIP(), []int{4, 4}
 }
 
-func (x *ProxyConfig_ConnectionSettings) GetProfile() ProxyConfig_ConnectionSettings_ProxyConfigProfile {
+func (x *ProxyConfig_ConnectionSettings) GetProfile() ProxyConfig_ConnectionSettings_Profile {
 	if x != nil {
 		return x.Profile
 	}
 	return ProxyConfig_ConnectionSettings_SIDECAR
 }
 
-func (x *ProxyConfig_ConnectionSettings) GetListenerPerConnectionBufferLimitBytes() int32 {
+func (x *ProxyConfig_ConnectionSettings) GetListenerPerConnectionBufferLimitBytes() *wrappers.Int32Value {
 	if x != nil {
 		return x.ListenerPerConnectionBufferLimitBytes
 	}
-	return 0
+	return nil
 }
 
-func (x *ProxyConfig_ConnectionSettings) GetClusterPerConnectionBufferLimitBytes() int32 {
+func (x *ProxyConfig_ConnectionSettings) GetClusterPerConnectionBufferLimitBytes() *wrappers.Int32Value {
 	if x != nil {
 		return x.ClusterPerConnectionBufferLimitBytes
 	}
-	return 0
+	return nil
 }
 
 func (x *ProxyConfig_ConnectionSettings) GetHttpIdleTimeout() *duration.Duration {
@@ -2822,25 +2836,25 @@ func (x *ProxyConfig_ConnectionSettings) GetHttpMaxStreamDuration() *duration.Du
 	return nil
 }
 
-func (x *ProxyConfig_ConnectionSettings) GetHttpMaxConcurrentStreams() int32 {
+func (x *ProxyConfig_ConnectionSettings) GetHttpMaxConcurrentStreams() *wrappers.Int32Value {
 	if x != nil {
 		return x.HttpMaxConcurrentStreams
 	}
-	return 0
+	return nil
 }
 
-func (x *ProxyConfig_ConnectionSettings) GetHttp2InitialStreamWindowSize() int32 {
+func (x *ProxyConfig_ConnectionSettings) GetHttp2InitialStreamWindowSize() *wrappers.Int32Value {
 	if x != nil {
 		return x.Http2InitialStreamWindowSize
 	}
-	return 0
+	return nil
 }
 
-func (x *ProxyConfig_ConnectionSettings) GetHttp2InitialConnectionWindowSize() int32 {
+func (x *ProxyConfig_ConnectionSettings) GetHttp2InitialConnectionWindowSize() *wrappers.Int32Value {
 	if x != nil {
 		return x.Http2InitialConnectionWindowSize
 	}
-	return 0
+	return nil
 }
 
 func (x *ProxyConfig_ConnectionSettings) GetHttpHeadersWithUnderscoresAction() ProxyConfig_ConnectionSettings_HeadersWithUnderscoresAction {
@@ -2864,18 +2878,18 @@ func (x *ProxyConfig_ConnectionSettings) GetHttpPathWithEscapedSlashesAction() P
 	return ProxyConfig_ConnectionSettings_KEEP_UNCHANGED
 }
 
-func (x *ProxyConfig_ConnectionSettings) GetListenerConnectionLimit() int32 {
+func (x *ProxyConfig_ConnectionSettings) GetListenerConnectionLimit() *wrappers.Int32Value {
 	if x != nil {
 		return x.ListenerConnectionLimit
 	}
-	return 0
+	return nil
 }
 
-func (x *ProxyConfig_ConnectionSettings) GetGlobalDownstreamConnectionLimit() int32 {
+func (x *ProxyConfig_ConnectionSettings) GetGlobalDownstreamConnectionLimit() *wrappers.Int32Value {
 	if x != nil {
 		return x.GlobalDownstreamConnectionLimit
 	}
-	return 0
+	return nil
 }
 
 type ProxyConfig_ProxyHeaders_Server struct {
@@ -3359,7 +3373,7 @@ const file_mesh_v1alpha1_proxy_proto_rawDesc = "" +
 	"poll_delay\x18\x01 \x01(\v2\x19.google.protobuf.DurationR\tpollDelay\x126\n" +
 	"\bfallback\x18\x02 \x01(\v2\x1a.google.protobuf.BoolValueR\bfallbackB\n" +
 	"\n" +
-	"\bprovider\"\xf27\n" +
+	"\bprovider\"\xa79\n" +
 	"\vProxyConfig\x12\x1f\n" +
 	"\vconfig_path\x18\x01 \x01(\tR\n" +
 	"configPath\x12\x1f\n" +
@@ -3450,11 +3464,11 @@ const file_mesh_v1alpha1_proxy_proto_rawDesc = "" +
 	"\x03uri\x18\x05 \x01(\v2\x1a.google.protobuf.BoolValueR\x03uri\"2\n" +
 	"\x14MetadataExchangeMode\x12\r\n" +
 	"\tUNDEFINED\x10\x00\x12\v\n" +
-	"\aIN_MESH\x10\x01\x1a\x9e\x0f\n" +
-	"\x12ConnectionSettings\x12`\n" +
-	"\aprofile\x18\x01 \x01(\x0e2F.istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.ProxyConfigProfileR\aprofile\x12Y\n" +
-	"*listener_per_connection_buffer_limit_bytes\x18\x02 \x01(\x05R%listenerPerConnectionBufferLimitBytes\x12W\n" +
-	")cluster_per_connection_buffer_limit_bytes\x18\x03 \x01(\x05R$clusterPerConnectionBufferLimitBytes\x12E\n" +
+	"\aIN_MESH\x10\x01\x1a\xd3\x10\n" +
+	"\x12ConnectionSettings\x12U\n" +
+	"\aprofile\x18\x01 \x01(\x0e2;.istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.ProfileR\aprofile\x12v\n" +
+	"*listener_per_connection_buffer_limit_bytes\x18\x02 \x01(\v2\x1b.google.protobuf.Int32ValueR%listenerPerConnectionBufferLimitBytes\x12t\n" +
+	")cluster_per_connection_buffer_limit_bytes\x18\x03 \x01(\v2\x1b.google.protobuf.Int32ValueR$clusterPerConnectionBufferLimitBytes\x12E\n" +
 	"\x11http_idle_timeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\x0fhttpIdleTimeout\x12Z\n" +
 	"\x1chttp_max_connection_duration\x18\x05 \x01(\v2\x19.google.protobuf.DurationR\x19httpMaxConnectionDuration\x12G\n" +
 	"\x12http_drain_timeout\x18\x06 \x01(\v2\x19.google.protobuf.DurationR\x10httpDrainTimeout\x12K\n" +
@@ -3462,16 +3476,16 @@ const file_mesh_v1alpha1_proxy_proto_rawDesc = "" +
 	"\x1chttp_request_headers_timeout\x18\b \x01(\v2\x19.google.protobuf.DurationR\x19httpRequestHeadersTimeout\x12R\n" +
 	"\x18http_stream_idle_timeout\x18\t \x01(\v2\x19.google.protobuf.DurationR\x15httpStreamIdleTimeout\x12R\n" +
 	"\x18http_max_stream_duration\x18\n" +
-	" \x01(\v2\x19.google.protobuf.DurationR\x15httpMaxStreamDuration\x12=\n" +
-	"\x1bhttp_max_concurrent_streams\x18\v \x01(\x05R\x18httpMaxConcurrentStreams\x12F\n" +
-	" http2_initial_stream_window_size\x18\f \x01(\x05R\x1chttp2InitialStreamWindowSize\x12N\n" +
-	"$http2_initial_connection_window_size\x18\r \x01(\x05R http2InitialConnectionWindowSize\x12\xa0\x01\n" +
+	" \x01(\v2\x19.google.protobuf.DurationR\x15httpMaxStreamDuration\x12Z\n" +
+	"\x1bhttp_max_concurrent_streams\x18\v \x01(\v2\x1b.google.protobuf.Int32ValueR\x18httpMaxConcurrentStreams\x12c\n" +
+	" http2_initial_stream_window_size\x18\f \x01(\v2\x1b.google.protobuf.Int32ValueR\x1chttp2InitialStreamWindowSize\x12k\n" +
+	"$http2_initial_connection_window_size\x18\r \x01(\v2\x1b.google.protobuf.Int32ValueR http2InitialConnectionWindowSize\x12\xa0\x01\n" +
 	"$http_headers_with_underscores_action\x18\x0e \x01(\x0e2P.istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.HeadersWithUnderscoresActionR httpHeadersWithUnderscoresAction\x12H\n" +
 	"\x12http_merge_slashes\x18\x0f \x01(\v2\x1a.google.protobuf.BoolValueR\x10httpMergeSlashes\x12\xa1\x01\n" +
-	"%http_path_with_escaped_slashes_action\x18\x10 \x01(\x0e2P.istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.PathWithEscapedSlashesActionR httpPathWithEscapedSlashesAction\x12:\n" +
-	"\x19listener_connection_limit\x18\x11 \x01(\x05R\x17listenerConnectionLimit\x12K\n" +
-	"\"global_downstream_connection_limit\x18\x12 \x01(\x05R\x1fglobalDownstreamConnectionLimit\"+\n" +
-	"\x12ProxyConfigProfile\x12\v\n" +
+	"%http_path_with_escaped_slashes_action\x18\x10 \x01(\x0e2P.istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.PathWithEscapedSlashesActionR httpPathWithEscapedSlashesAction\x12W\n" +
+	"\x19listener_connection_limit\x18\x11 \x01(\v2\x1b.google.protobuf.Int32ValueR\x17listenerConnectionLimit\x12h\n" +
+	"\"global_downstream_connection_limit\x18\x12 \x01(\v2\x1b.google.protobuf.Int32ValueR\x1fglobalDownstreamConnectionLimit\" \n" +
+	"\aProfile\x12\v\n" +
 	"\aSIDECAR\x10\x00\x12\b\n" +
 	"\x04EDGE\x10\x01\"\x99\x01\n" +
 	"\x1cHeadersWithUnderscoresAction\x12\"\n" +
@@ -3532,7 +3546,7 @@ var file_mesh_v1alpha1_proxy_proto_goTypes = []any{
 	(ProxyConfig_TracingServiceName)(0),                              // 3: istio.mesh.v1alpha1.ProxyConfig.TracingServiceName
 	(ProxyConfig_InboundInterceptionMode)(0),                         // 4: istio.mesh.v1alpha1.ProxyConfig.InboundInterceptionMode
 	(ProxyConfig_ProxyHeaders_MetadataExchangeMode)(0),               // 5: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.MetadataExchangeMode
-	(ProxyConfig_ConnectionSettings_ProxyConfigProfile)(0),           // 6: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.ProxyConfigProfile
+	(ProxyConfig_ConnectionSettings_Profile)(0),                      // 6: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.Profile
 	(ProxyConfig_ConnectionSettings_HeadersWithUnderscoresAction)(0), // 7: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.HeadersWithUnderscoresAction
 	(ProxyConfig_ConnectionSettings_PathWithEscapedSlashesAction)(0), // 8: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.PathWithEscapedSlashesAction
 	(*Tracing)(nil),                                          // 9: istio.mesh.v1alpha1.Tracing
@@ -3636,34 +3650,41 @@ var file_mesh_v1alpha1_proxy_proto_depIdxs = []int32{
 	42, // 56: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.preserve_http1_header_case:type_name -> google.protobuf.BoolValue
 	36, // 57: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.x_forwarded_host:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.XForwardedHost
 	37, // 58: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.x_forwarded_port:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.XForwardedPort
-	6,  // 59: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.profile:type_name -> istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.ProxyConfigProfile
-	43, // 60: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_idle_timeout:type_name -> google.protobuf.Duration
-	43, // 61: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_max_connection_duration:type_name -> google.protobuf.Duration
-	43, // 62: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_drain_timeout:type_name -> google.protobuf.Duration
-	43, // 63: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_request_timeout:type_name -> google.protobuf.Duration
-	43, // 64: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_request_headers_timeout:type_name -> google.protobuf.Duration
-	43, // 65: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_stream_idle_timeout:type_name -> google.protobuf.Duration
-	43, // 66: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_max_stream_duration:type_name -> google.protobuf.Duration
-	7,  // 67: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_headers_with_underscores_action:type_name -> istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.HeadersWithUnderscoresAction
-	42, // 68: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_merge_slashes:type_name -> google.protobuf.BoolValue
-	8,  // 69: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_path_with_escaped_slashes_action:type_name -> istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.PathWithEscapedSlashesAction
-	42, // 70: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.Server.disabled:type_name -> google.protobuf.BoolValue
-	42, // 71: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.RequestId.disabled:type_name -> google.protobuf.BoolValue
-	42, // 72: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.AttemptCount.disabled:type_name -> google.protobuf.BoolValue
-	42, // 73: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.XForwardedHost.enabled:type_name -> google.protobuf.BoolValue
-	42, // 74: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.XForwardedPort.enabled:type_name -> google.protobuf.BoolValue
-	42, // 75: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.EnvoyDebugHeaders.disabled:type_name -> google.protobuf.BoolValue
-	5,  // 76: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.MetadataExchangeHeaders.mode:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.MetadataExchangeMode
-	42, // 77: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.SetCurrentClientCertDetails.subject:type_name -> google.protobuf.BoolValue
-	42, // 78: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.SetCurrentClientCertDetails.cert:type_name -> google.protobuf.BoolValue
-	42, // 79: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.SetCurrentClientCertDetails.chain:type_name -> google.protobuf.BoolValue
-	42, // 80: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.SetCurrentClientCertDetails.dns:type_name -> google.protobuf.BoolValue
-	42, // 81: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.SetCurrentClientCertDetails.uri:type_name -> google.protobuf.BoolValue
-	82, // [82:82] is the sub-list for method output_type
-	82, // [82:82] is the sub-list for method input_type
-	82, // [82:82] is the sub-list for extension type_name
-	82, // [82:82] is the sub-list for extension extendee
-	0,  // [0:82] is the sub-list for field type_name
+	6,  // 59: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.profile:type_name -> istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.Profile
+	44, // 60: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.listener_per_connection_buffer_limit_bytes:type_name -> google.protobuf.Int32Value
+	44, // 61: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.cluster_per_connection_buffer_limit_bytes:type_name -> google.protobuf.Int32Value
+	43, // 62: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_idle_timeout:type_name -> google.protobuf.Duration
+	43, // 63: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_max_connection_duration:type_name -> google.protobuf.Duration
+	43, // 64: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_drain_timeout:type_name -> google.protobuf.Duration
+	43, // 65: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_request_timeout:type_name -> google.protobuf.Duration
+	43, // 66: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_request_headers_timeout:type_name -> google.protobuf.Duration
+	43, // 67: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_stream_idle_timeout:type_name -> google.protobuf.Duration
+	43, // 68: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_max_stream_duration:type_name -> google.protobuf.Duration
+	44, // 69: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_max_concurrent_streams:type_name -> google.protobuf.Int32Value
+	44, // 70: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http2_initial_stream_window_size:type_name -> google.protobuf.Int32Value
+	44, // 71: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http2_initial_connection_window_size:type_name -> google.protobuf.Int32Value
+	7,  // 72: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_headers_with_underscores_action:type_name -> istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.HeadersWithUnderscoresAction
+	42, // 73: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_merge_slashes:type_name -> google.protobuf.BoolValue
+	8,  // 74: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.http_path_with_escaped_slashes_action:type_name -> istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.PathWithEscapedSlashesAction
+	44, // 75: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.listener_connection_limit:type_name -> google.protobuf.Int32Value
+	44, // 76: istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.global_downstream_connection_limit:type_name -> google.protobuf.Int32Value
+	42, // 77: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.Server.disabled:type_name -> google.protobuf.BoolValue
+	42, // 78: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.RequestId.disabled:type_name -> google.protobuf.BoolValue
+	42, // 79: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.AttemptCount.disabled:type_name -> google.protobuf.BoolValue
+	42, // 80: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.XForwardedHost.enabled:type_name -> google.protobuf.BoolValue
+	42, // 81: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.XForwardedPort.enabled:type_name -> google.protobuf.BoolValue
+	42, // 82: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.EnvoyDebugHeaders.disabled:type_name -> google.protobuf.BoolValue
+	5,  // 83: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.MetadataExchangeHeaders.mode:type_name -> istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.MetadataExchangeMode
+	42, // 84: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.SetCurrentClientCertDetails.subject:type_name -> google.protobuf.BoolValue
+	42, // 85: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.SetCurrentClientCertDetails.cert:type_name -> google.protobuf.BoolValue
+	42, // 86: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.SetCurrentClientCertDetails.chain:type_name -> google.protobuf.BoolValue
+	42, // 87: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.SetCurrentClientCertDetails.dns:type_name -> google.protobuf.BoolValue
+	42, // 88: istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders.SetCurrentClientCertDetails.uri:type_name -> google.protobuf.BoolValue
+	89, // [89:89] is the sub-list for method output_type
+	89, // [89:89] is the sub-list for method input_type
+	89, // [89:89] is the sub-list for extension type_name
+	89, // [89:89] is the sub-list for extension extendee
+	0,  // [0:89] is the sub-list for field type_name
 }
 
 func init() { file_mesh_v1alpha1_proxy_proto_init() }

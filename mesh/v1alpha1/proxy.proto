@@ -793,9 +793,9 @@ message ProxyConfig {
   // connection pool configuration, use DestinationRule's
   // `connectionPoolSettings`.
   message ConnectionSettings {
-    // ProxyConfigProfile selects a default value set for the fields in this message.
+    // Profile selects a default value set for the fields in this message.
     // Explicitly setting any field always takes precedence over profile defaults.
-    enum ProxyConfigProfile {
+    enum Profile {
       // SIDECAR profile preserves existing Istio behavior.
       // This is the default profile. No additional defaults are applied.
       SIDECAR = 0;
@@ -803,23 +803,32 @@ message ProxyConfig {
       // EDGE profile applies Envoy's recommended defaults for edge gateway deployments.
       // See https://www.envoyproxy.io/docs/envoy/latest/configuration/best_practices/edge
       // Explicitly setting any field overrides the corresponding profile default.
+      //
+      // Defaults applied by this profile:
+      //   listener_per_connection_buffer_limit_bytes: 32768 (32 KiB)
+      //   cluster_per_connection_buffer_limit_bytes:  32768 (32 KiB)
+      //   http_idle_timeout:                          3600s (1 hour)
+      //   http_request_timeout:                       300s  (5 minutes)
+      //   http_stream_idle_timeout:                   300s  (5 minutes)
+      //   http_max_concurrent_streams:                100
+      //   http2_initial_stream_window_size:           65536 (64 KiB)
+      //   http2_initial_connection_window_size:       1048576 (1 MiB)
+      //   http_headers_with_underscores_action:       HEADERS_WITH_UNDERSCORES_REJECT_REQUEST
+      //   http_merge_slashes:                         true
+      //   http_path_with_escaped_slashes_action:      UNESCAPE_AND_REDIRECT
       EDGE = 1;
     }
 
     // The config profile to use. Determines default values for all fields in this message.
-    ProxyConfigProfile profile = 1;
-
-    // --- Buffer limits ---
+    Profile profile = 1;
 
     // Soft limit on size of the listener's new connection read and write buffers in bytes.
     // See Envoy's [per_connection_buffer_limit_bytes](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/listener/v3/listener.proto#envoy-v3-api-field-config-listener-v3-listener-per-connection-buffer-limit-bytes).
-    int32 listener_per_connection_buffer_limit_bytes = 2;
+    google.protobuf.Int32Value listener_per_connection_buffer_limit_bytes = 2;
 
     // Soft limit on size of the cluster's new connection read and write buffers in bytes.
     // See Envoy's [per_connection_buffer_limit_bytes](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/cluster/v3/cluster.proto#envoy-v3-api-field-config-cluster-v3-cluster-per-connection-buffer-limit-bytes).
-    int32 cluster_per_connection_buffer_limit_bytes = 3;
-
-    // --- HTTP timeouts ---
+    google.protobuf.Int32Value cluster_per_connection_buffer_limit_bytes = 3;
 
     // The idle timeout for HTTP connections. The idle timeout is defined as the period in which there are no active requests.
     // When the idle timeout is reached, the connection will be closed.
@@ -859,23 +868,19 @@ message ProxyConfig {
     // See Envoy's [max_stream_duration](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-httpprotocoloptions-max-stream-duration).
     google.protobuf.Duration http_max_stream_duration = 10;
 
-    // --- HTTP/2 settings ---
-
     // Maximum number of concurrent streams allowed for HTTP/2 connections.
     // See Envoy's [max_concurrent_streams](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-http2protocoloptions-max-concurrent-streams).
-    int32 http_max_concurrent_streams = 11;
+    google.protobuf.Int32Value http_max_concurrent_streams = 11;
 
     // Initial stream-level flow-control window size for HTTP/2 connections.
     // Valid values range from 65535 (2^16 - 1, HTTP/2 default) to 2147483647 (2^31 - 1, HTTP/2 maximum).
     // See Envoy's [initial_stream_window_size](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-http2protocoloptions-initial-stream-window-size).
-    int32 http2_initial_stream_window_size = 12;
+    google.protobuf.Int32Value http2_initial_stream_window_size = 12;
 
     // Initial connection-level flow-control window size for HTTP/2 connections.
     // Valid values range from 65535 (2^16 - 1, HTTP/2 default) to 2147483647 (2^31 - 1, HTTP/2 maximum).
     // See Envoy's [initial_connection_window_size](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-field-config-core-v3-http2protocoloptions-initial-connection-window-size).
-    int32 http2_initial_connection_window_size = 13;
-
-    // --- Header and path normalization ---
+    google.protobuf.Int32Value http2_initial_connection_window_size = 13;
 
     // Action to take when Envoy receives client request with header names containing underscore characters.
     enum HeadersWithUnderscoresAction {
@@ -920,19 +925,17 @@ message ProxyConfig {
     // See Envoy's [path_with_escaped_slashes_action](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/network/http_connection_manager/v3/http_connection_manager.proto#envoy-v3-api-field-extensions-filters-network-http-connection-manager-v3-httpconnectionmanager-path-with-escaped-slashes-action).
     PathWithEscapedSlashesAction http_path_with_escaped_slashes_action = 16;
 
-    // --- Connection limits ---
-
     // The maximum number of connections that a single listener will accept.
     // Maps to Envoy's per-listener connection limit via runtime configuration
     // (`envoy.resource_limits.listener.<listener_name>.connection_limit`).
     // See Envoy's [edge best practices](https://www.envoyproxy.io/docs/envoy/latest/configuration/best_practices/edge).
-    int32 listener_connection_limit = 17;
+    google.protobuf.Int32Value listener_connection_limit = 17;
 
     // The maximum number of downstream connections allowed across all listeners.
     // Maps to Envoy's global downstream max connections via runtime configuration
     // (`overload.global_downstream_max_connections`).
     // See Envoy's [edge best practices](https://www.envoyproxy.io/docs/envoy/latest/configuration/best_practices/edge).
-    int32 global_downstream_connection_limit = 18;
+    google.protobuf.Int32Value global_downstream_connection_limit = 18;
   }
 
   // Connection handling settings for this proxy, including buffer limits, timeouts,
