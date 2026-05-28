@@ -703,6 +703,20 @@ message ConnectionPoolSettings {
     // The maximum number of concurrent streams allowed for a peer on one HTTP/2 connection.
     // Defaults to 2^31-1.
     int32 max_concurrent_streams = 8;
+
+    // Settings for HTTP/2 PING frames.
+    message ConnectionKeepalive {
+      // Send HTTP/2 PING frames at this interval. Required when
+      // `http2KeepAlive` is set.
+      google.protobuf.Duration interval = 1;
+
+      // How long to wait for a response to an HTTP/2 PING frame before
+      // closing the connection. Required when `http2KeepAlive` is set.
+      google.protobuf.Duration timeout = 2;
+    }
+
+    // Configure HTTP/2 PING frames for upstream connections.
+    ConnectionKeepalive http2_keep_alive = 9;
   }
 
   // Settings common to both HTTP and TCP upstream connections.

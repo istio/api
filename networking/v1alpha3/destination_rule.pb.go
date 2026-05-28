@@ -2543,8 +2543,10 @@ type ConnectionPoolSettings_HTTPSettings struct {
 	// The maximum number of concurrent streams allowed for a peer on one HTTP/2 connection.
 	// Defaults to 2^31-1.
 	MaxConcurrentStreams int32 `protobuf:"varint,8,opt,name=max_concurrent_streams,json=maxConcurrentStreams,proto3" json:"max_concurrent_streams,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+	// Configure HTTP/2 PING frames for upstream connections.
+	Http2KeepAlive *ConnectionPoolSettings_HTTPSettings_ConnectionKeepalive `protobuf:"bytes,9,opt,name=http2_keep_alive,json=http2KeepAlive,proto3" json:"http2_keep_alive,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *ConnectionPoolSettings_HTTPSettings) Reset() {
@@ -2633,6 +2635,13 @@ func (x *ConnectionPoolSettings_HTTPSettings) GetMaxConcurrentStreams() int32 {
 	return 0
 }
 
+func (x *ConnectionPoolSettings_HTTPSettings) GetHttp2KeepAlive() *ConnectionPoolSettings_HTTPSettings_ConnectionKeepalive {
+	if x != nil {
+		return x.Http2KeepAlive
+	}
+	return nil
+}
+
 // TCP keepalive.
 type ConnectionPoolSettings_TCPSettings_TcpKeepalive struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -2703,6 +2712,63 @@ func (x *ConnectionPoolSettings_TCPSettings_TcpKeepalive) GetInterval() *duratio
 	return nil
 }
 
+// Settings for HTTP/2 PING frames.
+type ConnectionPoolSettings_HTTPSettings_ConnectionKeepalive struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Send HTTP/2 PING frames at this interval. Required when
+	// `http2KeepAlive` is set.
+	Interval *duration.Duration `protobuf:"bytes,1,opt,name=interval,proto3" json:"interval,omitempty"`
+	// How long to wait for a response to an HTTP/2 PING frame before
+	// closing the connection. Required when `http2KeepAlive` is set.
+	Timeout       *duration.Duration `protobuf:"bytes,2,opt,name=timeout,proto3" json:"timeout,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ConnectionPoolSettings_HTTPSettings_ConnectionKeepalive) Reset() {
+	*x = ConnectionPoolSettings_HTTPSettings_ConnectionKeepalive{}
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ConnectionPoolSettings_HTTPSettings_ConnectionKeepalive) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ConnectionPoolSettings_HTTPSettings_ConnectionKeepalive) ProtoMessage() {}
+
+func (x *ConnectionPoolSettings_HTTPSettings_ConnectionKeepalive) ProtoReflect() protoreflect.Message {
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ConnectionPoolSettings_HTTPSettings_ConnectionKeepalive.ProtoReflect.Descriptor instead.
+func (*ConnectionPoolSettings_HTTPSettings_ConnectionKeepalive) Descriptor() ([]byte, []int) {
+	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{5, 1, 0}
+}
+
+func (x *ConnectionPoolSettings_HTTPSettings_ConnectionKeepalive) GetInterval() *duration.Duration {
+	if x != nil {
+		return x.Interval
+	}
+	return nil
+}
+
+func (x *ConnectionPoolSettings_HTTPSettings_ConnectionKeepalive) GetTimeout() *duration.Duration {
+	if x != nil {
+		return x.Timeout
+	}
+	return nil
+}
+
 // Describes how traffic originating in the 'from' zone or sub-zone is
 // distributed over a set of 'to' zones. Syntax for specifying a zone is
 // {region}/{zone}/{sub-zone} and terminal wildcards are allowed on any
@@ -2727,7 +2793,7 @@ type LocalityLoadBalancerSetting_Distribute struct {
 
 func (x *LocalityLoadBalancerSetting_Distribute) Reset() {
 	*x = LocalityLoadBalancerSetting_Distribute{}
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[22]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2739,7 +2805,7 @@ func (x *LocalityLoadBalancerSetting_Distribute) String() string {
 func (*LocalityLoadBalancerSetting_Distribute) ProtoMessage() {}
 
 func (x *LocalityLoadBalancerSetting_Distribute) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[22]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2789,7 +2855,7 @@ type LocalityLoadBalancerSetting_Failover struct {
 
 func (x *LocalityLoadBalancerSetting_Failover) Reset() {
 	*x = LocalityLoadBalancerSetting_Failover{}
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[23]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2801,7 +2867,7 @@ func (x *LocalityLoadBalancerSetting_Failover) String() string {
 func (*LocalityLoadBalancerSetting_Failover) ProtoMessage() {}
 
 func (x *LocalityLoadBalancerSetting_Failover) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[23]
+	mi := &file_networking_v1alpha3_destination_rule_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2927,8 +2993,7 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\x0fminimum_percent\x18\x02 \x01(\v2\x1c.google.protobuf.DoubleValueR\x0eminimumPercent\x12<\n" +
 	"\n" +
 	"aggression\x18\x03 \x01(\v2\x1c.google.protobuf.DoubleValueR\n" +
-	"aggression\"\x88\n" +
-	"\n" +
+	"aggression\"\x8a\f\n" +
 	"\x16ConnectionPoolSettings\x12O\n" +
 	"\x03tcp\x18\x01 \x01(\v2=.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettingsR\x03tcp\x12R\n" +
 	"\x04http\x18\x02 \x01(\v2>.istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettingsR\x04http\x1a\x8b\x04\n" +
@@ -2941,7 +3006,7 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\fTcpKeepalive\x12\x16\n" +
 	"\x06probes\x18\x01 \x01(\rR\x06probes\x12-\n" +
 	"\x04time\x18\x02 \x01(\v2\x19.google.protobuf.DurationR\x04time\x125\n" +
-	"\binterval\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\binterval\x1a\xba\x04\n" +
+	"\binterval\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\binterval\x1a\xbc\x06\n" +
 	"\fHTTPSettings\x12;\n" +
 	"\x1ahttp1_max_pending_requests\x18\x01 \x01(\x05R\x17http1MaxPendingRequests\x12,\n" +
 	"\x12http2_max_requests\x18\x02 \x01(\x05R\x10http2MaxRequests\x12=\n" +
@@ -2951,7 +3016,11 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\fidle_timeout\x18\x05 \x01(\v2\x19.google.protobuf.DurationR\vidleTimeout\x12z\n" +
 	"\x11h2_upgrade_policy\x18\x06 \x01(\x0e2N.istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicyR\x0fh2UpgradePolicy\x12.\n" +
 	"\x13use_client_protocol\x18\a \x01(\bR\x11useClientProtocol\x124\n" +
-	"\x16max_concurrent_streams\x18\b \x01(\x05R\x14maxConcurrentStreams\"?\n" +
+	"\x16max_concurrent_streams\x18\b \x01(\x05R\x14maxConcurrentStreams\x12|\n" +
+	"\x10http2_keep_alive\x18\t \x01(\v2R.istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.ConnectionKeepaliveR\x0ehttp2KeepAlive\x1a\x81\x01\n" +
+	"\x13ConnectionKeepalive\x125\n" +
+	"\binterval\x18\x01 \x01(\v2\x19.google.protobuf.DurationR\binterval\x123\n" +
+	"\atimeout\x18\x02 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"?\n" +
 	"\x0fH2UpgradePolicy\x12\v\n" +
 	"\aDEFAULT\x10\x00\x12\x12\n" +
 	"\x0eDO_NOT_UPGRADE\x10\x01\x12\v\n" +
@@ -3015,7 +3084,7 @@ func file_networking_v1alpha3_destination_rule_proto_rawDescGZIP() []byte {
 }
 
 var file_networking_v1alpha3_destination_rule_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_networking_v1alpha3_destination_rule_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
+var file_networking_v1alpha3_destination_rule_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
 var file_networking_v1alpha3_destination_rule_proto_goTypes = []any{
 	(TrafficPolicy_ProxyProtocol_VERSION)(0),                           // 0: istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol.VERSION
 	(LoadBalancerSettings_SimpleLB)(0),                                 // 1: istio.networking.v1alpha3.LoadBalancerSettings.SimpleLB
@@ -3043,20 +3112,21 @@ var file_networking_v1alpha3_destination_rule_proto_goTypes = []any{
 	(*ConnectionPoolSettings_TCPSettings)(nil),                         // 23: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings
 	(*ConnectionPoolSettings_HTTPSettings)(nil),                        // 24: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings
 	(*ConnectionPoolSettings_TCPSettings_TcpKeepalive)(nil),            // 25: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive
-	(*LocalityLoadBalancerSetting_Distribute)(nil),                     // 26: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute
-	(*LocalityLoadBalancerSetting_Failover)(nil),                       // 27: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Failover
-	nil,                              // 28: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.ToEntry
-	(*v1beta1.WorkloadSelector)(nil), // 29: istio.type.v1beta1.WorkloadSelector
-	(*duration.Duration)(nil),        // 30: google.protobuf.Duration
-	(*wrappers.DoubleValue)(nil),     // 31: google.protobuf.DoubleValue
-	(*wrappers.UInt32Value)(nil),     // 32: google.protobuf.UInt32Value
-	(*wrappers.BoolValue)(nil),       // 33: google.protobuf.BoolValue
-	(*PortSelector)(nil),             // 34: istio.networking.v1alpha3.PortSelector
+	(*ConnectionPoolSettings_HTTPSettings_ConnectionKeepalive)(nil),    // 26: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.ConnectionKeepalive
+	(*LocalityLoadBalancerSetting_Distribute)(nil),                     // 27: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute
+	(*LocalityLoadBalancerSetting_Failover)(nil),                       // 28: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Failover
+	nil,                              // 29: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.ToEntry
+	(*v1beta1.WorkloadSelector)(nil), // 30: istio.type.v1beta1.WorkloadSelector
+	(*duration.Duration)(nil),        // 31: google.protobuf.Duration
+	(*wrappers.DoubleValue)(nil),     // 32: google.protobuf.DoubleValue
+	(*wrappers.UInt32Value)(nil),     // 33: google.protobuf.UInt32Value
+	(*wrappers.BoolValue)(nil),       // 34: google.protobuf.BoolValue
+	(*PortSelector)(nil),             // 35: istio.networking.v1alpha3.PortSelector
 }
 var file_networking_v1alpha3_destination_rule_proto_depIdxs = []int32{
 	5,  // 0: istio.networking.v1alpha3.DestinationRule.traffic_policy:type_name -> istio.networking.v1alpha3.TrafficPolicy
 	6,  // 1: istio.networking.v1alpha3.DestinationRule.subsets:type_name -> istio.networking.v1alpha3.Subset
-	29, // 2: istio.networking.v1alpha3.DestinationRule.workload_selector:type_name -> istio.type.v1beta1.WorkloadSelector
+	30, // 2: istio.networking.v1alpha3.DestinationRule.workload_selector:type_name -> istio.type.v1beta1.WorkloadSelector
 	7,  // 3: istio.networking.v1alpha3.TrafficPolicy.load_balancer:type_name -> istio.networking.v1alpha3.LoadBalancerSettings
 	9,  // 4: istio.networking.v1alpha3.TrafficPolicy.connection_pool:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings
 	10, // 5: istio.networking.v1alpha3.TrafficPolicy.outlier_detection:type_name -> istio.networking.v1alpha3.OutlierDetection
@@ -3070,49 +3140,52 @@ var file_networking_v1alpha3_destination_rule_proto_depIdxs = []int32{
 	1,  // 13: istio.networking.v1alpha3.LoadBalancerSettings.simple:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.SimpleLB
 	18, // 14: istio.networking.v1alpha3.LoadBalancerSettings.consistent_hash:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB
 	12, // 15: istio.networking.v1alpha3.LoadBalancerSettings.locality_lb_setting:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting
-	30, // 16: istio.networking.v1alpha3.LoadBalancerSettings.warmup_duration_secs:type_name -> google.protobuf.Duration
+	31, // 16: istio.networking.v1alpha3.LoadBalancerSettings.warmup_duration_secs:type_name -> google.protobuf.Duration
 	8,  // 17: istio.networking.v1alpha3.LoadBalancerSettings.warmup:type_name -> istio.networking.v1alpha3.WarmupConfiguration
-	30, // 18: istio.networking.v1alpha3.WarmupConfiguration.duration:type_name -> google.protobuf.Duration
-	31, // 19: istio.networking.v1alpha3.WarmupConfiguration.minimum_percent:type_name -> google.protobuf.DoubleValue
-	31, // 20: istio.networking.v1alpha3.WarmupConfiguration.aggression:type_name -> google.protobuf.DoubleValue
+	31, // 18: istio.networking.v1alpha3.WarmupConfiguration.duration:type_name -> google.protobuf.Duration
+	32, // 19: istio.networking.v1alpha3.WarmupConfiguration.minimum_percent:type_name -> google.protobuf.DoubleValue
+	32, // 20: istio.networking.v1alpha3.WarmupConfiguration.aggression:type_name -> google.protobuf.DoubleValue
 	23, // 21: istio.networking.v1alpha3.ConnectionPoolSettings.tcp:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings
 	24, // 22: istio.networking.v1alpha3.ConnectionPoolSettings.http:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings
-	32, // 23: istio.networking.v1alpha3.OutlierDetection.consecutive_local_origin_failures:type_name -> google.protobuf.UInt32Value
-	32, // 24: istio.networking.v1alpha3.OutlierDetection.consecutive_gateway_errors:type_name -> google.protobuf.UInt32Value
-	32, // 25: istio.networking.v1alpha3.OutlierDetection.consecutive_5xx_errors:type_name -> google.protobuf.UInt32Value
-	30, // 26: istio.networking.v1alpha3.OutlierDetection.interval:type_name -> google.protobuf.Duration
-	30, // 27: istio.networking.v1alpha3.OutlierDetection.base_ejection_time:type_name -> google.protobuf.Duration
+	33, // 23: istio.networking.v1alpha3.OutlierDetection.consecutive_local_origin_failures:type_name -> google.protobuf.UInt32Value
+	33, // 24: istio.networking.v1alpha3.OutlierDetection.consecutive_gateway_errors:type_name -> google.protobuf.UInt32Value
+	33, // 25: istio.networking.v1alpha3.OutlierDetection.consecutive_5xx_errors:type_name -> google.protobuf.UInt32Value
+	31, // 26: istio.networking.v1alpha3.OutlierDetection.interval:type_name -> google.protobuf.Duration
+	31, // 27: istio.networking.v1alpha3.OutlierDetection.base_ejection_time:type_name -> google.protobuf.Duration
 	3,  // 28: istio.networking.v1alpha3.ClientTLSSettings.mode:type_name -> istio.networking.v1alpha3.ClientTLSSettings.TLSmode
-	33, // 29: istio.networking.v1alpha3.ClientTLSSettings.insecure_skip_verify:type_name -> google.protobuf.BoolValue
-	26, // 30: istio.networking.v1alpha3.LocalityLoadBalancerSetting.distribute:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute
-	27, // 31: istio.networking.v1alpha3.LocalityLoadBalancerSetting.failover:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Failover
-	33, // 32: istio.networking.v1alpha3.LocalityLoadBalancerSetting.enabled:type_name -> google.protobuf.BoolValue
-	34, // 33: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.port:type_name -> istio.networking.v1alpha3.PortSelector
+	34, // 29: istio.networking.v1alpha3.ClientTLSSettings.insecure_skip_verify:type_name -> google.protobuf.BoolValue
+	27, // 30: istio.networking.v1alpha3.LocalityLoadBalancerSetting.distribute:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute
+	28, // 31: istio.networking.v1alpha3.LocalityLoadBalancerSetting.failover:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Failover
+	34, // 32: istio.networking.v1alpha3.LocalityLoadBalancerSetting.enabled:type_name -> google.protobuf.BoolValue
+	35, // 33: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.port:type_name -> istio.networking.v1alpha3.PortSelector
 	7,  // 34: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.load_balancer:type_name -> istio.networking.v1alpha3.LoadBalancerSettings
 	9,  // 35: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.connection_pool:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings
 	10, // 36: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.outlier_detection:type_name -> istio.networking.v1alpha3.OutlierDetection
 	11, // 37: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.tls:type_name -> istio.networking.v1alpha3.ClientTLSSettings
 	0,  // 38: istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol.version:type_name -> istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol.VERSION
-	31, // 39: istio.networking.v1alpha3.TrafficPolicy.RetryBudget.percent:type_name -> google.protobuf.DoubleValue
+	32, // 39: istio.networking.v1alpha3.TrafficPolicy.RetryBudget.percent:type_name -> google.protobuf.DoubleValue
 	21, // 40: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.http_cookie:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie
 	19, // 41: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.ring_hash:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.RingHash
 	20, // 42: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.maglev:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.MagLev
-	30, // 43: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.ttl:type_name -> google.protobuf.Duration
+	31, // 43: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.ttl:type_name -> google.protobuf.Duration
 	22, // 44: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.attributes:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.Attribute
-	30, // 45: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.connect_timeout:type_name -> google.protobuf.Duration
+	31, // 45: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.connect_timeout:type_name -> google.protobuf.Duration
 	25, // 46: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.tcp_keepalive:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive
-	30, // 47: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.max_connection_duration:type_name -> google.protobuf.Duration
-	30, // 48: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.idle_timeout:type_name -> google.protobuf.Duration
-	30, // 49: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.idle_timeout:type_name -> google.protobuf.Duration
+	31, // 47: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.max_connection_duration:type_name -> google.protobuf.Duration
+	31, // 48: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.idle_timeout:type_name -> google.protobuf.Duration
+	31, // 49: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.idle_timeout:type_name -> google.protobuf.Duration
 	2,  // 50: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.h2_upgrade_policy:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicy
-	30, // 51: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.time:type_name -> google.protobuf.Duration
-	30, // 52: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.interval:type_name -> google.protobuf.Duration
-	28, // 53: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.to:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.ToEntry
-	54, // [54:54] is the sub-list for method output_type
-	54, // [54:54] is the sub-list for method input_type
-	54, // [54:54] is the sub-list for extension type_name
-	54, // [54:54] is the sub-list for extension extendee
-	0,  // [0:54] is the sub-list for field type_name
+	26, // 51: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.http2_keep_alive:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.ConnectionKeepalive
+	31, // 52: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.time:type_name -> google.protobuf.Duration
+	31, // 53: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.interval:type_name -> google.protobuf.Duration
+	31, // 54: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.ConnectionKeepalive.interval:type_name -> google.protobuf.Duration
+	31, // 55: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.ConnectionKeepalive.timeout:type_name -> google.protobuf.Duration
+	29, // 56: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.to:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.ToEntry
+	57, // [57:57] is the sub-list for method output_type
+	57, // [57:57] is the sub-list for method input_type
+	57, // [57:57] is the sub-list for extension type_name
+	57, // [57:57] is the sub-list for extension extendee
+	0,  // [0:57] is the sub-list for field type_name
 }
 
 func init() { file_networking_v1alpha3_destination_rule_proto_init() }
@@ -3139,7 +3212,7 @@ func file_networking_v1alpha3_destination_rule_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_networking_v1alpha3_destination_rule_proto_rawDesc), len(file_networking_v1alpha3_destination_rule_proto_rawDesc)),
 			NumEnums:      4,
-			NumMessages:   25,
+			NumMessages:   26,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
