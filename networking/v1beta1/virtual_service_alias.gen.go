@@ -520,6 +520,33 @@ type TLSMatchAttributes = v1alpha3.TLSMatchAttributes
 //	...
 //
 // ```
+//
+// The following rule redirects requests with a path prefix of /foo to the
+// authority foo.example.com, stripping the /foo prefix from the path:
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1
+// kind: VirtualService
+// metadata:
+//
+//	name: foo-redirect
+//
+// spec:
+//
+//	hosts:
+//	- example.com
+//	http:
+//	- match:
+//	  - uri:
+//	      prefix: /foo/
+//	  redirect:
+//	    authority: foo.example.com
+//	    prefix_rewrite: /
+//
+// ```
+//
+// With this rule, a request to example.com/foo/bar is redirected to
+// foo.example.com/bar.
 type HTTPRedirect = v1alpha3.HTTPRedirect
 type HTTPRedirect_RedirectPortSelection = v1alpha3.HTTPRedirect_RedirectPortSelection
 
