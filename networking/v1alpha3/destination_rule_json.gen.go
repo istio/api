@@ -270,6 +270,28 @@ func (this *LocalityLoadBalancerSetting_Failover) UnmarshalJSON(b []byte) error 
 	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for ZoneAwareLoadBalancerSetting
+func (this *ZoneAwareLoadBalancerSetting) MarshalJSON() ([]byte, error) {
+	str, err := DestinationRuleMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ZoneAwareLoadBalancerSetting
+func (this *ZoneAwareLoadBalancerSetting) UnmarshalJSON(b []byte) error {
+	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ZoneAwareLoadBalancerSetting_Failover
+func (this *ZoneAwareLoadBalancerSetting_Failover) MarshalJSON() ([]byte, error) {
+	str, err := DestinationRuleMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ZoneAwareLoadBalancerSetting_Failover
+func (this *ZoneAwareLoadBalancerSetting_Failover) UnmarshalJSON(b []byte) error {
+	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 var (
 	DestinationRuleMarshaler   = &jsonpb.Marshaler{}
 	DestinationRuleUnmarshaler = &jsonpb.Unmarshaler{AllowUnknownFields: true}

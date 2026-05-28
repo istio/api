@@ -487,3 +487,101 @@ type LocalityLoadBalancerSetting_Distribute = v1alpha3.LocalityLoadBalancerSetti
 // improve service health or may need to be restricted for other reasons
 // like regulatory controls.
 type LocalityLoadBalancerSetting_Failover = v1alpha3.LocalityLoadBalancerSetting_Failover
+
+// Zone Aware Load Balancer automatically routes traffic to endpoints in the same
+// availability zone as the downstream proxy, reducing cross-zone latency and
+// inter-zone data transfer costs. Unlike
+// [LocalityLoadBalancerSetting](#LocalityLoadBalancerSetting), which requires
+// explicitly specifying traffic weights per locality, Zone Aware Load Balancer
+// automatically calculates routing percentages based on the relative number of
+// upstream endpoints in each zone — no manual distribution configuration is
+// needed.
+//
+// When the local zone has proportionally fewer endpoints than the share of
+// traffic it would need to absorb, Envoy automatically overflows the excess to
+// other zones rather than overloading local endpoints.
+//
+// Additionally Zone Aware Load Balancer always partitions endpoints by region: the proxy's own region
+// forms the highest-priority tier and Envoy's automatic zone balancing operates
+// only among the endpoints within that region. Endpoints in other regions form
+// lower-priority failover tiers that receive traffic only when the local region is
+// unhealthy or runs out of capacity. The `failover` and `failoverPriority` fields
+// only influence how those lower tiers are ordered; the regional partitioning
+// itself is always applied whenever zone-aware load balancing is enabled.
+//
+// For proxies to activate Zone Aware Load Balancer all of the following conditions are needed:
+//
+//   - The downstream proxy is configured with  `ISTIO_META_ENABLE_SELF_DISCOVERY=true`
+//     (set via `proxyMetadata`).
+//   - The upstream cluster has at least `minClusterSize` hosts (default 6). Below
+//     this threshold zone-aware load balancing is disabled entirely, regardless of other
+//     settings.
+//   - The upstream cluster spans more than one zone.
+//   - There is at least one healthy endpoint in the local zone.
+//
+// For additional details on the algorithm, refer to Envoy's
+// [Zone Aware Routing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/zone_aware)
+// documentation.
+//
+// Note: Zone Aware Load Balancer is not supported on Ambient mode.
+//
+// The following example enables zone-aware load balancing for the ratings service:
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1
+// kind: DestinationRule
+// metadata:
+//
+//	name: ratings-zone-aware
+//
+// spec:
+//
+//	host: ratings.prod.svc.cluster.local
+//	trafficPolicy:
+//	  loadBalancer:
+//	    simple: ROUND_ROBIN
+//	    zoneAwareLbSetting:
+//	      enabled: true
+//
+// ```
+//
+// The following example adds a cross-region failover policy so that when all
+// endpoints in `us-east` become unhealthy, traffic fails over to `eu-west`
+// instead of any region globally:
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1
+// kind: DestinationRule
+// metadata:
+//
+//	name: ratings-zone-aware-failover
+//
+// spec:
+//
+//	host: ratings.prod.svc.cluster.local
+//	trafficPolicy:
+//	  loadBalancer:
+//	    simple: LEAST_REQUEST
+//	    zoneAwareLbSetting:
+//	      enabled: true
+//	      failover:
+//	        - from: us-east
+//	          to: eu-west
+//	        - from: us-west
+//	          to: us-east
+//	  outlierDetection:
+//	    consecutive5xxErrors: 5
+//	    interval: 30s
+//	    baseEjectionTime: 30s
+//
+// ```
+type ZoneAwareLoadBalancerSetting = v1alpha3.ZoneAwareLoadBalancerSetting
+
+// Specify the traffic failover policy across regions. Since zone and sub-zone
+// failover is supported by default this only needs to be specified for
+// regions when the operator needs to constrain traffic failover so that
+// the default behavior of failing over to any endpoint globally does not
+// apply. This is useful when failing over traffic across regions would not
+// improve service health or may need to be restricted for other reasons
+// like regulatory controls.
+type ZoneAwareLoadBalancerSetting_Failover = v1alpha3.ZoneAwareLoadBalancerSetting_Failover
