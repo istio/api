@@ -1,0 +1,10 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - https://github.com/istio/istio/issues/55640
+
+releaseNotes:
+  - |
+    **Added** `http2KeepAlive` settings to the `DestinationRule` API to enable
+    configuring HTTP/2 keepalive pings for upstream connections.
