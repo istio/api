@@ -303,6 +303,21 @@ message TrafficPolicy {
     // Defaults to 3.
     //
     uint32 min_retry_concurrency = 2;
+    // Specifies the duration in which requests will be considered when calculating
+    // the budget for retries. This parameter alters the way in which the retry budget
+    // is calculated, overriding the default behavior when specified.
+    //
+    // By default, when budget_interval is set to 0ms, only presently active
+    // and pending requests are considered when calculating the retry budget.
+    //
+    // When a non-zero budget_interval is specified, new requests are
+    // considered for the duration of budget_interval when calculating
+    // the retry budget.
+    //
+    // Defaults to 0ms.
+    //
+    // +protoc-gen-crd:duration-validation:none
+    google.protobuf.Duration budget_interval = 3;
   }
 
   // Specifies a limit on concurrent retries in relation to the number of active requests.
