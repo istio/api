@@ -1917,8 +1917,23 @@ type TrafficPolicy_RetryBudget struct {
 	//
 	// Defaults to 3.
 	MinRetryConcurrency uint32 `protobuf:"varint,2,opt,name=min_retry_concurrency,json=minRetryConcurrency,proto3" json:"min_retry_concurrency,omitempty"`
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
+	// Specifies the duration in which requests will be considered when calculating
+	// the budget for retries. This parameter alters the way in which the retry budget
+	// is calculated, overriding the default behavior when specified.
+	//
+	// By default, when budget_interval is set to 0ms, only presently active
+	// and pending requests are considered when calculating the retry budget.
+	//
+	// When a non-zero budget_interval is specified, new requests are
+	// considered for the duration of budget_interval when calculating
+	// the retry budget.
+	//
+	// Defaults to 0ms.
+	//
+	// +protoc-gen-crd:duration-validation:none
+	BudgetInterval *duration.Duration `protobuf:"bytes,3,opt,name=budget_interval,json=budgetInterval,proto3" json:"budget_interval,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *TrafficPolicy_RetryBudget) Reset() {
@@ -1963,6 +1978,13 @@ func (x *TrafficPolicy_RetryBudget) GetMinRetryConcurrency() uint32 {
 		return x.MinRetryConcurrency
 	}
 	return 0
+}
+
+func (x *TrafficPolicy_RetryBudget) GetBudgetInterval() *duration.Duration {
+	if x != nil {
+		return x.BudgetInterval
+	}
+	return nil
 }
 
 // Consistent Hash-based load balancing can be used to provide soft
@@ -2907,7 +2929,7 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\x0etraffic_policy\x18\x02 \x01(\v2(.istio.networking.v1alpha3.TrafficPolicyR\rtrafficPolicy\x12;\n" +
 	"\asubsets\x18\x03 \x03(\v2!.istio.networking.v1alpha3.SubsetR\asubsets\x12\x1b\n" +
 	"\texport_to\x18\x04 \x03(\tR\bexportTo\x12Q\n" +
-	"\x11workload_selector\x18\x05 \x01(\v2$.istio.type.v1beta1.WorkloadSelectorR\x10workloadSelector\"\xed\v\n" +
+	"\x11workload_selector\x18\x05 \x01(\v2$.istio.type.v1beta1.WorkloadSelectorR\x10workloadSelector\"\xb2\f\n" +
 	"\rTrafficPolicy\x12T\n" +
 	"\rload_balancer\x18\x01 \x01(\v2/.istio.networking.v1alpha3.LoadBalancerSettingsR\floadBalancer\x12Z\n" +
 	"\x0fconnection_pool\x18\x02 \x01(\v21.istio.networking.v1alpha3.ConnectionPoolSettingsR\x0econnectionPool\x12X\n" +
@@ -2933,10 +2955,11 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\aversion\x18\x01 \x01(\x0e2>.istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol.VERSIONR\aversion\"\x19\n" +
 	"\aVERSION\x12\x06\n" +
 	"\x02V1\x10\x00\x12\x06\n" +
-	"\x02V2\x10\x01\x1ay\n" +
+	"\x02V2\x10\x01\x1a\xbd\x01\n" +
 	"\vRetryBudget\x126\n" +
 	"\apercent\x18\x01 \x01(\v2\x1c.google.protobuf.DoubleValueR\apercent\x122\n" +
-	"\x15min_retry_concurrency\x18\x02 \x01(\rR\x13minRetryConcurrency\"\xf5\x01\n" +
+	"\x15min_retry_concurrency\x18\x02 \x01(\rR\x13minRetryConcurrency\x12B\n" +
+	"\x0fbudget_interval\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\x0ebudgetInterval\"\xf5\x01\n" +
 	"\x06Subset\x12\x18\n" +
 	"\x04name\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x04name\x12E\n" +
 	"\x06labels\x18\x02 \x03(\v2-.istio.networking.v1alpha3.Subset.LabelsEntryR\x06labels\x12O\n" +
@@ -3164,28 +3187,29 @@ var file_networking_v1alpha3_destination_rule_proto_depIdxs = []int32{
 	11, // 37: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.tls:type_name -> istio.networking.v1alpha3.ClientTLSSettings
 	0,  // 38: istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol.version:type_name -> istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol.VERSION
 	32, // 39: istio.networking.v1alpha3.TrafficPolicy.RetryBudget.percent:type_name -> google.protobuf.DoubleValue
-	21, // 40: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.http_cookie:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie
-	19, // 41: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.ring_hash:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.RingHash
-	20, // 42: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.maglev:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.MagLev
-	31, // 43: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.ttl:type_name -> google.protobuf.Duration
-	22, // 44: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.attributes:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.Attribute
-	31, // 45: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.connect_timeout:type_name -> google.protobuf.Duration
-	25, // 46: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.tcp_keepalive:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive
-	31, // 47: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.max_connection_duration:type_name -> google.protobuf.Duration
-	31, // 48: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.idle_timeout:type_name -> google.protobuf.Duration
-	31, // 49: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.idle_timeout:type_name -> google.protobuf.Duration
-	2,  // 50: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.h2_upgrade_policy:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicy
-	26, // 51: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.http2_keep_alive:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.ConnectionKeepalive
-	31, // 52: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.time:type_name -> google.protobuf.Duration
-	31, // 53: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.interval:type_name -> google.protobuf.Duration
-	31, // 54: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.ConnectionKeepalive.interval:type_name -> google.protobuf.Duration
-	31, // 55: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.ConnectionKeepalive.timeout:type_name -> google.protobuf.Duration
-	29, // 56: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.to:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.ToEntry
-	57, // [57:57] is the sub-list for method output_type
-	57, // [57:57] is the sub-list for method input_type
-	57, // [57:57] is the sub-list for extension type_name
-	57, // [57:57] is the sub-list for extension extendee
-	0,  // [0:57] is the sub-list for field type_name
+	31, // 40: istio.networking.v1alpha3.TrafficPolicy.RetryBudget.budget_interval:type_name -> google.protobuf.Duration
+	21, // 41: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.http_cookie:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie
+	19, // 42: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.ring_hash:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.RingHash
+	20, // 43: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.maglev:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.MagLev
+	31, // 44: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.ttl:type_name -> google.protobuf.Duration
+	22, // 45: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.attributes:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.Attribute
+	31, // 46: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.connect_timeout:type_name -> google.protobuf.Duration
+	25, // 47: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.tcp_keepalive:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive
+	31, // 48: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.max_connection_duration:type_name -> google.protobuf.Duration
+	31, // 49: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.idle_timeout:type_name -> google.protobuf.Duration
+	31, // 50: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.idle_timeout:type_name -> google.protobuf.Duration
+	2,  // 51: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.h2_upgrade_policy:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicy
+	26, // 52: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.http2_keep_alive:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.ConnectionKeepalive
+	31, // 53: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.time:type_name -> google.protobuf.Duration
+	31, // 54: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.interval:type_name -> google.protobuf.Duration
+	31, // 55: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.ConnectionKeepalive.interval:type_name -> google.protobuf.Duration
+	31, // 56: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.ConnectionKeepalive.timeout:type_name -> google.protobuf.Duration
+	29, // 57: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.to:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.ToEntry
+	58, // [58:58] is the sub-list for method output_type
+	58, // [58:58] is the sub-list for method input_type
+	58, // [58:58] is the sub-list for extension type_name
+	58, // [58:58] is the sub-list for extension extendee
+	0,  // [0:58] is the sub-list for field type_name
 }
 
 func init() { file_networking_v1alpha3_destination_rule_proto_init() }
