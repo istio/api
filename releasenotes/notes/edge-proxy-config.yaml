@@ -1,0 +1,11 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - https://github.com/istio/istio/issues/57973
+  - https://github.com/istio/istio/issues/24715
+releaseNotes:
+  - |
+    **Added** edge proxy configuration fields to `ProxyConfig`, including a `profile` enum (`SIDECAR`/`EDGE`),
+    connection buffer limits, HTTP timeout settings, HTTP/2 tuning parameters, header normalization options,
+    and connection limits. The `EDGE` profile provides Envoy-recommended defaults for gateway deployments.
