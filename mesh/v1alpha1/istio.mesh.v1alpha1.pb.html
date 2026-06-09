@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 90
+number_of_entries: 91
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -2443,6 +2443,27 @@ logic is used (controlled by <code>TracingServiceName</code> in <code>ProxyConfi
 
 </td>
 </tr>
+<tr id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-always_on_sampler" class="oneof">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-always_on_sampler">alwaysOnSampler</a></code></div>
+<div class="type"><a href="#MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-AlwaysOnSampler">AlwaysOnSampler (oneof)</a></div>
+</div></td>
+<td>
+<p>The AlwaysOn sampler.</p>
+<p>Example configuration:</p>
+<pre><code class="language-yaml">- name: otel-tracing
+  opentelemetry:
+    port: 443
+    service: my.olly-backend.com
+    http:
+      path: &quot;/api/v2/otlp/v1/traces&quot;
+      timeout: 10s
+    resourceDetectors:
+      environment: {}
+    alwaysOnSampler: {}
+</code></pre>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -2548,6 +2569,9 @@ host name defined in the ServiceEntry.</p>
 </tr>
 </tbody>
 </table>
+</section>
+<h5 id="MeshConfig-ExtensionProvider-OpenTelemetryTracingProvider-AlwaysOnSampler">AlwaysOnSampler</h5>
+<section>
 </section>
 <h4 id="MeshConfig-ExtensionProvider-SDSProvider">SDSProvider</h4>
 <section>

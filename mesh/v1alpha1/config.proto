@@ -1358,6 +1358,23 @@ message MeshConfig {
         //       tenant: "{your-environment-id}"
         //       clusterId: 1234
         DynatraceSampler dynatrace_sampler = 6;
+
+        // The AlwaysOn sampler.
+        //
+        // Example configuration:
+        //
+        // ```yaml
+        // - name: otel-tracing
+        //   opentelemetry:
+        //     port: 443
+        //     service: my.olly-backend.com
+        //     http:
+        //       path: "/api/v2/otlp/v1/traces"
+        //       timeout: 10s
+        //     resourceDetectors:
+        //       environment: {}
+        //     alwaysOnSampler: {}
+        AlwaysOnSampler always_on_sampler = 9;
       }
 
       message DynatraceSampler {
@@ -1402,6 +1419,8 @@ message MeshConfig {
           HttpService http = 3;
         }
       }
+
+      message AlwaysOnSampler {}
     }
 
     // Defines configuration for an Gateway SDS provider.
