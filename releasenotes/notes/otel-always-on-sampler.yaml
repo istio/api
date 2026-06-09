@@ -1,0 +1,10 @@
+apiVersion: release-notes/v2
+
+kind: feature
+area: telemetry
+issue:
+  - https://github.com/istio/istio/issues/60500
+
+releaseNotes:
+- |
+    **Added** Support for OpenTelemetry AlwaysOn trace sampler.
