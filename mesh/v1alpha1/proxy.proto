@@ -884,15 +884,19 @@ message ProxyConfig {
 
     // Action to take when Envoy receives client request with header names containing underscore characters.
     enum HeadersWithUnderscoresAction {
+      // Unspecified. When profile is EDGE, defaults to HEADERS_WITH_UNDERSCORES_REJECT_REQUEST.
+      // Otherwise defaults to HEADERS_WITH_UNDERSCORES_ALLOW.
+      HEADERS_WITH_UNDERSCORES_UNSPECIFIED = 0;
+
       // Allow headers with underscores.
-      HEADERS_WITH_UNDERSCORES_ALLOW = 0;
+      HEADERS_WITH_UNDERSCORES_ALLOW = 1;
 
       // Reject client request with 400 status. HTTP/1 requests are rejected with the "underscore_in_headers" response code.
-      HEADERS_WITH_UNDERSCORES_REJECT_REQUEST = 1;
+      HEADERS_WITH_UNDERSCORES_REJECT_REQUEST = 2;
 
       // Drop the header with name containing underscores. The header is dropped before the filter chain is invoked
       // and as such filters will not see the header.
-      HEADERS_WITH_UNDERSCORES_DROP_HEADER = 2;
+      HEADERS_WITH_UNDERSCORES_DROP_HEADER = 3;
     }
 
     // Action to take when a client request contains header names with underscore characters.
@@ -907,18 +911,22 @@ message ProxyConfig {
 
     // Determines the action for request paths that contain escaped slashes (%2F, %2f, %5C, %5c).
     enum PathWithEscapedSlashesAction {
+      // Unspecified. When profile is EDGE, defaults to UNESCAPE_AND_REDIRECT.
+      // Otherwise defaults to KEEP_UNCHANGED.
+      PATH_WITH_ESCAPED_SLASHES_UNSPECIFIED = 0;
+
       // Keep escaped slashes as they are.
-      KEEP_UNCHANGED = 0;
+      KEEP_UNCHANGED = 1;
 
       // Reject client request with 400 status.
-      REJECT_REQUEST = 1;
+      REJECT_REQUEST = 2;
 
       // Unescape %2F and %5C sequences and redirect the request to the new path if the result path is different.
-      UNESCAPE_AND_REDIRECT = 2;
+      UNESCAPE_AND_REDIRECT = 3;
 
       // Unescape %2F and %5C sequences and forward the request. Note that this option may introduce path confusion
       // vulnerabilities if the backend service does not expect unescaped slashes.
-      UNESCAPE_AND_FORWARD = 3;
+      UNESCAPE_AND_FORWARD = 4;
     }
 
     // Action to take when a request path contains escaped slash sequences (%2F, %5C).

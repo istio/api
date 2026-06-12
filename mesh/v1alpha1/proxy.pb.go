@@ -473,26 +473,31 @@ func (ProxyConfig_ConnectionSettings_Profile) EnumDescriptor() ([]byte, []int) {
 type ProxyConfig_ConnectionSettings_HeadersWithUnderscoresAction int32
 
 const (
+	// Unspecified. When profile is EDGE, defaults to HEADERS_WITH_UNDERSCORES_REJECT_REQUEST.
+	// Otherwise defaults to HEADERS_WITH_UNDERSCORES_ALLOW.
+	ProxyConfig_ConnectionSettings_HEADERS_WITH_UNDERSCORES_UNSPECIFIED ProxyConfig_ConnectionSettings_HeadersWithUnderscoresAction = 0
 	// Allow headers with underscores.
-	ProxyConfig_ConnectionSettings_HEADERS_WITH_UNDERSCORES_ALLOW ProxyConfig_ConnectionSettings_HeadersWithUnderscoresAction = 0
+	ProxyConfig_ConnectionSettings_HEADERS_WITH_UNDERSCORES_ALLOW ProxyConfig_ConnectionSettings_HeadersWithUnderscoresAction = 1
 	// Reject client request with 400 status. HTTP/1 requests are rejected with the "underscore_in_headers" response code.
-	ProxyConfig_ConnectionSettings_HEADERS_WITH_UNDERSCORES_REJECT_REQUEST ProxyConfig_ConnectionSettings_HeadersWithUnderscoresAction = 1
+	ProxyConfig_ConnectionSettings_HEADERS_WITH_UNDERSCORES_REJECT_REQUEST ProxyConfig_ConnectionSettings_HeadersWithUnderscoresAction = 2
 	// Drop the header with name containing underscores. The header is dropped before the filter chain is invoked
 	// and as such filters will not see the header.
-	ProxyConfig_ConnectionSettings_HEADERS_WITH_UNDERSCORES_DROP_HEADER ProxyConfig_ConnectionSettings_HeadersWithUnderscoresAction = 2
+	ProxyConfig_ConnectionSettings_HEADERS_WITH_UNDERSCORES_DROP_HEADER ProxyConfig_ConnectionSettings_HeadersWithUnderscoresAction = 3
 )
 
 // Enum value maps for ProxyConfig_ConnectionSettings_HeadersWithUnderscoresAction.
 var (
 	ProxyConfig_ConnectionSettings_HeadersWithUnderscoresAction_name = map[int32]string{
-		0: "HEADERS_WITH_UNDERSCORES_ALLOW",
-		1: "HEADERS_WITH_UNDERSCORES_REJECT_REQUEST",
-		2: "HEADERS_WITH_UNDERSCORES_DROP_HEADER",
+		0: "HEADERS_WITH_UNDERSCORES_UNSPECIFIED",
+		1: "HEADERS_WITH_UNDERSCORES_ALLOW",
+		2: "HEADERS_WITH_UNDERSCORES_REJECT_REQUEST",
+		3: "HEADERS_WITH_UNDERSCORES_DROP_HEADER",
 	}
 	ProxyConfig_ConnectionSettings_HeadersWithUnderscoresAction_value = map[string]int32{
-		"HEADERS_WITH_UNDERSCORES_ALLOW":          0,
-		"HEADERS_WITH_UNDERSCORES_REJECT_REQUEST": 1,
-		"HEADERS_WITH_UNDERSCORES_DROP_HEADER":    2,
+		"HEADERS_WITH_UNDERSCORES_UNSPECIFIED":    0,
+		"HEADERS_WITH_UNDERSCORES_ALLOW":          1,
+		"HEADERS_WITH_UNDERSCORES_REJECT_REQUEST": 2,
+		"HEADERS_WITH_UNDERSCORES_DROP_HEADER":    3,
 	}
 )
 
@@ -527,30 +532,35 @@ func (ProxyConfig_ConnectionSettings_HeadersWithUnderscoresAction) EnumDescripto
 type ProxyConfig_ConnectionSettings_PathWithEscapedSlashesAction int32
 
 const (
+	// Unspecified. When profile is EDGE, defaults to UNESCAPE_AND_REDIRECT.
+	// Otherwise defaults to KEEP_UNCHANGED.
+	ProxyConfig_ConnectionSettings_PATH_WITH_ESCAPED_SLASHES_UNSPECIFIED ProxyConfig_ConnectionSettings_PathWithEscapedSlashesAction = 0
 	// Keep escaped slashes as they are.
-	ProxyConfig_ConnectionSettings_KEEP_UNCHANGED ProxyConfig_ConnectionSettings_PathWithEscapedSlashesAction = 0
+	ProxyConfig_ConnectionSettings_KEEP_UNCHANGED ProxyConfig_ConnectionSettings_PathWithEscapedSlashesAction = 1
 	// Reject client request with 400 status.
-	ProxyConfig_ConnectionSettings_REJECT_REQUEST ProxyConfig_ConnectionSettings_PathWithEscapedSlashesAction = 1
+	ProxyConfig_ConnectionSettings_REJECT_REQUEST ProxyConfig_ConnectionSettings_PathWithEscapedSlashesAction = 2
 	// Unescape %2F and %5C sequences and redirect the request to the new path if the result path is different.
-	ProxyConfig_ConnectionSettings_UNESCAPE_AND_REDIRECT ProxyConfig_ConnectionSettings_PathWithEscapedSlashesAction = 2
+	ProxyConfig_ConnectionSettings_UNESCAPE_AND_REDIRECT ProxyConfig_ConnectionSettings_PathWithEscapedSlashesAction = 3
 	// Unescape %2F and %5C sequences and forward the request. Note that this option may introduce path confusion
 	// vulnerabilities if the backend service does not expect unescaped slashes.
-	ProxyConfig_ConnectionSettings_UNESCAPE_AND_FORWARD ProxyConfig_ConnectionSettings_PathWithEscapedSlashesAction = 3
+	ProxyConfig_ConnectionSettings_UNESCAPE_AND_FORWARD ProxyConfig_ConnectionSettings_PathWithEscapedSlashesAction = 4
 )
 
 // Enum value maps for ProxyConfig_ConnectionSettings_PathWithEscapedSlashesAction.
 var (
 	ProxyConfig_ConnectionSettings_PathWithEscapedSlashesAction_name = map[int32]string{
-		0: "KEEP_UNCHANGED",
-		1: "REJECT_REQUEST",
-		2: "UNESCAPE_AND_REDIRECT",
-		3: "UNESCAPE_AND_FORWARD",
+		0: "PATH_WITH_ESCAPED_SLASHES_UNSPECIFIED",
+		1: "KEEP_UNCHANGED",
+		2: "REJECT_REQUEST",
+		3: "UNESCAPE_AND_REDIRECT",
+		4: "UNESCAPE_AND_FORWARD",
 	}
 	ProxyConfig_ConnectionSettings_PathWithEscapedSlashesAction_value = map[string]int32{
-		"KEEP_UNCHANGED":        0,
-		"REJECT_REQUEST":        1,
-		"UNESCAPE_AND_REDIRECT": 2,
-		"UNESCAPE_AND_FORWARD":  3,
+		"PATH_WITH_ESCAPED_SLASHES_UNSPECIFIED": 0,
+		"KEEP_UNCHANGED":                        1,
+		"REJECT_REQUEST":                        2,
+		"UNESCAPE_AND_REDIRECT":                 3,
+		"UNESCAPE_AND_FORWARD":                  4,
 	}
 )
 
@@ -2861,7 +2871,7 @@ func (x *ProxyConfig_ConnectionSettings) GetHttpHeadersWithUnderscoresAction() P
 	if x != nil {
 		return x.HttpHeadersWithUnderscoresAction
 	}
-	return ProxyConfig_ConnectionSettings_HEADERS_WITH_UNDERSCORES_ALLOW
+	return ProxyConfig_ConnectionSettings_HEADERS_WITH_UNDERSCORES_UNSPECIFIED
 }
 
 func (x *ProxyConfig_ConnectionSettings) GetHttpMergeSlashes() *wrappers.BoolValue {
@@ -2875,7 +2885,7 @@ func (x *ProxyConfig_ConnectionSettings) GetHttpPathWithEscapedSlashesAction() P
 	if x != nil {
 		return x.HttpPathWithEscapedSlashesAction
 	}
-	return ProxyConfig_ConnectionSettings_KEEP_UNCHANGED
+	return ProxyConfig_ConnectionSettings_PATH_WITH_ESCAPED_SLASHES_UNSPECIFIED
 }
 
 func (x *ProxyConfig_ConnectionSettings) GetListenerConnectionLimit() *wrappers.Int32Value {
@@ -3373,7 +3383,7 @@ const file_mesh_v1alpha1_proxy_proto_rawDesc = "" +
 	"poll_delay\x18\x01 \x01(\v2\x19.google.protobuf.DurationR\tpollDelay\x126\n" +
 	"\bfallback\x18\x02 \x01(\v2\x1a.google.protobuf.BoolValueR\bfallbackB\n" +
 	"\n" +
-	"\bprovider\"\xa79\n" +
+	"\bprovider\"\xfd9\n" +
 	"\vProxyConfig\x12\x1f\n" +
 	"\vconfig_path\x18\x01 \x01(\tR\n" +
 	"configPath\x12\x1f\n" +
@@ -3464,7 +3474,7 @@ const file_mesh_v1alpha1_proxy_proto_rawDesc = "" +
 	"\x03uri\x18\x05 \x01(\v2\x1a.google.protobuf.BoolValueR\x03uri\"2\n" +
 	"\x14MetadataExchangeMode\x12\r\n" +
 	"\tUNDEFINED\x10\x00\x12\v\n" +
-	"\aIN_MESH\x10\x01\x1a\xd3\x10\n" +
+	"\aIN_MESH\x10\x01\x1a\xa9\x11\n" +
 	"\x12ConnectionSettings\x12U\n" +
 	"\aprofile\x18\x01 \x01(\x0e2;.istio.mesh.v1alpha1.ProxyConfig.ConnectionSettings.ProfileR\aprofile\x12v\n" +
 	"*listener_per_connection_buffer_limit_bytes\x18\x02 \x01(\v2\x1b.google.protobuf.Int32ValueR%listenerPerConnectionBufferLimitBytes\x12t\n" +
@@ -3487,16 +3497,18 @@ const file_mesh_v1alpha1_proxy_proto_rawDesc = "" +
 	"\"global_downstream_connection_limit\x18\x12 \x01(\v2\x1b.google.protobuf.Int32ValueR\x1fglobalDownstreamConnectionLimit\" \n" +
 	"\aProfile\x12\v\n" +
 	"\aSIDECAR\x10\x00\x12\b\n" +
-	"\x04EDGE\x10\x01\"\x99\x01\n" +
-	"\x1cHeadersWithUnderscoresAction\x12\"\n" +
-	"\x1eHEADERS_WITH_UNDERSCORES_ALLOW\x10\x00\x12+\n" +
-	"'HEADERS_WITH_UNDERSCORES_REJECT_REQUEST\x10\x01\x12(\n" +
-	"$HEADERS_WITH_UNDERSCORES_DROP_HEADER\x10\x02\"{\n" +
-	"\x1cPathWithEscapedSlashesAction\x12\x12\n" +
-	"\x0eKEEP_UNCHANGED\x10\x00\x12\x12\n" +
-	"\x0eREJECT_REQUEST\x10\x01\x12\x19\n" +
-	"\x15UNESCAPE_AND_REDIRECT\x10\x02\x12\x18\n" +
-	"\x14UNESCAPE_AND_FORWARD\x10\x03\"l\n" +
+	"\x04EDGE\x10\x01\"\xc3\x01\n" +
+	"\x1cHeadersWithUnderscoresAction\x12(\n" +
+	"$HEADERS_WITH_UNDERSCORES_UNSPECIFIED\x10\x00\x12\"\n" +
+	"\x1eHEADERS_WITH_UNDERSCORES_ALLOW\x10\x01\x12+\n" +
+	"'HEADERS_WITH_UNDERSCORES_REJECT_REQUEST\x10\x02\x12(\n" +
+	"$HEADERS_WITH_UNDERSCORES_DROP_HEADER\x10\x03\"\xa6\x01\n" +
+	"\x1cPathWithEscapedSlashesAction\x12)\n" +
+	"%PATH_WITH_ESCAPED_SLASHES_UNSPECIFIED\x10\x00\x12\x12\n" +
+	"\x0eKEEP_UNCHANGED\x10\x01\x12\x12\n" +
+	"\x0eREJECT_REQUEST\x10\x02\x12\x19\n" +
+	"\x15UNESCAPE_AND_REDIRECT\x10\x03\x12\x18\n" +
+	"\x14UNESCAPE_AND_FORWARD\x10\x04\"l\n" +
 	"\x12TracingServiceName\x12\x1b\n" +
 	"\x17APP_LABEL_AND_NAMESPACE\x10\x00\x12\x17\n" +
 	"\x13CANONICAL_NAME_ONLY\x10\x01\x12 \n" +
