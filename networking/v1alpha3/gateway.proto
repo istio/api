@@ -577,4 +577,10 @@ message ServerTLSSettings {
   // * `AES256-SHA`
   // * `DES-CBC3-SHA`
   repeated string cipher_suites = 9;
+
+  // Optional: If set to true, the proxy will accept connections even when the certificate
+  // does not pass validation. This is a security risk and is not recommened, but it's part
+  // of the Gateway API and we support it to comply with the Gateway API conformance
+  // requirements.
+  bool allow_insecure = 17;
 }

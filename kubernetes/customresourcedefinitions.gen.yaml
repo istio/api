@@ -7567,6 +7567,10 @@ spec:
                       description: Set of TLS related options that govern the server's
                         behavior.
                       properties:
+                        allowInsecure:
+                          description: 'Optional: If set to true, the proxy will accept
+                            connections even when the certificate does not pass validation.'
+                          type: boolean
                         caCertCredentialName:
                           description: For mutual TLS, the name of the secret or the
                             configmap that holds CA certificates.
@@ -7842,6 +7846,10 @@ spec:
                       description: Set of TLS related options that govern the server's
                         behavior.
                       properties:
+                        allowInsecure:
+                          description: 'Optional: If set to true, the proxy will accept
+                            connections even when the certificate does not pass validation.'
+                          type: boolean
                         caCertCredentialName:
                           description: For mutual TLS, the name of the secret or the
                             configmap that holds CA certificates.
@@ -8117,6 +8125,10 @@ spec:
                       description: Set of TLS related options that govern the server's
                         behavior.
                       properties:
+                        allowInsecure:
+                          description: 'Optional: If set to true, the proxy will accept
+                            connections even when the certificate does not pass validation.'
+                          type: boolean
                         caCertCredentialName:
                           description: For mutual TLS, the name of the secret or the
                             configmap that holds CA certificates.
@@ -9782,6 +9794,10 @@ spec:
                         termination on the sidecar for requests originating from outside
                         the mesh.
                       properties:
+                        allowInsecure:
+                          description: 'Optional: If set to true, the proxy will accept
+                            connections even when the certificate does not pass validation.'
+                          type: boolean
                         caCertCredentialName:
                           description: For mutual TLS, the name of the secret or the
                             configmap that holds CA certificates.
@@ -10397,6 +10413,10 @@ spec:
                         termination on the sidecar for requests originating from outside
                         the mesh.
                       properties:
+                        allowInsecure:
+                          description: 'Optional: If set to true, the proxy will accept
+                            connections even when the certificate does not pass validation.'
+                          type: boolean
                         caCertCredentialName:
                           description: For mutual TLS, the name of the secret or the
                             configmap that holds CA certificates.
@@ -11012,6 +11032,10 @@ spec:
                         termination on the sidecar for requests originating from outside
                         the mesh.
                       properties:
+                        allowInsecure:
+                          description: 'Optional: If set to true, the proxy will accept
+                            connections even when the certificate does not pass validation.'
+                          type: boolean
                         caCertCredentialName:
                           description: For mutual TLS, the name of the secret or the
                             configmap that holds CA certificates.
