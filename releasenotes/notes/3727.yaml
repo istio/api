@@ -1,0 +1,8 @@
+apiVersion: release-notes/v2
+kind: feature
+area: security
+releaseNotes:
+- |
+  **Added** `insecure_skip_verify` field to `ServerTLSSettings`. When set to `true`, this will tell the gateway to allow the
+  incoming connection even if the client certificate does not pass the checks. It will be used to implement Gateway API
+  `AllowInsecureFallback` feature in Istio.
