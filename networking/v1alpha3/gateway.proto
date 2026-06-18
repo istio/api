@@ -193,6 +193,7 @@ syntax = "proto3";
 package istio.networking.v1alpha3;
 
 import "google/api/field_behavior.proto";
+import "google/protobuf/wrappers.proto";
 
 option go_package = "istio.io/api/networking/v1alpha3";
 
@@ -578,9 +579,12 @@ message ServerTLSSettings {
   // * `DES-CBC3-SHA`
   repeated string cipher_suites = 9;
 
-  // Optional: If set to true, the proxy will accept connections even when the certificate
-  // does not pass validation. This is a security risk and is not recommened, but it's part
-  // of the Gateway API and we support it to comply with the Gateway API conformance
-  // requirements.
-  bool allow_insecure = 17;
+  // Optional: If set to true, the proxy will try to validate the certificate, but even if the
+  // validation fails, it will allow the connection through.
+  //
+  // It's needed to implement Gateway API AllowInsecureFallback feature. The different between
+  // AllowInsecureFallback and not verifying client certificate at all is that Gateway is able
+  // to pass the client certificate to the backend in the x-forwarded-client-cert HTTP header and
+  // backend can verify the certificate.
+  google.protobuf.BoolValue insecure_skip_verify = 17;
 }
