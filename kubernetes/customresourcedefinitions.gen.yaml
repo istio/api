@@ -17193,6 +17193,10 @@ spec:
                       description: This field specifies the header name to output
                         a successfully verified JWT payload to the backend.
                       type: string
+                    requireExpiration:
+                      description: If set to true, a JWT without an expiration ([`exp`](https://tools.ietf.org/html/rfc7519#section-4.1.4))
+                        claim is rejected.
+                      type: boolean
                     spaceDelimitedClaims:
                       description: List of JWT claim names that should be treated
                         as space-delimited strings.
@@ -17482,6 +17486,10 @@ spec:
                       description: This field specifies the header name to output
                         a successfully verified JWT payload to the backend.
                       type: string
+                    requireExpiration:
+                      description: If set to true, a JWT without an expiration ([`exp`](https://tools.ietf.org/html/rfc7519#section-4.1.4))
+                        claim is rejected.
+                      type: boolean
                     spaceDelimitedClaims:
                       description: List of JWT claim names that should be treated
                         as space-delimited strings.
