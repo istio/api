@@ -1634,8 +1634,27 @@ message MeshConfig {
   // For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.
   TLSConfig tls_defaults = 64;
 
+  // DefaultTrafficPolicy defines mesh-wide baseline traffic settings for outbound
+  // clusters. Only connection pool and outlier detection are configurable here, the
+  // two settings that benefit from a mesh-wide baseline. A DestinationRule overrides a
+  // baseline block when it sets the corresponding policy, and inherits it otherwise.
+  message DefaultTrafficPolicy {
+    // Baseline connection pool settings for outbound clusters. A DestinationRule that
+    // sets `connectionPool` overrides this whole block; otherwise this baseline applies.
+    istio.networking.v1alpha3.ConnectionPoolSettings connection_pool = 1;
+    // Baseline outlier detection for outbound clusters. A DestinationRule that sets
+    // `outlierDetection` overrides this whole block; otherwise this baseline applies.
+    istio.networking.v1alpha3.OutlierDetection outlier_detection = 2;
+  }
+
+  // The default traffic policy applied to outbound clusters in the mesh, providing a
+  // baseline that DestinationRules inherit and override per block. Without this, a
+  // DestinationRule that sets `connectionPool` or `outlierDetection` has no mesh-level
+  // baseline, and unset blocks fall back to Istio's built-in defaults.
+  DefaultTrafficPolicy default_traffic_policy = 71;
+
   // $hide_from_docs
-  // Next available field number: 71
+  // Next available field number: 72
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
