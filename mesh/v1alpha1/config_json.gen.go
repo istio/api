@@ -468,6 +468,39 @@ func (this *LabelSelectorRequirement) UnmarshalJSON(b []byte) error {
 	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for ServiceEntryPublishing
+func (this *ServiceEntryPublishing) MarshalJSON() ([]byte, error) {
+	str, err := ConfigMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ServiceEntryPublishing
+func (this *ServiceEntryPublishing) UnmarshalJSON(b []byte) error {
+	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ServiceEntryPublishing_PublishPolicy
+func (this *ServiceEntryPublishing_PublishPolicy) MarshalJSON() ([]byte, error) {
+	str, err := ConfigMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ServiceEntryPublishing_PublishPolicy
+func (this *ServiceEntryPublishing_PublishPolicy) UnmarshalJSON(b []byte) error {
+	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ServiceEntryPublishing_PublishMatchRule
+func (this *ServiceEntryPublishing_PublishMatchRule) MarshalJSON() ([]byte, error) {
+	str, err := ConfigMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ServiceEntryPublishing_PublishMatchRule
+func (this *ServiceEntryPublishing_PublishMatchRule) UnmarshalJSON(b []byte) error {
+	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 // MarshalJSON is a custom marshaler for ConfigSource
 func (this *ConfigSource) MarshalJSON() ([]byte, error) {
 	str, err := ConfigMarshaler.MarshalToString(this)
