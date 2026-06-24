@@ -468,36 +468,36 @@ func (this *LabelSelectorRequirement) UnmarshalJSON(b []byte) error {
 	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for ServiceEntryPublishing
-func (this *ServiceEntryPublishing) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for ServiceEntryVisibility
+func (this *ServiceEntryVisibility) MarshalJSON() ([]byte, error) {
 	str, err := ConfigMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for ServiceEntryPublishing
-func (this *ServiceEntryPublishing) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for ServiceEntryVisibility
+func (this *ServiceEntryVisibility) UnmarshalJSON(b []byte) error {
 	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for ServiceEntryPublishing_PublishPolicy
-func (this *ServiceEntryPublishing_PublishPolicy) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for ServiceEntryVisibility_Policy
+func (this *ServiceEntryVisibility_Policy) MarshalJSON() ([]byte, error) {
 	str, err := ConfigMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for ServiceEntryPublishing_PublishPolicy
-func (this *ServiceEntryPublishing_PublishPolicy) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for ServiceEntryVisibility_Policy
+func (this *ServiceEntryVisibility_Policy) UnmarshalJSON(b []byte) error {
 	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for ServiceEntryPublishing_PublishMatchRule
-func (this *ServiceEntryPublishing_PublishMatchRule) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for ServiceEntryVisibility_MatchRule
+func (this *ServiceEntryVisibility_MatchRule) MarshalJSON() ([]byte, error) {
 	str, err := ConfigMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for ServiceEntryPublishing_PublishMatchRule
-func (this *ServiceEntryPublishing_PublishMatchRule) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for ServiceEntryVisibility_MatchRule
+func (this *ServiceEntryVisibility_MatchRule) UnmarshalJSON(b []byte) error {
 	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

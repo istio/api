@@ -779,61 +779,61 @@ func (MeshConfig_TLSConfig_TLSProtocol) EnumDescriptor() ([]byte, []int) {
 	return file_mesh_v1alpha1_config_proto_rawDescGZIP(), []int{0, 9, 0}
 }
 
-// PublishScope defines how widely a matching ServiceEntry is published.
-type ServiceEntryPublishing_PublishScope int32
+// Visibility defines how widely a matching ServiceEntry is visible.
+type ServiceEntryVisibility_Visibility int32
 
 const (
 	// Default. Resolves to `CLUSTER_LOCAL` to preserve legacy behavior.
-	ServiceEntryPublishing_PUBLISH_SCOPE_UNSPECIFIED ServiceEntryPublishing_PublishScope = 0
+	ServiceEntryVisibility_VISIBILITY_UNSPECIFIED ServiceEntryVisibility_Visibility = 0
 	// The ServiceEntry may be written, but Istio configures no dataplane for
 	// it. Useful to expressly forbid a class of ServiceEntry.
-	ServiceEntryPublishing_UNUSED ServiceEntryPublishing_PublishScope = 1
+	ServiceEntryVisibility_UNUSED ServiceEntryVisibility_Visibility = 1
 	// Visible only within the namespace the ServiceEntry is defined in.
-	ServiceEntryPublishing_NAMESPACE_LOCAL ServiceEntryPublishing_PublishScope = 2
+	ServiceEntryVisibility_NAMESPACE_LOCAL ServiceEntryVisibility_Visibility = 2
 	// Visible to the entire cluster. Equivalent to the legacy `exportTo: "*"`.
-	ServiceEntryPublishing_CLUSTER_LOCAL ServiceEntryPublishing_PublishScope = 3
+	ServiceEntryVisibility_CLUSTER_LOCAL ServiceEntryVisibility_Visibility = 3
 )
 
-// Enum value maps for ServiceEntryPublishing_PublishScope.
+// Enum value maps for ServiceEntryVisibility_Visibility.
 var (
-	ServiceEntryPublishing_PublishScope_name = map[int32]string{
-		0: "PUBLISH_SCOPE_UNSPECIFIED",
+	ServiceEntryVisibility_Visibility_name = map[int32]string{
+		0: "VISIBILITY_UNSPECIFIED",
 		1: "UNUSED",
 		2: "NAMESPACE_LOCAL",
 		3: "CLUSTER_LOCAL",
 	}
-	ServiceEntryPublishing_PublishScope_value = map[string]int32{
-		"PUBLISH_SCOPE_UNSPECIFIED": 0,
-		"UNUSED":                    1,
-		"NAMESPACE_LOCAL":           2,
-		"CLUSTER_LOCAL":             3,
+	ServiceEntryVisibility_Visibility_value = map[string]int32{
+		"VISIBILITY_UNSPECIFIED": 0,
+		"UNUSED":                 1,
+		"NAMESPACE_LOCAL":        2,
+		"CLUSTER_LOCAL":          3,
 	}
 )
 
-func (x ServiceEntryPublishing_PublishScope) Enum() *ServiceEntryPublishing_PublishScope {
-	p := new(ServiceEntryPublishing_PublishScope)
+func (x ServiceEntryVisibility_Visibility) Enum() *ServiceEntryVisibility_Visibility {
+	p := new(ServiceEntryVisibility_Visibility)
 	*p = x
 	return p
 }
 
-func (x ServiceEntryPublishing_PublishScope) String() string {
+func (x ServiceEntryVisibility_Visibility) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (ServiceEntryPublishing_PublishScope) Descriptor() protoreflect.EnumDescriptor {
+func (ServiceEntryVisibility_Visibility) Descriptor() protoreflect.EnumDescriptor {
 	return file_mesh_v1alpha1_config_proto_enumTypes[13].Descriptor()
 }
 
-func (ServiceEntryPublishing_PublishScope) Type() protoreflect.EnumType {
+func (ServiceEntryVisibility_Visibility) Type() protoreflect.EnumType {
 	return &file_mesh_v1alpha1_config_proto_enumTypes[13]
 }
 
-func (x ServiceEntryPublishing_PublishScope) Number() protoreflect.EnumNumber {
+func (x ServiceEntryVisibility_Visibility) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use ServiceEntryPublishing_PublishScope.Descriptor instead.
-func (ServiceEntryPublishing_PublishScope) EnumDescriptor() ([]byte, []int) {
+// Deprecated: Use ServiceEntryVisibility_Visibility.Descriptor instead.
+func (ServiceEntryVisibility_Visibility) EnumDescriptor() ([]byte, []int) {
 	return file_mesh_v1alpha1_config_proto_rawDescGZIP(), []int{3, 0}
 }
 
@@ -1188,12 +1188,11 @@ type MeshConfig struct {
 	// DestinationRule that sets `connectionPool` or `outlierDetection` has no mesh-level
 	// baseline, and unset blocks fall back to Istio's built-in defaults.
 	DefaultTrafficPolicy *MeshConfig_DefaultTrafficPolicy `protobuf:"bytes,71,opt,name=default_traffic_policy,json=defaultTrafficPolicy,proto3" json:"default_traffic_policy,omitempty"`
-	// ServiceEntryPublishing lets a mesh administrator control the visibility
-	// ("publish scope") of ServiceEntry resources mesh-wide, without relying on
-	// external admission validation. When unset, ServiceEntry behaves as it does
-	// today (published cluster-wide; ambient ignores `exportTo`). See the
-	// ServiceEntryPublishing message for details.
-	ServiceEntryPublishing *ServiceEntryPublishing `protobuf:"bytes,72,opt,name=service_entry_publishing,json=serviceEntryPublishing,proto3" json:"service_entry_publishing,omitempty"`
+	// ServiceEntryVisibility lets a mesh administrator control the visibility
+	// of ServiceEntry resources mesh-wide, without relying on external admission
+	// validation. When unset, ServiceEntry behaves as it does today (visible
+	// cluster-wide; ambient ignores `exportTo`).
+	ServiceEntryVisibility *ServiceEntryVisibility `protobuf:"bytes,72,opt,name=service_entry_visibility,json=serviceEntryVisibility,proto3" json:"service_entry_visibility,omitempty"`
 	unknownFields          protoimpl.UnknownFields
 	sizeCache              protoimpl.SizeCache
 }
@@ -1566,9 +1565,9 @@ func (x *MeshConfig) GetDefaultTrafficPolicy() *MeshConfig_DefaultTrafficPolicy 
 	return nil
 }
 
-func (x *MeshConfig) GetServiceEntryPublishing() *ServiceEntryPublishing {
+func (x *MeshConfig) GetServiceEntryVisibility() *ServiceEntryVisibility {
 	if x != nil {
-		return x.ServiceEntryPublishing
+		return x.ServiceEntryVisibility
 	}
 	return nil
 }
@@ -1707,45 +1706,45 @@ func (x *LabelSelectorRequirement) GetValues() []string {
 	return nil
 }
 
-// ServiceEntryPublishing controls the visibility of ServiceEntry resources
-// across the mesh, giving a mesh administrator a way to scope ServiceEntry
-// without relying on external (VAP/CEL/OPA) admission validation.
+// ServiceEntryVisibility controls the visibility of ServiceEntry resources
+// across the mesh, giving a mesh administrator a way to constrain ServiceEntry
+// visibility without relying on external (VAP/CEL/OPA) admission validation.
 //
 // Policies are evaluated in order; the first policy whose rules all match sets
-// the ServiceEntry's publish scope. If no policy matches, `defaultPublishScope`
+// the ServiceEntry's visibility. If no policy matches, `defaultVisibility`
 // applies. When this entire message is absent from `MeshConfig`, every
-// ServiceEntry is published `CLUSTER_LOCAL`, preserving current Istio behavior.
-type ServiceEntryPublishing struct {
+// ServiceEntry is visible `CLUSTER_LOCAL`, preserving current Istio behavior.
+type ServiceEntryVisibility struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// The publish scope used when no policy matches a ServiceEntry. If left
-	// `PUBLISH_SCOPE_UNSPECIFIED`, it resolves to `CLUSTER_LOCAL`.
-	DefaultPublishScope ServiceEntryPublishing_PublishScope `protobuf:"varint,1,opt,name=default_publish_scope,json=defaultPublishScope,proto3,enum=istio.mesh.v1alpha1.ServiceEntryPublishing_PublishScope" json:"default_publish_scope,omitempty"`
-	// Whether sidecars honor these publish semantics. When false (default), only
-	// ambient proxies (ztunnel and waypoints) apply them and sidecars continue
-	// to use `exportTo`. This enables incremental adoption during an ambient
-	// migration without affecting a working sidecar environment.
+	// The visibility used when no policy matches a ServiceEntry. If left
+	// `VISIBILITY_UNSPECIFIED`, it resolves to `CLUSTER_LOCAL`.
+	DefaultVisibility ServiceEntryVisibility_Visibility `protobuf:"varint,1,opt,name=default_visibility,json=defaultVisibility,proto3,enum=istio.mesh.v1alpha1.ServiceEntryVisibility_Visibility" json:"default_visibility,omitempty"`
+	// Whether sidecars honor these visibility semantics. When false (default),
+	// only ambient proxies (ztunnel and waypoints) apply them and sidecars
+	// continue to use `exportTo`. This enables incremental adoption during an
+	// ambient migration without affecting a working sidecar environment.
 	ApplyToSidecars bool `protobuf:"varint,2,opt,name=apply_to_sidecars,json=applyToSidecars,proto3" json:"apply_to_sidecars,omitempty"`
 	// An ordered list of policies. Each policy is evaluated in turn; the first
-	// policy whose rules all match determines the ServiceEntry's publish scope.
-	Policies      []*ServiceEntryPublishing_PublishPolicy `protobuf:"bytes,3,rep,name=policies,proto3" json:"policies,omitempty"`
+	// policy whose rules all match determines the ServiceEntry's visibility.
+	Policies      []*ServiceEntryVisibility_Policy `protobuf:"bytes,3,rep,name=policies,proto3" json:"policies,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ServiceEntryPublishing) Reset() {
-	*x = ServiceEntryPublishing{}
+func (x *ServiceEntryVisibility) Reset() {
+	*x = ServiceEntryVisibility{}
 	mi := &file_mesh_v1alpha1_config_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ServiceEntryPublishing) String() string {
+func (x *ServiceEntryVisibility) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ServiceEntryPublishing) ProtoMessage() {}
+func (*ServiceEntryVisibility) ProtoMessage() {}
 
-func (x *ServiceEntryPublishing) ProtoReflect() protoreflect.Message {
+func (x *ServiceEntryVisibility) ProtoReflect() protoreflect.Message {
 	mi := &file_mesh_v1alpha1_config_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1757,26 +1756,26 @@ func (x *ServiceEntryPublishing) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ServiceEntryPublishing.ProtoReflect.Descriptor instead.
-func (*ServiceEntryPublishing) Descriptor() ([]byte, []int) {
+// Deprecated: Use ServiceEntryVisibility.ProtoReflect.Descriptor instead.
+func (*ServiceEntryVisibility) Descriptor() ([]byte, []int) {
 	return file_mesh_v1alpha1_config_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *ServiceEntryPublishing) GetDefaultPublishScope() ServiceEntryPublishing_PublishScope {
+func (x *ServiceEntryVisibility) GetDefaultVisibility() ServiceEntryVisibility_Visibility {
 	if x != nil {
-		return x.DefaultPublishScope
+		return x.DefaultVisibility
 	}
-	return ServiceEntryPublishing_PUBLISH_SCOPE_UNSPECIFIED
+	return ServiceEntryVisibility_VISIBILITY_UNSPECIFIED
 }
 
-func (x *ServiceEntryPublishing) GetApplyToSidecars() bool {
+func (x *ServiceEntryVisibility) GetApplyToSidecars() bool {
 	if x != nil {
 		return x.ApplyToSidecars
 	}
 	return false
 }
 
-func (x *ServiceEntryPublishing) GetPolicies() []*ServiceEntryPublishing_PublishPolicy {
+func (x *ServiceEntryVisibility) GetPolicies() []*ServiceEntryVisibility_Policy {
 	if x != nil {
 		return x.Policies
 	}
@@ -5482,33 +5481,32 @@ func (*MeshConfig_ExtensionProvider_ResourceDetectors_DynatraceResourceDetector)
 	return file_mesh_v1alpha1_config_proto_rawDescGZIP(), []int{0, 6, 18, 1}
 }
 
-// PublishPolicy assigns a publish scope to ServiceEntries that match all of
-// its rules.
-type ServiceEntryPublishing_PublishPolicy struct {
+// Policy assigns a visibility to ServiceEntries that match all of its rules.
+type ServiceEntryVisibility_Policy struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// The scope applied to a ServiceEntry when all `matchingRules` match.
-	PublishScope ServiceEntryPublishing_PublishScope `protobuf:"varint,1,opt,name=publish_scope,json=publishScope,proto3,enum=istio.mesh.v1alpha1.ServiceEntryPublishing_PublishScope" json:"publish_scope,omitempty"`
+	// The visibility applied to a ServiceEntry when all `matchingRules` match.
+	Visibility ServiceEntryVisibility_Visibility `protobuf:"varint,1,opt,name=visibility,proto3,enum=istio.mesh.v1alpha1.ServiceEntryVisibility_Visibility" json:"visibility,omitempty"`
 	// The rules to evaluate. All rules must match (AND semantics) for this
 	// policy to apply.
-	MatchingRules []*ServiceEntryPublishing_PublishMatchRule `protobuf:"bytes,2,rep,name=matching_rules,json=matchingRules,proto3" json:"matching_rules,omitempty"`
+	MatchingRules []*ServiceEntryVisibility_MatchRule `protobuf:"bytes,2,rep,name=matching_rules,json=matchingRules,proto3" json:"matching_rules,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ServiceEntryPublishing_PublishPolicy) Reset() {
-	*x = ServiceEntryPublishing_PublishPolicy{}
+func (x *ServiceEntryVisibility_Policy) Reset() {
+	*x = ServiceEntryVisibility_Policy{}
 	mi := &file_mesh_v1alpha1_config_proto_msgTypes[48]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ServiceEntryPublishing_PublishPolicy) String() string {
+func (x *ServiceEntryVisibility_Policy) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ServiceEntryPublishing_PublishPolicy) ProtoMessage() {}
+func (*ServiceEntryVisibility_Policy) ProtoMessage() {}
 
-func (x *ServiceEntryPublishing_PublishPolicy) ProtoReflect() protoreflect.Message {
+func (x *ServiceEntryVisibility_Policy) ProtoReflect() protoreflect.Message {
 	mi := &file_mesh_v1alpha1_config_proto_msgTypes[48]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5520,50 +5518,50 @@ func (x *ServiceEntryPublishing_PublishPolicy) ProtoReflect() protoreflect.Messa
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ServiceEntryPublishing_PublishPolicy.ProtoReflect.Descriptor instead.
-func (*ServiceEntryPublishing_PublishPolicy) Descriptor() ([]byte, []int) {
+// Deprecated: Use ServiceEntryVisibility_Policy.ProtoReflect.Descriptor instead.
+func (*ServiceEntryVisibility_Policy) Descriptor() ([]byte, []int) {
 	return file_mesh_v1alpha1_config_proto_rawDescGZIP(), []int{3, 0}
 }
 
-func (x *ServiceEntryPublishing_PublishPolicy) GetPublishScope() ServiceEntryPublishing_PublishScope {
+func (x *ServiceEntryVisibility_Policy) GetVisibility() ServiceEntryVisibility_Visibility {
 	if x != nil {
-		return x.PublishScope
+		return x.Visibility
 	}
-	return ServiceEntryPublishing_PUBLISH_SCOPE_UNSPECIFIED
+	return ServiceEntryVisibility_VISIBILITY_UNSPECIFIED
 }
 
-func (x *ServiceEntryPublishing_PublishPolicy) GetMatchingRules() []*ServiceEntryPublishing_PublishMatchRule {
+func (x *ServiceEntryVisibility_Policy) GetMatchingRules() []*ServiceEntryVisibility_MatchRule {
 	if x != nil {
 		return x.MatchingRules
 	}
 	return nil
 }
 
-// PublishMatchRule is a single matcher.
-type ServiceEntryPublishing_PublishMatchRule struct {
+// MatchRule is a single matcher.
+type ServiceEntryVisibility_MatchRule struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to Matcher:
 	//
-	//	*ServiceEntryPublishing_PublishMatchRule_NamespaceSelector
-	Matcher       isServiceEntryPublishing_PublishMatchRule_Matcher `protobuf_oneof:"matcher"`
+	//	*ServiceEntryVisibility_MatchRule_NamespaceSelector
+	Matcher       isServiceEntryVisibility_MatchRule_Matcher `protobuf_oneof:"matcher"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ServiceEntryPublishing_PublishMatchRule) Reset() {
-	*x = ServiceEntryPublishing_PublishMatchRule{}
+func (x *ServiceEntryVisibility_MatchRule) Reset() {
+	*x = ServiceEntryVisibility_MatchRule{}
 	mi := &file_mesh_v1alpha1_config_proto_msgTypes[49]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ServiceEntryPublishing_PublishMatchRule) String() string {
+func (x *ServiceEntryVisibility_MatchRule) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ServiceEntryPublishing_PublishMatchRule) ProtoMessage() {}
+func (*ServiceEntryVisibility_MatchRule) ProtoMessage() {}
 
-func (x *ServiceEntryPublishing_PublishMatchRule) ProtoReflect() protoreflect.Message {
+func (x *ServiceEntryVisibility_MatchRule) ProtoReflect() protoreflect.Message {
 	mi := &file_mesh_v1alpha1_config_proto_msgTypes[49]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5575,38 +5573,38 @@ func (x *ServiceEntryPublishing_PublishMatchRule) ProtoReflect() protoreflect.Me
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ServiceEntryPublishing_PublishMatchRule.ProtoReflect.Descriptor instead.
-func (*ServiceEntryPublishing_PublishMatchRule) Descriptor() ([]byte, []int) {
+// Deprecated: Use ServiceEntryVisibility_MatchRule.ProtoReflect.Descriptor instead.
+func (*ServiceEntryVisibility_MatchRule) Descriptor() ([]byte, []int) {
 	return file_mesh_v1alpha1_config_proto_rawDescGZIP(), []int{3, 1}
 }
 
-func (x *ServiceEntryPublishing_PublishMatchRule) GetMatcher() isServiceEntryPublishing_PublishMatchRule_Matcher {
+func (x *ServiceEntryVisibility_MatchRule) GetMatcher() isServiceEntryVisibility_MatchRule_Matcher {
 	if x != nil {
 		return x.Matcher
 	}
 	return nil
 }
 
-func (x *ServiceEntryPublishing_PublishMatchRule) GetNamespaceSelector() *LabelSelector {
+func (x *ServiceEntryVisibility_MatchRule) GetNamespaceSelector() *LabelSelector {
 	if x != nil {
-		if x, ok := x.Matcher.(*ServiceEntryPublishing_PublishMatchRule_NamespaceSelector); ok {
+		if x, ok := x.Matcher.(*ServiceEntryVisibility_MatchRule_NamespaceSelector); ok {
 			return x.NamespaceSelector
 		}
 	}
 	return nil
 }
 
-type isServiceEntryPublishing_PublishMatchRule_Matcher interface {
-	isServiceEntryPublishing_PublishMatchRule_Matcher()
+type isServiceEntryVisibility_MatchRule_Matcher interface {
+	isServiceEntryVisibility_MatchRule_Matcher()
 }
 
-type ServiceEntryPublishing_PublishMatchRule_NamespaceSelector struct {
+type ServiceEntryVisibility_MatchRule_NamespaceSelector struct {
 	// Matches when the namespace the ServiceEntry is defined in matches this
 	// label selector.
 	NamespaceSelector *LabelSelector `protobuf:"bytes,1,opt,name=namespace_selector,json=namespaceSelector,proto3,oneof"`
 }
 
-func (*ServiceEntryPublishing_PublishMatchRule_NamespaceSelector) isServiceEntryPublishing_PublishMatchRule_Matcher() {
+func (*ServiceEntryVisibility_MatchRule_NamespaceSelector) isServiceEntryVisibility_MatchRule_Matcher() {
 }
 
 var File_mesh_v1alpha1_config_proto protoreflect.FileDescriptor
@@ -5664,7 +5662,7 @@ const file_mesh_v1alpha1_config_proto_rawDesc = "" +
 	"\tmesh_mTLS\x18? \x01(\v2).istio.mesh.v1alpha1.MeshConfig.TLSConfigR\bmeshMTLS\x12L\n" +
 	"\ftls_defaults\x18@ \x01(\v2).istio.mesh.v1alpha1.MeshConfig.TLSConfigR\vtlsDefaults\x12j\n" +
 	"\x16default_traffic_policy\x18G \x01(\v24.istio.mesh.v1alpha1.MeshConfig.DefaultTrafficPolicyR\x14defaultTrafficPolicy\x12e\n" +
-	"\x18service_entry_publishing\x18H \x01(\v2+.istio.mesh.v1alpha1.ServiceEntryPublishingR\x16serviceEntryPublishing\x1a\x88\x02\n" +
+	"\x18service_entry_visibility\x18H \x01(\v2+.istio.mesh.v1alpha1.ServiceEntryVisibilityR\x16serviceEntryVisibility\x1a\x88\x02\n" +
 	"\x15OutboundTrafficPolicy\x12N\n" +
 	"\x04mode\x18\x01 \x01(\x0e2:.istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.ModeR\x04mode\x12>\n" +
 	"\x03tls\x18\x02 \x01(\v2,.istio.networking.v1alpha3.ClientTLSSettingsR\x03tls\"_\n" +
@@ -5939,19 +5937,22 @@ const file_mesh_v1alpha1_config_proto_rawDesc = "" +
 	"\x18LabelSelectorRequirement\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x1a\n" +
 	"\boperator\x18\x02 \x01(\tR\boperator\x12\x16\n" +
-	"\x06values\x18\x03 \x03(\tR\x06values\"\xb6\x05\n" +
-	"\x16ServiceEntryPublishing\x12l\n" +
-	"\x15default_publish_scope\x18\x01 \x01(\x0e28.istio.mesh.v1alpha1.ServiceEntryPublishing.PublishScopeR\x13defaultPublishScope\x12*\n" +
-	"\x11apply_to_sidecars\x18\x02 \x01(\bR\x0fapplyToSidecars\x12U\n" +
-	"\bpolicies\x18\x03 \x03(\v29.istio.mesh.v1alpha1.ServiceEntryPublishing.PublishPolicyR\bpolicies\x1a\xd3\x01\n" +
-	"\rPublishPolicy\x12]\n" +
-	"\rpublish_scope\x18\x01 \x01(\x0e28.istio.mesh.v1alpha1.ServiceEntryPublishing.PublishScopeR\fpublishScope\x12c\n" +
-	"\x0ematching_rules\x18\x02 \x03(\v2<.istio.mesh.v1alpha1.ServiceEntryPublishing.PublishMatchRuleR\rmatchingRules\x1ar\n" +
-	"\x10PublishMatchRule\x12S\n" +
+	"\x06values\x18\x03 \x03(\tR\x06values\"\x87\x05\n" +
+	"\x16ServiceEntryVisibility\x12e\n" +
+	"\x12default_visibility\x18\x01 \x01(\x0e26.istio.mesh.v1alpha1.ServiceEntryVisibility.VisibilityR\x11defaultVisibility\x12*\n" +
+	"\x11apply_to_sidecars\x18\x02 \x01(\bR\x0fapplyToSidecars\x12N\n" +
+	"\bpolicies\x18\x03 \x03(\v22.istio.mesh.v1alpha1.ServiceEntryVisibility.PolicyR\bpolicies\x1a\xbe\x01\n" +
+	"\x06Policy\x12V\n" +
+	"\n" +
+	"visibility\x18\x01 \x01(\x0e26.istio.mesh.v1alpha1.ServiceEntryVisibility.VisibilityR\n" +
+	"visibility\x12\\\n" +
+	"\x0ematching_rules\x18\x02 \x03(\v25.istio.mesh.v1alpha1.ServiceEntryVisibility.MatchRuleR\rmatchingRules\x1ak\n" +
+	"\tMatchRule\x12S\n" +
 	"\x12namespace_selector\x18\x01 \x01(\v2\".istio.mesh.v1alpha1.LabelSelectorH\x00R\x11namespaceSelectorB\t\n" +
-	"\amatcher\"a\n" +
-	"\fPublishScope\x12\x1d\n" +
-	"\x19PUBLISH_SCOPE_UNSPECIFIED\x10\x00\x12\n" +
+	"\amatcher\"\\\n" +
+	"\n" +
+	"Visibility\x12\x1a\n" +
+	"\x16VISIBILITY_UNSPECIFIED\x10\x00\x12\n" +
 	"\n" +
 	"\x06UNUSED\x10\x01\x12\x13\n" +
 	"\x0fNAMESPACE_LOCAL\x10\x02\x12\x11\n" +
@@ -5995,11 +5996,11 @@ var file_mesh_v1alpha1_config_proto_goTypes = []any{
 	(MeshConfig_ExtensionProvider_OpenCensusAgentTracingProvider_TraceContext)(0), // 10: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenCensusAgentTracingProvider.TraceContext
 	(MeshConfig_ProxyPathNormalization_NormalizationType)(0),                      // 11: istio.mesh.v1alpha1.MeshConfig.ProxyPathNormalization.NormalizationType
 	(MeshConfig_TLSConfig_TLSProtocol)(0),                                         // 12: istio.mesh.v1alpha1.MeshConfig.TLSConfig.TLSProtocol
-	(ServiceEntryPublishing_PublishScope)(0),                                      // 13: istio.mesh.v1alpha1.ServiceEntryPublishing.PublishScope
+	(ServiceEntryVisibility_Visibility)(0),                                        // 13: istio.mesh.v1alpha1.ServiceEntryVisibility.Visibility
 	(*MeshConfig)(nil),                                                            // 14: istio.mesh.v1alpha1.MeshConfig
 	(*LabelSelector)(nil),                                                         // 15: istio.mesh.v1alpha1.LabelSelector
 	(*LabelSelectorRequirement)(nil),                                              // 16: istio.mesh.v1alpha1.LabelSelectorRequirement
-	(*ServiceEntryPublishing)(nil),                                                // 17: istio.mesh.v1alpha1.ServiceEntryPublishing
+	(*ServiceEntryVisibility)(nil),                                                // 17: istio.mesh.v1alpha1.ServiceEntryVisibility
 	(*ConfigSource)(nil),                                                          // 18: istio.mesh.v1alpha1.ConfigSource
 	(*Certificate)(nil),                                                           // 19: istio.mesh.v1alpha1.Certificate
 	(*MeshConfig_OutboundTrafficPolicy)(nil),                                      // 20: istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy
@@ -6043,20 +6044,20 @@ var file_mesh_v1alpha1_config_proto_goTypes = []any{
 	(*MeshConfig_ExtensionProvider_OpenTelemetryTracingProvider_DynatraceSampler_DynatraceApi)(nil), // 58: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.DynatraceSampler.DynatraceApi
 	(*MeshConfig_ExtensionProvider_ResourceDetectors_EnvironmentResourceDetector)(nil),              // 59: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ResourceDetectors.EnvironmentResourceDetector
 	(*MeshConfig_ExtensionProvider_ResourceDetectors_DynatraceResourceDetector)(nil),                // 60: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.ResourceDetectors.DynatraceResourceDetector
-	nil, // 61: istio.mesh.v1alpha1.LabelSelector.MatchLabelsEntry
-	(*ServiceEntryPublishing_PublishPolicy)(nil),                     // 62: istio.mesh.v1alpha1.ServiceEntryPublishing.PublishPolicy
-	(*ServiceEntryPublishing_PublishMatchRule)(nil),                  // 63: istio.mesh.v1alpha1.ServiceEntryPublishing.PublishMatchRule
-	(*duration.Duration)(nil),                                        // 64: google.protobuf.Duration
+	nil,                                      // 61: istio.mesh.v1alpha1.LabelSelector.MatchLabelsEntry
+	(*ServiceEntryVisibility_Policy)(nil),    // 62: istio.mesh.v1alpha1.ServiceEntryVisibility.Policy
+	(*ServiceEntryVisibility_MatchRule)(nil), // 63: istio.mesh.v1alpha1.ServiceEntryVisibility.MatchRule
+	(*duration.Duration)(nil),                // 64: google.protobuf.Duration
 	(*v1alpha3.ConnectionPoolSettings_TCPSettings_TcpKeepalive)(nil), // 65: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive
-	(*ProxyConfig)(nil),                                              // 66: istio.mesh.v1alpha1.ProxyConfig
-	(*wrappers.BoolValue)(nil),                                       // 67: google.protobuf.BoolValue
-	(*v1alpha3.LocalityLoadBalancerSetting)(nil),                     // 68: istio.networking.v1alpha3.LocalityLoadBalancerSetting
-	(*v1alpha3.HTTPRetry)(nil),                                       // 69: istio.networking.v1alpha3.HTTPRetry
-	(*v1alpha3.ClientTLSSettings)(nil),                               // 70: istio.networking.v1alpha3.ClientTLSSettings
-	(*v1alpha3.ConnectionPoolSettings)(nil),                          // 71: istio.networking.v1alpha3.ConnectionPoolSettings
-	(*v1alpha3.OutlierDetection)(nil),                                // 72: istio.networking.v1alpha3.OutlierDetection
-	(*wrappers.Int64Value)(nil),                                      // 73: google.protobuf.Int64Value
-	(*_struct.Struct)(nil),                                           // 74: google.protobuf.Struct
+	(*ProxyConfig)(nil),                          // 66: istio.mesh.v1alpha1.ProxyConfig
+	(*wrappers.BoolValue)(nil),                   // 67: google.protobuf.BoolValue
+	(*v1alpha3.LocalityLoadBalancerSetting)(nil), // 68: istio.networking.v1alpha3.LocalityLoadBalancerSetting
+	(*v1alpha3.HTTPRetry)(nil),                   // 69: istio.networking.v1alpha3.HTTPRetry
+	(*v1alpha3.ClientTLSSettings)(nil),           // 70: istio.networking.v1alpha3.ClientTLSSettings
+	(*v1alpha3.ConnectionPoolSettings)(nil),      // 71: istio.networking.v1alpha3.ConnectionPoolSettings
+	(*v1alpha3.OutlierDetection)(nil),            // 72: istio.networking.v1alpha3.OutlierDetection
+	(*wrappers.Int64Value)(nil),                  // 73: google.protobuf.Int64Value
+	(*_struct.Struct)(nil),                       // 74: google.protobuf.Struct
 }
 var file_mesh_v1alpha1_config_proto_depIdxs = []int32{
 	64, // 0: istio.mesh.v1alpha1.MeshConfig.connect_timeout:type_name -> google.protobuf.Duration
@@ -6088,11 +6089,11 @@ var file_mesh_v1alpha1_config_proto_depIdxs = []int32{
 	29, // 26: istio.mesh.v1alpha1.MeshConfig.mesh_mTLS:type_name -> istio.mesh.v1alpha1.MeshConfig.TLSConfig
 	29, // 27: istio.mesh.v1alpha1.MeshConfig.tls_defaults:type_name -> istio.mesh.v1alpha1.MeshConfig.TLSConfig
 	30, // 28: istio.mesh.v1alpha1.MeshConfig.default_traffic_policy:type_name -> istio.mesh.v1alpha1.MeshConfig.DefaultTrafficPolicy
-	17, // 29: istio.mesh.v1alpha1.MeshConfig.service_entry_publishing:type_name -> istio.mesh.v1alpha1.ServiceEntryPublishing
+	17, // 29: istio.mesh.v1alpha1.MeshConfig.service_entry_visibility:type_name -> istio.mesh.v1alpha1.ServiceEntryVisibility
 	61, // 30: istio.mesh.v1alpha1.LabelSelector.matchLabels:type_name -> istio.mesh.v1alpha1.LabelSelector.MatchLabelsEntry
 	16, // 31: istio.mesh.v1alpha1.LabelSelector.matchExpressions:type_name -> istio.mesh.v1alpha1.LabelSelectorRequirement
-	13, // 32: istio.mesh.v1alpha1.ServiceEntryPublishing.default_publish_scope:type_name -> istio.mesh.v1alpha1.ServiceEntryPublishing.PublishScope
-	62, // 33: istio.mesh.v1alpha1.ServiceEntryPublishing.policies:type_name -> istio.mesh.v1alpha1.ServiceEntryPublishing.PublishPolicy
+	13, // 32: istio.mesh.v1alpha1.ServiceEntryVisibility.default_visibility:type_name -> istio.mesh.v1alpha1.ServiceEntryVisibility.Visibility
+	62, // 33: istio.mesh.v1alpha1.ServiceEntryVisibility.policies:type_name -> istio.mesh.v1alpha1.ServiceEntryVisibility.Policy
 	70, // 34: istio.mesh.v1alpha1.ConfigSource.tls_settings:type_name -> istio.networking.v1alpha3.ClientTLSSettings
 	0,  // 35: istio.mesh.v1alpha1.ConfigSource.subscribed_resources:type_name -> istio.mesh.v1alpha1.Resource
 	5,  // 36: istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.mode:type_name -> istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.Mode
@@ -6154,9 +6155,9 @@ var file_mesh_v1alpha1_config_proto_depIdxs = []int32{
 	74, // 92: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.EnvoyOpenTelemetryLogProvider.LogFormat.labels:type_name -> google.protobuf.Struct
 	58, // 93: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.DynatraceSampler.http_service:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.DynatraceSampler.DynatraceApi
 	48, // 94: istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.OpenTelemetryTracingProvider.DynatraceSampler.DynatraceApi.http:type_name -> istio.mesh.v1alpha1.MeshConfig.ExtensionProvider.HttpService
-	13, // 95: istio.mesh.v1alpha1.ServiceEntryPublishing.PublishPolicy.publish_scope:type_name -> istio.mesh.v1alpha1.ServiceEntryPublishing.PublishScope
-	63, // 96: istio.mesh.v1alpha1.ServiceEntryPublishing.PublishPolicy.matching_rules:type_name -> istio.mesh.v1alpha1.ServiceEntryPublishing.PublishMatchRule
-	15, // 97: istio.mesh.v1alpha1.ServiceEntryPublishing.PublishMatchRule.namespace_selector:type_name -> istio.mesh.v1alpha1.LabelSelector
+	13, // 95: istio.mesh.v1alpha1.ServiceEntryVisibility.Policy.visibility:type_name -> istio.mesh.v1alpha1.ServiceEntryVisibility.Visibility
+	63, // 96: istio.mesh.v1alpha1.ServiceEntryVisibility.Policy.matching_rules:type_name -> istio.mesh.v1alpha1.ServiceEntryVisibility.MatchRule
+	15, // 97: istio.mesh.v1alpha1.ServiceEntryVisibility.MatchRule.namespace_selector:type_name -> istio.mesh.v1alpha1.LabelSelector
 	98, // [98:98] is the sub-list for method output_type
 	98, // [98:98] is the sub-list for method input_type
 	98, // [98:98] is the sub-list for extension type_name
@@ -6203,7 +6204,7 @@ func file_mesh_v1alpha1_config_proto_init() {
 		(*MeshConfig_ExtensionProvider_EnvoyFileAccessLogProvider_LogFormat_Labels)(nil),
 	}
 	file_mesh_v1alpha1_config_proto_msgTypes[49].OneofWrappers = []any{
-		(*ServiceEntryPublishing_PublishMatchRule_NamespaceSelector)(nil),
+		(*ServiceEntryVisibility_MatchRule_NamespaceSelector)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
