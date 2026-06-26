@@ -487,8 +487,20 @@ message JWTRule {
   // +kubebuilder:validation:MaxItems=64
   repeated string space_delimited_claims = 14;
 
+  // If set to true, a JWT without an expiration
+  // ([`exp`](https://tools.ietf.org/html/rfc7519#section-4.1.4)) claim is rejected.
+  // This enforces that every accepted token is short-lived and will eventually
+  // expire, which is recommended for zero-trust deployments that rely on token
+  // expiration rather than revocation (for example,
+  // [SPIFFE JWT-SVID](https://github.com/spiffe/spiffe/blob/main/standards/JWT-SVID.md#33-expiration-time)
+  // expiration restrictions).
+  //
+  // By default (`false`), a JWT without an `exp` claim is accepted and treated as
+  // non-expiring, matching the existing behavior.
+  bool require_expiration = 15;
+
   // $hide_from_docs
-  // Next available field number: 15
+  // Next available field number: 16
 }
 
 // This message specifies a header location to extract JWT token.

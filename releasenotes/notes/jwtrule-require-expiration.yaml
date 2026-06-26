@@ -1,0 +1,12 @@
+apiVersion: release-notes/v2
+kind: feature
+area: security
+issue:
+  - https://github.com/istio/istio/issues/59200
+
+releaseNotes:
+  - |
+    **Added** `requireExpiration` field in `RequestAuthentication` under `spec.jwtRules`.
+    When set to `true`, a JWT without an expiration (`exp`) claim is rejected, enforcing that
+    every accepted token is short-lived. This exposes Envoy's `jwt_authn` `require_expiration`
+    option directly, removing the need to configure it through an `EnvoyFilter`.
