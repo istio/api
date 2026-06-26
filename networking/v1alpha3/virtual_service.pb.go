@@ -3060,7 +3060,23 @@ type HTTPMirrorPolicy struct {
 	// Percentage of the traffic to be mirrored by the `destination` field.
 	// If this field is absent, all the traffic (100%) will be mirrored.
 	// Max value is 100.
-	Percentage    *Percent `protobuf:"bytes,2,opt,name=percentage,proto3" json:"percentage,omitempty"`
+	Percentage *Percent `protobuf:"bytes,2,opt,name=percentage,proto3" json:"percentage,omitempty"`
+	// If set, the Host (`:authority`) header of the mirrored request is
+	// rewritten to this value before being sent to the mirror destination.
+	// This maps to Envoy's
+	// [host_rewrite_literal](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto#envoy-v3-api-field-config-route-v3-routeaction-requestmirrorpolicy-host-rewrite-literal)
+	// on the mirror policy. When set, Envoy will not append the default
+	// `-shadow` suffix to the Host header.
+	//
+	// +cue-gen:VirtualService:releaseChannel:extended
+	Authority string `protobuf:"bytes,3,opt,name=authority,proto3" json:"authority,omitempty"`
+	// Header manipulation rules applied to the mirrored request before it is
+	// sent to the mirror destination. This maps to Envoy's
+	// [request_headers_mutations](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto#envoy-v3-api-field-config-route-v3-routeaction-requestmirrorpolicy-request-headers-mutations)
+	// on the mirror policy.
+	//
+	// +cue-gen:VirtualService:releaseChannel:extended
+	Headers       *Headers_HeaderOperations `protobuf:"bytes,4,opt,name=headers,proto3" json:"headers,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3105,6 +3121,20 @@ func (x *HTTPMirrorPolicy) GetDestination() *Destination {
 func (x *HTTPMirrorPolicy) GetPercentage() *Percent {
 	if x != nil {
 		return x.Percentage
+	}
+	return nil
+}
+
+func (x *HTTPMirrorPolicy) GetAuthority() string {
+	if x != nil {
+		return x.Authority
+	}
+	return ""
+}
+
+func (x *HTTPMirrorPolicy) GetHeaders() *Headers_HeaderOperations {
+	if x != nil {
+		return x.Headers
 	}
 	return nil
 }
@@ -3747,12 +3777,14 @@ const file_networking_v1alpha3_virtual_service_proto_rawDesc = "" +
 	"percentage\x18\x05 \x01(\v2\".istio.networking.v1alpha3.PercentR\n" +
 	"percentageB\f\n" +
 	"\n" +
-	"error_typeJ\x04\b\x01\x10\x02R\apercent\"\xa6\x01\n" +
+	"error_typeJ\x04\b\x01\x10\x02R\apercent\"\x93\x02\n" +
 	"\x10HTTPMirrorPolicy\x12N\n" +
 	"\vdestination\x18\x01 \x01(\v2&.istio.networking.v1alpha3.DestinationB\x04\xe2A\x01\x02R\vdestination\x12B\n" +
 	"\n" +
 	"percentage\x18\x02 \x01(\v2\".istio.networking.v1alpha3.PercentR\n" +
-	"percentage\"2\n" +
+	"percentage\x12\x1c\n" +
+	"\tauthority\x18\x03 \x01(\tR\tauthority\x12M\n" +
+	"\aheaders\x18\x04 \x01(\v23.istio.networking.v1alpha3.Headers.HeaderOperationsR\aheaders\"2\n" +
 	"\fPortSelector\x12\x16\n" +
 	"\x06number\x18\x01 \x01(\rR\x06numberJ\x04\b\x02\x10\x03R\x04name\"\x1f\n" +
 	"\aPercent\x12\x14\n" +
@@ -3868,20 +3900,21 @@ var file_networking_v1alpha3_virtual_service_proto_depIdxs = []int32{
 	36, // 50: istio.networking.v1alpha3.HTTPFaultInjection.abort:type_name -> istio.networking.v1alpha3.HTTPFaultInjection.Abort
 	3,  // 51: istio.networking.v1alpha3.HTTPMirrorPolicy.destination:type_name -> istio.networking.v1alpha3.Destination
 	25, // 52: istio.networking.v1alpha3.HTTPMirrorPolicy.percentage:type_name -> istio.networking.v1alpha3.Percent
-	27, // 53: istio.networking.v1alpha3.Headers.HeaderOperations.set:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations.SetEntry
-	28, // 54: istio.networking.v1alpha3.Headers.HeaderOperations.add:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations.AddEntry
-	19, // 55: istio.networking.v1alpha3.HTTPMatchRequest.HeadersEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
-	19, // 56: istio.networking.v1alpha3.HTTPMatchRequest.QueryParamsEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
-	19, // 57: istio.networking.v1alpha3.HTTPMatchRequest.WithoutHeadersEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
-	37, // 58: istio.networking.v1alpha3.HTTPFaultInjection.Delay.fixed_delay:type_name -> google.protobuf.Duration
-	37, // 59: istio.networking.v1alpha3.HTTPFaultInjection.Delay.exponential_delay:type_name -> google.protobuf.Duration
-	25, // 60: istio.networking.v1alpha3.HTTPFaultInjection.Delay.percentage:type_name -> istio.networking.v1alpha3.Percent
-	25, // 61: istio.networking.v1alpha3.HTTPFaultInjection.Abort.percentage:type_name -> istio.networking.v1alpha3.Percent
-	62, // [62:62] is the sub-list for method output_type
-	62, // [62:62] is the sub-list for method input_type
-	62, // [62:62] is the sub-list for extension type_name
-	62, // [62:62] is the sub-list for extension extendee
-	0,  // [0:62] is the sub-list for field type_name
+	26, // 53: istio.networking.v1alpha3.HTTPMirrorPolicy.headers:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations
+	27, // 54: istio.networking.v1alpha3.Headers.HeaderOperations.set:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations.SetEntry
+	28, // 55: istio.networking.v1alpha3.Headers.HeaderOperations.add:type_name -> istio.networking.v1alpha3.Headers.HeaderOperations.AddEntry
+	19, // 56: istio.networking.v1alpha3.HTTPMatchRequest.HeadersEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
+	19, // 57: istio.networking.v1alpha3.HTTPMatchRequest.QueryParamsEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
+	19, // 58: istio.networking.v1alpha3.HTTPMatchRequest.WithoutHeadersEntry.value:type_name -> istio.networking.v1alpha3.StringMatch
+	37, // 59: istio.networking.v1alpha3.HTTPFaultInjection.Delay.fixed_delay:type_name -> google.protobuf.Duration
+	37, // 60: istio.networking.v1alpha3.HTTPFaultInjection.Delay.exponential_delay:type_name -> google.protobuf.Duration
+	25, // 61: istio.networking.v1alpha3.HTTPFaultInjection.Delay.percentage:type_name -> istio.networking.v1alpha3.Percent
+	25, // 62: istio.networking.v1alpha3.HTTPFaultInjection.Abort.percentage:type_name -> istio.networking.v1alpha3.Percent
+	63, // [63:63] is the sub-list for method output_type
+	63, // [63:63] is the sub-list for method input_type
+	63, // [63:63] is the sub-list for extension type_name
+	63, // [63:63] is the sub-list for extension extendee
+	0,  // [0:63] is the sub-list for field type_name
 }
 
 func init() { file_networking_v1alpha3_virtual_service_proto_init() }

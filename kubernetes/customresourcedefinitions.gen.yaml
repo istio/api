@@ -11875,6 +11875,11 @@ spec:
                         in addition to the original destination.
                       items:
                         properties:
+                          authority:
+                            description: If set, the Host (`:authority`) header of
+                              the mirrored request is rewritten to this value before
+                              being sent to the mirror destination.
+                            type: string
                           destination:
                             description: Destination specifies the target of the mirror
                               operation.
@@ -11897,6 +11902,23 @@ spec:
                                 type: string
                             required:
                             - host
+                            type: object
+                          headers:
+                            description: Header manipulation rules applied to the
+                              mirrored request before it is sent to the mirror destination.
+                            properties:
+                              add:
+                                additionalProperties:
+                                  type: string
+                                type: object
+                              remove:
+                                items:
+                                  type: string
+                                type: array
+                              set:
+                                additionalProperties:
+                                  type: string
+                                type: object
                             type: object
                           percentage:
                             description: Percentage of the traffic to be mirrored
@@ -12931,6 +12953,11 @@ spec:
                         in addition to the original destination.
                       items:
                         properties:
+                          authority:
+                            description: If set, the Host (`:authority`) header of
+                              the mirrored request is rewritten to this value before
+                              being sent to the mirror destination.
+                            type: string
                           destination:
                             description: Destination specifies the target of the mirror
                               operation.
@@ -12953,6 +12980,23 @@ spec:
                                 type: string
                             required:
                             - host
+                            type: object
+                          headers:
+                            description: Header manipulation rules applied to the
+                              mirrored request before it is sent to the mirror destination.
+                            properties:
+                              add:
+                                additionalProperties:
+                                  type: string
+                                type: object
+                              remove:
+                                items:
+                                  type: string
+                                type: array
+                              set:
+                                additionalProperties:
+                                  type: string
+                                type: object
                             type: object
                           percentage:
                             description: Percentage of the traffic to be mirrored
@@ -13987,6 +14031,11 @@ spec:
                         in addition to the original destination.
                       items:
                         properties:
+                          authority:
+                            description: If set, the Host (`:authority`) header of
+                              the mirrored request is rewritten to this value before
+                              being sent to the mirror destination.
+                            type: string
                           destination:
                             description: Destination specifies the target of the mirror
                               operation.
@@ -14009,6 +14058,23 @@ spec:
                                 type: string
                             required:
                             - host
+                            type: object
+                          headers:
+                            description: Header manipulation rules applied to the
+                              mirrored request before it is sent to the mirror destination.
+                            properties:
+                              add:
+                                additionalProperties:
+                                  type: string
+                                type: object
+                              remove:
+                                items:
+                                  type: string
+                                type: array
+                              set:
+                                additionalProperties:
+                                  type: string
+                                type: object
                             type: object
                           percentage:
                             description: Percentage of the traffic to be mirrored
