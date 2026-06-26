@@ -1653,8 +1653,14 @@ message MeshConfig {
   // baseline, and unset blocks fall back to Istio's built-in defaults.
   DefaultTrafficPolicy default_traffic_policy = 71;
 
+  // ServiceEntryVisibility lets a mesh administrator control the visibility
+  // of ServiceEntry resources mesh-wide, without relying on external admission
+  // validation. When unset, ServiceEntry behaves as it does today (visible
+  // cluster-wide; ambient ignores `exportTo`).
+  ServiceEntryVisibility service_entry_visibility = 72;
+
   // $hide_from_docs
-  // Next available field number: 72
+  // Next available field number: 73
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
@@ -1741,6 +1747,65 @@ message LabelSelectorRequirement {
   // merge patch.
   // +optional
   repeated string values = 3;
+}
+
+// ServiceEntryVisibility controls the visibility of ServiceEntry resources
+// across the mesh, giving a mesh administrator a way to constrain ServiceEntry
+// visibility without relying on external (VAP/CEL/OPA) admission validation.
+//
+// Policies are evaluated in order; the first policy whose rules all match sets
+// the ServiceEntry's visibility. If no policy matches, `defaultVisibility`
+// applies. When this entire message is absent from `MeshConfig`, every
+// ServiceEntry is visible `CLUSTER_LOCAL`, preserving current Istio behavior.
+message ServiceEntryVisibility {
+  // Visibility defines how widely a matching ServiceEntry is visible.
+  enum Visibility {
+    // Default. Resolves to `CLUSTER_LOCAL` to preserve legacy behavior.
+    VISIBILITY_UNSPECIFIED = 0;
+
+    // The ServiceEntry may be written, but Istio configures no dataplane for
+    // it. Useful to expressly forbid a class of ServiceEntry.
+    UNUSED = 1;
+
+    // Visible only within the namespace the ServiceEntry is defined in.
+    NAMESPACE_LOCAL = 2;
+
+    // Visible to the entire cluster. Equivalent to the legacy `exportTo: "*"`.
+    CLUSTER_LOCAL = 3;
+  }
+
+  // The visibility used when no policy matches a ServiceEntry. If left
+  // `VISIBILITY_UNSPECIFIED`, it resolves to `CLUSTER_LOCAL`.
+  Visibility default_visibility = 1;
+
+  // Whether sidecars honor these visibility semantics. When false (default),
+  // only ambient proxies (ztunnel and waypoints) apply them and sidecars
+  // continue to use `exportTo`. This enables incremental adoption during an
+  // ambient migration without affecting a working sidecar environment.
+  bool apply_to_sidecars = 2;
+
+  // An ordered list of policies. Each policy is evaluated in turn; the first
+  // policy whose rules all match determines the ServiceEntry's visibility.
+  repeated Policy policies = 3;
+
+  // Policy assigns a visibility to ServiceEntries that match all of its rules.
+  message Policy {
+    // The visibility applied to a ServiceEntry when all `matchingRules` match.
+    Visibility visibility = 1;
+
+    // The rules to evaluate. All rules must match (AND semantics) for this
+    // policy to apply.
+    repeated MatchRule matching_rules = 2;
+  }
+
+  // MatchRule is a single matcher.
+  message MatchRule {
+    oneof matcher {
+      // Matches when the namespace the ServiceEntry is defined in matches this
+      // label selector.
+      LabelSelector namespace_selector = 1;
+    }
+  }
 }
 
 // ConfigSource describes information about a configuration store inside a
