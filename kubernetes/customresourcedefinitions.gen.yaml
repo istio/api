@@ -17112,6 +17112,12 @@ spec:
                         minLength: 1
                         type: string
                       type: array
+                    clockSkewSeconds:
+                      description: The clock skew, in seconds, allowed when verifying
+                        the JWT `exp` and `nbf` claims.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
                     forwardOriginalToken:
                       description: If set to true, the original token will be kept
                         for the upstream request.
@@ -17401,6 +17407,12 @@ spec:
                         minLength: 1
                         type: string
                       type: array
+                    clockSkewSeconds:
+                      description: The clock skew, in seconds, allowed when verifying
+                        the JWT `exp` and `nbf` claims.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
                     forwardOriginalToken:
                       description: If set to true, the original token will be kept
                         for the upstream request.
