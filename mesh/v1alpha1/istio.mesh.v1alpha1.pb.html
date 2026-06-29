@@ -3320,7 +3320,7 @@ visibility without relying on external (VAP/CEL/OPA) admission validation.</p>
 <p>Policies are evaluated in order; the first policy whose rules all match sets
 the ServiceEntry&rsquo;s visibility. If no policy matches, <code>defaultVisibility</code>
 applies. When this entire message is absent from <code>MeshConfig</code>, every
-ServiceEntry is visible <code>CLUSTER_LOCAL</code>, preserving current Istio behavior.</p>
+ServiceEntry is visible <code>CLUSTER</code>, preserving current Istio behavior.</p>
 
 <table class="message-fields">
 <thead>
@@ -3336,7 +3336,7 @@ ServiceEntry is visible <code>CLUSTER_LOCAL</code>, preserving current Istio beh
 </div></td>
 <td>
 <p>The visibility used when no policy matches a ServiceEntry. If left
-<code>VISIBILITY_UNSPECIFIED</code>, it resolves to <code>CLUSTER_LOCAL</code>.</p>
+<code>VISIBILITY_UNSPECIFIED</code>, it resolves to <code>CLUSTER</code>.</p>
 
 </td>
 </tr>
@@ -3439,7 +3439,7 @@ label selector.</p>
 <tr id="ServiceEntryVisibility-Visibility-VISIBILITY_UNSPECIFIED">
 <td><code><a href="#ServiceEntryVisibility-Visibility-VISIBILITY_UNSPECIFIED">VISIBILITY_UNSPECIFIED</a></code></td>
 <td>
-<p>Default. Resolves to <code>CLUSTER_LOCAL</code> to preserve legacy behavior.</p>
+<p>Default. Resolves to <code>CLUSTER</code> to preserve legacy behavior.</p>
 
 </td>
 </tr>
@@ -3451,15 +3451,15 @@ it. Useful to expressly forbid a class of ServiceEntry.</p>
 
 </td>
 </tr>
-<tr id="ServiceEntryVisibility-Visibility-NAMESPACE_LOCAL">
-<td><code><a href="#ServiceEntryVisibility-Visibility-NAMESPACE_LOCAL">NAMESPACE_LOCAL</a></code></td>
+<tr id="ServiceEntryVisibility-Visibility-NAMESPACE">
+<td><code><a href="#ServiceEntryVisibility-Visibility-NAMESPACE">NAMESPACE</a></code></td>
 <td>
 <p>Visible only within the namespace the ServiceEntry is defined in.</p>
 
 </td>
 </tr>
-<tr id="ServiceEntryVisibility-Visibility-CLUSTER_LOCAL">
-<td><code><a href="#ServiceEntryVisibility-Visibility-CLUSTER_LOCAL">CLUSTER_LOCAL</a></code></td>
+<tr id="ServiceEntryVisibility-Visibility-CLUSTER">
+<td><code><a href="#ServiceEntryVisibility-Visibility-CLUSTER">CLUSTER</a></code></td>
 <td>
 <p>Visible to the entire cluster. Equivalent to the legacy <code>exportTo: &quot;*&quot;</code>.</p>
 

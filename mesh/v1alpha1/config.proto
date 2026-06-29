@@ -1756,11 +1756,11 @@ message LabelSelectorRequirement {
 // Policies are evaluated in order; the first policy whose rules all match sets
 // the ServiceEntry's visibility. If no policy matches, `defaultVisibility`
 // applies. When this entire message is absent from `MeshConfig`, every
-// ServiceEntry is visible `CLUSTER_LOCAL`, preserving current Istio behavior.
+// ServiceEntry is visible `CLUSTER`, preserving current Istio behavior.
 message ServiceEntryVisibility {
   // Visibility defines how widely a matching ServiceEntry is visible.
   enum Visibility {
-    // Default. Resolves to `CLUSTER_LOCAL` to preserve legacy behavior.
+    // Default. Resolves to `CLUSTER` to preserve legacy behavior.
     VISIBILITY_UNSPECIFIED = 0;
 
     // The ServiceEntry may be written, but Istio configures no dataplane for
@@ -1768,14 +1768,14 @@ message ServiceEntryVisibility {
     UNUSED = 1;
 
     // Visible only within the namespace the ServiceEntry is defined in.
-    NAMESPACE_LOCAL = 2;
+    NAMESPACE = 2;
 
     // Visible to the entire cluster. Equivalent to the legacy `exportTo: "*"`.
-    CLUSTER_LOCAL = 3;
+    CLUSTER = 3;
   }
 
   // The visibility used when no policy matches a ServiceEntry. If left
-  // `VISIBILITY_UNSPECIFIED`, it resolves to `CLUSTER_LOCAL`.
+  // `VISIBILITY_UNSPECIFIED`, it resolves to `CLUSTER`.
   Visibility default_visibility = 1;
 
   // Whether sidecars honor these visibility semantics. When false (default),
