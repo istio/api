@@ -1756,11 +1756,11 @@ message LabelSelectorRequirement {
 // Policies are evaluated in order; the first policy whose rules all match sets
 // the ServiceEntry's visibility. If no policy matches, `defaultVisibility`
 // applies. When this entire message is absent from `MeshConfig`, every
-// ServiceEntry is visible `CLUSTER`, preserving current Istio behavior.
+// ServiceEntry is visible `PUBLIC`, preserving current Istio behavior.
 message ServiceEntryVisibility {
   // Visibility defines how widely a matching ServiceEntry is visible.
   enum Visibility {
-    // Default. Resolves to `CLUSTER` to preserve legacy behavior.
+    // Default. Resolves to `PUBLIC` to preserve legacy behavior.
     VISIBILITY_UNSPECIFIED = 0;
 
     // The ServiceEntry may be written, but Istio configures no dataplane for
@@ -1768,14 +1768,26 @@ message ServiceEntryVisibility {
     UNUSED = 1;
 
     // Visible only within the namespace the ServiceEntry is defined in.
+    // Equivalent to the legacy `exportTo: "."`.
     NAMESPACE = 2;
 
-    // Visible to the entire cluster. Equivalent to the legacy `exportTo: "*"`.
-    CLUSTER = 3;
+    // Visible to every workload the holding control plane configures.
+    // Equivalent to the legacy `exportTo: "*"`.
+    //
+    // The reach of `PUBLIC` is a control-plane-connectivity boundary, not a
+    // fixed topological one: it extends exactly as far as the control plane
+    // that holds this ServiceEntry distributes configuration. Mesh topology
+    // therefore determines how far `PUBLIC` actually reaches, and the same
+    // entry scopes differently under different topologies. For example, in a
+    // single-primary multi-cluster mesh a `PUBLIC` ServiceEntry reaches every
+    // proxy that primary configures, spanning clusters; in a multi-primary
+    // mesh it reaches only the proxies of the control plane that holds the
+    // entry and does not propagate to the other control planes.
+    PUBLIC = 3;
   }
 
   // The visibility used when no policy matches a ServiceEntry. If left
-  // `VISIBILITY_UNSPECIFIED`, it resolves to `CLUSTER`.
+  // `VISIBILITY_UNSPECIFIED`, it resolves to `PUBLIC`.
   Visibility default_visibility = 1;
 
   // Whether sidecars honor these visibility semantics. When false (default),

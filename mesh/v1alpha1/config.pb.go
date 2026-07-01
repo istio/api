@@ -783,15 +783,27 @@ func (MeshConfig_TLSConfig_TLSProtocol) EnumDescriptor() ([]byte, []int) {
 type ServiceEntryVisibility_Visibility int32
 
 const (
-	// Default. Resolves to `CLUSTER` to preserve legacy behavior.
+	// Default. Resolves to `PUBLIC` to preserve legacy behavior.
 	ServiceEntryVisibility_VISIBILITY_UNSPECIFIED ServiceEntryVisibility_Visibility = 0
 	// The ServiceEntry may be written, but Istio configures no dataplane for
 	// it. Useful to expressly forbid a class of ServiceEntry.
 	ServiceEntryVisibility_UNUSED ServiceEntryVisibility_Visibility = 1
 	// Visible only within the namespace the ServiceEntry is defined in.
+	// Equivalent to the legacy `exportTo: "."`.
 	ServiceEntryVisibility_NAMESPACE ServiceEntryVisibility_Visibility = 2
-	// Visible to the entire cluster. Equivalent to the legacy `exportTo: "*"`.
-	ServiceEntryVisibility_CLUSTER ServiceEntryVisibility_Visibility = 3
+	// Visible to every workload the holding control plane configures.
+	// Equivalent to the legacy `exportTo: "*"`.
+	//
+	// The reach of `PUBLIC` is a control-plane-connectivity boundary, not a
+	// fixed topological one: it extends exactly as far as the control plane
+	// that holds this ServiceEntry distributes configuration. Mesh topology
+	// therefore determines how far `PUBLIC` actually reaches, and the same
+	// entry scopes differently under different topologies. For example, in a
+	// single-primary multi-cluster mesh a `PUBLIC` ServiceEntry reaches every
+	// proxy that primary configures, spanning clusters; in a multi-primary
+	// mesh it reaches only the proxies of the control plane that holds the
+	// entry and does not propagate to the other control planes.
+	ServiceEntryVisibility_PUBLIC ServiceEntryVisibility_Visibility = 3
 )
 
 // Enum value maps for ServiceEntryVisibility_Visibility.
@@ -800,13 +812,13 @@ var (
 		0: "VISIBILITY_UNSPECIFIED",
 		1: "UNUSED",
 		2: "NAMESPACE",
-		3: "CLUSTER",
+		3: "PUBLIC",
 	}
 	ServiceEntryVisibility_Visibility_value = map[string]int32{
 		"VISIBILITY_UNSPECIFIED": 0,
 		"UNUSED":                 1,
 		"NAMESPACE":              2,
-		"CLUSTER":                3,
+		"PUBLIC":                 3,
 	}
 )
 
@@ -1713,11 +1725,11 @@ func (x *LabelSelectorRequirement) GetValues() []string {
 // Policies are evaluated in order; the first policy whose rules all match sets
 // the ServiceEntry's visibility. If no policy matches, `defaultVisibility`
 // applies. When this entire message is absent from `MeshConfig`, every
-// ServiceEntry is visible `CLUSTER`, preserving current Istio behavior.
+// ServiceEntry is visible `PUBLIC`, preserving current Istio behavior.
 type ServiceEntryVisibility struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The visibility used when no policy matches a ServiceEntry. If left
-	// `VISIBILITY_UNSPECIFIED`, it resolves to `CLUSTER`.
+	// `VISIBILITY_UNSPECIFIED`, it resolves to `PUBLIC`.
 	DefaultVisibility ServiceEntryVisibility_Visibility `protobuf:"varint,1,opt,name=default_visibility,json=defaultVisibility,proto3,enum=istio.mesh.v1alpha1.ServiceEntryVisibility_Visibility" json:"default_visibility,omitempty"`
 	// Whether sidecars honor these visibility semantics. When false (default),
 	// only ambient proxies (ztunnel and waypoints) apply them and sidecars
@@ -5937,7 +5949,7 @@ const file_mesh_v1alpha1_config_proto_rawDesc = "" +
 	"\x18LabelSelectorRequirement\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x1a\n" +
 	"\boperator\x18\x02 \x01(\tR\boperator\x12\x16\n" +
-	"\x06values\x18\x03 \x03(\tR\x06values\"\xfb\x04\n" +
+	"\x06values\x18\x03 \x03(\tR\x06values\"\xfa\x04\n" +
 	"\x16ServiceEntryVisibility\x12e\n" +
 	"\x12default_visibility\x18\x01 \x01(\x0e26.istio.mesh.v1alpha1.ServiceEntryVisibility.VisibilityR\x11defaultVisibility\x12*\n" +
 	"\x11apply_to_sidecars\x18\x02 \x01(\bR\x0fapplyToSidecars\x12N\n" +
@@ -5949,14 +5961,15 @@ const file_mesh_v1alpha1_config_proto_rawDesc = "" +
 	"\x0ematching_rules\x18\x02 \x03(\v25.istio.mesh.v1alpha1.ServiceEntryVisibility.MatchRuleR\rmatchingRules\x1ak\n" +
 	"\tMatchRule\x12S\n" +
 	"\x12namespace_selector\x18\x01 \x01(\v2\".istio.mesh.v1alpha1.LabelSelectorH\x00R\x11namespaceSelectorB\t\n" +
-	"\amatcher\"P\n" +
+	"\amatcher\"O\n" +
 	"\n" +
 	"Visibility\x12\x1a\n" +
 	"\x16VISIBILITY_UNSPECIFIED\x10\x00\x12\n" +
 	"\n" +
 	"\x06UNUSED\x10\x01\x12\r\n" +
-	"\tNAMESPACE\x10\x02\x12\v\n" +
-	"\aCLUSTER\x10\x03\"\xcb\x01\n" +
+	"\tNAMESPACE\x10\x02\x12\n" +
+	"\n" +
+	"\x06PUBLIC\x10\x03\"\xcb\x01\n" +
 	"\fConfigSource\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\x12O\n" +
 	"\ftls_settings\x18\x02 \x01(\v2,.istio.networking.v1alpha3.ClientTLSSettingsR\vtlsSettings\x12P\n" +
