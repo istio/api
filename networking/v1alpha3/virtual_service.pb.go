@@ -1323,8 +1323,9 @@ type HTTPMatchRequest struct {
 	// concatenated with the parent route's name and will be logged in
 	// the access logs for requests matching this route.
 	Name string `protobuf:"bytes,11,opt,name=name,proto3" json:"name,omitempty"`
-	// URI to match
-	// values are case-sensitive and formatted as follows:
+	// URI to match.
+	//
+	// Values are case-sensitive and formatted as follows:
 	//
 	// - `exact: "value"` for exact string match
 	//
@@ -1335,8 +1336,9 @@ type HTTPMatchRequest struct {
 	// **Note:** Case-insensitive matching could be enabled via the
 	// `ignoreUriCase` flag.
 	Uri *StringMatch `protobuf:"bytes,1,opt,name=uri,proto3" json:"uri,omitempty"`
-	// URI Scheme
-	// values are case-sensitive and formatted as follows:
+	// URI Scheme.
+	//
+	// Values are case-sensitive and formatted as follows:
 	//
 	// - `exact: "value"` for exact string match
 	//
@@ -1344,8 +1346,9 @@ type HTTPMatchRequest struct {
 	//
 	// - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
 	Scheme *StringMatch `protobuf:"bytes,2,opt,name=scheme,proto3" json:"scheme,omitempty"`
-	// HTTP Method
-	// values are case-sensitive and formatted as follows:
+	// HTTP Method.
+	//
+	// Values are case-sensitive and formatted as follows:
 	//
 	// - `exact: "value"` for exact string match
 	//
@@ -1353,8 +1356,9 @@ type HTTPMatchRequest struct {
 	//
 	// - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
 	Method *StringMatch `protobuf:"bytes,3,opt,name=method,proto3" json:"method,omitempty"`
-	// HTTP Authority
-	// values are case-sensitive and formatted as follows:
+	// HTTP Authority.
+	//
+	// Values are case-sensitive and formatted as follows:
 	//
 	// - `exact: "value"` for exact string match
 	//
