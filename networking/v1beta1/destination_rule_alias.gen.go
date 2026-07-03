@@ -219,7 +219,10 @@ const LoadBalancerSettings_ROUND_ROBIN LoadBalancerSettings_SimpleLB = v1alpha3.
 // LEAST_REQUEST as a drop-in replacement for ROUND_ROBIN.
 const LoadBalancerSettings_LEAST_REQUEST LoadBalancerSettings_SimpleLB = v1alpha3.LoadBalancerSettings_LEAST_REQUEST
 
+// Standard load balancing algorithms that require no tuning.
 type LoadBalancerSettings_Simple = v1alpha3.LoadBalancerSettings_Simple
+
+// Consistent Hash-based load balancing can be used to provide soft session affinity based on HTTP headers, cookies or other properties.
 type LoadBalancerSettings_ConsistentHash = v1alpha3.LoadBalancerSettings_ConsistentHash
 type WarmupConfiguration = v1alpha3.WarmupConfiguration
 

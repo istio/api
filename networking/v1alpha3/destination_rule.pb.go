@@ -810,7 +810,7 @@ type LoadBalancerSettings struct {
 	//	*LoadBalancerSettings_Simple
 	//	*LoadBalancerSettings_ConsistentHash
 	LbPolicy isLoadBalancerSettings_LbPolicy `protobuf_oneof:"lb_policy"`
-	// Locality load balancer settings, this will override mesh-wide settings in entirety, meaning no merging would be performed
+	// Locality load balancer settings. This will override mesh-wide settings in entirety, meaning no merging would be performed
 	// between this object and the object one in MeshConfig
 	LocalityLbSetting *LocalityLoadBalancerSetting `protobuf:"bytes,3,opt,name=locality_lb_setting,json=localityLbSetting,proto3" json:"locality_lb_setting,omitempty"`
 	// Deprecated: use `warmup` instead.
@@ -909,10 +909,12 @@ type isLoadBalancerSettings_LbPolicy interface {
 }
 
 type LoadBalancerSettings_Simple struct {
+	// Standard load balancing algorithms that require no tuning.
 	Simple LoadBalancerSettings_SimpleLB `protobuf:"varint,1,opt,name=simple,proto3,enum=istio.networking.v1alpha3.LoadBalancerSettings_SimpleLB,oneof"`
 }
 
 type LoadBalancerSettings_ConsistentHash struct {
+	// Consistent Hash-based load balancing can be used to provide soft session affinity based on HTTP headers, cookies or other properties.
 	ConsistentHash *LoadBalancerSettings_ConsistentHashLB `protobuf:"bytes,2,opt,name=consistent_hash,json=consistentHash,proto3,oneof"`
 }
 
