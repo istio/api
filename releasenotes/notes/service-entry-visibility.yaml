@@ -1,0 +1,13 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - https://github.com/istio/istio/issues/59652
+  - https://github.com/istio/istio/issues/55163
+  - https://github.com/istio/istio/issues/60148
+
+releaseNotes:
+  - |
+    **Added** `MeshConfig.serviceEntryVisibility`, allowing a mesh administrator to
+    control the visibility of `ServiceEntry` resources across the mesh (`NONE`,
+    `NAMESPACE`, or `PUBLIC`) without relying on external admission validation.

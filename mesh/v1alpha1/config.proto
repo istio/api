@@ -1655,7 +1655,7 @@ message MeshConfig {
 
   // ServiceEntryVisibility lets a mesh administrator control the visibility
   // of ServiceEntry resources mesh-wide, without relying on external admission
-  // validation. When unset, ServiceEntry behaves as it does today (visible
+  // validation. When unset, ServiceEntry behaves as it does today (public visibility,
   // cluster-wide; ambient ignores `exportTo`).
   ServiceEntryVisibility service_entry_visibility = 72;
 
@@ -1763,9 +1763,10 @@ message ServiceEntryVisibility {
     // Default. Resolves to `PUBLIC` to preserve legacy behavior.
     VISIBILITY_UNSPECIFIED = 0;
 
-    // The ServiceEntry may be written, but Istio configures no dataplane for
-    // it. Useful to expressly forbid a class of ServiceEntry.
-    UNUSED = 1;
+    // Not visible anywhere: the ServiceEntry may be written, but Istio
+    // configures no dataplane for it. Useful to expressly forbid a class of
+    // ServiceEntry.
+    NONE = 1;
 
     // Visible only within the namespace the ServiceEntry is defined in.
     // Equivalent to the legacy `exportTo: "."`.
