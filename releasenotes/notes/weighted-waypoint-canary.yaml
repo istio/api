@@ -1,0 +1,13 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - 60801
+
+releaseNotes:
+  - |
+    **Added** the `istio.io/use-waypoint-canary` and
+    `istio.io/use-waypoint-canary-namespace` labels and the
+    `istio.io/use-waypoint-canary-weight` annotation, which let a service shift a
+    configurable percentage of its traffic to a second (canary) waypoint alongside
+    its primary `istio.io/use-waypoint`.
