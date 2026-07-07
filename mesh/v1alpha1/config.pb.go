@@ -785,9 +785,10 @@ type ServiceEntryVisibility_Visibility int32
 const (
 	// Default. Resolves to `PUBLIC` to preserve legacy behavior.
 	ServiceEntryVisibility_VISIBILITY_UNSPECIFIED ServiceEntryVisibility_Visibility = 0
-	// The ServiceEntry may be written, but Istio configures no dataplane for
-	// it. Useful to expressly forbid a class of ServiceEntry.
-	ServiceEntryVisibility_UNUSED ServiceEntryVisibility_Visibility = 1
+	// Not visible anywhere: the ServiceEntry may be written, but Istio
+	// configures no dataplane for it. Useful to expressly forbid a class of
+	// ServiceEntry.
+	ServiceEntryVisibility_NONE ServiceEntryVisibility_Visibility = 1
 	// Visible only within the namespace the ServiceEntry is defined in.
 	// Equivalent to the legacy `exportTo: "."`.
 	ServiceEntryVisibility_NAMESPACE ServiceEntryVisibility_Visibility = 2
@@ -810,13 +811,13 @@ const (
 var (
 	ServiceEntryVisibility_Visibility_name = map[int32]string{
 		0: "VISIBILITY_UNSPECIFIED",
-		1: "UNUSED",
+		1: "NONE",
 		2: "NAMESPACE",
 		3: "PUBLIC",
 	}
 	ServiceEntryVisibility_Visibility_value = map[string]int32{
 		"VISIBILITY_UNSPECIFIED": 0,
-		"UNUSED":                 1,
+		"NONE":                   1,
 		"NAMESPACE":              2,
 		"PUBLIC":                 3,
 	}
@@ -1202,7 +1203,7 @@ type MeshConfig struct {
 	DefaultTrafficPolicy *MeshConfig_DefaultTrafficPolicy `protobuf:"bytes,71,opt,name=default_traffic_policy,json=defaultTrafficPolicy,proto3" json:"default_traffic_policy,omitempty"`
 	// ServiceEntryVisibility lets a mesh administrator control the visibility
 	// of ServiceEntry resources mesh-wide, without relying on external admission
-	// validation. When unset, ServiceEntry behaves as it does today (visible
+	// validation. When unset, ServiceEntry behaves as it does today (public visibility,
 	// cluster-wide; ambient ignores `exportTo`).
 	ServiceEntryVisibility *ServiceEntryVisibility `protobuf:"bytes,72,opt,name=service_entry_visibility,json=serviceEntryVisibility,proto3" json:"service_entry_visibility,omitempty"`
 	unknownFields          protoimpl.UnknownFields
@@ -5949,7 +5950,7 @@ const file_mesh_v1alpha1_config_proto_rawDesc = "" +
 	"\x18LabelSelectorRequirement\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x1a\n" +
 	"\boperator\x18\x02 \x01(\tR\boperator\x12\x16\n" +
-	"\x06values\x18\x03 \x03(\tR\x06values\"\xfa\x04\n" +
+	"\x06values\x18\x03 \x03(\tR\x06values\"\xf8\x04\n" +
 	"\x16ServiceEntryVisibility\x12e\n" +
 	"\x12default_visibility\x18\x01 \x01(\x0e26.istio.mesh.v1alpha1.ServiceEntryVisibility.VisibilityR\x11defaultVisibility\x12*\n" +
 	"\x11apply_to_sidecars\x18\x02 \x01(\bR\x0fapplyToSidecars\x12N\n" +
@@ -5961,12 +5962,11 @@ const file_mesh_v1alpha1_config_proto_rawDesc = "" +
 	"\x0ematching_rules\x18\x02 \x03(\v25.istio.mesh.v1alpha1.ServiceEntryVisibility.MatchRuleR\rmatchingRules\x1ak\n" +
 	"\tMatchRule\x12S\n" +
 	"\x12namespace_selector\x18\x01 \x01(\v2\".istio.mesh.v1alpha1.LabelSelectorH\x00R\x11namespaceSelectorB\t\n" +
-	"\amatcher\"O\n" +
+	"\amatcher\"M\n" +
 	"\n" +
 	"Visibility\x12\x1a\n" +
-	"\x16VISIBILITY_UNSPECIFIED\x10\x00\x12\n" +
-	"\n" +
-	"\x06UNUSED\x10\x01\x12\r\n" +
+	"\x16VISIBILITY_UNSPECIFIED\x10\x00\x12\b\n" +
+	"\x04NONE\x10\x01\x12\r\n" +
 	"\tNAMESPACE\x10\x02\x12\n" +
 	"\n" +
 	"\x06PUBLIC\x10\x03\"\xcb\x01\n" +

@@ -607,7 +607,7 @@ baseline, and unset blocks fall back to Istio&rsquo;s built-in defaults.</p>
 <td>
 <p>ServiceEntryVisibility lets a mesh administrator control the visibility
 of ServiceEntry resources mesh-wide, without relying on external admission
-validation. When unset, ServiceEntry behaves as it does today (visible
+validation. When unset, ServiceEntry behaves as it does today (public visibility,
 cluster-wide; ambient ignores <code>exportTo</code>).</p>
 
 </td>
@@ -3443,11 +3443,12 @@ label selector.</p>
 
 </td>
 </tr>
-<tr id="ServiceEntryVisibility-Visibility-UNUSED">
-<td><code><a href="#ServiceEntryVisibility-Visibility-UNUSED">UNUSED</a></code></td>
+<tr id="ServiceEntryVisibility-Visibility-NONE">
+<td><code><a href="#ServiceEntryVisibility-Visibility-NONE">NONE</a></code></td>
 <td>
-<p>The ServiceEntry may be written, but Istio configures no dataplane for
-it. Useful to expressly forbid a class of ServiceEntry.</p>
+<p>Not visible anywhere: the ServiceEntry may be written, but Istio
+configures no dataplane for it. Useful to expressly forbid a class of
+ServiceEntry.</p>
 
 </td>
 </tr>
