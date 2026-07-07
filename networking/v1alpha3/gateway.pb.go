@@ -841,7 +841,7 @@ type ServerTLSSettings struct {
 	// Optional: If set to true, the proxy will try to validate the certificate, but even if the
 	// validation fails, it will allow the connection through.
 	//
-	// It's needed to implement Gateway API AllowInsecureFallback feature. The different between
+	// It's needed to implement Gateway API AllowInsecureFallback feature. The difference between
 	// AllowInsecureFallback and not verifying client certificate at all is that Gateway is able
 	// to pass the client certificate to the backend in the x-forwarded-client-cert HTTP header and
 	// backend can verify the certificate.
