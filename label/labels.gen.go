@@ -231,6 +231,45 @@ Note: the waypoint must allow the type, see "istio.io/waypoint-for".
 		},
 	}
 
+	IoIstioUseWaypointCanary = Instance {
+		Name:          "istio.io/use-waypoint-canary",
+		Description:   `When set on a "Service" or "ServiceEntry" (or its "Namespace"), names a second, canary waypoint for the
+service in addition to the primary "istio.io/use-waypoint". A configurable percentage of the
+service's in-mesh (and, with "istio.io/ingress-use-waypoint", ingress) traffic is shifted to
+this canary waypoint, controlled by the "istio.io/use-waypoint-canary-weight" annotation.
+This is the migration primitive for canarying a service between two waypoints (for example
+two waypoint revisions, or two waypoint implementations).
+
+The canary is assumed to be in the same namespace; for cross-namespace, see
+"istio.io/use-waypoint-canary-namespace". The canary waypoint must allow the type, see
+"istio.io/waypoint-for".
+`,
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Service,
+			ServiceEntry,
+			Namespace,
+		},
+	}
+
+	IoIstioUseWaypointCanaryNamespace = Instance {
+		Name:          "istio.io/use-waypoint-canary-namespace",
+		Description:   `When set on a resource, indicates the canary waypoint ("istio.io/use-waypoint-canary") is in
+the provided namespace. This must be set in addition to "istio.io/use-waypoint-canary", when a
+cross-namespace reference is desired.
+`,
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Service,
+			ServiceEntry,
+			Namespace,
+		},
+	}
+
 	IoIstioUseWaypointNamespace = Instance {
 		Name:          "istio.io/use-waypoint-namespace",
 		Description:   `When set on a resource, indicates the resource has an associated waypoint in the provided namespace.
@@ -499,6 +538,8 @@ func AllResourceLabels() []*Instance {
 		&IoIstioRev,
 		&IoIstioTag,
 		&IoIstioUseWaypoint,
+		&IoIstioUseWaypointCanary,
+		&IoIstioUseWaypointCanaryNamespace,
 		&IoIstioUseWaypointNamespace,
 		&IoIstioWaypointFor,
 		&NetworkingEnableAutoallocateIp,

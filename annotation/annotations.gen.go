@@ -313,6 +313,24 @@ Note: When using docker-in-docker container, the default bridge interface name i
 		},
 	}
 
+	IoIstioUseWaypointCanaryWeight = Instance {
+		Name:          "istio.io/use-waypoint-canary-weight",
+		Description:   `Sets the percentage (0-100) of a service's traffic that is shifted to its canary waypoint
+("istio.io/use-waypoint-canary"). The remainder continues to the primary
+"istio.io/use-waypoint". Defaults to 0 (canary resolved but receives no traffic) when unset.
+A value of 100 sends all traffic to the canary (a transient promotion step). Invalid values
+(non-integer or outside 0-100) are rejected and the service stays on the primary waypoint.
+`,
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Service,
+			ServiceEntry,
+			Namespace,
+		},
+	}
+
 	IoIstioWorkloadController = Instance {
 		Name:          "istio.io/workloadController",
 		Description:   "On a WorkloadEntry should store the current/last pilot "+
@@ -983,6 +1001,7 @@ func AllResourceAnnotations() []*Instance {
 		&IoIstioDryRun,
 		&IoIstioRerouteVirtualInterfaces,
 		&IoIstioRev,
+		&IoIstioUseWaypointCanaryWeight,
 		&IoIstioWorkloadController,
 		&IoKubernetesIngressClass,
 		&NetworkingExportTo,
