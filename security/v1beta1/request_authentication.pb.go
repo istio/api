@@ -549,8 +549,14 @@ type JWTRule struct {
 	// +protoc-gen-crd:list-value-validation:MinLength=1
 	// +kubebuilder:validation:MaxItems=64
 	SpaceDelimitedClaims []string `protobuf:"bytes,14,rep,name=space_delimited_claims,json=spaceDelimitedClaims,proto3" json:"space_delimited_claims,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+	// If set to true, the JWT token must be present in the request. Requests
+	// without this token will be rejected with 401 even if other JWT rules are
+	// satisfied. When false (the default), a missing token is allowed as long as
+	// no invalid token is present. This is useful when multiple JWT rules are
+	// configured and all tokens must be present and valid simultaneously.
+	Required      bool `protobuf:"varint,15,opt,name=required,proto3" json:"required,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *JWTRule) Reset() {
@@ -665,6 +671,13 @@ func (x *JWTRule) GetSpaceDelimitedClaims() []string {
 		return x.SpaceDelimitedClaims
 	}
 	return nil
+}
+
+func (x *JWTRule) GetRequired() bool {
+	if x != nil {
+		return x.Required
+	}
+	return false
 }
 
 // This message specifies a header location to extract JWT token.
@@ -795,7 +808,7 @@ const file_security_v1beta1_request_authentication_proto_rawDesc = "" +
 	"\n" +
 	"targetRefs\x18\x04 \x03(\v2).istio.type.v1beta1.PolicyTargetReferenceR\n" +
 	"targetRefs\x12<\n" +
-	"\tjwt_rules\x18\x02 \x03(\v2\x1f.istio.security.v1beta1.JWTRuleR\bjwtRules\"\xb0\x04\n" +
+	"\tjwt_rules\x18\x02 \x03(\v2\x1f.istio.security.v1beta1.JWTRuleR\bjwtRules\"\xcc\x04\n" +
 	"\aJWTRule\x12\x16\n" +
 	"\x06issuer\x18\x01 \x01(\tR\x06issuer\x12\x1c\n" +
 	"\taudiences\x18\x02 \x03(\tR\taudiences\x12\x19\n" +
@@ -810,7 +823,8 @@ const file_security_v1beta1_request_authentication_proto_rawDesc = "" +
 	"\x16forward_original_token\x18\t \x01(\bR\x14forwardOriginalToken\x12\\\n" +
 	"\x17output_claim_to_headers\x18\v \x03(\v2%.istio.security.v1beta1.ClaimToHeaderR\x14outputClaimToHeaders\x123\n" +
 	"\atimeout\x18\r \x01(\v2\x19.google.protobuf.DurationR\atimeout\x124\n" +
-	"\x16space_delimited_claims\x18\x0e \x03(\tR\x14spaceDelimitedClaims\"=\n" +
+	"\x16space_delimited_claims\x18\x0e \x03(\tR\x14spaceDelimitedClaims\x12\x1a\n" +
+	"\brequired\x18\x0f \x01(\bR\brequired\"=\n" +
 	"\tJWTHeader\x12\x18\n" +
 	"\x04name\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x04name\x12\x16\n" +
 	"\x06prefix\x18\x02 \x01(\tR\x06prefix\"I\n" +

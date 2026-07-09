@@ -17229,6 +17229,10 @@ spec:
                       description: This field specifies the header name to output
                         a successfully verified JWT payload to the backend.
                       type: string
+                    required:
+                      description: If set to true, the JWT token must be present in
+                        the request.
+                      type: boolean
                     spaceDelimitedClaims:
                       description: List of JWT claim names that should be treated
                         as space-delimited strings.
@@ -17518,6 +17522,10 @@ spec:
                       description: This field specifies the header name to output
                         a successfully verified JWT payload to the backend.
                       type: string
+                    required:
+                      description: If set to true, the JWT token must be present in
+                        the request.
+                      type: boolean
                     spaceDelimitedClaims:
                       description: List of JWT claim names that should be treated
                         as space-delimited strings.

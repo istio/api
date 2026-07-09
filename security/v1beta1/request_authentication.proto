@@ -487,8 +487,15 @@ message JWTRule {
   // +kubebuilder:validation:MaxItems=64
   repeated string space_delimited_claims = 14;
 
+  // If set to true, the JWT token must be present in the request. Requests
+  // without this token will be rejected with 401 even if other JWT rules are
+  // satisfied. When false (the default), a missing token is allowed as long as
+  // no invalid token is present. This is useful when multiple JWT rules are
+  // configured and all tokens must be present and valid simultaneously.
+  bool required = 15;
+
   // $hide_from_docs
-  // Next available field number: 15
+  // Next available field number: 16
 }
 
 // This message specifies a header location to extract JWT token.
