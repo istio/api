@@ -544,11 +544,14 @@ message LoadBalancerSettings {
 
   // Upstream load balancing policy.
   oneof lb_policy {
+    // Standard load balancing algorithms that require no tuning.
     SimpleLB simple = 1;
+
+    // Consistent Hash-based load balancing can be used to provide soft session affinity based on HTTP headers, cookies or other properties.
     ConsistentHashLB consistent_hash = 2;
   }
 
-  // Locality load balancer settings, this will override mesh-wide settings in entirety, meaning no merging would be performed
+  // Locality load balancer settings. This will override mesh-wide settings in entirety, meaning no merging would be performed
   // between this object and the object one in MeshConfig
   LocalityLoadBalancerSetting locality_lb_setting = 3;
 
