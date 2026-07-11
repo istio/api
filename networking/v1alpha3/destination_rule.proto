@@ -864,6 +864,16 @@ message OutlierDetection {
   // disabled by setting it to 0%. The default is 0% as it's not typically
   // applicable in k8s environments with few pods per service.
   int32 min_health_percent = 5;
+
+  // HTTP status codes to additionally treat as outlier detection failures,
+  // beyond the default behavior of only treating 5xx responses as failures.
+  // `consecutiveGatewayErrors` and `consecutive5xxErrors` are unaffected by
+  // this field. When unset, only 5xx responses are treated as failures.
+  //
+  // +cue-gen:OutlierDetection:releaseChannel:extended
+  // +protoc-gen-crd:list-value-validation:Minimum=100
+  // +protoc-gen-crd:list-value-validation:Maximum=599
+  repeated uint32 outlier_detection_http_error_codes = 10;
 }
 
 // SSL/TLS related settings for upstream connections. See Envoy's [TLS
