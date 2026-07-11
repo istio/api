@@ -1193,8 +1193,17 @@ type OutlierDetection struct {
 	// disabled by setting it to 0%. The default is 0% as it's not typically
 	// applicable in k8s environments with few pods per service.
 	MinHealthPercent int32 `protobuf:"varint,5,opt,name=min_health_percent,json=minHealthPercent,proto3" json:"min_health_percent,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	// HTTP status codes to additionally treat as outlier detection failures,
+	// beyond the default behavior of only treating 5xx responses as failures.
+	// `consecutiveGatewayErrors` and `consecutive5xxErrors` are unaffected by
+	// this field. When unset, only 5xx responses are treated as failures.
+	//
+	// +cue-gen:OutlierDetection:releaseChannel:extended
+	// +protoc-gen-crd:list-value-validation:Minimum=100
+	// +protoc-gen-crd:list-value-validation:Maximum=599
+	OutlierDetectionHttpErrorCodes []uint32 `protobuf:"varint,10,rep,packed,name=outlier_detection_http_error_codes,json=outlierDetectionHttpErrorCodes,proto3" json:"outlier_detection_http_error_codes,omitempty"`
+	unknownFields                  protoimpl.UnknownFields
+	sizeCache                      protoimpl.SizeCache
 }
 
 func (x *OutlierDetection) Reset() {
@@ -1289,6 +1298,13 @@ func (x *OutlierDetection) GetMinHealthPercent() int32 {
 		return x.MinHealthPercent
 	}
 	return 0
+}
+
+func (x *OutlierDetection) GetOutlierDetectionHttpErrorCodes() []uint32 {
+	if x != nil {
+		return x.OutlierDetectionHttpErrorCodes
+	}
+	return nil
 }
 
 // SSL/TLS related settings for upstream connections. See Envoy's [TLS
@@ -3049,7 +3065,7 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\x0fH2UpgradePolicy\x12\v\n" +
 	"\aDEFAULT\x10\x00\x12\x12\n" +
 	"\x0eDO_NOT_UPGRADE\x10\x01\x12\v\n" +
-	"\aUPGRADE\x10\x02\"\x8a\x05\n" +
+	"\aUPGRADE\x10\x02\"\xd6\x05\n" +
 	"\x10OutlierDetection\x121\n" +
 	"\x12consecutive_errors\x18\x01 \x01(\x05B\x02\x18\x01R\x11consecutiveErrors\x12J\n" +
 	"\"split_external_local_origin_errors\x18\b \x01(\bR\x1esplitExternalLocalOriginErrors\x12g\n" +
@@ -3059,7 +3075,9 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\binterval\x18\x02 \x01(\v2\x19.google.protobuf.DurationR\binterval\x12G\n" +
 	"\x12base_ejection_time\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\x10baseEjectionTime\x120\n" +
 	"\x14max_ejection_percent\x18\x04 \x01(\x05R\x12maxEjectionPercent\x12,\n" +
-	"\x12min_health_percent\x18\x05 \x01(\x05R\x10minHealthPercent\"\xe4\x03\n" +
+	"\x12min_health_percent\x18\x05 \x01(\x05R\x10minHealthPercent\x12J\n" +
+	"\"outlier_detection_http_error_codes\x18\n" +
+	" \x03(\rR\x1eoutlierDetectionHttpErrorCodes\"\xe4\x03\n" +
 	"\x11ClientTLSSettings\x12H\n" +
 	"\x04mode\x18\x01 \x01(\x0e24.istio.networking.v1alpha3.ClientTLSSettings.TLSmodeR\x04mode\x12-\n" +
 	"\x12client_certificate\x18\x02 \x01(\tR\x11clientCertificate\x12\x1f\n" +

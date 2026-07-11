@@ -1552,6 +1552,18 @@ applicable in k8s environments with few pods per service.</p>
 
 </td>
 </tr>
+<tr id="OutlierDetection-outlier_detection_http_error_codes">
+<td><div class="field"><div class="name"><code><a href="#OutlierDetection-outlier_detection_http_error_codes">outlierDetectionHttpErrorCodes</a></code></div>
+<div class="type">uint32[]</div>
+</div></td>
+<td>
+<p>HTTP status codes to additionally treat as outlier detection failures,
+beyond the default behavior of only treating 5xx responses as failures.
+<code>consecutiveGatewayErrors</code> and <code>consecutive5xxErrors</code> are unaffected by
+this field. When unset, only 5xx responses are treated as failures.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>

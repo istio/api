@@ -1185,6 +1185,15 @@ spec:
                                 `minHealthPercent` hosts in healthy mode.
                               format: int32
                               type: integer
+                            outlierDetectionHttpErrorCodes:
+                              description: HTTP status codes to additionally treat
+                                as outlier detection failures, beyond the default
+                                behavior of only treating 5xx responses as failures.
+                              items:
+                                maximum: 599
+                                minimum: 100
+                                type: integer
+                              type: array
                             splitExternalLocalOriginErrors:
                               description: Determines whether to distinguish local
                                 origin failures from external errors.
@@ -1599,6 +1608,16 @@ spec:
                                       mode.
                                     format: int32
                                     type: integer
+                                  outlierDetectionHttpErrorCodes:
+                                    description: HTTP status codes to additionally
+                                      treat as outlier detection failures, beyond
+                                      the default behavior of only treating 5xx responses
+                                      as failures.
+                                    items:
+                                      maximum: 599
+                                      minimum: 100
+                                      type: integer
+                                    type: array
                                   splitExternalLocalOriginErrors:
                                     description: Determines whether to distinguish
                                       local origin failures from external errors.
@@ -2169,6 +2188,15 @@ spec:
                           hosts in healthy mode.
                         format: int32
                         type: integer
+                      outlierDetectionHttpErrorCodes:
+                        description: HTTP status codes to additionally treat as outlier
+                          detection failures, beyond the default behavior of only
+                          treating 5xx responses as failures.
+                        items:
+                          maximum: 599
+                          minimum: 100
+                          type: integer
+                        type: array
                       splitExternalLocalOriginErrors:
                         description: Determines whether to distinguish local origin
                           failures from external errors.
@@ -2570,6 +2598,15 @@ spec:
                                 `minHealthPercent` hosts in healthy mode.
                               format: int32
                               type: integer
+                            outlierDetectionHttpErrorCodes:
+                              description: HTTP status codes to additionally treat
+                                as outlier detection failures, beyond the default
+                                behavior of only treating 5xx responses as failures.
+                              items:
+                                maximum: 599
+                                minimum: 100
+                                type: integer
+                              type: array
                             splitExternalLocalOriginErrors:
                               description: Determines whether to distinguish local
                                 origin failures from external errors.
@@ -3295,6 +3332,15 @@ spec:
                                 `minHealthPercent` hosts in healthy mode.
                               format: int32
                               type: integer
+                            outlierDetectionHttpErrorCodes:
+                              description: HTTP status codes to additionally treat
+                                as outlier detection failures, beyond the default
+                                behavior of only treating 5xx responses as failures.
+                              items:
+                                maximum: 599
+                                minimum: 100
+                                type: integer
+                              type: array
                             splitExternalLocalOriginErrors:
                               description: Determines whether to distinguish local
                                 origin failures from external errors.
@@ -3709,6 +3755,16 @@ spec:
                                       mode.
                                     format: int32
                                     type: integer
+                                  outlierDetectionHttpErrorCodes:
+                                    description: HTTP status codes to additionally
+                                      treat as outlier detection failures, beyond
+                                      the default behavior of only treating 5xx responses
+                                      as failures.
+                                    items:
+                                      maximum: 599
+                                      minimum: 100
+                                      type: integer
+                                    type: array
                                   splitExternalLocalOriginErrors:
                                     description: Determines whether to distinguish
                                       local origin failures from external errors.
@@ -4279,6 +4335,15 @@ spec:
                           hosts in healthy mode.
                         format: int32
                         type: integer
+                      outlierDetectionHttpErrorCodes:
+                        description: HTTP status codes to additionally treat as outlier
+                          detection failures, beyond the default behavior of only
+                          treating 5xx responses as failures.
+                        items:
+                          maximum: 599
+                          minimum: 100
+                          type: integer
+                        type: array
                       splitExternalLocalOriginErrors:
                         description: Determines whether to distinguish local origin
                           failures from external errors.
@@ -4680,6 +4745,15 @@ spec:
                                 `minHealthPercent` hosts in healthy mode.
                               format: int32
                               type: integer
+                            outlierDetectionHttpErrorCodes:
+                              description: HTTP status codes to additionally treat
+                                as outlier detection failures, beyond the default
+                                behavior of only treating 5xx responses as failures.
+                              items:
+                                maximum: 599
+                                minimum: 100
+                                type: integer
+                              type: array
                             splitExternalLocalOriginErrors:
                               description: Determines whether to distinguish local
                                 origin failures from external errors.
@@ -5405,6 +5479,15 @@ spec:
                                 `minHealthPercent` hosts in healthy mode.
                               format: int32
                               type: integer
+                            outlierDetectionHttpErrorCodes:
+                              description: HTTP status codes to additionally treat
+                                as outlier detection failures, beyond the default
+                                behavior of only treating 5xx responses as failures.
+                              items:
+                                maximum: 599
+                                minimum: 100
+                                type: integer
+                              type: array
                             splitExternalLocalOriginErrors:
                               description: Determines whether to distinguish local
                                 origin failures from external errors.
@@ -5819,6 +5902,16 @@ spec:
                                       mode.
                                     format: int32
                                     type: integer
+                                  outlierDetectionHttpErrorCodes:
+                                    description: HTTP status codes to additionally
+                                      treat as outlier detection failures, beyond
+                                      the default behavior of only treating 5xx responses
+                                      as failures.
+                                    items:
+                                      maximum: 599
+                                      minimum: 100
+                                      type: integer
+                                    type: array
                                   splitExternalLocalOriginErrors:
                                     description: Determines whether to distinguish
                                       local origin failures from external errors.
@@ -6389,6 +6482,15 @@ spec:
                           hosts in healthy mode.
                         format: int32
                         type: integer
+                      outlierDetectionHttpErrorCodes:
+                        description: HTTP status codes to additionally treat as outlier
+                          detection failures, beyond the default behavior of only
+                          treating 5xx responses as failures.
+                        items:
+                          maximum: 599
+                          minimum: 100
+                          type: integer
+                        type: array
                       splitExternalLocalOriginErrors:
                         description: Determines whether to distinguish local origin
                           failures from external errors.
@@ -6790,6 +6892,15 @@ spec:
                                 `minHealthPercent` hosts in healthy mode.
                               format: int32
                               type: integer
+                            outlierDetectionHttpErrorCodes:
+                              description: HTTP status codes to additionally treat
+                                as outlier detection failures, beyond the default
+                                behavior of only treating 5xx responses as failures.
+                              items:
+                                maximum: 599
+                                minimum: 100
+                                type: integer
+                              type: array
                             splitExternalLocalOriginErrors:
                               description: Determines whether to distinguish local
                                 origin failures from external errors.
