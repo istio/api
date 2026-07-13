@@ -1193,11 +1193,11 @@ type OutlierDetection struct {
 	// disabled by setting it to 0%. The default is 0% as it's not typically
 	// applicable in k8s environments with few pods per service.
 	MinHealthPercent int32 `protobuf:"varint,5,opt,name=min_health_percent,json=minHealthPercent,proto3" json:"min_health_percent,omitempty"`
-	// Specifies additional HTTP response status codes that should be treated as
-	// outlier detection errors, in addition to the default 5xx behavior.
-	// `consecutiveGatewayErrors` and `consecutive5xxErrors` are unaffected by
-	// this field. Values must be in the range [100, 599]. When unset, only 5xx
-	// responses are treated as failures.
+	// Specifies HTTP response status codes that should be treated as
+	// outlier detection errors. Overrides the default 5xx behavior.
+	// `consecutiveGatewayErrors` and `consecutive5xxErrors` are
+	// unaffected by this field. Values must be in the range [100, 599].
+	// When unset, only 5xx responses are treated as failures.
 	//
 	// +protoc-gen-crd:list-value-validation:Minimum=100
 	// +protoc-gen-crd:list-value-validation:Maximum=599
