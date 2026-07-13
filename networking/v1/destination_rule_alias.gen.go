@@ -516,11 +516,12 @@ type LocalityLoadBalancerSetting_Failover = v1alpha3.LocalityLoadBalancerSetting
 //
 //   - The downstream proxy is configured with  `ISTIO_META_ENABLE_SELF_DISCOVERY=true`
 //     (set via `proxyMetadata`).
-//   - The upstream cluster has at least `minClusterSize` hosts (default 6). Below
-//     this threshold zone-aware load balancing is disabled entirely, regardless of other
-//     settings.
 //   - The upstream cluster spans more than one zone.
+//   - The upstream cluster has at least `minClusterSize` hosts (default 6) in the local region.
 //   - There is at least one healthy endpoint in the local zone.
+//
+// If any of these conditions are not met, Envoy falls back to the configured load balancing policy
+// (e.g. round-robin or least-request) across all endpoints in the local region.
 //
 // For additional details on the algorithm, refer to Envoy's
 // [Zone Aware Routing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/zone_aware)

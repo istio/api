@@ -2055,12 +2055,12 @@ itself is always applied whenever zone-aware load balancing is enabled.</p>
 <ul>
 <li>The downstream proxy is configured with  <code>ISTIO_META_ENABLE_SELF_DISCOVERY=true</code>
 (set via <code>proxyMetadata</code>).</li>
-<li>The upstream cluster has at least <code>minClusterSize</code> hosts (default 6). Below
-this threshold zone-aware load balancing is disabled entirely, regardless of other
-settings.</li>
 <li>The upstream cluster spans more than one zone.</li>
+<li>The upstream cluster has at least <code>minClusterSize</code> hosts (default 6) in the local region.</li>
 <li>There is at least one healthy endpoint in the local zone.</li>
 </ul>
+<p>If any of these conditions are not met, Envoy falls back to the configured load balancing policy
+(e.g. round-robin or least-request) across all endpoints in the local region.</p>
 <p>For additional details on the algorithm, refer to Envoy&rsquo;s
 <a href="https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/zone_aware">Zone Aware Routing</a>
 documentation.</p>
@@ -2226,8 +2226,8 @@ For this to be effective consider one of the following:</p>
 <div class="type"><a href="#google-protobuf-UInt64Value">UInt64Value</a></div>
 </div></td>
 <td>
-<p>Minimum number of hosts in the upstream cluster required for zone-aware
-load balancing to be enabled. If the total number of upstream hosts falls below
+<p>Minimum number of hosts in the upstream cluster&rsquo;s local region required for zone-aware
+load balancing to be enabled. If the total number of upstream hosts in the local region falls below
 this value, zone-aware load balancing is disabled for this cluster regardless of
 other settings. This guards against zone-skew issues that can occur with
 very small clusters where the uneven distribution of hosts across zones
