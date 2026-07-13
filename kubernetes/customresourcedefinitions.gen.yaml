@@ -1186,9 +1186,9 @@ spec:
                               format: int32
                               type: integer
                             outlierDetectionHttpErrorCodes:
-                              description: HTTP status codes to additionally treat
-                                as outlier detection failures, beyond the default
-                                behavior of only treating 5xx responses as failures.
+                              description: Specifies additional HTTP response status
+                                codes that should be treated as outlier detection
+                                errors, in addition to the default 5xx behavior.
                               items:
                                 maximum: 599
                                 minimum: 100
@@ -1609,10 +1609,10 @@ spec:
                                     format: int32
                                     type: integer
                                   outlierDetectionHttpErrorCodes:
-                                    description: HTTP status codes to additionally
-                                      treat as outlier detection failures, beyond
-                                      the default behavior of only treating 5xx responses
-                                      as failures.
+                                    description: Specifies additional HTTP response
+                                      status codes that should be treated as outlier
+                                      detection errors, in addition to the default
+                                      5xx behavior.
                                     items:
                                       maximum: 599
                                       minimum: 100
@@ -2189,9 +2189,9 @@ spec:
                         format: int32
                         type: integer
                       outlierDetectionHttpErrorCodes:
-                        description: HTTP status codes to additionally treat as outlier
-                          detection failures, beyond the default behavior of only
-                          treating 5xx responses as failures.
+                        description: Specifies additional HTTP response status codes
+                          that should be treated as outlier detection errors, in addition
+                          to the default 5xx behavior.
                         items:
                           maximum: 599
                           minimum: 100
@@ -2599,9 +2599,9 @@ spec:
                               format: int32
                               type: integer
                             outlierDetectionHttpErrorCodes:
-                              description: HTTP status codes to additionally treat
-                                as outlier detection failures, beyond the default
-                                behavior of only treating 5xx responses as failures.
+                              description: Specifies additional HTTP response status
+                                codes that should be treated as outlier detection
+                                errors, in addition to the default 5xx behavior.
                               items:
                                 maximum: 599
                                 minimum: 100
@@ -3333,9 +3333,9 @@ spec:
                               format: int32
                               type: integer
                             outlierDetectionHttpErrorCodes:
-                              description: HTTP status codes to additionally treat
-                                as outlier detection failures, beyond the default
-                                behavior of only treating 5xx responses as failures.
+                              description: Specifies additional HTTP response status
+                                codes that should be treated as outlier detection
+                                errors, in addition to the default 5xx behavior.
                               items:
                                 maximum: 599
                                 minimum: 100
@@ -3756,10 +3756,10 @@ spec:
                                     format: int32
                                     type: integer
                                   outlierDetectionHttpErrorCodes:
-                                    description: HTTP status codes to additionally
-                                      treat as outlier detection failures, beyond
-                                      the default behavior of only treating 5xx responses
-                                      as failures.
+                                    description: Specifies additional HTTP response
+                                      status codes that should be treated as outlier
+                                      detection errors, in addition to the default
+                                      5xx behavior.
                                     items:
                                       maximum: 599
                                       minimum: 100
@@ -4336,9 +4336,9 @@ spec:
                         format: int32
                         type: integer
                       outlierDetectionHttpErrorCodes:
-                        description: HTTP status codes to additionally treat as outlier
-                          detection failures, beyond the default behavior of only
-                          treating 5xx responses as failures.
+                        description: Specifies additional HTTP response status codes
+                          that should be treated as outlier detection errors, in addition
+                          to the default 5xx behavior.
                         items:
                           maximum: 599
                           minimum: 100
@@ -4746,9 +4746,9 @@ spec:
                               format: int32
                               type: integer
                             outlierDetectionHttpErrorCodes:
-                              description: HTTP status codes to additionally treat
-                                as outlier detection failures, beyond the default
-                                behavior of only treating 5xx responses as failures.
+                              description: Specifies additional HTTP response status
+                                codes that should be treated as outlier detection
+                                errors, in addition to the default 5xx behavior.
                               items:
                                 maximum: 599
                                 minimum: 100
@@ -5480,9 +5480,9 @@ spec:
                               format: int32
                               type: integer
                             outlierDetectionHttpErrorCodes:
-                              description: HTTP status codes to additionally treat
-                                as outlier detection failures, beyond the default
-                                behavior of only treating 5xx responses as failures.
+                              description: Specifies additional HTTP response status
+                                codes that should be treated as outlier detection
+                                errors, in addition to the default 5xx behavior.
                               items:
                                 maximum: 599
                                 minimum: 100
@@ -5903,10 +5903,10 @@ spec:
                                     format: int32
                                     type: integer
                                   outlierDetectionHttpErrorCodes:
-                                    description: HTTP status codes to additionally
-                                      treat as outlier detection failures, beyond
-                                      the default behavior of only treating 5xx responses
-                                      as failures.
+                                    description: Specifies additional HTTP response
+                                      status codes that should be treated as outlier
+                                      detection errors, in addition to the default
+                                      5xx behavior.
                                     items:
                                       maximum: 599
                                       minimum: 100
@@ -6483,9 +6483,9 @@ spec:
                         format: int32
                         type: integer
                       outlierDetectionHttpErrorCodes:
-                        description: HTTP status codes to additionally treat as outlier
-                          detection failures, beyond the default behavior of only
-                          treating 5xx responses as failures.
+                        description: Specifies additional HTTP response status codes
+                          that should be treated as outlier detection errors, in addition
+                          to the default 5xx behavior.
                         items:
                           maximum: 599
                           minimum: 100
@@ -6893,9 +6893,9 @@ spec:
                               format: int32
                               type: integer
                             outlierDetectionHttpErrorCodes:
-                              description: HTTP status codes to additionally treat
-                                as outlier detection failures, beyond the default
-                                behavior of only treating 5xx responses as failures.
+                              description: Specifies additional HTTP response status
+                                codes that should be treated as outlier detection
+                                errors, in addition to the default 5xx behavior.
                               items:
                                 maximum: 599
                                 minimum: 100
