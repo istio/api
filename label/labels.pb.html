@@ -210,8 +210,8 @@ When set on a <code>Namespace</code>, this applies to all <code>Pod</code>/<code
     <tr>
       <th>Description</th>
       <td><p>When set on a <code>Service</code> or <code>ServiceEntry</code> (or its <code>Namespace</code>), names a second, canary waypoint for the
-service in addition to the primary <code>istio.io/use-waypoint</code>. A configurable percentage of the
-service&rsquo;s in-mesh (and, with <code>istio.io/ingress-use-waypoint</code>, ingress) traffic is shifted to
+service in addition to the primary <code>istio.io/use-waypoint</code>. A configurable share of the service&rsquo;s
+in-mesh connections (and, with <code>istio.io/ingress-use-waypoint</code>, ingress requests) is directed to
 this canary waypoint, controlled by the <code>istio.io/use-waypoint-canary-weight</code> annotation.
 This is the migration primitive for canarying a service between two waypoints (for example
 two waypoint revisions, or two waypoint implementations).</p>

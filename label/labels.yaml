@@ -269,8 +269,8 @@ labels:
     featureStatus: Alpha
     description: |
       When set on a `Service` or `ServiceEntry` (or its `Namespace`), names a second, canary waypoint for the
-      service in addition to the primary `istio.io/use-waypoint`. A configurable percentage of the
-      service's in-mesh (and, with `istio.io/ingress-use-waypoint`, ingress) traffic is shifted to
+      service in addition to the primary `istio.io/use-waypoint`. A configurable share of the service's
+      in-mesh connections (and, with `istio.io/ingress-use-waypoint`, ingress requests) is directed to
       this canary waypoint, controlled by the `istio.io/use-waypoint-canary-weight` annotation.
       This is the migration primitive for canarying a service between two waypoints (for example
       two waypoint revisions, or two waypoint implementations).

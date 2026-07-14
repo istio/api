@@ -315,11 +315,15 @@ Note: When using docker-in-docker container, the default bridge interface name i
 
 	IoIstioUseWaypointCanaryWeight = Instance {
 		Name:          "istio.io/use-waypoint-canary-weight",
-		Description:   `Sets the percentage (0-100) of a service's traffic that is shifted to its canary waypoint
-("istio.io/use-waypoint-canary"). The remainder continues to the primary
-"istio.io/use-waypoint". Defaults to 0 (canary resolved but receives no traffic) when unset.
-A value of 100 sends all traffic to the canary (a transient promotion step). Invalid values
-(non-integer or outside 0-100) are rejected and the service stays on the primary waypoint.
+		Description:   `Sets the relative weight (0-100) of the canary waypoint ("istio.io/use-waypoint-canary"); the
+primary "istio.io/use-waypoint" receives the remainder. On the in-mesh path a waypoint is
+selected per connection, so this is the share of new connections directed to the canary, not a
+per-request split: a connection is pinned to its selected waypoint for its lifetime, and the
+realized share converges over many connections. On the ingress path
+("istio.io/ingress-use-waypoint") selection is per request. Defaults to 0 (canary resolved for
+validation but receives no connections) when unset. A value of 100 directs all selection to the
+canary (a transient promotion step). Invalid values (non-integer or outside 0-100) are rejected
+and the service stays on the primary waypoint.
 `,
 		FeatureStatus: Alpha,
 		Hidden:        false,
