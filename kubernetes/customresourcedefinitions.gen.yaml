@@ -1135,6 +1135,42 @@ spec:
                               x-kubernetes-validations:
                               - message: must be a valid duration greater than 1ms
                                 rule: duration(self) >= duration('1ms')
+                            zoneAwareLbSetting:
+                              description: Zone Aware load balancer settings.
+                              properties:
+                                enabled:
+                                  description: Enable zone aware load balancing.
+                                  nullable: true
+                                  type: boolean
+                                failover:
+                                  description: Optional.
+                                  items:
+                                    properties:
+                                      from:
+                                        description: Originating region.
+                                        type: string
+                                      to:
+                                        description: Destination region the traffic
+                                          will fail over to when endpoints in the
+                                          'from' region becomes unhealthy.
+                                        type: string
+                                    type: object
+                                  type: array
+                                failoverPriority:
+                                  description: failoverPriority is an ordered list
+                                    of labels used to sort endpoints for priority-based
+                                    load balancing.
+                                  items:
+                                    type: string
+                                  type: array
+                                minClusterSize:
+                                  description: Minimum number of hosts in the upstream
+                                    cluster's local region required for zone-aware
+                                    load balancing to be enabled.
+                                  minimum: 1
+                                  nullable: true
+                                  type: integer
+                              type: object
                           type: object
                         outlierDetection:
                           properties:
@@ -1545,6 +1581,42 @@ spec:
                                     - message: must be a valid duration greater than
                                         1ms
                                       rule: duration(self) >= duration('1ms')
+                                  zoneAwareLbSetting:
+                                    description: Zone Aware load balancer settings.
+                                    properties:
+                                      enabled:
+                                        description: Enable zone aware load balancing.
+                                        nullable: true
+                                        type: boolean
+                                      failover:
+                                        description: Optional.
+                                        items:
+                                          properties:
+                                            from:
+                                              description: Originating region.
+                                              type: string
+                                            to:
+                                              description: Destination region the
+                                                traffic will fail over to when endpoints
+                                                in the 'from' region becomes unhealthy.
+                                              type: string
+                                          type: object
+                                        type: array
+                                      failoverPriority:
+                                        description: failoverPriority is an ordered
+                                          list of labels used to sort endpoints for
+                                          priority-based load balancing.
+                                        items:
+                                          type: string
+                                        type: array
+                                      minClusterSize:
+                                        description: Minimum number of hosts in the
+                                          upstream cluster's local region required
+                                          for zone-aware load balancing to be enabled.
+                                        minimum: 1
+                                        nullable: true
+                                        type: integer
+                                    type: object
                                 type: object
                               outlierDetection:
                                 properties:
@@ -2119,6 +2191,41 @@ spec:
                         x-kubernetes-validations:
                         - message: must be a valid duration greater than 1ms
                           rule: duration(self) >= duration('1ms')
+                      zoneAwareLbSetting:
+                        description: Zone Aware load balancer settings.
+                        properties:
+                          enabled:
+                            description: Enable zone aware load balancing.
+                            nullable: true
+                            type: boolean
+                          failover:
+                            description: Optional.
+                            items:
+                              properties:
+                                from:
+                                  description: Originating region.
+                                  type: string
+                                to:
+                                  description: Destination region the traffic will
+                                    fail over to when endpoints in the 'from' region
+                                    becomes unhealthy.
+                                  type: string
+                              type: object
+                            type: array
+                          failoverPriority:
+                            description: failoverPriority is an ordered list of labels
+                              used to sort endpoints for priority-based load balancing.
+                            items:
+                              type: string
+                            type: array
+                          minClusterSize:
+                            description: Minimum number of hosts in the upstream cluster's
+                              local region required for zone-aware load balancing
+                              to be enabled.
+                            minimum: 1
+                            nullable: true
+                            type: integer
+                        type: object
                     type: object
                   outlierDetection:
                     properties:
@@ -2520,6 +2627,42 @@ spec:
                               x-kubernetes-validations:
                               - message: must be a valid duration greater than 1ms
                                 rule: duration(self) >= duration('1ms')
+                            zoneAwareLbSetting:
+                              description: Zone Aware load balancer settings.
+                              properties:
+                                enabled:
+                                  description: Enable zone aware load balancing.
+                                  nullable: true
+                                  type: boolean
+                                failover:
+                                  description: Optional.
+                                  items:
+                                    properties:
+                                      from:
+                                        description: Originating region.
+                                        type: string
+                                      to:
+                                        description: Destination region the traffic
+                                          will fail over to when endpoints in the
+                                          'from' region becomes unhealthy.
+                                        type: string
+                                    type: object
+                                  type: array
+                                failoverPriority:
+                                  description: failoverPriority is an ordered list
+                                    of labels used to sort endpoints for priority-based
+                                    load balancing.
+                                  items:
+                                    type: string
+                                  type: array
+                                minClusterSize:
+                                  description: Minimum number of hosts in the upstream
+                                    cluster's local region required for zone-aware
+                                    load balancing to be enabled.
+                                  minimum: 1
+                                  nullable: true
+                                  type: integer
+                              type: object
                           type: object
                         outlierDetection:
                           properties:
@@ -3245,6 +3388,42 @@ spec:
                               x-kubernetes-validations:
                               - message: must be a valid duration greater than 1ms
                                 rule: duration(self) >= duration('1ms')
+                            zoneAwareLbSetting:
+                              description: Zone Aware load balancer settings.
+                              properties:
+                                enabled:
+                                  description: Enable zone aware load balancing.
+                                  nullable: true
+                                  type: boolean
+                                failover:
+                                  description: Optional.
+                                  items:
+                                    properties:
+                                      from:
+                                        description: Originating region.
+                                        type: string
+                                      to:
+                                        description: Destination region the traffic
+                                          will fail over to when endpoints in the
+                                          'from' region becomes unhealthy.
+                                        type: string
+                                    type: object
+                                  type: array
+                                failoverPriority:
+                                  description: failoverPriority is an ordered list
+                                    of labels used to sort endpoints for priority-based
+                                    load balancing.
+                                  items:
+                                    type: string
+                                  type: array
+                                minClusterSize:
+                                  description: Minimum number of hosts in the upstream
+                                    cluster's local region required for zone-aware
+                                    load balancing to be enabled.
+                                  minimum: 1
+                                  nullable: true
+                                  type: integer
+                              type: object
                           type: object
                         outlierDetection:
                           properties:
@@ -3655,6 +3834,42 @@ spec:
                                     - message: must be a valid duration greater than
                                         1ms
                                       rule: duration(self) >= duration('1ms')
+                                  zoneAwareLbSetting:
+                                    description: Zone Aware load balancer settings.
+                                    properties:
+                                      enabled:
+                                        description: Enable zone aware load balancing.
+                                        nullable: true
+                                        type: boolean
+                                      failover:
+                                        description: Optional.
+                                        items:
+                                          properties:
+                                            from:
+                                              description: Originating region.
+                                              type: string
+                                            to:
+                                              description: Destination region the
+                                                traffic will fail over to when endpoints
+                                                in the 'from' region becomes unhealthy.
+                                              type: string
+                                          type: object
+                                        type: array
+                                      failoverPriority:
+                                        description: failoverPriority is an ordered
+                                          list of labels used to sort endpoints for
+                                          priority-based load balancing.
+                                        items:
+                                          type: string
+                                        type: array
+                                      minClusterSize:
+                                        description: Minimum number of hosts in the
+                                          upstream cluster's local region required
+                                          for zone-aware load balancing to be enabled.
+                                        minimum: 1
+                                        nullable: true
+                                        type: integer
+                                    type: object
                                 type: object
                               outlierDetection:
                                 properties:
@@ -4229,6 +4444,41 @@ spec:
                         x-kubernetes-validations:
                         - message: must be a valid duration greater than 1ms
                           rule: duration(self) >= duration('1ms')
+                      zoneAwareLbSetting:
+                        description: Zone Aware load balancer settings.
+                        properties:
+                          enabled:
+                            description: Enable zone aware load balancing.
+                            nullable: true
+                            type: boolean
+                          failover:
+                            description: Optional.
+                            items:
+                              properties:
+                                from:
+                                  description: Originating region.
+                                  type: string
+                                to:
+                                  description: Destination region the traffic will
+                                    fail over to when endpoints in the 'from' region
+                                    becomes unhealthy.
+                                  type: string
+                              type: object
+                            type: array
+                          failoverPriority:
+                            description: failoverPriority is an ordered list of labels
+                              used to sort endpoints for priority-based load balancing.
+                            items:
+                              type: string
+                            type: array
+                          minClusterSize:
+                            description: Minimum number of hosts in the upstream cluster's
+                              local region required for zone-aware load balancing
+                              to be enabled.
+                            minimum: 1
+                            nullable: true
+                            type: integer
+                        type: object
                     type: object
                   outlierDetection:
                     properties:
@@ -4630,6 +4880,42 @@ spec:
                               x-kubernetes-validations:
                               - message: must be a valid duration greater than 1ms
                                 rule: duration(self) >= duration('1ms')
+                            zoneAwareLbSetting:
+                              description: Zone Aware load balancer settings.
+                              properties:
+                                enabled:
+                                  description: Enable zone aware load balancing.
+                                  nullable: true
+                                  type: boolean
+                                failover:
+                                  description: Optional.
+                                  items:
+                                    properties:
+                                      from:
+                                        description: Originating region.
+                                        type: string
+                                      to:
+                                        description: Destination region the traffic
+                                          will fail over to when endpoints in the
+                                          'from' region becomes unhealthy.
+                                        type: string
+                                    type: object
+                                  type: array
+                                failoverPriority:
+                                  description: failoverPriority is an ordered list
+                                    of labels used to sort endpoints for priority-based
+                                    load balancing.
+                                  items:
+                                    type: string
+                                  type: array
+                                minClusterSize:
+                                  description: Minimum number of hosts in the upstream
+                                    cluster's local region required for zone-aware
+                                    load balancing to be enabled.
+                                  minimum: 1
+                                  nullable: true
+                                  type: integer
+                              type: object
                           type: object
                         outlierDetection:
                           properties:
@@ -5355,6 +5641,42 @@ spec:
                               x-kubernetes-validations:
                               - message: must be a valid duration greater than 1ms
                                 rule: duration(self) >= duration('1ms')
+                            zoneAwareLbSetting:
+                              description: Zone Aware load balancer settings.
+                              properties:
+                                enabled:
+                                  description: Enable zone aware load balancing.
+                                  nullable: true
+                                  type: boolean
+                                failover:
+                                  description: Optional.
+                                  items:
+                                    properties:
+                                      from:
+                                        description: Originating region.
+                                        type: string
+                                      to:
+                                        description: Destination region the traffic
+                                          will fail over to when endpoints in the
+                                          'from' region becomes unhealthy.
+                                        type: string
+                                    type: object
+                                  type: array
+                                failoverPriority:
+                                  description: failoverPriority is an ordered list
+                                    of labels used to sort endpoints for priority-based
+                                    load balancing.
+                                  items:
+                                    type: string
+                                  type: array
+                                minClusterSize:
+                                  description: Minimum number of hosts in the upstream
+                                    cluster's local region required for zone-aware
+                                    load balancing to be enabled.
+                                  minimum: 1
+                                  nullable: true
+                                  type: integer
+                              type: object
                           type: object
                         outlierDetection:
                           properties:
@@ -5765,6 +6087,42 @@ spec:
                                     - message: must be a valid duration greater than
                                         1ms
                                       rule: duration(self) >= duration('1ms')
+                                  zoneAwareLbSetting:
+                                    description: Zone Aware load balancer settings.
+                                    properties:
+                                      enabled:
+                                        description: Enable zone aware load balancing.
+                                        nullable: true
+                                        type: boolean
+                                      failover:
+                                        description: Optional.
+                                        items:
+                                          properties:
+                                            from:
+                                              description: Originating region.
+                                              type: string
+                                            to:
+                                              description: Destination region the
+                                                traffic will fail over to when endpoints
+                                                in the 'from' region becomes unhealthy.
+                                              type: string
+                                          type: object
+                                        type: array
+                                      failoverPriority:
+                                        description: failoverPriority is an ordered
+                                          list of labels used to sort endpoints for
+                                          priority-based load balancing.
+                                        items:
+                                          type: string
+                                        type: array
+                                      minClusterSize:
+                                        description: Minimum number of hosts in the
+                                          upstream cluster's local region required
+                                          for zone-aware load balancing to be enabled.
+                                        minimum: 1
+                                        nullable: true
+                                        type: integer
+                                    type: object
                                 type: object
                               outlierDetection:
                                 properties:
@@ -6339,6 +6697,41 @@ spec:
                         x-kubernetes-validations:
                         - message: must be a valid duration greater than 1ms
                           rule: duration(self) >= duration('1ms')
+                      zoneAwareLbSetting:
+                        description: Zone Aware load balancer settings.
+                        properties:
+                          enabled:
+                            description: Enable zone aware load balancing.
+                            nullable: true
+                            type: boolean
+                          failover:
+                            description: Optional.
+                            items:
+                              properties:
+                                from:
+                                  description: Originating region.
+                                  type: string
+                                to:
+                                  description: Destination region the traffic will
+                                    fail over to when endpoints in the 'from' region
+                                    becomes unhealthy.
+                                  type: string
+                              type: object
+                            type: array
+                          failoverPriority:
+                            description: failoverPriority is an ordered list of labels
+                              used to sort endpoints for priority-based load balancing.
+                            items:
+                              type: string
+                            type: array
+                          minClusterSize:
+                            description: Minimum number of hosts in the upstream cluster's
+                              local region required for zone-aware load balancing
+                              to be enabled.
+                            minimum: 1
+                            nullable: true
+                            type: integer
+                        type: object
                     type: object
                   outlierDetection:
                     properties:
@@ -6740,6 +7133,42 @@ spec:
                               x-kubernetes-validations:
                               - message: must be a valid duration greater than 1ms
                                 rule: duration(self) >= duration('1ms')
+                            zoneAwareLbSetting:
+                              description: Zone Aware load balancer settings.
+                              properties:
+                                enabled:
+                                  description: Enable zone aware load balancing.
+                                  nullable: true
+                                  type: boolean
+                                failover:
+                                  description: Optional.
+                                  items:
+                                    properties:
+                                      from:
+                                        description: Originating region.
+                                        type: string
+                                      to:
+                                        description: Destination region the traffic
+                                          will fail over to when endpoints in the
+                                          'from' region becomes unhealthy.
+                                        type: string
+                                    type: object
+                                  type: array
+                                failoverPriority:
+                                  description: failoverPriority is an ordered list
+                                    of labels used to sort endpoints for priority-based
+                                    load balancing.
+                                  items:
+                                    type: string
+                                  type: array
+                                minClusterSize:
+                                  description: Minimum number of hosts in the upstream
+                                    cluster's local region required for zone-aware
+                                    load balancing to be enabled.
+                                  minimum: 1
+                                  nullable: true
+                                  type: integer
+                              type: object
                           type: object
                         outlierDetection:
                           properties:

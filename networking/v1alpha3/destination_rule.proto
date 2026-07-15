@@ -553,7 +553,13 @@ message LoadBalancerSettings {
 
   // Locality load balancer settings. This will override mesh-wide settings in entirety, meaning no merging would be performed
   // between this object and the object one in MeshConfig
+  // Only one of locality_lb_setting and zone_aware_lb_setting can be set.
   LocalityLoadBalancerSetting locality_lb_setting = 3;
+
+  // Zone Aware load balancer settings. This will override mesh-wide settings in entirety, meaning no merging would be performed
+  // between this object and the object one in MeshConfig.
+  // Only one of locality_lb_setting and zone_aware_lb_setting can be set.
+  ZoneAwareLoadBalancerSetting zone_aware_lb_setting = 6;
 
   // Deprecated: use `warmup` instead.
   google.protobuf.Duration warmup_duration_secs = 4;
@@ -1169,4 +1175,201 @@ message LocalityLoadBalancerSetting {
   // Enable locality load balancing. This is DestinationRule-level and will override mesh-wide settings in entirety.
   // e.g. true means that turn on locality load balancing for this DestinationRule no matter what mesh-wide settings is.
   google.protobuf.BoolValue enabled = 3;
+}
+
+// Zone Aware Load Balancer automatically routes traffic to endpoints in the same
+// availability zone as the downstream proxy, reducing cross-zone latency and
+// inter-zone data transfer costs. Unlike
+// [LocalityLoadBalancerSetting](#LocalityLoadBalancerSetting), which requires
+// explicitly specifying traffic weights per locality, Zone Aware Load Balancer
+// automatically calculates routing percentages based on the relative number of
+// upstream endpoints in each zone — no manual distribution configuration is
+// needed.
+//
+// When the local zone has proportionally fewer endpoints than the share of
+// traffic it would need to absorb, Envoy automatically overflows the excess to
+// other zones rather than overloading local endpoints.
+//
+// Additionally Zone Aware Load Balancer always partitions endpoints by region: the proxy's own region
+// forms the highest-priority tier and Envoy's automatic zone balancing operates
+// only among the endpoints within that region. Endpoints in other regions form
+// lower-priority failover tiers that receive traffic only when the local region is
+// unhealthy or runs out of capacity. The `failover` and `failoverPriority` fields
+// only influence how those lower tiers are ordered; the regional partitioning
+// itself is always applied whenever zone-aware load balancing is enabled.
+//
+// For proxies to activate Zone Aware Load Balancer all of the following conditions are needed:
+//
+// - The downstream proxy is configured with  `ISTIO_META_ENABLE_SELF_DISCOVERY=true`
+//    (set via `proxyMetadata`).
+// - The upstream cluster spans more than one zone.
+// - The upstream cluster has at least `minClusterSize` hosts (default 6) in the local region.
+// - There is at least one healthy endpoint in the local zone.
+//
+// If any of these conditions are not met, Envoy falls back to the configured load balancing policy
+// (e.g. round-robin or least-request) across all endpoints in the local region.
+//
+// For additional details on the algorithm, refer to Envoy's
+// [Zone Aware Routing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/zone_aware)
+// documentation.
+//
+// Note: Zone Aware Load Balancer is not supported on Ambient mode.
+//
+// The following example enables zone-aware load balancing for the ratings service:
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1
+// kind: DestinationRule
+// metadata:
+//   name: ratings-zone-aware
+// spec:
+//   host: ratings.prod.svc.cluster.local
+//   trafficPolicy:
+//     loadBalancer:
+//       simple: ROUND_ROBIN
+//       zoneAwareLbSetting:
+//         enabled: true
+// ```
+//
+// The following example adds a cross-region failover policy so that when all
+// endpoints in `us-east` become unhealthy, traffic fails over to `eu-west`
+// instead of any region globally:
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1
+// kind: DestinationRule
+// metadata:
+//   name: ratings-zone-aware-failover
+// spec:
+//   host: ratings.prod.svc.cluster.local
+//   trafficPolicy:
+//     loadBalancer:
+//       simple: LEAST_REQUEST
+//       zoneAwareLbSetting:
+//         enabled: true
+//         failover:
+//           - from: us-east
+//             to: eu-west
+//           - from: us-west
+//             to: us-east
+//     outlierDetection:
+//       consecutive5xxErrors: 5
+//       interval: 30s
+//       baseEjectionTime: 30s
+// ```
+//
+message ZoneAwareLoadBalancerSetting {
+  // Enable zone aware load balancing. This is DestinationRule-level and will
+  // override mesh-wide settings in entirety, meaning no merging is performed
+  // with MeshConfig.
+  google.protobuf.BoolValue enabled = 1;
+
+  // Specify the traffic failover policy across regions. Since zone and sub-zone
+  // failover is supported by default this only needs to be specified for
+  // regions when the operator needs to constrain traffic failover so that
+  // the default behavior of failing over to any endpoint globally does not
+  // apply. This is useful when failing over traffic across regions would not
+  // improve service health or may need to be restricted for other reasons
+  // like regulatory controls.
+  message Failover {
+    // Originating region.
+    string from = 1;
+
+    // Destination region the traffic will fail over to when endpoints in
+    // the 'from' region becomes unhealthy.
+    string to = 2;
+  }
+
+  // Optional. Explicitly specifies the region traffic will land on when the endpoints
+  // in the local region become unhealthy. Regional partitioning is always
+  // applied; this field only customizes the ordering of the cross-region tiers.
+  // It may be used on its own, or together with `failoverPriority`, in which case
+  // it orders the regional tiers applied on top of the label-based priorities.
+  // For this to be effective consider one of the following:
+  // - Use together with `OutlierDetection` to detect unhealthy endpoints in the local zone so that traffic fails over to other zones according to the specified priority.
+  // - Enable `PILOT_SEND_UNHEALTHY_ENDPOINTS` to allow Envoy to know when endpoints in the local zone are unhealthy and failover according to the specified priority.
+  repeated Failover failover = 2;
+
+  // failoverPriority is an ordered list of labels used to sort endpoints for
+  // priority-based load balancing. This supports traffic failover across
+  // different groups of endpoints and complements the automatic zone-level
+  // routing by allowing label-based priority tiers on top of it.
+  //
+  // Regional partitioning is always applied in addition to these labels: within
+  // each tier produced by `failoverPriority`, endpoints in the proxy's own region
+  // are preferred over endpoints in other regions (ordered by `failover` when it
+  // is also set). Because region-, zone-, and subzone-level routing are all handled
+  // automatically, `failoverPriority` must not include the
+  // `topology.kubernetes.io/region`, `topology.kubernetes.io/zone`, or
+  // `topology.istio.io/subzone` labels.
+  //
+  // Two kinds of labels can be specified:
+  // - Specify only label keys `[key1, key2, key3]`, istio would compare the label values of client with endpoints.
+  //   Suppose there are total N label keys `[key1, key2, key3, ...keyN]` specified:
+  //
+  //   1. Endpoints matching all N labels with the client proxy have priority P(0) i.e. the highest priority.
+  //   2. Endpoints matching the first N-1 labels with the client proxy have priority P(1) i.e. second highest priority.
+  //   3. By extension of this logic, endpoints matching only the first label with the client proxy has priority P(N-1) i.e. second lowest priority.
+  //   4. All the other endpoints have priority P(N) i.e. lowest priority.
+  //
+  // - Specify labels with key and value `[key1=value1, key2=value2, key3=value3]`, istio would compare the labels with endpoints.
+  //   Suppose there are total N labels `[key1=value1, key2=value2, key3=value3, ...keyN=valueN]` specified:
+  //
+  //   1. Endpoints matching all N labels have priority P(0) i.e. the highest priority.
+  //   2. Endpoints matching the first N-1 labels have priority P(1) i.e. second highest priority.
+  //   3. By extension of this logic, endpoints matching only the first label has priority P(N-1) i.e. second lowest priority.
+  //   4. All the other endpoints have priority P(N) i.e. lowest priority.
+  //
+  // Note: For a label to be considered for match, the previous labels must match, i.e. nth label would be considered matched only if first n-1 labels match.
+  //
+  // It can be any label specified on both client and server workloads.
+  // The following labels which have special semantic meaning are also supported:
+  //
+  //   - `topology.istio.io/network` is used to match the network metadata of an endpoint, which can be specified by pod/namespace label `topology.istio.io/network`, sidecar env `ISTIO_META_NETWORK` or MeshNetworks.
+  //   - `topology.istio.io/cluster` is used to match the clusterID of an endpoint, which can be specified by pod label `topology.istio.io/cluster` or pod env `ISTIO_META_CLUSTER_ID`.
+  //   - `topology.kubernetes.io/region` is used to match the region metadata of an endpoint, which maps to Kubernetes node label `topology.kubernetes.io/region` or the deprecated label `failure-domain.beta.kubernetes.io/region`.
+  //   - `topology.kubernetes.io/zone` is used to match the zone metadata of an endpoint, which maps to Kubernetes node label `topology.kubernetes.io/zone` or the deprecated label `failure-domain.beta.kubernetes.io/zone`.
+  //   - `kubernetes.io/hostname` is used to match the current node of an endpoint, which maps to Kubernetes node label `kubernetes.io/hostname`.
+  //
+  // The below topology config indicates the following priority levels:
+  //
+  // ```yaml
+  // failoverPriority:
+  // - "topology.istio.io/network"
+  // - "topology.kubernetes.io/region"
+  // - "topology.kubernetes.io/zone"
+  // ```
+  //
+  // 1. endpoints match same [network, region, zone] label with the client proxy have the highest priority.
+  // 2. endpoints have same [network, region] label but different [zone] label with the client proxy have the second highest priority.
+  // 3. endpoints have same [network] but different [region] labels with the client proxy have the third highest priority.
+  // 4. all the other endpoints have the same lowest priority.
+  //
+  // Suppose a service associated endpoints reside in multi clusters, the below example represents:
+  // 1. endpoints in `clusterA` and has `version=v1` label have P(0) priority.
+  // 2. endpoints not in `clusterA` but has `version=v1` label have P(1) priority.
+  // 3. all the other endpoints have P(2) priority.
+  //
+  // ```yaml
+  // failoverPriority:
+  // - "version=v1"
+  // - "topology.istio.io/cluster=clusterA"
+  // ```
+  //
+  // Optional. May be combined with `failover` (which then orders the regional
+  // tiers applied on top of these label-based priorities).
+  // For this to be effective consider one of the following:
+  // - Use together with `OutlierDetection` to detect unhealthy endpoints in the local zone so that traffic fails over to other zones according to the specified priority.
+  // - Enable `PILOT_SEND_UNHEALTHY_ENDPOINTS` to allow Envoy to know when endpoints in the local zone are unhealthy and failover according to the specified priority.
+  repeated string failover_priority = 3;
+
+  // Minimum number of hosts in the upstream cluster's local region required for zone-aware
+  // load balancing to be enabled. If the total number of upstream hosts in the local region falls below
+  // this value, zone-aware load balancing is disabled for this cluster regardless of
+  // other settings. This guards against zone-skew issues that can occur with
+  // very small clusters where the uneven distribution of hosts across zones
+  // would produce poor load balancing results.
+  // If not specified, the default is 6.
+  // +kubebuilder:validation:Minimum=1
+  google.protobuf.UInt64Value min_cluster_size = 4;
 }
