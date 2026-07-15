@@ -265,6 +265,39 @@ labels:
       - ServiceEntry
       - Namespace
 
+  - name: istio.io/use-waypoint-canary
+    featureStatus: Alpha
+    description: |
+      When set on a `Service` or `ServiceEntry` (or its `Namespace`), names a second, canary waypoint for the
+      service in addition to the primary `istio.io/use-waypoint`. A configurable share of the service's
+      in-mesh connections (and, with `istio.io/ingress-use-waypoint`, ingress requests) is directed to
+      this canary waypoint, controlled by the `istio.io/use-waypoint-canary-weight` annotation.
+      This is the migration primitive for canarying a service between two waypoints (for example
+      two waypoint revisions, or two waypoint implementations).
+
+      The canary is assumed to be in the same namespace; for cross-namespace, see
+      `istio.io/use-waypoint-canary-namespace`. The canary waypoint must allow the type, see
+      `istio.io/waypoint-for`.
+    deprecated: false
+    hidden: false
+    resources:
+      - Service
+      - ServiceEntry
+      - Namespace
+
+  - name: istio.io/use-waypoint-canary-namespace
+    featureStatus: Alpha
+    description: |
+      When set on a resource, indicates the canary waypoint (`istio.io/use-waypoint-canary`) is in
+      the provided namespace. This must be set in addition to `istio.io/use-waypoint-canary`, when a
+      cross-namespace reference is desired.
+    deprecated: false
+    hidden: false
+    resources:
+      - Service
+      - ServiceEntry
+      - Namespace
+
   - name: istio.io/ingress-use-waypoint
     featureStatus: Beta
     descriptions: |
