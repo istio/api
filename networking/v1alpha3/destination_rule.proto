@@ -865,11 +865,12 @@ message OutlierDetection {
   // applicable in k8s environments with few pods per service.
   int32 min_health_percent = 5;
 
-  // Specifies HTTP response status codes that should be treated as
-  // outlier detection errors. Overrides the default 5xx behavior.
-  // `consecutiveGatewayErrors` and `consecutive5xxErrors` are
-  // unaffected by this field. Values must be in the range [100, 599].
-  // When unset, only 5xx responses are treated as failures.
+  // Specifies the HTTP response status codes that are treated as outlier
+  // detection errors. If specified, only responses with one of these status
+  // codes will be treated as errors by outlier detection. If not specified,
+  // only 5xx responses are treated as errors.
+  //
+  // Values must be in the range [100, 599].
   //
   // +protoc-gen-crd:list-value-validation:Minimum=100
   // +protoc-gen-crd:list-value-validation:Maximum=599
