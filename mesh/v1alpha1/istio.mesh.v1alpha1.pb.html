@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 94
+number_of_entries: 95
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -467,6 +467,15 @@ For example <code>outbound|8080|v2|reviews.prod.svc.cluster.local</code>. This c
 
 </td>
 </tr>
+<tr id="MeshConfig-service_settings">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-service_settings">serviceSettings</a></code></div>
+<div class="type"><a href="#MeshConfig-ServiceSettings">ServiceSettings[]</a></div>
+</div></td>
+<td>
+<p>Settings to be applied to select services.</p>
+
+</td>
+</tr>
 <tr id="MeshConfig-service_scope_configs">
 <td><div class="field"><div class="name"><code><a href="#MeshConfig-service_scope_configs">serviceScopeConfigs</a></code></div>
 <div class="type"><a href="#MeshConfig-ServiceScopeConfigs">ServiceScopeConfigs[]</a></div>
@@ -814,6 +823,96 @@ If neither certSigners nor trustDomains is set, this trustAnchor is used for all
 If only trustDomains is set, this trustAnchor is used for these trustDomains and all signers.
 If only certSigners is set, this trustAnchor is used for these certSigners and all trust domains.
 If both certSigners and trustDomains is set, this trustAnchor is only used for these signers and trust domains.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="MeshConfig-ServiceSettings">ServiceSettings</h3>
+<section>
+<p>Settings to be applied to select services.</p>
+<p>For example, the following configures all services in namespace &ldquo;foo&rdquo; as well as the
+&ldquo;bar&rdquo; service in namespace &ldquo;baz&rdquo; to be considered cluster-local:</p>
+<pre><code class="language-yaml">serviceSettings:
+  - settings:
+      clusterLocal: true
+    hosts:
+      - &quot;*.foo.svc.cluster.local&quot;
+      - &quot;bar.baz.svc.cluster.local&quot;
+</code></pre>
+<p>When in ambient mode, if ServiceSettings are defined they will be considered in addition to the
+ServiceScopeConfigs. If a service is defined by ServiceSetting to be cluster local and matches a
+global service scope selector, the service will be considered cluster local. If a service is
+considered global by ServiceSettings and does not match a global service scope selector
+the serive will be considered local. Local scope takes precedence over global scope. Since
+ServiceScopeConfigs is local by default, all services are considered local unless it is considered
+global by ServiceSettings AND ServiceScopeConfigs.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ServiceSettings-settings">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceSettings-settings">settings</a></code></div>
+<div class="type"><a href="#MeshConfig-ServiceSettings-Settings">Settings</a></div>
+</div></td>
+<td>
+<p>The settings to apply to the selected services.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-ServiceSettings-hosts">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceSettings-hosts">hosts</a></code></div>
+<div class="type">string[]</div>
+</div></td>
+<td>
+<p>The services to which the Settings should be applied. Services are selected using the hostname
+matching rules used by DestinationRule.</p>
+<p>For example: foo.bar.svc.cluster.local, *.baz.svc.cluster.local</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h4 id="MeshConfig-ServiceSettings-Settings">Settings</h4>
+<section>
+<p>Settings for the selected services.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ServiceSettings-Settings-cluster_local">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceSettings-Settings-cluster_local">clusterLocal</a></code></div>
+<div class="type">bool</div>
+</div></td>
+<td>
+<p>If true, specifies that the client and service endpoints must reside in the same cluster.
+By default, in multi-cluster deployments, the Istio control plane assumes all service
+endpoints to be reachable from any client in any of the clusters which are part of the
+mesh. This configuration option limits the set of service endpoints visible to a client
+to be cluster scoped.</p>
+<p>There are some common scenarios when this can be useful:</p>
+<ul>
+<li>A service (or group of services) is inherently local to the cluster and has local storage
+for that cluster. For example, the kube-system namespace (e.g. the Kube API Server).</li>
+<li>A mesh administrator wants to slowly migrate services to Istio. They might start by first
+having services cluster-local and then slowly transition them to mesh-wide. They could do
+this service-by-service (e.g. mysvc.myns.svc.cluster.local) or as a group
+(e.g. *.myns.svc.cluster.local).</li>
+</ul>
+<p>By default Istio will consider kubernetes.default.svc (i.e. the API Server) as well as all
+services in the kube-system namespace to be cluster-local, unless explicitly overridden here.</p>
 
 </td>
 </tr>
@@ -3094,45 +3193,6 @@ sets <code>connectionPool</code> overrides this whole block; otherwise this base
 <td>
 <p>Baseline outlier detection for outbound clusters. A DestinationRule that sets
 <code>outlierDetection</code> overrides this whole block; otherwise this baseline applies.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h4 id="MeshConfig-ServiceSettings-Settings">Settings</h4>
-<section>
-<p>Settings for the selected services.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="MeshConfig-ServiceSettings-Settings-cluster_local">
-<td><div class="field"><div class="name"><code><a href="#MeshConfig-ServiceSettings-Settings-cluster_local">clusterLocal</a></code></div>
-<div class="type">bool</div>
-</div></td>
-<td>
-<p>If true, specifies that the client and service endpoints must reside in the same cluster.
-By default, in multi-cluster deployments, the Istio control plane assumes all service
-endpoints to be reachable from any client in any of the clusters which are part of the
-mesh. This configuration option limits the set of service endpoints visible to a client
-to be cluster scoped.</p>
-<p>There are some common scenarios when this can be useful:</p>
-<ul>
-<li>A service (or group of services) is inherently local to the cluster and has local storage
-for that cluster. For example, the kube-system namespace (e.g. the Kube API Server).</li>
-<li>A mesh administrator wants to slowly migrate services to Istio. They might start by first
-having services cluster-local and then slowly transition them to mesh-wide. They could do
-this service-by-service (e.g. mysvc.myns.svc.cluster.local) or as a group
-(e.g. *.myns.svc.cluster.local).</li>
-</ul>
-<p>By default Istio will consider kubernetes.default.svc (i.e. the API Server) as well as all
-services in the kube-system namespace to be cluster-local, unless explicitly overridden here.</p>
 
 </td>
 </tr>
