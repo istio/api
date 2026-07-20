@@ -1186,8 +1186,8 @@ spec:
                               format: int32
                               type: integer
                             outlierDetectionHttpErrorCodes:
-                              description: Specifies HTTP response status codes that
-                                should be treated as outlier detection errors.
+                              description: Specifies the HTTP response status codes
+                                that are treated as outlier detection errors.
                               items:
                                 maximum: 599
                                 minimum: 100
@@ -1608,8 +1608,8 @@ spec:
                                     format: int32
                                     type: integer
                                   outlierDetectionHttpErrorCodes:
-                                    description: Specifies HTTP response status codes
-                                      that should be treated as outlier detection
+                                    description: Specifies the HTTP response status
+                                      codes that are treated as outlier detection
                                       errors.
                                     items:
                                       maximum: 599
@@ -2187,8 +2187,8 @@ spec:
                         format: int32
                         type: integer
                       outlierDetectionHttpErrorCodes:
-                        description: Specifies HTTP response status codes that should
-                          be treated as outlier detection errors.
+                        description: Specifies the HTTP response status codes that
+                          are treated as outlier detection errors.
                         items:
                           maximum: 599
                           minimum: 100
@@ -2596,8 +2596,8 @@ spec:
                               format: int32
                               type: integer
                             outlierDetectionHttpErrorCodes:
-                              description: Specifies HTTP response status codes that
-                                should be treated as outlier detection errors.
+                              description: Specifies the HTTP response status codes
+                                that are treated as outlier detection errors.
                               items:
                                 maximum: 599
                                 minimum: 100
@@ -3329,8 +3329,8 @@ spec:
                               format: int32
                               type: integer
                             outlierDetectionHttpErrorCodes:
-                              description: Specifies HTTP response status codes that
-                                should be treated as outlier detection errors.
+                              description: Specifies the HTTP response status codes
+                                that are treated as outlier detection errors.
                               items:
                                 maximum: 599
                                 minimum: 100
@@ -3751,8 +3751,8 @@ spec:
                                     format: int32
                                     type: integer
                                   outlierDetectionHttpErrorCodes:
-                                    description: Specifies HTTP response status codes
-                                      that should be treated as outlier detection
+                                    description: Specifies the HTTP response status
+                                      codes that are treated as outlier detection
                                       errors.
                                     items:
                                       maximum: 599
@@ -4330,8 +4330,8 @@ spec:
                         format: int32
                         type: integer
                       outlierDetectionHttpErrorCodes:
-                        description: Specifies HTTP response status codes that should
-                          be treated as outlier detection errors.
+                        description: Specifies the HTTP response status codes that
+                          are treated as outlier detection errors.
                         items:
                           maximum: 599
                           minimum: 100
@@ -4739,8 +4739,8 @@ spec:
                               format: int32
                               type: integer
                             outlierDetectionHttpErrorCodes:
-                              description: Specifies HTTP response status codes that
-                                should be treated as outlier detection errors.
+                              description: Specifies the HTTP response status codes
+                                that are treated as outlier detection errors.
                               items:
                                 maximum: 599
                                 minimum: 100
@@ -5472,8 +5472,8 @@ spec:
                               format: int32
                               type: integer
                             outlierDetectionHttpErrorCodes:
-                              description: Specifies HTTP response status codes that
-                                should be treated as outlier detection errors.
+                              description: Specifies the HTTP response status codes
+                                that are treated as outlier detection errors.
                               items:
                                 maximum: 599
                                 minimum: 100
@@ -5894,8 +5894,8 @@ spec:
                                     format: int32
                                     type: integer
                                   outlierDetectionHttpErrorCodes:
-                                    description: Specifies HTTP response status codes
-                                      that should be treated as outlier detection
+                                    description: Specifies the HTTP response status
+                                      codes that are treated as outlier detection
                                       errors.
                                     items:
                                       maximum: 599
@@ -6473,8 +6473,8 @@ spec:
                         format: int32
                         type: integer
                       outlierDetectionHttpErrorCodes:
-                        description: Specifies HTTP response status codes that should
-                          be treated as outlier detection errors.
+                        description: Specifies the HTTP response status codes that
+                          are treated as outlier detection errors.
                         items:
                           maximum: 599
                           minimum: 100
@@ -6882,8 +6882,8 @@ spec:
                               format: int32
                               type: integer
                             outlierDetectionHttpErrorCodes:
-                              description: Specifies HTTP response status codes that
-                                should be treated as outlier detection errors.
+                              description: Specifies the HTTP response status codes
+                                that are treated as outlier detection errors.
                               items:
                                 maximum: 599
                                 minimum: 100

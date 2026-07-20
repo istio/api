@@ -1557,11 +1557,11 @@ applicable in k8s environments with few pods per service.</p>
 <div class="type">uint32[]</div>
 </div></td>
 <td>
-<p>Specifies HTTP response status codes that should be treated as
-outlier detection errors. Overrides the default 5xx behavior.
-<code>consecutiveGatewayErrors</code> and <code>consecutive5xxErrors</code> are
-unaffected by this field. Values must be in the range [100, 599].
-When unset, only 5xx responses are treated as failures.</p>
+<p>Specifies the HTTP response status codes that are treated as outlier
+detection errors. If specified, only responses with one of these status
+codes will be treated as errors by outlier detection. If not specified,
+only 5xx responses are treated as errors.</p>
+<p>Values must be in the range [100, 599].</p>
 
 </td>
 </tr>
