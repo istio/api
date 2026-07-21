@@ -1094,7 +1094,6 @@ type MeshConfig struct {
 	//
 	// Deprecated: Marked as deprecated in mesh/v1alpha1/config.proto.
 	Certificates []*Certificate `protobuf:"bytes,47,rep,name=certificates,proto3" json:"certificates,omitempty"`
-	// $hide_from_docs
 	// Settings to be applied to select services.
 	ServiceSettings []*MeshConfig_ServiceSettings `protobuf:"bytes,50,rep,name=service_settings,json=serviceSettings,proto3" json:"service_settings,omitempty"`
 	// Scope to be applied to select services.
@@ -2177,7 +2176,6 @@ func (*MeshConfig_CertificateData_Pem) isMeshConfig_CertificateData_CertificateD
 
 func (*MeshConfig_CertificateData_SpiffeBundleUrl) isMeshConfig_CertificateData_CertificateData() {}
 
-// $hide_from_docs
 // Settings to be applied to select services.
 //
 // For example, the following configures all services in namespace "foo" as well as the
