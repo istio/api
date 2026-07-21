@@ -1,0 +1,11 @@
+apiVersion: release-notes/v2
+kind: feature
+area: security
+issue:
+  - https://github.com/istio/istio/issues/60823
+
+releaseNotes:
+  - |
+    **Added** `required` field in `RequestAuthentication` under `spec.jwtRules`. 
+    When set to `true`, the JWT token for that rule must be present and valid. 
+    This allows multiple JWT rules to require all configured tokens simultaneously. Defaults to `false`.
