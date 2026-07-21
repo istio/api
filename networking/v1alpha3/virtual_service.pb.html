@@ -2409,6 +2409,32 @@ Max value is 100.</p>
 
 </td>
 </tr>
+<tr id="HTTPMirrorPolicy-authority">
+<td><div class="field"><div class="name"><code><a href="#HTTPMirrorPolicy-authority">authority</a></code></div>
+<div class="type">string</div>
+</div></td>
+<td>
+<p>If set, the Host (<code>:authority</code>) header of the mirrored request is
+rewritten to this value before being sent to the mirror destination.
+This maps to Envoy&rsquo;s
+<a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto#envoy-v3-api-field-config-route-v3-routeaction-requestmirrorpolicy-host-rewrite-literal">host_rewrite_literal</a>
+on the mirror policy. When set, Envoy will not append the default
+<code>-shadow</code> suffix to the Host header.</p>
+
+</td>
+</tr>
+<tr id="HTTPMirrorPolicy-headers">
+<td><div class="field"><div class="name"><code><a href="#HTTPMirrorPolicy-headers">headers</a></code></div>
+<div class="type"><a href="#Headers-HeaderOperations">HeaderOperations</a></div>
+</div></td>
+<td>
+<p>Header manipulation rules applied to the mirrored request before it is
+sent to the mirror destination. This maps to Envoy&rsquo;s
+<a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto#envoy-v3-api-field-config-route-v3-routeaction-requestmirrorpolicy-request-headers-mutations">request_headers_mutations</a>
+on the mirror policy.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
