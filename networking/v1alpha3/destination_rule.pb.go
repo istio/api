@@ -1983,6 +1983,10 @@ func (x *ZoneAwareLoadBalancerSetting) GetMinClusterSize() *wrappers.UInt64Value
 }
 
 // Traffic policies that apply to specific ports of the service
+// Note that port-level settings override the destination-level settings.
+// Traffic settings specified at the destination-level will not be inherited
+// when overridden by port-level settings, i.e. default values will be
+// applied to fields omitted in port-level traffic policies.
 type TrafficPolicy_PortTrafficPolicy struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Specifies the number of a port on the destination service
