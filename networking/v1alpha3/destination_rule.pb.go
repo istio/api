@@ -1198,6 +1198,10 @@ type OutlierDetection struct {
 	// codes will be treated as errors by outlier detection. If not specified,
 	// only 5xx responses are treated as errors.
 	//
+	// Note: Host ejection is still driven by the `consecutive5xxErrors` and
+	// `consecutiveGatewayErrors` thresholds; this field only redefines which
+	// HTTP status codes are counted as errors toward those thresholds.
+	//
 	// Values must be in the range [100, 599].
 	//
 	// +protoc-gen-crd:list-value-validation:Minimum=100
