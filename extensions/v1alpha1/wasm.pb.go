@@ -587,7 +587,7 @@ type WasmPlugin struct {
 	// within the proxy container, and `http[s]://` for `.wasm` module files
 	// hosted remotely.
 	// +kubebuilder:validation:MinLength=1
-	// +kubebuilder:validation:XValidation:message="url must have schema one of [http, https, file, oci]",rule="isURL(self) ? (url(self).getScheme() in [”, 'http', 'https', 'oci', 'file']) : (isURL('http://' + self) && url('http://' +self).getScheme() in [”, 'http', 'https', 'oci', 'file'])"
+	// +kubebuilder:validation:XValidation:message="url must have schema one of [http, https, file, oci] or be a valid OCI image reference",rule="(isURL(self) && url(self).getScheme() in ['http','https','file','oci']) || matches(self,'^([A-Za-z0-9.-]+(?::[0-9]+)?)?(/[A-Za-z0-9][A-Za-z0-9._-]*)*(?::[\\w][\\w.-]{0,127})?$')"
 	Url string `protobuf:"bytes,2,opt,name=url,proto3" json:"url,omitempty"`
 	// SHA256 checksum that will be used to verify Wasm module or OCI container.
 	// If the `url` field already references a SHA256 (using the `@sha256:`
