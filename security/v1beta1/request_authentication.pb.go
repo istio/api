@@ -243,6 +243,57 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Specifies whether the JWT token is required or optional in the request.
+type JWTRule_JWTRequirement int32
+
+const (
+	// The JWT token is optional. Requests without a token are allowed as long as
+	// no invalid token is present. This is the default behavior.
+	JWTRule_OPTIONAL JWTRule_JWTRequirement = 0
+	// The JWT token must be present and valid. Requests without this token will
+	// be rejected with 401 even if other JWT rules are satisfied.
+	JWTRule_REQUIRED JWTRule_JWTRequirement = 1
+)
+
+// Enum value maps for JWTRule_JWTRequirement.
+var (
+	JWTRule_JWTRequirement_name = map[int32]string{
+		0: "OPTIONAL",
+		1: "REQUIRED",
+	}
+	JWTRule_JWTRequirement_value = map[string]int32{
+		"OPTIONAL": 0,
+		"REQUIRED": 1,
+	}
+)
+
+func (x JWTRule_JWTRequirement) Enum() *JWTRule_JWTRequirement {
+	p := new(JWTRule_JWTRequirement)
+	*p = x
+	return p
+}
+
+func (x JWTRule_JWTRequirement) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (JWTRule_JWTRequirement) Descriptor() protoreflect.EnumDescriptor {
+	return file_security_v1beta1_request_authentication_proto_enumTypes[0].Descriptor()
+}
+
+func (JWTRule_JWTRequirement) Type() protoreflect.EnumType {
+	return &file_security_v1beta1_request_authentication_proto_enumTypes[0]
+}
+
+func (x JWTRule_JWTRequirement) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use JWTRule_JWTRequirement.Descriptor instead.
+func (JWTRule_JWTRequirement) EnumDescriptor() ([]byte, []int) {
+	return file_security_v1beta1_request_authentication_proto_rawDescGZIP(), []int{1, 0}
+}
+
 // <!-- crd generation tags
 // +cue-gen:RequestAuthentication:groupName:security.istio.io
 // +cue-gen:RequestAuthentication:versions:v1,v1beta1
@@ -549,8 +600,14 @@ type JWTRule struct {
 	// +protoc-gen-crd:list-value-validation:MinLength=1
 	// +kubebuilder:validation:MaxItems=64
 	SpaceDelimitedClaims []string `protobuf:"bytes,14,rep,name=space_delimited_claims,json=spaceDelimitedClaims,proto3" json:"space_delimited_claims,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+	// Configures whether the JWT token must be present in the request.
+	// When set to `REQUIRED`, requests without this token will be rejected with 401
+	// even if other JWT rules are satisfied. When `OPTIONAL` (the default), a missing
+	// token is allowed as long as no invalid token is present. This is useful when
+	// multiple JWT rules are configured and all tokens must be present and valid simultaneously.
+	Presence      JWTRule_JWTRequirement `protobuf:"varint,15,opt,name=presence,proto3,enum=istio.security.v1beta1.JWTRule_JWTRequirement" json:"presence,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *JWTRule) Reset() {
@@ -665,6 +722,13 @@ func (x *JWTRule) GetSpaceDelimitedClaims() []string {
 		return x.SpaceDelimitedClaims
 	}
 	return nil
+}
+
+func (x *JWTRule) GetPresence() JWTRule_JWTRequirement {
+	if x != nil {
+		return x.Presence
+	}
+	return JWTRule_OPTIONAL
 }
 
 // This message specifies a header location to extract JWT token.
@@ -795,7 +859,7 @@ const file_security_v1beta1_request_authentication_proto_rawDesc = "" +
 	"\n" +
 	"targetRefs\x18\x04 \x03(\v2).istio.type.v1beta1.PolicyTargetReferenceR\n" +
 	"targetRefs\x12<\n" +
-	"\tjwt_rules\x18\x02 \x03(\v2\x1f.istio.security.v1beta1.JWTRuleR\bjwtRules\"\xb0\x04\n" +
+	"\tjwt_rules\x18\x02 \x03(\v2\x1f.istio.security.v1beta1.JWTRuleR\bjwtRules\"\xaa\x05\n" +
 	"\aJWTRule\x12\x16\n" +
 	"\x06issuer\x18\x01 \x01(\tR\x06issuer\x12\x1c\n" +
 	"\taudiences\x18\x02 \x03(\tR\taudiences\x12\x19\n" +
@@ -810,7 +874,11 @@ const file_security_v1beta1_request_authentication_proto_rawDesc = "" +
 	"\x16forward_original_token\x18\t \x01(\bR\x14forwardOriginalToken\x12\\\n" +
 	"\x17output_claim_to_headers\x18\v \x03(\v2%.istio.security.v1beta1.ClaimToHeaderR\x14outputClaimToHeaders\x123\n" +
 	"\atimeout\x18\r \x01(\v2\x19.google.protobuf.DurationR\atimeout\x124\n" +
-	"\x16space_delimited_claims\x18\x0e \x03(\tR\x14spaceDelimitedClaims\"=\n" +
+	"\x16space_delimited_claims\x18\x0e \x03(\tR\x14spaceDelimitedClaims\x12J\n" +
+	"\bpresence\x18\x0f \x01(\x0e2..istio.security.v1beta1.JWTRule.JWTRequirementR\bpresence\",\n" +
+	"\x0eJWTRequirement\x12\f\n" +
+	"\bOPTIONAL\x10\x00\x12\f\n" +
+	"\bREQUIRED\x10\x01\"=\n" +
 	"\tJWTHeader\x12\x18\n" +
 	"\x04name\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x04name\x12\x16\n" +
 	"\x06prefix\x18\x02 \x01(\tR\x06prefix\"I\n" +
@@ -830,29 +898,32 @@ func file_security_v1beta1_request_authentication_proto_rawDescGZIP() []byte {
 	return file_security_v1beta1_request_authentication_proto_rawDescData
 }
 
+var file_security_v1beta1_request_authentication_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_security_v1beta1_request_authentication_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_security_v1beta1_request_authentication_proto_goTypes = []any{
-	(*RequestAuthentication)(nil),         // 0: istio.security.v1beta1.RequestAuthentication
-	(*JWTRule)(nil),                       // 1: istio.security.v1beta1.JWTRule
-	(*JWTHeader)(nil),                     // 2: istio.security.v1beta1.JWTHeader
-	(*ClaimToHeader)(nil),                 // 3: istio.security.v1beta1.ClaimToHeader
-	(*v1beta1.WorkloadSelector)(nil),      // 4: istio.type.v1beta1.WorkloadSelector
-	(*v1beta1.PolicyTargetReference)(nil), // 5: istio.type.v1beta1.PolicyTargetReference
-	(*duration.Duration)(nil),             // 6: google.protobuf.Duration
+	(JWTRule_JWTRequirement)(0),           // 0: istio.security.v1beta1.JWTRule.JWTRequirement
+	(*RequestAuthentication)(nil),         // 1: istio.security.v1beta1.RequestAuthentication
+	(*JWTRule)(nil),                       // 2: istio.security.v1beta1.JWTRule
+	(*JWTHeader)(nil),                     // 3: istio.security.v1beta1.JWTHeader
+	(*ClaimToHeader)(nil),                 // 4: istio.security.v1beta1.ClaimToHeader
+	(*v1beta1.WorkloadSelector)(nil),      // 5: istio.type.v1beta1.WorkloadSelector
+	(*v1beta1.PolicyTargetReference)(nil), // 6: istio.type.v1beta1.PolicyTargetReference
+	(*duration.Duration)(nil),             // 7: google.protobuf.Duration
 }
 var file_security_v1beta1_request_authentication_proto_depIdxs = []int32{
-	4, // 0: istio.security.v1beta1.RequestAuthentication.selector:type_name -> istio.type.v1beta1.WorkloadSelector
-	5, // 1: istio.security.v1beta1.RequestAuthentication.targetRef:type_name -> istio.type.v1beta1.PolicyTargetReference
-	5, // 2: istio.security.v1beta1.RequestAuthentication.targetRefs:type_name -> istio.type.v1beta1.PolicyTargetReference
-	1, // 3: istio.security.v1beta1.RequestAuthentication.jwt_rules:type_name -> istio.security.v1beta1.JWTRule
-	2, // 4: istio.security.v1beta1.JWTRule.from_headers:type_name -> istio.security.v1beta1.JWTHeader
-	3, // 5: istio.security.v1beta1.JWTRule.output_claim_to_headers:type_name -> istio.security.v1beta1.ClaimToHeader
-	6, // 6: istio.security.v1beta1.JWTRule.timeout:type_name -> google.protobuf.Duration
-	7, // [7:7] is the sub-list for method output_type
-	7, // [7:7] is the sub-list for method input_type
-	7, // [7:7] is the sub-list for extension type_name
-	7, // [7:7] is the sub-list for extension extendee
-	0, // [0:7] is the sub-list for field type_name
+	5, // 0: istio.security.v1beta1.RequestAuthentication.selector:type_name -> istio.type.v1beta1.WorkloadSelector
+	6, // 1: istio.security.v1beta1.RequestAuthentication.targetRef:type_name -> istio.type.v1beta1.PolicyTargetReference
+	6, // 2: istio.security.v1beta1.RequestAuthentication.targetRefs:type_name -> istio.type.v1beta1.PolicyTargetReference
+	2, // 3: istio.security.v1beta1.RequestAuthentication.jwt_rules:type_name -> istio.security.v1beta1.JWTRule
+	3, // 4: istio.security.v1beta1.JWTRule.from_headers:type_name -> istio.security.v1beta1.JWTHeader
+	4, // 5: istio.security.v1beta1.JWTRule.output_claim_to_headers:type_name -> istio.security.v1beta1.ClaimToHeader
+	7, // 6: istio.security.v1beta1.JWTRule.timeout:type_name -> google.protobuf.Duration
+	0, // 7: istio.security.v1beta1.JWTRule.presence:type_name -> istio.security.v1beta1.JWTRule.JWTRequirement
+	8, // [8:8] is the sub-list for method output_type
+	8, // [8:8] is the sub-list for method input_type
+	8, // [8:8] is the sub-list for extension type_name
+	8, // [8:8] is the sub-list for extension extendee
+	0, // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_security_v1beta1_request_authentication_proto_init() }
@@ -865,13 +936,14 @@ func file_security_v1beta1_request_authentication_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_security_v1beta1_request_authentication_proto_rawDesc), len(file_security_v1beta1_request_authentication_proto_rawDesc)),
-			NumEnums:      0,
+			NumEnums:      1,
 			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_security_v1beta1_request_authentication_proto_goTypes,
 		DependencyIndexes: file_security_v1beta1_request_authentication_proto_depIdxs,
+		EnumInfos:         file_security_v1beta1_request_authentication_proto_enumTypes,
 		MessageInfos:      file_security_v1beta1_request_authentication_proto_msgTypes,
 	}.Build()
 	File_security_v1beta1_request_authentication_proto = out.File
