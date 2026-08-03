@@ -1585,6 +1585,28 @@ message MeshConfig {
   // configured globally via this field.
   istio.networking.v1alpha3.HTTPRetry default_http_retry_policy = 62;
 
+  // Configure the default retry policy for inbound routes on sidecars.
+  //
+  // By default, a sidecar retries requests that were reset before they reached the
+  // application, using Envoy's `reset-before-request` condition with 2 attempts.
+  // Because such a request never reached the application, retrying it is safe even
+  // for non-idempotent methods. This shields clients from races where the
+  // application closes an idle connection while a request is in flight.
+  //
+  // Setting the number of attempts to 0 disables the inbound retry policy
+  // mesh-wide, for example `defaultInboundHttpRetryPolicy: {}`.
+  //
+  // Only `attempts`, `retryOn` and `backoff` apply here. `perTryTimeout`,
+  // `retryRemoteLocalities` and `retryIgnorePreviousHosts` are ignored, since an
+  // inbound route always targets the single local application cluster.
+  //
+  // The inbound retry policy is never applied to ports declared as gRPC, where
+  // `reset-before-request` does not work well for streaming services.
+  //
+  // Note this is distinct from `defaultHttpRetryPolicy`, which applies to outbound
+  // traffic to other services. Configuring one does not affect the other.
+  istio.networking.v1alpha3.HTTPRetry default_inbound_http_retry_policy = 74;
+
   message TLSConfig {
     // TLS protocol versions.
     enum TLSProtocol {
@@ -1671,7 +1693,7 @@ message MeshConfig {
   ServiceEntryVisibility service_entry_visibility = 72;
 
   // $hide_from_docs
-  // Next available field number: 73
+  // Next available field number: 75
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
