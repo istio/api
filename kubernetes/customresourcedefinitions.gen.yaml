@@ -954,10 +954,6 @@ spec:
                                   description: Duration after an endpoint first reports
                                     metrics before its weight is trusted.
                                   type: string
-                                  x-kubernetes-validations:
-                                  - message: must be a valid duration greater than
-                                      1ms
-                                    rule: duration(self) >= duration('1ms')
                                 errorUtilizationPenaltyPercent:
                                   description: Additional penalty applied to endpoints
                                     that return errors, expressed as a percentage
@@ -978,19 +974,11 @@ spec:
                                     discarded and it reverts to the default (equal)
                                     weight.
                                   type: string
-                                  x-kubernetes-validations:
-                                  - message: must be a valid duration greater than
-                                      1ms
-                                    rule: duration(self) >= duration('1ms')
                                 weightUpdatePeriod:
                                   description: How often the load balancer recomputes
                                     endpoint weights from the latest reported utilization
                                     data.
                                   type: string
-                                  x-kubernetes-validations:
-                                  - message: must be a valid duration greater than
-                                      1ms
-                                    rule: duration(self) >= duration('1ms')
                               type: object
                             consistentHash:
                               allOf:
@@ -1453,10 +1441,6 @@ spec:
                                         description: Duration after an endpoint first
                                           reports metrics before its weight is trusted.
                                         type: string
-                                        x-kubernetes-validations:
-                                        - message: must be a valid duration greater
-                                            than 1ms
-                                          rule: duration(self) >= duration('1ms')
                                       errorUtilizationPenaltyPercent:
                                         description: Additional penalty applied to
                                           endpoints that return errors, expressed
@@ -1478,19 +1462,11 @@ spec:
                                           weight is discarded and it reverts to the
                                           default (equal) weight.
                                         type: string
-                                        x-kubernetes-validations:
-                                        - message: must be a valid duration greater
-                                            than 1ms
-                                          rule: duration(self) >= duration('1ms')
                                       weightUpdatePeriod:
                                         description: How often the load balancer recomputes
                                           endpoint weights from the latest reported
                                           utilization data.
                                         type: string
-                                        x-kubernetes-validations:
-                                        - message: must be a valid duration greater
-                                            than 1ms
-                                          rule: duration(self) >= duration('1ms')
                                     type: object
                                   consistentHash:
                                     allOf:
@@ -2133,9 +2109,6 @@ spec:
                             description: Duration after an endpoint first reports
                               metrics before its weight is trusted.
                             type: string
-                            x-kubernetes-validations:
-                            - message: must be a valid duration greater than 1ms
-                              rule: duration(self) >= duration('1ms')
                           errorUtilizationPenaltyPercent:
                             description: Additional penalty applied to endpoints that
                               return errors, expressed as a percentage of the utilization.
@@ -2154,16 +2127,10 @@ spec:
                               metrics for this long, its reported weight is discarded
                               and it reverts to the default (equal) weight.
                             type: string
-                            x-kubernetes-validations:
-                            - message: must be a valid duration greater than 1ms
-                              rule: duration(self) >= duration('1ms')
                           weightUpdatePeriod:
                             description: How often the load balancer recomputes endpoint
                               weights from the latest reported utilization data.
                             type: string
-                            x-kubernetes-validations:
-                            - message: must be a valid duration greater than 1ms
-                              rule: duration(self) >= duration('1ms')
                         type: object
                       consistentHash:
                         allOf:
@@ -2618,10 +2585,6 @@ spec:
                                   description: Duration after an endpoint first reports
                                     metrics before its weight is trusted.
                                   type: string
-                                  x-kubernetes-validations:
-                                  - message: must be a valid duration greater than
-                                      1ms
-                                    rule: duration(self) >= duration('1ms')
                                 errorUtilizationPenaltyPercent:
                                   description: Additional penalty applied to endpoints
                                     that return errors, expressed as a percentage
@@ -2642,19 +2605,11 @@ spec:
                                     discarded and it reverts to the default (equal)
                                     weight.
                                   type: string
-                                  x-kubernetes-validations:
-                                  - message: must be a valid duration greater than
-                                      1ms
-                                    rule: duration(self) >= duration('1ms')
                                 weightUpdatePeriod:
                                   description: How often the load balancer recomputes
                                     endpoint weights from the latest reported utilization
                                     data.
                                   type: string
-                                  x-kubernetes-validations:
-                                  - message: must be a valid duration greater than
-                                      1ms
-                                    rule: duration(self) >= duration('1ms')
                               type: object
                             consistentHash:
                               allOf:
@@ -3438,10 +3393,6 @@ spec:
                                   description: Duration after an endpoint first reports
                                     metrics before its weight is trusted.
                                   type: string
-                                  x-kubernetes-validations:
-                                  - message: must be a valid duration greater than
-                                      1ms
-                                    rule: duration(self) >= duration('1ms')
                                 errorUtilizationPenaltyPercent:
                                   description: Additional penalty applied to endpoints
                                     that return errors, expressed as a percentage
@@ -3462,19 +3413,11 @@ spec:
                                     discarded and it reverts to the default (equal)
                                     weight.
                                   type: string
-                                  x-kubernetes-validations:
-                                  - message: must be a valid duration greater than
-                                      1ms
-                                    rule: duration(self) >= duration('1ms')
                                 weightUpdatePeriod:
                                   description: How often the load balancer recomputes
                                     endpoint weights from the latest reported utilization
                                     data.
                                   type: string
-                                  x-kubernetes-validations:
-                                  - message: must be a valid duration greater than
-                                      1ms
-                                    rule: duration(self) >= duration('1ms')
                               type: object
                             consistentHash:
                               allOf:
@@ -3937,10 +3880,6 @@ spec:
                                         description: Duration after an endpoint first
                                           reports metrics before its weight is trusted.
                                         type: string
-                                        x-kubernetes-validations:
-                                        - message: must be a valid duration greater
-                                            than 1ms
-                                          rule: duration(self) >= duration('1ms')
                                       errorUtilizationPenaltyPercent:
                                         description: Additional penalty applied to
                                           endpoints that return errors, expressed
@@ -3962,19 +3901,11 @@ spec:
                                           weight is discarded and it reverts to the
                                           default (equal) weight.
                                         type: string
-                                        x-kubernetes-validations:
-                                        - message: must be a valid duration greater
-                                            than 1ms
-                                          rule: duration(self) >= duration('1ms')
                                       weightUpdatePeriod:
                                         description: How often the load balancer recomputes
                                           endpoint weights from the latest reported
                                           utilization data.
                                         type: string
-                                        x-kubernetes-validations:
-                                        - message: must be a valid duration greater
-                                            than 1ms
-                                          rule: duration(self) >= duration('1ms')
                                     type: object
                                   consistentHash:
                                     allOf:
@@ -4617,9 +4548,6 @@ spec:
                             description: Duration after an endpoint first reports
                               metrics before its weight is trusted.
                             type: string
-                            x-kubernetes-validations:
-                            - message: must be a valid duration greater than 1ms
-                              rule: duration(self) >= duration('1ms')
                           errorUtilizationPenaltyPercent:
                             description: Additional penalty applied to endpoints that
                               return errors, expressed as a percentage of the utilization.
@@ -4638,16 +4566,10 @@ spec:
                               metrics for this long, its reported weight is discarded
                               and it reverts to the default (equal) weight.
                             type: string
-                            x-kubernetes-validations:
-                            - message: must be a valid duration greater than 1ms
-                              rule: duration(self) >= duration('1ms')
                           weightUpdatePeriod:
                             description: How often the load balancer recomputes endpoint
                               weights from the latest reported utilization data.
                             type: string
-                            x-kubernetes-validations:
-                            - message: must be a valid duration greater than 1ms
-                              rule: duration(self) >= duration('1ms')
                         type: object
                       consistentHash:
                         allOf:
@@ -5102,10 +5024,6 @@ spec:
                                   description: Duration after an endpoint first reports
                                     metrics before its weight is trusted.
                                   type: string
-                                  x-kubernetes-validations:
-                                  - message: must be a valid duration greater than
-                                      1ms
-                                    rule: duration(self) >= duration('1ms')
                                 errorUtilizationPenaltyPercent:
                                   description: Additional penalty applied to endpoints
                                     that return errors, expressed as a percentage
@@ -5126,19 +5044,11 @@ spec:
                                     discarded and it reverts to the default (equal)
                                     weight.
                                   type: string
-                                  x-kubernetes-validations:
-                                  - message: must be a valid duration greater than
-                                      1ms
-                                    rule: duration(self) >= duration('1ms')
                                 weightUpdatePeriod:
                                   description: How often the load balancer recomputes
                                     endpoint weights from the latest reported utilization
                                     data.
                                   type: string
-                                  x-kubernetes-validations:
-                                  - message: must be a valid duration greater than
-                                      1ms
-                                    rule: duration(self) >= duration('1ms')
                               type: object
                             consistentHash:
                               allOf:
@@ -5922,10 +5832,6 @@ spec:
                                   description: Duration after an endpoint first reports
                                     metrics before its weight is trusted.
                                   type: string
-                                  x-kubernetes-validations:
-                                  - message: must be a valid duration greater than
-                                      1ms
-                                    rule: duration(self) >= duration('1ms')
                                 errorUtilizationPenaltyPercent:
                                   description: Additional penalty applied to endpoints
                                     that return errors, expressed as a percentage
@@ -5946,19 +5852,11 @@ spec:
                                     discarded and it reverts to the default (equal)
                                     weight.
                                   type: string
-                                  x-kubernetes-validations:
-                                  - message: must be a valid duration greater than
-                                      1ms
-                                    rule: duration(self) >= duration('1ms')
                                 weightUpdatePeriod:
                                   description: How often the load balancer recomputes
                                     endpoint weights from the latest reported utilization
                                     data.
                                   type: string
-                                  x-kubernetes-validations:
-                                  - message: must be a valid duration greater than
-                                      1ms
-                                    rule: duration(self) >= duration('1ms')
                               type: object
                             consistentHash:
                               allOf:
@@ -6421,10 +6319,6 @@ spec:
                                         description: Duration after an endpoint first
                                           reports metrics before its weight is trusted.
                                         type: string
-                                        x-kubernetes-validations:
-                                        - message: must be a valid duration greater
-                                            than 1ms
-                                          rule: duration(self) >= duration('1ms')
                                       errorUtilizationPenaltyPercent:
                                         description: Additional penalty applied to
                                           endpoints that return errors, expressed
@@ -6446,19 +6340,11 @@ spec:
                                           weight is discarded and it reverts to the
                                           default (equal) weight.
                                         type: string
-                                        x-kubernetes-validations:
-                                        - message: must be a valid duration greater
-                                            than 1ms
-                                          rule: duration(self) >= duration('1ms')
                                       weightUpdatePeriod:
                                         description: How often the load balancer recomputes
                                           endpoint weights from the latest reported
                                           utilization data.
                                         type: string
-                                        x-kubernetes-validations:
-                                        - message: must be a valid duration greater
-                                            than 1ms
-                                          rule: duration(self) >= duration('1ms')
                                     type: object
                                   consistentHash:
                                     allOf:
@@ -7101,9 +6987,6 @@ spec:
                             description: Duration after an endpoint first reports
                               metrics before its weight is trusted.
                             type: string
-                            x-kubernetes-validations:
-                            - message: must be a valid duration greater than 1ms
-                              rule: duration(self) >= duration('1ms')
                           errorUtilizationPenaltyPercent:
                             description: Additional penalty applied to endpoints that
                               return errors, expressed as a percentage of the utilization.
@@ -7122,16 +7005,10 @@ spec:
                               metrics for this long, its reported weight is discarded
                               and it reverts to the default (equal) weight.
                             type: string
-                            x-kubernetes-validations:
-                            - message: must be a valid duration greater than 1ms
-                              rule: duration(self) >= duration('1ms')
                           weightUpdatePeriod:
                             description: How often the load balancer recomputes endpoint
                               weights from the latest reported utilization data.
                             type: string
-                            x-kubernetes-validations:
-                            - message: must be a valid duration greater than 1ms
-                              rule: duration(self) >= duration('1ms')
                         type: object
                       consistentHash:
                         allOf:
@@ -7586,10 +7463,6 @@ spec:
                                   description: Duration after an endpoint first reports
                                     metrics before its weight is trusted.
                                   type: string
-                                  x-kubernetes-validations:
-                                  - message: must be a valid duration greater than
-                                      1ms
-                                    rule: duration(self) >= duration('1ms')
                                 errorUtilizationPenaltyPercent:
                                   description: Additional penalty applied to endpoints
                                     that return errors, expressed as a percentage
@@ -7610,19 +7483,11 @@ spec:
                                     discarded and it reverts to the default (equal)
                                     weight.
                                   type: string
-                                  x-kubernetes-validations:
-                                  - message: must be a valid duration greater than
-                                      1ms
-                                    rule: duration(self) >= duration('1ms')
                                 weightUpdatePeriod:
                                   description: How often the load balancer recomputes
                                     endpoint weights from the latest reported utilization
                                     data.
                                   type: string
-                                  x-kubernetes-validations:
-                                  - message: must be a valid duration greater than
-                                      1ms
-                                    rule: duration(self) >= duration('1ms')
                               type: object
                             consistentHash:
                               allOf:

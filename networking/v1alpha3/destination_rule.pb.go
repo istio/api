@@ -2534,16 +2534,19 @@ type LoadBalancerSettings_BackendUtilizationLB struct {
 	// is trusted. During the blackout period the endpoint receives the
 	// same weight as endpoints without metrics.
 	// Default is 10s.
+	// +protoc-gen-crd:duration-validation:none
 	BlackoutPeriod *duration.Duration `protobuf:"bytes,1,opt,name=blackout_period,json=blackoutPeriod,proto3" json:"blackout_period,omitempty"`
 	// If an endpoint stops reporting utilization metrics for this long,
 	// its reported weight is discarded and it reverts to the default
 	// (equal) weight.
 	// Default is 3m.
+	// +protoc-gen-crd:duration-validation:none
 	WeightExpirationPeriod *duration.Duration `protobuf:"bytes,2,opt,name=weight_expiration_period,json=weightExpirationPeriod,proto3" json:"weight_expiration_period,omitempty"`
 	// How often the load balancer recomputes endpoint weights from the
 	// latest reported utilization data. Smaller values react faster but
 	// increase CPU overhead. Minimum 100ms.
 	// Default is 1s.
+	// +protoc-gen-crd:duration-validation:none
 	WeightUpdatePeriod *duration.Duration `protobuf:"bytes,3,opt,name=weight_update_period,json=weightUpdatePeriod,proto3" json:"weight_update_period,omitempty"`
 	// Additional penalty applied to endpoints that return errors,
 	// expressed as a percentage of the utilization. For example, a value

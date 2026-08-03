@@ -574,18 +574,21 @@ message LoadBalancerSettings {
     // is trusted. During the blackout period the endpoint receives the
     // same weight as endpoints without metrics.
     // Default is 10s.
+    // +protoc-gen-crd:duration-validation:none
     google.protobuf.Duration blackout_period = 1;
 
     // If an endpoint stops reporting utilization metrics for this long,
     // its reported weight is discarded and it reverts to the default
     // (equal) weight.
     // Default is 3m.
+    // +protoc-gen-crd:duration-validation:none
     google.protobuf.Duration weight_expiration_period = 2;
 
     // How often the load balancer recomputes endpoint weights from the
     // latest reported utilization data. Smaller values react faster but
     // increase CPU overhead. Minimum 100ms.
     // Default is 1s.
+    // +protoc-gen-crd:duration-validation:none
     google.protobuf.Duration weight_update_period = 3;
 
     // Additional penalty applied to endpoints that return errors,
