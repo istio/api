@@ -549,8 +549,19 @@ type JWTRule struct {
 	// +protoc-gen-crd:list-value-validation:MinLength=1
 	// +kubebuilder:validation:MaxItems=64
 	SpaceDelimitedClaims []string `protobuf:"bytes,14,rep,name=space_delimited_claims,json=spaceDelimitedClaims,proto3" json:"space_delimited_claims,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+	// If set to true, a JWT without an expiration
+	// ([`exp`](https://tools.ietf.org/html/rfc7519#section-4.1.4)) claim is rejected.
+	// This enforces that every accepted token is short-lived and will eventually
+	// expire, which is recommended for zero-trust deployments that rely on token
+	// expiration rather than revocation (for example,
+	// [SPIFFE JWT-SVID](https://github.com/spiffe/spiffe/blob/main/standards/JWT-SVID.md#33-expiration-time)
+	// expiration restrictions).
+	//
+	// By default (`false`), a JWT without an `exp` claim is accepted and treated as
+	// non-expiring, matching the existing behavior.
+	RequireExpiration bool `protobuf:"varint,15,opt,name=require_expiration,json=requireExpiration,proto3" json:"require_expiration,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *JWTRule) Reset() {
@@ -665,6 +676,13 @@ func (x *JWTRule) GetSpaceDelimitedClaims() []string {
 		return x.SpaceDelimitedClaims
 	}
 	return nil
+}
+
+func (x *JWTRule) GetRequireExpiration() bool {
+	if x != nil {
+		return x.RequireExpiration
+	}
+	return false
 }
 
 // This message specifies a header location to extract JWT token.
@@ -795,7 +813,7 @@ const file_security_v1beta1_request_authentication_proto_rawDesc = "" +
 	"\n" +
 	"targetRefs\x18\x04 \x03(\v2).istio.type.v1beta1.PolicyTargetReferenceR\n" +
 	"targetRefs\x12<\n" +
-	"\tjwt_rules\x18\x02 \x03(\v2\x1f.istio.security.v1beta1.JWTRuleR\bjwtRules\"\xb0\x04\n" +
+	"\tjwt_rules\x18\x02 \x03(\v2\x1f.istio.security.v1beta1.JWTRuleR\bjwtRules\"\xdf\x04\n" +
 	"\aJWTRule\x12\x16\n" +
 	"\x06issuer\x18\x01 \x01(\tR\x06issuer\x12\x1c\n" +
 	"\taudiences\x18\x02 \x03(\tR\taudiences\x12\x19\n" +
@@ -810,7 +828,8 @@ const file_security_v1beta1_request_authentication_proto_rawDesc = "" +
 	"\x16forward_original_token\x18\t \x01(\bR\x14forwardOriginalToken\x12\\\n" +
 	"\x17output_claim_to_headers\x18\v \x03(\v2%.istio.security.v1beta1.ClaimToHeaderR\x14outputClaimToHeaders\x123\n" +
 	"\atimeout\x18\r \x01(\v2\x19.google.protobuf.DurationR\atimeout\x124\n" +
-	"\x16space_delimited_claims\x18\x0e \x03(\tR\x14spaceDelimitedClaims\"=\n" +
+	"\x16space_delimited_claims\x18\x0e \x03(\tR\x14spaceDelimitedClaims\x12-\n" +
+	"\x12require_expiration\x18\x0f \x01(\bR\x11requireExpiration\"=\n" +
 	"\tJWTHeader\x12\x18\n" +
 	"\x04name\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x04name\x12\x16\n" +
 	"\x06prefix\x18\x02 \x01(\tR\x06prefix\"I\n" +

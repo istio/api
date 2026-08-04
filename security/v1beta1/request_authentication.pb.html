@@ -481,6 +481,23 @@ regardless of this setting.</p>
 
 </td>
 </tr>
+<tr id="JWTRule-require_expiration">
+<td><div class="field"><div class="name"><code><a href="#JWTRule-require_expiration">requireExpiration</a></code></div>
+<div class="type">bool</div>
+</div></td>
+<td>
+<p>If set to true, a JWT without an expiration
+(<a href="https://tools.ietf.org/html/rfc7519#section-4.1.4"><code>exp</code></a>) claim is rejected.
+This enforces that every accepted token is short-lived and will eventually
+expire, which is recommended for zero-trust deployments that rely on token
+expiration rather than revocation (for example,
+<a href="https://github.com/spiffe/spiffe/blob/main/standards/JWT-SVID.md#33-expiration-time">SPIFFE JWT-SVID</a>
+expiration restrictions).</p>
+<p>By default (<code>false</code>), a JWT without an <code>exp</code> claim is accepted and treated as
+non-expiring, matching the existing behavior.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
