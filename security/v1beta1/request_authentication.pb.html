@@ -125,6 +125,26 @@ spec:
     - operation:
         paths: [&quot;/healthz&quot;]
 </code></pre>
+<p>Alternatively, you can use <code>requireJwt: true</code> to enforce JWT requirement directly in the RequestAuthentication
+policy without needing a separate AuthorizationPolicy. This approach returns 401 Unauthorized with a
+<code>WWW-Authenticate: Bearer</code> header for missing JWTs instead of 403 Forbidden:</p>
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1
+kind: RequestAuthentication
+metadata:
+  name: httpbin
+  namespace: foo
+spec:
+  selector:
+    matchLabels:
+      app: httpbin
+  jwtRules:
+  - issuer: &quot;issuer-foo&quot;
+    jwksUri: https://example.com/.well-known/jwks.json
+    requireJwt: true
+</code></pre>
+<p>With <code>requireJwt: true</code>, requests without a JWT will be rejected with 401 Unauthorized and a
+<code>WWW-Authenticate: Bearer</code> header, making it clearer that authentication is required. This is semantically
+more accurate than the 403 Forbidden returned by AuthorizationPolicy and complies with RFC 7235.</p>
 <p>[Experimental] Routing based on derived <a href="https://istio.io/latest/docs/reference/config/security/conditions/">metadata</a>
 is now supported. A prefix &lsquo;@&rsquo; is used to denote a match against internal metadata instead of the headers in the request.
 Currently this feature is only supported for the following metadata:</p>
@@ -294,6 +314,14 @@ spaceDelimitedClaims:
 </code></pre>
 <p>With this configuration, a JWT containing <code>&quot;custom_scope&quot;: &quot;read write admin&quot;</code> will allow
 authorization policies to match against individual values like &ldquo;read&rdquo;, &ldquo;write&rdquo;, or &ldquo;admin&rdquo;.</p>
+<p>This example shows how to require JWT tokens and return 401 for missing tokens:</p>
+<pre><code class="language-yaml">issuer: https://example.com
+jwksUri: https://example.com/.well-known/jwks.json
+requireJwt: true
+</code></pre>
+<p>With <code>requireJwt: true</code>, requests without a JWT will receive a 401 Unauthorized response with a
+<code>WWW-Authenticate: Bearer</code> header directly from the authentication filter, eliminating the need
+for a separate AuthorizationPolicy when you simply want to require authentication.</p>
 
 <table class="message-fields">
 <thead>
@@ -478,6 +506,40 @@ treats &lsquo;scope&rsquo; and &lsquo;permission&rsquo; claims as space-delimite
 claim strings, maintaining compatibility with existing JWT token formats.</p>
 <p>Note: The default claims &lsquo;scope&rsquo; and &lsquo;permission&rsquo; are always treated as space-delimited
 regardless of this setting.</p>
+
+</td>
+</tr>
+<tr id="JWTRule-require_jwt">
+<td><div class="field"><div class="name"><code><a href="#JWTRule-require_jwt">requireJwt</a></code></div>
+<div class="type">bool</div>
+</div></td>
+<td>
+<p>If set to true, requests without a valid JWT token will be rejected with a 401 Unauthorized status code
+along with a <code>WWW-Authenticate</code> header indicating the Bearer authentication scheme is required.
+If set to false or unset (default), requests without a JWT token are allowed to pass through but will not have
+an authenticated identity. In the default case, to enforce that requests must have authentication,
+you should use an AuthorizationPolicy with requestPrincipals.</p>
+<p>Note: Setting this to true changes the HTTP status code for missing JWT from 403 (via AuthorizationPolicy)
+to 401 (via RequestAuthentication), which is semantically more accurate for authentication failures and
+includes the proper <code>WWW-Authenticate</code> header as required by RFC 7235.</p>
+<p>Example usage:</p>
+<pre><code class="language-yaml">jwtRules:
+- issuer: &quot;https://example.com&quot;
+  jwksUri: https://example.com/.well-known/jwks.json
+  requireJwt: true
+</code></pre>
+<p>With <code>requireJwt: true</code>:</p>
+<ul>
+<li>Request with missing JWT -&gt; 401 Unauthorized (with WWW-Authenticate: Bearer header)</li>
+<li>Request with invalid/expired JWT -&gt; 401 Unauthorized (with WWW-Authenticate: Bearer header)</li>
+<li>Request with valid JWT -&gt; Accepted</li>
+</ul>
+<p>With <code>requireJwt: false</code> (default):</p>
+<ul>
+<li>Request with missing JWT -&gt; Accepted (no authenticated identity)</li>
+<li>Request with invalid/expired JWT -&gt; 401 Unauthorized (with WWW-Authenticate: Bearer header)</li>
+<li>Request with valid JWT -&gt; Accepted (with authenticated identity)</li>
+</ul>
 
 </td>
 </tr>

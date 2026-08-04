@@ -68,6 +68,18 @@ type RequestAuthentication = v1beta1.RequestAuthentication
 //
 // With this configuration, a JWT containing `"custom_scope": "read write admin"` will allow
 // authorization policies to match against individual values like "read", "write", or "admin".
+//
+// This example shows how to require JWT tokens and return 401 for missing tokens:
+//
+// ```yaml
+// issuer: https://example.com
+// jwksUri: https://example.com/.well-known/jwks.json
+// requireJwt: true
+// ```
+//
+// With `requireJwt: true`, requests without a JWT will receive a 401 Unauthorized response with a
+// `WWW-Authenticate: Bearer` header directly from the authentication filter, eliminating the need
+// for a separate AuthorizationPolicy when you simply want to require authentication.
 // +kubebuilder:validation:XValidation:message="only one of jwks or jwksUri can be set",rule="oneof(self.jwksUri, self.jwks_uri, self.jwks)"
 type JWTRule = v1beta1.JWTRule
 
