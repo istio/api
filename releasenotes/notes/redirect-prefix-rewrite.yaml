@@ -1,0 +1,13 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - 47500
+  - 47777
+  - 52521
+
+releaseNotes:
+  - |
+    **Added** `prefix_rewrite` field to `HTTPRedirect`, allowing redirects that preserve the path
+    suffix. The matched route prefix is stripped and replaced with the specified value (e.g.
+    `example.com/foo/bar` → `foo.example.com/bar`). Mutually exclusive with the existing `uri` field.

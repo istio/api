@@ -1,0 +1,8 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+releaseNotes:
+  - |
+    **Added** `MERGE_AND_REPLACE_LIST` operation to EnvoyFilter patch API.
+    This operation behaves like `MERGE` using proto merge semantics, but
+    replaces list fields entirely instead of appending to them.

@@ -1,0 +1,8 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue: []
+
+releaseNotes:
+  - |
+    **Added** `defaultTrafficPolicy` to `MeshConfig` to set mesh-wide baseline `connectionPool` and `outlierDetection` settings that DestinationRules inherit and override per block.

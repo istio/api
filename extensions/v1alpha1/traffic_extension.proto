@@ -17,7 +17,7 @@ syntax = "proto3";
 // $schema: istio.extensions.v1alpha1.TrafficExtension
 // $title: Traffic Extension
 // $description: Extend the functionality provided by the Istio proxy through WebAssembly or Lua filters.
-// $location: https://istio.io/docs/reference/config/proxy_extensions/v1alpha1/traffic_extension.html
+// $location: https://istio.io/docs/reference/config/proxy_extensions/traffic_extension.html
 // $aliases: [/docs/reference/config/extensions/v1alpha1/traffic_extension]
 
 // TrafficExtension provides a mechanism to extend the functionality provided by

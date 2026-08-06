@@ -1,0 +1,8 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue: []
+releaseNotes:
+  - |
+    **Added** `defaultInboundHttpRetryPolicy` to `MeshConfig` to configure or disable the default
+    `reset-before-request` retry policy applied to sidecar inbound routes.

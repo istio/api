@@ -189,6 +189,7 @@ message MeshConfig {
       // In `ALLOW_ANY_DYNAMIC_DNS` mode, traffic to unknown destinations will be allowed via dynamic DNS resolution.
       // This mode allows users that do not have all possible egress destinations registered through `ServiceEntry` configurations to still connect
       // to arbitrary destinations. Client TLS settings can be configured for connections to such destinations.
+      // This mode cannot be used at the Sidecar level.
       ALLOW_ANY_DYNAMIC_DNS = 3;
 
       reserved 2;
@@ -201,7 +202,7 @@ message MeshConfig {
   }
 
   // Set the default behavior of the sidecar for handling outbound
-  // traffic from the application.
+  // traffic from the application. This does not apply to gateways.
   //
   // Can be overridden at a Sidecar level by setting the `OutboundTrafficPolicy` in the
   // [Sidecar API](https://istio.io/docs/reference/config/networking/sidecar/#OutboundTrafficPolicy).
@@ -344,9 +345,20 @@ message MeshConfig {
 
   // Locality based load balancing distribution or failover settings.
   // If unspecified, locality based load balancing will be enabled by default.
-  // However, this requires outlierDetection to actually take effect for a particular
+  // Only one of locality_lb_setting and zone_aware_lb_setting should be enabled;
+  // if both are set, zone_aware_lb_setting takes precedence and this setting is ignored.
+  // Failover settings, require outlierDetection to actually take effect for a particular
   // service, see https://istio.io/latest/docs/tasks/traffic-management/locality-load-balancing/failover/
   istio.networking.v1alpha3.LocalityLoadBalancerSetting locality_lb_setting = 35;
+
+  // Zone Aware based load balancing settings.
+  // Only one of locality_lb_setting and zone_aware_lb_setting should be enabled,
+  // if unspecified zone_aware_lb_setting is disabled by default.
+  // If both are set, zone_aware_lb_setting takes precedence over locality_lb_setting.
+  // Additionally, Zone Aware LB is only supported in Sidecar mode and only takes effect
+  // on proxies configured with `ISTIO_META_ENABLE_SELF_DISCOVERY=true` (via `proxyMetadata`); see
+  // [ZoneAwareLoadBalancerSetting](https://istio.io/latest/docs/reference/config/networking/destination-rule/#ZoneAwareLoadBalancerSetting).
+  istio.networking.v1alpha3.ZoneAwareLoadBalancerSetting zone_aware_lb_setting = 73;
 
   // Configures DNS refresh rate for Envoy clusters of type `STRICT_DNS`
   // Default refresh rate is `60s`.
@@ -1573,6 +1585,28 @@ message MeshConfig {
   // configured globally via this field.
   istio.networking.v1alpha3.HTTPRetry default_http_retry_policy = 62;
 
+  // Configure the default retry policy for inbound routes on sidecars.
+  //
+  // By default, a sidecar retries requests that were reset before they reached the
+  // application, using Envoy's `reset-before-request` condition with 2 attempts.
+  // Because such a request never reached the application, retrying it is safe even
+  // for non-idempotent methods. This shields clients from races where the
+  // application closes an idle connection while a request is in flight.
+  //
+  // Setting the number of attempts to 0 disables the inbound retry policy
+  // mesh-wide, for example `defaultInboundHttpRetryPolicy: {}`.
+  //
+  // Only `attempts`, `retryOn` and `backoff` apply here. `perTryTimeout`,
+  // `retryRemoteLocalities` and `retryIgnorePreviousHosts` are ignored, since an
+  // inbound route always targets the single local application cluster.
+  //
+  // The inbound retry policy is never applied to ports declared as gRPC, where
+  // `reset-before-request` does not work well for streaming services.
+  //
+  // Note this is distinct from `defaultHttpRetryPolicy`, which applies to outbound
+  // traffic to other services. Configuring one does not affect the other.
+  istio.networking.v1alpha3.HTTPRetry default_inbound_http_retry_policy = 74;
+
   message TLSConfig {
     // TLS protocol versions.
     enum TLSProtocol {
@@ -1633,8 +1667,33 @@ message MeshConfig {
   // For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.
   TLSConfig tls_defaults = 64;
 
+  // DefaultTrafficPolicy defines mesh-wide baseline traffic settings for outbound
+  // clusters. Only connection pool and outlier detection are configurable here, the
+  // two settings that benefit from a mesh-wide baseline. A DestinationRule overrides a
+  // baseline block when it sets the corresponding policy, and inherits it otherwise.
+  message DefaultTrafficPolicy {
+    // Baseline connection pool settings for outbound clusters. A DestinationRule that
+    // sets `connectionPool` overrides this whole block; otherwise this baseline applies.
+    istio.networking.v1alpha3.ConnectionPoolSettings connection_pool = 1;
+    // Baseline outlier detection for outbound clusters. A DestinationRule that sets
+    // `outlierDetection` overrides this whole block; otherwise this baseline applies.
+    istio.networking.v1alpha3.OutlierDetection outlier_detection = 2;
+  }
+
+  // The default traffic policy applied to outbound clusters in the mesh, providing a
+  // baseline that DestinationRules inherit and override per block. Without this, a
+  // DestinationRule that sets `connectionPool` or `outlierDetection` has no mesh-level
+  // baseline, and unset blocks fall back to Istio's built-in defaults.
+  DefaultTrafficPolicy default_traffic_policy = 71;
+
+  // ServiceEntryVisibility lets a mesh administrator control the visibility
+  // of ServiceEntry resources mesh-wide, without relying on external admission
+  // validation. When unset, ServiceEntry behaves as it does today (public visibility,
+  // cluster-wide; ambient ignores `exportTo`).
+  ServiceEntryVisibility service_entry_visibility = 72;
+
   // $hide_from_docs
-  // Next available field number: 71
+  // Next available field number: 75
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
@@ -1721,6 +1780,78 @@ message LabelSelectorRequirement {
   // merge patch.
   // +optional
   repeated string values = 3;
+}
+
+// ServiceEntryVisibility controls the visibility of ServiceEntry resources
+// across the mesh, giving a mesh administrator a way to constrain ServiceEntry
+// visibility without relying on external (VAP/CEL/OPA) admission validation.
+//
+// Policies are evaluated in order; the first policy whose rules all match sets
+// the ServiceEntry's visibility. If no policy matches, `defaultVisibility`
+// applies. When this entire message is absent from `MeshConfig`, every
+// ServiceEntry is visible `PUBLIC`, preserving current Istio behavior.
+message ServiceEntryVisibility {
+  // Visibility defines how widely a matching ServiceEntry is visible.
+  enum Visibility {
+    // Default. Resolves to `PUBLIC` to preserve legacy behavior.
+    VISIBILITY_UNSPECIFIED = 0;
+
+    // Not visible anywhere: the ServiceEntry may be written, but Istio
+    // configures no dataplane for it. Useful to expressly forbid a class of
+    // ServiceEntry.
+    NONE = 1;
+
+    // Visible only within the namespace the ServiceEntry is defined in.
+    // Equivalent to the legacy `exportTo: "."`.
+    NAMESPACE = 2;
+
+    // Visible to every workload the holding control plane configures.
+    // Equivalent to the legacy `exportTo: "*"`.
+    //
+    // The reach of `PUBLIC` is a control-plane-connectivity boundary, not a
+    // fixed topological one: it extends exactly as far as the control plane
+    // that holds this ServiceEntry distributes configuration. Mesh topology
+    // therefore determines how far `PUBLIC` actually reaches, and the same
+    // entry scopes differently under different topologies. For example, in a
+    // single-primary multi-cluster mesh a `PUBLIC` ServiceEntry reaches every
+    // proxy that primary configures, spanning clusters; in a multi-primary
+    // mesh it reaches only the proxies of the control plane that holds the
+    // entry and does not propagate to the other control planes.
+    PUBLIC = 3;
+  }
+
+  // The visibility used when no policy matches a ServiceEntry. If left
+  // `VISIBILITY_UNSPECIFIED`, it resolves to `PUBLIC`.
+  Visibility default_visibility = 1;
+
+  // Whether sidecars honor these visibility semantics. When false (default),
+  // only ambient proxies (ztunnel and waypoints) apply them and sidecars
+  // continue to use `exportTo`. This enables incremental adoption during an
+  // ambient migration without affecting a working sidecar environment.
+  bool apply_to_sidecars = 2;
+
+  // An ordered list of policies. Each policy is evaluated in turn; the first
+  // policy whose rules all match determines the ServiceEntry's visibility.
+  repeated Policy policies = 3;
+
+  // Policy assigns a visibility to ServiceEntries that match all of its rules.
+  message Policy {
+    // The visibility applied to a ServiceEntry when all `matchingRules` match.
+    Visibility visibility = 1;
+
+    // The rules to evaluate. All rules must match (AND semantics) for this
+    // policy to apply.
+    repeated MatchRule matching_rules = 2;
+  }
+
+  // MatchRule is a single matcher.
+  message MatchRule {
+    oneof matcher {
+      // Matches when the namespace the ServiceEntry is defined in matches this
+      // label selector.
+      LabelSelector namespace_selector = 1;
+    }
+  }
 }
 
 // ConfigSource describes information about a configuration store inside a
