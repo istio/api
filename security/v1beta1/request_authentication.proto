@@ -487,8 +487,26 @@ message JWTRule {
   // +kubebuilder:validation:MaxItems=64
   repeated string space_delimited_claims = 14;
 
+  // Specifies whether the JWT token is required or optional in the request.
+  enum JWTRequirement {
+    // The JWT token is optional. Requests without a token are allowed as long as
+    // no invalid token is present. This is the default behavior.
+    OPTIONAL = 0;
+
+    // The JWT token must be present and valid. Requests without this token will
+    // be rejected with 401 even if other JWT rules are satisfied.
+    REQUIRED = 1;
+  }
+
+  // Configures whether the JWT token must be present in the request.
+  // When set to `REQUIRED`, requests without this token will be rejected with 401
+  // even if other JWT rules are satisfied. When `OPTIONAL` (the default), a missing
+  // token is allowed as long as no invalid token is present. This is useful when
+  // multiple JWT rules are configured and all tokens must be present and valid simultaneously.
+  JWTRequirement presence = 15;
+
   // $hide_from_docs
-  // Next available field number: 15
+  // Next available field number: 16
 }
 
 // This message specifies a header location to extract JWT token.

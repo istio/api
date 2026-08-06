@@ -1,0 +1,13 @@
+apiVersion: release-notes/v2
+kind: feature
+area: security
+issue:
+  - https://github.com/istio/istio/issues/60823
+
+releaseNotes:
+  - |
+    **Added** `presence` field in `RequestAuthentication` under `spec.jwtRules` to configure
+    whether a JWT token is required (`REQUIRED`) or optional (`OPTIONAL`, default).
+    When set to `REQUIRED`, requests missing the token are rejected with 401 even if other
+    JWT rules are satisfied, enabling configurations where all tokens must be present and valid simultaneously.
+    The default behavior is `OPTIONAL`, which allows requests to pass if at least one JWT rule is satisfied, even if others are missing or invalid (current behavior).
