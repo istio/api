@@ -560,7 +560,7 @@ message LoadBalancerSettings {
     uint64 minimum_ring_size = 4 [deprecated = true];
   }
 
-  // Client-side weighted round-robin load balancing policy that uses
+  // BackendUtilizationLB load balancing policy that uses
   // backend-reported utilization metrics (ORCA) to dynamically adjust
   // endpoint weights. Endpoints that report higher utilization receive
   // proportionally fewer requests. Endpoints that have not yet reported
@@ -575,7 +575,7 @@ message LoadBalancerSettings {
     // same weight as endpoints without metrics.
     // Default is 10s.
     // +protoc-gen-crd:duration-validation:none
-    google.protobuf.Duration blackout_period = 1;
+    google.protobuf.Duration weight_stabilization_period = 1;
 
     // If an endpoint stops reporting utilization metrics for this long,
     // its reported weight is discarded and it reverts to the default
@@ -599,10 +599,16 @@ message LoadBalancerSettings {
     // +kubebuilder:validation:Minimum=0
     uint32 error_utilization_penalty_percent = 4;
 
-    // Custom ORCA metric names used to compute utilization when the
-    // standard `application_utilization` metric is not available from the
-    // backend. When set, these metrics are used in the weight formula
-    // instead of the default.
+    // Custom ORCA metric names used to compute utilization. Check
+    // [ORCA Protocol](https://github.com/cncf/xds/blob/main/xds/data/orca/v3/orca_load_report.proto)
+    // for available metrics. For map fields in the ORCA proto,
+    // the string will be of the form `<map_field_name>.<map_key>`.
+    // For example, the string `named_metrics.foo`.
+    //
+    // If not specified, the load balancer will use the standard
+    // `application_utilization` metric.
+    // If specified, the utilization is the max of the values of
+    // the metrics specified here, when that max is greater than 0.
     repeated string metric_names_for_computing_utilization = 5;
   }
 

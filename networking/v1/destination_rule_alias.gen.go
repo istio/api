@@ -206,7 +206,7 @@ type LoadBalancerSettings_ConsistentHashLB_RingHash_ = v1alpha3.LoadBalancerSett
 // The Maglev load balancer implements consistent hashing to backend hosts.
 type LoadBalancerSettings_ConsistentHashLB_Maglev = v1alpha3.LoadBalancerSettings_ConsistentHashLB_Maglev
 
-// Client-side weighted round-robin load balancing policy that uses
+// BackendUtilizationLB load balancing policy that uses
 // backend-reported utilization metrics (ORCA) to dynamically adjust
 // endpoint weights. Endpoints that report higher utilization receive
 // proportionally fewer requests. Endpoints that have not yet reported

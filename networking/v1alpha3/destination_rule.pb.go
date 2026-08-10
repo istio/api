@@ -2519,7 +2519,7 @@ func (*LoadBalancerSettings_ConsistentHashLB_RingHash_) isLoadBalancerSettings_C
 func (*LoadBalancerSettings_ConsistentHashLB_Maglev) isLoadBalancerSettings_ConsistentHashLB_HashAlgorithm() {
 }
 
-// Client-side weighted round-robin load balancing policy that uses
+// BackendUtilizationLB load balancing policy that uses
 // backend-reported utilization metrics (ORCA) to dynamically adjust
 // endpoint weights. Endpoints that report higher utilization receive
 // proportionally fewer requests. Endpoints that have not yet reported
@@ -2535,7 +2535,7 @@ type LoadBalancerSettings_BackendUtilizationLB struct {
 	// same weight as endpoints without metrics.
 	// Default is 10s.
 	// +protoc-gen-crd:duration-validation:none
-	BlackoutPeriod *duration.Duration `protobuf:"bytes,1,opt,name=blackout_period,json=blackoutPeriod,proto3" json:"blackout_period,omitempty"`
+	WeightStabilizationPeriod *duration.Duration `protobuf:"bytes,1,opt,name=weight_stabilization_period,json=weightStabilizationPeriod,proto3" json:"weight_stabilization_period,omitempty"`
 	// If an endpoint stops reporting utilization metrics for this long,
 	// its reported weight is discarded and it reverts to the default
 	// (equal) weight.
@@ -2555,10 +2555,16 @@ type LoadBalancerSettings_BackendUtilizationLB struct {
 	// Default is 0 (disabled).
 	// +kubebuilder:validation:Minimum=0
 	ErrorUtilizationPenaltyPercent uint32 `protobuf:"varint,4,opt,name=error_utilization_penalty_percent,json=errorUtilizationPenaltyPercent,proto3" json:"error_utilization_penalty_percent,omitempty"`
-	// Custom ORCA metric names used to compute utilization when the
-	// standard `application_utilization` metric is not available from the
-	// backend. When set, these metrics are used in the weight formula
-	// instead of the default.
+	// Custom ORCA metric names used to compute utilization. Check
+	// [ORCA Protocol](https://github.com/cncf/xds/blob/main/xds/data/orca/v3/orca_load_report.proto)
+	// for available metrics. For map fields in the ORCA proto,
+	// the string will be of the form `<map_field_name>.<map_key>`.
+	// For example, the string `named_metrics.foo`.
+	//
+	// If not specified, the load balancer will use the standard
+	// `application_utilization` metric.
+	// If specified, the utilization is the max of the values of
+	// the metrics specified here, when that max is greater than 0.
 	MetricNamesForComputingUtilization []string `protobuf:"bytes,5,rep,name=metric_names_for_computing_utilization,json=metricNamesForComputingUtilization,proto3" json:"metric_names_for_computing_utilization,omitempty"`
 	unknownFields                      protoimpl.UnknownFields
 	sizeCache                          protoimpl.SizeCache
@@ -2594,9 +2600,9 @@ func (*LoadBalancerSettings_BackendUtilizationLB) Descriptor() ([]byte, []int) {
 	return file_networking_v1alpha3_destination_rule_proto_rawDescGZIP(), []int{3, 1}
 }
 
-func (x *LoadBalancerSettings_BackendUtilizationLB) GetBlackoutPeriod() *duration.Duration {
+func (x *LoadBalancerSettings_BackendUtilizationLB) GetWeightStabilizationPeriod() *duration.Duration {
 	if x != nil {
-		return x.BlackoutPeriod
+		return x.WeightStabilizationPeriod
 	}
 	return nil
 }
@@ -3461,7 +3467,7 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\x0etraffic_policy\x18\x03 \x01(\v2(.istio.networking.v1alpha3.TrafficPolicyR\rtrafficPolicy\x1a9\n" +
 	"\vLabelsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x84\x11\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x9b\x11\n" +
 	"\x14LoadBalancerSettings\x12R\n" +
 	"\x06simple\x18\x01 \x01(\x0e28.istio.networking.v1alpha3.LoadBalancerSettings.SimpleLBH\x00R\x06simple\x12k\n" +
 	"\x0fconsistent_hash\x18\x02 \x01(\v2@.istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLBH\x00R\x0econsistentHash\x12w\n" +
@@ -3497,9 +3503,9 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05valueB\n" +
 	"\n" +
 	"\bhash_keyB\x10\n" +
-	"\x0ehash_algorithm\x1a\x9b\x03\n" +
-	"\x14BackendUtilizationLB\x12B\n" +
-	"\x0fblackout_period\x18\x01 \x01(\v2\x19.google.protobuf.DurationR\x0eblackoutPeriod\x12S\n" +
+	"\x0ehash_algorithm\x1a\xb2\x03\n" +
+	"\x14BackendUtilizationLB\x12Y\n" +
+	"\x1bweight_stabilization_period\x18\x01 \x01(\v2\x19.google.protobuf.DurationR\x19weightStabilizationPeriod\x12S\n" +
 	"\x18weight_expiration_period\x18\x02 \x01(\v2\x19.google.protobuf.DurationR\x16weightExpirationPeriod\x12K\n" +
 	"\x14weight_update_period\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\x12weightUpdatePeriod\x12I\n" +
 	"!error_utilization_penalty_percent\x18\x04 \x01(\rR\x1eerrorUtilizationPenaltyPercent\x12R\n" +
@@ -3713,7 +3719,7 @@ var file_networking_v1alpha3_destination_rule_proto_depIdxs = []int32{
 	23, // 46: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.http_cookie:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie
 	21, // 47: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.ring_hash:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.RingHash
 	22, // 48: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.maglev:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.MagLev
-	34, // 49: istio.networking.v1alpha3.LoadBalancerSettings.BackendUtilizationLB.blackout_period:type_name -> google.protobuf.Duration
+	34, // 49: istio.networking.v1alpha3.LoadBalancerSettings.BackendUtilizationLB.weight_stabilization_period:type_name -> google.protobuf.Duration
 	34, // 50: istio.networking.v1alpha3.LoadBalancerSettings.BackendUtilizationLB.weight_expiration_period:type_name -> google.protobuf.Duration
 	34, // 51: istio.networking.v1alpha3.LoadBalancerSettings.BackendUtilizationLB.weight_update_period:type_name -> google.protobuf.Duration
 	34, // 52: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.ttl:type_name -> google.protobuf.Duration

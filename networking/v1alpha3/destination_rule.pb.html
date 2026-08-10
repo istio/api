@@ -948,7 +948,7 @@ the generated cookie will be a session cookie.</p>
 </section>
 <h3 id="LoadBalancerSettings-BackendUtilizationLB">BackendUtilizationLB</h3>
 <section>
-<p>Client-side weighted round-robin load balancing policy that uses
+<p>BackendUtilizationLB load balancing policy that uses
 backend-reported utilization metrics (ORCA) to dynamically adjust
 endpoint weights. Endpoints that report higher utilization receive
 proportionally fewer requests. Endpoints that have not yet reported
@@ -965,8 +965,8 @@ load balancing policy.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="LoadBalancerSettings-BackendUtilizationLB-blackout_period">
-<td><div class="field"><div class="name"><code><a href="#LoadBalancerSettings-BackendUtilizationLB-blackout_period">blackoutPeriod</a></code></div>
+<tr id="LoadBalancerSettings-BackendUtilizationLB-weight_stabilization_period">
+<td><div class="field"><div class="name"><code><a href="#LoadBalancerSettings-BackendUtilizationLB-weight_stabilization_period">weightStabilizationPeriod</a></code></div>
 <div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></div>
 </div></td>
 <td>
@@ -1019,10 +1019,15 @@ Default is 0 (disabled).</p>
 <div class="type">string[]</div>
 </div></td>
 <td>
-<p>Custom ORCA metric names used to compute utilization when the
-standard <code>application_utilization</code> metric is not available from the
-backend. When set, these metrics are used in the weight formula
-instead of the default.</p>
+<p>Custom ORCA metric names used to compute utilization. Check
+<a href="https://github.com/cncf/xds/blob/main/xds/data/orca/v3/orca_load_report.proto">ORCA Protocol</a>
+for available metrics. For map fields in the ORCA proto,
+the string will be of the form <code>&lt;map_field_name&gt;.&lt;map_key&gt;</code>.
+For example, the string <code>named_metrics.foo</code>.</p>
+<p>If not specified, the load balancer will use the standard
+<code>application_utilization</code> metric.
+If specified, the utilization is the max of the values of
+the metrics specified here, when that max is greater than 0.</p>
 
 </td>
 </tr>

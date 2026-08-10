@@ -5,6 +5,6 @@ issue: []
 releaseNotes:
   - |
     **Added** `backendUtilization` load balancing policy to `DestinationRule`,
-    enabling client-side weighted round-robin based on backend-reported ORCA
+    enabling BackendUtilizationLB based on backend-reported ORCA
     utilization metrics. Endpoints reporting higher utilization automatically
     receive fewer requests.
