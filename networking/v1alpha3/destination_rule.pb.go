@@ -818,7 +818,7 @@ func (x *Subset) GetTrafficPolicy() *TrafficPolicy {
 //	trafficPolicy:
 //	  loadBalancer:
 //	    backendUtilization:
-//	      blackoutPeriod: 10s
+//	      weightStabilizationPeriod: 10s
 //	      weightExpirationPeriod: 3m
 //	      weightUpdatePeriod: 1s
 //
@@ -2531,7 +2531,7 @@ func (*LoadBalancerSettings_ConsistentHashLB_Maglev) isLoadBalancerSettings_Cons
 type LoadBalancerSettings_BackendUtilizationLB struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Duration after an endpoint first reports metrics before its weight
-	// is trusted. During the blackout period the endpoint receives the
+	// is trusted. During the stabilization period the endpoint receives the
 	// same weight as endpoints without metrics.
 	// Default is 10s.
 	// +protoc-gen-crd:duration-validation:none

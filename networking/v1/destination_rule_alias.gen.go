@@ -153,7 +153,7 @@ type Subset = v1alpha3.Subset
 //	trafficPolicy:
 //	  loadBalancer:
 //	    backendUtilization:
-//	      blackoutPeriod: 10s
+//	      weightStabilizationPeriod: 10s
 //	      weightExpirationPeriod: 3m
 //	      weightUpdatePeriod: 1s
 //
