@@ -1461,5 +1461,5 @@ message ZoneAwareLoadBalancerSetting {
   // would produce poor load balancing results.
   // If not specified, the default is 6.
   // +kubebuilder:validation:Minimum=1
-  google.protobuf.UInt64Value min_cluster_size = 4;
+  google.protobuf.UInt32Value min_cluster_size = 4;
 }
