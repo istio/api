@@ -1919,7 +1919,7 @@ type ZoneAwareLoadBalancerSetting struct {
 	// would produce poor load balancing results.
 	// If not specified, the default is 6.
 	// +kubebuilder:validation:Minimum=1
-	MinClusterSize *wrappers.UInt64Value `protobuf:"bytes,4,opt,name=min_cluster_size,json=minClusterSize,proto3" json:"min_cluster_size,omitempty"`
+	MinClusterSize *wrappers.UInt32Value `protobuf:"bytes,4,opt,name=min_cluster_size,json=minClusterSize,proto3" json:"min_cluster_size,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -1975,7 +1975,7 @@ func (x *ZoneAwareLoadBalancerSetting) GetFailoverPriority() []string {
 	return nil
 }
 
-func (x *ZoneAwareLoadBalancerSetting) GetMinClusterSize() *wrappers.UInt64Value {
+func (x *ZoneAwareLoadBalancerSetting) GetMinClusterSize() *wrappers.UInt32Value {
 	if x != nil {
 		return x.MinClusterSize
 	}
@@ -3444,7 +3444,7 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\aenabled\x18\x01 \x01(\v2\x1a.google.protobuf.BoolValueR\aenabled\x12\\\n" +
 	"\bfailover\x18\x02 \x03(\v2@.istio.networking.v1alpha3.ZoneAwareLoadBalancerSetting.FailoverR\bfailover\x12+\n" +
 	"\x11failover_priority\x18\x03 \x03(\tR\x10failoverPriority\x12F\n" +
-	"\x10min_cluster_size\x18\x04 \x01(\v2\x1c.google.protobuf.UInt64ValueR\x0eminClusterSize\x1a.\n" +
+	"\x10min_cluster_size\x18\x04 \x01(\v2\x1c.google.protobuf.UInt32ValueR\x0eminClusterSize\x1a.\n" +
 	"\bFailover\x12\x12\n" +
 	"\x04from\x18\x01 \x01(\tR\x04from\x12\x0e\n" +
 	"\x02to\x18\x02 \x01(\tR\x02toB\"Z istio.io/api/networking/v1alpha3b\x06proto3"
@@ -3501,8 +3501,7 @@ var file_networking_v1alpha3_destination_rule_proto_goTypes = []any{
 	(*wrappers.DoubleValue)(nil),                  // 34: google.protobuf.DoubleValue
 	(*wrappers.UInt32Value)(nil),                  // 35: google.protobuf.UInt32Value
 	(*wrappers.BoolValue)(nil),                    // 36: google.protobuf.BoolValue
-	(*wrappers.UInt64Value)(nil),                  // 37: google.protobuf.UInt64Value
-	(*PortSelector)(nil),                          // 38: istio.networking.v1alpha3.PortSelector
+	(*PortSelector)(nil),                          // 37: istio.networking.v1alpha3.PortSelector
 }
 var file_networking_v1alpha3_destination_rule_proto_depIdxs = []int32{
 	5,  // 0: istio.networking.v1alpha3.DestinationRule.traffic_policy:type_name -> istio.networking.v1alpha3.TrafficPolicy
@@ -3541,8 +3540,8 @@ var file_networking_v1alpha3_destination_rule_proto_depIdxs = []int32{
 	36, // 33: istio.networking.v1alpha3.LocalityLoadBalancerSetting.enabled:type_name -> google.protobuf.BoolValue
 	36, // 34: istio.networking.v1alpha3.ZoneAwareLoadBalancerSetting.enabled:type_name -> google.protobuf.BoolValue
 	31, // 35: istio.networking.v1alpha3.ZoneAwareLoadBalancerSetting.failover:type_name -> istio.networking.v1alpha3.ZoneAwareLoadBalancerSetting.Failover
-	37, // 36: istio.networking.v1alpha3.ZoneAwareLoadBalancerSetting.min_cluster_size:type_name -> google.protobuf.UInt64Value
-	38, // 37: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.port:type_name -> istio.networking.v1alpha3.PortSelector
+	35, // 36: istio.networking.v1alpha3.ZoneAwareLoadBalancerSetting.min_cluster_size:type_name -> google.protobuf.UInt32Value
+	37, // 37: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.port:type_name -> istio.networking.v1alpha3.PortSelector
 	7,  // 38: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.load_balancer:type_name -> istio.networking.v1alpha3.LoadBalancerSettings
 	9,  // 39: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.connection_pool:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings
 	10, // 40: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.outlier_detection:type_name -> istio.networking.v1alpha3.OutlierDetection
