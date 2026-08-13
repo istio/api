@@ -1,0 +1,10 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue: []
+releaseNotes:
+  - |
+    **Added** `backendUtilization` load balancing policy to `DestinationRule`,
+    enabling BackendUtilizationLB based on backend-reported ORCA
+    utilization metrics. Endpoints reporting higher utilization automatically
+    receive fewer requests.

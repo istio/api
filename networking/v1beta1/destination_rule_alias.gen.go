@@ -136,6 +136,28 @@ type Subset = v1alpha3.Subset
 //	        ttl: 0s
 //
 // ```
+//
+// The following example uses backend utilization to dynamically weight
+// endpoints based on ORCA metrics reported by the backends:
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1
+// kind: DestinationRule
+// metadata:
+//
+//	name: bookinfo-ratings
+//
+// spec:
+//
+//	host: ratings.prod.svc.cluster.local
+//	trafficPolicy:
+//	  loadBalancer:
+//	    backendUtilization:
+//	      weightStabilizationPeriod: 10s
+//	      weightExpirationPeriod: 3m
+//	      weightUpdatePeriod: 1s
+//
+// ```
 type LoadBalancerSettings = v1alpha3.LoadBalancerSettings
 
 // Consistent Hash-based load balancing can be used to provide soft
@@ -184,6 +206,17 @@ type LoadBalancerSettings_ConsistentHashLB_RingHash_ = v1alpha3.LoadBalancerSett
 // The Maglev load balancer implements consistent hashing to backend hosts.
 type LoadBalancerSettings_ConsistentHashLB_Maglev = v1alpha3.LoadBalancerSettings_ConsistentHashLB_Maglev
 
+// BackendUtilizationLB load balancing policy that uses
+// backend-reported utilization metrics (ORCA) to dynamically adjust
+// endpoint weights. Endpoints that report higher utilization receive
+// proportionally fewer requests. Endpoints that have not yet reported
+// metrics are given equal weight.
+//
+// This corresponds to Envoy's
+// [client_side_weighted_round_robin](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#weighted-round-robin)
+// load balancing policy.
+type LoadBalancerSettings_BackendUtilizationLB = v1alpha3.LoadBalancerSettings_BackendUtilizationLB
+
 // +kubebuilder:validation:XValidation:message="only one of warmupDurationSecs or warmup can be set",rule="oneof(self.warmupDurationSecs, self.warmup)"
 // Standard load balancing algorithms that require no tuning.
 type LoadBalancerSettings_SimpleLB = v1alpha3.LoadBalancerSettings_SimpleLB
@@ -224,6 +257,11 @@ type LoadBalancerSettings_Simple = v1alpha3.LoadBalancerSettings_Simple
 
 // Consistent Hash-based load balancing can be used to provide soft session affinity based on HTTP headers, cookies or other properties.
 type LoadBalancerSettings_ConsistentHash = v1alpha3.LoadBalancerSettings_ConsistentHash
+
+// Utilization-based load balancing that uses backend-reported ORCA
+// metrics to weight endpoints by their current load. Backends that
+// report higher utilization receive fewer requests.
+type LoadBalancerSettings_BackendUtilization = v1alpha3.LoadBalancerSettings_BackendUtilization
 type WarmupConfiguration = v1alpha3.WarmupConfiguration
 
 // Connection pool settings for an upstream host. The settings apply to
