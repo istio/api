@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue: []
+releaseNotes:
+  - |
+    **Added** `alpnProtocols` to the `Gateway` server TLS settings, allowing
+    the ALPN protocols advertised by the gateway during the TLS handshake to
+    be overridden. The proxy advertises `h2` and `http/1.1` by default.
