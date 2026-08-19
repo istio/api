@@ -1,0 +1,12 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue: []
+releaseNotes:
+  - |
+    **Added** `transportSocket` to the `EnvoyFilter` listener filter chain match, to
+    match filter chains by the transport socket they are configured with, such as
+    `envoy.transport_sockets.tls`. Unlike `transportProtocol`, which is a match
+    condition describing the traffic a filter chain accepts, this matches how the
+    connection is actually processed, so it can precisely select the filter chains
+    that terminate TLS.
