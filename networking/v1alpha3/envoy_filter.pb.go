@@ -1861,15 +1861,15 @@ type EnvoyFilter_ListenerMatch_FilterChainMatch struct {
 	//
 	// Accepted values include:
 	//
-	//   - `envoy.transport_sockets.raw_buffer` - the connection bytes are
-	//     passed through unmodified. This also matches filter chains with
-	//     no transport socket explicitly configured, since that is Envoy's
-	//     default.
-	//   - `envoy.transport_sockets.tls` - the filter chain terminates TLS,
-	//     for example an inbound filter chain terminating mTLS, or a
-	//     gateway HTTPS/TLS server that is not in passthrough mode.
-	//   - `envoy.transport_sockets.quic` - the filter chain terminates
-	//     QUIC, including the TLS handshake carried within it.
+	// * `envoy.transport_sockets.raw_buffer` - the connection bytes are
+	//   passed through unmodified. This also matches filter chains with
+	//   no transport socket explicitly configured, since that is Envoy's
+	//   default.
+	// * `envoy.transport_sockets.tls` - the filter chain terminates TLS,
+	//   for example an inbound filter chain terminating mTLS, or a
+	//   gateway HTTPS/TLS server that is not in passthrough mode.
+	// * `envoy.transport_sockets.quic` - the filter chain terminates
+	//   QUIC, including the TLS handshake carried within it.
 	TransportSocket string `protobuf:"bytes,7,opt,name=transport_socket,json=transportSocket,proto3" json:"transport_socket,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
