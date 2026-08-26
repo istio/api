@@ -1627,6 +1627,12 @@ used separately or together. Because the errors counted by
 if the value of <code>consecutiveGatewayErrors</code> is greater than or equal to
 the value of <code>consecutive5xxErrors</code>, <code>consecutiveGatewayErrors</code> will have
 no effect.</p>
+<p>Because this threshold only counts <em>consecutive</em> failures, a host whose
+errors are interleaved with successful requests may never reach it even
+if its overall failure rate is high, e.g. a host that fails every other
+request will never accumulate 5 consecutive errors. Use
+<code>failurePercentageThreshold</code> to eject hosts based on failure rate over
+the analysis <code>interval</code> instead of requiring consecutive failures.</p>
 
 </td>
 </tr>
@@ -1702,6 +1708,9 @@ HTTP status codes are counted as errors toward those thresholds.</p>
 <p>The failure percentage to use when determining failure percentage-based outlier detection. If
 the failure percentage of a given host is greater than or equal to this value, it will be
 ejected. Defaults to 85.</p>
+<p>Unlike <code>consecutive5xxErrors</code> and <code>consecutiveGatewayErrors</code>, this does not require failures
+to occur back-to-back, so it will still eject a host whose failure rate is high but whose
+errors are interspersed with successful requests.</p>
 
 </td>
 </tr>

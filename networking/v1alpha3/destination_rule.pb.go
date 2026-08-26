@@ -1225,6 +1225,13 @@ type OutlierDetection struct {
 	// if the value of `consecutiveGatewayErrors` is greater than or equal to
 	// the value of `consecutive5xxErrors`, `consecutiveGatewayErrors` will have
 	// no effect.
+	//
+	// Because this threshold only counts *consecutive* failures, a host whose
+	// errors are interleaved with successful requests may never reach it even
+	// if its overall failure rate is high, e.g. a host that fails every other
+	// request will never accumulate 5 consecutive errors. Use
+	// `failurePercentageThreshold` to eject hosts based on failure rate over
+	// the analysis `interval` instead of requiring consecutive failures.
 	Consecutive_5XxErrors *wrappers.UInt32Value `protobuf:"bytes,7,opt,name=consecutive_5xx_errors,json=consecutive5xxErrors,proto3" json:"consecutive_5xx_errors,omitempty"`
 	// Time interval between ejection sweep analysis. format:
 	// 1h/1m/1s/1ms. MUST be >=1ms. Default is 10s.
@@ -1263,6 +1270,10 @@ type OutlierDetection struct {
 	// The failure percentage to use when determining failure percentage-based outlier detection. If
 	// the failure percentage of a given host is greater than or equal to this value, it will be
 	// ejected. Defaults to 85.
+	//
+	// Unlike `consecutive5xxErrors` and `consecutiveGatewayErrors`, this does not require failures
+	// to occur back-to-back, so it will still eject a host whose failure rate is high but whose
+	// errors are interspersed with successful requests.
 	//
 	// +kubebuilder:validation:Maximum=100
 	// +kubebuilder:validation:Minimum=0
