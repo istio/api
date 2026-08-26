@@ -1694,6 +1694,17 @@ HTTP status codes are counted as errors toward those thresholds.</p>
 
 </td>
 </tr>
+<tr id="OutlierDetection-failure_percentage_threshold">
+<td><div class="field"><div class="name"><code><a href="#OutlierDetection-failure_percentage_threshold">failurePercentageThreshold</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>The failure percentage to use when determining failure percentage-based outlier detection. If
+the failure percentage of a given host is greater than or equal to this value, it will be
+ejected. Defaults to 85.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>

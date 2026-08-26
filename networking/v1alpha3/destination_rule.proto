@@ -960,6 +960,14 @@ message OutlierDetection {
   // +protoc-gen-crd:list-value-validation:Minimum=100
   // +protoc-gen-crd:list-value-validation:Maximum=599
   repeated uint32 outlier_detection_http_error_codes = 10;
+
+  // The failure percentage to use when determining failure percentage-based outlier detection. If
+  // the failure percentage of a given host is greater than or equal to this value, it will be
+  // ejected. Defaults to 85.
+  //
+  // +kubebuilder:validation:Maximum=100
+  // +kubebuilder:validation:Minimum=0
+  google.protobuf.UInt32Value failure_percentage_threshold = 11;
 }
 
 // SSL/TLS related settings for upstream connections. See Envoy's [TLS
