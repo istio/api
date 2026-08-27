@@ -1,0 +1,69 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: string-match-types
+spec:
+  hosts:
+  - reviews.prod.svc.cluster.local
+  http:
+  - match:
+    - uri:
+        prefix: /reviews
+      authority:
+        exact: reviews.prod.svc.cluster.local
+      headers:
+        end-user:
+          regex: jas.n
+    route:
+    - destination:
+        host: reviews.prod.svc.cluster.local
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: suffix-match
+spec:
+  hosts:
+  - '*.example.com'
+  http:
+  - match:
+    - authority:
+        suffix: .a.example.com
+      headers:
+        referer:
+          suffix: .example.com
+      queryParams:
+        token:
+          suffix: -dev
+      withoutHeaders:
+        end-user:
+          suffix: son
+    route:
+    - destination:
+        host: a.example.com
+  - route:
+    - destination:
+        host: b.example.com
+---
+# Note: corsPolicy.allowOrigins deliberately has no `suffix` entry. These fixtures are synced
+# into istio/istio, where the dependency-update commit runs them against the webhook validator
+# before the webhook supports suffix CORS origins; suffix allowOrigins are covered by the
+# webhook's own unit tests instead.
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: cors-match
+spec:
+  hosts:
+  - ratings.prod.svc.cluster.local
+  http:
+  - corsPolicy:
+      allowOrigins:
+      - exact: https://example.com
+      - prefix: https://example
+      - regex: https://.*\.example\.com
+      allowMethods:
+      - GET
+    route:
+    - destination:
+        host: ratings.prod.svc.cluster.local

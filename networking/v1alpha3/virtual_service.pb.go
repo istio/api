@@ -1332,6 +1332,8 @@ type HTTPMatchRequest struct {
 	//
 	// - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
 	//
+	// **Note:** `suffix` matching is not supported for `uri`.
+	//
 	// **Note:** Case-insensitive matching could be enabled via the
 	// `ignoreUriCase` flag.
 	Uri *StringMatch `protobuf:"bytes,1,opt,name=uri,proto3" json:"uri,omitempty"`
@@ -1343,6 +1345,8 @@ type HTTPMatchRequest struct {
 	// - `prefix: "value"` for prefix-based match
 	//
 	// - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
+	//
+	// - `suffix: "value"` for suffix-based match
 	Scheme *StringMatch `protobuf:"bytes,2,opt,name=scheme,proto3" json:"scheme,omitempty"`
 	// HTTP Method
 	// values are case-sensitive and formatted as follows:
@@ -1352,6 +1356,8 @@ type HTTPMatchRequest struct {
 	// - `prefix: "value"` for prefix-based match
 	//
 	// - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
+	//
+	// - `suffix: "value"` for suffix-based match
 	Method *StringMatch `protobuf:"bytes,3,opt,name=method,proto3" json:"method,omitempty"`
 	// HTTP Authority
 	// values are case-sensitive and formatted as follows:
@@ -1361,6 +1367,8 @@ type HTTPMatchRequest struct {
 	// - `prefix: "value"` for prefix-based match
 	//
 	// - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
+	//
+	// - `suffix: "value"` for suffix-based match
 	Authority *StringMatch `protobuf:"bytes,4,opt,name=authority,proto3" json:"authority,omitempty"`
 	// The header keys must be lowercase and use hyphen as the separator,
 	// e.g. _x-request-id_.
@@ -1372,6 +1380,8 @@ type HTTPMatchRequest struct {
 	// - `prefix: "value"` for prefix-based match
 	//
 	// - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
+	//
+	// - `suffix: "value"` for suffix-based match
 	//
 	// If the value is empty and only the name of header is specified, presence of the header is checked.
 	// To provide an empty value, use `{}`, for example:
@@ -1416,6 +1426,9 @@ type HTTPMatchRequest struct {
 	//   - For a query parameter like "?key=123", the map key would be "key" and the
 	//     string match could be defined as `regex: "\d+$"`. Note that this
 	//     configuration will only match values like "123" but not "a123" or "123a".
+	//
+	//   - For a query parameter like "?key=ab123" or "?key=xy123", the map key would be "key" and the
+	//     string match could be defined as `suffix: "123"`.
 	QueryParams map[string]*StringMatch `protobuf:"bytes,9,rep,name=query_params,json=queryParams,proto3" json:"query_params,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	// Flag to specify whether the URI matching should be case-insensitive.
 	//
@@ -2576,7 +2589,7 @@ func (x *RegexRewrite) GetRewrite() string {
 	return ""
 }
 
-// Describes how to match a given string in HTTP headers. `exact` and `prefix` matching is
+// Describes how to match a given string in HTTP headers. `exact`, `prefix` and `suffix` matching is
 // case-sensitive. `regex` matching supports case-insensitive matches.
 type StringMatch struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -2585,6 +2598,7 @@ type StringMatch struct {
 	//	*StringMatch_Exact
 	//	*StringMatch_Prefix
 	//	*StringMatch_Regex
+	//	*StringMatch_Suffix
 	MatchType     isStringMatch_MatchType `protobuf_oneof:"match_type"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -2654,6 +2668,15 @@ func (x *StringMatch) GetRegex() string {
 	return ""
 }
 
+func (x *StringMatch) GetSuffix() string {
+	if x != nil {
+		if x, ok := x.MatchType.(*StringMatch_Suffix); ok {
+			return x.Suffix
+		}
+	}
+	return ""
+}
+
 type isStringMatch_MatchType interface {
 	isStringMatch_MatchType()
 }
@@ -2675,11 +2698,18 @@ type StringMatch_Regex struct {
 	Regex string `protobuf:"bytes,3,opt,name=regex,proto3,oneof"`
 }
 
+type StringMatch_Suffix struct {
+	// suffix-based match
+	Suffix string `protobuf:"bytes,4,opt,name=suffix,proto3,oneof"`
+}
+
 func (*StringMatch_Exact) isStringMatch_MatchType() {}
 
 func (*StringMatch_Prefix) isStringMatch_MatchType() {}
 
 func (*StringMatch_Regex) isStringMatch_MatchType() {}
+
+func (*StringMatch_Suffix) isStringMatch_MatchType() {}
 
 // Describes the retry policy to use when a HTTP request fails. For
 // example, the following rule sets the maximum number of retries to 3 when
@@ -3695,11 +3725,12 @@ const file_networking_v1alpha3_virtual_service_proto_rawDesc = "" +
 	"\x11uri_regex_rewrite\x18\x03 \x01(\v2'.istio.networking.v1alpha3.RegexRewriteR\x0furiRegexRewrite\">\n" +
 	"\fRegexRewrite\x12\x14\n" +
 	"\x05match\x18\x01 \x01(\tR\x05match\x12\x18\n" +
-	"\arewrite\x18\x02 \x01(\tR\arewrite\"e\n" +
+	"\arewrite\x18\x02 \x01(\tR\arewrite\"\x7f\n" +
 	"\vStringMatch\x12\x16\n" +
 	"\x05exact\x18\x01 \x01(\tH\x00R\x05exact\x12\x18\n" +
 	"\x06prefix\x18\x02 \x01(\tH\x00R\x06prefix\x12\x16\n" +
-	"\x05regex\x18\x03 \x01(\tH\x00R\x05regexB\f\n" +
+	"\x05regex\x18\x03 \x01(\tH\x00R\x05regex\x12\x18\n" +
+	"\x06suffix\x18\x04 \x01(\tH\x00R\x06suffixB\f\n" +
 	"\n" +
 	"match_type\"\xe9\x02\n" +
 	"\tHTTPRetry\x12\x1a\n" +
@@ -3901,6 +3932,7 @@ func file_networking_v1alpha3_virtual_service_proto_init() {
 		(*StringMatch_Exact)(nil),
 		(*StringMatch_Prefix)(nil),
 		(*StringMatch_Regex)(nil),
+		(*StringMatch_Suffix)(nil),
 	}
 	file_networking_v1alpha3_virtual_service_proto_msgTypes[33].OneofWrappers = []any{
 		(*HTTPFaultInjection_Delay_FixedDelay)(nil),
