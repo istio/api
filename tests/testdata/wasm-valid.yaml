@@ -23,13 +23,6 @@ spec:
 apiVersion: extensions.istio.io/v1alpha1
 kind: WasmPlugin
 metadata:
-  name: url-without-schema
-spec:
-  url: "test"
----
-apiVersion: extensions.istio.io/v1alpha1
-kind: WasmPlugin
-metadata:
   name: env
 spec:
   url: "http://test"
@@ -42,3 +35,73 @@ spec:
         value: "test"
       - name: "test3"
         value: "test"
+---
+apiVersion: extensions.istio.io/v1alpha1
+kind: WasmPlugin
+metadata:
+  name: noprefix-image-default-lib-and-tag
+spec:
+  url: "bar"
+---
+apiVersion: extensions.istio.io/v1alpha1
+kind: WasmPlugin
+metadata:
+  name: noprefix-image-default-lib-with-tag
+spec:
+  url: "bar:latest"
+---
+apiVersion: extensions.istio.io/v1alpha1
+kind: WasmPlugin
+metadata:
+  name: noprefix-image-explicit-lib-default-tag
+spec:
+  url: "library/bar"
+---
+apiVersion: extensions.istio.io/v1alpha1
+kind: WasmPlugin
+metadata:
+  name: noprefix-image-explicit-lib-and-tag
+spec:
+  url: "library/bar:latest"
+---
+apiVersion: extensions.istio.io/v1alpha1
+kind: WasmPlugin
+metadata:
+  name: noprefix-image-with-explicit-repo-and-tag
+spec:
+  url: "foo.bar/foo/bar:1.21.4"
+---
+apiVersion: extensions.istio.io/v1alpha1
+kind: WasmPlugin
+metadata:
+  name: noprefix-image-with-explicit-repo-and-tag-and-port
+spec:
+  url: "foo.bar:5000/client_id_matches_cert:latest"
+---
+apiVersion: extensions.istio.io/v1alpha1
+kind: WasmPlugin
+metadata:
+  name: oci-image-explicit-lib-default-tag
+spec:
+  url: "oci://library/bar"
+---
+apiVersion: extensions.istio.io/v1alpha1
+kind: WasmPlugin
+metadata:
+  name: oci-image-explicit-lib-and-tag
+spec:
+  url: "oci://library/bar:latest"
+---
+apiVersion: extensions.istio.io/v1alpha1
+kind: WasmPlugin
+metadata:
+  name: oci-image-with-explicit-repo-and-tag
+spec:
+  url: "oci://foo.bar/foo/bar:1.21.4"
+---
+apiVersion: extensions.istio.io/v1alpha1
+kind: WasmPlugin
+metadata:
+  name: oci-image-with-explicit-repo-and-tag-and-port
+spec:
+  url: "oci://foo.bar:5000/client_id_matches_cert:latest"
