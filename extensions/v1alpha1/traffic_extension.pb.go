@@ -573,7 +573,7 @@ type WasmConfig struct {
 	// hosted remotely.
 	//
 	// +kubebuilder:validation:MinLength=1
-	// +kubebuilder:validation:XValidation:message="url must have schema one of [http, https, file, oci]",rule="isURL(self) ? (url(self).getScheme() in [”, 'http', 'https', 'file', 'oci']) : (isURL('http://' + self) && url('http://' + self).getScheme() in [”, 'http', 'https', 'file', 'oci'])"
+	// +kubebuilder:validation:XValidation:message="url must have schema one of [http, https, file, oci]",rule="isURL(self) ? (url(self).getScheme() in ['', 'http', 'https', 'file', 'oci']) : (isURL('http://' + self) && url('http://' + self).getScheme() in ['', 'http', 'https', 'file', 'oci'])"
 	Url string `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
 	// SHA256 checksum that will be used to verify Wasm module or OCI container.
 	// If the `url` field already references a SHA256 (using the `@sha256:`
@@ -604,8 +604,8 @@ type WasmConfig struct {
 	// We can observe two major streams for signing OCI images: Cosign from Sigstore and Notary,
 	// which is used in Docker Content Trust.
 	// In case of Wasm module, multiple approaches are still in discussion.
-	//   - https://github.com/WebAssembly/design/issues/1413
-	//   - https://github.com/wasm-signatures/design (various signing tools are enumerated)
+	//  * https://github.com/WebAssembly/design/issues/1413
+	//  * https://github.com/wasm-signatures/design (various signing tools are enumerated)
 	//
 	// In addition, for each method for signing&verifying, we may need to consider to provide
 	// additional data or configuration (e.g., key rolling, KMS, root certs, ...) as well.

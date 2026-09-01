@@ -415,18 +415,17 @@ const (
 	// Explicitly setting any field overrides the corresponding profile default.
 	//
 	// Defaults applied by this profile:
-	//
-	//	listener_per_connection_buffer_limit_bytes: 32768 (32 KiB)
-	//	cluster_per_connection_buffer_limit_bytes:  32768 (32 KiB)
-	//	http_idle_timeout:                          3600s (1 hour)
-	//	http_request_timeout:                       300s  (5 minutes)
-	//	http_stream_idle_timeout:                   300s  (5 minutes)
-	//	http_max_concurrent_streams:                100
-	//	http2_initial_stream_window_size:           65536 (64 KiB)
-	//	http2_initial_connection_window_size:       1048576 (1 MiB)
-	//	http_headers_with_underscores_action:       HEADERS_WITH_UNDERSCORES_REJECT_REQUEST
-	//	http_merge_slashes:                         true
-	//	http_path_with_escaped_slashes_action:      UNESCAPE_AND_REDIRECT
+	//   listener_per_connection_buffer_limit_bytes: 32768 (32 KiB)
+	//   cluster_per_connection_buffer_limit_bytes:  32768 (32 KiB)
+	//   http_idle_timeout:                          3600s (1 hour)
+	//   http_request_timeout:                       300s  (5 minutes)
+	//   http_stream_idle_timeout:                   300s  (5 minutes)
+	//   http_max_concurrent_streams:                100
+	//   http2_initial_stream_window_size:           65536 (64 KiB)
+	//   http2_initial_connection_window_size:       1048576 (1 MiB)
+	//   http_headers_with_underscores_action:       HEADERS_WITH_UNDERSCORES_REJECT_REQUEST
+	//   http_merge_slashes:                         true
+	//   http_path_with_escaped_slashes_action:      UNESCAPE_AND_REDIRECT
 	ProxyConfig_ConnectionSettings_EDGE ProxyConfig_ConnectionSettings_Profile = 1
 )
 
@@ -610,12 +609,10 @@ type Tracing struct {
 	// Ex:
 	// ```yaml
 	// custom_tags:
-	//
-	//	new_tag_name:
-	//	  header:
-	//	    name: custom-http-header-name
-	//	    default_value: defaulted-value-from-custom-header
-	//
+	//   new_tag_name:
+	//     header:
+	//       name: custom-http-header-name
+	//       default_value: defaulted-value-from-custom-header
 	// ```
 	// $hide_from_docs
 	CustomTags map[string]*Tracing_CustomTag `protobuf:"bytes,5,rep,name=custom_tags,json=customTags,proto3" json:"custom_tags,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
@@ -1181,14 +1178,12 @@ type ProxyConfig struct {
 	// you can specify stats matcher as follows:
 	// ```yaml
 	// proxyStatsMatcher:
-	//
-	//	inclusionRegexps:
-	//	  - .*outlier_detection.*
-	//	  - .*upstream_rq_retry.*
-	//	  - .*upstream_cx_.*
-	//	inclusionSuffixes:
-	//	  - upstream_rq_timeout
-	//
+	//   inclusionRegexps:
+	//     - .*outlier_detection.*
+	//     - .*upstream_rq_retry.*
+	//     - .*upstream_cx_.*
+	//   inclusionSuffixes:
+	//     - upstream_rq_timeout
 	// ```
 	// Note including more Envoy stats might increase number of time series
 	// collected by prometheus significantly. Care needs to be taken on Prometheus
@@ -1217,43 +1212,37 @@ type ProxyConfig struct {
 	//
 	// ```yaml
 	// proxyHeaders:
-	//
-	//	server:
-	//	  value: "my-custom-server"
-	//	# Explicitly enable Request IDs.
-	//	# As this is the default, this has no effect.
-	//	requestId: {}
-	//	attemptCount:
-	//	  disabled: true
-	//
+	//   server:
+	//     value: "my-custom-server"
+	//   # Explicitly enable Request IDs.
+	//   # As this is the default, this has no effect.
+	//   requestId: {}
+	//   attemptCount:
+	//     disabled: true
 	// ```
 	//
-	// # Below shows an example of preserving the header case for HTTP 1.x requests
+	// Below shows an example of preserving the header case for HTTP 1.x requests
 	//
 	// ```yaml
 	// proxyHeaders:
-	//
-	//	preserveHttp1HeaderCase: true
-	//
+	//   preserveHttp1HeaderCase: true
 	// ```
 	//
 	// Some headers are enabled by default, and require explicitly disabling. See below for an example of disabling all default-enabled headers:
 	//
 	// ```yaml
 	// proxyHeaders:
-	//
-	//	forwardedClientCert: SANITIZE
-	//	server:
-	//	  disabled: true
-	//	requestId:
-	//	  disabled: true
-	//	attemptCount:
-	//	  disabled: true
-	//	envoyDebugHeaders:
-	//	  disabled: true
-	//	metadataExchangeHeaders:
-	//	  mode: IN_MESH
-	//
+	//   forwardedClientCert: SANITIZE
+	//   server:
+	//     disabled: true
+	//   requestId:
+	//     disabled: true
+	//   attemptCount:
+	//     disabled: true
+	//   envoyDebugHeaders:
+	//     disabled: true
+	//   metadataExchangeHeaders:
+	//     mode: IN_MESH
 	// ```
 	ProxyHeaders *ProxyConfig_ProxyHeaders `protobuf:"bytes,39,opt,name=proxy_headers,json=proxyHeaders,proto3" json:"proxy_headers,omitempty"`
 	// File flush interval for envoy flushes buffers to disk in milliseconds.
@@ -2543,7 +2532,7 @@ type ProxyConfig_ProxyHeaders struct {
 	// This header is disabled by default.
 	XForwardedHost *ProxyConfig_ProxyHeaders_XForwardedHost `protobuf:"bytes,41,opt,name=x_forwarded_host,json=xForwardedHost,proto3" json:"x_forwarded_host,omitempty"`
 	// Controls the `X-Forwarded-Port` header. If enabled, the `X-Forwarded-Port` header is header with the port value
-	// client used to connect to Envoy. It will be ignored if the “x-forwarded-port“ header has been set by any
+	// client used to connect to Envoy. It will be ignored if the ``x-forwarded-port`` header has been set by any
 	// trusted proxy in front of Envoy.
 	// This header is disabled by default.
 	XForwardedPort *ProxyConfig_ProxyHeaders_XForwardedPort `protobuf:"bytes,42,opt,name=x_forwarded_port,json=xForwardedPort,proto3" json:"x_forwarded_port,omitempty"`
