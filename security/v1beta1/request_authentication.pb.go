@@ -483,9 +483,8 @@ type JWTRule struct {
 	//
 	// ```yaml
 	// audiences:
-	//   - bookstore_android.apps.example.com
-	//     bookstore_web.apps.example.com
-	//
+	// - bookstore_android.apps.example.com
+	//   bookstore_web.apps.example.com
 	// ```
 	// +protoc-gen-crd:list-value-validation:MinLength=1
 	Audiences []string `protobuf:"bytes,2,rep,name=audiences,proto3" json:"audiences,omitempty"`
@@ -515,11 +514,9 @@ type JWTRule struct {
 	// if JWT is expected to be found in `x-jwt-assertion` header, and have `Bearer` prefix:
 	//
 	// ```yaml
-	//
-	//	fromHeaders:
-	//	- name: x-jwt-assertion
-	//	  prefix: "Bearer "
-	//
+	//   fromHeaders:
+	//   - name: x-jwt-assertion
+	//     prefix: "Bearer "
 	// ```
 	//
 	// Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
@@ -529,10 +526,8 @@ type JWTRule struct {
 	// parameter `my_token` (e.g `/path?my_token=<JWT>`), the config is:
 	//
 	// ```yaml
-	//
-	//	fromParams:
-	//	- "my_token"
-	//
+	//   fromParams:
+	//   - "my_token"
 	// ```
 	//
 	// Note: Requests with multiple tokens (at different locations) are not supported, the output principal of
@@ -547,10 +542,8 @@ type JWTRule struct {
 	// For example, if config is:
 	//
 	// ``` yaml
-	//
-	//	fromCookies:
-	//	- auth-token
-	//
+	//   fromCookies:
+	//   - auth-token
 	// ```
 	// Then JWT will be extracted from `auth-token` cookie in the request.
 	//
@@ -564,15 +557,13 @@ type JWTRule struct {
 	// This differs from the `output_payload_to_header` by allowing outputting individual claims instead of the whole payload.
 	// The header specified in each operation in the list must be unique. Nested claims of type string/int/bool is supported as well.
 	// ```
-	//
-	//	outputClaimToHeaders:
-	//	- header: x-my-company-jwt-group
-	//	  claim: my-group
-	//	- header: x-test-environment-flag
-	//	  claim: test-flag
-	//	- header: x-jwt-claim-group
-	//	  claim: nested.key.group
-	//
+	//   outputClaimToHeaders:
+	//   - header: x-my-company-jwt-group
+	//     claim: my-group
+	//   - header: x-test-environment-flag
+	//     claim: test-flag
+	//   - header: x-jwt-claim-group
+	//     claim: nested.key.group
 	// ```
 	// [Experimental] This feature is a experimental feature.
 	OutputClaimToHeaders []*ClaimToHeader `protobuf:"bytes,11,rep,name=output_claim_to_headers,json=outputClaimToHeaders,proto3" json:"output_claim_to_headers,omitempty"` // [TODO:Update the status whenever this feature is promoted.]
