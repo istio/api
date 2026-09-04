@@ -1493,6 +1493,17 @@ type ClientTLSSettings struct {
 	// Otherwise the field will be applicable only at gateways, and
 	// sidecars will continue to use the certificate paths.
 	CredentialName string `protobuf:"bytes,7,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
+	// The name of the secret or the configmap that holds CA certificates used to
+	// verify the server's certificate. Allows sourcing the trust bundle
+	// independently from `credentialName`.
+	//
+	// Applies to `SIMPLE` and `MUTUAL` TLS modes. Should be empty when using `ISTIO_MUTUAL`.
+	//
+	// **NOTE:** This field is applicable at sidecars only if
+	// `DestinationRule` has a `workloadSelector` specified.
+	// Otherwise the field will be applicable only at gateways, and
+	// sidecars will continue to use the certificate paths.
+	CaCertCredentialName string `protobuf:"bytes,10,opt,name=ca_cert_credential_name,json=caCertCredentialName,proto3" json:"ca_cert_credential_name,omitempty"`
 	// A list of alternate names to verify the subject identity in the
 	// certificate. If specified, the proxy will verify that the server
 	// certificate's subject alt name matches one of the specified values.
@@ -1581,6 +1592,13 @@ func (x *ClientTLSSettings) GetCaCertificates() string {
 func (x *ClientTLSSettings) GetCredentialName() string {
 	if x != nil {
 		return x.CredentialName
+	}
+	return ""
+}
+
+func (x *ClientTLSSettings) GetCaCertCredentialName() string {
+	if x != nil {
+		return x.CaCertCredentialName
 	}
 	return ""
 }
@@ -3593,14 +3611,16 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\x12min_health_percent\x18\x05 \x01(\x05R\x10minHealthPercent\x12J\n" +
 	"\"outlier_detection_http_error_codes\x18\n" +
 	" \x03(\rR\x1eoutlierDetectionHttpErrorCodes\x12^\n" +
-	"\x1cfailure_percentage_threshold\x18\v \x01(\v2\x1c.google.protobuf.UInt32ValueR\x1afailurePercentageThreshold\"\xe4\x03\n" +
+	"\x1cfailure_percentage_threshold\x18\v \x01(\v2\x1c.google.protobuf.UInt32ValueR\x1afailurePercentageThreshold\"\x9b\x04\n" +
 	"\x11ClientTLSSettings\x12H\n" +
 	"\x04mode\x18\x01 \x01(\x0e24.istio.networking.v1alpha3.ClientTLSSettings.TLSmodeR\x04mode\x12-\n" +
 	"\x12client_certificate\x18\x02 \x01(\tR\x11clientCertificate\x12\x1f\n" +
 	"\vprivate_key\x18\x03 \x01(\tR\n" +
 	"privateKey\x12'\n" +
 	"\x0fca_certificates\x18\x04 \x01(\tR\x0ecaCertificates\x12'\n" +
-	"\x0fcredential_name\x18\a \x01(\tR\x0ecredentialName\x12*\n" +
+	"\x0fcredential_name\x18\a \x01(\tR\x0ecredentialName\x125\n" +
+	"\x17ca_cert_credential_name\x18\n" +
+	" \x01(\tR\x14caCertCredentialName\x12*\n" +
 	"\x11subject_alt_names\x18\x05 \x03(\tR\x0fsubjectAltNames\x12\x10\n" +
 	"\x03sni\x18\x06 \x01(\tR\x03sni\x12L\n" +
 	"\x14insecure_skip_verify\x18\b \x01(\v2\x1a.google.protobuf.BoolValueR\x12insecureSkipVerify\x12\x15\n" +
