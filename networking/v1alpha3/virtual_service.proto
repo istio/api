@@ -1594,6 +1594,24 @@ message HTTPMirrorPolicy {
   // If this field is absent, all the traffic (100%) will be mirrored.
   // Max value is 100.
   Percent percentage = 2;
+
+  // If set, the Host (`:authority`) header of the mirrored request is
+  // rewritten to this value before being sent to the mirror destination.
+  // This maps to Envoy's
+  // [host_rewrite_literal](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto#envoy-v3-api-field-config-route-v3-routeaction-requestmirrorpolicy-host-rewrite-literal)
+  // on the mirror policy. When set, Envoy will not append the default
+  // `-shadow` suffix to the Host header.
+  //
+  // +cue-gen:VirtualService:releaseChannel:extended
+  string authority = 3;
+
+  // Header manipulation rules applied to the mirrored request before it is
+  // sent to the mirror destination. This maps to Envoy's
+  // [request_headers_mutations](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto#envoy-v3-api-field-config-route-v3-routeaction-requestmirrorpolicy-request-headers-mutations)
+  // on the mirror policy.
+  //
+  // +cue-gen:VirtualService:releaseChannel:extended
+  Headers.HeaderOperations headers = 4;
 }
 
 // PortSelector specifies the number of a port to be used for
