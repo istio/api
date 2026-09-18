@@ -738,8 +738,9 @@ message HTTPMatchRequest {
   // the access logs for requests matching this route.
   string name = 11;
 
-  // URI to match
-  // values are case-sensitive and formatted as follows:
+  // URI to match.
+  //
+  // Values are case-sensitive and formatted as follows:
   //
   // - `exact: "value"` for exact string match
   //
@@ -751,8 +752,9 @@ message HTTPMatchRequest {
   // `ignoreUriCase` flag.
   StringMatch uri = 1;
 
-  // URI Scheme
-  // values are case-sensitive and formatted as follows:
+  // URI Scheme.
+  //
+  // Values are case-sensitive and formatted as follows:
   //
   // - `exact: "value"` for exact string match
   //
@@ -762,8 +764,9 @@ message HTTPMatchRequest {
   //
   StringMatch scheme = 2;
 
-  // HTTP Method
-  // values are case-sensitive and formatted as follows:
+  // HTTP Method.
+  //
+  // Values are case-sensitive and formatted as follows:
   //
   // - `exact: "value"` for exact string match
   //
@@ -773,8 +776,9 @@ message HTTPMatchRequest {
   //
   StringMatch method = 3;
 
-  // HTTP Authority
-  // values are case-sensitive and formatted as follows:
+  // HTTP Authority.
+  //
+  // Values are case-sensitive and formatted as follows:
   //
   // - `exact: "value"` for exact string match
   //
