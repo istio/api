@@ -1692,8 +1692,18 @@ message MeshConfig {
   // cluster-wide; ambient ignores `exportTo`).
   ServiceEntryVisibility service_entry_visibility = 72;
 
+  // Maps workload namespace to the Kubernetes CSR signer suffix authorized for
+  // that namespace when Istiod acts as a registration authority
+  // (EXTERNAL_CA=ISTIOD_RA_KUBERNETES_API). The full signer name passed to the
+  // Kubernetes API is CERT_SIGNER_DOMAIN + "/" + mapped_value.
+  // If the map is non-empty, any CreateCertificate request whose caller namespace
+  // is not present in the map, or whose requested signer does not match, is
+  // rejected. If the map is empty, no signer authorization is enforced (default,
+  // backward-compatible behavior).
+  map<string, string> cert_signer_namespace_map = 75;
+
   // $hide_from_docs
-  // Next available field number: 75
+  // Next available field number: 76
   reserved 1;
   reserved "mixer_check_server";
   reserved 2;
