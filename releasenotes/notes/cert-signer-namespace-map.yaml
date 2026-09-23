@@ -8,3 +8,4 @@ releaseNotes:
     **Added** `cert_signer_namespace_map` field to `MeshConfig` to allow
     namespace-scoped CSR signer authorization when Istiod acts as a
     registration authority (`EXTERNAL_CA=ISTIOD_RA_KUBERNETES_API`).
+    Thanks to Juno Im for the contribution.
