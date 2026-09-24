@@ -2297,7 +2297,7 @@ func (x *MeshConfig_ServiceSettings) GetHosts() []string {
 //
 // ```yaml
 // serviceScopeConfigs:
-//   - namespacesSelector:
+//   - namespaceSelector:
 //     matchExpressions:
 //   - key: istio.io/global
 //     operator: In
