@@ -411,6 +411,28 @@ If that backend becomes unhealthy, traffic will sent to <code>us-east</code>.</l
     </tr>
   </tbody>
 </table>
+<h2 id="SidecarAdminTransport">sidecar.istio.io/adminTransport</h2>
+<table class="annotations">
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <td><code>sidecar.istio.io/adminTransport</code></td>
+    </tr>
+    <tr>
+      <th>Feature Status</th>
+      <td>Alpha</td>
+    </tr>
+    <tr>
+      <th>Resource Types</th>
+      <td>[Pod]</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td><p>Selects TCP or UDS for Envoy administration. Overrides ISTIO_ENVOY_ADMIN_TRANSPORT in proxy metadata. UDS requires a Kubernetes native sidecar and diagnostics access through pods/exec. Defaults to TCP.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
 <h2 id="SidecarAgentLogLevel">sidecar.istio.io/agentLogLevel</h2>
 <table class="annotations">
   <tbody>
