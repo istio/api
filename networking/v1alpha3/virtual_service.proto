@@ -1091,7 +1091,7 @@ message TLSMatchAttributes {
 //         prefix: /foo/
 //     redirect:
 //       authority: foo.example.com
-//       prefix_rewrite: /
+//       prefixRewrite: /
 // ```
 //
 // With this rule, a request to example.com/foo/bar is redirected to
