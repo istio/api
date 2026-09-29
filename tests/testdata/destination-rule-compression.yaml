@@ -1,0 +1,284 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: decompression-v1alpha3-none
+spec:
+  host: reviews.default.svc.cluster.local
+  subsets:
+  - name: v1
+    trafficPolicy:
+      compression:
+        response:
+          decompress: {}
+      portLevelSettings:
+      - compression:
+          response:
+            decompress: {}
+        port:
+          number: 8080
+  trafficPolicy:
+    compression:
+      response:
+        decompress: {}
+    portLevelSettings:
+    - compression:
+        response:
+          decompress: {}
+      port:
+        number: 8080
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: decompression-v1alpha3-false
+spec:
+  host: reviews.default.svc.cluster.local
+  subsets:
+  - name: v1
+    trafficPolicy:
+      compression:
+        response:
+          decompress:
+            enabled: false
+      portLevelSettings:
+      - compression:
+          response:
+            decompress:
+              enabled: false
+        port:
+          number: 8080
+  trafficPolicy:
+    compression:
+      response:
+        decompress:
+          enabled: false
+    portLevelSettings:
+    - compression:
+        response:
+          decompress:
+            enabled: false
+      port:
+        number: 8080
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: decompression-v1alpha3-true
+spec:
+  host: reviews.default.svc.cluster.local
+  subsets:
+  - name: v1
+    trafficPolicy:
+      compression:
+        response:
+          decompress:
+            enabled: true
+      portLevelSettings:
+      - compression:
+          response:
+            decompress:
+              enabled: true
+        port:
+          number: 8080
+  trafficPolicy:
+    compression:
+      response:
+        decompress:
+          enabled: true
+    portLevelSettings:
+    - compression:
+        response:
+          decompress:
+            enabled: true
+      port:
+        number: 8080
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: decompression-v1beta1-none
+spec:
+  host: reviews.default.svc.cluster.local
+  subsets:
+  - name: v1
+    trafficPolicy:
+      compression:
+        response:
+          decompress: {}
+      portLevelSettings:
+      - compression:
+          response:
+            decompress: {}
+        port:
+          number: 8080
+  trafficPolicy:
+    compression:
+      response:
+        decompress: {}
+    portLevelSettings:
+    - compression:
+        response:
+          decompress: {}
+      port:
+        number: 8080
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: decompression-v1beta1-false
+spec:
+  host: reviews.default.svc.cluster.local
+  subsets:
+  - name: v1
+    trafficPolicy:
+      compression:
+        response:
+          decompress:
+            enabled: false
+      portLevelSettings:
+      - compression:
+          response:
+            decompress:
+              enabled: false
+        port:
+          number: 8080
+  trafficPolicy:
+    compression:
+      response:
+        decompress:
+          enabled: false
+    portLevelSettings:
+    - compression:
+        response:
+          decompress:
+            enabled: false
+      port:
+        number: 8080
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: decompression-v1beta1-true
+spec:
+  host: reviews.default.svc.cluster.local
+  subsets:
+  - name: v1
+    trafficPolicy:
+      compression:
+        response:
+          decompress:
+            enabled: true
+      portLevelSettings:
+      - compression:
+          response:
+            decompress:
+              enabled: true
+        port:
+          number: 8080
+  trafficPolicy:
+    compression:
+      response:
+        decompress:
+          enabled: true
+    portLevelSettings:
+    - compression:
+        response:
+          decompress:
+            enabled: true
+      port:
+        number: 8080
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: decompression-v1-none
+spec:
+  host: reviews.default.svc.cluster.local
+  subsets:
+  - name: v1
+    trafficPolicy:
+      compression:
+        response:
+          decompress: {}
+      portLevelSettings:
+      - compression:
+          response:
+            decompress: {}
+        port:
+          number: 8080
+  trafficPolicy:
+    compression:
+      response:
+        decompress: {}
+    portLevelSettings:
+    - compression:
+        response:
+          decompress: {}
+      port:
+        number: 8080
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: decompression-v1-false
+spec:
+  host: reviews.default.svc.cluster.local
+  subsets:
+  - name: v1
+    trafficPolicy:
+      compression:
+        response:
+          decompress:
+            enabled: false
+      portLevelSettings:
+      - compression:
+          response:
+            decompress:
+              enabled: false
+        port:
+          number: 8080
+  trafficPolicy:
+    compression:
+      response:
+        decompress:
+          enabled: false
+    portLevelSettings:
+    - compression:
+        response:
+          decompress:
+            enabled: false
+      port:
+        number: 8080
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: decompression-v1-true
+spec:
+  host: reviews.default.svc.cluster.local
+  subsets:
+  - name: v1
+    trafficPolicy:
+      compression:
+        response:
+          decompress:
+            enabled: true
+      portLevelSettings:
+      - compression:
+          response:
+            decompress:
+              enabled: true
+        port:
+          number: 8080
+  trafficPolicy:
+    compression:
+      response:
+        decompress:
+          enabled: true
+    portLevelSettings:
+    - compression:
+        response:
+          decompress:
+            enabled: true
+      port:
+        number: 8080

@@ -1,0 +1,258 @@
+// Copyright Istio Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+// $schema: istio.networking.v1alpha1.InboundTrafficPolicy
+// $title: Inbound Traffic Policy
+// $description: Configure inbound HTTP response compression.
+// $location: https://istio.io/docs/reference/config/networking/inbound-traffic-policy.html
+
+// InboundTrafficPolicy configures the inbound/server-side listener or filter chain
+// of a sidecar, gateway, or waypoint. DestinationRule configures the proxy's
+// outbound/client-side connection instead.
+//
+// The most specific policy applies in full, without merging: resource targetRefs,
+// workload selector with matchLabels, namespace-wide policy, then the mesh-wide
+// default in the configuration root namespace. Ties are resolved by oldest
+// creationTimestamp, then lexicographically by name.
+//
+// For example, compress responses at a Kubernetes Gateway:
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha1
+// kind: InboundTrafficPolicy
+// metadata:
+//   name: ingress-compression
+//   namespace: istio-system
+// spec:
+//   targetRefs:
+//   - group: gateway.networking.k8s.io
+//     kind: Gateway
+//     name: ingressgateway
+//   http:
+//     compression:
+//       compressors:
+//       - brotli:
+//           quality: 4
+//         minContentLength: 1024
+//       - gzip: {}
+// ```
+package istio.networking.v1alpha1;
+
+import "google/api/field_behavior.proto";
+import "google/protobuf/wrappers.proto";
+import "meta/v1alpha1/status.proto";
+import "type/v1beta1/selector.proto";
+
+option go_package = "istio.io/api/networking/v1alpha1";
+
+// <!-- crd generation tags
+// +cue-gen:InboundTrafficPolicy:groupName:networking.istio.io
+// +cue-gen:InboundTrafficPolicy:versions:v1alpha1
+// +cue-gen:InboundTrafficPolicy:storageVersion
+// +cue-gen:InboundTrafficPolicy:annotations:helm.sh/resource-policy=keep
+// +cue-gen:InboundTrafficPolicy:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
+// +cue-gen:InboundTrafficPolicy:subresource:status=istio.networking.v1alpha1.InboundTrafficPolicyStatus
+// +cue-gen:InboundTrafficPolicy:spec:required
+// +cue-gen:InboundTrafficPolicy:scope:Namespaced
+// +cue-gen:InboundTrafficPolicy:releaseChannel:extended
+// +cue-gen:InboundTrafficPolicy:resource:categories=istio-io,networking-istio-io,plural=inboundtrafficpolicies
+// -->
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// istiostatus-override: InboundTrafficPolicyStatus: istio.io/api/networking/v1alpha1
+// +kubetype-gen:groupVersion=networking.istio.io/v1alpha1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
+// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="!(has(self.selector) && has(self.targetRefs))"
+message InboundTrafficPolicy {
+  // Select workloads by label, including sidecars and Istio gateway workloads.
+  // An absent or empty selector selects the namespace; in the configuration
+  // root namespace it defines the mesh-wide default. Mutually exclusive with targetRefs.
+  istio.type.v1beta1.WorkloadSelector selector = 1;
+
+  // Attach to Kubernetes Gateways (group gateway.networking.k8s.io) or Services
+  // (empty group or core), in this policy's namespace. Service attachment is for
+  // waypoints and requires a waypoint bound via istio.io/use-waypoint.
+  // HTTPRoute attachment is not supported. Mutually exclusive with selector.
+  // +kubebuilder:validation:MaxItems=16
+  // +kubebuilder:validation:XValidation:message="targetRefs must reference a Gateway or Service",rule="self.all(t, (t.kind == 'Gateway' && has(t.group) && t.group == 'gateway.networking.k8s.io') || (t.kind == 'Service' && (!has(t.group) || t.group == '' || t.group == 'core')))"
+  repeated istio.type.v1beta1.PolicyTargetReference target_refs = 2;
+
+  // HTTP settings for all ports unless replaced by a port-level entry.
+  HttpSettings http = 3;
+
+  // Field 4 is left available for future TCP settings.
+
+  // Port-specific settings replace the top-level settings in full. Unset fields
+  // use built-in defaults, not the top-level settings. A port entry without HTTP
+  // compression disables compression for that port.
+  // +kubebuilder:validation:MaxItems=4096
+  repeated PortTrafficPolicy port_level_settings = 5;
+}
+
+// HTTP settings on the inbound listener or filter chain.
+message HttpSettings {
+  // HTTP response compression. If absent or empty, compression is disabled.
+  CompressionSettings compression = 1;
+}
+
+// Settings for a specific inbound port.
+message PortTrafficPolicy {
+  // Workload port for selector attachment, Service port for Service attachment,
+  // or listener port for Gateway attachment. All listeners on this port are affected.
+  istio.type.v1beta1.PortSelector port = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // HTTP settings for this port. Unset fields use built-in defaults.
+  HttpSettings http = 2;
+  // Field 3 is left available for future TCP settings.
+}
+
+// HTTP response compression settings. Responses already carrying Content-Encoding
+// are not compressed again. Vary: Accept-Encoding is added to compressible responses.
+// Responses without a matching Accept-Encoding, eligible type, or sufficient size
+// are served unchanged. Compression can expose secrets through response sizes when
+// secret data and attacker-controlled input occur in the same response.
+message CompressionSettings {
+  // Compressors in preference order. The first eligible algorithm matching the
+  // client's Accept-Encoding preferences (including q-values) is used. At most one
+  // compressor applies. For Accept-Encoding: *, the first configured compressor
+  // is preferred. An empty list disables compression.
+  // +kubebuilder:validation:MaxItems=64
+  repeated Compressor compressors = 1;
+
+  // Skip responses with a strong ETag to preserve the validator. Defaults to false.
+  google.protobuf.BoolValue disable_on_etag = 2;
+
+  // Remove Accept-Encoding before forwarding to the application so Istio owns
+  // compression. Defaults to true.
+  google.protobuf.BoolValue remove_accept_encoding_header = 3;
+}
+
+// A response compressor with its own eligibility settings.
+// +kubebuilder:validation:XValidation:message="exactly one of gzip, brotli or zstd must be set",rule="(has(self.gzip)?1:0)+(has(self.brotli)?1:0)+(has(self.zstd)?1:0)==1"
+message Compressor {
+  // Minimum response size in bytes. Defaults to 30. Consider a higher threshold
+  // for high-throughput listeners to avoid spending CPU on very small responses.
+  // +kubebuilder:validation:Minimum=0
+  // +kubebuilder:validation:Maximum=4294967295
+  google.protobuf.UInt32Value min_content_length = 1;
+
+  // Eligible Content-Type values. An empty list uses Envoy's defaults:
+  // application/javascript, application/json, application/xhtml+xml,
+  // image/svg+xml, text/css, text/html, text/plain, text/xml.
+  repeated string content_type = 2;
+
+  // Exactly one compression algorithm must be configured.
+  oneof compressor_config {
+    // Gzip compression.
+    GzipCompressor gzip = 3;
+    // Brotli compression.
+    BrotliCompressor brotli = 4;
+    // Zstandard compression.
+    ZstdCompressor zstd = 5;
+  }
+}
+
+// Gzip compression tuning. Higher levels consume more CPU.
+message GzipCompressor {
+  // Compression level. Defaults to 6.
+  // +kubebuilder:validation:Minimum=1
+  // +kubebuilder:validation:Maximum=9
+  google.protobuf.UInt32Value compression_level = 1;
+  // Zlib window size in bits. Defaults to 12.
+  // +kubebuilder:validation:Minimum=9
+  // +kubebuilder:validation:Maximum=15
+  google.protobuf.UInt32Value window_bits = 2;
+  // Zlib memory level. Defaults to 5.
+  // +kubebuilder:validation:Minimum=1
+  // +kubebuilder:validation:Maximum=9
+  google.protobuf.UInt32Value memory_level = 3;
+  // Output buffer size in bytes. Defaults to 4096.
+  // +kubebuilder:validation:Minimum=4096
+  // +kubebuilder:validation:Maximum=65536
+  google.protobuf.UInt32Value chunk_size = 4;
+}
+
+// Brotli compression tuning. The default quality of 11 is CPU-intensive;
+// consider a lower quality for high-throughput listeners.
+message BrotliCompressor {
+  // Quality level. Defaults to 11.
+  // +kubebuilder:validation:Minimum=0
+  // +kubebuilder:validation:Maximum=11
+  google.protobuf.UInt32Value quality = 1;
+  // Sliding window size in bits. Defaults to 18.
+  // +kubebuilder:validation:Minimum=10
+  // +kubebuilder:validation:Maximum=24
+  google.protobuf.UInt32Value window_bits = 2;
+  // Input block size in bits. Defaults to 24.
+  // +kubebuilder:validation:Minimum=16
+  // +kubebuilder:validation:Maximum=24
+  google.protobuf.UInt32Value input_block_bits = 3;
+  // Output buffer size in bytes. Defaults to 4096.
+  // +kubebuilder:validation:Minimum=4096
+  // +kubebuilder:validation:Maximum=65536
+  google.protobuf.UInt32Value chunk_size = 4;
+}
+
+// Zstandard compression tuning. Higher levels consume more CPU.
+message ZstdCompressor {
+  // Compression level. Defaults to 3.
+  // +kubebuilder:validation:Minimum=1
+  // +kubebuilder:validation:Maximum=22
+  google.protobuf.UInt32Value compression_level = 1;
+  // Output buffer size in bytes. Defaults to 4096.
+  // +kubebuilder:validation:Minimum=4096
+  // +kubebuilder:validation:Maximum=65536
+  google.protobuf.UInt32Value chunk_size = 2;
+}
+
+// Observed attachment state. Conditions include Accepted when attached to at least
+// one proxy, Conflicted or Overridden when another policy wins, and TargetNotFound
+// when no target matches or a Service has no waypoint. Controllers populate status.
+message InboundTrafficPolicyStatus {
+  // Aggregate conditions for this policy, including selectors that match no workloads.
+  repeated istio.meta.v1alpha1.IstioCondition conditions = 1;
+  // Conditions for individual resource or workload targets.
+  repeated InboundTrafficPolicyTargetStatus targets = 2;
+}
+
+// Attachment state for one target.
+message InboundTrafficPolicyTargetStatus {
+  // The Gateway, Service, or workload whose attachment is reported.
+  InboundTrafficPolicyStatusReference target_ref = 1 [(google.api.field_behavior) = REQUIRED];
+  // Conditions for this target, including observed generation and diagnostic messages.
+  repeated istio.meta.v1alpha1.IstioCondition conditions = 2;
+  // The winning InboundTrafficPolicy when this policy is conflicted or overridden.
+  InboundTrafficPolicyStatusReference winning_policy = 3;
+}
+
+// Resource identity for status reporting. Unlike spec targetRefs, this reference
+// may identify resources in other namespaces, including targets of mesh-wide policies.
+message InboundTrafficPolicyStatusReference {
+  // API group. Empty for core Kubernetes resources.
+  string group = 1;
+  // Resource kind.
+  // +kubebuilder:validation:MinLength=1
+  string kind = 2 [(google.api.field_behavior) = REQUIRED];
+  // Resource namespace.
+  // +kubebuilder:validation:MinLength=1
+  string namespace = 3 [(google.api.field_behavior) = REQUIRED];
+  // Resource name.
+  // +kubebuilder:validation:MinLength=1
+  string name = 4 [(google.api.field_behavior) = REQUIRED];
+}

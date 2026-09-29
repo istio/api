@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue: []
+releaseNotes:
+- |
+    **Added** the experimental `InboundTrafficPolicy` API for inbound HTTP response
+    compression with gzip, brotli, and zstd, port overrides, and per-target status.
+    Added `DestinationRule` API settings for opt-in client-side response decompression.
