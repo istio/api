@@ -215,6 +215,11 @@ message VirtualService {
   // matching an incoming request is used.
   repeated TCPRoute tcp = 4;
 
+  // An ordered list of route rules for UDP traffic. UDP routes apply to
+  // gateway servers whose port protocol is UDP. The first rule matching
+  // an incoming request is used.
+  repeated UDPRoute udp = 7;
+
   // A list of namespaces to which this virtual service is exported. Exporting a
   // virtual service allows it to be used by sidecars and gateways defined in
   // other namespaces. This feature provides a mechanism for service owners
@@ -698,6 +703,39 @@ message TCPRoute {
   repeated L4MatchAttributes match = 1;
 
   // The destination to which the connection should be forwarded to.
+  repeated RouteDestination route = 2;
+}
+
+// Describes match conditions and actions for routing UDP traffic. The
+// following routing rule forwards traffic arriving at port 5353 from
+// 172.17.16.0/24 subnet to the DNS server on port 53.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1
+// kind: VirtualService
+// metadata:
+//   name: coredns
+// spec:
+//   hosts:
+//     - coredns.kube-system.svc.cluster.local
+//   udp:
+//   - match:
+//     - port: 5353
+//       sourceSubnet: 172.17.16.0/24
+//     route:
+//     - destination:
+//         host: coredns.kube-system.svc.cluster.local
+//         port:
+//           number: 53
+// ```
+message UDPRoute {
+  // Match conditions to be satisfied for the rule to be
+  // activated. All conditions inside a single match block have AND
+  // semantics, while the list of match blocks have OR semantics. The rule
+  // is matched if any one of the match blocks succeed.
+  repeated L4MatchAttributes match = 1;
+
+  // The destination to which the datagrams should be forwarded to.
   repeated RouteDestination route = 2;
 }
 
