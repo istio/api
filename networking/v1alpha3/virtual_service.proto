@@ -500,8 +500,81 @@ message HTTPRoute {
   // Header manipulation rules
   Headers headers = 16;
 
+  // Session persistence settings for this HTTP route. When configured, the
+  // selected destination is retained for subsequent requests in the same
+  // session. This applies to every destination in this route, while
+  // preserving the route's weights when a session is first established.
+  SessionPersistence session_persistence = 23;
+
   // $hide_from_docs
-  // Next available field number: 23
+  // Next available field number: 24
+}
+
+// Session persistence settings for an HTTP route.
+//
+// Session persistence is scoped to the route that selects it. It does not
+// affect traffic sent to the same destination by another HTTP route.
+// +kubebuilder:validation:XValidation:message="exactly one of cookie or header must be specified",rule="oneof(self.cookie, self.header)"
+// +kubebuilder:validation:XValidation:message="type must match the specified session persistence configuration",rule="!has(self.type) ? has(self.cookie) : self.type == 'COOKIE' ? has(self.cookie) : has(self.header)"
+message SessionPersistence {
+  // Absolute timeout of the persistent session. After this duration the
+  // session is invalid and a subsequent request establishes a new session.
+  // When cookie.lifetime_type is PERMANENT, this field is required and is used
+  // as the cookie's Expires or Max-Age attribute. Implementations must reject
+  // a PERMANENT cookie that does not specify this field.
+  // +protoc-gen-crd:duration-validation:none
+  // +kubebuilder:validation:MaxLength=32
+  google.protobuf.Duration absolute_timeout = 1;
+
+  // Type defines whether a cookie or a header carries the session identity.
+  // Defaults to COOKIE.
+  enum Type {
+    // Use a cookie to carry the session identity.
+    COOKIE = 0;
+    // Use a header to carry the session identity.
+    HEADER = 1;
+  }
+
+  // The session persistence type.
+  // +kubebuilder:validation:MaxLength=16
+  Type type = 2;
+
+  // Cookie-specific session persistence settings. This must be specified when
+  // type is COOKIE.
+  Cookie cookie = 3;
+
+  // Header-specific session persistence settings. This must be specified when
+  // type is HEADER.
+  Header header = 4;
+
+  // Cookie-specific session persistence settings.
+  message Cookie {
+    // Name of the cookie used for session persistence. If omitted, the proxy
+    // generates a unique cookie name.
+    string name = 1;
+
+    // Value of the cookie Path attribute. If omitted, this defaults to "/".
+    string path = 2;
+
+    // Defines whether the cookie is retained only for the browser session or
+    // persists until absolute_timeout expires. Defaults to SESSION.
+    enum LifetimeType {
+      // The cookie is deleted when the current browser session ends.
+      SESSION = 0;
+      // The cookie persists until absolute_timeout expires.
+      PERMANENT = 1;
+    }
+
+    // +kubebuilder:validation:MaxLength=16
+    LifetimeType lifetime_type = 3;
+  }
+
+  // Header-specific session persistence settings.
+  message Header {
+    // Name of the header that carries the session identity. Clients must send
+    // this header on subsequent requests to retain the session.
+    string name = 1 [(google.api.field_behavior) = REQUIRED];
+  }
 }
 
 // Describes the delegate VirtualService.
