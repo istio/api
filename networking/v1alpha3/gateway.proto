@@ -193,6 +193,7 @@ syntax = "proto3";
 package istio.networking.v1alpha3;
 
 import "google/api/field_behavior.proto";
+import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 
 option go_package = "istio.io/api/networking/v1alpha3";
@@ -599,4 +600,11 @@ message ServerTLSSettings {
   // Note: Setting an ALPN list that is incompatible with the protocol
   // configured for the server port may break the traffic served by this port.
   repeated string alpn_protocols = 19;
+
+  // Optional: the maximum duration the proxy will wait for the initial delivery of the
+  // credential(s) referenced by `credentialName`, `credentialNames`, or `caCertCredentialName`
+  // from the configured secret discovery service (SDS) provider, before proceeding with an
+  // empty credential for this listener. If unset, the proxy's default initial fetch timeout
+  // applies. This is mainly used for external SDS provider.
+  google.protobuf.Duration credential_fetch_timeout = 20;
 }
