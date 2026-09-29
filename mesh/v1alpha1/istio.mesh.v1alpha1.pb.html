@@ -652,6 +652,22 @@ cluster-wide; ambient ignores <code>exportTo</code>).</p>
 
 </td>
 </tr>
+<tr id="MeshConfig-cert_signer_namespace_map">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-cert_signer_namespace_map">certSignerNamespaceMap</a></code></div>
+<div class="type">map&lt;string,&nbsp;string&gt;</div>
+</div></td>
+<td>
+<p>Maps workload namespace to the Kubernetes CSR signer suffix authorized for
+that namespace when Istiod acts as a registration authority
+(EXTERNAL_CA=ISTIOD_RA_KUBERNETES_API). The full signer name passed to the
+Kubernetes API is CERT_SIGNER_DOMAIN + &ldquo;/&rdquo; + mapped_value.
+If the map is non-empty, any CreateCertificate request whose caller namespace
+is not present in the map, or whose requested signer does not match, is
+rejected. If the map is empty, no signer authorization is enforced (default,
+backward-compatible behavior).</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
