@@ -505,7 +505,6 @@ message JWTRule {
   // multiple JWT rules are configured and all tokens must be present and valid simultaneously.
   JWTRequirement presence = 15;
 
-  // $hide_from_docs
   // Next available field number: 16
 }
 
