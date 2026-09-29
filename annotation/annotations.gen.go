@@ -501,6 +501,20 @@ Accepted values:
 		},
 	}
 
+	SidecarAdminTransport = Instance {
+		Name:          "sidecar.istio.io/adminTransport",
+		Description:   "Selects TCP or UDS for Envoy administration. Overrides "+
+                        "ISTIO_ENVOY_ADMIN_TRANSPORT in proxy metadata. UDS "+
+                        "requires a Kubernetes native sidecar and diagnostics "+
+                        "access through pods/exec. Defaults to TCP.",
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	SidecarAgentLogLevel = Instance {
 		Name:          "sidecar.istio.io/agentLogLevel",
 		Description:   "Specifies the log output level for pilot-agent.",
@@ -1018,6 +1032,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarStatusReadinessFailureThreshold,
 		&SidecarStatusReadinessInitialDelaySeconds,
 		&SidecarStatusReadinessPeriodSeconds,
+		&SidecarAdminTransport,
 		&SidecarAgentLogLevel,
 		&SidecarBootstrapOverride,
 		&SidecarComponentLogLevel,

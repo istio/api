@@ -270,6 +270,16 @@ annotations:
     resources:
       - Pod
 
+  - name: sidecar.istio.io/adminTransport
+    featureStatus: Alpha
+    description: Selects TCP or UDS for Envoy administration. Overrides
+      ISTIO_ENVOY_ADMIN_TRANSPORT in proxy metadata. UDS requires a Kubernetes
+      native sidecar and diagnostics access through pods/exec. Defaults to TCP.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+
   - name: sidecar.istio.io/nativeSidecar
     featureStatus: Alpha
     description: Specifies if the istio-proxy sidecar should be injected as a
