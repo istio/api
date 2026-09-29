@@ -426,6 +426,21 @@ Accepted values:
 		},
 	}
 
+	PrometheusScrapeTargets = Instance {
+		Name:          "prometheus.istio.io/scrape-targets",
+		Description:   `Declares additional application metrics endpoints to scrape and merge for workloads with
+more than one metrics-emitting container, as a comma-separated list of "port:path" pairs
+(for example, "8080:/metrics,9100:/metrics"). An omitted path defaults to "/metrics".
+Target ports cannot use an Istio-reserved data-plane port.
+`,
+		FeatureStatus: Alpha,
+		Hidden:        false,
+		Deprecated:    false,
+		Resources: []ResourceTypes{
+			Pod,
+		},
+	}
+
 	ProxyConfig = Instance {
 		Name:          "proxy.istio.io/config",
 		Description:   "Overrides for the proxy configuration for this specific "+
@@ -1012,6 +1027,7 @@ func AllResourceAnnotations() []*Instance {
 		&NetworkingServiceType,
 		&NetworkingTrafficDistribution,
 		&PrometheusMergeMetrics,
+		&PrometheusScrapeTargets,
 		&ProxyConfig,
 		&ProxyOverrides,
 		&SidecarStatusReadinessApplicationPorts,

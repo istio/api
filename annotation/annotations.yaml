@@ -23,6 +23,19 @@ annotations:
     resources:
       - Pod
 
+  - name: prometheus.istio.io/scrape-targets
+    featureStatus: Alpha
+    variableName: PrometheusScrapeTargets
+    description: |
+      Declares additional application metrics endpoints to scrape and merge for workloads with
+      more than one metrics-emitting container, as a comma-separated list of `port:path` pairs
+      (for example, `8080:/metrics,9100:/metrics`). An omitted path defaults to `/metrics`.
+      Target ports cannot use an Istio-reserved data-plane port.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+
   - name: alpha.istio.io/kubernetes-serviceaccounts
     featureStatus: Alpha
     variableName: AlphaKubernetesServiceAccounts
