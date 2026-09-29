@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.DestinationRule
 aliases: [/docs/reference/config/networking/v1alpha3/destination-rule]
-number_of_entries: 32
+number_of_entries: 35
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -278,6 +278,16 @@ Tunnel settings can be applied to TCP or TLS routes and can&rsquo;t be applied t
 
 </td>
 </tr>
+<tr id="TrafficPolicy-compression">
+<td><div class="field"><div class="name"><code><a href="#TrafficPolicy-compression">compression</a></code></div>
+<div class="type"><a href="#ClientCompressionSettings">ClientCompressionSettings</a></div>
+</div></td>
+<td>
+<p>Explicit client-side response decompression. This is not inferred from the
+server&rsquo;s InboundTrafficPolicy. Also available in subset traffic policies.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -336,6 +346,15 @@ on which this policy is being applied.</p>
 </div></td>
 <td>
 <p>TLS related settings for connections to the upstream service.</p>
+
+</td>
+</tr>
+<tr id="TrafficPolicy-PortTrafficPolicy-compression">
+<td><div class="field"><div class="name"><code><a href="#TrafficPolicy-PortTrafficPolicy-compression">compression</a></code></div>
+<div class="type"><a href="#ClientCompressionSettings">ClientCompressionSettings</a></div>
+</div></td>
+<td>
+<p>Response decompression for this destination port. Defaults to disabled.</p>
 
 </td>
 </tr>
@@ -491,6 +510,94 @@ and pending requests are considered when calculating the retry budget.</p>
 considered for the duration of budget_interval when calculating
 the retry budget.</p>
 <p>Defaults to 0ms.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ClientCompressionSettings">ClientCompressionSettings</h2>
+<section>
+<p>Compression settings for the calling proxy&rsquo;s upstream connection.
+Request-body compression is not supported.</p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: reviews-client-compression
+spec:
+  host: reviews.default.svc.cluster.local
+  trafficPolicy:
+    compression:
+      response:
+        decompress:
+          enabled: true
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ClientCompressionSettings-response">
+<td><div class="field"><div class="name"><code><a href="#ClientCompressionSettings-response">response</a></code></div>
+<div class="type"><a href="#ClientCompressionSettings-Response">Response</a></div>
+</div></td>
+<td>
+<p>Response handling. Defaults to leaving response decompression to the application.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="ClientCompressionSettings-Response">Response</h3>
+<section>
+<p>Client-side response compression handling.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ClientCompressionSettings-Response-decompress">
+<td><div class="field"><div class="name"><code><a href="#ClientCompressionSettings-Response-decompress">decompress</a></code></div>
+<div class="type"><a href="#ClientCompressionSettings-Decompression">Decompression</a></div>
+</div></td>
+<td>
+<p>Opt-in transparent response decompression.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="ClientCompressionSettings-Decompression">Decompression</h3>
+<section>
+<p>Transparent response decompression settings.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ClientCompressionSettings-Decompression-enabled">
+<td><div class="field"><div class="name"><code><a href="#ClientCompressionSettings-Decompression-enabled">enabled</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></div>
+</div></td>
+<td>
+<p>When true, the outbound sidecar advertises Accept-Encoding upstream and
+decompresses the response before delivering it to the client application.
+If omitted or false, the application handles content negotiation and
+decompression itself. This does not enable request-body compression.</p>
 
 </td>
 </tr>
