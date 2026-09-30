@@ -1,0 +1,13 @@
+apiVersion: release-notes/v2
+
+kind: feature
+area: traffic-management
+issue:
+- 61951
+
+releaseNotes:
+- |
+    **Added** `hashBalanceFactor` field to `ConsistentHashLB` in `DestinationRule` to enable Consistent Hashing with Bounded Loads. Each host's active requests are capped at `hashBalanceFactor / 100` times the average across all hosts, and excess requests spill over to other hosts while otherwise preserving hash affinity. Applies to both `ringHash` and `maglev`.
+
+docs:
+- https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/cluster/v3/cluster.proto#envoy-v3-api-field-config-cluster-v3-cluster-commonlbconfig-consistenthashinglbconfig-hash-balance-factor

@@ -1015,6 +1015,16 @@ spec:
                                 be used to provide soft session affinity based on
                                 HTTP headers, cookies or other properties.
                               properties:
+                                hashBalanceFactor:
+                                  description: Enables [Consistent Hashing with Bounded
+                                    Loads](https://arxiv.org/abs/1608.01350), which
+                                    caps the load of any single host at `hashBalanceFactor
+                                    / 100` times the average number of active requests
+                                    across all hosts.
+                                  maximum: 4294967295
+                                  minimum: 100
+                                  nullable: true
+                                  type: integer
                                 httpCookie:
                                   description: Hash based on HTTP cookie.
                                   properties:
@@ -1509,6 +1519,16 @@ spec:
                                       can be used to provide soft session affinity
                                       based on HTTP headers, cookies or other properties.
                                     properties:
+                                      hashBalanceFactor:
+                                        description: Enables [Consistent Hashing with
+                                          Bounded Loads](https://arxiv.org/abs/1608.01350),
+                                          which caps the load of any single host at
+                                          `hashBalanceFactor / 100` times the average
+                                          number of active requests across all hosts.
+                                        maximum: 4294967295
+                                        minimum: 100
+                                        nullable: true
+                                        type: integer
                                       httpCookie:
                                         description: Hash based on HTTP cookie.
                                         properties:
@@ -2191,6 +2211,16 @@ spec:
                           to provide soft session affinity based on HTTP headers,
                           cookies or other properties.
                         properties:
+                          hashBalanceFactor:
+                            description: Enables [Consistent Hashing with Bounded
+                              Loads](https://arxiv.org/abs/1608.01350), which caps
+                              the load of any single host at `hashBalanceFactor /
+                              100` times the average number of active requests across
+                              all hosts.
+                            maximum: 4294967295
+                            minimum: 100
+                            nullable: true
+                            type: integer
                           httpCookie:
                             description: Hash based on HTTP cookie.
                             properties:
@@ -2677,6 +2707,16 @@ spec:
                                 be used to provide soft session affinity based on
                                 HTTP headers, cookies or other properties.
                               properties:
+                                hashBalanceFactor:
+                                  description: Enables [Consistent Hashing with Bounded
+                                    Loads](https://arxiv.org/abs/1608.01350), which
+                                    caps the load of any single host at `hashBalanceFactor
+                                    / 100` times the average number of active requests
+                                    across all hosts.
+                                  maximum: 4294967295
+                                  minimum: 100
+                                  nullable: true
+                                  type: integer
                                 httpCookie:
                                   description: Hash based on HTTP cookie.
                                   properties:
@@ -3501,6 +3541,16 @@ spec:
                                 be used to provide soft session affinity based on
                                 HTTP headers, cookies or other properties.
                               properties:
+                                hashBalanceFactor:
+                                  description: Enables [Consistent Hashing with Bounded
+                                    Loads](https://arxiv.org/abs/1608.01350), which
+                                    caps the load of any single host at `hashBalanceFactor
+                                    / 100` times the average number of active requests
+                                    across all hosts.
+                                  maximum: 4294967295
+                                  minimum: 100
+                                  nullable: true
+                                  type: integer
                                 httpCookie:
                                   description: Hash based on HTTP cookie.
                                   properties:
@@ -3995,6 +4045,16 @@ spec:
                                       can be used to provide soft session affinity
                                       based on HTTP headers, cookies or other properties.
                                     properties:
+                                      hashBalanceFactor:
+                                        description: Enables [Consistent Hashing with
+                                          Bounded Loads](https://arxiv.org/abs/1608.01350),
+                                          which caps the load of any single host at
+                                          `hashBalanceFactor / 100` times the average
+                                          number of active requests across all hosts.
+                                        maximum: 4294967295
+                                        minimum: 100
+                                        nullable: true
+                                        type: integer
                                       httpCookie:
                                         description: Hash based on HTTP cookie.
                                         properties:
@@ -4677,6 +4737,16 @@ spec:
                           to provide soft session affinity based on HTTP headers,
                           cookies or other properties.
                         properties:
+                          hashBalanceFactor:
+                            description: Enables [Consistent Hashing with Bounded
+                              Loads](https://arxiv.org/abs/1608.01350), which caps
+                              the load of any single host at `hashBalanceFactor /
+                              100` times the average number of active requests across
+                              all hosts.
+                            maximum: 4294967295
+                            minimum: 100
+                            nullable: true
+                            type: integer
                           httpCookie:
                             description: Hash based on HTTP cookie.
                             properties:
@@ -5163,6 +5233,16 @@ spec:
                                 be used to provide soft session affinity based on
                                 HTTP headers, cookies or other properties.
                               properties:
+                                hashBalanceFactor:
+                                  description: Enables [Consistent Hashing with Bounded
+                                    Loads](https://arxiv.org/abs/1608.01350), which
+                                    caps the load of any single host at `hashBalanceFactor
+                                    / 100` times the average number of active requests
+                                    across all hosts.
+                                  maximum: 4294967295
+                                  minimum: 100
+                                  nullable: true
+                                  type: integer
                                 httpCookie:
                                   description: Hash based on HTTP cookie.
                                   properties:
@@ -5987,6 +6067,16 @@ spec:
                                 be used to provide soft session affinity based on
                                 HTTP headers, cookies or other properties.
                               properties:
+                                hashBalanceFactor:
+                                  description: Enables [Consistent Hashing with Bounded
+                                    Loads](https://arxiv.org/abs/1608.01350), which
+                                    caps the load of any single host at `hashBalanceFactor
+                                    / 100` times the average number of active requests
+                                    across all hosts.
+                                  maximum: 4294967295
+                                  minimum: 100
+                                  nullable: true
+                                  type: integer
                                 httpCookie:
                                   description: Hash based on HTTP cookie.
                                   properties:
@@ -6481,6 +6571,16 @@ spec:
                                       can be used to provide soft session affinity
                                       based on HTTP headers, cookies or other properties.
                                     properties:
+                                      hashBalanceFactor:
+                                        description: Enables [Consistent Hashing with
+                                          Bounded Loads](https://arxiv.org/abs/1608.01350),
+                                          which caps the load of any single host at
+                                          `hashBalanceFactor / 100` times the average
+                                          number of active requests across all hosts.
+                                        maximum: 4294967295
+                                        minimum: 100
+                                        nullable: true
+                                        type: integer
                                       httpCookie:
                                         description: Hash based on HTTP cookie.
                                         properties:
@@ -7163,6 +7263,16 @@ spec:
                           to provide soft session affinity based on HTTP headers,
                           cookies or other properties.
                         properties:
+                          hashBalanceFactor:
+                            description: Enables [Consistent Hashing with Bounded
+                              Loads](https://arxiv.org/abs/1608.01350), which caps
+                              the load of any single host at `hashBalanceFactor /
+                              100` times the average number of active requests across
+                              all hosts.
+                            maximum: 4294967295
+                            minimum: 100
+                            nullable: true
+                            type: integer
                           httpCookie:
                             description: Hash based on HTTP cookie.
                             properties:
@@ -7649,6 +7759,16 @@ spec:
                                 be used to provide soft session affinity based on
                                 HTTP headers, cookies or other properties.
                               properties:
+                                hashBalanceFactor:
+                                  description: Enables [Consistent Hashing with Bounded
+                                    Loads](https://arxiv.org/abs/1608.01350), which
+                                    caps the load of any single host at `hashBalanceFactor
+                                    / 100` times the average number of active requests
+                                    across all hosts.
+                                  maximum: 4294967295
+                                  minimum: 100
+                                  nullable: true
+                                  type: integer
                                 httpCookie:
                                   description: Hash based on HTTP cookie.
                                   properties:

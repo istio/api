@@ -793,6 +793,30 @@ This is applicable for both TCP and HTTP connections.</p>
 
 </td>
 </tr>
+<tr id="LoadBalancerSettings-ConsistentHashLB-hash_balance_factor">
+<td><div class="field"><div class="name"><code><a href="#LoadBalancerSettings-ConsistentHashLB-hash_balance_factor">hashBalanceFactor</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>Enables <a href="https://arxiv.org/abs/1608.01350">Consistent Hashing with Bounded Loads</a>,
+which caps the load of any single host at <code>hashBalanceFactor / 100</code> times
+the average number of active requests across all hosts. While a host is
+under the cap it keeps all of its hashed keys; once it exceeds the cap,
+excess requests spill over to the next eligible host on the ring/table.
+Applies to both <code>ringHash</code> and <code>maglev</code>.</p>
+<p>For example, a value of <code>150</code> allows a host to carry up to 1.5x the average
+load before requests are redirected. Lower values spread load more evenly
+at the cost of weaker affinity. If unset, load is not bounded.</p>
+<p>Note: the bound is relative to the average load, so it corrects hot spots
+between hosts but does not protect against all hosts being overloaded;
+use circuit breaking for that. The load is measured in active requests,
+not connections.</p>
+<p>Please refer to Envoy&rsquo;s
+<a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/cluster/v3/cluster.proto#envoy-v3-api-field-config-cluster-v3-cluster-commonlbconfig-consistenthashinglbconfig-hash-balance-factor">hash_balance_factor</a>
+for more details.</p>
+
+</td>
+</tr>
 <tr id="LoadBalancerSettings-ConsistentHashLB-minimum_ring_size" class="deprecated ">
 <td><div class="field"><div class="name"><code><a href="#LoadBalancerSettings-ConsistentHashLB-minimum_ring_size">minimumRingSize</a></code></div>
 <div class="type">uint64</div>
