@@ -60,3 +60,24 @@ spec:
   hosts: ["example.com"]
   addresses:
   - 1.1.1.1/32
+---
+apiVersion: networking.istio.io/v1
+kind: ServiceEntry
+metadata:
+  name: port-name-length-boundary
+spec:
+  hosts: [example.com]
+  resolution: STATIC
+  ports:
+  - name: http-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    number: 80
+    protocol: HTTP
+  - name: http-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    number: 81
+    protocol: HTTP
+  endpoints:
+  - address: 1.2.3.4
+    # 62 and 63 character port names.
+    ports:
+      http-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: 80
+      http-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: 80
