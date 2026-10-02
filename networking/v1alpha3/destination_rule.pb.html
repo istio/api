@@ -1219,7 +1219,11 @@ spec:
 <div class="type">int32</div>
 </div></td>
 <td>
-<p>Maximum number of HTTP1 /TCP connections to a destination host. Default 2^32-1.</p>
+<p>Maximum number of TCP connections to a destination host, including connections used for
+HTTP/1.1 and HTTP/2. Default 2^32-1.
+This is a circuit breaker limit, which can be exceeded in some circumstances.
+See <a href="https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/circuit_breaking#arch-overview-circuit-break-cluster-maximum-connections">Envoy circuit breaking</a>
+for details.</p>
 
 </td>
 </tr>
