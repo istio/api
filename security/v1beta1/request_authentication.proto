@@ -487,7 +487,7 @@ message JWTRule {
   // +kubebuilder:validation:MaxItems=64
   repeated string space_delimited_claims = 14;
 
-  // Specifies whether the JWT token is required or optional in the request.
+  // Specifies whether the JWT token is required, optional, or ignored in the request.
   enum JWTRequirement {
     // The JWT token is optional. Requests without a token are allowed as long as
     // no invalid token is present. This is the default behavior.
@@ -496,17 +496,28 @@ message JWTRule {
     // The JWT token must be present and valid. Requests without this token will
     // be rejected with 401 even if other JWT rules are satisfied.
     REQUIRED = 1;
+
+    // The JWT requirement is always satisfied. A request with a missing or
+    // failed token is not rejected. A present token is still verified and
+    // its claims still populate.
+    IGNORED = 2;
   }
 
-  // Configures whether the JWT token must be present in the request.
+  // Configures whether the JWT token must be present and valid in the request.
   // When set to `REQUIRED`, requests without this token will be rejected with 401
   // even if other JWT rules are satisfied. When `OPTIONAL` (the default), a missing
   // token is allowed as long as no invalid token is present. This is useful when
   // multiple JWT rules are configured and all tokens must be present and valid simultaneously.
+  // When set to `IGNORED`, a request with a missing or failed token is not rejected.
   JWTRequirement presence = 15;
 
+  // If set to true, a verification failure is written to the filter's dynamic metadata
+  // under the fixed key `istio_jwt_verification_failure`. The failure is then observable
+  // even when the request is not rejected, such as when `presence` is `IGNORED`.
+  bool failed_status_in_metadata = 16;
+
   // $hide_from_docs
-  // Next available field number: 16
+  // Next available field number: 17
 }
 
 // This message specifies a header location to extract JWT token.

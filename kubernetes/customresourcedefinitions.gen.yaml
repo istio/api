@@ -18406,6 +18406,10 @@ spec:
                         minLength: 1
                         type: string
                       type: array
+                    failedStatusInMetadata:
+                      description: If set to true, a verification failure is written
+                        to the filter's dynamic metadata under the fixed key `istio_jwt_verification_failure`.
+                      type: boolean
                     forwardOriginalToken:
                       description: If set to true, the original token will be kept
                         for the upstream request.
@@ -18489,12 +18493,13 @@ spec:
                       type: string
                     presence:
                       description: |-
-                        Configures whether the JWT token must be present in the request.
+                        Configures whether the JWT token must be present and valid in the request.
 
-                        Valid Options: OPTIONAL, REQUIRED
+                        Valid Options: OPTIONAL, REQUIRED, IGNORED
                       enum:
                       - OPTIONAL
                       - REQUIRED
+                      - IGNORED
                       type: string
                     spaceDelimitedClaims:
                       description: List of JWT claim names that should be treated
@@ -18704,6 +18709,10 @@ spec:
                         minLength: 1
                         type: string
                       type: array
+                    failedStatusInMetadata:
+                      description: If set to true, a verification failure is written
+                        to the filter's dynamic metadata under the fixed key `istio_jwt_verification_failure`.
+                      type: boolean
                     forwardOriginalToken:
                       description: If set to true, the original token will be kept
                         for the upstream request.
@@ -18787,12 +18796,13 @@ spec:
                       type: string
                     presence:
                       description: |-
-                        Configures whether the JWT token must be present in the request.
+                        Configures whether the JWT token must be present and valid in the request.
 
-                        Valid Options: OPTIONAL, REQUIRED
+                        Valid Options: OPTIONAL, REQUIRED, IGNORED
                       enum:
                       - OPTIONAL
                       - REQUIRED
+                      - IGNORED
                       type: string
                     spaceDelimitedClaims:
                       description: List of JWT claim names that should be treated
