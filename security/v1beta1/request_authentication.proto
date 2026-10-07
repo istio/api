@@ -487,26 +487,44 @@ message JWTRule {
   // +kubebuilder:validation:MaxItems=64
   repeated string space_delimited_claims = 14;
 
-  // Specifies whether the JWT token is required or optional in the request.
+  // Specifies whether the JWT token is required, optional, or ignored in the request.
   enum JWTRequirement {
     // The JWT token is optional. Requests without a token are allowed as long as
     // no invalid token is present. This is the default behavior.
+    // Result: missing token => allowed, invalid token => 401
     OPTIONAL = 0;
 
     // The JWT token must be present and valid. Requests without this token will
     // be rejected with 401 even if other JWT rules are satisfied.
+    // Result: missing token => 401, invalid token => 401
     REQUIRED = 1;
+
+    // The JWT requirement is always satisfied. Requests without a token are
+    // allowed, requests with an invalid token are also allowed. Note that this
+    // only relaxes the requirement. A present token is always verified, and
+    // the claims are always populated when a token is valid.
+    // Result: missing token => allowed, invalid token => allowed
+    IGNORED = 2;
   }
 
-  // Configures whether the JWT token must be present in the request.
+  // Configures whether the JWT token must be present and valid in the request.
   // When set to `REQUIRED`, requests without this token will be rejected with 401
   // even if other JWT rules are satisfied. When `OPTIONAL` (the default), a missing
   // token is allowed as long as no invalid token is present. This is useful when
   // multiple JWT rules are configured and all tokens must be present and valid simultaneously.
+  // When set to `IGNORED`, a missing token and an invalid token are both allowed.
   JWTRequirement presence = 15;
 
+  // If set, a verification failure is written to the filter's dynamic metadata
+  // under this key, such that failures are always observable regardless of the
+  // `presence` value. The failure is in the form of {code, message}, e.g.
+  // `{"code": 3, "message": "Jwt is expired"}`. When there are multiple
+  // providers, each one should use its own key, otherwise failures can
+  // overwrite each other.
+  string failed_status_in_metadata = 16;
+
   // $hide_from_docs
-  // Next available field number: 16
+  // Next available field number: 17
 }
 
 // This message specifies a header location to extract JWT token.
