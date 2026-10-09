@@ -1,0 +1,17 @@
+apiVersion: release-notes/v2
+
+kind: feature
+area: security
+issue:
+  - https://github.com/istio/istio/issues/43982
+
+releaseNotes:
+- |
+  **Added** `IGNORED` value to the `presence` field of `JWTRule` in `RequestAuthentication`.
+  A request with a missing or failed token is no longer rejected, so verification can be
+  introduced on existing services without failures impairing traffic.
+- |
+  **Added** `failedStatusInMetadata` field to `JWTRule` in `RequestAuthentication`.
+  When set to `true`, a verification failure is written to dynamic metadata under the
+  fixed key `istio_jwt_verification_failure`, so failures stay observable even when
+  the request is not rejected, such as when `presence` is `IGNORED`.
