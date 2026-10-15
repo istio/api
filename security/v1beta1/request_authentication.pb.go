@@ -243,7 +243,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// Specifies whether the JWT token is required or optional in the request.
+// Specifies whether the JWT token is required, optional, or ignored in the request.
 type JWTRule_JWTRequirement int32
 
 const (
@@ -253,6 +253,10 @@ const (
 	// The JWT token must be present and valid. Requests without this token will
 	// be rejected with 401 even if other JWT rules are satisfied.
 	JWTRule_REQUIRED JWTRule_JWTRequirement = 1
+	// The JWT requirement is always satisfied. A request with a missing or
+	// failed token is not rejected. A present token is still verified and
+	// its claims still populate.
+	JWTRule_IGNORED JWTRule_JWTRequirement = 2
 )
 
 // Enum value maps for JWTRule_JWTRequirement.
@@ -260,10 +264,12 @@ var (
 	JWTRule_JWTRequirement_name = map[int32]string{
 		0: "OPTIONAL",
 		1: "REQUIRED",
+		2: "IGNORED",
 	}
 	JWTRule_JWTRequirement_value = map[string]int32{
 		"OPTIONAL": 0,
 		"REQUIRED": 1,
+		"IGNORED":  2,
 	}
 )
 
@@ -591,14 +597,19 @@ type JWTRule struct {
 	// +protoc-gen-crd:list-value-validation:MinLength=1
 	// +kubebuilder:validation:MaxItems=64
 	SpaceDelimitedClaims []string `protobuf:"bytes,14,rep,name=space_delimited_claims,json=spaceDelimitedClaims,proto3" json:"space_delimited_claims,omitempty"`
-	// Configures whether the JWT token must be present in the request.
+	// Configures whether the JWT token must be present and valid in the request.
 	// When set to `REQUIRED`, requests without this token will be rejected with 401
 	// even if other JWT rules are satisfied. When `OPTIONAL` (the default), a missing
 	// token is allowed as long as no invalid token is present. This is useful when
 	// multiple JWT rules are configured and all tokens must be present and valid simultaneously.
-	Presence      JWTRule_JWTRequirement `protobuf:"varint,15,opt,name=presence,proto3,enum=istio.security.v1beta1.JWTRule_JWTRequirement" json:"presence,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	// When set to `IGNORED`, a request with a missing or failed token is not rejected.
+	Presence JWTRule_JWTRequirement `protobuf:"varint,15,opt,name=presence,proto3,enum=istio.security.v1beta1.JWTRule_JWTRequirement" json:"presence,omitempty"`
+	// If set to true, a verification failure is written to the filter's dynamic metadata
+	// under the fixed key `istio_jwt_verification_failure`. The failure is then observable
+	// even when the request is not rejected, such as when `presence` is `IGNORED`.
+	FailedStatusInMetadata bool `protobuf:"varint,16,opt,name=failed_status_in_metadata,json=failedStatusInMetadata,proto3" json:"failed_status_in_metadata,omitempty"`
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
 }
 
 func (x *JWTRule) Reset() {
@@ -720,6 +731,13 @@ func (x *JWTRule) GetPresence() JWTRule_JWTRequirement {
 		return x.Presence
 	}
 	return JWTRule_OPTIONAL
+}
+
+func (x *JWTRule) GetFailedStatusInMetadata() bool {
+	if x != nil {
+		return x.FailedStatusInMetadata
+	}
+	return false
 }
 
 // This message specifies a header location to extract JWT token.
@@ -850,7 +868,7 @@ const file_security_v1beta1_request_authentication_proto_rawDesc = "" +
 	"\n" +
 	"targetRefs\x18\x04 \x03(\v2).istio.type.v1beta1.PolicyTargetReferenceR\n" +
 	"targetRefs\x12<\n" +
-	"\tjwt_rules\x18\x02 \x03(\v2\x1f.istio.security.v1beta1.JWTRuleR\bjwtRules\"\xaa\x05\n" +
+	"\tjwt_rules\x18\x02 \x03(\v2\x1f.istio.security.v1beta1.JWTRuleR\bjwtRules\"\xf2\x05\n" +
 	"\aJWTRule\x12\x16\n" +
 	"\x06issuer\x18\x01 \x01(\tR\x06issuer\x12\x1c\n" +
 	"\taudiences\x18\x02 \x03(\tR\taudiences\x12\x19\n" +
@@ -866,10 +884,12 @@ const file_security_v1beta1_request_authentication_proto_rawDesc = "" +
 	"\x17output_claim_to_headers\x18\v \x03(\v2%.istio.security.v1beta1.ClaimToHeaderR\x14outputClaimToHeaders\x123\n" +
 	"\atimeout\x18\r \x01(\v2\x19.google.protobuf.DurationR\atimeout\x124\n" +
 	"\x16space_delimited_claims\x18\x0e \x03(\tR\x14spaceDelimitedClaims\x12J\n" +
-	"\bpresence\x18\x0f \x01(\x0e2..istio.security.v1beta1.JWTRule.JWTRequirementR\bpresence\",\n" +
+	"\bpresence\x18\x0f \x01(\x0e2..istio.security.v1beta1.JWTRule.JWTRequirementR\bpresence\x129\n" +
+	"\x19failed_status_in_metadata\x18\x10 \x01(\bR\x16failedStatusInMetadata\"9\n" +
 	"\x0eJWTRequirement\x12\f\n" +
 	"\bOPTIONAL\x10\x00\x12\f\n" +
-	"\bREQUIRED\x10\x01\"=\n" +
+	"\bREQUIRED\x10\x01\x12\v\n" +
+	"\aIGNORED\x10\x02\"=\n" +
 	"\tJWTHeader\x12\x18\n" +
 	"\x04name\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x04name\x12\x16\n" +
 	"\x06prefix\x18\x02 \x01(\tR\x06prefix\"I\n" +

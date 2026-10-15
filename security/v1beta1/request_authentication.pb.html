@@ -486,11 +486,23 @@ regardless of this setting.</p>
 <div class="type"><a href="#JWTRule-JWTRequirement">JWTRequirement</a></div>
 </div></td>
 <td>
-<p>Configures whether the JWT token must be present in the request.
+<p>Configures whether the JWT token must be present and valid in the request.
 When set to <code>REQUIRED</code>, requests without this token will be rejected with 401
 even if other JWT rules are satisfied. When <code>OPTIONAL</code> (the default), a missing
 token is allowed as long as no invalid token is present. This is useful when
-multiple JWT rules are configured and all tokens must be present and valid simultaneously.</p>
+multiple JWT rules are configured and all tokens must be present and valid simultaneously.
+When set to <code>IGNORED</code>, a request with a missing or failed token is not rejected.</p>
+
+</td>
+</tr>
+<tr id="JWTRule-failed_status_in_metadata">
+<td><div class="field"><div class="name"><code><a href="#JWTRule-failed_status_in_metadata">failedStatusInMetadata</a></code></div>
+<div class="type">bool</div>
+</div></td>
+<td>
+<p>If set to true, a verification failure is written to the filter&rsquo;s dynamic metadata
+under the fixed key <code>istio_jwt_verification_failure</code>. The failure is then observable
+even when the request is not rejected, such as when <code>presence</code> is <code>IGNORED</code>.</p>
 
 </td>
 </tr>
@@ -499,7 +511,7 @@ multiple JWT rules are configured and all tokens must be present and valid simul
 </section>
 <h3 id="JWTRule-JWTRequirement">JWTRequirement</h3>
 <section>
-<p>Specifies whether the JWT token is required or optional in the request.</p>
+<p>Specifies whether the JWT token is required, optional, or ignored in the request.</p>
 
 <table class="enum-values">
 <thead>
@@ -522,6 +534,15 @@ no invalid token is present. This is the default behavior.</p>
 <td>
 <p>The JWT token must be present and valid. Requests without this token will
 be rejected with 401 even if other JWT rules are satisfied.</p>
+
+</td>
+</tr>
+<tr id="JWTRule-JWTRequirement-IGNORED">
+<td><code><a href="#JWTRule-JWTRequirement-IGNORED">IGNORED</a></code></td>
+<td>
+<p>The JWT requirement is always satisfied. A request with a missing or
+failed token is not rejected. A present token is still verified and
+its claims still populate.</p>
 
 </td>
 </tr>
