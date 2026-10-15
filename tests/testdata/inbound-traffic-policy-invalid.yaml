@@ -1,0 +1,380 @@
+_err: only one of targetRefs or selector
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: conflicting-targets
+spec:
+  selector: {}
+  targetRefs:
+  - kind: Service
+    name: reviews
+---
+_err: targetRefs must reference
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: invalid-target-httproute
+spec:
+  targetRefs:
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: reviews
+---
+_err: targetRefs must reference
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: invalid-target-gateway
+spec:
+  targetRefs:
+  - group: networking.istio.io
+    kind: Gateway
+    name: reviews
+---
+_err: targetRefs must reference
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: invalid-target-service
+spec:
+  targetRefs:
+  - group: wrong
+    kind: Service
+    name: reviews
+---
+_err: cross namespace
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: cross-namespace
+spec:
+  targetRefs:
+  - kind: Service
+    name: reviews
+    namespace: other
+---
+_err: 'port: Required value'
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: missing-port
+spec:
+  portLevelSettings:
+  - {}
+---
+_err: port.number in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: invalid-port-0
+spec:
+  portLevelSettings:
+  - port:
+      number: 0
+---
+_err: port.number in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: invalid-port-65536
+spec:
+  portLevelSettings:
+  - port:
+      number: 65536
+---
+_err: exactly one
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: missing-codec
+spec:
+  http:
+    compression:
+      compressors:
+      - {}
+---
+_err: must validate one and only one schema
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: multiple-codecs
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli: {}
+        gzip: {}
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: gzip-compressionlevel-invalid-0
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip:
+          compressionLevel: 0
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: gzip-compressionlevel-invalid-10
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip:
+          compressionLevel: 10
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: gzip-windowbits-invalid-8
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip:
+          windowBits: 8
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: gzip-windowbits-invalid-16
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip:
+          windowBits: 16
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: gzip-memorylevel-invalid-0
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip:
+          memoryLevel: 0
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: gzip-memorylevel-invalid-10
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip:
+          memoryLevel: 10
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: gzip-chunksize-invalid-4095
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip:
+          chunkSize: 4095
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: gzip-chunksize-invalid-65537
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip:
+          chunkSize: 65537
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: brotli-quality-invalid-negative-1
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli:
+          quality: -1
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: brotli-quality-invalid-12
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli:
+          quality: 12
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: brotli-windowbits-invalid-9
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli:
+          windowBits: 9
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: brotli-windowbits-invalid-25
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli:
+          windowBits: 25
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: brotli-inputblockbits-invalid-15
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli:
+          inputBlockBits: 15
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: brotli-inputblockbits-invalid-25
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli:
+          inputBlockBits: 25
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: brotli-chunksize-invalid-4095
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli:
+          chunkSize: 4095
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: brotli-chunksize-invalid-65537
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli:
+          chunkSize: 65537
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: zstd-compressionlevel-invalid-0
+spec:
+  http:
+    compression:
+      compressors:
+      - zstd:
+          compressionLevel: 0
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: zstd-compressionlevel-invalid-23
+spec:
+  http:
+    compression:
+      compressors:
+      - zstd:
+          compressionLevel: 23
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: zstd-chunksize-invalid-4095
+spec:
+  http:
+    compression:
+      compressors:
+      - zstd:
+          chunkSize: 4095
+---
+_err: in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: zstd-chunksize-invalid-65537
+spec:
+  http:
+    compression:
+      compressors:
+      - zstd:
+          chunkSize: 65537
+---
+_err: 'targetRef: Required value'
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: missing-status-target
+spec: {}
+status:
+  targets:
+  - conditions: []
+---
+_err: minContentLength in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: negative-min-content-length
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip: {}
+        minContentLength: -1
+---
+_err: minContentLength in body should be
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: oversized-min-content-length
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip: {}
+        minContentLength: 4294967296

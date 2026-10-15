@@ -1,0 +1,401 @@
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: empty
+spec: {}
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: namespace-selector
+spec:
+  selector: {}
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: workload-selector
+spec:
+  selector:
+    matchLabels:
+      app: reviews
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: target-gateway-gateway-networking-k8s-io
+spec:
+  targetRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: reviews
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: target-service-empty
+spec:
+  targetRefs:
+  - group: ""
+    kind: Service
+    name: reviews
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: target-service-core
+spec:
+  targetRefs:
+  - group: core
+    kind: Service
+    name: reviews
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: service-default-group
+spec:
+  targetRefs:
+  - kind: Service
+    name: reviews
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: empty-compression
+spec:
+  http:
+    compression: {}
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: empty-list
+spec:
+  http:
+    compression:
+      compressors: []
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: all-codecs
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli:
+          quality: 0
+        contentType:
+        - application/json
+        minContentLength: 0
+      - gzip: {}
+      - zstd: {}
+      disableOnEtag: false
+      removeAcceptEncodingHeader: false
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: port-overrides
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip: {}
+  portLevelSettings:
+  - port:
+      number: 1
+  - http:
+      compression: {}
+    port:
+      number: 65535
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: gzip-defaults
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip: {}
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: gzip-compressionlevel-1
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip:
+          compressionLevel: 1
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: gzip-compressionlevel-9
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip:
+          compressionLevel: 9
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: gzip-windowbits-9
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip:
+          windowBits: 9
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: gzip-windowbits-15
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip:
+          windowBits: 15
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: gzip-memorylevel-1
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip:
+          memoryLevel: 1
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: gzip-memorylevel-9
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip:
+          memoryLevel: 9
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: gzip-chunksize-4096
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip:
+          chunkSize: 4096
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: gzip-chunksize-65536
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip:
+          chunkSize: 65536
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: brotli-defaults
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli: {}
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: brotli-quality-0
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli:
+          quality: 0
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: brotli-quality-11
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli:
+          quality: 11
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: brotli-windowbits-10
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli:
+          windowBits: 10
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: brotli-windowbits-24
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli:
+          windowBits: 24
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: brotli-inputblockbits-16
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli:
+          inputBlockBits: 16
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: brotli-inputblockbits-24
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli:
+          inputBlockBits: 24
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: brotli-chunksize-4096
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli:
+          chunkSize: 4096
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: brotli-chunksize-65536
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli:
+          chunkSize: 65536
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: zstd-defaults
+spec:
+  http:
+    compression:
+      compressors:
+      - zstd: {}
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: zstd-compressionlevel-1
+spec:
+  http:
+    compression:
+      compressors:
+      - zstd:
+          compressionLevel: 1
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: zstd-compressionlevel-22
+spec:
+  http:
+    compression:
+      compressors:
+      - zstd:
+          compressionLevel: 22
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: zstd-chunksize-4096
+spec:
+  http:
+    compression:
+      compressors:
+      - zstd:
+          chunkSize: 4096
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: zstd-chunksize-65536
+spec:
+  http:
+    compression:
+      compressors:
+      - zstd:
+          chunkSize: 65536
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: target-status
+spec: {}
+status:
+  conditions:
+  - observedGeneration: 2
+    status: "True"
+    type: Accepted
+  targets:
+  - conditions:
+    - message: Policy other/winner applies
+      observedGeneration: 2
+      reason: MoreSpecificPolicy
+      status: "True"
+      type: Overridden
+    targetRef:
+      group: ""
+      kind: Pod
+      name: reviews-abc
+      namespace: other
+    winningPolicy:
+      group: networking.istio.io
+      kind: InboundTrafficPolicy
+      name: winner
+      namespace: other
+---
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: duplicate-port
+spec:
+  portLevelSettings:
+  - port:
+      number: 80
+  - port:
+      number: 80
