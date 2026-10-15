@@ -13392,6 +13392,61 @@ spec:
                         - destination
                         type: object
                       type: array
+                    sessionPersistence:
+                      description: Session persistence settings for this HTTP route.
+                      properties:
+                        absoluteTimeout:
+                          description: Absolute timeout of the persistent session.
+                          type: string
+                        cookie:
+                          description: Cookie-specific session persistence settings.
+                          properties:
+                            lifetimeType:
+                              description: |2-
+
+
+                                Valid Options: SESSION, PERMANENT
+                              enum:
+                              - SESSION
+                              - PERMANENT
+                              maxLength: 16
+                              type: string
+                            name:
+                              description: Name of the cookie used for session persistence.
+                              type: string
+                            path:
+                              description: Value of the cookie Path attribute.
+                              type: string
+                          type: object
+                        header:
+                          description: Header-specific session persistence settings.
+                          properties:
+                            name:
+                              description: Name of the header that carries the session
+                                identity.
+                              type: string
+                          required:
+                          - name
+                          type: object
+                        type:
+                          description: |-
+                            The session persistence type.
+
+                            Valid Options: COOKIE, HEADER
+                          enum:
+                          - COOKIE
+                          - HEADER
+                          maxLength: 16
+                          type: string
+                      type: object
+                      x-kubernetes-validations:
+                      - message: exactly one of cookie or header must be specified
+                        rule: '(has(self.cookie) ? 1 : 0) + (has(self.header) ? 1
+                          : 0) <= 1'
+                      - message: type must match the specified session persistence
+                          configuration
+                        rule: '!has(self.type) ? has(self.cookie) : ((self.type ==
+                          "COOKIE") ? has(self.cookie) : has(self.header))'
                     timeout:
                       description: Timeout for HTTP requests, default is disabled.
                       type: string
@@ -14448,6 +14503,61 @@ spec:
                         - destination
                         type: object
                       type: array
+                    sessionPersistence:
+                      description: Session persistence settings for this HTTP route.
+                      properties:
+                        absoluteTimeout:
+                          description: Absolute timeout of the persistent session.
+                          type: string
+                        cookie:
+                          description: Cookie-specific session persistence settings.
+                          properties:
+                            lifetimeType:
+                              description: |2-
+
+
+                                Valid Options: SESSION, PERMANENT
+                              enum:
+                              - SESSION
+                              - PERMANENT
+                              maxLength: 16
+                              type: string
+                            name:
+                              description: Name of the cookie used for session persistence.
+                              type: string
+                            path:
+                              description: Value of the cookie Path attribute.
+                              type: string
+                          type: object
+                        header:
+                          description: Header-specific session persistence settings.
+                          properties:
+                            name:
+                              description: Name of the header that carries the session
+                                identity.
+                              type: string
+                          required:
+                          - name
+                          type: object
+                        type:
+                          description: |-
+                            The session persistence type.
+
+                            Valid Options: COOKIE, HEADER
+                          enum:
+                          - COOKIE
+                          - HEADER
+                          maxLength: 16
+                          type: string
+                      type: object
+                      x-kubernetes-validations:
+                      - message: exactly one of cookie or header must be specified
+                        rule: '(has(self.cookie) ? 1 : 0) + (has(self.header) ? 1
+                          : 0) <= 1'
+                      - message: type must match the specified session persistence
+                          configuration
+                        rule: '!has(self.type) ? has(self.cookie) : ((self.type ==
+                          "COOKIE") ? has(self.cookie) : has(self.header))'
                     timeout:
                       description: Timeout for HTTP requests, default is disabled.
                       type: string
@@ -15504,6 +15614,61 @@ spec:
                         - destination
                         type: object
                       type: array
+                    sessionPersistence:
+                      description: Session persistence settings for this HTTP route.
+                      properties:
+                        absoluteTimeout:
+                          description: Absolute timeout of the persistent session.
+                          type: string
+                        cookie:
+                          description: Cookie-specific session persistence settings.
+                          properties:
+                            lifetimeType:
+                              description: |2-
+
+
+                                Valid Options: SESSION, PERMANENT
+                              enum:
+                              - SESSION
+                              - PERMANENT
+                              maxLength: 16
+                              type: string
+                            name:
+                              description: Name of the cookie used for session persistence.
+                              type: string
+                            path:
+                              description: Value of the cookie Path attribute.
+                              type: string
+                          type: object
+                        header:
+                          description: Header-specific session persistence settings.
+                          properties:
+                            name:
+                              description: Name of the header that carries the session
+                                identity.
+                              type: string
+                          required:
+                          - name
+                          type: object
+                        type:
+                          description: |-
+                            The session persistence type.
+
+                            Valid Options: COOKIE, HEADER
+                          enum:
+                          - COOKIE
+                          - HEADER
+                          maxLength: 16
+                          type: string
+                      type: object
+                      x-kubernetes-validations:
+                      - message: exactly one of cookie or header must be specified
+                        rule: '(has(self.cookie) ? 1 : 0) + (has(self.header) ? 1
+                          : 0) <= 1'
+                      - message: type must match the specified session persistence
+                          configuration
+                        rule: '!has(self.type) ? has(self.cookie) : ((self.type ==
+                          "COOKIE") ? has(self.cookie) : has(self.header))'
                     timeout:
                       description: Timeout for HTTP requests, default is disabled.
                       type: string
