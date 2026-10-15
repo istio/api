@@ -9827,7 +9827,7 @@ spec:
                       type: object
                       x-kubernetes-validations:
                       - message: port name must be valid
-                        rule: self.all(key, size(key) < 63 && key.matches("^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$"))
+                        rule: self.all(key, size(key) <= 63 && key.matches("^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$"))
                     serviceAccount:
                       description: The service account associated with the workload
                         if a sidecar is present in the workload.
@@ -10126,7 +10126,7 @@ spec:
                       type: object
                       x-kubernetes-validations:
                       - message: port name must be valid
-                        rule: self.all(key, size(key) < 63 && key.matches("^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$"))
+                        rule: self.all(key, size(key) <= 63 && key.matches("^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$"))
                     serviceAccount:
                       description: The service account associated with the workload
                         if a sidecar is present in the workload.
@@ -10425,7 +10425,7 @@ spec:
                       type: object
                       x-kubernetes-validations:
                       - message: port name must be valid
-                        rule: self.all(key, size(key) < 63 && key.matches("^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$"))
+                        rule: self.all(key, size(key) <= 63 && key.matches("^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$"))
                     serviceAccount:
                       description: The service account associated with the workload
                         if a sidecar is present in the workload.
@@ -15849,7 +15849,7 @@ spec:
                 type: object
                 x-kubernetes-validations:
                 - message: port name must be valid
-                  rule: self.all(key, size(key) < 63 && key.matches("^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$"))
+                  rule: self.all(key, size(key) <= 63 && key.matches("^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$"))
               serviceAccount:
                 description: The service account associated with the workload if a
                   sidecar is present in the workload.
@@ -16009,7 +16009,7 @@ spec:
                 type: object
                 x-kubernetes-validations:
                 - message: port name must be valid
-                  rule: self.all(key, size(key) < 63 && key.matches("^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$"))
+                  rule: self.all(key, size(key) <= 63 && key.matches("^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$"))
               serviceAccount:
                 description: The service account associated with the workload if a
                   sidecar is present in the workload.
@@ -16169,7 +16169,7 @@ spec:
                 type: object
                 x-kubernetes-validations:
                 - message: port name must be valid
-                  rule: self.all(key, size(key) < 63 && key.matches("^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$"))
+                  rule: self.all(key, size(key) <= 63 && key.matches("^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$"))
               serviceAccount:
                 description: The service account associated with the workload if a
                   sidecar is present in the workload.
@@ -16502,7 +16502,7 @@ spec:
                     type: object
                     x-kubernetes-validations:
                     - message: port name must be valid
-                      rule: self.all(key, size(key) < 63 && key.matches("^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$"))
+                      rule: self.all(key, size(key) <= 63 && key.matches("^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$"))
                   serviceAccount:
                     description: The service account associated with the workload
                       if a sidecar is present in the workload.
@@ -16810,7 +16810,7 @@ spec:
                     type: object
                     x-kubernetes-validations:
                     - message: port name must be valid
-                      rule: self.all(key, size(key) < 63 && key.matches("^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$"))
+                      rule: self.all(key, size(key) <= 63 && key.matches("^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$"))
                   serviceAccount:
                     description: The service account associated with the workload
                       if a sidecar is present in the workload.
@@ -17118,7 +17118,7 @@ spec:
                     type: object
                     x-kubernetes-validations:
                     - message: port name must be valid
-                      rule: self.all(key, size(key) < 63 && key.matches("^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$"))
+                      rule: self.all(key, size(key) <= 63 && key.matches("^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$"))
                   serviceAccount:
                     description: The service account associated with the workload
                       if a sidecar is present in the workload.

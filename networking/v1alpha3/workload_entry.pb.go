@@ -222,7 +222,7 @@ type WorkloadEntry struct {
 	// **NOTE 2:** endpoint port map takes precedence over targetPort.
 	// +protoc-gen-crd:map-value-validation:XValidation:message="port must be between 1-65535",rule="0 < self && self <= 65535"
 	// +kubebuilder:validation:MaxProperties=128
-	// +kubebuilder:validation:XValidation:message="port name must be valid",rule="self.all(key, size(key) < 63 && key.matches('^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$'))"
+	// +kubebuilder:validation:XValidation:message="port name must be valid",rule="self.all(key, size(key) <= 63 && key.matches('^[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?$'))"
 	Ports map[string]uint32 `protobuf:"bytes,2,rep,name=ports,proto3" json:"ports,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value"`
 	// One or more labels associated with the endpoint.
 	// +kubebuilder:validation:MaxProperties=256

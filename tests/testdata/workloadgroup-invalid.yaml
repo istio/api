@@ -29,3 +29,15 @@ spec:
         - name: "**"
       port: 80
   template: {}
+---
+_err: port name must be valid
+apiVersion: networking.istio.io/v1
+kind: WorkloadGroup
+metadata:
+  name: port-name-length-boundary
+spec:
+  template:
+    address: 1.2.3.4
+    # 64 character port names.
+    ports:
+      http-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: 80
