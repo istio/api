@@ -848,12 +848,12 @@ type Operation struct {
 	Ports []string `protobuf:"bytes,2,rep,name=ports,proto3" json:"ports,omitempty"`
 	// Optional. A list of negative match of ports as specified in the connection.
 	NotPorts []string `protobuf:"bytes,6,rep,name=not_ports,json=notPorts,proto3" json:"not_ports,omitempty"`
-	// Optional. A list of methods as specified in the HTTP request.
+	// Optional. A list of methods as specified in the HTTP request. The match is case-insensitive.
 	// For gRPC service, this will always be `POST`.
 	//
 	// If not set, any method is allowed. Must be used only with HTTP.
 	Methods []string `protobuf:"bytes,3,rep,name=methods,proto3" json:"methods,omitempty"`
-	// Optional. A list of negative match of methods as specified in the HTTP request.
+	// Optional. A list of negative match of methods as specified in the HTTP request. The match is case-insensitive.
 	NotMethods []string `protobuf:"bytes,7,rep,name=not_methods,json=notMethods,proto3" json:"not_methods,omitempty"`
 	// Optional. A list of paths as specified in the HTTP request. See the [Authorization Policy Normalization](https://istio.io/latest/docs/reference/config/security/normalization/)
 	// for details of the path normalization.
