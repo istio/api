@@ -369,6 +369,7 @@
 //         config_discovery:
 //           config_source:
 //             ads: {}
+//             initial_fetch_timeout": "0s"
 //           type_urls: ["type.googleapis.com/envoy.extensions.filters.http.wasm.v3.Wasm"]
 // ```
 //
@@ -472,8 +473,7 @@ const (
 	EnvoyFilter_HTTP_ROUTE EnvoyFilter_ApplyTo = 7
 	// Applies the patch to a cluster in a CDS output. Also used to add new clusters.
 	EnvoyFilter_CLUSTER EnvoyFilter_ApplyTo = 8
-	// Applies the patch to or adds an extension config in ECDS output. Note that ECDS
-	// is only supported by HTTP filters.
+	// Applies the patch to or adds an extension config in ECDS output.
 	EnvoyFilter_EXTENSION_CONFIG EnvoyFilter_ApplyTo = 9
 	// DEPRECATED. Applies the patch to bootstrap configuration.
 	EnvoyFilter_BOOTSTRAP EnvoyFilter_ApplyTo = 10
