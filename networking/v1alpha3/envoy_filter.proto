@@ -365,6 +365,7 @@ syntax = "proto3";
 //         config_discovery:
 //           config_source:
 //             ads: {}
+//             initial_fetch_timeout": "0s"
 //           type_urls: ["type.googleapis.com/envoy.extensions.filters.http.wasm.v3.Wasm"]
 // ```
 //
@@ -487,8 +488,7 @@ message EnvoyFilter {
     // Applies the patch to a cluster in a CDS output. Also used to add new clusters.
     CLUSTER = 8;
 
-    // Applies the patch to or adds an extension config in ECDS output. Note that ECDS
-    // is only supported by HTTP filters.
+    // Applies the patch to or adds an extension config in ECDS output.
     EXTENSION_CONFIG = 9;
 
     // DEPRECATED. Applies the patch to bootstrap configuration.
