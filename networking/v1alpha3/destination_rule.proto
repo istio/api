@@ -556,6 +556,29 @@ message LoadBalancerSettings {
       MagLev maglev = 7;
     }
 
+    // Enables [Consistent Hashing with Bounded Loads](https://arxiv.org/abs/1608.01350),
+    // which caps the load of any single host at `hashBalanceFactor / 100` times
+    // the average number of active requests across all hosts. While a host is
+    // under the cap it keeps all of its hashed keys; once it exceeds the cap,
+    // excess requests spill over to the next eligible host on the ring/table.
+    // Applies to both `ringHash` and `maglev`.
+    //
+    // For example, a value of `150` allows a host to carry up to 1.5x the average
+    // load before requests are redirected. Lower values spread load more evenly
+    // at the cost of weaker affinity. If unset, load is not bounded.
+    //
+    // Note: the bound is relative to the average load, so it corrects hot spots
+    // between hosts but does not protect against all hosts being overloaded;
+    // use circuit breaking for that. The load is measured in active requests,
+    // not connections.
+    //
+    // Please refer to Envoy's
+    // [hash_balance_factor](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/cluster/v3/cluster.proto#envoy-v3-api-field-config-cluster-v3-cluster-commonlbconfig-consistenthashinglbconfig-hash-balance-factor)
+    // for more details.
+    //
+    // +kubebuilder:validation:Minimum=100
+    google.protobuf.UInt32Value hash_balance_factor = 8;
+
     // Deprecated. Use RingHash instead.
     uint64 minimum_ring_size = 4 [deprecated = true];
   }
