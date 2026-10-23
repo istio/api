@@ -71,16 +71,25 @@ type RequestAuthentication = v1beta1.RequestAuthentication
 // +kubebuilder:validation:XValidation:message="only one of jwks or jwksUri can be set",rule="oneof(self.jwksUri, self.jwks_uri, self.jwks)"
 type JWTRule = v1beta1.JWTRule
 
-// Specifies whether the JWT token is required or optional in the request.
+// Specifies whether the JWT token is required, optional, or ignored in the request.
 type JWTRule_JWTRequirement = v1beta1.JWTRule_JWTRequirement
 
 // The JWT token is optional. Requests without a token are allowed as long as
 // no invalid token is present. This is the default behavior.
+// Result: missing token => allowed, invalid token => 401
 const JWTRule_OPTIONAL JWTRule_JWTRequirement = v1beta1.JWTRule_OPTIONAL
 
 // The JWT token must be present and valid. Requests without this token will
 // be rejected with 401 even if other JWT rules are satisfied.
+// Result: missing token => 401, invalid token => 401
 const JWTRule_REQUIRED JWTRule_JWTRequirement = v1beta1.JWTRule_REQUIRED
+
+// The JWT requirement is always satisfied. Requests without a token are
+// allowed, requests with an invalid token are also allowed. Note that this
+// only relaxes the requirement. A present token is always verified, and
+// the claims are always populated when a token is valid.
+// Result: missing token => allowed, invalid token => allowed
+const JWTRule_IGNORED JWTRule_JWTRequirement = v1beta1.JWTRule_IGNORED
 
 // This message specifies a header location to extract JWT token.
 type JWTHeader = v1beta1.JWTHeader
