@@ -184,6 +184,40 @@ type Destination = v1alpha3.Destination
 // gRPC traffic. See VirtualService for usage examples.
 type HTTPRoute = v1alpha3.HTTPRoute
 
+// Session persistence settings for an HTTP route.
+//
+// Session persistence is scoped to the route that selects it. It does not
+// affect traffic sent to the same destination by another HTTP route.
+// +kubebuilder:validation:XValidation:message="exactly one of cookie or header must be specified",rule="oneof(self.cookie, self.header)"
+// +kubebuilder:validation:XValidation:message="type must match the specified session persistence configuration",rule="!has(self.type) ? has(self.cookie) : self.type == 'COOKIE' ? has(self.cookie) : has(self.header)"
+type SessionPersistence = v1alpha3.SessionPersistence
+
+// Cookie-specific session persistence settings.
+type SessionPersistence_Cookie = v1alpha3.SessionPersistence_Cookie
+
+// Defines whether the cookie is retained only for the browser session or
+// persists until absolute_timeout expires. Defaults to SESSION.
+type SessionPersistence_Cookie_LifetimeType = v1alpha3.SessionPersistence_Cookie_LifetimeType
+
+// The cookie is deleted when the current browser session ends.
+const SessionPersistence_Cookie_SESSION SessionPersistence_Cookie_LifetimeType = v1alpha3.SessionPersistence_Cookie_SESSION
+
+// The cookie persists until absolute_timeout expires.
+const SessionPersistence_Cookie_PERMANENT SessionPersistence_Cookie_LifetimeType = v1alpha3.SessionPersistence_Cookie_PERMANENT
+
+// Header-specific session persistence settings.
+type SessionPersistence_Header = v1alpha3.SessionPersistence_Header
+
+// Type defines whether a cookie or a header carries the session identity.
+// Defaults to COOKIE.
+type SessionPersistence_Type = v1alpha3.SessionPersistence_Type
+
+// Use a cookie to carry the session identity.
+const SessionPersistence_COOKIE SessionPersistence_Type = v1alpha3.SessionPersistence_COOKIE
+
+// Use a header to carry the session identity.
+const SessionPersistence_HEADER SessionPersistence_Type = v1alpha3.SessionPersistence_HEADER
+
 // Describes the delegate VirtualService.
 // The following routing rules forward the traffic to `/productpage` by a delegate VirtualService named `productpage`,
 // forward the traffic to `/reviews` by a delegate VirtualService named `reviews`.
