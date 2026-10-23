@@ -1,14 +1,22 @@
-version: v1
+version: v2
 plugins:
-- name: go
-  out: .
-  opt: paths=source_relative
-- name: go-grpc
-  out: .
-  opt: paths=source_relative
-- name: docs
-  out: .
-  opt: warnings=false,dictionary=./dictionaries/en-US,custom_word_list=./dictionaries/custom.txt,per_file=true,mode=html_fragment_with_front_matter
-- name: golang-jsonshim
-  out: .
-  opt: paths=source_relative
+  - local: protoc-gen-go
+    out: .
+    opt:
+      - paths=source_relative
+  - local: protoc-gen-go-grpc
+    out: .
+    opt:
+      - paths=source_relative
+  - local: protoc-gen-docs
+    out: .
+    opt:
+      - warnings=false 
+      - dictionary=./dictionaries/en-US 
+      - custom_word_list=./dictionaries/custom.txt 
+      - per_file=true 
+      - mode=html_fragment_with_front_matter
+  - local: protoc-gen-golang-jsonshim
+    out: .
+    opt:
+      - paths=source_relative
