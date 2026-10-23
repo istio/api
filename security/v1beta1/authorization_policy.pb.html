@@ -371,8 +371,9 @@ spec:
 <h2 id="Rule">Rule</h2>
 <section>
 <p>Rule matches requests from a list of sources that perform a list of operations subject to a
-list of conditions. A match occurs when at least one source, one operation and all conditions
-matches the request. An empty rule is always matched.</p>
+list of conditions. A match occurs when at least one source (if specified), at least one
+operation (if specified), and all conditions (if specified) match the request. An empty rule
+is always matched. The policy&rsquo;s action is applied to requests that match its rules.</p>
 <p>Any string field in the rule supports Exact, Prefix, Suffix and Presence match:</p>
 <ul>
 <li>Exact match: <code>abc</code> will match on value <code>abc</code>.</li>
@@ -394,8 +395,8 @@ matches the request. An empty rule is always matched.</p>
 <div class="type"><a href="#Rule-From">From[]</a></div>
 </div></td>
 <td>
-<p><code>from</code> specifies the source of a request.</p>
-<p>If not set, any source is allowed.</p>
+<p><code>from</code> specifies a list of sources that a request can match.</p>
+<p>If not set, any source matches.</p>
 
 </td>
 </tr>
@@ -404,8 +405,8 @@ matches the request. An empty rule is always matched.</p>
 <div class="type"><a href="#Rule-To">To[]</a></div>
 </div></td>
 <td>
-<p><code>to</code> specifies the operation of a request.</p>
-<p>If not set, any operation is allowed.</p>
+<p><code>to</code> specifies a list of operations that a request can match.</p>
+<p>If not set, any operation matches.</p>
 
 </td>
 </tr>
@@ -415,7 +416,7 @@ matches the request. An empty rule is always matched.</p>
 </div></td>
 <td>
 <p><code>when</code> specifies a list of additional conditions of a request.</p>
-<p>If not set, any condition is allowed.</p>
+<p>If not set, no additional conditions are required.</p>
 
 </td>
 </tr>
@@ -498,7 +499,7 @@ notIpBlocks: [&quot;203.0.113.4&quot;]
 <code>&quot;&lt;TRUST_DOMAIN&gt;/ns/&lt;NAMESPACE&gt;/sa/&lt;SERVICE_ACCOUNT&gt;&quot;</code>, for example, <code>&quot;cluster.local/ns/default/sa/productpage&quot;</code>.
 This field requires mTLS enabled and is the same as the <code>source.principal</code> attribute.</p>
 <p>Usage of <code>serviceAccounts</code> is typically simpler and offers the same functionality.</p>
-<p>If not set, any principal is allowed.</p>
+<p>If not set, any principal matches.</p>
 
 </td>
 </tr>
@@ -519,7 +520,7 @@ This field requires mTLS enabled and is the same as the <code>source.principal</
 <p>A list of request identities derived from the JWT. The request identity is in the format of
 <code>&quot;&lt;ISS&gt;/&lt;SUB&gt;&quot;</code>, for example, <code>&quot;example.com/sub-1&quot;</code>. This field requires request authentication enabled and is the
 same as the <code>request.auth.principal</code> attribute.</p>
-<p>If not set, any request principal is allowed.</p>
+<p>If not set, any request principal matches.</p>
 
 </td>
 </tr>
@@ -539,7 +540,7 @@ same as the <code>request.auth.principal</code> attribute.</p>
 <td>
 <p>A list of namespaces derived from the peer certificate.
 This field requires mTLS enabled and is the same as the <code>source.namespace</code> attribute.</p>
-<p>If not set, any namespace is allowed.</p>
+<p>If not set, any namespace matches.</p>
 
 </td>
 </tr>
@@ -561,7 +562,7 @@ This field requires mTLS enabled and is the same as the <code>source.namespace</
 This field requires mTLS enabled and is the same as the <code>source.serviceaccount</code> attribute.</p>
 <p>This takes the format <code>&lt;namespace&gt;/&lt;serviceaccount&gt;</code>.
 <code>&lt;serviceaccount&gt;</code> may also be used to use the same namespace as the <code>AuthorizationPolicy</code>.</p>
-<p>If not set, any service account is allowed.</p>
+<p>If not set, any service account matches.</p>
 <p>No form of wildcard (<code>*</code>) is allowed.
 Cannot be set with <code>principals</code> or <code>namespaces</code>.</p>
 
@@ -586,7 +587,7 @@ Cannot be set with <code>principals</code> or <code>namespaces</code>.</p>
 <td>
 <p>A list of IP blocks, populated from the source address of the IP packet. Single IP (e.g. <code>203.0.113.4</code>) and
 CIDR (e.g. <code>203.0.113.0/24</code>) are supported. This is the same as the <code>source.ip</code> attribute.</p>
-<p>If not set, any IP is allowed.</p>
+<p>If not set, any IP matches.</p>
 
 </td>
 </tr>
@@ -610,7 +611,7 @@ when you install Istio or using an annotation on the ingress gateway.  See the d
 <a href="https://istio.io/latest/docs/ops/configuration/traffic-management/network-topologies/">Configuring Gateway Network Topology</a>.
 Single IP (e.g. <code>203.0.113.4</code>) and CIDR (e.g. <code>203.0.113.0/24</code>) are supported.
 This is the same as the <code>remote.ip</code> attribute.</p>
-<p>If not set, any IP is allowed.</p>
+<p>If not set, any IP matches.</p>
 
 </td>
 </tr>
@@ -631,7 +632,7 @@ This is the same as the <code>remote.ip</code> attribute.</p>
 <p>A list of trust domains derived from the peer certificate.
 Can be exact, prefix, suffix and presence.
 This field requires mTLS enabled and is the same as the <code>source.trustDomain</code> attribute.</p>
-<p>If not set, any trust domain is allowed.</p>
+<p>If not set, any trust domain matches.</p>
 
 </td>
 </tr>
@@ -675,7 +676,7 @@ notPaths: [&quot;/admin*&quot;]
 <p>A list of hosts as specified in the HTTP request. The match is case-insensitive.
 See the <a href="https://istio.io/latest/docs/ops/best-practices/security/#writing-host-match-policies">security best practices</a> for
 recommended usage of this field.</p>
-<p>If not set, any host is allowed. Must be used only with HTTP.</p>
+<p>If not set, any host matches. Must be used only with HTTP.</p>
 
 </td>
 </tr>
@@ -694,7 +695,7 @@ recommended usage of this field.</p>
 </div></td>
 <td>
 <p>A list of ports as specified in the connection.</p>
-<p>If not set, any port is allowed.</p>
+<p>If not set, any port matches.</p>
 
 </td>
 </tr>
@@ -714,7 +715,7 @@ recommended usage of this field.</p>
 <td>
 <p>A list of methods as specified in the HTTP request.
 For gRPC service, this will always be <code>POST</code>.</p>
-<p>If not set, any method is allowed. Must be used only with HTTP.</p>
+<p>If not set, any method matches. Must be used only with HTTP.</p>
 
 </td>
 </tr>
@@ -751,7 +752,7 @@ To be a valid path template, the path must not contain <code>*</code>, <code>{</
 <li><code>/{**}/foo/{*}</code> is not a valid path template since <code>{**}</code> is not the last operator</li>
 <li><code>/foo/{*}.txt</code> is invalid since there are characters other than <code>{*}</code> in the path segment</li>
 </ul>
-<p>If not set, any path is allowed. Must be used only with HTTP.</p>
+<p>If not set, any path matches. Must be used only with HTTP.</p>
 
 </td>
 </tr>
@@ -795,7 +796,7 @@ See the <a href="https://istio.io/docs/reference/config/security/conditions/">fu
 <div class="type">string[]</div>
 </div></td>
 <td>
-<p>A list of allowed values for the attribute.
+<p>A list of values to match for the attribute.
 Note: at least one of <code>values</code> or <code>notValues</code> must be set.</p>
 
 </td>

@@ -377,8 +377,9 @@ message AuthorizationPolicy {
 }
 
 // Rule matches requests from a list of sources that perform a list of operations subject to a
-// list of conditions. A match occurs when at least one source, one operation and all conditions
-// matches the request. An empty rule is always matched.
+// list of conditions. A match occurs when at least one source (if specified), at least one
+// operation (if specified), and all conditions (if specified) match the request. An empty rule
+// is always matched. The policy's action is applied to requests that match its rules.
 //
 // Any string field in the rule supports Exact, Prefix, Suffix and Presence match:
 //
@@ -393,9 +394,9 @@ message Rule {
     Source source = 1;
   }
 
-  // Optional. `from` specifies the source of a request.
+  // Optional. `from` specifies a list of sources that a request can match.
   //
-  // If not set, any source is allowed.
+  // If not set, any source matches.
   // +kubebuilder:validation:MaxItems=512
   repeated From from = 1;
 
@@ -405,14 +406,14 @@ message Rule {
     Operation operation = 1;
   }
 
-  // Optional. `to` specifies the operation of a request.
+  // Optional. `to` specifies a list of operations that a request can match.
   //
-  // If not set, any operation is allowed.
+  // If not set, any operation matches.
   repeated To to = 2;
 
   // Optional. `when` specifies a list of additional conditions of a request.
   //
-  // If not set, any condition is allowed.
+  // If not set, no additional conditions are required.
   repeated Condition when = 3;
 }
 
@@ -435,7 +436,7 @@ message Source {
   //
   // Usage of `serviceAccounts` is typically simpler and offers the same functionality.
   //
-  // If not set, any principal is allowed.
+  // If not set, any principal matches.
   repeated string principals = 1;
 
   // Optional. A list of negative match of peer identities.
@@ -445,7 +446,7 @@ message Source {
   // `"<ISS>/<SUB>"`, for example, `"example.com/sub-1"`. This field requires request authentication enabled and is the
   // same as the `request.auth.principal` attribute.
   //
-  // If not set, any request principal is allowed.
+  // If not set, any request principal matches.
   repeated string request_principals = 2;
 
   // Optional. A list of negative match of request identities.
@@ -454,7 +455,7 @@ message Source {
   // Optional. A list of namespaces derived from the peer certificate.
   // This field requires mTLS enabled and is the same as the `source.namespace` attribute.
   //
-  // If not set, any namespace is allowed.
+  // If not set, any namespace matches.
   repeated string namespaces = 3;
 
   // Optional. A list of negative match of namespaces.
@@ -466,7 +467,7 @@ message Source {
   // This takes the format `<namespace>/<serviceaccount>`.
   // `<serviceaccount>` may also be used to use the same namespace as the `AuthorizationPolicy`.
   //
-  // If not set, any service account is allowed.
+  // If not set, any service account matches.
   //
   // No form of wildcard (`*`) is allowed.
   // Cannot be set with `principals` or `namespaces`.
@@ -488,7 +489,7 @@ message Source {
   // Optional. A list of IP blocks, populated from the source address of the IP packet. Single IP (e.g. `203.0.113.4`) and
   // CIDR (e.g. `203.0.113.0/24`) are supported. This is the same as the `source.ip` attribute.
   //
-  // If not set, any IP is allowed.
+  // If not set, any IP matches.
   repeated string ip_blocks = 4;
 
   // Optional. A list of negative match of IP blocks.
@@ -501,7 +502,7 @@ message Source {
   // Single IP (e.g. `203.0.113.4`) and CIDR (e.g. `203.0.113.0/24`) are supported.
   // This is the same as the `remote.ip` attribute.
   //
-  // If not set, any IP is allowed.
+  // If not set, any IP matches.
   repeated string remote_ip_blocks = 9;
 
   // Optional. A list of negative match of remote IP blocks.
@@ -511,7 +512,7 @@ message Source {
   // Can be exact, prefix, suffix and presence.
   // This field requires mTLS enabled and is the same as the `source.trustDomain` attribute.
   //
-  // If not set, any trust domain is allowed.
+  // If not set, any trust domain matches.
   //
   // +cue-gen:AuthorizationPolicy:releaseChannel:extended
   repeated string trust_domains = 13;
@@ -539,7 +540,7 @@ message Operation {
   // See the [security best practices](https://istio.io/latest/docs/ops/best-practices/security/#writing-host-match-policies) for
   // recommended usage of this field.
   //
-  // If not set, any host is allowed. Must be used only with HTTP.
+  // If not set, any host matches. Must be used only with HTTP.
   repeated string hosts = 1;
 
   // Optional. A list of negative match of hosts as specified in the HTTP request. The match is case-insensitive.
@@ -547,7 +548,7 @@ message Operation {
 
   // Optional. A list of ports as specified in the connection.
   //
-  // If not set, any port is allowed.
+  // If not set, any port matches.
   repeated string ports = 2;
 
   // Optional. A list of negative match of ports as specified in the connection.
@@ -556,7 +557,7 @@ message Operation {
   // Optional. A list of methods as specified in the HTTP request.
   // For gRPC service, this will always be `POST`.
   //
-  // If not set, any method is allowed. Must be used only with HTTP.
+  // If not set, any method matches. Must be used only with HTTP.
   repeated string methods = 3;
 
   // Optional. A list of negative match of methods as specified in the HTTP request.
@@ -580,7 +581,7 @@ message Operation {
   // - `/{**}/foo/{*}` is not a valid path template since `{**}` is not the last operator
   // - `/foo/{*}.txt` is invalid since there are characters other than `{*}` in the path segment
   //
-  // If not set, any path is allowed. Must be used only with HTTP.
+  // If not set, any path matches. Must be used only with HTTP.
   repeated string paths = 4;
 
   // Optional. A list of negative match of paths.
@@ -593,7 +594,7 @@ message Condition {
   // See the [full list of supported attributes](https://istio.io/docs/reference/config/security/conditions/).
   string key = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // Optional. A list of allowed values for the attribute.
+  // Optional. A list of values to match for the attribute.
   // Note: at least one of `values` or `notValues` must be set.
   repeated string values = 2;
 

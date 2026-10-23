@@ -517,8 +517,9 @@ type AuthorizationPolicy_Provider struct {
 func (*AuthorizationPolicy_Provider) isAuthorizationPolicy_ActionDetail() {}
 
 // Rule matches requests from a list of sources that perform a list of operations subject to a
-// list of conditions. A match occurs when at least one source, one operation and all conditions
-// matches the request. An empty rule is always matched.
+// list of conditions. A match occurs when at least one source (if specified), at least one
+// operation (if specified), and all conditions (if specified) match the request. An empty rule
+// is always matched. The policy's action is applied to requests that match its rules.
 //
 // Any string field in the rule supports Exact, Prefix, Suffix and Presence match:
 //
@@ -528,18 +529,18 @@ func (*AuthorizationPolicy_Provider) isAuthorizationPolicy_ActionDetail() {}
 // - Presence match: `*` will match when value is not empty.
 type Rule struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Optional. `from` specifies the source of a request.
+	// Optional. `from` specifies a list of sources that a request can match.
 	//
-	// If not set, any source is allowed.
+	// If not set, any source matches.
 	// +kubebuilder:validation:MaxItems=512
 	From []*Rule_From `protobuf:"bytes,1,rep,name=from,proto3" json:"from,omitempty"`
-	// Optional. `to` specifies the operation of a request.
+	// Optional. `to` specifies a list of operations that a request can match.
 	//
-	// If not set, any operation is allowed.
+	// If not set, any operation matches.
 	To []*Rule_To `protobuf:"bytes,2,rep,name=to,proto3" json:"to,omitempty"`
 	// Optional. `when` specifies a list of additional conditions of a request.
 	//
-	// If not set, any condition is allowed.
+	// If not set, no additional conditions are required.
 	When          []*Condition `protobuf:"bytes,3,rep,name=when,proto3" json:"when,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -616,7 +617,7 @@ type Source struct {
 	//
 	// Usage of `serviceAccounts` is typically simpler and offers the same functionality.
 	//
-	// If not set, any principal is allowed.
+	// If not set, any principal matches.
 	Principals []string `protobuf:"bytes,1,rep,name=principals,proto3" json:"principals,omitempty"`
 	// Optional. A list of negative match of peer identities.
 	NotPrincipals []string `protobuf:"bytes,5,rep,name=not_principals,json=notPrincipals,proto3" json:"not_principals,omitempty"`
@@ -624,14 +625,14 @@ type Source struct {
 	// `"<ISS>/<SUB>"`, for example, `"example.com/sub-1"`. This field requires request authentication enabled and is the
 	// same as the `request.auth.principal` attribute.
 	//
-	// If not set, any request principal is allowed.
+	// If not set, any request principal matches.
 	RequestPrincipals []string `protobuf:"bytes,2,rep,name=request_principals,json=requestPrincipals,proto3" json:"request_principals,omitempty"`
 	// Optional. A list of negative match of request identities.
 	NotRequestPrincipals []string `protobuf:"bytes,6,rep,name=not_request_principals,json=notRequestPrincipals,proto3" json:"not_request_principals,omitempty"`
 	// Optional. A list of namespaces derived from the peer certificate.
 	// This field requires mTLS enabled and is the same as the `source.namespace` attribute.
 	//
-	// If not set, any namespace is allowed.
+	// If not set, any namespace matches.
 	Namespaces []string `protobuf:"bytes,3,rep,name=namespaces,proto3" json:"namespaces,omitempty"`
 	// Optional. A list of negative match of namespaces.
 	NotNamespaces []string `protobuf:"bytes,7,rep,name=not_namespaces,json=notNamespaces,proto3" json:"not_namespaces,omitempty"`
@@ -641,7 +642,7 @@ type Source struct {
 	// This takes the format `<namespace>/<serviceaccount>`.
 	// `<serviceaccount>` may also be used to use the same namespace as the `AuthorizationPolicy`.
 	//
-	// If not set, any service account is allowed.
+	// If not set, any service account matches.
 	//
 	// No form of wildcard (`*`) is allowed.
 	// Cannot be set with `principals` or `namespaces`.
@@ -661,7 +662,7 @@ type Source struct {
 	// Optional. A list of IP blocks, populated from the source address of the IP packet. Single IP (e.g. `203.0.113.4`) and
 	// CIDR (e.g. `203.0.113.0/24`) are supported. This is the same as the `source.ip` attribute.
 	//
-	// If not set, any IP is allowed.
+	// If not set, any IP matches.
 	IpBlocks []string `protobuf:"bytes,4,rep,name=ip_blocks,json=ipBlocks,proto3" json:"ip_blocks,omitempty"`
 	// Optional. A list of negative match of IP blocks.
 	NotIpBlocks []string `protobuf:"bytes,8,rep,name=not_ip_blocks,json=notIpBlocks,proto3" json:"not_ip_blocks,omitempty"`
@@ -672,7 +673,7 @@ type Source struct {
 	// Single IP (e.g. `203.0.113.4`) and CIDR (e.g. `203.0.113.0/24`) are supported.
 	// This is the same as the `remote.ip` attribute.
 	//
-	// If not set, any IP is allowed.
+	// If not set, any IP matches.
 	RemoteIpBlocks []string `protobuf:"bytes,9,rep,name=remote_ip_blocks,json=remoteIpBlocks,proto3" json:"remote_ip_blocks,omitempty"`
 	// Optional. A list of negative match of remote IP blocks.
 	NotRemoteIpBlocks []string `protobuf:"bytes,10,rep,name=not_remote_ip_blocks,json=notRemoteIpBlocks,proto3" json:"not_remote_ip_blocks,omitempty"`
@@ -680,7 +681,7 @@ type Source struct {
 	// Can be exact, prefix, suffix and presence.
 	// This field requires mTLS enabled and is the same as the `source.trustDomain` attribute.
 	//
-	// If not set, any trust domain is allowed.
+	// If not set, any trust domain matches.
 	//
 	// +cue-gen:AuthorizationPolicy:releaseChannel:extended
 	TrustDomains []string `protobuf:"bytes,13,rep,name=trust_domains,json=trustDomains,proto3" json:"trust_domains,omitempty"`
@@ -838,20 +839,20 @@ type Operation struct {
 	// See the [security best practices](https://istio.io/latest/docs/ops/best-practices/security/#writing-host-match-policies) for
 	// recommended usage of this field.
 	//
-	// If not set, any host is allowed. Must be used only with HTTP.
+	// If not set, any host matches. Must be used only with HTTP.
 	Hosts []string `protobuf:"bytes,1,rep,name=hosts,proto3" json:"hosts,omitempty"`
 	// Optional. A list of negative match of hosts as specified in the HTTP request. The match is case-insensitive.
 	NotHosts []string `protobuf:"bytes,5,rep,name=not_hosts,json=notHosts,proto3" json:"not_hosts,omitempty"`
 	// Optional. A list of ports as specified in the connection.
 	//
-	// If not set, any port is allowed.
+	// If not set, any port matches.
 	Ports []string `protobuf:"bytes,2,rep,name=ports,proto3" json:"ports,omitempty"`
 	// Optional. A list of negative match of ports as specified in the connection.
 	NotPorts []string `protobuf:"bytes,6,rep,name=not_ports,json=notPorts,proto3" json:"not_ports,omitempty"`
 	// Optional. A list of methods as specified in the HTTP request.
 	// For gRPC service, this will always be `POST`.
 	//
-	// If not set, any method is allowed. Must be used only with HTTP.
+	// If not set, any method matches. Must be used only with HTTP.
 	Methods []string `protobuf:"bytes,3,rep,name=methods,proto3" json:"methods,omitempty"`
 	// Optional. A list of negative match of methods as specified in the HTTP request.
 	NotMethods []string `protobuf:"bytes,7,rep,name=not_methods,json=notMethods,proto3" json:"not_methods,omitempty"`
@@ -873,7 +874,7 @@ type Operation struct {
 	// - `/{**}/foo/{*}` is not a valid path template since `{**}` is not the last operator
 	// - `/foo/{*}.txt` is invalid since there are characters other than `{*}` in the path segment
 	//
-	// If not set, any path is allowed. Must be used only with HTTP.
+	// If not set, any path matches. Must be used only with HTTP.
 	Paths []string `protobuf:"bytes,4,rep,name=paths,proto3" json:"paths,omitempty"`
 	// Optional. A list of negative match of paths.
 	NotPaths      []string `protobuf:"bytes,8,rep,name=not_paths,json=notPaths,proto3" json:"not_paths,omitempty"`
@@ -973,7 +974,7 @@ type Condition struct {
 	// The name of an Istio attribute.
 	// See the [full list of supported attributes](https://istio.io/docs/reference/config/security/conditions/).
 	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	// Optional. A list of allowed values for the attribute.
+	// Optional. A list of values to match for the attribute.
 	// Note: at least one of `values` or `notValues` must be set.
 	Values []string `protobuf:"bytes,2,rep,name=values,proto3" json:"values,omitempty"`
 	// Optional. A list of negative match of values for the attribute.
