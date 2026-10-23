@@ -1,0 +1,559 @@
+---
+title: Inbound Traffic Policy
+description: Configure inbound HTTP response compression.
+location: https://istio.io/docs/reference/config/networking/inbound-traffic-policy.html
+layout: protoc-gen-docs
+generator: protoc-gen-docs
+schema: istio.networking.v1alpha1.InboundTrafficPolicy
+number_of_entries: 12
+---
+<p>InboundTrafficPolicy configures the inbound/server-side listener or filter chain
+of a sidecar, gateway, or waypoint. DestinationRule configures the proxy&rsquo;s
+outbound/client-side connection instead.</p>
+<p>The most specific policy applies in full, without merging: resource targetRefs,
+workload selector with matchLabels, namespace-wide policy, then the mesh-wide
+default in the configuration root namespace. Ties are resolved by oldest
+creationTimestamp, then lexicographically by name.</p>
+<p>For example, compress responses at a Kubernetes Gateway:</p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: ingress-compression
+  namespace: istio-system
+spec:
+  targetRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: ingressgateway
+  http:
+    compression:
+      compressors:
+      - brotli:
+          quality: 4
+        minContentLength: 1024
+      - gzip: {}
+</code></pre>
+
+<h2 id="InboundTrafficPolicy">InboundTrafficPolicy</h2>
+<section>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="InboundTrafficPolicy-selector">
+<td><div class="field"><div class="name"><code><a href="#InboundTrafficPolicy-selector">selector</a></code></div>
+<div class="type"><a href="https://istio.io/docs/reference/config/type/workload-selector.html#WorkloadSelector">WorkloadSelector</a></div>
+</div></td>
+<td>
+<p>Select workloads by label, including sidecars and Istio gateway workloads.
+An absent or empty selector selects the namespace; in the configuration
+root namespace it defines the mesh-wide default. Mutually exclusive with targetRefs.</p>
+
+</td>
+</tr>
+<tr id="InboundTrafficPolicy-target_refs">
+<td><div class="field"><div class="name"><code><a href="#InboundTrafficPolicy-target_refs">targetRefs</a></code></div>
+<div class="type"><a href="https://istio.io/docs/reference/config/type/workload-selector.html#PolicyTargetReference">PolicyTargetReference[]</a></div>
+</div></td>
+<td>
+<p>Attach to Kubernetes Gateways (group gateway.networking.k8s.io) or Services
+(empty group or core), in this policy&rsquo;s namespace. Service attachment is for
+waypoints and requires a waypoint bound via istio.io/use-waypoint.
+HTTPRoute attachment is not supported. Mutually exclusive with selector.</p>
+
+</td>
+</tr>
+<tr id="InboundTrafficPolicy-http">
+<td><div class="field"><div class="name"><code><a href="#InboundTrafficPolicy-http">http</a></code></div>
+<div class="type"><a href="#HttpSettings">HttpSettings</a></div>
+</div></td>
+<td>
+<p>HTTP settings for all ports unless replaced by a port-level entry.</p>
+
+</td>
+</tr>
+<tr id="InboundTrafficPolicy-port_level_settings">
+<td><div class="field"><div class="name"><code><a href="#InboundTrafficPolicy-port_level_settings">portLevelSettings</a></code></div>
+<div class="type"><a href="#PortTrafficPolicy">PortTrafficPolicy[]</a></div>
+</div></td>
+<td>
+<p>Port-specific settings replace the top-level settings in full. Unset fields
+use built-in defaults, not the top-level settings. A port entry without HTTP
+compression disables compression for that port.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HttpSettings">HttpSettings</h2>
+<section>
+<p>HTTP settings on the inbound listener or filter chain.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HttpSettings-compression">
+<td><div class="field"><div class="name"><code><a href="#HttpSettings-compression">compression</a></code></div>
+<div class="type"><a href="#CompressionSettings">CompressionSettings</a></div>
+</div></td>
+<td>
+<p>HTTP response compression. If absent or empty, compression is disabled.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="PortTrafficPolicy">PortTrafficPolicy</h2>
+<section>
+<p>Settings for a specific inbound port.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="PortTrafficPolicy-port">
+<td><div class="field"><div class="name"><code><a href="#PortTrafficPolicy-port">port</a></code></div>
+<div class="type"><a href="https://istio.io/docs/reference/config/type/workload-selector.html#PortSelector">PortSelector</a></div>
+<div class="required">Required</div>
+</div></td>
+<td>
+<p>Workload port for selector attachment, Service port for Service attachment,
+or listener port for Gateway attachment. All listeners on this port are affected.</p>
+
+</td>
+</tr>
+<tr id="PortTrafficPolicy-http">
+<td><div class="field"><div class="name"><code><a href="#PortTrafficPolicy-http">http</a></code></div>
+<div class="type"><a href="#HttpSettings">HttpSettings</a></div>
+</div></td>
+<td>
+<p>HTTP settings for this port. Unset fields use built-in defaults.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="CompressionSettings">CompressionSettings</h2>
+<section>
+<p>HTTP response compression settings. Responses already carrying Content-Encoding
+are not compressed again. Vary: Accept-Encoding is added to compressible responses.
+Responses without a matching Accept-Encoding, eligible type, or sufficient size
+are served unchanged. Compression can expose secrets through response sizes when
+secret data and attacker-controlled input occur in the same response.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="CompressionSettings-compressors">
+<td><div class="field"><div class="name"><code><a href="#CompressionSettings-compressors">compressors</a></code></div>
+<div class="type"><a href="#Compressor">Compressor[]</a></div>
+</div></td>
+<td>
+<p>Compressors in preference order. The first eligible algorithm matching the
+client&rsquo;s Accept-Encoding preferences (including q-values) is used. At most one
+compressor applies. For Accept-Encoding: *, the first configured compressor
+is preferred. An empty list disables compression.</p>
+
+</td>
+</tr>
+<tr id="CompressionSettings-disable_on_etag">
+<td><div class="field"><div class="name"><code><a href="#CompressionSettings-disable_on_etag">disableOnEtag</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></div>
+</div></td>
+<td>
+<p>Skip responses with a strong ETag to preserve the validator. Defaults to false.</p>
+
+</td>
+</tr>
+<tr id="CompressionSettings-remove_accept_encoding_header">
+<td><div class="field"><div class="name"><code><a href="#CompressionSettings-remove_accept_encoding_header">removeAcceptEncodingHeader</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></div>
+</div></td>
+<td>
+<p>Remove Accept-Encoding before forwarding to the application so Istio owns
+compression. Defaults to true.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Compressor">Compressor</h2>
+<section>
+<p>A response compressor with its own eligibility settings.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Compressor-min_content_length">
+<td><div class="field"><div class="name"><code><a href="#Compressor-min_content_length">minContentLength</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>Minimum response size in bytes. Defaults to 30. Consider a higher threshold
+for high-throughput listeners to avoid spending CPU on very small responses.</p>
+
+</td>
+</tr>
+<tr id="Compressor-content_type">
+<td><div class="field"><div class="name"><code><a href="#Compressor-content_type">contentType</a></code></div>
+<div class="type">string[]</div>
+</div></td>
+<td>
+<p>Eligible Content-Type values. An empty list uses Envoy&rsquo;s defaults:
+application/javascript, application/json, application/xhtml+xml,
+image/svg+xml, text/css, text/html, text/plain, text/xml.</p>
+
+</td>
+</tr>
+<tr id="Compressor-gzip" class="oneof oneof-start">
+<td><div class="field"><div class="name"><code><a href="#Compressor-gzip">gzip</a></code></div>
+<div class="type"><a href="#GzipCompressor">GzipCompressor (oneof)</a></div>
+</div></td>
+<td>
+<p>Gzip compression.</p>
+
+</td>
+</tr>
+<tr id="Compressor-brotli" class="oneof">
+<td><div class="field"><div class="name"><code><a href="#Compressor-brotli">brotli</a></code></div>
+<div class="type"><a href="#BrotliCompressor">BrotliCompressor (oneof)</a></div>
+</div></td>
+<td>
+<p>Brotli compression.</p>
+
+</td>
+</tr>
+<tr id="Compressor-zstd" class="oneof">
+<td><div class="field"><div class="name"><code><a href="#Compressor-zstd">zstd</a></code></div>
+<div class="type"><a href="#ZstdCompressor">ZstdCompressor (oneof)</a></div>
+</div></td>
+<td>
+<p>Zstandard compression.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="GzipCompressor">GzipCompressor</h2>
+<section>
+<p>Gzip compression tuning. Higher levels consume more CPU.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="GzipCompressor-compression_level">
+<td><div class="field"><div class="name"><code><a href="#GzipCompressor-compression_level">compressionLevel</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>Compression level. Defaults to 6.</p>
+
+</td>
+</tr>
+<tr id="GzipCompressor-window_bits">
+<td><div class="field"><div class="name"><code><a href="#GzipCompressor-window_bits">windowBits</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>Zlib window size in bits. Defaults to 12.</p>
+
+</td>
+</tr>
+<tr id="GzipCompressor-memory_level">
+<td><div class="field"><div class="name"><code><a href="#GzipCompressor-memory_level">memoryLevel</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>Zlib memory level. Defaults to 5.</p>
+
+</td>
+</tr>
+<tr id="GzipCompressor-chunk_size">
+<td><div class="field"><div class="name"><code><a href="#GzipCompressor-chunk_size">chunkSize</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>Output buffer size in bytes. Defaults to 4096.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="BrotliCompressor">BrotliCompressor</h2>
+<section>
+<p>Brotli compression tuning. The default quality of 11 is CPU-intensive;
+consider a lower quality for high-throughput listeners.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="BrotliCompressor-quality">
+<td><div class="field"><div class="name"><code><a href="#BrotliCompressor-quality">quality</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>Quality level. Defaults to 11.</p>
+
+</td>
+</tr>
+<tr id="BrotliCompressor-window_bits">
+<td><div class="field"><div class="name"><code><a href="#BrotliCompressor-window_bits">windowBits</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>Sliding window size in bits. Defaults to 18.</p>
+
+</td>
+</tr>
+<tr id="BrotliCompressor-input_block_bits">
+<td><div class="field"><div class="name"><code><a href="#BrotliCompressor-input_block_bits">inputBlockBits</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>Input block size in bits. Defaults to 24.</p>
+
+</td>
+</tr>
+<tr id="BrotliCompressor-chunk_size">
+<td><div class="field"><div class="name"><code><a href="#BrotliCompressor-chunk_size">chunkSize</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>Output buffer size in bytes. Defaults to 4096.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ZstdCompressor">ZstdCompressor</h2>
+<section>
+<p>Zstandard compression tuning. Higher levels consume more CPU.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ZstdCompressor-compression_level">
+<td><div class="field"><div class="name"><code><a href="#ZstdCompressor-compression_level">compressionLevel</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>Compression level. Defaults to 3.</p>
+
+</td>
+</tr>
+<tr id="ZstdCompressor-chunk_size">
+<td><div class="field"><div class="name"><code><a href="#ZstdCompressor-chunk_size">chunkSize</a></code></div>
+<div class="type"><a href="#google-protobuf-UInt32Value">UInt32Value</a></div>
+</div></td>
+<td>
+<p>Output buffer size in bytes. Defaults to 4096.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="InboundTrafficPolicyStatus">InboundTrafficPolicyStatus</h2>
+<section>
+<p>Observed attachment state. Conditions include Accepted when attached to at least
+one proxy, Conflicted or Overridden when another policy wins, and TargetNotFound
+when no target matches or a Service has no waypoint. Controllers populate status.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="InboundTrafficPolicyStatus-conditions">
+<td><div class="field"><div class="name"><code><a href="#InboundTrafficPolicyStatus-conditions">conditions</a></code></div>
+<div class="type"><a href="https://istio.io/docs/reference/config/meta/v1beta1/istio-status.html#IstioCondition">IstioCondition[]</a></div>
+</div></td>
+<td>
+<p>Aggregate conditions for this policy, including selectors that match no workloads.</p>
+
+</td>
+</tr>
+<tr id="InboundTrafficPolicyStatus-targets">
+<td><div class="field"><div class="name"><code><a href="#InboundTrafficPolicyStatus-targets">targets</a></code></div>
+<div class="type"><a href="#InboundTrafficPolicyTargetStatus">InboundTrafficPolicyTargetStatus[]</a></div>
+</div></td>
+<td>
+<p>Conditions for individual resource or workload targets.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="InboundTrafficPolicyTargetStatus">InboundTrafficPolicyTargetStatus</h2>
+<section>
+<p>Attachment state for one target.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="InboundTrafficPolicyTargetStatus-target_ref">
+<td><div class="field"><div class="name"><code><a href="#InboundTrafficPolicyTargetStatus-target_ref">targetRef</a></code></div>
+<div class="type"><a href="#InboundTrafficPolicyStatusReference">InboundTrafficPolicyStatusReference</a></div>
+<div class="required">Required</div>
+</div></td>
+<td>
+<p>The Gateway, Service, or workload whose attachment is reported.</p>
+
+</td>
+</tr>
+<tr id="InboundTrafficPolicyTargetStatus-conditions">
+<td><div class="field"><div class="name"><code><a href="#InboundTrafficPolicyTargetStatus-conditions">conditions</a></code></div>
+<div class="type"><a href="https://istio.io/docs/reference/config/meta/v1beta1/istio-status.html#IstioCondition">IstioCondition[]</a></div>
+</div></td>
+<td>
+<p>Conditions for this target, including observed generation and diagnostic messages.</p>
+
+</td>
+</tr>
+<tr id="InboundTrafficPolicyTargetStatus-winning_policy">
+<td><div class="field"><div class="name"><code><a href="#InboundTrafficPolicyTargetStatus-winning_policy">winningPolicy</a></code></div>
+<div class="type"><a href="#InboundTrafficPolicyStatusReference">InboundTrafficPolicyStatusReference</a></div>
+</div></td>
+<td>
+<p>The winning InboundTrafficPolicy when this policy is conflicted or overridden.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="InboundTrafficPolicyStatusReference">InboundTrafficPolicyStatusReference</h2>
+<section>
+<p>Resource identity for status reporting. Unlike spec targetRefs, this reference
+may identify resources in other namespaces, including targets of mesh-wide policies.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="InboundTrafficPolicyStatusReference-group">
+<td><div class="field"><div class="name"><code><a href="#InboundTrafficPolicyStatusReference-group">group</a></code></div>
+<div class="type">string</div>
+</div></td>
+<td>
+<p>API group. Empty for core Kubernetes resources.</p>
+
+</td>
+</tr>
+<tr id="InboundTrafficPolicyStatusReference-kind">
+<td><div class="field"><div class="name"><code><a href="#InboundTrafficPolicyStatusReference-kind">kind</a></code></div>
+<div class="type">string</div>
+<div class="required">Required</div>
+</div></td>
+<td>
+<p>Resource kind.</p>
+
+</td>
+</tr>
+<tr id="InboundTrafficPolicyStatusReference-namespace">
+<td><div class="field"><div class="name"><code><a href="#InboundTrafficPolicyStatusReference-namespace">namespace</a></code></div>
+<div class="type">string</div>
+<div class="required">Required</div>
+</div></td>
+<td>
+<p>Resource namespace.</p>
+
+</td>
+</tr>
+<tr id="InboundTrafficPolicyStatusReference-name">
+<td><div class="field"><div class="name"><code><a href="#InboundTrafficPolicyStatusReference-name">name</a></code></div>
+<div class="type">string</div>
+<div class="required">Required</div>
+</div></td>
+<td>
+<p>Resource name.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h4 id="google-protobuf-UInt32Value">UInt32Value</h4>
+<section>
+<p>Wrapper message for <code>uint32</code>.</p>
+<p>The JSON representation for <code>UInt32Value</code> is JSON number.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="google-protobuf-UInt32Value-value">
+<td><div class="field"><div class="name"><code><a href="#google-protobuf-UInt32Value-value">value</a></code></div>
+<div class="type">uint32</div>
+</div></td>
+<td>
+<p>The uint32 value.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>

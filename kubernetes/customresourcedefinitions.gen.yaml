@@ -793,6 +793,25 @@ spec:
                     trafficPolicy:
                       description: Traffic policies that apply to this subset.
                       properties:
+                        compression:
+                          description: Explicit client-side response decompression.
+                          properties:
+                            response:
+                              description: Response handling.
+                              properties:
+                                decompress:
+                                  description: Opt-in transparent response decompression.
+                                  properties:
+                                    enabled:
+                                      description: When true, the outbound sidecar
+                                        advertises Accept-Encoding upstream and decompresses
+                                        the response before delivering it to the client
+                                        application.
+                                      nullable: true
+                                      type: boolean
+                                  type: object
+                              type: object
+                          type: object
                         connectionPool:
                           properties:
                             http:
@@ -1284,6 +1303,26 @@ spec:
                           description: Traffic policies specific to individual ports.
                           items:
                             properties:
+                              compression:
+                                description: Response decompression for this destination
+                                  port.
+                                properties:
+                                  response:
+                                    description: Response handling.
+                                    properties:
+                                      decompress:
+                                        description: Opt-in transparent response decompression.
+                                        properties:
+                                          enabled:
+                                            description: When true, the outbound sidecar
+                                              advertises Accept-Encoding upstream
+                                              and decompresses the response before
+                                              delivering it to the client application.
+                                            nullable: true
+                                            type: boolean
+                                        type: object
+                                    type: object
+                                type: object
                               connectionPool:
                                 properties:
                                   http:
@@ -1985,6 +2024,24 @@ spec:
                 description: Traffic policies to apply (load balancing policy, connection
                   pool sizes, outlier detection).
                 properties:
+                  compression:
+                    description: Explicit client-side response decompression.
+                    properties:
+                      response:
+                        description: Response handling.
+                        properties:
+                          decompress:
+                            description: Opt-in transparent response decompression.
+                            properties:
+                              enabled:
+                                description: When true, the outbound sidecar advertises
+                                  Accept-Encoding upstream and decompresses the response
+                                  before delivering it to the client application.
+                                nullable: true
+                                type: boolean
+                            type: object
+                        type: object
+                    type: object
                   connectionPool:
                     properties:
                       http:
@@ -2455,6 +2512,26 @@ spec:
                     description: Traffic policies specific to individual ports.
                     items:
                       properties:
+                        compression:
+                          description: Response decompression for this destination
+                            port.
+                          properties:
+                            response:
+                              description: Response handling.
+                              properties:
+                                decompress:
+                                  description: Opt-in transparent response decompression.
+                                  properties:
+                                    enabled:
+                                      description: When true, the outbound sidecar
+                                        advertises Accept-Encoding upstream and decompresses
+                                        the response before delivering it to the client
+                                        application.
+                                      nullable: true
+                                      type: boolean
+                                  type: object
+                              type: object
+                          type: object
                         connectionPool:
                           properties:
                             http:
@@ -3279,6 +3356,25 @@ spec:
                     trafficPolicy:
                       description: Traffic policies that apply to this subset.
                       properties:
+                        compression:
+                          description: Explicit client-side response decompression.
+                          properties:
+                            response:
+                              description: Response handling.
+                              properties:
+                                decompress:
+                                  description: Opt-in transparent response decompression.
+                                  properties:
+                                    enabled:
+                                      description: When true, the outbound sidecar
+                                        advertises Accept-Encoding upstream and decompresses
+                                        the response before delivering it to the client
+                                        application.
+                                      nullable: true
+                                      type: boolean
+                                  type: object
+                              type: object
+                          type: object
                         connectionPool:
                           properties:
                             http:
@@ -3770,6 +3866,26 @@ spec:
                           description: Traffic policies specific to individual ports.
                           items:
                             properties:
+                              compression:
+                                description: Response decompression for this destination
+                                  port.
+                                properties:
+                                  response:
+                                    description: Response handling.
+                                    properties:
+                                      decompress:
+                                        description: Opt-in transparent response decompression.
+                                        properties:
+                                          enabled:
+                                            description: When true, the outbound sidecar
+                                              advertises Accept-Encoding upstream
+                                              and decompresses the response before
+                                              delivering it to the client application.
+                                            nullable: true
+                                            type: boolean
+                                        type: object
+                                    type: object
+                                type: object
                               connectionPool:
                                 properties:
                                   http:
@@ -4471,6 +4587,24 @@ spec:
                 description: Traffic policies to apply (load balancing policy, connection
                   pool sizes, outlier detection).
                 properties:
+                  compression:
+                    description: Explicit client-side response decompression.
+                    properties:
+                      response:
+                        description: Response handling.
+                        properties:
+                          decompress:
+                            description: Opt-in transparent response decompression.
+                            properties:
+                              enabled:
+                                description: When true, the outbound sidecar advertises
+                                  Accept-Encoding upstream and decompresses the response
+                                  before delivering it to the client application.
+                                nullable: true
+                                type: boolean
+                            type: object
+                        type: object
+                    type: object
                   connectionPool:
                     properties:
                       http:
@@ -4941,6 +5075,26 @@ spec:
                     description: Traffic policies specific to individual ports.
                     items:
                       properties:
+                        compression:
+                          description: Response decompression for this destination
+                            port.
+                          properties:
+                            response:
+                              description: Response handling.
+                              properties:
+                                decompress:
+                                  description: Opt-in transparent response decompression.
+                                  properties:
+                                    enabled:
+                                      description: When true, the outbound sidecar
+                                        advertises Accept-Encoding upstream and decompresses
+                                        the response before delivering it to the client
+                                        application.
+                                      nullable: true
+                                      type: boolean
+                                  type: object
+                              type: object
+                          type: object
                         connectionPool:
                           properties:
                             http:
@@ -5765,6 +5919,25 @@ spec:
                     trafficPolicy:
                       description: Traffic policies that apply to this subset.
                       properties:
+                        compression:
+                          description: Explicit client-side response decompression.
+                          properties:
+                            response:
+                              description: Response handling.
+                              properties:
+                                decompress:
+                                  description: Opt-in transparent response decompression.
+                                  properties:
+                                    enabled:
+                                      description: When true, the outbound sidecar
+                                        advertises Accept-Encoding upstream and decompresses
+                                        the response before delivering it to the client
+                                        application.
+                                      nullable: true
+                                      type: boolean
+                                  type: object
+                              type: object
+                          type: object
                         connectionPool:
                           properties:
                             http:
@@ -6256,6 +6429,26 @@ spec:
                           description: Traffic policies specific to individual ports.
                           items:
                             properties:
+                              compression:
+                                description: Response decompression for this destination
+                                  port.
+                                properties:
+                                  response:
+                                    description: Response handling.
+                                    properties:
+                                      decompress:
+                                        description: Opt-in transparent response decompression.
+                                        properties:
+                                          enabled:
+                                            description: When true, the outbound sidecar
+                                              advertises Accept-Encoding upstream
+                                              and decompresses the response before
+                                              delivering it to the client application.
+                                            nullable: true
+                                            type: boolean
+                                        type: object
+                                    type: object
+                                type: object
                               connectionPool:
                                 properties:
                                   http:
@@ -6957,6 +7150,24 @@ spec:
                 description: Traffic policies to apply (load balancing policy, connection
                   pool sizes, outlier detection).
                 properties:
+                  compression:
+                    description: Explicit client-side response decompression.
+                    properties:
+                      response:
+                        description: Response handling.
+                        properties:
+                          decompress:
+                            description: Opt-in transparent response decompression.
+                            properties:
+                              enabled:
+                                description: When true, the outbound sidecar advertises
+                                  Accept-Encoding upstream and decompresses the response
+                                  before delivering it to the client application.
+                                nullable: true
+                                type: boolean
+                            type: object
+                        type: object
+                    type: object
                   connectionPool:
                     properties:
                       http:
@@ -7427,6 +7638,26 @@ spec:
                     description: Traffic policies specific to individual ports.
                     items:
                       properties:
+                        compression:
+                          description: Response decompression for this destination
+                            port.
+                          properties:
+                            response:
+                              description: Response handling.
+                              properties:
+                                decompress:
+                                  description: Opt-in transparent response decompression.
+                                  properties:
+                                    enabled:
+                                      description: When true, the outbound sidecar
+                                        advertises Accept-Encoding upstream and decompresses
+                                        the response before delivering it to the client
+                                        application.
+                                      nullable: true
+                                      type: boolean
+                                  type: object
+                              type: object
+                          type: object
                         connectionPool:
                           properties:
                             http:
@@ -9566,6 +9797,520 @@ spec:
         type: object
     served: true
     storage: false
+    subresources:
+      status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    app: istio-pilot
+    chart: istio
+    heritage: Tiller
+    release: istio
+  name: inboundtrafficpolicies.networking.istio.io
+spec:
+  group: networking.istio.io
+  names:
+    categories:
+    - istio-io
+    - networking-istio-io
+    kind: InboundTrafficPolicy
+    listKind: InboundTrafficPolicyList
+    plural: inboundtrafficpolicies
+    singular: inboundtrafficpolicy
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            description: 'Configure inbound HTTP response compression. See more details
+              at: https://istio.io/docs/reference/config/networking/inbound-traffic-policy.html'
+            properties:
+              http:
+                description: HTTP settings for all ports unless replaced by a port-level
+                  entry.
+                properties:
+                  compression:
+                    description: HTTP response compression.
+                    properties:
+                      compressors:
+                        description: Compressors in preference order.
+                        items:
+                          oneOf:
+                          - not:
+                              anyOf:
+                              - required:
+                                - gzip
+                              - required:
+                                - brotli
+                              - required:
+                                - zstd
+                          - required:
+                            - gzip
+                          - required:
+                            - brotli
+                          - required:
+                            - zstd
+                          properties:
+                            brotli:
+                              description: Brotli compression.
+                              properties:
+                                chunkSize:
+                                  description: Output buffer size in bytes.
+                                  maximum: 65536
+                                  minimum: 4096
+                                  nullable: true
+                                  type: integer
+                                inputBlockBits:
+                                  description: Input block size in bits.
+                                  maximum: 24
+                                  minimum: 16
+                                  nullable: true
+                                  type: integer
+                                quality:
+                                  description: Quality level.
+                                  maximum: 11
+                                  minimum: 0
+                                  nullable: true
+                                  type: integer
+                                windowBits:
+                                  description: Sliding window size in bits.
+                                  maximum: 24
+                                  minimum: 10
+                                  nullable: true
+                                  type: integer
+                              type: object
+                            contentType:
+                              description: Eligible Content-Type values.
+                              items:
+                                type: string
+                              type: array
+                            gzip:
+                              description: Gzip compression.
+                              properties:
+                                chunkSize:
+                                  description: Output buffer size in bytes.
+                                  maximum: 65536
+                                  minimum: 4096
+                                  nullable: true
+                                  type: integer
+                                compressionLevel:
+                                  description: Compression level.
+                                  maximum: 9
+                                  minimum: 1
+                                  nullable: true
+                                  type: integer
+                                memoryLevel:
+                                  description: Zlib memory level.
+                                  maximum: 9
+                                  minimum: 1
+                                  nullable: true
+                                  type: integer
+                                windowBits:
+                                  description: Zlib window size in bits.
+                                  maximum: 15
+                                  minimum: 9
+                                  nullable: true
+                                  type: integer
+                              type: object
+                            minContentLength:
+                              description: Minimum response size in bytes.
+                              maximum: 4294967295
+                              minimum: 0
+                              nullable: true
+                              type: integer
+                            zstd:
+                              description: Zstandard compression.
+                              properties:
+                                chunkSize:
+                                  description: Output buffer size in bytes.
+                                  maximum: 65536
+                                  minimum: 4096
+                                  nullable: true
+                                  type: integer
+                                compressionLevel:
+                                  description: Compression level.
+                                  maximum: 22
+                                  minimum: 1
+                                  nullable: true
+                                  type: integer
+                              type: object
+                          type: object
+                          x-kubernetes-validations:
+                          - message: exactly one of gzip, brotli or zstd must be set
+                            rule: '(has(self.gzip) ? 1 : 0) + (has(self.brotli) ?
+                              1 : 0) + (has(self.zstd) ? 1 : 0) == 1'
+                        maxItems: 64
+                        type: array
+                      disableOnEtag:
+                        description: Skip responses with a strong ETag to preserve
+                          the validator.
+                        nullable: true
+                        type: boolean
+                      removeAcceptEncodingHeader:
+                        description: Remove Accept-Encoding before forwarding to the
+                          application so Istio owns compression.
+                        nullable: true
+                        type: boolean
+                    type: object
+                type: object
+              portLevelSettings:
+                description: Port-specific settings replace the top-level settings
+                  in full.
+                items:
+                  properties:
+                    http:
+                      description: HTTP settings for this port.
+                      properties:
+                        compression:
+                          description: HTTP response compression.
+                          properties:
+                            compressors:
+                              description: Compressors in preference order.
+                              items:
+                                oneOf:
+                                - not:
+                                    anyOf:
+                                    - required:
+                                      - gzip
+                                    - required:
+                                      - brotli
+                                    - required:
+                                      - zstd
+                                - required:
+                                  - gzip
+                                - required:
+                                  - brotli
+                                - required:
+                                  - zstd
+                                properties:
+                                  brotli:
+                                    description: Brotli compression.
+                                    properties:
+                                      chunkSize:
+                                        description: Output buffer size in bytes.
+                                        maximum: 65536
+                                        minimum: 4096
+                                        nullable: true
+                                        type: integer
+                                      inputBlockBits:
+                                        description: Input block size in bits.
+                                        maximum: 24
+                                        minimum: 16
+                                        nullable: true
+                                        type: integer
+                                      quality:
+                                        description: Quality level.
+                                        maximum: 11
+                                        minimum: 0
+                                        nullable: true
+                                        type: integer
+                                      windowBits:
+                                        description: Sliding window size in bits.
+                                        maximum: 24
+                                        minimum: 10
+                                        nullable: true
+                                        type: integer
+                                    type: object
+                                  contentType:
+                                    description: Eligible Content-Type values.
+                                    items:
+                                      type: string
+                                    type: array
+                                  gzip:
+                                    description: Gzip compression.
+                                    properties:
+                                      chunkSize:
+                                        description: Output buffer size in bytes.
+                                        maximum: 65536
+                                        minimum: 4096
+                                        nullable: true
+                                        type: integer
+                                      compressionLevel:
+                                        description: Compression level.
+                                        maximum: 9
+                                        minimum: 1
+                                        nullable: true
+                                        type: integer
+                                      memoryLevel:
+                                        description: Zlib memory level.
+                                        maximum: 9
+                                        minimum: 1
+                                        nullable: true
+                                        type: integer
+                                      windowBits:
+                                        description: Zlib window size in bits.
+                                        maximum: 15
+                                        minimum: 9
+                                        nullable: true
+                                        type: integer
+                                    type: object
+                                  minContentLength:
+                                    description: Minimum response size in bytes.
+                                    maximum: 4294967295
+                                    minimum: 0
+                                    nullable: true
+                                    type: integer
+                                  zstd:
+                                    description: Zstandard compression.
+                                    properties:
+                                      chunkSize:
+                                        description: Output buffer size in bytes.
+                                        maximum: 65536
+                                        minimum: 4096
+                                        nullable: true
+                                        type: integer
+                                      compressionLevel:
+                                        description: Compression level.
+                                        maximum: 22
+                                        minimum: 1
+                                        nullable: true
+                                        type: integer
+                                    type: object
+                                type: object
+                                x-kubernetes-validations:
+                                - message: exactly one of gzip, brotli or zstd must
+                                    be set
+                                  rule: '(has(self.gzip) ? 1 : 0) + (has(self.brotli)
+                                    ? 1 : 0) + (has(self.zstd) ? 1 : 0) == 1'
+                              maxItems: 64
+                              type: array
+                            disableOnEtag:
+                              description: Skip responses with a strong ETag to preserve
+                                the validator.
+                              nullable: true
+                              type: boolean
+                            removeAcceptEncodingHeader:
+                              description: Remove Accept-Encoding before forwarding
+                                to the application so Istio owns compression.
+                              nullable: true
+                              type: boolean
+                          type: object
+                      type: object
+                    port:
+                      description: Workload port for selector attachment, Service
+                        port for Service attachment, or listener port for Gateway
+                        attachment.
+                      properties:
+                        number:
+                          maximum: 65535
+                          minimum: 1
+                          type: integer
+                      required:
+                      - number
+                      type: object
+                  required:
+                  - port
+                  type: object
+                maxItems: 4096
+                type: array
+              selector:
+                description: Select workloads by label, including sidecars and Istio
+                  gateway workloads.
+                properties:
+                  matchLabels:
+                    additionalProperties:
+                      maxLength: 63
+                      type: string
+                      x-kubernetes-validations:
+                      - message: wildcard not allowed in label value match
+                        rule: '!self.contains("*")'
+                    description: One or more labels that indicate a specific set of
+                      pods/VMs on which a policy should be applied.
+                    maxProperties: 4096
+                    type: object
+                    x-kubernetes-validations:
+                    - message: wildcard not allowed in label key match
+                      rule: self.all(key, !key.contains("*"))
+                    - message: key must not be empty
+                      rule: self.all(key, key.size() != 0)
+                type: object
+              targetRefs:
+                description: Attach to Kubernetes Gateways (group gateway.networking.k8s.io)
+                  or Services (empty group or core), in this policy's namespace.
+                items:
+                  properties:
+                    group:
+                      description: group is the group of the target resource.
+                      maxLength: 253
+                      pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                      type: string
+                    kind:
+                      description: kind is kind of the target resource.
+                      maxLength: 63
+                      minLength: 1
+                      pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
+                      type: string
+                    name:
+                      description: name is the name of the target resource.
+                      maxLength: 253
+                      minLength: 1
+                      type: string
+                    namespace:
+                      description: namespace is the namespace of the referent.
+                      type: string
+                      x-kubernetes-validations:
+                      - message: cross namespace referencing is not currently supported
+                        rule: self.size() == 0
+                  required:
+                  - kind
+                  - name
+                  type: object
+                maxItems: 16
+                type: array
+                x-kubernetes-validations:
+                - message: targetRefs must reference a Gateway or Service
+                  rule: |-
+                    self.all(t, t.kind == "Gateway" && has(t.group) && t.group == "gateway.networking.k8s.io" ||
+                    t.kind == "Service" && (!has(t.group) || t.group == "" || t.group == "core"))
+            type: object
+            x-kubernetes-validations:
+            - message: only one of targetRefs or selector can be set
+              rule: '!(has(self.selector) && has(self.targetRefs))'
+          status:
+            description: Observed attachment state.
+            properties:
+              conditions:
+                description: Aggregate conditions for this policy, including selectors
+                  that match no workloads.
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      format: date-time
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about
+                        last transition.
+                      type: string
+                    observedGeneration:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      description: Resource Generation to which the Condition refers.
+                      x-kubernetes-int-or-string: true
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's
+                        last transition.
+                      type: string
+                    status:
+                      description: Status is the status of the condition.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                type: array
+              targets:
+                description: Conditions for individual resource or workload targets.
+                items:
+                  properties:
+                    conditions:
+                      description: Conditions for this target, including observed
+                        generation and diagnostic messages.
+                      items:
+                        properties:
+                          lastProbeTime:
+                            description: Last time we probed the condition.
+                            format: date-time
+                            type: string
+                          lastTransitionTime:
+                            description: Last time the condition transitioned from
+                              one status to another.
+                            format: date-time
+                            type: string
+                          message:
+                            description: Human-readable message indicating details
+                              about last transition.
+                            type: string
+                          observedGeneration:
+                            anyOf:
+                            - type: integer
+                            - type: string
+                            description: Resource Generation to which the Condition
+                              refers.
+                            x-kubernetes-int-or-string: true
+                          reason:
+                            description: Unique, one-word, CamelCase reason for the
+                              condition's last transition.
+                            type: string
+                          status:
+                            description: Status is the status of the condition.
+                            type: string
+                          type:
+                            description: Type is the type of the condition.
+                            type: string
+                        type: object
+                      type: array
+                    targetRef:
+                      description: The Gateway, Service, or workload whose attachment
+                        is reported.
+                      properties:
+                        group:
+                          description: API group.
+                          type: string
+                        kind:
+                          description: Resource kind.
+                          minLength: 1
+                          type: string
+                        name:
+                          description: Resource name.
+                          minLength: 1
+                          type: string
+                        namespace:
+                          description: Resource namespace.
+                          minLength: 1
+                          type: string
+                      required:
+                      - kind
+                      - namespace
+                      - name
+                      type: object
+                    winningPolicy:
+                      description: The winning InboundTrafficPolicy when this policy
+                        is conflicted or overridden.
+                      properties:
+                        group:
+                          description: API group.
+                          type: string
+                        kind:
+                          description: Resource kind.
+                          minLength: 1
+                          type: string
+                        name:
+                          description: Resource name.
+                          minLength: 1
+                          type: string
+                        namespace:
+                          description: Resource namespace.
+                          minLength: 1
+                          type: string
+                      required:
+                      - kind
+                      - namespace
+                      - name
+                      type: object
+                  required:
+                  - targetRef
+                  type: object
+                type: array
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
     subresources:
       status: {}
 ---
