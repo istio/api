@@ -122,6 +122,28 @@ User should not manually modify this annotation.</p>
     </tr>
   </tbody>
 </table>
+<h2 id="IoIstioIgnorePolicyAttachment">istio.io/ignore-policy-attachment</h2>
+<table class="annotations">
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <td><code>istio.io/ignore-policy-attachment</code></td>
+    </tr>
+    <tr>
+      <th>Feature Status</th>
+      <td>Alpha</td>
+    </tr>
+    <tr>
+      <th>Resource Types</th>
+      <td>[BackendTLSPolicy BackendTrafficPolicy]</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td><p>When set to true on a policy attachment CRD object (BackendTLSPolicy, BackendTrafficPolicy), the object will not be used by the Istio control plane to generate configuration or conflict with other policies.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
 <h2 id="IoIstioRerouteVirtualInterfaces">istio.io/reroute-virtual-interfaces</h2>
 <table class="annotations">
   <tbody>
