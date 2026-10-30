@@ -1,0 +1,12 @@
+apiVersion: release-notes/v2
+kind: feature
+area: security
+issue:
+  - https://github.com/istio/istio/issues/60823
+
+releaseNotes:
+  - |
+    **Added** `payloadToMetadata` field in `RequestAuthentication` under `spec.jwtRules` to configure
+    the dynamic metadata key under which a verified JWT payload is stored (default `payload`).
+    Setting a distinct key on each rule keeps the claims of every token when multiple tokens are validated
+    in the same request, and allows `AuthorizationPolicy` to match them via `request.auth.payload[{key}][{claim-name}]`.

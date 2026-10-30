@@ -596,9 +596,38 @@ type JWTRule struct {
 	// even if other JWT rules are satisfied. When `OPTIONAL` (the default), a missing
 	// token is allowed as long as no invalid token is present. This is useful when
 	// multiple JWT rules are configured and all tokens must be present and valid simultaneously.
-	Presence      JWTRule_JWTRequirement `protobuf:"varint,15,opt,name=presence,proto3,enum=istio.security.v1beta1.JWTRule_JWTRequirement" json:"presence,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	Presence JWTRule_JWTRequirement `protobuf:"varint,15,opt,name=presence,proto3,enum=istio.security.v1beta1.JWTRule_JWTRequirement" json:"presence,omitempty"`
+	// This field specifies the key under which the payload of a successfully verified JWT is
+	// stored in the request's dynamic metadata. If it is not specified, the payload is stored
+	// under the default key `payload`, which is what `request.auth.principal` and
+	// `request.auth.claims` in `AuthorizationPolicy` read from.
+	//
+	// When multiple JWT rules apply to a workload and more than one token can be validated in
+	// the same request (for example, multiple rules with `presence: REQUIRED`), the payloads
+	// stored under the same key overwrite each other. Set a distinct key on each rule to keep
+	// the payload of every token, and use `request.auth.payload[{key}][{claim-name}]` in
+	// `AuthorizationPolicy` to match the claims of a specific token.
+	//
+	// For example:
+	// ```yaml
+	// jwtRules:
+	// - issuer: https://idp.example.com
+	//   presence: REQUIRED
+	//   payloadToMetadata: idp
+	// - issuer: https://scope.example.com
+	//   fromHeaders:
+	//   - name: x-scope-token
+	//   presence: REQUIRED
+	//   payloadToMetadata: scope
+	// ```
+	//
+	// Note: a payload stored under a key other than `payload` is not visible to
+	// `request.auth.principal` and `request.auth.claims`.
+	// +kubebuilder:validation:MaxLength=64
+	// +kubebuilder:validation:Pattern=^[-_A-Za-z0-9]+$
+	PayloadToMetadata string `protobuf:"bytes,16,opt,name=payload_to_metadata,json=payloadToMetadata,proto3" json:"payload_to_metadata,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *JWTRule) Reset() {
@@ -720,6 +749,13 @@ func (x *JWTRule) GetPresence() JWTRule_JWTRequirement {
 		return x.Presence
 	}
 	return JWTRule_OPTIONAL
+}
+
+func (x *JWTRule) GetPayloadToMetadata() string {
+	if x != nil {
+		return x.PayloadToMetadata
+	}
+	return ""
 }
 
 // This message specifies a header location to extract JWT token.
@@ -850,7 +886,7 @@ const file_security_v1beta1_request_authentication_proto_rawDesc = "" +
 	"\n" +
 	"targetRefs\x18\x04 \x03(\v2).istio.type.v1beta1.PolicyTargetReferenceR\n" +
 	"targetRefs\x12<\n" +
-	"\tjwt_rules\x18\x02 \x03(\v2\x1f.istio.security.v1beta1.JWTRuleR\bjwtRules\"\xaa\x05\n" +
+	"\tjwt_rules\x18\x02 \x03(\v2\x1f.istio.security.v1beta1.JWTRuleR\bjwtRules\"\xda\x05\n" +
 	"\aJWTRule\x12\x16\n" +
 	"\x06issuer\x18\x01 \x01(\tR\x06issuer\x12\x1c\n" +
 	"\taudiences\x18\x02 \x03(\tR\taudiences\x12\x19\n" +
@@ -866,7 +902,8 @@ const file_security_v1beta1_request_authentication_proto_rawDesc = "" +
 	"\x17output_claim_to_headers\x18\v \x03(\v2%.istio.security.v1beta1.ClaimToHeaderR\x14outputClaimToHeaders\x123\n" +
 	"\atimeout\x18\r \x01(\v2\x19.google.protobuf.DurationR\atimeout\x124\n" +
 	"\x16space_delimited_claims\x18\x0e \x03(\tR\x14spaceDelimitedClaims\x12J\n" +
-	"\bpresence\x18\x0f \x01(\x0e2..istio.security.v1beta1.JWTRule.JWTRequirementR\bpresence\",\n" +
+	"\bpresence\x18\x0f \x01(\x0e2..istio.security.v1beta1.JWTRule.JWTRequirementR\bpresence\x12.\n" +
+	"\x13payload_to_metadata\x18\x10 \x01(\tR\x11payloadToMetadata\",\n" +
 	"\x0eJWTRequirement\x12\f\n" +
 	"\bOPTIONAL\x10\x00\x12\f\n" +
 	"\bREQUIRED\x10\x01\"=\n" +

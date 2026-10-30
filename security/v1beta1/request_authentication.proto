@@ -505,8 +505,38 @@ message JWTRule {
   // multiple JWT rules are configured and all tokens must be present and valid simultaneously.
   JWTRequirement presence = 15;
 
+  // This field specifies the key under which the payload of a successfully verified JWT is
+  // stored in the request's dynamic metadata. If it is not specified, the payload is stored
+  // under the default key `payload`, which is what `request.auth.principal` and
+  // `request.auth.claims` in `AuthorizationPolicy` read from.
+  //
+  // When multiple JWT rules apply to a workload and more than one token can be validated in
+  // the same request (for example, multiple rules with `presence: REQUIRED`), the payloads
+  // stored under the same key overwrite each other. Set a distinct key on each rule to keep
+  // the payload of every token, and use `request.auth.payload[{key}][{claim-name}]` in
+  // `AuthorizationPolicy` to match the claims of a specific token.
+  //
+  // For example:
+  // ```yaml
+  // jwtRules:
+  // - issuer: https://idp.example.com
+  //   presence: REQUIRED
+  //   payloadToMetadata: idp
+  // - issuer: https://scope.example.com
+  //   fromHeaders:
+  //   - name: x-scope-token
+  //   presence: REQUIRED
+  //   payloadToMetadata: scope
+  // ```
+  //
+  // Note: a payload stored under a key other than `payload` is not visible to
+  // `request.auth.principal` and `request.auth.claims`.
+  // +kubebuilder:validation:MaxLength=64
+  // +kubebuilder:validation:Pattern=^[-_A-Za-z0-9]+$
+  string payload_to_metadata = 16;
+
   // $hide_from_docs
-  // Next available field number: 16
+  // Next available field number: 17
 }
 
 // This message specifies a header location to extract JWT token.
