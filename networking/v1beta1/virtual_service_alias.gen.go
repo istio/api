@@ -366,6 +366,34 @@ type TLSRoute = v1alpha3.TLSRoute
 // ```
 type TCPRoute = v1alpha3.TCPRoute
 
+// Describes match conditions and actions for routing UDP traffic. The
+// following routing rule forwards traffic arriving at port 5353 from
+// 172.17.16.0/24 subnet to the DNS server on port 53.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1
+// kind: VirtualService
+// metadata:
+//
+//	name: coredns
+//
+// spec:
+//
+//	hosts:
+//	  - coredns.kube-system.svc.cluster.local
+//	udp:
+//	- match:
+//	  - port: 5353
+//	    sourceSubnet: 172.17.16.0/24
+//	  route:
+//	  - destination:
+//	      host: coredns.kube-system.svc.cluster.local
+//	      port:
+//	        number: 53
+//
+// ```
+type UDPRoute = v1alpha3.UDPRoute
+
 // HttpMatchRequest specifies a set of criteria to be met in order for the
 // rule to be applied to the HTTP request. For example, the following
 // restricts the rule to match only requests where the URL path
