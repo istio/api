@@ -1,0 +1,17 @@
+apiVersion: release-notes/v2
+
+kind: feature
+area: security
+issue:
+  - https://github.com/istio/istio/issues/43982
+
+releaseNotes:
+- |
+  **Added** `IGNORED` value to the `presence` field of `JWTRule` in `RequestAuthentication`.
+  In this mode, requests without a token and requests with an invalid token are both allowed,
+  so verification can be done first before enforcement.
+- |
+  **Added** `failedStatusInMetadata` string field to `JWTRule` in `RequestAuthentication`.
+  If set, a verification failure is written to dynamic metadata under this key, e.g.
+  `{"code": 3, "message": "Jwt is expired"}`, such that failures are always observable
+  regardless of the `presence` value. With multiple JWT rules, give each one its own key.
