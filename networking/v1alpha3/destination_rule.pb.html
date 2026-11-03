@@ -594,10 +594,14 @@ spec:
 <div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></div>
 </div></td>
 <td>
-<p>When true, the outbound sidecar advertises Accept-Encoding upstream and
-decompresses the response before delivering it to the client application.
-If omitted or false, the application handles content negotiation and
-decompression itself. This does not enable request-body compression.</p>
+<p>When true, the outbound sidecar owns response negotiation and decompression
+for gzip, brotli, and zstd, advertising Accept-Encoding upstream and
+decompressing responses before delivery to the application. This also applies
+when the application supplied Accept-Encoding: native Envoy behavior may
+change its existing preferences, including q=0 for an installed codec.
+If omitted or false, the application retains negotiation and decompression
+ownership. This is not inferred from server policy and does not enable
+request-body compression.</p>
 
 </td>
 </tr>

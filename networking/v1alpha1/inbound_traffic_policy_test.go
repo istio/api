@@ -81,3 +81,46 @@ func TestCompressionRoundTrip(t *testing.T) {
 		t.Fatal("deep copy aliases original compression settings")
 	}
 }
+
+func TestSelectionStatusRoundTrip(t *testing.T) {
+	original := &api.InboundTrafficPolicyStatus{
+		Workloads: &api.InboundTrafficPolicySelectionCounts{Total: 100000, Selected: 99998, Overridden: 2},
+		Services:  &api.InboundTrafficPolicySelectionCounts{Total: 2, Selected: 1, Invalid: 1},
+		Gateways:  &api.InboundTrafficPolicySelectionCounts{Total: 1, Selected: 1},
+		Diagnostics: []*api.InboundTrafficPolicyDiagnostic{{
+			Reason: "MoreSpecificPolicy", Message: "Two workloads are overridden",
+			WinningPolicy: &api.InboundTrafficPolicyReference{Namespace: "team-a", Name: "winner"},
+		}},
+	}
+	for name, codec := range map[string]struct {
+		marshal   func(proto.Message) ([]byte, error)
+		unmarshal func([]byte, proto.Message) error
+	}{
+		"protobuf":  {proto.Marshal, proto.Unmarshal},
+		"protojson": {protojson.Marshal, protojson.Unmarshal},
+		"jsonshim":  {func(m proto.Message) ([]byte, error) { return json.Marshal(m) }, func(b []byte, m proto.Message) error { return json.Unmarshal(b, m) }},
+	} {
+		t.Run(name, func(t *testing.T) {
+			data, err := codec.marshal(original)
+			if err != nil {
+				t.Fatal(err)
+			}
+			decoded := &api.InboundTrafficPolicyStatus{}
+			if err := codec.unmarshal(data, decoded); err != nil {
+				t.Fatal(err)
+			}
+			if !proto.Equal(original, decoded) {
+				t.Fatalf("round trip changed count categories or diagnostic: %s", data)
+			}
+		})
+	}
+	copied := original.DeepCopy()
+	copied.Workloads.Selected = 0
+	copied.Diagnostics[0].WinningPolicy.Name = "changed"
+	if original.Workloads.Selected != 99998 || original.Diagnostics[0].WinningPolicy.Name != "winner" {
+		t.Fatal("deep copy aliases original status")
+	}
+	if original.ProtoReflect().Descriptor().Fields().ByName("targets") != nil {
+		t.Fatal("status must not expose a per-target list")
+	}
+}

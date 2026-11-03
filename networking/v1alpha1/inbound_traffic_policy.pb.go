@@ -32,7 +32,15 @@
 // default in the configuration root namespace. Ties are resolved by oldest
 // creationTimestamp, then lexicographically by name.
 //
-// For example, compress responses at a Kubernetes Gateway:
+// Nonempty selectors are namespace-local, including in the root namespace, and
+// do not attach to waypoints. Legacy Istio gateways use workload selectors.
+// For a waypoint Service, precedence is Service attachment, Service namespace
+// default, then mesh default. The waypoint's hosting namespace does not supply
+// defaults for Services in other namespaces. Unlike DestinationRule lookup,
+// policy selection does not first consult the waypoint's configuration namespace.
+// Gateway attachment is supported for Kubernetes ingress Gateways, not waypoints.
+//
+// For example, compress responses at a Kubernetes ingress Gateway:
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha1
@@ -98,23 +106,30 @@ const (
 // +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="!(has(self.selector) && has(self.targetRefs))"
 type InboundTrafficPolicy struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Select workloads by label, including sidecars and Istio gateway workloads.
+	// Select workloads by label only in this policy's namespace, including sidecars
+	// and legacy Istio gateway workloads. Nonempty selectors do not attach to waypoints.
 	// An absent or empty selector selects the namespace; in the configuration
 	// root namespace it defines the mesh-wide default. Mutually exclusive with targetRefs.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
-	// Attach to Kubernetes Gateways (group gateway.networking.k8s.io) or Services
+	// Attach to Kubernetes ingress Gateways (group gateway.networking.k8s.io) or Services
 	// (empty group or core), in this policy's namespace. Service attachment is for
 	// waypoints and requires a waypoint bound via istio.io/use-waypoint.
+	// Waypoint Gateway references are unsupported and reported during reconciliation;
+	// they do not affect that target. Other supported references can still apply.
 	// HTTPRoute attachment is not supported. Mutually exclusive with selector.
 	// +kubebuilder:validation:MaxItems=16
-	// +kubebuilder:validation:XValidation:message="targetRefs must reference a Gateway or Service",rule="self.all(t, (t.kind == 'Gateway' && has(t.group) && t.group == 'gateway.networking.k8s.io') || (t.kind == 'Service' && (!has(t.group) || t.group == '' || t.group == 'core')))"
+	// +kubebuilder:validation:XValidation:message="targetRefs must reference a Gateway or Service",rule="self.all(t, (t.kind == 'Gateway' && has(t.group) && t.group == 'gateway.networking.k8s.io') || (t.kind == 'Service' && (!has(t.group) || t.group == ” || t.group == 'core')))"
 	TargetRefs []*v1beta1.PolicyTargetReference `protobuf:"bytes,2,rep,name=target_refs,json=targetRefs,proto3" json:"target_refs,omitempty"`
 	// HTTP settings for all ports unless replaced by a port-level entry.
 	Http *HttpSettings `protobuf:"bytes,3,opt,name=http,proto3" json:"http,omitempty"`
 	// Port-specific settings replace the top-level settings in full. Unset fields
 	// use built-in defaults, not the top-level settings. A port entry without HTTP
 	// compression disables compression for that port.
-	// +kubebuilder:validation:MaxItems=4096
+	// Duplicate numeric ports are rejected. An unmatched override port is diagnosed
+	// during reconciliation without preventing other applicable ports from working.
+	// The list is bounded to keep admission uniqueness checks within CEL cost limits.
+	// +kubebuilder:validation:MaxItems=256
+	// +kubebuilder:validation:XValidation:message="portLevelSettings must have unique port numbers",rule="self.all(p, self.filter(q, q.port.number == p.port.number).size() == 1)"
 	PortLevelSettings []*PortTrafficPolicy `protobuf:"bytes,5,rep,name=port_level_settings,json=portLevelSettings,proto3" json:"port_level_settings,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
@@ -287,11 +302,15 @@ func (x *PortTrafficPolicy) GetHttp() *HttpSettings {
 // secret data and attacker-controlled input occur in the same response.
 type CompressionSettings struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Compressors in preference order. The first eligible algorithm matching the
-	// client's Accept-Encoding preferences (including q-values) is used. At most one
-	// compressor applies. For Accept-Encoding: *, the first configured compressor
-	// is preferred. An empty list disables compression.
-	// +kubebuilder:validation:MaxItems=64
+	// Compressors use native Envoy negotiation. Client Accept-Encoding q-values
+	// govern selection. Equal-q explicit encodings follow client-header order;
+	// wildcard preference follows list order. At most one compressor applies.
+	// Content types participate in negotiation, but a selected codec failing its
+	// minimum-size check does not guarantee fallback to another codec. Missing
+	// Content-Length retains native streaming behavior without buffering the body.
+	// Each algorithm may appear once. An empty list disables compression.
+	// +kubebuilder:validation:MaxItems=3
+	// +kubebuilder:validation:XValidation:message="compression algorithms must be unique",rule="self.filter(c, has(c.gzip)).size() <= 1 && self.filter(c, has(c.brotli)).size() <= 1 && self.filter(c, has(c.zstd)).size() <= 1"
 	Compressors []*Compressor `protobuf:"bytes,1,rep,name=compressors,proto3" json:"compressors,omitempty"`
 	// Skip responses with a strong ETag to preserve the validator. Defaults to false.
 	DisableOnEtag *wrappers.BoolValue `protobuf:"bytes,2,opt,name=disable_on_etag,json=disableOnEtag,proto3" json:"disable_on_etag,omitempty"`
@@ -703,15 +722,30 @@ func (x *ZstdCompressor) GetChunkSize() *wrappers.UInt32Value {
 	return nil
 }
 
-// Observed attachment state. Conditions include Accepted when attached to at least
-// one proxy, Conflicted or Overridden when another policy wins, and TargetNotFound
-// when no target matches or a Service has no waypoint. Controllers populate status.
+// Aggregate desired-policy selection, not evidence of Envoy acknowledgment or
+// compressed traffic. There is no per-workload or per-resource targets list.
+// Existing Service/Gateway references remain valid at zero replicas, subject to
+// waypoint enrollment. Selectors matching no workloads report zero counts.
 type InboundTrafficPolicyStatus struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Aggregate conditions for this policy, including selectors that match no workloads.
+	// Aggregate conditions distinguish selection, partial/full shadowing, missing
+	// targets, unsupported attachments, and no applicable HTTP listener. Ordinary
+	// TCP ports on a mixed-protocol target are not errors. Conditions and diagnostics
+	// may describe partial success while other applicable targets/ports still work.
+	// +kubebuilder:validation:MaxItems=8
 	Conditions []*v1alpha1.IstioCondition `protobuf:"bytes,1,rep,name=conditions,proto3" json:"conditions,omitempty"`
-	// Conditions for individual resource or workload targets.
-	Targets       []*InboundTrafficPolicyTargetStatus `protobuf:"bytes,2,rep,name=targets,proto3" json:"targets,omitempty"`
+	// Workload outcomes for sidecar/selector policies and namespace/mesh defaults
+	// applied directly to workloads. Waypoint Service outcomes are counted separately.
+	Workloads *InboundTrafficPolicySelectionCounts `protobuf:"bytes,3,opt,name=workloads,proto3" json:"workloads,omitempty"`
+	// Outcomes for referenced Services and Service-scoped namespace/mesh defaults.
+	Services *InboundTrafficPolicySelectionCounts `protobuf:"bytes,4,opt,name=services,proto3" json:"services,omitempty"`
+	// Outcomes for explicitly referenced Kubernetes ingress Gateways.
+	Gateways *InboundTrafficPolicySelectionCounts `protobuf:"bytes,5,opt,name=gateways,proto3" json:"gateways,omitempty"`
+	// Bounded aggregate diagnostics, not an enumeration of targets. Includes
+	// relevant winning policies and explanations for unsupported or inapplicable
+	// configuration, including port overrides matching no target port.
+	// +kubebuilder:validation:MaxItems=16
+	Diagnostics   []*InboundTrafficPolicyDiagnostic `protobuf:"bytes,6,rep,name=diagnostics,proto3" json:"diagnostics,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -753,40 +787,77 @@ func (x *InboundTrafficPolicyStatus) GetConditions() []*v1alpha1.IstioCondition 
 	return nil
 }
 
-func (x *InboundTrafficPolicyStatus) GetTargets() []*InboundTrafficPolicyTargetStatus {
+func (x *InboundTrafficPolicyStatus) GetWorkloads() *InboundTrafficPolicySelectionCounts {
 	if x != nil {
-		return x.Targets
+		return x.Workloads
 	}
 	return nil
 }
 
-// Attachment state for one target.
-type InboundTrafficPolicyTargetStatus struct {
+func (x *InboundTrafficPolicyStatus) GetServices() *InboundTrafficPolicySelectionCounts {
+	if x != nil {
+		return x.Services
+	}
+	return nil
+}
+
+func (x *InboundTrafficPolicyStatus) GetGateways() *InboundTrafficPolicySelectionCounts {
+	if x != nil {
+		return x.Gateways
+	}
+	return nil
+}
+
+func (x *InboundTrafficPolicyStatus) GetDiagnostics() []*InboundTrafficPolicyDiagnostic {
+	if x != nil {
+		return x.Diagnostics
+	}
+	return nil
+}
+
+// Selection outcomes for one explicitly named category. Counts describe the
+// controller's desired configuration, independent of connected proxies or xDS ACKs.
+// Each counted item is selected, overridden, or invalid; counts are not combined
+// across workload, Service, and Gateway categories.
+// +kubebuilder:validation:XValidation:message="selected, overridden and invalid counts must sum to total",rule="default(self.selected, 0) + default(self.overridden, 0) + default(self.invalid, 0) == default(self.total, 0)"
+type InboundTrafficPolicySelectionCounts struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// The Gateway, Service, or workload whose attachment is reported.
-	TargetRef *InboundTrafficPolicyStatusReference `protobuf:"bytes,1,opt,name=target_ref,json=targetRef,proto3" json:"target_ref,omitempty"`
-	// Conditions for this target, including observed generation and diagnostic messages.
-	Conditions []*v1alpha1.IstioCondition `protobuf:"bytes,2,rep,name=conditions,proto3" json:"conditions,omitempty"`
-	// The winning InboundTrafficPolicy when this policy is conflicted or overridden.
-	WinningPolicy *InboundTrafficPolicyStatusReference `protobuf:"bytes,3,opt,name=winning_policy,json=winningPolicy,proto3" json:"winning_policy,omitempty"`
+	// Number of candidate workloads or resource references in this category.
+	// +kubebuilder:validation:Minimum=0
+	// +kubebuilder:validation:Maximum=4294967295
+	Total uint32 `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
+	// Candidates selected for at least one applicable port. Port-level diagnostics
+	// can still be present, so selected does not imply every setting applies.
+	// +kubebuilder:validation:Minimum=0
+	// +kubebuilder:validation:Maximum=4294967295
+	Selected uint32 `protobuf:"varint,2,opt,name=selected,proto3" json:"selected,omitempty"`
+	// Candidates for which another InboundTrafficPolicy wins in full.
+	// +kubebuilder:validation:Minimum=0
+	// +kubebuilder:validation:Maximum=4294967295
+	Overridden uint32 `protobuf:"varint,3,opt,name=overridden,proto3" json:"overridden,omitempty"`
+	// Missing, unsupported, or inapplicable candidates. A selector matching nothing
+	// has total zero, rather than one invalid resource reference.
+	// +kubebuilder:validation:Minimum=0
+	// +kubebuilder:validation:Maximum=4294967295
+	Invalid       uint32 `protobuf:"varint,4,opt,name=invalid,proto3" json:"invalid,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *InboundTrafficPolicyTargetStatus) Reset() {
-	*x = InboundTrafficPolicyTargetStatus{}
+func (x *InboundTrafficPolicySelectionCounts) Reset() {
+	*x = InboundTrafficPolicySelectionCounts{}
 	mi := &file_networking_v1alpha1_inbound_traffic_policy_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *InboundTrafficPolicyTargetStatus) String() string {
+func (x *InboundTrafficPolicySelectionCounts) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*InboundTrafficPolicyTargetStatus) ProtoMessage() {}
+func (*InboundTrafficPolicySelectionCounts) ProtoMessage() {}
 
-func (x *InboundTrafficPolicyTargetStatus) ProtoReflect() protoreflect.Message {
+func (x *InboundTrafficPolicySelectionCounts) ProtoReflect() protoreflect.Message {
 	mi := &file_networking_v1alpha1_inbound_traffic_policy_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -798,66 +869,140 @@ func (x *InboundTrafficPolicyTargetStatus) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use InboundTrafficPolicyTargetStatus.ProtoReflect.Descriptor instead.
-func (*InboundTrafficPolicyTargetStatus) Descriptor() ([]byte, []int) {
+// Deprecated: Use InboundTrafficPolicySelectionCounts.ProtoReflect.Descriptor instead.
+func (*InboundTrafficPolicySelectionCounts) Descriptor() ([]byte, []int) {
 	return file_networking_v1alpha1_inbound_traffic_policy_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *InboundTrafficPolicyTargetStatus) GetTargetRef() *InboundTrafficPolicyStatusReference {
+func (x *InboundTrafficPolicySelectionCounts) GetTotal() uint32 {
 	if x != nil {
-		return x.TargetRef
+		return x.Total
 	}
-	return nil
+	return 0
 }
 
-func (x *InboundTrafficPolicyTargetStatus) GetConditions() []*v1alpha1.IstioCondition {
+func (x *InboundTrafficPolicySelectionCounts) GetSelected() uint32 {
 	if x != nil {
-		return x.Conditions
+		return x.Selected
 	}
-	return nil
+	return 0
 }
 
-func (x *InboundTrafficPolicyTargetStatus) GetWinningPolicy() *InboundTrafficPolicyStatusReference {
+func (x *InboundTrafficPolicySelectionCounts) GetOverridden() uint32 {
+	if x != nil {
+		return x.Overridden
+	}
+	return 0
+}
+
+func (x *InboundTrafficPolicySelectionCounts) GetInvalid() uint32 {
+	if x != nil {
+		return x.Invalid
+	}
+	return 0
+}
+
+// One bounded policy-level diagnostic. Several targets may contribute to one
+// diagnostic; this message is not a per-target status entry.
+type InboundTrafficPolicyDiagnostic struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Machine-readable reason, such as MoreSpecificPolicy, TargetNotFound,
+	// UnsupportedTarget, NoApplicableHTTPListener, or PortNotFound.
+	// +kubebuilder:validation:MinLength=1
+	// +kubebuilder:validation:MaxLength=63
+	Reason string `protobuf:"bytes,1,opt,name=reason,proto3" json:"reason,omitempty"`
+	// Human-readable aggregate explanation.
+	// +kubebuilder:validation:MinLength=1
+	// +kubebuilder:validation:MaxLength=1024
+	Message string `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	// Relevant winner when this policy is shadowed. May name a policy in another
+	// namespace, for example when a namespace policy overrides the mesh default.
+	WinningPolicy *InboundTrafficPolicyReference `protobuf:"bytes,3,opt,name=winning_policy,json=winningPolicy,proto3" json:"winning_policy,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *InboundTrafficPolicyDiagnostic) Reset() {
+	*x = InboundTrafficPolicyDiagnostic{}
+	mi := &file_networking_v1alpha1_inbound_traffic_policy_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InboundTrafficPolicyDiagnostic) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InboundTrafficPolicyDiagnostic) ProtoMessage() {}
+
+func (x *InboundTrafficPolicyDiagnostic) ProtoReflect() protoreflect.Message {
+	mi := &file_networking_v1alpha1_inbound_traffic_policy_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InboundTrafficPolicyDiagnostic.ProtoReflect.Descriptor instead.
+func (*InboundTrafficPolicyDiagnostic) Descriptor() ([]byte, []int) {
+	return file_networking_v1alpha1_inbound_traffic_policy_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *InboundTrafficPolicyDiagnostic) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+func (x *InboundTrafficPolicyDiagnostic) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *InboundTrafficPolicyDiagnostic) GetWinningPolicy() *InboundTrafficPolicyReference {
 	if x != nil {
 		return x.WinningPolicy
 	}
 	return nil
 }
 
-// Resource identity for status reporting. Unlike spec targetRefs, this reference
-// may identify resources in other namespaces, including targets of mesh-wide policies.
-type InboundTrafficPolicyStatusReference struct {
+// Identity of an InboundTrafficPolicy named in an aggregate diagnostic.
+type InboundTrafficPolicyReference struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// API group. Empty for core Kubernetes resources.
-	Group string `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
-	// Resource kind.
+	// Policy namespace.
 	// +kubebuilder:validation:MinLength=1
-	Kind string `protobuf:"bytes,2,opt,name=kind,proto3" json:"kind,omitempty"`
-	// Resource namespace.
+	// +kubebuilder:validation:MaxLength=63
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Policy name.
 	// +kubebuilder:validation:MinLength=1
-	Namespace string `protobuf:"bytes,3,opt,name=namespace,proto3" json:"namespace,omitempty"`
-	// Resource name.
-	// +kubebuilder:validation:MinLength=1
-	Name          string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	// +kubebuilder:validation:MaxLength=253
+	Name          string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *InboundTrafficPolicyStatusReference) Reset() {
-	*x = InboundTrafficPolicyStatusReference{}
-	mi := &file_networking_v1alpha1_inbound_traffic_policy_proto_msgTypes[10]
+func (x *InboundTrafficPolicyReference) Reset() {
+	*x = InboundTrafficPolicyReference{}
+	mi := &file_networking_v1alpha1_inbound_traffic_policy_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *InboundTrafficPolicyStatusReference) String() string {
+func (x *InboundTrafficPolicyReference) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*InboundTrafficPolicyStatusReference) ProtoMessage() {}
+func (*InboundTrafficPolicyReference) ProtoMessage() {}
 
-func (x *InboundTrafficPolicyStatusReference) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1alpha1_inbound_traffic_policy_proto_msgTypes[10]
+func (x *InboundTrafficPolicyReference) ProtoReflect() protoreflect.Message {
+	mi := &file_networking_v1alpha1_inbound_traffic_policy_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -868,33 +1013,19 @@ func (x *InboundTrafficPolicyStatusReference) ProtoReflect() protoreflect.Messag
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use InboundTrafficPolicyStatusReference.ProtoReflect.Descriptor instead.
-func (*InboundTrafficPolicyStatusReference) Descriptor() ([]byte, []int) {
-	return file_networking_v1alpha1_inbound_traffic_policy_proto_rawDescGZIP(), []int{10}
+// Deprecated: Use InboundTrafficPolicyReference.ProtoReflect.Descriptor instead.
+func (*InboundTrafficPolicyReference) Descriptor() ([]byte, []int) {
+	return file_networking_v1alpha1_inbound_traffic_policy_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *InboundTrafficPolicyStatusReference) GetGroup() string {
-	if x != nil {
-		return x.Group
-	}
-	return ""
-}
-
-func (x *InboundTrafficPolicyStatusReference) GetKind() string {
-	if x != nil {
-		return x.Kind
-	}
-	return ""
-}
-
-func (x *InboundTrafficPolicyStatusReference) GetNamespace() string {
+func (x *InboundTrafficPolicyReference) GetNamespace() string {
 	if x != nil {
 		return x.Namespace
 	}
 	return ""
 }
 
-func (x *InboundTrafficPolicyStatusReference) GetName() string {
+func (x *InboundTrafficPolicyReference) GetName() string {
 	if x != nil {
 		return x.Name
 	}
@@ -946,24 +1077,29 @@ const file_networking_v1alpha1_inbound_traffic_policy_proto_rawDesc = "" +
 	"\x0eZstdCompressor\x12I\n" +
 	"\x11compression_level\x18\x01 \x01(\v2\x1c.google.protobuf.UInt32ValueR\x10compressionLevel\x12;\n" +
 	"\n" +
-	"chunk_size\x18\x02 \x01(\v2\x1c.google.protobuf.UInt32ValueR\tchunkSize\"\xb8\x01\n" +
+	"chunk_size\x18\x02 \x01(\v2\x1c.google.protobuf.UInt32ValueR\tchunkSize\"\xe3\x03\n" +
 	"\x1aInboundTrafficPolicyStatus\x12C\n" +
 	"\n" +
 	"conditions\x18\x01 \x03(\v2#.istio.meta.v1alpha1.IstioConditionR\n" +
-	"conditions\x12U\n" +
-	"\atargets\x18\x02 \x03(\v2;.istio.networking.v1alpha1.InboundTrafficPolicyTargetStatusR\atargets\"\xb3\x02\n" +
-	" InboundTrafficPolicyTargetStatus\x12c\n" +
+	"conditions\x12\\\n" +
+	"\tworkloads\x18\x03 \x01(\v2>.istio.networking.v1alpha1.InboundTrafficPolicySelectionCountsR\tworkloads\x12Z\n" +
+	"\bservices\x18\x04 \x01(\v2>.istio.networking.v1alpha1.InboundTrafficPolicySelectionCountsR\bservices\x12Z\n" +
+	"\bgateways\x18\x05 \x01(\v2>.istio.networking.v1alpha1.InboundTrafficPolicySelectionCountsR\bgateways\x12[\n" +
+	"\vdiagnostics\x18\x06 \x03(\v29.istio.networking.v1alpha1.InboundTrafficPolicyDiagnosticR\vdiagnosticsJ\x04\b\x02\x10\x03R\atargets\"\x91\x01\n" +
+	"#InboundTrafficPolicySelectionCounts\x12\x14\n" +
+	"\x05total\x18\x01 \x01(\rR\x05total\x12\x1a\n" +
+	"\bselected\x18\x02 \x01(\rR\bselected\x12\x1e\n" +
 	"\n" +
-	"target_ref\x18\x01 \x01(\v2>.istio.networking.v1alpha1.InboundTrafficPolicyStatusReferenceB\x04\xe2A\x01\x02R\ttargetRef\x12C\n" +
-	"\n" +
-	"conditions\x18\x02 \x03(\v2#.istio.meta.v1alpha1.IstioConditionR\n" +
-	"conditions\x12e\n" +
-	"\x0ewinning_policy\x18\x03 \x01(\v2>.istio.networking.v1alpha1.InboundTrafficPolicyStatusReferenceR\rwinningPolicy\"\x93\x01\n" +
-	"#InboundTrafficPolicyStatusReference\x12\x14\n" +
-	"\x05group\x18\x01 \x01(\tR\x05group\x12\x18\n" +
-	"\x04kind\x18\x02 \x01(\tB\x04\xe2A\x01\x02R\x04kind\x12\"\n" +
-	"\tnamespace\x18\x03 \x01(\tB\x04\xe2A\x01\x02R\tnamespace\x12\x18\n" +
-	"\x04name\x18\x04 \x01(\tB\x04\xe2A\x01\x02R\x04nameB\"Z istio.io/api/networking/v1alpha1b\x06proto3"
+	"overridden\x18\x03 \x01(\rR\n" +
+	"overridden\x12\x18\n" +
+	"\ainvalid\x18\x04 \x01(\rR\ainvalid\"\xbf\x01\n" +
+	"\x1eInboundTrafficPolicyDiagnostic\x12\x1c\n" +
+	"\x06reason\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x06reason\x12\x1e\n" +
+	"\amessage\x18\x02 \x01(\tB\x04\xe2A\x01\x02R\amessage\x12_\n" +
+	"\x0ewinning_policy\x18\x03 \x01(\v28.istio.networking.v1alpha1.InboundTrafficPolicyReferenceR\rwinningPolicy\"]\n" +
+	"\x1dInboundTrafficPolicyReference\x12\"\n" +
+	"\tnamespace\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\tnamespace\x12\x18\n" +
+	"\x04name\x18\x02 \x01(\tB\x04\xe2A\x01\x02R\x04nameB\"Z istio.io/api/networking/v1alpha1b\x06proto3"
 
 var (
 	file_networking_v1alpha1_inbound_traffic_policy_proto_rawDescOnce sync.Once
@@ -977,7 +1113,7 @@ func file_networking_v1alpha1_inbound_traffic_policy_proto_rawDescGZIP() []byte 
 	return file_networking_v1alpha1_inbound_traffic_policy_proto_rawDescData
 }
 
-var file_networking_v1alpha1_inbound_traffic_policy_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_networking_v1alpha1_inbound_traffic_policy_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_networking_v1alpha1_inbound_traffic_policy_proto_goTypes = []any{
 	(*InboundTrafficPolicy)(nil),                // 0: istio.networking.v1alpha1.InboundTrafficPolicy
 	(*HttpSettings)(nil),                        // 1: istio.networking.v1alpha1.HttpSettings
@@ -988,50 +1124,52 @@ var file_networking_v1alpha1_inbound_traffic_policy_proto_goTypes = []any{
 	(*BrotliCompressor)(nil),                    // 6: istio.networking.v1alpha1.BrotliCompressor
 	(*ZstdCompressor)(nil),                      // 7: istio.networking.v1alpha1.ZstdCompressor
 	(*InboundTrafficPolicyStatus)(nil),          // 8: istio.networking.v1alpha1.InboundTrafficPolicyStatus
-	(*InboundTrafficPolicyTargetStatus)(nil),    // 9: istio.networking.v1alpha1.InboundTrafficPolicyTargetStatus
-	(*InboundTrafficPolicyStatusReference)(nil), // 10: istio.networking.v1alpha1.InboundTrafficPolicyStatusReference
-	(*v1beta1.WorkloadSelector)(nil),            // 11: istio.type.v1beta1.WorkloadSelector
-	(*v1beta1.PolicyTargetReference)(nil),       // 12: istio.type.v1beta1.PolicyTargetReference
-	(*v1beta1.PortSelector)(nil),                // 13: istio.type.v1beta1.PortSelector
-	(*wrappers.BoolValue)(nil),                  // 14: google.protobuf.BoolValue
-	(*wrappers.UInt32Value)(nil),                // 15: google.protobuf.UInt32Value
-	(*v1alpha1.IstioCondition)(nil),             // 16: istio.meta.v1alpha1.IstioCondition
+	(*InboundTrafficPolicySelectionCounts)(nil), // 9: istio.networking.v1alpha1.InboundTrafficPolicySelectionCounts
+	(*InboundTrafficPolicyDiagnostic)(nil),      // 10: istio.networking.v1alpha1.InboundTrafficPolicyDiagnostic
+	(*InboundTrafficPolicyReference)(nil),       // 11: istio.networking.v1alpha1.InboundTrafficPolicyReference
+	(*v1beta1.WorkloadSelector)(nil),            // 12: istio.type.v1beta1.WorkloadSelector
+	(*v1beta1.PolicyTargetReference)(nil),       // 13: istio.type.v1beta1.PolicyTargetReference
+	(*v1beta1.PortSelector)(nil),                // 14: istio.type.v1beta1.PortSelector
+	(*wrappers.BoolValue)(nil),                  // 15: google.protobuf.BoolValue
+	(*wrappers.UInt32Value)(nil),                // 16: google.protobuf.UInt32Value
+	(*v1alpha1.IstioCondition)(nil),             // 17: istio.meta.v1alpha1.IstioCondition
 }
 var file_networking_v1alpha1_inbound_traffic_policy_proto_depIdxs = []int32{
-	11, // 0: istio.networking.v1alpha1.InboundTrafficPolicy.selector:type_name -> istio.type.v1beta1.WorkloadSelector
-	12, // 1: istio.networking.v1alpha1.InboundTrafficPolicy.target_refs:type_name -> istio.type.v1beta1.PolicyTargetReference
+	12, // 0: istio.networking.v1alpha1.InboundTrafficPolicy.selector:type_name -> istio.type.v1beta1.WorkloadSelector
+	13, // 1: istio.networking.v1alpha1.InboundTrafficPolicy.target_refs:type_name -> istio.type.v1beta1.PolicyTargetReference
 	1,  // 2: istio.networking.v1alpha1.InboundTrafficPolicy.http:type_name -> istio.networking.v1alpha1.HttpSettings
 	2,  // 3: istio.networking.v1alpha1.InboundTrafficPolicy.port_level_settings:type_name -> istio.networking.v1alpha1.PortTrafficPolicy
 	3,  // 4: istio.networking.v1alpha1.HttpSettings.compression:type_name -> istio.networking.v1alpha1.CompressionSettings
-	13, // 5: istio.networking.v1alpha1.PortTrafficPolicy.port:type_name -> istio.type.v1beta1.PortSelector
+	14, // 5: istio.networking.v1alpha1.PortTrafficPolicy.port:type_name -> istio.type.v1beta1.PortSelector
 	1,  // 6: istio.networking.v1alpha1.PortTrafficPolicy.http:type_name -> istio.networking.v1alpha1.HttpSettings
 	4,  // 7: istio.networking.v1alpha1.CompressionSettings.compressors:type_name -> istio.networking.v1alpha1.Compressor
-	14, // 8: istio.networking.v1alpha1.CompressionSettings.disable_on_etag:type_name -> google.protobuf.BoolValue
-	14, // 9: istio.networking.v1alpha1.CompressionSettings.remove_accept_encoding_header:type_name -> google.protobuf.BoolValue
-	15, // 10: istio.networking.v1alpha1.Compressor.min_content_length:type_name -> google.protobuf.UInt32Value
+	15, // 8: istio.networking.v1alpha1.CompressionSettings.disable_on_etag:type_name -> google.protobuf.BoolValue
+	15, // 9: istio.networking.v1alpha1.CompressionSettings.remove_accept_encoding_header:type_name -> google.protobuf.BoolValue
+	16, // 10: istio.networking.v1alpha1.Compressor.min_content_length:type_name -> google.protobuf.UInt32Value
 	5,  // 11: istio.networking.v1alpha1.Compressor.gzip:type_name -> istio.networking.v1alpha1.GzipCompressor
 	6,  // 12: istio.networking.v1alpha1.Compressor.brotli:type_name -> istio.networking.v1alpha1.BrotliCompressor
 	7,  // 13: istio.networking.v1alpha1.Compressor.zstd:type_name -> istio.networking.v1alpha1.ZstdCompressor
-	15, // 14: istio.networking.v1alpha1.GzipCompressor.compression_level:type_name -> google.protobuf.UInt32Value
-	15, // 15: istio.networking.v1alpha1.GzipCompressor.window_bits:type_name -> google.protobuf.UInt32Value
-	15, // 16: istio.networking.v1alpha1.GzipCompressor.memory_level:type_name -> google.protobuf.UInt32Value
-	15, // 17: istio.networking.v1alpha1.GzipCompressor.chunk_size:type_name -> google.protobuf.UInt32Value
-	15, // 18: istio.networking.v1alpha1.BrotliCompressor.quality:type_name -> google.protobuf.UInt32Value
-	15, // 19: istio.networking.v1alpha1.BrotliCompressor.window_bits:type_name -> google.protobuf.UInt32Value
-	15, // 20: istio.networking.v1alpha1.BrotliCompressor.input_block_bits:type_name -> google.protobuf.UInt32Value
-	15, // 21: istio.networking.v1alpha1.BrotliCompressor.chunk_size:type_name -> google.protobuf.UInt32Value
-	15, // 22: istio.networking.v1alpha1.ZstdCompressor.compression_level:type_name -> google.protobuf.UInt32Value
-	15, // 23: istio.networking.v1alpha1.ZstdCompressor.chunk_size:type_name -> google.protobuf.UInt32Value
-	16, // 24: istio.networking.v1alpha1.InboundTrafficPolicyStatus.conditions:type_name -> istio.meta.v1alpha1.IstioCondition
-	9,  // 25: istio.networking.v1alpha1.InboundTrafficPolicyStatus.targets:type_name -> istio.networking.v1alpha1.InboundTrafficPolicyTargetStatus
-	10, // 26: istio.networking.v1alpha1.InboundTrafficPolicyTargetStatus.target_ref:type_name -> istio.networking.v1alpha1.InboundTrafficPolicyStatusReference
-	16, // 27: istio.networking.v1alpha1.InboundTrafficPolicyTargetStatus.conditions:type_name -> istio.meta.v1alpha1.IstioCondition
-	10, // 28: istio.networking.v1alpha1.InboundTrafficPolicyTargetStatus.winning_policy:type_name -> istio.networking.v1alpha1.InboundTrafficPolicyStatusReference
-	29, // [29:29] is the sub-list for method output_type
-	29, // [29:29] is the sub-list for method input_type
-	29, // [29:29] is the sub-list for extension type_name
-	29, // [29:29] is the sub-list for extension extendee
-	0,  // [0:29] is the sub-list for field type_name
+	16, // 14: istio.networking.v1alpha1.GzipCompressor.compression_level:type_name -> google.protobuf.UInt32Value
+	16, // 15: istio.networking.v1alpha1.GzipCompressor.window_bits:type_name -> google.protobuf.UInt32Value
+	16, // 16: istio.networking.v1alpha1.GzipCompressor.memory_level:type_name -> google.protobuf.UInt32Value
+	16, // 17: istio.networking.v1alpha1.GzipCompressor.chunk_size:type_name -> google.protobuf.UInt32Value
+	16, // 18: istio.networking.v1alpha1.BrotliCompressor.quality:type_name -> google.protobuf.UInt32Value
+	16, // 19: istio.networking.v1alpha1.BrotliCompressor.window_bits:type_name -> google.protobuf.UInt32Value
+	16, // 20: istio.networking.v1alpha1.BrotliCompressor.input_block_bits:type_name -> google.protobuf.UInt32Value
+	16, // 21: istio.networking.v1alpha1.BrotliCompressor.chunk_size:type_name -> google.protobuf.UInt32Value
+	16, // 22: istio.networking.v1alpha1.ZstdCompressor.compression_level:type_name -> google.protobuf.UInt32Value
+	16, // 23: istio.networking.v1alpha1.ZstdCompressor.chunk_size:type_name -> google.protobuf.UInt32Value
+	17, // 24: istio.networking.v1alpha1.InboundTrafficPolicyStatus.conditions:type_name -> istio.meta.v1alpha1.IstioCondition
+	9,  // 25: istio.networking.v1alpha1.InboundTrafficPolicyStatus.workloads:type_name -> istio.networking.v1alpha1.InboundTrafficPolicySelectionCounts
+	9,  // 26: istio.networking.v1alpha1.InboundTrafficPolicyStatus.services:type_name -> istio.networking.v1alpha1.InboundTrafficPolicySelectionCounts
+	9,  // 27: istio.networking.v1alpha1.InboundTrafficPolicyStatus.gateways:type_name -> istio.networking.v1alpha1.InboundTrafficPolicySelectionCounts
+	10, // 28: istio.networking.v1alpha1.InboundTrafficPolicyStatus.diagnostics:type_name -> istio.networking.v1alpha1.InboundTrafficPolicyDiagnostic
+	11, // 29: istio.networking.v1alpha1.InboundTrafficPolicyDiagnostic.winning_policy:type_name -> istio.networking.v1alpha1.InboundTrafficPolicyReference
+	30, // [30:30] is the sub-list for method output_type
+	30, // [30:30] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_networking_v1alpha1_inbound_traffic_policy_proto_init() }
@@ -1050,7 +1188,7 @@ func file_networking_v1alpha1_inbound_traffic_policy_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_networking_v1alpha1_inbound_traffic_policy_proto_rawDesc), len(file_networking_v1alpha1_inbound_traffic_policy_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

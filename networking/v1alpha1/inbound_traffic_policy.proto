@@ -28,7 +28,15 @@ syntax = "proto3";
 // default in the configuration root namespace. Ties are resolved by oldest
 // creationTimestamp, then lexicographically by name.
 //
-// For example, compress responses at a Kubernetes Gateway:
+// Nonempty selectors are namespace-local, including in the root namespace, and
+// do not attach to waypoints. Legacy Istio gateways use workload selectors.
+// For a waypoint Service, precedence is Service attachment, Service namespace
+// default, then mesh default. The waypoint's hosting namespace does not supply
+// defaults for Services in other namespaces. Unlike DestinationRule lookup,
+// policy selection does not first consult the waypoint's configuration namespace.
+// Gateway attachment is supported for Kubernetes ingress Gateways, not waypoints.
+//
+// For example, compress responses at a Kubernetes ingress Gateway:
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha1
@@ -80,14 +88,17 @@ option go_package = "istio.io/api/networking/v1alpha1";
 // -->
 // +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="!(has(self.selector) && has(self.targetRefs))"
 message InboundTrafficPolicy {
-  // Select workloads by label, including sidecars and Istio gateway workloads.
+  // Select workloads by label only in this policy's namespace, including sidecars
+  // and legacy Istio gateway workloads. Nonempty selectors do not attach to waypoints.
   // An absent or empty selector selects the namespace; in the configuration
   // root namespace it defines the mesh-wide default. Mutually exclusive with targetRefs.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
-  // Attach to Kubernetes Gateways (group gateway.networking.k8s.io) or Services
+  // Attach to Kubernetes ingress Gateways (group gateway.networking.k8s.io) or Services
   // (empty group or core), in this policy's namespace. Service attachment is for
   // waypoints and requires a waypoint bound via istio.io/use-waypoint.
+  // Waypoint Gateway references are unsupported and reported during reconciliation;
+  // they do not affect that target. Other supported references can still apply.
   // HTTPRoute attachment is not supported. Mutually exclusive with selector.
   // +kubebuilder:validation:MaxItems=16
   // +kubebuilder:validation:XValidation:message="targetRefs must reference a Gateway or Service",rule="self.all(t, (t.kind == 'Gateway' && has(t.group) && t.group == 'gateway.networking.k8s.io') || (t.kind == 'Service' && (!has(t.group) || t.group == '' || t.group == 'core')))"
@@ -101,7 +112,11 @@ message InboundTrafficPolicy {
   // Port-specific settings replace the top-level settings in full. Unset fields
   // use built-in defaults, not the top-level settings. A port entry without HTTP
   // compression disables compression for that port.
-  // +kubebuilder:validation:MaxItems=4096
+  // Duplicate numeric ports are rejected. An unmatched override port is diagnosed
+  // during reconciliation without preventing other applicable ports from working.
+  // The list is bounded to keep admission uniqueness checks within CEL cost limits.
+  // +kubebuilder:validation:MaxItems=256
+  // +kubebuilder:validation:XValidation:message="portLevelSettings must have unique port numbers",rule="self.all(p, self.filter(q, q.port.number == p.port.number).size() == 1)"
   repeated PortTrafficPolicy port_level_settings = 5;
 }
 
@@ -128,11 +143,15 @@ message PortTrafficPolicy {
 // are served unchanged. Compression can expose secrets through response sizes when
 // secret data and attacker-controlled input occur in the same response.
 message CompressionSettings {
-  // Compressors in preference order. The first eligible algorithm matching the
-  // client's Accept-Encoding preferences (including q-values) is used. At most one
-  // compressor applies. For Accept-Encoding: *, the first configured compressor
-  // is preferred. An empty list disables compression.
-  // +kubebuilder:validation:MaxItems=64
+  // Compressors use native Envoy negotiation. Client Accept-Encoding q-values
+  // govern selection. Equal-q explicit encodings follow client-header order;
+  // wildcard preference follows list order. At most one compressor applies.
+  // Content types participate in negotiation, but a selected codec failing its
+  // minimum-size check does not guarantee fallback to another codec. Missing
+  // Content-Length retains native streaming behavior without buffering the body.
+  // Each algorithm may appear once. An empty list disables compression.
+  // +kubebuilder:validation:MaxItems=3
+  // +kubebuilder:validation:XValidation:message="compression algorithms must be unique",rule="self.filter(c, has(c.gzip)).size() <= 1 && self.filter(c, has(c.brotli)).size() <= 1 && self.filter(c, has(c.zstd)).size() <= 1"
   repeated Compressor compressors = 1;
 
   // Skip responses with a strong ETag to preserve the validator. Defaults to false.
@@ -221,38 +240,90 @@ message ZstdCompressor {
   google.protobuf.UInt32Value chunk_size = 2;
 }
 
-// Observed attachment state. Conditions include Accepted when attached to at least
-// one proxy, Conflicted or Overridden when another policy wins, and TargetNotFound
-// when no target matches or a Service has no waypoint. Controllers populate status.
+// Aggregate desired-policy selection, not evidence of Envoy acknowledgment or
+// compressed traffic. There is no per-workload or per-resource targets list.
+// Existing Service/Gateway references remain valid at zero replicas, subject to
+// waypoint enrollment. Selectors matching no workloads report zero counts.
 message InboundTrafficPolicyStatus {
-  // Aggregate conditions for this policy, including selectors that match no workloads.
+  // Aggregate conditions distinguish selection, partial/full shadowing, missing
+  // targets, unsupported attachments, and no applicable HTTP listener. Ordinary
+  // TCP ports on a mixed-protocol target are not errors. Conditions and diagnostics
+  // may describe partial success while other applicable targets/ports still work.
+  // +kubebuilder:validation:MaxItems=8
   repeated istio.meta.v1alpha1.IstioCondition conditions = 1;
-  // Conditions for individual resource or workload targets.
-  repeated InboundTrafficPolicyTargetStatus targets = 2;
+
+  // Previously used for individual targets in an unpublished draft.
+  reserved 2;
+  reserved "targets";
+
+  // Workload outcomes for sidecar/selector policies and namespace/mesh defaults
+  // applied directly to workloads. Waypoint Service outcomes are counted separately.
+  InboundTrafficPolicySelectionCounts workloads = 3;
+
+  // Outcomes for referenced Services and Service-scoped namespace/mesh defaults.
+  InboundTrafficPolicySelectionCounts services = 4;
+
+  // Outcomes for explicitly referenced Kubernetes ingress Gateways.
+  InboundTrafficPolicySelectionCounts gateways = 5;
+
+  // Bounded aggregate diagnostics, not an enumeration of targets. Includes
+  // relevant winning policies and explanations for unsupported or inapplicable
+  // configuration, including port overrides matching no target port.
+  // +kubebuilder:validation:MaxItems=16
+  repeated InboundTrafficPolicyDiagnostic diagnostics = 6;
 }
 
-// Attachment state for one target.
-message InboundTrafficPolicyTargetStatus {
-  // The Gateway, Service, or workload whose attachment is reported.
-  InboundTrafficPolicyStatusReference target_ref = 1 [(google.api.field_behavior) = REQUIRED];
-  // Conditions for this target, including observed generation and diagnostic messages.
-  repeated istio.meta.v1alpha1.IstioCondition conditions = 2;
-  // The winning InboundTrafficPolicy when this policy is conflicted or overridden.
-  InboundTrafficPolicyStatusReference winning_policy = 3;
+// Selection outcomes for one explicitly named category. Counts describe the
+// controller's desired configuration, independent of connected proxies or xDS ACKs.
+// Each counted item is selected, overridden, or invalid; counts are not combined
+// across workload, Service, and Gateway categories.
+// +kubebuilder:validation:XValidation:message="selected, overridden and invalid counts must sum to total",rule="default(self.selected, 0) + default(self.overridden, 0) + default(self.invalid, 0) == default(self.total, 0)"
+message InboundTrafficPolicySelectionCounts {
+  // Number of candidate workloads or resource references in this category.
+  // +kubebuilder:validation:Minimum=0
+  // +kubebuilder:validation:Maximum=4294967295
+  uint32 total = 1;
+  // Candidates selected for at least one applicable port. Port-level diagnostics
+  // can still be present, so selected does not imply every setting applies.
+  // +kubebuilder:validation:Minimum=0
+  // +kubebuilder:validation:Maximum=4294967295
+  uint32 selected = 2;
+  // Candidates for which another InboundTrafficPolicy wins in full.
+  // +kubebuilder:validation:Minimum=0
+  // +kubebuilder:validation:Maximum=4294967295
+  uint32 overridden = 3;
+  // Missing, unsupported, or inapplicable candidates. A selector matching nothing
+  // has total zero, rather than one invalid resource reference.
+  // +kubebuilder:validation:Minimum=0
+  // +kubebuilder:validation:Maximum=4294967295
+  uint32 invalid = 4;
 }
 
-// Resource identity for status reporting. Unlike spec targetRefs, this reference
-// may identify resources in other namespaces, including targets of mesh-wide policies.
-message InboundTrafficPolicyStatusReference {
-  // API group. Empty for core Kubernetes resources.
-  string group = 1;
-  // Resource kind.
+// One bounded policy-level diagnostic. Several targets may contribute to one
+// diagnostic; this message is not a per-target status entry.
+message InboundTrafficPolicyDiagnostic {
+  // Machine-readable reason, such as MoreSpecificPolicy, TargetNotFound,
+  // UnsupportedTarget, NoApplicableHTTPListener, or PortNotFound.
   // +kubebuilder:validation:MinLength=1
-  string kind = 2 [(google.api.field_behavior) = REQUIRED];
-  // Resource namespace.
+  // +kubebuilder:validation:MaxLength=63
+  string reason = 1 [(google.api.field_behavior) = REQUIRED];
+  // Human-readable aggregate explanation.
   // +kubebuilder:validation:MinLength=1
-  string namespace = 3 [(google.api.field_behavior) = REQUIRED];
-  // Resource name.
+  // +kubebuilder:validation:MaxLength=1024
+  string message = 2 [(google.api.field_behavior) = REQUIRED];
+  // Relevant winner when this policy is shadowed. May name a policy in another
+  // namespace, for example when a namespace policy overrides the mesh default.
+  InboundTrafficPolicyReference winning_policy = 3;
+}
+
+// Identity of an InboundTrafficPolicy named in an aggregate diagnostic.
+message InboundTrafficPolicyReference {
+  // Policy namespace.
   // +kubebuilder:validation:MinLength=1
-  string name = 4 [(google.api.field_behavior) = REQUIRED];
+  // +kubebuilder:validation:MaxLength=63
+  string namespace = 1 [(google.api.field_behavior) = REQUIRED];
+  // Policy name.
+  // +kubebuilder:validation:MinLength=1
+  // +kubebuilder:validation:MaxLength=253
+  string name = 2 [(google.api.field_behavior) = REQUIRED];
 }

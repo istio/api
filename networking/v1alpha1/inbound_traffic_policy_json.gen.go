@@ -105,25 +105,36 @@ func (this *InboundTrafficPolicyStatus) UnmarshalJSON(b []byte) error {
 	return InboundTrafficPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for InboundTrafficPolicyTargetStatus
-func (this *InboundTrafficPolicyTargetStatus) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for InboundTrafficPolicySelectionCounts
+func (this *InboundTrafficPolicySelectionCounts) MarshalJSON() ([]byte, error) {
 	str, err := InboundTrafficPolicyMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for InboundTrafficPolicyTargetStatus
-func (this *InboundTrafficPolicyTargetStatus) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for InboundTrafficPolicySelectionCounts
+func (this *InboundTrafficPolicySelectionCounts) UnmarshalJSON(b []byte) error {
 	return InboundTrafficPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for InboundTrafficPolicyStatusReference
-func (this *InboundTrafficPolicyStatusReference) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for InboundTrafficPolicyDiagnostic
+func (this *InboundTrafficPolicyDiagnostic) MarshalJSON() ([]byte, error) {
 	str, err := InboundTrafficPolicyMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for InboundTrafficPolicyStatusReference
-func (this *InboundTrafficPolicyStatusReference) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for InboundTrafficPolicyDiagnostic
+func (this *InboundTrafficPolicyDiagnostic) UnmarshalJSON(b []byte) error {
+	return InboundTrafficPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for InboundTrafficPolicyReference
+func (this *InboundTrafficPolicyReference) MarshalJSON() ([]byte, error) {
+	str, err := InboundTrafficPolicyMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for InboundTrafficPolicyReference
+func (this *InboundTrafficPolicyReference) UnmarshalJSON(b []byte) error {
 	return InboundTrafficPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

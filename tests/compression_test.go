@@ -29,14 +29,14 @@ func TestCompressionListLimits(t *testing.T) {
 		ports, compressors int
 		wantErr            string
 	}{
-		{"maximum-policy", 4096, 64, ""},
-		{"too-many-ports", 4097, 1, "at most 4096 items"},
-		{"too-many-compressors", 1, 65, "at most 64 items"},
+		{"maximum-policy", 256, 3, ""},
+		{"too-many-ports", 257, 1, "at most 256 items"},
+		{"too-many-compressors", 1, 4, "at most 3 items"},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			compressors := make([]any, tt.compressors)
 			for i := range compressors {
-				compressors[i] = map[string]any{"gzip": map[string]any{}}
+				compressors[i] = map[string]any{[]string{"gzip", "brotli", "zstd"}[i%3]: map[string]any{}}
 			}
 			http := map[string]any{"compression": map[string]any{"compressors": compressors}}
 			ports := make([]any, tt.ports)

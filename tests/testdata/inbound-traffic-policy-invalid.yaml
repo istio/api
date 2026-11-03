@@ -345,16 +345,6 @@ spec:
       - zstd:
           chunkSize: 65537
 ---
-_err: 'targetRef: Required value'
-apiVersion: networking.istio.io/v1alpha1
-kind: InboundTrafficPolicy
-metadata:
-  name: missing-status-target
-spec: {}
-status:
-  targets:
-  - conditions: []
----
 _err: minContentLength in body should be
 apiVersion: networking.istio.io/v1alpha1
 kind: InboundTrafficPolicy
@@ -378,3 +368,110 @@ spec:
       compressors:
       - gzip: {}
         minContentLength: 4294967296
+---
+_err: unique port numbers
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: duplicate-port
+spec:
+  portLevelSettings:
+  - port:
+      number: 80
+  - port:
+      number: 80
+    http:
+      compression:
+        compressors:
+        - gzip: {}
+---
+_err: compression algorithms must be unique
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: duplicate-gzip-top-level
+spec:
+  http:
+    compression:
+      compressors:
+      - gzip: {}
+      - gzip: {}
+---
+_err: compression algorithms must be unique
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: duplicate-gzip-port-level
+spec:
+  portLevelSettings:
+  - port:
+      number: 8080
+    http:
+      compression:
+        compressors:
+        - gzip: {}
+        - gzip: {}
+---
+_err: compression algorithms must be unique
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: duplicate-brotli-top-level
+spec:
+  http:
+    compression:
+      compressors:
+      - brotli: {}
+      - brotli: {}
+---
+_err: compression algorithms must be unique
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: duplicate-brotli-port-level
+spec:
+  portLevelSettings:
+  - port:
+      number: 8080
+    http:
+      compression:
+        compressors:
+        - brotli: {}
+        - brotli: {}
+---
+_err: compression algorithms must be unique
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: duplicate-zstd-top-level
+spec:
+  http:
+    compression:
+      compressors:
+      - zstd: {}
+      - zstd: {}
+---
+_err: compression algorithms must be unique
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: duplicate-zstd-port-level
+spec:
+  portLevelSettings:
+  - port:
+      number: 8080
+    http:
+      compression:
+        compressors:
+        - zstd: {}
+        - zstd: {}
+---
+_err: 'reason: Required value'
+apiVersion: networking.istio.io/v1alpha1
+kind: InboundTrafficPolicy
+metadata:
+  name: missing-diagnostic-reason
+spec: {}
+status:
+  diagnostics:
+  - message: A diagnostic requires a reason

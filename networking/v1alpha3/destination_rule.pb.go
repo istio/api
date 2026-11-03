@@ -452,7 +452,6 @@ type DestinationRule struct {
 	// the destination rule is declared in. Similarly, the value "*" is reserved and
 	// defines an export to all namespaces.
 	ExportTo []string `protobuf:"bytes,4,rep,name=export_to,json=exportTo,proto3" json:"export_to,omitempty"`
-	//
 	// Criteria used to select the specific set of pods/VMs on which this
 	// `DestinationRule` configuration should be applied. If specified, the `DestinationRule`
 	// configuration will be applied only to the workload instances matching the workload selector
@@ -1772,21 +1771,22 @@ type LocalityLoadBalancerSetting struct {
 	// failoverPriority is an ordered list of labels used to sort endpoints to do priority based load balancing.
 	// This is to support traffic failover across different groups of endpoints.
 	// Two kinds of labels can be specified:
-	// - Specify only label keys `[key1, key2, key3]`, istio would compare the label values of client with endpoints.
-	//   Suppose there are total N label keys `[key1, key2, key3, ...keyN]` specified:
 	//
-	//   1. Endpoints matching all N labels with the client proxy have priority P(0) i.e. the highest priority.
-	//   2. Endpoints matching the first N-1 labels with the client proxy have priority P(1) i.e. second highest priority.
-	//   3. By extension of this logic, endpoints matching only the first label with the client proxy has priority P(N-1) i.e. second lowest priority.
-	//   4. All the other endpoints have priority P(N) i.e. lowest priority.
+	//   - Specify only label keys `[key1, key2, key3]`, istio would compare the label values of client with endpoints.
+	//     Suppose there are total N label keys `[key1, key2, key3, ...keyN]` specified:
 	//
-	// - Specify labels with key and value `[key1=value1, key2=value2, key3=value3]`, istio would compare the labels with endpoints.
-	//   Suppose there are total N labels `[key1=value1, key2=value2, key3=value3, ...keyN=valueN]` specified:
+	//     1. Endpoints matching all N labels with the client proxy have priority P(0) i.e. the highest priority.
+	//     2. Endpoints matching the first N-1 labels with the client proxy have priority P(1) i.e. second highest priority.
+	//     3. By extension of this logic, endpoints matching only the first label with the client proxy has priority P(N-1) i.e. second lowest priority.
+	//     4. All the other endpoints have priority P(N) i.e. lowest priority.
 	//
-	//   1. Endpoints matching all N labels have priority P(0) i.e. the highest priority.
-	//   2. Endpoints matching the first N-1 labels have priority P(1) i.e. second highest priority.
-	//   3. By extension of this logic, endpoints matching only the first label has priority P(N-1) i.e. second lowest priority.
-	//   4. All the other endpoints have priority P(N) i.e. lowest priority.
+	//   - Specify labels with key and value `[key1=value1, key2=value2, key3=value3]`, istio would compare the labels with endpoints.
+	//     Suppose there are total N labels `[key1=value1, key2=value2, key3=value3, ...keyN=valueN]` specified:
+	//
+	//     1. Endpoints matching all N labels have priority P(0) i.e. the highest priority.
+	//     2. Endpoints matching the first N-1 labels have priority P(1) i.e. second highest priority.
+	//     3. By extension of this logic, endpoints matching only the first label has priority P(N-1) i.e. second lowest priority.
+	//     4. All the other endpoints have priority P(N) i.e. lowest priority.
 	//
 	// Note: For a label to be considered for match, the previous labels must match, i.e. nth label would be considered matched only if first n-1 labels match.
 	//
@@ -2012,21 +2012,22 @@ type ZoneAwareLoadBalancerSetting struct {
 	// `topology.istio.io/subzone` labels.
 	//
 	// Two kinds of labels can be specified:
-	// - Specify only label keys `[key1, key2, key3]`, istio would compare the label values of client with endpoints.
-	//   Suppose there are total N label keys `[key1, key2, key3, ...keyN]` specified:
 	//
-	//   1. Endpoints matching all N labels with the client proxy have priority P(0) i.e. the highest priority.
-	//   2. Endpoints matching the first N-1 labels with the client proxy have priority P(1) i.e. second highest priority.
-	//   3. By extension of this logic, endpoints matching only the first label with the client proxy has priority P(N-1) i.e. second lowest priority.
-	//   4. All the other endpoints have priority P(N) i.e. lowest priority.
+	//   - Specify only label keys `[key1, key2, key3]`, istio would compare the label values of client with endpoints.
+	//     Suppose there are total N label keys `[key1, key2, key3, ...keyN]` specified:
 	//
-	// - Specify labels with key and value `[key1=value1, key2=value2, key3=value3]`, istio would compare the labels with endpoints.
-	//   Suppose there are total N labels `[key1=value1, key2=value2, key3=value3, ...keyN=valueN]` specified:
+	//     1. Endpoints matching all N labels with the client proxy have priority P(0) i.e. the highest priority.
+	//     2. Endpoints matching the first N-1 labels with the client proxy have priority P(1) i.e. second highest priority.
+	//     3. By extension of this logic, endpoints matching only the first label with the client proxy has priority P(N-1) i.e. second lowest priority.
+	//     4. All the other endpoints have priority P(N) i.e. lowest priority.
 	//
-	//   1. Endpoints matching all N labels have priority P(0) i.e. the highest priority.
-	//   2. Endpoints matching the first N-1 labels have priority P(1) i.e. second highest priority.
-	//   3. By extension of this logic, endpoints matching only the first label has priority P(N-1) i.e. second lowest priority.
-	//   4. All the other endpoints have priority P(N) i.e. lowest priority.
+	//   - Specify labels with key and value `[key1=value1, key2=value2, key3=value3]`, istio would compare the labels with endpoints.
+	//     Suppose there are total N labels `[key1=value1, key2=value2, key3=value3, ...keyN=valueN]` specified:
+	//
+	//     1. Endpoints matching all N labels have priority P(0) i.e. the highest priority.
+	//     2. Endpoints matching the first N-1 labels have priority P(1) i.e. second highest priority.
+	//     3. By extension of this logic, endpoints matching only the first label has priority P(N-1) i.e. second lowest priority.
+	//     4. All the other endpoints have priority P(N) i.e. lowest priority.
 	//
 	// Note: For a label to be considered for match, the previous labels must match, i.e. nth label would be considered matched only if first n-1 labels match.
 	//
@@ -2146,7 +2147,6 @@ type TrafficPolicy_PortTrafficPolicy struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Specifies the number of a port on the destination service
 	// on which this policy is being applied.
-	//
 	Port *PortSelector `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
 	// Settings controlling the load balancer algorithms.
 	LoadBalancer *LoadBalancerSettings `protobuf:"bytes,2,opt,name=load_balancer,json=loadBalancer,proto3" json:"load_balancer,omitempty"`
@@ -2239,8 +2239,8 @@ type TrafficPolicy_TunnelSettings struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Specifies which protocol to use for tunneling the downstream connection.
 	// Supported protocols are:
-	//   * CONNECT - uses HTTP CONNECT;
-	//   * POST - uses HTTP POST.
+	//   - CONNECT - uses HTTP CONNECT;
+	//   - POST - uses HTTP POST.
 	//
 	// CONNECT is used by default if not specified.
 	//
@@ -2368,7 +2368,6 @@ type TrafficPolicy_RetryBudget struct {
 	// allowed because of the minimum retry concurrency.
 	//
 	// Defaults to 3.
-	//
 	MinRetryConcurrency uint32 `protobuf:"varint,2,opt,name=min_retry_concurrency,json=minRetryConcurrency,proto3" json:"min_retry_concurrency,omitempty"`
 	// Specifies the duration in which requests will be considered when calculating
 	// the budget for retries. This parameter alters the way in which the retry budget
@@ -2489,10 +2488,14 @@ func (x *ClientCompressionSettings_Response) GetDecompress() *ClientCompressionS
 // Transparent response decompression settings.
 type ClientCompressionSettings_Decompression struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// When true, the outbound sidecar advertises Accept-Encoding upstream and
-	// decompresses the response before delivering it to the client application.
-	// If omitted or false, the application handles content negotiation and
-	// decompression itself. This does not enable request-body compression.
+	// When true, the outbound sidecar owns response negotiation and decompression
+	// for gzip, brotli, and zstd, advertising Accept-Encoding upstream and
+	// decompressing responses before delivery to the application. This also applies
+	// when the application supplied Accept-Encoding: native Envoy behavior may
+	// change its existing preferences, including q=0 for an installed codec.
+	// If omitted or false, the application retains negotiation and decompression
+	// ownership. This is not inferred from server policy and does not enable
+	// request-body compression.
 	Enabled       *wrappers.BoolValue `protobuf:"bytes,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -3117,8 +3120,10 @@ type ConnectionPoolSettings_TCPSettings struct {
 	// annotation) which applies to all inbound connections.
 	// ```
 	// proxy.istio.io/config: |-
-	//    proxyMetadata:
-	//       ISTIO_META_IDLE_TIMEOUT: "100s"
+	//
+	//	proxyMetadata:
+	//	   ISTIO_META_IDLE_TIMEOUT: "100s"
+	//
 	// ```
 	// +protoc-gen-crd:duration-validation:none
 	IdleTimeout   *duration.Duration `protobuf:"bytes,5,opt,name=idle_timeout,json=idleTimeout,proto3" json:"idle_timeout,omitempty"`

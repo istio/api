@@ -364,38 +364,40 @@ spec:
 apiVersion: networking.istio.io/v1alpha1
 kind: InboundTrafficPolicy
 metadata:
-  name: target-status
+  name: summary-status
 spec: {}
 status:
   conditions:
   - observedGeneration: 2
     status: "True"
-    type: Accepted
-  targets:
-  - conditions:
-    - message: Policy other/winner applies
-      observedGeneration: 2
-      reason: MoreSpecificPolicy
-      status: "True"
-      type: Overridden
-    targetRef:
-      group: ""
-      kind: Pod
-      name: reviews-abc
-      namespace: other
+    type: Selected
+  workloads:
+    total: 100000
+    selected: 99998
+    overridden: 2
+  services:
+    total: 2
+    selected: 1
+    invalid: 1
+  gateways:
+    total: 1
+    selected: 1
+  diagnostics:
+  - reason: MoreSpecificPolicy
+    message: Two workloads are selected by other/winner
     winningPolicy:
-      group: networking.istio.io
-      kind: InboundTrafficPolicy
       name: winner
       namespace: other
+  - reason: UnsupportedTarget
+    message: Waypoint Gateway attachment is unsupported
 ---
 apiVersion: networking.istio.io/v1alpha1
 kind: InboundTrafficPolicy
 metadata:
-  name: duplicate-port
+  name: zero-match-status
 spec:
-  portLevelSettings:
-  - port:
-      number: 80
-  - port:
-      number: 80
+  selector:
+    matchLabels:
+      app: absent
+status:
+  workloads: {}

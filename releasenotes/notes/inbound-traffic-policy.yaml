@@ -5,5 +5,8 @@ issue: []
 releaseNotes:
 - |
     **Added** the experimental `InboundTrafficPolicy` API for inbound HTTP response
-    compression with gzip, brotli, and zstd, port overrides, and per-target status.
+    compression with gzip, brotli, and zstd, port replacement, and summary selection status.
+    Workload selectors are namespace-local; waypoint policies resolve by Service
+    attachment, Service namespace default, then mesh default. Waypoint Gateway
+    attachment is unsupported. Duplicate ports and compression algorithms are rejected.
     Added `DestinationRule` API settings for opt-in client-side response decompression.

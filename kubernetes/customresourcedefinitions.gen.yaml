@@ -804,9 +804,10 @@ spec:
                                   properties:
                                     enabled:
                                       description: When true, the outbound sidecar
-                                        advertises Accept-Encoding upstream and decompresses
-                                        the response before delivering it to the client
-                                        application.
+                                        owns response negotiation and decompression
+                                        for gzip, brotli, and zstd, advertising Accept-Encoding
+                                        upstream and decompressing responses before
+                                        delivery to the application.
                                       nullable: true
                                       type: boolean
                                   type: object
@@ -1315,9 +1316,10 @@ spec:
                                         properties:
                                           enabled:
                                             description: When true, the outbound sidecar
-                                              advertises Accept-Encoding upstream
-                                              and decompresses the response before
-                                              delivering it to the client application.
+                                              owns response negotiation and decompression
+                                              for gzip, brotli, and zstd, advertising
+                                              Accept-Encoding upstream and decompressing
+                                              responses before delivery to the application.
                                             nullable: true
                                             type: boolean
                                         type: object
@@ -2034,9 +2036,11 @@ spec:
                             description: Opt-in transparent response decompression.
                             properties:
                               enabled:
-                                description: When true, the outbound sidecar advertises
-                                  Accept-Encoding upstream and decompresses the response
-                                  before delivering it to the client application.
+                                description: When true, the outbound sidecar owns
+                                  response negotiation and decompression for gzip,
+                                  brotli, and zstd, advertising Accept-Encoding upstream
+                                  and decompressing responses before delivery to the
+                                  application.
                                 nullable: true
                                 type: boolean
                             type: object
@@ -2524,9 +2528,10 @@ spec:
                                   properties:
                                     enabled:
                                       description: When true, the outbound sidecar
-                                        advertises Accept-Encoding upstream and decompresses
-                                        the response before delivering it to the client
-                                        application.
+                                        owns response negotiation and decompression
+                                        for gzip, brotli, and zstd, advertising Accept-Encoding
+                                        upstream and decompressing responses before
+                                        delivery to the application.
                                       nullable: true
                                       type: boolean
                                   type: object
@@ -3367,9 +3372,10 @@ spec:
                                   properties:
                                     enabled:
                                       description: When true, the outbound sidecar
-                                        advertises Accept-Encoding upstream and decompresses
-                                        the response before delivering it to the client
-                                        application.
+                                        owns response negotiation and decompression
+                                        for gzip, brotli, and zstd, advertising Accept-Encoding
+                                        upstream and decompressing responses before
+                                        delivery to the application.
                                       nullable: true
                                       type: boolean
                                   type: object
@@ -3878,9 +3884,10 @@ spec:
                                         properties:
                                           enabled:
                                             description: When true, the outbound sidecar
-                                              advertises Accept-Encoding upstream
-                                              and decompresses the response before
-                                              delivering it to the client application.
+                                              owns response negotiation and decompression
+                                              for gzip, brotli, and zstd, advertising
+                                              Accept-Encoding upstream and decompressing
+                                              responses before delivery to the application.
                                             nullable: true
                                             type: boolean
                                         type: object
@@ -4597,9 +4604,11 @@ spec:
                             description: Opt-in transparent response decompression.
                             properties:
                               enabled:
-                                description: When true, the outbound sidecar advertises
-                                  Accept-Encoding upstream and decompresses the response
-                                  before delivering it to the client application.
+                                description: When true, the outbound sidecar owns
+                                  response negotiation and decompression for gzip,
+                                  brotli, and zstd, advertising Accept-Encoding upstream
+                                  and decompressing responses before delivery to the
+                                  application.
                                 nullable: true
                                 type: boolean
                             type: object
@@ -5087,9 +5096,10 @@ spec:
                                   properties:
                                     enabled:
                                       description: When true, the outbound sidecar
-                                        advertises Accept-Encoding upstream and decompresses
-                                        the response before delivering it to the client
-                                        application.
+                                        owns response negotiation and decompression
+                                        for gzip, brotli, and zstd, advertising Accept-Encoding
+                                        upstream and decompressing responses before
+                                        delivery to the application.
                                       nullable: true
                                       type: boolean
                                   type: object
@@ -5930,9 +5940,10 @@ spec:
                                   properties:
                                     enabled:
                                       description: When true, the outbound sidecar
-                                        advertises Accept-Encoding upstream and decompresses
-                                        the response before delivering it to the client
-                                        application.
+                                        owns response negotiation and decompression
+                                        for gzip, brotli, and zstd, advertising Accept-Encoding
+                                        upstream and decompressing responses before
+                                        delivery to the application.
                                       nullable: true
                                       type: boolean
                                   type: object
@@ -6441,9 +6452,10 @@ spec:
                                         properties:
                                           enabled:
                                             description: When true, the outbound sidecar
-                                              advertises Accept-Encoding upstream
-                                              and decompresses the response before
-                                              delivering it to the client application.
+                                              owns response negotiation and decompression
+                                              for gzip, brotli, and zstd, advertising
+                                              Accept-Encoding upstream and decompressing
+                                              responses before delivery to the application.
                                             nullable: true
                                             type: boolean
                                         type: object
@@ -7160,9 +7172,11 @@ spec:
                             description: Opt-in transparent response decompression.
                             properties:
                               enabled:
-                                description: When true, the outbound sidecar advertises
-                                  Accept-Encoding upstream and decompresses the response
-                                  before delivering it to the client application.
+                                description: When true, the outbound sidecar owns
+                                  response negotiation and decompression for gzip,
+                                  brotli, and zstd, advertising Accept-Encoding upstream
+                                  and decompressing responses before delivery to the
+                                  application.
                                 nullable: true
                                 type: boolean
                             type: object
@@ -7650,9 +7664,10 @@ spec:
                                   properties:
                                     enabled:
                                       description: When true, the outbound sidecar
-                                        advertises Accept-Encoding upstream and decompresses
-                                        the response before delivering it to the client
-                                        application.
+                                        owns response negotiation and decompression
+                                        for gzip, brotli, and zstd, advertising Accept-Encoding
+                                        upstream and decompressing responses before
+                                        delivery to the application.
                                       nullable: true
                                       type: boolean
                                   type: object
@@ -9839,7 +9854,7 @@ spec:
                     description: HTTP response compression.
                     properties:
                       compressors:
-                        description: Compressors in preference order.
+                        description: Compressors use native Envoy negotiation.
                         items:
                           oneOf:
                           - not:
@@ -9945,8 +9960,13 @@ spec:
                           - message: exactly one of gzip, brotli or zstd must be set
                             rule: '(has(self.gzip) ? 1 : 0) + (has(self.brotli) ?
                               1 : 0) + (has(self.zstd) ? 1 : 0) == 1'
-                        maxItems: 64
+                        maxItems: 3
                         type: array
+                        x-kubernetes-validations:
+                        - message: compression algorithms must be unique
+                          rule: |-
+                            self.filter(c, has(c.gzip)).size() <= 1 && self.filter(c, has(c.brotli)).size() <= 1 &&
+                            self.filter(c, has(c.zstd)).size() <= 1
                       disableOnEtag:
                         description: Skip responses with a strong ETag to preserve
                           the validator.
@@ -9971,7 +9991,7 @@ spec:
                           description: HTTP response compression.
                           properties:
                             compressors:
-                              description: Compressors in preference order.
+                              description: Compressors use native Envoy negotiation.
                               items:
                                 oneOf:
                                 - not:
@@ -10078,8 +10098,13 @@ spec:
                                     be set
                                   rule: '(has(self.gzip) ? 1 : 0) + (has(self.brotli)
                                     ? 1 : 0) + (has(self.zstd) ? 1 : 0) == 1'
-                              maxItems: 64
+                              maxItems: 3
                               type: array
+                              x-kubernetes-validations:
+                              - message: compression algorithms must be unique
+                                rule: |-
+                                  self.filter(c, has(c.gzip)).size() <= 1 && self.filter(c, has(c.brotli)).size() <= 1 &&
+                                  self.filter(c, has(c.zstd)).size() <= 1
                             disableOnEtag:
                               description: Skip responses with a strong ETag to preserve
                                 the validator.
@@ -10107,11 +10132,15 @@ spec:
                   required:
                   - port
                   type: object
-                maxItems: 4096
+                maxItems: 256
                 type: array
+                x-kubernetes-validations:
+                - message: portLevelSettings must have unique port numbers
+                  rule: self.all(p, self.filter(q, q.port.number == p.port.number).size()
+                    == 1)
               selector:
-                description: Select workloads by label, including sidecars and Istio
-                  gateway workloads.
+                description: Select workloads by label only in this policy's namespace,
+                  including sidecars and legacy Istio gateway workloads.
                 properties:
                   matchLabels:
                     additionalProperties:
@@ -10131,7 +10160,7 @@ spec:
                       rule: self.all(key, key.size() != 0)
                 type: object
               targetRefs:
-                description: Attach to Kubernetes Gateways (group gateway.networking.k8s.io)
+                description: Attach to Kubernetes ingress Gateways (group gateway.networking.k8s.io)
                   or Services (empty group or core), in this policy's namespace.
                 items:
                   properties:
@@ -10173,11 +10202,13 @@ spec:
             - message: only one of targetRefs or selector can be set
               rule: '!(has(self.selector) && has(self.targetRefs))'
           status:
-            description: Observed attachment state.
+            description: Aggregate desired-policy selection, not evidence of Envoy
+              acknowledgment or compressed traffic.
             properties:
               conditions:
-                description: Aggregate conditions for this policy, including selectors
-                  that match no workloads.
+                description: Aggregate conditions distinguish selection, partial/full
+                  shadowing, missing targets, unsupported attachments, and no applicable
+                  HTTP listener.
                 items:
                   properties:
                     lastProbeTime:
@@ -10210,100 +10241,144 @@ spec:
                       description: Type is the type of the condition.
                       type: string
                   type: object
+                maxItems: 8
                 type: array
-              targets:
-                description: Conditions for individual resource or workload targets.
+              diagnostics:
+                description: Bounded aggregate diagnostics, not an enumeration of
+                  targets.
                 items:
                   properties:
-                    conditions:
-                      description: Conditions for this target, including observed
-                        generation and diagnostic messages.
-                      items:
-                        properties:
-                          lastProbeTime:
-                            description: Last time we probed the condition.
-                            format: date-time
-                            type: string
-                          lastTransitionTime:
-                            description: Last time the condition transitioned from
-                              one status to another.
-                            format: date-time
-                            type: string
-                          message:
-                            description: Human-readable message indicating details
-                              about last transition.
-                            type: string
-                          observedGeneration:
-                            anyOf:
-                            - type: integer
-                            - type: string
-                            description: Resource Generation to which the Condition
-                              refers.
-                            x-kubernetes-int-or-string: true
-                          reason:
-                            description: Unique, one-word, CamelCase reason for the
-                              condition's last transition.
-                            type: string
-                          status:
-                            description: Status is the status of the condition.
-                            type: string
-                          type:
-                            description: Type is the type of the condition.
-                            type: string
-                        type: object
-                      type: array
-                    targetRef:
-                      description: The Gateway, Service, or workload whose attachment
-                        is reported.
-                      properties:
-                        group:
-                          description: API group.
-                          type: string
-                        kind:
-                          description: Resource kind.
-                          minLength: 1
-                          type: string
-                        name:
-                          description: Resource name.
-                          minLength: 1
-                          type: string
-                        namespace:
-                          description: Resource namespace.
-                          minLength: 1
-                          type: string
-                      required:
-                      - kind
-                      - namespace
-                      - name
-                      type: object
+                    message:
+                      description: Human-readable aggregate explanation.
+                      maxLength: 1024
+                      minLength: 1
+                      type: string
+                    reason:
+                      description: Machine-readable reason, such as MoreSpecificPolicy,
+                        TargetNotFound, UnsupportedTarget, NoApplicableHTTPListener,
+                        or PortNotFound.
+                      maxLength: 63
+                      minLength: 1
+                      type: string
                     winningPolicy:
-                      description: The winning InboundTrafficPolicy when this policy
-                        is conflicted or overridden.
+                      description: Relevant winner when this policy is shadowed.
                       properties:
-                        group:
-                          description: API group.
-                          type: string
-                        kind:
-                          description: Resource kind.
-                          minLength: 1
-                          type: string
                         name:
-                          description: Resource name.
+                          description: Policy name.
+                          maxLength: 253
                           minLength: 1
                           type: string
                         namespace:
-                          description: Resource namespace.
+                          description: Policy namespace.
+                          maxLength: 63
                           minLength: 1
                           type: string
                       required:
-                      - kind
                       - namespace
                       - name
                       type: object
                   required:
-                  - targetRef
+                  - reason
+                  - message
                   type: object
+                maxItems: 16
                 type: array
+              gateways:
+                description: Outcomes for explicitly referenced Kubernetes ingress
+                  Gateways.
+                properties:
+                  invalid:
+                    description: Missing, unsupported, or inapplicable candidates.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  overridden:
+                    description: Candidates for which another InboundTrafficPolicy
+                      wins in full.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  selected:
+                    description: Candidates selected for at least one applicable port.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  total:
+                    description: Number of candidate workloads or resource references
+                      in this category.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                type: object
+                x-kubernetes-validations:
+                - message: selected, overridden and invalid counts must sum to total
+                  rule: '(has(self.selected) ? self.selected : 0) + (has(self.overridden)
+                    ? self.overridden : 0) + (has(self.invalid) ? self.invalid : 0)
+                    == (has(self.total) ? self.total : 0)'
+              services:
+                description: Outcomes for referenced Services and Service-scoped namespace/mesh
+                  defaults.
+                properties:
+                  invalid:
+                    description: Missing, unsupported, or inapplicable candidates.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  overridden:
+                    description: Candidates for which another InboundTrafficPolicy
+                      wins in full.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  selected:
+                    description: Candidates selected for at least one applicable port.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  total:
+                    description: Number of candidate workloads or resource references
+                      in this category.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                type: object
+                x-kubernetes-validations:
+                - message: selected, overridden and invalid counts must sum to total
+                  rule: '(has(self.selected) ? self.selected : 0) + (has(self.overridden)
+                    ? self.overridden : 0) + (has(self.invalid) ? self.invalid : 0)
+                    == (has(self.total) ? self.total : 0)'
+              workloads:
+                description: Workload outcomes for sidecar/selector policies and namespace/mesh
+                  defaults applied directly to workloads.
+                properties:
+                  invalid:
+                    description: Missing, unsupported, or inapplicable candidates.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  overridden:
+                    description: Candidates for which another InboundTrafficPolicy
+                      wins in full.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  selected:
+                    description: Candidates selected for at least one applicable port.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  total:
+                    description: Number of candidate workloads or resource references
+                      in this category.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                type: object
+                x-kubernetes-validations:
+                - message: selected, overridden and invalid counts must sum to total
+                  rule: '(has(self.selected) ? self.selected : 0) + (has(self.overridden)
+                    ? self.overridden : 0) + (has(self.invalid) ? self.invalid : 0)
+                    == (has(self.total) ? self.total : 0)'
             type: object
             x-kubernetes-preserve-unknown-fields: true
         required:
