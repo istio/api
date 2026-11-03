@@ -535,7 +535,6 @@ message JWTRule {
   // +kubebuilder:validation:Pattern=^[-_A-Za-z0-9]+$
   string payload_to_metadata = 16;
 
-  // $hide_from_docs
   // Next available field number: 17
 }
 
