@@ -1,0 +1,51 @@
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: credential-name
+spec:
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - "*"
+    tls:
+      mode: SIMPLE
+      credentialName: foo
+---
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: credential-names
+spec:
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - "*"
+    tls:
+      mode: SIMPLE
+      credentialNames:
+      - foo
+      - bar
+---
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: tls-certificates
+spec:
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - "*"
+    tls:
+      mode: SIMPLE
+      tlsCertificates:
+      - serverCertificate: /etc/certs/cert.pem
+        privateKey: /etc/certs/key.pem

@@ -8892,7 +8892,7 @@ spec:
                           ? 1 : 0) <= 1'
                       - message: only one of credentialName or tlsCertificates can
                           be set
-                        rule: '(has(self.credentialNames) ? 1 : 0) + (has(self.tlsCertificates)
+                        rule: '(has(self.credentialName) ? 1 : 0) + (has(self.tlsCertificates)
                           ? 1 : 0) <= 1'
                   required:
                   - port
@@ -9186,7 +9186,7 @@ spec:
                           ? 1 : 0) <= 1'
                       - message: only one of credentialName or tlsCertificates can
                           be set
-                        rule: '(has(self.credentialNames) ? 1 : 0) + (has(self.tlsCertificates)
+                        rule: '(has(self.credentialName) ? 1 : 0) + (has(self.tlsCertificates)
                           ? 1 : 0) <= 1'
                   required:
                   - port
@@ -9480,7 +9480,7 @@ spec:
                           ? 1 : 0) <= 1'
                       - message: only one of credentialName or tlsCertificates can
                           be set
-                        rule: '(has(self.credentialNames) ? 1 : 0) + (has(self.tlsCertificates)
+                        rule: '(has(self.credentialName) ? 1 : 0) + (has(self.tlsCertificates)
                           ? 1 : 0) <= 1'
                   required:
                   - port
@@ -11164,7 +11164,7 @@ spec:
                           ? 1 : 0) <= 1'
                       - message: only one of credentialName or tlsCertificates can
                           be set
-                        rule: '(has(self.credentialNames) ? 1 : 0) + (has(self.tlsCertificates)
+                        rule: '(has(self.credentialName) ? 1 : 0) + (has(self.tlsCertificates)
                           ? 1 : 0) <= 1'
                   required:
                   - port
@@ -11798,7 +11798,7 @@ spec:
                           ? 1 : 0) <= 1'
                       - message: only one of credentialName or tlsCertificates can
                           be set
-                        rule: '(has(self.credentialNames) ? 1 : 0) + (has(self.tlsCertificates)
+                        rule: '(has(self.credentialName) ? 1 : 0) + (has(self.tlsCertificates)
                           ? 1 : 0) <= 1'
                   required:
                   - port
@@ -12432,7 +12432,7 @@ spec:
                           ? 1 : 0) <= 1'
                       - message: only one of credentialName or tlsCertificates can
                           be set
-                        rule: '(has(self.credentialNames) ? 1 : 0) + (has(self.tlsCertificates)
+                        rule: '(has(self.credentialName) ? 1 : 0) + (has(self.tlsCertificates)
                           ? 1 : 0) <= 1'
                   required:
                   - port
