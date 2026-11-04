@@ -494,8 +494,8 @@ multiple JWT rules are configured and all tokens must be present and valid simul
 
 </td>
 </tr>
-<tr id="JWTRule-payload_to_metadata">
-<td><div class="field"><div class="name"><code><a href="#JWTRule-payload_to_metadata">payloadToMetadata</a></code></div>
+<tr id="JWTRule-output_payload_to_metadata">
+<td><div class="field"><div class="name"><code><a href="#JWTRule-output_payload_to_metadata">outputPayloadToMetadata</a></code></div>
 <div class="type">string</div>
 </div></td>
 <td>
@@ -512,12 +512,12 @@ the payload of every token, and use <code>request.auth.payload*{key}*</code> in
 <pre><code class="language-yaml">jwtRules:
 - issuer: https://idp.example.com
   presence: REQUIRED
-  payloadToMetadata: idp
+  outputPayloadToMetadata: idp
 - issuer: https://scope.example.com
   fromHeaders:
   - name: x-scope-token
   presence: REQUIRED
-  payloadToMetadata: scope
+  outputPayloadToMetadata: scope
 </code></pre>
 <p>Note: a payload stored under a key other than <code>payload</code> is not visible to
 <code>request.auth.principal</code> and <code>request.auth.claims</code>.</p>

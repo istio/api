@@ -521,19 +521,19 @@ message JWTRule {
   // jwtRules:
   // - issuer: https://idp.example.com
   //   presence: REQUIRED
-  //   payloadToMetadata: idp
+  //   outputPayloadToMetadata: idp
   // - issuer: https://scope.example.com
   //   fromHeaders:
   //   - name: x-scope-token
   //   presence: REQUIRED
-  //   payloadToMetadata: scope
+  //   outputPayloadToMetadata: scope
   // ```
   //
   // Note: a payload stored under a key other than `payload` is not visible to
   // `request.auth.principal` and `request.auth.claims`.
   // +kubebuilder:validation:MaxLength=64
   // +kubebuilder:validation:Pattern=^[-_A-Za-z0-9]+$
-  string payload_to_metadata = 16;
+  string output_payload_to_metadata = 16;
 
   // Next available field number: 17
 }

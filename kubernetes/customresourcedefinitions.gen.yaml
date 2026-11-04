@@ -18487,7 +18487,7 @@ spec:
                       description: This field specifies the header name to output
                         a successfully verified JWT payload to the backend.
                       type: string
-                    payloadToMetadata:
+                    outputPayloadToMetadata:
                       description: This field specifies the key under which the payload
                         of a successfully verified JWT is stored in the request's
                         dynamic metadata.
@@ -18792,7 +18792,7 @@ spec:
                       description: This field specifies the header name to output
                         a successfully verified JWT payload to the backend.
                       type: string
-                    payloadToMetadata:
+                    outputPayloadToMetadata:
                       description: This field specifies the key under which the payload
                         of a successfully verified JWT is stored in the request's
                         dynamic metadata.
