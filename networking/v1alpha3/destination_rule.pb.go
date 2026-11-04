@@ -2912,7 +2912,11 @@ func (x *LoadBalancerSettings_ConsistentHashLB_HTTPCookie_Attribute) GetValue() 
 // Settings common to both HTTP and TCP upstream connections.
 type ConnectionPoolSettings_TCPSettings struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Maximum number of HTTP1 /TCP connections to a destination host. Default 2^32-1.
+	// Maximum number of TCP connections to a destination host, including connections used for
+	// HTTP/1.1 and HTTP/2. Default 2^32-1.
+	// This is a circuit breaker limit, which can be exceeded in some circumstances.
+	// See [Envoy circuit breaking](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/circuit_breaking#arch-overview-circuit-break-cluster-maximum-connections)
+	// for details.
 	MaxConnections int32 `protobuf:"varint,1,opt,name=max_connections,json=maxConnections,proto3" json:"max_connections,omitempty"`
 	// TCP connection timeout. format:
 	// 1h/1m/1s/1ms. MUST be >=1ms. Default is 10s.
