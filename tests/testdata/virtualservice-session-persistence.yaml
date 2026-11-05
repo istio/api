@@ -1,0 +1,48 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: cookie-session-persistence
+spec:
+  hosts:
+  - ratings.default.svc.cluster.local
+  http:
+  - sessionPersistence:
+      absoluteTimeout: 5m
+      cookie:
+        name: ratings-session
+        path: /ratings
+        lifetimeType: PERMANENT
+    route:
+    - destination:
+        host: ratings.default.svc.cluster.local
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: header-session-persistence
+spec:
+  hosts:
+  - ratings.default.svc.cluster.local
+  http:
+  - sessionPersistence:
+      type: HEADER
+      header:
+        name: x-ratings-session
+    route:
+    - destination:
+        host: ratings.default.svc.cluster.local
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+_err: type must match the specified session persistence configuration
+metadata:
+  name: header-without-config
+spec:
+  hosts:
+  - ratings.default.svc.cluster.local
+  http:
+  - sessionPersistence:
+      type: HEADER
+    route:
+    - destination:
+        host: ratings.default.svc.cluster.local
