@@ -40,3 +40,14 @@ metadata:
   name: fqdn
 spec:
   address: example.com
+---
+apiVersion: networking.istio.io/v1
+kind: WorkloadEntry
+metadata:
+  name: port-name-length-boundary
+spec:
+  address: 1.2.3.4
+  # 62 and 63 character port names.
+  ports:
+    http-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: 80
+    http-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: 80
