@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: bug-fix
+area: documentation
+issue:
+  - https://github.com/istio/istio/issues/3612
+
+releaseNotes:
+  - |
+    **Upgraded** Buf configuration files from v1 to v2.
