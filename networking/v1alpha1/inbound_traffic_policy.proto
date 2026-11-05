@@ -1,0 +1,329 @@
+// Copyright Istio Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+// $schema: istio.networking.v1alpha1.InboundTrafficPolicy
+// $title: Inbound Traffic Policy
+// $description: Configure inbound HTTP response compression.
+// $location: https://istio.io/docs/reference/config/networking/inbound-traffic-policy.html
+
+// InboundTrafficPolicy configures the inbound/server-side listener or filter chain
+// of a sidecar, gateway, or waypoint. DestinationRule configures the proxy's
+// outbound/client-side connection instead.
+//
+// The most specific policy applies in full, without merging: resource targetRefs,
+// workload selector with matchLabels, namespace-wide policy, then the mesh-wide
+// default in the configuration root namespace. Ties are resolved by oldest
+// creationTimestamp, then lexicographically by name.
+//
+// Nonempty selectors are namespace-local, including in the root namespace, and
+// do not attach to waypoints. Legacy Istio gateways use workload selectors.
+// For a waypoint Service, precedence is Service attachment, Service namespace
+// default, then mesh default. The waypoint's hosting namespace does not supply
+// defaults for Services in other namespaces. Unlike DestinationRule lookup,
+// policy selection does not first consult the waypoint's configuration namespace.
+// Gateway attachment is supported for Kubernetes ingress Gateways, not waypoints.
+//
+// For example, compress responses at a Kubernetes ingress Gateway:
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha1
+// kind: InboundTrafficPolicy
+// metadata:
+//   name: ingress-compression
+//   namespace: istio-system
+// spec:
+//   targetRefs:
+//   - group: gateway.networking.k8s.io
+//     kind: Gateway
+//     name: ingressgateway
+//   http:
+//     compression:
+//       compressors:
+//       - brotli:
+//           quality: 4
+//         minContentLength: 1024
+//       - gzip: {}
+// ```
+package istio.networking.v1alpha1;
+
+import "google/api/field_behavior.proto";
+import "google/protobuf/wrappers.proto";
+import "meta/v1alpha1/status.proto";
+import "type/v1beta1/selector.proto";
+
+option go_package = "istio.io/api/networking/v1alpha1";
+
+// <!-- crd generation tags
+// +cue-gen:InboundTrafficPolicy:groupName:networking.istio.io
+// +cue-gen:InboundTrafficPolicy:versions:v1alpha1
+// +cue-gen:InboundTrafficPolicy:storageVersion
+// +cue-gen:InboundTrafficPolicy:annotations:helm.sh/resource-policy=keep
+// +cue-gen:InboundTrafficPolicy:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
+// +cue-gen:InboundTrafficPolicy:subresource:status=istio.networking.v1alpha1.InboundTrafficPolicyStatus
+// +cue-gen:InboundTrafficPolicy:spec:required
+// +cue-gen:InboundTrafficPolicy:scope:Namespaced
+// +cue-gen:InboundTrafficPolicy:releaseChannel:extended
+// +cue-gen:InboundTrafficPolicy:resource:categories=istio-io,networking-istio-io,plural=inboundtrafficpolicies
+// -->
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// istiostatus-override: InboundTrafficPolicyStatus: istio.io/api/networking/v1alpha1
+// +kubetype-gen:groupVersion=networking.istio.io/v1alpha1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
+// +kubebuilder:validation:XValidation:message="only one of targetRefs or selector can be set",rule="!(has(self.selector) && has(self.targetRefs))"
+message InboundTrafficPolicy {
+  // Select workloads by label only in this policy's namespace, including sidecars
+  // and legacy Istio gateway workloads. Nonempty selectors do not attach to waypoints.
+  // An absent or empty selector selects the namespace; in the configuration
+  // root namespace it defines the mesh-wide default. Mutually exclusive with targetRefs.
+  istio.type.v1beta1.WorkloadSelector selector = 1;
+
+  // Attach to Kubernetes ingress Gateways (group gateway.networking.k8s.io) or Services
+  // (empty group or core), in this policy's namespace. Service attachment is for
+  // waypoints and requires a waypoint bound via istio.io/use-waypoint.
+  // Waypoint Gateway references are unsupported and reported during reconciliation;
+  // they do not affect that target. Other supported references can still apply.
+  // HTTPRoute attachment is not supported. Mutually exclusive with selector.
+  // +kubebuilder:validation:MaxItems=16
+  // +kubebuilder:validation:XValidation:message="targetRefs must reference a Gateway or Service",rule="self.all(t, (t.kind == 'Gateway' && has(t.group) && t.group == 'gateway.networking.k8s.io') || (t.kind == 'Service' && (!has(t.group) || t.group == '' || t.group == 'core')))"
+  repeated istio.type.v1beta1.PolicyTargetReference target_refs = 2;
+
+  // HTTP settings for all ports unless replaced by a port-level entry.
+  HttpSettings http = 3;
+
+  // Field 4 is left available for future TCP settings.
+
+  // Port-specific settings replace the top-level settings in full. Unset fields
+  // use built-in defaults, not the top-level settings. A port entry without HTTP
+  // compression disables compression for that port.
+  // Duplicate numeric ports are rejected. An unmatched override port is diagnosed
+  // during reconciliation without preventing other applicable ports from working.
+  // The list is bounded to keep admission uniqueness checks within CEL cost limits.
+  // +kubebuilder:validation:MaxItems=256
+  // +kubebuilder:validation:XValidation:message="portLevelSettings must have unique port numbers",rule="self.all(p, self.filter(q, q.port.number == p.port.number).size() == 1)"
+  repeated PortTrafficPolicy port_level_settings = 5;
+}
+
+// HTTP settings on the inbound listener or filter chain.
+message HttpSettings {
+  // HTTP response compression. If absent or empty, compression is disabled.
+  CompressionSettings compression = 1;
+}
+
+// Settings for a specific inbound port.
+message PortTrafficPolicy {
+  // Workload port for selector attachment, Service port for Service attachment,
+  // or listener port for Gateway attachment. All listeners on this port are affected.
+  istio.type.v1beta1.PortSelector port = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // HTTP settings for this port. Unset fields use built-in defaults.
+  HttpSettings http = 2;
+  // Field 3 is left available for future TCP settings.
+}
+
+// HTTP response compression settings. Responses already carrying Content-Encoding
+// are not compressed again. Vary: Accept-Encoding is added to compressible responses.
+// Responses without a matching Accept-Encoding, eligible type, or sufficient size
+// are served unchanged. Compression can expose secrets through response sizes when
+// secret data and attacker-controlled input occur in the same response.
+message CompressionSettings {
+  // Compressors use native Envoy negotiation. Client Accept-Encoding q-values
+  // govern selection. Equal-q explicit encodings follow client-header order;
+  // wildcard preference follows list order. At most one compressor applies.
+  // Content types participate in negotiation, but a selected codec failing its
+  // minimum-size check does not guarantee fallback to another codec. Missing
+  // Content-Length retains native streaming behavior without buffering the body.
+  // Each algorithm may appear once. An empty list disables compression.
+  // +kubebuilder:validation:MaxItems=3
+  // +kubebuilder:validation:XValidation:message="compression algorithms must be unique",rule="self.filter(c, has(c.gzip)).size() <= 1 && self.filter(c, has(c.brotli)).size() <= 1 && self.filter(c, has(c.zstd)).size() <= 1"
+  repeated Compressor compressors = 1;
+
+  // Skip responses with a strong ETag to preserve the validator. Defaults to false.
+  google.protobuf.BoolValue disable_on_etag = 2;
+
+  // Remove Accept-Encoding before forwarding to the application so Istio owns
+  // compression. Defaults to true.
+  google.protobuf.BoolValue remove_accept_encoding_header = 3;
+}
+
+// A response compressor with its own eligibility settings.
+// +kubebuilder:validation:XValidation:message="exactly one of gzip, brotli or zstd must be set",rule="(has(self.gzip)?1:0)+(has(self.brotli)?1:0)+(has(self.zstd)?1:0)==1"
+message Compressor {
+  // Minimum response size in bytes. Defaults to 30. Consider a higher threshold
+  // for high-throughput listeners to avoid spending CPU on very small responses.
+  // +kubebuilder:validation:Minimum=0
+  // +kubebuilder:validation:Maximum=4294967295
+  google.protobuf.UInt32Value min_content_length = 1;
+
+  // Eligible Content-Type values. An empty list uses Envoy's defaults:
+  // application/javascript, application/json, application/xhtml+xml,
+  // image/svg+xml, text/css, text/html, text/plain, text/xml.
+  repeated string content_type = 2;
+
+  // Exactly one compression algorithm must be configured.
+  oneof compressor_config {
+    // Gzip compression.
+    GzipCompressor gzip = 3;
+    // Brotli compression.
+    BrotliCompressor brotli = 4;
+    // Zstandard compression.
+    ZstdCompressor zstd = 5;
+  }
+}
+
+// Gzip compression tuning. Higher levels consume more CPU.
+message GzipCompressor {
+  // Compression level. Defaults to 6.
+  // +kubebuilder:validation:Minimum=1
+  // +kubebuilder:validation:Maximum=9
+  google.protobuf.UInt32Value compression_level = 1;
+  // Zlib window size in bits. Defaults to 12.
+  // +kubebuilder:validation:Minimum=9
+  // +kubebuilder:validation:Maximum=15
+  google.protobuf.UInt32Value window_bits = 2;
+  // Zlib memory level. Defaults to 5.
+  // +kubebuilder:validation:Minimum=1
+  // +kubebuilder:validation:Maximum=9
+  google.protobuf.UInt32Value memory_level = 3;
+  // Output buffer size in bytes. Defaults to 4096.
+  // +kubebuilder:validation:Minimum=4096
+  // +kubebuilder:validation:Maximum=65536
+  google.protobuf.UInt32Value chunk_size = 4;
+}
+
+// Brotli compression tuning. The default quality of 11 is CPU-intensive;
+// consider a lower quality for high-throughput listeners.
+message BrotliCompressor {
+  // Quality level. Defaults to 11.
+  // +kubebuilder:validation:Minimum=0
+  // +kubebuilder:validation:Maximum=11
+  google.protobuf.UInt32Value quality = 1;
+  // Sliding window size in bits. Defaults to 18.
+  // +kubebuilder:validation:Minimum=10
+  // +kubebuilder:validation:Maximum=24
+  google.protobuf.UInt32Value window_bits = 2;
+  // Input block size in bits. Defaults to 24.
+  // +kubebuilder:validation:Minimum=16
+  // +kubebuilder:validation:Maximum=24
+  google.protobuf.UInt32Value input_block_bits = 3;
+  // Output buffer size in bytes. Defaults to 4096.
+  // +kubebuilder:validation:Minimum=4096
+  // +kubebuilder:validation:Maximum=65536
+  google.protobuf.UInt32Value chunk_size = 4;
+}
+
+// Zstandard compression tuning. Higher levels consume more CPU.
+message ZstdCompressor {
+  // Compression level. Defaults to 3.
+  // +kubebuilder:validation:Minimum=1
+  // +kubebuilder:validation:Maximum=22
+  google.protobuf.UInt32Value compression_level = 1;
+  // Output buffer size in bytes. Defaults to 4096.
+  // +kubebuilder:validation:Minimum=4096
+  // +kubebuilder:validation:Maximum=65536
+  google.protobuf.UInt32Value chunk_size = 2;
+}
+
+// Aggregate desired-policy selection, not evidence of Envoy acknowledgment or
+// compressed traffic. There is no per-workload or per-resource targets list.
+// Existing Service/Gateway references remain valid at zero replicas, subject to
+// waypoint enrollment. Selectors matching no workloads report zero counts.
+message InboundTrafficPolicyStatus {
+  // Aggregate conditions distinguish selection, partial/full shadowing, missing
+  // targets, unsupported attachments, and no applicable HTTP listener. Ordinary
+  // TCP ports on a mixed-protocol target are not errors. Conditions and diagnostics
+  // may describe partial success while other applicable targets/ports still work.
+  // +kubebuilder:validation:MaxItems=8
+  repeated istio.meta.v1alpha1.IstioCondition conditions = 1;
+
+  // Previously used for individual targets in an unpublished draft.
+  reserved 2;
+  reserved "targets";
+
+  // Workload outcomes for sidecar/selector policies and namespace/mesh defaults
+  // applied directly to workloads. Waypoint Service outcomes are counted separately.
+  InboundTrafficPolicySelectionCounts workloads = 3;
+
+  // Outcomes for referenced Services and Service-scoped namespace/mesh defaults.
+  InboundTrafficPolicySelectionCounts services = 4;
+
+  // Outcomes for explicitly referenced Kubernetes ingress Gateways.
+  InboundTrafficPolicySelectionCounts gateways = 5;
+
+  // Bounded aggregate diagnostics, not an enumeration of targets. Includes
+  // relevant winning policies and explanations for unsupported or inapplicable
+  // configuration, including port overrides matching no target port.
+  // +kubebuilder:validation:MaxItems=16
+  repeated InboundTrafficPolicyDiagnostic diagnostics = 6;
+}
+
+// Selection outcomes for one explicitly named category. Counts describe the
+// controller's desired configuration, independent of connected proxies or xDS ACKs.
+// Each counted item is selected, overridden, or invalid; counts are not combined
+// across workload, Service, and Gateway categories.
+// +kubebuilder:validation:XValidation:message="selected, overridden and invalid counts must sum to total",rule="default(self.selected, 0) + default(self.overridden, 0) + default(self.invalid, 0) == default(self.total, 0)"
+message InboundTrafficPolicySelectionCounts {
+  // Number of candidate workloads or resource references in this category.
+  // +kubebuilder:validation:Minimum=0
+  // +kubebuilder:validation:Maximum=4294967295
+  uint32 total = 1;
+  // Candidates selected for at least one applicable port. Port-level diagnostics
+  // can still be present, so selected does not imply every setting applies.
+  // +kubebuilder:validation:Minimum=0
+  // +kubebuilder:validation:Maximum=4294967295
+  uint32 selected = 2;
+  // Candidates for which another InboundTrafficPolicy wins in full.
+  // +kubebuilder:validation:Minimum=0
+  // +kubebuilder:validation:Maximum=4294967295
+  uint32 overridden = 3;
+  // Missing, unsupported, or inapplicable candidates. A selector matching nothing
+  // has total zero, rather than one invalid resource reference.
+  // +kubebuilder:validation:Minimum=0
+  // +kubebuilder:validation:Maximum=4294967295
+  uint32 invalid = 4;
+}
+
+// One bounded policy-level diagnostic. Several targets may contribute to one
+// diagnostic; this message is not a per-target status entry.
+message InboundTrafficPolicyDiagnostic {
+  // Machine-readable reason, such as MoreSpecificPolicy, TargetNotFound,
+  // UnsupportedTarget, NoApplicableHTTPListener, or PortNotFound.
+  // +kubebuilder:validation:MinLength=1
+  // +kubebuilder:validation:MaxLength=63
+  string reason = 1 [(google.api.field_behavior) = REQUIRED];
+  // Human-readable aggregate explanation.
+  // +kubebuilder:validation:MinLength=1
+  // +kubebuilder:validation:MaxLength=1024
+  string message = 2 [(google.api.field_behavior) = REQUIRED];
+  // Relevant winner when this policy is shadowed. May name a policy in another
+  // namespace, for example when a namespace policy overrides the mesh default.
+  InboundTrafficPolicyReference winning_policy = 3;
+}
+
+// Identity of an InboundTrafficPolicy named in an aggregate diagnostic.
+message InboundTrafficPolicyReference {
+  // Policy namespace.
+  // +kubebuilder:validation:MinLength=1
+  // +kubebuilder:validation:MaxLength=63
+  string namespace = 1 [(google.api.field_behavior) = REQUIRED];
+  // Policy name.
+  // +kubebuilder:validation:MinLength=1
+  // +kubebuilder:validation:MaxLength=253
+  string name = 2 [(google.api.field_behavior) = REQUIRED];
+}
