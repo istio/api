@@ -12677,12 +12677,16 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - suffix
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - suffix
                             properties:
                               exact:
                                 type: string
@@ -12690,6 +12694,8 @@ spec:
                                 type: string
                               regex:
                                 description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                type: string
+                              suffix:
                                 type: string
                             type: object
                           type: array
@@ -12900,12 +12906,16 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - suffix
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - suffix
                             properties:
                               exact:
                                 type: string
@@ -12913,6 +12923,8 @@ spec:
                                 type: string
                               regex:
                                 description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                type: string
+                              suffix:
                                 type: string
                             type: object
                           gateways:
@@ -12932,12 +12944,16 @@ spec:
                                     - prefix
                                   - required:
                                     - regex
+                                  - required:
+                                    - suffix
                               - required:
                                 - exact
                               - required:
                                 - prefix
                               - required:
                                 - regex
+                              - required:
+                                - suffix
                               properties:
                                 exact:
                                   type: string
@@ -12945,6 +12961,8 @@ spec:
                                   type: string
                                 regex:
                                   description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                  type: string
+                                suffix:
                                   type: string
                               type: object
                             description: The header keys must be lowercase and use
@@ -12968,12 +12986,16 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - suffix
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - suffix
                             properties:
                               exact:
                                 type: string
@@ -12981,6 +13003,8 @@ spec:
                                 type: string
                               regex:
                                 description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                type: string
+                              suffix:
                                 type: string
                             type: object
                           name:
@@ -13003,12 +13027,16 @@ spec:
                                     - prefix
                                   - required:
                                     - regex
+                                  - required:
+                                    - suffix
                               - required:
                                 - exact
                               - required:
                                 - prefix
                               - required:
                                 - regex
+                              - required:
+                                - suffix
                               properties:
                                 exact:
                                   type: string
@@ -13016,6 +13044,8 @@ spec:
                                   type: string
                                 regex:
                                   description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                  type: string
+                                suffix:
                                   type: string
                               type: object
                             description: Query parameters for matching.
@@ -13034,12 +13064,16 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - suffix
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - suffix
                             properties:
                               exact:
                                 type: string
@@ -13047,6 +13081,8 @@ spec:
                                 type: string
                               regex:
                                 description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                type: string
+                              suffix:
                                 type: string
                             type: object
                           sourceLabels:
@@ -13078,12 +13114,16 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - suffix
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - suffix
                             properties:
                               exact:
                                 type: string
@@ -13091,6 +13131,8 @@ spec:
                                 type: string
                               regex:
                                 description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                type: string
+                              suffix:
                                 type: string
                             type: object
                           withoutHeaders:
@@ -13104,12 +13146,16 @@ spec:
                                     - prefix
                                   - required:
                                     - regex
+                                  - required:
+                                    - suffix
                               - required:
                                 - exact
                               - required:
                                 - prefix
                               - required:
                                 - regex
+                              - required:
+                                - suffix
                               properties:
                                 exact:
                                   type: string
@@ -13117,6 +13163,8 @@ spec:
                                   type: string
                                 regex:
                                   description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                  type: string
+                                suffix:
                                   type: string
                               type: object
                             description: withoutHeader has the same syntax with the
@@ -13733,12 +13781,16 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - suffix
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - suffix
                             properties:
                               exact:
                                 type: string
@@ -13746,6 +13798,8 @@ spec:
                                 type: string
                               regex:
                                 description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                type: string
+                              suffix:
                                 type: string
                             type: object
                           type: array
@@ -13956,12 +14010,16 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - suffix
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - suffix
                             properties:
                               exact:
                                 type: string
@@ -13969,6 +14027,8 @@ spec:
                                 type: string
                               regex:
                                 description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                type: string
+                              suffix:
                                 type: string
                             type: object
                           gateways:
@@ -13988,12 +14048,16 @@ spec:
                                     - prefix
                                   - required:
                                     - regex
+                                  - required:
+                                    - suffix
                               - required:
                                 - exact
                               - required:
                                 - prefix
                               - required:
                                 - regex
+                              - required:
+                                - suffix
                               properties:
                                 exact:
                                   type: string
@@ -14001,6 +14065,8 @@ spec:
                                   type: string
                                 regex:
                                   description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                  type: string
+                                suffix:
                                   type: string
                               type: object
                             description: The header keys must be lowercase and use
@@ -14024,12 +14090,16 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - suffix
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - suffix
                             properties:
                               exact:
                                 type: string
@@ -14037,6 +14107,8 @@ spec:
                                 type: string
                               regex:
                                 description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                type: string
+                              suffix:
                                 type: string
                             type: object
                           name:
@@ -14059,12 +14131,16 @@ spec:
                                     - prefix
                                   - required:
                                     - regex
+                                  - required:
+                                    - suffix
                               - required:
                                 - exact
                               - required:
                                 - prefix
                               - required:
                                 - regex
+                              - required:
+                                - suffix
                               properties:
                                 exact:
                                   type: string
@@ -14072,6 +14148,8 @@ spec:
                                   type: string
                                 regex:
                                   description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                  type: string
+                                suffix:
                                   type: string
                               type: object
                             description: Query parameters for matching.
@@ -14090,12 +14168,16 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - suffix
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - suffix
                             properties:
                               exact:
                                 type: string
@@ -14103,6 +14185,8 @@ spec:
                                 type: string
                               regex:
                                 description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                type: string
+                              suffix:
                                 type: string
                             type: object
                           sourceLabels:
@@ -14134,12 +14218,16 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - suffix
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - suffix
                             properties:
                               exact:
                                 type: string
@@ -14147,6 +14235,8 @@ spec:
                                 type: string
                               regex:
                                 description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                type: string
+                              suffix:
                                 type: string
                             type: object
                           withoutHeaders:
@@ -14160,12 +14250,16 @@ spec:
                                     - prefix
                                   - required:
                                     - regex
+                                  - required:
+                                    - suffix
                               - required:
                                 - exact
                               - required:
                                 - prefix
                               - required:
                                 - regex
+                              - required:
+                                - suffix
                               properties:
                                 exact:
                                   type: string
@@ -14173,6 +14267,8 @@ spec:
                                   type: string
                                 regex:
                                   description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                  type: string
+                                suffix:
                                   type: string
                               type: object
                             description: withoutHeader has the same syntax with the
@@ -14789,12 +14885,16 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - suffix
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - suffix
                             properties:
                               exact:
                                 type: string
@@ -14802,6 +14902,8 @@ spec:
                                 type: string
                               regex:
                                 description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                type: string
+                              suffix:
                                 type: string
                             type: object
                           type: array
@@ -15012,12 +15114,16 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - suffix
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - suffix
                             properties:
                               exact:
                                 type: string
@@ -15025,6 +15131,8 @@ spec:
                                 type: string
                               regex:
                                 description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                type: string
+                              suffix:
                                 type: string
                             type: object
                           gateways:
@@ -15044,12 +15152,16 @@ spec:
                                     - prefix
                                   - required:
                                     - regex
+                                  - required:
+                                    - suffix
                               - required:
                                 - exact
                               - required:
                                 - prefix
                               - required:
                                 - regex
+                              - required:
+                                - suffix
                               properties:
                                 exact:
                                   type: string
@@ -15057,6 +15169,8 @@ spec:
                                   type: string
                                 regex:
                                   description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                  type: string
+                                suffix:
                                   type: string
                               type: object
                             description: The header keys must be lowercase and use
@@ -15080,12 +15194,16 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - suffix
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - suffix
                             properties:
                               exact:
                                 type: string
@@ -15093,6 +15211,8 @@ spec:
                                 type: string
                               regex:
                                 description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                type: string
+                              suffix:
                                 type: string
                             type: object
                           name:
@@ -15115,12 +15235,16 @@ spec:
                                     - prefix
                                   - required:
                                     - regex
+                                  - required:
+                                    - suffix
                               - required:
                                 - exact
                               - required:
                                 - prefix
                               - required:
                                 - regex
+                              - required:
+                                - suffix
                               properties:
                                 exact:
                                   type: string
@@ -15128,6 +15252,8 @@ spec:
                                   type: string
                                 regex:
                                   description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                  type: string
+                                suffix:
                                   type: string
                               type: object
                             description: Query parameters for matching.
@@ -15146,12 +15272,16 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - suffix
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - suffix
                             properties:
                               exact:
                                 type: string
@@ -15159,6 +15289,8 @@ spec:
                                 type: string
                               regex:
                                 description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                type: string
+                              suffix:
                                 type: string
                             type: object
                           sourceLabels:
@@ -15190,12 +15322,16 @@ spec:
                                   - prefix
                                 - required:
                                   - regex
+                                - required:
+                                  - suffix
                             - required:
                               - exact
                             - required:
                               - prefix
                             - required:
                               - regex
+                            - required:
+                              - suffix
                             properties:
                               exact:
                                 type: string
@@ -15203,6 +15339,8 @@ spec:
                                 type: string
                               regex:
                                 description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                type: string
+                              suffix:
                                 type: string
                             type: object
                           withoutHeaders:
@@ -15216,12 +15354,16 @@ spec:
                                     - prefix
                                   - required:
                                     - regex
+                                  - required:
+                                    - suffix
                               - required:
                                 - exact
                               - required:
                                 - prefix
                               - required:
                                 - regex
+                              - required:
+                                - suffix
                               properties:
                                 exact:
                                   type: string
@@ -15229,6 +15371,8 @@ spec:
                                   type: string
                                 regex:
                                   description: '[RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                                  type: string
+                                suffix:
                                   type: string
                               type: object
                             description: withoutHeader has the same syntax with the
