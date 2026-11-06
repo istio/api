@@ -243,16 +243,24 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// Specifies whether the JWT token is required or optional in the request.
+// Specifies whether the JWT token is required, optional, or ignored in the request.
 type JWTRule_JWTRequirement int32
 
 const (
 	// The JWT token is optional. Requests without a token are allowed as long as
 	// no invalid token is present. This is the default behavior.
+	// Result: missing token => allowed, invalid token => 401
 	JWTRule_OPTIONAL JWTRule_JWTRequirement = 0
 	// The JWT token must be present and valid. Requests without this token will
 	// be rejected with 401 even if other JWT rules are satisfied.
+	// Result: missing token => 401, invalid token => 401
 	JWTRule_REQUIRED JWTRule_JWTRequirement = 1
+	// The JWT requirement is always satisfied. Requests without a token are
+	// allowed, requests with an invalid token are also allowed. Note that this
+	// only relaxes the requirement. A present token is always verified, and
+	// the claims are always populated when a token is valid.
+	// Result: missing token => allowed, invalid token => allowed
+	JWTRule_IGNORED JWTRule_JWTRequirement = 2
 )
 
 // Enum value maps for JWTRule_JWTRequirement.
@@ -260,10 +268,12 @@ var (
 	JWTRule_JWTRequirement_name = map[int32]string{
 		0: "OPTIONAL",
 		1: "REQUIRED",
+		2: "IGNORED",
 	}
 	JWTRule_JWTRequirement_value = map[string]int32{
 		"OPTIONAL": 0,
 		"REQUIRED": 1,
+		"IGNORED":  2,
 	}
 )
 
@@ -591,11 +601,12 @@ type JWTRule struct {
 	// +protoc-gen-crd:list-value-validation:MinLength=1
 	// +kubebuilder:validation:MaxItems=64
 	SpaceDelimitedClaims []string `protobuf:"bytes,14,rep,name=space_delimited_claims,json=spaceDelimitedClaims,proto3" json:"space_delimited_claims,omitempty"`
-	// Configures whether the JWT token must be present in the request.
+	// Configures whether the JWT token must be present and valid in the request.
 	// When set to `REQUIRED`, requests without this token will be rejected with 401
 	// even if other JWT rules are satisfied. When `OPTIONAL` (the default), a missing
 	// token is allowed as long as no invalid token is present. This is useful when
 	// multiple JWT rules are configured and all tokens must be present and valid simultaneously.
+	// When set to `IGNORED`, a missing token and an invalid token are both allowed.
 	Presence JWTRule_JWTRequirement `protobuf:"varint,15,opt,name=presence,proto3,enum=istio.security.v1beta1.JWTRule_JWTRequirement" json:"presence,omitempty"`
 	// This field specifies the key under which the payload of a successfully verified JWT is
 	// stored in the request's dynamic metadata. If it is not specified, the payload is stored
@@ -626,6 +637,13 @@ type JWTRule struct {
 	// +kubebuilder:validation:MaxLength=64
 	// +kubebuilder:validation:Pattern=^[-_A-Za-z0-9]+$
 	OutputPayloadToMetadata string `protobuf:"bytes,16,opt,name=output_payload_to_metadata,json=outputPayloadToMetadata,proto3" json:"output_payload_to_metadata,omitempty"`
+	// If set, a verification failure is written to the filter's dynamic metadata
+	// under this key, such that failures are always observable regardless of the
+	// `presence` value. The failure is in the form of {code, message}, e.g.
+	// `{"code": 3, "message": "Jwt is expired"}`. When there are multiple
+	// providers, each one should use its own key, otherwise failures can
+	// overwrite each other.
+	FailedStatusMetadataKey string `protobuf:"bytes,17,opt,name=failed_status_metadata_key,json=failedStatusMetadataKey,proto3" json:"failed_status_metadata_key,omitempty"`
 	unknownFields           protoimpl.UnknownFields
 	sizeCache               protoimpl.SizeCache
 }
@@ -758,6 +776,13 @@ func (x *JWTRule) GetOutputPayloadToMetadata() string {
 	return ""
 }
 
+func (x *JWTRule) GetFailedStatusMetadataKey() string {
+	if x != nil {
+		return x.FailedStatusMetadataKey
+	}
+	return ""
+}
+
 // This message specifies a header location to extract JWT token.
 type JWTHeader struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -886,7 +911,7 @@ const file_security_v1beta1_request_authentication_proto_rawDesc = "" +
 	"\n" +
 	"targetRefs\x18\x04 \x03(\v2).istio.type.v1beta1.PolicyTargetReferenceR\n" +
 	"targetRefs\x12<\n" +
-	"\tjwt_rules\x18\x02 \x03(\v2\x1f.istio.security.v1beta1.JWTRuleR\bjwtRules\"\xe7\x05\n" +
+	"\tjwt_rules\x18\x02 \x03(\v2\x1f.istio.security.v1beta1.JWTRuleR\bjwtRules\"\xb1\x06\n" +
 	"\aJWTRule\x12\x16\n" +
 	"\x06issuer\x18\x01 \x01(\tR\x06issuer\x12\x1c\n" +
 	"\taudiences\x18\x02 \x03(\tR\taudiences\x12\x19\n" +
@@ -903,10 +928,12 @@ const file_security_v1beta1_request_authentication_proto_rawDesc = "" +
 	"\atimeout\x18\r \x01(\v2\x19.google.protobuf.DurationR\atimeout\x124\n" +
 	"\x16space_delimited_claims\x18\x0e \x03(\tR\x14spaceDelimitedClaims\x12J\n" +
 	"\bpresence\x18\x0f \x01(\x0e2..istio.security.v1beta1.JWTRule.JWTRequirementR\bpresence\x12;\n" +
-	"\x1aoutput_payload_to_metadata\x18\x10 \x01(\tR\x17outputPayloadToMetadata\",\n" +
+	"\x1aoutput_payload_to_metadata\x18\x10 \x01(\tR\x17outputPayloadToMetadata\x12;\n" +
+	"\x1afailed_status_metadata_key\x18\x11 \x01(\tR\x17failedStatusMetadataKey\"9\n" +
 	"\x0eJWTRequirement\x12\f\n" +
 	"\bOPTIONAL\x10\x00\x12\f\n" +
-	"\bREQUIRED\x10\x01\"=\n" +
+	"\bREQUIRED\x10\x01\x12\v\n" +
+	"\aIGNORED\x10\x02\"=\n" +
 	"\tJWTHeader\x12\x18\n" +
 	"\x04name\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x04name\x12\x16\n" +
 	"\x06prefix\x18\x02 \x01(\tR\x06prefix\"I\n" +
