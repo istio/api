@@ -560,21 +560,6 @@ Accepted values:
 		},
 	}
 
-	SidecarInject = Instance {
-		Name:          "sidecar.istio.io/inject",
-		Description:   "Specifies whether or not an Envoy sidecar should be "+
-                        "automatically injected into the workload. This annotation "+
-                        "has been deprecated in favor of the "+
-                        "`sidecar.istio.io/inject` label documented "+
-                        "[here](/docs/reference/config/labels/#SidecarInject).",
-		FeatureStatus: Beta,
-		Hidden:        false,
-		Deprecated:    true,
-		Resources: []ResourceTypes{
-			Pod,
-		},
-	}
-
 	SidecarInterceptionMode = Instance {
 		Name:          "sidecar.istio.io/interceptionMode",
 		Description:   "Specifies the mode used to redirect inbound connections "+
@@ -1023,7 +1008,6 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarComponentLogLevel,
 		&SidecarDiscoveryAddress,
 		&SidecarExtraStatTags,
-		&SidecarInject,
 		&SidecarInterceptionMode,
 		&SidecarLogLevel,
 		&SidecarNativeSidecar,

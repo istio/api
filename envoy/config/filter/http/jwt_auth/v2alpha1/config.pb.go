@@ -46,7 +46,8 @@ type HttpUri struct {
 	//
 	// .. code-block:: yaml
 	//
-	//	uri: https://www.googleapis.com/oauth2/v1/certs
+	//    uri: https://www.googleapis.com/oauth2/v1/certs
+	//
 	Uri string `protobuf:"bytes,1,opt,name=uri,proto3" json:"uri,omitempty"`
 	// Specify how `uri` is to be fetched. Today, this requires an explicit
 	// cluster, but in the future we may support dynamic cluster creation or
@@ -135,7 +136,8 @@ type HttpUri_Cluster struct {
 	//
 	// .. code-block:: yaml
 	//
-	//	cluster: jwks_cluster
+	//    cluster: jwks_cluster
+	//
 	Cluster string `protobuf:"bytes,2,opt,name=cluster,proto3,oneof"`
 }
 
@@ -268,11 +270,11 @@ func (*DataSource_InlineString) isDataSource_Specifier() {}
 type JwtRule struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Identifies the principal that issued the JWT. See `here
-	//
-	//	<https://tools.ietf.org/html/rfc7519#section-4.1.1>`_. Usually a URL or an email address.
+	//  <https://tools.ietf.org/html/rfc7519#section-4.1.1>`_. Usually a URL or an email address.
 	//
 	// Example: https://securetoken.google.com
 	// Example: 1234567-compute@developer.gserviceaccount.com
+	//
 	Issuer string `protobuf:"bytes,1,opt,name=issuer,proto3" json:"issuer,omitempty"`
 	// The list of JWT `audiences <https://tools.ietf.org/html/rfc7519#section-4.1.3>`_. that are
 	// allowed to access. A JWT containing any of these audiences will be accepted. If not specified,
@@ -282,9 +284,10 @@ type JwtRule struct {
 	//
 	// .. code-block:: yaml
 	//
-	//	audiences:
-	//	- bookstore_android.apps.googleusercontent.com
-	//	  bookstore_web.apps.googleusercontent.com
+	//     audiences:
+	//     - bookstore_android.apps.googleusercontent.com
+	//       bookstore_web.apps.googleusercontent.com
+	//
 	Audiences []string `protobuf:"bytes,2,rep,name=audiences,proto3" json:"audiences,omitempty"`
 	// `JSON Web Key Set <https://tools.ietf.org/html/rfc7517#appendix-A>`_ is needed. to validate
 	// signature of the JWT. This field specifies where to fetch JWKS.
@@ -301,12 +304,13 @@ type JwtRule struct {
 	//
 	// .. code-block:: yaml
 	//
-	//	from_headers:
-	//	- name: x-goog-iap-jwt-assertion
+	//   from_headers:
+	//   - name: x-goog-iap-jwt-assertion
 	//
 	// can be used to extract token from header::
 	//
-	//	x-goog-iap-jwt-assertion: <JWT>.
+	//   x-goog-iap-jwt-assertion: <JWT>.
+	//
 	FromHeaders []*JwtHeader `protobuf:"bytes,6,rep,name=from_headers,json=fromHeaders,proto3" json:"from_headers,omitempty"`
 	// JWT is sent in a query parameter. `jwt_params` represents the query parameter names.
 	//
@@ -314,17 +318,18 @@ type JwtRule struct {
 	//
 	// .. code-block:: yaml
 	//
-	//	from_params:
-	//	- jwt_token
+	//   from_params:
+	//   - jwt_token
 	//
 	// The JWT format in query parameter is::
 	//
-	//	/path?jwt_token=<JWT>
+	//    /path?jwt_token=<JWT>
+	//
 	FromParams []string `protobuf:"bytes,7,rep,name=from_params,json=fromParams,proto3" json:"from_params,omitempty"`
 	// This field specifies the header name to forward a successfully verified JWT payload to the
 	// backend. The forwarded data is::
 	//
-	//	base64_encoded(jwt_payload_in_JSON)
+	//    base64_encoded(jwt_payload_in_JSON)
 	//
 	// If it is not specified, the payload will not be forwarded.
 	// Multiple JWTs in a request from different issuers will be supported. Multiple JWTs from the
@@ -445,12 +450,13 @@ type JwtRule_RemoteJwks struct {
 	//
 	// .. code-block:: yaml
 	//
-	//	remote_jwks:
-	//	- http_uri:
-	//	  - uri: https://www.googleapis.com/oauth2/v1/certs
-	//	    cluster: jwt.www.googleapis.com|443
-	//	  cache_duration:
-	//	  - seconds: 300
+	//    remote_jwks:
+	//    - http_uri:
+	//      - uri: https://www.googleapis.com/oauth2/v1/certs
+	//        cluster: jwt.www.googleapis.com|443
+	//      cache_duration:
+	//      - seconds: 300
+	//
 	RemoteJwks *RemoteJwks `protobuf:"bytes,3,opt,name=remote_jwks,json=remoteJwks,proto3,oneof"`
 }
 
@@ -462,15 +468,16 @@ type JwtRule_LocalJwks struct {
 	//
 	// .. code-block:: yaml
 	//
-	//	local_jwks:
-	//	- filename: /etc/envoy/jwks/jwks1.txt
+	//    local_jwks:
+	//    - filename: /etc/envoy/jwks/jwks1.txt
 	//
 	// Example: inline_string
 	//
 	// .. code-block:: yaml
 	//
-	//	local_jwks:
-	//	- inline_string: "ACADADADADA"
+	//    local_jwks:
+	//    - inline_string: "ACADADADADA"
+	//
 	LocalJwks *DataSource `protobuf:"bytes,4,opt,name=local_jwks,json=localJwks,proto3,oneof"`
 }
 
@@ -485,9 +492,10 @@ type RemoteJwks struct {
 	//
 	// .. code-block:: yaml
 	//
-	//	http_uri:
-	//	- uri: https://www.googleapis.com/oauth2/v1/certs
-	//	  cluster: jwt.www.googleapis.com|443
+	//    http_uri:
+	//    - uri: https://www.googleapis.com/oauth2/v1/certs
+	//      cluster: jwt.www.googleapis.com|443
+	//
 	HttpUri *HttpUri `protobuf:"bytes,1,opt,name=http_uri,json=httpUri,proto3" json:"http_uri,omitempty"`
 	// Duration after which the cached JWKS should be expired. If not specified, default cache
 	// duration is 5 minutes.

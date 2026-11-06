@@ -473,8 +473,8 @@ const (
 	// for the authentication or the authorization plugins.
 	FailStrategy_FAIL_OPEN FailStrategy = 1
 	// New plugin instance will be created for the new request if the Wasm plugin
-	// has failed. This only applies for “proxy_wasm::FailState::RuntimeError“.
-	// For all other error types this will fallback to “FAIL_CLOSED“.
+	// has failed. This only applies for ``proxy_wasm::FailState::RuntimeError``.
+	// For all other error types this will fallback to ``FAIL_CLOSED``.
 	FailStrategy_FAIL_RELOAD FailStrategy = 2
 )
 
@@ -587,7 +587,7 @@ type WasmPlugin struct {
 	// within the proxy container, and `http[s]://` for `.wasm` module files
 	// hosted remotely.
 	// +kubebuilder:validation:MinLength=1
-	// +kubebuilder:validation:XValidation:message="url must have schema one of [http, https, file, oci]",rule="isURL(self) ? (url(self).getScheme() in [”, 'http', 'https', 'oci', 'file']) : (isURL('http://' + self) && url('http://' +self).getScheme() in [”, 'http', 'https', 'oci', 'file'])"
+	// +kubebuilder:validation:XValidation:message="url must have schema one of [http, https, file, oci]",rule="isURL(self) ? (url(self).getScheme() in ['', 'http', 'https', 'oci', 'file']) : (isURL('http://' + self) && url('http://' +self).getScheme() in ['', 'http', 'https', 'oci', 'file'])"
 	Url string `protobuf:"bytes,2,opt,name=url,proto3" json:"url,omitempty"`
 	// SHA256 checksum that will be used to verify Wasm module or OCI container.
 	// If the `url` field already references a SHA256 (using the `@sha256:`
@@ -618,8 +618,8 @@ type WasmPlugin struct {
 	// We can observe two major streams for signing OCI images: Cosign from Sigstore and Notary,
 	// which is used in Docker Content Trust.
 	// In case of Wasm module, multiple approaches are still in discussion.
-	//   - https://github.com/WebAssembly/design/issues/1413
-	//   - https://github.com/wasm-signatures/design (various signing tools are enumerated)
+	//  * https://github.com/WebAssembly/design/issues/1413
+	//  * https://github.com/wasm-signatures/design (various signing tools are enumerated)
 	//
 	// In addition, for each method for signing&verifying, we may need to consider to provide
 	// additional data or configuration (e.g., key rolling, KMS, root certs, ...) as well.

@@ -683,9 +683,9 @@ type HTTPRoute struct {
 	//
 	// **NOTE**:
 	//
-	//  1. Only one level delegation is supported.
-	//  2. The delegate's HTTPMatchRequest must be a strict subset of the root's,
-	//     otherwise there is a conflict and the HTTPRoute will not take effect.
+	// 1. Only one level delegation is supported.
+	// 2. The delegate's HTTPMatchRequest must be a strict subset of the root's,
+	//    otherwise there is a conflict and the HTTPRoute will not take effect.
 	Delegate *Delegate `protobuf:"bytes,20,opt,name=delegate,proto3" json:"delegate,omitempty"`
 	// Rewrite HTTP URIs and Authority headers. Rewrite cannot be used with
 	// Redirect primitive. Rewrite will be performed before forwarding.
@@ -1387,10 +1387,9 @@ type HTTPMatchRequest struct {
 	// To provide an empty value, use `{}`, for example:
 	//
 	// ```
-	//   - match:
-	//   - headers:
-	//     myheader: {}
-	//
+	//  - match:
+	//    - headers:
+	//        myheader: {}
 	// ```
 	// **Note:** The keys `uri`, `scheme`, `method`, and `authority` will be ignored.
 	Headers map[string]*StringMatch `protobuf:"bytes,5,rep,name=headers,proto3" json:"headers,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
@@ -1414,21 +1413,21 @@ type HTTPMatchRequest struct {
 	//
 	// Ex:
 	//
-	//   - For a query parameter like "?key=true", the map key would be "key" and
-	//     the string match could be defined as `exact: "true"`.
+	// - For a query parameter like "?key=true", the map key would be "key" and
+	//   the string match could be defined as `exact: "true"`.
 	//
-	//   - For a query parameter like "?key", the map key would be "key" and the
-	//     string match could be defined as `exact: ""`.
+	// - For a query parameter like "?key", the map key would be "key" and the
+	//   string match could be defined as `exact: ""`.
 	//
-	//   - For a query parameter like "?key=abc" or "?key=abx", the map key would be "key" and the
-	//     string match could be defined as `prefix: "ab"`.
+	// - For a query parameter like "?key=abc" or "?key=abx", the map key would be "key" and the
+	//   string match could be defined as `prefix: "ab"`.
 	//
-	//   - For a query parameter like "?key=123", the map key would be "key" and the
-	//     string match could be defined as `regex: "\d+$"`. Note that this
-	//     configuration will only match values like "123" but not "a123" or "123a".
+	// - For a query parameter like "?key=123", the map key would be "key" and the
+	//   string match could be defined as `regex: "\d+$"`. Note that this
+	//   configuration will only match values like "123" but not "a123" or "123a".
 	//
-	//   - For a query parameter like "?key=ab123" or "?key=xy123", the map key would be "key" and the
-	//     string match could be defined as `suffix: "123"`.
+	// - For a query parameter like "?key=ab123" or "?key=xy123", the map key would be "key" and the
+	//   string match could be defined as `suffix: "123"`.
 	QueryParams map[string]*StringMatch `protobuf:"bytes,9,rep,name=query_params,json=queryParams,proto3" json:"query_params,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	// Flag to specify whether the URI matching should be case-insensitive.
 	//

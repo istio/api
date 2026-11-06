@@ -452,6 +452,7 @@ type DestinationRule struct {
 	// the destination rule is declared in. Similarly, the value "*" is reserved and
 	// defines an export to all namespaces.
 	ExportTo []string `protobuf:"bytes,4,rep,name=export_to,json=exportTo,proto3" json:"export_to,omitempty"`
+	//
 	// Criteria used to select the specific set of pods/VMs on which this
 	// `DestinationRule` configuration should be applied. If specified, the `DestinationRule`
 	// configuration will be applied only to the workload instances matching the workload selector
@@ -1225,6 +1226,13 @@ type OutlierDetection struct {
 	// if the value of `consecutiveGatewayErrors` is greater than or equal to
 	// the value of `consecutive5xxErrors`, `consecutiveGatewayErrors` will have
 	// no effect.
+	//
+	// Because this threshold only counts *consecutive* failures, a host whose
+	// errors are interleaved with successful requests may never reach it even
+	// if its overall failure rate is high, e.g. a host that fails every other
+	// request will never accumulate 5 consecutive errors. Use
+	// `failurePercentageThreshold` to eject hosts based on failure rate over
+	// the analysis `interval` instead of requiring consecutive failures.
 	Consecutive_5XxErrors *wrappers.UInt32Value `protobuf:"bytes,7,opt,name=consecutive_5xx_errors,json=consecutive5xxErrors,proto3" json:"consecutive_5xx_errors,omitempty"`
 	// Time interval between ejection sweep analysis. format:
 	// 1h/1m/1s/1ms. MUST be >=1ms. Default is 10s.
@@ -1260,8 +1268,19 @@ type OutlierDetection struct {
 	// +protoc-gen-crd:list-value-validation:Minimum=100
 	// +protoc-gen-crd:list-value-validation:Maximum=599
 	OutlierDetectionHttpErrorCodes []uint32 `protobuf:"varint,10,rep,packed,name=outlier_detection_http_error_codes,json=outlierDetectionHttpErrorCodes,proto3" json:"outlier_detection_http_error_codes,omitempty"`
-	unknownFields                  protoimpl.UnknownFields
-	sizeCache                      protoimpl.SizeCache
+	// The failure percentage to use when determining failure percentage-based outlier detection. If
+	// the failure percentage of a given host is greater than or equal to this value, it will be
+	// ejected. Defaults to 85.
+	//
+	// Unlike `consecutive5xxErrors` and `consecutiveGatewayErrors`, this does not require failures
+	// to occur back-to-back, so it will still eject a host whose failure rate is high but whose
+	// errors are interspersed with successful requests.
+	//
+	// +kubebuilder:validation:Maximum=100
+	// +kubebuilder:validation:Minimum=0
+	FailurePercentageThreshold *wrappers.UInt32Value `protobuf:"bytes,11,opt,name=failure_percentage_threshold,json=failurePercentageThreshold,proto3" json:"failure_percentage_threshold,omitempty"`
+	unknownFields              protoimpl.UnknownFields
+	sizeCache                  protoimpl.SizeCache
 }
 
 func (x *OutlierDetection) Reset() {
@@ -1361,6 +1380,13 @@ func (x *OutlierDetection) GetMinHealthPercent() int32 {
 func (x *OutlierDetection) GetOutlierDetectionHttpErrorCodes() []uint32 {
 	if x != nil {
 		return x.OutlierDetectionHttpErrorCodes
+	}
+	return nil
+}
+
+func (x *OutlierDetection) GetFailurePercentageThreshold() *wrappers.UInt32Value {
+	if x != nil {
+		return x.FailurePercentageThreshold
 	}
 	return nil
 }
@@ -1467,6 +1493,17 @@ type ClientTLSSettings struct {
 	// Otherwise the field will be applicable only at gateways, and
 	// sidecars will continue to use the certificate paths.
 	CredentialName string `protobuf:"bytes,7,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
+	// The name of the secret or the configmap that holds CA certificates used to
+	// verify the server's certificate. Allows sourcing the trust bundle
+	// independently from `credentialName`.
+	//
+	// Applies to `SIMPLE` and `MUTUAL` TLS modes. Should be empty when using `ISTIO_MUTUAL`.
+	//
+	// **NOTE:** This field is applicable at sidecars only if
+	// `DestinationRule` has a `workloadSelector` specified.
+	// Otherwise the field will be applicable only at gateways, and
+	// sidecars will continue to use the certificate paths.
+	CaCertCredentialName string `protobuf:"bytes,10,opt,name=ca_cert_credential_name,json=caCertCredentialName,proto3" json:"ca_cert_credential_name,omitempty"`
 	// A list of alternate names to verify the subject identity in the
 	// certificate. If specified, the proxy will verify that the server
 	// certificate's subject alt name matches one of the specified values.
@@ -1555,6 +1592,13 @@ func (x *ClientTLSSettings) GetCaCertificates() string {
 func (x *ClientTLSSettings) GetCredentialName() string {
 	if x != nil {
 		return x.CredentialName
+	}
+	return ""
+}
+
+func (x *ClientTLSSettings) GetCaCertCredentialName() string {
+	if x != nil {
+		return x.CaCertCredentialName
 	}
 	return ""
 }
@@ -1652,22 +1696,21 @@ type LocalityLoadBalancerSetting struct {
 	// failoverPriority is an ordered list of labels used to sort endpoints to do priority based load balancing.
 	// This is to support traffic failover across different groups of endpoints.
 	// Two kinds of labels can be specified:
+	// - Specify only label keys `[key1, key2, key3]`, istio would compare the label values of client with endpoints.
+	//   Suppose there are total N label keys `[key1, key2, key3, ...keyN]` specified:
 	//
-	//   - Specify only label keys `[key1, key2, key3]`, istio would compare the label values of client with endpoints.
-	//     Suppose there are total N label keys `[key1, key2, key3, ...keyN]` specified:
+	//   1. Endpoints matching all N labels with the client proxy have priority P(0) i.e. the highest priority.
+	//   2. Endpoints matching the first N-1 labels with the client proxy have priority P(1) i.e. second highest priority.
+	//   3. By extension of this logic, endpoints matching only the first label with the client proxy has priority P(N-1) i.e. second lowest priority.
+	//   4. All the other endpoints have priority P(N) i.e. lowest priority.
 	//
-	//     1. Endpoints matching all N labels with the client proxy have priority P(0) i.e. the highest priority.
-	//     2. Endpoints matching the first N-1 labels with the client proxy have priority P(1) i.e. second highest priority.
-	//     3. By extension of this logic, endpoints matching only the first label with the client proxy has priority P(N-1) i.e. second lowest priority.
-	//     4. All the other endpoints have priority P(N) i.e. lowest priority.
+	// - Specify labels with key and value `[key1=value1, key2=value2, key3=value3]`, istio would compare the labels with endpoints.
+	//   Suppose there are total N labels `[key1=value1, key2=value2, key3=value3, ...keyN=valueN]` specified:
 	//
-	//   - Specify labels with key and value `[key1=value1, key2=value2, key3=value3]`, istio would compare the labels with endpoints.
-	//     Suppose there are total N labels `[key1=value1, key2=value2, key3=value3, ...keyN=valueN]` specified:
-	//
-	//     1. Endpoints matching all N labels have priority P(0) i.e. the highest priority.
-	//     2. Endpoints matching the first N-1 labels have priority P(1) i.e. second highest priority.
-	//     3. By extension of this logic, endpoints matching only the first label has priority P(N-1) i.e. second lowest priority.
-	//     4. All the other endpoints have priority P(N) i.e. lowest priority.
+	//   1. Endpoints matching all N labels have priority P(0) i.e. the highest priority.
+	//   2. Endpoints matching the first N-1 labels have priority P(1) i.e. second highest priority.
+	//   3. By extension of this logic, endpoints matching only the first label has priority P(N-1) i.e. second lowest priority.
+	//   4. All the other endpoints have priority P(N) i.e. lowest priority.
 	//
 	// Note: For a label to be considered for match, the previous labels must match, i.e. nth label would be considered matched only if first n-1 labels match.
 	//
@@ -1893,22 +1936,21 @@ type ZoneAwareLoadBalancerSetting struct {
 	// `topology.istio.io/subzone` labels.
 	//
 	// Two kinds of labels can be specified:
+	// - Specify only label keys `[key1, key2, key3]`, istio would compare the label values of client with endpoints.
+	//   Suppose there are total N label keys `[key1, key2, key3, ...keyN]` specified:
 	//
-	//   - Specify only label keys `[key1, key2, key3]`, istio would compare the label values of client with endpoints.
-	//     Suppose there are total N label keys `[key1, key2, key3, ...keyN]` specified:
+	//   1. Endpoints matching all N labels with the client proxy have priority P(0) i.e. the highest priority.
+	//   2. Endpoints matching the first N-1 labels with the client proxy have priority P(1) i.e. second highest priority.
+	//   3. By extension of this logic, endpoints matching only the first label with the client proxy has priority P(N-1) i.e. second lowest priority.
+	//   4. All the other endpoints have priority P(N) i.e. lowest priority.
 	//
-	//     1. Endpoints matching all N labels with the client proxy have priority P(0) i.e. the highest priority.
-	//     2. Endpoints matching the first N-1 labels with the client proxy have priority P(1) i.e. second highest priority.
-	//     3. By extension of this logic, endpoints matching only the first label with the client proxy has priority P(N-1) i.e. second lowest priority.
-	//     4. All the other endpoints have priority P(N) i.e. lowest priority.
+	// - Specify labels with key and value `[key1=value1, key2=value2, key3=value3]`, istio would compare the labels with endpoints.
+	//   Suppose there are total N labels `[key1=value1, key2=value2, key3=value3, ...keyN=valueN]` specified:
 	//
-	//   - Specify labels with key and value `[key1=value1, key2=value2, key3=value3]`, istio would compare the labels with endpoints.
-	//     Suppose there are total N labels `[key1=value1, key2=value2, key3=value3, ...keyN=valueN]` specified:
-	//
-	//     1. Endpoints matching all N labels have priority P(0) i.e. the highest priority.
-	//     2. Endpoints matching the first N-1 labels have priority P(1) i.e. second highest priority.
-	//     3. By extension of this logic, endpoints matching only the first label has priority P(N-1) i.e. second lowest priority.
-	//     4. All the other endpoints have priority P(N) i.e. lowest priority.
+	//   1. Endpoints matching all N labels have priority P(0) i.e. the highest priority.
+	//   2. Endpoints matching the first N-1 labels have priority P(1) i.e. second highest priority.
+	//   3. By extension of this logic, endpoints matching only the first label has priority P(N-1) i.e. second lowest priority.
+	//   4. All the other endpoints have priority P(N) i.e. lowest priority.
 	//
 	// Note: For a label to be considered for match, the previous labels must match, i.e. nth label would be considered matched only if first n-1 labels match.
 	//
@@ -2028,6 +2070,7 @@ type TrafficPolicy_PortTrafficPolicy struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Specifies the number of a port on the destination service
 	// on which this policy is being applied.
+	//
 	Port *PortSelector `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
 	// Settings controlling the load balancer algorithms.
 	LoadBalancer *LoadBalancerSettings `protobuf:"bytes,2,opt,name=load_balancer,json=loadBalancer,proto3" json:"load_balancer,omitempty"`
@@ -2110,8 +2153,8 @@ type TrafficPolicy_TunnelSettings struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Specifies which protocol to use for tunneling the downstream connection.
 	// Supported protocols are:
-	//   - CONNECT - uses HTTP CONNECT;
-	//   - POST - uses HTTP POST.
+	//   * CONNECT - uses HTTP CONNECT;
+	//   * POST - uses HTTP POST.
 	//
 	// CONNECT is used by default if not specified.
 	//
@@ -2239,6 +2282,7 @@ type TrafficPolicy_RetryBudget struct {
 	// allowed because of the minimum retry concurrency.
 	//
 	// Defaults to 3.
+	//
 	MinRetryConcurrency uint32 `protobuf:"varint,2,opt,name=min_retry_concurrency,json=minRetryConcurrency,proto3" json:"min_retry_concurrency,omitempty"`
 	// Specifies the duration in which requests will be considered when calculating
 	// the budget for retries. This parameter alters the way in which the retry budget
@@ -2892,10 +2936,8 @@ type ConnectionPoolSettings_TCPSettings struct {
 	// annotation) which applies to all inbound connections.
 	// ```
 	// proxy.istio.io/config: |-
-	//
-	//	proxyMetadata:
-	//	   ISTIO_META_IDLE_TIMEOUT: "100s"
-	//
+	//    proxyMetadata:
+	//       ISTIO_META_IDLE_TIMEOUT: "100s"
 	// ```
 	// +protoc-gen-crd:duration-validation:none
 	IdleTimeout   *duration.Duration `protobuf:"bytes,5,opt,name=idle_timeout,json=idleTimeout,proto3" json:"idle_timeout,omitempty"`
@@ -3556,7 +3598,7 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\x0fH2UpgradePolicy\x12\v\n" +
 	"\aDEFAULT\x10\x00\x12\x12\n" +
 	"\x0eDO_NOT_UPGRADE\x10\x01\x12\v\n" +
-	"\aUPGRADE\x10\x02\"\xd6\x05\n" +
+	"\aUPGRADE\x10\x02\"\xb6\x06\n" +
 	"\x10OutlierDetection\x121\n" +
 	"\x12consecutive_errors\x18\x01 \x01(\x05B\x02\x18\x01R\x11consecutiveErrors\x12J\n" +
 	"\"split_external_local_origin_errors\x18\b \x01(\bR\x1esplitExternalLocalOriginErrors\x12g\n" +
@@ -3568,14 +3610,17 @@ const file_networking_v1alpha3_destination_rule_proto_rawDesc = "" +
 	"\x14max_ejection_percent\x18\x04 \x01(\x05R\x12maxEjectionPercent\x12,\n" +
 	"\x12min_health_percent\x18\x05 \x01(\x05R\x10minHealthPercent\x12J\n" +
 	"\"outlier_detection_http_error_codes\x18\n" +
-	" \x03(\rR\x1eoutlierDetectionHttpErrorCodes\"\xe4\x03\n" +
+	" \x03(\rR\x1eoutlierDetectionHttpErrorCodes\x12^\n" +
+	"\x1cfailure_percentage_threshold\x18\v \x01(\v2\x1c.google.protobuf.UInt32ValueR\x1afailurePercentageThreshold\"\x9b\x04\n" +
 	"\x11ClientTLSSettings\x12H\n" +
 	"\x04mode\x18\x01 \x01(\x0e24.istio.networking.v1alpha3.ClientTLSSettings.TLSmodeR\x04mode\x12-\n" +
 	"\x12client_certificate\x18\x02 \x01(\tR\x11clientCertificate\x12\x1f\n" +
 	"\vprivate_key\x18\x03 \x01(\tR\n" +
 	"privateKey\x12'\n" +
 	"\x0fca_certificates\x18\x04 \x01(\tR\x0ecaCertificates\x12'\n" +
-	"\x0fcredential_name\x18\a \x01(\tR\x0ecredentialName\x12*\n" +
+	"\x0fcredential_name\x18\a \x01(\tR\x0ecredentialName\x125\n" +
+	"\x17ca_cert_credential_name\x18\n" +
+	" \x01(\tR\x14caCertCredentialName\x12*\n" +
 	"\x11subject_alt_names\x18\x05 \x03(\tR\x0fsubjectAltNames\x12\x10\n" +
 	"\x03sni\x18\x06 \x01(\tR\x03sni\x12L\n" +
 	"\x14insecure_skip_verify\x18\b \x01(\v2\x1a.google.protobuf.BoolValueR\x12insecureSkipVerify\x12\x15\n" +
@@ -3699,47 +3744,48 @@ var file_networking_v1alpha3_destination_rule_proto_depIdxs = []int32{
 	36, // 27: istio.networking.v1alpha3.OutlierDetection.consecutive_5xx_errors:type_name -> google.protobuf.UInt32Value
 	34, // 28: istio.networking.v1alpha3.OutlierDetection.interval:type_name -> google.protobuf.Duration
 	34, // 29: istio.networking.v1alpha3.OutlierDetection.base_ejection_time:type_name -> google.protobuf.Duration
-	3,  // 30: istio.networking.v1alpha3.ClientTLSSettings.mode:type_name -> istio.networking.v1alpha3.ClientTLSSettings.TLSmode
-	37, // 31: istio.networking.v1alpha3.ClientTLSSettings.insecure_skip_verify:type_name -> google.protobuf.BoolValue
-	29, // 32: istio.networking.v1alpha3.LocalityLoadBalancerSetting.distribute:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute
-	30, // 33: istio.networking.v1alpha3.LocalityLoadBalancerSetting.failover:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Failover
-	37, // 34: istio.networking.v1alpha3.LocalityLoadBalancerSetting.enabled:type_name -> google.protobuf.BoolValue
-	37, // 35: istio.networking.v1alpha3.ZoneAwareLoadBalancerSetting.enabled:type_name -> google.protobuf.BoolValue
-	32, // 36: istio.networking.v1alpha3.ZoneAwareLoadBalancerSetting.failover:type_name -> istio.networking.v1alpha3.ZoneAwareLoadBalancerSetting.Failover
-	36, // 37: istio.networking.v1alpha3.ZoneAwareLoadBalancerSetting.min_cluster_size:type_name -> google.protobuf.UInt32Value
-	38, // 38: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.port:type_name -> istio.networking.v1alpha3.PortSelector
-	7,  // 39: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.load_balancer:type_name -> istio.networking.v1alpha3.LoadBalancerSettings
-	9,  // 40: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.connection_pool:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings
-	10, // 41: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.outlier_detection:type_name -> istio.networking.v1alpha3.OutlierDetection
-	11, // 42: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.tls:type_name -> istio.networking.v1alpha3.ClientTLSSettings
-	0,  // 43: istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol.version:type_name -> istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol.VERSION
-	35, // 44: istio.networking.v1alpha3.TrafficPolicy.RetryBudget.percent:type_name -> google.protobuf.DoubleValue
-	34, // 45: istio.networking.v1alpha3.TrafficPolicy.RetryBudget.budget_interval:type_name -> google.protobuf.Duration
-	23, // 46: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.http_cookie:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie
-	21, // 47: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.ring_hash:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.RingHash
-	22, // 48: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.maglev:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.MagLev
-	34, // 49: istio.networking.v1alpha3.LoadBalancerSettings.BackendUtilizationLB.weight_stabilization_period:type_name -> google.protobuf.Duration
-	34, // 50: istio.networking.v1alpha3.LoadBalancerSettings.BackendUtilizationLB.weight_expiration_period:type_name -> google.protobuf.Duration
-	34, // 51: istio.networking.v1alpha3.LoadBalancerSettings.BackendUtilizationLB.weight_update_period:type_name -> google.protobuf.Duration
-	34, // 52: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.ttl:type_name -> google.protobuf.Duration
-	24, // 53: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.attributes:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.Attribute
-	34, // 54: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.connect_timeout:type_name -> google.protobuf.Duration
-	27, // 55: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.tcp_keepalive:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive
-	34, // 56: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.max_connection_duration:type_name -> google.protobuf.Duration
-	34, // 57: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.idle_timeout:type_name -> google.protobuf.Duration
-	34, // 58: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.idle_timeout:type_name -> google.protobuf.Duration
-	2,  // 59: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.h2_upgrade_policy:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicy
-	28, // 60: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.http2_keep_alive:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.ConnectionKeepalive
-	34, // 61: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.time:type_name -> google.protobuf.Duration
-	34, // 62: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.interval:type_name -> google.protobuf.Duration
-	34, // 63: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.ConnectionKeepalive.interval:type_name -> google.protobuf.Duration
-	34, // 64: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.ConnectionKeepalive.timeout:type_name -> google.protobuf.Duration
-	31, // 65: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.to:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.ToEntry
-	66, // [66:66] is the sub-list for method output_type
-	66, // [66:66] is the sub-list for method input_type
-	66, // [66:66] is the sub-list for extension type_name
-	66, // [66:66] is the sub-list for extension extendee
-	0,  // [0:66] is the sub-list for field type_name
+	36, // 30: istio.networking.v1alpha3.OutlierDetection.failure_percentage_threshold:type_name -> google.protobuf.UInt32Value
+	3,  // 31: istio.networking.v1alpha3.ClientTLSSettings.mode:type_name -> istio.networking.v1alpha3.ClientTLSSettings.TLSmode
+	37, // 32: istio.networking.v1alpha3.ClientTLSSettings.insecure_skip_verify:type_name -> google.protobuf.BoolValue
+	29, // 33: istio.networking.v1alpha3.LocalityLoadBalancerSetting.distribute:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute
+	30, // 34: istio.networking.v1alpha3.LocalityLoadBalancerSetting.failover:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Failover
+	37, // 35: istio.networking.v1alpha3.LocalityLoadBalancerSetting.enabled:type_name -> google.protobuf.BoolValue
+	37, // 36: istio.networking.v1alpha3.ZoneAwareLoadBalancerSetting.enabled:type_name -> google.protobuf.BoolValue
+	32, // 37: istio.networking.v1alpha3.ZoneAwareLoadBalancerSetting.failover:type_name -> istio.networking.v1alpha3.ZoneAwareLoadBalancerSetting.Failover
+	36, // 38: istio.networking.v1alpha3.ZoneAwareLoadBalancerSetting.min_cluster_size:type_name -> google.protobuf.UInt32Value
+	38, // 39: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.port:type_name -> istio.networking.v1alpha3.PortSelector
+	7,  // 40: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.load_balancer:type_name -> istio.networking.v1alpha3.LoadBalancerSettings
+	9,  // 41: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.connection_pool:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings
+	10, // 42: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.outlier_detection:type_name -> istio.networking.v1alpha3.OutlierDetection
+	11, // 43: istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy.tls:type_name -> istio.networking.v1alpha3.ClientTLSSettings
+	0,  // 44: istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol.version:type_name -> istio.networking.v1alpha3.TrafficPolicy.ProxyProtocol.VERSION
+	35, // 45: istio.networking.v1alpha3.TrafficPolicy.RetryBudget.percent:type_name -> google.protobuf.DoubleValue
+	34, // 46: istio.networking.v1alpha3.TrafficPolicy.RetryBudget.budget_interval:type_name -> google.protobuf.Duration
+	23, // 47: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.http_cookie:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie
+	21, // 48: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.ring_hash:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.RingHash
+	22, // 49: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.maglev:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.MagLev
+	34, // 50: istio.networking.v1alpha3.LoadBalancerSettings.BackendUtilizationLB.weight_stabilization_period:type_name -> google.protobuf.Duration
+	34, // 51: istio.networking.v1alpha3.LoadBalancerSettings.BackendUtilizationLB.weight_expiration_period:type_name -> google.protobuf.Duration
+	34, // 52: istio.networking.v1alpha3.LoadBalancerSettings.BackendUtilizationLB.weight_update_period:type_name -> google.protobuf.Duration
+	34, // 53: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.ttl:type_name -> google.protobuf.Duration
+	24, // 54: istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.attributes:type_name -> istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie.Attribute
+	34, // 55: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.connect_timeout:type_name -> google.protobuf.Duration
+	27, // 56: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.tcp_keepalive:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive
+	34, // 57: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.max_connection_duration:type_name -> google.protobuf.Duration
+	34, // 58: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.idle_timeout:type_name -> google.protobuf.Duration
+	34, // 59: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.idle_timeout:type_name -> google.protobuf.Duration
+	2,  // 60: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.h2_upgrade_policy:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicy
+	28, // 61: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.http2_keep_alive:type_name -> istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.ConnectionKeepalive
+	34, // 62: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.time:type_name -> google.protobuf.Duration
+	34, // 63: istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive.interval:type_name -> google.protobuf.Duration
+	34, // 64: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.ConnectionKeepalive.interval:type_name -> google.protobuf.Duration
+	34, // 65: istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.ConnectionKeepalive.timeout:type_name -> google.protobuf.Duration
+	31, // 66: istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.to:type_name -> istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute.ToEntry
+	67, // [67:67] is the sub-list for method output_type
+	67, // [67:67] is the sub-list for method input_type
+	67, // [67:67] is the sub-list for extension type_name
+	67, // [67:67] is the sub-list for extension extendee
+	0,  // [0:67] is the sub-list for field type_name
 }
 
 func init() { file_networking_v1alpha3_destination_rule_proto_init() }
