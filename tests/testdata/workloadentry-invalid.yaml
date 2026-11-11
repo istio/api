@@ -59,3 +59,14 @@ spec:
 # TODO:
 # if its not an IP it must be a valid fqdn (0..255, ValidateDNS1123Labels)
 # validate labels (k8s)
+---
+_err: port name must be valid
+apiVersion: networking.istio.io/v1
+kind: WorkloadEntry
+metadata:
+  name: port-name-length-boundary
+spec:
+  address: 1.2.3.4
+  # 64 character port names.
+  ports:
+    http-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: 80
