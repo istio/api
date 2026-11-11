@@ -1,14 +1,14 @@
-version: v1
-build:
-  excludes:
-    - common-protos
+version: v2
+modules:
+  - path: .
+    excludes:
+      - common-protos
 breaking:
   use:
-  - WIRE_JSON
+    - WIRE_JSON
 lint:
   use:
     - BASIC
   except:
     - FIELD_LOWER_SNAKE_CASE
     - PACKAGE_DIRECTORY_MATCH
-  allow_comment_ignores: true
