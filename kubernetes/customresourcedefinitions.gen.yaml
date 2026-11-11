@@ -8922,6 +8922,16 @@ spec:
                           items:
                             type: string
                           type: array
+                        credentialFetchTimeout:
+                          description: 'Optional: the maximum duration the proxy will
+                            wait for the initial delivery of the credential(s) referenced
+                            by `credentialName`, `credentialNames`, or `caCertCredentialName`
+                            from the configured secret discovery service (SDS) provider,
+                            before proceeding with an empty credential for this listener.'
+                          type: string
+                          x-kubernetes-validations:
+                          - message: must be a valid duration greater than 1ms
+                            rule: duration(self) >= duration('1ms')
                         credentialName:
                           description: For gateways running on Kubernetes, the name
                             of the secret that holds the TLS certs including the CA
@@ -9216,6 +9226,16 @@ spec:
                           items:
                             type: string
                           type: array
+                        credentialFetchTimeout:
+                          description: 'Optional: the maximum duration the proxy will
+                            wait for the initial delivery of the credential(s) referenced
+                            by `credentialName`, `credentialNames`, or `caCertCredentialName`
+                            from the configured secret discovery service (SDS) provider,
+                            before proceeding with an empty credential for this listener.'
+                          type: string
+                          x-kubernetes-validations:
+                          - message: must be a valid duration greater than 1ms
+                            rule: duration(self) >= duration('1ms')
                         credentialName:
                           description: For gateways running on Kubernetes, the name
                             of the secret that holds the TLS certs including the CA
@@ -9510,6 +9530,16 @@ spec:
                           items:
                             type: string
                           type: array
+                        credentialFetchTimeout:
+                          description: 'Optional: the maximum duration the proxy will
+                            wait for the initial delivery of the credential(s) referenced
+                            by `credentialName`, `credentialNames`, or `caCertCredentialName`
+                            from the configured secret discovery service (SDS) provider,
+                            before proceeding with an empty credential for this listener.'
+                          type: string
+                          x-kubernetes-validations:
+                          - message: must be a valid duration greater than 1ms
+                            rule: duration(self) >= duration('1ms')
                         credentialName:
                           description: For gateways running on Kubernetes, the name
                             of the secret that holds the TLS certs including the CA
@@ -11194,6 +11224,16 @@ spec:
                           items:
                             type: string
                           type: array
+                        credentialFetchTimeout:
+                          description: 'Optional: the maximum duration the proxy will
+                            wait for the initial delivery of the credential(s) referenced
+                            by `credentialName`, `credentialNames`, or `caCertCredentialName`
+                            from the configured secret discovery service (SDS) provider,
+                            before proceeding with an empty credential for this listener.'
+                          type: string
+                          x-kubernetes-validations:
+                          - message: must be a valid duration greater than 1ms
+                            rule: duration(self) >= duration('1ms')
                         credentialName:
                           description: For gateways running on Kubernetes, the name
                             of the secret that holds the TLS certs including the CA
@@ -11828,6 +11868,16 @@ spec:
                           items:
                             type: string
                           type: array
+                        credentialFetchTimeout:
+                          description: 'Optional: the maximum duration the proxy will
+                            wait for the initial delivery of the credential(s) referenced
+                            by `credentialName`, `credentialNames`, or `caCertCredentialName`
+                            from the configured secret discovery service (SDS) provider,
+                            before proceeding with an empty credential for this listener.'
+                          type: string
+                          x-kubernetes-validations:
+                          - message: must be a valid duration greater than 1ms
+                            rule: duration(self) >= duration('1ms')
                         credentialName:
                           description: For gateways running on Kubernetes, the name
                             of the secret that holds the TLS certs including the CA
@@ -12462,6 +12512,16 @@ spec:
                           items:
                             type: string
                           type: array
+                        credentialFetchTimeout:
+                          description: 'Optional: the maximum duration the proxy will
+                            wait for the initial delivery of the credential(s) referenced
+                            by `credentialName`, `credentialNames`, or `caCertCredentialName`
+                            from the configured secret discovery service (SDS) provider,
+                            before proceeding with an empty credential for this listener.'
+                          type: string
+                          x-kubernetes-validations:
+                          - message: must be a valid duration greater than 1ms
+                            rule: duration(self) >= duration('1ms')
                         credentialName:
                           description: For gateways running on Kubernetes, the name
                             of the secret that holds the TLS certs including the CA
