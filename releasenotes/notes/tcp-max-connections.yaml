@@ -1,0 +1,8 @@
+apiVersion: release-notes/v2
+kind: bug-fix
+area: documentation
+issue:
+  - https://github.com/istio/api/issues/3509
+releaseNotes:
+  - |
+    **Fixed** the `maxConnections` documentation to include HTTP/2 connections and explain that the circuit breaker limit can be exceeded.

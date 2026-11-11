@@ -892,8 +892,9 @@ spec:
                                       1ms
                                     rule: duration(self) >= duration('1ms')
                                 maxConnections:
-                                  description: Maximum number of HTTP1 /TCP connections
-                                    to a destination host.
+                                  description: Maximum number of TCP connections to
+                                    a destination host, including connections used
+                                    for HTTP/1.1 and HTTP/2.
                                   format: int32
                                   type: integer
                                 tcpKeepalive:
@@ -1385,8 +1386,9 @@ spec:
                                             than 1ms
                                           rule: duration(self) >= duration('1ms')
                                       maxConnections:
-                                        description: Maximum number of HTTP1 /TCP
-                                          connections to a destination host.
+                                        description: Maximum number of TCP connections
+                                          to a destination host, including connections
+                                          used for HTTP/1.1 and HTTP/2.
                                         format: int32
                                         type: integer
                                       tcpKeepalive:
@@ -2099,8 +2101,8 @@ spec:
                             - message: must be a valid duration greater than 1ms
                               rule: duration(self) >= duration('1ms')
                           maxConnections:
-                            description: Maximum number of HTTP1 /TCP connections
-                              to a destination host.
+                            description: Maximum number of TCP connections to a destination
+                              host, including connections used for HTTP/1.1 and HTTP/2.
                             format: int32
                             type: integer
                           tcpKeepalive:
@@ -2579,8 +2581,9 @@ spec:
                                       1ms
                                     rule: duration(self) >= duration('1ms')
                                 maxConnections:
-                                  description: Maximum number of HTTP1 /TCP connections
-                                    to a destination host.
+                                  description: Maximum number of TCP connections to
+                                    a destination host, including connections used
+                                    for HTTP/1.1 and HTTP/2.
                                   format: int32
                                   type: integer
                                 tcpKeepalive:
@@ -3428,8 +3431,9 @@ spec:
                                       1ms
                                     rule: duration(self) >= duration('1ms')
                                 maxConnections:
-                                  description: Maximum number of HTTP1 /TCP connections
-                                    to a destination host.
+                                  description: Maximum number of TCP connections to
+                                    a destination host, including connections used
+                                    for HTTP/1.1 and HTTP/2.
                                   format: int32
                                   type: integer
                                 tcpKeepalive:
@@ -3921,8 +3925,9 @@ spec:
                                             than 1ms
                                           rule: duration(self) >= duration('1ms')
                                       maxConnections:
-                                        description: Maximum number of HTTP1 /TCP
-                                          connections to a destination host.
+                                        description: Maximum number of TCP connections
+                                          to a destination host, including connections
+                                          used for HTTP/1.1 and HTTP/2.
                                         format: int32
                                         type: integer
                                       tcpKeepalive:
@@ -4635,8 +4640,8 @@ spec:
                             - message: must be a valid duration greater than 1ms
                               rule: duration(self) >= duration('1ms')
                           maxConnections:
-                            description: Maximum number of HTTP1 /TCP connections
-                              to a destination host.
+                            description: Maximum number of TCP connections to a destination
+                              host, including connections used for HTTP/1.1 and HTTP/2.
                             format: int32
                             type: integer
                           tcpKeepalive:
@@ -5115,8 +5120,9 @@ spec:
                                       1ms
                                     rule: duration(self) >= duration('1ms')
                                 maxConnections:
-                                  description: Maximum number of HTTP1 /TCP connections
-                                    to a destination host.
+                                  description: Maximum number of TCP connections to
+                                    a destination host, including connections used
+                                    for HTTP/1.1 and HTTP/2.
                                   format: int32
                                   type: integer
                                 tcpKeepalive:
@@ -5964,8 +5970,9 @@ spec:
                                       1ms
                                     rule: duration(self) >= duration('1ms')
                                 maxConnections:
-                                  description: Maximum number of HTTP1 /TCP connections
-                                    to a destination host.
+                                  description: Maximum number of TCP connections to
+                                    a destination host, including connections used
+                                    for HTTP/1.1 and HTTP/2.
                                   format: int32
                                   type: integer
                                 tcpKeepalive:
@@ -6457,8 +6464,9 @@ spec:
                                             than 1ms
                                           rule: duration(self) >= duration('1ms')
                                       maxConnections:
-                                        description: Maximum number of HTTP1 /TCP
-                                          connections to a destination host.
+                                        description: Maximum number of TCP connections
+                                          to a destination host, including connections
+                                          used for HTTP/1.1 and HTTP/2.
                                         format: int32
                                         type: integer
                                       tcpKeepalive:
@@ -7171,8 +7179,8 @@ spec:
                             - message: must be a valid duration greater than 1ms
                               rule: duration(self) >= duration('1ms')
                           maxConnections:
-                            description: Maximum number of HTTP1 /TCP connections
-                              to a destination host.
+                            description: Maximum number of TCP connections to a destination
+                              host, including connections used for HTTP/1.1 and HTTP/2.
                             format: int32
                             type: integer
                           tcpKeepalive:
@@ -7651,8 +7659,9 @@ spec:
                                       1ms
                                     rule: duration(self) >= duration('1ms')
                                 maxConnections:
-                                  description: Maximum number of HTTP1 /TCP connections
-                                    to a destination host.
+                                  description: Maximum number of TCP connections to
+                                    a destination host, including connections used
+                                    for HTTP/1.1 and HTTP/2.
                                   format: int32
                                   type: integer
                                 tcpKeepalive:
@@ -10963,8 +10972,8 @@ spec:
                         - message: must be a valid duration greater than 1ms
                           rule: duration(self) >= duration('1ms')
                       maxConnections:
-                        description: Maximum number of HTTP1 /TCP connections to a
-                          destination host.
+                        description: Maximum number of TCP connections to a destination
+                          host, including connections used for HTTP/1.1 and HTTP/2.
                         format: int32
                         type: integer
                       tcpKeepalive:
@@ -11106,8 +11115,9 @@ spec:
                               - message: must be a valid duration greater than 1ms
                                 rule: duration(self) >= duration('1ms')
                             maxConnections:
-                              description: Maximum number of HTTP1 /TCP connections
-                                to a destination host.
+                              description: Maximum number of TCP connections to a
+                                destination host, including connections used for HTTP/1.1
+                                and HTTP/2.
                               format: int32
                               type: integer
                             tcpKeepalive:
@@ -11597,8 +11607,8 @@ spec:
                         - message: must be a valid duration greater than 1ms
                           rule: duration(self) >= duration('1ms')
                       maxConnections:
-                        description: Maximum number of HTTP1 /TCP connections to a
-                          destination host.
+                        description: Maximum number of TCP connections to a destination
+                          host, including connections used for HTTP/1.1 and HTTP/2.
                         format: int32
                         type: integer
                       tcpKeepalive:
@@ -11740,8 +11750,9 @@ spec:
                               - message: must be a valid duration greater than 1ms
                                 rule: duration(self) >= duration('1ms')
                             maxConnections:
-                              description: Maximum number of HTTP1 /TCP connections
-                                to a destination host.
+                              description: Maximum number of TCP connections to a
+                                destination host, including connections used for HTTP/1.1
+                                and HTTP/2.
                               format: int32
                               type: integer
                             tcpKeepalive:
@@ -12231,8 +12242,8 @@ spec:
                         - message: must be a valid duration greater than 1ms
                           rule: duration(self) >= duration('1ms')
                       maxConnections:
-                        description: Maximum number of HTTP1 /TCP connections to a
-                          destination host.
+                        description: Maximum number of TCP connections to a destination
+                          host, including connections used for HTTP/1.1 and HTTP/2.
                         format: int32
                         type: integer
                       tcpKeepalive:
@@ -12374,8 +12385,9 @@ spec:
                               - message: must be a valid duration greater than 1ms
                                 rule: duration(self) >= duration('1ms')
                             maxConnections:
-                              description: Maximum number of HTTP1 /TCP connections
-                                to a destination host.
+                              description: Maximum number of TCP connections to a
+                                destination host, including connections used for HTTP/1.1
+                                and HTTP/2.
                               format: int32
                               type: integer
                             tcpKeepalive:
