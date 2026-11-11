@@ -301,6 +301,31 @@ If that backend becomes unhealthy, traffic will sent to <code>us-east</code>.</l
     </tr>
   </tbody>
 </table>
+<h2 id="PrometheusScrapeTargets">prometheus.istio.io/scrape-targets</h2>
+<table class="annotations">
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <td><code>prometheus.istio.io/scrape-targets</code></td>
+    </tr>
+    <tr>
+      <th>Feature Status</th>
+      <td>Alpha</td>
+    </tr>
+    <tr>
+      <th>Resource Types</th>
+      <td>[Pod]</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td><p>Declares additional application metrics endpoints to scrape and merge for workloads with
+more than one metrics-emitting container, as a comma-separated list of <code>port:path</code> pairs
+(for example, <code>8080:/metrics,9100:/metrics</code>). An omitted path defaults to <code>/metrics</code>.
+Target ports cannot use an Istio-reserved data-plane port.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
 <h2 id="ProxyConfig">proxy.istio.io/config</h2>
 <table class="annotations">
   <tbody>
