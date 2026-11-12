@@ -950,6 +950,11 @@ message ProxyConfig {
   // HTTP/2 tuning, header/path normalization, and connection limits.
   // Use `profile` within this message to apply a recommended set of defaults.
   ConnectionSettings connection_settings = 43;
+
+  // Compute resources for the injected `istio-proxy` container. Populated from the `ProxyConfig`
+  // resource; see `istio.networking.v1beta1.ProxyConfig.resources`.
+  // $hide_from_docs
+  istio.networking.v1beta1.ProxyResources resources = 44;
 }
 
 message RemoteService {

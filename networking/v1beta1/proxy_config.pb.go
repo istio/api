@@ -141,7 +141,31 @@ type ProxyConfig struct {
 	// +protoc-gen-crd:map-value-validation:MaxLength=2048
 	EnvironmentVariables map[string]string `protobuf:"bytes,3,rep,name=environment_variables,json=environmentVariables,proto3" json:"environment_variables,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	// Specifies the details of the proxy image.
-	Image         *ProxyImage `protobuf:"bytes,4,opt,name=image,proto3" json:"image,omitempty"`
+	Image *ProxyImage `protobuf:"bytes,4,opt,name=image,proto3" json:"image,omitempty"`
+	// Compute resources for the injected `istio-proxy` container. Applies to sidecar injection only.
+	//
+	// Each of `requests` and `limits` is resolved per resource name: a value set by the
+	// `sidecar.istio.io/proxyCPU`, `sidecar.istio.io/proxyMemory`, `sidecar.istio.io/proxyCPULimit` or
+	// `sidecar.istio.io/proxyMemoryLimit` pod annotation wins, then the most specific matching `ProxyConfig`
+	// (workload, then namespace, then root namespace), then the installation default
+	// (`values.global.proxy.resources`). Setting only some values keeps the others from the next level.
+	//
+	// ```yaml
+	// apiVersion: networking.istio.io/v1beta1
+	// kind: ProxyConfig
+	// metadata:
+	//   name: sidecar-size
+	//   namespace: user-namespace
+	// spec:
+	//   resources:
+	//     requests:
+	//       cpu: 50m
+	//       memory: 64Mi
+	//     limits:
+	//       cpu: 200m
+	//       memory: 128Mi
+	// ```
+	Resources     *ProxyResources `protobuf:"bytes,5,opt,name=resources,proto3" json:"resources,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -204,6 +228,74 @@ func (x *ProxyConfig) GetImage() *ProxyImage {
 	return nil
 }
 
+func (x *ProxyConfig) GetResources() *ProxyResources {
+	if x != nil {
+		return x.Resources
+	}
+	return nil
+}
+
+// Compute resource requests and limits for the proxy container.
+// Keys are resource names (`cpu`, `memory` or `ephemeral-storage`) and values are Kubernetes
+// quantities, such as `100m` or `128Mi`.
+type ProxyResources struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Minimum amount of compute resources requested by the proxy container.
+	// +protoc-gen-crd:map-value-validation:MaxLength=64
+	// +kubebuilder:validation:MaxProperties=3
+	Requests map[string]string `protobuf:"bytes,1,rep,name=requests,proto3" json:"requests,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	// Maximum amount of compute resources allowed for the proxy container.
+	// +protoc-gen-crd:map-value-validation:MaxLength=64
+	// +kubebuilder:validation:MaxProperties=3
+	Limits        map[string]string `protobuf:"bytes,2,rep,name=limits,proto3" json:"limits,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ProxyResources) Reset() {
+	*x = ProxyResources{}
+	mi := &file_networking_v1beta1_proxy_config_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ProxyResources) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProxyResources) ProtoMessage() {}
+
+func (x *ProxyResources) ProtoReflect() protoreflect.Message {
+	mi := &file_networking_v1beta1_proxy_config_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProxyResources.ProtoReflect.Descriptor instead.
+func (*ProxyResources) Descriptor() ([]byte, []int) {
+	return file_networking_v1beta1_proxy_config_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *ProxyResources) GetRequests() map[string]string {
+	if x != nil {
+		return x.Requests
+	}
+	return nil
+}
+
+func (x *ProxyResources) GetLimits() map[string]string {
+	if x != nil {
+		return x.Limits
+	}
+	return nil
+}
+
 // The following values are used to construct proxy image url.
 // format: `${hub}/${image_name}/${tag}-${image_type}`,
 // example: `registry.istio.io/release/proxyv2:1.11.1` or `registry.istio.io/release/proxyv2:1.11.1-distroless`.
@@ -221,7 +313,7 @@ type ProxyImage struct {
 
 func (x *ProxyImage) Reset() {
 	*x = ProxyImage{}
-	mi := &file_networking_v1beta1_proxy_config_proto_msgTypes[1]
+	mi := &file_networking_v1beta1_proxy_config_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -233,7 +325,7 @@ func (x *ProxyImage) String() string {
 func (*ProxyImage) ProtoMessage() {}
 
 func (x *ProxyImage) ProtoReflect() protoreflect.Message {
-	mi := &file_networking_v1beta1_proxy_config_proto_msgTypes[1]
+	mi := &file_networking_v1beta1_proxy_config_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -246,7 +338,7 @@ func (x *ProxyImage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProxyImage.ProtoReflect.Descriptor instead.
 func (*ProxyImage) Descriptor() ([]byte, []int) {
-	return file_networking_v1beta1_proxy_config_proto_rawDescGZIP(), []int{1}
+	return file_networking_v1beta1_proxy_config_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *ProxyImage) GetImageType() string {
@@ -260,13 +352,23 @@ var File_networking_v1beta1_proxy_config_proto protoreflect.FileDescriptor
 
 const file_networking_v1beta1_proxy_config_proto_rawDesc = "" +
 	"\n" +
-	"%networking/v1beta1/proxy_config.proto\x12\x18istio.networking.v1beta1\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1btype/v1beta1/selector.proto\"\x89\x03\n" +
+	"%networking/v1beta1/proxy_config.proto\x12\x18istio.networking.v1beta1\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1btype/v1beta1/selector.proto\"\xd1\x03\n" +
 	"\vProxyConfig\x12@\n" +
 	"\bselector\x18\x01 \x01(\v2$.istio.type.v1beta1.WorkloadSelectorR\bselector\x12=\n" +
 	"\vconcurrency\x18\x02 \x01(\v2\x1b.google.protobuf.Int32ValueR\vconcurrency\x12t\n" +
 	"\x15environment_variables\x18\x03 \x03(\v2?.istio.networking.v1beta1.ProxyConfig.EnvironmentVariablesEntryR\x14environmentVariables\x12:\n" +
-	"\x05image\x18\x04 \x01(\v2$.istio.networking.v1beta1.ProxyImageR\x05image\x1aG\n" +
+	"\x05image\x18\x04 \x01(\v2$.istio.networking.v1beta1.ProxyImageR\x05image\x12F\n" +
+	"\tresources\x18\x05 \x01(\v2(.istio.networking.v1beta1.ProxyResourcesR\tresources\x1aG\n" +
 	"\x19EnvironmentVariablesEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xaa\x02\n" +
+	"\x0eProxyResources\x12R\n" +
+	"\brequests\x18\x01 \x03(\v26.istio.networking.v1beta1.ProxyResources.RequestsEntryR\brequests\x12L\n" +
+	"\x06limits\x18\x02 \x03(\v24.istio.networking.v1beta1.ProxyResources.LimitsEntryR\x06limits\x1a;\n" +
+	"\rRequestsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a9\n" +
+	"\vLimitsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"+\n" +
 	"\n" +
@@ -286,24 +388,30 @@ func file_networking_v1beta1_proxy_config_proto_rawDescGZIP() []byte {
 	return file_networking_v1beta1_proxy_config_proto_rawDescData
 }
 
-var file_networking_v1beta1_proxy_config_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_networking_v1beta1_proxy_config_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_networking_v1beta1_proxy_config_proto_goTypes = []any{
 	(*ProxyConfig)(nil),              // 0: istio.networking.v1beta1.ProxyConfig
-	(*ProxyImage)(nil),               // 1: istio.networking.v1beta1.ProxyImage
-	nil,                              // 2: istio.networking.v1beta1.ProxyConfig.EnvironmentVariablesEntry
-	(*v1beta1.WorkloadSelector)(nil), // 3: istio.type.v1beta1.WorkloadSelector
-	(*wrappers.Int32Value)(nil),      // 4: google.protobuf.Int32Value
+	(*ProxyResources)(nil),           // 1: istio.networking.v1beta1.ProxyResources
+	(*ProxyImage)(nil),               // 2: istio.networking.v1beta1.ProxyImage
+	nil,                              // 3: istio.networking.v1beta1.ProxyConfig.EnvironmentVariablesEntry
+	nil,                              // 4: istio.networking.v1beta1.ProxyResources.RequestsEntry
+	nil,                              // 5: istio.networking.v1beta1.ProxyResources.LimitsEntry
+	(*v1beta1.WorkloadSelector)(nil), // 6: istio.type.v1beta1.WorkloadSelector
+	(*wrappers.Int32Value)(nil),      // 7: google.protobuf.Int32Value
 }
 var file_networking_v1beta1_proxy_config_proto_depIdxs = []int32{
-	3, // 0: istio.networking.v1beta1.ProxyConfig.selector:type_name -> istio.type.v1beta1.WorkloadSelector
-	4, // 1: istio.networking.v1beta1.ProxyConfig.concurrency:type_name -> google.protobuf.Int32Value
-	2, // 2: istio.networking.v1beta1.ProxyConfig.environment_variables:type_name -> istio.networking.v1beta1.ProxyConfig.EnvironmentVariablesEntry
-	1, // 3: istio.networking.v1beta1.ProxyConfig.image:type_name -> istio.networking.v1beta1.ProxyImage
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	6, // 0: istio.networking.v1beta1.ProxyConfig.selector:type_name -> istio.type.v1beta1.WorkloadSelector
+	7, // 1: istio.networking.v1beta1.ProxyConfig.concurrency:type_name -> google.protobuf.Int32Value
+	3, // 2: istio.networking.v1beta1.ProxyConfig.environment_variables:type_name -> istio.networking.v1beta1.ProxyConfig.EnvironmentVariablesEntry
+	2, // 3: istio.networking.v1beta1.ProxyConfig.image:type_name -> istio.networking.v1beta1.ProxyImage
+	1, // 4: istio.networking.v1beta1.ProxyConfig.resources:type_name -> istio.networking.v1beta1.ProxyResources
+	4, // 5: istio.networking.v1beta1.ProxyResources.requests:type_name -> istio.networking.v1beta1.ProxyResources.RequestsEntry
+	5, // 6: istio.networking.v1beta1.ProxyResources.limits:type_name -> istio.networking.v1beta1.ProxyResources.LimitsEntry
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_networking_v1beta1_proxy_config_proto_init() }
@@ -317,7 +425,7 @@ func file_networking_v1beta1_proxy_config_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_networking_v1beta1_proxy_config_proto_rawDesc), len(file_networking_v1beta1_proxy_config_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
