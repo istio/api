@@ -1,0 +1,9 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - https://github.com/istio/istio/issues/62780
+releaseNotes:
+  - |
+    **Added** `resources` field to `ProxyConfig` to set the CPU and memory requests and limits of
+    the injected `istio-proxy` sidecar per namespace or per workload.
