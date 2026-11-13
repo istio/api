@@ -526,6 +526,16 @@ func (*AuthorizationPolicy_Provider) isAuthorizationPolicy_ActionDetail() {}
 // - Prefix match: `abc*` will match on value `abc` and `abcd`.
 // - Suffix match: `*abc` will match on value `abc` and `xabc`.
 // - Presence match: `*` will match when value is not empty.
+//
+// The `*` character is only treated as a wildcard when it is the first or the last character of
+// the string, and it matches any sequence of characters, including `/` and `.`:
+//
+// - A `*` in any other position is matched literally, e.g. `a*c` only matches the value `a*c`.
+// - Only one wildcard is supported. A string that both starts and ends with `*` is treated as a
+//   suffix match, e.g. `*abc*` matches values ending with the literal `abc*`, not values containing `abc`.
+// - There is no escape character, so a value that starts or ends with a literal `*` cannot be matched
+//   with a prefix or suffix match.
+// - Regular expressions and other glob syntax such as `?` or `**` are not supported.
 type Rule struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Optional. `from` specifies the source of a request.
