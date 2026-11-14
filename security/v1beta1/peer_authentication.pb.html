@@ -13,7 +13,8 @@ number_of_entries: 3
 for connections to an Envoy proxy sidecar.</p>
 <p>In ambient mode, security is transparently enabled for a pod by the ztunnel node agent.
 (Traffic between proxies uses the HBONE protocol, which includes encryption with mTLS.)
-Because of this, <code>DISABLE</code> mode is not supported.
+<code>DISABLE</code> mode is accepted, but it behaves the same as <code>PERMISSIVE</code>: plaintext connections are allowed,
+while traffic between ambient workloads is still sent over HBONE with mTLS.
 <code>STRICT</code> mode is useful to ensure that connections that bypass the mesh are not possible.</p>
 <p>Examples:</p>
 <p>Policy to require mTLS traffic for all workloads under namespace <code>foo</code>:</p>
