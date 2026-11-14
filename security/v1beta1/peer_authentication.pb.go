@@ -31,7 +31,8 @@
 //
 // In ambient mode, security is transparently enabled for a pod by the ztunnel node agent.
 // (Traffic between proxies uses the HBONE protocol, which includes encryption with mTLS.)
-// Because of this, `DISABLE` mode is not supported.
+// `DISABLE` mode is accepted, but it behaves the same as `PERMISSIVE`: plaintext connections are allowed,
+// while traffic between ambient workloads is still sent over HBONE with mTLS.
 // `STRICT` mode is useful to ensure that connections that bypass the mesh are not possible.
 //
 // Examples:
