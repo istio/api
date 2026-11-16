@@ -262,6 +262,32 @@ type LoadBalancerSettings_ConsistentHash = v1alpha3.LoadBalancerSettings_Consist
 // metrics to weight endpoints by their current load. Backends that
 // report higher utilization receive fewer requests.
 type LoadBalancerSettings_BackendUtilization = v1alpha3.LoadBalancerSettings_BackendUtilization
+
+// Dynamic subset load balancing settings. See `dynamicSubset` in
+// `LoadBalancerSettings` for an overview.
+//
+// +kubebuilder:validation:XValidation:message="defaultSubset is required when fallbackPolicy is DEFAULT_SUBSET",rule="!has(self.fallbackPolicy) || self.fallbackPolicy != 'DEFAULT_SUBSET' || (has(self.defaultSubset) && size(self.defaultSubset) > 0)"
+type DynamicSubsetLB = v1alpha3.DynamicSubsetLB
+
+// A set of keys that together identify a subset. One subset exists for
+// every distinct combination of values found on the endpoints of the
+// service.
+type DynamicSubsetLB_SubsetSelector = v1alpha3.DynamicSubsetLB_SubsetSelector
+
+// The behavior when a request does not select a subset, or selects a
+// subset that has no endpoints.
+type DynamicSubsetLB_FallbackPolicy = v1alpha3.DynamicSubsetLB_FallbackPolicy
+
+// Load balance across all endpoints of the service.
+const DynamicSubsetLB_ANY_ENDPOINT DynamicSubsetLB_FallbackPolicy = v1alpha3.DynamicSubsetLB_ANY_ENDPOINT
+
+// Fail the request, as if the service had no healthy endpoints. Note
+// that this also applies to requests that do not supply any key.
+const DynamicSubsetLB_NO_FALLBACK DynamicSubsetLB_FallbackPolicy = v1alpha3.DynamicSubsetLB_NO_FALLBACK
+
+// Load balance across the endpoints matching `defaultSubset`.
+const DynamicSubsetLB_DEFAULT_SUBSET DynamicSubsetLB_FallbackPolicy = v1alpha3.DynamicSubsetLB_DEFAULT_SUBSET
+
 type WarmupConfiguration = v1alpha3.WarmupConfiguration
 
 // Connection pool settings for an upstream host. The settings apply to

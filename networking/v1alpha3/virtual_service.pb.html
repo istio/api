@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.VirtualService
 aliases: [/docs/reference/config/networking/v1alpha3/virtual-service]
-number_of_entries: 30
+number_of_entries: 31
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -577,6 +577,83 @@ for further details about cross origin resource sharing.</p>
 </div></td>
 <td>
 <p>Header manipulation rules</p>
+
+</td>
+</tr>
+<tr id="HTTPRoute-header_to_dynamic_subset_keys">
+<td><div class="field"><div class="name"><code><a href="#HTTPRoute-header_to_dynamic_subset_keys">headerToDynamicSubsetKeys</a></code></div>
+<div class="type"><a href="#HeaderToDynamicSubsetKey">HeaderToDynamicSubsetKey[]</a></div>
+</div></td>
+<td>
+<p>Selects a dynamic subset of the destination from request headers.
+Each entry supplies the value of one key declared in the
+<code>dynamicSubset</code> load balancer settings of the destination&rsquo;s
+<code>DestinationRule</code>. Destinations without <code>dynamicSubset</code> settings
+ignore the keys.</p>
+<p>For example, the following route sends a request to the endpoint
+named by the <code>x-endpoint-ip</code> header:</p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: reviews-route
+spec:
+  hosts:
+  - reviews.prod.svc.cluster.local
+  http:
+  - route:
+    - destination:
+        host: reviews.prod.svc.cluster.local
+    headerToDynamicSubsetKeys:
+    - header: x-endpoint-ip
+      key: &quot;%ip%&quot;
+</code></pre>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HeaderToDynamicSubsetKey">HeaderToDynamicSubsetKey</h2>
+<section>
+<p>Maps a request header to a key of a dynamic subset. See <code>dynamicSubset</code>
+in the <code>DestinationRule</code> load balancer settings.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HeaderToDynamicSubsetKey-header">
+<td><div class="field"><div class="name"><code><a href="#HeaderToDynamicSubsetKey-header">header</a></code></div>
+<div class="type">string</div>
+<div class="required">Required</div>
+</div></td>
+<td>
+<p>The name of the request header that carries the value.</p>
+
+</td>
+</tr>
+<tr id="HeaderToDynamicSubsetKey-key">
+<td><div class="field"><div class="name"><code><a href="#HeaderToDynamicSubsetKey-key">key</a></code></div>
+<div class="type">string</div>
+<div class="required">Required</div>
+</div></td>
+<td>
+<p>The dynamic subset key that receives the value. Either the name of a
+workload label, or one of the built-in keys <code>%ip%</code> and <code>%hostname%</code>.</p>
+
+</td>
+</tr>
+<tr id="HeaderToDynamicSubsetKey-default_value">
+<td><div class="field"><div class="name"><code><a href="#HeaderToDynamicSubsetKey-default_value">defaultValue</a></code></div>
+<div class="type">string</div>
+</div></td>
+<td>
+<p>The value used when the request does not carry the header. If unset,
+the key is not supplied for such requests.</p>
 
 </td>
 </tr>
