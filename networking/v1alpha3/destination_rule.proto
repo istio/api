@@ -239,6 +239,11 @@ message TrafficPolicy {
 
     // Specifies a limit on concurrent retries in relation to the number of active requests.
     RetryBudget retry_budget = 6;
+
+    // Response decompression for this destination port. Defaults to disabled.
+    // Applies to upstream requests from outbound sidecars and waypoints.
+    // +cue-gen:DestinationRule:releaseChannel:extended
+    ClientCompressionSettings compression = 7;
   }
 
   // Traffic policies specific to individual ports. Note that port level
@@ -325,6 +330,65 @@ message TrafficPolicy {
 
   // Specifies a limit on concurrent retries in relation to the number of active requests.
   RetryBudget retry_budget = 8;
+
+  // Explicit client-side response decompression. This is not inferred from the
+  // server's InboundTrafficPolicy.
+  // Applies to upstream requests from outbound sidecars and waypoints.
+  // +cue-gen:DestinationRule:releaseChannel:extended
+  ClientCompressionSettings compression = 9;
+}
+
+// ClientCompressionSettings configures upstream HTTP response decompression.
+//
+// Outbound sidecars negotiate compressed responses and decompress them before
+// delivery to the calling application. Waypoints do the same for backend responses,
+// before downstream response processing.
+//
+// InboundTrafficPolicy independently controls compression toward waypoint callers.
+// Ambient clients must handle those response encodings themselves; ztunnel cannot
+// decompress HTTP. These settings do not apply to ingress gateways or enable
+// request-body compression.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1
+// kind: DestinationRule
+// metadata:
+//   name: reviews-client-compression
+// spec:
+//   host: reviews.default.svc.cluster.local
+//   trafficPolicy:
+//     compression:
+//       response:
+//         decompress:
+//           enabled: true
+// ```
+message ClientCompressionSettings {
+  // Response handling. Defaults to passing upstream response encodings through unchanged.
+  Response response = 1;
+
+  // Client-side response compression handling.
+  message Response {
+    // Opt-in response decompression on an outbound sidecar or waypoint's upstream path.
+    Decompression decompress = 1;
+  }
+
+  // Transparent response decompression settings.
+  message Decompression {
+    // When true, the sidecar or waypoint owns upstream response negotiation and decompression
+    // for zstd, gzip, and brotli, advertising Accept-Encoding upstream and
+    // decompressing responses before forwarding them downstream. This also applies
+    // when the downstream client supplied Accept-Encoding: native Envoy behavior may
+    // change its existing preferences, including q=0 for an installed codec.
+    // If omitted or false, the proxy leaves negotiation and response encodings unchanged.
+    // This is not inferred from server policy and does not enable request-body compression.
+    //
+    // On a waypoint, this decompresses responses from backend destinations. It does not
+    // decompress responses encoded by the waypoint's InboundTrafficPolicy on the path
+    // to ambient clients. Those clients must support the response encoding themselves;
+    // ztunnel cannot perform HTTP decompression. Downstream compression is configured
+    // independently through InboundTrafficPolicy.
+    google.protobuf.BoolValue enabled = 1;
+  }
 }
 
 // A subset of endpoints of a service. Subsets can be used for scenarios
