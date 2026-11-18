@@ -75,6 +75,20 @@ For example, if your CNI has a 30s cooldown period, setting this to 15s is recom
 
 </td>
 </tr>
+<tr id="MeshConfig-hbone_keepalive">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-hbone_keepalive">hboneKeepalive</a></code></div>
+<div class="type"><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ConnectionPoolSettings-HTTPSettings-ConnectionKeepalive">ConnectionKeepalive</a></div>
+</div></td>
+<td>
+<p>Settings for the HTTP/2 PING frames that Envoy proxies send on the HBONE connections they originate.
+The PINGs let a waypoint or gateway detect a peer that went away without closing the connection,
+even while requests keep flowing on it, which <code>hboneIdleTimeout</code> cannot do.
+Note: This setting is applied only on the Envoy proxy side; ztunnel does not use it.
+If unset, PINGs are sent every 10s and the connection is closed when a PING is not answered within 20s.
+When set, both <code>interval</code> and <code>timeout</code> are required. (MUST be &gt;=1ms)</p>
+
+</td>
+</tr>
 <tr id="MeshConfig-tcp_keepalive">
 <td><div class="field"><div class="name"><code><a href="#MeshConfig-tcp_keepalive">tcpKeepalive</a></code></div>
 <div class="type"><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ConnectionPoolSettings-TCPSettings-TcpKeepalive">TcpKeepalive</a></div>
