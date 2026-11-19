@@ -747,6 +747,8 @@ message HTTPMatchRequest {
   //
   // - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
   //
+  // **Note:** `suffix` matching is not supported for `uri`.
+  //
   // **Note:** Case-insensitive matching could be enabled via the
   // `ignoreUriCase` flag.
   StringMatch uri = 1;
@@ -760,6 +762,8 @@ message HTTPMatchRequest {
   //
   // - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
   //
+  // - `suffix: "value"` for suffix-based match
+  //
   StringMatch scheme = 2;
 
   // HTTP Method
@@ -771,6 +775,8 @@ message HTTPMatchRequest {
   //
   // - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
   //
+  // - `suffix: "value"` for suffix-based match
+  //
   StringMatch method = 3;
 
   // HTTP Authority
@@ -781,6 +787,8 @@ message HTTPMatchRequest {
   // - `prefix: "value"` for prefix-based match
   //
   // - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
+  //
+  // - `suffix: "value"` for suffix-based match
   //
   StringMatch authority = 4;
 
@@ -794,6 +802,8 @@ message HTTPMatchRequest {
   // - `prefix: "value"` for prefix-based match
   //
   // - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).
+  //
+  // - `suffix: "value"` for suffix-based match
   //
   // If the value is empty and only the name of header is specified, presence of the header is checked.
   // To provide an empty value, use `{}`, for example:
@@ -841,6 +851,9 @@ message HTTPMatchRequest {
   // - For a query parameter like "?key=123", the map key would be "key" and the
   //   string match could be defined as `regex: "\d+$"`. Note that this
   //   configuration will only match values like "123" but not "a123" or "123a".
+  //
+  // - For a query parameter like "?key=ab123" or "?key=xy123", the map key would be "key" and the
+  //   string match could be defined as `suffix: "123"`.
   map<string, StringMatch> query_params = 9;
 
   // Flag to specify whether the URI matching should be case-insensitive.
@@ -1292,7 +1305,7 @@ message RegexRewrite {
   string rewrite = 2;
 }
 
-// Describes how to match a given string in HTTP headers. `exact` and `prefix` matching is
+// Describes how to match a given string in HTTP headers. `exact`, `prefix` and `suffix` matching is
 // case-sensitive. `regex` matching supports case-insensitive matches.
 message StringMatch {
   oneof match_type {
@@ -1306,6 +1319,9 @@ message StringMatch {
     //
     // Example: `(?i)^aaa$` can be used to case-insensitive match a string consisting of three a's.
     string regex = 3;
+
+    // suffix-based match
+    string suffix = 4;
   }
 }
 
