@@ -1,0 +1,8 @@
+apiVersion: release-notes/v2
+kind: bug-fix
+area: documentation
+issue:
+  - https://github.com/istio/api/issues/2071
+releaseNotes:
+  - |
+    **Fixed** authorization policy documentation to distinguish matching a request from allowing it, and clarify how omitted rule fields match requests.
