@@ -1,0 +1,11 @@
+apiVersion: release-notes/v2
+kind: feature
+area: traffic-management
+issue:
+  - https://github.com/istio/istio/issues/62827
+releaseNotes:
+  - |
+    **Added** `dynamicSubset` to the `DestinationRule` load balancer settings and
+    `headerToDynamicSubsetKeys` to `VirtualService` HTTP routes. Together they let a request
+    select a subset of the endpoints of a service by workload label, endpoint address or
+    endpoint hostname, without a cluster per subset.

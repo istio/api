@@ -60,3 +60,25 @@ spec:
       retryBudget:
         percent: 20.0
         minRetryConcurrency: 5
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: dynamic-subset
+spec:
+  host: ratings.prod.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      simple: LEAST_REQUEST
+      dynamicSubset:
+        subsetSelectors:
+        - keys:
+          - version
+          - stage
+        - keys:
+          - "%ip%"
+        - keys:
+          - "%hostname%"
+        fallbackPolicy: DEFAULT_SUBSET
+        defaultSubset:
+          version: v1

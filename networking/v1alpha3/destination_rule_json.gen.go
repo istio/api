@@ -160,6 +160,28 @@ func (this *LoadBalancerSettings_BackendUtilizationLB) UnmarshalJSON(b []byte) e
 	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for DynamicSubsetLB
+func (this *DynamicSubsetLB) MarshalJSON() ([]byte, error) {
+	str, err := DestinationRuleMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for DynamicSubsetLB
+func (this *DynamicSubsetLB) UnmarshalJSON(b []byte) error {
+	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for DynamicSubsetLB_SubsetSelector
+func (this *DynamicSubsetLB_SubsetSelector) MarshalJSON() ([]byte, error) {
+	str, err := DestinationRuleMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for DynamicSubsetLB_SubsetSelector
+func (this *DynamicSubsetLB_SubsetSelector) UnmarshalJSON(b []byte) error {
+	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 // MarshalJSON is a custom marshaler for WarmupConfiguration
 func (this *WarmupConfiguration) MarshalJSON() ([]byte, error) {
 	str, err := DestinationRuleMarshaler.MarshalToString(this)
