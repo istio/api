@@ -117,7 +117,7 @@ well-known value that will be considered as default.
 
 ### Basic Proto Versioning
 
-Protocol Buffers have well-defined semantics for coping with version changes. In essense, the unknown fields
+Protocol Buffers have well-defined semantics for coping with version changes. In essence, the unknown fields
 get ignored, and additive, and non-breaking changes are acceptable.
 
 In addition to the standard proto versioning semantics, Istio tooling imposes its own restrictions, as CRD
