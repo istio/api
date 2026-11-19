@@ -43,3 +43,15 @@ spec:
   template:
     serviceAccount: sa
     network: net
+---
+apiVersion: networking.istio.io/v1
+kind: WorkloadGroup
+metadata:
+  name: port-name-length-boundary
+spec:
+  template:
+    address: 1.2.3.4
+    # 62 and 63 character port names.
+    ports:
+      http-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: 80
+      http-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: 80
