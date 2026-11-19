@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1beta1.ProxyConfig
 aliases: [/docs/reference/config/networking/v1beta1/proxy-config]
-number_of_entries: 2
+number_of_entries: 3
 ---
 <p><code>ProxyConfig</code> exposes proxy level configuration options. <code>ProxyConfig</code> can be configured on a per-workload basis,
 a per-namespace basis, or mesh-wide. <code>ProxyConfig</code> is not a required resource; there are default values in place, which are documented
@@ -104,6 +104,69 @@ Names starting with <code>ISTIO_META_</code> will be included in the generated b
 </div></td>
 <td>
 <p>Specifies the details of the proxy image.</p>
+
+</td>
+</tr>
+<tr id="ProxyConfig-resources">
+<td><div class="field"><div class="name"><code><a href="#ProxyConfig-resources">resources</a></code></div>
+<div class="type"><a href="#ProxyResources">ProxyResources</a></div>
+</div></td>
+<td>
+<p>Compute resources for the injected <code>istio-proxy</code> container. Applies to sidecar injection only.</p>
+<p>Each of <code>requests</code> and <code>limits</code> is resolved per resource name: a value set by the
+<code>sidecar.istio.io/proxyCPU</code>, <code>sidecar.istio.io/proxyMemory</code>, <code>sidecar.istio.io/proxyCPULimit</code> or
+<code>sidecar.istio.io/proxyMemoryLimit</code> pod annotation wins, then the most specific matching <code>ProxyConfig</code>
+(workload, then namespace, then root namespace), then the installation default
+(<code>values.global.proxy.resources</code>). Setting only some values keeps the others from the next level.</p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1beta1
+kind: ProxyConfig
+metadata:
+  name: sidecar-size
+  namespace: user-namespace
+spec:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+</code></pre>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ProxyResources">ProxyResources</h2>
+<section>
+<p>Compute resource requests and limits for the proxy container.
+Keys are resource names (<code>cpu</code>, <code>memory</code> or <code>ephemeral-storage</code>) and values are Kubernetes
+quantities, such as <code>100m</code> or <code>128Mi</code>.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProxyResources-requests">
+<td><div class="field"><div class="name"><code><a href="#ProxyResources-requests">requests</a></code></div>
+<div class="type">map&lt;string,&nbsp;string&gt;</div>
+</div></td>
+<td>
+<p>Minimum amount of compute resources requested by the proxy container.</p>
+
+</td>
+</tr>
+<tr id="ProxyResources-limits">
+<td><div class="field"><div class="name"><code><a href="#ProxyResources-limits">limits</a></code></div>
+<div class="type">map&lt;string,&nbsp;string&gt;</div>
+</div></td>
+<td>
+<p>Maximum amount of compute resources allowed for the proxy container.</p>
 
 </td>
 </tr>

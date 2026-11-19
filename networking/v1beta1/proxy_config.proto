@@ -127,6 +127,46 @@ message ProxyConfig {
 
   // Specifies the details of the proxy image.
   ProxyImage image = 4;
+
+  // Compute resources for the injected `istio-proxy` container. Applies to sidecar injection only.
+  //
+  // Each of `requests` and `limits` is resolved per resource name: a value set by the
+  // `sidecar.istio.io/proxyCPU`, `sidecar.istio.io/proxyMemory`, `sidecar.istio.io/proxyCPULimit` or
+  // `sidecar.istio.io/proxyMemoryLimit` pod annotation wins, then the most specific matching `ProxyConfig`
+  // (workload, then namespace, then root namespace), then the installation default
+  // (`values.global.proxy.resources`). Setting only some values keeps the others from the next level.
+  //
+  // ```yaml
+  // apiVersion: networking.istio.io/v1beta1
+  // kind: ProxyConfig
+  // metadata:
+  //   name: sidecar-size
+  //   namespace: user-namespace
+  // spec:
+  //   resources:
+  //     requests:
+  //       cpu: 50m
+  //       memory: 64Mi
+  //     limits:
+  //       cpu: 200m
+  //       memory: 128Mi
+  // ```
+  ProxyResources resources = 5;
+}
+
+// Compute resource requests and limits for the proxy container.
+// Keys are resource names (`cpu`, `memory` or `ephemeral-storage`) and values are Kubernetes
+// quantities, such as `100m` or `128Mi`.
+message ProxyResources {
+  // Minimum amount of compute resources requested by the proxy container.
+  // +protoc-gen-crd:map-value-validation:MaxLength=64
+  // +kubebuilder:validation:MaxProperties=3
+  map<string, string> requests = 1;
+
+  // Maximum amount of compute resources allowed for the proxy container.
+  // +protoc-gen-crd:map-value-validation:MaxLength=64
+  // +kubebuilder:validation:MaxProperties=3
+  map<string, string> limits = 2;
 }
 
 // The following values are used to construct proxy image url.
