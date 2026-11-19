@@ -659,6 +659,19 @@ configured for the server port may break the traffic served by this port.</p>
 
 </td>
 </tr>
+<tr id="ServerTLSSettings-credential_fetch_timeout">
+<td><div class="field"><div class="name"><code><a href="#ServerTLSSettings-credential_fetch_timeout">credentialFetchTimeout</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></div>
+</div></td>
+<td>
+<p>the maximum duration the proxy will wait for the initial delivery of the
+credential(s) referenced by <code>credentialName</code>, <code>credentialNames</code>, or <code>caCertCredentialName</code>
+from the configured secret discovery service (SDS) provider, before proceeding with an
+empty credential for this listener. If unset, the proxy&rsquo;s default initial fetch timeout
+applies. This is mainly used for external SDS provider.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
