@@ -417,6 +417,7 @@ annotations:
     hidden: false
     resources:
       - Pod
+      - WorkloadGroup
 
   - name: istio.io/dry-run
     featureStatus: Alpha
