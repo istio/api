@@ -17,6 +17,17 @@ func (this *ProxyConfig) UnmarshalJSON(b []byte) error {
 	return ProxyConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for ProxyResources
+func (this *ProxyResources) MarshalJSON() ([]byte, error) {
+	str, err := ProxyConfigMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ProxyResources
+func (this *ProxyResources) UnmarshalJSON(b []byte) error {
+	return ProxyConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 // MarshalJSON is a custom marshaler for ProxyImage
 func (this *ProxyImage) MarshalJSON() ([]byte, error) {
 	str, err := ProxyConfigMarshaler.MarshalToString(this)
