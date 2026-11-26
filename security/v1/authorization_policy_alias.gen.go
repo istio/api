@@ -84,8 +84,9 @@ const AuthorizationPolicy_CUSTOM AuthorizationPolicy_Action = v1beta1.Authorizat
 type AuthorizationPolicy_Provider = v1beta1.AuthorizationPolicy_Provider
 
 // Rule matches requests from a list of sources that perform a list of operations subject to a
-// list of conditions. A match occurs when at least one source, one operation and all conditions
-// matches the request. An empty rule is always matched.
+// list of conditions. A match occurs when at least one source (if specified), at least one
+// operation (if specified), and all conditions (if specified) match the request. An empty rule
+// is always matched. The policy's action is applied to requests that match its rules.
 //
 // Any string field in the rule supports Exact, Prefix, Suffix and Presence match:
 //
