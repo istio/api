@@ -740,7 +740,7 @@ func (x *Port) GetTargetPort() uint32 {
 
 // +kubebuilder:validation:XValidation:message="only one of credentialNames or tlsCertificates can be set",rule="oneof(self.tlsCertificates, self.credentialNames)"
 // +kubebuilder:validation:XValidation:message="only one of credentialName or credentialNames can be set",rule="oneof(self.credentialName, self.credentialNames)"
-// +kubebuilder:validation:XValidation:message="only one of credentialName or tlsCertificates can be set",rule="oneof(self.credentialNames, self.tlsCertificates)"
+// +kubebuilder:validation:XValidation:message="only one of credentialName or tlsCertificates can be set",rule="oneof(self.credentialName, self.tlsCertificates)"
 type ServerTLSSettings struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// If set to true, the load balancer will send a 301 redirect for
