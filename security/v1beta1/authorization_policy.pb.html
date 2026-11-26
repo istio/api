@@ -380,6 +380,16 @@ matches the request. An empty rule is always matched.</p>
 <li>Suffix match: <code>*abc</code> will match on value <code>abc</code> and <code>xabc</code>.</li>
 <li>Presence match: <code>*</code> will match when value is not empty.</li>
 </ul>
+<p>The <code>*</code> character is only treated as a wildcard when it is the first or the last character of
+the string, and it matches any sequence of characters, including <code>/</code> and <code>.</code>:</p>
+<ul>
+<li>A <code>*</code> in any other position is matched literally, e.g. <code>a*c</code> only matches the value <code>a*c</code>.</li>
+<li>Only one wildcard is supported. A string that both starts and ends with <code>*</code> is treated as a
+suffix match, e.g. <code>*abc*</code> matches values ending with the literal <code>abc*</code>, not values containing <code>abc</code>.</li>
+<li>There is no escape character, so a value that starts or ends with a literal <code>*</code> cannot be matched
+with a prefix or suffix match.</li>
+<li>Regular expressions and other glob syntax such as <code>?</code> or <code>**</code> are not supported.</li>
+</ul>
 
 <table class="message-fields">
 <thead>
