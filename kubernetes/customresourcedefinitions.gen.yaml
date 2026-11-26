@@ -13037,10 +13037,7 @@ spec:
                       items:
                         properties:
                           authority:
-                            description: 'HTTP Authority values are case-sensitive
-                              and formatted as follows: - `exact: "value"` for exact
-                              string match - `prefix: "value"` for prefix-based match
-                              - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                            description: HTTP Authority.
                             oneOf:
                             - not:
                                 anyOf:
@@ -13105,10 +13102,7 @@ spec:
                               should be case-insensitive.
                             type: boolean
                           method:
-                            description: 'HTTP Method values are case-sensitive and
-                              formatted as follows: - `exact: "value"` for exact string
-                              match - `prefix: "value"` for prefix-based match - `regex:
-                              "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                            description: HTTP Method.
                             oneOf:
                             - not:
                                 anyOf:
@@ -13171,10 +13165,7 @@ spec:
                             description: Query parameters for matching.
                             type: object
                           scheme:
-                            description: 'URI Scheme values are case-sensitive and
-                              formatted as follows: - `exact: "value"` for exact string
-                              match - `prefix: "value"` for prefix-based match - `regex:
-                              "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                            description: URI Scheme.
                             oneOf:
                             - not:
                                 anyOf:
@@ -13215,10 +13206,7 @@ spec:
                               statistics for this route.
                             type: string
                           uri:
-                            description: 'URI to match values are case-sensitive and
-                              formatted as follows: - `exact: "value"` for exact string
-                              match - `prefix: "value"` for prefix-based match - `regex:
-                              "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                            description: URI to match.
                             oneOf:
                             - not:
                                 anyOf:
@@ -14093,10 +14081,7 @@ spec:
                       items:
                         properties:
                           authority:
-                            description: 'HTTP Authority values are case-sensitive
-                              and formatted as follows: - `exact: "value"` for exact
-                              string match - `prefix: "value"` for prefix-based match
-                              - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                            description: HTTP Authority.
                             oneOf:
                             - not:
                                 anyOf:
@@ -14161,10 +14146,7 @@ spec:
                               should be case-insensitive.
                             type: boolean
                           method:
-                            description: 'HTTP Method values are case-sensitive and
-                              formatted as follows: - `exact: "value"` for exact string
-                              match - `prefix: "value"` for prefix-based match - `regex:
-                              "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                            description: HTTP Method.
                             oneOf:
                             - not:
                                 anyOf:
@@ -14227,10 +14209,7 @@ spec:
                             description: Query parameters for matching.
                             type: object
                           scheme:
-                            description: 'URI Scheme values are case-sensitive and
-                              formatted as follows: - `exact: "value"` for exact string
-                              match - `prefix: "value"` for prefix-based match - `regex:
-                              "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                            description: URI Scheme.
                             oneOf:
                             - not:
                                 anyOf:
@@ -14271,10 +14250,7 @@ spec:
                               statistics for this route.
                             type: string
                           uri:
-                            description: 'URI to match values are case-sensitive and
-                              formatted as follows: - `exact: "value"` for exact string
-                              match - `prefix: "value"` for prefix-based match - `regex:
-                              "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                            description: URI to match.
                             oneOf:
                             - not:
                                 anyOf:
@@ -15149,10 +15125,7 @@ spec:
                       items:
                         properties:
                           authority:
-                            description: 'HTTP Authority values are case-sensitive
-                              and formatted as follows: - `exact: "value"` for exact
-                              string match - `prefix: "value"` for prefix-based match
-                              - `regex: "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                            description: HTTP Authority.
                             oneOf:
                             - not:
                                 anyOf:
@@ -15217,10 +15190,7 @@ spec:
                               should be case-insensitive.
                             type: boolean
                           method:
-                            description: 'HTTP Method values are case-sensitive and
-                              formatted as follows: - `exact: "value"` for exact string
-                              match - `prefix: "value"` for prefix-based match - `regex:
-                              "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                            description: HTTP Method.
                             oneOf:
                             - not:
                                 anyOf:
@@ -15283,10 +15253,7 @@ spec:
                             description: Query parameters for matching.
                             type: object
                           scheme:
-                            description: 'URI Scheme values are case-sensitive and
-                              formatted as follows: - `exact: "value"` for exact string
-                              match - `prefix: "value"` for prefix-based match - `regex:
-                              "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                            description: URI Scheme.
                             oneOf:
                             - not:
                                 anyOf:
@@ -15327,10 +15294,7 @@ spec:
                               statistics for this route.
                             type: string
                           uri:
-                            description: 'URI to match values are case-sensitive and
-                              formatted as follows: - `exact: "value"` for exact string
-                              match - `prefix: "value"` for prefix-based match - `regex:
-                              "value"` for [RE2 style regex-based match](https://github.com/google/re2/wiki/Syntax).'
+                            description: URI to match.
                             oneOf:
                             - not:
                                 anyOf:
