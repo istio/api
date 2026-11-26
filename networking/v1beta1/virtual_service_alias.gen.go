@@ -541,7 +541,7 @@ type TLSMatchAttributes = v1alpha3.TLSMatchAttributes
 //	      prefix: /foo/
 //	  redirect:
 //	    authority: foo.example.com
-//	    prefix_rewrite: /
+//	    prefixRewrite: /
 //
 // ```
 //
