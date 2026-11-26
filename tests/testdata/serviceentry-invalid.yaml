@@ -157,3 +157,21 @@ spec:
 # validate protocol parsing
 # Validation of DNS/DNS_RR endpoints
 # Validate exportTo duplicates (with logic about . and current namespace)
+---
+_err: port name must be valid
+apiVersion: networking.istio.io/v1
+kind: ServiceEntry
+metadata:
+  name: port-name-length-boundary
+spec:
+  hosts: [example.com]
+  resolution: STATIC
+  ports:
+  - name: http
+    number: 80
+    protocol: HTTP
+  endpoints:
+  - address: 1.2.3.4
+    # 64 character port names.
+    ports:
+      http-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: 80
