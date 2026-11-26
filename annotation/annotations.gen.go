@@ -37,6 +37,7 @@ const (
     Service
     ServiceEntry
     WorkloadEntry
+    WorkloadGroup
 )
 
 func (r ResourceTypes) String() string {
@@ -61,6 +62,8 @@ func (r ResourceTypes) String() string {
 		return "ServiceEntry"
 	case 10:
 		return "WorkloadEntry"
+	case 11:
+		return "WorkloadGroup"
 	}
 	return "Unknown"
 }
@@ -436,6 +439,7 @@ Accepted values:
 		Deprecated:    false,
 		Resources: []ResourceTypes{
 			Pod,
+			WorkloadGroup,
 		},
 	}
 
@@ -1055,5 +1059,6 @@ func AllResourceTypes() []string {
 		"Service",
 		"ServiceEntry",
 		"WorkloadEntry",
+		"WorkloadGroup",
 	}
 }
