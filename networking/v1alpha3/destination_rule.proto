@@ -651,6 +651,106 @@ message LoadBalancerSettings {
   // amount of requests.
   // Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancers.
   WarmupConfiguration warmup = 5;
+
+  // Dynamic subset load balancing divides the endpoints of the service into
+  // subsets at request time, based on endpoint attributes, without creating
+  // a separate cluster for each subset. A request selects a subset by
+  // supplying a value for every key of one of the `subsetSelectors`, for
+  // example with `headerToDynamicSubsetKeys` in a `VirtualService` HTTP
+  // route. The load balancing policy configured above is then applied to
+  // the endpoints of the selected subset.
+  //
+  // Unlike `subsets`, which are declared ahead of time and referenced by
+  // name, dynamic subsets are derived from the values present on the
+  // endpoints, so a request can address a single version, shard or even a
+  // single endpoint.
+  //
+  // For example, the following rule allows requests to select the endpoints
+  // of the `reviews` service by `version` label, or a single endpoint by its
+  // address, and uses any endpoint when a request selects nothing:
+  //
+  // ```yaml
+  // apiVersion: networking.istio.io/v1
+  // kind: DestinationRule
+  // metadata:
+  //   name: reviews
+  // spec:
+  //   host: reviews.prod.svc.cluster.local
+  //   trafficPolicy:
+  //     loadBalancer:
+  //       dynamicSubset:
+  //         subsetSelectors:
+  //         - keys:
+  //           - version
+  //         - keys:
+  //           - "%ip%"
+  //         fallbackPolicy: ANY_ENDPOINT
+  // ```
+  //
+  // Dynamic subset load balancing applies to HTTP traffic of sidecars and
+  // gateways. Endpoints that are reached through a gateway of another
+  // network cannot be selected individually.
+  DynamicSubsetLB dynamic_subset = 8;
+}
+
+// Dynamic subset load balancing settings. See `dynamicSubset` in
+// `LoadBalancerSettings` for an overview.
+//
+// +kubebuilder:validation:XValidation:message="defaultSubset is required when fallbackPolicy is DEFAULT_SUBSET",rule="!has(self.fallbackPolicy) || self.fallbackPolicy != 'DEFAULT_SUBSET' || (has(self.defaultSubset) && size(self.defaultSubset) > 0)"
+message DynamicSubsetLB {
+  // A set of keys that together identify a subset. One subset exists for
+  // every distinct combination of values found on the endpoints of the
+  // service.
+  message SubsetSelector {
+    // The keys that a request must supply to select a subset of this
+    // selector. A key is either the name of a workload label, or one of
+    // the following built-in keys:
+    //
+    // * `%ip%`: the address of the endpoint.
+    // * `%hostname%`: the hostname of the endpoint. For a Kubernetes pod
+    //   this is `spec.hostname` if set, and the pod name otherwise.
+    //
+    // Endpoints that do not have a value for every key are not part of
+    // any subset of this selector. A built-in key identifies a single
+    // endpoint and cannot be combined with other keys.
+    //
+    // +kubebuilder:validation:MinItems=1
+    // +kubebuilder:validation:MaxItems=8
+    // +listType=set
+    repeated string keys = 1 [(google.api.field_behavior) = REQUIRED];
+  }
+
+  // The behavior when a request does not select a subset, or selects a
+  // subset that has no endpoints.
+  enum FallbackPolicy {
+    // Load balance across all endpoints of the service.
+    ANY_ENDPOINT = 0;
+
+    // Fail the request, as if the service had no healthy endpoints. Note
+    // that this also applies to requests that do not supply any key.
+    NO_FALLBACK = 1;
+
+    // Load balance across the endpoints matching `defaultSubset`.
+    DEFAULT_SUBSET = 2;
+  }
+
+  // The selectors that define which subsets exist. A request selects a
+  // subset when the keys it supplies are exactly the keys of one selector.
+  //
+  // +kubebuilder:validation:MinItems=1
+  // +kubebuilder:validation:MaxItems=16
+  repeated SubsetSelector subset_selectors = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The behavior when a request does not select a subset, or selects a
+  // subset that has no endpoints. Defaults to `ANY_ENDPOINT`.
+  FallbackPolicy fallback_policy = 2;
+
+  // The subset used when `fallbackPolicy` is `DEFAULT_SUBSET`, as a map of
+  // key to value. Endpoints matching every entry are part of the default
+  // subset.
+  //
+  // +kubebuilder:validation:MaxProperties=16
+  map<string, string> default_subset = 3;
 }
 
 message WarmupConfiguration {

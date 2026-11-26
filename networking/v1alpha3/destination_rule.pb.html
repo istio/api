@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.DestinationRule
 aliases: [/docs/reference/config/networking/v1alpha3/destination-rule]
-number_of_entries: 32
+number_of_entries: 35
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -719,6 +719,47 @@ Currently this is only supported for ROUND_ROBIN and LEAST_REQUEST load balancer
 
 </td>
 </tr>
+<tr id="LoadBalancerSettings-dynamic_subset">
+<td><div class="field"><div class="name"><code><a href="#LoadBalancerSettings-dynamic_subset">dynamicSubset</a></code></div>
+<div class="type"><a href="#DynamicSubsetLB">DynamicSubsetLB</a></div>
+</div></td>
+<td>
+<p>Dynamic subset load balancing divides the endpoints of the service into
+subsets at request time, based on endpoint attributes, without creating
+a separate cluster for each subset. A request selects a subset by
+supplying a value for every key of one of the <code>subsetSelectors</code>, for
+example with <code>headerToDynamicSubsetKeys</code> in a <code>VirtualService</code> HTTP
+route. The load balancing policy configured above is then applied to
+the endpoints of the selected subset.</p>
+<p>Unlike <code>subsets</code>, which are declared ahead of time and referenced by
+name, dynamic subsets are derived from the values present on the
+endpoints, so a request can address a single version, shard or even a
+single endpoint.</p>
+<p>For example, the following rule allows requests to select the endpoints
+of the <code>reviews</code> service by <code>version</code> label, or a single endpoint by its
+address, and uses any endpoint when a request selects nothing:</p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: reviews
+spec:
+  host: reviews.prod.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      dynamicSubset:
+        subsetSelectors:
+        - keys:
+          - version
+        - keys:
+          - &quot;%ip%&quot;
+        fallbackPolicy: ANY_ENDPOINT
+</code></pre>
+<p>Dynamic subset load balancing applies to HTTP traffic of sidecars and
+gateways. Endpoints that are reached through a gateway of another
+network cannot be selected individually.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1107,6 +1148,129 @@ LEAST_REQUEST as a drop-in replacement for ROUND_ROBIN.</p>
 <td><code><a href="#LoadBalancerSettings-SimpleLB-LEAST_CONN">LEAST_CONN</a></code></td>
 <td>
 <p>Deprecated. Use LEAST_REQUEST instead.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="DynamicSubsetLB">DynamicSubsetLB</h2>
+<section>
+<p>Dynamic subset load balancing settings. See <code>dynamicSubset</code> in
+<code>LoadBalancerSettings</code> for an overview.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="DynamicSubsetLB-subset_selectors">
+<td><div class="field"><div class="name"><code><a href="#DynamicSubsetLB-subset_selectors">subsetSelectors</a></code></div>
+<div class="type"><a href="#DynamicSubsetLB-SubsetSelector">SubsetSelector[]</a></div>
+<div class="required">Required</div>
+</div></td>
+<td>
+<p>The selectors that define which subsets exist. A request selects a
+subset when the keys it supplies are exactly the keys of one selector.</p>
+
+</td>
+</tr>
+<tr id="DynamicSubsetLB-fallback_policy">
+<td><div class="field"><div class="name"><code><a href="#DynamicSubsetLB-fallback_policy">fallbackPolicy</a></code></div>
+<div class="type"><a href="#DynamicSubsetLB-FallbackPolicy">FallbackPolicy</a></div>
+</div></td>
+<td>
+<p>The behavior when a request does not select a subset, or selects a
+subset that has no endpoints. Defaults to <code>ANY_ENDPOINT</code>.</p>
+
+</td>
+</tr>
+<tr id="DynamicSubsetLB-default_subset">
+<td><div class="field"><div class="name"><code><a href="#DynamicSubsetLB-default_subset">defaultSubset</a></code></div>
+<div class="type">map&lt;string,&nbsp;string&gt;</div>
+</div></td>
+<td>
+<p>The subset used when <code>fallbackPolicy</code> is <code>DEFAULT_SUBSET</code>, as a map of
+key to value. Endpoints matching every entry are part of the default
+subset.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="DynamicSubsetLB-SubsetSelector">SubsetSelector</h3>
+<section>
+<p>A set of keys that together identify a subset. One subset exists for
+every distinct combination of values found on the endpoints of the
+service.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="DynamicSubsetLB-SubsetSelector-keys">
+<td><div class="field"><div class="name"><code><a href="#DynamicSubsetLB-SubsetSelector-keys">keys</a></code></div>
+<div class="type">string[]</div>
+<div class="required">Required</div>
+</div></td>
+<td>
+<p>The keys that a request must supply to select a subset of this
+selector. A key is either the name of a workload label, or one of
+the following built-in keys:</p>
+<ul>
+<li><code>%ip%</code>: the address of the endpoint.</li>
+<li><code>%hostname%</code>: the hostname of the endpoint. For a Kubernetes pod
+this is <code>spec.hostname</code> if set, and the pod name otherwise.</li>
+</ul>
+<p>Endpoints that do not have a value for every key are not part of
+any subset of this selector. A built-in key identifies a single
+endpoint and cannot be combined with other keys.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="DynamicSubsetLB-FallbackPolicy">FallbackPolicy</h3>
+<section>
+<p>The behavior when a request does not select a subset, or selects a
+subset that has no endpoints.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="DynamicSubsetLB-FallbackPolicy-ANY_ENDPOINT">
+<td><code><a href="#DynamicSubsetLB-FallbackPolicy-ANY_ENDPOINT">ANY_ENDPOINT</a></code></td>
+<td>
+<p>Load balance across all endpoints of the service.</p>
+
+</td>
+</tr>
+<tr id="DynamicSubsetLB-FallbackPolicy-NO_FALLBACK">
+<td><code><a href="#DynamicSubsetLB-FallbackPolicy-NO_FALLBACK">NO_FALLBACK</a></code></td>
+<td>
+<p>Fail the request, as if the service had no healthy endpoints. Note
+that this also applies to requests that do not supply any key.</p>
+
+</td>
+</tr>
+<tr id="DynamicSubsetLB-FallbackPolicy-DEFAULT_SUBSET">
+<td><code><a href="#DynamicSubsetLB-FallbackPolicy-DEFAULT_SUBSET">DEFAULT_SUBSET</a></code></td>
+<td>
+<p>Load balance across the endpoints matching <code>defaultSubset</code>.</p>
 
 </td>
 </tr>

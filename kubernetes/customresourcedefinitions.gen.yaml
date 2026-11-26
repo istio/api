@@ -1079,6 +1079,58 @@ spec:
                                   description: Hash based on the source IP address.
                                   type: boolean
                               type: object
+                            dynamicSubset:
+                              description: Dynamic subset load balancing divides the
+                                endpoints of the service into subsets at request time,
+                                based on endpoint attributes, without creating a separate
+                                cluster for each subset.
+                              properties:
+                                defaultSubset:
+                                  additionalProperties:
+                                    type: string
+                                  description: The subset used when `fallbackPolicy`
+                                    is `DEFAULT_SUBSET`, as a map of key to value.
+                                  maxProperties: 16
+                                  type: object
+                                fallbackPolicy:
+                                  description: |-
+                                    The behavior when a request does not select a subset, or selects a subset that has no endpoints.
+
+                                    Valid Options: ANY_ENDPOINT, NO_FALLBACK, DEFAULT_SUBSET
+                                  enum:
+                                  - ANY_ENDPOINT
+                                  - NO_FALLBACK
+                                  - DEFAULT_SUBSET
+                                  type: string
+                                subsetSelectors:
+                                  description: The selectors that define which subsets
+                                    exist.
+                                  items:
+                                    properties:
+                                      keys:
+                                        description: The keys that a request must
+                                          supply to select a subset of this selector.
+                                        items:
+                                          type: string
+                                        maxItems: 8
+                                        minItems: 1
+                                        type: array
+                                        x-kubernetes-list-type: set
+                                    required:
+                                    - keys
+                                    type: object
+                                  maxItems: 16
+                                  minItems: 1
+                                  type: array
+                              required:
+                              - subsetSelectors
+                              type: object
+                              x-kubernetes-validations:
+                              - message: defaultSubset is required when fallbackPolicy
+                                  is DEFAULT_SUBSET
+                                rule: |-
+                                  !has(self.fallbackPolicy) || self.fallbackPolicy != "DEFAULT_SUBSET" || has(self.defaultSubset) &&
+                                  size(self.defaultSubset) > 0
                             localityLbSetting:
                               description: Locality load balancer settings.
                               properties:
@@ -1578,6 +1630,61 @@ spec:
                                         description: Hash based on the source IP address.
                                         type: boolean
                                     type: object
+                                  dynamicSubset:
+                                    description: Dynamic subset load balancing divides
+                                      the endpoints of the service into subsets at
+                                      request time, based on endpoint attributes,
+                                      without creating a separate cluster for each
+                                      subset.
+                                    properties:
+                                      defaultSubset:
+                                        additionalProperties:
+                                          type: string
+                                        description: The subset used when `fallbackPolicy`
+                                          is `DEFAULT_SUBSET`, as a map of key to
+                                          value.
+                                        maxProperties: 16
+                                        type: object
+                                      fallbackPolicy:
+                                        description: |-
+                                          The behavior when a request does not select a subset, or selects a subset that has no endpoints.
+
+                                          Valid Options: ANY_ENDPOINT, NO_FALLBACK, DEFAULT_SUBSET
+                                        enum:
+                                        - ANY_ENDPOINT
+                                        - NO_FALLBACK
+                                        - DEFAULT_SUBSET
+                                        type: string
+                                      subsetSelectors:
+                                        description: The selectors that define which
+                                          subsets exist.
+                                        items:
+                                          properties:
+                                            keys:
+                                              description: The keys that a request
+                                                must supply to select a subset of
+                                                this selector.
+                                              items:
+                                                type: string
+                                              maxItems: 8
+                                              minItems: 1
+                                              type: array
+                                              x-kubernetes-list-type: set
+                                          required:
+                                          - keys
+                                          type: object
+                                        maxItems: 16
+                                        minItems: 1
+                                        type: array
+                                    required:
+                                    - subsetSelectors
+                                    type: object
+                                    x-kubernetes-validations:
+                                    - message: defaultSubset is required when fallbackPolicy
+                                        is DEFAULT_SUBSET
+                                      rule: |-
+                                        !has(self.fallbackPolicy) || self.fallbackPolicy != "DEFAULT_SUBSET" || has(self.defaultSubset) &&
+                                        size(self.defaultSubset) > 0
                                   localityLbSetting:
                                     description: Locality load balancer settings.
                                     properties:
@@ -2279,6 +2386,57 @@ spec:
                             description: Hash based on the source IP address.
                             type: boolean
                         type: object
+                      dynamicSubset:
+                        description: Dynamic subset load balancing divides the endpoints
+                          of the service into subsets at request time, based on endpoint
+                          attributes, without creating a separate cluster for each
+                          subset.
+                        properties:
+                          defaultSubset:
+                            additionalProperties:
+                              type: string
+                            description: The subset used when `fallbackPolicy` is
+                              `DEFAULT_SUBSET`, as a map of key to value.
+                            maxProperties: 16
+                            type: object
+                          fallbackPolicy:
+                            description: |-
+                              The behavior when a request does not select a subset, or selects a subset that has no endpoints.
+
+                              Valid Options: ANY_ENDPOINT, NO_FALLBACK, DEFAULT_SUBSET
+                            enum:
+                            - ANY_ENDPOINT
+                            - NO_FALLBACK
+                            - DEFAULT_SUBSET
+                            type: string
+                          subsetSelectors:
+                            description: The selectors that define which subsets exist.
+                            items:
+                              properties:
+                                keys:
+                                  description: The keys that a request must supply
+                                    to select a subset of this selector.
+                                  items:
+                                    type: string
+                                  maxItems: 8
+                                  minItems: 1
+                                  type: array
+                                  x-kubernetes-list-type: set
+                              required:
+                              - keys
+                              type: object
+                            maxItems: 16
+                            minItems: 1
+                            type: array
+                        required:
+                        - subsetSelectors
+                        type: object
+                        x-kubernetes-validations:
+                        - message: defaultSubset is required when fallbackPolicy is
+                            DEFAULT_SUBSET
+                          rule: |-
+                            !has(self.fallbackPolicy) || self.fallbackPolicy != "DEFAULT_SUBSET" || has(self.defaultSubset) &&
+                            size(self.defaultSubset) > 0
                       localityLbSetting:
                         description: Locality load balancer settings.
                         properties:
@@ -2766,6 +2924,58 @@ spec:
                                   description: Hash based on the source IP address.
                                   type: boolean
                               type: object
+                            dynamicSubset:
+                              description: Dynamic subset load balancing divides the
+                                endpoints of the service into subsets at request time,
+                                based on endpoint attributes, without creating a separate
+                                cluster for each subset.
+                              properties:
+                                defaultSubset:
+                                  additionalProperties:
+                                    type: string
+                                  description: The subset used when `fallbackPolicy`
+                                    is `DEFAULT_SUBSET`, as a map of key to value.
+                                  maxProperties: 16
+                                  type: object
+                                fallbackPolicy:
+                                  description: |-
+                                    The behavior when a request does not select a subset, or selects a subset that has no endpoints.
+
+                                    Valid Options: ANY_ENDPOINT, NO_FALLBACK, DEFAULT_SUBSET
+                                  enum:
+                                  - ANY_ENDPOINT
+                                  - NO_FALLBACK
+                                  - DEFAULT_SUBSET
+                                  type: string
+                                subsetSelectors:
+                                  description: The selectors that define which subsets
+                                    exist.
+                                  items:
+                                    properties:
+                                      keys:
+                                        description: The keys that a request must
+                                          supply to select a subset of this selector.
+                                        items:
+                                          type: string
+                                        maxItems: 8
+                                        minItems: 1
+                                        type: array
+                                        x-kubernetes-list-type: set
+                                    required:
+                                    - keys
+                                    type: object
+                                  maxItems: 16
+                                  minItems: 1
+                                  type: array
+                              required:
+                              - subsetSelectors
+                              type: object
+                              x-kubernetes-validations:
+                              - message: defaultSubset is required when fallbackPolicy
+                                  is DEFAULT_SUBSET
+                                rule: |-
+                                  !has(self.fallbackPolicy) || self.fallbackPolicy != "DEFAULT_SUBSET" || has(self.defaultSubset) &&
+                                  size(self.defaultSubset) > 0
                             localityLbSetting:
                               description: Locality load balancer settings.
                               properties:
@@ -3615,6 +3825,58 @@ spec:
                                   description: Hash based on the source IP address.
                                   type: boolean
                               type: object
+                            dynamicSubset:
+                              description: Dynamic subset load balancing divides the
+                                endpoints of the service into subsets at request time,
+                                based on endpoint attributes, without creating a separate
+                                cluster for each subset.
+                              properties:
+                                defaultSubset:
+                                  additionalProperties:
+                                    type: string
+                                  description: The subset used when `fallbackPolicy`
+                                    is `DEFAULT_SUBSET`, as a map of key to value.
+                                  maxProperties: 16
+                                  type: object
+                                fallbackPolicy:
+                                  description: |-
+                                    The behavior when a request does not select a subset, or selects a subset that has no endpoints.
+
+                                    Valid Options: ANY_ENDPOINT, NO_FALLBACK, DEFAULT_SUBSET
+                                  enum:
+                                  - ANY_ENDPOINT
+                                  - NO_FALLBACK
+                                  - DEFAULT_SUBSET
+                                  type: string
+                                subsetSelectors:
+                                  description: The selectors that define which subsets
+                                    exist.
+                                  items:
+                                    properties:
+                                      keys:
+                                        description: The keys that a request must
+                                          supply to select a subset of this selector.
+                                        items:
+                                          type: string
+                                        maxItems: 8
+                                        minItems: 1
+                                        type: array
+                                        x-kubernetes-list-type: set
+                                    required:
+                                    - keys
+                                    type: object
+                                  maxItems: 16
+                                  minItems: 1
+                                  type: array
+                              required:
+                              - subsetSelectors
+                              type: object
+                              x-kubernetes-validations:
+                              - message: defaultSubset is required when fallbackPolicy
+                                  is DEFAULT_SUBSET
+                                rule: |-
+                                  !has(self.fallbackPolicy) || self.fallbackPolicy != "DEFAULT_SUBSET" || has(self.defaultSubset) &&
+                                  size(self.defaultSubset) > 0
                             localityLbSetting:
                               description: Locality load balancer settings.
                               properties:
@@ -4114,6 +4376,61 @@ spec:
                                         description: Hash based on the source IP address.
                                         type: boolean
                                     type: object
+                                  dynamicSubset:
+                                    description: Dynamic subset load balancing divides
+                                      the endpoints of the service into subsets at
+                                      request time, based on endpoint attributes,
+                                      without creating a separate cluster for each
+                                      subset.
+                                    properties:
+                                      defaultSubset:
+                                        additionalProperties:
+                                          type: string
+                                        description: The subset used when `fallbackPolicy`
+                                          is `DEFAULT_SUBSET`, as a map of key to
+                                          value.
+                                        maxProperties: 16
+                                        type: object
+                                      fallbackPolicy:
+                                        description: |-
+                                          The behavior when a request does not select a subset, or selects a subset that has no endpoints.
+
+                                          Valid Options: ANY_ENDPOINT, NO_FALLBACK, DEFAULT_SUBSET
+                                        enum:
+                                        - ANY_ENDPOINT
+                                        - NO_FALLBACK
+                                        - DEFAULT_SUBSET
+                                        type: string
+                                      subsetSelectors:
+                                        description: The selectors that define which
+                                          subsets exist.
+                                        items:
+                                          properties:
+                                            keys:
+                                              description: The keys that a request
+                                                must supply to select a subset of
+                                                this selector.
+                                              items:
+                                                type: string
+                                              maxItems: 8
+                                              minItems: 1
+                                              type: array
+                                              x-kubernetes-list-type: set
+                                          required:
+                                          - keys
+                                          type: object
+                                        maxItems: 16
+                                        minItems: 1
+                                        type: array
+                                    required:
+                                    - subsetSelectors
+                                    type: object
+                                    x-kubernetes-validations:
+                                    - message: defaultSubset is required when fallbackPolicy
+                                        is DEFAULT_SUBSET
+                                      rule: |-
+                                        !has(self.fallbackPolicy) || self.fallbackPolicy != "DEFAULT_SUBSET" || has(self.defaultSubset) &&
+                                        size(self.defaultSubset) > 0
                                   localityLbSetting:
                                     description: Locality load balancer settings.
                                     properties:
@@ -4815,6 +5132,57 @@ spec:
                             description: Hash based on the source IP address.
                             type: boolean
                         type: object
+                      dynamicSubset:
+                        description: Dynamic subset load balancing divides the endpoints
+                          of the service into subsets at request time, based on endpoint
+                          attributes, without creating a separate cluster for each
+                          subset.
+                        properties:
+                          defaultSubset:
+                            additionalProperties:
+                              type: string
+                            description: The subset used when `fallbackPolicy` is
+                              `DEFAULT_SUBSET`, as a map of key to value.
+                            maxProperties: 16
+                            type: object
+                          fallbackPolicy:
+                            description: |-
+                              The behavior when a request does not select a subset, or selects a subset that has no endpoints.
+
+                              Valid Options: ANY_ENDPOINT, NO_FALLBACK, DEFAULT_SUBSET
+                            enum:
+                            - ANY_ENDPOINT
+                            - NO_FALLBACK
+                            - DEFAULT_SUBSET
+                            type: string
+                          subsetSelectors:
+                            description: The selectors that define which subsets exist.
+                            items:
+                              properties:
+                                keys:
+                                  description: The keys that a request must supply
+                                    to select a subset of this selector.
+                                  items:
+                                    type: string
+                                  maxItems: 8
+                                  minItems: 1
+                                  type: array
+                                  x-kubernetes-list-type: set
+                              required:
+                              - keys
+                              type: object
+                            maxItems: 16
+                            minItems: 1
+                            type: array
+                        required:
+                        - subsetSelectors
+                        type: object
+                        x-kubernetes-validations:
+                        - message: defaultSubset is required when fallbackPolicy is
+                            DEFAULT_SUBSET
+                          rule: |-
+                            !has(self.fallbackPolicy) || self.fallbackPolicy != "DEFAULT_SUBSET" || has(self.defaultSubset) &&
+                            size(self.defaultSubset) > 0
                       localityLbSetting:
                         description: Locality load balancer settings.
                         properties:
@@ -5302,6 +5670,58 @@ spec:
                                   description: Hash based on the source IP address.
                                   type: boolean
                               type: object
+                            dynamicSubset:
+                              description: Dynamic subset load balancing divides the
+                                endpoints of the service into subsets at request time,
+                                based on endpoint attributes, without creating a separate
+                                cluster for each subset.
+                              properties:
+                                defaultSubset:
+                                  additionalProperties:
+                                    type: string
+                                  description: The subset used when `fallbackPolicy`
+                                    is `DEFAULT_SUBSET`, as a map of key to value.
+                                  maxProperties: 16
+                                  type: object
+                                fallbackPolicy:
+                                  description: |-
+                                    The behavior when a request does not select a subset, or selects a subset that has no endpoints.
+
+                                    Valid Options: ANY_ENDPOINT, NO_FALLBACK, DEFAULT_SUBSET
+                                  enum:
+                                  - ANY_ENDPOINT
+                                  - NO_FALLBACK
+                                  - DEFAULT_SUBSET
+                                  type: string
+                                subsetSelectors:
+                                  description: The selectors that define which subsets
+                                    exist.
+                                  items:
+                                    properties:
+                                      keys:
+                                        description: The keys that a request must
+                                          supply to select a subset of this selector.
+                                        items:
+                                          type: string
+                                        maxItems: 8
+                                        minItems: 1
+                                        type: array
+                                        x-kubernetes-list-type: set
+                                    required:
+                                    - keys
+                                    type: object
+                                  maxItems: 16
+                                  minItems: 1
+                                  type: array
+                              required:
+                              - subsetSelectors
+                              type: object
+                              x-kubernetes-validations:
+                              - message: defaultSubset is required when fallbackPolicy
+                                  is DEFAULT_SUBSET
+                                rule: |-
+                                  !has(self.fallbackPolicy) || self.fallbackPolicy != "DEFAULT_SUBSET" || has(self.defaultSubset) &&
+                                  size(self.defaultSubset) > 0
                             localityLbSetting:
                               description: Locality load balancer settings.
                               properties:
@@ -6151,6 +6571,58 @@ spec:
                                   description: Hash based on the source IP address.
                                   type: boolean
                               type: object
+                            dynamicSubset:
+                              description: Dynamic subset load balancing divides the
+                                endpoints of the service into subsets at request time,
+                                based on endpoint attributes, without creating a separate
+                                cluster for each subset.
+                              properties:
+                                defaultSubset:
+                                  additionalProperties:
+                                    type: string
+                                  description: The subset used when `fallbackPolicy`
+                                    is `DEFAULT_SUBSET`, as a map of key to value.
+                                  maxProperties: 16
+                                  type: object
+                                fallbackPolicy:
+                                  description: |-
+                                    The behavior when a request does not select a subset, or selects a subset that has no endpoints.
+
+                                    Valid Options: ANY_ENDPOINT, NO_FALLBACK, DEFAULT_SUBSET
+                                  enum:
+                                  - ANY_ENDPOINT
+                                  - NO_FALLBACK
+                                  - DEFAULT_SUBSET
+                                  type: string
+                                subsetSelectors:
+                                  description: The selectors that define which subsets
+                                    exist.
+                                  items:
+                                    properties:
+                                      keys:
+                                        description: The keys that a request must
+                                          supply to select a subset of this selector.
+                                        items:
+                                          type: string
+                                        maxItems: 8
+                                        minItems: 1
+                                        type: array
+                                        x-kubernetes-list-type: set
+                                    required:
+                                    - keys
+                                    type: object
+                                  maxItems: 16
+                                  minItems: 1
+                                  type: array
+                              required:
+                              - subsetSelectors
+                              type: object
+                              x-kubernetes-validations:
+                              - message: defaultSubset is required when fallbackPolicy
+                                  is DEFAULT_SUBSET
+                                rule: |-
+                                  !has(self.fallbackPolicy) || self.fallbackPolicy != "DEFAULT_SUBSET" || has(self.defaultSubset) &&
+                                  size(self.defaultSubset) > 0
                             localityLbSetting:
                               description: Locality load balancer settings.
                               properties:
@@ -6650,6 +7122,61 @@ spec:
                                         description: Hash based on the source IP address.
                                         type: boolean
                                     type: object
+                                  dynamicSubset:
+                                    description: Dynamic subset load balancing divides
+                                      the endpoints of the service into subsets at
+                                      request time, based on endpoint attributes,
+                                      without creating a separate cluster for each
+                                      subset.
+                                    properties:
+                                      defaultSubset:
+                                        additionalProperties:
+                                          type: string
+                                        description: The subset used when `fallbackPolicy`
+                                          is `DEFAULT_SUBSET`, as a map of key to
+                                          value.
+                                        maxProperties: 16
+                                        type: object
+                                      fallbackPolicy:
+                                        description: |-
+                                          The behavior when a request does not select a subset, or selects a subset that has no endpoints.
+
+                                          Valid Options: ANY_ENDPOINT, NO_FALLBACK, DEFAULT_SUBSET
+                                        enum:
+                                        - ANY_ENDPOINT
+                                        - NO_FALLBACK
+                                        - DEFAULT_SUBSET
+                                        type: string
+                                      subsetSelectors:
+                                        description: The selectors that define which
+                                          subsets exist.
+                                        items:
+                                          properties:
+                                            keys:
+                                              description: The keys that a request
+                                                must supply to select a subset of
+                                                this selector.
+                                              items:
+                                                type: string
+                                              maxItems: 8
+                                              minItems: 1
+                                              type: array
+                                              x-kubernetes-list-type: set
+                                          required:
+                                          - keys
+                                          type: object
+                                        maxItems: 16
+                                        minItems: 1
+                                        type: array
+                                    required:
+                                    - subsetSelectors
+                                    type: object
+                                    x-kubernetes-validations:
+                                    - message: defaultSubset is required when fallbackPolicy
+                                        is DEFAULT_SUBSET
+                                      rule: |-
+                                        !has(self.fallbackPolicy) || self.fallbackPolicy != "DEFAULT_SUBSET" || has(self.defaultSubset) &&
+                                        size(self.defaultSubset) > 0
                                   localityLbSetting:
                                     description: Locality load balancer settings.
                                     properties:
@@ -7351,6 +7878,57 @@ spec:
                             description: Hash based on the source IP address.
                             type: boolean
                         type: object
+                      dynamicSubset:
+                        description: Dynamic subset load balancing divides the endpoints
+                          of the service into subsets at request time, based on endpoint
+                          attributes, without creating a separate cluster for each
+                          subset.
+                        properties:
+                          defaultSubset:
+                            additionalProperties:
+                              type: string
+                            description: The subset used when `fallbackPolicy` is
+                              `DEFAULT_SUBSET`, as a map of key to value.
+                            maxProperties: 16
+                            type: object
+                          fallbackPolicy:
+                            description: |-
+                              The behavior when a request does not select a subset, or selects a subset that has no endpoints.
+
+                              Valid Options: ANY_ENDPOINT, NO_FALLBACK, DEFAULT_SUBSET
+                            enum:
+                            - ANY_ENDPOINT
+                            - NO_FALLBACK
+                            - DEFAULT_SUBSET
+                            type: string
+                          subsetSelectors:
+                            description: The selectors that define which subsets exist.
+                            items:
+                              properties:
+                                keys:
+                                  description: The keys that a request must supply
+                                    to select a subset of this selector.
+                                  items:
+                                    type: string
+                                  maxItems: 8
+                                  minItems: 1
+                                  type: array
+                                  x-kubernetes-list-type: set
+                              required:
+                              - keys
+                              type: object
+                            maxItems: 16
+                            minItems: 1
+                            type: array
+                        required:
+                        - subsetSelectors
+                        type: object
+                        x-kubernetes-validations:
+                        - message: defaultSubset is required when fallbackPolicy is
+                            DEFAULT_SUBSET
+                          rule: |-
+                            !has(self.fallbackPolicy) || self.fallbackPolicy != "DEFAULT_SUBSET" || has(self.defaultSubset) &&
+                            size(self.defaultSubset) > 0
                       localityLbSetting:
                         description: Locality load balancer settings.
                         properties:
@@ -7838,6 +8416,58 @@ spec:
                                   description: Hash based on the source IP address.
                                   type: boolean
                               type: object
+                            dynamicSubset:
+                              description: Dynamic subset load balancing divides the
+                                endpoints of the service into subsets at request time,
+                                based on endpoint attributes, without creating a separate
+                                cluster for each subset.
+                              properties:
+                                defaultSubset:
+                                  additionalProperties:
+                                    type: string
+                                  description: The subset used when `fallbackPolicy`
+                                    is `DEFAULT_SUBSET`, as a map of key to value.
+                                  maxProperties: 16
+                                  type: object
+                                fallbackPolicy:
+                                  description: |-
+                                    The behavior when a request does not select a subset, or selects a subset that has no endpoints.
+
+                                    Valid Options: ANY_ENDPOINT, NO_FALLBACK, DEFAULT_SUBSET
+                                  enum:
+                                  - ANY_ENDPOINT
+                                  - NO_FALLBACK
+                                  - DEFAULT_SUBSET
+                                  type: string
+                                subsetSelectors:
+                                  description: The selectors that define which subsets
+                                    exist.
+                                  items:
+                                    properties:
+                                      keys:
+                                        description: The keys that a request must
+                                          supply to select a subset of this selector.
+                                        items:
+                                          type: string
+                                        maxItems: 8
+                                        minItems: 1
+                                        type: array
+                                        x-kubernetes-list-type: set
+                                    required:
+                                    - keys
+                                    type: object
+                                  maxItems: 16
+                                  minItems: 1
+                                  type: array
+                              required:
+                              - subsetSelectors
+                              type: object
+                              x-kubernetes-validations:
+                              - message: defaultSubset is required when fallbackPolicy
+                                  is DEFAULT_SUBSET
+                                rule: |-
+                                  !has(self.fallbackPolicy) || self.fallbackPolicy != "DEFAULT_SUBSET" || has(self.defaultSubset) &&
+                                  size(self.defaultSubset) > 0
                             localityLbSetting:
                               description: Locality load balancer settings.
                               properties:
@@ -12998,6 +13628,29 @@ spec:
                               type: object
                           type: object
                       type: object
+                    headerToDynamicSubsetKeys:
+                      description: Selects a dynamic subset of the destination from
+                        request headers.
+                      items:
+                        properties:
+                          defaultValue:
+                            description: The value used when the request does not
+                              carry the header.
+                            type: string
+                          header:
+                            description: The name of the request header that carries
+                              the value.
+                            type: string
+                          key:
+                            description: The dynamic subset key that receives the
+                              value.
+                            type: string
+                        required:
+                        - header
+                        - key
+                        type: object
+                      maxItems: 16
+                      type: array
                     headers:
                       properties:
                         request:
@@ -14054,6 +14707,29 @@ spec:
                               type: object
                           type: object
                       type: object
+                    headerToDynamicSubsetKeys:
+                      description: Selects a dynamic subset of the destination from
+                        request headers.
+                      items:
+                        properties:
+                          defaultValue:
+                            description: The value used when the request does not
+                              carry the header.
+                            type: string
+                          header:
+                            description: The name of the request header that carries
+                              the value.
+                            type: string
+                          key:
+                            description: The dynamic subset key that receives the
+                              value.
+                            type: string
+                        required:
+                        - header
+                        - key
+                        type: object
+                      maxItems: 16
+                      type: array
                     headers:
                       properties:
                         request:
@@ -15110,6 +15786,29 @@ spec:
                               type: object
                           type: object
                       type: object
+                    headerToDynamicSubsetKeys:
+                      description: Selects a dynamic subset of the destination from
+                        request headers.
+                      items:
+                        properties:
+                          defaultValue:
+                            description: The value used when the request does not
+                              carry the header.
+                            type: string
+                          header:
+                            description: The name of the request header that carries
+                              the value.
+                            type: string
+                          key:
+                            description: The dynamic subset key that receives the
+                              value.
+                            type: string
+                        required:
+                        - header
+                        - key
+                        type: object
+                      maxItems: 16
+                      type: array
                     headers:
                       properties:
                         request:

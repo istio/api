@@ -500,8 +500,52 @@ message HTTPRoute {
   // Header manipulation rules
   Headers headers = 16;
 
+  // Selects a dynamic subset of the destination from request headers.
+  // Each entry supplies the value of one key declared in the
+  // `dynamicSubset` load balancer settings of the destination's
+  // `DestinationRule`. Destinations without `dynamicSubset` settings
+  // ignore the keys.
+  //
+  // For example, the following route sends a request to the endpoint
+  // named by the `x-endpoint-ip` header:
+  //
+  // ```yaml
+  // apiVersion: networking.istio.io/v1
+  // kind: VirtualService
+  // metadata:
+  //   name: reviews-route
+  // spec:
+  //   hosts:
+  //   - reviews.prod.svc.cluster.local
+  //   http:
+  //   - route:
+  //     - destination:
+  //         host: reviews.prod.svc.cluster.local
+  //     headerToDynamicSubsetKeys:
+  //     - header: x-endpoint-ip
+  //       key: "%ip%"
+  // ```
+  //
+  // +kubebuilder:validation:MaxItems=16
+  repeated HeaderToDynamicSubsetKey header_to_dynamic_subset_keys = 23;
+
   // $hide_from_docs
-  // Next available field number: 23
+  // Next available field number: 24
+}
+
+// Maps a request header to a key of a dynamic subset. See `dynamicSubset`
+// in the `DestinationRule` load balancer settings.
+message HeaderToDynamicSubsetKey {
+  // The name of the request header that carries the value.
+  string header = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The dynamic subset key that receives the value. Either the name of a
+  // workload label, or one of the built-in keys `%ip%` and `%hostname%`.
+  string key = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // The value used when the request does not carry the header. If unset,
+  // the key is not supplied for such requests.
+  string default_value = 3;
 }
 
 // Describes the delegate VirtualService.
