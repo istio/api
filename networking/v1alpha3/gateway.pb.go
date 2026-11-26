@@ -198,6 +198,7 @@
 package v1alpha3
 
 import (
+	duration "github.com/golang/protobuf/ptypes/duration"
 	wrappers "github.com/golang/protobuf/ptypes/wrappers"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -856,8 +857,14 @@ type ServerTLSSettings struct {
 	// Note: Setting an ALPN list that is incompatible with the protocol
 	// configured for the server port may break the traffic served by this port.
 	AlpnProtocols []string `protobuf:"bytes,19,rep,name=alpn_protocols,json=alpnProtocols,proto3" json:"alpn_protocols,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	// Optional: the maximum duration the proxy will wait for the initial delivery of the
+	// credential(s) referenced by `credentialName`, `credentialNames`, or `caCertCredentialName`
+	// from the configured secret discovery service (SDS) provider, before proceeding with an
+	// empty credential for this listener. If unset, the proxy's default initial fetch timeout
+	// applies. This is mainly used for external SDS provider.
+	CredentialFetchTimeout *duration.Duration `protobuf:"bytes,20,opt,name=credential_fetch_timeout,json=credentialFetchTimeout,proto3" json:"credential_fetch_timeout,omitempty"`
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
 }
 
 func (x *ServerTLSSettings) Reset() {
@@ -1023,6 +1030,13 @@ func (x *ServerTLSSettings) GetAlpnProtocols() []string {
 	return nil
 }
 
+func (x *ServerTLSSettings) GetCredentialFetchTimeout() *duration.Duration {
+	if x != nil {
+		return x.CredentialFetchTimeout
+	}
+	return nil
+}
+
 // TLSCertificate describes the server's TLS certificate.
 type ServerTLSSettings_TLSCertificate struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -1097,7 +1111,7 @@ var File_networking_v1alpha3_gateway_proto protoreflect.FileDescriptor
 
 const file_networking_v1alpha3_gateway_proto_rawDesc = "" +
 	"\n" +
-	"!networking/v1alpha3/gateway.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\xd1\x01\n" +
+	"!networking/v1alpha3/gateway.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\xd1\x01\n" +
 	"\aGateway\x12;\n" +
 	"\aservers\x18\x01 \x03(\v2!.istio.networking.v1alpha3.ServerR\aservers\x12L\n" +
 	"\bselector\x18\x02 \x03(\v20.istio.networking.v1alpha3.Gateway.SelectorEntryR\bselector\x1a;\n" +
@@ -1116,7 +1130,7 @@ const file_networking_v1alpha3_gateway_proto_rawDesc = "" +
 	"\bprotocol\x18\x02 \x01(\tB\x04\xe2A\x01\x02R\bprotocol\x12\x18\n" +
 	"\x04name\x18\x03 \x01(\tB\x04\xe2A\x01\x02R\x04name\x12#\n" +
 	"\vtarget_port\x18\x04 \x01(\rB\x02\x18\x01R\n" +
-	"targetPort\"\x84\v\n" +
+	"targetPort\"\xd9\v\n" +
 	"\x11ServerTLSSettings\x12%\n" +
 	"\x0ehttps_redirect\x18\x01 \x01(\bR\rhttpsRedirect\x12H\n" +
 	"\x04mode\x18\x02 \x01(\x0e24.istio.networking.v1alpha3.ServerTLSSettings.TLSmodeR\x04mode\x12-\n" +
@@ -1139,7 +1153,8 @@ const file_networking_v1alpha3_gateway_proto_rawDesc = "" +
 	"\x14insecure_skip_verify\x18\x11 \x01(\v2\x1a.google.protobuf.BoolValueR\x12insecureSkipVerify\x12\x1f\n" +
 	"\vecdh_curves\x18\x12 \x03(\tR\n" +
 	"ecdhCurves\x12%\n" +
-	"\x0ealpn_protocols\x18\x13 \x03(\tR\ralpnProtocols\x1a\x89\x01\n" +
+	"\x0ealpn_protocols\x18\x13 \x03(\tR\ralpnProtocols\x12S\n" +
+	"\x18credential_fetch_timeout\x18\x14 \x01(\v2\x19.google.protobuf.DurationR\x16credentialFetchTimeout\x1a\x89\x01\n" +
 	"\x0eTLSCertificate\x12-\n" +
 	"\x12server_certificate\x18\x01 \x01(\tR\x11serverCertificate\x12\x1f\n" +
 	"\vprivate_key\x18\x02 \x01(\tR\n" +
@@ -1185,22 +1200,24 @@ var file_networking_v1alpha3_gateway_proto_goTypes = []any{
 	nil,                                      // 6: istio.networking.v1alpha3.Gateway.SelectorEntry
 	(*ServerTLSSettings_TLSCertificate)(nil), // 7: istio.networking.v1alpha3.ServerTLSSettings.TLSCertificate
 	(*wrappers.BoolValue)(nil),               // 8: google.protobuf.BoolValue
+	(*duration.Duration)(nil),                // 9: google.protobuf.Duration
 }
 var file_networking_v1alpha3_gateway_proto_depIdxs = []int32{
-	3, // 0: istio.networking.v1alpha3.Gateway.servers:type_name -> istio.networking.v1alpha3.Server
-	6, // 1: istio.networking.v1alpha3.Gateway.selector:type_name -> istio.networking.v1alpha3.Gateway.SelectorEntry
-	4, // 2: istio.networking.v1alpha3.Server.port:type_name -> istio.networking.v1alpha3.Port
-	5, // 3: istio.networking.v1alpha3.Server.tls:type_name -> istio.networking.v1alpha3.ServerTLSSettings
-	0, // 4: istio.networking.v1alpha3.ServerTLSSettings.mode:type_name -> istio.networking.v1alpha3.ServerTLSSettings.TLSmode
-	7, // 5: istio.networking.v1alpha3.ServerTLSSettings.tls_certificates:type_name -> istio.networking.v1alpha3.ServerTLSSettings.TLSCertificate
-	1, // 6: istio.networking.v1alpha3.ServerTLSSettings.min_protocol_version:type_name -> istio.networking.v1alpha3.ServerTLSSettings.TLSProtocol
-	1, // 7: istio.networking.v1alpha3.ServerTLSSettings.max_protocol_version:type_name -> istio.networking.v1alpha3.ServerTLSSettings.TLSProtocol
-	8, // 8: istio.networking.v1alpha3.ServerTLSSettings.insecure_skip_verify:type_name -> google.protobuf.BoolValue
-	9, // [9:9] is the sub-list for method output_type
-	9, // [9:9] is the sub-list for method input_type
-	9, // [9:9] is the sub-list for extension type_name
-	9, // [9:9] is the sub-list for extension extendee
-	0, // [0:9] is the sub-list for field type_name
+	3,  // 0: istio.networking.v1alpha3.Gateway.servers:type_name -> istio.networking.v1alpha3.Server
+	6,  // 1: istio.networking.v1alpha3.Gateway.selector:type_name -> istio.networking.v1alpha3.Gateway.SelectorEntry
+	4,  // 2: istio.networking.v1alpha3.Server.port:type_name -> istio.networking.v1alpha3.Port
+	5,  // 3: istio.networking.v1alpha3.Server.tls:type_name -> istio.networking.v1alpha3.ServerTLSSettings
+	0,  // 4: istio.networking.v1alpha3.ServerTLSSettings.mode:type_name -> istio.networking.v1alpha3.ServerTLSSettings.TLSmode
+	7,  // 5: istio.networking.v1alpha3.ServerTLSSettings.tls_certificates:type_name -> istio.networking.v1alpha3.ServerTLSSettings.TLSCertificate
+	1,  // 6: istio.networking.v1alpha3.ServerTLSSettings.min_protocol_version:type_name -> istio.networking.v1alpha3.ServerTLSSettings.TLSProtocol
+	1,  // 7: istio.networking.v1alpha3.ServerTLSSettings.max_protocol_version:type_name -> istio.networking.v1alpha3.ServerTLSSettings.TLSProtocol
+	8,  // 8: istio.networking.v1alpha3.ServerTLSSettings.insecure_skip_verify:type_name -> google.protobuf.BoolValue
+	9,  // 9: istio.networking.v1alpha3.ServerTLSSettings.credential_fetch_timeout:type_name -> google.protobuf.Duration
+	10, // [10:10] is the sub-list for method output_type
+	10, // [10:10] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_networking_v1alpha3_gateway_proto_init() }
