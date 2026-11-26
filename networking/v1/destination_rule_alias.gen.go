@@ -48,6 +48,34 @@ const TrafficPolicy_ProxyProtocol_V2 TrafficPolicy_ProxyProtocol_VERSION = v1alp
 
 type TrafficPolicy_RetryBudget = v1alpha3.TrafficPolicy_RetryBudget
 
+// Compression settings for the calling proxy's upstream connection.
+// Request-body compression is not supported.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1
+// kind: DestinationRule
+// metadata:
+//
+//	name: reviews-client-compression
+//
+// spec:
+//
+//	host: reviews.default.svc.cluster.local
+//	trafficPolicy:
+//	  compression:
+//	    response:
+//	      decompress:
+//	        enabled: true
+//
+// ```
+type ClientCompressionSettings = v1alpha3.ClientCompressionSettings
+
+// Client-side response compression handling.
+type ClientCompressionSettings_Response = v1alpha3.ClientCompressionSettings_Response
+
+// Transparent response decompression settings.
+type ClientCompressionSettings_Decompression = v1alpha3.ClientCompressionSettings_Decompression
+
 // A subset of endpoints of a service. Subsets can be used for scenarios
 // like A/B testing, or routing to a specific version of a service. Refer
 // to [VirtualService](https://istio.io/docs/reference/config/networking/virtual-service/#VirtualService) documentation for examples of using
