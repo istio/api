@@ -58,6 +58,14 @@ message MeshConfig {
   // For example, if your CNI has a 30s cooldown period, setting this to 15s is recommended.
   google.protobuf.Duration hbone_idle_timeout = 70;
 
+  // Settings for the HTTP/2 PING frames that Envoy proxies send on the HBONE connections they originate.
+  // The PINGs let a waypoint or gateway detect a peer that went away without closing the connection,
+  // even while requests keep flowing on it, which `hboneIdleTimeout` cannot do.
+  // Note: This setting is applied only on the Envoy proxy side; ztunnel does not use it.
+  // If unset, PINGs are sent every 10s and the connection is closed when a PING is not answered within 20s.
+  // When set, both `interval` and `timeout` are required. (MUST be >=1ms)
+  istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.ConnectionKeepalive hbone_keepalive = 75;
+
   // $hide_from_docs
   // Automatic protocol detection uses a set of heuristics to
   // determine whether the connection is using TLS or not (on the
